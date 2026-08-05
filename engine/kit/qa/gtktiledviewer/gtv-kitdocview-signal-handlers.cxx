@@ -466,10 +466,10 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     aCommand << "&y=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), rowPosPixel));
     aCommand << "&height=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), rowSizePixel));
     std::stringstream ss;
-    ss << "kit::Document::getCommandValues(" << aCommand.str() << ")";
+    ss << "COKitDocument::getCommandValues(" << aCommand.str() << ")";
     g_info("%s", ss.str().c_str());
     char* pValues = pDocument->getCommandValues(aCommand.str().c_str());
-    g_info("kit::Document::getCommandValues() returned '%s'", pValues);
+    g_info("COKitDocument::getCommandValues() returned '%s'", pValues);
     std::stringstream aStream(pValues);
     free(pValues);
     assert(!aStream.str().empty());

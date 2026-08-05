@@ -85,7 +85,7 @@ KIT_DOC_VIEW_DLLPUBLIC GtkWidget* kit_doc_view_new_from_user_profile (const gcha
 /**
  * kit_doc_view_new_from_widget:
  * @pDocView: The #KitDocumentView instance
- * @pRenderingArguments: (nullable) (allow-none): kit::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): COKitDocument::initializeForRendering() arguments.
  *
  * Returns: (transfer none): The #KitDocumentView widget instance.
  */
@@ -96,7 +96,7 @@ KIT_DOC_VIEW_DLLPUBLIC GtkWidget* kit_doc_view_new_from_widget     (KitDocumentV
  * kit_doc_view_open_document:
  * @pDocView: The #KitDocumentView instance
  * @pPath: (transfer full): The path of the document that #KitDocumentView widget should try to open
- * @pRenderingArguments: (nullable) (allow-none): kit::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): COKitDocument::initializeForRendering() arguments.
  * @cancellable:
  * @callback:
  * @userdata:
@@ -380,7 +380,7 @@ KIT_DOC_VIEW_DLLPUBLIC gfloat  kit_doc_view_twip_to_pixel          (KitDocumentV
 /**
  * kit_doc_view_send_content_control_event:
  * @pDocView: The #KitDocumentView instance
- * @pArguments: (nullable) (allow-none): see kit::Document::sendContentControlEvent() for the details.
+ * @pArguments: (nullable) (allow-none): see COKitDocument::sendContentControlEvent() for the details.
  */
 KIT_DOC_VIEW_DLLPUBLIC void kit_doc_view_send_content_control_event(KitDocumentView* pDocView, const gchar* pArguments);
 

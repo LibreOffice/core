@@ -147,7 +147,7 @@ public:
      */
     virtual OUString getPartHash(int nPart) = 0;
 
-    /// @see kit::Document::setPartMode().
+    /// @see COKitDocument::setPartMode().
     virtual void setPartMode(COKitPartMode) {}
 
     /**
@@ -172,14 +172,14 @@ public:
     /**
      * Posts a keyboard event on the document.
      *
-     * @see kit::Document::postKeyEvent().
+     * @see COKitDocument::postKeyEvent().
      */
     virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) = 0;
 
     /**
      * Posts a mouse event on the document.
      *
-     * @see kit::Document::postMouseEvent().
+     * @see COKitDocument::postMouseEvent().
      */
     virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
                                 int nModifier) = 0;
@@ -187,7 +187,7 @@ public:
     /**
      * Sets the start or end of a text selection.
      *
-     * @see kit::Document::setTextSelection().
+     * @see COKitDocument::setTextSelection().
      */
     virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) = 0;
 
@@ -199,17 +199,17 @@ public:
     /**
      * Adjusts the graphic selection.
      *
-     * @see kit::Document::setGraphicSelection().
+     * @see COKitDocument::setGraphicSelection().
      */
     virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
 
     /**
-     * @see kit::Document::resetSelection().
+     * @see COKitDocument::resetSelection().
      */
     virtual void resetSelection() = 0;
 
     /**
-     * @see kit::Document::getPartPageRectangles().
+     * @see COKitDocument::getPartPageRectangles().
      */
     virtual OUString getPartPageRectangles()
     {
@@ -291,7 +291,7 @@ public:
     {
     }
 
-    /// @see kit::Document::setClientVisibleArea().
+    /// @see COKitDocument::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& /*rRectangle*/)
     {
     }
@@ -320,32 +320,32 @@ public:
     }
 
     /// Implementation for
-    /// kit::Document::getCommandValues(".uno:AcceptTrackedChanges") when there
+    /// COKitDocument::getCommandValues(".uno:AcceptTrackedChanges") when there
     /// is no matching UNO API.
     virtual void getTrackedChanges(tools::JsonWriter&)
     {
     }
 
     /// Implementation for
-    /// kit::Document::getCommandValues(".uno:TrackedChangeAuthors").
+    /// COKitDocument::getCommandValues(".uno:TrackedChangeAuthors").
     virtual void getTrackedChangeAuthors(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// kit::Document::getCommandValues(".uno:ViewAnnotations");
+    /// COKitDocument::getCommandValues(".uno:ViewAnnotations");
     virtual void getPostIts(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// kit::Document::getCommandValues(".uno:ViewAnnotationsPosition");
+    /// COKitDocument::getCommandValues(".uno:ViewAnnotationsPosition");
     virtual void getPostItsPos(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// kit::Document::getCommandValues(".uno:RulerState");
+    /// COKitDocument::getCommandValues(".uno:RulerState");
     virtual void getRulerState(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
@@ -387,7 +387,7 @@ public:
      */
     virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/, int /*nIntoSection*/) {}
 
-    /// @see kit::Document::completeFunction().
+    /// @see COKitDocument::completeFunction().
     virtual void completeFunction(const OUString& /*rFunctionName*/)
     {
     }

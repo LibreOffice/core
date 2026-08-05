@@ -27,20 +27,20 @@ to bottom-up).
 ## Tiled Editing
 
 On top of the tiled rendering API, a set of new methods have been added to the
-`kit::Document` class to allow basic editing, too. Communication between the COKit
+`COKitDocument` class to allow basic editing, too. Communication between the COKit
 client and CollaboraOffice is a two-way channel. The client can initiate an action
 by calling the above mentioned methods. The most important methods for the
 client -> CollaboraOffice communication are:
 
 - `initializeForRendering()`, expected to be called right after
-  `kit::Office::documentLoad()` returned a `kit::Document*`.
+  `COKit::documentLoad()` returned a `COKitDocument*`.
 - `postKeyEvent()`, expected to be called when the user provides input on the
   (soft-)keyboard.
 - `postMouseEvent()`, expected to be called when the user generated a touch or
   mouse event.
 
 In general, all coordinates are always in absolute twips (20th of a point, or:
-1" = 1440 twips). See `kit::Document` in `COKit.hxx` for a full list of
+1" = 1440 twips). See `COKitDocument` in `COKit.hxx` for a full list of
 methods and their documentation.
 
 The other way around (CollaboraOffice -> COKit client) is implemented using a

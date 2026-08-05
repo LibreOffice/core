@@ -36,7 +36,7 @@
  * callbacks may touch the platform clipboard directly. A callback must not
  * re-enter the engine.
  *
- * @see kit::Document::installClipboardProvider().
+ * @see COKitDocument::installClipboardProvider().
  */
 struct COKitClipboardProvider
 {
@@ -111,7 +111,7 @@ enum class COKitSelectionType
  *  COKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
  *
- *  @see kit::Office::setOptionalFeatures().
+ *  @see COKit::setOptionalFeatures().
  */
 enum class COKitOptionalFeatures : unsigned long long
 {
@@ -121,7 +121,7 @@ enum class COKitOptionalFeatures : unsigned long long
      * Handle COKitCallbackType::DOCUMENT_PASSWORD by prompting the user
      * for a password.
      *
-     * @see kit::Office::setDocumentPassword().
+     * @see COKit::setDocumentPassword().
      */
     DOCUMENT_PASSWORD = (1ULL << 0),
 
@@ -129,7 +129,7 @@ enum class COKitOptionalFeatures : unsigned long long
      * Handle COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
      * for a password.
      *
-     * @see kit::Office::setDocumentPassword().
+     * @see COKit::setDocumentPassword().
      */
     DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
 
@@ -336,7 +336,7 @@ enum class COKitCallbackType
      * Size of the document changed.
      *
      * Payload format is "width, height", i.e. clients get the new size without
-     * having to do an explicit kit::Document::getDocumentSize() call.
+     * having to do an explicit COKitDocument::getDocumentSize() call.
      *
      * A size change is always preceded by a series of
      * COKitCallbackType::INVALIDATE_TILES events invalidating any areas
@@ -420,7 +420,7 @@ enum class COKitCallbackType
      * Loading a document requires a password.
      *
      * Loading the document is blocked until the password is provided via
-     * kit::Office::setDocumentPassword().  The document cannot be loaded
+     * COKit::setDocumentPassword().  The document cannot be loaded
      * without the password.
      */
     DOCUMENT_PASSWORD = 20,
@@ -429,7 +429,7 @@ enum class COKitCallbackType
      * Editing a document requires a password.
      *
      * Loading the document is blocked until the password is provided via
-     * kit::Office::setDocumentPassword().
+     * COKit::setDocumentPassword().
      */
     DOCUMENT_PASSWORD_TO_MODIFY = 21,
 
@@ -480,7 +480,7 @@ enum class COKitCallbackType
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - rectangle uses the format of COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
      */
     INVALIDATE_VIEW_CURSOR = 24,
@@ -495,7 +495,7 @@ enum class COKitCallbackType
      *     "selection": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - selection uses the format of COKitCallbackType::TEXT_SELECTION.
      */
     TEXT_VIEW_SELECTION = 25,
@@ -510,7 +510,7 @@ enum class COKitCallbackType
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - rectangle uses the format of COKitCallbackType::CELL_CURSOR.
      */
     CELL_VIEW_CURSOR = 26,
@@ -526,7 +526,7 @@ enum class COKitCallbackType
      *     "selection": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - selection uses the format of COKitCallbackType::INVALIDATE_TILES.
      */
     GRAPHIC_VIEW_SELECTION = 27,
@@ -542,7 +542,7 @@ enum class COKitCallbackType
      *     "visible": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - visible uses the format of COKitCallbackType::CURSOR_VISIBLE.
      */
     VIEW_CURSOR_VISIBLE = 28,
@@ -558,7 +558,7 @@ enum class COKitCallbackType
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by kit::Document::createView()
+     * - viewId is a value returned earlier by COKitDocument::createView()
      * - rectangle uses the format of COKitCallbackType::INVALIDATE_TILES.
      */
     VIEW_LOCK = 29,
@@ -580,7 +580,7 @@ enum class COKitCallbackType
      * }
      *
      * The format is the same as an entry of
-     * kit::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
+     * COKitDocument::getCommandValues('.uno:AcceptTrackedChanges'), extra
      * fields:
      *
      * - 'action' is either 'Add' or 'Remove', depending on if this is an
@@ -605,7 +605,7 @@ enum class COKitCallbackType
      * }
      *
      * The format is the same as an entry of
-     * kit::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
+     * COKitDocument::getCommandValues('.uno:AcceptTrackedChanges'), extra
      * fields:
      *
      * - 'action' is 'Modify'.
@@ -630,7 +630,7 @@ enum class COKitCallbackType
      * }
      *
      * The format is the same as an entry of
-     * kit::Document::getCommandValues('.uno:ViewAnnotations'), extra
+     * COKitDocument::getCommandValues('.uno:ViewAnnotations'), extra
      * fields:
      *
      * - 'action' can be 'Add', 'Remove' or 'Modify' depending on whether
@@ -1415,22 +1415,22 @@ enum class COKitSetGraphicSelectionType
     END
 };
 
-/** @see kit::Office::registerCallback(). */
+/** @see COKit::registerCallback(). */
 typedef void (*COKitCallback)(COKitCallbackType eType, const char* pPayload, void* pData);
 
-/** @see kit::Office::runLoop(). */
+/** @see COKit::runLoop(). */
 typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
 
 typedef void (*COKitWakeCallback)(void* pData);
 
-/// @see kit::Office::registerAnyInputCallback()
+/// @see COKit::registerAnyInputCallback()
 typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
 
-/// @see kit::Office::registerFileSaveDialogCallback()
+/// @see COKit::registerFileSaveDialogCallback()
 typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
                                             size_t nResultUri);
 
-/// @see kit::Office::registerRevealInFileManagerCallback()
+/// @see COKit::registerRevealInFileManagerCallback()
 typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
 
 struct COKitDocument;
@@ -1687,8 +1687,6 @@ struct COKit
      */
     virtual void setForkedChild(bool bIsChild) = 0;
 
-    /** @see kit::Office::extractDocumentStructureRequest.
-     */
     virtual char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
 
     /**
@@ -1868,7 +1866,6 @@ struct COKitDocument
     /// Get the current part's name.
     virtual char* getPartName(int nPart) = 0;
 
-    /// @see kit::Document::setPartMode().
     virtual void setPartMode(COKitPartMode eMode) = 0;
 
     /**
@@ -2051,8 +2048,12 @@ struct COKitDocument
      */
     virtual void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) = 0;
 
-    /// @see kit::Document::createView().
+    /**
+     * Create a new view for an existing document. A loaded document has one view.
+     * @return the ID of the new view.
+     */
     virtual int createView() = 0;
+
     /**
      * Destroy a view of an existing document.
      * @param nId a view ID, returned by createView().
@@ -2113,7 +2114,6 @@ struct COKitDocument
     virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) = 0;
 
     /// Paints window with given id to the buffer
-    /// @see kit::Document::paintWindow().
     virtual void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
                              const int width, const int height) = 0;
 
@@ -2168,12 +2168,11 @@ struct COKitDocument
     virtual void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
                                              const char* pText) = 0;
 
-    /// @see kit::Document::getPartInfo().
     virtual char* getPartInfo(int nPart) = 0;
 
     /// Paints window with given id to the buffer with the give DPI scale
     /// (every pixel is dpiscale-times larger).
-    /// @see kit::Document::paintWindow().
+    /// @see COKitDocument::paintWindow().
     virtual void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
                                 const int y, const int width, const int height,
                                 const double dpiscale) = 0;
@@ -2356,7 +2355,6 @@ struct COKitDocument
      */
     virtual void sendFormFieldEvent(const char* pArguments) = 0;
 
-    /// @see kit::Document::setBlockedCommandList
     virtual void setBlockedCommandList(int nViewId, const char* blockedCommandList) = 0;
 
     /**
@@ -2417,7 +2415,6 @@ struct COKitDocument
     /// Get the data area (in Calc last row and column).
     virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;
 
-    /// @see kit::Document::getEditMode().
     virtual int getEditMode() = 0;
 
     /**

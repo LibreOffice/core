@@ -358,7 +358,7 @@ public:
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
 
-    /// @see kit::Document::resetSelection().
+    /// @see COKitDocument::resetSelection().
     virtual void resetSelection() override;
 
     /// @see vcl::ITiledRenderable::setClipboard().

@@ -419,9 +419,9 @@ public:
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
-    /// See kit::Document::getPart().
+    /// See COKitDocument::getPart().
     virtual int getPart() const;
-    /// See kit::Document::getMode().
+    /// See COKitDocument::getEditMode().
     virtual int getEditMode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().

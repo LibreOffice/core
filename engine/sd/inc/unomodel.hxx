@@ -352,7 +352,7 @@ public:
     SD_DLLPUBLIC virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     SD_DLLPUBLIC virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
-    /// @see kit::Document::resetSelection().
+    /// @see COKitDocument::resetSelection().
     SD_DLLPUBLIC virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
