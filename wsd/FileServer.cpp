@@ -286,6 +286,40 @@ std::string stringifyBoolFromConfig(const Poco::Util::LayeredConfiguration& conf
     return config.getBool(propertyName, defaultValue) ? "true" : "false";
 }
 
+/// Fills in the zoom a server administrator chose for everyone in coolwsd.xml. Either one becomes
+/// an empty string when coolwsd.xml leaves that setting unset.
+void applyZoomConfig(std::string& fileContent, const Poco::Util::LayeredConfiguration& config)
+{
+    // The zoom levels a document can open at, in percent. A level is named by its position here,
+    // counted from zero.
+    const std::vector<int> zoomLevelPercentages = { 20,  25,  30,  35,  40,  50,
+                                                    60,  70,  85,  100, 120, 150,
+                                                    170, 200, 235, 280, 335, 400 };
+
+    std::string smartZoom;
+    if (!config.getString("user_interface.smart_zoom", std::string()).empty())
+        smartZoom = stringifyBoolFromConfig(config, "user_interface.smart_zoom", true);
+
+    std::string defaultZoom;
+    const std::string configuredZoom =
+        config.getString("user_interface.default_zoom", std::string());
+    if (!configuredZoom.empty())
+    {
+        const int percentage = NumUtil::i32FromString(configuredZoom, 0);
+        const auto level =
+            std::find(zoomLevelPercentages.begin(), zoomLevelPercentages.end(), percentage);
+        if (level == zoomLevelPercentages.end())
+            LOG_WRN("Ignoring user_interface.default_zoom ["
+                    << configuredZoom << "] because it is not one of the zoom levels a document "
+                                         "can open at");
+        else
+            defaultZoom = std::to_string(std::distance(zoomLevelPercentages.begin(), level));
+    }
+
+    Poco::replaceInPlace(fileContent, std::string("%SMART_ZOOM%"), smartZoom);
+    Poco::replaceInPlace(fileContent, std::string("%DEFAULT_ZOOM%"), defaultZoom);
+}
+
 /// Returns true if the host is allowed, false otherwise.
 bool isAllowedWopiHost(const Poco::URI& uri)
 {
@@ -1576,6 +1610,8 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     static const std::string useStatusbarSaveIndicator =
         config.getBool("user_interface.statusbar_save_indicator", false) ? "true" : "false";
     Poco::replaceInPlace(preprocess, std::string("%STATUSBAR_SAVE_INDICATOR%"), useStatusbarSaveIndicator);
+
+    applyZoomConfig(preprocess, config);
 
     updateThemeResources(preprocess, responseRoot, urv[BRANDING_THEME], config);
 
@@ -2949,6 +2985,8 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     const std::string showLeftNav = form.get("show_left_nav", "false");
     Poco::replaceInPlace(adminFile, std::string("%SHOW_LEFT_NAV%"),
                          std::string(showLeftNav == "true" ? "true" : "false"));
+
+    applyZoomConfig(adminFile, config);
 
     updateThemeResources(adminFile, responseRoot, urv[BRANDING_THEME], config);
 

@@ -457,6 +457,13 @@ class BrowserInitializer extends InitializerBase {
 		window.frameAncestors = decodeURIComponent(element.dataset.frameAncestors);
 		window.socketProxy = element.dataset.socketProxy.toLowerCase().trim() === "true";
 		window.uiDefaults = JSON.parse(atob(element.dataset.uiDefaults));
+		// The server administrator can choose the opening zoom for every text
+		// document. Both attributes are empty when coolwsd.xml chooses neither,
+		// which leaves the choice with each user.
+		if (element.dataset.smartZoom)
+			window.uiDefaults['smartZoom'] = element.dataset.smartZoom;
+		if (element.dataset.defaultZoom)
+			window.uiDefaults['defaultZoom'] = element.dataset.defaultZoom;
 		window.checkFileInfoOverride = element.dataset.checkFileInfoOverride;
 		window.deeplEnabled = element.dataset.deeplEnabled.toLowerCase().trim() === "true";
 		window.aiEthicalRatingMessage = element.dataset.aiEthicalRatingMessage.toLowerCase().trim() === "true";

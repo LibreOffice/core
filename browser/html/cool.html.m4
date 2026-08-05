@@ -294,6 +294,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-coolwsd-version = "%COOLWSD_VERSION%"
       data-copyright-year = _YEAR_
       data-deepl-enabled = "%DEEPL_ENABLED%"
+      data-default-zoom = "%DEFAULT_ZOOM%"
       data-document-signing-enabled = "%DOCUMENT_SIGNING_ENABLED%"
       data-enable-accessibility = "%ENABLE_ACCESSIBILITY%"
       data-enable-debug = "%ENABLE_DEBUG%"
@@ -315,6 +316,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-protocol-debug = "%PROTOCOL_DEBUG%"
       data-saved-ui-state = "%SAVED_UI_STATE%"
       data-service-root = "%SERVICE_ROOT%"
+      data-smart-zoom = "%SMART_ZOOM%"
       data-socket-proxy = "%SOCKET_PROXY%"
       data-statusbar-save-indicator = "%STATUSBAR_SAVE_INDICATOR%"
       data-ui-defaults = "%UI_DEFAULTS%"

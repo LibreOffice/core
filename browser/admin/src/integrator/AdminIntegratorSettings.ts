@@ -886,6 +886,17 @@ class SettingIframe {
 		window.serviceRoot = read('serviceRoot', 'service_root');
 		window.versionHash = read('versionHash', 'version_hash');
 
+		// coolwsd.xml can choose the opening zoom for every text document on this
+		// server. Where it does, that choice stands in for the built-in default, so
+		// the form starts on the server's value for a user who has saved no zoom
+		// setting of their own. Both values are empty when coolwsd.xml chooses
+		// neither.
+		const smartZoom = read('smartZoom', 'smart_zoom');
+		if (smartZoom) defaultBrowserSetting.smartZoom = smartZoom === 'true';
+		const defaultZoom = parseInt(read('defaultZoom', 'default_zoom'));
+		if (!isNaN(defaultZoom))
+			defaultBrowserSetting.defaultZoom.value = defaultZoom;
+
 		// CSS theme switching reads <html data-theme>; the template's
 		// literal "%UI_THEME%" would never match. Set it from the URL.
 		const theme = urlParams.get('ui_theme');

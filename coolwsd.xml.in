@@ -290,6 +290,8 @@
       <mode type="string" desc="Controls the user interface style. The 'default' means: Take the value from ui_defaults, or decide for one of compact or tabbed (default|compact|tabbed)" default="default">default</mode>
       <use_integration_theme desc="Use theme from the integrator" type="bool" default="true">true</use_integration_theme>
       <statusbar_save_indicator desc="Show saving status indicator in the statusbar" type="bool" default="true">true</statusbar_save_indicator>
+      <smart_zoom desc="Fit a text document to the width of the window when it opens. Leave this empty to let every user choose for themselves in their own Interface Settings, where fitting to the width is the default." type="bool" default=""></smart_zoom>
+      <default_zoom desc="The zoom in percent that a text document opens at when smart_zoom is off. One of 20, 25, 30, 35, 40, 50, 60, 70, 85, 100, 120, 150, 170, 200, 235, 280, 335 and 400. Leave this empty to let every user choose for themselves in their own Interface Settings, where the default is 100." type="int" default=""></default_zoom>
 
       @CONFIG_INTERFACE_FRAGMENT@
 

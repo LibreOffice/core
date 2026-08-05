@@ -81,6 +81,8 @@ m4_dnl------------------------------------------------------------------------
         data-lang="%UI_LANG%"
         data-disable-ai-settings="%DISABLE_AI_SETTINGS%"
         data-show-left-nav="%SHOW_LEFT_NAV%"
+        data-smart-zoom="%SMART_ZOOM%"
+        data-default-zoom="%DEFAULT_ZOOM%"
       />
     </div>
   </body>
