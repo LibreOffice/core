@@ -584,6 +584,13 @@ window.L.Map.include({
 			}
 		});
 
+		// Restore the full list of sections as soon as the search field becomes empty.
+		searchInput.addEventListener('input', function () {
+			if (searchInput.value.trim() === '') {
+				performSearch();
+			}
+		});
+
 		const searchButton = document.getElementById('online-help-search-button');
 		searchButton.setAttribute('aria-label', _('Search'));
 		searchButton.addEventListener('click', performSearch);
