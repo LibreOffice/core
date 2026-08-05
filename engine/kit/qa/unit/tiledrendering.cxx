@@ -86,7 +86,7 @@ public:
     const string m_sInstDir;
     const string m_sLOPath;
 
-    std::unique_ptr<COKitDocument, kit::Deleter> loadDocument( COKit *pOffice, const string &pName,
+    std::unique_ptr<COKitDocument> loadDocument( COKit *pOffice, const string &pName,
                                             const char *pFilterOptions = nullptr );
 
     TiledRenderingTest()
@@ -132,7 +132,7 @@ void TiledRenderingTest::runAllTests()
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest_kit";
     rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserInstallURL);
 
-    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(
+    std::unique_ptr<COKit> pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice );
 
@@ -162,7 +162,7 @@ void TiledRenderingTest::runAllTests()
 void TiledRenderingTest::testDocumentLoadFail( COKit* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/kit/qa/data/IDONOTEXIST.odt";
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr<COKitDocument> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
     CPPUNIT_ASSERT( !pDocument );
     // TODO: we probably want to have some way of returning what
     // the cause of failure was. getError() will return
@@ -175,12 +175,12 @@ void TiledRenderingTest::testDocumentLoadFail( COKit* pOffice )
 
 static COKitDocumentType getDocumentType( COKit* pOffice, const string& rPath )
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad( rPath.c_str() ) );
+    std::unique_ptr<COKitDocument> pDocument( pOffice->documentLoad( rPath.c_str() ) );
     CPPUNIT_ASSERT( pDocument );
     return pDocument->getDocumentType();
 }
 
-std::unique_ptr<COKitDocument, kit::Deleter> TiledRenderingTest::loadDocument( COKit *pOffice, const string &pName,
+std::unique_ptr<COKitDocument> TiledRenderingTest::loadDocument( COKit *pOffice, const string &pName,
                                                             const char *pFilterOptions )
 {
     const string sDocPath = m_sSrcRoot + "/kit/qa/data/" + pName;
@@ -188,13 +188,13 @@ std::unique_ptr<COKitDocument, kit::Deleter> TiledRenderingTest::loadDocument( C
 
     remove( sLockFile.c_str() );
 
-    return std::unique_ptr<COKitDocument, kit::Deleter>(
+    return std::unique_ptr<COKitDocument>(
         pOffice->documentLoadWithOptions(sDocPath.c_str(), pFilterOptions));
 }
 
 void TiledRenderingTest::testDocumentTypes( COKit* pOffice )
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
@@ -215,7 +215,7 @@ void TiledRenderingTest::testDocumentTypes( COKit* pOffice )
 
 void TiledRenderingTest::testImpressSlideNames( COKit* pOffice )
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -227,7 +227,7 @@ void TiledRenderingTest::testImpressSlideNames( COKit* pOffice )
 
 void TiledRenderingTest::testCalcSheetNames( COKit* pOffice )
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -237,7 +237,7 @@ void TiledRenderingTest::testCalcSheetNames( COKit* pOffice )
 
 void TiledRenderingTest::testPaintPartTile(COKit* pOffice)
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
@@ -262,7 +262,7 @@ void TiledRenderingTest::testPaintPartTile(COKit* pOffice)
 
 void TiledRenderingTest::testDocumentLoadLanguage(COKit* pOffice)
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt", "Language=en-US"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "blank_text.odt", "Language=en-US"));
 
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
@@ -341,11 +341,11 @@ void TiledRenderingTest::testOverlay( COKit* /*pOffice*/ )
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
-    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(
+    std::unique_ptr<COKit> pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     assert( pOffice.get() );
 
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad(
+    std::unique_ptr<COKitDocument> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
 
     if ( !pDocument.get() )
@@ -415,7 +415,7 @@ void TiledRenderingTest::testOverlay( COKit* /*pOffice*/ )
 
 void TiledRenderingTest::testMultiKeyInput(COKit *pOffice)
 {
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());

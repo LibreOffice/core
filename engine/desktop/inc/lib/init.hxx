@@ -300,7 +300,6 @@ namespace desktop {
 
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
 
-        void destroy() override;
         bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
         COKitDocumentType getDocumentType() override;
         int getParts() override;
@@ -435,7 +434,6 @@ namespace desktop {
 
         void dumpState(rtl::OStringBuffer &aState);
 
-        void destroy() override;
         COKitDocument* documentLoad(const char* pURL) override;
         char* getError() override;
         COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) override;

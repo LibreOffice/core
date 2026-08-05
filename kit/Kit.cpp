@@ -2165,8 +2165,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         const char* url = loadUri.c_str();
         LOG_DBG("Calling lokit::documentLoad(" << anonymizeUrl(url) << ", \"" << options << "\")");
         const auto start = std::chrono::steady_clock::now();
-        _loKitDocument.reset(_loKit->documentLoadWithOptions(url, options.c_str()),
-                             kit::Deleter());
+        _loKitDocument.reset(_loKit->documentLoadWithOptions(url, options.c_str()));
 #ifdef __ANDROID__
         _loKitDocumentForAndroidOnly = _loKitDocument;
         {
@@ -3660,7 +3659,7 @@ std::future<COKit*> initKitRunLoopThread(const std::shared_ptr<KitSocketPoll>& m
 #endif
                 p.set_value(kit);
 
-                std::shared_ptr<COKit> loKit(kit, kit::Deleter());
+                std::shared_ptr<COKit> loKit(kit);
 
                 startMainLoop(kit, loKit, mainKit);
 
@@ -4232,7 +4231,7 @@ void lokit_main(
 
             kit = initFunction(instdir, userdir);
 
-            loKit = std::shared_ptr<COKit>(kit, kit::Deleter());
+            loKit = std::shared_ptr<COKit>(kit);
             if (!loKit)
             {
                 LOG_FTL("COKit initialization failed. Exiting.");
@@ -4381,7 +4380,7 @@ void lokit_main(
 
         assert(kit);
 
-        static std::shared_ptr<COKit> loKit(kit, kit::Deleter());
+        static std::shared_ptr<COKit> loKit(kit);
         assert(loKit);
 
         COOLWSD::LOKitVersion = loKit->getVersionInfo();
@@ -4502,7 +4501,7 @@ void runKitLoopInAThread()
                 {
                     ProcUtil::setThreadName("lokit_runloop");
 
-                    std::shared_ptr<COKit> loKit(lo_kit, kit::Deleter());
+                    std::shared_ptr<COKit> loKit(lo_kit);
                     int dummy;
                     loKit->runLoop(pollCallback, wakeCallback, &dummy);
 

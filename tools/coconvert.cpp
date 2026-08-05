@@ -43,7 +43,7 @@ static void convert(COKit* office, const std::string& input, std::set<std::strin
 
     try
     {
-        std::unique_ptr<COKitDocument, kit::Deleter> doc(
+        std::unique_ptr<COKitDocument> doc(
             office->documentLoadWithOptions(Poco::URI(Poco::Path(input)).toString().c_str(),
                                            nullptr /* options */));
         if (!doc)
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::unique_ptr<COKit, kit::Deleter> office;
+    std::unique_ptr<COKit> office;
     try
     {
         std::string kit_path;

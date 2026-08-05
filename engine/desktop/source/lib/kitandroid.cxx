@@ -59,13 +59,13 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    pCOKit->destroy();
+    delete pCOKit;
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAndExit(JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    pCOKit->destroy();
+    delete pCOKit;
     // Stopgap fix: _exit() to force the OS to restart the LO activity.
     // Better than to hang.
     _exit(0);
@@ -199,7 +199,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->destroy();
+    delete pDocument;
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart

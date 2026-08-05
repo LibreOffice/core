@@ -1439,8 +1439,6 @@ struct COKit
 {
     virtual ~COKit() = default;
 
-    virtual void destroy() = 0;
-
     /**
      * Loads a document from a URL.
      *
@@ -1787,8 +1785,6 @@ struct COKit
 struct COKitDocument
 {
     virtual ~COKitDocument() = default;
-
-    virtual void destroy() = 0;
 
     /**
      * Stores the document's persistent data to a URL and
@@ -2508,17 +2504,5 @@ struct COKitDocument
     virtual int getPartIndex(int nPart, int nMode) = 0;
 
 };
-
-namespace kit
-{
-
-/// Frees a COKit or a COKitDocument, for use as the deleter of a standard smart pointer.
-struct Deleter
-{
-    void operator()(COKit* pKit) const { pKit->destroy(); }
-    void operator()(COKitDocument* pDocument) const { pDocument->destroy(); }
-};
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -165,7 +165,7 @@ static NSString *mapTemplateExtensionToActual(NSString *templateName) {
 
     COKitDocument *doc = lo_kit->documentLoad([[selectedTemplate absoluteString] UTF8String]);
     doc->saveAs([[newURL absoluteString] UTF8String], nullptr, nullptr);
-    doc->destroy();
+    delete doc;
 
     // Partial fix for issue #1962 Set import handler to nil after use
     if (self.importHandler) {

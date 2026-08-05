@@ -614,7 +614,7 @@ int main( int argc, char* argv[] )
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(install_path, user_profile) );
+    std::unique_ptr<COKit> pOffice( kit_cpp_init(install_path, user_profile) );
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
@@ -623,7 +623,7 @@ int main( int argc, char* argv[] )
     aTimes.emplace_back();
     pOffice->registerCallback(ignoreCallback, nullptr);
 
-    std::unique_ptr<COKitDocument, kit::Deleter> pDocument;
+    std::unique_ptr<COKitDocument> pDocument;
 
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)

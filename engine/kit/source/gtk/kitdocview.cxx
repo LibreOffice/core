@@ -2368,7 +2368,7 @@ openDocumentInThread (gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     if ( priv->m_pDocument )
     {
-        priv->m_pDocument->destroy();
+        delete priv->m_pDocument;
         priv->m_pDocument = nullptr;
     }
 
@@ -2819,11 +2819,11 @@ static void kit_doc_view_destroy (GtkWidget* widget)
         if (priv->m_pDocument->getViewsCount() == 0)
         {
             // Last view(s) gone
-            priv->m_pDocument->destroy();
+            delete priv->m_pDocument;
             priv->m_pDocument = nullptr;
             if (priv->m_pOffice && priv->m_pOffice->getDocsCount() == 0)
             {
-                priv->m_pOffice->destroy();
+                delete priv->m_pOffice;
                 priv->m_pOffice = nullptr;
             }
         }

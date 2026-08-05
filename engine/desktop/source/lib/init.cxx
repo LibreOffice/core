@@ -293,6 +293,7 @@ using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::Language
 static LibCO_Impl *gImpl = nullptr;
 static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
+static bool bInitialized = false;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
@@ -1145,7 +1146,6 @@ OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName
 extern "C"
 {
 
-static void doc_destroy(COKitDocument* pThis);
 static int doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static COKitDocumentType doc_getDocumentType(COKitDocument* pThis);
 static int doc_getParts(COKitDocument* pThis);
@@ -1564,11 +1564,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
     assert(nDocumentId != -1 && "Cannot set mnDocumentId to -1");
 
     forceSetClipboardForCurrentView(this);
-}
-
-void LibLODocument_Impl::destroy()
-{
-    doc_destroy(this);
 }
 
 bool LibLODocument_Impl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
@@ -2027,6 +2022,22 @@ void LibLODocument_Impl::flushClipboard()
 
 LibLODocument_Impl::~LibLODocument_Impl()
 {
+    comphelper::ProfileZone aZone("~LibLODocument_Impl");
+
+    SolarMutexGuard aGuard;
+
+#ifndef IOS
+    KitClipboardFactory::releaseClipboardsForDocument(mnDocumentId);
+#endif
+
+    // Drop any original-document-URL mapping recorded for this document at load.
+    // Clear it by the key we captured then, not via xModel->getURL(): the model
+    // may already be disposed by the time we get here, and getURL() on a disposed
+    // model throws DisposedException, which would escape the destructor and call
+    // std::terminate().
+    if (!maOriginalDocumentUrlKey.isEmpty())
+        comphelper::COKit::clearOriginalDocumentUrl(maOriginalDocumentUrlKey);
+
     if (comphelper::COKit::isForkedChild())
     {
         // Touch the least memory possible, while trying to avoid leaking files.
@@ -3242,30 +3253,6 @@ void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectan
 }
 
 
-static void doc_destroy(COKitDocument *pThis)
-{
-    comphelper::ProfileZone aZone("doc_destroy");
-
-    SolarMutexGuard aGuard;
-
-    LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-#ifndef IOS
-    KitClipboardFactory::releaseClipboardsForDocument(pDocument->mnDocumentId);
-#endif
-
-    // Drop any original-document-URL mapping recorded for this document at load.
-    // Clear it by the key we captured then, not via xModel->getURL(): the model
-    // may already be disposed by the time we get here (doc_destroy runs from
-    // ~Document()), and getURL() on a disposed model throws DisposedException,
-    // which would escape the destructor and call std::terminate().
-    if (!pDocument->maOriginalDocumentUrlKey.isEmpty())
-        comphelper::COKit::clearOriginalDocumentUrl(pDocument->maOriginalDocumentUrlKey);
-
-    delete pDocument;
-}
-
-static void                    lo_destroy       (COKit* pThis);
 static int                     lo_initialize    (COKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static COKitDocument* lo_documentLoad  (COKit* pThis, const char* pURL);
 static char *                  lo_getError      (COKit* pThis);
@@ -3356,11 +3343,6 @@ LibCO_Impl::LibCO_Impl()
     , mpCallbackData(nullptr)
     , mOptionalFeatures(COKitOptionalFeatures::NONE)
 {
-}
-
-void LibCO_Impl::destroy()
-{
-    lo_destroy(this);
 }
 
 COKitDocument* LibCO_Impl::documentLoad(const char* pURL)
@@ -3544,6 +3526,35 @@ int LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCou
 
 LibCO_Impl::~LibCO_Impl()
 {
+    SolarMutexClearableGuard aGuard;
+
+    gImpl = nullptr;
+
+    SAL_INFO("kit", "LO Destroy");
+
+    comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
+    uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
+    // FIXME: the terminate() call here is a no-op because it detects
+    // that COKit::isActive() and then returns early!
+    bool bSuccess = xDesktop.is() && xDesktop->terminate();
+
+    if (!bSuccess)
+    {
+        bSuccess = GetpApp() && GetpApp()->QueryExit();
+    }
+
+    if (!bSuccess)
+    {
+        Application::Quit();
+    }
+
+    aGuard.clear();
+
+    osl_joinWithThread(maThread);
+    osl_destroyThread(maThread);
+
+    bInitialized = false;
+    SAL_INFO("kit", "LO Destroy Done");
 }
 
 namespace
@@ -3725,7 +3736,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
                                                     RTL_TEXTENCODING_UTF8);
             // Key by the canonical main URL, matching how the Properties dialog
             // looks it up (INetURLObject::GetMainURL with no decoding). Remember
-            // the key so doc_destroy can clear the mapping without dereferencing
+            // the key so the destructor can clear the mapping without dereferencing
             // the (possibly already disposed) model.
             aOriginalDocumentUrlKey
                 = INetURLObject(aURL).GetMainURL(INetURLObject::DecodeMechanism::NONE);
@@ -9417,8 +9428,6 @@ static int lo_getDocsCount(COKit* /*pThis*/)
 
 }
 
-static bool bInitialized = false;
-
 static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIndicatorCallbackType type, int percent, const char* pText)
 {
     LibCO_Impl* pLib = static_cast<LibCO_Impl*>(data);
@@ -10242,7 +10251,7 @@ COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
 
         if (!lo_initialize(gImpl, install_path, user_profile_url))
         {
-            lo_destroy(gImpl);
+            delete gImpl;
         }
     }
     return static_cast<COKit*>(gImpl);
@@ -10268,41 +10277,6 @@ int cok_preinit_2(const char* install_path, const char* user_profile_url, COKit*
     if (kit != nullptr)
         *kit = gImpl;
     return result;
-}
-
-static void lo_destroy(COKit* pThis)
-{
-    SolarMutexClearableGuard aGuard;
-
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
-    gImpl = nullptr;
-
-    SAL_INFO("kit", "LO Destroy");
-
-    comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
-    uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
-    // FIXME: the terminate() call here is a no-op because it detects
-    // that COKit::isActive() and then returns early!
-    bool bSuccess = xDesktop.is() && xDesktop->terminate();
-
-    if (!bSuccess)
-    {
-        bSuccess = GetpApp() && GetpApp()->QueryExit();
-    }
-
-    if (!bSuccess)
-    {
-        Application::Quit();
-    }
-
-    aGuard.clear();
-
-    osl_joinWithThread(pLib->maThread);
-    osl_destroyThread(pLib->maThread);
-
-    delete pLib;
-    bInitialized = false;
-    SAL_INFO("kit", "LO Destroy Done");
 }
 
 } // extern "C"
