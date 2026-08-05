@@ -39,6 +39,7 @@
 #include <sys/wait.h>
 #include <sysexits.h>
 #include <unistd.h>
+#include <vector>
 
 #ifdef __linux__
 #include <sys/sysmacros.h>
@@ -71,11 +72,61 @@ void mapuser(uid_t origuid, uid_t newuid, gid_t origgid, gid_t newgid)
         of << newgid << " " << origgid << " 1";
     }
 }
+
+/// Contents of a small file, empty when it cannot be read.
+std::string readWholeFile(const std::string& path, int maxSize)
+{
+    std::vector<char> buffer;
+    if (FileUtil::readFile(path, buffer, maxSize) <= 0)
+        return std::string();
+
+    return std::string(buffer.data(), buffer.size());
+}
 #endif // __linux__
 
 } // namespace
 
 #ifdef __linux__
+int seccompModeFromStatus(std::string_view procSelfStatus)
+{
+    constexpr std::string_view Field = "Seccomp:";
+
+    const std::size_t pos = procSelfStatus.find(Field);
+    if (pos == std::string_view::npos)
+        return 0;
+
+    return NumUtil::strTo<int>(procSelfStatus.substr(pos + Field.size()), 0);
+}
+
+std::string explainNamespaceRefusal(std::string_view maxUserNamespaces,
+                                    std::string_view apparmorRestrictUserns, int seccompMode)
+{
+    // These come straight from the files, so they carry a trailing newline. Parsing the leading
+    // number tolerates that.
+    if (NumUtil::strTo<int>(maxUserNamespaces, -1) == 0)
+    {
+        return "This host permits no user namespaces: /proc/sys/user/max_user_namespaces is 0. "
+               "Raise it to let a jail be built for each document.";
+    }
+
+    if (NumUtil::strTo<int>(apparmorRestrictUserns, -1) == 1)
+    {
+        return "AppArmor is restricting unprivileged user namespaces on this host. Either set "
+               "kernel.apparmor_restrict_unprivileged_userns to 0, or install an AppArmor profile "
+               "for coolwsd.";
+    }
+
+    if (seccompMode != 0)
+    {
+        return "A seccomp filter is in force and is the likely cause. A container runtime's "
+               "default profile permits unshare and mount only to a container holding "
+               "CAP_SYS_ADMIN. Run with the cool-seccomp-profile.json profile that Collabora "
+               "Online ships, which permits them with no capability granted.";
+    }
+
+    return std::string();
+}
+
 bool enterMountingNS(uid_t uid, gid_t gid)
 {
     // Put this process into its own user and mount namespace.
@@ -83,6 +134,12 @@ bool enterMountingNS(uid_t uid, gid_t gid)
     if (unshare(CLONE_NEWUSER) != 0)
     {
         LOG_SYS("enterMountingNS, CLONE_NEWUSER unshare failed");
+        const std::string reason = explainNamespaceRefusal(
+            readWholeFile("/proc/sys/user/max_user_namespaces", 4096),
+            readWholeFile("/proc/sys/kernel/apparmor_restrict_unprivileged_userns", 4096),
+            seccompModeFromStatus(readWholeFile("/proc/self/status", 8192)));
+        if (!reason.empty())
+            LOG_ERR(reason);
         return false;
     }
 
@@ -112,7 +169,7 @@ bool enterUserNS(uid_t uid, gid_t gid)
     if (unshare(CLONE_NEWUSER) != 0)
     {
         // having multiple threads is a source of failure f.e.
-        LOG_SYS("enterMountingNS, unshare failed");
+        LOG_SYS("enterUserNS, unshare failed");
         return false;
     }
 

@@ -12,6 +12,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <sys/types.h>
 
 namespace JailUtil
@@ -47,6 +48,16 @@ bool enterMountingNS(uid_t uid, gid_t gid);
 /// Try to put this process into its own user namespace and
 /// map root to uid/gid within that namespace.
 bool enterUserNS(uid_t uid, gid_t gid);
+
+/// The seccomp mode of a process, read from the text of its /proc/<pid>/status. Zero when no
+/// filter is installed, and when the field is absent or unreadable.
+int seccompModeFromStatus(std::string_view procSelfStatus);
+
+/// One sentence naming which setting forbids a new user namespace, empty when none of the three
+/// explains it. The first two arguments are the text of /proc/sys/user/max_user_namespaces and of
+/// /proc/sys/kernel/apparmor_restrict_unprivileged_userns, each empty on a host without it.
+std::string explainNamespaceRefusal(std::string_view maxUserNamespaces,
+                                    std::string_view apparmorRestrictUserns, int seccompMode);
 
 #endif // __linux__
 

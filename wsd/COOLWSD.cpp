@@ -1378,7 +1378,12 @@ void COOLWSD::setupChildRoot(const bool UseMountNamespaces)
             if (childMountWorked && JailUtil::enterMountingNS(geteuid(), getegid()))
                 JailUtil::enableMountNamespaces();
             else
-                LOG_ERR("creating usernamespace for mount user failed.");
+            {
+                LOG_ERR("creating usernamespace for mount user failed. Jails will be built by "
+                        "the coolforkit-caps helper instead, which starts only when it holds "
+                        "CAP_CHOWN, CAP_FOWNER and CAP_SYS_CHROOT and is allowed to raise "
+                        "privileges as it starts.");
+            }
         }
 
         // Setup the jails.
