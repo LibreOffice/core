@@ -96,12 +96,20 @@ function selectTextShapeInTheCenter() {
 function selectTableInTheCenter(win) {
 	cy.log('>> selectTableInTheCenter - start');
 
+	// The client sends the first click of a group straight away and holds
+	// any further click back for 250 ms, then sends the group as one double
+	// or triple click. Both clicks below land on the same spot, so wait for
+	// that timer between them. Each click then reaches core on its own, and
+	// it does so while this helper is still running.
+
 	// First click selects the table as a shape.
 	clickCenterOfSlide();
+	helper.waitForTimers(win, 'clicktimer');
 	helper.processToIdle(win);
 
 	// Second click enters the table and places the cursor in a cell.
 	clickCenterOfSlide();
+	helper.waitForTimers(win, 'clicktimer');
 	helper.processToIdle(win);
 
 	cy.cGet('.leaflet-cursor-container').should('be.visible');
