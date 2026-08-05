@@ -443,7 +443,18 @@ class SlideShowPresenter {
 	}
 
 	_onFullScreenChange() {
-		this._fullscreen = document.fullscreenElement;
+		// A presentation is running full screen only while its own container is
+		// the full screen element. The document also goes full screen for the
+		// View menu's Full Screen entry, which the slide show takes no part in.
+		const fullscreen =
+			this._presenterContainer &&
+			document.fullscreenElement === this._presenterContainer
+				? this._presenterContainer
+				: null;
+
+		if (!fullscreen && !this._fullscreen) return;
+
+		this._fullscreen = fullscreen;
 		if (this._fullscreen) {
 			// window.addEventListener('keydown', this._onCanvasKeyDown.bind(this));
 			window.addEventListener('keydown', this._onKeyDownHandler, true);
