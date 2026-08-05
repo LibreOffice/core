@@ -14,8 +14,7 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Module_add_check_targets,kit, \
 ))
 
-# tdf#113311 disabled because it can deadlock on shutdown
-#$(eval $(call gb_Module_add_subsequentcheck_targets,kit,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,kit,\
     CppunitTest_kit_tiledrendering \
 ))
 

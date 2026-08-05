@@ -120,12 +120,17 @@ public:
 
 void TiledRenderingTest::runAllTests()
 {
-    // set UserInstallation to user profile dir in test/user-template
+    // Use a private user-installation directory for this test. It must NOT be
+    // the shared workdir/unittest template that every CppunitTest copies its
+    // profile from: kit_cpp_init() initializes the profile from the shipped
+    // presets (including autotbl.fmt with predefined table styles), so pointing
+    // UserInstallation at the shared template pollutes it and breaks unrelated
+    // tests that assume a pristine profile (e.g. the sw/sc autoformat tests).
     const char* pWorkdirRoot = getenv("WORKDIR_FOR_BUILD");
     OUString aWorkdirRootPath = OUString::createFromAscii(pWorkdirRoot);
     OUString aWorkdirRootURL = getFileURLFromSystemPath(aWorkdirRootPath);
-    OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
-    rtl::Bootstrap::set("UserInstallation", sUserInstallURL);
+    OUString sUserInstallURL = aWorkdirRootURL + "/unittest_kit";
+    rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserInstallURL);
 
     std::unique_ptr< Office > pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
@@ -141,6 +146,17 @@ void TiledRenderingTest::runAllTests()
 #if 0
     testOverlay( pOffice.get() );
 #endif
+
+    // tdf#113311: all tests have passed at this point. Destroy the Office and
+    // then leave the process via _Exit() to skip C++ global destructors and
+    // atexit handlers. The COKit lifecycle does not support an in-process
+    // teardown: static singletons such as sw's SwDLLInstance are destroyed at
+    // exit and tear down a document whose item-pool vtable has already gone,
+    // causing a pure-virtual call / use-after-free that used to abort this
+    // otherwise-green test on shutdown. Exiting here is the workaround
+    // suggested in the bug for running this test reliably.
+    pOffice.reset();
+    std::_Exit(EXIT_SUCCESS);
 }
 
 void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
@@ -157,7 +173,7 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 // Our dumped .png files end up in
 // workdir/CppunitTest/kit_tiledrendering.test.core
 
-static int getDocumentType( Office* pOffice, const string& rPath )
+static COKitDocumentType getDocumentType( Office* pOffice, const string& rPath )
 {
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
     CPPUNIT_ASSERT( pDocument );
@@ -180,7 +196,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
     // This crashed.
     pDocument->postUnoCommand(".uno:Bold");
     processEventsToIdle();
@@ -191,7 +207,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // FIXME: same comment as below wrt lockfile removal.
     remove( sPresentationLockFile.c_str() );
 
-    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::PRESENTATION, static_cast<COKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::PRESENTATION, getDocumentType(pOffice, sPresentationDocPath));
 
     // TODO: do this for all supported document types
 }
@@ -223,7 +239,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
 
     // Create two views.
     pDocument->getView();
@@ -240,7 +256,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
 
     // And try to paintPartTile() - this used to crash when the current viewId
     // was destroyed
-    pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, /*nMode=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
 }
 
 void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
@@ -401,7 +417,7 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
 
     // Create two views.
     int nViewA = pDocument->getView();

@@ -125,11 +125,16 @@ void KitInteractionHandler::postError(css::task::InteractionClassification class
     aJson.put("code", static_cast<sal_uInt32>(code));
     aJson.put("message", message.toUtf8());
 
+    // Always finish the JsonWriter, even when there is no callback to deliver
+    // the error to (e.g. an error during load before any callback was
+    // registered), otherwise its destructor asserts that data was not extracted.
+    const OString aPayload = aJson.finishAndGetAsOString();
+
     std::size_t nView = SfxViewShell::Current() ? KitHelper::getCurrentView() : 0;
     if (m_pKitDocument && m_pKitDocument->mpCallbackFlushHandlers.count(nView))
-        m_pKitDocument->mpCallbackFlushHandlers[nView]->queue(COKitCallbackType::ERROR_REPORT, aJson.finishAndGetAsOString());
+        m_pKitDocument->mpCallbackFlushHandlers[nView]->queue(COKitCallbackType::ERROR_REPORT, aPayload);
     else if (m_pKit->mpCallback)
-        m_pKit->mpCallback(COKitCallbackType::ERROR_REPORT, aJson.finishAndGetAsOString().getStr(), m_pKit->mpCallbackData);
+        m_pKit->mpCallback(COKitCallbackType::ERROR_REPORT, aPayload.getStr(), m_pKit->mpCallbackData);
 }
 
 namespace {
