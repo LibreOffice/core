@@ -146,6 +146,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
 #if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfiumLinks)
 {
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     // Given a pdf file with links:
     SdXImpressDocument* pDoc = createDoc("link_2p.pdf");
     SdTestViewCallback aView;
