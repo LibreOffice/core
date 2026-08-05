@@ -1448,6 +1448,7 @@ input, button {
 	background: var(--color-background-lighter);
 }
 
+#date_picker .ui-datepicker-next span,
 #datepicker .ui-datepicker-next span {
 	background-image: url('images/lc_nextrecord.svg');
 }
@@ -1456,6 +1457,7 @@ input, button {
 	background-position: 0;
 }
 
+#date_picker .ui-datepicker-prev span,
 #datepicker .ui-datepicker-prev span {
 	background-image: url('images/lc_prevrecord.svg');
 }
