@@ -1154,7 +1154,7 @@ bool ChildSession::loadDocument(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    _docType = LOKitHelper::getDocumentTypeAsString(getLOKitDocument()->get());
+    _docType = LOKitHelper::getDocumentTypeAsString(getLOKitDocument().get());
     if (_docType != "text" && part != -1)
     {
         // The load option names the part by its index in document order, while
@@ -1170,7 +1170,7 @@ bool ChildSession::loadDocument(const StringVector& tokens)
 
     // Respond by the document status
     LOG_DBG("Sending status after loading view " << _viewId);
-    const std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+    const std::string status = LOKitHelper::documentStatus(getLOKitDocument().get());
 
     KitLoadTimings.record("loadDocumentEnd");
     const std::string loadTimingMsg = KitLoadTimings.format("loadtiming:");
@@ -1243,7 +1243,7 @@ bool ChildSession::getStatus()
 
     getLOKitDocument()->setView(_viewId);
 
-    status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+    status = LOKitHelper::documentStatus(getLOKitDocument().get());
 
     if (status.empty())
     {
@@ -1260,7 +1260,7 @@ bool ChildSession::getPartStatus()
 
     getLOKitDocument()->setView(_viewId);
 
-    status = LOKitHelper::documentStatus(getLOKitDocument()->get(), true);
+    status = LOKitHelper::documentStatus(getLOKitDocument().get(), true);
 
     if (status.empty())
     {
@@ -1721,10 +1721,13 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
     for (const auto& type : mimeTypes)
     {
         char* textSelection = nullptr;
+        char* usedMimeType = nullptr;
         const COKitSelectionType selectionType
-            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(), &textSelection);
+            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(),
+                                                          &textSelection, &usedMimeType);
         std::string selection(textSelection ? textSelection : "");
         free(textSelection);
+        free(usedMimeType);
         if (selectionType == COKitSelectionType::COMPLEX)
         {
             // Flag complex data so the client will download async.
@@ -3445,7 +3448,7 @@ bool ChildSession::selectClientPart(const StringVector& tokens)
             getLOKitDocument()->selectPart(part, select);
 
             // Notify the client of the selection update.
-            const std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+            const std::string status = LOKitHelper::documentStatus(getLOKitDocument().get());
             if (!status.empty())
                 return sendTextFrame("statusupdate: " + status);
         }
@@ -3481,7 +3484,7 @@ bool ChildSession::moveSelectedClientParts(const StringVector& tokens)
         getLOKitDocument()->moveSelectedParts(position, false, intoSection); // Move, don't duplicate.
 
         // Get the status to notify clients of the reordering and selection change.
-        const std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+        const std::string status = LOKitHelper::documentStatus(getLOKitDocument().get());
         if (!status.empty())
             return _docManager->notifyAll("statusupdate: " + status);
     }
@@ -4022,7 +4025,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
             payload == ".uno:RedlineRenderMode=true" || payload == ".uno:RedlineRenderMode=false")
         {
             getLOKitDocument()->setView(_viewId);
-            std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+            std::string status = LOKitHelper::documentStatus(getLOKitDocument().get());
             sendTextFrame("statusupdate: " + status);
         }
         else if (payload.find(".uno:ModifiedStatus") != std::string::npos)

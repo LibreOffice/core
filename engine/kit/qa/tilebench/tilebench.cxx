@@ -148,7 +148,7 @@ static void dumpTile(const char *pNameStem,
     ofs.close();
 }
 
-static void testTile( Document *pDocument, int max_parts,
+static void testTile( COKitDocument *pDocument, int max_parts,
                       int max_tiles, bool dump )
 {
     const COKitTileMode mode = pDocument->getTileMode();
@@ -330,7 +330,7 @@ static int diffTiles( const std::vector<unsigned char> &vBase,
     return nDifferent;
 }
 
-static std::vector<unsigned char> paintTile( Document *pDocument,
+static std::vector<unsigned char> paintTile( COKitDocument *pDocument,
                                              long nX, long nY,
                                              long const nTilePixelWidth,
                                              long const nTilePixelHeight,
@@ -345,7 +345,7 @@ static std::vector<unsigned char> paintTile( Document *pDocument,
     return vData;
 }
 
-static int testJoinsAt( Document *pDocument, long nX, long nY,
+static int testJoinsAt( COKitDocument *pDocument, long nX, long nY,
                         long const nTilePixelSize,
                         long const nTileTwipSize )
 {
@@ -426,7 +426,7 @@ static int testJoinsAt( Document *pDocument, long nX, long nY,
 }
 
 // Check that our tiles join nicely ...
-static int testJoin( Document *pDocument)
+static int testJoin( COKitDocument *pDocument)
 {
     // Ignore parts - just the first for now ...
     long nWidth = 0, nHeight = 0;
@@ -480,7 +480,7 @@ static std::atomic<int> nDialogId(-1);
 
 static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    Document *pDocument = static_cast<Document *>(pData);
+    COKitDocument *pDocument = static_cast<COKitDocument *>(pData);
 
     if (eType != COKitCallbackType::WINDOW)
         return;
@@ -511,7 +511,7 @@ static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pDa
     unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
 
     aTimes.emplace_back("render dialog");
-    pDocument->paintWindowForView(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
+    pDocument->paintWindowForView(nDialogId, pBuffer, 0, 0, nWidth, nHeight, 1.0, -1);
     dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
     aTimes.emplace_back();
 
@@ -520,9 +520,9 @@ static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pDa
     bDialogRendered = true;
 }
 
-static void testDialog( Document *pDocument, const char *uno_cmd )
+static void testDialog( COKitDocument *pDocument, const char *uno_cmd )
 {
-    int view = pDocument->createViewWithOptions();
+    int view = pDocument->createViewWithOptions(nullptr);
     pDocument->setView(view);
     pDocument->registerCallback(kitCallback, pDocument);
 
@@ -537,7 +537,7 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     }
 
     aTimes.emplace_back("post close dialog");
-    pDocument->postWindow(nDialogId, COKitWindowAction::CLOSE);
+    pDocument->postWindow(nDialogId, COKitWindowAction::CLOSE, nullptr);
     aTimes.emplace_back();
 
     pDocument->destroyView(view);
@@ -614,7 +614,7 @@ int main( int argc, char* argv[] )
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    std::unique_ptr<Office> pOffice( kit_cpp_init(install_path, user_profile) );
+    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(install_path, user_profile) );
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
@@ -623,7 +623,7 @@ int main( int argc, char* argv[] )
     aTimes.emplace_back();
     pOffice->registerCallback(ignoreCallback, nullptr);
 
-    std::unique_ptr<Document> pDocument;
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument;
 
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)
@@ -672,7 +672,7 @@ int main( int argc, char* argv[] )
         if (saveToPath != nullptr)
         {
             aTimes.emplace_back("save");
-            pDocument->saveAs(saveToPath);
+            pDocument->saveAs(saveToPath, nullptr, nullptr);
             aTimes.emplace_back();
         }
     } else

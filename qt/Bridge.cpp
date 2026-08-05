@@ -458,7 +458,7 @@ void Bridge::saveCompleted()
 void Bridge::promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback)
 {
     // Prompt user to pick a save location and format
-    kit::Document* loKitDoc = DocumentData::get(_document._appDocId).loKitDocument;
+    COKitDocument* loKitDoc = DocumentData::get(_document._appDocId).loKitDocument;
     if (!loKitDoc)
     {
         LOG_ERR("promptSaveLocation: no loKitDocument");

@@ -1441,8 +1441,19 @@ struct COKit
 
     virtual void destroy() = 0;
 
+    /**
+     * Loads a document from a URL.
+     *
+     * @param pUrl the URL of the document to load
+     * @param pFilterOptions options for the import filter, e.g. SkipImages.
+     *        Another useful FilterOption is "Language=...".  It is consumed
+     *        by the documentLoad() itself, and when provided, COKit
+     *        switches the language accordingly first.
+     */
     virtual COKitDocument* documentLoad(const char* pURL) = 0;
 
+    /// Returns the last error as a string. The returned pointer has to be freed by the caller
+    /// by calling the freeError() member function.
     virtual char* getError() = 0;
 
     virtual COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) = 0;
@@ -1460,1453 +1471,13 @@ struct COKit
     /// same C runtime where the malloc() that allocated the pointer
     /// is.
 
-    virtual void freeError(char* pFree) = 0;
-
-    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
-
-    /** @see kit::Office::getFilterTypes(). */
-    virtual char* getFilterTypes() = 0;
-
-    /** @see kit::Office::setOptionalFeatures(). */
-    virtual void setOptionalFeatures(COKitOptionalFeatures features) = 0;
-
-    /** @see kit::Office::setDocumentPassword(). */
-    virtual void setDocumentPassword(char const* pURL, char const* pPassword) = 0;
-
-    /** @see kit::Office::getVersionInfo(). */
-    virtual char* getVersionInfo() = 0;
-
-    /** @see kit::Office::runMacro(). */
-    virtual int runMacro(const char* pURL) = 0;
-
-    /** @see kit::Office::signDocument(). */
-    virtual bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
-                               const int nCertificateBinarySize,
-                               const unsigned char* pPrivateKeyBinary,
-                               const int nPrivateKeyBinarySize) = 0;
-
-    /// @see kit::Office::runLoop()
-    virtual void runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
-                         void* pData) = 0;
-
-    /// @see kit::Office::sendDialogEvent
-    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
-
-    /// @see kit::Office::setOption
-    virtual void setOption(const char* pOption, const char* pValue) = 0;
-
-    /// @see kit::Office::dumpState
-    virtual void dumpState(const char* pOptions, char** pState) = 0;
-
-    /** @see kit::Office::extractRequest.
-     */
-    virtual char* extractRequest(const char* pFilePath) = 0;
-
-    /// @see kit::Office::trimMemory
-    virtual void trimMemory(int nTarget) = 0;
-
-    /// @see kit::Office::startURP
-    virtual void* startURP(
-        void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-        int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-        int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) = 0;
-
-    /// @see kit::Office::stopURP
-    virtual void stopURP(void* pSendURPToLOContext) = 0;
-
-    /// @see kit::Office::joinThreads
-    virtual int joinThreads() = 0;
-
-    /// @see kit::Office::startThreads
-    virtual void startThreads() = 0;
-
-    /// @see kit::Office::setForkedChild
-    virtual void setForkedChild(bool bIsChild) = 0;
-
-    /** @see kit::Office::extractDocumentStructureRequest.
-     */
-    virtual char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
-
-    /// @see kit::Office::registerAnyInputCallback()
-    virtual void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) = 0;
-
-    /// @see kit::Office::getDocsCount().
-    virtual int getDocsCount() = 0;
-
-    /// @see kit::Office::registerFileSaveDialogCallback()
-    virtual void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) = 0;
-
-    /// @see kit::Office::executeScript().
-    virtual void executeScript(char const * script, char ** result, char ** error,
-                               void (*proxyCallback) (void * data, char const * payload),
-                               void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
-
-    /// @see kit::Office::deliverProxyResult().
-    virtual void deliverProxyResult(char const * callId, char const * jsonValue) = 0;
-
-    /// @see kit::Office::cancelProxyCalls().
-    virtual void cancelProxyCalls() = 0;
-
-    /// @see kit::Office::isExpectedReentry().
-    virtual int isExpectedReentry() = 0;
-
-    /// @see kit::Office::takeLegacyUnoApiUseFlag().
-    virtual bool takeLegacyUnoApiUseFlag() = 0;
-
-    /// @see kit::Office::registerRevealInFileManagerCallback()
-    virtual void
-    registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) = 0;
-
-    /** @see kit::Office::installClipboardProvider(). */
-    virtual void installClipboardProvider(const COKitClipboardProvider* pProvider) = 0;
-
-    /** @see kit::Office::getGlobalClipboard(). */
-    virtual int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                   char      ***pOutStreams) = 0;
-};
-
-struct COKitDocument
-{
-    virtual ~COKitDocument() = default;
-
-    virtual void destroy() = 0;
-
-    virtual bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) = 0;
-
-    /** @see kit::Document::getDocumentType(). */
-    virtual COKitDocumentType getDocumentType() = 0;
-
-    /// @see kit::Document::getParts().
-    virtual int getParts() = 0;
-
-    /// @see kit::Document::getPartPageRectangles().
-    virtual char* getPartPageRectangles() = 0;
-
-    /// @see kit::Document::getPart().
-    virtual int getPart() = 0;
-
-    /// @see kit::Document::setPart().
-    virtual void setPart(int nPart) = 0;
-
-    /// @see kit::Document::getPartName().
-    virtual char* getPartName(int nPart) = 0;
-
-    /// @see kit::Document::setPartMode().
-    virtual void setPartMode(COKitPartMode eMode) = 0;
-
-    /// @see kit::Document::paintTile().
-    virtual void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
-                           const int nTilePosX, const int nTilePosY, const int nTileWidth,
-                           const int nTileHeight) = 0;
-
-    /// @see kit::Document::getTileMode().
-    virtual COKitTileMode getTileMode() = 0;
-
-    /// @see kit::Document::getDocumentSize().
-    virtual void getDocumentSize(long* pWidth, long* pHeight) = 0;
-
-    /// @see kit::Document::initializeForRendering().
-    virtual void initializeForRendering(const char* pArguments) = 0;
-
-    /// @see kit::Document::registerCallback().
-    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
-
-    /// @see kit::Document::postKeyEvent
-    virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) = 0;
-
-    /// @see kit::Document::postMouseEvent
-    virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
-                                int nButtons, int nModifier) = 0;
-
-    /// @see kit::Document::postUnoCommand
-    virtual void postUnoCommand(const char* pCommand, const char* pArguments,
-                                bool bNotifyWhenFinished) = 0;
-
-    /// @see kit::Document::setTextSelection
-    virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) = 0;
-
-    /// @see kit::Document::getTextSelection
-    virtual char* getTextSelection(const char* pMimeType, char** pUsedMimeType) = 0;
-
-    /// @see kit::Document::paste().
-    virtual bool paste(const char* pMimeType, const char* pData, size_t nSize) = 0;
-
-    /// @see kit::Document::setGraphicSelection
-    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
-
-    /// @see kit::Document::resetSelection
-    virtual void resetSelection() = 0;
-
-    /// @see kit::Document::getCommandValues().
-    virtual char* getCommandValues(const char* pCommand) = 0;
-
-    /// @see kit::Document::setClientZoom().
-    virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
-                               int nTileTwipHeight) = 0;
-
-    /// @see kit::Document::setVisibleArea).
-    virtual void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) = 0;
-
-    /// @see kit::Document::createView().
-    virtual int createView() = 0;
-    /// @see kit::Document::destroyView().
-    virtual void destroyView(int nId) = 0;
-    /// @see kit::Document::setView().
-    virtual void setView(int nId) = 0;
-    /// @see kit::Document::getView().
-    virtual int getView() = 0;
-    /// @see kit::Document::getViewsCount().
-    virtual int getViewsCount() = 0;
-
-    /// @see kit::Document::getPartHash().
-    virtual char* getPartHash(int nPart) = 0;
-
-    /// Paints a tile from a specific part.
-    /// @see kit::Document::paintTile().
-    virtual void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
-                               const int nCanvasWidth, const int nCanvasHeight,
-                               const int nTilePosX, const int nTilePosY, const int nTileWidth,
-                               const int nTileHeight) = 0;
-
-    /// @see kit::Document::getViewIds().
-    virtual bool getViewIds(int* pArray, size_t nSize) = 0;
-
-    /// @see kit::Document::setOutlineState).
-    virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) = 0;
-
-    /// Paints window with given id to the buffer
-    /// @see kit::Document::paintWindow().
-    virtual void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
-                             const int width, const int height) = 0;
-
-    /// @see kit::Document::postWindow().
-    virtual void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData) = 0;
-
-    /// @see kit::Document::postWindowKeyEvent().
-    virtual void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
-                                    int nKeyCode) = 0;
-
-    /// @see kit::Document::postWindowMouseEvent().
-    virtual void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX,
-                                      int nY, int nCount, int nButtons, int nModifier) = 0;
-
-    /// @see kit::Document::setViewLanguage().
-    virtual void setViewLanguage(int nId, const char* language) = 0;
-
-    /// @see kit::Document::postWindowExtTextInputEvent
-    virtual void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
-                                             const char* pText) = 0;
-
-    /// @see kit::Document::getPartInfo().
-    virtual char* getPartInfo(int nPart) = 0;
-
-    /// Paints window with given id to the buffer with the give DPI scale
-    /// (every pixel is dpiscale-times larger).
-    /// @see kit::Document::paintWindow().
-    virtual void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
-                                const int y, const int width, const int height,
-                                const double dpiscale) = 0;
-
-    /// @see kit::Document::insertCertificate().
-    virtual bool insertCertificate(const unsigned char* pCertificateBinary,
-                                   const int nCertificateBinarySize,
-                                   const unsigned char* pPrivateKeyBinary,
-                                   const int nPrivateKeyBinarySize) = 0;
-
-    /// @see kit::Document::addCertificate().
-    virtual bool addCertificate(const unsigned char* pCertificateBinary,
-                                const int nCertificateBinarySize) = 0;
-
-    /// @see kit::Document::getSignatureState().
-    virtual int getSignatureState() = 0;
-
-    /// @see kit::Document::renderShapeSelection
-    virtual size_t renderShapeSelection(char** pOutput) = 0;
-
-    /// @see kit::Document::postWindowGestureEvent().
-    virtual void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
-                                        int nOffset) = 0;
-
-    /// @see kit::Document::createViewWithOptions().
-    virtual int createViewWithOptions(const char* pOptions) = 0;
-
-    /// @see kit::Document::selectPart().
-    virtual void selectPart(int nPart, int nSelect) = 0;
-
-    /// @see kit::Document::moveSelectedParts().
-    /// nIntoSection: when >= 0, the section at that index will be re-anchored
-    /// to the first moved slide (i.e. the slide becomes the new section start).
-    /// Pass -1 to keep the default behaviour where sections stay anchored to
-    /// their existing non-moved slides.
-    virtual void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) = 0;
-
-    /// Resize window with given id.
-    /// @see kit::Document::resizeWindow().
-    virtual void resizeWindow(unsigned nWindowId, const int width, const int height) = 0;
-
-    /// Pass a nullptr terminated array of mime-type strings
-    /// @see kit::Document::getClipboard for more details
-    virtual int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                             char      ***pOutMimeTypes, size_t     **pOutSizes,
-                             char      ***pOutStreams) = 0;
-
-    /// @see kit::Document::setClipboard
-    virtual int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
-                             const size_t  *pInSizes, const char   **pInStreams) = 0;
-
-    /// @see kit::Document::getSelectionType
-    virtual COKitSelectionType getSelectionType() = 0;
-
-    /// @see kit::Document::removeTextContext
-    virtual void removeTextContext(unsigned nWindowId, int nBefore, int nAfter) = 0;
-
-    /// @see kit::Document::sendDialogEvent
-    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
-
-    /// @see kit::Document::renderFontOrientation().
-    virtual unsigned char* renderFontOrientation(const char* pFontName, const char* pChar,
-                                                 int* pFontWidth, int* pFontHeight,
-                                                 int pOrientation) = 0;
-
-    /// Switches view to viewId if viewId >= 0, and paints window
-    /// @see kit::Document::paintWindowDPI().
-    virtual void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
-                                    const int y, const int width, const int height,
-                                    const double dpiscale, int viewId) = 0;
-
-    /// @see kit::Document::completeFunction().
-    virtual void completeFunction(const char* pFunctionName) = 0;
-
-    /// @see kit::Document::setWindowTextSelection
-    virtual void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY) = 0;
-
-    /// @see kit::Document::sendFormFieldEvent
-    virtual void sendFormFieldEvent(const char* pArguments) = 0;
-
-    /// @see kit::Document::setBlockedCommandList
-    virtual void setBlockedCommandList(int nViewId, const char* blockedCommandList) = 0;
-
-    /// @see kit::Document::renderSearchResult
-    virtual bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
-                                    int* pWidth, int* pHeight, size_t* pByteSize) = 0;
-
-    /// @see kit::Document::sendContentControlEvent().
-    virtual void sendContentControlEvent(const char* pArguments) = 0;
-
-    /// @see kit::Document::getSelectionTypeAndText
-    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
-                                                       char** pUsedMimeType) = 0;
-
-    /// @see kit::Document::getDataArea().
-    virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;
-
-    /// @see kit::Document::getEditMode().
-    virtual int getEditMode() = 0;
-
-    /// @see kit::Document::setViewTimezone().
-    virtual void setViewTimezone(int nId, const char* pTimezone) = 0;
-
-    /// @see kit::Document::setAccessibilityState().
-    virtual void setAccessibilityState(int nId, bool nEnabled) = 0;
-
-    /// @see kit::Document::getA11yFocusedParagraph.
-    virtual char* getA11yFocusedParagraph() = 0;
-
-    /// @see kit::Document::getA11yCaretPosition.
-    virtual int getA11yCaretPosition() = 0;
-
-    /// @see kit::Document::setViewReadOnly().
-    virtual void setViewReadOnly(int nId, const bool readOnly) = 0;
-
-    /// @see kit::Document::setAllowChangeComments().
-    virtual void setAllowChangeComments(int nId, const bool allow) = 0;
-
-    /// @see kit::Document::getPresentationInfo
-    virtual char* getPresentationInfo() = 0;
-
-    /// @see kit::Document::createSlideRenderer
-    virtual bool createSlideRenderer(const char* pSlideHash, int nSlideNumber,
-                                     unsigned* nViewWidth, unsigned* nViewHeight,
-                                     bool bRenderBackground, bool bRenderMasterPage) = 0;
-
-    /// @see kit::Document::postSlideshowCleanup
-    virtual void postSlideshowCleanup() = 0;
-
-    /// @see kit::Document::renderNextSlideLayer
-    virtual bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
-                                      char** pJsonMessage) = 0;
-
-    /// @see kit::Document::setViewOption
-    virtual void setViewOption(const char* pOption, const char* pValue) = 0;
-
-    /// @see kit::Document::setColorPreviewState().
-    virtual void setColorPreviewState(int nId, bool nEnabled) = 0;
-
-    /// @see kit::Document::setAllowManageRedlines().
-    virtual void setAllowManageRedlines(int nId, bool allow) = 0;
-
-    /// @see kit::Document::transferClipboardFromView().
-    virtual void transferClipboardFromView(int nSourceViewId) = 0;
-
-    /// @see kit::Document::flushClipboard().
-    virtual void flushClipboard() = 0;
-
-    /// @see kit::Document::getPartUniqueId().
-    virtual unsigned long long getPartUniqueId(int nPart, int nMode)= 0;
-
-    /// @see kit::Document::getPartIndex().
-    virtual int getPartIndex(int nPart, int nMode) = 0;
-
-};
-
-/*
- * The reasons this C++ code is not as pretty as it could be are:
- *  a) provide a pure C API - that's useful for some people
- *  b) allow ABI stability - C++ vtables are not good for that.
- *  c) avoid C++ types as part of the API.
- */
-namespace kit
-{
-
-/// The kit::Document class represents one loaded document instance.
-class Document
-{
-private:
-    COKitDocument* mpDoc;
-
-public:
-    /// A kit::Document is typically created by the kit::Office::documentLoad() method.
-    Document(COKitDocument* pDoc) :
-        mpDoc(pDoc)
-    {}
-
-    ~Document()
-    {
-        mpDoc->destroy();
-    }
-
-    /**
-     * Stores the document's persistent data to a URL and
-     * continues to be a representation of the old URL.
-     *
-     * @param pUrl the location where to store the document
-     * @param pFormat the format to use while exporting, when omitted, then deducted from pURL's extension
-     * @param pFilterOptions options for the export filter, e.g. SkipImages.
-     *        Another useful FilterOption is "TakeOwnership".  It is consumed
-     *        by the saveAs() itself, and when provided, the document identity
-     *        changes to the provided pUrl - meaning that '.uno:ModifiedStatus'
-     *        is triggered as with the "Save As..." in the UI.
-     *        "TakeOwnership" mode must not be used when saving to PNG or PDF.
-     */
-    bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
-    {
-        return mpDoc->saveAs(pUrl, pFormat, pFilterOptions);
-    }
-
-    /// Gives access to the underlying C pointer.
-    COKitDocument *get() { return mpDoc; }
-
-    /**
-     * Get document type.
-     *
-     * @return an element of the COKitDocumentType enum.
-     */
-    COKitDocumentType getDocumentType()
-    {
-        return mpDoc->getDocumentType();
-    }
-
-    /**
-     * Get number of part that the document contains.
-     *
-     * Part refers to either individual sheets in a Calc, or slides in Impress,
-     * and has no relevance for Writer.
-     */
-    int getParts()
-    {
-        return mpDoc->getParts();
-    }
-
-    /**
-     * Get the extent of each page in the document.
-     *
-     * This function is relevant for Writer documents only. It is a
-     * mistake that the API has "part" in its name as Writer documents
-     * don't have parts.
-     *
-     * @return a rectangle list, using the same format as
-     * COKitCallbackType::TEXT_SELECTION.
-     */
-    char* getPartPageRectangles()
-    {
-        return mpDoc->getPartPageRectangles();
-    }
-
-    /// Get the current part number of the document. For a presentation or
-    /// drawing document a part number is the page's stable unique identifier;
-    /// for other document types it is the part's index.
-    int getPart()
-    {
-        return mpDoc->getPart();
-    }
-
-    /// Set the current part of the document by its part number. The part
-    /// number of a page that is gone selects nothing.
-    void setPart(int nPart)
-    {
-        mpDoc->setPart(nPart);
-    }
-
-    /**
-     * Renders a window (dialog, popup, etc.) with the given id, switching to
-     * viewId first when that is >= 0.
-     *
-     * @param pBuffer Buffer with enough memory allocated to render any dialog
-     * @param x x-coordinate from where the dialog should start painting
-     * @param y y-coordinate from where the dialog should start painting
-     * @param width The width of the dialog image to be painted
-     * @param height The height of the dialog image to be painted
-     * @param dpiscale The dpi scale value used by the client. Please note
-     *                 that the x, y, width, height are supposed to be the
-     *                 values with dpiscale applied (ie. dialog covering
-     *                 100x100 "normal" pixels with dpiscale '2' will have
-     *                 200x200 width x height), so that it is easy to compute
-     *                 the buffer sizes etc.
-     */
-    void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
-                            const int width, const int height, const double dpiscale = 1.0,
-                            const int viewId = -1)
-    {
-        mpDoc->paintWindowForView(nWindowId, pBuffer, x, y, width, height, dpiscale, viewId);
-    }
-
-    /**
-     * Paints a font name or character if provided to be displayed in the font list
-     * @param pFontName the font to be painted
-     */
-    unsigned char* renderFontOrientation(const char* pFontName, const char* pChar, int* pFontWidth,
-                                         int* pFontHeight, int pOrientation = 0)
-    {
-        return mpDoc->renderFontOrientation(pFontName, pChar, pFontWidth, pFontHeight,
-                                            pOrientation);
-    }
-
-    /// Get the current part's name.
-    char* getPartName(int nPart)
-    {
-        return mpDoc->getPartName(nPart);
-    }
-
-    /// Get the current part's hash.
-    char* getPartHash(int nPart)
-    {
-        return mpDoc->getPartHash(nPart);
-    }
-
-    /**
-     * Get the stable unique identifier of one part: a nonzero integer assigned
-     * to the part for the whole document session, kept over part moves,
-     * insertions and deletions of other parts. nMode selects the part list the
-     * index addresses: 0 for the standard parts, 1 for the master pages, 2 for
-     * the notes pages. Zero when there is no such part or the document has no
-     * part identifiers.
-     */
-    unsigned long long getPartUniqueId(int nPart, int nMode)
-    {
-        return mpDoc->getPartUniqueId(nPart, nMode);
-    }
-
-    /**
-     * Get the index the part with the given part number holds now. For a
-     * presentation or drawing document a part number is the page's stable
-     * unique identifier, and the result is the position of that page in the
-     * part list nMode selects; -1 when no page carries that number any more.
-     * For other document types the part number is the index itself.
-     */
-    int getPartIndex(int nPart, int nMode)
-    {
-        return mpDoc->getPartIndex(nPart, nMode);
-    }
-
-    void setPartMode(COKitPartMode eMode)
-    {
-        mpDoc->setPartMode(eMode);
-    }
-
-    int getEditMode()
-    {
-        return mpDoc->getEditMode();
-    }
-
-    /**
-     * Renders a subset of the document to a pre-allocated buffer.
-     *
-     * Note that the buffer size and the tile size implicitly supports
-     * rendering at different zoom levels, as the number of rendered pixels and
-     * the rendered rectangle of the document are independent.
-     *
-     * @param pBuffer pointer to the buffer, its size is determined by nCanvasWidth and nCanvasHeight.
-     * @param nCanvasWidth number of pixels in a row of pBuffer.
-     * @param nCanvasHeight number of pixels in a column of pBuffer.
-     * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
-     * @param nTilePosY logical Y position of the top left corner of the rendered rectangle, in TWIPs.
-     * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
-     * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
-     */
-    void paintTile(unsigned char* pBuffer,
-                          const int nCanvasWidth,
-                          const int nCanvasHeight,
-                          const int nTilePosX,
-                          const int nTilePosY,
-                          const int nTileWidth,
-                          const int nTileHeight)
-    {
-        return mpDoc->paintTile(pBuffer, nCanvasWidth, nCanvasHeight,
-                                nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-    }
-
-    /**
-     * Posts a command to the window (dialog, popup, etc.) with given id
-     *
-     * @param nWindowid
-     */
-    void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData = nullptr)
-    {
-        return mpDoc->postWindow(nWindowId, eAction, pData);
-    }
-
-    /**
-     * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
-     *
-     * @return the pixel order the document's tiles use.
-     */
-    COKitTileMode getTileMode()
-    {
-        return mpDoc->getTileMode();
-    }
-
-    /// Get the document sizes in TWIPs.
-    void getDocumentSize(long* pWidth, long* pHeight)
-    {
-        mpDoc->getDocumentSize(pWidth, pHeight);
-    }
-
-    /// Get the data area (in Calc last row and column).
-    void getDataArea(long nPart, long* pCol, long* pRow)
-    {
-        mpDoc->getDataArea(nPart, pCol, pRow);
-    }
-
-    /**
-     * Initialize document for rendering.
-     *
-     * Sets the rendering and document parameters to default values that are
-     * needed to render the document correctly using tiled rendering. This
-     * method has to be called right after documentLoad() in case any of the
-     * tiled rendering methods are to be used later.
-     *
-     * Example argument string for text documents:
-     *
-     * {
-     *     ".uno:HideWhitespace":
-     *     {
-     *         "type": "boolean",
-     *         "value": "true"
-     *     }
-     * }
-     *
-     * @param pArguments arguments of the rendering
-     */
-    void initializeForRendering(const char* pArguments = NULL)
-    {
-        mpDoc->initializeForRendering(pArguments);
-    }
-
-    /**
-     * Registers a callback. COKit will invoke this function when it wants to
-     * inform the client about events.
-     *
-     * @param pCallback the callback to invoke
-     * @param pData the user data, will be passed to the callback on invocation
-     */
-    void registerCallback(COKitCallback pCallback, void* pData)
-    {
-        mpDoc->registerCallback(pCallback, pData);
-    }
-
-    /**
-     * Posts a keyboard event to the focused frame.
-     *
-     * @param eType Event type, like press or release.
-     * @param nCharCode contains the Unicode character generated by this event or 0
-     * @param nKeyCode contains the integer code representing the key of the event (non-zero for control keys)
-     */
-    void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
-    {
-        mpDoc->postKeyEvent(eType, nCharCode, nKeyCode);
-    }
-
-    /**
-     * Posts a keyboard event to the dialog
-     *
-     * @param nWindowId
-     * @param eType Event type, like press or release.
-     * @param nCharCode contains the Unicode character generated by this event or 0
-     * @param nKeyCode contains the integer code representing the key of the event (non-zero for control keys)
-     */
-    void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
-                            int nKeyCode)
-    {
-        mpDoc->postWindowKeyEvent(nWindowId, eType, nCharCode, nKeyCode);
-    }
-
-    /**
-     * Posts a mouse event to the document.
-     *
-     * @param eType Event type, like down, move or up.
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     * @param nCount number of clicks: 1 for single click, 2 for double click
-     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
-     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
-     */
-    void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
-                        int nModifier)
-    {
-        mpDoc->postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier);
-    }
-
-    /**
-     * Posts a mouse event to the window with given id.
-     *
-     * @param nWindowId
-     * @param eType Event type, like down, move or up.
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     * @param nCount number of clicks: 1 for single click, 2 for double click
-     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
-     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
-     */
-    void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX, int nY,
-                              int nCount, int nButtons, int nModifier)
-    {
-        mpDoc->postWindowMouseEvent(nWindowId, eType, nX, nY, nCount, nButtons,
-                                           nModifier);
-    }
-
-    /**
-     * Posts a dialog event for the window with given id
-     *
-     * @param nWindowId id of the window to notify
-     * @param pArguments arguments of the event.
-     */
-    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
-    {
-        mpDoc->sendDialogEvent(nWindowId, pArguments);
-    }
-
-    /**
-     * Posts a UNO command to the document.
-     *
-     * Example argument string:
-     *
-     * {
-     *     "SearchItem.SearchString":
-     *     {
-     *         "type": "string",
-     *         "value": "foobar"
-     *     },
-     *     "SearchItem.Backward":
-     *     {
-     *         "type": "boolean",
-     *         "value": "false"
-     *     }
-     * }
-     *
-     * @param pCommand uno command to be posted to the document, like ".uno:Bold"
-     * @param pArguments arguments of the uno command.
-     */
-    void postUnoCommand(const char* pCommand, const char* pArguments = NULL, bool bNotifyWhenFinished = false)
-    {
-        mpDoc->postUnoCommand(pCommand, pArguments, bNotifyWhenFinished);
-    }
-
-    /**
-     * Sets the start or end of a text selection.
-     *
-     * @param nType @see COKitSetTextSelectionType
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     */
-    void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
-    {
-        mpDoc->setTextSelection(eType, nX, nY);
-    }
-
-    /**
-     * Gets the currently selected text.
-     *
-     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
-     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
-     */
-    char* getTextSelection(const char* pMimeType, char** pUsedMimeType = NULL)
-    {
-        return mpDoc->getTextSelection(pMimeType, pUsedMimeType);
-    }
-
-    /**
-     * Gets the type of the selected content.
-     *
-     * In most cases it is more efficient to use getSelectionTypeAndText().
-     *
-     * @return what kind of selection the document holds.
-     */
-    COKitSelectionType getSelectionType()
-    {
-        return mpDoc->getSelectionType();
-    }
-
-    /**
-     * Gets the type of the selected content and possibly its text.
-     *
-     * This function is a more efficient combination of getSelectionType() and getTextSelection().
-     * It returns the same as getSelectionType(), and additionally if the return value is
-     * COKitSelectionType::TEXT then it also returns the same as getTextSelection(), otherwise
-     * pText and pUsedMimeType are unchanged.
-     *
-     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
-     * @param pText the currently selected text
-     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
-     * @return what kind of selection the document holds.
-     */
-    COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
-                                              char** pUsedMimeType = NULL)
-    {
-        return mpDoc->getSelectionTypeAndText(pMimeType, pText, pUsedMimeType);
-    }
-
-    /**
-     * Gets the content on the clipboard for the current view as a series of binary streams.
-     *
-     * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
-     *
-     * @param pMimeTypes passes in a nullptr terminated list of mime types to fetch
-     * @param pOutCount     returns the size of the other @pOut arrays
-     * @param pOutMimeTypes returns an array of mime types
-     * @param pOutSizes     returns the size of each pOutStream
-     * @param pOutStreams   the content of each mime-type, of length in @pOutSizes
-     *
-     * @returns: true on success, false on error.
-     */
-    bool getClipboard(const char **pMimeTypes,
-                      size_t      *pOutCount,
-                      char      ***pOutMimeTypes,
-                      size_t     **pOutSizes,
-                      char      ***pOutStreams)
-    {
-        return mpDoc->getClipboard(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
-    }
-
-    /**
-     * Populates the clipboard for this view with multiple types of content.
-     *
-     * @param nInCount the number of types to paste
-     * @param pInMimeTypes array of mime type strings
-     * @param pInSizes array of sizes of the data to paste
-     * @param pInStreams array containing the data of the various types
-     *
-     * @return if the supplied data was populated successfully.
-     */
-    bool setClipboard(const size_t  nInCount,
-                      const char  **pInMimeTypes,
-                      const size_t *pInSizes,
-                      const char  **pInStreams)
-    {
-        return mpDoc->setClipboard(nInCount, pInMimeTypes, pInSizes, pInStreams);
-    }
-
-    /**
-     * Shares another view's live clipboard transferable into the current view's
-     * clipboard by reference, without serializing (same-process only). The caller
-     * must have made the destination the current view first.
-     *
-     * @param nSourceViewId the view whose clipboard contents to share.
-     */
-    void transferClipboardFromView(int nSourceViewId)
-    {
-        mpDoc->transferClipboardFromView(nSourceViewId);
-    }
-
-    /**
-     * Renders every advertised clipboard format now, so the clipboard's
-     * contents stay readable after this document is closed. Call it while the
-     * document is still alive, when it produced the current clipboard content
-     * and other documents remain open. A lazy transferable (Writer, Impress)
-     * builds its own clip document; a self-contained one (Calc) is unaffected.
-     */
-    void flushClipboard()
-    {
-        mpDoc->flushClipboard();
-    }
-
-    /**
-     * Pastes content at the current cursor position.
-     *
-     * @param pMimeType format of pData, for example text/plain;charset=utf-8.
-     * @param pData the actual data to be pasted.
-     * @return if the supplied data was pasted successfully.
-     */
-    bool paste(const char* pMimeType, const char* pData, size_t nSize)
-    {
-        return mpDoc->paste(pMimeType, pData, nSize);
-    }
-
-    /**
-     * Adjusts the graphic selection.
-     *
-     * @param nType @see COKitSetGraphicSelectionType
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     */
-    void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
-    {
-        mpDoc->setGraphicSelection(eType, nX, nY);
-    }
-
-    /**
-     * Gets rid of any text or graphic selection.
-     */
-    void resetSelection()
-    {
-        mpDoc->resetSelection();
-    }
-
-    /**
-     * Returns a json mapping of the possible values for the given command
-     * e.g. {commandName: ".uno:StyleApply", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
-     * @param pCommand a UNO command for which the possible values are requested
-     * @return {commandName: unoCmd, commandValues: {possible_values}}
-     *
-     * The return value is dynamically allocated and should be
-     * deallocated by calling the freeError() function.
-     */
-    char* getCommandValues(const char* pCommand)
-    {
-        return mpDoc->getCommandValues(pCommand);
-    }
-
-    /**
-     * Save the client's view so that we can compute the right zoom level
-     * for the mouse events. This only affects CALC.
-     * @param nTilePixelWidth - tile width in pixels
-     * @param nTilePixelHeight - tile height in pixels
-     * @param nTileTwipWidth - tile width in twips
-     * @param nTileTwipHeight - tile height in twips
-     */
-    void setClientZoom(
-            int nTilePixelWidth,
-            int nTilePixelHeight,
-            int nTileTwipWidth,
-            int nTileTwipHeight)
-    {
-        mpDoc->setClientZoom(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
-    }
-
-    /**
-     * Inform core about the currently visible area of the document on the
-     * client, so that it can perform e.g. page down (which depends on the
-     * visible height) in a sane way.
-     *
-     * @param nX - top left corner horizontal position
-     * @param nY - top left corner vertical position
-     * @param nWidth - area width
-     * @param nHeight - area height
-     */
-    void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
-    {
-        mpDoc->setClientVisibleArea(nX, nY, nWidth, nHeight);
-    }
-
-    /**
-     * Show/Hide a single row/column header outline for Calc documents.
-     *
-     * @param bColumn - if we are dealing with a column or row group
-     * @param nLevel - the level to which the group belongs
-     * @param nIndex - the group entry index
-     * @param bHidden - the new group state (collapsed/expanded)
-     */
-    void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
-    {
-        mpDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
-    }
-
-    /**
-     * Create a new view for an existing document, with options in the same form
-     * as documentLoadWithOptions() takes. A loaded document has one view.
-     * @return the ID of the new view.
-     */
-    int createViewWithOptions(const char* pOptions = nullptr)
-    {
-        return mpDoc->createViewWithOptions(pOptions);
-    }
-
-    /**
-     * Destroy a view of an existing document.
-     * @param nId a view ID, returned by createView().
-     */
-    void destroyView(int nId)
-    {
-        mpDoc->destroyView(nId);
-    }
-
-    /**
-     * Set an existing view of an existing document as current.
-     * @param nId a view ID, returned by createView().
-     */
-    void setView(int nId)
-    {
-        mpDoc->setView(nId);
-    }
-
-    /**
-     * Get the current view.
-     * @return a view ID, previously returned by createView().
-     */
-    int getView()
-    {
-        return mpDoc->getView();
-    }
-
-    /**
-     * Get number of views of this document.
-     */
-    int getViewsCount()
-    {
-        return mpDoc->getViewsCount();
-    }
-
-    /**
-     * Renders a subset of the document's part to a pre-allocated buffer.
-     *
-     * @param nPart the part number of the document of which the tile is painted. For a
-     * presentation or drawing document that is the page's stable unique identifier, resolved to
-     * the index the page holds when it paints; the part number of a page that is gone paints
-     * nothing.
-     * @see paintTile.
-     */
-    void paintPartTile(unsigned char* pBuffer,
-                              const int nPart,
-                              const int nMode,
-                              const int nCanvasWidth,
-                              const int nCanvasHeight,
-                              const int nTilePosX,
-                              const int nTilePosY,
-                              const int nTileWidth,
-                              const int nTileHeight)
-    {
-        return mpDoc->paintPartTile(pBuffer, nPart, nMode,
-                                            nCanvasWidth, nCanvasHeight,
-                                            nTilePosX, nTilePosY,
-                                            nTileWidth, nTileHeight);
-    }
-
-    /**
-     * Returns the viewID for each existing view. Since viewIDs are not reused,
-     * viewIDs are not the same as the index of the view in the view array over
-     * time. Use getViewsCount() to know the minimal nSize that's large enough.
-     *
-     * @param pArray the array to write the viewIDs into
-     * @param nSize the size of pArray
-     * @returns true if pArray was large enough and result is written, false
-     * otherwise.
-     */
-    bool getViewIds(int* pArray,
-                           size_t nSize)
-    {
-        return mpDoc->getViewIds(pArray, nSize);
-    }
-
-    /**
-     * Set the language tag of the window with the specified nId.
-     *
-     * @param nId a view ID, returned by createView().
-     * @param language Bcp47 languageTag, like en-US or so.
-     */
-    void setViewLanguage(int nId, const char* language)
-    {
-        mpDoc->setViewLanguage(nId, language);
-    }
-
-    /**
-     * Post the text input from external input window, like IME, to given windowId
-     *
-     * @param nWindowId Specify the window id to post the input event to. If
-     * nWindow is 0, the event is posted into the document
-     * @param eType which stage of the input method's composition this is
-     * @param pText Text for COKitExtTextInputType::TEXTINPUT
-     */
-    void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
-                                     const char* pText)
-    {
-        mpDoc->postWindowExtTextInputEvent(nWindowId, eType, pText);
-    }
-
-    /**
-     *  Insert certificate (in binary form) to the certificate store.
-     */
-    bool insertCertificate(const unsigned char* pCertificateBinary,
-                           const int pCertificateBinarySize,
-                           const unsigned char* pPrivateKeyBinary,
-                           const int nPrivateKeyBinarySize)
-    {
-        return mpDoc->insertCertificate(pCertificateBinary, pCertificateBinarySize,
-                                                pPrivateKeyBinary, nPrivateKeyBinarySize);
-    }
-
-    /**
-     *  Add the certificate (in binary form) to the certificate store.
-     *
-     */
-    bool addCertificate(const unsigned char* pCertificateBinary,
-                         const int pCertificateBinarySize)
-    {
-        return mpDoc->addCertificate(pCertificateBinary, pCertificateBinarySize);
-    }
-
-    /**
-     *  Verify signature of the document.
-     *
-     *  Check possible values in include/sfx2/signaturestate.hxx
-     */
-    int getSignatureState()
-    {
-        return mpDoc->getSignatureState();
-    }
-
-    /**
-     * Gets an image of the selected shapes.
-     * @param pOutput contains the result; use free to deallocate.
-     * @return the size of *pOutput in bytes.
-     */
-    size_t renderShapeSelection(char** pOutput)
-    {
-        return mpDoc->renderShapeSelection(pOutput);
-    }
-
-    /**
-     * Posts a gesture event to the window with given id.
-     *
-     * @param nWindowId
-     * @param pType Event type, like panStart, panEnd, panUpdate.
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     * @param nOffset difference value from when the gesture started to current value
-     */
-    void postWindowGestureEvent(unsigned nWindowId,
-                              const char* pType,
-                              int nX, int nY, int nOffset)
-    {
-        return mpDoc->postWindowGestureEvent(nWindowId, pType, nX, nY, nOffset);
-    }
-
-    /// Set a part's selection mode, naming the part by its part number.
-    /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
-    void selectPart(int nPart, int nSelect)
-    {
-        mpDoc->selectPart(nPart, nSelect);
-    }
-
-    /// Moves the selected pages/slides to a new position.
-    /// nPosition is the new position where the selection
-    /// should go. bDuplicate when true will copy instead of move.
-    /// nIntoSection: when >= 0, re-anchor that section to the first moved
-    /// slide (slide becomes the section's new first slide).  Pass -1 (default)
-    /// to keep the existing section anchoring.
-    void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection = -1)
-    {
-        mpDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
-    }
-
-    /**
-     * Resize a window (dialog, popup, etc.) with give id.
-     *
-     * @param nWindowId
-     * @param width The width of the window.
-     * @param height The height of the window.
-     */
-    void resizeWindow(unsigned nWindowId,
-                      const int width,
-                      const int height)
-    {
-        return mpDoc->resizeWindow(nWindowId, width, height);
-    }
-
-    /**
-     * For deleting many characters all at once
-     *
-     * @param nWindowId Specify the window id to post the input event to. If
-     * nWindow is 0, the event is posted into the document
-     * @param nBefore The characters to be deleted before the cursor position
-     * @param nAfter The characters to be deleted after the cursor position
-     */
-    void removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
-    {
-        mpDoc->removeTextContext(nWindowId, nBefore, nAfter);
-    }
-
-    /**
-     * Select the Calc function to be pasted into the formula input box
-     *
-     * @param nIndex is the index of the selected function
-     */
-    void completeFunction(const char* pFunctionName)
-    {
-        mpDoc->completeFunction(pFunctionName);
-    }
-
-    /**
-     * Sets the start or end of a text selection for a dialog.
-     *
-     * @param nWindowId
-     * @param bSwap swap anchor and cursor position of current selection
-     * @param nX horizontal position in document coordinates
-     * @param nY vertical position in document coordinates
-     */
-    void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
-    {
-        mpDoc->setWindowTextSelection(nWindowId, bSwap, nX, nY);
-    }
-
-    /**
-     * Posts an event for the form field at the cursor position.
-     *
-     * @param pArguments arguments of the event.
-     */
-    void sendFormFieldEvent(const char* pArguments)
-    {
-        mpDoc->sendFormFieldEvent(pArguments);
-    }
-
-    void setBlockedCommandList(int nViewId, const char* blockedCommandList)
-    {
-        mpDoc->setBlockedCommandList(nViewId, blockedCommandList);
-    }
-    /**
-     * Render input search result to a bitmap buffer.
-     *
-     * @param pSearchResult payload containing the search result data
-     * @param pBitmapBuffer contains the bitmap; use free to deallocate.
-     * @param nWidth output bitmap width
-     * @param nHeight output bitmap height
-     * @param nByteSize output bitmap byte size
-     * @return true if successful
-     */
-    bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
-                            int* pWidth, int* pHeight, size_t* pByteSize)
-    {
-        return mpDoc->renderSearchResult(pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
-    }
-
-    /**
-     * Posts an event for the content control at the cursor position.
-     *
-     * @param pArguments arguments of the event.
-     *
-     * Examples:
-     * To select the 3rd list item of the drop-down:
-     * {
-     *     "type": "drop-down",
-     *     "selected": "2"
-     * }
-     *
-     * To change a picture place-holder:
-     * {
-     *     "type": "picture",
-     *     "changed": "file:///path/to/test.png"
-     * }
-     *
-     * To select a date of the current date content control:
-     * {
-     *     "type": "date",
-     *     "selected": "2022-05-29T00:00:00Z"
-     * }
-     */
-    void sendContentControlEvent(const char* pArguments)
-    {
-        mpDoc->sendContentControlEvent(pArguments);
-    }
-
-    /**
-     * Set the timezone of the window with the specified nId.
-     *
-     * @param nId a view ID, returned by createView().
-     * @param timezone a timezone in the tzfile(5) format (e.g. Pacific/Auckland).
-     */
-    void setViewTimezone(int nId, const char* timezone)
-    {
-        mpDoc->setViewTimezone(nId, timezone);
-    }
-
-    /** Set if the view should be treated as readonly or not.
-     *
-     * @param nId view ID
-     * @param readOnly
-    */
-    void setViewReadOnly(int nId, const bool readOnly)
-    {
-        mpDoc->setViewReadOnly(nId, readOnly);
-    }
-
-    /** Set if the view can edit comments on readonly mode or not.
-     *
-     * @param nId view ID
-     * @param allow
-    */
-    void setAllowChangeComments(int nId, const bool allow)
-    {
-        mpDoc->setAllowChangeComments(nId, allow);
-    }
-
-    /** Set if the view can manage redlines in readonly mode or not.
-     *
-     * @param nId view ID
-     * @param allow
-    */
-    void setAllowManageRedlines(int nId, bool allow)
-    {
-        mpDoc->setAllowManageRedlines(nId, allow);
-    }
-
-    /**
-     * Enable/Disable accessibility support for the window with the specified nId.
-     *
-     * @param nId a view ID, returned by createView().
-     * @param nEnabled true/false
-     */
-    void setAccessibilityState(int nId, bool nEnabled)
-    {
-        mpDoc->setAccessibilityState(nId, nEnabled);
-    }
-
-    /**
-     *  Get the current focused paragraph info:
-     *  {
-     *      "content": paragraph content
-     *      "start": selection start
-     *      "end": selection end
-     *  }
-     */
-    char* getA11yFocusedParagraph()
-    {
-        return mpDoc->getA11yFocusedParagraph();
-    }
-
-    /// Get the current text cursor position.
-    int getA11yCaretPosition()
-    {
-        return mpDoc->getA11yCaretPosition();
-    }
-
-    /// Get the information about the current presentation (Impress only).
-    char* getPresentationInfo()
-    {
-        return mpDoc->getPresentationInfo();
-    }
-
-    /// Create a slide renderer in core for the input slide.
-    bool createSlideRenderer(
-        const char* pSlideHash,
-        int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
-        bool bRenderBackground, bool bRenderMasterPage)
-    {
-        return mpDoc->createSlideRenderer(pSlideHash, nSlideNumber, nViewWidth, nViewHeight, bRenderBackground, bRenderMasterPage);
-    }
-
-    /// Clean-up the slideshow (slide renderer)
-    void postSlideshowCleanup()
-    {
-        mpDoc->postSlideshowCleanup();
-    }
-
-    /// Render the slide layer
-    bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMessage)
-    {
-        return mpDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
-    }
-
-    /// Set named view options
-    void setViewOption(const char* pOption, const char* pValue)
-    {
-        mpDoc->setViewOption(pOption, pValue);
-    }
-
-    /**
-     * Set color preview state for the window with the specified nId.
-     *
-     * @param nId a view ID, returned by createView().
-     * @param nEnabled true/false
-     */
-    void setColorPreviewState(int nId, bool nEnabled)
-    {
-        mpDoc->setColorPreviewState(nId, nEnabled);
-    }
-
-};
-
-/// The kit::Office class represents one started COKit instance.
-class Office
-{
-private:
-    COKit* mpThis;
-
-public:
-    /// A kit::Office is typically created by the kit_cpp_init() function.
-    Office(COKit* pThis) :
-        mpThis(pThis)
-    {}
-
-    ~Office()
-    {
-        mpThis->destroy();
-    }
-
-    /**
-     * Loads a document from a URL.
-     *
-     * @param pUrl the URL of the document to load
-     * @param pFilterOptions options for the import filter, e.g. SkipImages.
-     *        Another useful FilterOption is "Language=...".  It is consumed
-     *        by the documentLoad() itself, and when provided, COKit
-     *        switches the language accordingly first.
-     */
-    Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
-    {
-        COKitDocument* pDoc = mpThis->documentLoadWithOptions(pUrl, pFilterOptions);
-
-        if (pDoc == NULL)
-            return NULL;
-
-        return new Document(pDoc);
-    }
-
-    /// Returns the last error as a string. The returned pointer has to be freed by the caller
-    /// by calling the freeError() member function.
-    char* getError()
-    {
-        return mpThis->getError();
-    }
-
     /**
      * Frees the memory pointed to by pFree.
      *
      * Use on dynamically allocated data returned by COKit
      * functions, not only on the value returned by getError().
      */
-    void freeError(char* pFree)
-    {
-        mpThis->freeError(pFree);
-    }
+    virtual void freeError(char* pFree) = 0;
 
     /**
      * Registers a callback. COKit will invoke this function when it wants to
@@ -2915,10 +1486,7 @@ public:
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
-    void registerCallback(COKitCallback pCallback, void* pData)
-    {
-        mpThis->registerCallback(pCallback, pData);
-    }
+    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
 
     /**
      * Returns details of filter types.
@@ -2935,20 +1503,14 @@ public:
      * }
      *
      */
-    char* getFilterTypes()
-    {
-        return mpThis->getFilterTypes();
-    }
+    virtual char* getFilterTypes() = 0;
 
     /**
      * Set bitmask of optional features supported by the client.
      *
      * @see COKitOptionalFeatures
      */
-    void setOptionalFeatures(COKitOptionalFeatures features)
-    {
-        return mpThis->setOptionalFeatures(features);
-    }
+    virtual void setOptionalFeatures(COKitOptionalFeatures features) = 0;
 
     /**
      * Set password required for loading or editing a document.
@@ -2969,10 +1531,7 @@ public:
      * and a NULL password will continue loading the document in read-only
      * mode.
      */
-    void setDocumentPassword(char const* pURL, char const* pPassword)
-    {
-        mpThis->setDocumentPassword(pURL, pPassword);
-    }
+    virtual void setDocumentPassword(char const* pURL, char const* pPassword) = 0;
 
     /**
      * Get version information of the COKit process
@@ -2985,10 +1544,7 @@ public:
      * "ProductExtension": ".0.0.alpha0",
      * "BuildId": "<full 40 char git hash>"}
      */
-    char* getVersionInfo()
-    {
-        return mpThis->getVersionInfo();
-    }
+    virtual char* getVersionInfo() = 0;
 
     /**
      * Run a macro.
@@ -2997,22 +1553,15 @@ public:
      *
      * @param pURL macro url to run
      */
-    bool runMacro( const char* pURL)
-    {
-        return mpThis->runMacro(pURL );
-    }
+    virtual int runMacro(const char* pURL) = 0;
 
     /**
      * Exports the document and signs its content.
      */
-    bool signDocument(const char* pURL,
-                       const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
-                       const unsigned char* pPrivateKeyBinary, const int nPrivateKeyBinarySize)
-    {
-        return mpThis->signDocument(pURL,
-                                            pCertificateBinary, nCertificateBinarySize,
-                                            pPrivateKeyBinary, nPrivateKeyBinarySize);
-    }
+    virtual bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
+                               const int nCertificateBinarySize,
+                               const unsigned char* pPrivateKeyBinary,
+                               const int nPrivateKeyBinarySize) = 0;
 
     /**
      * Runs the main-loop in the current thread. To trigger this
@@ -3025,12 +1574,8 @@ public:
      *
      * @pData is a context/closure passed to both methods.
      */
-    void runLoop(COKitPollCallback pPollCallback,
-                 COKitWakeCallback pWakeCallback,
-                 void* pData)
-    {
-        mpThis->runLoop(pPollCallback, pWakeCallback, pData);
-    }
+    virtual void runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
+                         void* pData) = 0;
 
     /**
      * Posts a dialog event for the window with given id
@@ -3038,10 +1583,7 @@ public:
      * @param nWindowId id of the window to notify
      * @param pArguments arguments of the event.
      */
-    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
-    {
-        mpThis->sendDialogEvent(nWindowId, pArguments);
-    }
+    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
 
     /**
      * Generic function to toggle and tweak various things in the core LO
@@ -3075,10 +1617,7 @@ public:
      * @param pOption the option name
      * @param pValue its value
      */
-    void setOption(const char* pOption, const char* pValue)
-    {
-        mpThis->setOption(pOption, pValue);
-    }
+    virtual void setOption(const char* pOption, const char* pValue) = 0;
 
     /**
      * Debugging tool for triggering a dump of internal state.
@@ -3090,15 +1629,9 @@ public:
      * @param pOption future expansion - string options.
      * @param pState - heap allocated, C string containing the state dump.
      */
-    void dumpState(const char* pOption, char** pState)
-    {
-        mpThis->dumpState(pOption, pState);
-    }
+    virtual void dumpState(const char* pOptions, char** pState) = 0;
 
-    char* extractRequest(const char* pFilePath)
-    {
-        return mpThis->extractRequest(pFilePath);
-    }
+    virtual char* extractRequest(const char* pFilePath) = 0;
 
     /**
      * Trim memory usage.
@@ -3112,10 +1645,66 @@ public:
      * in active use, and to re-fill caches, a large positive
      * number (>=1000) encourages immediate maximum memory saving.
      */
-    void trimMemory (int nTarget)
-    {
-        mpThis->trimMemory(nTarget);
-    }
+    virtual void trimMemory(int nTarget) = 0;
+
+    /**
+     * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
+     *
+     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
+     * @param pSendURPToLOContext A pointer that will be passed to your fnSendURPToLO function
+     * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
+     * @param fnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO
+     */
+    virtual void* startURP(
+        void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+        int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+        int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) = 0;
+
+    /**
+     * Stop a function based URP connection you previously started with startURP
+     *
+     * @param pURPContext the context returned by startURP  when starting the connection
+     */
+    virtual void stopURP(void* pSendURPToLOContext) = 0;
+
+    /**
+     * Joins all threads if possible to get down to a single process
+     * which can be forked from safely.
+     *
+     * @returns non-zero for successful join, 0 for failure.
+     */
+    virtual int joinThreads() = 0;
+
+    /**
+     * Starts all threads that are necessary to continue working
+     * after a joinThreads().
+     */
+    virtual void startThreads() = 0;
+
+    /**
+     * Informs that this process is either a parent, or a child
+     * process post-fork, allowing improved resource sharing.
+     */
+    virtual void setForkedChild(bool bIsChild) = 0;
+
+    /** @see kit::Office::extractDocumentStructureRequest.
+     */
+    virtual char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
+
+    /**
+     * Registers a callback that can determine if there are any pending input events.
+     */
+    virtual void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) = 0;
+
+    /**
+     * Get number of documents of this COKit.
+     */
+    virtual int getDocsCount() = 0;
+
+    /**
+     * Registers a callback that can display an interactive file save dialog.
+     */
+    virtual void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) = 0;
 
     /**
      * Execute a JavaScript snippet via the embedded JS UNO support.
@@ -3145,13 +1734,9 @@ public:
      * @param usedLegacyUnoApi must be non-null; set to true if the script touched the legacy
      *        com.sun.star UNO API, not modified otherwise.
      */
-    void executeScript(char const * script, char ** result, char ** error,
-                       void (*proxyCallback) (void * data, char const * payload) = nullptr,
-                       void * proxyCallbackData = nullptr, bool * usedLegacyUnoApi = nullptr)
-    {
-        mpThis->executeScript(
-            script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
-    }
+    virtual void executeScript(char const * script, char ** result, char ** error,
+                               void (*proxyCallback) (void * data, char const * payload),
+                               void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
 
     /**
      * Deliver the iframe-side response value back to a JS-UNO proxy listener whose
@@ -3167,10 +1752,7 @@ public:
      * @param callId opaque token matching one previously delivered to proxyCallback.
      * @param jsonValue JSON-encoded return value for the listener method.
      */
-    void deliverProxyResult(char const * callId, char const * jsonValue)
-    {
-        mpThis->deliverProxyResult(callId, jsonValue);
-    }
+    virtual void deliverProxyResult(char const * callId, char const * jsonValue) = 0;
 
     /**
      * Cancel all in-flight JS-UNO proxy listener calls by unblocking any
@@ -3179,10 +1761,7 @@ public:
      * ChildSession destruction so the kit's main thread can't end up spinning on a
      * synchronous proxy result that will never come.
      */
-    void cancelProxyCalls()
-    {
-        mpThis->cancelProxyCalls();
-    }
+    virtual void cancelProxyCalls() = 0;
 
     /**
      * Whether the current thread is inside a window where it has explicitly opted into a kitPoll
@@ -3191,10 +1770,7 @@ public:
      *
      * @return non-zero if a re-entry is expected.
      */
-    bool isExpectedReentry()
-    {
-        return mpThis->isExpectedReentry();
-    }
+    virtual int isExpectedReentry() = 0;
 
     /**
      * Returns and clears the process-wide "legacy UNO API use" flag set by the engine's UNO bridges
@@ -3203,102 +1779,13 @@ public:
      * @return true if at least one legacy identifier was resolved since the last call; false
      *         otherwise.
      */
-    bool takeLegacyUnoApiUseFlag()
-    {
-        return mpThis->takeLegacyUnoApiUseFlag();
-    }
-
-    /**
-     * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
-     *
-     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
-     * @param pSendURPToLOContext A pointer that will be passed to your fnSendURPToLO function
-     * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
-     * @param fnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO
-     */
-    void* startURP(void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-                   int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-                   int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
-    {
-        return mpThis->startURP(pReceiveURPFromLOContext, pSendURPToLOContext,
-                                        fnReceiveURPFromLO, fnSendURPToLO);
-    }
-
-    /**
-     * Stop a function based URP connection you previously started with startURP
-     *
-     * @param pURPContext the context returned by startURP  when starting the connection
-     */
-    void stopURP(void* pURPContext)
-    {
-        mpThis->stopURP(pURPContext);
-    }
-
-    /**
-     * Joins all threads if possible to get down to a single process
-     * which can be forked from safely.
-     *
-     * @returns non-zero for successful join, 0 for failure.
-     */
-    int joinThreads()
-    {
-        return mpThis->joinThreads();
-    }
-
-    /**
-     * Starts all threads that are necessary to continue working
-     * after a joinThreads().
-     */
-    void startThreads()
-    {
-        mpThis->startThreads();
-    }
-
-    /**
-     * Informs that this process is either a parent, or a child
-     * process post-fork, allowing improved resource sharing.
-     */
-    void setForkedChild(bool bIsChild)
-    {
-        return mpThis->setForkedChild(bIsChild);
-    }
-
-    char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
-    {
-        return mpThis->extractDocumentStructureRequest(pFilePath, pFilter);
-    }
-
-    /**
-     * Registers a callback that can determine if there are any pending input events.
-     */
-    void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
-    {
-        return mpThis->registerAnyInputCallback(pCallback, pData);
-    }
-
-    /**
-     * Get number of documents of this COKit.
-     */
-    int getDocsCount()
-    {
-        return mpThis->getDocsCount();
-    }
-
-    /**
-     * Registers a callback that can display an interactive file save dialog.
-     */
-    void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
-    {
-        return mpThis->registerFileSaveDialogCallback(pCallback);
-    }
+    virtual bool takeLegacyUnoApiUseFlag() = 0;
 
     /**
      * Registers a callback that reveals (and selects) a file in the native file manager.
      */
-    void registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
-    {
-        return mpThis->registerRevealInFileManagerCallback(pCallback);
-    }
+    virtual void
+    registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) = 0;
 
     /**
      * Installs a process-global clipboard provider and switches the kit to a
@@ -3308,10 +1795,7 @@ public:
      * nullptr to remove the provider and return to the default per-view
      * clipboards (as used by the collaborative server).
      */
-    void installClipboardProvider(const COKitClipboardProvider* pProvider)
-    {
-        mpThis->installClipboardProvider(pProvider);
-    }
+    virtual void installClipboardProvider(const COKitClipboardProvider* pProvider) = 0;
 
     /**
      * Read the desktop app's single process-wide clipboard. See
@@ -3319,15 +1803,746 @@ public:
      * because the shared clipboard is process-global. The distinct name marks
      * that it reads one global clipboard, not a per-view one.
      */
-    bool getGlobalClipboard(const char **pMimeTypes,
-                            size_t      *pOutCount,
-                            char      ***pOutMimeTypes,
-                            size_t     **pOutSizes,
-                            char      ***pOutStreams)
-    {
-        return mpThis->getGlobalClipboard(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
-                                          pOutStreams);
-    }
+    virtual int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                   char      ***pOutStreams) = 0;
+};
+
+struct COKitDocument
+{
+    virtual ~COKitDocument() = default;
+
+    virtual void destroy() = 0;
+
+    /**
+     * Stores the document's persistent data to a URL and
+     * continues to be a representation of the old URL.
+     *
+     * @param pUrl the location where to store the document
+     * @param pFormat the format to use while exporting, when omitted, then deducted from pURL's extension
+     * @param pFilterOptions options for the export filter, e.g. SkipImages.
+     *        Another useful FilterOption is "TakeOwnership".  It is consumed
+     *        by the saveAs() itself, and when provided, the document identity
+     *        changes to the provided pUrl - meaning that '.uno:ModifiedStatus'
+     *        is triggered as with the "Save As..." in the UI.
+     *        "TakeOwnership" mode must not be used when saving to PNG or PDF.
+     */
+    virtual bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) = 0;
+
+    /**
+     * Get document type.
+     *
+     * @return an element of the COKitDocumentType enum.
+     */
+    virtual COKitDocumentType getDocumentType() = 0;
+
+    /**
+     * Get number of part that the document contains.
+     *
+     * Part refers to either individual sheets in a Calc, or slides in Impress,
+     * and has no relevance for Writer.
+     */
+    virtual int getParts() = 0;
+
+    /**
+     * Get the extent of each page in the document.
+     *
+     * This function is relevant for Writer documents only. It is a
+     * mistake that the API has "part" in its name as Writer documents
+     * don't have parts.
+     *
+     * @return a rectangle list, using the same format as
+     * COKitCallbackType::TEXT_SELECTION.
+     */
+    virtual char* getPartPageRectangles() = 0;
+
+    /// Get the current part number of the document. For a presentation or
+    /// drawing document a part number is the page's stable unique identifier;
+    /// for other document types it is the part's index.
+    virtual int getPart() = 0;
+
+    /// Set the current part of the document by its part number. The part
+    /// number of a page that is gone selects nothing.
+    virtual void setPart(int nPart) = 0;
+
+    /// Get the current part's name.
+    virtual char* getPartName(int nPart) = 0;
+
+    /// @see kit::Document::setPartMode().
+    virtual void setPartMode(COKitPartMode eMode) = 0;
+
+    /**
+     * Renders a subset of the document to a pre-allocated buffer.
+     *
+     * Note that the buffer size and the tile size implicitly supports
+     * rendering at different zoom levels, as the number of rendered pixels and
+     * the rendered rectangle of the document are independent.
+     *
+     * @param pBuffer pointer to the buffer, its size is determined by nCanvasWidth and nCanvasHeight.
+     * @param nCanvasWidth number of pixels in a row of pBuffer.
+     * @param nCanvasHeight number of pixels in a column of pBuffer.
+     * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTilePosY logical Y position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
+     * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
+     */
+    virtual void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
+                           const int nTilePosX, const int nTilePosY, const int nTileWidth,
+                           const int nTileHeight) = 0;
+
+    /**
+     * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
+     *
+     * @return the pixel order the document's tiles use.
+     */
+    virtual COKitTileMode getTileMode() = 0;
+
+    /// Get the document sizes in TWIPs.
+    virtual void getDocumentSize(long* pWidth, long* pHeight) = 0;
+
+    /**
+     * Initialize document for rendering.
+     *
+     * Sets the rendering and document parameters to default values that are
+     * needed to render the document correctly using tiled rendering. This
+     * method has to be called right after documentLoad() in case any of the
+     * tiled rendering methods are to be used later.
+     *
+     * Example argument string for text documents:
+     *
+     * {
+     *     ".uno:HideWhitespace":
+     *     {
+     *         "type": "boolean",
+     *         "value": "true"
+     *     }
+     * }
+     *
+     * @param pArguments arguments of the rendering
+     */
+    virtual void initializeForRendering(const char* pArguments) = 0;
+
+    /**
+     * Registers a callback. COKit will invoke this function when it wants to
+     * inform the client about events.
+     *
+     * @param pCallback the callback to invoke
+     * @param pData the user data, will be passed to the callback on invocation
+     */
+    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
+
+    /**
+     * Posts a keyboard event to the focused frame.
+     *
+     * @param eType Event type, like press or release.
+     * @param nCharCode contains the Unicode character generated by this event or 0
+     * @param nKeyCode contains the integer code representing the key of the event (non-zero for control keys)
+     */
+    virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) = 0;
+
+    /**
+     * Posts a mouse event to the document.
+     *
+     * @param eType Event type, like down, move or up.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nCount number of clicks: 1 for single click, 2 for double click
+     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
+     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
+     */
+    virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                int nButtons, int nModifier) = 0;
+
+    /**
+     * Posts a UNO command to the document.
+     *
+     * Example argument string:
+     *
+     * {
+     *     "SearchItem.SearchString":
+     *     {
+     *         "type": "string",
+     *         "value": "foobar"
+     *     },
+     *     "SearchItem.Backward":
+     *     {
+     *         "type": "boolean",
+     *         "value": "false"
+     *     }
+     * }
+     *
+     * @param pCommand uno command to be posted to the document, like ".uno:Bold"
+     * @param pArguments arguments of the uno command.
+     */
+    virtual void postUnoCommand(const char* pCommand, const char* pArguments,
+                                bool bNotifyWhenFinished) = 0;
+
+    /**
+     * Sets the start or end of a text selection.
+     *
+     * @param nType @see COKitSetTextSelectionType
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) = 0;
+
+    /**
+     * Gets the currently selected text.
+     *
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
+     */
+    virtual char* getTextSelection(const char* pMimeType, char** pUsedMimeType) = 0;
+
+    /**
+     * Pastes content at the current cursor position.
+     *
+     * @param pMimeType format of pData, for example text/plain;charset=utf-8.
+     * @param pData the actual data to be pasted.
+     * @return if the supplied data was pasted successfully.
+     */
+    virtual bool paste(const char* pMimeType, const char* pData, size_t nSize) = 0;
+
+    /**
+     * Adjusts the graphic selection.
+     *
+     * @param nType @see COKitSetGraphicSelectionType
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
+
+    /**
+     * Gets rid of any text or graphic selection.
+     */
+    virtual void resetSelection() = 0;
+
+    /**
+     * Returns a json mapping of the possible values for the given command
+     * e.g. {commandName: ".uno:StyleApply", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
+     * @param pCommand a UNO command for which the possible values are requested
+     * @return {commandName: unoCmd, commandValues: {possible_values}}
+     *
+     * The return value is dynamically allocated and should be
+     * deallocated by calling the freeError() function.
+     */
+    virtual char* getCommandValues(const char* pCommand) = 0;
+
+    /**
+     * Save the client's view so that we can compute the right zoom level
+     * for the mouse events. This only affects CALC.
+     * @param nTilePixelWidth - tile width in pixels
+     * @param nTilePixelHeight - tile height in pixels
+     * @param nTileTwipWidth - tile width in twips
+     * @param nTileTwipHeight - tile height in twips
+     */
+    virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
+                               int nTileTwipHeight) = 0;
+
+    /**
+     * Inform core about the currently visible area of the document on the
+     * client, so that it can perform e.g. page down (which depends on the
+     * visible height) in a sane way.
+     *
+     * @param nX - top left corner horizontal position
+     * @param nY - top left corner vertical position
+     * @param nWidth - area width
+     * @param nHeight - area height
+     */
+    virtual void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) = 0;
+
+    /// @see kit::Document::createView().
+    virtual int createView() = 0;
+    /**
+     * Destroy a view of an existing document.
+     * @param nId a view ID, returned by createView().
+     */
+    virtual void destroyView(int nId) = 0;
+    /**
+     * Set an existing view of an existing document as current.
+     * @param nId a view ID, returned by createView().
+     */
+    virtual void setView(int nId) = 0;
+    /**
+     * Get the current view.
+     * @return a view ID, previously returned by createView().
+     */
+    virtual int getView() = 0;
+    /**
+     * Get number of views of this document.
+     */
+    virtual int getViewsCount() = 0;
+
+    /// Get the current part's hash.
+    virtual char* getPartHash(int nPart) = 0;
+
+    /**
+     * Renders a subset of the document's part to a pre-allocated buffer.
+     *
+     * @param nPart the part number of the document of which the tile is painted. For a
+     * presentation or drawing document that is the page's stable unique identifier, resolved to
+     * the index the page holds when it paints; the part number of a page that is gone paints
+     * nothing.
+     * @see paintTile.
+     */
+    virtual void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+                               const int nCanvasWidth, const int nCanvasHeight,
+                               const int nTilePosX, const int nTilePosY, const int nTileWidth,
+                               const int nTileHeight) = 0;
+
+    /**
+     * Returns the viewID for each existing view. Since viewIDs are not reused,
+     * viewIDs are not the same as the index of the view in the view array over
+     * time. Use getViewsCount() to know the minimal nSize that's large enough.
+     *
+     * @param pArray the array to write the viewIDs into
+     * @param nSize the size of pArray
+     * @returns true if pArray was large enough and result is written, false
+     * otherwise.
+     */
+    virtual bool getViewIds(int* pArray, size_t nSize) = 0;
+
+    /**
+     * Show/Hide a single row/column header outline for Calc documents.
+     *
+     * @param bColumn - if we are dealing with a column or row group
+     * @param nLevel - the level to which the group belongs
+     * @param nIndex - the group entry index
+     * @param bHidden - the new group state (collapsed/expanded)
+     */
+    virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) = 0;
+
+    /// Paints window with given id to the buffer
+    /// @see kit::Document::paintWindow().
+    virtual void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
+                             const int width, const int height) = 0;
+
+    /**
+     * Posts a command to the window (dialog, popup, etc.) with given id
+     *
+     * @param nWindowid
+     */
+    virtual void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData) = 0;
+
+    /**
+     * Posts a keyboard event to the dialog
+     *
+     * @param nWindowId
+     * @param eType Event type, like press or release.
+     * @param nCharCode contains the Unicode character generated by this event or 0
+     * @param nKeyCode contains the integer code representing the key of the event (non-zero for control keys)
+     */
+    virtual void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
+                                    int nKeyCode) = 0;
+
+    /**
+     * Posts a mouse event to the window with given id.
+     *
+     * @param nWindowId
+     * @param eType Event type, like down, move or up.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nCount number of clicks: 1 for single click, 2 for double click
+     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
+     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
+     */
+    virtual void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX,
+                                      int nY, int nCount, int nButtons, int nModifier) = 0;
+
+    /**
+     * Set the language tag of the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param language Bcp47 languageTag, like en-US or so.
+     */
+    virtual void setViewLanguage(int nId, const char* language) = 0;
+
+    /**
+     * Post the text input from external input window, like IME, to given windowId
+     *
+     * @param nWindowId Specify the window id to post the input event to. If
+     * nWindow is 0, the event is posted into the document
+     * @param eType which stage of the input method's composition this is
+     * @param pText Text for COKitExtTextInputType::TEXTINPUT
+     */
+    virtual void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
+                                             const char* pText) = 0;
+
+    /// @see kit::Document::getPartInfo().
+    virtual char* getPartInfo(int nPart) = 0;
+
+    /// Paints window with given id to the buffer with the give DPI scale
+    /// (every pixel is dpiscale-times larger).
+    /// @see kit::Document::paintWindow().
+    virtual void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                const int y, const int width, const int height,
+                                const double dpiscale) = 0;
+
+    /**
+     *  Insert certificate (in binary form) to the certificate store.
+     */
+    virtual bool insertCertificate(const unsigned char* pCertificateBinary,
+                                   const int nCertificateBinarySize,
+                                   const unsigned char* pPrivateKeyBinary,
+                                   const int nPrivateKeyBinarySize) = 0;
+
+    /**
+     *  Add the certificate (in binary form) to the certificate store.
+     *
+     */
+    virtual bool addCertificate(const unsigned char* pCertificateBinary,
+                                const int nCertificateBinarySize) = 0;
+
+    /**
+     *  Verify signature of the document.
+     *
+     *  Check possible values in include/sfx2/signaturestate.hxx
+     */
+    virtual int getSignatureState() = 0;
+
+    /**
+     * Gets an image of the selected shapes.
+     * @param pOutput contains the result; use free to deallocate.
+     * @return the size of *pOutput in bytes.
+     */
+    virtual size_t renderShapeSelection(char** pOutput) = 0;
+
+    /**
+     * Posts a gesture event to the window with given id.
+     *
+     * @param nWindowId
+     * @param pType Event type, like panStart, panEnd, panUpdate.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nOffset difference value from when the gesture started to current value
+     */
+    virtual void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
+                                        int nOffset) = 0;
+
+    /**
+     * Create a new view for an existing document, with options in the same form
+     * as documentLoadWithOptions() takes. A loaded document has one view.
+     * @return the ID of the new view.
+     */
+    virtual int createViewWithOptions(const char* pOptions) = 0;
+
+    /// Set a part's selection mode, naming the part by its part number.
+    /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
+    virtual void selectPart(int nPart, int nSelect) = 0;
+
+    /// Moves the selected pages/slides to a new position.
+    /// nPosition is the new position where the selection
+    /// should go. bDuplicate when true will copy instead of move.
+    /// nIntoSection: when >= 0, re-anchor that section to the first moved
+    /// slide (slide becomes the section's new first slide).  Pass -1
+    /// to keep the existing section anchoring.
+    virtual void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) = 0;
+
+    /**
+     * Resize a window (dialog, popup, etc.) with give id.
+     *
+     * @param nWindowId
+     * @param width The width of the window.
+     * @param height The height of the window.
+     */
+    virtual void resizeWindow(unsigned nWindowId, const int width, const int height) = 0;
+
+    /**
+     * Gets the content on the clipboard for the current view as a series of binary streams.
+     *
+     * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
+     *
+     * @param pMimeTypes passes in a nullptr terminated list of mime types to fetch
+     * @param pOutCount     returns the size of the other @pOut arrays
+     * @param pOutMimeTypes returns an array of mime types
+     * @param pOutSizes     returns the size of each pOutStream
+     * @param pOutStreams   the content of each mime-type, of length in @pOutSizes
+     *
+     * @returns: true on success, false on error.
+     */
+    virtual int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                             char      ***pOutMimeTypes, size_t     **pOutSizes,
+                             char      ***pOutStreams) = 0;
+
+    /**
+     * Populates the clipboard for this view with multiple types of content.
+     *
+     * @param nInCount the number of types to paste
+     * @param pInMimeTypes array of mime type strings
+     * @param pInSizes array of sizes of the data to paste
+     * @param pInStreams array containing the data of the various types
+     *
+     * @return if the supplied data was populated successfully.
+     */
+    virtual int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                             const size_t  *pInSizes, const char   **pInStreams) = 0;
+
+    /**
+     * Gets the type of the selected content.
+     *
+     * In most cases it is more efficient to use getSelectionTypeAndText().
+     *
+     * @return what kind of selection the document holds.
+     */
+    virtual COKitSelectionType getSelectionType() = 0;
+
+    /**
+     * For deleting many characters all at once
+     *
+     * @param nWindowId Specify the window id to post the input event to. If
+     * nWindow is 0, the event is posted into the document
+     * @param nBefore The characters to be deleted before the cursor position
+     * @param nAfter The characters to be deleted after the cursor position
+     */
+    virtual void removeTextContext(unsigned nWindowId, int nBefore, int nAfter) = 0;
+
+    /**
+     * Posts a dialog event for the window with given id
+     *
+     * @param nWindowId id of the window to notify
+     * @param pArguments arguments of the event.
+     */
+    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
+
+    /**
+     * Paints a font name or character if provided to be displayed in the font list
+     * @param pFontName the font to be painted
+     */
+    virtual unsigned char* renderFontOrientation(const char* pFontName, const char* pChar,
+                                                 int* pFontWidth, int* pFontHeight,
+                                                 int pOrientation) = 0;
+
+    /**
+     * Renders a window (dialog, popup, etc.) with the given id, switching to
+     * viewId first when that is >= 0.
+     *
+     * @param pBuffer Buffer with enough memory allocated to render any dialog
+     * @param x x-coordinate from where the dialog should start painting
+     * @param y y-coordinate from where the dialog should start painting
+     * @param width The width of the dialog image to be painted
+     * @param height The height of the dialog image to be painted
+     * @param dpiscale The dpi scale value used by the client. Please note
+     *                 that the x, y, width, height are supposed to be the
+     *                 values with dpiscale applied (ie. dialog covering
+     *                 100x100 "normal" pixels with dpiscale '2' will have
+     *                 200x200 width x height), so that it is easy to compute
+     *                 the buffer sizes etc.
+     */
+    virtual void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                    const int y, const int width, const int height,
+                                    const double dpiscale, int viewId) = 0;
+
+    /**
+     * Select the Calc function to be pasted into the formula input box
+     *
+     * @param nIndex is the index of the selected function
+     */
+    virtual void completeFunction(const char* pFunctionName) = 0;
+
+    /**
+     * Sets the start or end of a text selection for a dialog.
+     *
+     * @param nWindowId
+     * @param bSwap swap anchor and cursor position of current selection
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    virtual void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY) = 0;
+
+    /**
+     * Posts an event for the form field at the cursor position.
+     *
+     * @param pArguments arguments of the event.
+     */
+    virtual void sendFormFieldEvent(const char* pArguments) = 0;
+
+    /// @see kit::Document::setBlockedCommandList
+    virtual void setBlockedCommandList(int nViewId, const char* blockedCommandList) = 0;
+
+    /**
+     * Render input search result to a bitmap buffer.
+     *
+     * @param pSearchResult payload containing the search result data
+     * @param pBitmapBuffer contains the bitmap; use free to deallocate.
+     * @param nWidth output bitmap width
+     * @param nHeight output bitmap height
+     * @param nByteSize output bitmap byte size
+     * @return true if successful
+     */
+    virtual bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                    int* pWidth, int* pHeight, size_t* pByteSize) = 0;
+
+    /**
+     * Posts an event for the content control at the cursor position.
+     *
+     * @param pArguments arguments of the event.
+     *
+     * Examples:
+     * To select the 3rd list item of the drop-down:
+     * {
+     *     "type": "drop-down",
+     *     "selected": "2"
+     * }
+     *
+     * To change a picture place-holder:
+     * {
+     *     "type": "picture",
+     *     "changed": "file:///path/to/test.png"
+     * }
+     *
+     * To select a date of the current date content control:
+     * {
+     *     "type": "date",
+     *     "selected": "2022-05-29T00:00:00Z"
+     * }
+     */
+    virtual void sendContentControlEvent(const char* pArguments) = 0;
+
+    /**
+     * Gets the type of the selected content and possibly its text.
+     *
+     * This function is a more efficient combination of getSelectionType() and getTextSelection().
+     * It returns the same as getSelectionType(), and additionally if the return value is
+     * COKitSelectionType::TEXT then it also returns the same as getTextSelection(), otherwise
+     * pText and pUsedMimeType are unchanged.
+     *
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     * @param pText the currently selected text
+     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
+     * @return what kind of selection the document holds.
+     */
+    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
+                                                       char** pUsedMimeType) = 0;
+
+    /// Get the data area (in Calc last row and column).
+    virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;
+
+    /// @see kit::Document::getEditMode().
+    virtual int getEditMode() = 0;
+
+    /**
+     * Set the timezone of the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param timezone a timezone in the tzfile(5) format (e.g. Pacific/Auckland).
+     */
+    virtual void setViewTimezone(int nId, const char* pTimezone) = 0;
+
+    /**
+     * Enable/Disable accessibility support for the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param nEnabled true/false
+     */
+    virtual void setAccessibilityState(int nId, bool nEnabled) = 0;
+
+    /**
+     *  Get the current focused paragraph info:
+     *  {
+     *      "content": paragraph content
+     *      "start": selection start
+     *      "end": selection end
+     *  }
+     */
+    virtual char* getA11yFocusedParagraph() = 0;
+
+    /// Get the current text cursor position.
+    virtual int getA11yCaretPosition() = 0;
+
+    /** Set if the view should be treated as readonly or not.
+     *
+     * @param nId view ID
+     * @param readOnly
+    */
+    virtual void setViewReadOnly(int nId, const bool readOnly) = 0;
+
+    /** Set if the view can edit comments on readonly mode or not.
+     *
+     * @param nId view ID
+     * @param allow
+    */
+    virtual void setAllowChangeComments(int nId, const bool allow) = 0;
+
+    /// Get the information about the current presentation (Impress only).
+    virtual char* getPresentationInfo() = 0;
+
+    /// Create a slide renderer in core for the input slide.
+    virtual bool createSlideRenderer(const char* pSlideHash, int nSlideNumber,
+                                     unsigned* nViewWidth, unsigned* nViewHeight,
+                                     bool bRenderBackground, bool bRenderMasterPage) = 0;
+
+    /// Clean-up the slideshow (slide renderer)
+    virtual void postSlideshowCleanup() = 0;
+
+    /// Render the slide layer
+    virtual bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
+                                      char** pJsonMessage) = 0;
+
+    /// Set named view options
+    virtual void setViewOption(const char* pOption, const char* pValue) = 0;
+
+    /**
+     * Set color preview state for the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param nEnabled true/false
+     */
+    virtual void setColorPreviewState(int nId, bool nEnabled) = 0;
+
+    /** Set if the view can manage redlines in readonly mode or not.
+     *
+     * @param nId view ID
+     * @param allow
+    */
+    virtual void setAllowManageRedlines(int nId, bool allow) = 0;
+
+    /**
+     * Shares another view's live clipboard transferable into the current view's
+     * clipboard by reference, without serializing (same-process only). The caller
+     * must have made the destination the current view first.
+     *
+     * @param nSourceViewId the view whose clipboard contents to share.
+     */
+    virtual void transferClipboardFromView(int nSourceViewId) = 0;
+
+    /**
+     * Renders every advertised clipboard format now, so the clipboard's
+     * contents stay readable after this document is closed. Call it while the
+     * document is still alive, when it produced the current clipboard content
+     * and other documents remain open. A lazy transferable (Writer, Impress)
+     * builds its own clip document; a self-contained one (Calc) is unaffected.
+     */
+    virtual void flushClipboard() = 0;
+
+    /**
+     * Get the stable unique identifier of one part: a nonzero integer assigned
+     * to the part for the whole document session, kept over part moves,
+     * insertions and deletions of other parts. nMode selects the part list the
+     * index addresses: 0 for the standard parts, 1 for the master pages, 2 for
+     * the notes pages. Zero when there is no such part or the document has no
+     * part identifiers.
+     */
+    virtual unsigned long long getPartUniqueId(int nPart, int nMode) = 0;
+
+    /**
+     * Get the index the part with the given part number holds now. For a
+     * presentation or drawing document a part number is the page's stable
+     * unique identifier, and the result is the position of that page in the
+     * part list nMode selects; -1 when no page carries that number any more.
+     * For other document types the part number is the index itself.
+     */
+    virtual int getPartIndex(int nPart, int nMode) = 0;
+
+};
+
+namespace kit
+{
+
+/// Frees a COKit or a COKitDocument, for use as the deleter of a standard smart pointer.
+struct Deleter
+{
+    void operator()(COKit* pKit) const { pKit->destroy(); }
+    void operator()(COKitDocument* pDocument) const { pDocument->destroy(); }
 };
 
 }

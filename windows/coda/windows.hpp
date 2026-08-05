@@ -27,7 +27,7 @@ void reveal_in_file_manager(const char* uri);
 
 // Install the process-global clipboard provider so the desktop app uses one shared clipboard for
 // every document. Called once, while the engine's main loop starts.
-void install_clipboard_provider(kit::Office& rOffice);
+void install_clipboard_provider(COKit& rOffice);
 
 // Materialise all clipboard formats we have advertised
 void materialize_clipboard_formats();

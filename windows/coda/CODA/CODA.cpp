@@ -124,7 +124,7 @@ static bool weOwnTheClipboard = false;
 
 // The COKit Office object, captured when the clipboard provider is installed, so a clipboard read
 // can go straight to the process-shared clipboard without needing a particular document.
-static kit::Office* office = nullptr;
+static COKit* office = nullptr;
 
 const char* user_name = nullptr;
 int coolwsd_server_socket_fd = -1;
@@ -2840,7 +2840,7 @@ static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size
 // Install the process-global clipboard provider (declared in windows.hpp). After this the engine
 // advertises formats on copy and reads the clipboard on paste through the callbacks above, using
 // one shared clipboard for every document.
-void install_clipboard_provider(kit::Office& kitOffice)
+void install_clipboard_provider(COKit& kitOffice)
 {
     office = &kitOffice;
 

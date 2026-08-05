@@ -54,7 +54,7 @@ void processEventsToIdle()
     (*processFn)();
 }
 
-void insertString(Document& rDocument, const std::string& s)
+void insertString(COKitDocument& rDocument, const std::string& s)
 {
     for (const char c : s)
     {
@@ -86,7 +86,7 @@ public:
     const string m_sInstDir;
     const string m_sLOPath;
 
-    std::unique_ptr<Document> loadDocument( Office *pOffice, const string &pName,
+    std::unique_ptr<COKitDocument, kit::Deleter> loadDocument( COKit *pOffice, const string &pName,
                                             const char *pFilterOptions = nullptr );
 
     TiledRenderingTest()
@@ -102,15 +102,15 @@ public:
     // components on the one Office instance that we retrieve.
     void runAllTests();
 
-    void testDocumentLoadFail( Office* pOffice );
-    void testDocumentTypes( Office* pOffice );
-    void testImpressSlideNames( Office* pOffice );
-    void testCalcSheetNames( Office* pOffice );
-    void testPaintPartTile( Office* pOffice );
-    void testDocumentLoadLanguage(Office* pOffice);
-    void testMultiKeyInput(Office *pOffice);
+    void testDocumentLoadFail( COKit* pOffice );
+    void testDocumentTypes( COKit* pOffice );
+    void testImpressSlideNames( COKit* pOffice );
+    void testCalcSheetNames( COKit* pOffice );
+    void testPaintPartTile( COKit* pOffice );
+    void testDocumentLoadLanguage(COKit* pOffice);
+    void testMultiKeyInput(COKit *pOffice);
 #if 0
-    void testOverlay( Office* pOffice );
+    void testOverlay( COKit* pOffice );
 #endif
 
     CPPUNIT_TEST_SUITE(TiledRenderingTest);
@@ -132,7 +132,7 @@ void TiledRenderingTest::runAllTests()
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest_kit";
     rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserInstallURL);
 
-    std::unique_ptr< Office > pOffice( kit_cpp_init(
+    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice );
 
@@ -159,10 +159,10 @@ void TiledRenderingTest::runAllTests()
     std::_Exit(EXIT_SUCCESS);
 }
 
-void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
+void TiledRenderingTest::testDocumentLoadFail( COKit* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/kit/qa/data/IDONOTEXIST.odt";
-    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
     CPPUNIT_ASSERT( !pDocument );
     // TODO: we probably want to have some way of returning what
     // the cause of failure was. getError() will return
@@ -173,14 +173,14 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 // Our dumped .png files end up in
 // workdir/CppunitTest/kit_tiledrendering.test.core
 
-static COKitDocumentType getDocumentType( Office* pOffice, const string& rPath )
+static COKitDocumentType getDocumentType( COKit* pOffice, const string& rPath )
 {
-    std::unique_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad( rPath.c_str() ) );
     CPPUNIT_ASSERT( pDocument );
     return pDocument->getDocumentType();
 }
 
-std::unique_ptr<Document> TiledRenderingTest::loadDocument( Office *pOffice, const string &pName,
+std::unique_ptr<COKitDocument, kit::Deleter> TiledRenderingTest::loadDocument( COKit *pOffice, const string &pName,
                                                             const char *pFilterOptions )
 {
     const string sDocPath = m_sSrcRoot + "/kit/qa/data/" + pName;
@@ -188,17 +188,18 @@ std::unique_ptr<Document> TiledRenderingTest::loadDocument( Office *pOffice, con
 
     remove( sLockFile.c_str() );
 
-    return std::unique_ptr<Document>(pOffice->documentLoad( sDocPath.c_str(), pFilterOptions ));
+    return std::unique_ptr<COKitDocument, kit::Deleter>(
+        pOffice->documentLoadWithOptions(sDocPath.c_str(), pFilterOptions));
 }
 
-void TiledRenderingTest::testDocumentTypes( Office* pOffice )
+void TiledRenderingTest::testDocumentTypes( COKit* pOffice )
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
     // This crashed.
-    pDocument->postUnoCommand(".uno:Bold");
+    pDocument->postUnoCommand(".uno:Bold", nullptr, false);
     processEventsToIdle();
 
     const string sPresentationDocPath = m_sSrcRoot + "/kit/qa/data/blank_presentation.odp";
@@ -212,9 +213,9 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // TODO: do this for all supported document types
 }
 
-void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
+void TiledRenderingTest::testImpressSlideNames( COKit* pOffice )
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -224,9 +225,9 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
     // have a localised version of "Slide 3".
 }
 
-void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
+void TiledRenderingTest::testCalcSheetNames( COKit* pOffice )
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
@@ -234,16 +235,16 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
     CPPUNIT_ASSERT_EQUAL(std::string("Sheet3"), std::string(pDocument->getPartName(2)));
 }
 
-void TiledRenderingTest::testPaintPartTile(Office* pOffice)
+void TiledRenderingTest::testPaintPartTile(COKit* pOffice)
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
 
     // Create two views.
     pDocument->getView();
-    pDocument->createViewWithOptions();
+    pDocument->createViewWithOptions(nullptr);
 
     int nView2 = pDocument->getView();
 
@@ -259,9 +260,9 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, /*nMode=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
 }
 
-void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
+void TiledRenderingTest::testDocumentLoadLanguage(COKit* pOffice)
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt", "Language=en-US"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt", "Language=en-US"));
 
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
@@ -282,7 +283,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
 #if 0
     // FIXME disabled, as occasionally fails
     // we've got a meaningful result
-    OString aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
+    OString aResult = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 
     pDocument.reset();
@@ -291,7 +292,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     remove(sLockFile.c_str());
 
     // load the file again, now in another language
-    pDocument.reset(pOffice->documentLoad(sDocPath.c_str(), "Language=cs-CZ"));
+    pDocument.reset(pOffice->documentLoadWithOptions(sDocPath.c_str(), "Language=cs-CZ"));
 
     // with cs-CZ, the decimal separator is ',' instead, assert that
     insertString(*pDocument, "1,5");
@@ -310,7 +311,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     processEventsToIdle();
 
     // we've got a meaningful result
-    aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
+    aResult = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 #endif
 }
@@ -330,7 +331,7 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
     sOutput.Close();
 }
 
-void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
+void TiledRenderingTest::testOverlay( COKit* /*pOffice*/ )
 {
     const string sDocPath = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
     const string sLockFile = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
@@ -340,11 +341,11 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
-    std::unique_ptr< Office > pOffice( kit_cpp_init(
+    std::unique_ptr<COKit, kit::Deleter> pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     assert( pOffice.get() );
 
-    std::unique_ptr< Document> pDocument( pOffice->documentLoad(
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
 
     if ( !pDocument.get() )
@@ -412,9 +413,9 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
 }
 #endif
 
-void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
+void TiledRenderingTest::testMultiKeyInput(COKit *pOffice)
 {
-    std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
+    std::unique_ptr<COKitDocument, kit::Deleter> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(COKitDocumentType::TEXT, pDocument->getDocumentType());
@@ -423,12 +424,12 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     int nViewA = pDocument->getView();
     pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jill\"}}");
 
-    pDocument->createViewWithOptions();
+    pDocument->createViewWithOptions(nullptr);
     int nViewB = pDocument->getView();
     pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jack\"}}");
 
     // Enable change tracking
-    pDocument->postUnoCommand(".uno:TrackChanges");
+    pDocument->postUnoCommand(".uno:TrackChanges", nullptr, false);
 
     // First a key-stroke from a
     pDocument->setView(nViewA);

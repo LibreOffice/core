@@ -41,7 +41,7 @@ namespace
 {
 /// coda-qt keeps one view per document, so the first view owns the clipboard;
 /// a multi-view document would need the specific copying view instead.
-int firstViewId(kit::Document* loKitDoc)
+int firstViewId(COKitDocument* loKitDoc)
 {
     int nViewId = -1;
     if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
@@ -50,7 +50,7 @@ int firstViewId(kit::Document* loKitDoc)
 }
 
 /// doc_getClipboard and doc_setClipboard both route by the kit's current view.
-bool selectDocViewAsCurrent(kit::Document* loKitDoc)
+bool selectDocViewAsCurrent(COKitDocument* loKitDoc)
 {
     const int nViewId = firstViewId(loKitDoc);
     if (nViewId < 0)
@@ -68,7 +68,7 @@ std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
     if (!docData)
         return nullptr;
 
-    kit::Document* loKitDoc = docData->loKitDocument;
+    COKitDocument* loKitDoc = docData->loKitDocument;
     if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
         return nullptr;
 
@@ -115,7 +115,7 @@ bool isLoKitFormat(const QString& f)
         || f == QLatin1String("application/pdf");
 }
 
-void writeMimeDataToDoc(kit::Document* dstDoc, const QMimeData* data)
+void writeMimeDataToDoc(COKitDocument* dstDoc, const QMimeData* data)
 {
     if (!dstDoc || !data)
         return;
@@ -175,8 +175,8 @@ bool transferClipboardOnKitThread(unsigned srcDocId, unsigned dstDocId)
     DocumentData* dstData = DocumentData::getIfExists(dstDocId);
     if (!srcData || !dstData)
         return false;
-    kit::Document* srcDoc = srcData->loKitDocument;
-    kit::Document* dstDoc = dstData->loKitDocument;
+    COKitDocument* srcDoc = srcData->loKitDocument;
+    COKitDocument* dstDoc = dstData->loKitDocument;
     if (!srcDoc || !dstDoc)
         return false;
 

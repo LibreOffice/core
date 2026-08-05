@@ -36,10 +36,7 @@
 // and opening of several documents in sequence very quickly might cause discrepancies, so it is
 // better to use a different counter to be sure. Patches to use just one counter welcome.
 
-namespace kit
-{
-class Document;
-}
+struct COKitDocument;
 
 class DocumentData
 {
@@ -53,7 +50,7 @@ public:
     {
     }
 
-    kit::Document *loKitDocument;
+    COKitDocument *loKitDocument;
 
     static DocumentData &allocate(unsigned docId);
     static DocumentData &get(unsigned docId);

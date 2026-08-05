@@ -33,7 +33,7 @@ static std::set<std::string> parseCommaSeparatedList(const std::string& list)
     return result;
 }
 
-static void convert(kit::Office* office, const std::string& input, std::set<std::string> outputFormats)
+static void convert(COKit* office, const std::string& input, std::set<std::string> outputFormats)
 {
 #ifdef _WIN32
     const std::string stem = Util::wide_string_to_string(std::filesystem::path(input).stem().native());
@@ -43,8 +43,9 @@ static void convert(kit::Office* office, const std::string& input, std::set<std:
 
     try
     {
-        std::unique_ptr<kit::Document> doc(
-            office->documentLoad(Poco::URI(Poco::Path(input)).toString().c_str(), nullptr /* options */));
+        std::unique_ptr<COKitDocument, kit::Deleter> doc(
+            office->documentLoadWithOptions(Poco::URI(Poco::Path(input)).toString().c_str(),
+                                           nullptr /* options */));
         if (!doc)
         {
             std::cerr << "Error: could not load document: " << office->getError() << "\n";
@@ -95,7 +96,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::unique_ptr<kit::Office> office;
+    std::unique_ptr<COKit, kit::Deleter> office;
     try
     {
         std::string kit_path;

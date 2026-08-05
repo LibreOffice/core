@@ -26,15 +26,12 @@ class Document;
 class KitQueue;
 class KitSocketPoll;
 
-namespace kit
-{
-class Office;
-}
+struct COKit;
 
 class KitWebSocketHandler final : public WebSocketHandler
 {
     std::string _socketName;
-    std::shared_ptr<kit::Office> _loKit;
+    std::shared_ptr<COKit> _loKit;
     std::string _jailId;
     std::string _docKey; ///< When we get it while creating a new view.
     std::shared_ptr<Document> _document;
@@ -43,7 +40,7 @@ class KitWebSocketHandler final : public WebSocketHandler
     bool _backgroundSaver;
 
 public:
-    KitWebSocketHandler(const std::string& socketName, const std::shared_ptr<kit::Office>& loKit,
+    KitWebSocketHandler(const std::string& socketName, const std::shared_ptr<COKit>& loKit,
                         const std::string& jailId, std::shared_ptr<KitSocketPoll> ksPoll,
                         unsigned mobileAppDocId)
         : WebSocketHandler(/* isClient = */ true, /* isMasking */ false)

@@ -72,7 +72,7 @@ static COClipboardOwner *sClipboardOwner = nil;
 // The engine office handle, captured when the clipboard provider is installed,
 // so a clipboard read can go straight to the process-shared clipboard without
 // needing a particular document.
-static kit::Office *sOffice = nullptr;
+static COKit *sOffice = nullptr;
 
 static std::thread coolwsdThread;
 
@@ -257,7 +257,7 @@ static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size
 // Install the process-global clipboard provider (declared in macos.h). After
 // this the engine advertises formats on copy and reads the pasteboard on paste
 // through the callbacks above, using one shared clipboard for every document.
-void install_clipboard_provider(kit::Office &rOffice)
+void install_clipboard_provider(COKit &rOffice)
 {
     sOffice = &rOffice;
 
@@ -405,7 +405,7 @@ void install_clipboard_provider(kit::Office &rOffice)
         // just render it now so a lazy transferable (Writer, Impress) stays
         // readable once this document's engine is gone. No system-pasteboard
         // write yet.
-        kit::Document * loKitDoc = DocumentData::get(document.appDocId).loKitDocument;
+        COKitDocument * loKitDoc = DocumentData::get(document.appDocId).loKitDocument;
         if (loKitDoc)
             loKitDoc->flushClipboard();
     } else {

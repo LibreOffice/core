@@ -49,6 +49,6 @@ void reveal_in_file_manager(const char *uri);
  * shared clipboard for every document. Called once, while the engine's main
  * loop starts, so the office handle is valid.
  */
-void install_clipboard_provider(kit::Office &rOffice);
+void install_clipboard_provider(COKit &rOffice);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,11 +41,6 @@
 void runKitLoopInAThread();
 #endif
 
-namespace kit
-{
-class Document;
-class Office;
-}
 struct COKit;
 
 void lokit_main(
@@ -226,7 +221,7 @@ class ChildSession;
 class Document final : public std::enable_shared_from_this<Document>, private TilePrioritizer
 {
 public:
-    Document(const std::shared_ptr<kit::Office>& loKit, const std::string& jailId,
+    Document(const std::shared_ptr<COKit>& loKit, const std::string& jailId,
              const std::string& docKey, const std::string& docId, const std::string& url,
              const std::shared_ptr<WebSocketHandler>& websocketHandler, unsigned mobileAppDocId);
     ~Document() final;
@@ -377,7 +372,7 @@ private:
 
     static std::string getDefaultBackgroundTheme(const std::shared_ptr<ChildSession>& session);
 
-    std::shared_ptr<kit::Document> load(const std::shared_ptr<ChildSession>& session,
+    std::shared_ptr<COKitDocument> load(const std::shared_ptr<ChildSession>& session,
                                         const std::string& renderOpts);
 
     bool forwardToChild(std::string_view prefix, const std::vector<char>& payload);
@@ -425,11 +420,11 @@ public:
     /// Returns true iff we have a LOKit Document instance.
     bool isLoaded() const { return !!_loKitDocument; }
 
-    /// Return access to the kit::Office instance.
-    std::shared_ptr<kit::Office> getLOKit() const { return _loKit; }
+    /// Return access to the engine instance.
+    std::shared_ptr<COKit> getLOKit() const { return _loKit; }
 
-    /// Return access to the kit::Document instance.
-    std::shared_ptr<kit::Document> getLOKitDocument();
+    /// Return access to the engine document instance.
+    std::shared_ptr<COKitDocument> getLOKitDocument();
 
     const std::string& getObfuscatedFileId() const { return _obfuscatedFileId; }
 
@@ -491,7 +486,7 @@ private:
     void flushAndExit(int code);
 
 private:
-    std::shared_ptr<kit::Office> _loKit;
+    std::shared_ptr<COKit> _loKit;
     const std::string _jailId;
     /// URL-based key. May be repeated during the lifetime of WSD.
     const std::string _docKey;
@@ -502,9 +497,9 @@ private:
     std::string _jailedUrl;
     std::string _renderOpts;
 
-    std::shared_ptr<kit::Document> _loKitDocument;
+    std::shared_ptr<COKitDocument> _loKitDocument;
 #ifdef __ANDROID__
-    static std::shared_ptr<kit::Document> _loKitDocumentForAndroidOnly;
+    static std::shared_ptr<COKitDocument> _loKitDocumentForAndroidOnly;
     static std::weak_ptr<DocumentBroker> _documentBrokerForAndroidOnly;
 #endif
     std::unique_ptr<KitQueue> _queue;
@@ -551,7 +546,7 @@ private:
     /// For showing disconnected user info in the doc repair dialog.
     std::map<int, UserInfo> _sessionUserInfo;
 #ifdef __ANDROID__
-    friend std::shared_ptr<kit::Document> getLOKDocumentForAndroidOnly();
+    friend std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly();
     friend std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly();
 #endif
 
@@ -582,7 +577,7 @@ TileWireId getCurrentWireId(bool increment = false);
 
 #ifdef __ANDROID__
 /// For the Android app, for now, we need access to the one and only document open to perform eg. saveAs() for printing.
-std::shared_ptr<kit::Document> getLOKDocumentForAndroidOnly();
+std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly();
 std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly();
 #endif
 
@@ -594,7 +589,7 @@ bool isURPEnabled();
 extern Util::LoadTimings KitLoadTimings;
 
 /// Start a URP connection, checking if URP is enabled and there is not already an active URP session
-bool startURP(const std::shared_ptr<kit::Office>& LOKit, void** ppURPContext);
+bool startURP(const std::shared_ptr<COKit>& LOKit, void** ppURPContext);
 
 /// Ensure all recorded traces hit the disk
 void flushTraceEventRecordings();

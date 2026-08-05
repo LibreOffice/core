@@ -30,7 +30,7 @@ using ScopedBytes = std::unique_ptr<unsigned char, BytesDeleter>;
 class Watermark final
 {
 public:
-    Watermark(const std::shared_ptr<kit::Document>& loKitDoc, const std::string& text,
+    Watermark(const std::shared_ptr<COKitDocument>& loKitDoc, const std::string& text,
               double opacity)
         : _loKitDoc(loKitDoc)
         , _text(Util::replace(text, "\\n", "\n"))
@@ -227,7 +227,7 @@ private:
     }
 
 private:
-    const std::shared_ptr<kit::Document> _loKitDoc;
+    const std::shared_ptr<COKitDocument> _loKitDoc;
     const std::string _text;
     const std::string _font;
     const double _alphaLevel;

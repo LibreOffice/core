@@ -793,7 +793,7 @@ namespace
 #endif // BUILDING_TESTS
 } // namespace
 
-Document::Document(const std::shared_ptr<kit::Office>& loKit, const std::string& jailId,
+Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailId,
                    const std::string& docKey, const std::string& docId, const std::string& url,
                    const std::shared_ptr<WebSocketHandler>& websocketHandler,
                    unsigned mobileAppDocId)
@@ -2042,7 +2042,7 @@ std::string removeServerLoadOptions(const std::string& filterOptions,
 }
 }
 
-std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession>& session,
+std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession>& session,
                                               const std::string& renderOpts)
 {
     const std::string sessionId = session->getId();
@@ -2165,7 +2165,8 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
         const char* url = loadUri.c_str();
         LOG_DBG("Calling lokit::documentLoad(" << anonymizeUrl(url) << ", \"" << options << "\")");
         const auto start = std::chrono::steady_clock::now();
-        _loKitDocument.reset(_loKit->documentLoad(url, options.c_str()));
+        _loKitDocument.reset(_loKit->documentLoadWithOptions(url, options.c_str()),
+                             kit::Deleter());
 #ifdef __ANDROID__
         _loKitDocumentForAndroidOnly = _loKitDocument;
         {
@@ -2187,7 +2188,7 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
             DocumentData::get(_mobileAppDocId).docBroker = docBrokerIt->second;
         }
 #endif
-        if (!_loKitDocument || !_loKitDocument->get())
+        if (!_loKitDocument)
         {
             LOG_ERR("Failed to load: " << uriAnonym << ", error: " << _loKit->getError());
 
@@ -2760,8 +2761,8 @@ void Document::drainQueue()
     }
 }
 
-/// Return access to the kit::Document instance.
-std::shared_ptr<kit::Document> Document::getLOKitDocument()
+/// Return access to the engine document instance.
+std::shared_ptr<COKitDocument> Document::getLOKitDocument()
 {
     if (!_loKitDocument)
     {
@@ -3059,10 +3060,10 @@ void flushTraceEventRecordings()
 
 #ifdef __ANDROID__
 
-std::shared_ptr<kit::Document> Document::_loKitDocumentForAndroidOnly = std::shared_ptr<kit::Document>();
+std::shared_ptr<COKitDocument> Document::_loKitDocumentForAndroidOnly = std::shared_ptr<COKitDocument>();
 std::weak_ptr<DocumentBroker> Document::_documentBrokerForAndroidOnly;
 
-std::shared_ptr<kit::Document> getLOKDocumentForAndroidOnly()
+std::shared_ptr<COKitDocument> getLOKDocumentForAndroidOnly()
 {
     return Document::_loKitDocumentForAndroidOnly;
 }
@@ -3381,7 +3382,7 @@ bool KitSocketPoll::kitHasAnyInput([[maybe_unused]] int mostUrgentPriority) {
         if (document->isLoaded())
         {
             // Check if core has high-priority tasks in which case we don't interrupt.
-            std::shared_ptr<kit::Document> kitDocument = document->getLOKitDocument();
+            std::shared_ptr<COKitDocument> kitDocument = document->getLOKitDocument();
             // TaskPriority::HIGHEST -> TaskPriority::REPAINT
             if (mostUrgentPriority >= 0 && mostUrgentPriority <= 4)
             {
@@ -3536,7 +3537,7 @@ void KitSocketPoll::kitWakeup() {
  *
  * The LOKit main loop will use/call these callbacks inside VCL's Yield(), see SvpSalInstance::ImplYield().
  */
-static void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
+static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
 #if MOBILEAPP
     // The server sets loKitPtr in globalPreinit(); MOBILEAPP has no ForKit, so publish the
     // engine handle here, before the poll loop runs, so kitPoll's reentry guard can reach
@@ -3630,7 +3631,7 @@ static void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
 #include <SettingsStorage.hpp> // Desktop::getConfigPath()
 
 // with "unipoll" thread that calls cok_init_2 ends up holding the yield mutex in InitVCL()
-// kit::Office:runLoop then spawned in another thread ends up stuck. To prevent that call cok_init_2
+// COKit::runLoop then spawned in another thread ends up stuck. To prevent that call cok_init_2
 // and runLoop in the same thread.
 // note: at this point in time, it is unclear (to quwex) if cok_init_2 not being in the "main"
 // thread will disrupt other things :-) if that is the case maybe we could also ReleaseYieldMutex()
@@ -3659,7 +3660,7 @@ std::future<COKit*> initKitRunLoopThread(const std::shared_ptr<KitSocketPoll>& m
 #endif
                 p.set_value(kit);
 
-                std::shared_ptr<kit::Office> loKit = std::make_shared<kit::Office>(kit);
+                std::shared_ptr<COKit> loKit(kit, kit::Deleter());
 
                 startMainLoop(kit, loKit, mainKit);
 
@@ -3765,7 +3766,7 @@ void lokit_main(
     // lokit's destroy typically throws from
     // framework/source/services/modulemanager.cxx:198
     // So we insure it lives until std::_Exit is called.
-    std::shared_ptr<kit::Office> loKit;
+    std::shared_ptr<COKit> loKit;
     ChildSession::NoCapsForKit = noCapabilities;
 #endif // MOBILEAPP
 
@@ -4231,7 +4232,7 @@ void lokit_main(
 
             kit = initFunction(instdir, userdir);
 
-            loKit = std::make_shared<kit::Office>(kit);
+            loKit = std::shared_ptr<COKit>(kit, kit::Deleter());
             if (!loKit)
             {
                 LOG_FTL("COKit initialization failed. Exiting.");
@@ -4380,7 +4381,7 @@ void lokit_main(
 
         assert(kit);
 
-        static std::shared_ptr<kit::Office> loKit = std::make_shared<kit::Office>(kit);
+        static std::shared_ptr<COKit> loKit(kit, kit::Deleter());
         assert(loKit);
 
         COOLWSD::LOKitVersion = loKit->getVersionInfo();
@@ -4501,7 +4502,7 @@ void runKitLoopInAThread()
                 {
                     ProcUtil::setThreadName("lokit_runloop");
 
-                    std::shared_ptr<kit::Office> loKit = std::make_shared<kit::Office>(lo_kit);
+                    std::shared_ptr<COKit> loKit(lo_kit, kit::Deleter());
                     int dummy;
                     loKit->runLoop(pollCallback, wakeCallback, &dummy);
 
@@ -4614,7 +4615,7 @@ static int sendURPToLO(void* context, signed char* buffer, int bytesToRead)
     return sendURPData(context, buffer, bytesToRead);
 }
 
-bool startURP(const std::shared_ptr<kit::Office>& LOKit, void** ppURPContext)
+bool startURP(const std::shared_ptr<COKit>& LOKit, void** ppURPContext)
 {
     if (!isURPEnabled())
     {

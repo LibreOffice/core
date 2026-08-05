@@ -426,19 +426,15 @@ int cok_preinit( const char *install_path,  const char *user_profile_url )
 namespace kit
 {
 
-/// Create a kit::Office instance.
+/// Create the one COKit instance of a process.
 ///
-/// Presumably you are not supposed to create multiple kit::Office
-/// instances in the same process. Possibly not even a new one after
-/// destroying a previous one.
+/// Presumably you are not supposed to create multiple instances in the same
+/// process. Possibly not even a new one after destroying a previous one.
 ///
 /// For information on the parameters, see writeup for cok_init_2 above.
-inline Office* kit_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
+inline COKit* kit_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
-    COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
-    if (pThis == NULL)
-        return NULL;
-    return new ::kit::Office(pThis);
+    return cok_init_2(pInstallPath, pUserProfileUrl);
 }
 
 }

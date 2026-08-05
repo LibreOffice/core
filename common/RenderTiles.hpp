@@ -59,7 +59,7 @@ namespace RenderTiles
 
     /// Renders the tiles of tileCombined and outputs the tile or tilecombine response messages.
     bool doRender(
-        const std::shared_ptr<kit::Document>& document, DeltaGenerator& deltaGen,
+        const std::shared_ptr<COKitDocument>& document, DeltaGenerator& deltaGen,
         TileCombined& tileCombined, ThreadPool& pngPool,
         const std::function<void(unsigned char* data, int offsetX, int offsetY, size_t pixmapWidth,
                                  size_t pixmapHeight, int pixelWidth, int pixelHeight,
