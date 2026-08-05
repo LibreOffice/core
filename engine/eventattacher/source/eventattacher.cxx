@@ -66,12 +66,12 @@ public:
         const Reference< XAllListener >& AllListener, Any Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
-    virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
-    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
-    virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual Reference< XIntrospectionAccess > getIntrospection() override;
+    virtual Any invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
+    virtual void setValue(const OUString& PropertyName, const Any& Value) override;
+    virtual Any getValue(const OUString& PropertyName) override;
+    virtual bool hasMethod(const OUString& Name) override;
+    virtual bool hasProperty(const OUString& Name) override;
 
 private:
     Reference< XAllListener >    m_xAllListener;
@@ -113,13 +113,13 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 }
 
 
-Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection()
+Reference< XIntrospectionAccess > InvocationToAllListenerMapper::getIntrospection()
 {
     return Reference< XIntrospectionAccess >();
 }
 
 
-Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
+Any InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >& , Sequence< Any >& )
 {
     Any aRet;
@@ -167,25 +167,25 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 }
 
 
-void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& , const Any& )
+void InvocationToAllListenerMapper::setValue(const OUString& , const Any& )
 {
 }
 
 
-Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& )
+Any InvocationToAllListenerMapper::getValue(const OUString& )
 {
     return Any();
 }
 
 
-bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
+bool InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
 }
 
 
-bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
+bool InvocationToAllListenerMapper::hasProperty(const OUString& Name)
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -203,27 +203,27 @@ public:
     explicit EventAttacherImpl( const Reference< XComponentContext >& );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
 
     // methods of XEventAttacher
-    virtual Reference< XEventListener > SAL_CALL attachListener(const Reference< XInterface >& xObject,
+    virtual Reference< XEventListener > attachListener(const Reference< XInterface >& xObject,
             const Reference< XAllListener >& AllListener, const Any& Helper,
             const OUString& ListenerType, const OUString& AddListenerParam) override;
-    virtual Reference< XEventListener > SAL_CALL attachSingleEventListener(const Reference< XInterface >& xObject,
+    virtual Reference< XEventListener > attachSingleEventListener(const Reference< XInterface >& xObject,
             const Reference< XAllListener >& AllListener, const Any& Helper,
             const OUString& ListenerType, const OUString& AddListenerParam,
             const OUString& EventMethod) override;
-    virtual void SAL_CALL removeListener(const Reference< XInterface >& xObject,
+    virtual void removeListener(const Reference< XInterface >& xObject,
             const OUString& ListenerType, const OUString& AddListenerParam,
             const Reference< XEventListener >& aToRemoveListener) override;
 
     // XEventAttacher2
-    virtual Sequence< Reference<XEventListener> > SAL_CALL attachMultipleEventListeners(
+    virtual Sequence< Reference<XEventListener> > attachMultipleEventListeners(
         const Reference<XInterface>& xObject, const Sequence<css::script::EventListener>& aListeners ) override;
 
     // used by FilterAllListener_Impl
@@ -274,22 +274,22 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 }
 
 /// @throws Exception
-OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
+OUString EventAttacherImpl::getImplementationName(  )
 {
     return u"com.sun.star.comp.EventAttacher"_ustr;
 }
 
-bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
+bool EventAttacherImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
+Sequence<OUString> EventAttacherImpl::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.script.EventAttacher"_ustr };
 }
 
-void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
+void EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
 {
     // get services from the argument list
     for( const Any& arg : Arguments )
@@ -395,11 +395,11 @@ public:
                            const Reference< XAllListener >& AllListener_ );
 
     // XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) override;
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) override;
+    virtual void firing(const AllEventObject& Event) override;
+    virtual Any approveFiring(const AllEventObject& Event) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) override;
+    virtual void disposing(const EventObject& Source) override;
 
 private:
     // convert
@@ -423,7 +423,7 @@ FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, OUString
 }
 
 
-void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
+void FilterAllListenerImpl::firing(const AllEventObject& Event)
 {
     if( Event.MethodName == m_EventMethod && m_AllListener.is() )
         m_AllListener->firing( Event );
@@ -472,7 +472,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
 }
 
 
-Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
+Any FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
 {
     Any aRet;
 
