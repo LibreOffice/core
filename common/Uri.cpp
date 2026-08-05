@@ -76,9 +76,11 @@ std::string Uri::getFilenameFromURL(const std::string& url)
 std::string Uri::getFilenameWithExtFromURL(const std::string& url)
 {
     auto [base, filename, ext, params] = Util::splitUrl(url);
+    // The url carries the name percent-encoded. The file name is the decoded
+    // form, so a name with spaces comes back with real spaces rather than %20.
     if (ext.empty())
-        return filename;
-    return filename + ext;
+        return decode(filename);
+    return decode(filename + ext);
 }
 
 bool Uri::hasReadonlyPermission(const std::string& url)

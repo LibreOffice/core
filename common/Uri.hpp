@@ -65,7 +65,8 @@ public:
     /// Extract and return the filename (without extension) given a url or path.
     static std::string getFilenameFromURL(const std::string& url);
 
-    /// Extract and return the filename (with extension) given a url or path.
+    /// Extract and return the filename (with extension) given a url or path,
+    /// percent-decoded.
     static std::string getFilenameWithExtFromURL(const std::string& url);
 
     static bool hasReadonlyPermission(const std::string& url);

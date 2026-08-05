@@ -32,11 +32,13 @@ class UriTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testEncode);
     CPPUNIT_TEST(testProtocolMessageRoundTripWithSpaces);
     CPPUNIT_TEST(testDecodeBeforePathStrip);
+    CPPUNIT_TEST(testFilenameFromUrlDecodes);
     CPPUNIT_TEST_SUITE_END();
 
     void testEncode();
     void testProtocolMessageRoundTripWithSpaces();
     void testDecodeBeforePathStrip();
+    void testFilenameFromUrlDecodes();
 };
 
 void UriTests::testEncode()
@@ -134,6 +136,33 @@ void UriTests::testDecodeBeforePathStrip()
     // after decoding and must not be flagged.
     LOK_ASSERT(Uri::decode("Hello%20World.odt").find('/') == std::string::npos);
     LOK_ASSERT(Uri::decode("What%27s%20New.pdf").find('/') == std::string::npos);
+}
+
+// The file name taken from a url is the percent-decoded form of the url's
+// last path segment. A preset asset named with spaces must land on disk
+// under its real name - saved as My%20Deck.otp it would not match the name
+// the host shows, and the design-template catalog's name contract rejects
+// the percent sign.
+void UriTests::testFilenameFromUrlDecodes()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A plain name passes through unchanged, query dropped.
+    LOK_ASSERT_EQUAL_STR("Quarterly.otp",
+                         Uri::getFilenameWithExtFromURL("http://host/path/Quarterly.otp?id=1"));
+
+    // Encoded spaces decode to real spaces.
+    LOK_ASSERT_EQUAL_STR(
+        "COOL Days 2026 Slide Template.otp",
+        Uri::getFilenameWithExtFromURL(
+            "http://host/settings/template/COOL%20Days%202026%20Slide%20Template.otp?identifier=282"));
+
+    // An encoded separator decodes to a real '/'.
+    LOK_ASSERT(Uri::getFilenameWithExtFromURL("http://host/a%2Fb.otp").find('/') !=
+               std::string::npos);
+
+    // Double encoding decodes one level only.
+    LOK_ASSERT_EQUAL_STR("a%20b.otp", Uri::getFilenameWithExtFromURL("http://host/a%2520b.otp"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UriTests);

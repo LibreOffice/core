@@ -71,6 +71,7 @@
 #include <Poco/URI.h>
 #include <Poco/XML/XMLWriter.h>
 
+#include <algorithm>
 #include <atomic>
 #include <cassert>
 #include <chrono>
@@ -1874,8 +1875,12 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
             if (fileName.empty())
                 fileName = Uri::getFilenameWithExtFromURL(uri);
 
+            // A settings file name is one plain path component.
+            const bool hasControlChar =
+                std::any_of(fileName.begin(), fileName.end(),
+                            [](unsigned char c) { return c < 0x20 || c == 0x7f; });
             if (fileName.empty() || fileName == "." || fileName == ".." ||
-                fileName.find_first_of('/') != std::string::npos)
+                fileName.find_first_of("/\\") != std::string::npos || hasControlChar)
             {
                 LOG_ERR("Invalid settings filename of: " << fileName);
                 continue;
