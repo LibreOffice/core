@@ -1514,6 +1514,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159133NoBlankPage)
     CPPUNIT_ASSERT_EQUAL(2, nPageCount);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testZeroDefaultTabStop)
+{
+    createSwDoc("zero-default-tab-stop.docx");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the tabs stepped across the line by the application default distance
+    // until one of them passed the right margin and broke the line.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace
