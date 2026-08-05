@@ -1145,15 +1145,6 @@ OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName
 
 static bool doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static COKitDocumentType doc_getDocumentType(COKitDocument* pThis);
-static int doc_getParts(COKitDocument* pThis);
-static char* doc_getPartPageRectangles(COKitDocument* pThis);
-static int doc_getPart(COKitDocument* pThis);
-static void doc_setPart(COKitDocument* pThis, int nPart);
-static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect);
-static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection);
-static char* doc_getPartName(COKitDocument* pThis, int nPart);
-static void doc_setPartMode(COKitDocument* pThis, COKitPartMode ePartMode);
-static int doc_getEditMode(COKitDocument* pThis);
 static void doc_paintTile(COKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -1290,7 +1281,6 @@ static unsigned char* doc_renderFontOrientation(COKitDocument* pThis,
                           int* pFontWidth,
                           int* pFontHeight,
                           int pOrientation);
-static char* doc_getPartHash(COKitDocument* pThis, int nPart);
 
 static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
                             const int nX, const int nY,
@@ -1308,10 +1298,6 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId, 
 
 static void doc_postWindow(COKitDocument* pThis, unsigned nKitWindowId,
                            COKitWindowAction eAction, const char* pData);
-
-static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
-static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, int nMode);
-static int doc_getPartIndex(COKitDocument* pThis, int nPart, int nMode);
 
 static bool doc_insertCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary,
@@ -1571,36 +1557,6 @@ COKitDocumentType LibLODocument_Impl::getDocumentType()
     return doc_getDocumentType(this);
 }
 
-int LibLODocument_Impl::getParts()
-{
-    return doc_getParts(this);
-}
-
-char* LibLODocument_Impl::getPartPageRectangles()
-{
-    return doc_getPartPageRectangles(this);
-}
-
-int LibLODocument_Impl::getPart()
-{
-    return doc_getPart(this);
-}
-
-void LibLODocument_Impl::setPart(int nPart)
-{
-    doc_setPart(this, nPart);
-}
-
-char* LibLODocument_Impl::getPartName(int nPart)
-{
-    return doc_getPartName(this, nPart);
-}
-
-void LibLODocument_Impl::setPartMode(COKitPartMode eMode)
-{
-    doc_setPartMode(this, eMode);
-}
-
 void LibLODocument_Impl::paintTile(unsigned char* pBuffer, const int nCanvasWidth,
                                    const int nCanvasHeight, const int nTilePosX,
                                    const int nTilePosY, const int nTileWidth, const int nTileHeight)
@@ -1712,11 +1668,6 @@ int LibLODocument_Impl::getViewsCount()
     return doc_getViewsCount(this);
 }
 
-char* LibLODocument_Impl::getPartHash(int nPart)
-{
-    return doc_getPartHash(this, nPart);
-}
-
 void LibLODocument_Impl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                                        const int nCanvasWidth, const int nCanvasHeight,
                                        const int nTilePosX, const int nTilePosY,
@@ -1772,21 +1723,6 @@ void LibLODocument_Impl::postWindowExtTextInputEvent(unsigned nWindowId,
     doc_postWindowExtTextInputEvent(this, nWindowId, eType, pText);
 }
 
-char* LibLODocument_Impl::getPartInfo(int nPart)
-{
-    return doc_getPartInfo(this, nPart);
-}
-
-unsigned long long LibLODocument_Impl::getPartUniqueId(int nPart, int nMode)
-{
-    return doc_getPartUniqueId(this, nPart, nMode);
-}
-
-int LibLODocument_Impl::getPartIndex(int nPart, int nMode)
-{
-    return doc_getPartIndex(this, nPart, nMode);
-}
-
 void LibLODocument_Impl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
                                         const int y, const int width, const int height,
                                         const double dpiscale)
@@ -1828,16 +1764,6 @@ void LibLODocument_Impl::postWindowGestureEvent(unsigned nWindowId, const char* 
 int LibLODocument_Impl::createViewWithOptions(const char* pOptions)
 {
     return doc_createViewWithOptions(this, pOptions);
-}
-
-void LibLODocument_Impl::selectPart(int nPart, int nSelect)
-{
-    doc_selectPart(this, nPart, nSelect);
-}
-
-void LibLODocument_Impl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
-{
-    doc_moveSelectedParts(this, nPosition, bDuplicate, nIntoSection);
 }
 
 void LibLODocument_Impl::resizeWindow(unsigned nWindowId, const int width, const int height)
@@ -1929,11 +1855,6 @@ COKitSelectionType LibLODocument_Impl::getSelectionTypeAndText(const char* pMime
 void LibLODocument_Impl::getDataArea(long nPart, long* pCol, long* pRow)
 {
     doc_getDataArea(this, nPart, pCol, pRow);
-}
-
-int LibLODocument_Impl::getEditMode()
-{
-    return doc_getEditMode(this);
 }
 
 void LibLODocument_Impl::setViewTimezone(int nId, const char* pTimezone)
@@ -4814,13 +4735,13 @@ static COKitDocumentType doc_getDocumentType (COKitDocument* pThis)
     return getDocumentType(pThis);
 }
 
-static int doc_getParts (COKitDocument* pThis)
+int LibLODocument_Impl::getParts()
 {
-    comphelper::ProfileZone aZone("doc_getParts");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getParts");
 
     SolarMutexGuard aGuard;
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4830,14 +4751,14 @@ static int doc_getParts (COKitDocument* pThis)
     return pDoc->getParts();
 }
 
-static int doc_getPart (COKitDocument* pThis)
+int LibLODocument_Impl::getPart()
 {
-    comphelper::ProfileZone aZone("doc_getPart");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPart");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4860,7 +4781,7 @@ static int doc_getPart (COKitDocument* pThis)
 
 static void doc_setPartIndexImpl(COKitDocument* pThis, int nPartIndex, bool bAllowChangeFocus = true)
 {
-    comphelper::ProfileZone aZone("doc_setPart");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::setPart");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4902,17 +4823,17 @@ static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFo
     doc_setPartIndexImpl(pThis, nPart, bAllowChangeFocus);
 }
 
-static void doc_setPart(COKitDocument* pThis, int nPart)
+void LibLODocument_Impl::setPart(int nPart)
 {
-    doc_setPartImpl(pThis, nPart, true);
+    doc_setPartImpl(this, nPart, true);
 }
 
-static char* doc_getPartInfo(COKitDocument* pThis, int nPart)
+char* LibLODocument_Impl::getPartInfo(int nPart)
 {
-    comphelper::ProfileZone aZone("doc_getPartInfo");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartInfo");
 
     SolarMutexGuard aGuard;
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4922,12 +4843,12 @@ static char* doc_getPartInfo(COKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartInfo(nPart));
 }
 
-static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, int nMode)
+unsigned long long LibLODocument_Impl::getPartUniqueId(int nPart, int nMode)
 {
-    comphelper::ProfileZone aZone("doc_getPartUniqueId");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartUniqueId");
 
     SolarMutexGuard aGuard;
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4937,12 +4858,12 @@ static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, i
     return pDoc->getPartUniqueId(nPart, nMode);
 }
 
-static int doc_getPartIndex(COKitDocument* pThis, int nPart, int nMode)
+int LibLODocument_Impl::getPartIndex(int nPart, int nMode)
 {
-    comphelper::ProfileZone aZone("doc_getPartIndex");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartIndex");
 
     SolarMutexGuard aGuard;
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4956,12 +4877,12 @@ static int doc_getPartIndex(COKitDocument* pThis, int nPart, int nMode)
     return partIndexFromNumber(pDoc, nPart, nMode);
 }
 
-static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
+void LibLODocument_Impl::selectPart(int nPart, int nSelect)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4984,12 +4905,12 @@ static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
     pDoc->selectPart( nPart, nSelect );
 }
 
-static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection)
+void LibLODocument_Impl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -4999,14 +4920,14 @@ static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDup
     pDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
 }
 
-static char* doc_getPartPageRectangles(COKitDocument* pThis)
+char* LibLODocument_Impl::getPartPageRectangles()
 {
-    comphelper::ProfileZone aZone("doc_getPartPageRectangles");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartPageRectangles");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -5056,14 +4977,14 @@ static int  doc_getA11yCaretPosition(COKitDocument* pThis)
 
 }
 
-static char* doc_getPartName(COKitDocument* pThis, int nPart)
+char* LibLODocument_Impl::getPartName(int nPart)
 {
-    comphelper::ProfileZone aZone("doc_getPartName");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartName");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -5073,14 +4994,14 @@ static char* doc_getPartName(COKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartName(nPart));
 }
 
-static char* doc_getPartHash(COKitDocument* pThis, int nPart)
+char* LibLODocument_Impl::getPartHash(int nPart)
 {
-    comphelper::ProfileZone aZone("doc_getPartHash");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartHash");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -5090,15 +5011,14 @@ static char* doc_getPartHash(COKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartHash(nPart));
 }
 
-static void doc_setPartMode(COKitDocument* pThis,
-                            COKitPartMode ePartMode)
+void LibLODocument_Impl::setPartMode(COKitPartMode eMode)
 {
-    comphelper::ProfileZone aZone("doc_setPartMode");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::setPartMode");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
@@ -5108,7 +5028,7 @@ static void doc_setPartMode(COKitDocument* pThis,
 
     int nCurrentPart = pDoc->getPart();
 
-    pDoc->setPartMode(ePartMode);
+    pDoc->setPartMode(eMode);
 
     // We need to make sure the internal state is updated, just changing the mode
     // might not update the relevant shells (i.e. impress will keep rendering the
@@ -5130,14 +5050,14 @@ static void doc_setPartMode(COKitDocument* pThis,
     }
 }
 
-static int doc_getEditMode(COKitDocument* pThis)
+int LibLODocument_Impl::getEditMode()
 {
-    comphelper::ProfileZone aZone("doc_getEditMode");
+    comphelper::ProfileZone aZone("LibLODocument_Impl::getEditMode");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
