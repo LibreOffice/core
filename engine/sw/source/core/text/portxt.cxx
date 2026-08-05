@@ -984,7 +984,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
     rInf.X( rInf.X() - nBlankSize );
     SetLen( GetLen() - nHoleLen );
     SwHolePortion* pHole = new SwHolePortion(*this, IsPaintTrailingSpaceDecorations(rInf));
-    pHole->SetBlankWidth(nBlankSize);
+    pHole->SetBlankWidth(gfx::Length::twip(nBlankSize));
     pHole->SetLen(nHoleLen);
     Insert( pHole );
 
@@ -1226,7 +1226,7 @@ SwPositiveSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf 
 }
 
 SwHolePortion::SwHolePortion(const SwTextPortion& rPor, bool bShowUnderline)
-    : m_nBlankWidth( 0 )
+    : m_nBlankWidth( 0_emu )
     , m_bShowUnderline(bShowUnderline)
 {
     SetLen( TextFrameIndex(1) );
@@ -1302,8 +1302,8 @@ void SwHolePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, T
     dumpAsXmlAttributes(pWriter, rText, nOffset);
     nOffset += GetLen();
 
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("blank-width"),
-                                      BAD_CAST(OString::number(m_nBlankWidth).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("blank-width-twips"),
+                                      BAD_CAST(OString::number(m_nBlankWidth.as_twip<SwTwips>()).getStr()));
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("show-underline"),
                                       BAD_CAST(OString::boolean(m_bShowUnderline).getStr()));

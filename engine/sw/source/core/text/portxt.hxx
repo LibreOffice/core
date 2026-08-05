@@ -19,6 +19,7 @@
 #pragma once
 
 #include "porlin.hxx"
+#include <basegfx/units/Length.hxx>
 
 class SwTextGuess;
 
@@ -66,13 +67,13 @@ public:
 
 class SwHolePortion : public SwLinePortion
 {
-    SwTwips m_nBlankWidth;
+    gfx::Length m_nBlankWidth;
     bool m_bShowUnderline;
 
 public:
     explicit SwHolePortion(const SwTextPortion& rPor, bool bShowUnderline = false);
-    SwTwips GetBlankWidth() const { return m_nBlankWidth; }
-    void SetBlankWidth(const SwTwips nNew) { m_nBlankWidth = nNew; }
+    gfx::Length GetBlankWidth() const { return m_nBlankWidth; }
+    void SetBlankWidth(const gfx::Length nNew) { m_nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPositiveSize GetTextSize(const SwTextSizeInfo& rInfo) const override;

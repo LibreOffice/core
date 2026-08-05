@@ -263,7 +263,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                         if ( !pHolePor->GetNextPortion() ||
                              !pHolePor->GetNextPortion()->InFixMargGrp() )
                         {
-                            pPrev->AddPrtWidth( pHolePor->GetBlankWidth() );
+                            pPrev->AddPrtWidth( pHolePor->GetBlankWidth().as_twip<SwTwips>() );
                             pPrev->SetLen(pPrev->GetLen() + TextFrameIndex(1));
                             pPrev->SetNextPortion( pHolePor->GetNextPortion() );
                             delete pHolePor;
