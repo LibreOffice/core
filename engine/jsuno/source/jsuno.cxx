@@ -320,10 +320,10 @@ template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
 // A stripped-down and modified version of <https://console.spec.whatwg.org/#assert> (which only
 // takes a single argument and aborts when the assertion is not met), just enough for using it in
 // jsunit/qa/unit/testuno.cxx:
-JSValue consoleAssert(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue consoleAssert(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         auto const ok = JS_ToBool(ctx, argv[0]);
         if (ok == -1)
         {
@@ -672,10 +672,10 @@ void setTypeProperty(JSContext* ctx, JSValueConst obj, char const* prop, cpo::un
     JS_SetPropertyStr(ctx, obj, prop, val.release());
 }
 
-JSValue unoTypeSequence(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue unoTypeSequence(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         if (JS_GetClassID(argv[0]) != getRuntimeData(ctx)->typeClassId)
         {
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
@@ -697,10 +697,10 @@ JSValue unoTypeSequence(JSContext* ctx, JSValueConst, int argc, JSValueConst* ar
     });
 }
 
-JSValue unoTypeEnum(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue unoTypeEnum(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         if (JS_GetClassID(argv[0]) != getRuntimeData(ctx)->enumClassId)
         {
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
@@ -810,11 +810,10 @@ JSValue unoTypeStruct(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
     });
 }
 
-JSValue unoTypeException(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue unoTypeException(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         ValueRef data(ctx, JS_GetPropertyStr(ctx, argv[0], "'data"));
         if (JS_IsException(data))
         {
@@ -837,10 +836,10 @@ JSValue unoTypeException(JSContext* ctx, JSValueConst, int argc, JSValueConst* a
     });
 }
 
-JSValue unoTypeInterface(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue unoTypeInterface(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         if (JS_GetClassID(argv[0]) != getRuntimeData(ctx)->interfaceClassId)
         {
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
@@ -1198,11 +1197,11 @@ void singletonFinalizer(JSRuntime* rt, JSValueConst val)
         static_cast<rtl_uString*>(JS_GetOpaque(val, getRuntimeData(rt)->singletonClassId)));
 }
 
-JSValue getSingleton(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv, int,
+JSValue getSingleton(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv, int,
                      JSValueConst* func_data)
 {
-    return callFromJs(ctx, [ctx, argc, argv, func_data] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv, func_data] {
         auto const s = static_cast<rtl_uString*>(
             JS_GetOpaque(func_data[0], getRuntimeData(ctx)->singletonClassId));
         css::uno::Reference<css::uno::XComponentContext> context(
@@ -2391,10 +2390,10 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Any const& value)
     return toJs(ctx, value.getValueType(), value.getValue());
 }
 
-JSValue sameUnoObject(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue sameUnoObject(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 2);
+    assert(argc >= 2);
+    return callFromJs(ctx, [ctx, argv] {
         return JS_NewBool(
             ctx,
             *o3tl::forceAccess<css::uno::Reference<css::uno::XInterface>>(
@@ -2583,10 +2582,10 @@ private:
     std::function<void(OUString const&)> m_proxyCallHook;
 };
 
-JSValue internalCreateProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 2);
+    assert(argc >= 2);
+    return callFromJs(ctx, [ctx, argv] {
         if (JS_GetClassID(argv[0]) != getRuntimeData(ctx)->interfaceClassId)
         {
             JS_ThrowTypeError(ctx,
@@ -2627,10 +2626,10 @@ JSValue internalCreateProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst
     });
 }
 
-JSValue internalTakeProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+JSValue internalTakeProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
 {
-    return callFromJs(ctx, [ctx, argc, argv] {
-        assert(argc >= 1);
+    assert(argc >= 1);
+    return callFromJs(ctx, [ctx, argv] {
         if (!JS_IsString(argv[0]))
         {
             JS_ThrowTypeError(ctx, "$internal.takeProxy: argument must be a string id");
