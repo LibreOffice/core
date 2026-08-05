@@ -949,7 +949,7 @@ void SbRtl_Int(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Fix(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxVariableRef pArg = rPar.Get(1);
