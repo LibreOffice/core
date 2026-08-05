@@ -327,6 +327,7 @@ core_constructor_list = [
     ("scripting_BasicProviderImpl_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # sfx2/util/sfx.component
     "SfxDocumentMetaData_get_implementation",
+    ("com_sun_star_comp_document_OwnSubFilter_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
     "com_sun_star_comp_office_FrameLoader_get_implementation",
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
