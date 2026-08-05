@@ -221,6 +221,7 @@
 		BE70D1FF2FC4F13200FA34B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackstageViewController.swift; sourceTree = "<group>"; };
 		BE70D2012FC4F13200FA34B7 /* coda.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = coda.entitlements; sourceTree = "<group>"; };
+		BE70D2012FC4F13200FA34B8 /* coda-debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "coda-debug.entitlements"; sourceTree = "<group>"; };
 		BE70D2022FC4F13200FA34B7 /* COWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COWrapper.h; sourceTree = "<group>"; };
 		BE70D2032FC4F13200FA34B7 /* COWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = COWrapper.mm; sourceTree = "<group>"; };
 		BE70D2042FC4F13200FA34B7 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
@@ -474,6 +475,7 @@
 				BE70D1FE2FC4F13200FA34B7 /* AppDelegate.swift */,
 				BE70D1FF2FC4F13200FA34B7 /* Assets.xcassets */,
 				BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */,
+				BE70D2012FC4F13200FA34B8 /* coda-debug.entitlements */,
 				BE70D2012FC4F13200FA34B7 /* coda.entitlements */,
 				BE70D2022FC4F13200FA34B7 /* COWrapper.h */,
 				BE70D2032FC4F13200FA34B7 /* COWrapper.mm */,
@@ -1263,7 +1265,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = coda/coda.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "coda/coda-debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

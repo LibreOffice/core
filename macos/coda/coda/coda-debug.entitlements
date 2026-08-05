@@ -12,6 +12,12 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
+	<!-- Lets the embedded WebDriver test server (WebDriverServer.swift,
+	     enabled by the testDriverPort command-line argument) listen on
+	     localhost. Debug builds only; the App Store build must not
+	     request this. -->
+	<key>com.apple.security.network.server</key>
+	<true/>
 	<key>com.apple.security.print</key>
 	<true/>
 </dict>
