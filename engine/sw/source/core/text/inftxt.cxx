@@ -1205,7 +1205,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     Size aSize;
     Point aTmp;
 
-    const SwTwips nPostItsWidth = SwViewOption::GetPostItsWidth(GetOut());
+    const SwTwips nPostItsWidth = SwViewOption::GetPostItsWidth(GetOut()).as_twip<SwTwips>();
     const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
     const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
 

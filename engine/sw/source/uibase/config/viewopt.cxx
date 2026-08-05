@@ -197,10 +197,10 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-SwTwips SwViewOption::GetPostItsWidth(const OutputDevice* pOut)
+gfx::Length SwViewOption::GetPostItsWidth(const OutputDevice* pOut)
 {
     assert(pOut && "no Outdev");
-    return pOut->GetTextWidth(u"  "_ustr);
+    return gfx::Length::twip(pOut->GetTextWidth(u"  "_ustr));
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )

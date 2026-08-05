@@ -29,6 +29,7 @@
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
+#include <basegfx/units/Length.hxx>
 
 class SwRect;
 class OutputDevice;
@@ -475,7 +476,7 @@ public:
 
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
-    static SwTwips GetPostItsWidth(const OutputDevice* pOut);
+    static gfx::Length GetPostItsWidth(const OutputDevice* pOut);
 
     //show/hide tooltips on tracked changes
     bool IsShowInlineTooltips() const
