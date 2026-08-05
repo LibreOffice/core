@@ -22,7 +22,7 @@ $(eval $(call gb_Executable_set_include,coconvert, \
     -I$(SRCDIR)/.. \
     -I$(SRCDIR)/include \
     $$(INCLUDE) \
-    -I$(gb_UnpackedTarball_workdir)/poco/include \
+    $(online_poco_inc) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,coconvert, \

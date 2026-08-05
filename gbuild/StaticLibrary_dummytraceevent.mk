@@ -21,7 +21,7 @@ $(eval $(call gb_StaticLibrary_set_include,dummytraceevent, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
     -I$(SRCDIR)/.. \
     $$(INCLUDE) \
-    -I$(gb_UnpackedTarball_workdir)/poco/include \
+    $(online_poco_inc) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,dummytraceevent, \

@@ -28,7 +28,7 @@ $(eval $(call gb_Executable_set_include,coolwsd, \
     -I$(SRCDIR)/../kit \
     -I$(SRCDIR)/include \
     $$(INCLUDE) \
-    -I$(gb_UnpackedTarball_workdir)/poco/include \
+    $(online_poco_inc) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,coolwsd, \
