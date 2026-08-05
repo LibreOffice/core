@@ -127,6 +127,14 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 			return;
 		}
 
+		// This handler stays on the document once a presentation has started it,
+		// so it also sees the document going full screen for the View menu's
+		// Full Screen entry. The slide show is only involved while its own
+		// iframe is there.
+		if (!this._slideShow) {
+			return;
+		}
+
 		this.fullscreen = document.fullscreenElement;
 		if (!this.fullscreen) {
 			this._stopFullScreen();
