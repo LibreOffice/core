@@ -1,0 +1,14 @@
+--- third_party/abseil-cpp/absl/base/macros.h
++++ third_party/abseil-cpp/absl/base/macros.h
+@@ -253,6 +253,11 @@
+ #else
+ #define ABSL_REFACTOR_INLINE
+ #endif
++// clang < 13 rejects attributes on using-declarations
++#if defined(__clang__) && __clang_major__ < 13
++#undef ABSL_REFACTOR_INLINE
++#define ABSL_REFACTOR_INLINE
++#endif
+ 
+ // ABSL_DEPRECATE_AND_INLINE()
+ //

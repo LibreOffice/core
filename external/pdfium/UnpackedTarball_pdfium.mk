@@ -25,6 +25,8 @@ pdfium_patches += system-fast_float.diff
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
 pdfium_patches += container-stream-concepts.patch
+# clang < 13 rejects attributes on using-declarations
+pdfium_patches += abseil-old-clang.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 

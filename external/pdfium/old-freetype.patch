@@ -1,6 +1,17 @@
 --- core/fxge/cfx_face.cpp
 +++ core/fxge/cfx_face.cpp
-@@ -1042,7 +1042,7 @@
+@@ -987,7 +987,10 @@
+ 
+ int CFX_Face::GetGlyphTTWidth(uint32_t glyph_index) const {
+   const auto* fontglyph = GetRec()->glyph;
++// FreeType 2.9 has no glyph_index member
++#if FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 10)
+   DCHECK_EQ(glyph_index, fontglyph->glyph_index);
++#endif
+ 
+   const int ft_result =
+       NormalizeFontMetric(fontglyph->metrics.horiAdvance, GetUnitsPerEm());
+@@ -1127,7 +1130,7 @@
  }
  
  int CFX_Face::GetNameIndex(const char* name) {
@@ -9,3 +20,14 @@
  
  #if defined(PDF_ENABLE_SKIA_TYPEFACE_CHECKS)
  #if defined(PDF_ENABLE_FONTATIONS)
+@@ -1320,7 +1323,10 @@
+ 
+ FX_RECT CFX_Face::GetGlyphBBox(uint32_t glyph_index) const {
+   const auto* glyph = GetRec()->glyph;
++// FreeType 2.9 has no glyph_index member
++#if FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 10)
+   DCHECK_EQ(glyph_index, glyph->glyph_index);
++#endif
+ 
+   pdfium::ClampedNumeric<FT_Pos> left = glyph->metrics.horiBearingX;
+   pdfium::ClampedNumeric<FT_Pos> top = glyph->metrics.horiBearingY;
