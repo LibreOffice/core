@@ -1834,8 +1834,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get(), &nMaxAscent, &nMaxDescent, bCaret);
     }
 
-    rInf.SetExtraAscent(std::max(SwTwips{ 0 }, nMaxAscent));
-    rInf.SetExtraDescent(std::max(SwTwips{ 0 }, nMaxDescent));
+    rInf.SetExtraAscent(gfx::Length::twip(std::max(SwTwips{ 0 }, nMaxAscent)));
+    rInf.SetExtraDescent(gfx::Length::twip(std::max(SwTwips{ 0 }, nMaxDescent)));
 
     if (bCompress)
     {

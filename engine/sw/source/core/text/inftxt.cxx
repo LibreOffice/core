@@ -465,8 +465,8 @@ void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex n
     aDrawInf.SetKanaComp( nComp );
     SwPositiveSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
     nMaxSizeDiff = aDrawInf.GetKanaDiff();
-    nExtraAscent = aDrawInf.GetExtraAscent();
-    nExtraDescent = aDrawInf.GetExtraDescent();
+    nExtraAscent = aDrawInf.GetExtraAscent().as_twip<SwTwips>();
+    nExtraDescent = aDrawInf.GetExtraDescent().as_twip<SwTwips>();
     nMinSize = aSize.Width();
 }
 

@@ -24,6 +24,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include "TextFrameIndex.hxx"
 #include <swdllapi.h>
 #include "swporlayoutcontext.hxx"
@@ -60,8 +61,8 @@ class SW_DLLPUBLIC SwDrawTextInfo
     SwUnderlineFont* m_pUnderFnt = nullptr;
     TextFrameIndex* m_pHyphPos = nullptr;
     tools::Long m_nKanaDiff = 0;
-    SwTwips m_nExtraAscent = 0;
-    SwTwips m_nExtraDescent = 0;
+    gfx::Length m_nExtraAscent = 0_emu;
+    gfx::Length m_nExtraDescent = 0_emu;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
     TextFrameIndex m_nMeasureLen = TextFrameIndex{ COMPLETE_STRING };
@@ -280,7 +281,7 @@ public:
         return m_nKanaDiff;
     }
 
-    SwTwips GetExtraAscent() const
+    gfx::Length GetExtraAscent() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE(m_bExtraAscent, "DrawTextInfo: Undefined extra ascent");
@@ -288,7 +289,7 @@ public:
         return m_nExtraAscent;
     }
 
-    SwTwips GetExtraDescent() const
+    gfx::Length GetExtraDescent() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE(m_bExtraDescent, "DrawTextInfo: Undefined extra descent");
@@ -510,7 +511,7 @@ public:
 #endif
     }
 
-    void SetExtraAscent(SwTwips nNew)
+    void SetExtraAscent(gfx::Length nNew)
     {
         m_nExtraAscent = nNew;
 #ifdef DBG_UTIL
@@ -518,7 +519,7 @@ public:
 #endif
     }
 
-    void SetExtraDescent(SwTwips nNew)
+    void SetExtraDescent(gfx::Length nNew)
     {
         m_nExtraDescent = nNew;
 #ifdef DBG_UTIL
