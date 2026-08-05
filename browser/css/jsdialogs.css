@@ -190,6 +190,29 @@ div.ui-treeview-icon-column {
 	max-height: 300px;
 }
 
+/* New Table Style dialog: the online layout does not apply the .ui size hints,
+   so size the region list to show all its rows, widen the picker column so its
+   labels and colour dropdowns are not cut off, and put a gap before that
+   column. */
+#NewTableStyleDialog #regions.ui-treeview {
+	max-height: 300px;
+}
+
+#NewTableStyleDialog #pickergrid {
+	min-width: 380px;
+}
+
+/* The colour dropdowns fill their grid cell but also carry a side margin, which
+   pushes them past the cell (and the dialog) edge and clips them. Drop the
+   margin; the grid column gap still separates them from the labels. */
+#NewTableStyleDialog :is(#backcolor, #fontcolor, #bordercolor) {
+	margin-inline: 0;
+}
+
+#NewTableStyleDialog #editbox {
+	column-gap: 12px;
+}
+
 #writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='2'] .ui-treeview-expander-column,
 #writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='2'] .ui-treeview-icon-column {
 	padding-left: 2.5ch;
