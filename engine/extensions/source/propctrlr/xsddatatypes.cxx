@@ -37,7 +37,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
     template< typename INTERFACE, typename ARGUMENT >
-    static ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
+    static ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( INTERFACE::*pGetter )( ) )
     {
         ARGUMENT aReturn = ARGUMENT();
         try

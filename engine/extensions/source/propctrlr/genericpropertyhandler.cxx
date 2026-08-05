@@ -192,10 +192,10 @@ using namespace cpo::uno;
         virtual ~UrlClickHandler() override;
 
         // XActionListener
-        virtual void SAL_CALL actionPerformed( const ActionEvent& rEvent ) override;
+        virtual void actionPerformed( const ActionEvent& rEvent ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void disposing( const EventObject& Source ) override;
 
     protected:
         void impl_dispatch_throw( const OUString& _rURL );
@@ -222,7 +222,7 @@ using namespace cpo::uno;
     {
     }
 
-    void SAL_CALL UrlClickHandler::actionPerformed( const ActionEvent& rEvent )
+    void UrlClickHandler::actionPerformed( const ActionEvent& rEvent )
     {
         Reference< XPropertyControl > xControl( rEvent.Source, UNO_QUERY_THROW );
         Any aControlValue( xControl->getValue() );
@@ -237,7 +237,7 @@ using namespace cpo::uno;
         impl_dispatch_throw( sURL );
     }
 
-    void SAL_CALL UrlClickHandler::disposing( const EventObject& /*Source*/ )
+    void UrlClickHandler::disposing( const EventObject& /*Source*/ )
     {
         // not interested in
     }
@@ -270,22 +270,22 @@ using namespace cpo::uno;
     {
     }
 
-    OUString SAL_CALL GenericPropertyHandler::getImplementationName(  )
+    OUString GenericPropertyHandler::getImplementationName(  )
     {
         return u"com.sun.star.comp.extensions.GenericPropertyHandler"_ustr;
     }
 
-    bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName )
+    bool GenericPropertyHandler::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames(  )
+    Sequence< OUString > GenericPropertyHandler::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.inspection.GenericPropertyHandler"_ustr };
     }
 
-    void SAL_CALL GenericPropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
+    void GenericPropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -322,7 +322,7 @@ using namespace cpo::uno;
             m_xComponent->addPropertyChangeListener( OUString(), static_cast< XPropertyChangeListener* >( iterReAdd.next() ) );
     }
 
-    Any SAL_CALL GenericPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any GenericPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xComponent.is() )
@@ -331,7 +331,7 @@ using namespace cpo::uno;
         return m_xComponent->getPropertyValue( _rPropertyName );
     }
 
-    void SAL_CALL GenericPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void GenericPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xComponent.is() )
@@ -348,7 +348,7 @@ using namespace cpo::uno;
         return rConverter;
     }
 
-    Any SAL_CALL GenericPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any GenericPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensurePropertyMap();
@@ -374,7 +374,7 @@ using namespace cpo::uno;
         return aPropertyValue;
     }
 
-    Any SAL_CALL GenericPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any GenericPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensurePropertyMap();
@@ -397,7 +397,7 @@ using namespace cpo::uno;
         return aControlValue;
     }
 
-    PropertyState SAL_CALL GenericPropertyHandler::getPropertyState( const OUString& _rPropertyName )
+    PropertyState GenericPropertyHandler::getPropertyState( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyState eState = PropertyState_DIRECT_VALUE;
@@ -406,7 +406,7 @@ using namespace cpo::uno;
         return eState;
     }
 
-    void SAL_CALL GenericPropertyHandler::addPropertyChangeListener(const Reference< XPropertyChangeListener >& _rxListener)
+    void GenericPropertyHandler::addPropertyChangeListener(const Reference< XPropertyChangeListener >& _rxListener)
     {
         if ( !_rxListener.is() )
             throw NullPointerException();
@@ -426,7 +426,7 @@ using namespace cpo::uno;
         }
     }
 
-    void SAL_CALL GenericPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void GenericPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_xComponent.is() )
@@ -507,7 +507,7 @@ using namespace cpo::uno;
         }
     }
 
-    Sequence< Property > SAL_CALL GenericPropertyHandler::getSupportedProperties()
+    Sequence< Property > GenericPropertyHandler::getSupportedProperties()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensurePropertyMap();
@@ -515,7 +515,7 @@ using namespace cpo::uno;
         return comphelper::mapValuesToSequence( m_aProperties );
     }
 
-    Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupersededProperties( )
+    Sequence< OUString > GenericPropertyHandler::getSupersededProperties( )
     {
         // no superseded properties at all. This handler offers the very basic PropertyHandler
         // functionality, so it's much more likely that other handlers want to supersede
@@ -523,14 +523,14 @@ using namespace cpo::uno;
         return Sequence< OUString >( );
     }
 
-    Sequence< OUString > SAL_CALL GenericPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > GenericPropertyHandler::getActuatingProperties( )
     {
         // This basic PropertyHandler implementation is too dumb^Wgeneric to know
         // anything about property dependencies
         return Sequence< OUString >( );
     }
 
-    LineDescriptor SAL_CALL GenericPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor GenericPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         if ( !_rxControlFactory.is() )
@@ -578,35 +578,35 @@ using namespace cpo::uno;
         return aDescriptor;
     }
 
-    bool SAL_CALL GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ )
+    bool GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ )
     {
         return false;
     }
 
-    InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
+    InteractiveSelectionResult GenericPropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
     {
         OSL_FAIL( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
-    void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
+    void GenericPropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
     }
 
-    bool SAL_CALL GenericPropertyHandler::suspend( bool /*_bSuspend*/ )
+    bool GenericPropertyHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }
 
-    void SAL_CALL GenericPropertyHandler::disposing()
+    void GenericPropertyHandler::disposing()
     {
         m_aPropertyListeners.clear();
             // not disposeAndClear: the listeners are (virtually) listeners at our introspectee, not
             // at this handler instance
     }
 
-    void SAL_CALL GenericPropertyHandler::dispose(  )
+    void GenericPropertyHandler::dispose(  )
     {
         GenericPropertyHandler_Base::WeakComponentImplHelperBase::dispose();
         m_xComponentIntrospectionAccess.clear();
@@ -614,11 +614,11 @@ using namespace cpo::uno;
         m_xTypeConverter.clear();
         m_xPropertyState.clear();
     }
-    void SAL_CALL GenericPropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void GenericPropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
     {
         GenericPropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
     }
-    void SAL_CALL GenericPropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void GenericPropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
     {
         GenericPropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
     }

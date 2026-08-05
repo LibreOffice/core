@@ -43,9 +43,9 @@ public:
                                         BitmapTransporter();
     virtual                             ~BitmapTransporter() override;
 
-    virtual css::awt::Size SAL_CALL          getSize() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL    getDIB() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL    getMaskDIB() override { return cpo::uno::Sequence< sal_Int8 >(); }
+    virtual css::awt::Size          getSize() override;
+    virtual cpo::uno::Sequence< sal_Int8 >    getDIB() override;
+    virtual cpo::uno::Sequence< sal_Int8 >    getMaskDIB() override { return cpo::uno::Sequence< sal_Int8 >(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }

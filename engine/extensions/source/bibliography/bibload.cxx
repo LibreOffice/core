@@ -91,33 +91,33 @@ public:
                             virtual ~BibliographyLoader() override;
 
     // XServiceInfo
-    OUString               SAL_CALL getImplementationName() override;
-    bool               SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >   SAL_CALL getSupportedServiceNames() override;
+    OUString               getImplementationName() override;
+    bool               supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >   getSupportedServiceNames() override;
 
     //XNameAccess
-    virtual Any SAL_CALL getByName(const OUString& aName) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName(const OUString& aName) override;
+    virtual Any getByName(const OUString& aName) override;
+    virtual Sequence< OUString > getElementNames() override;
+    virtual bool hasByName(const OUString& aName) override;
 
     //XElementAccess
-    virtual Type  SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type  getElementType() override;
+    virtual bool hasElements() override;
 
     //XPropertySet
-    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
-    virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
+    virtual Reference< XPropertySetInfo >  getPropertySetInfo() override;
+    virtual void setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
+    virtual Any getPropertyValue(const OUString& PropertyName) override;
+    virtual void addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
+    virtual void removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
+    virtual void addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
+    virtual void removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
 
     // XLoader
-    virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
+    virtual void            load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
                                 const Reference< XLoadEventListener > & aListener) override;
-    virtual void            SAL_CALL cancel() override;
+    virtual void            cancel() override;
 };
 
 }

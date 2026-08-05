@@ -47,14 +47,14 @@ namespace logging
 
     private:
         // XLogFormatter
-        virtual OUString SAL_CALL getHead(  ) override;
-        virtual OUString SAL_CALL format( const LogRecord& Record ) override;
-        virtual OUString SAL_CALL getTail(  ) override;
+        virtual OUString getHead(  ) override;
+        virtual OUString format( const LogRecord& Record ) override;
+        virtual OUString getTail(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& _rServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames() override;
     };
 
     }
@@ -63,7 +63,7 @@ namespace logging
     {
     }
 
-    OUString SAL_CALL PlainTextFormatter::getHead(  )
+    OUString PlainTextFormatter::getHead(  )
     {
         return
             u"  event no"                 // column 1: the event number
@@ -79,7 +79,7 @@ namespace logging
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord )
+    OUString PlainTextFormatter::format( const LogRecord& _rRecord )
     {
         char buffer[ sizeof("-32768-65535-65535 65535:65535:65535.4294967295") ];
             // reserve enough space for hypothetical max length
@@ -115,24 +115,24 @@ namespace logging
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::getTail(  )
+    OUString PlainTextFormatter::getTail(  )
     {
         // no tail
         return OUString();
     }
 
-    bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName )
+    bool PlainTextFormatter::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::getImplementationName()
+    OUString PlainTextFormatter::getImplementationName()
     {
         return u"com.sun.star.comp.extensions.PlainTextFormatter"_ustr;
     }
 
-    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames()
+    Sequence< OUString > PlainTextFormatter::getSupportedServiceNames()
     {
         return { u"com.sun.star.logging.PlainTextFormatter"_ustr };
     }

@@ -146,13 +146,13 @@ public:
         /* [out] */ IConnectionPoint **ppCP) override;
 
     // XBridgeSupplier2
-    virtual cpo::uno::Any SAL_CALL createBridge(const cpo::uno::Any& modelDepObject,
+    virtual cpo::uno::Any createBridge(const cpo::uno::Any& modelDepObject,
                                 const cpo::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // IUnoObjectWrapper
     STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pXInt) override;

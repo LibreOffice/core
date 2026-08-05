@@ -134,8 +134,8 @@ public:
                                             , pController(nullptr)
                                         {}
 
-    virtual void                        SAL_CALL frameAction(const FrameActionEvent& aEvent) override;
-    virtual void                        SAL_CALL disposing( const lang::EventObject& Source ) override;
+    virtual void                        frameAction(const FrameActionEvent& aEvent) override;
+    virtual void                        disposing( const lang::EventObject& Source ) override;
 };
 
 void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& )
@@ -165,17 +165,17 @@ BibFrameController_Impl::~BibFrameController_Impl()
     m_xDatMan.clear();
 }
 
-OUString SAL_CALL BibFrameController_Impl::getImplementationName()
+OUString BibFrameController_Impl::getImplementationName()
 {
     return u"com.sun.star.comp.extensions.Bibliography"_ustr;
 }
 
-bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName )
+bool BibFrameController_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService( this, sServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BibFrameController_Impl::getSupportedServiceNames()
 {
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
@@ -276,7 +276,7 @@ cpo::uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryD
     return aDispatches;
 }
 
-cpo::uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
+cpo::uno::Sequence< ::sal_Int16 > BibFrameController_Impl::getSupportedCommandGroups()
 {
     cpo::uno::Sequence< ::sal_Int16 > aDispatchInfo{ frame::CommandGroup::EDIT,
                                                 frame::CommandGroup::DOCUMENT,
@@ -286,7 +286,7 @@ cpo::uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupported
     return aDispatchInfo;
 }
 
-cpo::uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
+cpo::uno::Sequence< frame::DispatchInformation > BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 

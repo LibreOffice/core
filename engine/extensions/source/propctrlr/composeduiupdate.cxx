@@ -136,16 +136,16 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, bool _bShow ) override;
-        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
-        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
-        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) override;
+        virtual void enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
+        virtual void enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
+        virtual void rebuildPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void showPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void hidePropertyUI( const OUString& _rPropertyName ) override;
+        virtual void showCategory( const OUString& _rCategory, bool _bShow ) override;
+        virtual Reference< XPropertyControl > getPropertyControl( const OUString& _rPropertyName ) override;
+        virtual void registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
+        virtual void revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
+        virtual void setHelpSectionText( const OUString& HelpText ) override;
 
     protected:
         virtual ~CachedInspectorUI() override;
@@ -320,7 +320,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName )
+    Reference< XPropertyControl > CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -330,7 +330,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& Observer )
+    void CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         OSL_FAIL( "CachedInspectorUI::registerControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
@@ -339,7 +339,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer )
+    void CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         OSL_FAIL( "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
@@ -348,7 +348,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& HelpText )
+    void CachedInspectorUI::setHelpSectionText( const OUString& HelpText )
     {
         m_rMaster.getDelegatorUI()->setHelpSectionText( HelpText );
     }
@@ -440,7 +440,7 @@ namespace pcr
         };
 
         // a typedef for a ->XObjectInspectorUI member function taking a string
-        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
+        typedef void ( XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
 
 
         // an STL-compatible struct which calls a certain member method (taking a string) at a
@@ -512,7 +512,7 @@ namespace pcr
 
 
         // a ->XObjectInspectorUI method taking a string and a boolean
-        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, bool );
+        typedef void ( XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, bool );
 
 
         // an implementation of the ->IStringKeyBooleanUIUpdate interface which calls

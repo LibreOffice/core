@@ -403,17 +403,17 @@ cpo::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
         !sValue.isEmpty(), sValue.isEmpty() ? cpo::uno::Any() : cpo::uno::Any(sValue)));
 }
 
-OUString SAL_CALL WinUserInfoBe::getImplementationName()
+OUString WinUserInfoBe::getImplementationName()
 {
     return "com.sun.star.comp.configuration.backend.WinUserInfoBe";
 }
 
-bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
+bool WinUserInfoBe::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> WinUserInfoBe::getSupportedServiceNames()
 {
     return { "com.sun.star.configuration.backend.WinUserInfoBe" };
 }

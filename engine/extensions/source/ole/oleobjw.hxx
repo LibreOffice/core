@@ -65,45 +65,45 @@ public:
     ~IUnknownWrapper() override;
 
     //XInterface
-    cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& t) override;
+    cpo::uno::Any queryInterface(const cpo::uno::Type& t) override;
 
     // XInvokation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName,
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
+    virtual cpo::uno::Any invoke( const OUString& aFunctionName,
                                  const cpo::uno::Sequence< cpo::uno::Any >& aParams,
                                  cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
                                  cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName,
+    virtual void setValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual cpo::uno::Any getValue( const OUString& aPropertyName ) override;
+    virtual bool hasMethod( const OUString& aName ) override;
+    virtual bool hasProperty( const OUString& aName ) override;
 
     // XBridgeSupplier2
     // This interface is implemented to provide a safe way to obtain the original
     // IUnknown or IDispatch within the function anyToVariant. The function asks
     // every UNO object for its XBridgeSupplier2 and if it is available uses it to convert
     // the object with its own supplier.
-    virtual cpo::uno::Any SAL_CALL createBridge( const cpo::uno::Any& modelDepObject,
+    virtual cpo::uno::Any createBridge( const cpo::uno::Any& modelDepObject,
                                        const cpo::uno::Sequence< sal_Int8 >& aProcessId,
                                        sal_Int16 sourceModelType,
                                        sal_Int16 destModelType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return m_sDefaultMember; }
+    virtual OUString getDefaultPropertyName(  ) override { return m_sDefaultMember; }
 
     // XDefaultMethod
-    virtual OUString SAL_CALL getDefaultMethodName(  ) override { return m_sDefaultMember; }
+    virtual OUString getDefaultMethodName(  ) override { return m_sDefaultMember; }
 
-    virtual cpo::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
-    virtual cpo::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any invokeGetProperty( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any invokePutProperty( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
 
     // XDirectInvocation
-    virtual cpo::uno::Any SAL_CALL directInvoke( const OUString& aName, const cpo::uno::Sequence< cpo::uno::Any >& aParams ) override;
-    virtual bool SAL_CALL hasMember( const OUString& aName ) override;
+    virtual cpo::uno::Any directInvoke( const OUString& aName, const cpo::uno::Sequence< cpo::uno::Any >& aParams ) override;
+    virtual bool hasMember( const OUString& aName ) override;
 
 
     cpo::uno::Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,

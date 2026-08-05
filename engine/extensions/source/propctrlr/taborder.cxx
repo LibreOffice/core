@@ -95,14 +95,14 @@ namespace pcr
         }
 
         // XTabControllerModel
-        virtual void SAL_CALL setControlModels(const Sequence< Reference< XControlModel > >& rModels) override {m_aModels = rModels;}
-        virtual Sequence< Reference< XControlModel > > SAL_CALL getControlModels() override {return m_aModels;}
-        virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const OUString& /*GroupName*/) override {}
-        virtual sal_Int32 SAL_CALL getGroupCount() override {return 0;}
-        virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) override {}
-        virtual void SAL_CALL getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) override {}
-        virtual bool SAL_CALL getGroupControl() override {return false;} ;
-        virtual void SAL_CALL setGroupControl(bool /*GroupControl*/) override {};
+        virtual void setControlModels(const Sequence< Reference< XControlModel > >& rModels) override {m_aModels = rModels;}
+        virtual Sequence< Reference< XControlModel > > getControlModels() override {return m_aModels;}
+        virtual void setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const OUString& /*GroupName*/) override {}
+        virtual sal_Int32 getGroupCount() override {return 0;}
+        virtual void getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) override {}
+        virtual void getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) override {}
+        virtual bool getGroupControl() override {return false;} ;
+        virtual void setGroupControl(bool /*GroupControl*/) override {};
     };
 
     //= TabOrderDialog

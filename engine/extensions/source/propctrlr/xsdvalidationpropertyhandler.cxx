@@ -88,7 +88,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL XSDValidationPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any XSDValidationPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -118,7 +118,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL XSDValidationPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void XSDValidationPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -213,7 +213,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getSupersededProperties( )
+    Sequence< OUString > XSDValidationPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -248,7 +248,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > XSDValidationPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         std::vector< OUString > aInterestedInActuations;
@@ -273,7 +273,7 @@ using namespace cpo::uno;
     }
 
 
-    LineDescriptor SAL_CALL XSDValidationPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor XSDValidationPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -408,7 +408,7 @@ using namespace cpo::uno;
     }
 
 
-    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult XSDValidationPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -447,7 +447,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL XSDValidationPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void XSDValidationPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyHandlerComponent::addPropertyChangeListener( _rxListener );
@@ -456,7 +456,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL XSDValidationPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void XSDValidationPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (m_pHelper)
@@ -549,7 +549,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
+    void XSDValidationPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

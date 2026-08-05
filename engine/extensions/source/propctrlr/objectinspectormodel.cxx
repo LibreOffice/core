@@ -51,16 +51,16 @@ namespace pcr
         ObjectInspectorModel();
 
         // XObjectInspectorModel
-        virtual Sequence< Any > SAL_CALL getHandlerFactories() override;
-        virtual Sequence< PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) override;
-        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) override;
+        virtual Sequence< Any > getHandlerFactories() override;
+        virtual Sequence< PropertyCategoryDescriptor > describeCategories(  ) override;
+        virtual ::sal_Int32 getPropertyOrderIndex( const OUString& PropertyName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+        virtual void initialize( const Sequence< Any >& aArguments ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     protected:
         void    createDefault();
@@ -82,27 +82,27 @@ namespace pcr
     }
 
 
-    Sequence< Any > SAL_CALL ObjectInspectorModel::getHandlerFactories()
+    Sequence< Any > ObjectInspectorModel::getHandlerFactories()
     {
         return m_aFactories;
     }
 
 
-    Sequence< PropertyCategoryDescriptor > SAL_CALL ObjectInspectorModel::describeCategories(  )
+    Sequence< PropertyCategoryDescriptor > ObjectInspectorModel::describeCategories(  )
     {
         // no category info provided by this default implementation
         return Sequence< PropertyCategoryDescriptor >( );
     }
 
 
-    ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const OUString& /*PropertyName*/ )
+    ::sal_Int32 ObjectInspectorModel::getPropertyOrderIndex( const OUString& /*PropertyName*/ )
     {
         // no ordering provided by this default implementation
         return 0;
     }
 
 
-    void SAL_CALL ObjectInspectorModel::initialize( const Sequence< Any >& _arguments )
+    void ObjectInspectorModel::initialize( const Sequence< Any >& _arguments )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_aFactories.hasElements() )
@@ -136,13 +136,13 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL ObjectInspectorModel::getImplementationName(  )
+    OUString ObjectInspectorModel::getImplementationName(  )
     {
         return u"org.openoffice.comp.extensions.ObjectInspectorModel"_ustr;
     }
 
 
-    Sequence< OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  )
+    Sequence< OUString > ObjectInspectorModel::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.inspection.ObjectInspectorModel"_ustr };
     }

@@ -36,25 +36,25 @@ using namespace cpo::uno;
     {
     }
 
-    Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  )
+    Sequence<sal_Int8> MasterDetailLinkDialog::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
 
-    OUString SAL_CALL MasterDetailLinkDialog::getImplementationName()
+    OUString MasterDetailLinkDialog::getImplementationName()
     {
         return u"org.openoffice.comp.form.ui.MasterDetailLinkDialog"_ustr;
     }
 
 
-    cpo::uno::Sequence<OUString> SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.form.MasterDetailLinkDialog"_ustr };
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo()
+    Reference<XPropertySetInfo>  MasterDetailLinkDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

@@ -45,33 +45,33 @@ namespace logging
     class CsvFormatter : public cppu::WeakImplHelper<css::logging::XCsvLogFormatter, css::lang::XServiceInfo>
     {
     public:
-        virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) override;
+        virtual OUString formatMultiColumn(const Sequence< OUString>& column_data) override;
 
         CsvFormatter();
 
     private:
         // XCsvLogFormatter
-        virtual bool SAL_CALL getLogEventNo() override;
-        virtual bool SAL_CALL getLogThread() override;
-        virtual bool SAL_CALL getLogTimestamp() override;
-        virtual bool SAL_CALL getLogSource() override;
-        virtual Sequence< OUString > SAL_CALL getColumnnames() override;
+        virtual bool getLogEventNo() override;
+        virtual bool getLogThread() override;
+        virtual bool getLogTimestamp() override;
+        virtual bool getLogSource() override;
+        virtual Sequence< OUString > getColumnnames() override;
 
-        virtual void SAL_CALL setLogEventNo( bool log_event_no ) override;
-        virtual void SAL_CALL setLogThread( bool log_thread ) override;
-        virtual void SAL_CALL setLogTimestamp( bool log_timestamp ) override;
-        virtual void SAL_CALL setLogSource( bool log_source ) override;
-        virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) override;
+        virtual void setLogEventNo( bool log_event_no ) override;
+        virtual void setLogThread( bool log_thread ) override;
+        virtual void setLogTimestamp( bool log_timestamp ) override;
+        virtual void setLogSource( bool log_source ) override;
+        virtual void setColumnnames( const Sequence< OUString>& column_names) override;
 
         // XLogFormatter
-        virtual OUString SAL_CALL getHead(  ) override;
-        virtual OUString SAL_CALL format( const LogRecord& Record ) override;
-        virtual OUString SAL_CALL getTail(  ) override;
+        virtual OUString getHead(  ) override;
+        virtual OUString format( const LogRecord& Record ) override;
+        virtual OUString getTail(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& service_name ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& service_name ) override;
+        virtual Sequence< OUString > getSupportedServiceNames() override;
 
     private:
         bool m_LogEventNo;
@@ -188,7 +188,7 @@ namespace logging
         m_MultiColumn = (m_Columnnames.getLength()>1);
     }
 
-    OUString SAL_CALL CsvFormatter::getHead(  )
+    OUString CsvFormatter::getHead(  )
     {
         OUStringBuffer buf;
         if(m_LogEventNo)
@@ -209,7 +209,7 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    OUString SAL_CALL CsvFormatter::format( const LogRecord& record )
+    OUString CsvFormatter::format( const LogRecord& record )
     {
         OUStringBuffer aLogEntry;
 
@@ -273,12 +273,12 @@ namespace logging
         return aLogEntry.makeStringAndClear();
     }
 
-    OUString SAL_CALL CsvFormatter::getTail(  )
+    OUString CsvFormatter::getTail(  )
     {
         return OUString();
     }
 
-    OUString SAL_CALL CsvFormatter::formatMultiColumn(const Sequence< OUString>& column_data)
+    OUString CsvFormatter::formatMultiColumn(const Sequence< OUString>& column_data)
     {
         sal_Int32 columns = column_data.getLength();
         OUStringBuffer buf;
@@ -291,17 +291,17 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name )
+    bool CsvFormatter::supportsService( const OUString& service_name )
     {
         return cppu::supportsService(this, service_name);
     }
 
-    OUString SAL_CALL CsvFormatter::getImplementationName()
+    OUString CsvFormatter::getImplementationName()
     {
         return u"com.sun.star.comp.extensions.CsvFormatter"_ustr;
     }
 
-    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames()
+    Sequence< OUString > CsvFormatter::getSupportedServiceNames()
     {
         return { u"com.sun.star.logging.CsvFormatter"_ustr };
     }

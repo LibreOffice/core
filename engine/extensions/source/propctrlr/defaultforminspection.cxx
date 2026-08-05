@@ -55,19 +55,19 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  )
+    OUString DefaultFormComponentInspectorModel::getImplementationName(  )
     {
         return u"org.openoffice.comp.extensions.DefaultFormComponentInspectorModel"_ustr;
     }
 
 
-    Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  )
+    Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.form.inspection.DefaultFormComponentInspectorModel"_ustr };
     }
 
 
-    Sequence< Any > SAL_CALL DefaultFormComponentInspectorModel::getHandlerFactories()
+    Sequence< Any > DefaultFormComponentInspectorModel::getHandlerFactories()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -122,7 +122,7 @@ namespace pcr
     }
 
 
-    Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultFormComponentInspectorModel::describeCategories(  )
+    Sequence< PropertyCategoryDescriptor > DefaultFormComponentInspectorModel::describeCategories(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -151,7 +151,7 @@ namespace pcr
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName )
+    ::sal_Int32 DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName )
     {
         sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
         if ( nPropertyId == -1 )
@@ -167,7 +167,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments )
+    void DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments )
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();

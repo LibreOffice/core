@@ -62,7 +62,7 @@ using namespace cpo::uno;
         m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     }
 
-    void SAL_CALL OTimeControl::setValue( const Any& _rValue )
+    void OTimeControl::setValue( const Any& _rValue )
     {
         util::Time aUNOTime;
         if ( !( _rValue >>= aUNOTime ) )
@@ -76,7 +76,7 @@ using namespace cpo::uno;
         }
     }
 
-    Any SAL_CALL OTimeControl::getValue()
+    Any OTimeControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->get_text().isEmpty() )
@@ -86,7 +86,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL OTimeControl::getValueType()
+    Type OTimeControl::getValueType()
     {
         return ::cppu::UnoType<util::Time>::get();
     }
@@ -111,7 +111,7 @@ using namespace cpo::uno;
         m_xCalendarBox->get_button().connect_toggled(LINK(this, ODateControl, ToggleHdl));
     }
 
-    void SAL_CALL ODateControl::disposing()
+    void ODateControl::disposing()
     {
         m_xEntryFormatter.reset();
         m_xEntry.reset();
@@ -119,7 +119,7 @@ using namespace cpo::uno;
         ODateControl_Base::disposing();
     }
 
-    void SAL_CALL ODateControl::setValue( const Any& _rValue )
+    void ODateControl::setValue( const Any& _rValue )
     {
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
@@ -153,7 +153,7 @@ using namespace cpo::uno;
         m_xCalendarBox->set_date(aDate);
     }
 
-    Any SAL_CALL ODateControl::getValue()
+    Any ODateControl::getValue()
     {
         Any aPropValue;
         if (!m_xEntry->get_text().isEmpty())
@@ -164,7 +164,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL ODateControl::getValueType()
+    Type ODateControl::getValueType()
     {
         return ::cppu::UnoType<util::Date>::get();
     }
@@ -183,7 +183,7 @@ using namespace cpo::uno;
            pWidget->set_max_length( 1 );
     }
 
-    void SAL_CALL OEditControl::setValue( const Any& _rValue )
+    void OEditControl::setValue( const Any& _rValue )
     {
         OUString sText;
         if ( m_bIsPassword )
@@ -201,7 +201,7 @@ using namespace cpo::uno;
         getTypedControlWindow()->set_text( sText );
     }
 
-    Any SAL_CALL OEditControl::getValue()
+    Any OEditControl::getValue()
     {
         Any aPropValue;
 
@@ -217,7 +217,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL OEditControl::getValueType()
+    Type OEditControl::getValueType()
     {
         return m_bIsPassword ? ::cppu::UnoType<sal_Int16>::get() : ::cppu::UnoType<OUString>::get();
     }
@@ -257,7 +257,7 @@ using namespace cpo::uno;
         m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     }
 
-    void SAL_CALL ODateTimeControl::setValue( const Any& _rValue )
+    void ODateTimeControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
         {
@@ -278,7 +278,7 @@ using namespace cpo::uno;
         }
     }
 
-    Any SAL_CALL ODateTimeControl::getValue()
+    Any ODateTimeControl::getValue()
     {
         Any aPropValue;
         if (!m_xTime->get_text().isEmpty())
@@ -293,7 +293,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL ODateTimeControl::getValueType()
+    Type ODateTimeControl::getValueType()
     {
         return ::cppu::UnoType<util::DateTime>::get();
     }
@@ -312,36 +312,36 @@ using namespace cpo::uno;
         m_xButton->connect_clicked(LINK(this, OHyperlinkControl, OnHyperlinkClicked));
     }
 
-    Any SAL_CALL OHyperlinkControl::getValue()
+    Any OHyperlinkControl::getValue()
     {
         OUString sText = m_xEntry->get_text();
         return Any( sText );
     }
 
-    void SAL_CALL OHyperlinkControl::setValue( const Any& _value )
+    void OHyperlinkControl::setValue( const Any& _value )
     {
         OUString sText;
         _value >>= sText;
         m_xEntry->set_text( sText );
     }
 
-    Type SAL_CALL OHyperlinkControl::getValueType()
+    Type OHyperlinkControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-    void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener )
+    void OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener )
     {
         if ( listener.is() )
             m_aActionListeners.addInterface( listener );
     }
 
-    void SAL_CALL OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener )
+    void OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener )
     {
         m_aActionListeners.removeInterface( listener );
     }
 
-    void SAL_CALL OHyperlinkControl::disposing()
+    void OHyperlinkControl::disposing()
     {
         m_xButton.reset();
         m_xEntry.reset();
@@ -370,12 +370,12 @@ using namespace cpo::uno;
         setMinValue( value );
     }
 
-    ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits()
+    ::sal_Int16 ONumericControl::getDecimalDigits()
     {
         return getTypedControlWindow()->get_digits();
     }
 
-    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 decimaldigits )
+    void ONumericControl::setDecimalDigits( ::sal_Int16 decimaldigits )
     {
         weld::MetricSpinButton* pControlWindow = getTypedControlWindow();
         sal_Int64 min, max;
@@ -384,7 +384,7 @@ using namespace cpo::uno;
         pControlWindow->set_range(min, max, FieldUnit::NONE);
     }
 
-    Optional< double > SAL_CALL ONumericControl::getMinValue()
+    Optional< double > ONumericControl::getMinValue()
     {
         Optional< double > aReturn( true, 0 );
 
@@ -397,7 +397,7 @@ using namespace cpo::uno;
         return aReturn;
     }
 
-    void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue )
+    void ONumericControl::setMinValue( const Optional< double >& _minvalue )
     {
         if ( !_minvalue.IsPresent )
             getTypedControlWindow()->set_min( std::numeric_limits<sal_Int64>::min(), FieldUnit::NONE );
@@ -405,7 +405,7 @@ using namespace cpo::uno;
             getTypedControlWindow()->set_min( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
 
-    Optional< double > SAL_CALL ONumericControl::getMaxValue()
+    Optional< double > ONumericControl::getMaxValue()
     {
         Optional< double > aReturn( true, 0 );
 
@@ -418,7 +418,7 @@ using namespace cpo::uno;
         return aReturn;
     }
 
-    void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue )
+    void ONumericControl::setMaxValue( const Optional< double >& _maxvalue )
     {
         if ( !_maxvalue.IsPresent )
             getTypedControlWindow()->set_max( std::numeric_limits<sal_Int64>::max(), FieldUnit::NONE );
@@ -426,12 +426,12 @@ using namespace cpo::uno;
             getTypedControlWindow()->set_max( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }
 
-    ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit()
+    ::sal_Int16 ONumericControl::getDisplayUnit()
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->get_unit(), 1 );
     }
 
-    void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit )
+    void ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit )
     {
         if ( ( _displayunit < MeasureUnit::MM_100TH ) || ( _displayunit > MeasureUnit::PERCENT ) )
             throw IllegalArgumentException();
@@ -453,19 +453,19 @@ using namespace cpo::uno;
         getTypedControlWindow()->set_unit(eFieldUnit);
     }
 
-    ::sal_Int16 SAL_CALL ONumericControl::getValueUnit()
+    ::sal_Int16 ONumericControl::getValueUnit()
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
     }
 
-    void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit )
+    void ONumericControl::setValueUnit( ::sal_Int16 _valueunit )
     {
         if ( ( _valueunit < MeasureUnit::MM_100TH ) || ( _valueunit > MeasureUnit::PERCENT ) )
             throw IllegalArgumentException();
         m_eValueUnit = VCLUnoHelper::ConvertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
     }
 
-    void SAL_CALL ONumericControl::setValue( const Any& _rValue )
+    void ONumericControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
         {
@@ -494,7 +494,7 @@ using namespace cpo::uno;
         return nApiValue;
     }
 
-    Any SAL_CALL ONumericControl::getValue()
+    Any ONumericControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->get_text().isEmpty() )
@@ -506,7 +506,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL ONumericControl::getValueType()
+    Type ONumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
@@ -518,7 +518,7 @@ using namespace cpo::uno;
         getTypedControlWindow()->SetSlotId(SID_FM_CTL_PROPERTIES);
     }
 
-    void SAL_CALL OColorControl::setValue( const Any& _rValue )
+    void OColorControl::setValue( const Any& _rValue )
     {
         css::util::Color nColor = sal_uInt32(COL_TRANSPARENT);
         if (_rValue.hasValue())
@@ -526,7 +526,7 @@ using namespace cpo::uno;
         getTypedControlWindow()->SelectEntry(::Color(ColorTransparency, nColor));
     }
 
-    Any SAL_CALL OColorControl::getValue()
+    Any OColorControl::getValue()
     {
         Any aPropValue;
         ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
@@ -536,7 +536,7 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL OColorControl::getValueType()
+    Type OColorControl::getValueType()
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
@@ -555,7 +555,7 @@ using namespace cpo::uno;
     {
     }
 
-    Any SAL_CALL OListboxControl::getValue()
+    Any OListboxControl::getValue()
     {
         OUString sControlValue( getTypedControlWindow()->get_active_text() );
 
@@ -565,12 +565,12 @@ using namespace cpo::uno;
         return aPropValue;
     }
 
-    Type SAL_CALL OListboxControl::getValueType()
+    Type OListboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-    void SAL_CALL OListboxControl::setValue( const Any& _rValue )
+    void OListboxControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
             getTypedControlWindow()->set_active(-1);
@@ -587,22 +587,22 @@ using namespace cpo::uno;
         }
     }
 
-    void SAL_CALL OListboxControl::clearList()
+    void OListboxControl::clearList()
     {
         getTypedControlWindow()->clear();
     }
 
-    void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry )
+    void OListboxControl::prependListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->insert_text(0, NewEntry);
     }
 
-    void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry )
+    void OListboxControl::appendListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->append_text(NewEntry);
     }
 
-    Sequence< OUString > SAL_CALL OListboxControl::getListEntries()
+    Sequence< OUString > OListboxControl::getListEntries()
     {
         const sal_Int32 nCount = getTypedControlWindow()->get_count();
         Sequence< OUString > aRet(nCount);
@@ -632,7 +632,7 @@ using namespace cpo::uno;
         pComboBox->set_entry_width_chars(nDefaultWidthDigits);
     }
 
-    void SAL_CALL OComboboxControl::setValue( const Any& _rValue )
+    void OComboboxControl::setValue( const Any& _rValue )
     {
         OUString sText;
         _rValue >>= sText;
@@ -642,32 +642,32 @@ using namespace cpo::uno;
             pControlWindow->set_entry_text(sText);
     }
 
-    Any SAL_CALL OComboboxControl::getValue()
+    Any OComboboxControl::getValue()
     {
         return Any( getTypedControlWindow()->get_active_text() );
     }
 
-    Type SAL_CALL OComboboxControl::getValueType()
+    Type OComboboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
-    void SAL_CALL OComboboxControl::clearList()
+    void OComboboxControl::clearList()
     {
         getTypedControlWindow()->clear();
     }
 
-    void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry )
+    void OComboboxControl::prependListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->insert_text(0, NewEntry);
     }
 
-    void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry )
+    void OComboboxControl::appendListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->append_text( NewEntry );
     }
 
-    Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  )
+    Sequence< OUString > OComboboxControl::getListEntries(  )
     {
         const sal_Int32 nCount = getTypedControlWindow()->get_count();
         Sequence< OUString > aRet(nCount);
@@ -810,7 +810,7 @@ using namespace cpo::uno;
         notifyModifiedValue();
     }
 
-    void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue )
+    void OMultilineEditControl::setValue( const Any& _rValue )
     {
         impl_checkDisposed_throw();
 
@@ -835,7 +835,7 @@ using namespace cpo::uno;
         }
     }
 
-    Any SAL_CALL OMultilineEditControl::getValue()
+    Any OMultilineEditControl::getValue()
     {
         impl_checkDisposed_throw();
 
@@ -852,7 +852,7 @@ using namespace cpo::uno;
         return aValue;
     }
 
-    Type SAL_CALL OMultilineEditControl::getValueType()
+    Type OMultilineEditControl::getValueType()
     {
         if (m_nOperationMode == eMultiLineText)
             return ::cppu::UnoType<OUString>::get();

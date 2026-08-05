@@ -64,24 +64,24 @@ using namespace cpo::uno;
         }
     }
 
-    Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  )
+    Sequence<sal_Int8> OTabOrderDialog::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
-    OUString SAL_CALL OTabOrderDialog::getImplementationName()
+    OUString OTabOrderDialog::getImplementationName()
     {
         return u"org.openoffice.comp.form.ui.OTabOrderDialog"_ustr;
     }
 
 
-    cpo::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.form.ui.TabOrderDialog"_ustr, u"com.sun.star.form.TabOrderDialog"_ustr };
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OTabOrderDialog::getPropertySetInfo()
+    Reference<XPropertySetInfo>  OTabOrderDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

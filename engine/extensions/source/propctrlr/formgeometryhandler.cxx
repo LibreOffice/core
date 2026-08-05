@@ -161,21 +161,21 @@ namespace pcr
         }
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) noexcept override
+        virtual void acquire(  ) noexcept override
         {
             m_rParent.acquire();
         }
 
-        virtual void SAL_CALL release(  ) noexcept override
+        virtual void release(  ) noexcept override
         {
             m_rParent.release();
         }
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& _event ) override;
+        virtual void propertyChange( const PropertyChangeEvent& _event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& _event ) override;
+        virtual void disposing( const EventObject& _event ) override;
 
     protected:
         virtual ~ShapeGeometryChangeNotifier() override
@@ -227,20 +227,20 @@ namespace pcr
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
-        virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
-        virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) override;
-        virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
-        virtual void                        SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                        SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual Sequence< OUString >        SAL_CALL getActuatingProperties( ) override;
-        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual Any                         getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                        setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) override;
+        virtual LineDescriptor              describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual void                        addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                        removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual Sequence< OUString >        getActuatingProperties( ) override;
+        virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
 
         // OComponentHandler overridables
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         // PropertyHandler overridables
         virtual Sequence< Property >        doDescribeSupportedProperties() const override;
@@ -333,7 +333,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL FormGeometryHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any FormGeometryHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -382,7 +382,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormGeometryHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void FormGeometryHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -448,7 +448,7 @@ namespace pcr
     }
 
 
-    LineDescriptor SAL_CALL FormGeometryHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor FormGeometryHandler::describePropertyLine( const OUString& _rPropertyName,
             const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -496,7 +496,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormGeometryHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _listener )
+    void FormGeometryHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _listener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_PRECOND( m_xChangeNotifier.is(), "FormGeometryHandler::addPropertyChangeListener: no notified, implies no shape!?" );
@@ -505,7 +505,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormGeometryHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _listener )
+    void FormGeometryHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _listener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_PRECOND( m_xChangeNotifier.is(), "FormGeometryHandler::removePropertyChangeListener: no notified, implies no shape!?" );
@@ -514,14 +514,14 @@ namespace pcr
     }
 
 
-    Sequence< OUString > SAL_CALL FormGeometryHandler::getActuatingProperties( )
+    Sequence< OUString > FormGeometryHandler::getActuatingProperties( )
     {
         Sequence< OUString > aInterestedIn { PROPERTY_TEXT_ANCHOR_TYPE };
         return aInterestedIn;
     }
 
 
-    void SAL_CALL FormGeometryHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
+    void FormGeometryHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -570,7 +570,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormGeometryHandler::disposing()
+    void FormGeometryHandler::disposing()
     {
         PropertyHandlerComponent::disposing();
 
@@ -729,7 +729,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ShapeGeometryChangeNotifier::propertyChange( const PropertyChangeEvent& _event )
+    void ShapeGeometryChangeNotifier::propertyChange( const PropertyChangeEvent& _event )
     {
         ::comphelper::ComponentMethodGuard aGuard( *this );
 
@@ -770,7 +770,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ShapeGeometryChangeNotifier::disposing( const EventObject& /*_event*/ )
+    void ShapeGeometryChangeNotifier::disposing( const EventObject& /*_event*/ )
     {
         ::comphelper::ComponentMethodGuard aGuard( *this );
         impl_dispose_nothrow();

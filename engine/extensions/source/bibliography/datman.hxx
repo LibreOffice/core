@@ -61,13 +61,13 @@ public:
     void ReleaseInterceptor();
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
+    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
     // XDispatchProviderInterceptor
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) override;
-    virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) override;
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) override;
-    virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > getSlaveDispatchProvider(  ) override;
+    virtual void setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) override;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > getMasterDispatchProvider(  ) override;
+    virtual void setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
 };
 
 typedef comphelper::WeakComponentImplHelper  <   css::form::XLoadable
@@ -108,12 +108,12 @@ public:
         virtual ~BibDataManager() override;
 
         // XLoadable
-        virtual void SAL_CALL load(  ) override;
-        virtual void SAL_CALL unload(  ) override;
-        virtual void SAL_CALL reload(  ) override;
-        virtual bool SAL_CALL isLoaded(  ) override;
-        virtual void SAL_CALL addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
-        virtual void SAL_CALL removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
+        virtual void load(  ) override;
+        virtual void unload(  ) override;
+        virtual void reload(  ) override;
+        virtual bool isLoaded(  ) override;
+        virtual void addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
+        virtual void removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
 
         css::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 

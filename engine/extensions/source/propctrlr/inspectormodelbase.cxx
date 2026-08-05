@@ -172,66 +172,66 @@ namespace pcr
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ImplInspectorModel, ImplInspectorModel_Base, ImplInspectorModel_PBase )
 
 
-    Reference< XPropertySetInfo > SAL_CALL ImplInspectorModel::getPropertySetInfo(  )
+    Reference< XPropertySetInfo > ImplInspectorModel::getPropertySetInfo(  )
     {
         return m_pProperties->getPropertySetInfo();
     }
 
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL ImplInspectorModel::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& ImplInspectorModel::getInfoHelper()
     {
         return m_pProperties->getInfoHelper();
     }
 
 
-    bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+    bool ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
         return m_pProperties->convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
 
 
-    void SAL_CALL ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+    void ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
     {
         m_pProperties->setFastPropertyValue( nHandle, rValue );
     }
 
 
-    void SAL_CALL ImplInspectorModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+    void ImplInspectorModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
         m_pProperties->getFastPropertyValue( rValue, nHandle );
     }
 
 
-    bool SAL_CALL ImplInspectorModel::getHasHelpSection()
+    bool ImplInspectorModel::getHasHelpSection()
     {
         return m_pProperties->hasHelpSection();
     }
 
 
-    ::sal_Int32 SAL_CALL ImplInspectorModel::getMinHelpTextLines()
+    ::sal_Int32 ImplInspectorModel::getMinHelpTextLines()
     {
         return m_pProperties->getMinHelpTextLines();
     }
 
 
-    ::sal_Int32 SAL_CALL ImplInspectorModel::getMaxHelpTextLines()
+    ::sal_Int32 ImplInspectorModel::getMaxHelpTextLines()
     {
         return m_pProperties->getMaxHelpTextLines();
     }
 
 
-    bool SAL_CALL ImplInspectorModel::getIsReadOnly()
+    bool ImplInspectorModel::getIsReadOnly()
     {
         return m_pProperties->isReadOnly();
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( bool IsReadOnly )
+    void ImplInspectorModel::setIsReadOnly( bool IsReadOnly )
     {
         setFastPropertyValue( static_cast<sal_Int32>(ModelPropertyId::IS_READ_ONLY), Any( IsReadOnly ) );
     }
 
-    bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )
+    bool ImplInspectorModel::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

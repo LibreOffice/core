@@ -54,9 +54,9 @@ namespace pcr
 
     protected:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
         PropertyEventTranslation( const PropertyEventTranslation& ) = delete;

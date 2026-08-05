@@ -59,19 +59,19 @@ using namespace cpo::uno;
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OControlFontDialog::getImplementationId(  )
+    Sequence<sal_Int8> OControlFontDialog::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
 
-    OUString SAL_CALL OControlFontDialog::getImplementationName()
+    OUString OControlFontDialog::getImplementationName()
     {
         return u"org.openoffice.comp.form.ui.OControlFontDialog"_ustr;
     }
 
 
-    cpo::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OControlFontDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.form.ControlFontDialog"_ustr };
     }
@@ -90,7 +90,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OControlFontDialog::getPropertySetInfo()
+    Reference<XPropertySetInfo>  OControlFontDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

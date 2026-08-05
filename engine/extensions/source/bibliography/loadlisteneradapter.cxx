@@ -92,7 +92,7 @@ namespace bib
     // XEventListener
 
 
-    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& )
+    void OComponentAdapterBase::disposing( const EventObject& )
     {
         if (m_pListener)
         {
@@ -120,19 +120,19 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::acquire(  ) noexcept
+    void OLoadListenerAdapter::acquire(  ) noexcept
     {
         OLoadListenerAdapter_Base::acquire();
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::release(  ) noexcept
+    void OLoadListenerAdapter::release(  ) noexcept
     {
         OLoadListenerAdapter_Base::release();
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::disposing( const  EventObject& _rSource )
+    void OLoadListenerAdapter::disposing( const  EventObject& _rSource )
     {
         OComponentAdapterBase::disposing( _rSource );
     }
@@ -146,33 +146,33 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::loaded( const EventObject& _rEvent )
+    void OLoadListenerAdapter::loaded( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_loaded( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::unloading( const EventObject& _rEvent )
+    void OLoadListenerAdapter::unloading( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_unloading( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& )
+    void OLoadListenerAdapter::unloaded( const EventObject& )
     {
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::reloading( const EventObject& _rEvent )
+    void OLoadListenerAdapter::reloading( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_reloading( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::reloaded( const EventObject& _rEvent )
+    void OLoadListenerAdapter::reloaded( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_reloaded( _rEvent );

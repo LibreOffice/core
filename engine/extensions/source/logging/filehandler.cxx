@@ -88,22 +88,22 @@ namespace logging
 
     private:
         // XLogHandler
-        virtual OUString SAL_CALL getEncoding() override;
-        virtual void SAL_CALL setEncoding( const OUString& _encoding ) override;
-        virtual Reference< XLogFormatter > SAL_CALL getFormatter() override;
-        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) override;
-        virtual ::sal_Int32 SAL_CALL getLevel() override;
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) override;
-        virtual void SAL_CALL flush(  ) override;
-        virtual bool SAL_CALL publish( const LogRecord& Record ) override;
+        virtual OUString getEncoding() override;
+        virtual void setEncoding( const OUString& _encoding ) override;
+        virtual Reference< XLogFormatter > getFormatter() override;
+        virtual void setFormatter( const Reference< XLogFormatter >& _formatter ) override;
+        virtual ::sal_Int32 getLevel() override;
+        virtual void setLevel( ::sal_Int32 _level ) override;
+        virtual void flush(  ) override;
+        virtual bool publish( const LogRecord& Record ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& _rServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames() override;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     public:
         typedef ComponentMethodGuard< FileHandler > MethodGuard;
@@ -233,7 +233,7 @@ namespace logging
     }
 
 
-    void SAL_CALL FileHandler::disposing()
+    void FileHandler::disposing()
     {
         if ( m_eFileValidity == eValid )
         {
@@ -259,7 +259,7 @@ namespace logging
     }
 
 
-    OUString SAL_CALL FileHandler::getEncoding()
+    OUString FileHandler::getEncoding()
     {
         MethodGuard aGuard( *this );
         OUString sEncoding;
@@ -268,42 +268,42 @@ namespace logging
     }
 
 
-    void SAL_CALL FileHandler::setEncoding( const OUString& _rEncoding )
+    void FileHandler::setEncoding( const OUString& _rEncoding )
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
 
 
-    Reference< XLogFormatter > SAL_CALL FileHandler::getFormatter()
+    Reference< XLogFormatter > FileHandler::getFormatter()
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
 
 
-    void SAL_CALL FileHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter )
+    void FileHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter )
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
 
 
-    ::sal_Int32 SAL_CALL FileHandler::getLevel()
+    ::sal_Int32 FileHandler::getLevel()
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
 
 
-    void SAL_CALL FileHandler::setLevel( ::sal_Int32 _nLevel )
+    void FileHandler::setLevel( ::sal_Int32 _nLevel )
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
 
 
-    void SAL_CALL FileHandler::flush(  )
+    void FileHandler::flush(  )
     {
         MethodGuard aGuard( *this );
         if (!m_pFile)
@@ -316,7 +316,7 @@ namespace logging
     }
 
 
-    bool SAL_CALL FileHandler::publish( const LogRecord& _rRecord )
+    bool FileHandler::publish( const LogRecord& _rRecord )
     {
         MethodGuard aGuard( *this );
 
@@ -331,17 +331,17 @@ namespace logging
         return true;
     }
 
-    OUString SAL_CALL FileHandler::getImplementationName()
+    OUString FileHandler::getImplementationName()
     {
         return u"com.sun.star.comp.extensions.FileHandler"_ustr;
     }
 
-    bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName )
+    bool FileHandler::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames()
+    Sequence< OUString > FileHandler::getSupportedServiceNames()
     {
         return { u"com.sun.star.logging.FileHandler"_ustr };
     }

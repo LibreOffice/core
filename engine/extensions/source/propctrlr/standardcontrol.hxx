@@ -39,16 +39,16 @@ namespace pcr
     public:
         OTimeControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
-        virtual void SAL_CALL disposing() override
+        virtual void disposing() override
         {
             m_xFormatter.reset();
             OTimeControl_Base::disposing();
         }
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {
@@ -74,9 +74,9 @@ namespace pcr
         ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {
@@ -90,7 +90,7 @@ namespace pcr
             m_xEntryFormatter->connect_changed(LINK(this, CommonBehaviourControlHelper, EditModifiedHdl));
         }
 
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
@@ -105,9 +105,9 @@ namespace pcr
         OEditControl(std::unique_ptr<weld::Entry> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bPassWord, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {
@@ -144,7 +144,7 @@ namespace pcr
             m_xTime->connect_value_changed( LINK( this, CommonBehaviourControlHelper, TimeModifiedHdl ) );
         }
 
-        virtual void SAL_CALL disposing() override
+        virtual void disposing() override
         {
             m_xFormatter.reset();
             m_xTime.reset();
@@ -153,9 +153,9 @@ namespace pcr
         }
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
@@ -174,9 +174,9 @@ namespace pcr
         OHyperlinkControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {
@@ -191,12 +191,12 @@ namespace pcr
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
         // XHyperlinkControl
-        virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
-        virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
+        virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
+        virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
 
     private:
         // XComponent
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         DECL_LINK(OnHyperlinkClicked, weld::Button&, void);
     };
@@ -213,21 +213,21 @@ namespace pcr
         ONumericControl(std::unique_ptr<weld::MetricSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         // XNumericControl
-        virtual ::sal_Int16 SAL_CALL getDecimalDigits() override;
-        virtual void SAL_CALL setDecimalDigits( ::sal_Int16 _decimaldigits ) override;
-        virtual css::beans::Optional< double > SAL_CALL getMinValue() override;
-        virtual void SAL_CALL setMinValue( const css::beans::Optional< double >& _minvalue ) override;
-        virtual css::beans::Optional< double > SAL_CALL getMaxValue() override;
-        virtual void SAL_CALL setMaxValue( const css::beans::Optional< double >& _maxvalue ) override;
-        virtual ::sal_Int16 SAL_CALL getDisplayUnit() override;
-        virtual void SAL_CALL setDisplayUnit( ::sal_Int16 _displayunit ) override;
-        virtual ::sal_Int16 SAL_CALL getValueUnit() override;
-        virtual void SAL_CALL setValueUnit( ::sal_Int16 _valueunit ) override;
+        virtual ::sal_Int16 getDecimalDigits() override;
+        virtual void setDecimalDigits( ::sal_Int16 _decimaldigits ) override;
+        virtual css::beans::Optional< double > getMinValue() override;
+        virtual void setMinValue( const css::beans::Optional< double >& _minvalue ) override;
+        virtual css::beans::Optional< double > getMaxValue() override;
+        virtual void setMaxValue( const css::beans::Optional< double >& _maxvalue ) override;
+        virtual ::sal_Int16 getDisplayUnit() override;
+        virtual void setDisplayUnit( ::sal_Int16 _displayunit ) override;
+        virtual ::sal_Int16 getValueUnit() override;
+        virtual void setValueUnit( ::sal_Int16 _valueunit ) override;
 
         virtual void SetModifyHandler() override
         {
@@ -261,9 +261,9 @@ namespace pcr
         OColorControl(std::unique_ptr<ColorListBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {
@@ -287,15 +287,15 @@ namespace pcr
         OListboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         // XStringListControl
-        virtual void SAL_CALL clearList(  ) override;
-        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
-        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
+        virtual void clearList(  ) override;
+        virtual void prependListEntry( const OUString& NewEntry ) override;
+        virtual void appendListEntry( const OUString& NewEntry ) override;
+        virtual cpo::uno::Sequence< OUString > getListEntries(  ) override;
 
         virtual void SetModifyHandler() override
         {
@@ -317,15 +317,15 @@ namespace pcr
         OComboboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         // XStringListControl
-        virtual void SAL_CALL clearList(  ) override;
-        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
-        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
+        virtual void clearList(  ) override;
+        virtual void prependListEntry( const OUString& NewEntry ) override;
+        virtual void appendListEntry( const OUString& NewEntry ) override;
+        virtual cpo::uno::Sequence< OUString > getListEntries(  ) override;
 
         virtual void SetModifyHandler() override
         {
@@ -377,9 +377,9 @@ namespace pcr
         OMultilineEditControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, MultiLineOperationMode eMode, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
         virtual void editChanged() override;
@@ -395,7 +395,7 @@ namespace pcr
             m_xTextView->connect_changed( LINK( this, OMultilineEditControl, TextViewModifiedHdl ) );
         }
 
-        virtual void SAL_CALL disposing() override
+        virtual void disposing() override
         {
             m_xOk.reset();
             m_xTextView.reset();

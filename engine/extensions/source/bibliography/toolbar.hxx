@@ -52,10 +52,10 @@ public:
 
     // css::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
-    virtual void    SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override {};
+    virtual void    disposing(const css::lang::EventObject& /*Source*/) override {};
 
     // css::frame::XStatusListener
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+    virtual void    statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -66,7 +66,7 @@ public:
     BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBListBoxListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+    virtual void    statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -77,7 +77,7 @@ public:
     BibTBEditListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBEditListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+    virtual void    statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -88,7 +88,7 @@ public:
     BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBQueryMenuListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+    virtual void    statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 

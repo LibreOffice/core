@@ -41,10 +41,10 @@ namespace pcr
         );
 
         // XKeyListener
-        virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) override;
-        virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) override;
+        virtual void keyPressed( const css::awt::KeyEvent& e ) override;
+        virtual void keyReleased( const css::awt::KeyEvent& e ) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     protected:
         virtual ~PropertyControlExtender() override;

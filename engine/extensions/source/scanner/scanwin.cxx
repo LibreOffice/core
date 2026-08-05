@@ -572,7 +572,7 @@ cpo::uno::Sequence<sal_Int8> ScannerManager::getDIB()
     return aRet;
 }
 
-cpo::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
+cpo::uno::Sequence<ScannerContext> ScannerManager::getAvailableScanners()
 {
     osl::MutexGuard aGuard(maProtector);
     cpo::uno::Sequence<ScannerContext> aRet(1);
@@ -583,7 +583,7 @@ cpo::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners
     return aRet;
 }
 
-bool SAL_CALL ScannerManager::configureScannerAndScan(
+bool ScannerManager::configureScannerAndScan(
     ScannerContext& rContext, const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);
@@ -612,9 +612,8 @@ bool SAL_CALL ScannerManager::configureScannerAndScan(
     return bSelected;
 }
 
-void SAL_CALL
-ScannerManager::startScan(const ScannerContext& rContext,
-                          const css::uno::Reference<css::lang::XEventListener>& rxListener)
+void ScannerManager::startScan(const ScannerContext& rContext,
+                               const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);
     css::uno::Reference<XScannerManager> xThis(this);
@@ -626,7 +625,7 @@ ScannerManager::startScan(const ScannerContext& rContext,
     aTwain.PerformTransfer(*this, rxListener, ImplGetActiveFrameWindow());
 }
 
-ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
+ScanError ScannerManager::getError(const ScannerContext& rContext)
 {
     osl::MutexGuard aGuard(maProtector);
     css::uno::Reference<XScannerManager> xThis(this);
@@ -638,8 +637,7 @@ ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
                                                         : ScanError_ScanErrorNone);
 }
 
-css::uno::Reference<css::awt::XBitmap>
-    SAL_CALL ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
+css::uno::Reference<css::awt::XBitmap> ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
 {
     osl::MutexGuard aGuard(maProtector);
     return css::uno::Reference<css::awt::XBitmap>(this);

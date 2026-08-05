@@ -40,16 +40,16 @@ namespace pcr
         virtual ~DefaultFormComponentInspectorModel() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XObjectInspectorModel
-        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getHandlerFactories() override;
-        virtual cpo::uno::Sequence< css::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) override;
-        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getHandlerFactories() override;
+        virtual cpo::uno::Sequence< css::inspection::PropertyCategoryDescriptor > describeCategories(  ) override;
+        virtual ::sal_Int32 getPropertyOrderIndex( const OUString& PropertyName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     public:
         explicit DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );

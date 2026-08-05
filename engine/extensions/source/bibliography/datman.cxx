@@ -475,7 +475,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
     xInterception.clear();
 }
 
-css::uno::Reference< css::frame::XDispatch > SAL_CALL
+css::uno::Reference< css::frame::XDispatch >
     BibInterceptorHelper::queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 {
     Reference< XDispatch > xReturn;
@@ -490,7 +490,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL
     return xReturn;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     BibInterceptorHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
@@ -503,24 +503,24 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
 }
 
 // XDispatchProviderInterceptor
-css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+css::uno::Reference< css::frame::XDispatchProvider >
     BibInterceptorHelper::getSlaveDispatchProvider(  )
 {
     return xSlaveDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider )
+void BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider )
 {
     xSlaveDispatchProvider = xNewSlaveDispatchProvider;
 }
 
-css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+css::uno::Reference< css::frame::XDispatchProvider >
     BibInterceptorHelper::getMasterDispatchProvider(  )
 {
     return xMasterDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider )
+void BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider )
 {
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
@@ -990,7 +990,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
 }
 
 
-void SAL_CALL BibDataManager::load(  )
+void BibDataManager::load(  )
 {
     if ( isLoaded() )
         // nothing to do
@@ -1009,7 +1009,7 @@ void SAL_CALL BibDataManager::load(  )
 }
 
 
-void SAL_CALL BibDataManager::unload(  )
+void BibDataManager::unload(  )
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1036,7 +1036,7 @@ void SAL_CALL BibDataManager::unload(  )
 }
 
 
-void SAL_CALL BibDataManager::reload(  )
+void BibDataManager::reload(  )
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1063,7 +1063,7 @@ void SAL_CALL BibDataManager::reload(  )
 }
 
 
-bool SAL_CALL BibDataManager::isLoaded(  )
+bool BibDataManager::isLoaded(  )
 {
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
     DBG_ASSERT( xFormAsLoadable.is() || !m_xForm.is(), "BibDataManager::isLoaded: invalid form!");
@@ -1075,14 +1075,14 @@ bool SAL_CALL BibDataManager::isLoaded(  )
 }
 
 
-void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener )
+void BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
     m_aLoadListeners.addInterface( g, aListener );
 }
 
 
-void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener )
+void BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
     m_aLoadListeners.removeInterface( g, aListener );

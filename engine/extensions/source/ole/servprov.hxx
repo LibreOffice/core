@@ -97,19 +97,19 @@ public:
 
     // XBridgeSupplier2 ---------------------------------------------------
 
-    cpo::uno::Any SAL_CALL createBridge(const cpo::uno::Any& modelDepObject,
+    cpo::uno::Any createBridge(const cpo::uno::Any& modelDepObject,
                                 const cpo::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UnoConversionUtilities
     css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
@@ -128,15 +128,15 @@ public:
     ~OleClient() override;
 
     // XMultiServiceFactory
-    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
-    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
-    cpo::uno::Sequence< OUString >    SAL_CALL getAvailableServiceNames() override;
+    css::uno::Reference<css::uno::XInterface> createInstance(const OUString& ServiceSpecifier) override;
+    css::uno::Reference<css::uno::XInterface> createInstanceWithArguments(const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
+    cpo::uno::Sequence< OUString >    getAvailableServiceNames() override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UnoConversionUtilities
     css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
@@ -163,11 +163,11 @@ public:
     explicit OleServer( const css::uno::Reference<css::lang::XMultiServiceFactory> &smgr);
     ~OleServer() override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 protected:
     bool provideInstance(std::function<const css::uno::Reference<css::uno::XInterface>()> xInstFunction, GUID const * guid);

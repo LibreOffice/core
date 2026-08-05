@@ -125,17 +125,17 @@ namespace pcr
         }
 
         // XPropertyControl - delegated to ->m_aImplControl
-        virtual ::sal_Int16 SAL_CALL getControlType() override
+        virtual ::sal_Int16 getControlType() override
             { return CommonBehaviourControlHelper::getControlType(); }
-        virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() override
+        virtual css::uno::Reference< css::inspection::XPropertyControlContext > getControlContext() override
             { return CommonBehaviourControlHelper::getControlContext(); }
-        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
+        virtual void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
             { CommonBehaviourControlHelper::setControlContext( controlcontext ); }
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() override
+        virtual css::uno::Reference< css::awt::XWindow > getControlWindow() override
             { return new weld::TransportAsXWindow(getWidget()); }
-        virtual bool SAL_CALL isModified(  ) override
+        virtual bool isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }
-        virtual void SAL_CALL notifyModifiedValue(  ) override
+        virtual void notifyModifiedValue(  ) override
             { CommonBehaviourControlHelper::notifyModifiedValue(); }
 
         void clear_widgetry()
@@ -150,7 +150,7 @@ namespace pcr
         }
 
         // XComponent
-        virtual void SAL_CALL disposing() override
+        virtual void disposing() override
         {
             clear_widgetry();
         }

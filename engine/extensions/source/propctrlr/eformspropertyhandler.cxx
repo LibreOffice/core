@@ -84,7 +84,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL EFormsPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any EFormsPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -144,7 +144,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EFormsPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void EFormsPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -304,7 +304,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL EFormsPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any EFormsPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aReturn;
@@ -339,7 +339,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL EFormsPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any EFormsPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aReturn;
@@ -373,7 +373,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL EFormsPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > EFormsPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (!m_pHelper)
@@ -386,7 +386,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( )
+    Sequence< OUString > EFormsPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (!m_pHelper)
@@ -396,7 +396,7 @@ using namespace cpo::uno;
         return aReturn;
     }
 
-    LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor EFormsPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -461,7 +461,7 @@ using namespace cpo::uno;
         return aDescriptor;
     }
 
-    InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult EFormsPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -520,7 +520,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EFormsPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void EFormsPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyHandlerComponent::addPropertyChangeListener( _rxListener );
@@ -529,7 +529,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EFormsPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void EFormsPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (m_pHelper)
@@ -538,7 +538,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
+    void EFormsPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

@@ -122,42 +122,42 @@ namespace pcr
         DECLARE_XINTERFACE()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XController
-        virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-        virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
-        virtual bool SAL_CALL suspend( bool bSuspend ) override;
-        virtual cpo::uno::Any SAL_CALL getViewData(  ) override;
-        virtual void SAL_CALL restoreViewData( const cpo::uno::Any& Data ) override;
-        virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) override;
-        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame(  ) override;
+        virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+        virtual bool suspend( bool bSuspend ) override;
+        virtual cpo::uno::Any getViewData(  ) override;
+        virtual void restoreViewData( const cpo::uno::Any& Data ) override;
+        virtual css::uno::Reference< css::frame::XModel > getModel(  ) override;
+        virtual css::uno::Reference< css::frame::XFrame > getFrame(  ) override;
 
         // XComponent
-        virtual void SAL_CALL dispose(  ) override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void dispose(  ) override;
+        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XFocusListener
-        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& _rSource ) override;
-        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& _rSource ) override;
+        virtual void focusGained( const css::awt::FocusEvent& _rSource ) override;
+        virtual void focusLost( const css::awt::FocusEvent& _rSource ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XLayoutConstrains
-        virtual css::awt::Size SAL_CALL getMinimumSize(  ) override;
-        virtual css::awt::Size SAL_CALL getPreferredSize(  ) override;
-        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+        virtual css::awt::Size getMinimumSize(  ) override;
+        virtual css::awt::Size getPreferredSize(  ) override;
+        virtual css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
         /** XPropertyControlFactory
         */
-        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, bool CreateReadOnly ) override;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > createPropertyControl( ::sal_Int16 ControlType, bool CreateReadOnly ) override;
 
     public:
         explicit OPropertyBrowserController(
@@ -178,29 +178,29 @@ namespace pcr
         virtual bool hasPropertyByName( const OUString& _rName ) override;
 
         // XObjectInspectorUI
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, bool _bShow ) override;
-        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
-        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
-        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) override;
+        virtual void enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
+        virtual void enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
+        virtual void rebuildPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void showPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void hidePropertyUI( const OUString& _rPropertyName ) override;
+        virtual void showCategory( const OUString& _rCategory, bool _bShow ) override;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > getPropertyControl( const OUString& _rPropertyName ) override;
+        virtual void registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
+        virtual void revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
+        virtual void setHelpSectionText( const OUString& HelpText ) override;
 
         // XObjectInspector
-        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() override;
-        virtual void SAL_CALL setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
-        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() override;
-        virtual void SAL_CALL inspect( const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) override;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > getInspectorModel() override;
+        virtual void setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > getInspectorUI() override;
+        virtual void inspect( const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void UpdateUI();

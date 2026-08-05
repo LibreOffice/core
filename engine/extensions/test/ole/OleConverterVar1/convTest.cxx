@@ -63,7 +63,7 @@ void printResultVariantArray( VARIANT & var);
 void printVariant( VARIANT & var);
 
 
-int SAL_CALL main( int argc, char* argv[] )
+int main( int argc, char* argv[] )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))

@@ -152,17 +152,17 @@ namespace pcr
         */
         void setNotificationMode( NotificationMode _eMode );
 
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
     protected:
         virtual ~PropertyControlContext_Impl() override;
 
         // XPropertyControlObserver
-        virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) override;
-        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) override;
+        virtual void focusGained( const Reference< XPropertyControl >& Control ) override;
+        virtual void valueChanged( const Reference< XPropertyControl >& Control ) override;
         // XPropertyControlContext
-        virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) override;
+        virtual void activateNextControl( const Reference< XPropertyControl >& CurrentControl ) override;
 
         // IEventProcessor
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
@@ -236,27 +236,27 @@ namespace pcr
         SharedNotifier::getNotifier()->addEvent( pEvent, this );
     }
 
-    void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control )
+    void PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control )
     {
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
-    void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control )
+    void PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control )
     {
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
-    void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl )
+    void PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl )
     {
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
-    void SAL_CALL PropertyControlContext_Impl::acquire() noexcept
+    void PropertyControlContext_Impl::acquire() noexcept
     {
         PropertyControlContext_Impl_Base::acquire();
     }
 
-    void SAL_CALL PropertyControlContext_Impl::release() noexcept
+    void PropertyControlContext_Impl::release() noexcept
     {
         PropertyControlContext_Impl_Base::release();
     }

@@ -79,7 +79,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > CellBindingPropertyHandler::getActuatingProperties( )
     {
         Sequence< OUString > aInterestingProperties{ PROPERTY_LIST_CELL_RANGE,
                                                      PROPERTY_BOUND_CELL,
@@ -88,7 +88,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
+    void CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
@@ -219,7 +219,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -265,7 +265,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -337,7 +337,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL CellBindingPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any CellBindingPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aPropertyValue;
@@ -387,7 +387,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL CellBindingPropertyHandler::convertToControlValue( const OUString& _rPropertyName,
+    Any CellBindingPropertyHandler::convertToControlValue( const OUString& _rPropertyName,
         const Any& _rPropertyValue, const Type& /*_rControlValueType*/ )
     {
         ::osl::MutexGuard aGuard( m_aMutex );

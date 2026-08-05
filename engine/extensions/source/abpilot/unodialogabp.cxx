@@ -42,17 +42,17 @@ using namespace cpo::uno;
             &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
     }
 
-    OUString SAL_CALL OABSPilotUno::getImplementationName()
+    OUString OABSPilotUno::getImplementationName()
     {
         return u"org.openoffice.comp.abp.OAddressBookSourcePilot"_ustr;
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OABSPilotUno::getSupportedServiceNames()
     {
         return { u"com.sun.star.ui.dialogs.AddressBookSourcePilot"_ustr };
     }
 
-    Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo()
+    Reference<XPropertySetInfo>  OABSPilotUno::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -72,7 +72,7 @@ using namespace cpo::uno;
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    void SAL_CALL OABSPilotUno::initialize( const Sequence< Any >& aArguments )
+    void OABSPilotUno::initialize( const Sequence< Any >& aArguments )
     {
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
@@ -89,7 +89,7 @@ using namespace cpo::uno;
         return std::make_unique<OAddressBookSourcePilot>(Application::GetFrameWeld(rParent), m_aContext);
     }
 
-    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ )
+    Any OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ )
     {
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog

@@ -85,8 +85,8 @@ namespace bib
         void Init( OComponentListener* _pListener );
 
     // base for ref-counting, implemented by OComponentAdapter
-        virtual void SAL_CALL acquire(  ) noexcept = 0;
-        virtual void SAL_CALL release(  ) noexcept = 0;
+        virtual void acquire(  ) noexcept = 0;
+        virtual void release(  ) noexcept = 0;
 
         /// dispose the object - stop listening and such
         void dispose();
@@ -94,7 +94,7 @@ namespace bib
     protected:
     // XEventListener
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source );
+        virtual void disposing( const  css::lang::EventObject& Source );
     };
 
     class OLoadListener : public OComponentListener
@@ -129,19 +129,19 @@ namespace bib
         );
 
 
-        virtual void SAL_CALL acquire(  ) noexcept override;
-        virtual void SAL_CALL release(  ) noexcept override;
+        virtual void acquire(  ) noexcept override;
+        virtual void release(  ) noexcept override;
 
     protected:
     // XEventListener
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& _rSource ) override;
+        virtual void disposing( const  css::lang::EventObject& _rSource ) override;
 
     // XLoadListener
-        virtual void SAL_CALL loaded( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL unloading( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL unloaded( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL reloading( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) override;
+        virtual void loaded( const css::lang::EventObject& aEvent ) override;
+        virtual void unloading( const css::lang::EventObject& aEvent ) override;
+        virtual void unloaded( const css::lang::EventObject& aEvent ) override;
+        virtual void reloading( const css::lang::EventObject& aEvent ) override;
+        virtual void reloaded( const css::lang::EventObject& aEvent ) override;
     };
 
 

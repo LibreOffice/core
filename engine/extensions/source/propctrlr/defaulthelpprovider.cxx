@@ -60,23 +60,23 @@ namespace pcr
     }
 
 
-    Sequence< OUString > SAL_CALL DefaultHelpProvider::getSupportedServiceNames()
+    Sequence< OUString > DefaultHelpProvider::getSupportedServiceNames()
     {
         return { u"com.sun.star.inspection.DefaultHelpProvider"_ustr };
     }
 
-    OUString SAL_CALL DefaultHelpProvider::getImplementationName()
+    OUString DefaultHelpProvider::getImplementationName()
     {
         return u"org.openoffice.comp.extensions.DefaultHelpProvider"_ustr;
     }
 
-    bool SAL_CALL DefaultHelpProvider::supportsService(const OUString& aServiceName)
+    bool DefaultHelpProvider::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
 
-    void SAL_CALL DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& Control )
+    void DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& Control )
     {
         if ( !m_xInspectorUI.is() )
             throw RuntimeException( OUString(), *this );
@@ -92,13 +92,13 @@ namespace pcr
     }
 
 
-    void SAL_CALL DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& )
+    void DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& )
     {
         // not interested in
     }
 
 
-    void SAL_CALL DefaultHelpProvider::initialize( const Sequence< Any >& _arguments )
+    void DefaultHelpProvider::initialize( const Sequence< Any >& _arguments )
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();

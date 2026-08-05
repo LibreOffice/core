@@ -48,7 +48,7 @@ bool incrementMultidimensionalIndex(
     const sal_Int32 * parDimensionLengths,
     sal_Int32 * parMultidimensionalIndex);
 
-int SAL_CALL main( int /*argc*/, char** /*argv*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))

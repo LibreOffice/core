@@ -45,19 +45,19 @@ namespace pcr
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
-        virtual void                                    SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
-        virtual cpo::uno::Any                           SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
-        virtual void                                    SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
-        virtual css::beans::PropertyState               SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
-        virtual cpo::uno::Sequence< OUString >          SAL_CALL getActuatingProperties( ) override;
+        virtual void                                    inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
+        virtual cpo::uno::Any                           getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                                    setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
+        virtual css::beans::PropertyState               getPropertyState( const OUString& _rPropertyName ) override;
+        virtual cpo::uno::Sequence< OUString >          getActuatingProperties( ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                        SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                    SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
-        virtual css::inspection::LineDescriptor         SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+                                                        onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                    actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual css::inspection::LineDescriptor         describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
 
         // PropertyHandler overridables
         virtual cpo::uno::Sequence< css::beans::Property >

@@ -46,7 +46,7 @@ ScannerManager::~ScannerManager()
 }
 
 
-Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB()
+Sequence< sal_Int8 > ScannerManager::getMaskDIB()
 {
     return Sequence< sal_Int8 >();
 }
@@ -70,12 +70,12 @@ cpo::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
 }
 
 
-bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+bool ScannerManager::configureScanner( ScannerContext& rContext )
 {
     return configureScannerAndScan( rContext, nullptr );
 }
 
-void SAL_CALL ScannerManager::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void ScannerManager::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))

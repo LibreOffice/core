@@ -107,7 +107,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL PropertyComposer::inspect( const Reference< XInterface >& _rxIntrospectee )
+    void PropertyComposer::inspect( const Reference< XInterface >& _rxIntrospectee )
     {
         MethodGuard aGuard( *this );
 
@@ -118,35 +118,35 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL PropertyComposer::getPropertyValue( const OUString& _rPropertyName )
+    Any PropertyComposer::getPropertyValue( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->getPropertyValue( _rPropertyName );
     }
 
 
-    void SAL_CALL PropertyComposer::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void PropertyComposer::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         MethodGuard aGuard( *this );
         std::for_each( m_aSlaveHandlers.begin(), m_aSlaveHandlers.end(), SetPropertyValue( _rPropertyName, _rValue ) );
     }
 
 
-    Any SAL_CALL PropertyComposer::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any PropertyComposer::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->convertToPropertyValue( _rPropertyName, _rControlValue );
     }
 
 
-    Any SAL_CALL PropertyComposer::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any PropertyComposer::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
     }
 
 
-    PropertyState SAL_CALL PropertyComposer::getPropertyState( const OUString& _rPropertyName )
+    PropertyState PropertyComposer::getPropertyState( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
 
@@ -185,21 +185,21 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL PropertyComposer::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyComposer::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         MethodGuard aGuard( *this );
         m_aPropertyListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL PropertyComposer::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyComposer::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         MethodGuard aGuard( *this );
         m_aPropertyListeners.removeInterface( _rxListener );
     }
 
 
-    Sequence< Property > SAL_CALL PropertyComposer::getSupportedProperties()
+    Sequence< Property > PropertyComposer::getSupportedProperties()
     {
         MethodGuard aGuard( *this );
 
@@ -251,7 +251,7 @@ using namespace cpo::uno;
     }
 
 
-    static void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< OUString > (SAL_CALL XPropertyHandler::*pGetter)( ),
+    static void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< OUString > (XPropertyHandler::*pGetter)( ),
         Sequence< OUString >& /* [out] */ _rUnion )
     {
         std::set< OUString > aUnitedBag;
@@ -267,7 +267,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL PropertyComposer::getSupersededProperties( )
+    Sequence< OUString > PropertyComposer::getSupersededProperties( )
     {
         MethodGuard aGuard( *this );
 
@@ -278,7 +278,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL PropertyComposer::getActuatingProperties( )
+    Sequence< OUString > PropertyComposer::getActuatingProperties( )
     {
         MethodGuard aGuard( *this );
 
@@ -289,7 +289,7 @@ using namespace cpo::uno;
     }
 
 
-    LineDescriptor SAL_CALL PropertyComposer::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor PropertyComposer::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         MethodGuard aGuard( *this );
@@ -297,14 +297,14 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL PropertyComposer::isComposable( const OUString& _rPropertyName )
+    bool PropertyComposer::isComposable( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->isComposable( _rPropertyName );
     }
 
 
-    InteractiveSelectionResult SAL_CALL PropertyComposer::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult PropertyComposer::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -367,7 +367,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL PropertyComposer::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
+    void PropertyComposer::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -400,7 +400,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XCOMPONENT( PropertyComposer, PropertyComposer_Base )
 
 
-    void SAL_CALL PropertyComposer::disposing()
+    void PropertyComposer::disposing()
     {
         MethodGuard aGuard( *this );
 
@@ -419,7 +419,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL PropertyComposer::propertyChange( const PropertyChangeEvent& evt )
+    void PropertyComposer::propertyChange( const PropertyChangeEvent& evt )
     {
         if ( !impl_isSupportedProperty_nothrow( evt.PropertyName ) )
             // A slave handler might fire events for more properties than we support. Ignore those.
@@ -438,14 +438,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL PropertyComposer::disposing( const EventObject& Source )
+    void PropertyComposer::disposing( const EventObject& Source )
     {
         MethodGuard aGuard( *this );
         m_aPropertyListeners.disposeAndClear( Source );
     }
 
 
-    bool SAL_CALL PropertyComposer::suspend( bool _bSuspend )
+    bool PropertyComposer::suspend( bool _bSuspend )
     {
         MethodGuard aGuard( *this );
         for ( PropertyComposer::HandlerArray::const_iterator loop = m_aSlaveHandlers.begin();

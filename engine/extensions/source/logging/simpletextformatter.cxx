@@ -43,22 +43,22 @@ public:
 
 private:
     // XLogFormatter
-    virtual OUString SAL_CALL getHead() override;
-    virtual OUString SAL_CALL format(const LogRecord& Record) override;
-    virtual OUString SAL_CALL getTail() override;
+    virtual OUString getHead() override;
+    virtual OUString format(const LogRecord& Record) override;
+    virtual OUString getTail() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& _rServiceName) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& _rServiceName) override;
+    virtual Sequence<OUString> getSupportedServiceNames() override;
 };
 }
 
 SimpleTextFormatter::SimpleTextFormatter() {}
 
-OUString SAL_CALL SimpleTextFormatter::getHead() { return OUString(); }
+OUString SimpleTextFormatter::getHead() { return OUString(); }
 
-OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
+OUString SimpleTextFormatter::format(const LogRecord& _rRecord)
 {
     OUString aLogEntry;
     // Highlight warnings
@@ -70,19 +70,19 @@ OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
     return aLogEntry + _rRecord.Message + "\n";
 }
 
-OUString SAL_CALL SimpleTextFormatter::getTail() { return OUString(); }
+OUString SimpleTextFormatter::getTail() { return OUString(); }
 
-bool SAL_CALL SimpleTextFormatter::supportsService(const OUString& _rServiceName)
+bool SimpleTextFormatter::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-OUString SAL_CALL SimpleTextFormatter::getImplementationName()
+OUString SimpleTextFormatter::getImplementationName()
 {
     return u"com.sun.star.comp.extensions.SimpleTextFormatter"_ustr;
 }
 
-Sequence<OUString> SAL_CALL SimpleTextFormatter::getSupportedServiceNames()
+Sequence<OUString> SimpleTextFormatter::getSupportedServiceNames()
 {
     return { u"com.sun.star.logging.SimpleTextFormatter"_ustr };
 }

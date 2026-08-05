@@ -58,14 +58,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ButtonNavigationHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
+    void ButtonNavigationHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
     {
         PropertyHandlerComponent::inspect( _rxIntrospectee );
         m_xSlaveHandler->inspect( _rxIntrospectee );
     }
 
 
-    PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const OUString& _rPropertyName )
+    PropertyState  ButtonNavigationHandler::getPropertyState( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -94,7 +94,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any ButtonNavigationHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -125,7 +125,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ButtonNavigationHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void ButtonNavigationHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -179,14 +179,14 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( )
+    Sequence< OUString > ButtonNavigationHandler::getActuatingProperties( )
     {
         Sequence< OUString > aActuating{ PROPERTY_BUTTONTYPE, PROPERTY_TARGET_URL };
         return aActuating;
     }
 
 
-    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -207,7 +207,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
+    void ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
@@ -233,7 +233,7 @@ using namespace cpo::uno;
     }
 
 
-    LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor ButtonNavigationHandler::describePropertyLine( const OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );

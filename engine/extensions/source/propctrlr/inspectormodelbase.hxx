@@ -63,21 +63,21 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // css::beans::XPropertySet and friends
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
+        virtual bool convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // css::inspection::XObjectInspectorModel
-        virtual bool SAL_CALL getHasHelpSection() override;
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() override;
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() override;
-        virtual bool SAL_CALL getIsReadOnly() override;
-        virtual void SAL_CALL setIsReadOnly( bool IsReadOnly ) override;
+        virtual bool getHasHelpSection() override;
+        virtual ::sal_Int32 getMinHelpTextLines() override;
+        virtual ::sal_Int32 getMaxHelpTextLines() override;
+        virtual bool getIsReadOnly() override;
+        virtual void setIsReadOnly( bool IsReadOnly ) override;
 
         // css::lang::XServiceInfo
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
 
     protected:
         void enableHelpSectionProperties( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );

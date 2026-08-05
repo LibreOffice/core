@@ -135,14 +135,14 @@ Any IUnknownWrapper::queryInterface(const Type& t)
         XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >::queryInterface(t);
 }
 
-Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper::getIntrospection()
+Reference<XIntrospectionAccess> IUnknownWrapper::getIntrospection()
 {
     Reference<XIntrospectionAccess> ret;
 
     return ret;
 }
 
-Any SAL_CALL IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     Any aResult;
     try
@@ -172,7 +172,7 @@ Any SAL_CALL IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, 
     return aResult;
 }
 
-Any SAL_CALL IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     Any aResult;
     try
@@ -203,7 +203,7 @@ Any SAL_CALL IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, 
 }
 
 
-Any SAL_CALL IUnknownWrapper::invoke( const OUString& aFunctionName,
+Any IUnknownWrapper::invoke( const OUString& aFunctionName,
              const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex,
              Sequence< Any >& aOutParam )
 {
@@ -265,7 +265,7 @@ Any SAL_CALL IUnknownWrapper::invoke( const OUString& aFunctionName,
     return ret;
 }
 
-void SAL_CALL IUnknownWrapper::setValue( const OUString& aPropertyName,
+void IUnknownWrapper::setValue( const OUString& aPropertyName,
                  const Any& aValue )
 {
     if ( ! m_spDispatch )
@@ -436,7 +436,7 @@ void SAL_CALL IUnknownWrapper::setValue( const OUString& aPropertyName,
 
 static OUString BStrToOUString(BSTR s) { return OUString(o3tl::toU(s), SysStringLen(s)); }
 
-Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
+Any IUnknownWrapper::getValue( const OUString& aPropertyName )
 {
     if ( ! m_spDispatch )
     {
@@ -580,7 +580,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
     return ret;
 }
 
-bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
+bool IUnknownWrapper::hasMethod( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
@@ -630,7 +630,7 @@ bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
     return ret;
 }
 
-bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
+bool IUnknownWrapper::hasProperty( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
@@ -682,7 +682,7 @@ bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
     return ret;
 }
 
-Any SAL_CALL IUnknownWrapper::createBridge( const Any& modelDepObject,
+Any IUnknownWrapper::createBridge( const Any& modelDepObject,
                 const Sequence< sal_Int8 >& /*aProcessId*/, sal_Int16 sourceModelType,
                  sal_Int16 destModelType )
 {
@@ -1165,7 +1165,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 
 
 // XInitialization
-void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
+void IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
 {
     // 1.parameter is IUnknown
     // 2.parameter is a boolean which indicates if the COM pointer was an IUnknown or IDispatch
@@ -1245,7 +1245,7 @@ void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
 
 
 // XDirectInvocation
-cpo::uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const cpo::uno::Sequence< cpo::uno::Any >& aParams )
+cpo::uno::Any IUnknownWrapper::directInvoke( const OUString& aName, const cpo::uno::Sequence< cpo::uno::Any >& aParams )
 {
     Any aResult;
 
@@ -1490,7 +1490,7 @@ cpo::uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, con
     return aResult;
 }
 
-bool SAL_CALL IUnknownWrapper::hasMember( const OUString& aName )
+bool IUnknownWrapper::hasMember( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {

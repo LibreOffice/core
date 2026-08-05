@@ -484,7 +484,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL disposing(lang::EventObject const &) override
+    virtual void disposing(lang::EventObject const &) override
     {
     }
 
@@ -516,7 +516,7 @@ namespace
             setValue(rPropSet->getPropertyValue(u"Text"_ustr));
         }
 
-        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override
+        virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override
         {
             if (m_bSelfChanging)
                 return;
@@ -627,7 +627,7 @@ namespace
             setValue(rPropSet->getPropertyValue(u"SelectedItems"_ustr));
         }
 
-        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override
+        virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override
         {
             if (m_bSelfChanging)
                 return;

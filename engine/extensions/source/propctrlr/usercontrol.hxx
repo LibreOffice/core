@@ -41,11 +41,11 @@ namespace pcr
         OFormatSampleControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
-        virtual void SAL_CALL disposing() override
+        virtual void disposing() override
         {
             m_xEntry.reset();
             m_xSpinButton.reset();
@@ -91,9 +91,9 @@ namespace pcr
         OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         void SetFormatDescription( const FormatDescription& rDesc );
 
@@ -124,9 +124,9 @@ namespace pcr
         OFileUrlControl(std::unique_ptr<SvtURLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual cpo::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual cpo::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Any getValue() override;
+        virtual void setValue( const cpo::uno::Any& _value ) override;
+        virtual cpo::uno::Type getValueType() override;
 
         virtual void SetModifyHandler() override
         {

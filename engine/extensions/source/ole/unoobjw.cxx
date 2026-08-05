@@ -1483,7 +1483,7 @@ bool  InterfaceOleWrapper::getInvocationInfoForCall( DISPID id, InvocationInfo& 
 // If sourceModelType is UNO than any UNO interface implemented by InterfaceOleWrapper
 // can bridged to IDispatch ( if destModelType == OLE). The IDispatch is
 // implemented by this class.
-Any SAL_CALL InterfaceOleWrapper::createBridge(const Any& modelDepObject,
+Any InterfaceOleWrapper::createBridge(const Any& modelDepObject,
                                 const Sequence<sal_Int8>& /*ProcessId*/,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType)
@@ -1515,7 +1515,7 @@ Any SAL_CALL InterfaceOleWrapper::createBridge(const Any& modelDepObject,
 }
 
 // XInitialization --------------------------------------------------
-void SAL_CALL InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments )
+void InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments )
 {
     switch( aArguments.getLength() )
     {
@@ -2274,7 +2274,7 @@ public:
          InterfaceOleWrapper* pInterfaceOleWrapper);
 
     // XSink
-    void SAL_CALL Call( const OUString& Method, Sequence< Any >& Arguments ) override;
+    void Call( const OUString& Method, Sequence< Any >& Arguments ) override;
 
 private:
     IUnknown* mpUnkSink;
@@ -2297,7 +2297,7 @@ Sink::Sink(IUnknown* pUnkSink,
     mpUnkSink->AddRef();
 }
 
-void SAL_CALL
+void
 Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
 {
     SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << ", " << Arguments.getLength() << " arguments)");

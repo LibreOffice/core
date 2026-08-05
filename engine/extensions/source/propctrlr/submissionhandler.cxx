@@ -106,7 +106,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL SubmissionPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any SubmissionPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -155,7 +155,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void SubmissionPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -198,7 +198,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > SubmissionPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (!m_pHelper)
@@ -209,7 +209,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupersededProperties( )
+    Sequence< OUString > SubmissionPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (!m_pHelper)
@@ -261,7 +261,7 @@ using namespace cpo::uno;
     }
 
 
-    LineDescriptor SAL_CALL SubmissionPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor SubmissionPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -301,7 +301,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
+    void SubmissionPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -328,7 +328,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL SubmissionPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any SubmissionPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aPropertyValue;
@@ -369,7 +369,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL SubmissionPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any SubmissionPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aControlValue;

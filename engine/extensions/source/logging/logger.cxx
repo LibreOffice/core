@@ -68,14 +68,14 @@ namespace logging
         EventLogger( const Reference< XComponentContext >& _rxContext, OUString _aName );
 
         // XLogger
-        virtual OUString SAL_CALL getName() override;
-        virtual ::sal_Int32 SAL_CALL getLevel() override;
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) override;
-        virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) override;
-        virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) override;
-        virtual bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) override;
-        virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) override;
-        virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) override;
+        virtual OUString getName() override;
+        virtual ::sal_Int32 getLevel() override;
+        virtual void setLevel( ::sal_Int32 _level ) override;
+        virtual void addLogHandler( const Reference< XLogHandler >& LogHandler ) override;
+        virtual void removeLogHandler( const Reference< XLogHandler >& LogHandler ) override;
+        virtual bool isLoggable( ::sal_Int32 _nLevel ) override;
+        virtual void log( ::sal_Int32 Level, const OUString& Message ) override;
+        virtual void logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) override;
 
     protected:
         virtual ~EventLogger() override;
@@ -104,13 +104,13 @@ namespace logging
         explicit LoggerPool( const Reference< XComponentContext >& _rxContext );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& _rServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames() override;
 
         // XLoggerPool
-        virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) override;
-        virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) override;
+        virtual Reference< XLogger > getNamedLogger( const OUString& Name ) override;
+        virtual Reference< XLogger > getDefaultLogger(  ) override;
     };
 
     }
@@ -156,42 +156,42 @@ namespace logging
             [] (Reference<XLogHandler> const& rxListener) { rxListener->flush(); } );
     }
 
-    OUString SAL_CALL EventLogger::getName()
+    OUString EventLogger::getName()
     {
         return m_sName;
     }
 
-    ::sal_Int32 SAL_CALL EventLogger::getLevel()
+    ::sal_Int32 EventLogger::getLevel()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_nLogLevel;
     }
 
-    void SAL_CALL EventLogger::setLevel( ::sal_Int32 _level )
+    void EventLogger::setLevel( ::sal_Int32 _level )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nLogLevel = _level;
     }
 
-    void SAL_CALL EventLogger::addLogHandler( const Reference< XLogHandler >& _rxLogHandler )
+    void EventLogger::addLogHandler( const Reference< XLogHandler >& _rxLogHandler )
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.addInterface( _rxLogHandler );
     }
 
-    void SAL_CALL EventLogger::removeLogHandler( const Reference< XLogHandler >& _rxLogHandler )
+    void EventLogger::removeLogHandler( const Reference< XLogHandler >& _rxLogHandler )
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.removeInterface( _rxLogHandler );
     }
 
-    bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel )
+    bool EventLogger::isLoggable( ::sal_Int32 _nLevel )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_nts_isLoggable_nothrow( _nLevel );
     }
 
-    void SAL_CALL EventLogger::log( ::sal_Int32 _nLevel, const OUString& _rMessage )
+    void EventLogger::log( ::sal_Int32 _nLevel, const OUString& _rMessage )
     {
         impl_ts_logEvent_nothrow( createLogRecord(
             m_sName,
@@ -201,7 +201,7 @@ namespace logging
         ) );
     }
 
-    void SAL_CALL EventLogger::logp( ::sal_Int32 _nLevel, const OUString& _rSourceClass, const OUString& _rSourceMethod, const OUString& _rMessage )
+    void EventLogger::logp( ::sal_Int32 _nLevel, const OUString& _rSourceClass, const OUString& _rSourceMethod, const OUString& _rMessage )
     {
         impl_ts_logEvent_nothrow( createLogRecord(
             m_sName,
@@ -218,22 +218,22 @@ namespace logging
     {
     }
 
-    OUString SAL_CALL LoggerPool::getImplementationName()
+    OUString LoggerPool::getImplementationName()
     {
         return u"com.sun.star.comp.extensions.LoggerPool"_ustr;
     }
 
-    bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName )
+    bool LoggerPool::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames()
+    Sequence< OUString > LoggerPool::getSupportedServiceNames()
     {
         return { u"com.sun.star.logging.LoggerPool"_ustr };
     }
 
-    Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const OUString& _rName )
+    Reference< XLogger > LoggerPool::getNamedLogger( const OUString& _rName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -249,7 +249,7 @@ namespace logging
         return xLogger;
     }
 
-    Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  )
+    Reference< XLogger > LoggerPool::getDefaultLogger(  )
     {
         return getNamedLogger( u"org.openoffice.logging.DefaultLogger"_ustr );
     }

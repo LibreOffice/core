@@ -67,7 +67,7 @@ using namespace cpo::uno;
     {
     }
 
-    void SAL_CALL PropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
+    void PropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
     {
         if ( !_rxIntrospectee.is() )
             throw NullPointerException();
@@ -105,7 +105,7 @@ using namespace cpo::uno;
         m_aSupportedProperties.realloc( 0 );
     }
 
-    Sequence< Property > SAL_CALL PropertyHandler::getSupportedProperties()
+    Sequence< Property > PropertyHandler::getSupportedProperties()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bSupportedPropertiesAreKnown )
@@ -116,17 +116,17 @@ using namespace cpo::uno;
         return m_aSupportedProperties;
     }
 
-    Sequence< OUString > SAL_CALL PropertyHandler::getSupersededProperties( )
+    Sequence< OUString > PropertyHandler::getSupersededProperties( )
     {
         return Sequence< OUString >();
     }
 
-    Sequence< OUString > SAL_CALL PropertyHandler::getActuatingProperties( )
+    Sequence< OUString > PropertyHandler::getActuatingProperties( )
     {
         return Sequence< OUString >();
     }
 
-    Any SAL_CALL PropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
+    Any PropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
@@ -152,7 +152,7 @@ using namespace cpo::uno;
         return aPropertyValue;
     }
 
-    Any SAL_CALL PropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any PropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
@@ -171,12 +171,12 @@ using namespace cpo::uno;
             m_xContext, m_xTypeConverter, _rPropertyValue, _rControlValueType );
     }
 
-    PropertyState SAL_CALL PropertyHandler::getPropertyState( const OUString& /*_rPropertyName*/ )
+    PropertyState PropertyHandler::getPropertyState( const OUString& /*_rPropertyName*/ )
     {
         return PropertyState_DIRECT_VALUE;
     }
 
-    LineDescriptor SAL_CALL PropertyHandler::describePropertyLine( const OUString& _rPropertyName,
+    LineDescriptor PropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         if ( !_rxControlFactory.is() )
@@ -206,24 +206,24 @@ using namespace cpo::uno;
         return aDescriptor;
     }
 
-    bool SAL_CALL PropertyHandler::isComposable( const OUString& _rPropertyName )
+    bool PropertyHandler::isComposable( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pInfoService->isComposeable( _rPropertyName );
     }
 
-    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
+    InteractiveSelectionResult PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
     {
         OSL_FAIL( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
-    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
+    void PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
 
-    void SAL_CALL PropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxListener.is() )
@@ -231,35 +231,35 @@ using namespace cpo::uno;
         m_aPropertyListeners.addInterface( _rxListener );
     }
 
-    void SAL_CALL PropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeInterface( _rxListener );
     }
 
-    bool SAL_CALL PropertyHandler::suspend( bool /*_bSuspend*/ )
+    bool PropertyHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }
 
-    void SAL_CALL PropertyHandler::dispose(  )
+    void PropertyHandler::dispose(  )
     {
         PropertyHandler_Base::WeakComponentImplHelperBase::dispose();
         m_xComponent.clear();
         m_xComponentPropertyInfo.clear();
         m_xTypeConverter.clear();
     }
-    void SAL_CALL PropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void PropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
     {
         PropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
     }
-    void SAL_CALL PropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void PropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
     {
         PropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
     }
 
 
-    void SAL_CALL PropertyHandler::disposing()
+    void PropertyHandler::disposing()
     {
         m_xComponent.clear();
         m_aPropertyListeners.clear();
@@ -426,7 +426,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XINTERFACE2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
 
-    bool SAL_CALL PropertyHandlerComponent::supportsService( const OUString& ServiceName )
+    bool PropertyHandlerComponent::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

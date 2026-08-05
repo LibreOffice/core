@@ -84,7 +84,7 @@ using namespace cpo::uno;
 
     IMPLEMENT_FORWARD_REFCOUNT( OPropertyBrowserController, OPropertyBrowserController_Base )
 
-    Any SAL_CALL OPropertyBrowserController::queryInterface( const Type& _rType )
+    Any OPropertyBrowserController::queryInterface( const Type& _rType )
     {
         Any aReturn = OPropertyBrowserController_Base::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -134,7 +134,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XObjectInspectorModel > SAL_CALL OPropertyBrowserController::getInspectorModel()
+    Reference< XObjectInspectorModel > OPropertyBrowserController::getInspectorModel()
     {
         return m_xModel;
     }
@@ -180,7 +180,7 @@ using namespace cpo::uno;
                 // dynamically - fine with us
                 return;
 
-            void (SAL_CALL XPropertySet::*pListenerOperation)( const OUString&, const Reference< XPropertyChangeListener >& )
+            void (XPropertySet::*pListenerOperation)( const OUString&, const Reference< XPropertyChangeListener >& )
                 = _bDoListen ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
             (xModelProperties.get()->*pListenerOperation)(
@@ -211,7 +211,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::setInspectorModel( const Reference< XObjectInspectorModel >& _inspectorModel )
+    void OPropertyBrowserController::setInspectorModel( const Reference< XObjectInspectorModel >& _inspectorModel )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -222,14 +222,14 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XObjectInspectorUI > SAL_CALL OPropertyBrowserController::getInspectorUI()
+    Reference< XObjectInspectorUI > OPropertyBrowserController::getInspectorUI()
     {
         // we're derived from this interface, though we do not expose it in queryInterface and getTypes.
         return this;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects )
+    void OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -250,14 +250,14 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ )
+    Reference< XDispatch > OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ )
     {
         // we don't have any dispatches at all, right now
         return Reference< XDispatch >();
     }
 
 
-    Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests )
+    Sequence< Reference< XDispatch > > OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests )
     {
         Sequence<Reference<XDispatch>> aReturn(Requests.getLength());
         std::transform(Requests.begin(), Requests.end(), aReturn.getArray(),
@@ -267,7 +267,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::initialize( const Sequence< Any >& _arguments )
+    void OPropertyBrowserController::initialize( const Sequence< Any >& _arguments )
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();
@@ -303,7 +303,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame )
+    void OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -348,7 +348,7 @@ using namespace cpo::uno;
         UpdateUI();
     }
 
-    bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel )
+    bool OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel )
     {
         Reference< XObjectInspectorModel > xModel( _rxModel, UNO_QUERY );
         if ( !xModel.is() )
@@ -405,7 +405,7 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OPropertyBrowserController::suspend( bool _bSuspend )
+    bool OPropertyBrowserController::suspend( bool _bSuspend )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( haveView(), "OPropertyBrowserController::suspend: don't have a view anymore!" );
@@ -432,13 +432,13 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OPropertyBrowserController::getViewData(  )
+    Any OPropertyBrowserController::getViewData(  )
     {
         return Any( m_sPageSelection );
     }
 
 
-    void SAL_CALL OPropertyBrowserController::restoreViewData( const Any& Data )
+    void OPropertyBrowserController::restoreViewData( const Any& Data )
     {
         OUString sPageSelection;
         if ( ( Data >>= sPageSelection ) && !sPageSelection.isEmpty() )
@@ -448,18 +448,18 @@ using namespace cpo::uno;
         }
     }
 
-    Reference< XModel > SAL_CALL OPropertyBrowserController::getModel(  )
+    Reference< XModel > OPropertyBrowserController::getModel(  )
     {
         // have no model
         return Reference< XModel >();
     }
 
-    Reference< XFrame > SAL_CALL OPropertyBrowserController::getFrame(  )
+    Reference< XFrame > OPropertyBrowserController::getFrame(  )
     {
         return m_xFrame;
     }
 
-    void SAL_CALL OPropertyBrowserController::dispose()
+    void OPropertyBrowserController::dispose()
     {
         SolarMutexGuard aSolarGuard;
 
@@ -486,34 +486,34 @@ using namespace cpo::uno;
         m_xFrame.clear();
     }
 
-    void SAL_CALL OPropertyBrowserController::addEventListener( const Reference< XEventListener >& _rxListener )
+    void OPropertyBrowserController::addEventListener( const Reference< XEventListener >& _rxListener )
     {
         m_aDisposeListeners.addInterface(_rxListener);
     }
 
-    void SAL_CALL OPropertyBrowserController::removeEventListener( const Reference< XEventListener >& _rxListener )
+    void OPropertyBrowserController::removeEventListener( const Reference< XEventListener >& _rxListener )
     {
         m_aDisposeListeners.removeInterface(_rxListener);
     }
 
-    OUString SAL_CALL OPropertyBrowserController::getImplementationName(  )
+    OUString OPropertyBrowserController::getImplementationName(  )
     {
         return u"org.openoffice.comp.extensions.ObjectInspector"_ustr;
     }
 
-    bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName )
+    bool OPropertyBrowserController::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
 
-    Sequence< OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  )
+    Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.inspection.ObjectInspector"_ustr };
     }
 
 
-    void SAL_CALL OPropertyBrowserController::focusGained( const FocusEvent& _rSource )
+    void OPropertyBrowserController::focusGained( const FocusEvent& _rSource )
     {
         Reference< XWindow > xSourceWindow(_rSource.Source, UNO_QUERY);
         Reference< XWindow > xContainerWindow;
@@ -528,13 +528,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& /*_rSource*/ )
+    void OPropertyBrowserController::focusLost( const FocusEvent& /*_rSource*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL OPropertyBrowserController::disposing( const EventObject& _rSource )
+    void OPropertyBrowserController::disposing( const EventObject& _rSource )
     {
         if ( m_xView.is() && ( m_xView == _rSource.Source ) )
         {
@@ -626,7 +626,7 @@ using namespace cpo::uno;
         impl_initializeView_nothrow();
     }
 
-    void SAL_CALL OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent )
+    void OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent )
     {
         if ( _rEvent.Source == m_xModel )
         {
@@ -669,7 +669,7 @@ using namespace cpo::uno;
             impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
     }
 
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, bool bCreateReadOnly )
+    Reference< XPropertyControl > OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, bool bCreateReadOnly )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1038,7 +1038,7 @@ using namespace cpo::uno;
     }
 
 
-    css::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize()
+    css::awt::Size OPropertyBrowserController::getMinimumSize()
     {
         css::awt::Size aSize;
         if( m_xPropView )
@@ -1048,13 +1048,13 @@ using namespace cpo::uno;
     }
 
 
-    css::awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize()
+    css::awt::Size OPropertyBrowserController::getPreferredSize()
     {
         return getMinimumSize();
     }
 
 
-    css::awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const css::awt::Size& _rNewSize )
+    css::awt::Size OPropertyBrowserController::calcAdjustedSize( const css::awt::Size& _rNewSize )
     {
         awt::Size aMinSize = getMinimumSize( );
         awt::Size aAdjustedSize( _rNewSize );
@@ -1567,7 +1567,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::getPropertyControl( const OUString& _rPropertyName )
+    Reference< XPropertyControl > OPropertyBrowserController::getPropertyControl( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1578,19 +1578,19 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBrowserController::registerControlObserver( const Reference< XPropertyControlObserver >& Observer )
+    void OPropertyBrowserController::registerControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         m_aControlObservers.addInterface( Observer );
     }
 
 
-    void SAL_CALL OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer )
+    void OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         m_aControlObservers.removeInterface( Observer );
     }
 
 
-    void SAL_CALL OPropertyBrowserController::setHelpSectionText( const OUString& _rHelpText )
+    void OPropertyBrowserController::setHelpSectionText( const OUString& _rHelpText )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

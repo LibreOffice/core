@@ -85,7 +85,7 @@ namespace pcr
     IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
 
 
-    Sequence< Type > SAL_CALL FormController::getTypes(  )
+    Sequence< Type > FormController::getTypes(  )
     {
         ::cppu::OTypeCollection aTypes(
             cppu::UnoType<XPropertySet>::get(),
@@ -99,13 +99,13 @@ namespace pcr
     IMPLEMENT_GET_IMPLEMENTATION_ID( FormController )
 
 
-    OUString SAL_CALL FormController::getImplementationName(  )
+    OUString FormController::getImplementationName(  )
     {
         return m_sImplementationName;
     }
 
 
-    Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  )
+    Sequence< OUString > FormController::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported( m_aSupportedServiceNames );
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -114,13 +114,13 @@ namespace pcr
     }
 
 
-    Reference< XPropertySetInfo > SAL_CALL FormController::getPropertySetInfo(  )
+    Reference< XPropertySetInfo > FormController::getPropertySetInfo(  )
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
 
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL FormController::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& FormController::getInfoHelper()
     {
         return *getArrayHelper();
     }
@@ -146,7 +146,7 @@ namespace pcr
     }
 
 
-    bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+    bool FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
         switch ( static_cast<OwnPropertyId>(nHandle) )
         {
@@ -168,7 +168,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+    void FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
     {
         switch ( static_cast<OwnPropertyId>(_nHandle) )
         {
@@ -205,7 +205,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormController::getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const
+    void FormController::getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const
     {
         switch ( static_cast<OwnPropertyId>(nHandle) )
         {

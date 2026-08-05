@@ -71,7 +71,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL EditPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
+    Any EditPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -127,7 +127,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EditPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
+    void EditPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -222,7 +222,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( )
+    Sequence< OUString > EditPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         std::vector< OUString > aSuperseded;
@@ -242,7 +242,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( )
+    Sequence< OUString > EditPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         std::vector< OUString > aInterestingActuatingProps;
@@ -253,7 +253,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
+    void EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

@@ -87,7 +87,7 @@ namespace pcr
         m_xEntry->connect_key_press(LINK(this, OFormatSampleControl, KeyInputHdl));
     }
 
-    void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue )
+    void OFormatSampleControl::setValue( const Any& _rValue )
     {
         sal_Int32 nFormatKey = 0;
         if ( _rValue >>= nFormatKey )
@@ -148,7 +148,7 @@ namespace pcr
         return nValue;
     }
 
-    Any SAL_CALL OFormatSampleControl::getValue()
+    Any OFormatSampleControl::getValue()
     {
         Any aPropValue;
         if ( !m_xSpinButton->get_text().isEmpty() )
@@ -159,7 +159,7 @@ namespace pcr
         return aPropValue;
     }
 
-    Type SAL_CALL OFormatSampleControl::getValueType()
+    Type OFormatSampleControl::getValueType()
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
@@ -177,7 +177,7 @@ namespace pcr
     {
     }
 
-    void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue )
+    void OFormattedNumericControl::setValue( const Any& _rValue )
     {
         double nValue( 0 );
         if ( _rValue >>= nValue )
@@ -186,7 +186,7 @@ namespace pcr
             getTypedControlWindow()->set_text(u""_ustr);
     }
 
-    Any SAL_CALL OFormattedNumericControl::getValue()
+    Any OFormattedNumericControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->get_text().isEmpty() )
@@ -194,7 +194,7 @@ namespace pcr
         return aPropValue;
     }
 
-    Type SAL_CALL OFormattedNumericControl::getValueType()
+    Type OFormattedNumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
@@ -242,7 +242,7 @@ namespace pcr
     {
     }
 
-    void SAL_CALL OFileUrlControl::setValue(const Any& rValue)
+    void OFileUrlControl::setValue(const Any& rValue)
     {
         OUString sURL;
         SvtURLBox* pControlWindow = getTypedControlWindow();
@@ -252,7 +252,7 @@ namespace pcr
         pControlWindow->set_entry_text(sURL);
     }
 
-    Any SAL_CALL OFileUrlControl::getValue()
+    Any OFileUrlControl::getValue()
     {
         Any aPropValue;
         if (!getTypedControlWindow()->get_active_text().isEmpty())
@@ -260,7 +260,7 @@ namespace pcr
         return aPropValue;
     }
 
-    Type SAL_CALL OFileUrlControl::getValueType()
+    Type OFileUrlControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }

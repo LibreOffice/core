@@ -206,7 +206,7 @@ OleConverter::~OleConverter()
 }
 
 // XBridgeSupplier2 --------------------------------------------------------------
-Any SAL_CALL OleConverter::createBridge(const Any& modelDepObject,
+Any OleConverter::createBridge(const Any& modelDepObject,
                                         const Sequence< sal_Int8 >& ProcessId,
                                         sal_Int16 sourceModelType,
                                         sal_Int16 destModelType)
@@ -317,7 +317,7 @@ cpo::uno::Sequence<OUString> OleConverter::getSupportedServiceNames()
 
 // XInitialize ------------------------------------------------------------------------------
 // the first argument is an XMultiServiceFactory if at all
-void SAL_CALL OleConverter::initialize( const Sequence< Any >& aArguments )
+void OleConverter::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.getLength() == 1 && aArguments[0].getValueTypeClass() == TypeClass_INTERFACE)
     {
@@ -370,7 +370,7 @@ OleClient::~OleClient()
 {
 }
 
-Sequence< OUString >    SAL_CALL OleClient::getAvailableServiceNames()
+Sequence< OUString >    OleClient::getAvailableServiceNames()
 {
     Sequence< OUString > ret;
 
@@ -394,7 +394,7 @@ cpo::uno::Sequence<OUString> OleClient::getSupportedServiceNames()
         "com.sun.star.bridge.oleautomation.Factory"};
 }
 
-Reference<XInterface> SAL_CALL OleClient::createInstance(const OUString& ServiceSpecifier)
+Reference<XInterface> OleClient::createInstance(const OUString& ServiceSpecifier)
 {
     Reference<XInterface>   ret;
 
@@ -415,7 +415,7 @@ Reference<XInterface> SAL_CALL OleClient::createInstance(const OUString& Service
     return ret;
 }
 
-Reference<XInterface> SAL_CALL OleClient::createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/)
+Reference<XInterface> OleClient::createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/)
 {
     return createInstance( ServiceSpecifier);
 }

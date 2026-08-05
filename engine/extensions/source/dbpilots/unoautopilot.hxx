@@ -49,30 +49,30 @@ namespace dbp
 
 
         // XTypeProvider
-        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override
+        virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override
         {
             return cpo::uno::Sequence<sal_Int8>();
         }
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override
+        virtual OUString getImplementationName() override
         {
             return m_ImplementationName;
         }
 
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
         {
             return m_SupportedServices;
         }
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override
         {
             css::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
             return xInfo;
         }
 
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override
         {
             return *this->getArrayHelper();
         }

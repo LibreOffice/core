@@ -65,16 +65,16 @@ public:
     StringRepresentation& operator=(const StringRepresentation&) = delete;
 
     // lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString & ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // inspection::XStringRepresentation:
-    virtual OUString SAL_CALL convertToControlValue(const cpo::uno::Any & PropertyValue) override;
-    virtual cpo::uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType) override;
+    virtual OUString convertToControlValue(const cpo::uno::Any & PropertyValue) override;
+    virtual cpo::uno::Any convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType) override;
 
     // lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
 private:
     virtual ~StringRepresentation() override {}
@@ -135,23 +135,23 @@ StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContex
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString  SAL_CALL StringRepresentation::getImplementationName()
+OUString  StringRepresentation::getImplementationName()
 {
     return u"StringRepresentation"_ustr;
 }
 
-bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
+bool StringRepresentation::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString >  StringRepresentation::getSupportedServiceNames()
 {
     return { u"com.sun.star.inspection.StringRepresentation"_ustr };
 }
 
 // inspection::XStringRepresentation:
-OUString SAL_CALL StringRepresentation::convertToControlValue(const cpo::uno::Any & PropertyValue)
+OUString StringRepresentation::convertToControlValue(const cpo::uno::Any & PropertyValue)
 {
     OUString sReturn;
     if ( !convertGenericValueToString( PropertyValue, sReturn ) )
@@ -170,7 +170,7 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const cpo::uno::An
     return sReturn;
 }
 
-cpo::uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType)
+cpo::uno::Any StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType)
 {
     cpo::uno::Any aReturn;
 
@@ -232,7 +232,7 @@ struct CompareConstants {
 }
 
 // lang::XInitialization:
-void SAL_CALL StringRepresentation::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void StringRepresentation::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     sal_Int32 nLength = aArguments.getLength();
     if ( !nLength )
