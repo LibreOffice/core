@@ -1018,6 +1018,11 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         aAreaParam.aPrintArea.aStart.SetTab(nPrintTab);
         aAreaParam.aPrintArea.aEnd.SetTab(nPrintTab);
     }
+    else if (!rDoc.IsVisible(nPrintTab))
+    {
+        aAreaParam.bPrintArea = true;
+        bPrintCurrentTable = false;
+    }
     else if (bHasPrintRange)
     {
         if ( pPrintArea )                               // at least one set?
@@ -1030,24 +1035,14 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         }
         else
         {
-            // do not print hidden sheets with "Print entire sheet" flag
-            bPrintCurrentTable = rDoc.IsPrintEntireSheet( nPrintTab ) && rDoc.IsVisible( nPrintTab );
+            bPrintCurrentTable = rDoc.IsPrintEntireSheet(nPrintTab);
             aAreaParam.bPrintArea = !bPrintCurrentTable;    // otherwise the table is always counted
         }
     }
     else
     {
-        //  don't print hidden tables if there's no print range defined there
-        if ( rDoc.IsVisible( nPrintTab ) )
-        {
-            aAreaParam.bPrintArea = false;
-            bPrintCurrentTable = true;
-        }
-        else
-        {
-            aAreaParam.bPrintArea = true;   // otherwise the table is always counted
-            bPrintCurrentTable = false;
-        }
+        aAreaParam.bPrintArea = false;
+        bPrintCurrentTable = true;
     }
 
     if ( oRepeatCol )
