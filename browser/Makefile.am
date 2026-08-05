@@ -566,6 +566,7 @@ COOL_JS_LST =\
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \
 	src/canvas/sections/CellRangeHandleSection.ts \
+	src/canvas/sections/OverviewPreviewsSection.ts \
 	src/canvas/sections/PreviewEditSection.ts \
 	src/canvas/sections/TableResizeMarkerSection.ts \
 	src/canvas/sections/TableSelectMarkerSection.ts \

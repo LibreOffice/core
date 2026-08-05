@@ -3,7 +3,7 @@
  * window.L.Map.StateChanges stores the state changes commands coming from core
  * LOK_CALLBACK_STATE_CHANGED callback
  */
-/* global $ app cool _ RenderManager HandleTravel PreviewEditSection */
+/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection */
 /*eslint no-extend-native:0*/
 window.L.Map.mergeOptions({
 	stateChangeHandler: true
@@ -163,6 +163,8 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 				}
 			}
 			app.impress.previewRects = previews;
+			OverviewPreviewsSection.ensure();
+			app.sectionContainer.requestReDraw();
 			this._map.fire('canvaspreviewrects');
 		}
 

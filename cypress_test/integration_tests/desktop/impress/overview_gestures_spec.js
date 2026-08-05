@@ -201,7 +201,7 @@ describe(['tagdesktop'], 'Overview page gestures', { testIsolation: false }, fun
 		});
 	}
 
-	it('Hovering a preview shows the pointer and the outline', function() {
+	it('Hovering a preview shows the move cursor and the outline', function() {
 		const win = this.win;
 		ensureOverviewPage(win);
 		let client;
@@ -223,10 +223,10 @@ describe(['tagdesktop'], 'Overview page gestures', { testIsolation: false }, fun
 				function() {
 					return cy.wrap(win, { log: false }).then(function(w) {
 						return w.document.getElementById('document-canvas').style.cursor
-							=== 'pointer';
+							=== 'move';
 					});
 				},
-				{ errorMsg: 'hovering the preview never set the pointer cursor' }
+				{ errorMsg: 'hovering the preview never set the move cursor' }
 			);
 		});
 		cy.then(function() {
@@ -234,7 +234,7 @@ describe(['tagdesktop'], 'Overview page gestures', { testIsolation: false }, fun
 			expect(section).to.exist;
 			expect(section.sectionProperties.hoveredPart).to.equal(1);
 			expect(win.document.getElementById('document-canvas').style.cursor)
-				.to.equal('pointer');
+				.to.equal('move');
 		});
 	});
 

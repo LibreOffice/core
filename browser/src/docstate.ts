@@ -81,6 +81,7 @@
 			slideHeight: 0,
 		},
 		previewShapeSelection: null as any, // Canvas-space rectangle of the preview-selected shape.
+		selectedPreviewPart: -1, // Part whose preview is the current graphic selection on the overview page, or -1.
 		notesMode: false, // Opposite of "NormalMultiPaneGUI".
 		savedViewMode: null as string | null, // Remembered view mode ('normal'|'notes'|'master') for this document, sent by the server on load.
 		twipsCorrection: 0.567, // There is a constant ratio between tiletwips and impress page twips. For now, this seems safe to use.

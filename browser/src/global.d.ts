@@ -183,6 +183,8 @@ interface AppInterface {
 		};
 		// Canvas-space rectangle of the preview-selected shape.
 		previewShapeSelection: any;
+		// Part whose preview is the current graphic selection on the overview page, or -1.
+		selectedPreviewPart: number;
 	};
 	writer: {
 		compareDocumentProperties: CompareDocumentProperties | null;
