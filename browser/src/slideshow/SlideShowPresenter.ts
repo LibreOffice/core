@@ -446,7 +446,7 @@ class SlideShowPresenter {
 		this._fullscreen = document.fullscreenElement;
 		if (this._fullscreen) {
 			// window.addEventListener('keydown', this._onCanvasKeyDown.bind(this));
-			window.addEventListener('keydown', this._onKeyDownHandler);
+			window.addEventListener('keydown', this._onKeyDownHandler, true);
 			this.centerCanvas();
 		} else {
 			// we need to cleanup current/prev slide
