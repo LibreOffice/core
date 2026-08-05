@@ -456,44 +456,41 @@ window.L.Map.include({
 
 		// Let's translate
 		var max;
-		var translatableContent = contentElement.querySelectorAll('h1');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
-		translatableContent = contentElement.querySelectorAll('h2');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
-		translatableContent = contentElement.querySelectorAll('h3');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
-		translatableContent = contentElement.querySelectorAll('h4');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
-		translatableContent = contentElement.querySelectorAll('td');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			var orig = translatableContent[i].innerHTML;
-			var trans = translatableContent[i].innerHTML.toLocaleHelpString();
-			// Try harder to get translation of keyboard shortcuts (html2po trims starting <kbd> and ending </kbd>)
-			if (orig === trans && orig.indexOf('kbd') != -1) {
-				var trimmedOrig = orig.replace(/^(<kbd>)/,'').replace(/(<\/kbd>$)/,'');
-				var trimmedTrans = trimmedOrig.toLocaleHelpString();
-				if (trimmedOrig !== trimmedTrans) {
-					trans = '<kbd>' + trimmedTrans + '</kbd>';
+		var translatableContent;
+		// The tags html2po extracts strings from; keep in sync with the source
+		// references in po/templates/cool-help.pot.
+		var translatableTags = ['h1', 'h2', 'h3', 'h4', 'td', 'p', 'li', 'button'];
+		for (i = 0; i < translatableTags.length; i++) {
+			contentElement.querySelectorAll(translatableTags[i]).forEach(function (element) {
+				// html2po trims the extracted string, so the indentation the
+				// element carries in cool-help.html is not part of the msgid.
+				var orig = element.innerHTML.trim();
+				var trans = orig.toLocaleHelpString();
+				// Try harder when the whole content is wrapped in a single inline
+				// tag: html2po trims those (<kbd> around the keyboard shortcuts,
+				// <a> around the table of contents entries), so the string to look
+				// up is the content without the wrapper.
+				if (orig === trans) {
+					var wrapped = /^(<(kbd|a)\b[^>]*>)([\s\S]*)(<\/\2>)$/.exec(orig);
+					if (wrapped) {
+						var unwrapped = wrapped[3].trim();
+						var trimmedTrans = unwrapped.toLocaleHelpString();
+						if (trimmedTrans !== unwrapped) {
+							trans = wrapped[1] + trimmedTrans + wrapped[4];
+						}
+					}
 				}
-			}
-			translatableContent[i].innerHTML = trans;
+				// Assign only on an actual change: re-setting innerHTML recreates
+				// the children, detaching elements that are yet to be translated.
+				if (trans !== orig) {
+					element.innerHTML = trans;
+				}
+			});
 		}
-		translatableContent = contentElement.querySelectorAll('p');
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
-		translatableContent = contentElement.querySelectorAll('button'); // TOC
-		for (i = 0, max = translatableContent.length; i < max; i++) {
-			translatableContent[i].innerHTML = translatableContent[i].innerHTML.toLocaleHelpString();
-		}
+		// The alternative texts of the screenshots are translated as well.
+		contentElement.querySelectorAll('img[alt]').forEach(function (image) {
+			image.alt = image.alt.toLocaleHelpString();
+		});
 
 		//translatable screenshots
 		var supportedLanguage = ['de', 'fr', 'it', 'es', 'pt-BR'];
