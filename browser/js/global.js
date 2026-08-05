@@ -2046,8 +2046,11 @@ function showWelcomeSVG() {
 				return string.toLocaleString();
 			}
 		} else {
-			// fallback to original
-			return originalStringToLocaleString.call(this);
+			// In the browser the help strings live in the same dictionary as the
+			// ui ones; l10n.js installs its lookup on String.prototype, and it is
+			// loaded after this file, so resolve it at call time instead of using
+			// the original method saved above (which is the native, no-op one).
+			return String.prototype.toLocaleString.call(this);
 		}
 	};
 
