@@ -1151,8 +1151,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         return;
     }
 
-    // Send it to dmapper
-    if (xShape.is())
+    // Send it to dmapper. Inside a table this has to wait for the row to be replayed, when the
+    // cells exist - resolvePict() defers its own output the same way.
+    if (xShape.is() && !m_rImport.bufferShapeInsertion(xShape, bClose))
     {
         m_rImport.Mapper().startShape(xShape);
         if (bClose)
