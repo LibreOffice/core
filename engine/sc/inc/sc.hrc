@@ -651,6 +651,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_RENAME_CALCTABLE        (SID_NEW_SLOTS+125)
 #define SID_CONVERT_CALCTABLE_TO_RANGE (SID_NEW_SLOTS+126)
 #define SID_SET_DEFAULT_TABLE_STYLE (SID_NEW_SLOTS+127)
+#define SID_NEW_TABLE_STYLE         (SID_NEW_SLOTS+128)
 
 // idl parameter
 

@@ -146,6 +146,8 @@ private:
 public:
     ScTableStyles(ScDocument* pDoc);
 
+    // Register a style under its programmatic name. A style already registered
+    // under that name is kept, so the first definition of a name wins.
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return !maTableStyles.empty(); }

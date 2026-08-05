@@ -442,6 +442,28 @@
 #define STR_TABLE_STYLE_LIGHT                       NC_("STR_TABLE_STYLE_LIGHT", "Table Style Light")
 #define STR_TABLE_STYLE_MEDIUM                      NC_("STR_TABLE_STYLE_MEDIUM", "Table Style Medium")
 #define STR_TABLE_STYLE_DARK                        NC_("STR_TABLE_STYLE_DARK", "Table Style Dark")
+/* Group headings in the table-style gallery */
+#define STR_TABLE_STYLE_GROUP_LIGHT                 NC_("STR_TABLE_STYLE_GROUP_LIGHT", "Light")
+#define STR_TABLE_STYLE_GROUP_MEDIUM                NC_("STR_TABLE_STYLE_GROUP_MEDIUM", "Medium")
+#define STR_TABLE_STYLE_GROUP_DARK                  NC_("STR_TABLE_STYLE_GROUP_DARK", "Dark")
+#define STR_TABLE_STYLE_GROUP_CUSTOM                NC_("STR_TABLE_STYLE_GROUP_CUSTOM", "Custom")
+/* The "clear the table style" entry in the gallery */
+#define STR_TABLE_STYLE_NONE                        NC_("STR_TABLE_STYLE_NONE", "None")
+/* Region names in the New Table Style dialog, one per table-style element */
+#define STR_TABLESTYLE_ELEM_WHOLETABLE              NC_("STR_TABLESTYLE_ELEM_WHOLETABLE", "Whole Table")
+#define STR_TABLESTYLE_ELEM_HEADERROW               NC_("STR_TABLESTYLE_ELEM_HEADERROW", "Header Row")
+#define STR_TABLESTYLE_ELEM_TOTALROW                NC_("STR_TABLESTYLE_ELEM_TOTALROW", "Total Row")
+#define STR_TABLESTYLE_ELEM_FIRSTCOLUMN             NC_("STR_TABLESTYLE_ELEM_FIRSTCOLUMN", "First Column")
+#define STR_TABLESTYLE_ELEM_LASTCOLUMN              NC_("STR_TABLESTYLE_ELEM_LASTCOLUMN", "Last Column")
+#define STR_TABLESTYLE_ELEM_FIRSTROWSTRIPE          NC_("STR_TABLESTYLE_ELEM_FIRSTROWSTRIPE", "First Row Stripe")
+#define STR_TABLESTYLE_ELEM_SECONDROWSTRIPE         NC_("STR_TABLESTYLE_ELEM_SECONDROWSTRIPE", "Second Row Stripe")
+#define STR_TABLESTYLE_ELEM_FIRSTCOLUMNSTRIPE       NC_("STR_TABLESTYLE_ELEM_FIRSTCOLUMNSTRIPE", "First Column Stripe")
+#define STR_TABLESTYLE_ELEM_SECONDCOLUMNSTRIPE      NC_("STR_TABLESTYLE_ELEM_SECONDCOLUMNSTRIPE", "Second Column Stripe")
+#define STR_TABLESTYLE_ELEM_FIRSTHEADERCELL         NC_("STR_TABLESTYLE_ELEM_FIRSTHEADERCELL", "First Header Cell")
+#define STR_TABLESTYLE_ELEM_LASTHEADERCELL          NC_("STR_TABLESTYLE_ELEM_LASTHEADERCELL", "Last Header Cell")
+/* New Table Style dialog: default name and duplicate-name warning */
+#define STR_TABLESTYLE_NEW_DEFAULTNAME              NC_("STR_TABLESTYLE_NEW_DEFAULTNAME", "Custom Table Style")
+#define STR_TABLESTYLE_NAME_EXISTS                  NC_("STR_TABLESTYLE_NAME_EXISTS", "A table style with this name already exists.")
 
 /* Reference Warning Infobar */
 #define STR_REF_ERROR_TITLE                         NC_("STR_REF_ERROR_TITLE", "Broken References")

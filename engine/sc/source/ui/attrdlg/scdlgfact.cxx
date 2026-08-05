@@ -23,6 +23,7 @@
 
 #include <scuiasciiopt.hxx>
 #include <scuiautofmt.hxx>
+#include <tablestyledlg.hxx>
 #include <corodlg.hxx>
 #include <dapidata.hxx>
 #include <dapitype.hxx>
@@ -143,6 +144,14 @@ public:
     sal_uInt16 GetIndex() const override { return m_pDlg->GetIndex(); }
     OUString GetCurrFormatName() override { return m_pDlg->GetCurrFormatName(); }
 };
+
+class AbstractScTableStyleDlg_Impl
+    : public vcl::AbstractDialogImpl_Async<AbstractScTableStyleDlg, ScTableStyleDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    std::unique_ptr<ScTableStyle> TakeStyle() override { return m_pDlg->TakeStyle(); }
+};
 }
 
 VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(weld::Window* pParent,
@@ -151,6 +160,12 @@ VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormat
                                                                 ScViewData& rViewData)
 {
     return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(pParent, pAutoFormat, pSelFormatData, rViewData);
+}
+
+VclPtr<AbstractScTableStyleDlg> ScAbstractDialogFactory_Impl::CreateScTableStyleDlg(weld::Window* pParent,
+                                                                ScDocument& rDoc)
+{
+    return VclPtr<AbstractScTableStyleDlg_Impl>::Create(pParent, rDoc);
 }
 
 namespace

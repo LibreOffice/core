@@ -989,11 +989,11 @@ ScTableStyles::ScTableStyles(ScDocument* pDoc)
 
 void ScTableStyles::AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle)
 {
-    // TODO: insert() won't overwrite an existing entry with the same name.
-    // When we add UI support for creating custom table styles, we should
-    // either reject duplicates (with UI validation) or use insert_or_assign
-    // to replace the existing style.
-    maTableStyles.insert({ pTableStyle->GetName(), std::move(pTableStyle) });
+    // insert() keeps an existing entry with the same name. The create dialog
+    // picks a programmatic name that is not yet in use, and OOXML import keeps
+    // the first-seen definition, so this never has to overwrite.
+    OUString aName = pTableStyle->GetName();
+    maTableStyles.insert({ std::move(aName), std::move(pTableStyle) });
     InvalidateBindings();
 }
 

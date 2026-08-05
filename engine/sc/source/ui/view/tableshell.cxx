@@ -30,6 +30,7 @@
 #include <editable.hxx>
 #include <subtotalparam.hxx>
 #include <tablestyle.hxx>
+#include <scabstdlg.hxx>
 
 #define ShellClass_ScTableShell
 #include <scslots.hxx>
@@ -86,6 +87,65 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
     pTabViewShell->HideListBox();
 
     const ScDBData* pDBData = GetTableDBDataAtCursor();
+
+    if (rReq.GetSlot() == SID_NEW_TABLE_STYLE)
+    {
+        // The command is reached only from the Table Design context, so a
+        // table is at the cursor. The dialog builds the style and hands it
+        // back; here we register it with the document and apply it to that
+        // table as one step. The dialog runs asynchronously, as the online
+        // client requires.
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        if (pDBData && IsTableEditable(*pDBData) && rDoc.GetTableStyles())
+        {
+            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+            VclPtr<AbstractScTableStyleDlg> pDlg(
+                pFact->CreateScTableStyleDlg(pTabViewShell->GetFrameWeld(), rDoc));
+            pDlg->StartExecuteAsync([pDlg, pDocSh](sal_Int32 nResult) {
+                if (nResult == RET_OK)
+                {
+                    if (std::unique_ptr<ScTableStyle> pStyle = pDlg->TakeStyle())
+                    {
+                        ScDocument& rCbDoc = pDocSh->GetDocument();
+                        if (ScTableStyles* pStyles = rCbDoc.GetTableStyles())
+                        {
+                            const OUString aStyleName = pStyle->GetName();
+                            pStyles->AddTableStyle(std::move(pStyle));
+                            pDocSh->SetDocumentModified();
+
+                            // Re-resolve the view rather than capturing it: apply
+                            // the new style only if the same document is still
+                            // shown and a table is at the cursor.
+                            ScTabViewShell* pView = ScTabViewShell::GetActiveViewShell();
+                            if (pView && pView->GetViewData().GetDocShell() == pDocSh)
+                            {
+                                ScViewData& rCbData = pView->GetViewData();
+                                const ScAddress aPos = rCbData.GetCurPos();
+                                const ScDBData* pTableData = rCbDoc.GetTableDBAtCursor(
+                                    aPos.Col(), aPos.Row(), aPos.Tab(), ScDBDataPortion::AREA);
+                                if (pTableData)
+                                {
+                                    ScDBData aNewDBData(*pTableData);
+                                    ScTableStyleParam aParam
+                                        = pTableData->GetTableStyleInfo()
+                                              ? *pTableData->GetTableStyleInfo()
+                                              : ScTableStyleParam();
+                                    aParam.maStyleID = aStyleName;
+                                    aNewDBData.SetTableStyleInfo(aParam);
+                                    ScDBDocFunc aFunc(*pDocSh);
+                                    aFunc.ModifyDBData(aNewDBData);
+                                }
+                            }
+                        }
+                    }
+                }
+                pDlg->disposeOnce();
+            });
+        }
+        return;
+    }
+
     if (pDBData && IsTableEditable(*pDBData))
     {
         switch (rReq.GetSlot())
@@ -254,6 +314,15 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                 ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
                 if (const ScTableStyles* pStyles = rDoc.GetTableStyles())
                     rSet.Put(SfxStringItem(nWhich, pStyles->GetDefaultStyleName()));
+            }
+            break;
+            case SID_NEW_TABLE_STYLE:
+            {
+                // Creating a style applies it to the table at the cursor, so it
+                // needs an editable table to be there.
+                ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
+                if (!pDBData || bProtected || !rDoc.GetTableStyles())
+                    rSet.DisableItem(nWhich);
             }
             break;
         }

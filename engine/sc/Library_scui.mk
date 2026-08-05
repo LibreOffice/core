@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/miscdlgs/shtabdlg \
     sc/source/ui/miscdlgs/strindlg \
     sc/source/ui/miscdlgs/tabbgcolordlg \
+    sc/source/ui/miscdlgs/tablestyledlg \
     sc/source/ui/miscdlgs/textdlgs \
     sc/source/ui/namedlg/namepast \
     sc/source/ui/optdlg/tpprint \

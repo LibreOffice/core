@@ -212,6 +212,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/table7 \
     sc/source/core/data/TableStyleGenerator \
     sc/source/core/data/tablestyle \
+    sc/source/core/data/tablestyleswatch \
     sc/source/core/data/tabprotection \
     sc/source/core/data/types \
     sc/source/core/data/userdat \
@@ -412,6 +413,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/cctrl/tbzoomsliderctrl \
     sc/source/ui/cctrl/SheetViewBox \
     sc/source/ui/cctrl/SheetViewControl \
+    sc/source/ui/cctrl/tablestyleswatchrender \
     sc/source/ui/condformat/condformatdlg \
     sc/source/ui/condformat/condformatdlgentry \
     sc/source/ui/condformat/condformatdlgdata \

@@ -38,6 +38,8 @@ public:
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
                                                                 ScViewData& rViewData) override;
+    virtual VclPtr<AbstractScTableStyleDlg> CreateScTableStyleDlg(weld::Window* pParent,
+                                                                ScDocument& rDoc) override;
     virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (weld::Window* pParent,
                                                                 bool bCol,
                                                                 bool bRow) override;

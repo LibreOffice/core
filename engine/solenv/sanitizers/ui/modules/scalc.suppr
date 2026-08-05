@@ -62,6 +62,7 @@ sc/uiconfig/scalc/ui/inputbar.ui://GtkButton[@id='up'] button-no-label
 sc/uiconfig/scalc/ui/inputbar.ui://GtkButton[@id='down'] button-no-label
 sc/uiconfig/scalc/ui/insertsheet.ui://GtkLabel[@id='path'] orphan-label
 sc/uiconfig/scalc/ui/integerdialog.ui://GtkSpinButton[@id='value'] no-labelled-by
+sc/uiconfig/scalc/ui/newtablestyle.ui://GtkLabel[@id='warning'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='clipboardgrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='formatgrouplabel'] orphan-label
