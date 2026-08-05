@@ -1240,15 +1240,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159443)
     //// - In <>, XPath contents of child does not match
     assertXPathContent(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[47]/textarray/text",
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/push[47]/textarray/text",
         u"DataSeries1");
     assertXPathContent(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[49]/textarray/text",
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/push[49]/textarray/text",
         u"Category1");
     assertXPathContent(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[51]/textarray/text",
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/push[51]/textarray/text",
         u"4.3");
 }
 
@@ -1268,19 +1268,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159422)
     //// - Actual  : 5649
     //// - Delta   : 20
     sal_Int32 nYSymbol1 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
                                    "push[1]/push[99]/polypolygon/polygon/point[1]",
                                    "y")
                               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5877, nYSymbol1, 20);
     sal_Int32 nYSymbol2 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
                                    "push[1]/push[100]/polypolygon/polygon/point[1]",
                                    "y")
                               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6225, nYSymbol2, 20);
     sal_Int32 nYSymbol3 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
                                    "push[1]/push[101]/polypolygon/polygon/point[1]",
                                    "y")
                               .toInt32();
@@ -1302,11 +1302,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159456)
     //// - Actual  : 1.5
     //// - In <>, XPath contents of child does not match
     assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/"
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/"
                        "push[103]/textarray/text",
                        u"1");
     assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/"
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/"
                        "push[104]/textarray/text",
                        u"2");
 }

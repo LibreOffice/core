@@ -1885,7 +1885,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
     // - Expected: 53
     // - Actual  : 0
     // i.e. the chart lost.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push",
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/push",
                 53);
 }
 
@@ -1901,12 +1901,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
     CPPUNIT_ASSERT(pXmlDoc);
 
     sal_Int32 nXChartWall = getXPath(pXmlDoc,
-                                     "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                     "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
                                      "push[1]/push[1]/polyline[1]/point[2]",
                                      "x")
                                 .toInt32();
     sal_Int32 nXColumn = getXPath(pXmlDoc,
-                                  "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                  "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
                                   "push[1]/push[41]/polypolygon/polygon/point[1]",
                                   "x")
                              .toInt32();
@@ -1927,16 +1927,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Test wide of inner chart area.
-    sal_Int32 nXRight
-        = getXPath(pXmlDoc,
-                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[1]",
-                   "x")
-              .toInt32();
-    sal_Int32 nXLeft
-        = getXPath(pXmlDoc,
-                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[2]",
-                   "x")
-              .toInt32();
+    sal_Int32 nXRight = getXPath(pXmlDoc,
+                                 "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/"
+                                 "push[3]/polyline[1]/point[1]",
+                                 "x")
+                            .toInt32();
+    sal_Int32 nXLeft = getXPath(pXmlDoc,
+                                "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/push[3]/"
+                                "polyline[1]/point[2]",
+                                "x")
+                           .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2895, nXRight - nXLeft, 50);
 }
 

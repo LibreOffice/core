@@ -226,17 +226,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf129054)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Test the size of diameter of Pie chart.
-    sal_Int32 nYTop
-        = getXPath(pXmlDoc,
-                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[1]",
-                   "y")
-              .toInt32();
-    sal_Int32 nYBottom
-        = getXPath(
-              pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[31]",
-              "y")
-              .toInt32();
+    sal_Int32 nYTop = getXPath(pXmlDoc,
+                               "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/push[4]/"
+                               "polyline[1]/point[1]",
+                               "y")
+                          .toInt32();
+    sal_Int32 nYBottom = getXPath(pXmlDoc,
+                                  "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/"
+                                  "push[4]/polyline[1]/point[31]",
+                                  "y")
+                             .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4615, nYTop - nYBottom, 5);
 }
 
@@ -416,11 +415,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf130380)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nY = getXPath(pXmlDoc,
-                            "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/polypolygon/"
-                            "polygon/point[1]",
-                            "y")
-                       .toInt32();
+    sal_Int32 nY
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/push[1]/polypolygon/"
+                   "polygon/point[1]",
+                   "y")
+              .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 6727
     // - Actual  : 4411

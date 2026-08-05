@@ -2995,11 +2995,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
     assertXPath(pXmlDoc, "//line", 3);
 
     // check line color
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/linecolor", 1);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/linecolor", 1);
     // tdf#142128 This was NON_PRINTING_CHARACTER_COLOR (#268bd2)
     assertXPath(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/linecolor[@color='#268bd2']", 0);
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/linecolor[@color='#268bd2']", 0);
 
     // reject deletion of the image
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());

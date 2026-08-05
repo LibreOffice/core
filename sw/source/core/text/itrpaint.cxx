@@ -246,6 +246,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     GetInfo().SetPos( GetTopLeft() );
 
     const bool bDrawInWindow = GetInfo().OnWin();
+    const bool bDrawMetaFile = GetInfo().GetOut()->GetConnectMetaFile();
 
     // 6882: blank lines can't be optimized by removing them if Formatting Marks are shown
     const bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetText().isEmpty();
@@ -309,7 +310,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // bClip decides if there's a need to clip
     // The whole thing must be done before retouching
 
-    bool bClip = ( bDrawInWindow || bUnderSized ) && !rClip.IsChg();
+    bool bClip = ( bDrawInWindow || bUnderSized || bDrawMetaFile ) && !rClip.IsChg();
     if( bClip && pPor )
     {
         // If TopLeft or BottomLeft of the line are outside, the we must clip.

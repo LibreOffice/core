@@ -394,6 +394,55 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeIME)
     rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
     rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf171263TextClippedToPaintRect)
+{
+    // Given text that does not lie within a table cell's boundaries, make sure
+    // the metafile pushes a clipregion before drawing text to ensure the text is
+    // clipped at the cell boundaries
+    createSwDoc("tdf171263.doc");
+    SwDocShell* pDocShell = getSwDocShell();
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+
+    // Assert that the text to be clipped exists at the right place in the metafile
+    assertXPath(pXmlDoc,
+                "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[2]/textarray",
+                "layoutcontextlength", u"10");
+    OUString aContent = getXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[2]/textarray[1]/text");
+    CPPUNIT_ASSERT_EQUAL(u"        1."_ustr, aContent);
+
+    // Read the right-side boundary of the first table cell
+    OUString sCellFill = getXPath(pXmlDoc,
+                                  "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
+                                  "push[1]/push[1]/fillcolor",
+                                  "color");
+    CPPUNIT_ASSERT_EQUAL(u"#e6e6e6"_ustr, sCellFill);
+
+    sal_Int32 nCellRight = getXPath(pXmlDoc,
+                                    "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
+                                    "push[1]/push[1]/rect",
+                                    "right")
+                               .toInt32();
+
+    // Assert the clipregion that tdf#171263 adds to the metafile exists
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[2]",
+                "flags", u"PushAll");
+    sal_Int32 nTextClipRight
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[2]/clipregion",
+                   "right")
+              .toInt32();
+    // Assert that the clipregion's right-side boundary is close to the table cell's
+    // right-side boundary
+    CPPUNIT_ASSERT_GREATEREQUAL(nCellRight - 5, nTextClipRight);
+    CPPUNIT_ASSERT_LESSEQUAL(nCellRight + 5, nTextClipRight);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
