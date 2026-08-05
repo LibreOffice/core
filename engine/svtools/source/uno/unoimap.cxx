@@ -483,7 +483,7 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 
 namespace {
 
-class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo >
+class SvUnoImageMap : public cppu::WeakImplHelper< XIndexContainer, XServiceInfo >
 {
 public:
     explicit SvUnoImageMap();
