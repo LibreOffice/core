@@ -119,7 +119,15 @@ class GifFrameSource {
 	// Shows the current frame, either from the cache or freshly decoded, then
 	// schedules the next one after this frame's duration.
 	private _decodeNextFrame(): void {
-		if (this._disposed || !this._decoder || !this._frameCount) return;
+		if (this._disposed || !this._decoder) return;
+
+		// The decoder's track metadata may still be loading, so the frame count
+		// is not known yet. Keep the timer running so the animation starts as
+		// soon as the metadata is ready.
+		if (!this._frameCount) {
+			this._scheduleNextFrame(GIF_DEFAULT_FRAME_DURATION_MICROS);
+			return;
+		}
 
 		const index = this._frameIndex % this._frameCount;
 
