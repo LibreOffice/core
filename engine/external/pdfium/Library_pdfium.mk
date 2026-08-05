@@ -309,6 +309,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_basedcs \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_indexedcs \
     UnpackedTarball/pdfium/core/fpdfapi/parser/object_tree_traversal_util \
+    UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_facebasedsimplefont \
 ))
 
 # fpdfdoc
@@ -450,6 +451,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/string_template \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_stream \
     UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_container_stream \
+    UnpackedTarball/pdfium/core/fxcrt/bytestring_pool \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_bidi_resolver \
 ))
 
 ifneq ($(OS),WNT)
@@ -510,11 +513,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_cmyk_to_srgb \
     UnpackedTarball/pdfium/core/fxge/text_char_pos \
     UnpackedTarball/pdfium/core/fxge/cfx_face \
-    UnpackedTarball/pdfium/core/fxge/cfx_defaultrenderdevice \
     UnpackedTarball/pdfium/core/fxge/calculate_pitch \
     UnpackedTarball/pdfium/core/fxge/cfx_charmap_resolver \
     UnpackedTarball/pdfium/core/fxge/cfx_cttgsubtable \
     UnpackedTarball/pdfium/core/fxge/cfx_cttnametable \
+    UnpackedTarball/pdfium/core/fxge/cfx_standardfont \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
@@ -672,12 +675,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/win32/ctext_only_printer_driver \
     UnpackedTarball/pdfium/core/fxge/win32/cwin32_platform \
     UnpackedTarball/pdfium/core/fxge/win32/cfx_psfonttracker \
-    UnpackedTarball/pdfium/core/fxge/cfx_windowsrenderdevice \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
     UnpackedTarball/pdfium/core/fxcrt/fx_folder_windows \
     UnpackedTarball/pdfium/core/fxcrt/win/win_util \
     UnpackedTarball/pdfium/core/fxcrt/code_point_view \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_windowsrenderdevice \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,pdfium,\
@@ -720,8 +721,6 @@ endif
 ifeq ($(OS),ANDROID)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafont \
-    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafontmgr \
     UnpackedTarball/pdfium/core/fxge/android/cfx_androidfontinfo \
     UnpackedTarball/pdfium/core/fxge/android/fx_android_impl \
 ))
