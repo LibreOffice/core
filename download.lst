@@ -544,8 +544,8 @@ PAGEMAKER_TARBALL := libpagemaker-0.0.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PDFIUM_SHA256SUM := 7d11b3f6e456fbdde392ec9ae1ae5588c85149116edcd1d6a986af0a977bda1f
-PDFIUM_TARBALL := pdfium-7897.tar.bz2
+PDFIUM_SHA256SUM := 0340b2fca57cecdf6e2e0366129a3340f6764c132cb090f57db96d9f0f349855
+PDFIUM_TARBALL := pdfium-7988.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

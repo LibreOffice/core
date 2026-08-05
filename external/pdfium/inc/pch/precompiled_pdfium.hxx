@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-06-19 13:14:02 using:
+ Generated on 2026-08-03 16:22:37 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,6 +36,7 @@
 #include <cfloat>
 #include <climits>
 #include <cmath>
+#include <cstdlib>
 #include <ctype.h>
 #include <functional>
 #include <hb-subset.h>
@@ -107,6 +108,7 @@
 #include <core/fpdfapi/font/cpdf_cidfont.h>
 #include <core/fpdfapi/font/cpdf_cmap.h>
 #include <core/fpdfapi/font/cpdf_cmapparser.h>
+#include <core/fpdfapi/font/cpdf_facebasedsimplefont.h>
 #include <core/fpdfapi/font/cpdf_font.h>
 #include <core/fpdfapi/font/cpdf_fontencoding.h>
 #include <core/fpdfapi/font/cpdf_fontglobals.h>
@@ -290,6 +292,8 @@
 #include <core/fxcrt/binary_buffer.h>
 #include <core/fxcrt/byteorder.h>
 #include <core/fxcrt/bytestring.h>
+#include <core/fxcrt/bytestring_pool.h>
+#include <core/fxcrt/cfx_bidi_resolver.h>
 #include <core/fxcrt/cfx_bitstream.h>
 #include <core/fxcrt/cfx_datetime.h>
 #include <core/fxcrt/cfx_fileaccess_stream.h>
@@ -363,7 +367,6 @@
 #include <core/fxcrt/span_util.h>
 #include <core/fxcrt/stl_util.h>
 #include <core/fxcrt/string_data_template.h>
-#include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/string_template.h>
 #include <core/fxcrt/to_underlying.h>
 #include <core/fxcrt/unowned_ptr.h>
@@ -388,7 +391,6 @@
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_cttgsubtable.h>
 #include <core/fxge/cfx_cttnametable.h>
-#include <core/fxge/cfx_defaultrenderdevice.h>
 #include <core/fxge/cfx_drawutils.h>
 #include <core/fxge/cfx_face.h>
 #include <core/fxge/cfx_fillrenderoptions.h>
@@ -403,6 +405,7 @@
 #include <core/fxge/cfx_graphstatedata.h>
 #include <core/fxge/cfx_path.h>
 #include <core/fxge/cfx_renderdevice.h>
+#include <core/fxge/cfx_standardfont.h>
 #include <core/fxge/cfx_substfont.h>
 #include <core/fxge/cfx_textrenderoptions.h>
 #include <core/fxge/dib/blend.h>
@@ -487,6 +490,7 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
+#include <third_party/abseil-cpp/absl/cleanup/cleanup.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>

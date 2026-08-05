@@ -5018,7 +5018,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139627)
     int rehmim = 0, kasreh = 1, jehtatweel = 2;
 
     CPPUNIT_ASSERT_EQUAL(u"رم"_ustr, sText[rehmim].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("\xD9\x90\xD8\xAC"), sText[kasreh].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("\xD8\xAC\xD9\x90"), sText[kasreh].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, sText[jehtatweel].trim());
 
     // "Kasreh" should be within "jeh" character
@@ -5868,9 +5868,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf134226)
 
     CPPUNIT_ASSERT_EQUAL(u"ة"_ustr, aText[0].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[1].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u0651ق"_ustr, aText[2].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ق\r\n\u0651"_ustr, aText[2].trim());
     CPPUNIT_ASSERT_EQUAL(u"ش"_ustr, aText[3].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u0651ق"_ustr, aText[4].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ق\u0651"_ustr, aText[4].trim());
     CPPUNIT_ASSERT_EQUAL(u"ش"_ustr, aText[5].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[6].trim());
     CPPUNIT_ASSERT_EQUAL(u"ة"_ustr, aText[7].trim());
@@ -5901,13 +5901,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf71956)
     CPPUNIT_ASSERT_EQUAL(size_t(12), aText.size());
 
     CPPUNIT_ASSERT_EQUAL(u"ه"_ustr, aText[0].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ل\r\n\u064e\u0651\u0670"_ustr, aText[1].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[2].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[3].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[4].trim());
     CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[5].trim());
     CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[6].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[7].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ل\u064e\u0651\u0670"_ustr, aText[7].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[8].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[9].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[10].trim());
@@ -6209,19 +6209,19 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
     CPPUNIT_ASSERT_EQUAL(size_t(17), aText.size());
 
     // Box 1: Not enough room for kashida
-    CPPUNIT_ASSERT_EQUAL(u"خط تخوردگی"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u"تخوردگی خط"_ustr, aText.at(0).trim());
     CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(1).trim());
 
     // Box 2: One kashida toward end
     CPPUNIT_ASSERT_EQUAL(u"وردگی"_ustr, aText.at(2).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim()); // Kashida
-    CPPUNIT_ASSERT_EQUAL(u"خط تخ"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"تخ خط"_ustr, aText.at(4).trim());
     CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(5).trim());
 
     // Box 3: Two kashida
     CPPUNIT_ASSERT_EQUAL(u"وردگی"_ustr, aText.at(6).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(7).trim()); // Kashida
-    CPPUNIT_ASSERT_EQUAL(u"ط تخ"_ustr, aText.at(8).trim());
+    CPPUNIT_ASSERT_EQUAL(u"تخ ط"_ustr, aText.at(8).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(9).trim()); // Kashida
     CPPUNIT_ASSERT_EQUAL(u"خ"_ustr, aText.at(10).trim());
     CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(11).trim());
@@ -6248,7 +6248,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105SwKashidaSpaceExpansion)
 
     CPPUNIT_ASSERT_EQUAL(u"یده"_ustr, aText.at(0).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ه کش"_ustr, aText.at(2).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u"کش ه"_ustr, aText.at(2).trim()); // This span is whitespace justified
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
     CPPUNIT_ASSERT_EQUAL(u"نویس"_ustr, aText.at(4).trim());
 
@@ -6272,7 +6272,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105Writer)
 
     CPPUNIT_ASSERT_EQUAL(u"ارسی"_ustr, aText.at(0).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
-    CPPUNIT_ASSERT_EQUAL(u"تن ف"_ustr, aText.at(2).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u"ف تن"_ustr, aText.at(2).trim()); // This span is whitespace justified
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
     CPPUNIT_ASSERT_EQUAL(u"م"_ustr, aText.at(4).trim());
 
@@ -6296,7 +6296,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105Editeng)
 
     CPPUNIT_ASSERT_EQUAL(u"ارسی"_ustr, aText.at(0).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
-    CPPUNIT_ASSERT_EQUAL(u"تن ف"_ustr, aText.at(2).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u"ف تن"_ustr, aText.at(2).trim()); // This span is whitespace justified
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
     CPPUNIT_ASSERT_EQUAL(u"م"_ustr, aText.at(4).trim());
 
@@ -6315,16 +6315,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf140767SyriacJustification)
     CPPUNIT_ASSERT_EQUAL(size_t(11), aText.size());
 
     CPPUNIT_ASSERT_EQUAL(u"ܝ"_ustr, aText.at(0).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ܺܛ"_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܛܺ"_ustr, aText.at(1).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(2).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ܰܚ"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܚܰ"_ustr, aText.at(4).trim());
     CPPUNIT_ASSERT_EQUAL(u"ܕ"_ustr, aText.at(5).trim()); // This span is whitespace justified
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(6).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ܰܓ"_ustr, aText.at(7).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܓܰ"_ustr, aText.at(7).trim());
     CPPUNIT_ASSERT_EQUAL(u"ܒ"_ustr, aText.at(8).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(9).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ܰܐ"_ustr, aText.at(10).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܐܰ"_ustr, aText.at(10).trim());
 
     // Without kashida justification, this space will be 224.328
     CPPUNIT_ASSERT_LESS(90.0, aRect.at(5).getWidth());

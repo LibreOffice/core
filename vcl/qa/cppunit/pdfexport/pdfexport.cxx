@@ -1541,7 +1541,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     for (int i = 0; i < nChars; i++)
         aChars[i] = pPdfTextPage->getUnicode(i);
     OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"\u0627\u0644 \u0648\u0642\u0641 \u0628\u0627\u0644 \u0627\u0644"_ustr,
                          aActualText);
 #endif
 }
@@ -1573,7 +1573,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
     // Without the fix in place, this test would have failed with
     // - Expected: ִبي
     // - Actual  : بִي
-    CPPUNIT_ASSERT_EQUAL(u"\u05B4\u0628\u064A"_ustr, aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"\u0628\u064A\u05B4"_ustr, aActualText);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
@@ -1633,7 +1633,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160401)
     // אאא בבב
     // - Actual  : אאא בבב
     // בבב אאא
-    CPPUNIT_ASSERT_EQUAL(u"אאא בבב\r\nאאא בבב"_ustr, aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"בבב אאא\r\nבבב אאא"_ustr, aActualText);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
