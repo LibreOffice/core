@@ -1038,10 +1038,20 @@ void PDFWriterImpl::checkAndEnableStreamEncryption(sal_Int32 nObject)
     m_pPDFEncryptor->setupEncryption(m_aContext.Encryption.EncryptionKey, nObject);
 }
 
-void PDFWriterImpl::disableStreamEncryption()
+void PDFWriterImpl::finishStreamEncryption()
 {
-    if (m_pPDFEncryptor)
-        m_pPDFEncryptor->disableStreamEncryption();
+    if (!m_pPDFEncryptor)
+        return;
+
+    if (m_pPDFEncryptor->isStreamEncryptionEnabled())
+    {
+        std::vector<sal_uInt8> data;
+        m_pPDFEncryptor->finishStreamEncryption(data);
+        if (!data.empty())
+        {
+            writeBufferBytes(data.data(), data.size());
+        }
+    }
 }
 
 sal_uInt64 PDFWriterImpl::calculateStreamSize(sal_uInt64 const nDataSize) const

@@ -157,6 +157,11 @@ public:
 
     void encryptWithIV(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
                        std::vector<sal_uInt8>& rIV);
+
+    void encryptStreamData(sal_uInt8 const* pInput, sal_uInt64 nInputSize,
+                           std::vector<sal_uInt8>& rOutput) override;
+
+    void finishStreamEncryption(std::vector<sal_uInt8>& rOutput) override;
 };
 
 } // end vcl::pdf

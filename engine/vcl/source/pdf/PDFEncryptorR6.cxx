@@ -263,6 +263,11 @@ class VCL_DLLPUBLIC EncryptionContext
 private:
     std::vector<sal_uInt8> maKey;
 
+    /** The cipher of the stream that is being written */
+    std::unique_ptr<comphelper::Encrypt> m_pStreamEncrypt;
+    /** Data of a block that is not complete yet */
+    std::vector<sal_uInt8> m_PartialBlock;
+
 public:
     EncryptionContext(std::vector<sal_uInt8> const& rKey)
         : maKey(rKey)
@@ -282,6 +287,67 @@ public:
         rOutput.resize(nPaddedSize + IV_SIZE);
         std::copy(rIV.begin(), rIV.end(), rOutput.begin());
         std::copy(aOutput.begin(), aOutput.end(), rOutput.begin() + IV_SIZE);
+    }
+
+    /** Algorithm 1.A on a stream that arrives in chunks.
+        Only whole blocks are given to the cipher, partial blocks are buffered.
+    */
+    void encryptStreamData(sal_uInt8 const* const pInput, sal_uInt64 const nInputSize,
+                           std::vector<sal_uInt8>& rOutput)
+    {
+        rOutput.clear();
+        startCipherForStream(rOutput);
+
+        m_PartialBlock.insert(m_PartialBlock.end(), pInput, pInput + nInputSize);
+
+        size_t const nWholeBlocks{ m_PartialBlock.size() - (m_PartialBlock.size() % BLOCK_SIZE) };
+        if (0 < nWholeBlocks)
+        {
+            std::vector<sal_uInt8> blocks(m_PartialBlock.begin(),
+                                          m_PartialBlock.begin() + nWholeBlocks);
+            m_PartialBlock.erase(m_PartialBlock.begin(), m_PartialBlock.begin() + nWholeBlocks);
+            appendEncrypted(blocks, rOutput);
+        }
+    }
+
+    /** The padding, and with it the last block of the stream
+
+        A stream that carried no data at all still comes out as the
+        initialisation vector followed by one block of padding.
+    */
+    void finishStreamEncryption(std::vector<sal_uInt8>& rOutput)
+    {
+        rOutput.clear();
+        startCipherForStream(rOutput);
+        addPaddingToVector(m_PartialBlock, BLOCK_SIZE);
+        appendEncrypted(m_PartialBlock, rOutput);
+
+        m_PartialBlock.clear();
+        m_pStreamEncrypt.reset();
+    }
+
+private:
+    /** On the first call, init the cipher and put the IV before the data */
+    void startCipherForStream(std::vector<sal_uInt8>& rOutput)
+    {
+        if (m_pStreamEncrypt)
+        {
+            return;
+        }
+
+        std::vector<sal_uInt8> streamIV;
+        generateBytes(streamIV, IV_SIZE);
+        m_pStreamEncrypt = std::make_unique<comphelper::Encrypt>(
+            maKey, streamIV, comphelper::CryptoType::AES_256_CBC);
+        rOutput.insert(rOutput.end(), streamIV.begin(), streamIV.end());
+    }
+
+    void appendEncrypted(std::vector<sal_uInt8>& rInput, std::vector<sal_uInt8>& rOutput)
+    {
+        assert(rInput.size() % BLOCK_SIZE == 0);
+        std::vector<sal_uInt8> buffer(rInput.size());
+        m_pStreamEncrypt->update(buffer, rInput);
+        rOutput.insert(rOutput.end(), buffer.begin(), buffer.end());
     }
 };
 
@@ -376,6 +442,18 @@ void PDFEncryptorR6::encryptWithIV(const void* pInput, sal_uInt64 nInputSize,
                                    std::vector<sal_uInt8>& rOutput, std::vector<sal_uInt8>& rIV)
 {
     m_pEncryptionContext->encrypt(pInput, nInputSize, rOutput, rIV);
+}
+
+void PDFEncryptorR6::encryptStreamData(sal_uInt8 const* const pInput, sal_uInt64 const nInputSize,
+                                       std::vector<sal_uInt8>& rOutput)
+{
+    m_pEncryptionContext->encryptStreamData(pInput, nInputSize, rOutput);
+}
+
+void PDFEncryptorR6::finishStreamEncryption(std::vector<sal_uInt8>& rOutput)
+{
+    m_pEncryptionContext->finishStreamEncryption(rOutput);
+    disableStreamEncryption();
 }
 
 } // end vcl::pdf

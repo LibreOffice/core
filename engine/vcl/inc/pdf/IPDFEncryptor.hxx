@@ -42,6 +42,9 @@ private:
     /* set to true if the following stream must be encrypted, used inside writeBuffer() */
     bool m_bEncryptThisStream = false;
 
+protected:
+    void disableStreamEncryption() { m_bEncryptThisStream = false; }
+
 public:
     virtual ~IPDFEncryptor() {}
 
@@ -87,8 +90,15 @@ public:
                          sal_uInt64 nOutputSize)
         = 0;
 
+    /** Encrypts one chunk of the stream that is currently being written */
+    virtual void encryptStreamData(sal_uInt8 const* pInput, sal_uInt64 nInputSize,
+                                   std::vector<sal_uInt8>& rOutput)
+        = 0;
+
+    /** Ends the run of the cipher with padding and returns any buffered data */
+    virtual void finishStreamEncryption(std::vector<sal_uInt8>& rOutput) = 0;
+
     void enableStreamEncryption() { m_bEncryptThisStream = true; }
-    void disableStreamEncryption() { m_bEncryptThisStream = false; }
     bool isStreamEncryptionEnabled() { return m_bEncryptThisStream; }
 };
 }

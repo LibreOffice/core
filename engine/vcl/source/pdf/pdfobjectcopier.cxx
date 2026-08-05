@@ -185,7 +185,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
         if (!m_rContainer.writeBuffer(aLine))
             return -1;
         aLine.setLength(0);
-        m_rContainer.disableStreamEncryption();
+        m_rContainer.finishStreamEncryption();
 
         aLine.append("\nendstream\n");
         if (!m_rContainer.writeBuffer(aLine))

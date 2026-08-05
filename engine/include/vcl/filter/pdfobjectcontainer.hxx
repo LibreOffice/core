@@ -37,7 +37,7 @@ public:
 
     virtual void checkAndEnableStreamEncryption(sal_Int32 nObject) = 0;
 
-    virtual void disableStreamEncryption() = 0;
+    virtual void finishStreamEncryption() = 0;
 
     virtual sal_uInt64 calculateStreamSize(sal_uInt64 nDataSize) const = 0;
 

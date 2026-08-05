@@ -569,9 +569,13 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
         bool bStreamEncryption = m_pPDFEncryptor && m_pPDFEncryptor->isStreamEncryptionEnabled();
         if (bStreamEncryption)
         {
-            nActualSize = m_pPDFEncryptor->calculateSizeIncludingHeader(nActualSize);
-            m_vEncryptionBuffer.resize(nActualSize);
-            m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer, nActualSize);
+            m_pPDFEncryptor->encryptStreamData(static_cast<sal_uInt8 const*>(pBuffer), nBytes, m_vEncryptionBuffer);
+            nActualSize = m_vEncryptionBuffer.size();
+            // The data is less than a full encryption block; wait for more data
+            if (nActualSize == 0)
+            {
+                return true;
+            }
         }
 
         const void* pWriteBuffer = bStreamEncryption ? m_vEncryptionBuffer.data() : pBuffer;
@@ -1363,7 +1367,7 @@ bool PDFWriterImpl::emitTilings()
         tiling.m_pTilingStream.reset();
         if( !written )
             return false;
-        disableStreamEncryption();
+        finishStreamEncryption();
         aTilingObj.setLength( 0 );
         aTilingObj.append( "\nendstream\nendobj\n\n" );
         if ( !writeBuffer( aTilingObj ) ) return false;
@@ -1749,7 +1753,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             checkAndEnableStreamEncryption(nStream);
             if (!writeBuffer(aContents))
                 return false;
-            disableStreamEncryption();
+            finishStreamEncryption();
             aLine.setLength(0);
             aLine.append("\nendstream\nendobj\n\n");
             if (!writeBuffer(aLine))
@@ -1971,7 +1975,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     {
         if (!writeBuffer(aContents)) return 0;
     }
-    disableStreamEncryption();
+    finishStreamEncryption();
     aLine.setLength( 0 );
     aLine.append( "\nendstream\n"
                   "endobj\n\n" );
@@ -2179,7 +2183,7 @@ bool PDFWriterImpl::emitFonts()
                 }
 
                 endCompression();
-                disableStreamEncryption();
+                finishStreamEncryption();
 
                 sal_uInt64 nEndPos = 0;
                 if ( osl::File::E_None != m_aFile.getPos(nEndPos) ) return false;
@@ -2576,7 +2580,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
             checkAndEnableStreamEncryption(rScreen.m_nTempFileObject);
             if (!writeBufferBytes(aMemoryStream.GetData(), aMemoryStream.GetSize()))
                 return false;
-            disableStreamEncryption();
+            finishStreamEncryption();
 
             aLine.append("\nendstream\nendobj\n\n");
             if (!writeBuffer(aLine))
@@ -3788,7 +3792,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 if (!writeBuffer(aLine)) return false;
                 checkAndEnableStreamEncryption( nObject );
                 if (!writeBufferBytes( pAppearanceStream->GetData(), nStreamLen)) return false;
-                disableStreamEncryption();
+                finishStreamEncryption();
                 if (!writeBuffer("\nendstream\nendobj\n\n")) return false;
 
                 if( bUseSubDict )
@@ -4291,7 +4295,7 @@ bool PDFWriterImpl::emitEmbeddedFiles()
             sal_uInt64 const nStartPos{getCurrentFilePosition()};
             if (!writeBufferBytes(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()))
                 return false;
-            disableStreamEncryption();
+            finishStreamEncryption(); // before taking size
             nSize = sal_Int64(getCurrentFilePosition() - nStartPos);
         }
         else if (rEmbeddedFile.m_pStream)
@@ -4302,8 +4306,8 @@ bool PDFWriterImpl::emitEmbeddedFiles()
             rEmbeddedFile.m_pStream->write(xStream);
             rEmbeddedFile.m_pStream.reset();
             xStream.clear();
+            finishStreamEncryption();
             nSize = sal_Int64(getCurrentFilePosition() - nBegin);
-            disableStreamEncryption();
         }
         aLine.append("\nendstream\nendobj\n\n");
         if (!writeBuffer(aLine)) return false;
@@ -5019,8 +5023,9 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     cmsSaveProfileToMem(hProfile, aBuffer.data(), &nBytesNeeded);
     cmsCloseProfile(hProfile);
     bool written = writeBufferBytes( aBuffer.data(), aBuffer.size() );
-    disableStreamEncryption();
+    // write compressed data before finishing encryption
     endCompression();
+    finishStreamEncryption();
 
     sal_uInt64 nEndStreamPos = 0;
     if (m_aFile.getPos(nEndStreamPos) != osl::File::E_None)
@@ -5159,7 +5164,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         return 0;
 
     if (bEncryptMetadata)
-        disableStreamEncryption();
+        finishStreamEncryption();
 
     {
         COSWriter aWriter;
@@ -8026,7 +8031,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     checkAndEnableStreamEncryption( rObject.m_nObject );
     if (!writeBufferBytes(rObject.m_pContentStream->GetData(), nSize))
         return;
-    disableStreamEncryption();
+    finishStreamEncryption();
     aLine.setLength( 0 );
     aLine.append( "\n"
                   "endstream\n"
@@ -8183,7 +8188,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             }
     }
     endCompression();
-    disableStreamEncryption();
+    finishStreamEncryption();
 
     sal_uInt64 nEndStreamPos = 0;
     if (osl::File::E_None != m_aFile.getPos(nEndStreamPos))
@@ -8343,7 +8348,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     checkAndEnableStreamEncryption( rObject.m_nObject );
     if (!writeBufferBytes(rObject.m_pStream->GetData(), nLength))
         return;
-    disableStreamEncryption();
+    finishStreamEncryption();
 
     aLine.setLength( 0 );
     if (!writeBuffer("\nendstream\nendobj\n\n"))
@@ -8572,7 +8577,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         if (!writeBuffer(aLine))
             return;
         aLine.setLength(0);
-        disableStreamEncryption();
+        finishStreamEncryption();
 
         aLine.append("\nendstream\nendobj\n\n");
         if (!writeBuffer(aLine))
@@ -8680,7 +8685,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     if (!writeBuffer(aLine))
         return;
     aLine.setLength(0);
-    disableStreamEncryption();
+    finishStreamEncryption();
 
     aLine.append("\nendstream\nendobj\n\n");
     if (!writeBuffer(aLine))
@@ -8945,7 +8950,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
         }
         endCompression();
     }
-    disableStreamEncryption();
+    finishStreamEncryption();
 
     sal_uInt64 nEndPos = 0;
     if (osl::File::E_None != m_aFile.getPos(nEndPos))
@@ -9038,7 +9043,7 @@ bool PDFWriterImpl::writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMas
             return false;
     }
     endCompression();
-    disableStreamEncryption();
+    finishStreamEncryption();
 
     sal_uInt64 nEndPos = 0;
     if (osl::File::E_None != m_aFile.getPos(nEndPos))

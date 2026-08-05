@@ -59,6 +59,11 @@ public:
 
     void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
                  sal_uInt64 nOutputSize) override;
+
+    void encryptStreamData(sal_uInt8 const* pInput, sal_uInt64 nInputSize,
+                           std::vector<sal_uInt8>& rOutput) override;
+
+    void finishStreamEncryption(std::vector<sal_uInt8>& rOutput) override;
 };
 }
 

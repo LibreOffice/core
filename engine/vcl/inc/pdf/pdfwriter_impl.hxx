@@ -899,7 +899,7 @@ private:
 
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
-    void disableStreamEncryption() override;
+    void finishStreamEncryption() override;
 
     /** Number of bytes that nDataSize bytes of input data occupy, taking
         into account encryption overhead. */

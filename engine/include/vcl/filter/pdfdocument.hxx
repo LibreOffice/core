@@ -347,7 +347,7 @@ class VCL_DLLPUBLIC PDFHexStringElement final : public PDFElement
 
 public:
     SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
-    SAL_DLLPRIVATE const OString& GetValue() const;
+    const OString& GetValue() const;
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -600,7 +600,7 @@ public:
     /// See vcl::PDFObjectContainer::writeBuffer().
     SAL_DLLPRIVATE bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) override;
     void checkAndEnableStreamEncryption(sal_Int32 /*nObject*/) override {}
-    void disableStreamEncryption() override {}
+    void finishStreamEncryption() override {}
     sal_uInt64 calculateStreamSize(sal_uInt64 const nDataSize) const override { return nDataSize; }
 };
 

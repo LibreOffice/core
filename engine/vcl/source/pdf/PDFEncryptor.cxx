@@ -405,6 +405,20 @@ void PDFEncryptor::encrypt(const void* pInput, sal_uInt64 nInputSize,
                              sal_Size(nOutputsSize));
 }
 
+void PDFEncryptor::encryptStreamData(sal_uInt8 const* const pInput, sal_uInt64 const nInputSize,
+                                     std::vector<sal_uInt8>& rOutput)
+{
+    // RC4 is a stream cipher so it's just byte goes in, byte comes out
+    rOutput.resize(nInputSize);
+    encrypt(pInput, nInputSize, rOutput, nInputSize);
+}
+
+void PDFEncryptor::finishStreamEncryption(std::vector<sal_uInt8>& rOutput)
+{
+    rOutput.clear();
+    disableStreamEncryption();
+}
+
 } // end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

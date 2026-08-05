@@ -114,6 +114,7 @@ void PDFPage::endStream()
 {
     if (!g_bDebugDisableCompression)
         m_pWriter->endCompression();
+    m_pWriter->finishStreamEncryption();
     sal_uInt64 nEndStreamPos;
     if (osl::File::E_None != m_pWriter->m_aFile.getPos(nEndStreamPos))
     {
@@ -121,7 +122,6 @@ void PDFPage::endStream()
         m_pWriter->m_bOpen = false;
         return;
     }
-    m_pWriter->disableStreamEncryption();
     if( ! m_pWriter->writeBuffer( "\nendstream\nendobj\n\n" ) )
         return;
     // emit stream length object
