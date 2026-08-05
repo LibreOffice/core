@@ -30,6 +30,7 @@
 #include "porlin.hxx"
 #include "portxt.hxx"
 #include "possiz.hxx"
+#include <basegfx/units/Length.hxx>
 
 class SwTextPaintInfo;
 class SwFont;
@@ -128,16 +129,17 @@ public:
 // The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTextPortion
 {
-    SwTwips m_nInnerWidth;
+    gfx::Length m_nInnerWidth;
 public:
-    explicit SwHangingPortion( SwPositiveSize aSize ) : m_nInnerWidth( aSize.Width() )
+    explicit SwHangingPortion(SwPositiveSize aSize)
+        : m_nInnerWidth(gfx::Length::twip(aSize.Width()))
     {
         SetWhichPor( PortionType::Hanging );
         SetLen(TextFrameIndex(1));
         Height( aSize.Height() );
     }
 
-    SwTwips GetInnerWidth() const { return m_nInnerWidth; }
+    gfx::Length GetInnerWidth() const { return m_nInnerWidth; }
 };
 
 // Used to hide text
