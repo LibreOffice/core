@@ -1,0 +1,32 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <svtools/restartdialog.hxx>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+constexpr TranslateId RID_RESTART_REASONS[] =
+{
+    NC_("restartdialog|reason_java", "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted."), // svtools::RESTART_REASON_JAVA
+    NC_("restartdialog|reason_bibliography_install", "For the bibliography to work properly, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL
+    NC_("restartdialog|reason_mailmerge_install", "For mail merge to work properly, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_MAILMERGE_INSTALL
+    NC_("restartdialog|reason_language_change", "For the updated UI language setting to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_LANGUAGE_CHANGE)
+    NC_("restartdialog|reason_assigning_folders", "For the assigned folders and archives to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_ASSIGNING_FOLDERS)
+    NC_("restartdialog|reason_assigning_javaparameters", "For the assigned Java parameters to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS)
+    NC_("restartdialog|reason_adding_path", "For the added path to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_ADDING_PATH)
+    NC_("restartdialog|reason_exp_features", "For the modified experimental features to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_EXP_FEATURES)
+    NC_("restartdialog|reason_extension_install", "For the extension to work properly, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_EXTENSION_INSTALL)
+    NC_("restartdialog|reason_theme_reload", "To apply theme changes, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_THEME_CHANGE)
+    NC_("restartdialog|reason_skia", "For the Skia changes to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_SKIA)
+    NC_("restartdialog|reason_calculation", "For the Calculation settings changes to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_CALCULATION)
+    NC_("restartdialog|reason_high_contrast", "For the High Contrast setting change to take effect, %PRODUCTNAME must be restarted.") , // svtools::RESTART_REASON_HIGH_CONTRAST)
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+

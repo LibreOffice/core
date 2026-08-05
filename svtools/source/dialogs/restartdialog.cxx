@@ -21,7 +21,12 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <svtools/svtresid.hxx>
+#include <unotools/resmgr.hxx>
+
+#include <restart.hrc>
 
 namespace {
 
@@ -32,50 +37,9 @@ public:
         , btnYes_(m_xBuilder->weld_button(u"yes"_ustr))
         , btnNo_(m_xBuilder->weld_button(u"no"_ustr))
     {
-        switch (reason) {
-        case svtools::RESTART_REASON_JAVA:
-            reason_ = m_xBuilder->weld_widget(u"reason_java"_ustr);
-            break;
-        case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
-            reason_ = m_xBuilder->weld_widget(u"reason_bibliography_install"_ustr);
-            break;
-        case svtools::RESTART_REASON_MAILMERGE_INSTALL:
-            reason_ = m_xBuilder->weld_widget(u"reason_mailmerge_install"_ustr);
-            break;
-        case svtools::RESTART_REASON_LANGUAGE_CHANGE:
-            reason_ = m_xBuilder->weld_widget(u"reason_language_change"_ustr);
-            break;
-        case svtools::RESTART_REASON_ADDING_PATH:
-            reason_ = m_xBuilder->weld_widget(u"reason_adding_path"_ustr);
-            break;
-        case svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS:
-            reason_ = m_xBuilder->weld_widget(u"reason_assigning_javaparameters"_ustr);
-            break;
-        case svtools::RESTART_REASON_ASSIGNING_FOLDERS:
-            reason_ = m_xBuilder->weld_widget(u"reason_assigning_folders"_ustr);
-            break;
-        case svtools::RESTART_REASON_EXP_FEATURES:
-            reason_ = m_xBuilder->weld_widget(u"reason_exp_features"_ustr);
-            break;
-        case svtools::RESTART_REASON_EXTENSION_INSTALL:
-            reason_ = m_xBuilder->weld_widget(u"reason_extension_install"_ustr);
-            break;
-        case svtools::RESTART_REASON_THEME_CHANGE:
-            reason_ = m_xBuilder->weld_widget(u"reason_theme_reload"_ustr);
-            break;
-        case svtools::RESTART_REASON_SKIA:
-            reason_ = m_xBuilder->weld_widget(u"reason_skia"_ustr);
-            break;
-        case svtools::RESTART_REASON_CALCULATION:
-            reason_ = m_xBuilder->weld_widget(u"reason_calculation"_ustr);
-            break;
-        case svtools::RESTART_REASON_HIGH_CONTRAST:
-            reason_ = m_xBuilder->weld_widget(u"reason_high_contrast"_ustr);
-            break;
-        default:
-            assert(false); // this cannot happen
-        }
-        reason_->show();
+        assert(reason < svtools::RESTART_REASON_NONE);
+        reason_ = m_xBuilder->weld_label(u"reason_template"_ustr);
+        reason_->set_label(SvtResId(RID_RESTART_REASONS[reason]));
         btnYes_->connect_clicked(LINK(this, RestartDialog, hdlYes));
         btnNo_->connect_clicked(LINK(this, RestartDialog, hdlNo));
     }
@@ -83,7 +47,7 @@ private:
     DECL_LINK(hdlYes, weld::Button&, void);
     DECL_LINK(hdlNo, weld::Button&, void);
 
-    std::unique_ptr<weld::Widget> reason_;
+    std::unique_ptr<weld::Label> reason_;
     std::unique_ptr<weld::Button> btnYes_;
     std::unique_ptr<weld::Button> btnNo_;
 };
