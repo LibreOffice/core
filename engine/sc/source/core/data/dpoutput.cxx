@@ -913,8 +913,8 @@ void ScDPOutput::Output()
     if (mbSizeOverflow || mbResultsError)   // does output area exceed sheet limits?
         return;                             // nothing
 
-    // Collect the pivot table sections while the content is written, so all the visual
-    // formatting can be drawn in one pass at the end.
+    // Collect the pivot table sections while the header content is written, so all the visual
+    // formatting can be drawn in one pass.
     mpStyleOutput->clear();
     {
         sc::pivot::Geometry aGeometry;
@@ -992,9 +992,12 @@ void ScDPOutput::Output()
         maFormatOutput.insertEmptyDataColumn(nCol, nRow);
     }
 
-    outputDataResults(nTab);
-
+    // Draw the visual formatting of the table before the results are written. The results carry
+    // the number formats and the pivot table formats of the document, and those come out on top
+    // of the frames, the bold weight and the alignment that are drawn here.
     mpStyleOutput->apply();
+
+    outputDataResults(nTab);
 }
 
 void ScDPOutput::Output(const ScRange& rOldRange, bool bCheckForSpill)
