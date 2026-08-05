@@ -1979,8 +1979,13 @@ class SettingIframe {
 		}));
 
 		const getDefaultZoomValueId = function (zoom: number | undefined): string {
-			if (!zoom || zoom < 0 || zoom >= ZOOM_LEVELS.length)
-				return defaultBrowserSetting.defaultZoom.toString();
+			if (
+				zoom === undefined ||
+				!Number.isInteger(zoom) ||
+				zoom < 0 ||
+				zoom >= ZOOM_LEVELS.length
+			)
+				return defaultBrowserSetting.defaultZoom.value.toString();
 			return zoom.toString();
 		};
 
