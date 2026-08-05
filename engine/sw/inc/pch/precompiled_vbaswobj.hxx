@@ -272,7 +272,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <dmapper/resourcemodel.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autodiritem.hxx>
 #include <editeng/editengdllapi.h>
