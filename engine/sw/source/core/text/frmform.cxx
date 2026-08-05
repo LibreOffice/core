@@ -1629,19 +1629,19 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
 
         // Finally we enlarge the repaint rectangle if we found an underscore
         // or another glyph extending beyond the line height within the line.
-        auto nBaseAscent = pNew->GetAscent();
-        auto nMaxExtraAscent
-            = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraAscent() - nBaseAscent,
-                         rLine.GetCurr()->GetExtraAscent().as_twip<SwTwips>() });
-        rRepaint.Top(rRepaint.Top() - nMaxExtraAscent);
-        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraAscent(gfx::Length::twip(nMaxExtraAscent));
+        const gfx::Length nBaseAscent = gfx::Length::twip(pNew->GetAscent());
+        const gfx::Length nMaxExtraAscent
+            = std::max({ 0_emu, rLine.GetInfo().GetExtraAscent() - nBaseAscent,
+                         rLine.GetCurr()->GetExtraAscent() });
+        rRepaint.Top(rRepaint.Top() - nMaxExtraAscent.as_twip<SwTwips>());
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraAscent(nMaxExtraAscent);
 
-        auto nBaseDescent = pNew->Height() - pNew->GetAscent();
-        auto nMaxExtraDescent
-            = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraDescent() - nBaseDescent,
-                         rLine.GetCurr()->GetExtraDescent().as_twip<SwTwips>() });
-        rRepaint.Bottom(rRepaint.Bottom() + nMaxExtraDescent);
-        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraDescent(gfx::Length::twip(nMaxExtraDescent));
+        const gfx::Length nBaseDescent = gfx::Length::twip(pNew->Height() - pNew->GetAscent());
+        const gfx::Length nMaxExtraDescent
+            = std::max({ 0_emu, rLine.GetInfo().GetExtraDescent() - nBaseDescent,
+                         rLine.GetCurr()->GetExtraDescent() });
+        rRepaint.Bottom(rRepaint.Bottom() + nMaxExtraDescent.as_twip<SwTwips>());
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraDescent(nMaxExtraDescent);
     }
 
     // Calculating the good ol' nDelta

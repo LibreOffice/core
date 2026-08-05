@@ -1773,8 +1773,8 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_nFirst = 0;
     m_nRealWidth = 0;
     m_nForcedLeftMargin = 0;
-    m_nExtraAscent = 0;
-    m_nExtraDescent = 0;
+    m_nExtraAscent = 0_emu;
+    m_nExtraDescent = 0_emu;
     m_pRest = nullptr;
     m_nLineHeight = 0;
     m_nLineNetHeight = 0;
@@ -1872,8 +1872,8 @@ void SwTextFormatInfo::Init()
     m_cTabDecimal = 0;
     m_nWidth = m_nRealWidth;
     m_nForcedLeftMargin = 0;
-    m_nExtraAscent = 0;
-    m_nExtraDescent = 0;
+    m_nExtraAscent = 0_emu;
+    m_nExtraDescent = 0_emu;
     m_nSoftHyphPos = TextFrameIndex(0);
     m_nLastBookmarkPos = TextFrameIndex(-1);
     ClearHookChar();
@@ -1915,8 +1915,8 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_nLineHeight(0),
     m_nLineNetHeight(0),
     m_nForcedLeftMargin(0),
-    m_nExtraAscent(0),
-    m_nExtraDescent(0),
+    m_nExtraAscent(0_emu),
+    m_nExtraDescent(0_emu),
     m_bFull(false),
     m_bFootnoteDone(true),
     m_bErgoDone(true),

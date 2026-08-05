@@ -25,6 +25,7 @@
 #include <map>
 
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include <swrect.hxx>
 #include <txtfly.hxx>
 #include <swfont.hxx>
@@ -529,8 +530,8 @@ class SwTextFormatInfo : public SwTextPaintInfo
     SwTwips m_nLineHeight;     // Final height after CalcLine
     SwTwips m_nLineNetHeight; // line height without spacing
     SwTwips m_nForcedLeftMargin; // Shift of left margin due to frame
-    SwTwips m_nExtraAscent = 0; // Enlarge clipping area for glyphs above the line height
-    SwTwips m_nExtraDescent = 0; // Enlarge clipping area for glyphs below the line height
+    gfx::Length m_nExtraAscent = 0_emu; // Enlarge clipping area for glyphs above the line height
+    gfx::Length m_nExtraDescent = 0_emu; // Enlarge clipping area for glyphs below the line height
 
     bool m_bFull : 1;             // Line is full
     bool m_bFootnoteDone : 1;          // Footnote already formatted
@@ -704,11 +705,11 @@ public:
     // Should the hyphenate helper be discarded?
     bool IsHyphenate() const;
 
-    SwTwips GetExtraAscent() const { return m_nExtraAscent; }
-    void SetExtraAscent(SwTwips nNew) { m_nExtraAscent = std::max(m_nExtraAscent, nNew); }
+    gfx::Length GetExtraAscent() const { return m_nExtraAscent; }
+    void SetExtraAscent(gfx::Length nNew) { m_nExtraAscent = std::max(m_nExtraAscent, nNew); }
 
-    SwTwips GetExtraDescent() const { return m_nExtraDescent; }
-    void SetExtraDescent(SwTwips nNew) { m_nExtraDescent = std::max(m_nExtraDescent, nNew); }
+    gfx::Length GetExtraDescent() const { return m_nExtraDescent; }
+    void SetExtraDescent(gfx::Length nNew) { m_nExtraDescent = std::max(m_nExtraDescent, nNew); }
 
     // Calls HyphenateWord() of Hyphenator
     css::uno::Reference< css::linguistic2::XHyphenatedWord >

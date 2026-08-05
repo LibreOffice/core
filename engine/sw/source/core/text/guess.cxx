@@ -282,8 +282,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             if ( nMaxSizeDiff )
                 rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
-            rInf.SetExtraAscent(nExtraAscent);
-            rInf.SetExtraDescent(nExtraDescent);
+            rInf.SetExtraAscent(gfx::Length::twip(nExtraAscent));
+            rInf.SetExtraDescent(gfx::Length::twip(nExtraDescent));
 
             m_nBreakWidth += nLeftRightBorderSpace;
 
@@ -572,8 +572,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             if ( nMaxSizeDiff )
                 rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
-            rInf.SetExtraAscent(nExtraAscent);
-            rInf.SetExtraDescent(nExtraDescent);
+            rInf.SetExtraAscent(gfx::Length::twip(nExtraAscent));
+            rInf.SetExtraDescent(gfx::Length::twip(nExtraDescent));
 
             m_nBreakWidth += nLeftRightBorderSpace;
 
@@ -886,8 +886,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if ( nMaxSizeDiff )
             rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
-        rInf.SetExtraAscent(nExtraAscent);
-        rInf.SetExtraDescent(nExtraDescent);
+        rInf.SetExtraAscent(gfx::Length::twip(nExtraAscent));
+        rInf.SetExtraDescent(gfx::Length::twip(nExtraDescent));
 
         m_nBreakWidth += nItalic + nLeftRightBorderSpace;
     }
