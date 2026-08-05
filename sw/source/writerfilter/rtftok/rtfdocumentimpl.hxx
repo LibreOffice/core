@@ -85,6 +85,8 @@ enum class RTFBufferTypes
     /// Imports a shape.
     ResolveShape,
     EndShape,
+    /// Inserts an already built shape, see RTFDocumentImpl::bufferShapeInsertion().
+    InsertShape,
     ResolveSubstream,
     /// Restores RTFParserState::aPicture.
     Picture
@@ -738,6 +740,13 @@ public:
     void setDestinationText(std::u16string_view rString);
     /// Resolve a picture: If not inline, then anchored.
     void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& rShape);
+    /** tdf#167713 defer inserting a built shape into the text, if content is being buffered
+
+        Inside a table the cells only come into existence when the row buffer is replayed, so the
+        shape has to wait for the cell it belongs to. Returns false when nothing is being buffered
+        and the caller should insert the shape itself.
+    */
+    bool bufferShapeInsertion(css::uno::Reference<css::drawing::XShape> const& rShape, bool bClose);
 
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();

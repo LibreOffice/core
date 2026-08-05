@@ -1311,6 +1311,19 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     }
 }
 
+bool RTFDocumentImpl::bufferShapeInsertion(uno::Reference<drawing::XShape> const& rShape,
+                                           bool const bClose)
+{
+    RTFBuffer_t* pBuffer = m_aStates.empty() ? nullptr : m_aStates.top().getCurrentBuffer();
+    if (!pBuffer)
+        return false;
+
+    pBuffer->emplace_back(RTFBufferTypes::InsertShape, new RTFValue(rShape), nullptr);
+    if (bClose)
+        pBuffer->emplace_back(RTFBufferTypes::EndShape, nullptr, nullptr);
+    return true;
+}
+
 RTFError RTFDocumentImpl::resolveChars(char ch)
 {
     if (m_aStates.top().getInternalState() == RTFInternalState::BIN)
@@ -1989,6 +2002,13 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         else if (std::get<0>(aTuple) == RTFBufferTypes::EndShape)
             m_pSdrImport->close();
+        else if (std::get<0>(aTuple) == RTFBufferTypes::InsertShape)
+        {
+            uno::Reference<drawing::XShape> xShape;
+            std::get<1>(aTuple)->getAny() >>= xShape;
+            if (xShape.is())
+                Mapper().startShape(xShape);
+        }
         else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveSubstream)
         {
             RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();

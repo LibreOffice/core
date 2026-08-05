@@ -1020,6 +1020,23 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineFormulaTextMode)
                          getProperty<bool>(xDisplay->getEmbeddedObject(), u"IsTextMode"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167713)
+{
+    // A picture is inserted while its row is still being buffered, and the cells do not exist until
+    // the row is replayed, so every picture in a row used to end up in the row's first cell.
+    createSwDoc("tdf167713.rtf");
+
+    // The row holds text in A1, then a picture in B1 and another in C1.
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    auto xImage1 = getShape(1).queryThrow<text::XTextContent>();
+    CPPUNIT_ASSERT_EQUAL(u"B1"_ustr,
+                         getProperty<OUString>(xImage1->getAnchor()->getText(), u"CellName"_ustr));
+
+    auto xImage2 = getShape(2).queryThrow<text::XTextContent>();
+    CPPUNIT_ASSERT_EQUAL(u"C1"_ustr,
+                         getProperty<OUString>(xImage2->getAnchor()->getText(), u"CellName"_ustr));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
