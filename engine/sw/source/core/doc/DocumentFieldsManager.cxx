@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <DocumentFieldsManager.hxx>
+#include <climits>
 #include <config_features.h>
 #include <config_fuzzers.h>
 #include <doc.hxx>
@@ -1224,7 +1225,8 @@ void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->UpdateDocPos(gfx::Length::twip(nDocPos));
+            pFieldType->UpdateDocPos(nDocPos == LONG_MAX ? gfx::Length::maximum()
+                                                        : gfx::Length::twip(nDocPos));
             break;
         case SwFieldIds::DocStat:
         {
