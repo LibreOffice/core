@@ -453,6 +453,8 @@ class HRuler extends Ruler {
 
 	_updateOptions(obj: Options) {
 		// window.app.console.log('===> _updateOptions');
+		if (obj['margin1'] === 0 && obj['margin2'] === 0) return;
+
 		// Note that the values for margin1, margin2 and leftOffset are not in any sane
 		// units. See the comment in SwCommentRuler::CreateJsonNotification(). The values
 		// are pixels for some virtual device in core, not related to the actual device this
