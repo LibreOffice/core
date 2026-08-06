@@ -175,6 +175,10 @@ function _menubuttonControl(
 					control.container,
 					freshMenu,
 					callback,
+					'',
+					false,
+					false,
+					true,
 				);
 			}
 		};

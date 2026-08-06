@@ -19,6 +19,11 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 		cy.cGet('#toolbar-up #Home .unoConditionalFormatMenu:visible').click();
 
 		desktopHelper.getDropdown('home-conditional-format-menu').click();
+
+		// Should not have the first entry selected by default.
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Highlight cells with...').parent().should('not.have.class', 'selected');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Manage...').parent().should('not.have.class', 'selected');
+
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Manage...').click();
 
 		cy.cGet('body').contains('.ui-pushbutton.jsdialog', 'Edit').click();

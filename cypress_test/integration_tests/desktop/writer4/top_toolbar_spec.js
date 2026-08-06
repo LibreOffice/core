@@ -445,6 +445,13 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 		});
 		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Viewing');
 
+		cy.cGet('#viewModeDropdownButton-button').click();
+		// Although default selection is diabled, jsdialog json should have explicitly selected the 'Viewing Mode' entry.
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').contains('span', 'Viewing Mode').parent().should('have.class', 'selected');
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').contains('span', 'Editing Mode').parent().should('have.not.class', 'selected');
+		cy.cGet('#viewModeDropdownButton-button').type('{esc}', { force: true });
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').should('not.exist');
+
 		// Press Ctrl+B - should be blocked in view mode.
 		helper.typeIntoDocument('{ctrl}b');
 
@@ -456,6 +463,14 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 		cy.getFrameWindow().its('app').then(function(app) {
 			app.map.setPermission('edit');
 		});
+
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Editing');
+		cy.cGet('#viewModeDropdownButton-button').click();
+		// jsdialog json should have selected the 'Editing Mode' entry.
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').contains('span', 'Editing Mode').parent().should('have.class', 'selected');
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').contains('span', 'Viewing Mode').parent().should('have.not.class', 'selected');
+		cy.cGet('#viewModeDropdownButton-button').type('{esc}', { force: true });
+		cy.cGet('div.ui-combobox-entry.jsdialog.ui-grid-cell').should('not.exist');
 
 		helper.setDummyClipboardForCopy();
 		writerHelper.selectAllTextOfDoc();
