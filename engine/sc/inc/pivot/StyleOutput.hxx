@@ -51,79 +51,77 @@ struct Geometry
     size_t mnRowFieldCount = 0;
 };
 
-/** A cell with a field caption. When bFrame is true, the cell is part of the table area and
- *  carries a thin frame around it. */
+/** A cell with a field caption. mbInTable is true for a caption that sits inside the table
+ *  area and false for one above it, such as the caption of a page field. */
 struct FieldCell
 {
-    SCCOL nCol = -1;
-    SCROW nRow = -1;
-    bool bFrame = false;
+    SCCOL mnCol = -1;
+    SCROW mnRow = -1;
+    bool mbInTable = false;
 };
 
 /** A cell holding the selected value of a page field. */
 struct PageFieldValueCell
 {
-    SCCOL nCol = -1;
-    SCROW nRow = -1;
+    SCCOL mnCol = -1;
+    SCROW mnRow = -1;
 };
 
-/** One member of a column field, spanning the columns nStartCol to nEndCol in the header row
- *  nRow. nField is the position of the field among the column fields. */
+/** One member of a column field. The member spans the columns mnStartCol to mnEndCol in the
+ *  header row mnRow. mnField is the position of the field among the column fields. */
 struct ColumnMemberSpan
 {
-    size_t nField = 0;
-    SCCOL nStartCol = -1;
-    SCCOL nEndCol = -1;
-    SCROW nRow = -1;
+    size_t mnField = 0;
+    SCCOL mnStartCol = -1;
+    SCCOL mnEndCol = -1;
+    SCROW mnRow = -1;
 };
 
-/** One member of a row field, spanning the rows nStartRow to nEndRow in the header column
- *  nCol. nField is the position of the field among the row fields. */
+/** One member of a row field. The member spans the rows mnStartRow to mnEndRow in the header
+ *  column mnCol. mnField is the position of the field among the row fields. */
 struct RowMemberSpan
 {
-    size_t nField = 0;
-    SCCOL nCol = -1;
-    SCROW nStartRow = -1;
-    SCROW nEndRow = -1;
+    size_t mnField = 0;
+    SCCOL mnCol = -1;
+    SCROW mnStartRow = -1;
+    SCROW mnEndRow = -1;
 };
 
-/** A column holding subtotal results. The header cells reach from nStartRow down to the row
- *  above the data start row, and the result cells fill the column below. bGrandTotal is true
- *  for the grand total column. */
+/** A column holding subtotal results. Its header cells begin in the row mnStartRow, and
+ *  mbGrandTotal is true for the column that holds the grand total. */
 struct SubtotalColumn
 {
-    SCCOL nCol = -1;
-    SCROW nStartRow = -1;
-    bool bGrandTotal = false;
+    SCCOL mnCol = -1;
+    SCROW mnStartRow = -1;
+    bool mbGrandTotal = false;
 };
 
-/** A row holding subtotal results. The header cells reach from nStartCol to the column left
- *  of the data start column, and the result cells fill the row to the right. bGrandTotal is
- *  true for the grand total row. */
+/** A row holding subtotal results. Its header cells begin in the column mnStartCol, and
+ *  mbGrandTotal is true for the row that holds the grand total. */
 struct SubtotalRow
 {
-    SCROW nRow = -1;
-    SCCOL nStartCol = -1;
-    bool bGrandTotal = false;
+    SCROW mnRow = -1;
+    SCCOL mnStartCol = -1;
+    bool mbGrandTotal = false;
 };
 
-/** A row field member cell with indented content. The indent value is in twips. */
+/** A row field member cell whose content is indented by mnIndent twips. */
 struct Indent
 {
-    SCCOL nCol = -1;
-    SCROW nRow = -1;
-    tools::Long nIndent = 0;
+    SCCOL mnCol = -1;
+    SCROW mnRow = -1;
+    tools::Long mnIndent = 0;
 };
 
-/** A row field member cell that shows an expand or collapse button. */
+/** A row field member cell that shows an expand or a collapse button. */
 struct Expander
 {
-    SCCOL nCol = -1;
-    SCROW nRow = -1;
-    ScMF nFlags = ScMF::NONE;
+    SCCOL mnCol = -1;
+    SCROW mnRow = -1;
+    ScMF mnFlags = ScMF::NONE;
 };
 
-/** Collects the sections of a pivot table while the table content is written to the sheet, and
+/** Collects the sections of a pivot table while the header content is written to the sheet, and
  *  then draws the whole visual formatting of the pivot table (block frames, member indents and
  *  the expand and collapse buttons) in one pass over the collected sections. */
 class StyleOutput
@@ -143,16 +141,14 @@ private:
     std::vector<Expander> maExpanderCells;
 
 public:
-    StyleOutput(ScDocument& rDocument)
+    explicit StyleOutput(ScDocument& rDocument)
         : mrDocument(rDocument)
     {
     }
 
-    void setGeometry(Geometry const& rGeometry) { maGeometry = rGeometry; }
-
-    void addFieldCell(SCCOL nCol, SCROW nRow, bool bFrame)
+    void addFieldCell(SCCOL nCol, SCROW nRow, bool bInTable)
     {
-        maFieldCells.push_back(FieldCell{ nCol, nRow, bFrame });
+        maFieldCells.push_back(FieldCell{ nCol, nRow, bInTable });
     }
 
     void addPageFieldValueCell(SCCOL nCol, SCROW nRow)
@@ -190,7 +186,9 @@ public:
         maExpanderCells.push_back(Expander{ nCol, nRow, nFlags });
     }
 
-    void clear();
+    /// Drops the sections of the previous run and starts a new one with the given geometry.
+    void reset(Geometry const& rGeometry);
+
     void apply();
 };
 }

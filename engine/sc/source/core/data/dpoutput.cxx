@@ -568,7 +568,7 @@ void ScDPOutput::MultiFieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bRowFie
     nMergeFlag |= ScMF::ButtonPopup2;
 
     mpDocument->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
-    mpStyleOutput->addFieldCell(nCol, nRow, /*bFrame*/ false);
+    mpStyleOutput->addFieldCell(nCol, nRow, /*bInTable*/ true);
 }
 
 void ScDPOutput::FieldCell(
@@ -915,7 +915,6 @@ void ScDPOutput::Output()
 
     // Collect the pivot table sections while the header content is written, so all the visual
     // formatting can be drawn in one pass.
-    mpStyleOutput->clear();
     {
         sc::pivot::Geometry aGeometry;
         aGeometry.mnTab = nTab;
@@ -929,7 +928,7 @@ void ScDPOutput::Output()
         aGeometry.mnTabEndRow = mnTabEndRow;
         aGeometry.mnColumnFieldCount = mpColFields.size();
         aGeometry.mnRowFieldCount = mpRowFields.size();
-        mpStyleOutput->setGeometry(aGeometry);
+        mpStyleOutput->reset(aGeometry);
     }
 
     // Prepare format output

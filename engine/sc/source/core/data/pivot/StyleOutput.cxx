@@ -38,52 +38,48 @@ constexpr sal_uInt16 SC_DP_FRAME_WIDTH = SvxBorderLineWidth::Thin;
 
 constexpr Color SC_DP_FRAME_COLOR(0, 0, 0);
 
-void lcl_SetFrame(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                  sal_uInt16 nWidth)
+/** Draws a thin box around the given area. With bHorizontalLines the area also gets the same
+ *  line between each pair of rows inside it. */
+void applyFrame(ScDocument& rDocument, SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
+                SCROW nEndRow, bool bHorizontalLines)
 {
-    ::editeng::SvxBorderLine aLine(nullptr, nWidth, SvxBorderLineStyle::SOLID);
+    Color aColor = SC_DP_FRAME_COLOR;
+    ::editeng::SvxBorderLine aLine(&aColor, SC_DP_FRAME_WIDTH);
+
     SvxBoxItem aBox(ATTR_BORDER);
     aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
     aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
     aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
     aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+
     SvxBoxInfoItem aBoxInfo(ATTR_BORDER_INNER);
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, false);
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, false);
+    if (bHorizontalLines)
+    {
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI);
+        aBoxInfo.SetLine(&aLine, SvxBoxInfoItemLine::HORI);
+    }
+    else
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, false);
+
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, false);
 
-    rDoc.ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
-}
-
-void lcl_SetLeftAligned(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-                        SCROW nRow2)
-{
-    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
-    rDoc.ApplyPatternAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, aPattern);
-}
-
-void lcl_SetBold(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
-{
-    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
-    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT));
-    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT));
-    rDoc.ApplyPatternAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, aPattern);
+    rDocument.ApplyFrameAreaTab(ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), aBox,
+                                aBoxInfo);
 }
 
 /** Draws the block frames of the table: each block gets a thin box around it. The rows and
- *  columns where subtotal and member blocks begin are collected with AddRow and AddCol, and
- *  OutputDataArea then frames the blocks between them. */
+ *  columns where subtotal and member blocks begin are collected with addRow and addColumn, and
+ *  outputDataArea then frames the blocks between them. */
 class BlockFrameOutput
 {
     ScDocument& mrDocument;
     SCTAB mnTab;
-    std::vector<bool> mbNeedLineCols;
-    std::vector<SCCOL> mnCols;
+    std::vector<bool> maNeedLineCols;
+    std::vector<SCCOL> maCols;
 
-    std::vector<bool> mbNeedLineRows;
-    std::vector<SCROW> mnRows;
+    std::vector<bool> maNeedLineRows;
+    std::vector<SCROW> maRows;
 
     SCCOL mnTabStartCol;
     SCROW mnTabStartRow;
@@ -104,103 +100,83 @@ public:
         , mnTabEndCol(rGeometry.mnTabEndCol)
         , mnTabEndRow(rGeometry.mnTabEndRow)
     {
-        mbNeedLineCols.resize(mnTabEndCol - mnDataStartCol + 1, false);
-        mbNeedLineRows.resize(mnTabEndRow - mnDataStartRow + 1, false);
+        maNeedLineCols.resize(mnTabEndCol - mnDataStartCol + 1, false);
+        maNeedLineRows.resize(mnTabEndRow - mnDataStartRow + 1, false);
     }
 
-    void AddRow(SCROW nRow)
+    void addRow(SCROW nRow)
     {
-        if (!mbNeedLineRows[nRow - mnDataStartRow])
+        if (!maNeedLineRows[nRow - mnDataStartRow])
         {
-            mbNeedLineRows[nRow - mnDataStartRow] = true;
-            mnRows.push_back(nRow);
+            maNeedLineRows[nRow - mnDataStartRow] = true;
+            maRows.push_back(nRow);
         }
     }
 
-    void AddCol(SCCOL nCol)
+    void addColumn(SCCOL nCol)
     {
-        if (!mbNeedLineCols[nCol - mnDataStartCol])
+        if (!maNeedLineCols[nCol - mnDataStartCol])
         {
-            mbNeedLineCols[nCol - mnDataStartCol] = true;
-            mnCols.push_back(nCol);
+            maNeedLineCols[nCol - mnDataStartCol] = true;
+            maCols.push_back(nCol);
         }
     }
 
-    void OutputBlockFrame(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                          bool bHori = false)
+    void outputBlockFrame(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                          bool bHorizontalLines = false)
     {
-        Color color = SC_DP_FRAME_COLOR;
-        ::editeng::SvxBorderLine aLine(&color, SC_DP_FRAME_WIDTH);
-
-        SvxBoxItem aBox(ATTR_BORDER);
-        aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
-        aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
-        aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
-        aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
-
-        SvxBoxInfoItem aBoxInfo(ATTR_BORDER_INNER);
-        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, false);
-        if (bHori)
-        {
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI);
-            aBoxInfo.SetLine(&aLine, SvxBoxInfoItemLine::HORI);
-        }
-        else
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, false);
-
-        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, false);
-
-        mrDocument.ApplyFrameAreaTab(ScRange(nStartCol, nStartRow, mnTab, nEndCol, nEndRow, mnTab),
-                                     aBox, aBoxInfo);
+        applyFrame(mrDocument, mnTab, nStartCol, nStartRow, nEndCol, nEndRow, bHorizontalLines);
     }
 
-    void OutputDataArea()
+    void outputDataArea()
     {
-        AddRow(mnDataStartRow);
-        AddCol(mnDataStartCol);
+        addRow(mnDataStartRow);
+        addColumn(mnDataStartCol);
 
-        mnCols.push_back(mnTabEndCol + 1); //set last row bottom
-        mnRows.push_back(mnTabEndRow + 1); //set last col bottom
+        maCols.push_back(mnTabEndCol + 1); // right edge of the last block
+        maRows.push_back(mnTabEndRow + 1); // bottom edge of the last block
 
-        bool bAllRows = ((mnTabEndRow - mnDataStartRow + 2) == static_cast<SCROW>(mnRows.size()));
+        bool bAllRows = ((mnTabEndRow - mnDataStartRow + 2) == static_cast<SCROW>(maRows.size()));
 
-        std::sort(mnCols.begin(), mnCols.end());
-        std::sort(mnRows.begin(), mnRows.end());
+        std::sort(maCols.begin(), maCols.end());
+        std::sort(maRows.begin(), maRows.end());
 
-        for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(mnCols.size()) - 1; nCol++)
+        for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(maCols.size()) - 1; nCol++)
         {
             if (!bAllRows)
             {
-                if (nCol < static_cast<SCCOL>(mnCols.size()) - 2)
+                if (nCol < static_cast<SCCOL>(maCols.size()) - 2)
                 {
-                    for (SCROW i = nCol % 2; i < static_cast<SCROW>(mnRows.size()) - 2; i += 2)
-                        OutputBlockFrame(mnCols[nCol], mnRows[i], mnCols[nCol + 1] - 1,
-                                         mnRows[i + 1] - 1);
-                    if (mnRows.size() >= 2)
-                        OutputBlockFrame(mnCols[nCol], mnRows[mnRows.size() - 2],
-                                         mnCols[nCol + 1] - 1, mnRows[mnRows.size() - 1] - 1);
+                    for (SCROW i = nCol % 2; i < static_cast<SCROW>(maRows.size()) - 2; i += 2)
+                        outputBlockFrame(maCols[nCol], maRows[i], maCols[nCol + 1] - 1,
+                                         maRows[i + 1] - 1);
+                    if (maRows.size() >= 2)
+                        outputBlockFrame(maCols[nCol], maRows[maRows.size() - 2],
+                                         maCols[nCol + 1] - 1, maRows[maRows.size() - 1] - 1);
                 }
                 else
                 {
-                    for (SCROW i = 0; i < static_cast<SCROW>(mnRows.size()) - 1; i++)
-                        OutputBlockFrame(mnCols[nCol], mnRows[i], mnCols[nCol + 1] - 1,
-                                         mnRows[i + 1] - 1);
+                    for (SCROW i = 0; i < static_cast<SCROW>(maRows.size()) - 1; i++)
+                        outputBlockFrame(maCols[nCol], maRows[i], maCols[nCol + 1] - 1,
+                                         maRows[i + 1] - 1);
                 }
             }
             else
-                OutputBlockFrame(mnCols[nCol], mnRows.front(), mnCols[nCol + 1] - 1,
-                                 mnRows.back() - 1, bAllRows);
+                outputBlockFrame(maCols[nCol], maRows.front(), maCols[nCol + 1] - 1,
+                                 maRows.back() - 1, bAllRows);
         }
-        //out put rows area outer framer
+
+        // the outer frame around the row header area
         if (mnTabStartCol != mnDataStartCol)
         {
             if (mnTabStartRow != mnDataStartRow)
-                OutputBlockFrame(mnTabStartCol, mnTabStartRow, mnDataStartCol - 1,
+                outputBlockFrame(mnTabStartCol, mnTabStartRow, mnDataStartCol - 1,
                                  mnDataStartRow - 1);
-            OutputBlockFrame(mnTabStartCol, mnDataStartRow, mnDataStartCol - 1, mnTabEndRow);
+            outputBlockFrame(mnTabStartCol, mnDataStartRow, mnDataStartCol - 1, mnTabEndRow);
         }
-        //out put cols area outer framer
-        OutputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow - 1);
+
+        // the outer frame around the column header area
+        outputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow - 1);
     }
 };
 
@@ -208,9 +184,9 @@ public:
 
 namespace sc::pivot
 {
-void StyleOutput::clear()
+void StyleOutput::reset(Geometry const& rGeometry)
 {
-    maGeometry = Geometry();
+    maGeometry = rGeometry;
     maFieldCells.clear();
     maPageFieldValueCells.clear();
     maColumnMemberSpans.clear();
@@ -225,45 +201,55 @@ void StyleOutput::apply()
 {
     SCTAB nTab = maGeometry.mnTab;
 
-    // Field caption cells and page field value cells
+    // The member cells are aligned to the left, which makes their indent visible. An indent shows
+    // only in a left-aligned cell. The subtotal and grand total labels and results are bold.
+    ScPatternAttr aLeftAligned(mrDocument.getCellAttributeHelper());
+    aLeftAligned.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
+
+    ScPatternAttr aBold(mrDocument.getCellAttributeHelper());
+    aBold.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    aBold.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT));
+    aBold.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT));
+
+    ScPatternAttr aBoldAndLeftAligned(aBold);
+    aBoldAndLeftAligned.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
+
+    // Field caption cells and page field value cells. Only a caption inside the table area gets a
+    // frame. A caption above the table keeps the flat look of the filter button.
     for (FieldCell const& rCell : maFieldCells)
     {
-        if (rCell.bFrame)
-            lcl_SetFrame(mrDocument, nTab, rCell.nCol, rCell.nRow, rCell.nCol, rCell.nRow,
-                         SC_DP_FRAME_WIDTH);
+        if (rCell.mbInTable)
+            applyFrame(mrDocument, nTab, rCell.mnCol, rCell.mnRow, rCell.mnCol, rCell.mnRow, false);
     }
     for (PageFieldValueCell const& rCell : maPageFieldValueCells)
-    {
-        lcl_SetFrame(mrDocument, nTab, rCell.nCol, rCell.nRow, rCell.nCol, rCell.nRow,
-                     SC_DP_FRAME_WIDTH);
-    }
+        applyFrame(mrDocument, nTab, rCell.mnCol, rCell.mnRow, rCell.mnCol, rCell.mnRow, false);
 
     BlockFrameOutput aBlockFrames(mrDocument, maGeometry);
 
     // Column field members
     for (ColumnMemberSpan const& rSpan : maColumnMemberSpans)
     {
-        if (rSpan.nField + 1 < maGeometry.mnColumnFieldCount)
+        if (rSpan.mnField + 1 < maGeometry.mnColumnFieldCount)
         {
-            if (rSpan.nField + 2 == maGeometry.mnColumnFieldCount)
+            if (rSpan.mnField + 2 == maGeometry.mnColumnFieldCount)
             {
-                aBlockFrames.AddCol(rSpan.nStartCol);
-                if (rSpan.nStartCol + 1 == rSpan.nEndCol)
-                    aBlockFrames.OutputBlockFrame(rSpan.nStartCol, rSpan.nRow, rSpan.nEndCol,
-                                                  rSpan.nRow + 1, true);
+                aBlockFrames.addColumn(rSpan.mnStartCol);
+                if (rSpan.mnStartCol + 1 == rSpan.mnEndCol)
+                    aBlockFrames.outputBlockFrame(rSpan.mnStartCol, rSpan.mnRow, rSpan.mnEndCol,
+                                                  rSpan.mnRow + 1, true);
             }
             else
             {
-                aBlockFrames.OutputBlockFrame(rSpan.nStartCol, rSpan.nRow, rSpan.nEndCol,
-                                              rSpan.nRow);
+                aBlockFrames.outputBlockFrame(rSpan.mnStartCol, rSpan.mnRow, rSpan.mnEndCol,
+                                              rSpan.mnRow);
             }
-            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nStartCol, rSpan.nRow, rSpan.nEndCol,
-                               maGeometry.mnDataStartRow - 1);
+            mrDocument.ApplyPatternAreaTab(rSpan.mnStartCol, rSpan.mnRow, rSpan.mnEndCol,
+                                           maGeometry.mnDataStartRow - 1, nTab, aLeftAligned);
         }
         else
         {
-            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nStartCol, rSpan.nRow, rSpan.nStartCol,
-                               maGeometry.mnDataStartRow - 1);
+            mrDocument.ApplyPatternAreaTab(rSpan.mnStartCol, rSpan.mnRow, rSpan.mnStartCol,
+                                           maGeometry.mnDataStartRow - 1, nTab, aLeftAligned);
         }
     }
 
@@ -272,23 +258,20 @@ void StyleOutput::apply()
     if (maGeometry.mnColumnFieldCount == 1
         && maGeometry.mnMemberStartRow > maGeometry.mnTabStartRow)
     {
-        aBlockFrames.OutputBlockFrame(maGeometry.mnDataStartCol, maGeometry.mnTabStartRow,
+        aBlockFrames.outputBlockFrame(maGeometry.mnDataStartCol, maGeometry.mnTabStartRow,
                                       maGeometry.mnTabEndCol, maGeometry.mnMemberStartRow - 1);
     }
 
-    // Subtotal and grand total columns. The label cells in the header area are bold and aligned
-    // to the left, the result cells below them are bold.
+    // Subtotal and grand total columns
     for (SubtotalColumn const& rColumn : maSubtotalColumns)
     {
-        aBlockFrames.AddCol(rColumn.nCol);
-        aBlockFrames.OutputBlockFrame(rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
+        aBlockFrames.addColumn(rColumn.mnCol);
+        aBlockFrames.outputBlockFrame(rColumn.mnCol, rColumn.mnStartRow, rColumn.mnCol,
                                       maGeometry.mnDataStartRow - 1);
-        lcl_SetBold(mrDocument, nTab, rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
-                    maGeometry.mnDataStartRow - 1);
-        lcl_SetLeftAligned(mrDocument, nTab, rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
-                           maGeometry.mnDataStartRow - 1);
-        lcl_SetBold(mrDocument, nTab, rColumn.nCol, maGeometry.mnDataStartRow, rColumn.nCol,
-                    maGeometry.mnTabEndRow);
+        mrDocument.ApplyPatternAreaTab(rColumn.mnCol, rColumn.mnStartRow, rColumn.mnCol,
+                                       maGeometry.mnDataStartRow - 1, nTab, aBoldAndLeftAligned);
+        mrDocument.ApplyPatternAreaTab(rColumn.mnCol, maGeometry.mnDataStartRow, rColumn.mnCol,
+                                       maGeometry.mnTabEndRow, nTab, aBold);
     }
 
     // Row field members. The first member that begins in a row also gets a frame around the whole
@@ -296,58 +279,57 @@ void StyleOutput::apply()
     std::vector<bool> aBorderSet(maGeometry.mnTabEndRow - maGeometry.mnDataStartRow + 1, false);
     for (RowMemberSpan const& rSpan : maRowMemberSpans)
     {
-        if (rSpan.nField + 1 < maGeometry.mnRowFieldCount)
+        if (rSpan.mnField + 1 < maGeometry.mnRowFieldCount)
         {
-            aBlockFrames.AddRow(rSpan.nStartRow);
-            if (!aBorderSet[rSpan.nStartRow - maGeometry.mnDataStartRow])
+            aBlockFrames.addRow(rSpan.mnStartRow);
+            if (!aBorderSet[rSpan.mnStartRow - maGeometry.mnDataStartRow])
             {
-                aBlockFrames.OutputBlockFrame(rSpan.nCol, rSpan.nStartRow, maGeometry.mnTabEndCol,
-                                              rSpan.nEndRow);
-                aBorderSet[rSpan.nStartRow - maGeometry.mnDataStartRow] = true;
+                aBlockFrames.outputBlockFrame(rSpan.mnCol, rSpan.mnStartRow, maGeometry.mnTabEndCol,
+                                              rSpan.mnEndRow);
+                aBorderSet[rSpan.mnStartRow - maGeometry.mnDataStartRow] = true;
             }
-            aBlockFrames.OutputBlockFrame(rSpan.nCol, rSpan.nStartRow, rSpan.nCol, rSpan.nEndRow);
+            aBlockFrames.outputBlockFrame(rSpan.mnCol, rSpan.mnStartRow, rSpan.mnCol,
+                                          rSpan.mnEndRow);
 
-            if (rSpan.nField == maGeometry.mnRowFieldCount - 2)
-                aBlockFrames.OutputBlockFrame(rSpan.nCol + 1, rSpan.nStartRow, rSpan.nCol + 1,
-                                              rSpan.nEndRow);
+            if (rSpan.mnField == maGeometry.mnRowFieldCount - 2)
+                aBlockFrames.outputBlockFrame(rSpan.mnCol + 1, rSpan.mnStartRow, rSpan.mnCol + 1,
+                                              rSpan.mnEndRow);
 
-            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nCol, rSpan.nStartRow,
-                               maGeometry.mnDataStartCol - 1, rSpan.nEndRow);
+            mrDocument.ApplyPatternAreaTab(rSpan.mnCol, rSpan.mnStartRow,
+                                           maGeometry.mnDataStartCol - 1, rSpan.mnEndRow, nTab,
+                                           aLeftAligned);
         }
         else
         {
-            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nCol, rSpan.nStartRow,
-                               maGeometry.mnDataStartCol - 1, rSpan.nStartRow);
+            mrDocument.ApplyPatternAreaTab(rSpan.mnCol, rSpan.mnStartRow,
+                                           maGeometry.mnDataStartCol - 1, rSpan.mnStartRow, nTab,
+                                           aLeftAligned);
         }
     }
 
-    // Subtotal and grand total rows. The label cells in the header area are bold and aligned to
-    // the left, the result cells to the right of them are bold.
+    // Subtotal and grand total rows
     for (SubtotalRow const& rRow : maSubtotalRows)
     {
-        aBlockFrames.AddRow(rRow.nRow);
-        aBlockFrames.OutputBlockFrame(rRow.nStartCol, rRow.nRow, maGeometry.mnDataStartCol - 1,
-                                      rRow.nRow);
-        lcl_SetBold(mrDocument, nTab, rRow.nStartCol, rRow.nRow, maGeometry.mnDataStartCol - 1,
-                    rRow.nRow);
-        lcl_SetLeftAligned(mrDocument, nTab, rRow.nStartCol, rRow.nRow,
-                           maGeometry.mnDataStartCol - 1, rRow.nRow);
-        lcl_SetBold(mrDocument, nTab, maGeometry.mnDataStartCol, rRow.nRow, maGeometry.mnTabEndCol,
-                    rRow.nRow);
+        aBlockFrames.addRow(rRow.mnRow);
+        aBlockFrames.outputBlockFrame(rRow.mnStartCol, rRow.mnRow, maGeometry.mnDataStartCol - 1,
+                                      rRow.mnRow);
+        mrDocument.ApplyPatternAreaTab(rRow.mnStartCol, rRow.mnRow, maGeometry.mnDataStartCol - 1,
+                                       rRow.mnRow, nTab, aBoldAndLeftAligned);
+        mrDocument.ApplyPatternAreaTab(maGeometry.mnDataStartCol, rRow.mnRow,
+                                       maGeometry.mnTabEndCol, rRow.mnRow, nTab, aBold);
     }
 
-    // Member indents and the expand and collapse buttons. The indent shows up because the member
-    // cells are aligned to the left, an indent has no effect in a centered cell.
+    // Member indents and the expand and collapse buttons
     for (Indent const& rIndent : maIndentCells)
-        mrDocument.ApplyAttr(rIndent.nCol, rIndent.nRow, nTab, ScIndentItem(rIndent.nIndent));
+        mrDocument.ApplyAttr(rIndent.mnCol, rIndent.mnRow, nTab, ScIndentItem(rIndent.mnIndent));
 
     for (Expander const& rExpander : maExpanderCells)
     {
-        mrDocument.ApplyFlagsTab(rExpander.nCol, rExpander.nRow, rExpander.nCol, rExpander.nRow,
-                                 nTab, rExpander.nFlags);
+        mrDocument.ApplyFlagsTab(rExpander.mnCol, rExpander.mnRow, rExpander.mnCol, rExpander.mnRow,
+                                 nTab, rExpander.mnFlags);
     }
 
-    aBlockFrames.OutputDataArea();
+    aBlockFrames.outputDataArea();
 }
 }
 
