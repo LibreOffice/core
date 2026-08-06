@@ -13,13 +13,13 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,dummytraceevent))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,dummytraceevent,cpp))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_base,dummytraceevent,$(SRCDIR)/..))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_base,dummytraceevent,$(online_srcdir)))
 
 $(eval $(call gb_StaticLibrary_set_generated_warnings_as_errors,dummytraceevent))
 
 $(eval $(call gb_StaticLibrary_set_include,dummytraceevent, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))

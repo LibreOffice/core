@@ -13,13 +13,13 @@ $(eval $(call gb_Executable_Executable,coolmount))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coolmount,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coolmount,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coolmount,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coolmount))
 
 $(eval $(call gb_Executable_set_include,coolmount, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
 ))
 

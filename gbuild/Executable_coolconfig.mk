@@ -13,13 +13,13 @@ $(eval $(call gb_Executable_Executable,coolconfig))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coolconfig,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coolconfig,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coolconfig,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coolconfig))
 
 $(eval $(call gb_Executable_set_include,coolconfig, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))

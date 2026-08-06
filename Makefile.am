@@ -480,6 +480,29 @@ EXTRA_DIST = \
              etc/key.pem \
              etc/nginx/coolwsd.conf \
              favicon.ico \
+             gbuild/Executable_clientnb.mk \
+             gbuild/Executable_coconvert.mk \
+             gbuild/Executable_connect.mk \
+             gbuild/Executable_coolbench.mk \
+             gbuild/Executable_coolconfig.mk \
+             gbuild/Executable_coolconvert.mk \
+             gbuild/Executable_coolforkit-caps.mk \
+             gbuild/Executable_coolforkit-ns.mk \
+             gbuild/Executable_coolmap.mk \
+             gbuild/Executable_coolmount.mk \
+             gbuild/Executable_coolsocketdump.mk \
+             gbuild/Executable_coolstress.mk \
+             gbuild/Executable_coolwsd.mk \
+             gbuild/Executable_lokitclient.mk \
+             gbuild/Makefile \
+             gbuild/Module_gbuild.mk \
+             gbuild/StaticLibrary_dummytraceevent.mk \
+             gbuild/StaticLibrary_forkit.mk \
+             gbuild/StaticLibrary_globals.mk \
+             gbuild/StaticLibrary_kitglobals.mk \
+             gbuild/StaticLibrary_shared.mk \
+             gbuild/StaticLibrary_simd.mk \
+             gbuild/StaticLibrary_wsdglobals.mk \
              scripts/create-sbom.py \
              scripts/genlangmaps.py \
              scripts/refresh-git-hooks \
@@ -497,6 +520,16 @@ endif
 
 CLEANUP_COVERAGE=rm -rf ${abs_top_srcdir}/gcov; find . -iname "*.gcda" -delete
 
+GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress coolwsd
+
+GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
+
+build-gbuild: FORCE
+	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' Module_gbuild
+$(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
+
+FORCE:
+
 if HAVE_LO_PATH
 
 SYSTEM_STAMP = @SYSTEMPLATE_PATH@/system_stamp
@@ -509,18 +542,6 @@ CLEANUP_DEPS=
 else
 CLEANUP_DEPS=coolwsd coolmount coolforkit-caps coolforkit-ns
 endif
-
-ENGINE_BUILDDIR = @LO_PATH@/..
-
-GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress coolwsd
-
-GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
-
-build-gbuild: FORCE
-	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' Module_gbuild
-$(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
-
-FORCE:
 
 # Build coolwsd and coolmount first, so we can cleanup before updating
 # the systemplate directory, which we can't rm if it's mounted.
@@ -559,7 +580,7 @@ clean-local:
 	if test "z@JAILS_PATH@" != "z"; then rm -rf "@JAILS_PATH@" || echo "WARNING: failed to remove all jails cleanly"; fi
 	if test "z@CACHE_PATH@" != "z"; then rm -rf "@CACHE_PATH@" || echo "WARNING: failed to remove all cache cleanly"; fi
 	rm -rf loolconfig loolconvert loolforkit loolmap loolmount # kill old binaries
-	if test -f config.h && test -f "$(ENGINE_BUILDDIR)/config_host.mk"; then $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild.clean; else rm -f $(GBUILD_EXES) $(GBUILD_EXES_NOINST); fi
+	if test -f config.h && test -f "$(ENGINE_BUILDDIR)/config_host.mk"; then $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild.clean; else rm -f $(GBUILD_EXES) $(GBUILD_EXES_NOINST); fi
 	rm -f .dir
 	rm -rf loolwsd loolwsd_fuzzer coolwsd_fuzzer loolstress loolsocketdump
 	rm -rf collabora-online-sbom.spdx.json

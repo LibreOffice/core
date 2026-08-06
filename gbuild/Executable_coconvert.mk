@@ -13,13 +13,13 @@ $(eval $(call gb_Executable_Executable,coconvert))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coconvert,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coconvert,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coconvert,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coconvert))
 
 $(eval $(call gb_Executable_set_include,coconvert, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     -I$(SRCDIR)/include \
     $$(INCLUDE) \
     $(online_poco_inc) \

@@ -15,13 +15,13 @@ $(eval $(call gb_Executable_set_visibility_default,coolforkit-ns))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coolforkit-ns,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coolforkit-ns,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coolforkit-ns,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coolforkit-ns))
 
 $(eval $(call gb_Executable_set_include,coolforkit-ns, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))

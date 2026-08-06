@@ -11,11 +11,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,simd))
 
-$(eval $(call gb_StaticLibrary_set_generated_c_base,simd,$(SRCDIR)/..))
+$(eval $(call gb_StaticLibrary_set_generated_c_base,simd,$(online_srcdir)))
 
 $(eval $(call gb_StaticLibrary_set_include,simd, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
 ))
 

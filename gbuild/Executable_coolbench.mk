@@ -13,17 +13,17 @@ $(eval $(call gb_Executable_Executable,coolbench))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coolbench,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coolbench,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coolbench,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coolbench))
 
 $(eval $(call gb_Executable_set_include,coolbench, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
-    -I$(SRCDIR)/../common \
-    -I$(SRCDIR)/../net \
-    -I$(SRCDIR)/../wsd \
-    -I$(SRCDIR)/../kit \
+    -I$(online_srcdir) \
+    -I$(online_srcdir)/common \
+    -I$(online_srcdir)/net \
+    -I$(online_srcdir)/wsd \
+    -I$(online_srcdir)/kit \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))

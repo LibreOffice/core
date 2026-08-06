@@ -1116,6 +1116,12 @@ if test "$enable_iosapp" != yes -a "$enable_windowsapp" != yes -a "$enable_andro
    fi
 
    LOKIT_PATH=`readlink -f $with_lokit_path`
+
+   # The engine build tree that gbuild builds online's C++ artifacts against.
+   # Derived from --with-lo-builddir rather than from --with-lo-path, which in
+   # a packaging build is the run-time installation (/opt/collaboraoffice) and
+   # has no build tree above it.
+   ENGINE_BUILDDIR=`readlink -f "$with_lo_builddir"`
 fi
 
 if test "$enable_iosapp" = "yes" -o "$enable_androidapp" = "yes"; then
@@ -1126,6 +1132,7 @@ if test "$enable_iosapp" = "yes" -o "$enable_androidapp" = "yes"; then
 fi
 
 AC_SUBST(LOKIT_PATH)
+AC_SUBST(ENGINE_BUILDDIR)
 
 ENABLE_ANDROIDAPP=
 if test "$enable_androidapp" = "yes"; then

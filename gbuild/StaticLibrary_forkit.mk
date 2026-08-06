@@ -15,17 +15,17 @@ $(eval $(call gb_StaticLibrary_set_visibility_default,forkit))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,forkit,cpp))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_base,forkit,$(SRCDIR)/..))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_base,forkit,$(online_srcdir)))
 
 $(eval $(call gb_StaticLibrary_set_generated_warnings_as_errors,forkit))
 
 $(eval $(call gb_StaticLibrary_set_include,forkit, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
-    -I$(SRCDIR)/../common \
-    -I$(SRCDIR)/../net \
-    -I$(SRCDIR)/../wsd \
-    -I$(SRCDIR)/../kit \
+    -I$(online_srcdir) \
+    -I$(online_srcdir)/common \
+    -I$(online_srcdir)/net \
+    -I$(online_srcdir)/wsd \
+    -I$(online_srcdir)/kit \
     -I$(SRCDIR)/include \
     $$(INCLUDE) \
     $(online_poco_inc) \

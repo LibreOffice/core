@@ -15,13 +15,13 @@ $(eval $(call gb_StaticLibrary_set_visibility_default,globals))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,globals,cpp))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_base,globals,$(SRCDIR)/..))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_base,globals,$(online_srcdir)))
 
 $(eval $(call gb_StaticLibrary_set_generated_warnings_as_errors,globals))
 
 $(eval $(call gb_StaticLibrary_set_include,globals, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
+    -I$(online_srcdir) \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))

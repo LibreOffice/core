@@ -13,17 +13,17 @@ $(eval $(call gb_Executable_Executable,coolstress))
 
 $(eval $(call gb_Executable_set_generated_cxx_suffix,coolstress,cpp))
 
-$(eval $(call gb_Executable_set_generated_cxx_base,coolstress,$(SRCDIR)/..))
+$(eval $(call gb_Executable_set_generated_cxx_base,coolstress,$(online_srcdir)))
 
 $(eval $(call gb_Executable_set_generated_warnings_as_errors,coolstress))
 
 $(eval $(call gb_Executable_set_include,coolstress, \
     -I$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
-    -I$(SRCDIR)/.. \
-    -I$(SRCDIR)/../common \
-    -I$(SRCDIR)/../net \
-    -I$(SRCDIR)/../wsd \
-    -I$(SRCDIR)/../kit \
+    -I$(online_srcdir) \
+    -I$(online_srcdir)/common \
+    -I$(online_srcdir)/net \
+    -I$(online_srcdir)/wsd \
+    -I$(online_srcdir)/kit \
     $$(INCLUDE) \
     $(online_poco_inc) \
 ))
@@ -54,7 +54,7 @@ $(eval $(call gb_Executable_add_libs,coolstress,$(UNIX_DLAPI_LIBS)))
 
 # The stress tool defaults its test documents to the in-tree test/data:
 $(eval $(call gb_Executable_add_defs,coolstress, \
-    -DTDOC=\"$(SRCDIR)/../test/data\" \
+    -DTDOC=\"$(online_srcdir)/test/data\" \
 ))
 
 $(eval $(call gb_Executable_add_generated_exception_objects,coolstress, \

@@ -11,6 +11,12 @@
 
 $(eval $(call gb_Module_Module,gbuild))
 
+# The online sources.  In the monorepo they sit right above the engine sources,
+# but a build from the distribution tarball (which ships no engine) is pointed
+# at an engine build tree elsewhere and passes its own source directory in as
+# ONLINE.SRCDIR, the same way it passes ONLINE.BUILDDIR.
+online_srcdir := $(or $(ONLINE.SRCDIR),$(SRCDIR)/..)
+
 # Poco static libraries that get linked whole-archive, to keep Poco's static
 # initialisers and factory registrations:
 online_poco_whole_libs := \
