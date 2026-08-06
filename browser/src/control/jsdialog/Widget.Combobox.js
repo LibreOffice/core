@@ -139,6 +139,10 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 		entry.addEventListener('mouseenter', function () {
 			builder.callback('combobox', 'showsubmenu', {id: data.comboboxId}, entryData, builder);
 		});
+	} else {
+		entry.addEventListener('mouseenter', function () {
+		builder.callback('combobox', 'hideothersubmenu', {id: data.comboboxId}, entryData, builder);
+		});
 	}
 
 	return false;

@@ -280,4 +280,36 @@ describe(['tagdesktop'], 'Change cell appearance.', { testIsolation: false }, fu
 				expect(parseInt(match[1], 10)).to.be.greaterThan(1);
 			});
 	});
+
+	// Once a submenu is open, moving the pointer to a sibling entry that has no
+	// submenu used to leave the open submenu on screen. The border dropdown is
+	// one place this happens: the Line style entry opens a submenu, while the
+	// border-preset entries above it have none.
+	it('an open submenu closes when the pointer moves to a childless entry', function() {
+		helper.setDummyClipboardForCopy();
+		calcHelper.clickOnFirstCell();
+
+		// The Line style submenu is only usable once the cell has a border, so
+		// give it an outer border on every side first.
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Outer Border').click();
+		cy.cGet('.ui-dialog-content').should('not.exist');
+
+		// Reopen the dropdown once core reports the line style command enabled
+		// for the reselected cell.
+		calcHelper.clickOnFirstCell();
+		helper.waitForMapState('.uno:LineStyle', 'enabled');
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+
+		// Hovering Line style opens its submenu.
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').trigger('mouseenter');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Extra thick (4.50 pt)').should('be.visible');
+
+		// Move the pointer to the "No Borders" entry, which has no
+		// submenu of its own. The open Line style submenu must disappear.
+		cy.cGet('body').contains('.ui-combobox-entry', 'No Borders').trigger('mouseenter');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Extra thick (4.50 pt)').should('not.exist');
+	});
 });

@@ -299,6 +299,9 @@ JSDialog.OpenDropdown = function (
 				closeLastSubMenu();
 				JSDialog.CloseDropdown(id);
 				return;
+			} else if (eventType === 'hideothersubmenu') {
+				closeLastSubMenu();
+				return;
 			}
 
 			// for multi-level menus last parameter should be used to handle event (it contains selected entry)
