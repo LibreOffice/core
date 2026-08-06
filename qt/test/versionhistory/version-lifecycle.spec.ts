@@ -71,8 +71,23 @@ describe('Local version history', () => {
 		const beforeHandles = await browser.webEngine.getWindowHandles();
 		const draftsBefore = readdirSync(draft.draftsDir());
 
+		// Editing mode from the previous case keeps the notebookbar - and
+		// thus the File tab - around.
 		await browser.webEngine.execute(() => {
-			app.socket.sendMessage('versionhistory list');
+			(document.getElementById('File-tab-label') as HTMLElement).click();
+		});
+		await browser.webEngine.waitUntil(
+			async () =>
+				await browser.webEngine.execute(
+					() => !!document.getElementById('backstage-history'),
+				),
+			{
+				timeout: 10000,
+				timeoutMsg: 'the backstage did not show a Version History entry',
+			},
+		);
+		await browser.webEngine.execute(() => {
+			(document.getElementById('backstage-history') as HTMLElement).click();
 		});
 		await browser.webEngine.waitUntil(
 			async () =>

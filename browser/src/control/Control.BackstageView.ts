@@ -203,6 +203,14 @@ class BackstageView extends window.L.Class {
 				visible: !this.isStarterMode,
 			},
 			{
+				id: 'history',
+				label: _('Version History'),
+				type: 'action',
+				actionType: 'history',
+				icon: 'lc_rev-history.svg',
+				visible: !this.isStarterMode && !!window.L.Params.revHistoryEnabled,
+			},
+			{
 				id: 'sign',
 				label: _('Sign'),
 				type: 'action',
