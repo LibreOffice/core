@@ -24,7 +24,7 @@ namespace DocumentToolDescriptions
 {
 
 /// Description for the extract_link_targets tool.
-inline constexpr const char* EXTRACT_LINK_TARGETS_DESCRIPTION =
+constexpr const char* EXTRACT_LINK_TARGETS_DESCRIPTION =
     "Extract all link targets from a document. Returns a JSON object with "
     "categories: Headings, Bookmarks, Tables, Frames, Images, Sections, "
     "OLE objects, Drawing objects. Each entry maps a name to a target string "
@@ -34,9 +34,9 @@ inline constexpr const char* EXTRACT_LINK_TARGETS_DESCRIPTION =
 /// extract_document_structure descriptions, split per document type so each
 /// open document advertises only the filters that work for it. The caller
 /// composes the intro with the matching document-type fragment(s).
-inline constexpr const char* EXTRACT_INTRO = "Inspect the open document as JSON.";
+constexpr const char* EXTRACT_INTRO = "Inspect the open document as JSON.";
 
-inline constexpr const char* EXTRACT_WRITER =
+constexpr const char* EXTRACT_WRITER =
     " With filter=\"text\" it returns the document body as markdown for "
     "summarizing or answering questions about the content. To answer about a "
     "specific part without reading the whole body, first call "
@@ -54,12 +54,12 @@ inline constexpr const char* EXTRACT_WRITER =
     "tables, frames or images for navigation, use extract_link_targets "
     "instead.";
 
-inline constexpr const char* EXTRACT_CALC =
+constexpr const char* EXTRACT_CALC =
     " For a spreadsheet, filter=\"text\" returns the active sheet as markdown, "
     "optionally limited to a cell range, for summarizing or answering questions "
     "about the data.";
 
-inline constexpr const char* EXTRACT_IMPRESS =
+constexpr const char* EXTRACT_IMPRESS =
     " For a presentation, filter=\"text\" returns the text of every slide as "
     "markdown, one section per slide, for summarizing or answering questions "
     "about the content. With filter=\"slides\" it returns each slide's name, "
@@ -68,12 +68,12 @@ inline constexpr const char* EXTRACT_IMPRESS =
     "for placeholders that still await content, and its text.";
 
 /// Shared intro for the transform parameter, valid for every document type.
-inline constexpr const char* TRANSFORM_INTRO =
+constexpr const char* TRANSFORM_INTRO =
     R"(JSON transformation commands. The top-level object can contain "Transforms" and/or "UnoCommand" objects in any order.)";
 
 /// Impress/ODP-specific transform documentation, the part before the
 /// generated SlideCommands vocabulary (see AIUtil::getSlideCommandDocs()).
-inline constexpr const char* TRANSFORM_IMPRESS_INTRO =
+constexpr const char* TRANSFORM_IMPRESS_INTRO =
     R"(
 
 --- Impress/ODP Presentations ---
@@ -85,7 +85,7 @@ Choose the layout that fits the content (see Available layouts below). When a de
 
 /// Impress/ODP-specific transform documentation, the part after the
 /// generated SlideCommands vocabulary.
-inline constexpr const char* TRANSFORM_IMPRESS_DETAILS =
+constexpr const char* TRANSFORM_IMPRESS_DETAILS =
     R"(
 UNO commands for text formatting (use inside EditTextObject):
 Toggle: .uno:Bold, .uno:Italic, .uno:Underline, .uno:Strikeout, .uno:Shadowed, .uno:OutlineFont, .uno:SuperScript, .uno:SubScript
@@ -119,7 +119,7 @@ Example - edit existing slides: jump to slide 2, change its layout, rewrite the 
 /// DeckSpec::limitsSentence). Used by the per-slide write_slide expansion tool,
 /// which appends the limits sentence built from the live budgets so the numbers
 /// the model is told match the numbers the validator enforces.
-inline constexpr const char* DECK_SLIDE_SHAPE =
+constexpr const char* DECK_SLIDE_SHAPE =
     R"(Each slide is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck. Use opening for the first slide, divider for a section break, closing for the last slide, and body for the rest.
 - "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout.
@@ -141,7 +141,7 @@ Which blocks each intent expects:
 /// The propose_outline description without its trailing slide-count sentence.
 /// The caller appends "Give at most N slides. ..." with N from the live budgets,
 /// so the number matches the validator.
-inline constexpr const char* PROPOSE_OUTLINE_HEAD =
+constexpr const char* PROPOSE_OUTLINE_HEAD =
     R"(Propose a slide-by-slide outline for a new deck for the user to review and edit before the slides are built. Call this to build a new deck of any size. After the user approves the outline, the server builds the slides itself.
 
 Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}. Each slide entry is an object with:
@@ -154,11 +154,11 @@ Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}.
 
 /// The propose_outline slide-count sentence, closing the description. The "N"
 /// is substituted from the live budgets at composition time.
-inline constexpr const char* PROPOSE_OUTLINE_TAIL_OPEN_CLOSE =
+constexpr const char* PROPOSE_OUTLINE_TAIL_OPEN_CLOSE =
     " slides. Open with an opening title slide and end with a closing slide.";
 
 /// Writer content-control transform documentation.
-inline constexpr const char* TRANSFORM_WRITER =
+constexpr const char* TRANSFORM_WRITER =
     R"(
 
 --- Writer Content Controls ---

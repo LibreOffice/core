@@ -33,18 +33,18 @@ namespace DeckSpec
 {
 
 /// The largest deck the compiler accepts, in slides.
-inline constexpr int MaxSlides = 30;
+constexpr int MaxSlides = 30;
 /// The largest number of items one bullets block may list.
-inline constexpr int MaxItemsPerBullets = 6;
+constexpr int MaxItemsPerBullets = 6;
 /// The largest length, in characters, of a single bullet item or text block.
-inline constexpr int MaxItemLength = 200;
+constexpr int MaxItemLength = 200;
 /// The largest length, in characters, of a slide title.
-inline constexpr int MaxTitleLength = 200;
+constexpr int MaxTitleLength = 200;
 /// The largest length, in characters, of a slide's one or two sentence outline
 /// gist.
-inline constexpr int MaxGistLength = 300;
+constexpr int MaxGistLength = 300;
 /// The largest length, in characters, of a slide's speaker notes.
-inline constexpr int MaxNotesLength = 500;
+constexpr int MaxNotesLength = 500;
 
 /// The limits a deck spec is checked against. Every field defaults to the
 /// matching constexpr limit above, so a default-constructed Budgets reproduces
