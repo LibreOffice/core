@@ -41,6 +41,8 @@ class BitmapTileManager extends RenderManagerBase {
 	private _cumTileCount: number;
 	private _preFetchIdle: any;
 	private _tilesPreFetcher: any;
+	/// Pending re-request for the tiles a request wait has skipped. One covers them all.
+	private _skippedTileRetry: any;
 	private _partTilePreFetcher: any;
 	private _adjacentTilePreFetcher: any;
 	private inTransaction: number = 0;
@@ -1067,6 +1069,7 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 
 		var now = new Date();
+		let skippedAsTooFast = false;
 
 		for (var pmKey in partMode) {
 			// no keys method
@@ -1085,7 +1088,10 @@ class BitmapTileManager extends RenderManagerBase {
 				const tile = this.tiles.get(key);
 
 				// don't send lots of duplicate, fast tilecombines
-				if (tile && tile.requestingTooFast(now)) continue;
+				if (tile && tile.requestingTooFast(now)) {
+					skippedAsTooFast = true;
+					continue;
+				}
 
 				// request each tile just once in these tilecombines
 				if (added.has(key)) continue;
@@ -1128,6 +1134,34 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 
 		this.notifyTileStateChanged();
+
+		if (skippedAsTooFast) this.scheduleSkippedTileRetry();
+	}
+
+	/// Ask again for the tiles a request wait has skipped, once that wait is over, so a tile the
+	/// server decided against sending is still filled in while the view stays where it is. The
+	/// wait is measured from the last request that went out, so by the time this runs it has
+	/// passed for every tile skipped here.
+	private scheduleSkippedTileRetry() {
+		if (this._skippedTileRetry !== undefined) return;
+
+		this._skippedTileRetry = setTimeout(() => {
+			this._skippedTileRetry = undefined;
+			if (!this.checkDocLayer()) return;
+
+			this.beginTransaction();
+			this.checkRequestTiles(
+				app.activeDocument.activeLayout.getCurrentCoordList(),
+			);
+			this.endTransaction(null);
+		}, Tile.requestWaitMs + 100);
+	}
+
+	private clearSkippedTileRetry() {
+		if (this._skippedTileRetry !== undefined) {
+			clearTimeout(this._skippedTileRetry);
+			this._skippedTileRetry = undefined;
+		}
 	}
 
 	private tileNeedsFetch(key: string) {
@@ -1473,7 +1507,7 @@ class BitmapTileManager extends RenderManagerBase {
 	public resetPreFetching(resetBorder: boolean) {
 		if (!this.checkDocLayer()) return;
 
-		this.clearPreFetch();
+		this.clearPreFetchTimers();
 
 		if (resetBorder) this._borders = undefined;
 
@@ -1494,14 +1528,19 @@ class BitmapTileManager extends RenderManagerBase {
 		);
 	}
 
-	public clearPreFetch() {
-		if (!this.checkDocLayer()) return;
-
+	private clearPreFetchTimers() {
 		this.clearTilesPreFetcher();
 		if (this._preFetchIdle !== undefined) {
 			clearTimeout(this._preFetchIdle);
 			this._preFetchIdle = undefined;
 		}
+	}
+
+	public clearPreFetch() {
+		if (!this.checkDocLayer()) return;
+
+		this.clearSkippedTileRetry();
+		this.clearPreFetchTimers();
 	}
 
 	public preFetchTiles(forceBorderCalc: boolean) {

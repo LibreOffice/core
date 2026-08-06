@@ -5425,7 +5425,6 @@ void DocumentBroker::handleTileRequest(const StringVector &tokens, bool forceKey
             tile.setWireId(cachedTile->_wids.back());
 
         session->sendTileNow(tile, cachedTile);
-        recordFirstTileSent();
         return;
     }
 
@@ -5866,23 +5865,22 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
 {
     ASSERT_CORRECT_THREAD();
 
-    size_t tilesOnFlyUpperLimit = session->getTilesOnFlyUpperLimit();
-
     auto now = std::chrono::steady_clock::now();
 
     // Drop tiles which we are waiting for too long
     session->removeOutdatedTilesOnFly(now);
 
-    // All tiles were processed on client side that we sent last time, so we can send
-    // a new batch of tiles which was invalidated / requested in the meantime
+    // Every tile the session has asked for is dealt with here: one that is cached goes to the
+    // client, one that is not goes to the kit to be rendered. What the client receives of it is
+    // decided as each tile is handed over, so the queue empties on every pass and holds only the
+    // tiles asked for since the last one.
     std::deque<TileDesc>& requestedTiles = session->getRequestedTiles();
     bool bumpedVersion = false;
     if (!requestedTiles.empty() && hasTileCache())
     {
         std::vector<TileDesc> tilesNeedsRendering;
         bool allSamePartAndSize = true;
-        while (!requestedTiles.empty() &&
-               session->getTilesOnFlyCount() < tilesOnFlyUpperLimit)
+        while (!requestedTiles.empty())
         {
             TileDesc& tile = *(requestedTiles.begin());
 
@@ -5902,7 +5900,6 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
 
                 // TODO: Combine the response to reduce latency.
                 session->sendTileNow(tile, cachedTile);
-                recordFirstTileSent();
             }
             else
             {

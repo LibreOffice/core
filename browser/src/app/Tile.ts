@@ -29,6 +29,8 @@ class Tile {
 	decompressedId: number = 0; // the id of the last decompressed delta chunk in imgDataCache
 	lastRendered: number = performance.timeOrigin;
 	private lastRequestTime: Date = undefined; // when did we last do a tilecombine request.
+	/// How long a tile that has just been asked for waits before it is asked for again.
+	static readonly requestWaitMs = 5000;
 
 	constructor(coords: TileCoordData) {
 		this.coords = coords;
@@ -67,7 +69,7 @@ class Tile {
 	requestingTooFast(now: Date): boolean {
 		const tooFast: boolean =
 			this.lastRequestTime &&
-			now.getTime() - this.lastRequestTime.getTime() < 5000; /* ms */
+			now.getTime() - this.lastRequestTime.getTime() < Tile.requestWaitMs;
 		return tooFast;
 	}
 

@@ -54,6 +54,9 @@ void ClientSession::setReadOnly(bool) {}
 
 bool ClientSession::_handleInput(const char* /*buffer*/, int /*length*/) { return false; }
 
+// A tile handed over in a test reaches its session.
+bool ClientSession::canSendTile(const TileDesc& /*tile*/) const { return true; }
+
 Admin::~Admin() {}
 std::unique_ptr<Admin> Admin::Instance;
 void Admin::dumpState(std::ostream&) const {}

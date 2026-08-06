@@ -58,6 +58,7 @@
 
 #include <limits>
 
+#include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <cstdint>
@@ -73,6 +74,9 @@ using namespace COOLProtocol;
 
 constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
 constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
+
+/// How many screenfuls beyond its visible area a client is taken to be preloading.
+constexpr int TILE_PRELOAD_SCREENS = 2;
 
 /// Log a warning once the queue of messages waiting to be sent to a client
 /// grows past this many bytes, which usually means the client is not reading.
@@ -4376,6 +4380,68 @@ Util::Rectangle ClientSession::getNormalizedVisiblePaneArea(const SplitPaneName 
     }
 
     return Util::Rectangle();
+}
+
+int ClientSession::getTileDistanceFromVisibleArea(const TileDesc& tile) const
+{
+    if (isTileInsideVisibleArea(tile))
+        return 0;
+
+    const Util::Rectangle visibleArea = getNormalizedVisibleArea();
+    const int tileWidth = std::max(getTileWidthInTwips(), 1);
+    const int tileHeight = std::max(getTileHeightInTwips(), 1);
+
+    int columnGap = 0;
+    if (tile.getTilePosX() > visibleArea.getRight())
+        columnGap = tile.getTilePosX() - visibleArea.getRight();
+    else if (tile.getTilePosX() + tile.getTileWidth() < visibleArea.getLeft())
+        columnGap = visibleArea.getLeft() - (tile.getTilePosX() + tile.getTileWidth());
+
+    int rowGap = 0;
+    if (tile.getTilePosY() > visibleArea.getBottom())
+        rowGap = tile.getTilePosY() - visibleArea.getBottom();
+    else if (tile.getTilePosY() + tile.getTileHeight() < visibleArea.getTop())
+        rowGap = visibleArea.getTop() - (tile.getTilePosY() + tile.getTileHeight());
+
+    // The ring number is the larger of the two gaps, so a tile past a corner of the visible area
+    // shares a ring with the tiles straight above it and beside it. Counting starts at one to keep
+    // the ring around the visible area apart from the visible tiles themselves.
+    return std::max(columnGap / tileWidth, rowGap / tileHeight) + 1;
+}
+
+bool ClientSession::canSendTile(const TileDesc& tile) const
+{
+    // A client that has room for another tile gets whatever it asked for, so the distance below
+    // is measured only while its capacity is spent.
+    if (getTilesOnFlyCount() < getTilesOnFlyUpperLimit())
+        return true;
+
+    // A preview is drawn for a slide panel or a thumbnail, so it belongs to no visible area.
+    if (tile.isPreview())
+        return true;
+
+    // A text document renders one continuous part, so its tiles always belong to the part the
+    // client is looking at. Elsewhere the client asks for another part to have it ready for a
+    // part switch, and those tiles are wanted wherever they sit.
+    if (!_isTextDocument &&
+        (tile.getPart() != _clientSelectedPart || tile.getEditMode() != _clientSelectedMode))
+        return true;
+
+    const Util::Rectangle visibleArea = getNormalizedVisibleArea();
+    if (!visibleArea.hasSurface() || getTileWidthInTwips() == 0 || getTileHeightInTwips() == 0)
+        return true;
+
+    const int tilesAcross = visibleArea.getWidth() / getTileWidthInTwips() + 1;
+    const int tilesDown = visibleArea.getHeight() / getTileHeightInTwips() + 1;
+
+    // The client asks for tiles up to one and a half screens ahead in the direction it is
+    // scrolling, so the reach of that request is what separates a tile it is still waiting for
+    // from one it has left behind. The larger of the two screen extents is used, which keeps the
+    // limit on the generous side: sending a tile that is no longer needed only wastes bandwidth,
+    // while holding one back that is needed leaves a gap on the screen.
+    const int limit = TILE_PRELOAD_SCREENS * std::max(tilesAcross, tilesDown);
+
+    return getTileDistanceFromVisibleArea(tile) <= limit;
 }
 
 bool ClientSession::isTileInsideVisibleArea(const TileDesc& tile) const

@@ -343,8 +343,6 @@ void TileCache::saveTileAndNotify(const TileDesc& desc, const char *data, const 
                 if (session)
                 {
                     session->sendTileNow(desc, tile);
-                    if (auto db = session->getDocumentBroker())
-                        db->recordFirstTileSent();
                 }
             }
         }

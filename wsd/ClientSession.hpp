@@ -130,6 +130,14 @@ public:
 
     bool sendTileNow(const TileDesc &desc, const Tile &tile)
     {
+        // The tracker is left alone for a tile that stays here, so the client and our record of
+        // what it holds keep matching and a later delta still applies.
+        if (!canSendTile(desc))
+        {
+            LOG_TRC("Keeping tile in the cache for now: " << desc.serialize());
+            return false;
+        }
+
         TileWireId lastSentId = _tracker.updateTileSeq(desc);
 
         std::string header;
@@ -147,7 +155,15 @@ public:
 
         bool hasContent = tile->appendChangesSince(output, tile->isPng() ? 0 : lastSentId);
         LOG_TRC("Sending tile message: " << header << " lastSendId " << lastSentId << " content " << hasContent);
-        return sendBinaryFrame(output.data(), output.size());
+        if (!sendBinaryFrame(output.data(), output.size()))
+            return false;
+
+        // The load timing marks the first tile that reached a client, so it is taken here, where
+        // every tile a client receives passes through.
+        if (const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker())
+            docBroker->recordFirstTileSent();
+
+        return true;
     }
 
     bool sendBlob(const std::string &header, const Blob &blob)
@@ -252,6 +268,12 @@ public:
     /// Remove a tile from the on-fly tracking (no logging if absent).
     /// Returns true if the wireId was found and removed.
     bool removeTileOnFly(TileWireId wireId);
+
+    /// Whether a tile goes to the client now. A client that is keeping up receives every tile it
+    /// asked for. One that is behind receives the tiles at and around its visible area, while a
+    /// tile it has scrolled away from keeps its place in the cache and goes out when asked for
+    /// again.
+    bool canSendTile(const TileDesc& tile) const;
 
     const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
     /// Visible area can have negative value as position, but we have tiles only in the positive range
@@ -429,6 +451,10 @@ private:
     void writeQueuedMessages(std::size_t capacity) override;
 
     virtual bool _handleInput(const char* buffer, int length) override;
+
+    /// Distance from the visible area to a tile, counted in whole tiles: zero for a tile the
+    /// client can see now, one for the ring of tiles next to the visible area, and so on.
+    int getTileDistanceFromVisibleArea(const TileDesc& tile) const;
 
     bool handleSignatureAction(const StringVector& tokens);
 
