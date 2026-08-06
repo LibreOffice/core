@@ -131,15 +131,40 @@ def run(command, timeout=240):
         return ""
 
 
-def pages_with_images(pdf):
-    """Page numbers on which the PDF draws at least one raster."""
+def rasters_by_page(pdf):
+    """{page: {(width, height), ...}} for every raster the PDF draws."""
     listing = run(["pdfimages", "-list", pdf])
-    pages = set()
+    pages = {}
     for line in listing.splitlines()[2:]:
         fields = line.split()
-        if len(fields) > 1 and fields[0].isdigit():
-            pages.add(int(fields[0]))
+        # page num type width height colour comp bpc enc ...
+        if len(fields) > 4 and fields[0].isdigit() and fields[3].isdigit():
+            pages.setdefault(int(fields[0]), set()).add((int(fields[3]), int(fields[4])))
     return pages
+
+
+def unmatched_rasters(ours, reference):
+    """{page: rasters the reference draws there and we do not}.
+
+    The flag's first condition used to be "the reference draws a raster here", and that is
+    met just as well by a logo *both* sides draw. Measured: four pages of one document were
+    flagged on a 162x109 JPEG of the EU flag in its footer, drawn identically by both
+    renderers, while the real surplus was a header block on 13 of its 18 pages. The
+    signature misfires on any document that puts a small picture in its page furniture and
+    has a furniture defect elsewhere.
+
+    Matching on dimensions rather than on content is deliberate: a rasterised metafile and a
+    logo differ in size by orders of magnitude, and decoding every image to compare pixels
+    would cost more than the whole scan.
+    """
+    mine = rasters_by_page(ours)
+    theirs = rasters_by_page(reference)
+    out = {}
+    for page, rasters in theirs.items():
+        only_theirs = rasters - mine.get(page, set())
+        if only_theirs:
+            out[page] = only_theirs
+    return out
 
 
 def words_per_page(pdf, count):
@@ -234,7 +259,7 @@ def main():
         if mine != theirs or mine < 1:
             # Pagination has to agree before a per-page comparison means anything.
             return [(relative, 0, emf, wmf, "-", "-", "pagination-differs")]
-        rastered = pages_with_images(reference)
+        rastered = unmatched_rasters(ours, reference)
         if not rastered:
             return []
         my_words = words_per_page(ours, mine)

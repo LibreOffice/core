@@ -295,10 +295,10 @@ again in corpus form: a fix aimed at batch *n* routinely breaks batch *n−4* in
 looks nothing like the change, and advancing on the first condition alone is how a corpus
 rots from the front.
 
-**`TODO.raster-ceiling.md` lists 53 pages the word gate cannot win.** LibreOffice rasterises
+**`TODO.raster-ceiling.md` lists 37 pages the word gate cannot win.** LibreOffice rasterises
 an embedded object on those, so its PDF holds a picture where ours holds real searchable text —
 ours is the better output and `wc -w` scores it as failure. An embedded metafile is the
-commonest cause and not the only one: 24 of the 53 are on documents holding none. Check that
+commonest cause and not the only one: 16 of the 37 are on documents holding none. Check that
 list before working any word-count failure; several agents have each re-derived it the hard way.
 
 The `corpus-batches` skill holds the rest — why the ordering and the batch size are what

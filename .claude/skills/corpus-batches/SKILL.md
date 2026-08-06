@@ -177,7 +177,14 @@ pages, including a `.ppt` whose page-10 ceiling had already been established by 
 page is flagged when the reference draws a raster there *and* we extract materially more words
 than it does — the metafile count rides along as an attribution.
 
-Two detection traps, both measured:
+Three detection traps, all measured:
+
+- **"The reference draws a raster here" is not enough.** A logo *both* renderers draw satisfies
+  it. Four pages of one document were flagged on a 162x109 JPEG of the EU flag in its footer,
+  identical on both sides, while the real surplus was a header block on 13 of its 18 pages.
+  Requiring the raster to be one *we do not draw* removed **16 of 53 flagged pages, nearly a
+  third of the list**. The signature misfires on any document with a small picture in its page
+  furniture and a furniture defect elsewhere.
 
 - **A binary document deflates its metafiles.** A `.ppt` keeps pictures zlib-compressed inside
   Escher blip records, so a raw signature search finds nothing in a file that plainly holds an
