@@ -96,11 +96,16 @@ window.L.TileSectionManager = window.L.Class.extend({
 	},
 
 	_addPreloadMap: function () {
-		app.sectionContainer.addSection(new app.definitions.preloadMapSection());
+		if (RenderManager.isVectorRendering())
+			return; // no bitmap tile grid to map
+		this._preloadMap = new app.definitions.preloadMapOverlay();
 	},
 
 	_removePreloadMap: function () {
-		app.sectionContainer.removeSection(app.CSections.Debug.PreloadMap.name);
+		if (!this._preloadMap)
+			return;
+		this._preloadMap.destroy();
+		this._preloadMap = null;
 	},
 
 	update: function () {

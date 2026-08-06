@@ -80,6 +80,27 @@ class RenderManagerBase {
 	discardAllCache(): void {}
 
 	// -- debug --
+	// Tile state change subscribers. Static, so a subscriber survives the
+	// instance being replaced when the document type becomes known. Nothing
+	// subscribes unless the preload map debug overlay is on, so notifying
+	// costs a length check.
+	private static tileStateListeners: Array<() => void> = [];
+
+	onTileStateChanged(callback: () => void): void {
+		RenderManagerBase.tileStateListeners.push(callback);
+	}
+
+	offTileStateChanged(callback: () => void): void {
+		const index = RenderManagerBase.tileStateListeners.indexOf(callback);
+		if (index >= 0) RenderManagerBase.tileStateListeners.splice(index, 1);
+	}
+
+	/// Tell subscribers that some tile's state changed: created, destroyed,
+	/// invalidated, requested, or given new content.
+	protected notifyTileStateChanged(): void {
+		for (const callback of RenderManagerBase.tileStateListeners) callback();
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setDebugDeltas(_state: boolean): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function

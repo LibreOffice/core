@@ -1710,6 +1710,14 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 #debug-panel input[type='checkbox'] { margin-right: 5px; }
 #debug-panel .debug-panel-number { width: 5.5em; margin-left: 5px; font: inherit; }
 
+/* the debug tile preload map, drawn above the document canvas it is a
+   sibling of, and transparent to input */
+#preload-map {
+	position: absolute;
+	z-index: 1;
+	pointer-events: none;
+}
+
 /* the bar saying that a small screen is not fully accessible */
 .accessibility-notice {
 	position: fixed;

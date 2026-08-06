@@ -82,6 +82,14 @@ class RenderManager {
 		RenderManager.ensureInstance().setDebugDeltas(state);
 	}
 
+	static onTileStateChanged(callback: () => void): void {
+		RenderManager.ensureInstance().onTileStateChanged(callback);
+	}
+
+	static offTileStateChanged(callback: () => void): void {
+		RenderManager.ensureInstance().offTileStateChanged(callback);
+	}
+
 	static get(coords: TileCoordData): Tile {
 		return RenderManager.ensureInstance().get(coords);
 	}

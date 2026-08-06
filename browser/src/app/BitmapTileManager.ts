@@ -192,6 +192,7 @@ class BitmapTileManager extends RenderManagerBase {
 					this.reclaimTileBitmapMemory(tile);
 					tile.rawDeltas = [];
 					tile.forceKeyframe();
+					this.notifyTileStateChanged();
 				}
 			}
 		}
@@ -302,6 +303,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 			if (tile.isReady()) this.tileReady(tile.coords);
 		}
+		this.notifyTileStateChanged();
 
 		// Check if all current visible tiles are accounted for and resume drawing if so.
 		if (this.visibleTilesReady()) {
@@ -701,6 +703,7 @@ class BitmapTileManager extends RenderManagerBase {
 		const tile = new Tile(coords);
 
 		this.tiles.set(key, tile);
+		this.notifyTileStateChanged();
 
 		return tile;
 	}
@@ -875,6 +878,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 		this.reclaimTileBitmapMemory(tile);
 		this.tiles.delete(key);
+		this.notifyTileStateChanged();
 	}
 
 	private removeAllTiles() {
@@ -928,6 +932,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 			const n = this.tileBitmapList.findIndex((it) => it == tile);
 			if (n !== -1) this.tileBitmapList.splice(n, 1);
+			this.notifyTileStateChanged();
 		}
 	}
 
@@ -1119,6 +1124,8 @@ class BitmapTileManager extends RenderManagerBase {
 				);
 			}
 		}
+
+		this.notifyTileStateChanged();
 	}
 
 	private tileNeedsFetch(key: string) {
@@ -1183,6 +1190,8 @@ class BitmapTileManager extends RenderManagerBase {
 
 			this.sortTileBitmapList();
 		}
+
+		this.notifyTileStateChanged();
 	}
 
 	private getMissingTiles(
@@ -1388,6 +1397,7 @@ class BitmapTileManager extends RenderManagerBase {
 		for (const tile of this.tiles.values()) {
 			tile.forceKeyframe();
 		}
+		this.notifyTileStateChanged();
 	}
 
 	public setDebugDeltas(state: boolean) {
@@ -1809,6 +1819,7 @@ class BitmapTileManager extends RenderManagerBase {
 		// Only decompress deltas for tiles that are current. This stops
 		// prefetching from blowing past GC limits.
 		if (tile.distanceFromView === 0) this.rehydrateTile(tile, true);
+		this.notifyTileStateChanged();
 
 		this.queueAcknowledgement(tileMsgObj);
 
@@ -2305,6 +2316,8 @@ class BitmapTileManager extends RenderManagerBase {
 				);
 			tile.forceKeyframe(wireId ? wireId : tile.wireId);
 		}
+
+		this.notifyTileStateChanged();
 	}
 
 	// Indicate that we're about to render this image.

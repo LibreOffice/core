@@ -378,6 +378,7 @@ COOL_JS_LST =\
 	src/app/GifFrameSource.ts \
 	src/app/AnimatedGifManager.ts \
 	src/app/TilesMiddleware.ts \
+	src/app/PreloadMapOverlay.ts \
 	src/app/SearchService.ts \
 	src/app/BaseClass.ts \
 	src/app/Events.ts \
@@ -434,7 +435,6 @@ COOL_JS_LST =\
 	src/canvas/sections/SplitterLinesSection.ts \
 	src/canvas/sections/PixelGridSection.ts \
 	src/canvas/sections/DebugOverlaySection.ts \
-	src/canvas/sections/PreloadMapSection.ts \
 	src/canvas/sections/TilesSection.ts \
 	src/canvas/sections/CalcRTLAwareDocumentPosition.ts \
 	src/canvas/vector/DrawRasterOptions.ts \

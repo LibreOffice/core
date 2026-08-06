@@ -84,7 +84,6 @@
 /// <reference path="../src/canvas/sections/SplitterLinesSection.ts" />
 /// <reference path="../src/canvas/sections/PixelGridSection.ts" />
 /// <reference path="../src/canvas/sections/DebugOverlaySection.ts" />
-/// <reference path="../src/canvas/sections/PreloadMapSection.ts" />
 /// <reference path="../src/canvas/sections/TilesSection.ts" />
 /// <reference path="../src/canvas/sections/CalcRTLAwareDocumentPosition.ts" />
 /// <reference path="../src/canvas/vector/primitive/Primitive.ts" />
