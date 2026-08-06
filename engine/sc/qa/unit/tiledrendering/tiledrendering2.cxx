@@ -24,10 +24,13 @@
 #include <COKit/COKit.hxx>
 
 #include <sctestviewcallback.hxx>
+#include <conditio.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
+#include <globstr.hrc>
 #include <scmod.hxx>
+#include <scresid.hxx>
 #include <tabprotection.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -1135,6 +1138,41 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetCellFormulaRespectsProtection)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(ScAddress(3, 3, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExportKeepsCondFormatTilesValid)
+{
+    // Downloading a copy of a sheet must leave the other collaborators' tiles alone.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // A condition comparing against a plain number holds no formula cell and no
+    // relative reference, so a recalculation has nothing to redo for it.
+    const ScRange aCondFormatRange(0, 0, 0, 3, 20, 0);
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, *pDoc);
+    pFormat->SetRange(ScRangeList(aCondFormatRange));
+    pFormat->AddEntry(new ScCondFormatEntry(ScConditionMode::Greater, u"5"_ustr, u""_ustr, *pDoc,
+                                            ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT)));
+    const sal_uInt32 nKey = pDoc->AddCondFormat(std::move(pFormat), 0);
+    pDoc->AddCondFormatData(ScRangeList(aCondFormatRange), 0, nKey);
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aView;
+    aView.ClearAllInvalids();
+
+    // The xlsx filter forces a calculation pass per sheet, which walks the
+    // conditional formats. This is the "Download as xlsx" path.
+    save(TestFilter::XLSX);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Exporting a copy must not invalidate tiles", size_t(0),
+                                 aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_MESSAGE("Exporting a copy must not flag a full-tile invalidation",
+                           !aView.m_bFullInvalidateTiles);
+    CPPUNIT_ASSERT_MESSAGE("Exporting a copy must not raise the tile-invalidate flag",
+                           !aView.m_bInvalidateTiles);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

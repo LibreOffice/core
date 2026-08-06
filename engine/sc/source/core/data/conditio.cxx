@@ -1607,7 +1607,7 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument& rDoc ) const
 
 void ScConditionEntry::CalcAll()
 {
-    if (pFCell1 || pFCell2 || xRelRefCells1 || !xRelRefCells2)
+    if (pFCell1 || pFCell2 || xRelRefCells1 || xRelRefCells2)
     {
         if (pFCell1)
             pFCell1->SetDirty();
