@@ -137,10 +137,18 @@ private:
 
     static bool eTagUnchanged(const std::string& uri, const std::string& oldETag);
 
+    /// Whether a response says the font is the one we downloaded before, whether
+    /// by answering the conditional request with 304 or by repeating its ETag.
+    static bool sameETag(const std::string& uri, const std::string& oldETag,
+                         const std::shared_ptr<const http::Response>& httpResponse);
+
     bool downloadWithETag(const std::string& uri, const std::string& oldETag);
 
     bool finishDownload(const std::string& uri,
                         const std::shared_ptr<const http::Response>& httpResponse);
+
+    /// Replace the spare Kits, once, if this poll added any font to ForKit.
+    void refreshSpareKits();
 
     void restartForKitAndReDownloadConfigFile();
 
@@ -166,6 +174,9 @@ private:
 
     // The key of this map is the download URI of the font.
     std::map<std::string, FontData> fonts;
+
+    // Whether any font reached ForKit while the current JSON file was handled.
+    bool _fontsAdded = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

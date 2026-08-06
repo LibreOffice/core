@@ -711,6 +711,17 @@ void RemoteFontConfigPoll::handleJSON(const Poco::JSON::Object::Ptr& remoteJson)
             break;
         }
     }
+
+    refreshSpareKits();
+}
+
+void RemoteFontConfigPoll::refreshSpareKits()
+{
+    if (_fontsAdded)
+    {
+        _fontsAdded = false;
+        COOLWSD::requestTerminateSpareKits();
+    }
 }
 
 void RemoteFontConfigPoll::handleUnchangedJSON()
@@ -768,9 +779,27 @@ bool RemoteFontConfigPoll::eTagUnchanged(const std::string& uri, const std::stri
 
     const std::shared_ptr<const http::Response> httpResponse = httpSession->syncRequest(request);
 
+    return sameETag(uri, oldETag, httpResponse);
+}
+
+bool RemoteFontConfigPoll::sameETag(const std::string& uri, const std::string& oldETag,
+                                    const std::shared_ptr<const http::Response>& httpResponse)
+{
     if (httpResponse->statusLine().statusCode() == http::StatusCode::NotModified)
     {
         LOG_DBG("Not modified since last time: " << uri);
+        return true;
+    }
+
+    // Not every server answers a conditional request with 304; some ignore
+    // If-None-Match and send the file again with 200.  The font is unchanged all
+    // the same as long as the ETag is the one we already have, and taking the
+    // status code alone as the answer would have us re-download every font on
+    // every poll, and restart the Kits for each one of them.
+    if (!oldETag.empty() && httpResponse->statusLine().statusCode() == http::StatusCode::OK &&
+        httpResponse->get("ETag") == oldETag)
+    {
+        LOG_DBG("Same ETag as last time: " << uri);
         return true;
     }
 
@@ -792,11 +821,8 @@ bool RemoteFontConfigPoll::downloadWithETag(const std::string& uri, const std::s
 
     const std::shared_ptr<const http::Response> httpResponse = httpSession->syncRequest(request);
 
-    if (httpResponse->statusLine().statusCode() == http::StatusCode::NotModified)
-    {
-        LOG_DBG("Not modified since last time: " << uri);
+    if (sameETag(uri, oldETag, httpResponse))
         return true;
-    }
 
     if (!finishDownload(uri, httpResponse))
         return false;
@@ -841,7 +867,11 @@ bool RemoteFontConfigPoll::finishDownload(const std::string& uri,
 
     COOLWSD::sendMessageToForKit("addfont " + fontFile);
 
-    COOLWSD::requestTerminateSpareKits();
+    // The spare Kits that are already running know nothing of this font, but let
+    // the whole JSON file be handled before replacing them: one round of
+    // respawning serves however many fonts this poll brought in, where one round
+    // per font would leave the server without a spare Kit for the whole sync.
+    _fontsAdded = true;
 
     return true;
 }
