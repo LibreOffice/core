@@ -847,6 +847,47 @@ void SwTextFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 
 void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
 {
+    std::optional<bool> bShouldApplyCJKAdjustment;
+    auto fnShouldApplyCJKAdjustment = [&]
+    {
+        if (!bShouldApplyCJKAdjustment.has_value())
+        {
+            bShouldApplyCJKAdjustment = [&]
+            {
+                if (!GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                        DocumentSettingId::MS_WORD_COMP_GRID_METRICS))
+                {
+                    return false;
+                }
+
+                // tdf#171275: Do not add the CJK extra leading when grid is enabled
+                auto const* const pGrid = GetGridItem(m_pFrame->FindPageFrame());
+                if (pGrid && rInf.SnapToGrid())
+                {
+                    return false;
+                }
+
+                return rInf.FontHasCJKCodePages();
+            }();
+        }
+
+        return *bShouldApplyCJKAdjustment;
+    };
+
+    auto fnAdjustHeightAscent = [&](sal_uInt16 nHeight, sal_uInt16 nAscent)
+    {
+        if (fnShouldApplyCJKAdjustment())
+        {
+            // tdf#129808: For Word layout compatibility, adjust ascent for fonts
+            // advertising support for certain CJK code pages.
+            sal_uInt16 nAdjustedHeight = (nHeight * 127) / 100;
+            sal_uInt16 nAdjustedAscent = nAdjustedHeight - (nHeight - nAscent);
+            return std::make_tuple(nAdjustedHeight, nAdjustedAscent);
+        }
+
+        return std::make_tuple(nHeight, nAscent);
+    };
+
     bool bCalc = false;
     if ( pPor->InFieldGrp() && static_cast<SwFieldPortion*>(pPor)->GetFont() )
     {
@@ -854,8 +895,11 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
         // independent from hard attribute values
         SwFont* pFieldFnt = static_cast<SwFieldPortion*>(pPor)->m_pFont.get();
         SwFontSave aSave( rInf, pFieldFnt );
-        pPor->Height( rInf.GetTextHeight() );
-        pPor->SetAscent( rInf.GetAscent() );
+
+        auto [nAdjustedHeight, nAdjustedAscent]
+            = fnAdjustHeightAscent(rInf.GetTextHeight(), rInf.GetAscent());
+        pPor->Height(nAdjustedHeight);
+        pPor->SetAscent(nAdjustedAscent);
         bCalc = true;
     }
     // i#89179
@@ -928,8 +972,12 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
             || !rInf.GetLast()->InTextGrp() )
         {
             pPor->SetHangingBaseline( rInf.GetHangingBaseline() );
-            pPor->SetAscent( rInf.GetAscent()  );
-            pPor->Height(rInf.GetTextHeight());
+
+            auto [nAdjustedHeight, nAdjustedAscent]
+                = fnAdjustHeightAscent(rInf.GetTextHeight(), rInf.GetAscent());
+
+            pPor->SetAscent(nAdjustedAscent);
+            pPor->Height(nAdjustedHeight);
             bCalc = true;
         }
         else

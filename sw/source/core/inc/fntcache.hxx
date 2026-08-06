@@ -79,6 +79,9 @@ class SwFntObj final : public SwCacheObj
     sal_uInt16 m_nZoom;
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
+    bool m_bScrHasCJKCodePages : 1 = false;
+    bool m_bPrtHasCJKCodePages : 1 = false;
+    bool m_bPrtHasCJKCodePagesInitialized : 1 = false;
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
@@ -100,6 +103,7 @@ public:
     sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontHangingBaseline( const SwViewShell *pSh, const OutputDevice& rOut );
+    bool GetFontHasCJKCodePages(const SwViewShell* pSh, const OutputDevice& rOut);
 
     void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );
 

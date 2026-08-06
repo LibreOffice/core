@@ -86,6 +86,7 @@ class SwSubFont final : public SvxFont
     void DrawStretchText_( SwDrawTextInfo &rInf );
     TextFrameIndex GetModelPositionForViewPoint_( SwDrawTextInfo& rInf );
     TextFrameIndex GetCapitalCursorOfst( SwDrawTextInfo& rInf );
+    bool HasCJKCodePages(SwViewShell const* pSh, const OutputDevice& rOut);
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
@@ -345,6 +346,9 @@ public:
 
     sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut )
         { return m_nActual == SwFontScript::CTL ? m_aSub[m_nActual].GetHangingBaseline( pSh, rOut ) : 0; }
+
+    bool HasCJKCodePages( SwViewShell const *pSh, const OutputDevice &rOut )
+        { return m_aSub[m_nActual].HasCJKCodePages(pSh, rOut); }
 
     void Invalidate()
         { m_bFontChg = m_bOrgChg = true; }

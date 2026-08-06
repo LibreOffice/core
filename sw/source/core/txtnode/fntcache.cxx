@@ -266,30 +266,49 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
     }
 }
 
-// tdf#129808: Oddly, Word scales up ascent and line height for *fonts* that self-report
-// coverage for certain specific CJK code pages, even when that font isn't used for CJK
-// text. Apply this scale when necessary.
-static sal_uInt16 lcl_ApplyCjkHeightAdjustment(sal_uInt16 nBase, const SwViewShell* pSh,
-                                               const OutputDevice& rDev)
+namespace
 {
-    if (!pSh || !pSh->getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS))
-    {
-        return nBase;
-    }
-
+bool lcl_FontHasCJKCodePages(const OutputDevice& rOut)
+{
     vcl::FontCapabilities stCaps;
-    if (rDev.GetFontCapabilities(stCaps) && stCaps.oCodePageRange.has_value())
+    if (!rOut.GetFontCapabilities(stCaps) || !stCaps.oCodePageRange.has_value())
     {
-        if (stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP932)
-            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP936)
-            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP949)
-            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP950))
-        {
-            return (nBase * 127) / 100;
-        }
+        return false;
     }
 
-    return nBase;
+    // tdf#129808: Oddly, Word scales up ascent and line height for *fonts* that
+    // self-report coverage for certain specific CJK code pages, even when that
+    // font isn't used for CJK text. Only report these code pages.
+    return stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP932)
+           || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP936)
+           || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP949)
+           || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP950);
+}
+}
+
+bool SwFntObj::GetFontHasCJKCodePages(const SwViewShell* pSh, const OutputDevice& rOut)
+{
+    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+
+    if (pSh)
+    {
+        CreateScrFont(*pSh, rOut);
+        return m_bScrHasCJKCodePages;
+    }
+    else
+    {
+        if (!m_bPrtHasCJKCodePagesInitialized)
+        {
+            CreatePrtFont(rOut);
+            const vcl::Font aOldFnt(rRefDev.GetFont());
+            const_cast<OutputDevice&>(rRefDev).SetFont(*m_pPrtFont);
+            m_bPrtHasCJKCodePages = lcl_FontHasCJKCodePages(rRefDev);
+            m_bPrtHasCJKCodePagesInitialized = true;
+            const_cast<OutputDevice&>(rRefDev).SetFont(aOldFnt);
+        }
+
+        return m_bPrtHasCJKCodePages;
+    }
 }
 
 // Returns the Ascent of the Font on the given output device;
@@ -321,8 +340,6 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         nRet = m_nPrtAscent;
     }
 
-    nRet = lcl_ApplyCjkHeightAdjustment(nRet, pSh, rRefDev);
-
 #if !defined(MACOSX) // #i89844# extleading is below the line for Mac
     // TODO: move extleading below the line for all platforms too
     nRet += GetFontLeading( pSh, rRefDev );
@@ -344,8 +361,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
         CreateScrFont( *pSh, rOut );
         OSL_ENSURE( USHRT_MAX != m_nScrHeight, "nScrHeight is going berzerk" );
 
-        nRet = lcl_ApplyCjkHeightAdjustment(m_nScrHeight, pSh, rRefDev)
-               + GetFontLeading(pSh, rRefDev);
+        nRet = m_nScrHeight + GetFontLeading(pSh, rRefDev);
     }
     else
     {
@@ -368,8 +384,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
-        nRet = lcl_ApplyCjkHeightAdjustment(m_nPrtHeight, pSh, rRefDev)
-               + GetFontLeading(pSh, rRefDev);
+        nRet = m_nPrtHeight + GetFontLeading(pSh, rRefDev);
     }
 
     OSL_ENSURE( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" );
@@ -520,6 +535,8 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     m_nScrHangingBaseline =  o3tl::narrowing<sal_uInt16>(pOut->GetFontMetric().GetHangingBaseline());
     if ( USHRT_MAX == m_nScrHeight )
         m_nScrHeight = o3tl::narrowing<sal_uInt16>(pOut->GetTextHeight());
+
+    m_bScrHasCJKCodePages = lcl_FontHasCJKCodePages(*pOut);
 
     // reset original output device font
     pOut->SetFont( aOldOutFont );

@@ -270,6 +270,7 @@ public:
 
     sal_uInt16 GetAscent() const;
     sal_uInt16 GetHangingBaseline() const;
+    bool FontHasCJKCodePages() const;
 
     TextFrameIndex GetIdx() const { return m_nIdx; }
     void SetIdx(const TextFrameIndex nNew) { m_nIdx = nNew; }
@@ -793,6 +794,12 @@ inline sal_uInt16 SwTextSizeInfo::GetHangingBaseline() const
 {
     assert(GetOut());
     return const_cast<SwFont*>(GetFont())->GetHangingBaseline( m_pVsh, *GetOut() );
+}
+
+inline bool SwTextSizeInfo::FontHasCJKCodePages() const
+{
+    assert(GetOut());
+    return const_cast<SwFont*>(GetFont())->HasCJKCodePages(m_pVsh, *GetOut());
 }
 
 inline SwPositiveSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
