@@ -10,6 +10,7 @@
 #include "kitclipboard.hxx"
 #include <algorithm>
 #include <cstdlib>
+#include <optional>
 #include <unordered_map>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
@@ -421,11 +422,14 @@ void KitTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor
 }
 
 KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeTypes,
-                                 const size_t* pInSizes, const char** pInStreams)
+                                 const size_t* pInSizes, const char** pInStreams,
+                                 bool bSynthesizeMarkdown)
 {
     m_aContent.reserve(nInCount);
     m_aFlavors = cpo::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
     auto p_aFlavors = m_aFlavors.getArray();
+    std::optional<size_t> oPlainIdx;
+    bool bHasMarkdown = false;
     for (size_t i = 0; i < nInCount; ++i)
     {
         initFlavourFromMime(p_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
@@ -437,6 +441,23 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
             aContent <<= cpo::uno::Sequence<sal_Int8>(
                 reinterpret_cast<const sal_Int8*>(pInStreams[i]), pInSizes[i]);
         m_aContent.push_back(aContent);
+
+        if (!oPlainIdx && m_aFlavors[i].MimeType == "text/plain;charset=utf-16")
+            oPlainIdx = i;
+        else if (m_aFlavors[i].MimeType == "text/markdown")
+            bHasMarkdown = true;
+    }
+
+    if (bSynthesizeMarkdown && oPlainIdx && !bHasMarkdown)
+    {
+        // We have plain text data, offer the possibility to parse it as markdown.
+        sal_Int32 nFlavorsSize = m_aFlavors.getLength();
+        m_aFlavors.realloc(nFlavorsSize + 1);
+        datatransfer::DataFlavor& rFlavors = m_aFlavors.getArray()[nFlavorsSize];
+        rFlavors.MimeType = u"text/markdown"_ustr;
+        rFlavors.HumanPresentableName = u"text/markdown"_ustr;
+        rFlavors.DataType = cppu::UnoType<OUString>::get();
+        m_aContent.push_back(m_aContent[*oPlainIdx]);
     }
 }
 

@@ -7461,8 +7461,25 @@ static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* p
     pInSizes[0] = nSize;
     pInStreams[0] = pData;
 
-    if (!doc_setClipboard(pThis, 1, pInMimeTypes, pInSizes, pInStreams))
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return false;
+    }
+
+    uno::Reference<datatransfer::XTransferable> xTransferable(
+        new KitTransferable(1, pInMimeTypes, pInSizes, pInStreams,
+                            /*bSynthesizeMarkdown=*/false));
+
+    rtl::Reference<KitClipboard> xClip = forceSetClipboardForCurrentView(pThis);
+    xClip->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+
+    if (!pDoc->isMimeTypeSupported())
+    {
+        SetLastExceptionMsg(u"Document doesn't support this mime type"_ustr);
+        return false;
+    }
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {

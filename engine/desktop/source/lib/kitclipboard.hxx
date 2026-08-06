@@ -107,7 +107,7 @@ public:
 
     KitTransferable();
     KitTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
-                    const char** pInStreams);
+                    const char** pInStreams, bool bSynthesizeMarkdown = true);
     KitTransferable(const OUString& sMimeType, const cpo::uno::Sequence<sal_Int8>& aSequence);
 
     cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;

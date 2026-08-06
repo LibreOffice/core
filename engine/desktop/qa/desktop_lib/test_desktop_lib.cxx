@@ -170,6 +170,7 @@ public:
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
+    void testClipboardMarkdownFlavor();
     void testUndoWriter();
     void testRowColumnHeaders();
     void testHiddenRowHeaders();
@@ -260,6 +261,7 @@ public:
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
+    CPPUNIT_TEST(testClipboardMarkdownFlavor);
     CPPUNIT_TEST(testUndoWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testHiddenRowHeaders);
@@ -917,6 +919,52 @@ void DesktopKitTest::testPasteWriterJPEG()
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
+}
+
+void DesktopKitTest::testClipboardMarkdownFlavor()
+{
+    // Given text/plain and markdown data on the kit clipboard:
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    OString aText("foo _bar_ baz"_ostr);
+    const char* pInMimeTypes[] = { "text/plain;charset=utf-8" };
+    const size_t pInSizes[] = { static_cast<size_t>(aText.getLength()) };
+    const char* pInStreams[] = { aText.getStr() };
+    CPPUNIT_ASSERT(pDocument->pClass->setClipboard(pDocument, 1, pInMimeTypes, pInSizes,
+                                                   pInStreams));
+
+    // When getting the clipboard content:
+    size_t nOutCount = 0;
+    char** pOutMimeTypes = nullptr;
+    size_t* pOutSizes = nullptr;
+    char** pOutStreams = nullptr;
+    CPPUNIT_ASSERT(pDocument->pClass->getClipboard(pDocument, nullptr, &nOutCount, &pOutMimeTypes,
+                                                   &pOutSizes, &pOutStreams));
+
+    // Then make sure the plain text data is also advertised as markdown:
+    bool bHasPlain = false;
+    bool bHasMarkdown = false;
+    OString aMarkdownContent;
+    for (size_t i = 0; i < nOutCount; ++i)
+    {
+        OString aMime(pOutMimeTypes[i]);
+        if (aMime == "text/plain;charset=utf-8")
+            bHasPlain = true;
+        else if (aMime == "text/markdown")
+        {
+            bHasMarkdown = true;
+            aMarkdownContent = OString(pOutStreams[i], pOutSizes[i]);
+        }
+        free(pOutMimeTypes[i]);
+        free(pOutStreams[i]);
+    }
+    free(pOutMimeTypes);
+    free(pOutStreams);
+    free(pOutSizes);
+    CPPUNIT_ASSERT(bHasPlain);
+    // Without the accompanying fix in place, this test would have failed, there was no markdown
+    // advertised when listing available formats.
+    CPPUNIT_ASSERT(bHasMarkdown);
+    CPPUNIT_ASSERT_EQUAL(aText, aMarkdownContent);
 }
 
 void DesktopKitTest::testUndoWriter()
