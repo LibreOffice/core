@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-27 18:12+0000\n"
+"PO-Revision-Date: 2026-08-06 13:27+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -867,14 +867,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Uaslódáil síneadh pacáistithe mar .zip; díphacáiltear a bhfuil ann "
+"(manifest.json, ...) ar an bhfreastalaí."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Síneadh Uaslódála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Níl socruithe ar fáil ach d'úsáideoirí atá sínithe isteach."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -1043,7 +1045,7 @@ msgstr "m.sh."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Fág folamh mura bhfuil ceann ag teastáil ó do fhreastalaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1104,7 +1106,7 @@ msgstr "Faigh samhlacha le roghnú"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Cuóta API sáraithe - seiceáil do phlean agus do shonraí billeála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1447,7 +1449,7 @@ msgstr "Leagan Reatha"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n níos mó"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1556,7 +1558,7 @@ msgstr "seoladh cille"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Bosca Ainm"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
@@ -1564,7 +1566,7 @@ msgstr "Déan an téacs seo a leanas níos gonta"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Déan níos gonta é"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
@@ -1572,7 +1574,7 @@ msgstr "Achoimrigh príomhphointí an téacs seo"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Achoimrigh an téacs seo"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
@@ -1580,7 +1582,7 @@ msgstr "Leathnaigh agus cuir tuilleadh sonraí leis an téacs seo"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Leathnaigh an téacs seo"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1588,7 +1590,7 @@ msgstr "Deisigh earráidí gramadaí, litrithe agus poncaíochta"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Deisigh gramadach agus litriú"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
@@ -1616,7 +1618,7 @@ msgstr "Ócáideach"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Is Fearr"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1625,7 +1627,7 @@ msgstr "Go maith"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Bocht"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
@@ -1907,7 +1909,7 @@ msgstr "Féach níos mó"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Cealaíodh rogha teimpléid dearaidh."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
@@ -1926,6 +1928,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Chuaigh an t-am isteach don iarratas. Is féidir leat an t-am isteach don "
+"iarratas a mhéadú sa chuid AI de na socruithe."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -2029,23 +2033,23 @@ msgstr "Theip ar ábhar an roghnúcháin a pharsáil"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Roghnaigh dearadh chun do dheic, nó lean ar aghaidh gan ceann:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "Gan teimpléad"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Lean ar aghaidh gan teimpléad dearaidh"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Teimpléad dearaidh: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Ag leanúint ar aghaidh gan teimpléad dearaidh."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
@@ -2521,104 +2525,105 @@ msgstr "Tuilleadh Eolais Maoine"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Oscail doiciméad ó do ríomhaire nó ó shuíomh scamall."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Oscail Comhad ó Ríomhaire"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Cuir Scamall + leis"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Cuir cuntas in eagar"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Cuir cuntas nua leis"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL an fhreastalaí"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Cuir isteach URL an fhreastalaí"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Ainm taispeána"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Cuir isteach ainm taispeána"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Ainm a thaispeántar i do liosta scamall (uasmhéid 40 carachtar)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Sábháil athruithe"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Cuir Cuntas leis"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Bain cuntas"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Dícheanglaíonn sé an scamall seo"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Cuireadh cuntas nua leis go rathúil"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
 msgstr ""
+"Is féidir leat rochtain a fháil ar do chuid comhad ón scamall seo anois."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Oscail Comhaid"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "An cuntas seo a bhaint?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Déanfar tú a dhícheangal ón gcuntas scamall seo."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Scaoil comhad le hoscailt"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Níl an radharc soghluaiste seo inrochtana go hiomlán."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Ráiteas inrochtaineachta"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3787,7 +3792,7 @@ msgstr "Níos mó ..."
 
 #: src/control/Control.Menubar.ts:1979
 msgid "Menu"
-msgstr ""
+msgstr "Roghchlár"
 
 #: src/control/Control.Menubar.ts:2183
 msgid "Use Compact view"
@@ -3859,11 +3864,11 @@ msgstr "Torthaí"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Uasmhéadaigh go dtí an eangach"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Aimsigh agus Ionadaigh"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4062,7 +4067,7 @@ msgstr "Beochana"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Athruithe gan sábháil. Sábháil"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4102,7 +4107,7 @@ msgstr "Íomhá (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Athruithe gan sábháil."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -5098,7 +5103,7 @@ msgstr "Cóipeáil Bileog..."
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, faoi chosaint"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5161,6 +5166,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Úsáideann script leabaithe an sean-API UNO com.sun.star, a d'fhéadfaí a "
+"bhaint in eisiúintí amach anseo."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
@@ -5453,64 +5460,70 @@ msgstr "Iontráil ainm comhaid"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Cén chaoi ar mhaith leat eagarthóireacht a dhéanamh?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Tá úsáideoirí eile ag féachaint ar an doiciméad seo. Roghnaigh conas is mian "
+"leat leanúint ar aghaidh:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Cuir in eagar go háitiúil"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Athruithe sioncrónaithe nuair a shábhálann tú iad"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Eagarthóireacht chomhoibríoch"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Cuir in eagar le chéile i bhfíor-am"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Coinnigh ort ag féachaint ar chóip áitiúil"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Lean ar aghaidh le do leagan féin"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Bí páirteach in eagarthóireacht chomhoibríoch"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Ag fanacht go sábhálfar na hathruithe..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Tá úsáideoirí eile ag eagarthóireacht an doiciméid seo. Roghnaigh conas is "
+"mian leat leanúint ar aghaidh:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "thosaigh ag eagarthóireacht"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "Thosaigh %0 ag eagarthóireacht"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Tá duine eile ag eagarthóireacht an doiciméid seo anois. Roghnaigh conas is "
+"mian leat leanúint ar aghaidh:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5661,7 +5674,7 @@ msgstr "Athainmniú..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Ní féidir a roinnt"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6222,11 +6235,11 @@ msgstr "Feidhmeanna Cealla Tábla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Méid an chrutha roghnaithe"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Méid an Chrutha"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6459,12 +6472,10 @@ msgid "Server is shutting down"
 msgstr "Tá an freastalaí ag múchadh"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
 msgstr ""
-"Níl an AI cumraithe. Téigh go Comhad > Roghanna > Socruithe Amhairc chun é a "
-"shocrú."
+"Níl an AI cumraithe. Téigh go Comhad > Roghanna > Cúntóir AI chun é a shocrú."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6844,7 +6855,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Tá cóipeáil ón doiciméad díchumasaithe ag do riarthóir"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -7003,7 +7014,7 @@ msgstr "Léiriú Fuinneog: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Ag cur i láthair i bhfuinneog eile"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -7074,7 +7085,7 @@ msgstr "Dialóg Fáilte"
 
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Socruithe sábháilte. Cuir eochair API leis chun an cúntóir AI a úsáid."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7173,11 +7184,11 @@ msgstr "Súmáil Amach"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Réamhamharc ar an sleamhnán reatha"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Réamhamharc ar an sleamhnán seo chugainn"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7185,11 +7196,11 @@ msgstr "Réamhamharc ar an Sleamhnán {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Tá tú ag fágáil an chur i láthair."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "Níl an nasc bailí."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7355,11 +7366,11 @@ msgstr "Smaoineamh Buí"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Fáilte go dtí Scarbhileog"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Fáilte chuig an gCur i Láthair"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
