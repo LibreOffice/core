@@ -5334,19 +5334,27 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
                                                                       COOLWSD::ChildRoot + getJailId(),
                                                                       JAILED_DOCUMENT_ROOT + decoded));
 
-            std::ifstream ifs(filePath);
-            const std::string svg((std::istreambuf_iterator<char>(ifs)),
-                                (std::istreambuf_iterator<char>()));
-            ifs.close();
-
-            if (svg.empty())
+            const FileUtil::Stat downloadStat(filePath);
+            if (!downloadStat.good() || downloadStat.size() == 0)
                 LOG_WRN("Empty download: [id: " << downloadid << ", url: " << url << ']');
 
-            const auto it = _sessions.find(clientId);
-            if (it != _sessions.end())
+            // Only an SVG carries references to media files sitting in the jail's own
+            // /tmp, which the client has no way to reach. Reading and rewriting a whole
+            // spreadsheet or PDF here would cost the same as the export itself, and on
+            // the thread every session of this document shares.
+            if (FileUtil::extractFileExtension(decoded) == "svg")
             {
-                std::ofstream ofs(filePath);
-                ofs << it->second->processSVGContent(svg);
+                std::ifstream ifs(filePath);
+                const std::string svg((std::istreambuf_iterator<char>(ifs)),
+                                    (std::istreambuf_iterator<char>()));
+                ifs.close();
+
+                const auto it = _sessions.find(clientId);
+                if (it != _sessions.end())
+                {
+                    std::ofstream ofs(filePath);
+                    ofs << it->second->processSVGContent(svg);
+                }
             }
 
             _registeredDownloadLinks[downloadid] = std::move(url);
