@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-08-06 13:27+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "help/nl/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -100,11 +100,11 @@ msgstr "Afdrukken"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Zoeken"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Zoeken en vervangen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -146,41 +146,41 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Open het contextmenu bij de cursor of de geselecteerde cel"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Verplaats de focus naar het volgende gebied van de toepassing (menubalk, "
+"formulebalk, document, zijbalk, bladtabbladen, statusbalk)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Verplaats de focus naar het vorige gebied van de applicatie"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1375,41 +1375,44 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Selecteert de gehele kolom van de huidige cel."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Spatie</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Selecteert de gehele rij van de huidige cel."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Spatie</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Opent het contextmenu van het gefocusseerd tabblad (invoegen, hernoemen, "
+"verwijderen, verbergen, verplaatsen en meer)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Als een hele kolom of rij is geselecteerd, opent dit het contextmenu voor de "
+"overeenkomende kolom- of rijkop (invoegen, verwijderen, breedte of hoogte, "
+"verbergen en meer)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1648,7 +1651,7 @@ msgstr "<span class=\"productname\">{productname}</span> Help"
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 #: html/cool-help.html%2Bdiv.div.h3:383-5
 msgid "Collaborative editing"
-msgstr "Bewerken door samenwerking"
+msgstr "Gezamenlijk bewerken"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 #: html/cool-help.html%2Bdiv.div.h3:393-5
@@ -1663,7 +1666,7 @@ msgstr "Openen, sluiten, opslaan, afdrukken en downloaden van documenten"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Het openen, sluiten, opslaan en afdrukken van documenten"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.div.h3:480-5
@@ -1768,6 +1771,11 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"Met <span class=\"productname\">{productname}</span> kunt u typische "
+"kantoordocumenten maken en bewerken, d.w.z. tekstdocumenten, spreadsheets en "
+"presentaties, <span class=\"webBasedCOOLOnly\">direct in de webbrowser,</"
+"span> op eenvoudige wijze. <span class=\"webBasedCOOLOnly\">U kunt alleen "
+"aan een document werken, of samenwerken als onderdeel van een team.</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1797,17 +1805,16 @@ msgstr ""
 "gaat."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> maakt gebruik van moderne "
-"browserbronnen om de gebruikersinterface aan te passen aan de grootte van "
-"het weergavegebied, zoals kleine schermen op mobiele apparaten. De interface "
-"bestaat uit:"
+"<span class=\"webBasedCOOLOnly\"><span class=\"productname\">{productname}</"
+"span> maakt gebruik van moderne browserbronnen om de gebruikersinterface aan "
+"te passen aan de grootte van het weergavegebied, zoals kleine schermen op "
+"mobiele apparaten.</span> De interface bestaat uit:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -2007,6 +2014,10 @@ msgid ""
 "class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
 ">File</span> menu bar button."
 msgstr ""
+"Open een document direct vanuit de bestandsverkenner in <span "
+"class=\"productname\">{productname}</span> of gebruik de knop <span "
+"class=\"ui\">Openen</span> op de pagina die wordt getoond vanuit de knop "
+"<span class=\"ui\">Bestand</span> in de menubalk."
 
 #: html/cool-help.html%2Bdiv.div.div.p:458-7
 msgid ""
@@ -2014,6 +2025,9 @@ msgid ""
 "as</span> button on the page shown from the <span class=\"ui\">File</span> "
 "menu bar button."
 msgstr ""
+"Om het document in een ander formaat op te slaan gebruikt u de knop <span "
+"class=\"ui\">Opslaan als</span> op de pagina die wordt getoond vanuit de "
+"knop <span class=\"ui\">Bestand</span> in de menubalk."
 
 #: html/cool-help.html%2Bdiv.div.div.p:463-7
 msgid ""
@@ -2021,12 +2035,19 @@ msgid ""
 "to be saved right away you can use the <span class=\"ui\">Save</span> button "
 "on the page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Documenten worden automatisch periodiek opgeslagen, maar als u wilt dat er "
+"meteen een document wordt opgeslagen, kunt u de knop <span class=\"ui\">"
+"Opslaan</span> gebruiken op de pagina die wordt getoond vanuit de knop <span "
+"class=\"ui\">Bestand</span> in de menubalk."
 
 #: html/cool-help.html%2Bdiv.div.div.p:470-7
 msgid ""
 "To print the document, use the <span class=\"ui\">Print</span> button on the "
 "page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Om het document af te drukken, kunt u de knop <span class=\"ui\">Afdrukken</"
+"span> gebruiken op de pagina die wordt getoond vanuit de knop <span "
+"class=\"ui\">Bestand</span> in de menubalk."
 
 #: html/cool-help.html%2Bdiv.div.div.p:481-5
 msgid ""
