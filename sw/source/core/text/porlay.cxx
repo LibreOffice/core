@@ -192,7 +192,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
         pLeft->SetLen(TextFrameIndex(0));
         pLeft->SetAscent( 0 );
         pLeft->SetNextPortion( nullptr );
-        pLeft->SetFixWidth(0);
+        pLeft->SetFixWidth(0_emu);
     }
 
     SwLinePortion *pPos = pLeft->GetNextPortion();

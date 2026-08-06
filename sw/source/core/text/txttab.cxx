@@ -471,7 +471,7 @@ bool SwTabPortion::PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*const pL
             !rInf.GetFly() )
         {
             PrtWidth(std::max(SwTwips{0}, rInf.Width() - rInf.X()));
-            SetFixWidth( PrtWidth() );
+            SetFixWidth(gfx::Length::twip(PrtWidth()));
         }
         else
         {
@@ -487,7 +487,7 @@ bool SwTabPortion::PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*const pL
     {
         // A trick with impact: The new Tabportions now behave like
         // FlyFrames, located in the line - including adjustment !
-        SetFixWidth( PrtWidth() );
+        SetFixWidth(gfx::Length::twip(PrtWidth()));
         return false;
     }
 }
@@ -557,16 +557,16 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
 
     if( nDiffWidth > nPorWidth )
     {
-        const SwTwips nOldWidth = GetFixWidth();
+        const SwTwips nOldWidth = GetFixWidth().as_twip<SwTwips>();
         const SwTwips nAdjDiff = nDiffWidth - nPorWidth;
-        if( nAdjDiff > GetFixWidth() )
+        if (nAdjDiff > GetFixWidth().as_twip<SwTwips>())
             PrtWidth( nAdjDiff );
         // Don't be afraid: we have to move rInf further.
         // The right-tab till now only had the width of one blank.
         // Now that we stretched, the difference had to be added to rInf.X() !
         rInf.X( rInf.X() + PrtWidth() - nOldWidth );
     }
-    SetFixWidth( PrtWidth() );
+    SetFixWidth(gfx::Length::twip(PrtWidth()));
     // reset last values
     rInf.SetLastTab(nullptr);
     if( PortionType::TabDecimal == nWhich )

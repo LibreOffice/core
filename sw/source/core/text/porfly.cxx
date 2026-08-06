@@ -101,7 +101,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
         if( nNewWidth > rInf.Width() )
         {
             PrtWidth( nNewWidth - rInf.Width() );
-            SetFixWidth( PrtWidth() );
+            SetFixWidth(gfx::Length::twip(PrtWidth()));
         }
         return true;
     }
