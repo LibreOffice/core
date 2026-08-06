@@ -293,4 +293,66 @@ public class ShapingTests
         shaper.Shape(face, text).AdvanceInDesignUnits
             .ShouldBe(MetricsShaper.Instance.Shape(face, text).AdvanceInDesignUnits);
     }
+
+    // ------------------------------------------------------------------ the control characters
+
+    [Fact]
+    public void AControlCharacterIsCutOutRatherThanShapedIntoAMissingGlyphBox()
+    {
+        Assert.SkipUnless(HarfBuzzShaper.IsAvailable, "the native harfbuzz library is not present");
+        OpenTypeFace face = Carlito();
+        using HarfBuzzShaper shaper = new();
+
+        // U+0001 is what every word-processing reader writes where a picture, a floating frame, an
+        // embedded object or a comment mark stands. No text face maps it, so a shaper handed one
+        // returns .notdef at the face's glyph-zero advance — half an em in Carlito and more in the
+        // Liberation faces — which is both ink on the page and room taken on the line, for a character
+        // that means "something else stands here". LibreOffice removes it before shaping instead:
+        // ImplLayoutArgs::AddRun splits on IsControlChar, vcl/source/text/ImplLayoutArgs.cxx:111.
+        ShapedText plain = shaper.Shape(face, "ab");
+        ShapedText anchored = shaper.Shape(face, "a\u0001b");
+
+        anchored.AdvanceInDesignUnits.ShouldBe(plain.AdvanceInDesignUnits);
+        anchored.Glyphs.Count.ShouldBe(plain.Glyphs.Count);
+        anchored.Glyphs.ShouldNotContain(glyph => glyph.GlyphId == 0);
+
+        // It still occupies a position, so an offset recorded at its index still lands there: the
+        // prefix table has an entry for it and reads the same on either side.
+        anchored.TextLength.ShouldBe(3);
+        anchored.AdvanceUpTo(1).ShouldBe(anchored.AdvanceUpTo(2));
+    }
+
+    [Fact]
+    public void TheTabIsTheOneMemberOfTheC0RangeAShaperStillSees()
+    {
+        Assert.SkipUnless(HarfBuzzShaper.IsAvailable, "the native harfbuzz library is not present");
+        OpenTypeFace face = Carlito();
+        using HarfBuzzShaper shaper = new();
+
+        // A tab's width is not a property of the font — it advances to the next stop — so TabRuler
+        // resolves it against the paragraph's stops, the way Writer resolves it with a tab portion.
+        // Removing it here as LibreOffice does would be invisible on any line the ruler measures and
+        // would silently zero it on one measured without a paragraph format.
+        ShapingControls.IsRemovedBeforeShaping('\t').ShouldBeFalse();
+        ShapingControls.IsRemovedBeforeShaping('\u0001').ShouldBeTrue();
+        ShapingControls.IsRemovedBeforeShaping('\u000B').ShouldBeTrue();
+
+        shaper.Shape(face, "a\tb").TextLength.ShouldBe(3);
+    }
+
+    [Fact]
+    public void ACutOutControlDoesNotSplitTheShapingOfWhatSurroundsIt()
+    {
+        Assert.SkipUnless(HarfBuzzShaper.IsAvailable, "the native harfbuzz library is not present");
+        OpenTypeFace face = Carlito();
+        using HarfBuzzShaper shaper = new();
+
+        // Each stretch between two controls is still shaped whole, so the kern inside "AV" survives.
+        // Shaping character by character around the control would lose it, which is the failure the
+        // segmenting had to avoid — and the reason this is a split rather than a filter on the glyphs.
+        long kerned = shaper.Shape(face, "AV").AdvanceInDesignUnits;
+
+        shaper.Shape(face, "\u0001AV\u0001").AdvanceInDesignUnits.ShouldBe(kerned);
+        shaper.Shape(face, "AV\u0001AV").AdvanceInDesignUnits.ShouldBe(kerned * 2);
+    }
 }

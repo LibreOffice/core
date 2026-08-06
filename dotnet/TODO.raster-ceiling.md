@@ -70,6 +70,23 @@ So the boundary is real but its sign is not stable: **re-measure a document befo
 flagged pages**, because the table's per-page figures and a document's current total can be rounds
 apart. The rows below were measured when the file was built and this line was not.
 
+**And that same document's four rows are false positives, which is the sharper lesson.**
+`pdfimages -list` says the raster on each of pages 3, 7, 8 and 18 is a 162 × 109 JPEG that
+*both* sides draw — the EU flag in the footer, the same object at 302 dpi on every flagged page.
+Condition 1 below is met by a logo rather than by a rasterised object.
+
+The excess is a different defect entirely. Per page the document runs a near-constant **+18 to
++22 words on 13 of its 18 pages**, which is section 1's header: we draw it on every page and
+LibreOffice draws it on pages 1 and 14–17 only, because sections 2, 3 and 5 name only empty
+`even` and `first` header parts. Page 3 is +18 and the whole of it is that block. See
+`TODO.batches.md`, "the header nobody inherits", for the four probes that establish it.
+
+So the signature misfires on any document that puts a small logo in its page furniture *and*
+has a furniture defect elsewhere — the two conditions are then independent rather than joint
+evidence. Both are cheap to separate: ask whether the reference's raster is one **we draw too**,
+and whether the excess is spread evenly over the pages rather than concentrated on the flagged
+ones.
+
 **Eighty-two documents cannot be judged.** A per-page comparison is meaningless while the page
 counts disagree, so those are an honest **unknown** rather than a pass — they may hold the
 ceiling, a defect, or both. Fix their pagination first, then re-run. Two more (`2013_11.doc`,

@@ -38,9 +38,18 @@ public readonly record struct TextItem(int Start, int Length, byte Level, string
 /// Format control characters are cut out rather than shaped, which is
 /// <c>ImplLayoutArgs::AddRun</c>'s splitting on <c>IsControlChar</c>. A left-to-right mark handed to a
 /// shaper comes back as a missing-glyph box with a real advance, which is both visible and wide; cut
-/// out, it takes no room at all, which is what it means. The one departure from LibreOffice's list is
-/// the C0 range: it removes U+0001 to U+001F, and Paperless keeps them, because the tab is in that
-/// range and the tab's width is resolved by the line filler rather than by the shaper.
+/// out, it takes no room at all, which is what it means.
+/// </para>
+/// <para>
+/// <strong>This list is deliberately narrower than <see cref="Shaping.ShapingControls"/>'s</strong>,
+/// which is what a shaper is actually handed. Cutting here removes a character from every sub-run, so a
+/// paragraph whose whole text is one control character produces no run at all — and a paragraph with no
+/// run has no line for a frame anchored in it to be measured against. The commonest such paragraph in
+/// the corpus is a logo: a footer paragraph holding nothing but a <c>w:drawing</c>, whose text is the
+/// single U+0001 that stands for it. Measured on
+/// <c>1603642410-MoM-CASCOM-06-2020-draft04.docx</c>, whose nine footers each lost the six words in
+/// that shape. So the C0 range stays in the items and is dropped one layer down, where removing it
+/// costs the glyph and not the structure.
 /// </para>
 /// </remarks>
 public static class TextItemiser
@@ -217,13 +226,13 @@ public static class TextItemiser
     }
 
     /// <summary>
-    /// True for a character that must not reach a shaper.
+    /// True for a character that must not appear in a sub-run's range at all.
     /// </summary>
     /// <remarks>
-    /// LibreOffice's <c>IsControlChar</c> (<c>vcl/source/text/ImplLayoutArgs.cxx</c>) minus its C0
-    /// range: the directional marks and the embedding and override controls, the invisible operators
-    /// and the deprecated format characters, the byte-order mark, the two permanent non-characters,
-    /// and NUL. Every one of them has no width and no glyph, and a shaper handed one draws a box.
+    /// <see cref="Shaping.ShapingControls"/> minus the C0 range, for the reason on the class: a cut here
+    /// removes the character from every run, and a paragraph that is nothing but control characters then
+    /// has no run and no line. The C0 range is dropped inside the shaper instead, which costs it its
+    /// glyph and its advance and leaves the run it sits in intact.
     /// </remarks>
     private static bool IsFormatControl(char character) => character
         is '\u0000'
