@@ -889,6 +889,15 @@ ul {
   filter: saturate(0.7);
 }
 
+.checkbox-radio-switch--disabled {
+	opacity: 0.5;
+	filter: saturate(0.7);
+}
+
+.checkbox-radio-switch--disabled .checkbox-content {
+	cursor: default;
+}
+
 .signature-textarea {
 	width: 100%;
 	max-width: 80vw;
