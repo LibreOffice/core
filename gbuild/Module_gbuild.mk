@@ -29,16 +29,6 @@ online_poco_whole_libs := \
     PocoXML \
     PocoFoundation
 
-# Consume Poco's headers as system headers, so that gbuild's warning flags do
-# not apply to third-party code we do not maintain.  Poco's bundled tsl
-# hash-map headers in particular declare locals that shadow a member of their
-# private base, which -Wshadow reports afresh for every template instantiation;
-# with -I that alone is hundreds of megabytes of output per build.  MSVC proper
-# has no -isystem (and gets no -Wshadow either), so keep -I there.
-online_poco_inc := \
-    $(if $(filter GCC,$(COM))$(COM_IS_CLANG),-isystem,-I) \
-    $(gb_UnpackedTarball_workdir)/poco/include
-
 $(eval $(call gb_Module_add_targets,gbuild, \
     Executable_clientnb \
     Executable_coconvert \

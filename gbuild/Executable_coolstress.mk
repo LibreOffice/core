@@ -25,7 +25,7 @@ $(eval $(call gb_Executable_set_include,coolstress, \
     -I$(online_srcdir)/wsd \
     -I$(online_srcdir)/kit \
     $$(INCLUDE) \
-    $(online_poco_inc) \
+    -I$(gb_UnpackedTarball_workdir)/poco/include \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,coolstress, \

@@ -28,7 +28,7 @@ $(eval $(call gb_StaticLibrary_set_include,forkit, \
     -I$(online_srcdir)/kit \
     -I$(SRCDIR)/include \
     $$(INCLUDE) \
-    $(online_poco_inc) \
+    -I$(gb_UnpackedTarball_workdir)/poco/include \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,forkit, \

@@ -351,7 +351,19 @@
  #include "Poco/BasicEvent.h"
 --- dependencies/tessil/include/Poco/ordered_hash.h
 +++ dependencies/tessil/include/Poco/ordered_hash.h
-@@ -117,7 +117,7 @@
+@@ -40,6 +40,11 @@
+ #include <type_traits>
+ #include <utility>
+ #include <vector>
++
++#if defined __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wshadow"
++#endif
+ 
+ /**
+  * Macros for compatibility with GCC 4.8
+@@ -117,7 +122,7 @@
  }
  
  template <typename T, typename U>
@@ -360,7 +372,7 @@
                        const char* error_message = "numeric_cast() failed.") {
    T ret = static_cast<T>(value);
    if (static_cast<U>(ret) != value) {
-@@ -145,7 +145,7 @@
+@@ -145,7 +150,7 @@
                "slz_size_type must be >= std::size_t");
  
  template <class T, class Deserializer>
@@ -369,3 +381,13 @@
    // MSVC < 2017 is not conformant, circumvent the problem by removing the
    // template keyword
  #if defined(_MSC_VER) && _MSC_VER < 1910
+@@ -1697,5 +1702,9 @@
+ }  // end namespace detail_ordered_hash
+ 
+ }  // end namespace tsl
+ 
++#if defined __GNUC__
++#pragma GCC diagnostic pop
++#endif
++
+ #endif
