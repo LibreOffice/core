@@ -226,13 +226,7 @@ public:
         mxDocument = rDocument;
         mpDocument = nullptr;
         if (ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(mxDocument))
-        {
             mpDocument = pModel->GetDocument();
-            // The solver writes input cells and reads the recalculated objective
-            // and constraint cells, which needs automatic recalculation on.
-            if (mpDocument)
-                mpDocument->SetAutoCalc(true);
-        }
     }
 
     virtual table::CellAddress SAL_CALL getObjective() override { return maObjective; }
@@ -734,6 +728,16 @@ void SAL_CALL SwarmSolver::solve()
     // Unlock again on any exit from here on, including an exception thrown by
     // one of the cell accesses below, so the document is always left usable.
     comphelper::ScopeGuard aUnlockGuard([&xModel] { xModel->unlockControllers(); });
+
+    // The solve writes input cells and reads the recalculated objective and
+    // constraints, so automatic recalculation has to be on while it runs.
+    const bool bOldAutoCalc = mpDocument && mpDocument->GetAutoCalc();
+    if (mpDocument)
+        mpDocument->SetAutoCalc(true);
+    comphelper::ScopeGuard aAutoCalcGuard([this, bOldAutoCalc] {
+        if (mpDocument)
+            mpDocument->SetAutoCalc(bOldAutoCalc);
+    });
 
     if (mbNonNegative)
     {
