@@ -194,6 +194,17 @@ check-qtapp: coda-qt $(TEST_DIR)/node_modules
 	    CODA_APP_NAME='$(APP_NAME)' \
 	    CODA_TEST_SEED_DRAFT=1 \
 	    ./run-tests.sh --suite recovery
+	@echo "Running version history suite..."
+	cd $(TEST_DIR) && AT_SPI_DRIVER_PATH='@AT_SPI_DRIVER_PATH@' \
+	    CODA_QT_BINARY=$(abs_builddir)/coda-qt \
+	    CODA_APP_NAME='$(APP_NAME)' \
+	    ./run-tests.sh --suite versionhistory
+	@echo "Running version store pruning suite..."
+	cd $(TEST_DIR) && AT_SPI_DRIVER_PATH='@AT_SPI_DRIVER_PATH@' \
+	    CODA_QT_BINARY=$(abs_builddir)/coda-qt \
+	    CODA_APP_NAME='$(APP_NAME)' \
+	    CODA_TEST_SEED_VERSIONS=1 \
+	    ./run-tests.sh --suite versions
 
 # Clean test artifacts
 clean-local:
@@ -215,8 +226,11 @@ EXTRA_DIST += \
 	$(TEST_DIR)/lib/webview.ts \
 	$(TEST_DIR)/lib/file-dialog.ts \
 	$(TEST_DIR)/lib/draft.ts \
+	$(TEST_DIR)/lib/versions.ts \
 	$(TEST_DIR)/specs/draft-lifecycle.spec.ts \
 	$(TEST_DIR)/recovery/draft-recovery.spec.ts \
+	$(TEST_DIR)/recovery/version-pruning.spec.ts \
+	$(TEST_DIR)/versionhistory/version-lifecycle.spec.ts \
 	$(TEST_DIR)/fixtures/simple.odt \
 	$(TEST_DIR)/fixtures/slide_navigation.odp \
 	$(TEST_DIR)/fixtures/empty-presentation.odp \

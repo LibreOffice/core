@@ -17,6 +17,7 @@ import {
 	mkdtempSync,
 	readFileSync,
 	rmSync,
+	utimesSync,
 	writeFileSync,
 } from 'fs';
 import { homedir, tmpdir } from 'os';
@@ -140,7 +141,8 @@ export class CodaQtServiceLauncher {
 			copyFileSync(hostUserDirsPath(), join(configHome, 'user-dirs.dirs'));
 		// The tour for first-time users opens on its own as a modal dialog, which
 		// blocks every other dialog, so it is marked as seen for each document type.
-		const prefs: Record<string, string> = {};
+		// A zero merge window of the version store makes every save snapshot.
+		const prefs: Record<string, string> = { 'versions.mergeWindowSecs': '0' };
 		for (const docType of ['text', 'spreadsheet', 'presentation', 'drawing'])
 			prefs[docType + '.onboardingTourSeen'] = 'true';
 		writeFileSync(
@@ -177,6 +179,49 @@ export class CodaQtServiceLauncher {
 				join(fixturesDir, 'simple.odt'),
 				join(draftsDir, 'Recovered Draft.odt'),
 			);
+		}
+
+		// The version store keeps timestamped document copies here.
+		const versionsDir = join(
+			this.#testHomeDir,
+			'.local',
+			'share',
+			appName,
+			'versions',
+		);
+		process.env.CODA_TEST_VERSIONS_DIR = versionsDir;
+
+		// The versions suite plants store contents before coda-qt starts -
+		// the on-disk state a forced exit leaves behind.
+		if (process.env.CODA_TEST_SEED_VERSIONS) {
+			const docDir = join(versionsDir, '00c0ffee00c0ffee');
+			mkdirSync(docDir, { recursive: true });
+			writeFileSync(
+				join(docDir, 'meta.json'),
+				JSON.stringify({
+					key: '/nonexistent/Seeded.odt',
+					displayName: 'Seeded.odt',
+				}),
+			);
+			// A valid version, years old: the newest few of a document
+			// survive retention no matter their age.
+			cpSync(
+				join(fixturesDir, 'simple.odt'),
+				join(docDir, '20200102-030405.odt'),
+			);
+			// A stale copy temporary (a forced exit mid-copy): swept.
+			const staleOrphan = join(docDir, '20200102-030405.odtAbCdEfGhIjKl');
+			writeFileSync(staleOrphan, 'partial copy');
+			const twoDaysAgo = new Date(Date.now() - 2 * 86400 * 1000);
+			utimesSync(staleOrphan, twoDaysAgo, twoDaysAgo);
+			// A fresh temporary (another instance may still be writing
+			// it): kept for the grace period.
+			writeFileSync(
+				join(docDir, '20260101-000000.odtMnOpQrStUvWx'),
+				'in-flight copy',
+			);
+			// Nothing legitimate lives directly in the store root.
+			writeFileSync(join(versionsDir, 'stray.txt'), 'does not belong');
 		}
 
 		console.log('Starting coda-qt...');

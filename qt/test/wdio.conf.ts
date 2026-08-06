@@ -79,6 +79,10 @@ export const config = {
 			'./specs/document-lifecycle.spec.ts',
 			'./specs/open-file.spec.ts',
 		]],
+		// The local version store: baseline at open, version per save,
+		// dialog round trip. Outside specs/ so the default glob never
+		// runs it: its store-count assertions need a fresh app instance.
+		versionhistory: ['./versionhistory/version-lifecycle.spec.ts'],
 		// The cross-window slide copy/paste cases.
 		gui: ['./specs/slide-copy-paste.spec.ts'],
 		// Startup recovery of a pre-seeded draft. Lives outside specs/ so
@@ -86,6 +90,9 @@ export const config = {
 		// with CODA_TEST_SEED_DRAFT=1 (see coda-qt.service.ts), and the
 		// recovered draft suppresses the starter screen other specs use.
 		recovery: ['./recovery/draft-recovery.spec.ts'],
+		// Startup sweep of a pre-seeded version store; needs a fresh app
+		// instance with CODA_TEST_SEED_VERSIONS=1.
+		versions: ['./recovery/version-pruning.spec.ts'],
 	},
 
 	exclude: [],
