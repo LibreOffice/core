@@ -31,6 +31,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <fmtpdsc.hxx>
 #include <txatbase.hxx>
 #include <charfmt.hxx>
@@ -68,6 +69,17 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
             return rItem1 == rItem2;
 
         return rBrush1.GetColor().IsRGBEqual(rBrush2.GetColor());
+    }
+    case RES_CHRATR_OVERLINE:
+    case RES_CHRATR_UNDERLINE:
+    {
+        auto& rUnderline1 = static_cast<const SvxTextLineItem&>(rItem1);
+        auto& rUnderline2 = static_cast<const SvxTextLineItem&>(rItem2);
+        if (rUnderline1.getComplexColor().isUsed() && rUnderline2.getComplexColor().isUsed())
+            return rItem1 == rItem2;
+
+        return rUnderline1.GetColor().IsRGBEqual(rUnderline2.GetColor())
+            && rUnderline1.GetLineStyle() == rUnderline2.GetLineStyle();
     }
     case RES_CHRATR_COLOR:
     {
