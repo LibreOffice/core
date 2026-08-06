@@ -789,7 +789,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         // No document broker to ask: fall through and launch without designs.
     }
 
-    launchChatRequest(req, DesignInfo{});
+    launchChatRequest(req, {});
     return true;
 }
 
@@ -1390,7 +1390,7 @@ void AIChatSession::spliceSlideCommands(const Poco::JSON::Object::Ptr& transform
         newCmds->add(applyCmd);
     }
 
-    for (unsigned i = 0; i < cmds->size(); ++i)
+    for (std::size_t i = 0; i < cmds->size(); ++i)
     {
         Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
         if (cmd)
@@ -3351,10 +3351,10 @@ void AIChatSession::checkDesignFetchTimeout(std::chrono::steady_clock::time_poin
     {
         const PendingChatRequest req = std::move(*_pendingDesignFetch);
         _pendingDesignFetch.reset();
-        launchChatRequest(req, DesignInfo{});
+        launchChatRequest(req, {});
         return;
     }
-    continueApprovedBuild(DesignInfo{});
+    continueApprovedBuild({});
 }
 
 bool AIChatSession::tryConsumeExtractedLinkTargets(const std::shared_ptr<Message>& payload)

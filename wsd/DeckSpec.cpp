@@ -20,6 +20,7 @@
 #include <Poco/JSON/Array.h>
 
 #include <array>
+#include <cstddef>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -313,7 +314,7 @@ SlotText buildSlotText(const std::vector<std::string>& paragraphs)
 std::vector<std::string> collectItems(const Poco::JSON::Array::Ptr& items)
 {
     std::vector<std::string> out;
-    for (unsigned i = 0; items && i < items->size(); ++i)
+    for (std::size_t i = 0; items && i < items->size(); ++i)
     {
         try
         {
@@ -396,7 +397,7 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
                 return prefix + "a bullets block may list at most " +
                        std::to_string(budgets.maxItemsPerBullets) + " items, found " +
                        std::to_string(items->size()) + ".";
-            for (unsigned it = 0; it < items->size(); ++it)
+            for (std::size_t it = 0; it < items->size(); ++it)
             {
                 // Extraction converts a number or object element to its text,
                 // so the element type is checked first: only a real JSON
@@ -567,7 +568,7 @@ void emitSlideCommands(Poco::JSON::Array::Ptr cmds, const Poco::JSON::Object::Pt
     std::vector<int> bulletSlots;
     int slot = 1;
     Poco::JSON::Array::Ptr blocks = slide->getArray("blocks");
-    for (unsigned b = 0; blocks && b < blocks->size(); ++b)
+    for (std::size_t b = 0; blocks && b < blocks->size(); ++b)
     {
         Poco::JSON::Object::Ptr block = blocks->getObject(b);
         if (!block)
@@ -756,7 +757,7 @@ std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlin
         return "An outline may have at most " + std::to_string(budgets.maxSlides) + " slides, found " +
                std::to_string(slides->size()) + ".";
 
-    for (unsigned i = 0; i < slides->size(); ++i)
+    for (std::size_t i = 0; i < slides->size(); ++i)
     {
         Poco::JSON::Object::Ptr slide = slides->getObject(i);
         if (!slide)
@@ -798,7 +799,7 @@ Poco::JSON::Object::Ptr sanitizeOutline(const Poco::JSON::Object::Ptr& outlineOb
         return clean;
 
     Poco::JSON::Array::Ptr slides = outlineObj->getArray("slides");
-    for (unsigned i = 0; slides && i < slides->size(); ++i)
+    for (std::size_t i = 0; slides && i < slides->size(); ++i)
     {
         Poco::JSON::Object::Ptr slide = slides->getObject(i);
         if (!slide)
@@ -853,7 +854,7 @@ rewriteGenerateImageCommands(const Poco::JSON::Object::Ptr& transformObj, int nE
     int currentSlide = 0;
     int pageCount = nExistingSlides;
 
-    for (unsigned i = 0; i < cmds->size(); ++i)
+    for (std::size_t i = 0; i < cmds->size(); ++i)
     {
         Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
         if (!cmd)
