@@ -134,6 +134,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxRBDateTimeAutomatic;
     std::unique_ptr<weld::Entry> mxTBDateTimeFixed;
     std::unique_ptr<weld::ComboBox> mxCBDateTimeFormat;
+    std::unique_ptr<weld::Label> mxFTDateTimeFormat;
     std::unique_ptr<weld::Label> mxFTDateTimeLanguage;
     std::unique_ptr<SvxLanguageBox> mxCBDateTimeLanguage;
     std::unique_ptr<weld::CheckButton> mxCBFooter;
@@ -379,6 +380,7 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
     , mxRBDateTimeAutomatic(mxBuilder->weld_radio_button(u"rb_auto"_ustr))
     , mxTBDateTimeFixed(mxBuilder->weld_entry(u"datetime_value"_ustr))
     , mxCBDateTimeFormat(mxBuilder->weld_combo_box(u"datetime_format_list"_ustr))
+    , mxFTDateTimeFormat(mxBuilder->weld_label(u"language_label1"_ustr))
     , mxFTDateTimeLanguage(mxBuilder->weld_label(u"language_label"_ustr))
     , mxCBDateTimeLanguage(new SvxLanguageBox(mxBuilder->weld_combo_box(u"language_list"_ustr)))
     , mxCBFooter(mxBuilder->weld_check_button(u"footer_cb"_ustr))
@@ -512,6 +514,7 @@ void HeaderFooterTabPage::update()
     mxTBDateTimeFixed->set_sensitive( mxRBDateTimeFixed->get_active() && mxCBDateTime->get_active() );
     mxRBDateTimeAutomatic->set_sensitive( mxCBDateTime->get_active() );
     mxCBDateTimeFormat->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
+    mxFTDateTimeFormat->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
     mxFTDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
     mxCBDateTimeLanguage->set_sensitive( mxCBDateTime->get_active() && mxRBDateTimeAutomatic->get_active() );
     mxFooterBox->set_sensitive( mxCBFooter->get_active() );
