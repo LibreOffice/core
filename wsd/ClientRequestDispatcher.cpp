@@ -2688,6 +2688,15 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
     }
     else if (requestDetails.equals(1, "render-search-result"))
     {
+        // Validate sender - FIXME: should do this even earlier.
+        if (!allowConvertTo(socket->clientAddress(), request, false, nullptr))
+        {
+            LOG_WRN("Render-search-result requests not allowed from this address: "
+                    << socket->clientAddress());
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
+            return true;
+        }
+
         RenderSearchResultPartHandler handler;
         Poco::Net::HTMLForm form(request, message, handler);
 
