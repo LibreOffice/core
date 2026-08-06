@@ -113,7 +113,9 @@ all_la_unit_tests = \
 	unit-wopi-httpredirect.la \
 	unit-convert-to-password-protected.la \
 	unit-bad-doc-load.la \
-	unit-hosting.la
+	unit-hosting.la \
+	unit-legacy-uno-api-warning.la \
+	unit-legacy-uno-api-warning-suppressed.la
 #	unit-admin.la
 #	unit-tilecache.la # Empty test.
 else
@@ -432,6 +434,10 @@ unit_session_la_SOURCES = UnitSession.cpp
 unit_session_la_LIBADD = $(CPPUNIT_LIBS)
 unit_uno_command_la_SOURCES = UnitUNOCommand.cpp
 unit_uno_command_la_LIBADD = $(CPPUNIT_LIBS)
+unit_legacy_uno_api_warning_la_SOURCES = UnitLegacyUnoApiWarning.cpp
+unit_legacy_uno_api_warning_la_LIBADD = $(CPPUNIT_LIBS)
+unit_legacy_uno_api_warning_suppressed_la_SOURCES = UnitLegacyUnoApiWarningSuppressed.cpp
+unit_legacy_uno_api_warning_suppressed_la_LIBADD = $(CPPUNIT_LIBS)
 unit_load_la_SOURCES = UnitLoad.cpp
 unit_load_la_LIBADD = $(CPPUNIT_LIBS)
 unit_cursor_la_SOURCES = UnitCursor.cpp

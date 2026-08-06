@@ -2190,6 +2190,7 @@ class UIManager extends window.L.Control {
 	private _legacyUnoApiDocLoaded = false;
 
 	showLegacyUnoApiSnackbarOnce(): void {
+		if (window.hideLegacyScriptWarning) return;
 		if (this._legacyUnoApiSnackbarShown) return;
 		if (!this._legacyUnoApiDocLoaded) {
 			this._legacyUnoApiSnackbarPending = true;

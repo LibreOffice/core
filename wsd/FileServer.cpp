@@ -1618,6 +1618,9 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     std::string enableMacrosExecution = stringifyBoolFromConfig(config, "security.enable_macros_execution", false);
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_MACROS_EXECUTION%"), enableMacrosExecution);
 
+    std::string hideLegacyScriptWarning = stringifyBoolFromConfig(config, "hide_legacy_script_warning", false);
+    Poco::replaceInPlace(preprocess, std::string("%HIDE_LEGACY_SCRIPT_WARNING%"), hideLegacyScriptWarning);
+
 
     if (config.getBool("home_mode.enable", false))
     {

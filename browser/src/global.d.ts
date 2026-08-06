@@ -387,6 +387,7 @@ interface Window {
 	enableDebug: boolean;
 	simulateError: (name: string) => boolean;
 	enableMacrosExecution: boolean;
+	hideLegacyScriptWarning: boolean;
 	enableWelcomeMessage: boolean;
 	expectedServerId: string;
 	extraExportFormats: string[];

@@ -123,6 +123,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "help_url", HELP_URL },
 #endif
     { "hexify_embedded_urls", "false" },
+    { "hide_legacy_script_warning", "false" },
     { "home_mode.enable", "false" },
     { "indirection_endpoint.geolocation_setup.enable", "false" },
     { "indirection_endpoint.geolocation_setup.timezone", "" },
