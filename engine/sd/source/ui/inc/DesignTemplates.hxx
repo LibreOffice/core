@@ -15,7 +15,6 @@
 #include <sddllapi.h>
 #include <xmloff/autolayout.hxx>
 
-#include <cstdint>
 #include <map>
 #include <optional>
 #include <string_view>
@@ -40,7 +39,7 @@ std::vector<std::pair<OUString, OUString>> CollectDesignTemplates();
     final slide on Closing. Unknown means the master's name carries no part
     keyword, so the part is decided from the layout of its example slide
     instead. */
-enum class DesignMasterRole : std::uint8_t
+enum class DesignMasterRole
 {
     Title,
     Divider,
