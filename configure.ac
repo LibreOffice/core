@@ -426,11 +426,17 @@ AC_ARG_WITH([libpng-libs],
 
 AC_ARG_WITH([cppunit-includes],
             AS_HELP_STRING([--with-cppunit-includes=<path>],
-                           [Path to the "include" directory with the Cppunit headers]))
+                           [Obsolete and ignored. Cppunit is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
+            [AC_MSG_WARN([--with-cppunit-includes is obsolete and ignored; Cppunit is taken from the engine or the system.])])
 
 AC_ARG_WITH([cppunit-libs],
             AS_HELP_STRING([--with-cppunit-libs=<path>],
-                           [Path to the "lib" directory with the Cppunit libraries]))
+                           [Obsolete and ignored. Cppunit is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
+            [AC_MSG_WARN([--with-cppunit-libs is obsolete and ignored; Cppunit is taken from the engine or the system.])])
 
 AC_ARG_ENABLE([ssl],
             AS_HELP_STRING([--disable-ssl],
@@ -1879,16 +1885,6 @@ AS_IF([test -n "$LIBPNG_INCLUDES"],
 AS_IF([test -n "$LIBPNG_LIBS"],
       [LDFLAGS="$LDFLAGS -L${LIBPNG_LIBS}"])
 
-AS_IF([test -n "$with_cppunit_includes"],
-      [CPPFLAGS="$CPPFLAGS -isystem ${with_cppunit_includes}"])
-
-AS_IF([test -n "$with_cppunit_libs"],
-      [LDFLAGS="$LDFLAGS -L${with_cppunit_libs}"])
-
-AS_IF([test \( `uname -s` = Linux -o `uname -s` = FreeBSD \) -a "$host_os" != "emscripten"],
-      [AS_IF([test -n "$with_cppunit_libs"],
-             [LDFLAGS="$LDFLAGS -Wl,-rpath,${with_cppunit_libs}"])])
-
 AS_IF([test `uname -s` != Darwin],
       [AC_SEARCH_LIBS([dlopen],
                       [dl dld],
@@ -1903,10 +1899,10 @@ dnl
 dnl For each third-party library that the engine can bundle, link the engine's
 dnl own copy when it built one, otherwise fall back to the system copy.  Which of
 dnl the two happens is decided by how the engine was configured: the server build
-dnl (engine/distro-configs/CPLinux-LOKit.conf) bundles libpng and zstd, while the
-dnl Flatpak and Snap builds configure the engine --with-system-libpng and
-dnl --with-system-zstd and rely on the runtime's copies.  This mirrors how POCO
-dnl and OpenSSL are picked up above.
+dnl (engine/distro-configs/CPLinux-LOKit.conf) bundles libpng, zstd and Cppunit,
+dnl while the Flatpak and Snap builds configure the engine --with-system-libpng,
+dnl --with-system-zstd and --with-system-cppunit and rely on the runtime's copies.
+dnl This mirrors how POCO and OpenSSL are picked up above.
 AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$ENABLE_MACOSAPP" != "true" -a "$host_os" != "emscripten"],
       [engine_workdir=`readlink -f "$with_lo_builddir"`/workdir
 dnl    libpng.  The engine builds it as the static liblibpng.a (a double "lib"
@@ -1929,12 +1925,25 @@ dnl    zlib (deflated HTTP / web-page serving) always comes from the system; the
 dnl    engine links the system zlib too (--with-system-zlib in every config).
        PKG_CHECK_MODULES([ZLIB], [zlib])
 
-       PKG_CHECK_MODULES([CPPUNIT], [cppunit])
+dnl    Cppunit, needed by the test suite only.  Unlike libpng and zstd the engine
+dnl    builds it as a shared library, and leaves it in its workdir instead of
+dnl    installing it, so the test binaries and the dlopened unit-test modules need
+dnl    an rpath into that directory to find it at run time.
+       AS_IF([test "$enable_tests" != "no"],
+             [cppunit_engine_libdir="$engine_workdir/UnpackedTarball/cppunit/src/cppunit/.libs"
+              AS_IF([test -f "$cppunit_engine_libdir/libcppunit.so"],
+                    [AC_MSG_NOTICE([using Cppunit built in the engine])
+                     CPPUNIT_CFLAGS="-isystem $engine_workdir/UnpackedTarball/cppunit/include"
+                     CPPUNIT_LIBS="-L$cppunit_engine_libdir -Wl,-rpath,$cppunit_engine_libdir -lcppunit"],
+                    [AC_MSG_NOTICE([Cppunit not built in the engine, using the system Cppunit])
+                     PKG_CHECK_MODULES([CPPUNIT], [cppunit])])])
        ])
 AC_SUBST([PNG_CFLAGS])
 AC_SUBST([PNG_LIBS])
 AC_SUBST([ZSTD_CFLAGS])
 AC_SUBST([ZSTD_LIBS])
+AC_SUBST([CPPUNIT_CFLAGS])
+AC_SUBST([CPPUNIT_LIBS])
 
 CAP_LIBS=
 AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
