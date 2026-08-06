@@ -20,6 +20,7 @@
 #pragma once
 
 #include "porlin.hxx"
+#include <basegfx/units/Length.hxx>
 
 class SwRect;
 class SwLineLayout;
@@ -30,15 +31,15 @@ class SwLineLayout;
 class SwGluePortion : public SwLinePortion
 {
 private:
-    SwTwips m_nFixWidth;
+    gfx::Length m_nFixWidth;
 public:
     explicit SwGluePortion(const SwTwips nInitFixWidth);
 
     void Join( SwGluePortion *pVictim );
 
     inline tools::Long GetPrtGlue() const;
-    SwTwips GetFixWidth() const { return m_nFixWidth; }
-    void SetFixWidth(const SwTwips nNew) { m_nFixWidth = nNew; }
+    gfx::Length GetFixWidth() const { return m_nFixWidth; }
+    void SetFixWidth(const gfx::Length nNew) { m_nFixWidth = nNew; }
     void MoveGlue( SwGluePortion *pTarget, const tools::Long nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
@@ -71,13 +72,15 @@ public:
 };
 
 inline tools::Long SwGluePortion::GetPrtGlue() const
-{ return Width() - m_nFixWidth; }
+{
+    return Width() - m_nFixWidth.as_twip<SwTwips>();
+}
 
 // The FixWidth MUST NEVER be larger than the accumulated width!
 inline void SwGluePortion::AdjFixWidth()
 {
-    if( m_nFixWidth > PrtWidth() )
-        m_nFixWidth = PrtWidth();
+    if (m_nFixWidth > gfx::Length::twip(PrtWidth()))
+        m_nFixWidth = gfx::Length::twip(PrtWidth());
 }
 
 inline void SwGluePortion::MoveAllGlue( SwGluePortion *pTarget )

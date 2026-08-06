@@ -26,9 +26,9 @@
 #include <comphelper/string.hxx>
 
 SwGluePortion::SwGluePortion(const SwTwips nInitFixWidth)
-    : m_nFixWidth( nInitFixWidth )
+    : m_nFixWidth(gfx::Length::twip(nInitFixWidth))
 {
-    PrtWidth( m_nFixWidth );
+    PrtWidth(m_nFixWidth.as_twip<SwTwips>());
     SetWhichPor( PortionType::Glue );
 }
 
@@ -67,7 +67,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        const sal_Int32 nCount = GetFixWidth() / sal_Int32(GetLen());
+        const sal_Int32 nCount = GetFixWidth().as_twip<SwTwips>() / sal_Int32(GetLen());
         OUString aText(OUString::Concat(RepeatedUChar(' ', nCount)));
         SwTextPaintInfo aInf( rInf, &aText );
         aInf.DrawText(*this, TextFrameIndex(aText.getLength()), true);
@@ -132,7 +132,7 @@ void SwGluePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
     dumpAsXmlAttributes(pWriter, rText, nOffset);
     nOffset += GetLen();
 
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fix-width"), BAD_CAST(OString::number(m_nFixWidth).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fix-width-twips"), BAD_CAST(OString::number(m_nFixWidth.as_twip<SwTwips>()).getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }

@@ -410,13 +410,13 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                     pCurrent->SetLLSpaceAdd( nSpaceSub
                         ? ( nSpaceSub + nSpaceKernAndScale <= LONG_MAX/2 ? 0 : nSpaceSub + nSpaceKernAndScale )
                         : ( nSpaceAdd > nSpaceKernAndScale ? nSpaceAdd - nSpaceKernAndScale : 0 ), nSpaceIdx );
-                    pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
+                    pPos->Width(static_cast<SwGluePortion*>(pPos)->GetFixWidth().as_twip<SwTwips>());
                 }
                 else if (IsOneBlock() && nCharCnt > TextFrameIndex(1))
                 {
                     const tools::Long nSpaceAdd = - nGluePortionWidth / (sal_Int32(nCharCnt) - 1);
                     pCurrent->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
-                    pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
+                    pPos->Width(static_cast<SwGluePortion*>(pPos)->GetFixWidth().as_twip<SwTwips>());
                 }
 
                 nSpaceIdx++;
@@ -587,8 +587,10 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             pPos->Width(pPos->Width() - nDecompress);
 
             if ( pPos->InTabGrp() )
+            {
                 // set fix width to width
-                static_cast<SwTabPortion*>(pPos)->SetFixWidth( pPos->Width() );
+                static_cast<SwTabPortion*>(pPos)->SetFixWidth(gfx::Length::twip(pPos->Width()));
+            }
 
             if ( ++nKanaIdx < pCurrent->GetKanaComp().size() )
                 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];

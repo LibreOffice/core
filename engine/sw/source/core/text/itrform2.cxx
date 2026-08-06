@@ -2869,8 +2869,8 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
                     // lowering the line => reformat the line
                     // we also have to reformat the line, if the fly size
                     // differs from the intersection interval's size.
-                    if( ! aInter.HasArea() ||
-                        static_cast<const SwFlyPortion*>(pPos)->GetFixWidth() != aInter.Width() )
+                    if (!aInter.HasArea() ||
+                        static_cast<const SwFlyPortion*>(pPos)->GetFixWidth().as_twip<SwTwips>() != aInter.Width())
                     {
                         rInf.SetLineHeight( nHeight );
                         rInf.SetLineNetHeight( m_pCurr->Height() );
