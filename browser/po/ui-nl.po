@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-08-06 13:27+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -868,14 +868,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Upload een verpakte extensie als een .zip; de inhoud ervan (manifest.json, "
+"...) wordt uitgepakt op de server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Extensie uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Instellingen zijn alleen beschikbaar voor ingelogde gebruikers."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -1046,7 +1048,7 @@ msgstr "b.v."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Laat leeg als uw server er geen nodig heeft"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1107,7 +1109,7 @@ msgstr "Modellen ophalen om te selecteren"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "API-quotum overschreden - controleer uw abonnement en facturering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1452,7 +1454,7 @@ msgstr "Huidige versie"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n meer"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1568,7 +1570,7 @@ msgstr "Maak de volgende tekst beknopter"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Maak het beknopter"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
@@ -1576,7 +1578,7 @@ msgstr "Vat de belangrijkste punten van deze tekst samen"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Vat deze tekst samen"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
@@ -1584,7 +1586,7 @@ msgstr "Deze tekst uitbreiden en meer details toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Deze tekst uitbreiden"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1592,7 +1594,7 @@ msgstr "Grammatica-, spelling- en interpunctiefouten corrigeren"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Grammatica en spelling verbeteren"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
@@ -1620,7 +1622,7 @@ msgstr "Informeel"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Beste"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1629,7 +1631,7 @@ msgstr "Goed"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Matig"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
@@ -1909,7 +1911,7 @@ msgstr "Meer weergeven"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Keuze ontwerpsjabloon geannuleerd."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
@@ -1928,6 +1930,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Het verzoek is verlopen. U kunt de time-out voor verzoeken verhogen in het "
+"AI-gedeelte van de instellingen."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -2029,23 +2033,23 @@ msgstr "De inhoud van de selectie kon niet worden verwerkt"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Kies een ontwerp voor je dek, of ga verder zonder:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "Geen sjabloon"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Doorgaan zonder ontwerpsjabloon"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Ontwerpsjabloon: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Doorgaan zonder ontwerpsjabloon."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
@@ -2073,7 +2077,7 @@ msgstr "Stel een fout in de formule vast in"
 
 #: src/control/Control.AIChatSidebar.ts:3095
 msgid "I have a formula error in my spreadsheet."
-msgstr "Ik heb een formulefout in mijn spreadsheet."
+msgstr "Ik heb een formulefout in mijn werkblad."
 
 #: src/control/Control.AIChatSidebar.ts:3097
 msgid "Cell"
@@ -2525,104 +2529,104 @@ msgstr "Meer informatie over eigenschappen"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Open een document vanaf uw computer of een cloudlocatie."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Bestand openen vanaf computer"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Cloud toevoegen +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Account bewerken"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Nieuw account toevoegen"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Server-URL"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Server-URL invoeren"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Weergavenaam"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Weergavenaam invoeren"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Naam weergegeven in uw cloudlijst (max. 40 tekens)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Wijzigingen opslaan"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Account toevoegen"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Account verwijderen"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Verbreekt de verbinding met deze cloud"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Nieuw account met succes toegevoegd"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "U heeft nu toegang tot bestanden uit deze cloud."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Bestanden openen"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Dit account verwijderen?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "De verbinding met dit cloudaccount wordt verbroken."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Bestand neerzetten om te openen"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Deze mobiele weergave is niet volledig toegankelijk."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Toegankelijkheidsverklaring"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3527,7 +3531,7 @@ msgstr "Laatste aanpassing"
 #: src/control/Control.NotebookbarBuilder.js:448
 #: src/control/Control.NotebookbarBuilder.js:563
 msgid "ODF presentation (.odp)"
-msgstr "ODF presentatie (.odp)"
+msgstr "ODF-presentatie (.odp)"
 
 #: src/control/Control.Menubar.ts:459 src/control/Control.Menubar.ts:472
 #: src/control/Control.Menubar.ts:1238
@@ -3638,7 +3642,7 @@ msgstr "ODF tekening (.odg)"
 #: src/control/Control.NotebookbarBuilder.js:415
 #: src/control/Control.NotebookbarBuilder.js:548
 msgid "ODF spreadsheet (.ods)"
-msgstr "ODF werkblad (.ods)"
+msgstr "ODF-werkblad (.ods)"
 
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:860
 #: src/control/Control.Menubar.ts:1360
@@ -3860,11 +3864,11 @@ msgstr "Resultaten"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maximaliseren naar raster"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Zoeken en vervangen"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4063,7 +4067,7 @@ msgstr "Animaties"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Niet-opgeslagen wijzigingen. Opslaan"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4103,7 +4107,7 @@ msgstr "Afbeelding (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Niet-opgeslagen wijzigingen."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -5096,7 +5100,7 @@ msgstr "Werkblad kopiëren…"
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, beschermd"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5159,6 +5163,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Een ingesloten script maakt gebruik van de verouderde com.sun.star UNO API, "
+"die in toekomstige releases kan worden verwijderd."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
@@ -5449,64 +5455,66 @@ msgstr "Geef een bestandsnaam op"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Hoe wilt u bewerken?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Andere gebruikers bekijken dit document. Kies hoe u verder wilt gaan:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Lokaal bewerken"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Wijzigingen synchroniseren bij opslaan"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Gezamenlijk bewerken"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Samen bewerken in real-time"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Lokale kopie blijven weergeven"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Doorgaan met uw versie"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Deelnemen aan gezamenlijke bewerking"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Wachten tot er wijzigingen worden opgeslagen…"
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Andere gebruikers bewerken dit document. Kies hoe u verder wilt gaan:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "begonnen met bewerken"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 is begonnen met bewerken"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Iemand anders is dit document nu aan het bewerken. Kies hoe u verder wilt "
+"gaan:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5657,7 +5665,7 @@ msgstr "Hernoemen..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Kan niet delen"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6217,11 +6225,11 @@ msgstr "Functies van tabelcellen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Grootte van geselecteerde vorm"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Grootte van vorm"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6450,12 +6458,11 @@ msgid "Server is shutting down"
 msgstr "Server wordt afgesloten"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
 msgstr ""
-"AI is niet geconfigureerd. Ga naar Bestand > Opties > Weergave-instellingen "
-"om dit in te stellen."
+"AI is niet geconfigureerd. Ga naar Bestand > Opties > AI-assistent om dit in "
+"te stellen."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6832,7 +6839,7 @@ msgstr "Klik eerst op de knop 'download', om buiten {productname} te plakken"
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Kopiëren vanuit het document is uitgeschakeld door uw beheerder"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -6990,7 +6997,7 @@ msgstr "Presentatie in venster: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Presenteren in een ander venster"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -7003,7 +7010,7 @@ msgstr "Presenteren in volledig scherm"
 
 #: src/map/handler/Map.SlideShow.js:231
 msgid "End Presentation"
-msgstr "Einde presentatie"
+msgstr "Presentatie beëindigen"
 
 #: src/map/handler/Map.SlideShow.js:295
 #: src/slideshow/SlideShowPresenter.ts:1390
@@ -7027,7 +7034,7 @@ msgstr "De presentatiemodus is uitgeschakeld voor dit document"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr "Wil je deze volgorde in je presentatie gebruiken?"
+msgstr "Deze volgorde gebruiken in de presentatie?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
@@ -7061,6 +7068,8 @@ msgstr "Dialoogvenster Welkom"
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
 msgstr ""
+"Instellingen opgeslagen. Voeg een API-sleutel toe om de AI-assistent te "
+"gebruiken."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7159,11 +7168,11 @@ msgstr "Uitzoomen"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Voorvertoning van de huidige dia"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Voorvertoning van de volgende dia"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7171,11 +7180,11 @@ msgstr "Voorbeeldweergave dia {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "U verlaat de presentatie."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "De link is niet geldig."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7341,11 +7350,11 @@ msgstr "Geel idee"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Welkom bij Werkblad"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Welkom bij Presentatie"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
