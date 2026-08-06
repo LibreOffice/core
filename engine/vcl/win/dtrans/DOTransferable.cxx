@@ -352,7 +352,7 @@ void CDOTransferable::initFlavorListFromFormatList(const std::vector<sal_uInt32>
                 addSupportedFlavor(formatEtcToDataFlavor(CF_UNICODETEXT));
                 // register markdown as format
                 css::datatransfer::DataFlavor aFlavor;
-                aFlavor.MimeType = "text/markdown";
+                aFlavor.MimeType = u"text/markdown"_ustr;
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
                 addSupportedFlavor(aFlavor);
             }

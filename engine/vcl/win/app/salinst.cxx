@@ -759,20 +759,20 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                  rDocumentService == "com.sun.star.text.GlobalDocument" ||
                  rDocumentService == "com.sun.star.text.WebDocument" ||
                  rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
-                sApplicationName = "Writer";
+                sApplicationName = u"Writer"_ustr;
             else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
                  rDocumentService == "com.sun.star.chart2.ChartDocument" )
-                sApplicationName = "Calc";
+                sApplicationName = u"Calc"_ustr;
             else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
-                sApplicationName = "Impress";
+                sApplicationName = u"Impress"_ustr;
             else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
-                sApplicationName = "Draw";
+                sApplicationName = u"Draw"_ustr;
             else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
-                sApplicationName = "Math";
+                sApplicationName = u"Math"_ustr;
             else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
                  rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
                  rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
-                sApplicationName = "Base";
+                sApplicationName = u"Base"_ustr;
 
             if ( !sApplicationName.isEmpty() )
             {

@@ -505,7 +505,7 @@ void CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STG
     DataFlavor aFlavor;
 
     // creating a DataFlavor on the fly
-    aFlavor.MimeType = "text/html";
+    aFlavor.MimeType = u"text/html"_ustr;
     aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     Any aAny = m_XTransferable->getTransferData( aFlavor );

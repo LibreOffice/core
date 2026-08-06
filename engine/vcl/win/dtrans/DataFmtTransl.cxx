@@ -105,10 +105,10 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc(sal_uInt32 cfFormat
 
         if ( isOemOrAnsiTextFormat( aClipformat ) )
         {
-            aFlavor.MimeType             = "text/plain;charset=";
+            aFlavor.MimeType             = u"text/plain;charset="_ustr;
             aFlavor.MimeType            += getTextCharsetFromLCID( lcid, aClipformat );
 
-            aFlavor.HumanPresentableName = "OEM/ANSI Text";
+            aFlavor.HumanPresentableName = u"OEM/ANSI Text"_ustr;
             aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
         }
         else if ( CF_INVALID != aClipformat )
