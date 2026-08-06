@@ -1347,23 +1347,19 @@ class SettingIframe {
 		this.addSubElements();
 	}
 
-	private _setupSmartZoomTipAndDescription() {
-		const container: HTMLSpanElement | null = document.querySelector(
-			'#common-smartZoom-container',
-		);
+	// A checkbox that carries a line of explanation stacks the two, with the
+	// text lined up under the label rather than under the box.
+	private addCheckboxDescription(containerSelector: string, text: string) {
+		const container: HTMLSpanElement | null =
+			document.querySelector(containerSelector);
 
 		if (!container) {
-			console.error('#common-smartZoom-container does not exist!');
+			console.error(containerSelector + ' does not exist!');
 			return;
 		}
 
-		container.appendChild(
-			this.createParagraph(
-				_(
-					'When on, Writer fits the document to the viewport width on open. When off, the document opens at the Default Zoom level set below.',
-				),
-			),
-		);
+		container.classList.add('checkbox-with-description');
+		container.appendChild(this.createParagraph(text));
 	}
 
 	private _updateZoomDropdownState() {
@@ -1420,7 +1416,12 @@ class SettingIframe {
 	 * customType doesn't work for this usecase.
 	 */
 	public addSubElements() {
-		this._setupSmartZoomTipAndDescription();
+		this.addCheckboxDescription(
+			'#common-smartZoom-container',
+			_(
+				'When on, Writer fits the document to the viewport width on open. When off, the document opens at the Default Zoom level set below.',
+			),
+		);
 	}
 
 	/*
