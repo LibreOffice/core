@@ -19,9 +19,9 @@
 #include <Poco/JSON/Object.h>
 
 #include <optional>
+#include <span>
 #include <string>
 #include <string_view>
-#include <vector>
 
 namespace AIUtil
 {
@@ -63,7 +63,7 @@ struct SlideCommandInfo
 };
 
 /// The Impress SlideCommands vocabulary, in documentation order.
-const std::vector<SlideCommandInfo>& getSlideCommands();
+std::span<const SlideCommandInfo> getSlideCommands();
 
 /// True when the key's base name (before any ".N" suffix) is a SlideCommands
 /// command the server alone may add to a transform.
@@ -86,7 +86,7 @@ struct SlideLayoutInfo
 };
 
 /// The slide layouts offered to the model, in documentation order.
-const std::vector<SlideLayoutInfo>& getSlideLayouts();
+std::span<const SlideLayoutInfo> getSlideLayouts();
 
 /// True when the name is one of the layouts in getSlideLayouts().
 bool isKnownSlideLayout(const std::string& name);

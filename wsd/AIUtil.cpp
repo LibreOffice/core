@@ -112,82 +112,83 @@ std::string normalizeAIBaseUrl(std::string_view baseUrl)
     return url;
 }
 
-const std::vector<SlideCommandInfo>& getSlideCommands()
+namespace
 {
-    static const std::vector<SlideCommandInfo> commands = {
-        { "JumpToSlide", true, "Navigation:",
-          R"(- {"JumpToSlide": N} - jump to 0-based slide index; use "last" for last slide)" },
-        { "JumpToSlideByName", true, "Navigation:",
-          R"(- {"JumpToSlideByName": "name"} - jump to named slide)" },
+constexpr SlideCommandInfo SlideCommands[] = {
+    { "JumpToSlide", true, "Navigation:",
+      R"(- {"JumpToSlide": N} - jump to 0-based slide index; use "last" for last slide)" },
+    { "JumpToSlideByName", true, "Navigation:",
+      R"(- {"JumpToSlideByName": "name"} - jump to named slide)" },
 
-        { "InsertMasterSlide", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"InsertMasterSlide": N} - insert slide based on master slide at index N)" },
-        { "InsertMasterSlideByName", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"InsertMasterSlideByName": "name"} - insert slide by master slide name)" },
-        { "DeleteSlide", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"DeleteSlide": N} - delete slide at index; use "" for current slide)" },
-        { "DuplicateSlide", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"DuplicateSlide": N} - duplicate slide at index; use "" for current)" },
-        { "MoveSlide", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"MoveSlide": N} - move current slide to position N
+    { "InsertMasterSlide", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"InsertMasterSlide": N} - insert slide based on master slide at index N)" },
+    { "InsertMasterSlideByName", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"InsertMasterSlideByName": "name"} - insert slide by master slide name)" },
+    { "DeleteSlide", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"DeleteSlide": N} - delete slide at index; use "" for current slide)" },
+    { "DuplicateSlide", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"DuplicateSlide": N} - duplicate slide at index; use "" for current)" },
+    { "MoveSlide", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"MoveSlide": N} - move current slide to position N
 - {"MoveSlide.X": N} - move slide at index X to position N)" },
-        { "RenameSlide", true,
-          "Slide management (inserts after current slide and jumps to new slide):",
-          R"(- {"RenameSlide": "name"} - rename current slide (must be unique))" },
+    { "RenameSlide", true,
+      "Slide management (inserts after current slide and jumps to new slide):",
+      R"(- {"RenameSlide": "name"} - rename current slide (must be unique))" },
 
-        { "ChangeLayoutByName", true, "Layout (applied to current slide):",
-          R"(- {"ChangeLayoutByName": "name"} - set layout by name)" },
-        { "ChangeLayout", true, "Layout (applied to current slide):",
-          R"(- {"ChangeLayout": N} - set layout by numeric ID)" },
+    { "ChangeLayoutByName", true, "Layout (applied to current slide):",
+      R"(- {"ChangeLayoutByName": "name"} - set layout by name)" },
+    { "ChangeLayout", true, "Layout (applied to current slide):",
+      R"(- {"ChangeLayout": N} - set layout by numeric ID)" },
 
-        { "SetText", true, "Text content:",
-          R"(- {"SetText.N": "text"} - set text of placeholder N on current slide (0=title, 1=first content, 2=second content, etc.). Use \n for paragraph breaks.)" },
+    { "SetText", true, "Text content:",
+      R"(- {"SetText.N": "text"} - set text of placeholder N on current slide (0=title, 1=first content, 2=second content, etc.). Use \n for paragraph breaks.)" },
 
-        { "SetNotes", true, "Text content:",
-          R"(- {"SetNotes": "text"} - set the speaker notes of the current slide)" },
+    { "SetNotes", true, "Text content:",
+      R"(- {"SetNotes": "text"} - set the speaker notes of the current slide)" },
 
-        { "GenerateImage", true,
-          "Image generation (inserts AI-generated image into a placeholder):",
-          R"(- {"GenerateImage.N": "prompt"} - generate an image from the text prompt using the AI image provider and insert it into placeholder N on the current slide, replacing the placeholder content. N is the 0-based object index (same as SetText.N). A loading placeholder is inserted immediately when the transform is applied, then the real image progressively replaces it after generation completes. Use descriptive prompts for best results. Example: {"GenerateImage.1": "A modern office building with glass facade at sunset, professional photography"})" },
+    { "GenerateImage", true,
+      "Image generation (inserts AI-generated image into a placeholder):",
+      R"(- {"GenerateImage.N": "prompt"} - generate an image from the text prompt using the AI image provider and insert it into placeholder N on the current slide, replacing the placeholder content. N is the 0-based object index (same as SetText.N). A loading placeholder is inserted immediately when the transform is applied, then the real image progressively replaces it after generation completes. Use descriptive prompts for best results. Example: {"GenerateImage.1": "A modern office building with glass facade at sunset, professional photography"})" },
 
-        { "MarkObject", true, "Object selection:",
-          R"(- {"MarkObject": N} - select object at index on current slide)" },
-        { "UnMarkObject", true, "Object selection:",
-          R"(- {"UnMarkObject": N} - deselect object at index)" },
+    { "MarkObject", true, "Object selection:",
+      R"(- {"MarkObject": N} - select object at index on current slide)" },
+    { "UnMarkObject", true, "Object selection:",
+      R"(- {"UnMarkObject": N} - deselect object at index)" },
 
-        { "EditTextObject", true, "Rich text editing:",
-          R"(- {"EditTextObject.N": [...]} - edit text object N with sub-commands:
+    { "EditTextObject", true, "Rich text editing:",
+      R"(- {"EditTextObject.N": [...]} - edit text object N with sub-commands:
   - {"SelectText": []} - select all text; [para] selects paragraph; [para,startChar,endPara,endChar] selects range; [para,char] positions cursor
   - {"SelectParagraph": N} - select paragraph N
   - {"InsertText": "text"} - insert/replace text at selection
   - {"UnoCommand": "cmd"} - apply UNO command to selection)" },
 
-        // Documented in the static UnoCommand-levels narrative, not here.
-        { "UnoCommand", true, "", "" },
+    // Documented in the static UnoCommand-levels narrative, not here.
+    { "UnoCommand", true, "", "" },
 
-        // The design template is the user's choice. The server alone
-        // splices an ApplyTemplate into a transform.
-        { "ApplyTemplate", false, "", "" },
+    // The design template is the user's choice. The server alone
+    // splices an ApplyTemplate into a transform.
+    { "ApplyTemplate", false, "", "" },
 
-        // Labels a slide's part (opening, divider, body, closing). The parts a
-        // template offers and the instruction to use them are given per request,
-        // when a template is in use, so the command carries no entry in the
-        // static documentation.
-        { "SetSlidePart", true, "", "" },
+    // Labels a slide's part (opening, divider, body, closing). The parts a
+    // template offers and the instruction to use them are given per request,
+    // when a template is in use, so the command carries no entry in the
+    // static documentation.
+    { "SetSlidePart", true, "", "" },
 
-        // Labels a slide's intent (the kind of slide it is). A template manifest
-        // may map an intent to a specific master. Like SetSlidePart, it carries
-        // no static documentation because the intent list and its use are given
-        // per request.
-        { "SetSlideIntent", true, "", "" },
-    };
-    return commands;
+    // Labels a slide's intent (the kind of slide it is). A template manifest
+    // may map an intent to a specific master. Like SetSlidePart, it carries
+    // no static documentation because the intent list and its use are given
+    // per request.
+    { "SetSlideIntent", true, "", "" },
+};
 }
+
+std::span<const SlideCommandInfo> getSlideCommands() { return SlideCommands; }
 
 bool isServerOnlySlideCommand(const std::string& key)
 {
@@ -195,43 +196,44 @@ bool isServerOnlySlideCommand(const std::string& key)
     return cmd && !cmd->allowedFromModel;
 }
 
-const std::vector<SlideLayoutInfo>& getSlideLayouts()
+namespace
 {
-    static const std::vector<SlideLayoutInfo> layouts = {
-        { "AUTOLAYOUT_TITLE", 0, 2, "title + subtitle. Use for opening or closing slides." },
-        { "AUTOLAYOUT_TITLE_CONTENT", 1, 2,
-          "title + one content area below. The default layout for bullet points, text, or a "
-          "single diagram." },
-        { "AUTOLAYOUT_TITLE_2CONTENT", 3, 3,
-          "title + two content areas side by side. Use for comparisons, pros/cons, or "
-          "before/after." },
-        { "AUTOLAYOUT_TITLE_CONTENT_2CONTENT", 12, 4,
-          "title + one large content left + two smaller content areas stacked right." },
-        { "AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT", 14, 3,
-          "title + two content areas stacked vertically. Use when two blocks need equal width." },
-        { "AUTOLAYOUT_TITLE_2CONTENT_CONTENT", 15, 4,
-          "title + two smaller content areas stacked left + one large content right." },
-        { "AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT", 16, 4,
-          "title + two content areas side by side over one full-width content area." },
-        { "AUTOLAYOUT_TITLE_4CONTENT", 18, 5,
-          "title + four content areas in a 2x2 grid. Use for dashboards or quadrant layouts." },
-        { "AUTOLAYOUT_TITLE_ONLY", 19, 1,
-          "title only, no content placeholders. Use for section dividers or title cards." },
-        { "AUTOLAYOUT_NONE", 20, 0,
-          "blank slide, no placeholders at all. Use for fully custom or image-only slides." },
-        { "AUTOLAYOUT_ONLY_TEXT", 32, 1,
-          "one centered text area, no title. Use for quotes, key statements, or transition "
-          "text." },
-        { "AUTOLAYOUT_TITLE_6CONTENT", 34, 7, "title + six content areas in a 3x2 grid." },
-        { "AUTOLAYOUT_VTITLE_VCONTENT", 28, 2,
-          "vertical title + vertical content. For vertical/CJK text." },
-        { "AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT", 27, 3,
-          "vertical title + two vertical content areas." },
-        { "AUTOLAYOUT_TITLE_VCONTENT", 29, 2, "horizontal title + vertical content below." },
-        { "AUTOLAYOUT_TITLE_2VTEXT", 30, 3, "title + two vertical text columns." },
-    };
-    return layouts;
+constexpr SlideLayoutInfo SlideLayouts[] = {
+    { "AUTOLAYOUT_TITLE", 0, 2, "title + subtitle. Use for opening or closing slides." },
+    { "AUTOLAYOUT_TITLE_CONTENT", 1, 2,
+      "title + one content area below. The default layout for bullet points, text, or a "
+      "single diagram." },
+    { "AUTOLAYOUT_TITLE_2CONTENT", 3, 3,
+      "title + two content areas side by side. Use for comparisons, pros/cons, or "
+      "before/after." },
+    { "AUTOLAYOUT_TITLE_CONTENT_2CONTENT", 12, 4,
+      "title + one large content left + two smaller content areas stacked right." },
+    { "AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT", 14, 3,
+      "title + two content areas stacked vertically. Use when two blocks need equal width." },
+    { "AUTOLAYOUT_TITLE_2CONTENT_CONTENT", 15, 4,
+      "title + two smaller content areas stacked left + one large content right." },
+    { "AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT", 16, 4,
+      "title + two content areas side by side over one full-width content area." },
+    { "AUTOLAYOUT_TITLE_4CONTENT", 18, 5,
+      "title + four content areas in a 2x2 grid. Use for dashboards or quadrant layouts." },
+    { "AUTOLAYOUT_TITLE_ONLY", 19, 1,
+      "title only, no content placeholders. Use for section dividers or title cards." },
+    { "AUTOLAYOUT_NONE", 20, 0,
+      "blank slide, no placeholders at all. Use for fully custom or image-only slides." },
+    { "AUTOLAYOUT_ONLY_TEXT", 32, 1,
+      "one centered text area, no title. Use for quotes, key statements, or transition "
+      "text." },
+    { "AUTOLAYOUT_TITLE_6CONTENT", 34, 7, "title + six content areas in a 3x2 grid." },
+    { "AUTOLAYOUT_VTITLE_VCONTENT", 28, 2,
+      "vertical title + vertical content. For vertical/CJK text." },
+    { "AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT", 27, 3,
+      "vertical title + two vertical content areas." },
+    { "AUTOLAYOUT_TITLE_VCONTENT", 29, 2, "horizontal title + vertical content below." },
+    { "AUTOLAYOUT_TITLE_2VTEXT", 30, 3, "title + two vertical text columns." },
+};
 }
+
+std::span<const SlideLayoutInfo> getSlideLayouts() { return SlideLayouts; }
 
 bool isKnownSlideLayout(const std::string& name)
 {
