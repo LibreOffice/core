@@ -195,16 +195,10 @@ private:
         {
             return nullptr;
         }
-        // Filter out e.g. `size_t(-1)`:
-        if (!e2->isValueDependent())
+        // Filter out e.g. `size_t(-1)` or `static_cast<uint64_t>(INT_MAX)`:
+        if (!e2->isValueDependent() && e2->getIntegerConstantExpr(compiler.getASTContext()))
         {
-            if (auto const val = e2->getIntegerConstantExpr(compiler.getASTContext()))
-            {
-                if (val->isNegative())
-                {
-                    return nullptr;
-                }
-            }
+            return nullptr;
         }
         auto loc = e->getBeginLoc();
         while (compiler.getSourceManager().isMacroArgExpansion(loc))

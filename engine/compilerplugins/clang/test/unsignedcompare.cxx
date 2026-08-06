@@ -7,10 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <climits>
+
 bool f(int i1, unsigned i2)
 {
     // expected-error@+1 {{explicit cast from 'int' to 'unsigned int' (of equal rank) in comparison against 'unsigned int': if the cast value is known to be non-negative, use o3tl::make_unsigned instead of the cast [loplugin:unsignedcompare]}}
     return unsigned(i1) < i2;
 }
+
+bool f2(unsigned i) { return i < unsigned(-1); }
+
+bool f3(unsigned i) { return i < unsigned(INT_MAX); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
