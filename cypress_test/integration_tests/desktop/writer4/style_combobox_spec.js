@@ -45,4 +45,19 @@ describe(['tagdesktop'], 'Sidebar style combo box', function() {
 		helper.copy();
 		cy.cGet('#copy-paste-container p font font').should('have.attr', 'style', 'font-size: 28pt');
 	});
+
+	it('Typing a style name does not apply it before it is committed', function() {
+		helper.setDummyClipboardForCopy();
+
+		// 'Title' is the exact name of an existing style, but nothing has
+		// committed the combo box yet: no Return, no picking from the dropdown.
+		cy.cGet('#applystyle .ui-combobox-content').click().clear();
+		helper.typeText('#applystyle .ui-combobox-content', 'Title', 100);
+
+		cy.then(() => { return helper.processToIdle(this.win); });
+
+		writerHelper.selectAllTextOfDoc();
+		helper.copy();
+		cy.cGet('#copy-paste-container p font font').should('not.exist');
+	});
 });

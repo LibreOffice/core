@@ -225,7 +225,12 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                         std::u16string_view entryPos = sSelectedData.subView(0, separatorPos);
                         sal_Int32 pos = o3tl::toInt32(entryPos);
                         pCombobox->set_active(pos);
-                        KitTrigger::trigger_changed(*pCombobox);
+                        // it might be other class than JSComboBox
+                        auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
+                        if (pJSCombobox)
+                            pJSCombobox->notifyChangedByDirectPick();
+                        else
+                            KitTrigger::trigger_changed(*pCombobox);
                         return true;
                     }
                 }
@@ -237,7 +242,21 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                         pJSCombobox->set_entry_text_without_notify(rData.at(u"data"_ustr));
                     else
                         pCombobox->set_entry_text(rData.at(u"data"_ustr));
+                    // Text still being typed is not a picked entry: changed_by_direct_pick()
+                    // reports false for this notification, as it does on the desktop when the
+                    // change comes from typing rather than from selecting an entry.
                     KitTrigger::trigger_changed(*pCombobox);
+                    return true;
+                }
+                else if (sAction == "activate")
+                {
+                    // it might be other class than JSComboBox
+                    auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
+                    if (pJSCombobox)
+                        pJSCombobox->set_entry_text_without_notify(rData.at(u"data"_ustr));
+                    else
+                        pCombobox->set_entry_text(rData.at(u"data"_ustr));
+                    KitTrigger::trigger_entry_activate(*pCombobox);
                     return true;
                 }
             }

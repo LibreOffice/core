@@ -25,6 +25,11 @@ public:
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
+    static bool trigger_entry_activate(weld::ComboBox& rComboBox)
+    {
+        return rComboBox.m_aEntryActivateHdl.Call(rComboBox);
+    }
+
     static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_selection_changed(); }
 
     static void trigger_editing_done(weld::TreeView& rTreeView,

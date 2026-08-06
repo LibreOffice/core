@@ -341,6 +341,11 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			}
 		}
 
+		// Return is a distinct commit action, sent in addition to any 'change' above:
+		// it marks the current text as explicitly confirmed, not merely typed so far.
+		if (event.key === 'Enter')
+			builder.callback('combobox', 'activate', data, this.value, builder);
+
 		resetSelection();
 		for (var i in entries) {
 			if (entries[i] == this.value || entries[i].text == this.value) {

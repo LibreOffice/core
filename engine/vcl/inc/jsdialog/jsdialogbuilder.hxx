@@ -583,6 +583,14 @@ public:
 class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>,
                          public OnDemandRenderingHandler
 {
+private:
+    // True only while replaying a "selected" dialog event (an entry picked from the
+    // dropdown), as opposed to a "change" event (text typed into the entry). The wrapped
+    // headless ::ComboBox never sees a real pick or keypress, so it cannot answer
+    // changed_by_direct_pick() on its own; this flag is JSComboBox's own record of which
+    // kind of event is currently being replayed.
+    bool m_bChangedByDirectPick = false;
+
 public:
     JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                bool bTakeOwnership);
@@ -594,6 +602,10 @@ public:
     virtual void do_set_active(int pos) override;
     virtual void do_set_active_id(const OUString& rText) override;
     virtual bool changed_by_direct_pick() const override;
+
+    // Fires the changed signal with changed_by_direct_pick() reporting true for its
+    // duration, for replaying a dropdown entry pick.
+    void notifyChangedByDirectPick();
 
     // OnDemandRenderingHandler
     virtual void render_entry(int pos, int dpiscale) override;

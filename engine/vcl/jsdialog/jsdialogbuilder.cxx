@@ -8,6 +8,7 @@
  */
 
 #include <jsdialog/jsdialogbuilder.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sal/log.hxx>
 #include <iconview.hxx>
 #include <vcl/customwidget.hxx>
@@ -1385,7 +1386,14 @@ void JSComboBox::do_set_active_id(const OUString& rStr)
     do_set_active(nPos);
 }
 
-bool JSComboBox::changed_by_direct_pick() const { return true; }
+bool JSComboBox::changed_by_direct_pick() const { return m_bChangedByDirectPick; }
+
+void JSComboBox::notifyChangedByDirectPick()
+{
+    m_bChangedByDirectPick = true;
+    comphelper::ScopeGuard aGuard([this] { m_bChangedByDirectPick = false; });
+    signal_changed();
+}
 
 void JSComboBox::render_entry(int pos, int dpiscale)
 {
