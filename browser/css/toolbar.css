@@ -495,7 +495,7 @@ button.leaflet-control-search-next
 }
 #toolbar-up #fontsizecombobox {
 	min-width: 70px;
-	width: 70px;
+	width: 70px !important;
 	margin: auto 4px;
 }
 #fontsizecombobox-dropdown .ui-grid {
