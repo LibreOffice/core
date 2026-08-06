@@ -311,7 +311,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
                     XComponentContext.class, xProp.getPropertyValue("DefaultContext"));
             prop[3].Value = xFactory.createInstanceWithContext(xContext);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             log.println("Could not create an instance for ItemDescriptorContainer property.");
             e.printStackTrace(log);
             return null;

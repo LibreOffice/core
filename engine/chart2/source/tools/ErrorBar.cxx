@@ -206,7 +206,7 @@ OUString getSourceRangeStrFromLabeledSequences( const cpo::uno::Sequence< uno::R
                 }
             }
         }
-        catch (uno::Exception const &)
+        catch (cpo::uno::Exception const &)
         {
             // we can't be sure that this is 100% safe and we don't want to kill the export
             // we should at least check why the exception is thrown

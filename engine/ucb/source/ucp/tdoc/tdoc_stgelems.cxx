@@ -88,7 +88,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
             reflection::ProxyFactory::create( rxContext );
         m_xAggProxy = xProxyFac->createProxy( m_xWrappedStorage );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
@@ -478,7 +478,7 @@ OutputStream::OutputStream(
             reflection::ProxyFactory::create( rxContext );
         m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
@@ -646,7 +646,7 @@ Stream::Stream(
             reflection::ProxyFactory::create( rxContext );
         m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }

@@ -168,7 +168,7 @@ void ClipboardManager::disposing(std::unique_lock<std::mutex>& rGuard)
                 xComponent->removeEventListener(static_cast < XEventListener * > (this));
                 xComponent->dispose();
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // exceptions can be safely ignored here.
             }

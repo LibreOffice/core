@@ -112,11 +112,11 @@ public class TestExtension {
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
          * component after its creation.
-         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
+         * @throws cpo.uno.Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
         public void initialize( Object[] object )
-            throws com.sun.star.uno.Exception {
+            throws cpo.uno.Exception {
             /* The component describes what arguments are expected and in which
              * order! At this point you can read the objects and initialize
              * your component using these objects.

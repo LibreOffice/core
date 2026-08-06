@@ -1905,7 +1905,7 @@ bool DbGridControl::SetCurrent(sal_Int32 nNewRow)
             return false;
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
         EndCursorAction();

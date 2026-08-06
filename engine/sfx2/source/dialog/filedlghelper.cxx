@@ -640,7 +640,7 @@ void FileDialogHelper_Impl::updateVersions()
                 std::transform(xVersions.begin(), xVersions.end(), std::next(aEntries.getArray()),
                     [](const util::RevisionTag& rVersion) -> OUString { return rVersion.Identifier; });
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }
@@ -1203,7 +1203,7 @@ css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const c
             {
                 xInit->initialize(aInitArguments);
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 OSL_FAIL( "createFolderPicker: could not initialize the picker!" );
             }
@@ -1772,7 +1772,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     {
         xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         SAL_WARN( "sfx.dialog", "Could not get filters from the configuration!" );
     }
@@ -2615,7 +2615,7 @@ static int impl_isFolder( const OUString& rPath )
 
         return 0;
     }
-    catch ( const Exception & )
+    catch ( const cpo::uno::Exception & )
     {
     }
 

@@ -19,7 +19,7 @@ importClass(Packages.com.sun.star.uno.UnoRuntime);
 importClass(Packages.com.sun.star.lang.XMultiComponentFactory);
 importClass(Packages.com.sun.star.awt.XDialogProvider);
 importClass(Packages.com.sun.star.awt.XDialog);
-importClass(Packages.com.sun.star.uno.Exception);
+importClass(Packages.cpo.uno.Exception);
 importClass(Packages.com.sun.star.script.provider.XScriptContext);
 
 importClass(java.lang.Thread);

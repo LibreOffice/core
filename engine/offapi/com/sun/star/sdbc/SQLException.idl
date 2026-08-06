@@ -31,13 +31,13 @@
     <ul>
     <li>
     a string describing the error.  This is used as the
-    com::sun::star::uno::Exception
+    cpo::uno::Exception
     message.
     </li>
     </ul>
     </p>
  */
-published exception SQLException: com::sun::star::uno::Exception
+published exception SQLException: cpo::uno::Exception
 {
     /** returns a string, which uses the XOPEN SQLState conventions.
         The values of the SQLState string are described in the XOPEN SQL spec.

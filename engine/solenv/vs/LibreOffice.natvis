@@ -72,7 +72,7 @@
     <DisplayString Condition="pType->eTypeClass == 13">{*((cpo::uno::Type*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_TYPE -->
     <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ANY -->
     <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ENUM -->
-    <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
+    <DisplayString Condition="pType->eTypeClass == 19">{*((cpo::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
     <DisplayString Condition="pType->eTypeClass == 20">{**((uno_Sequence**)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
     <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; !((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*(com::sun::star::uno::BaseReference*)pData} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
     <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; ((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*((com::sun::star::uno::BaseReference*)pData)->_pInterface} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
@@ -95,7 +95,7 @@
       <Item Name="pData" Condition="pType->eTypeClass == 13">(cpo::uno::Type*)pData</Item><!-- typelib_TypeClass_TYPE -->
       <Item Name="pData" Condition="pType->eTypeClass == 14">(_uno_Any*)pData</Item><!-- typelib_TypeClass_ANY -->
       <Item Name="pData" Condition="pType->eTypeClass == 15">(sal_Int32*)pData</Item><!-- typelib_TypeClass_ENUM -->
-      <Item Name="pData" Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
+      <Item Name="pData" Condition="pType->eTypeClass == 19">(cpo::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
       <Item Name="pData" Condition="pType->eTypeClass == 20">(uno_Sequence**)pData</Item><!-- typelib_TypeClass_SEQUENCE -->
       <Item Name="pData" Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference*)pData</Item><!-- typelib_TypeClass_INTERFACE -->
       <Item Name="pData" Condition="pType->eTypeClass &lt; 1 || (pType->eTypeClass &gt; 15 &amp;&amp; pType->eTypeClass &lt; 19) || pType->eTypeClass == 21 || pType->eTypeClass &gt; 22">pData</Item>

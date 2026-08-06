@@ -339,7 +339,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
             xCtrlAcc->setValue(ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
                 ui::dialogs::ListboxControlActions::SET_SELECT_ITEM, aSelectPos);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             SAL_WARN("sc", "control access failed");
         }

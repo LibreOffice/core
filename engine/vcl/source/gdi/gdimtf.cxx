@@ -411,7 +411,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
     {
         throw; // runtime errors are fatal
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // ignore errors, no way of reporting them here
         TOOLS_WARN_EXCEPTION("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer");

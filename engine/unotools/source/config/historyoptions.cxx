@@ -115,7 +115,7 @@ void Clear(EHistoryType eHistory, const bool bClearPinnedItems)
 
         ::comphelper::ConfigurationHelper::flush(xCfg);
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
@@ -161,7 +161,7 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
 
                 aRet.push_back(aItem);
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
                 // "FILEOPEN: No Recent Documents..." discusses a problem
@@ -174,7 +174,7 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
@@ -303,7 +303,7 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
             ::comphelper::ConfigurationHelper::flush(xCfg);
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
@@ -373,7 +373,7 @@ void DeleteItem(EHistoryType eHistory, const OUString& sURL, const bool bClearPi
             ::comphelper::ConfigurationHelper::flush(xCfg);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
@@ -410,7 +410,7 @@ void TogglePinItem(EHistoryType eHistory, const OUString& sURL)
                 PrependItem(xCfg, xOrderList, sURL);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }

@@ -179,7 +179,7 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
         // use stock encryption
         xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
-    } catch ( const uno::Exception & )
+    } catch ( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("svx", "exception setting stream metadata");
     }
@@ -258,7 +258,7 @@ bool SvxXMLXTableExportComponent::save(
             {
                 try {
                     xSubStorage = xStorage->openStorageElement( aPath, eCreate );
-                } catch (uno::Exception &) {
+                } catch (cpo::uno::Exception &) {
                     OSL_FAIL( "no output storage!" );
                     return false;
                 }
@@ -272,7 +272,7 @@ bool SvxXMLXTableExportComponent::save(
                         return false;
                     initializeStreamMetadata( xStream );
                     xOut = xStream->getOutputStream();
-                } catch (uno::Exception &) {
+                } catch (cpo::uno::Exception &) {
                     OSL_FAIL( "no output stream!" );
                     return false;
                 }
@@ -307,7 +307,7 @@ bool SvxXMLXTableExportComponent::save(
             xSubStorage->dispose();
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bRet = false;
     }

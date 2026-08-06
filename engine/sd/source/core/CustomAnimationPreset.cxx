@@ -74,7 +74,7 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
             xConfigProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs ),
             UNO_QUERY);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::getNodeAccess()" );
     }
@@ -106,7 +106,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::implImportLabels()" );
     }
@@ -162,7 +162,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
             return xNode;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::create()" );
     }
@@ -232,7 +232,7 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xFilter, UNO_QUERY_THROW );
         xRootNode = xAnimationNodeSupplier->getAnimationNode();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "");
     }
@@ -289,7 +289,7 @@ void CustomAnimationPresets::importEffects()
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importEffects()" );
     }
@@ -321,7 +321,7 @@ void CustomAnimationPresets::importResources()
 
         importPresets( xConfigProvider, u"/org.openoffice.Office.UI.Effects/Presets/Misc"_ustr, maMiscPresets );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importResources()" );
     }
@@ -375,7 +375,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importPresets()" );
     }

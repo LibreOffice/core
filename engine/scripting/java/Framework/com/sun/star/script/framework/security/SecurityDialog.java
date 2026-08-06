@@ -188,7 +188,7 @@ public class SecurityDialog extends WeakBase implements
         // now try and create the dialog
         try {
             _xDialog = createDialog();
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -233,7 +233,7 @@ public class SecurityDialog extends WeakBase implements
 
     /** method for creating a dialog at runtime
      */
-    private XDialog createDialog() throws com.sun.star.uno.Exception {
+    private XDialog createDialog() throws cpo.uno.Exception {
 
         // get the service manager from the component context
         XMultiComponentFactory xMultiComponentFactory =

@@ -413,7 +413,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
 
         mpCurrentPage = pNewCurrentPage;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage()");
     }

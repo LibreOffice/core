@@ -65,7 +65,7 @@ void CppIncludeManager::writeStandardIncludes(CppFile& file)
     {
         file.beginLine().append("#include <com/sun/star/uno/XInterface.hpp>").endLine();
         file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
-        file.beginLine().append("#include <com/sun/star/uno/Exception.hpp>").endLine();
+        file.beginLine().append("#include <cpo/uno/Exception.hpp>").endLine();
         file.beginLine().append("#include <sal/log.hxx>").endLine(); // For SAL_WARN macro
     }
 

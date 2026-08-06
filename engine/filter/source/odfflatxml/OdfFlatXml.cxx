@@ -151,7 +151,7 @@ OdfFlatXml::importer(
             saxParser->parseStream(inputSource);
         }
     }
-    catch (const Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("filter.odfflatxml", "");
         return false;
@@ -202,7 +202,7 @@ OdfFlatXml::importer(
 
         xFastParser->parseStream( inputSource );
     }
-    catch (const Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("filter.odfflatxml", "");
         return false;

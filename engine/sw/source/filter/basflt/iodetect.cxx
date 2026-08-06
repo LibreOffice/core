@@ -103,7 +103,7 @@ bool SwIoSystem::IsValidStgFilter( const css::uno::Reference < css::embed::XStor
         if ( bRet )
             bRet = ( nStgFormatId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFormatId ) );
     }
-    catch (const css::uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
     }
 

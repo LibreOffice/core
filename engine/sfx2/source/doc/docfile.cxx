@@ -606,7 +606,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
             SetError(ERRCODE_ABORT);
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {}
 }
 
@@ -631,7 +631,7 @@ util::DateTime const & SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
             aContent.getPropertyValue(u"DateModified"_ustr) >>= pImpl->m_aDateTime;
             pImpl->m_bGotDateTime = true;
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -668,7 +668,7 @@ Reference < XContent > SfxMedium::GetContent() const
             {
                 pImpl->aContent = ::ucbhelper::Content( xContent, pCommandEnv, comphelper::getProcessComponentContext() );
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -709,7 +709,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
             Any aAny = pImpl->aContent.getPropertyValue(u"BaseURI"_ustr);
             aAny >>= aBaseURL;
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
 
@@ -1049,7 +1049,7 @@ bool SfxMedium::SetEncryptionDataToStorage_Impl()
     {
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImpl->xStorage, aEncryptionData );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         SAL_WARN( "sfx.doc", "It must be possible to set a common password for the storage" );
         SetError(ERRCODE_IO_GENERAL);
@@ -1086,7 +1086,7 @@ OUString tryMSOwnerFiles(std::u16string_view sDocURL)
     {
         aData = aMSOLockFile.GetLockData();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         return OUString();
     }
@@ -1471,7 +1471,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                             // since it mostly happens on read/only part of webdav, this can be the most correct
                             // exception available
                         }
-                        catch( uno::Exception& )
+                        catch( cpo::uno::Exception& )
                         {
                             TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
                         }
@@ -1549,7 +1549,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
                     aContent.getPropertyValue(u"IsReadOnly"_ustr) >>= bContentReadonly;
                 }
-                catch( const uno::Exception& ) {}
+                catch( const cpo::uno::Exception& ) {}
             }
 
             // do further checks only if the file not readonly in fs
@@ -1617,7 +1617,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                     if(pMSOLockFile)
                                         bResult &= pMSOLockFile->CreateOwnLockFile();
                                 }
-                                catch (const uno::Exception&)
+                                catch (const cpo::uno::Exception&)
                                 {
                                     if (tools::IsMappedWebDAVPath(GetURLObject().GetMainURL(
                                             INetURLObject::DecodeMechanism::NONE)))
@@ -1664,7 +1664,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                     // not show the Lock Document Dialog
                                     bIoErr = true;
                                 }
-                                catch( const uno::Exception& )
+                                catch( const cpo::uno::Exception& )
                                 {
                                     // show the Lock Document Dialog, when locked from other app
                                     bIoErr = !bHandleSysLocked;
@@ -1712,7 +1712,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                 }
                             }
                         }
-                        catch( const uno::Exception& )
+                        catch( const cpo::uno::Exception& )
                         {
                         }
                     } while( !bResult && bUIStatus == ShowLockResult::Try );
@@ -1750,7 +1750,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         if ( bResult )
             eResult = LockFileResult::Succeeded;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: high probability, that the content has not been created" );
     }
@@ -1896,7 +1896,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         pImpl->xStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
                             uno::UNO_QUERY );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // impossibility to create the storage is no error
     }
@@ -2070,7 +2070,7 @@ uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( b
                         ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream, {}, IsRepairPackage());
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             SAL_WARN( "sfx.doc", "No possibility to get readonly version of storage from medium!" );
         }
@@ -2089,7 +2089,7 @@ void SfxMedium::CloseZipStorage_Impl()
     {
         try {
             pImpl->m_xZipStorage->dispose();
-        } catch( const uno::Exception& )
+        } catch( const cpo::uno::Exception& )
         {}
 
         pImpl->m_xZipStorage.clear();
@@ -2107,7 +2107,7 @@ void SfxMedium::CloseStorage()
         {
             try {
                 xComp->dispose();
-            } catch( const uno::Exception& )
+            } catch( const cpo::uno::Exception& )
             {
                 SAL_WARN( "sfx.doc", "Medium's storage is already disposed!" );
             }
@@ -2227,7 +2227,7 @@ bool SfxMedium::StorageCommit_Impl()
                     if (!GetErrorIgnoreWarning())
                         SetError(ERRCODE_IO_GENERAL);
                 }
-                catch ( const uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     //TODO/LATER: improve error handling
                     SetError(ERRCODE_IO_GENERAL);
@@ -2270,7 +2270,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             pImpl->m_eError = ERRCODE_IO_NOTEXISTSPATH;
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
        pImpl->m_eError = ERRCODE_IO_GENERAL;
     }
@@ -2360,7 +2360,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         {
             pImpl->m_eError = ERRCODE_IO_ALREADYEXISTS;
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             pImpl->m_eError = ERRCODE_IO_GENERAL;
         }
@@ -2439,7 +2439,7 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTar
 
                     return true;
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
             }
         }
@@ -2614,7 +2614,7 @@ void SfxMedium::Transfer_Impl()
             aAny = aDestContent.getPropertyValue(u"ObjectId"_ustr);
             aAny >>= sObjectId;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             SAL_INFO("sfx.doc", "exception while getting Title or ObjectId");
         }
@@ -2636,7 +2636,7 @@ void SfxMedium::Transfer_Impl()
                 pImpl->m_eError = ERRCODE_IO_NOTEXISTSPATH;
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             pImpl->m_eError = ERRCODE_IO_GENERAL;
         }
@@ -2701,7 +2701,7 @@ void SfxMedium::Transfer_Impl()
                         aLockContent.lock();
                     }
                 }
-                catch ( css::uno::Exception & )
+                catch ( cpo::uno::Exception & )
                 {
                     TOOLS_WARN_EXCEPTION( "sfx.doc", "LOCK not working while re-issuing it" );
                 }
@@ -2725,7 +2725,7 @@ void SfxMedium::Transfer_Impl()
                 else
                     pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
@@ -2875,7 +2875,7 @@ void SfxMedium::DoBackup_Impl(bool bForceUsingBackupPath)
                     pImpl->m_bRemoveBackup = false;
                     bSuccess = true;
                 }
-                catch ( const css::uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                 }
             }
@@ -3370,7 +3370,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
                 if ( !pImpl->m_bDisableUnlockWebDAV )
                     aContentToUnlock.unlock();
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
             }
@@ -3391,7 +3391,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
                 if ( xOutStream.is() )
                     xOutStream->closeOutput();
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
 
@@ -3417,7 +3417,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
             aLockFile.RemoveFileDirectly();
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     if(!pImpl->m_bMSOLockFileCreated)
@@ -3439,7 +3439,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
             aMSOLockFile.RemoveFileDirectly();
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
     pImpl->m_bMSOLockFileCreated = false;
 #endif
@@ -3474,7 +3474,7 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
         if ( xOutToClose.is() )
             xOutToClose->closeOutput();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -3852,7 +3852,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 
                 pImpl->xAttributes->Append( SvKeyValue( u"content-type"_ustr, aContentType ) );
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -3880,7 +3880,7 @@ const cpo::uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool 
         {
             pImpl->aVersions = xReader->load( GetStorage() );
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -3899,7 +3899,7 @@ cpo::uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::R
     {
         return xReader->load( xStorage );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -3974,7 +3974,7 @@ void SfxMedium::SaveVersionList_Impl()
     {
         xWriter->store( GetStorage(), pImpl->aVersions );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -4167,7 +4167,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
                     bTransferSuccess = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
 
             if ( bTransferSuccess )
@@ -4354,7 +4354,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
                 bChanges = true;
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "Couldn't use signing functionality!");
     }
@@ -4633,7 +4633,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "Couldn't use signing functionality!");
     }
@@ -4698,7 +4698,7 @@ OUString SfxMedium::CreateTempCopyWithExt( std::u16string_view aURL )
                                                         NameClash::OVERWRITE );
                     aResult = aNewTempFileURL;
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
             }
         }
@@ -4788,7 +4788,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                         pImpl->xStorage = xStorage;
                         aResult = aNewURL;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {}
                 }
 
@@ -4851,7 +4851,7 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
                     bResult = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
 
@@ -5041,7 +5041,7 @@ bool SfxMedium::CheckCanGetLockfile() const
             // we get empty or corrupt data
             return false;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // locked from other app
             return false;
@@ -5074,13 +5074,13 @@ bool SfxMedium::CheckCanGetLockfile() const
                     // erase the empty or corrupt file
                     aLockFile.RemoveFileDirectly();
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
             bCanReload = true;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

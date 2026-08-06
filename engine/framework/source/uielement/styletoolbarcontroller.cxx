@@ -68,7 +68,7 @@ OUString GetDisplayFromInternalName( const css::uno::Reference< css::frame::XFra
             xStyle->getPropertyValue( u"DisplayName"_ustr ) >>= aDisplayName;
         return aDisplayName;
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         // We couldn't get the display name. As a last resort we'll
         // try to use the internal name, as was specified in the URL.

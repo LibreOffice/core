@@ -96,7 +96,7 @@ rtl::Reference< Legend > LegendHelper::getLegend(
             OSL_FAIL("need diagram for creation of legend");
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -102,7 +102,7 @@ void Bridge::handle_java_exc(
 
 #if OSL_DEBUG_LEVEL > 0
     // patch Message, append stack trace
-    reinterpret_cast< css::uno::Exception * >(
+    reinterpret_cast< cpo::uno::Exception * >(
         uno_data.get() )->Message += jni.get_stack_trace( jo_exc.get() );
 #endif
 
@@ -113,7 +113,7 @@ void Bridge::handle_java_exc(
     SAL_INFO(
         "bridges",
         "exception occurred uno->java: [" << exc_name << "] "
-        << (static_cast<css::uno::Exception const *>(uno_exc->pData)
+        << (static_cast<cpo::uno::Exception const *>(uno_exc->pData)
             ->Message));
 }
 

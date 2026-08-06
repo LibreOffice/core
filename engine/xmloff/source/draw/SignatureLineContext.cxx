@@ -126,7 +126,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nEl
         }
         xPropSet->setPropertyValue(u"SignatureLineIsSigned"_ustr, Any(bIsSigned));
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         // DocumentDigitalSignatures service not available.
         // We render the "unsigned" shape instead.

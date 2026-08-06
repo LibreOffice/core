@@ -88,7 +88,7 @@ DocumentContentFactory::createDocumentContent(
         xDocFac.set( m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr, m_xContext),
                      uno::UNO_QUERY );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // handled below.
     }

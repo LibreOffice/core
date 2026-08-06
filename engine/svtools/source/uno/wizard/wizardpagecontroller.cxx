@@ -31,7 +31,7 @@ namespace svt::uno
 
     using css::uno::Reference;
     using css::uno::UNO_SET_THROW;
-    using css::uno::Exception;
+    using cpo::uno::Exception;
     using css::ui::dialogs::XWizardController;
     using css::awt::XWindow;
 

@@ -1675,7 +1675,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "unomodel: AnimationsExporter");
     }
@@ -2713,7 +2713,7 @@ OUString lcl_ReadTemplateThumbnailDataUrl(const OUString& rUrl)
                                                   static_cast<sal_Int32>(aBytes.size())));
         return u"data:image/png;base64,"_ustr + aBase64.makeStringAndClear();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return OUString();
     }
@@ -4174,7 +4174,7 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
                                          ::tools::Rectangle(aPopupPoint, aPopupSize));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -4662,7 +4662,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::A
                     }
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -4720,7 +4720,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::A
                 }
                 //<--- #i56629, #i40318
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -6202,7 +6202,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
             }
         }
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved");
     }
@@ -6223,7 +6223,7 @@ bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const 
             return slideHash == GetInterfaceHash(cppu::getXWeak(pSlide));
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createKitSlideRenderer: failed" );
     }

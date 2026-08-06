@@ -36,7 +36,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -221,7 +221,7 @@ Service::Service(
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (cpo::uno::Exception & e) {
         throw css::uno::DeploymentException(
             ("component context fails to supply service"
              " com.sun.star.configuration.DefaultProvider of type"
@@ -253,7 +253,7 @@ void Service::open(OUString const & rURL, bool bReadOnly, bool)
             args);
     } catch (css::uno::RuntimeException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (cpo::uno::Exception & e) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "com.sun.star.configuration.ConfigurationRegistry: open failed: " +

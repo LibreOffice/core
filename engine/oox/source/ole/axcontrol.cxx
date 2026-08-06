@@ -180,7 +180,7 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
         orRangeAddr = xAddressable->getRangeAddress();
         return true;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "");
     }
@@ -213,7 +213,7 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
             u"com.sun.star.table.CellAddressConversion"_ustr;
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "");
     }
@@ -353,7 +353,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr, aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "");
     }
@@ -384,7 +384,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments(u"com.sun.star.table.CellRangeListSource"_ustr, aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "");
     }
@@ -2698,7 +2698,7 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         {
             aPropMap.setProperty( PROP_GenerateVbaEvents, true);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("oox", "");
         }
@@ -2747,7 +2747,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         rnCtrlIndex = xFormIC->getCount();
         xFormIC->insertByIndex( rnCtrlIndex, Any( xFormComp ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "exception creating Control");
     }
@@ -2773,7 +2773,7 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("oox", "exception creating Form");
         }

@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 
 ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( OUString aObjectCID )

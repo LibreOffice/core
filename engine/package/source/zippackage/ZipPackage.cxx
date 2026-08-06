@@ -394,7 +394,7 @@ void ZipPackage::parseManifest()
                 xMetaInfFolder->removeByName( sManifest );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             if ( !m_bForceRecovery )
                 throw;
@@ -546,7 +546,7 @@ void ZipPackage::parseContentType()
 
         m_xRootFolder->removeByName( aContentTypes );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         if ( !m_bForceRecovery )
             throw;
@@ -704,7 +704,7 @@ void SAL_CALL ZipPackage::initialize( const cpo::uno::Sequence< Any >& aArgument
                 else
                     bHaveZipFile = false;
             }
-            catch ( css::uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // Exception derived from uno::Exception thrown. This probably
                 // means the file doesn't exist...we'll create it at
@@ -781,7 +781,7 @@ void SAL_CALL ZipPackage::initialize( const cpo::uno::Sequence< Any >& aArgument
         else
         {
             // The URL is not acceptable
-            throw css::uno::Exception (u"Bad arguments."_ustr,
+            throw cpo::uno::Exception (u"Bad arguments."_ustr,
                 getXWeak() );
         }
     }
@@ -799,7 +799,7 @@ void SAL_CALL ZipPackage::initialize( const cpo::uno::Sequence< Any >& aArgument
         else
             bHaveZipFile = false;
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // Exception derived from uno::Exception thrown. This probably
         // means the file doesn't exist...we'll create it at
@@ -1027,7 +1027,7 @@ bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any e(::cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(u"ZipPackage::hasByHierarchicalName"_ustr, nullptr, e);
@@ -1366,7 +1366,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
                 ConnectTo( xNewStream );
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         if( bUseTemp )
         {
@@ -1419,7 +1419,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                 if( !( aAny >>= aDetect ) )
                     bTruncSuccess = true;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 
@@ -1440,7 +1440,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
 
             aOriginalContent.executeCommand(u"open"_ustr, Any( aArg ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             // seems to be nonlocal file
             // temporary file mechanics should be used
@@ -1482,7 +1482,7 @@ void SAL_CALL ZipPackage::commitChanges()
         {
             xTempSeek->seek( 0 );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(u"Temporary file should be seekable!"_ustr,
@@ -1523,7 +1523,7 @@ void SAL_CALL ZipPackage::commitChanges()
                 // after successful truncation the original file contents are already lost
                 xTruncate->truncate();
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetException(u"This package is read only!"_ustr,
@@ -1541,7 +1541,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     asyncOutputMonitor->waitForCompletion();
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 // if anything goes wrong in this block the target file becomes corrupted
                 // so an exception should be thrown as a notification about it
@@ -1570,7 +1570,7 @@ void SAL_CALL ZipPackage::commitChanges()
                         // after successful truncation the file is already corrupted
                         xOrigTruncate->truncate();
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {}
                 }
 
@@ -1581,11 +1581,11 @@ void SAL_CALL ZipPackage::commitChanges()
                         ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, aOrigFileStream );
                         aOrigFileStream->closeOutput();
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                         try {
                             aOrigFileStream->closeOutput();
-                        } catch ( uno::Exception& ) {}
+                        } catch ( cpo::uno::Exception& ) {}
 
                         aOrigFileStream.clear();
                         // the original file can already be corrupted
@@ -1619,7 +1619,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     // if the file is still not corrupted, it can become after the next step
                     aContent.executeCommand (u"transfer"_ustr, Any(aInfo) );
                 }
-                catch ( const css::uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     if ( bCanBeCorrupted )
                         DisconnectFromTargetAndThrowException_Impl( xTempInStream );
@@ -1654,7 +1654,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
         xTempFile->setPropertyValue(u"RemoveFile"_ustr,
                                      cpo::uno::Any( false ) );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         OSL_FAIL( "These calls are pretty simple, they should not fail!" );
     }

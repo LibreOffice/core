@@ -49,7 +49,7 @@ class SfxMacroLoader final : public cppu::WeakImplHelper<
     SfxObjectShell* GetObjectShell_Impl();
 
 public:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     SfxMacroLoader(const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 

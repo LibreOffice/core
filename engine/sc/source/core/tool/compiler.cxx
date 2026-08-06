@@ -5583,7 +5583,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             return pNew;
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     // no success - fallback to some internal grammar and hope the best

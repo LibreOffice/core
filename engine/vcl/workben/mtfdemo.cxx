@@ -104,7 +104,7 @@ public:
             Application::Execute();
             mpWin.disposeAndClear();
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
             return 1;
@@ -213,7 +213,7 @@ private:
             }
 
         }
-        catch (const uno::Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             Application::Abort("Bootstrap exception " + e.Message);
         }

@@ -79,7 +79,7 @@ void OptimizationStats::InitializeStatusValuesFromDocument( const Reference< XMo
         Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         SetStatusValue( TK_Pages, Any( awt::Size( 0, xDrawPages->getCount() ) ) );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }

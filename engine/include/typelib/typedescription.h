@@ -772,7 +772,7 @@ CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     SAL_THROW_EXTERN_C();
 
 /** Gets static type reference of standard types by type class.
-    ADDITIONAL OPT: provides Type com.sun.star.uno.Exception for typelib_TypeClass_EXCEPTION
+    ADDITIONAL OPT: provides Type cpo.uno.Exception for typelib_TypeClass_EXCEPTION
                     and com.sun.star.uno.XInterface for typelib_TypeClass_INTERFACE.
 
     Thread synchronizes on typelib mutex.

@@ -228,7 +228,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
         }
         return true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -257,7 +257,7 @@ void SAL_CALL CellCursor::merge(  )
         mxTable->optimize();
         mxTable->setModified(true);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -522,7 +522,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
         if( nColumns > 0 ||nRows > 0 )
             mxTable->setModified(true);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
         throw NoSupportException();

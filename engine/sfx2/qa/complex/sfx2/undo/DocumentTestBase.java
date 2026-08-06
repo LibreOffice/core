@@ -19,7 +19,7 @@
 package complex.sfx2.undo;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import org.openoffice.test.tools.DocumentType;
 import org.openoffice.test.tools.OfficeDocument;
 

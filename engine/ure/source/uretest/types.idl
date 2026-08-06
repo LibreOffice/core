@@ -19,7 +19,7 @@
 
 module test { module types {
 
-exception TestException: com::sun::star::uno::Exception {};
+exception TestException: cpo::uno::Exception {};
 
 interface XTest {
     void throwException() raises (TestException);

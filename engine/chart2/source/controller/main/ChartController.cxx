@@ -203,7 +203,7 @@ void ChartController::TheModel::tryTermination()
 
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION( "chart2", "Termination of model failed" );
     }
@@ -455,7 +455,7 @@ void ChartController::attachFrame(
                         m_xLayoutManagerEventBroadcaster->addLayoutManagerEventListener( this );
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -840,7 +840,7 @@ void ChartController::dispose()
                 if( aModelRef->getModel().is())
                     aModelRef->getModel()->removeModifyListener( this );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -854,7 +854,7 @@ void ChartController::dispose()
         SolarMutexGuard g;
         m_aDispatchContainer.DisposeAndClear();
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
         assert(!m_xChartView.is());
@@ -1573,7 +1573,7 @@ void ChartController::dispatch(
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1766,7 +1766,7 @@ void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoA
         const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
         xUndoManager->addUndoAction( xAction );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2069,7 +2069,7 @@ static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
                     {
                         TOOLS_WARN_EXCEPTION("chart2", "unknown Property: " << aProperty.first);
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION("chart2", "");
                     }

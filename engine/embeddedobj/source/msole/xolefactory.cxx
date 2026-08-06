@@ -91,7 +91,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFr
                 if ( xObj.is() )
                     xNew->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
             }
-            catch ( const uno::Exception& ) {}
+            catch ( const cpo::uno::Exception& ) {}
             break;
         }
     }

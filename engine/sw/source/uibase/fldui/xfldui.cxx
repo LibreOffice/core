@@ -83,7 +83,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
                 aTable >>= xPropSet;
                 xColsSupplier.set(xPropSet, UNO_QUERY);
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -102,7 +102,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
                 aQuery >>= xPropSet;
                 xColsSupplier.set(xPropSet, UNO_QUERY);
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -115,7 +115,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
         {
             xCols = xColsSupplier->getColumns();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "sw", "getColumns()");
         }

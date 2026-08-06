@@ -612,7 +612,7 @@ bool OptimizerDialog::onFinish()
             // about extracting error code from exception text
             errorCode = ERRCODE_IO_CANTWRITE;
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             // Other general exception
             errorCode = ERRCODE_IO_GENERAL;

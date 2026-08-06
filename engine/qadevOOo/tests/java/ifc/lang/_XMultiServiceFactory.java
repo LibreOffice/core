@@ -123,7 +123,7 @@ public class _XMultiServiceFactory extends MultiMethodTest {
 
                 Object Inst = oObj.createInstance(services[k]);
                 res = (Inst != null);
-            } catch (com.sun.star.uno.Exception ex) {
+            } catch (cpo.uno.Exception ex) {
                 log.println("Exception occurred during createInstance()");
                 ex.printStackTrace(log);
                 res = false;
@@ -174,7 +174,7 @@ public class _XMultiServiceFactory extends MultiMethodTest {
                     Object Inst = oObj.createInstanceWithArguments(sNames[k],
                                                                    args[k]);
                     res &= (Inst != null);
-                } catch (com.sun.star.uno.Exception ex) {
+                } catch (cpo.uno.Exception ex) {
                     log.println(
                             "Exception occurred during createInstanceWithArguments()");
                     ex.printStackTrace(log);

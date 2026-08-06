@@ -68,7 +68,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData
     {
         aData.realloc( nBytesToRead );
     }
-    catch ( const css::uno::Exception & )
+    catch ( const cpo::uno::Exception & )
     {
         throw css::io::BufferSizeExceededException();
     }

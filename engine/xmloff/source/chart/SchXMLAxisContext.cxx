@@ -303,7 +303,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< frame::XModel >& xChart
             }
         }
     }
-    catch( uno::Exception & )
+    catch( cpo::uno::Exception & )
     {
         SAL_INFO("xmloff.chart", "Couldn't get axis" );
     }
@@ -652,7 +652,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
     {
         xAxis = rCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex );
     }
-    catch( uno::Exception & )
+    catch( cpo::uno::Exception & )
     {
     }
     return xAxis;
@@ -774,7 +774,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
             }
         }
     }
-    catch( uno::Exception & )
+    catch( cpo::uno::Exception & )
     {
     }
 }

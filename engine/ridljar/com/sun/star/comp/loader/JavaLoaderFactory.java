@@ -38,14 +38,14 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
     }
 
     public java.lang.Object createInstance()
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
         return new JavaLoader(multiServiceFactory);
     }
 
     public java.lang.Object createInstanceWithArguments( java.lang.Object[] args )
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
         JavaLoader loader = new JavaLoader();

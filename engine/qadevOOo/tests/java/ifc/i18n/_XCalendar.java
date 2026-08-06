@@ -80,7 +80,7 @@ public class _XCalendar extends MultiMethodTest {
             installed_locales = locData.getAllInstalledLocaleNames();
             calendars = new String[installed_locales.length][];
             count = new int[installed_locales.length];
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
 
         }
 

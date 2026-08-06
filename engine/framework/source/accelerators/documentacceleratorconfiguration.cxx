@@ -172,7 +172,7 @@ void DocumentAcceleratorConfiguration::fillCache()
         DocumentAcceleratorConfiguration::reload();
         m_aPresetHandler.addStorageListener(this);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {}
 }
 

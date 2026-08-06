@@ -180,7 +180,7 @@ Reference< XNameAccess > OQueryDescriptor_Base::getColumns( )
         {
             rebuildColumns();
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             setColumnsOutOfDate();
             throw;

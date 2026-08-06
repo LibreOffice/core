@@ -4410,7 +4410,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 }
                 bDone = true;
             }
-            catch( const css::uno::Exception&)
+            catch( const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT" );
             }
@@ -4436,7 +4436,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     }
                     bDone = true;
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -4468,7 +4468,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     }
                     bDone = true;
                 }
-                catch( const css::uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                 }
             }
@@ -4495,7 +4495,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     }
                     bDone = true;
                 }
-                catch( const css::uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                 }
             }
@@ -4518,7 +4518,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, EditSelection(rPaM));
                     bDone = true;
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("editeng", "HTML paste failed");
                 }

@@ -63,7 +63,7 @@ public class AccessibleControlShape extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log)
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
 
         XInterface oObj = null;

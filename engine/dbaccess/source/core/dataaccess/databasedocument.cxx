@@ -1223,7 +1223,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }
-    catch ( const Exception& e )
+    catch ( const cpo::uno::Exception& e )
     {
         throw IOException( e.Message, *const_cast< ODatabaseDocument* >( this ) );
     }
@@ -1517,7 +1517,7 @@ void ODatabaseDocument::close(bool bDeliverOwnership)
 
         dispose();
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         SolarMutexGuard g;
         m_bClosing = false;
@@ -1676,7 +1676,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         {
             xProp->setPropertyValue(u"Version"_ustr , cpo::uno::Any(aVersion));
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("dbaccess", "exception setting Version");
         }
@@ -1708,7 +1708,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
                lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext );
            }
        }
-       catch ( const Exception& )
+       catch ( const cpo::uno::Exception& )
        {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
        }

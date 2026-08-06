@@ -3627,7 +3627,7 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
     {
         xBrdcst->removeModifyListener(xListener);
     }
-    catch(uno::Exception const &)
+    catch(cpo::uno::Exception const &)
     {
         OSL_FAIL("OLE Listener couldn't be removed");
     }

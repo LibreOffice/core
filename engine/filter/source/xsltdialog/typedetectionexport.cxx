@@ -193,7 +193,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
         xHandler->endElement( sComponentData );
         xHandler->endDocument();
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
@@ -220,7 +220,7 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sProp );
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
@@ -249,7 +249,7 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sProp );
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }

@@ -555,7 +555,7 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     {
         m_xCooSysModel->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXAndY;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

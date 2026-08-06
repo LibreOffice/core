@@ -46,7 +46,7 @@ ItemHolder1::ItemHolder1()
         xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
 #ifdef DBG_UTIL
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         static bool bMessage = true;
         if(bMessage)
@@ -56,7 +56,7 @@ ItemHolder1::ItemHolder1()
         }
     }
 #else
-    catch(css::uno::Exception&){}
+    catch(cpo::uno::Exception&){}
 #endif
 }
 

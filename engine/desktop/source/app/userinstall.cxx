@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <comphelper/configuration.hxx>
 #include <config_folders.h>
 #include <officecfg/Setup.hxx>
@@ -148,7 +148,7 @@ Status create(OUString const & uri) {
 bool isCreated() {
     try {
         return officecfg::Setup::Office::ooSetupInstCompleted::get();
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         return false;
     }

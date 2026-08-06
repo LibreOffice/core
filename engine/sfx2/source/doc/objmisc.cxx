@@ -311,7 +311,7 @@ bool SfxObjectShell::IsModified() const
                             return true;
                     }
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
         }
@@ -533,7 +533,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                 aControlFile.InsertOwnEntry();
                 bRemoveEntryOnError = true;
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 bResult = false;
             }
@@ -583,7 +583,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                     ::svt::ShareControlFile aControlFile( GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                     aControlFile.RemoveFile();
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }
@@ -598,7 +598,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                     ::svt::ShareControlFile aControlFile( aOrigURL );
                     aControlFile.RemoveEntry();
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
 
@@ -630,7 +630,7 @@ void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
             ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
             aControlFile.RemoveEntry();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -1051,7 +1051,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
         xPropSet->getPropertyValue(u"HasEncryptedEntries"_ustr) >>= bIsEncrypted;
         xPropSet->getPropertyValue(u"HasNonEncryptedEntries"_ustr) >>= bHasNonEncrypted;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -1568,7 +1568,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         aException = ::cppu::getCaughtException();
         bCaughtException = true;
@@ -1845,7 +1845,7 @@ bool SfxObjectShell::UseInteractionToHandleError(
             xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
             bResult = pAbort->wasSelected();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -1945,7 +1945,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
                 uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
                 xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 
@@ -1979,7 +1979,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return bResult;

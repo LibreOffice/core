@@ -282,7 +282,7 @@ void convertToIOException(GError *pError, const css::uno::Reference< css::uno::X
     {
         throw;
     }
-    catch (const css::uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
@@ -776,7 +776,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
 
                 if (!exchangeIdentity( xNewId ) )
                 {
-                    aRetRange[ nTitlePos ] <<= css::uno::Exception
+                    aRetRange[ nTitlePos ] <<= cpo::uno::Exception
                         ( u"Exchange failed!"_ustr,
                           getXWeak() );
                 }

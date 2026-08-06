@@ -156,7 +156,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< 
                 table::CellRangeAddress aRangeAddr = xRangeAddr->getRangeAddress();
                 bAsArray = (aRangeAddr.StartColumn != aRangeAddr.EndColumn) || (aRangeAddr.StartRow != aRangeAddr.EndRow);
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
@@ -257,7 +257,7 @@ ScVbaWSFunction::hasMethod(const OUString& Name)
         if( ScCompiler::IsEnglishSymbol( Name ) )
             bIsFound = true;
     }
-    catch( uno::Exception& /*e*/ )
+    catch( cpo::uno::Exception& /*e*/ )
     {
         // failed to find name
     }

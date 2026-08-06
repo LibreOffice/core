@@ -65,7 +65,7 @@ editable_text_wrapper_set_run_attributes( AtkEditableText  *text,
                 return pEditableText->setAttributes(nStartOffset, nEndOffset, aAttributeList);
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setAttributes()" );
     }
 
@@ -85,7 +85,7 @@ editable_text_wrapper_set_text_contents( AtkEditableText  *text,
             pEditableText->setText( aString );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setText()" );
     }
 }
@@ -106,7 +106,7 @@ editable_text_wrapper_insert_text( AtkEditableText  *text,
                 *pos += length;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in insertText()" );
     }
 }
@@ -122,7 +122,7 @@ editable_text_wrapper_cut_text( AtkEditableText  *text,
         if( pEditableText.is() )
             pEditableText->cutText( start, end );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in cutText()" );
     }
 }
@@ -138,7 +138,7 @@ editable_text_wrapper_delete_text( AtkEditableText  *text,
         if( pEditableText.is() )
             pEditableText->deleteText( start, end );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in deleteText()" );
     }
 }
@@ -153,7 +153,7 @@ editable_text_wrapper_paste_text( AtkEditableText  *text,
         if( pEditableText.is() )
             pEditableText->pasteText( pos );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in pasteText()" );
     }
 }
@@ -169,7 +169,7 @@ editable_text_wrapper_copy_text( AtkEditableText  *text,
         if( pEditableText.is() )
             pEditableText->copyText( start, end );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in copyText()" );
     }
 }

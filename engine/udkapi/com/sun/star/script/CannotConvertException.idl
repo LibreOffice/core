@@ -24,7 +24,7 @@
 
 /** This exception is thrown to indicate that a type conversion can not be performed.
 */
-published exception CannotConvertException: com::sun::star::uno::Exception
+published exception CannotConvertException: cpo::uno::Exception
 {
     /** This member contains the class of the type to which the value should be
         converted.

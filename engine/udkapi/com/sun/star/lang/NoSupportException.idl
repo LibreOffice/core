@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module lang {
     @see     XEnumeration
     @see     com::sun::star::container::XChild::setParent
  */
-published exception NoSupportException: com::sun::star::uno::Exception
+published exception NoSupportException: cpo::uno::Exception
 {
 };
 

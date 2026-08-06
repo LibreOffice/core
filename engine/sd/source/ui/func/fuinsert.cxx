@@ -662,7 +662,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
             }
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             // For some reason the object can not be inserted.  For example
             // because it is password protected and is not properly unlocked.

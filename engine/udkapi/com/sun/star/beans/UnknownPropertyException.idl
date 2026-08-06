@@ -27,7 +27,7 @@
 
     @see XPropertySet
  */
-published exception UnknownPropertyException: com::sun::star::uno::Exception
+published exception UnknownPropertyException: cpo::uno::Exception
 {
 };
 

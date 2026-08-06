@@ -264,7 +264,7 @@ public class ODatasourceBrowser extends TestCase {
 
         try {
             xCtrl = xCtrlAccess.getControl(shapeModel);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);
         }

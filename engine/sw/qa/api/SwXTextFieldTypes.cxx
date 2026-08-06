@@ -53,7 +53,7 @@ public:
         {
             xTFS = Reference<text::XTextFieldsSupplier>(xTextDocument, UNO_QUERY_THROW);
         }
-        catch (Exception&)
+        catch (cpo::uno::Exception&)
         {
         }
 

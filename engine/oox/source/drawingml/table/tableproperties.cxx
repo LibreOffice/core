@@ -82,7 +82,7 @@ static void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, 
        if( xRange->isMergeable() )
                xRange->merge();
    }
-   catch( Exception& )
+   catch( cpo::uno::Exception& )
    {
    }
 }

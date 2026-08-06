@@ -46,7 +46,7 @@ void OSelfTerminateFileStream::CloseStreamDeleteFile()
     {
         m_xStreamWrapper->closeInput();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     m_oTempFile.reset();

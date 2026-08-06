@@ -103,7 +103,7 @@ public class SwXDocumentIndexMark extends TestCase {
                 ("com.sun.star.text.DocumentIndexMark");
             instance = oDocMSF.createInstance
                 ("com.sun.star.text.DocumentIndexMark");
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch ( cpo.uno.Exception e ) {
             log.println("Error:" + e);
         }
 

@@ -101,28 +101,28 @@ private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::vector< ContentRef > ContentRefList;
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws libcmis::Exception
     cpo::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, std::u16string_view rMimeType,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     OUString checkIn( const css::ucb::CheckinArgument& rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
@@ -132,7 +132,7 @@ private:
         setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     cpo::uno::Sequence< css::document::CmisVersion >
         getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 

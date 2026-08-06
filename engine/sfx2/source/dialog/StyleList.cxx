@@ -1220,7 +1220,7 @@ OUString StyleList::getDefaultStyleName(const SfxStyleFamily eFam)
         xStyles->getByName(sDefaultStyle) >>= xInfo;
         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return aUIName;

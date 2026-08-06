@@ -276,7 +276,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     {
         xStorable->storeToURL(u"private:stream"_ustr, args);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("oox.shape", "oox::GetOLEObjectStream");
         return nullptr;
@@ -315,7 +315,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
                     o_rpProgID, o_rMediaType, o_rRelationType, o_rSuffix);
         }
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("oox.shape", "oox::GetOLEObjectStream");
     }
@@ -3043,7 +3043,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         {
             ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLEObject");
         }

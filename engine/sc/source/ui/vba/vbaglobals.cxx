@@ -209,7 +209,7 @@ ScVbaGlobals::getDebug()
             u"ooo.vba.Debug"_ustr, mxContext );
         return cpo::uno::Any( xVBADebug );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return cpo::uno::Any();

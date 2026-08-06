@@ -384,7 +384,7 @@ using namespace cpo::uno;
         {
             xOldFormat.set(xFormats->getByKey( nOldIndex ));
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // non-existing format - can happen, use defaults
         }

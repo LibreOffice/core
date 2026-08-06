@@ -202,7 +202,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -277,7 +277,7 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
     {
         throw;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         sUIName.clear();
     }
@@ -356,7 +356,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 rootNode.set(xFac->createView(
                     css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR));
             }
-            catch (css::uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 TOOLS_WARN_EXCEPTION(
                     "cui.customize",
@@ -577,7 +577,7 @@ void CommandCategoryListBox::addChildren(
                 value = xPropSet->getPropertyValue(u"Description"_ustr);
                 value >>= description;
             }
-            catch (css::uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
                 // do nothing, the description will be empty
             }

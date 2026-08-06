@@ -117,7 +117,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
     {
         xComponent = xDesktop->loadComponentFromURL(m_aFileName, u"_blank"_ustr, 0, aArgs);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         aLoaderException = ::cppu::getCaughtException();
     }
@@ -130,7 +130,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
     {
         if (aLoaderException.hasValue())
         {
-            uno::Exception aLoaderError;
+            cpo::uno::Exception aLoaderError;
             OSL_VERIFY(aLoaderException >>= aLoaderError);
 
             SAL_WARN("connectivity.writer",

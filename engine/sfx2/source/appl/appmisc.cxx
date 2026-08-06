@@ -115,7 +115,7 @@ static bool FileExists( const INetURLObject& rURL )
             aCnt.getPropertyValue(u"Title"_ustr) >>= aTitle;
             bRet = ( !aTitle.isEmpty() );
         }
-        catch(const Exception&)
+        catch(const cpo::uno::Exception&)
         {
             return false;
         }
@@ -199,7 +199,7 @@ bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, in
             return true;
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx.appl", "Got no graphic::XPrimitive2DRenderer (!)" );
     }

@@ -166,7 +166,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                     moGraphic.emplace(*pObjGr);
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
     else if( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && (mpSourceDoc && !SdDrawDocument::GetAnimationInfo( pObj )) )
@@ -581,7 +581,7 @@ bool SdTransferable::WriteObject( SvStream& rOStm, void* pObject, sal_uInt32 nOb
                 xComponent->dispose();
                 bRet = ( rOStm.GetError() == ERRCODE_NONE );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sd", "sd::SdTransferable::WriteObject()" );
                 bRet = false;
@@ -616,7 +616,7 @@ bool SdTransferable::WriteObject( SvStream& rOStm, void* pObject, sal_uInt32 nOb
 
                 bRet = true;
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {}
         }
 

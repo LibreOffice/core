@@ -33,13 +33,13 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during saving
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void storeOwn()
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** allows to detect if the data store is read-only.
 
@@ -77,7 +77,7 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during opening or creation
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void reload(
@@ -86,7 +86,7 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

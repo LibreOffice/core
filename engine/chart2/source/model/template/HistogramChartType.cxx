@@ -204,7 +204,7 @@ void HistogramChartType::createCalculatedDataSeries()
         getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflowBin;
         getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflowBinValue;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

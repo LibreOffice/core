@@ -102,7 +102,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XMultiServiceFactory
      */
     public java.lang.Object createInstance( String serviceSpecifier )
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
         return createInstanceWithContext( serviceSpecifier, m_xDefaultContext );
@@ -120,7 +120,7 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public java.lang.Object createInstanceWithArguments(
         String serviceSpecifier, Object[] args )
-        throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException
+        throws cpo.uno.Exception, com.sun.star.uno.RuntimeException
     {
         if (DEBUG) {
             System.err.println("createInstanceWithArguments:" );
@@ -148,7 +148,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XMultiServiceFactory
      */
     private Object queryServiceFactory(String serviceName)
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
         DEBUG("queryServiceFactory for name " + serviceName );
@@ -174,7 +174,7 @@ public class ServiceManager implements XMultiServiceFactory,
         }
 
         if (factory == null)
-            throw new com.sun.star.uno.Exception("Query for service factory for " + serviceName + " failed.");
+            throw new cpo.uno.Exception("Query for service factory for " + serviceName + " failed.");
 
         return factory;
     }
@@ -207,7 +207,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public java.lang.Object createInstanceWithContext(
         String rServiceSpecifier,
         com.sun.star.uno.XComponentContext xContext )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         Object fac = queryServiceFactory( rServiceSpecifier );
         if (fac != null)
@@ -230,7 +230,7 @@ public class ServiceManager implements XMultiServiceFactory,
                 }
                 else
                 {
-                    throw new com.sun.star.uno.Exception(
+                    throw new cpo.uno.Exception(
                         "retrieved service factory object for \"" + rServiceSpecifier +
                         "\" does not export XSingleComponentFactory nor XSingleServiceFactory!" );
                 }
@@ -250,7 +250,7 @@ public class ServiceManager implements XMultiServiceFactory,
         String rServiceSpecifier,
         java.lang.Object[] rArguments,
         com.sun.star.uno.XComponentContext xContext )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         Object fac = queryServiceFactory( rServiceSpecifier );
         if (fac != null)
@@ -273,7 +273,7 @@ public class ServiceManager implements XMultiServiceFactory,
                 }
                 else
                 {
-                    throw new com.sun.star.uno.Exception(
+                    throw new cpo.uno.Exception(
                         "retrieved service factory object for \"" + rServiceSpecifier +
                         "\" does not export XSingleComponentFactory nor XSingleServiceFactory!" );
                 }

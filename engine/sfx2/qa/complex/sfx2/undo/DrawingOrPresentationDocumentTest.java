@@ -40,12 +40,12 @@ import static org.junit.Assert.*;
  */
 public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
 {
-    public DrawingOrPresentationDocumentTest( XMultiServiceFactory i_orb, final DocumentType i_docType ) throws com.sun.star.uno.Exception
+    public DrawingOrPresentationDocumentTest( XMultiServiceFactory i_orb, final DocumentType i_docType ) throws cpo.uno.Exception
     {
         super( i_orb, i_docType );
     }
 
-    public void initializeDocument() throws com.sun.star.uno.Exception
+    public void initializeDocument() throws cpo.uno.Exception
     {
         // remove all shapes - Impress has two default shapes in a new doc; just get rid of them
         final XShapes firstPageShapes = getFirstPageShapes();
@@ -53,7 +53,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
             firstPageShapes.remove( UnoRuntime.queryInterface( XShape.class, firstPageShapes.getByIndex( 0 ) ) );
     }
 
-    public void doSingleModification() throws com.sun.star.uno.Exception
+    public void doSingleModification() throws cpo.uno.Exception
     {
         // add a simple centered shape to the first page
         Rectangle pagePlayground = impl_getFirstPagePlayground();
@@ -65,13 +65,13 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
         );
     }
 
-    public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
+    public void verifyInitialDocumentState() throws cpo.uno.Exception
     {
         final XShapes firstPageShapes = getFirstPageShapes();
         assertEquals( "there should be no shapes at all", 0, firstPageShapes.getCount() );
     }
 
-    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
+    public void verifySingleModificationDocumentState() throws cpo.uno.Exception
     {
         final XShapes firstPageShapes = getFirstPageShapes();
         assertEquals( "there should be one shape, not more, not less", 1, firstPageShapes.getCount() );
@@ -85,7 +85,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
             // default value upon re-insertion. This is issue #i115080#
     }
 
-    public int doMultipleModifications() throws com.sun.star.uno.Exception
+    public int doMultipleModifications() throws cpo.uno.Exception
     {
         // add a simple centered shape to the first page
         Rectangle pagePlayground = impl_getFirstPagePlayground();
@@ -116,7 +116,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
         return 4;
     }
 
-    private void impl_createCircleShape( final int i_x, final int i_y, final int i_size, final int i_color ) throws com.sun.star.uno.Exception
+    private void impl_createCircleShape( final int i_x, final int i_y, final int i_size, final int i_color ) throws cpo.uno.Exception
     {
         final XPropertySet shapeProps = getDocument().createInstance( "com.sun.star.drawing.EllipseShape", XPropertySet.class );
         shapeProps.setPropertyValue( "CircleKind", CIRCLE_TYPE );
@@ -138,7 +138,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
         undoManager.addUndoAction( new ShapeInsertionUndoAction( shape, pageShapes ) );
     }
 
-    private Rectangle impl_getFirstPagePlayground() throws com.sun.star.uno.Exception
+    private Rectangle impl_getFirstPagePlayground() throws cpo.uno.Exception
     {
         final XShapes firstPageShapes = getFirstPageShapes();
         final XPropertySet firstPageProps = UnoRuntime.queryInterface( XPropertySet.class, firstPageShapes );
@@ -154,7 +154,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
     /**
      * returns the XShapes interface of the first page of our drawing document
      */
-    private XShapes getFirstPageShapes() throws com.sun.star.uno.Exception
+    private XShapes getFirstPageShapes() throws cpo.uno.Exception
     {
         final XDrawPagesSupplier suppPages = UnoRuntime.queryInterface( XDrawPagesSupplier.class, getDocument().getDocument() );
         final XDrawPages pages = suppPages.getDrawPages();

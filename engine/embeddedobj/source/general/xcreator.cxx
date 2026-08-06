@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
             cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
             aAny >>= aMediaType;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
 
@@ -120,7 +120,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
             if ( xSubStorage.is() )
                 xSubStorage->dispose();
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -143,7 +143,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
                 aEmbedFactory = u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
 
@@ -152,7 +152,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
             if ( xComp.is() )
                 xComp->dispose();
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }

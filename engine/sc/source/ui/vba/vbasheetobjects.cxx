@@ -50,7 +50,7 @@ bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropertySet >&
     {
         return rxPropSet->getPropertyValue( rPropName ) >>= orValue;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;
@@ -448,7 +448,7 @@ bool ScVbaControlContainer::implPickShape( const uno::Reference< drawing::XShape
         return lclGetProperty( nClassId, xModelProps, u"ClassId"_ustr ) &&
             (nClassId == meType) && implCheckProperties( xModelProps );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;

@@ -68,7 +68,7 @@ bool SfxIntegerListItem::PutValue  ( const cpo::uno::Any& rVal, sal_uInt8 )
             ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
     cpo::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < sal_Int32 >>::get() ); }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         return true;
     }

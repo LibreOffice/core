@@ -127,7 +127,7 @@ public:
                 if (pModuleName != sModuleNames.end())
                     msThisDocumentCodeName = *pModuleName;
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
@@ -156,7 +156,7 @@ public:
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

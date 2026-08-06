@@ -139,7 +139,7 @@ public class XMLImporter extends TestCase {
                             ("Formula") ;
                         logF.println("Formula returned = '" + gFormula + "'") ;
                         return impFormula.equals(gFormula) ;
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;

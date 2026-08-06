@@ -100,7 +100,7 @@ namespace utl
                 Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
                 xDesktop->addTerminateListener( new OObserverImpl );
             }
-            catch( const Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "unotools", "OObserverImpl::ensureObservation" );
             }

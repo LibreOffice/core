@@ -59,7 +59,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::geometry::IntegerRectangle2D;
 
@@ -335,7 +335,7 @@ awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const Referen
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return aSizeHmm;

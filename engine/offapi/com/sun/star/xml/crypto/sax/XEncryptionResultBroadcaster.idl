@@ -38,7 +38,7 @@ interface XEncryptionResultBroadcaster : com::sun::star::uno::XInterface
      */
     void addEncryptionResultListener(
         [in] XEncryptionResultListener listener)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Removes an encryption result listener.

@@ -1265,7 +1265,7 @@ void Metadatable::RemoveMetadataReference()
             m_pReg = nullptr;
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::RemoveMetadataReference");
     }
@@ -1421,7 +1421,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::RegisterAsCopyOf");
     }
@@ -1445,7 +1445,7 @@ std::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
             return xUndo;
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::CreateUndo");
     }
@@ -1515,7 +1515,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
             pRegDoc->JoinMetadatables(*this, i_rOther);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::JoinMetadatable");
     }

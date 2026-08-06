@@ -102,7 +102,7 @@ public class Job {
                     // Here we have to be aware of non-UNO exceptions, because
                     // they may kill a remote side which does not know anything
                     // about their types:
-                    if (!(exception instanceof com.sun.star.uno.Exception)
+                    if (!(exception instanceof cpo.uno.Exception)
                         && !(exception instanceof
                              com.sun.star.uno.RuntimeException))
                     {

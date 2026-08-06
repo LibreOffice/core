@@ -555,7 +555,7 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw",
                              "exception caught while importing animation information!");

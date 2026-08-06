@@ -290,7 +290,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             m_xLBMonitor->set_active(nSelectedIndex);
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

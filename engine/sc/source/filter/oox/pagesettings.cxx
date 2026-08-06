@@ -789,7 +789,7 @@ Reference<text::XTextContent> HeaderFooterParser::createField( const OUString& r
     {
         xContent.set( getBaseFilter().getModelFactory()->createInstance( rServiceName ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( OStringBuffer( "HeaderFooterParser::createField - error while creating text field \""
                 + OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US )
@@ -807,7 +807,7 @@ void HeaderFooterParser::appendField( const Reference<text::XTextContent>& rxCon
         getPortion().mxText->insertTextContent( xRange, rxContent, false );
         updateCurrHeight();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

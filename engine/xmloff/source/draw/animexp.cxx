@@ -278,7 +278,7 @@ void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw",
                              "exception caught while collection animation information!");
@@ -404,7 +404,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw",
                              "exception caught while collection animation information!");

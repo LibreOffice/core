@@ -108,7 +108,7 @@ public class SwXCellRange extends TestCase {
                 oDocMSF.createInstance("com.sun.star.text.TextSection");
             log.println("  adding TextSection object");
             tEnv.addObjRelation("CellProperties.TextSection", oTS);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Could not get instance of TextSection");
             e.printStackTrace(log);
         }

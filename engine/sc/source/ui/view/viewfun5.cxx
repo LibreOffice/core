@@ -646,7 +646,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                     if ( xObj.is() )
                         GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
 

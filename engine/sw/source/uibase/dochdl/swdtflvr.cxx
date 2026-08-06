@@ -781,7 +781,7 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
                 xWorkStore->dispose();
                 xWorkStore.clear();
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -1390,7 +1390,7 @@ SwPasteContext::~SwPasteContext()
         cpo::uno::Sequence<beans::PropertyValue> aEvent{ std::move(aPropertyValue) };
         m_rWrtShell.GetPasteListeners().notifyEach( &css::text::XPasteListener::notifyPasteEvent, aEvent );
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("sw",
                  "SwPasteContext::~SwPasteContext: uncaught exception: " << rException.Message);
@@ -2384,14 +2384,14 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                         xStore->dispose();
                         xStore = nullptr;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
 
                     break;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // it wasn't a storage, but maybe it's a useful stream
         }
@@ -2453,7 +2453,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                         // for example whether the object should be an iconified one
                         xObj = aInfo.Object;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -2553,7 +2553,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                 {
                     xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

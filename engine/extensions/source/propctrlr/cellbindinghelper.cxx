@@ -273,7 +273,7 @@ using namespace cpo::uno;
                     xReturn = xDocumentFactory->createInstance( _rService );
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 OSL_FAIL( "CellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
             }

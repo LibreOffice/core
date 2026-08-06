@@ -185,7 +185,7 @@ public class WriterHelper {
      *
      * @return returns the gained XExtendedToolkit Interface
      */
-    public XExtendedToolkit getToolkit() throws com.sun.star.uno.Exception {
+    public XExtendedToolkit getToolkit() throws cpo.uno.Exception {
         Object toolkit = m_xMSF.createInstance("com.sun.star.awt.Toolkit");
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,
@@ -200,7 +200,7 @@ public class WriterHelper {
      *
      * @return returns the gained XDesktop interface
      */
-    private XDesktop getDesktop() throws com.sun.star.uno.Exception {
+    private XDesktop getDesktop() throws cpo.uno.Exception {
         Object desk = m_xMSF.createInstance("com.sun.star.frame.Desktop");
 
         XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, desk);

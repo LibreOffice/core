@@ -59,7 +59,7 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
 
         pImporter->fillFilterVector( rFilters );
     }
-    catch( const Exception& /* e */ )
+    catch( const cpo::uno::Exception& /* e */ )
     {
         TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }

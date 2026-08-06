@@ -34,7 +34,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -157,7 +157,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
         throw;
     } catch (css::ucb::UnsupportedCommandException &) {
         return Result::GeneralFailure;
-    } catch (css::uno::Exception &) {
+    } catch (cpo::uno::Exception &) {
         return Result::SpecificFailure;
     }
     return Result::Success;

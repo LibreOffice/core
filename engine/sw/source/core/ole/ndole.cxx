@@ -212,7 +212,7 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode)
                     xObject->changeState( nState );
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -254,7 +254,7 @@ public:
             {
                 xPersObj->reload(cpo::uno::Sequence<beans::PropertyValue>(), cpo::uno::Sequence<beans::PropertyValue>());
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -423,7 +423,7 @@ bool SwOLENode::SavePersistentData()
                 // "unload" object
                 maOLEObj.m_xOLERef->changeState( embed::EmbedStates::LOADED );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -612,7 +612,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
                     if ( nCurState != embed::EmbedStates::LOADED )
                         xObj->changeState( nCurState );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -647,7 +647,7 @@ void SwOLENode::BreakFileLink_Impl()
         DisconnectFileLink_Impl();
         maLinkURL.clear();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -713,7 +713,7 @@ void SwOLENode::CheckFileLink_Impl()
                 pEmbedObjectLink->Connect();
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -771,7 +771,7 @@ bool SwOLENode::CompleteDeferredLink()
         SetChanged();
         return true;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -904,7 +904,7 @@ private:
             // model no longer needed and done
             mrDeflateData.maXModel.clear();
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 
@@ -994,7 +994,7 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
                 // remove object from container but don't close it
                 pCnt->RemoveEmbeddedObject( m_aName );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -1206,7 +1206,7 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > const & xO
                     // setting object to loaded state will remove it from cache
                     xObj->changeState( embed::EmbedStates::LOADED );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     bRet = false;
                 }

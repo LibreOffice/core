@@ -32,7 +32,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
     /** creates a component from scratch
     */
     void initNew()
-        raises( DoubleInitializationException, com::sun::star::io::IOException, com::sun::star::uno::Exception );
+        raises( DoubleInitializationException, com::sun::star::io::IOException, cpo::uno::Exception );
 
     /** loads a component from a URL
         @param lArguments
@@ -42,7 +42,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
     */
 
     void load( [in] sequence<com::sun::star::beans::PropertyValue> lArguments )
-        raises( DoubleInitializationException, com::sun::star::io::IOException, com::sun::star::uno::Exception );
+        raises( DoubleInitializationException, com::sun::star::io::IOException, cpo::uno::Exception );
 
 };
 

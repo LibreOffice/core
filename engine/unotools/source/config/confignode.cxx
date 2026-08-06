@@ -447,7 +447,7 @@ using namespace cpo::uno;
                 Reference< XMultiServiceFactory > xProvider = theDefaultProvider::get( i_rContext );
                 return xProvider;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("unotools");
             }
@@ -473,7 +473,7 @@ using namespace cpo::uno;
                 );
                 return xRoot;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("unotools");
             }

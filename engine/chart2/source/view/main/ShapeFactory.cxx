@@ -410,7 +410,7 @@ rtl::Reference<Svx3DExtrudeObject>
                     bRounded = false;
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -470,7 +470,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -712,7 +712,7 @@ rtl::Reference<Svx3DLatheObject>
 
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -923,7 +923,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
         xShape->SvxShape::setPropertyValue( u"PolyPolygonBezier"_ustr, cpo::uno::Any( aCoords ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1003,7 +1003,7 @@ rtl::Reference<Svx3DExtrudeObject>
         xShape->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
             , cpo::uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1058,7 +1058,7 @@ rtl::Reference<Svx3DPolygonObject>
             PropertyMapper::setMappedProperties(*xShape, xSourceProp, rPropertyNameMap);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1113,7 +1113,7 @@ rtl::Reference<Svx3DExtrudeObject>
         }
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1149,7 +1149,7 @@ rtl::Reference<SvxShapePolyPolygon>
             pPath->SetApplyEffects(true);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1569,7 +1569,7 @@ rtl::Reference<SvxShapePolyPolygon>
         xShape->SvxShape::setPropertyValue( UNO_NAME_FILLCOLOR
             , cpo::uno::Any( nFillColor ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1604,7 +1604,7 @@ rtl::Reference<SvxGraphicObject>
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1612,7 +1612,7 @@ rtl::Reference<SvxGraphicObject>
     {
         xShape->SvxShape::setPropertyValue( u"Graphic"_ustr, cpo::uno::Any( xGraphic ));
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1644,7 +1644,7 @@ rtl::Reference< SvxShapeGroup >
 
         return xShapeGroup;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1676,7 +1676,7 @@ rtl::Reference< SvxShapeGroup >
 
         return xShapeGroup;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1706,7 +1706,7 @@ rtl::Reference<Svx3DSceneObject>
             xShape->SvxShape::setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                 , cpo::uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -1718,7 +1718,7 @@ rtl::Reference<Svx3DSceneObject>
         //return
         return xShape;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1747,7 +1747,7 @@ rtl::Reference<SvxShapeCircle>
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1757,7 +1757,7 @@ rtl::Reference<SvxShapeCircle>
     {
         xShape->SvxShape::setPropertyValue( UNO_NAME_CIRCKIND, cpo::uno::Any( drawing::CircleKind_FULL ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1846,7 +1846,7 @@ rtl::Reference<Svx3DPolygonObject>
         }
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1897,7 +1897,7 @@ rtl::Reference<SvxShapePolyPolygon>
         if (pLineProperties)
             lcl_applyLineProperties(*xShape, *pLineProperties);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1929,7 +1929,7 @@ rtl::Reference<SvxShapePolyPolygon>
         if (pLineProperties)
             lcl_applyLineProperties(*xShape, *pLineProperties);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1961,7 +1961,7 @@ rtl::Reference<SvxShapePolyPolygon>
         if (pLineProperties)
             lcl_applyLineProperties(*xShape, *pLineProperties);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1998,7 +1998,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createInvisibleRectangle(
         xShape->setSize( rSize );
         return xShape;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2077,7 +2077,7 @@ rtl::Reference<SvxShapeText>
             SAL_INFO("chart2", "No rATransformation value is given to ShapeFactory::createText()");
 
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -2161,7 +2161,7 @@ rtl::Reference<SvxShapeText>
         {
             xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, rATransformation );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -2229,7 +2229,7 @@ rtl::Reference<SvxShapeText>
             {
                 xTextProperties->getPropertyValue( u"StackCharacters"_ustr ) >>= bStackCharacters;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -2320,7 +2320,7 @@ rtl::Reference<SvxShapeText>
         };
         xShape->SvxShape::setPropertyValues( aPropNames, aPropVals );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -2358,7 +2358,7 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
         xShape->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ));
         xShape->setPropertyValue( u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ));
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -2376,7 +2376,7 @@ void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
         xShape->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
             , cpo::uno::Any( rName ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -2394,7 +2394,7 @@ OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xS
         {
             xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }

@@ -116,9 +116,9 @@ cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
             "fwk.dispatch",
             "caught LoadEnvException " << +e.m_nID << " \"" << e.m_sMessage
                 << "\""
-                << (e.m_exOriginal.has<css::uno::Exception>()
+                << (e.m_exOriginal.has<cpo::uno::Exception>()
                     ? (", " + e.m_exOriginal.getValueTypeName() + " \""
-                       + e.m_exOriginal.get<css::uno::Exception>().Message
+                       + e.m_exOriginal.get<cpo::uno::Exception>().Message
                        + "\"")
                     : OUString())
                 << " while dispatching <" << rURL.Complete << ">");

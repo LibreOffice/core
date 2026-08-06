@@ -183,7 +183,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
                             Any( false ),
                             beans::PropertyState_DIRECT_VALUE ) );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sdremote", "sd::SlideShowImpl::setPointerMode()" );
         }
@@ -212,7 +212,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
                             Any( pos ),
                             beans::PropertyState_DIRECT_VALUE ) );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sdremote", "sd::SlideShowImpl::setPointerPosition()" );
         }

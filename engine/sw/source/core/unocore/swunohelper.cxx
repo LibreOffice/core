@@ -18,7 +18,7 @@
  */
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -67,7 +67,7 @@ bool UCB_DeleteFile( const OUString& rURL )
         aTempContent.executeCommand(u"delete"_ustr, cpo::uno::Any( true ) );
         bRemoved = true;
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bRemoved = false;
         TOOLS_WARN_EXCEPTION( "sw", "Exception from executeCommand( delete )" );
@@ -96,7 +96,7 @@ bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL )
         aInfo.MoveData = true;
         aTempContent.executeCommand( u"transfer"_ustr, cpo::uno::Any(aInfo) );
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sw", "Exception from executeCommand( transfer )" );
         bCopyCompleted = false;
@@ -124,7 +124,7 @@ bool UCB_IsCaseSensitiveFileName( std::u16string_view rURL )
         sal_Int32 nCompare = xUcb->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = 0 != nCompare;
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bCaseSensitive = false;
         TOOLS_WARN_EXCEPTION( "sw", "compareContentIds()" );
@@ -142,7 +142,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
         if(aAny.hasValue())
             bIsReadOnly = *o3tl::doAccess<bool>(aAny);
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bIsReadOnly = false;
     }
@@ -157,7 +157,7 @@ bool UCB_IsFile( const OUString& rURL )
         ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isDocument();
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bExists;
@@ -171,7 +171,7 @@ bool UCB_IsDirectory( const OUString& rURL )
         ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isFolder();
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bExists;
@@ -204,7 +204,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         {
             xResultSet = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "create cursor failed!" );
         }
@@ -244,13 +244,13 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                 }
                 bOk = true;
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sw", "" );
             }
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sw", "" );
         bOk = false;

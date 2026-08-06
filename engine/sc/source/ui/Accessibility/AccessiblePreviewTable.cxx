@@ -404,7 +404,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
             {
                 return getAccessibleCellAt( nRowIndex, nColIndex );
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
             }
         }

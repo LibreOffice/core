@@ -64,8 +64,8 @@ private:
 /**
    Represents the hierarchy formed by a set of UNO exception types.
 
-   The hierarchy is rooted at com.sun.star.uno.Exception.  For each exception E
-   from the given set S, the hierarchy from com.sun.star.uno.Exception to the
+   The hierarchy is rooted at cpo.uno.Exception.  For each exception E
+   from the given set S, the hierarchy from cpo.uno.Exception to the
    first supertype E' of E which is itself a member of S is represented (i.e.,
    subtypes that are hidden by supertypes are pruned from the hierarchy).  The
    exception com.sun.star.uno.RuntimeException and its subtypes are pruned
@@ -78,7 +78,7 @@ private:
  */
 class ExceptionTree {
 public:
-    ExceptionTree(): m_root("com.sun.star.uno.Exception"_ostr) {}
+    ExceptionTree(): m_root("cpo.uno.Exception"_ostr) {}
 
     /**
        Builds the exception hierarchy, by adding one exception type at a time.

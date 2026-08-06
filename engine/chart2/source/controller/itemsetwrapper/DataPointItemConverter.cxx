@@ -394,7 +394,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -425,7 +425,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -459,7 +459,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -601,7 +601,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }
@@ -670,7 +670,7 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 GetPropertySet()->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bUseSourceFormat;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }
@@ -685,7 +685,7 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 GetPropertySet()->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bUseSourceFormat;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }
@@ -702,7 +702,7 @@ void DataPointItemConverter::FillSpecialItem(
                 GetPropertySet()->getPropertyValue( u"LabelSeparator"_ustr ) >>= aValue;
                 rOutItemSet.Put( SfxStringItem( nWhichId, aValue ));
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -717,7 +717,7 @@ void DataPointItemConverter::FillSpecialItem(
                 GetPropertySet()->getPropertyValue( u"TextWordWrap"_ustr ) >>= bValue;
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -737,7 +737,7 @@ void DataPointItemConverter::FillSpecialItem(
                 else if( m_aAvailableLabelPlacements.hasElements() )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -764,7 +764,7 @@ void DataPointItemConverter::FillSpecialItem(
                 if( m_xSeries->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ) >>= bValue )
                     rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }

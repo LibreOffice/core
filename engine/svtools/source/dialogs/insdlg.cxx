@@ -149,7 +149,7 @@ void SvObjectServerList::FillInsertObjects()
 
     }catch(const container::NoSuchElementException&)
     {
-    }catch(const uno::Exception&)
+    }catch(const cpo::uno::Exception&)
     {
     }
     catch(...)

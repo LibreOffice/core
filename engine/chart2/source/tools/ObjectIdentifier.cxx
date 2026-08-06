@@ -355,7 +355,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         //datapoint?
         //Gridproperties
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -384,7 +384,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
             return createClassifiedIdentifierForParticle( createParticleForLegend( xChartModel ) );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -413,7 +413,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
             return createClassifiedIdentifierForParticles( aCooSysParticle, aAxisParticle );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1258,7 +1258,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

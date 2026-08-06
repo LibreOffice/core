@@ -294,7 +294,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // createInstance
             }

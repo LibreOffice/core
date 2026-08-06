@@ -69,7 +69,7 @@ public class UIConfigurationManager extends TestCase {
                     XUIConfigurationManager.class, xMSF.createInstance(
                     "com.sun.star.comp.framework.UIConfigurationManager"));
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
         }
         // just to make sure, it's the right one.
         log.println("TestObject: " + utils.getImplName(xManager));
@@ -94,7 +94,7 @@ public class UIConfigurationManager extends TestCase {
             xConfigStorage.setStorage(xSubStorage);
             tEnv.addObjRelation("XUIConfigurationStorage.Storage", xSubStorage);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             log.println("Could not create storage: " + e.toString());
         }
         util.dbg.printInterfaces(xManager);

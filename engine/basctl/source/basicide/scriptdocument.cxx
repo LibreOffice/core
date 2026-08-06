@@ -80,7 +80,7 @@ namespace basctl
     using ::com::sun::star::script::XStorageBasedLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::uno::UNO_QUERY;

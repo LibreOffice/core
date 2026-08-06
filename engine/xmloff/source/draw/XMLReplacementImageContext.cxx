@@ -66,7 +66,7 @@ void XMLReplacementImageContext::endFastElement(sal_Int32 )
             m_xBase64Stream = nullptr;
         }
     }
-    catch (uno::Exception const &)
+    catch (cpo::uno::Exception const &)
     {}
 
     Reference < XPropertySetInfo > xPropSetInfo = m_xPropSet->getPropertySetInfo();

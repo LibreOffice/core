@@ -545,7 +545,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
         return OUString( reinterpret_cast<char const *>(
             seq.data()), seq.size(), RTL_TEXTENCODING_UTF8);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -673,7 +673,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         throw;
     } catch (const css::uno::RuntimeException&) {
         throw;
-    } catch (const css::uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         Any anyExc = cppu::getCaughtException();
         throw css::deployment::DeploymentException(u"Unexpected exception"_ustr, nullptr, anyExc);
     }
@@ -809,7 +809,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 osl::ResettableMutexGuardScopedReleaser releaser(guard);
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (const Exception &)
+            catch (const cpo::uno::Exception &)
             {
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
@@ -842,7 +842,7 @@ void BackendImpl::PackageImpl::processPackage_(
                             bundle[ pos ]->revokePackage(
                                 startup, xSubAbortChannel, xCmdEnv );
                         }
-                        catch (const Exception &)
+                        catch (const cpo::uno::Exception &)
                         {
                             TOOLS_WARN_EXCEPTION( "desktop", "" );
                             // ignore any errors of rollback
@@ -887,7 +887,7 @@ void BackendImpl::PackageImpl::processPackage_(
             catch (const ucb::CommandAbortedException &) {
                 throw;
             }
-            catch (const Exception &) {
+            catch (const cpo::uno::Exception &) {
                 // CommandFailedException, DeploymentException:
                 Any exc( ::cppu::getCaughtException() );
                 // try to handle exception, notify:
@@ -1216,7 +1216,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             catch (const deployment::DeploymentException &) {
                 throw;
             }
-            catch (const Exception &) {
+            catch (const cpo::uno::Exception &) {
                 Any exc( ::cppu::getCaughtException() );
                 throw deployment::DeploymentException(
                     "error scanning bundle: " + getURL(),
@@ -1306,7 +1306,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     catch (const ucb::CommandFailedException &) {
         // ignore already handled error
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         const Any exc( ::cppu::getCaughtException() );
         if (notifyDetectionError ||
             !exc.isExtractableTo( cppu::UnoType<lang::IllegalArgumentException>::get()) )

@@ -877,7 +877,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, std::u16string
                     }
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL("Numberformat not found");
             }
@@ -950,7 +950,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
                     }
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL("Numberformat not found");
             }

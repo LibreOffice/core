@@ -125,7 +125,7 @@ void OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& a
         try {
             changeState( embed::EmbedStates::RUNNING );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             SAL_WARN( "embeddedobj.ole", "The object should not be resized without activation!" );
         }
@@ -140,7 +140,7 @@ void OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& a
             m_pOleComponent->SetExtent( aSizeToSet, nAspect ); // will throw an exception in case of failure
             m_bHasSizeToSet = false;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // some objects do not allow to set the size even in running state
             m_bHasSizeToSet = true;
@@ -218,7 +218,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
                         // many open MathType instances
                         bBackToLoaded = true;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         throw embed::NoVisualAreaSizeException(
                                 "No size available!",
@@ -232,7 +232,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
                     aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                     bSuccess = true;
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetExtent() failed:");
                 }
@@ -243,7 +243,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
                     {
                         changeState(embed::EmbedStates::LOADED);
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION("embeddedobj.ole", "ignoring ");
                     }
@@ -257,7 +257,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
                         aSize = m_pOleComponent->GetCachedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetCachedExtent() failed:");
                     }
@@ -271,7 +271,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
                         aSize = m_pOleComponent->GetRecommendedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetRecommendedExtent() failed:");
                     }
@@ -295,7 +295,7 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
         {
             throw;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw embed::NoVisualAreaSizeException(
                             "No size available!",
@@ -391,7 +391,7 @@ embed::VisualRepresentation OleEmbeddedObject::getPreferredVisualRepresentation(
 
             return aVisualRepr;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 #endif

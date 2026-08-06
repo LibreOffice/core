@@ -27,7 +27,7 @@ namespace cppu
 {
 /** This function throws the exception given by rExc.  The given value has to
     be of typeclass EXCEPTION and must be derived from or of
-    type com.sun.star.uno.Exception.
+    type cpo.uno.Exception.
 
     @param rExc
            exception to be thrown.
@@ -47,7 +47,7 @@ CPPUHELPER_DLLPUBLIC void throwException(const cpo::uno::Any& rExc);
         // you ought not handle RuntimeExceptions:
         throw;
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         cpo::uno::Any caught( ::cppu::getCaughtException() );
         ...

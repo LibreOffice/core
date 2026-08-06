@@ -51,7 +51,7 @@ static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Referenc
         css::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
         result = xSFA->getFolderContents( u"vnd.sun.star.tdoc:/"_ustr, true );
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
     return result;
@@ -71,7 +71,7 @@ static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >
                         xContext ),
                     css::uno::UNO_QUERY );
     }
-    catch ( css::uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // handled below
     }
@@ -126,7 +126,7 @@ static cpo::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString con
     {
         result = content.getPropertyValue( prop );
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
     return result;

@@ -150,7 +150,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
             xPersistence->store();
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         bRes = false;
     }

@@ -513,7 +513,7 @@ public sealed class Test
             l.assure(false);
         }
 
-        /* create3 specifies exceptions but no com.sun.star.uno.Exception. RuntimeException
+        /* create3 specifies exceptions but no cpo.uno.Exception. RuntimeException
            and derived fly through. Other specified exceptions are rethrown and all other
            exceptions cause a DeploymentException.
         */
@@ -1057,7 +1057,7 @@ public sealed class Test
             uno.ExceptionAttribute attr = arAttr[0] as uno.ExceptionAttribute;
             if (attr != null && attr.Raises.Length == 2)
             {
-                l.assure(attr.Raises[0] == typeof(unoidl.com.sun.star.uno.Exception));
+                l.assure(attr.Raises[0] == typeof(unoidl.cpo.uno.Exception));
                 l.assure(attr.Raises[1] == typeof(unoidl.com.sun.star.lang.ClassNotFoundException));
             }
             else
@@ -1100,7 +1100,7 @@ public sealed class Test
             uno.ExceptionAttribute attr = arAttr[0] as uno.ExceptionAttribute;
             if (attr != null && attr.Raises.Length == 2)
             {
-                l.assure(attr.Raises[0] == typeof(unoidl.com.sun.star.uno.Exception));
+                l.assure(attr.Raises[0] == typeof(unoidl.cpo.uno.Exception));
                 l.assure(attr.Raises[1] == typeof(unoidl.com.sun.star.lang.ClassNotFoundException));
             }
             else

@@ -101,7 +101,7 @@ public class EmbedContFrame extends Frame
     }
 
     public static XMultiServiceFactory connectOfficeGetServiceFactory()
-    throws com.sun.star.uno.Exception,
+    throws cpo.uno.Exception,
     com.sun.star.uno.RuntimeException,
     Exception
     {

@@ -213,7 +213,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
        eNextState = ERROR;
     }

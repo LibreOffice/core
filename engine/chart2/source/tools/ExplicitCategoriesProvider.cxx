@@ -78,7 +78,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                 m_aSplitCategoriesList = { m_xOriginalCategories };
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

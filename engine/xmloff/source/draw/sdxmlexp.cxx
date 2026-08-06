@@ -1867,7 +1867,7 @@ void SdXMLExport::exportSections()
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting sections");
     }
@@ -2047,7 +2047,7 @@ void SdXMLExport::exportPresentationSettings()
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting <presentation:settings>");
     }

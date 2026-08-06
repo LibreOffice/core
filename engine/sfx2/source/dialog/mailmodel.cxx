@@ -221,7 +221,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     {
         throw;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -253,7 +253,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     {
         throw;
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -505,7 +505,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     throw;
                 }
-                catch ( css::uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
             }
@@ -526,7 +526,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         {
                             throw;
                         }
-                        catch ( css::uno::Exception& )
+                        catch ( cpo::uno::Exception& )
                         {
                         }
                     }
@@ -568,7 +568,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                                 {
                                     throw;
                                 }
-                                catch ( css::uno::Exception& )
+                                catch ( cpo::uno::Exception& )
                                 {
                                 }
                             }
@@ -654,7 +654,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
         try {
             xSimpleMailClientSupplier = SimpleSystemMail::create( xContext );
         }
-        catch ( const uno::Exception & )
+        catch ( const cpo::uno::Exception & )
         {}
 
         if ( ! xSimpleMailClientSupplier.is() )
@@ -662,7 +662,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
             try {
                 xSimpleMailClientSupplier = SimpleCommandMail::create( xContext );
             }
-            catch ( const uno::Exception & )
+            catch ( const cpo::uno::Exception & )
             {}
         }
 
@@ -733,7 +733,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 catch ( IllegalArgumentException& )
                 {
                 }
-                catch ( Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
 

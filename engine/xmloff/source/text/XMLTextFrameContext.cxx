@@ -762,7 +762,7 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
             xComp->dispose();
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
     }
@@ -807,7 +807,7 @@ css::uno::Reference<css::graphic::XGraphic> XMLTextFrameContext::getGraphicFromI
                 xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
             }
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {}
     }
     return xGraphic;
@@ -1300,7 +1300,7 @@ void XMLTextFrameContext_Impl::SetName()
         {
             xNamed->setName(m_sOrigName);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {   // fdo#71698 document contains 2 frames with same draw:name
             TOOLS_INFO_EXCEPTION("xmloff.text", "SetName(): exception setting \""
                     << m_sOrigName << "\"");

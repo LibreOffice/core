@@ -195,7 +195,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
             xCT->setDataSeries( aLineSeq );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -294,7 +294,7 @@ bool ColumnLineChartTypeTemplate::matchesTemplate2(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -320,7 +320,7 @@ rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSerie
         xResult = new LineChartType();
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -349,7 +349,7 @@ IMPL_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
         // elements if a component gets detached from its frame!
         pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

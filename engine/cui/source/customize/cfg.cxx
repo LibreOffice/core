@@ -594,7 +594,7 @@ bool MenuSaveInData::Apply()
                     m_aMenuResourceURL, m_xMenuSettings );
             }
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("cui.customize", "caught some other exception saving settings");
         }
@@ -686,7 +686,7 @@ MenuSaveInData::Reset()
     {
         GetConfigManager()->removeSettings( m_aMenuResourceURL );
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {}
 
     PersistChanges( GetConfigManager() );
@@ -728,7 +728,7 @@ OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
         {
             m_xPersistentWindowState->getByName( rResourceURL ) >>= aProps;
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {}
 
         for (const auto& aProp : aProps)
@@ -776,7 +776,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             {
                 xPopupMenu = GetConfigManager()->getSettings( aUrl, false );
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {}
 
             if ( xPopupMenu.is() )
@@ -825,7 +825,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                 if ( aMenuInfo.find( aUrl ) == aMenuInfo.end() )
                     xPopupMenu = xParentCfgMgr->getSettings( aUrl, false );
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {}
 
             if ( xPopupMenu.is() )
@@ -887,7 +887,7 @@ bool ContextMenuSaveInData::Apply()
                 else
                     GetConfigManager()->insertSettings( aUrl, xIndexContainer );
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {}
         }
     }
@@ -904,7 +904,7 @@ void ContextMenuSaveInData::Reset()
         {
             GetConfigManager()->removeSettings( pEntry->GetCommand() );
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("cui.customize", "Exception caught while resetting context menus");
         }
@@ -919,7 +919,7 @@ void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
     {
         GetConfigManager()->removeSettings( pEntry->GetCommand() );
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("cui.customize", "Exception caught while resetting context menu");
     }
@@ -1207,7 +1207,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                     frame::FrameSearchFlag::ALL & ~frame::FrameSearchFlag::SELF );
 
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("cui.customize");
             }
@@ -1219,7 +1219,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                     OUString aCheckId;
                     try{
                         aCheckId = xModuleManager->identify( xf );
-                    } catch(const uno::Exception&)
+                    } catch(const cpo::uno::Exception&)
                         { aCheckId.clear(); }
 
                     if ( m_aModuleId == aCheckId )
@@ -1316,7 +1316,7 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
 
         sModuleID = vcl::CommandInfoProvider::GetModuleIdentifier(_inout_rxFrame);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("cui.customize");
     }
@@ -2023,7 +2023,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // do nothing, a default value is returned
         }
@@ -2118,7 +2118,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
         xNameReplace->replaceByName( rResourceURL, cpo::uno::Any( aProps ) );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // do nothing, a default value is returned
         TOOLS_WARN_EXCEPTION("cui.customize", "Exception setting toolbar style");
@@ -2149,7 +2149,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // do nothing, an empty UIName will be returned
         }
@@ -2176,7 +2176,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // not a system command name
         }
@@ -2388,7 +2388,7 @@ void ToolbarSaveInData::Reset()
             const OUString& url = entry->GetCommand();
             GetConfigManager()->removeSettings( url );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // error occurred removing the settings
             // TODO - add error dialog in future?
@@ -2408,7 +2408,7 @@ void ToolbarSaveInData::Reset()
         GetImageManager()->reset();
         PersistChanges( GetImageManager() );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         SAL_WARN("cui.customize", "Error resetting all icons when resetting toolbars");
     }
@@ -2503,7 +2503,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
                 pToolbar->SetParentData( false );
         }
     }
-    catch ( css::uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("cui.customize", "caught exception saving settings");
     }
@@ -2528,7 +2528,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
     {
         GetConfigManager()->insertSettings( pToolbar->GetCommand(), xSettings );
     }
-    catch ( css::uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("cui.customize", "caught exception saving settings");
     }
@@ -2555,7 +2555,7 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
 
         xNameContainer->removeByName( url );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // error occurred removing the settings
     }
@@ -2579,7 +2579,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         pToolbar->GetEntries()->clear();
         PersistChanges( GetConfigManager() );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // if an error occurs removing the settings then just return
         return;
@@ -2611,7 +2611,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
             {
                 GetImageManager()->removeImages( SvxConfigPageHelper::GetImageType(), aURLSeq );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 SAL_WARN("cui.customize", "Error restoring icon when resetting toolbar");
             }
@@ -2854,7 +2854,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
             else
                 graphics = m_xParentImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // can't get sequence for this name so it will not be
             // added to the list
@@ -2986,7 +2986,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
         else
             bOK = true;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         return false;
     }
@@ -3023,7 +3023,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 bResult = true;
                 break;
             }
-            catch ( css::uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 break;
             }
@@ -3180,7 +3180,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 SAL_WARN("cui.customize", "could not get query XGraphic");
         }
     }
-    catch( uno::Exception const & )
+    catch( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION("cui.customize", "Caught exception importing XGraphic");
     }

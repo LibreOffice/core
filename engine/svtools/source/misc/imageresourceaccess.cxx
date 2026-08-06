@@ -148,7 +148,7 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
 
         pMemBuffer->Seek(0);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svtools", "GraphicAccess::getImageStream");
         pMemBuffer.reset();

@@ -119,7 +119,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // configuration is awry
         m_xConfigProvider.clear();
@@ -323,7 +323,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // configuration is awry
         m_xConfigProvider.clear();

@@ -598,7 +598,7 @@ void SAL_CALL Moderator::run()
     {
         aResultType = ResultType::UNSUPPORTED;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         aResultType = ResultType::GENERAL;
     }
@@ -900,7 +900,7 @@ static bool UCBOpenContentSync_(
         bException = true;
         xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         bException = true;
         xLockBytes->SetError( ERRCODE_IO_GENERAL );
@@ -1024,7 +1024,7 @@ bool UcbLockBytes::setInputStreamImpl( std::unique_lock<std::mutex>& /*rGuard*/,
 
         bRet = m_xInputStream.is();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1161,7 +1161,7 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
         if ( pWritten )
             *pWritten = nCount;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return ERRCODE_IO_CANTWRITE;
     }
@@ -1179,7 +1179,7 @@ ErrCode UcbLockBytes::Flush() const
     {
         xOutputStream->flush();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return ERRCODE_IO_CANTWRITE;
     }

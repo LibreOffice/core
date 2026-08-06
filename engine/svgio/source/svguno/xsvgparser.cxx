@@ -109,7 +109,7 @@ namespace svgio::svgreader
                 // be processable from all our processors
                 xParser->parseStream(myInputSource);
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_INFO_EXCEPTION( "svg", "Parse error");
                 return false;

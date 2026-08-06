@@ -55,7 +55,7 @@ static bool IsSeparator( const Reference< XPropertySet >& xPropertySet )
     {
         return xServiceInfo->supportsService( SERVICENAME_ACTIONTRIGGERSEPARATOR );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -77,7 +77,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
         xGraphic = vcl::GetGraphic(xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr));
         xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr) >>= xSubContainer;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -86,7 +86,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
     {
         xActionTriggerPropertySet->getPropertyValue(u"HelpURL"_ustr) >>= aHelpURL;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -218,7 +218,7 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
                 xPropSet->setPropertyValue(u"Image"_ustr, Any(xBitmap));
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -287,7 +287,7 @@ static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMen
                 }
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

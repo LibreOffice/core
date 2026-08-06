@@ -32,7 +32,7 @@
     </ul><br>
 
  */
-published exception CannotRegisterImplementationException: com::sun::star::uno::Exception
+published exception CannotRegisterImplementationException: cpo::uno::Exception
 {
 };
 

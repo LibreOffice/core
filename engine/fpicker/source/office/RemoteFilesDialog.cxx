@@ -1132,7 +1132,7 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
             m_xContext);
         return content.isFolder();
     }
-    catch (css::uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         return false;
     }
@@ -1147,7 +1147,7 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
             m_xContext);
         return content.isDocument();
     }
-    catch (css::uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         return false;
     }

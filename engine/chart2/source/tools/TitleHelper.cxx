@@ -284,7 +284,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
                     xTitle->setPropertyValue( u"TextRotation"_ustr, cpo::uno::Any( 90.0 ));
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -405,7 +405,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
                 xFormattedString->setPropertyValue( u"CharHeightAsian"_ustr, aFontSize );
                 xFormattedString->setPropertyValue( u"CharHeightComplex"_ustr, aFontSize );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }

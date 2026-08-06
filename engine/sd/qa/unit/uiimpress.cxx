@@ -855,7 +855,7 @@ void lcl_SetDesignManifest(const uno::Reference<lang::XComponent>& xComponent,
     {
         xUserProps->removeProperty(u"AIDesignManifest"_ustr);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     xUserProps->addProperty(u"AIDesignManifest"_ustr, beans::PropertyAttribute::REMOVABLE,

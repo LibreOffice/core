@@ -905,7 +905,7 @@ bool SvtLinguConfig::GetElementNamesFor(
         rElementNames = xNA->getElementNames();
         bSuccess = true;
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bSuccess;
@@ -937,7 +937,7 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
             bSuccess = true;
         DBG_ASSERT( rFormatList.hasElements(), "supported dictionary format list is empty" );
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bSuccess;
@@ -966,7 +966,7 @@ bool SvtLinguConfig::GetLocaleListFor( const OUString &rSetName, const OUString 
             bSuccess = true;
         DBG_ASSERT( rLocaleList.hasElements(), "Locale list is empty" );
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bSuccess;
@@ -1036,7 +1036,7 @@ bool SvtLinguConfig::GetDictionaryEntry(
             }
         }
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return bSuccess;
@@ -1055,7 +1055,7 @@ cpo::uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
             return aResult;
         xNA->getByName( u"DisabledDictionaries"_ustr ) >>= aResult;
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     return aResult;
@@ -1099,7 +1099,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
             }
         }
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
 
@@ -1127,7 +1127,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
                     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps),
                     uno::UNO_QUERY );
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
 
@@ -1162,7 +1162,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
             }
         }
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         DBG_UNHANDLED_EXCEPTION("unotools");
     }
@@ -1222,7 +1222,7 @@ bool SvtLinguConfig::HasGrammarChecker() const
         cpo::uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.hasElements();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

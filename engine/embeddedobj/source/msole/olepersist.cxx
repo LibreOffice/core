@@ -77,7 +77,7 @@ bool KillFile_Impl( const OUString& aURL, const uno::Reference< uno::XComponentC
         xAccess->kill( aURL );
         bRet = true;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -99,7 +99,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
         xTempFile->setRemoveFile( false );
         aResult = xTempFile->getUri();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -146,7 +146,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
             KillFile_Impl( aResult, xContext );
             throw;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             KillFile_Impl( aResult, xContext );
             aResult.clear();
@@ -177,7 +177,7 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
     {
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -554,7 +554,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
 
                     xStream = xTempAccess->openFileRead( m_aTempURL );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
             }
 
@@ -582,7 +582,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
                         {
                             bExists = xNameContainer->hasByName( aStreamName );
                         }
-                        catch( const uno::Exception& )
+                        catch( const cpo::uno::Exception& )
                         {}
                     }
                 }
@@ -619,7 +619,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                         aArgs, m_xContext ),
                 uno::UNO_QUERY );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
 
         if ( xNameContainer.is() )
@@ -637,7 +637,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                             break;
                     }
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
 
                 if ( nInd == 0 )
@@ -653,7 +653,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                 break;
                         }
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {}
                 }
             }
@@ -709,7 +709,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                         CreateOleComponentAndLoad_Impl();
                                         m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
                                     }
-                                    catch( const uno::Exception& )
+                                    catch( const cpo::uno::Exception& )
                                     {
                                         GetRidOfComponent(&rGuard);
                                     }
@@ -722,7 +722,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     }
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
     }
@@ -763,7 +763,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
         if ( xComponent.is() )
             xComponent->dispose();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -815,7 +815,7 @@ bool OleEmbeddedObject::SaveObject_Impl()
             m_xClientSite->saveObject();
             bResult = true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -857,7 +857,7 @@ bool OleEmbeddedObject::OnShowWindow_Impl( bool bShow )
             ExecUnlocked([p = m_xClientSite, bShow] { p->visibilityChanged(bShow); }, aGuard);
             bResult = true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -1147,7 +1147,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 xSourceOptStor->copyElementDirectlyTo( m_aEntryName, xTargetOptStor, sEntName );
                 bOptimizedCopyingDone = true;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }
@@ -1281,7 +1281,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         {
             try {
                 xComp->dispose();
-            } catch( const uno::Exception& )
+            } catch( const cpo::uno::Exception& )
             {
             }
         }
@@ -1393,7 +1393,7 @@ void OleEmbeddedObject::setPersistentEntry(
                 CreateOleComponentAndLoad_Impl();
                 m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 // TODO/LATER: detect classID of the object if possible
                 // means that the object inprocess server could not be successfully instantiated
@@ -1594,7 +1594,7 @@ void OleEmbeddedObject::saveCompleted( bool bUseNew )
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -1620,7 +1620,7 @@ void OleEmbeddedObject::saveCompleted( bool bUseNew )
             // probably it might need to be done earlier, while the object is in active state
             getVisualAreaSize_impl(embed::Aspects::MSOLE_CONTENT, aGuard);
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 
@@ -1795,7 +1795,7 @@ void OleEmbeddedObject::storeOwn()
             // probably it might need to be done earlier, while the object is in active state
             getVisualAreaSize_impl(embed::Aspects::MSOLE_CONTENT, aGuard);
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 
@@ -1934,7 +1934,7 @@ void OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xSto
     try {
         pNewOleComponent->InitEmbeddedCopyOfLink(m_pOleComponent);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         if (!m_aTempURL.isEmpty())
             KillFile_Impl(m_aTempURL, m_xContext);
@@ -1945,7 +1945,7 @@ void OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xSto
     try {
         GetRidOfComponent(&aGuard);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         if (!m_aTempURL.isEmpty())
             KillFile_Impl(m_aTempURL, m_xContext);

@@ -47,7 +47,7 @@ void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale, boo
         if ( xC.is() )
             xC->loadDefaultCalendarTZ( rLocale, (bTimeZoneUTC ? u"UTC"_ustr : OUString()));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "loadDefaultCalendar" );
     }
@@ -60,7 +60,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::
         if ( xC.is() )
             xC->loadCalendarTZ( rUniqueID, rLocale, (bTimeZoneUTC ? u"UTC"_ustr : OUString()));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "loadCalendar: "
             << rUniqueID << "   Locale: " << LanguageTag::convertToBcp47(rLocale) );
@@ -74,7 +74,7 @@ cpo::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang
         if ( xC.is() )
             return xC->getAllCalendars( rLocale );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCalendars" );
     }
@@ -89,7 +89,7 @@ OUString CalendarWrapper::getUniqueID() const
         if ( xC.is() )
             return xC->getUniqueID();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getUniqueID" );
     }
@@ -103,7 +103,7 @@ void CalendarWrapper::setDateTime( double fTimeInDays )
         if ( xC.is() )
             xC->setDateTime( fTimeInDays );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "setDateTime" );
     }
@@ -116,7 +116,7 @@ double CalendarWrapper::getDateTime() const
         if ( xC.is() )
             return xC->getDateTime();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateTime" );
     }
@@ -132,7 +132,7 @@ void CalendarWrapper::setLocalDateTime( double fTimeInDays )
             xC->setLocalDateTime( fTimeInDays );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n",  "setLocalDateTime" );
     }
@@ -147,7 +147,7 @@ double CalendarWrapper::getLocalDateTime() const
             return xC->getLocalDateTime();
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n",  "getLocalDateTime" );
     }
@@ -161,7 +161,7 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
         if ( xC.is() )
             xC->setValue( nFieldIndex, nValue );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n",  "setValue" );
     }
@@ -174,7 +174,7 @@ bool CalendarWrapper::isValid() const
         if ( xC.is() )
             return xC->isValid();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n",  "isValid" );
     }
@@ -188,7 +188,7 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
         if ( xC.is() )
             return xC->getValue( nFieldIndex );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getValue" );
     }
@@ -202,7 +202,7 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
         if ( xC.is() )
             return xC->getFirstDayOfWeek();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getFirstDayOfWeek" );
     }
@@ -216,7 +216,7 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
         if ( xC.is() )
             return xC->getNumberOfMonthsInYear();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getNumberOfMonthsInYear" );
     }
@@ -230,7 +230,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         if ( xC.is() )
             return xC->getNumberOfDaysInWeek();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getNumberOfDaysInWeek" );
     }
@@ -244,7 +244,7 @@ cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() cons
         if ( xC.is() )
             return xC->getMonths2();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getMonths" );
     }
@@ -258,7 +258,7 @@ cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
         if ( xC.is() )
             return xC->getDays2();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDays" );
     }
@@ -272,7 +272,7 @@ OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_I
         if ( xC.is() )
             return xC->getDisplayName( nCalendarDisplayIndex, nIdx, nNameType );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDisplayName" );
     }
@@ -288,7 +288,7 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
         if ( xC.is() )
             return xC->getDisplayString( nCalendarDisplayCode, nNativeNumberMode );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDisplayString" );
     }
@@ -304,7 +304,7 @@ css::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
         if ( xC.is() )
             return xC->getLoadedCalendar2();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLoadedCalendar2" );
     }
@@ -318,7 +318,7 @@ cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonth
         if ( xC.is() )
             return xC->getGenitiveMonths2();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getGenitiveMonths" );
     }
@@ -332,7 +332,7 @@ cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMont
         if ( xC.is() )
             return xC->getPartitiveMonths2();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getPartitiveMonths" );
     }

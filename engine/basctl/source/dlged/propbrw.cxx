@@ -115,7 +115,7 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
         m_xMeAsFrame->initialize(VCLUnoHelper::GetInterface(m_xContentArea));
         m_xMeAsFrame->setName( u"form property browser"_ustr );  // change name!
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
@@ -179,7 +179,7 @@ void PropBrw::ImplReCreateController()
         VclContainer::setLayoutAllocation(*m_xContentArea, aPropWinPos, aPropWinSize);
         m_xContentArea->Show();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
         try
@@ -497,7 +497,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         StartListening(pView->GetModel());
     }
     catch ( const PropertyVetoException& ) { /* silence */ }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("basctl");
     }

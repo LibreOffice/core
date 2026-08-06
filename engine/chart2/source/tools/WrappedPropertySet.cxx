@@ -130,7 +130,7 @@ void WrappedPropertySet::setPropertyValue( std::unique_lock<std::mutex>& rGuard,
     {
         throw;
     }
-    catch( const uno::Exception& ex )
+    catch( const cpo::uno::Exception& ex )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         TOOLS_WARN_EXCEPTION( "chart2", "invalid exception caught in WrappedPropertySet::setPropertyValue");
@@ -174,7 +174,7 @@ Any WrappedPropertySet::getPropertyValue( std::unique_lock<std::mutex>& rGuard, 
     {
         throw;
     }
-    catch( const uno::Exception& ex )
+    catch( const cpo::uno::Exception& ex )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         TOOLS_WARN_EXCEPTION( "chart2", "invalid exception caught in WrappedPropertySet::setPropertyValue");

@@ -41,7 +41,7 @@ namespace svt::table
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_QUERY;
     using css::awt::grid::XGridColumn;
-    using css::uno::Exception;
+    using cpo::uno::Exception;
     using css::awt::grid::XGridDataModel;
     using css::awt::grid::XGridColumnModel;
     using cpo::uno::Any;

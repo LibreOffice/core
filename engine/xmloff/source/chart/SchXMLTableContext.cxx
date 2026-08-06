@@ -769,7 +769,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
                 xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr, cpo::uno::Any( true ) );
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -1014,7 +1014,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
     }
 }

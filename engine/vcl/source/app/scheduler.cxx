@@ -24,7 +24,7 @@
 #include <exception>
 #include <typeinfo>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <config_emscripten.h>
 #include <config_vclplug.h>
 #include <sal/log.hxx>
@@ -587,7 +587,7 @@ void Scheduler::CallbackTaskScheduling()
             pTask->Invoke();
         }
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("vcl.schedule",
                              "Uncaught exception for task '" << pTask->GetDebugName() << "'");

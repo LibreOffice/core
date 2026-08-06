@@ -55,7 +55,7 @@ public class ConfigurationRead {
             root = UnoRuntime.queryInterface(
             XHierarchicalNameAccess.class, rootObject);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace();
         }
     }

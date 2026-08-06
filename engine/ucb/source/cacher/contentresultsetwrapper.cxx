@@ -246,7 +246,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
             m_xPropertySetOrigin->removePropertyChangeListener(
                 OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "could not remove PropertyChangeListener" );
         }
@@ -255,7 +255,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
             m_xPropertySetOrigin->removeVetoableChangeListener(
                 OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "could not remove VetoableChangeListener" );
         }
@@ -442,7 +442,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
         m_xPropertySetOrigin->addPropertyChangeListener(
             OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         m_aPropertyChangeListeners.removeInterface( aGuard, aPropertyName, xListener );
         throw;
@@ -483,7 +483,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
         m_xPropertySetOrigin->addVetoableChangeListener(
             OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         m_aVetoableChangeListeners.removeInterface( aGuard, rPropertyName, xListener );
         throw;
@@ -533,7 +533,7 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
         m_xPropertySetOrigin->removePropertyChangeListener(
             OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "could not remove PropertyChangeListener" );
     }
@@ -581,7 +581,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
         m_xPropertySetOrigin->removeVetoableChangeListener(
             OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "could not remove VetoableChangeListener" );
     }

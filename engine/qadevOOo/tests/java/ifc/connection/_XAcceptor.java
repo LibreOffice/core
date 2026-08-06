@@ -129,7 +129,7 @@ public class _XAcceptor extends MultiMethodTest {
 
             dupAcceptor = UnoRuntime.queryInterface
                 (XAcceptor.class, acceptor) ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create service", e) ;
         }

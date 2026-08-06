@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
         cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
         aAny >>= aMediaType;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -86,7 +86,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
         if ( xSubStorage.is() )
             xSubStorage->dispose();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
     xSubStorage.clear();

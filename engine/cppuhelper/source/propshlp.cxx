@@ -465,7 +465,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
     catch (const IllegalArgumentException& )    { throw;    /* allowed to leave */ }
     catch (const WrappedTargetException& )      { throw;    /* allowed to leave */ }
     catch (const RuntimeException& )            { throw;    /* allowed to leave */ }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         // not allowed to leave this method
         WrappedTargetException aWrapped;
@@ -529,7 +529,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
         catch (const css::lang::IllegalArgumentException& )    { throw;    /* allowed to leave */ }
         catch (const css::lang::WrappedTargetException& )      { throw;    /* allowed to leave */ }
         catch (const css::uno::RuntimeException& )             { throw;    /* allowed to leave */ }
-        catch (const css::uno::Exception& e )
+        catch (const cpo::uno::Exception& e )
         {
             // not allowed to leave this method
             css::lang::WrappedTargetException aWrap;

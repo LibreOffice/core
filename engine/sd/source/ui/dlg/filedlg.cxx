@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
                 mxPlayer->start();
                 maUpdateIdle.Start();
             }
-            catch (const css::uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 mxPlayer.clear();
             }

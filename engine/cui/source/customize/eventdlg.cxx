@@ -112,7 +112,7 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xSaveInListBox->set_active(m_xSaveInListBox->get_count() - 1);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("cui.customize");
     }

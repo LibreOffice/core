@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
                             nNewType = SvNumFormatType::TIME;
                         }
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
                 }

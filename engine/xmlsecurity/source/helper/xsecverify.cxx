@@ -249,7 +249,7 @@ void XSecController::setX509Data(
                 rX509IssuerSerials.erase(iter);
             }
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
         }
@@ -419,7 +419,7 @@ void XSecController::setX509CertDigest(
                         return;
                     }
                 }
-                catch (uno::Exception const&)
+                catch (cpo::uno::Exception const&)
                 {
                     SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
                 }

@@ -300,7 +300,7 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
 
         (void)xDialog->execute();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     rReq.Ignore ();

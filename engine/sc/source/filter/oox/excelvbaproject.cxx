@@ -94,7 +94,7 @@ void ExcelVbaProject::prepareImport()
                 aCodeNameInfos.emplace_back( aSheetProp, "Sheet" );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -118,7 +118,7 @@ void ExcelVbaProject::prepareImport()
             addDummyModule( aCodeName, ModuleType::DOCUMENT );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

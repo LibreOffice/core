@@ -58,7 +58,7 @@ public class FormTools {
     */
     public static XControlShape createControlShape( XComponent oDoc, int height,
                                         int width, int x, int y, String kind )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
 
          Size size = new Size();
@@ -88,7 +88,7 @@ public class FormTools {
 
     public static XControlShape createUnoControlShape( XComponent oDoc, int height,
                                         int width, int x, int y, String kind, String defControl )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
 
          Size size = new Size();
@@ -118,7 +118,7 @@ public class FormTools {
 
     public static XControlShape createControlShapeWithDefaultControl( XComponent oDoc, int height,
                                         int width, int x, int y, String kind )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
 
          Size size = new Size();
@@ -146,7 +146,7 @@ public class FormTools {
     } // finish createControlShape
 
     public static XInterface createControl( XComponent oDoc, String kind )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XInterface oControl = null;
 
@@ -174,7 +174,7 @@ public class FormTools {
 
     public static void insertForm ( XComponent aDoc, XNameContainer Forms,
                                                                 String aName )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XInterface oControl = createControl(aDoc, "Form");
         XForm oForm = UnoRuntime.queryInterface(XForm.class, oControl);
@@ -183,7 +183,7 @@ public class FormTools {
 
     public static XControlShape insertControlShape( XComponent oDoc, int height,
                                         int width, int x, int y, String kind )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XControlShape aShape = createControlShape(oDoc,height,width,x,y,kind);
         XDrawPage oDP = DrawTools.getDrawPage(oDoc,0);
@@ -192,7 +192,7 @@ public class FormTools {
     }
 
     public static XLoadable bindForm( XTextDocument aDoc )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XLoadable formLoader = null;
 
@@ -219,7 +219,7 @@ public class FormTools {
     * implementation which is the bound form inside the document.
     */
     public static XLoadable bindForm( XTextDocument aDoc, String sourceName, String tableName )
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getIndexedForms(WriterTools.getDrawPage(aDoc)).getByIndex(0));
@@ -245,7 +245,7 @@ public class FormTools {
     * implementation which is the bound form inside the document.
     */
     public static XLoadable bindForm( XTextDocument aDoc, String formName, String sourceName,
-        String tableName) throws com.sun.star.uno.Exception {
+        String tableName) throws cpo.uno.Exception {
 
         XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName));
@@ -258,7 +258,7 @@ public class FormTools {
     }
 
     public static void switchDesignOf(XMultiServiceFactory xMSF, XTextDocument aDoc)
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         com.sun.star.frame.XController aController = aDoc.getCurrentController();
         com.sun.star.frame.XFrame aFrame = aController.getFrame();

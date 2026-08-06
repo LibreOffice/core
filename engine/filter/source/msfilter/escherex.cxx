@@ -3749,7 +3749,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                 }
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -3860,7 +3860,7 @@ bool EscherPropertyValueHelper::GetPropertyValue(
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -3873,7 +3873,7 @@ bool EscherPropertyValueHelper::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = false;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -3893,7 +3893,7 @@ beans::PropertyState EscherPropertyValueHelper::GetPropertyState(
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
     return eRetValue;

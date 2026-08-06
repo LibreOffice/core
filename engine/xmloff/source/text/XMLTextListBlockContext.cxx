@@ -216,7 +216,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 sListStyleDefaultListId );
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         // pop ourselves if anything goes wrong to avoid use-after-free
         rTxtImp.GetTextListHelper().PopListContext();

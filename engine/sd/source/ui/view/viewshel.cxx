@@ -1361,7 +1361,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
                     --nNumber;
                 }
             }
-            catch( const Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks
@@ -1431,7 +1431,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
                     --nNumber;
                 }
             }
-            catch( const Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks

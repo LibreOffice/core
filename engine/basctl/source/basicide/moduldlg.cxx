@@ -482,7 +482,7 @@ private:
                     }
                 }
             }
-            catch (const uno::Exception& )
+            catch (const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
@@ -517,7 +517,7 @@ private:
                     }
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }

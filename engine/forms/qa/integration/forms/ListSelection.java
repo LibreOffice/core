@@ -61,7 +61,7 @@ public class ListSelection extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkUserListSelection() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkUserListSelection() throws cpo.uno.Exception, java.lang.Exception
     {
         int runs = 5;
         for ( int i = 0; i < runs; ++i )
@@ -112,7 +112,7 @@ public class ListSelection extends integration.forms.TestCase
                 assure( "sheet was not selected as expected!", sheetName.getName().equals( selectSheetName ) );
             }
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
             failed( "caught an exception: " + e.toString() );
@@ -158,7 +158,7 @@ public class ListSelection extends integration.forms.TestCase
 
             basicLib.insertByName( "callbacks", sListSelectionScript );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
             failed( "caught an exception: " + e.toString() );
@@ -193,7 +193,7 @@ public class ListSelection extends integration.forms.TestCase
                 scriptCode
             ) );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
             failed( "caught an exception: " + e.toString() );
@@ -202,7 +202,7 @@ public class ListSelection extends integration.forms.TestCase
 
     /* ------------------------------------------------------------------ */
     @Override
-    protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
+    protected void prepareDocument() throws cpo.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();
         impl_setupListenerScript();
@@ -272,7 +272,7 @@ public class ListSelection extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    protected XListBox getListBoxControl( XSpreadsheet sheet ) throws com.sun.star.uno.Exception
+    protected XListBox getListBoxControl( XSpreadsheet sheet ) throws cpo.uno.Exception
     {
         return UnoRuntime.queryInterface(
             XListBox.class, m_document.getCurrentView().getControl( getListBoxModel( sheet ) ) );

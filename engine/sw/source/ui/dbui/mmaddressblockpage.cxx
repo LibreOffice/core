@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, weld::Button&,
             GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
         }
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         TOOLS_WARN_EXCEPTION("sw", "");
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pWizard->getDialog(),

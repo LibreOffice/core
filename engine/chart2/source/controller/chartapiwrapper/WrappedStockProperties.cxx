@@ -100,7 +100,7 @@ void WrappedStockProperty::setPropertyValue( const cpo::uno::Any& rOuterValue, c
         ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
         xTemplate->changeDiagram( xDiagram );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

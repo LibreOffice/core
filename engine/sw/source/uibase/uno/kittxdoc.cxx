@@ -1039,7 +1039,7 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
                         xTextViewCursor->gotoRange(xStart, false);
                         rJsonWriter.put("startPageNumber", xTextPageCursor->getPage());
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION("sw.ui");
                     }
@@ -1153,7 +1153,7 @@ sal_Int32 WriteLinkTargets(const uno::Reference<container::XNameAccess>& xLinks,
         {
             aAny = xLinks->getByName(aLink);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             continue;
         }

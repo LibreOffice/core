@@ -295,7 +295,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

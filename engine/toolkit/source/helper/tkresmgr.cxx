@@ -48,7 +48,7 @@ Image TkResMgr::getImageFromURL(const OUString& i_rImageURL)
             = xProvider->queryGraphic(aMediaProperties.getPropertyValues());
         return Image(xGraphic);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit");
     }

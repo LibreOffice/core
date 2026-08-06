@@ -137,7 +137,7 @@ void DrawViewShell::DeleteActualPage()
 
         GetView()->EndUndo();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "SelectionManager::DeleteSelectedMasterPages()");
     }

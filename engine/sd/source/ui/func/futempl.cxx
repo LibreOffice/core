@@ -146,7 +146,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     if ( !aUIName.isEmpty() )
                         rReq.AppendItem( SfxStringItem( nSId, aUIName ) );
                 }
-                catch( Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }

@@ -475,7 +475,7 @@ Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
     {
         xCell = mxSheet->getCellByPosition( rAddress.Col(), rAddress.Row() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xCell;
@@ -500,7 +500,7 @@ Reference< XCellRange > WorksheetGlobals::getColumn( sal_Int32 nCol ) const
         if (mxSheet)
             return mxSheet->getScColumns()->getScTableColumnByIndex( nCol );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return {};
@@ -513,7 +513,7 @@ Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
     {
         xRow = mxSheet->getScRows()->GetTableRowByIndex( nRow );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xRow;
@@ -527,7 +527,7 @@ Reference< XDrawPage > WorksheetGlobals::getDrawPage() const
         if (mxSheet)
             xDrawPage = mxSheet->getDrawPage();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xDrawPage;
@@ -1358,7 +1358,7 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

@@ -83,7 +83,7 @@ static void raiseRuntimeExceptionWhenNeeded()
         Runtime runtime;
         cpo::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf( "python-loader:" );
-        if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
+        if( auto e = o3tl::tryAccess<cpo::uno::Exception>(a) )
             buf.append( e->Message );
         throw RuntimeException( buf.makeStringAndClear() );
     }

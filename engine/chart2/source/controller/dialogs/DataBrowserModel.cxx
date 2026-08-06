@@ -67,7 +67,7 @@ OUString lcl_getRole(
         {
             xProp->getPropertyValue( u"Role"_ustr ) >>= aResult;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -114,7 +114,7 @@ bool lcl_SequenceOfSeriesIsShared(
                 break;
             }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -661,7 +661,7 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
             if( m_xChartDocument.is() )
                 m_xChartDocument->setModified(true);
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             bResult = false;
         }
@@ -920,7 +920,7 @@ void DataBrowserModel::addErrorBarRanges(
             ++rInOutHeaderEnd;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

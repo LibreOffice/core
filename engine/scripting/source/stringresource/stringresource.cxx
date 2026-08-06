@@ -846,7 +846,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
                 {
                     Storage->removeElement( aStreamName );
                 }
-                catch( Exception& )
+                catch( cpo::uno::Exception& )
                 {}
 
                 pLocaleItem.reset();
@@ -897,7 +897,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             {
                 Storage->removeElement( aStreamName );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {}
 
             pLocaleItem.reset();
@@ -2251,7 +2251,7 @@ bool StringResourceWithStorageImpl::implLoadLocale(std::unique_lock<std::mutex>&
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return bSuccess;
@@ -2542,7 +2542,7 @@ bool StringResourceWithLocationImpl::implLoadLocale(std::unique_lock<std::mutex>
     {
         xInputStream = xFileAccess->openFileRead( aCompleteFileName );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {}
     if( xInputStream.is() )
     {

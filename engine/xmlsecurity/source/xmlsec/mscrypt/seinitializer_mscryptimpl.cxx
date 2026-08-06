@@ -105,7 +105,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         xSecCtx->setDefaultSecurityEnvironmentIndex(xSecCtx->addSecurityEnvironment( xSecEnv )) ;
         return xSecCtx;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         if( n_hStoreHandle != nullptr )
         {

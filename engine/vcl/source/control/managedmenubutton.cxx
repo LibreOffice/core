@@ -68,7 +68,7 @@ void ManagedMenuButton::PrepareExecute()
         css::uno::Reference<css::frame::XModuleManager> xModuleManager(css::frame::ModuleManager::create(xContext));
         aModuleName = xModuleManager->identify(xFrame);
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     cpo::uno::Sequence<cpo::uno::Any> aArgs {

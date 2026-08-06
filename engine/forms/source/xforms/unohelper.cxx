@@ -23,7 +23,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -31,7 +31,7 @@
 
 using com::sun::star::uno::Reference;
 using cpo::uno::Sequence;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
@@ -58,7 +58,7 @@ void xforms::copy(const Reference<XPropertySet>& xFrom, Reference<XPropertySet> 
                 if ((aProperty.Attributes & READONLY) == 0)
                     xTo->setPropertyValue(rName, xFrom->getPropertyValue(rName));
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // ignore any errors; we'll copy as good as we can
             }

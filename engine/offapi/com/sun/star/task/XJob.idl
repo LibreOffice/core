@@ -55,14 +55,14 @@ published interface XJob : com::sun::star::uno::XInterface
             if some of given arguments doesn't fill out the service specification or
             was corrupt so the service couldn't work correctly
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             to notify the executor about failed operation; otherwise the return value
             indicates a successful finishing.
     */
     any execute(
         [in] sequence< com::sun::star::beans::NamedValue > Arguments )
             raises( com::sun::star::lang::IllegalArgumentException ,
-                    com::sun::star::uno::Exception                 );
+                    cpo::uno::Exception                 );
 };
 
 }; }; }; };

@@ -191,7 +191,7 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     assert( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
                     {
                     typelib_TypeDescription * pTD1 = nullptr;
-                    OUString sTypeName1(u"com.sun.star.uno.Exception"_ustr);
+                    OUString sTypeName1(u"cpo.uno.Exception"_ustr);
 
                     typelib_CompoundMember_Init aMembers[2];
                     OUString sMemberType0(u"string"_ustr);

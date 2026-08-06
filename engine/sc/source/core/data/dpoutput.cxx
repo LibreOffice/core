@@ -374,7 +374,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                                 xPropSet->getPropertyValue( SC_UNO_DP_LAYOUT ) >>= aLayoutInfo;
                                                 bFieldCompact = (aLayoutInfo.LayoutMode == sheet::DataPilotFieldLayoutMode::COMPACT_LAYOUT);
                                             }
-                                            catch (uno::Exception&)
+                                            catch (cpo::uno::Exception&)
                                             {
                                             }
                                             mpRowFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
@@ -450,7 +450,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
         aAny >>= aUStr;
         maDataDescription = aUStr;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -1163,7 +1163,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                             aGivenName = strLayoutName;
                     }
                 }
-                catch(const uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                 }
                 rDataNames.push_back( aSourceName );

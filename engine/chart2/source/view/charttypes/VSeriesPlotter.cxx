@@ -483,7 +483,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                 xPointProps->getPropertyValue( u"TextRotation"_ustr ) >>= fRotationDegrees;
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -768,7 +768,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
             xTextShape->setPosition( aNewTextPos );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -855,7 +855,7 @@ double lcl_getErrorBarLogicLength(
             break;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1087,7 +1087,7 @@ void VSeriesPlotter::createErrorBar(
         rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D( xTarget, aPoly );
         PropertyMapper::setMappedProperties( *xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1246,7 +1246,7 @@ void VSeriesPlotter::createErrorRectangle(
             addErrorBorder( aTopRight, aBottomRight, xErrorBorder_ShapesY, xErrorBorderPropY );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2", "Exception in createErrorRectangle(). ");
     }
@@ -2397,7 +2397,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
         {
             xCooSys->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bSwapXAndY;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
 
@@ -2701,7 +2701,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     bIsPie = false;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 
@@ -2716,7 +2716,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // "DeletedLegendEntries"
                 rSeries.getModel()->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntries;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
@@ -2829,7 +2829,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -2863,7 +2863,7 @@ std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbolsForSeries(
             aResult.push_back(aEntry);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }

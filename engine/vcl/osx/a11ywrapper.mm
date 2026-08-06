@@ -158,7 +158,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TABLE_CELL ) {
             mIsTableCell = YES;
         }
-    } catch ( const Exception ) {
+    } catch ( const cpo::uno::Exception ) {
     }
 }
 
@@ -330,7 +330,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
                 return NSAccessibilityUnignoredAncestor( parent_wrapper );
             }
         }
-    } catch (const Exception&) {
+    } catch (const cpo::uno::Exception&) {
     }
 
     OSL_ASSERT( false );
@@ -401,7 +401,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             }
 
             return NSAccessibilityUnignoredChildren( [ children autorelease ] );
-        } catch (const Exception &) {
+        } catch (const cpo::uno::Exception &) {
             // TODO: Log
         }
 
@@ -747,7 +747,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             mIsTableCell = NO; // just to be sure
             [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
             return nil;
-        } catch ( const Exception & ) {
+        } catch ( const cpo::uno::Exception & ) {
             // empty
         }
     }
@@ -924,7 +924,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             mIsTableCell = NO; // just to be sure
             [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
             return nil;
-        } catch ( const Exception & ) {
+        } catch ( const cpo::uno::Exception & ) {
             // empty
         }
     }

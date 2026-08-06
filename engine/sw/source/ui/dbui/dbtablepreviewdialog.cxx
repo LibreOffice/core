@@ -86,7 +86,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, cpo::uno::
         xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
         xFrame->initialize(m_xBeamerWIN->CreateChildFrame());
     }
-    catch (uno::Exception const &)
+    catch (cpo::uno::Exception const &)
     {
         xFrame.clear();
     }

@@ -318,7 +318,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         }
         while( false );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("editeng", "exception during xml export");
     }

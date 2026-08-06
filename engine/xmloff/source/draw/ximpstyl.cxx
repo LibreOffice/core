@@ -1160,7 +1160,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMas
         OUString sPrefix(rMaster.GetDisplayName() + "-");
         ImpSetGraphicStyles(xMasterPageStyles, XmlStyleFamily::SD_PRESENTATION_ID, sPrefix);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -1177,7 +1177,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u""_ustr);
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -1191,7 +1191,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u""_ustr);
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }

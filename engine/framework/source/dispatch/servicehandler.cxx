@@ -215,7 +215,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     // ignore all errors - inclusive runtime errors!
     // E.g. a script based service (written in Python) could not be executed
     // because it contains syntax errors, which was detected at runtime...
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("fwk.dispatch", "ignored");
         xService.clear();

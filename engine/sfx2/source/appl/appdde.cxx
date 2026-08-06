@@ -94,7 +94,7 @@ public:
             ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             bRet = aCnt.isDocument();
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sfx.appl", "" );
         }

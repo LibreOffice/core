@@ -556,7 +556,7 @@ protected:
                handle
         @param rValue
                value
-        @throws css::uno::Exception
+        @throws cpo::uno::Exception
     */
     virtual void setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,

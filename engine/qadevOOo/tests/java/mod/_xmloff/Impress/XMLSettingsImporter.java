@@ -166,7 +166,7 @@ public class XMLSettingsImporter extends TestCase {
                     try {
                         propValue = (Boolean) xPropSet.getPropertyValue
                             ("IsLayerMode");
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         e.printStackTrace(logF);
                         throw new StatusException
                             ("Can't get property value.", e);

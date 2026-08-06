@@ -466,7 +466,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
                 else
                     xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(rLabel.second));
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first);
             }
@@ -965,7 +965,7 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxProperty
         uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
         return xPropertySet->getPropertyValue(rName).get<OUString>();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

@@ -95,7 +95,7 @@ ScVbaCommandBar::getVisible()
             getPropertyValue( aToolBar, u"Visible"_ustr ) >>= bVisible;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return bVisible;
@@ -117,7 +117,7 @@ ScVbaCommandBar::setVisible( bool _visible )
             xLayoutManager->destroyElement( m_sResourceUrl );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         SAL_INFO("vbahelper", "SetVisible get an exception" );
     }

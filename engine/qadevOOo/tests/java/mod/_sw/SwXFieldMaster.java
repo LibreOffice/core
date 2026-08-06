@@ -85,7 +85,7 @@ public class SwXFieldMaster extends TestCase {
             XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, xTextDoc );
             oObj = (XInterface)
                 oDocMSF.createInstance( "com.sun.star.text.FieldMaster.Database" );
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch ( cpo.uno.Exception e ) {
             log.println("Couldn't create instance");
             e.printStackTrace(log);
         }

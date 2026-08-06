@@ -47,7 +47,7 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                          [in] long nActions )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::frame::DoubleInitializationException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** is used to initialize the object on it's creation.
 
@@ -77,7 +77,7 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                          [in] XActionsApproval xApprove )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::frame::DoubleInitializationException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

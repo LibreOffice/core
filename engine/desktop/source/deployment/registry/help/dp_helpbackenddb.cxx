@@ -74,7 +74,7 @@ void HelpBackendDb::addEntry(OUString const & url, Data const & data)
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -104,7 +104,7 @@ HelpBackendDb::getEntry(std::u16string_view url)
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

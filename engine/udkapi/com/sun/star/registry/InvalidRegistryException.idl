@@ -24,7 +24,7 @@
 /** signals that the registry is invalid or an operation on the registry
     failed.
  */
-published exception InvalidRegistryException: com::sun::star::uno::Exception
+published exception InvalidRegistryException: cpo::uno::Exception
 {
 };
 

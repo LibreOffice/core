@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -388,7 +388,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                     serviceName, m_context);
             } catch (css::uno::RuntimeException &) {
                 throw;
-            } catch (const css::uno::Exception &) {
+            } catch (const cpo::uno::Exception &) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     "creating service " + serviceName,

@@ -57,7 +57,7 @@ selection_add_selection( AtkSelection *selection,
             return true;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in selectAccessibleChild()" );
     }
 
@@ -76,7 +76,7 @@ selection_clear_selection( AtkSelection *selection )
             return true;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in clearAccessibleSelection()" );
     }
 
@@ -93,7 +93,7 @@ selection_ref_selection( AtkSelection *selection,
         if( pSelection.is() )
             return atk_object_wrapper_ref( pSelection->getSelectedAccessibleChild( i ) );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChild()" );
     }
 
@@ -118,7 +118,7 @@ selection_get_selection_count( AtkSelection   *selection)
             return nSelected;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
 
@@ -135,7 +135,7 @@ selection_is_child_selected( AtkSelection   *selection,
         if( pSelection.is() )
             return pSelection->isAccessibleChildSelected( i );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in isAccessibleChildSelected()" );
     }
 
@@ -161,7 +161,7 @@ selection_remove_selection( AtkSelection *selection,
             return true;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChild(), getAccessibleIndexInParent() or deselectAccessibleChild()" );
     }
 
@@ -180,7 +180,7 @@ selection_select_all_selection( AtkSelection   *selection)
             return true;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in selectAllAccessibleChildren()" );
     }
 

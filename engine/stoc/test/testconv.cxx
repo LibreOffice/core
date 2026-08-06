@@ -174,7 +174,7 @@ static bool convertTo( const Type & rDestType, const Any & rVal, bool bExpectSuc
         aRet = s_xConverter->convertTo( rVal, rDestType );
         bCanConvert = true;
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         aExcMsg = OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US );
     }
@@ -228,7 +228,7 @@ static bool convertTo( const Type & rDestType, const Any & rVal, bool bExpectSuc
             aRet2 = s_xConverter->convertTo( aRet, rVal.getValueType() );
             bReConvert = true;
         }
-        catch (const Exception & rExc)
+        catch (const cpo::uno::Exception & rExc)
         {
             aExcMsg = OUStringToOString( rExc.Message, RTL_TEXTENCODING_ISO_8859_1 );
         }
@@ -671,7 +671,7 @@ SAL_IMPLEMENT_MAIN()
 
         test_Conversion( xMgr );
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         DBG_UNHANDLED_EXCEPTION("stoc", "### exception occurred: " << rExc );
     }

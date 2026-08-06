@@ -215,7 +215,7 @@ void OInputCompStream::InternalDispose()
     {
         m_xStream->closeInput();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     m_pImpl = nullptr;

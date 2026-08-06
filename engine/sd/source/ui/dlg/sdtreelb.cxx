@@ -679,7 +679,7 @@ void SdPageObjsTLV::AddShapeToTransferable (
                 bIsDescriptorFillingPending = false;
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -744,7 +744,7 @@ void SdPageObjsTLV::AddShapeToTransferable (
                 return pViewShell.get();
         }
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.

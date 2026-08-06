@@ -29,7 +29,7 @@ import java.util.*;
 import java.beans.*;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;

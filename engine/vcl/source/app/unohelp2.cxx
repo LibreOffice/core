@@ -72,7 +72,7 @@ namespace vcl::unohelper {
                 pNotifier->viewCallback(COKitCallbackType::CLIPBOARD_CHANGED, OString(aStream.str()));
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }

@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -65,7 +65,7 @@ constexpr OUString updateAccessServiceName =
     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
 
 void badNodePath() {
-    throw css::uno::Exception(
+    throw cpo::uno::Exception(
         (u"com.sun.star.configuration.ConfigurationProvider expects a single,"
          " non-empty, string nodepath argument"_ustr),
         nullptr);
@@ -199,7 +199,7 @@ Service::createInstanceWithArguments(
             }
             break;
         } else {
-            throw css::uno::Exception(
+            throw cpo::uno::Exception(
                 (u"com.sun.star.configuration.ConfigurationProvider expects"
                  " NamedValue or PropertyValue arguments"_ustr),
                 nullptr);
@@ -216,7 +216,7 @@ Service::createInstanceWithArguments(
             if (!locale.isEmpty() || !(value >>= locale) ||
                 locale.isEmpty())
             {
-                throw css::uno::Exception(
+                throw cpo::uno::Exception(
                     (u"com.sun.star.configuration.ConfigurationProvider expects"
                      " at most one, non-empty, string Locale argument"_ustr),
                     nullptr);
@@ -244,7 +244,7 @@ Service::createInstanceWithArguments(
     } else if (ServiceSpecifier == updateAccessServiceName) {
         update = true;
     } else {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             ("com.sun.star.configuration.ConfigurationProvider does not support"
              " service " + ServiceSpecifier),
             getXWeak());
@@ -254,7 +254,7 @@ Service::createInstanceWithArguments(
     rtl::Reference root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             ("com.sun.star.configuration.ConfigurationProvider: there is a leaf"
              " value at nodepath " + nodepath),
             getXWeak());
@@ -366,7 +366,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
                 name = v2.Name;
                 value = v2.Value;
             } else {
-                throw css::uno::Exception(
+                throw cpo::uno::Exception(
                     (u"com.sun.star.configuration.ConfigurationProvider factory"
                      " expects NamedValue or PropertyValue arguments"_ustr),
                     nullptr);
@@ -377,14 +377,14 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
                 if (!locale.isEmpty() || !(value >>= locale) ||
                     locale.isEmpty())
                 {
-                    throw css::uno::Exception(
+                    throw cpo::uno::Exception(
                         (u"com.sun.star.configuration.ConfigurationProvider"
                          " factory expects at most one, non-empty, string"
                          " Locale argument"_ustr),
                         nullptr);
                 }
             } else if (!name.equalsIgnoreAsciiCase("enableasync")) {
-                throw css::uno::Exception(
+                throw cpo::uno::Exception(
                     ("com.sun.star.configuration.ConfigurationProvider factory:"
                      " unknown argument " + name),
                     nullptr);

@@ -257,7 +257,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
                 }
             }
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
 

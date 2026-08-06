@@ -56,7 +56,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
-    private void prepareTestStep( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void prepareTestStep( ) throws cpo.uno.Exception, java.lang.Exception
     {
         m_document = DocumentHelper.blankTextDocument( m_orb );
         m_document.getDocument( ).addEventListener( this );
@@ -83,7 +83,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
                 closeDoc.close( true );
             }
         }
-        catch ( com.sun.star.uno.Exception e )
+        catch ( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
         }
@@ -92,7 +92,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
     /* ------------------------------------------------------------------ */
     /* public test methods                                                */
     /* ------------------------------------------------------------------ */
-    public void interactiveValidation() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void interactiveValidation() throws cpo.uno.Exception, java.lang.Exception
     {
         prepareTestStep();
 

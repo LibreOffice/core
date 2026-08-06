@@ -1074,7 +1074,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
             xLBT->setRuntimeException( 0xcafebabe );
         }
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
@@ -1273,7 +1273,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
             throw RuntimeException( u"error: test failed!"_ustr );
         }
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
         OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "exception occurred: %s\n", cstr.getStr() );

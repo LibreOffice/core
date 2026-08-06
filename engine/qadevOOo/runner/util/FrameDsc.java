@@ -76,7 +76,7 @@ public class FrameDsc extends InstDescr {
         try {
             SrvObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
         XShape shape = UnoRuntime.queryInterface( XShape.class, SrvObj );
         try {

@@ -23,7 +23,7 @@
 
 /** This exception can be thrown in case object is not encrypted one as expected.
  */
-published exception NoEncryptionException: com::sun::star::uno::Exception
+published exception NoEncryptionException: cpo::uno::Exception
 {
 };
 

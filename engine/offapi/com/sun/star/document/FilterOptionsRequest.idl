@@ -22,7 +22,7 @@ module com { module sun { module star { module document {
 
 /** Is used for interaction handle to get filter options.
 */
-published exception FilterOptionsRequest : ::com::sun::star::uno::Exception
+published exception FilterOptionsRequest : ::cpo::uno::Exception
 {
     /** The model of the document that should be provided to filters
         that supports XExporter interface.

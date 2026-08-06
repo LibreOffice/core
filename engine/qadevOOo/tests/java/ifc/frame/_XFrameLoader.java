@@ -106,7 +106,7 @@ public class _XFrameLoader extends MultiMethodTest {
 
                 util.utils.shortWait();
                 frame = dsk.getCurrentFrame() ;
-            } catch ( com.sun.star.uno.Exception e ) {
+            } catch ( cpo.uno.Exception e ) {
                 // Some exception occurs.FAILED
                 e.printStackTrace( log );
                 throw new StatusException( "Couldn't create a frame.", e );

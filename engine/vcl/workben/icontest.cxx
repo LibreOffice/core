@@ -189,7 +189,7 @@ void IconTestApp::DoItWithVcl( const OUString& sImageFile)
 
         Execute();
     }
-    catch (const uno::Exception &e)
+    catch (const cpo::uno::Exception &e)
     {
         fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         nRet = EXIT_FAILURE;

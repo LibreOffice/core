@@ -98,7 +98,7 @@ void SAL_CALL FrameStatusListener::dispose()
             if ( xDispatch.is() )
                 xDispatch->removeStatusListener( this, aTargetURL );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -176,7 +176,7 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
                     if ( xOldDispatch.is() )
                         xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -191,7 +191,7 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
         if ( xDispatch.is() )
             xDispatch->addStatusListener( xStatusListener, aTargetURL );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -226,7 +226,7 @@ void FrameStatusListener::bindListener()
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -236,7 +236,7 @@ void FrameStatusListener::bindListener()
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
                 listener.second = xDispatch;
@@ -258,7 +258,7 @@ void FrameStatusListener::bindListener()
                 rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

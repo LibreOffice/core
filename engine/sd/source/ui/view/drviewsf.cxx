@@ -164,7 +164,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             bFound = true;
                         }
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                     }
                 }

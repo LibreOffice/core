@@ -849,7 +849,7 @@ bool UniversalContentBroker::getContentProviderData(
         TOOLS_WARN_EXCEPTION( "ucb", "" );
         return false;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 

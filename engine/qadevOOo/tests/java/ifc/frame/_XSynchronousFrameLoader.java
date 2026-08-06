@@ -100,7 +100,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
                 xURLTrans = UnoRuntime.queryInterface
                     (XURLTransformer.class, o) ;
 
-            } catch ( com.sun.star.uno.Exception e ) {
+            } catch ( cpo.uno.Exception e ) {
                 // Some exception occurs.FAILED
                 e.printStackTrace( log );
                 throw new StatusException( "Couldn't create a document.", e );

@@ -206,7 +206,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     bool m_bStreamReadOnly = false;
 
 protected:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::io::XStream > TryToGetAcceptableFormat_Impl(
                                     const css::uno::Reference< css::io::XStream >& xStream );
 
@@ -242,7 +242,7 @@ protected:
 
     void GetRidOfComponent(osl::ResettableMutexGuard* guard);
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void StoreToLocation_Impl(
                             const css::uno::Reference< css::embed::XStorage >& xStorage,
                             const OUString& sEntName,
@@ -250,23 +250,23 @@ protected:
                             bool bSaveAs,
                             osl::ResettableMutexGuard& rGuard);
 #ifdef _WIN32
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void StoreObjectToStream(css::uno::Reference<css::io::XOutputStream> const& xOutStream,
                              osl::ResettableMutexGuard& rGuard);
 #endif
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void InsertVisualCache_Impl(
             const css::uno::Reference< css::io::XStream >& xTargetStream,
             const css::uno::Reference< css::io::XStream >& xCachedVisualRepresentation,
             osl::ResettableMutexGuard& rGuard);
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void RemoveVisualCache_Impl( const css::uno::Reference< css::io::XStream >& xTargetStream );
 
     void SetVisReplInStream( bool bExists );
     bool HasVisReplInStream();
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
                     const css::uno::Reference< css::io::XStream >& xCachedVisRepr );
 

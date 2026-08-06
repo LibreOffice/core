@@ -99,7 +99,7 @@ ScVbaAxis::getAxisTitle(  )
                 break;
         }
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -148,7 +148,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
         }
         mxPropertySet->setPropertyValue(AUTOORIGIN, cpo::uno::Any(false) );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -180,7 +180,7 @@ ScVbaAxis::getCrosses(  )
             }
         }
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -196,7 +196,7 @@ ScVbaAxis::setCrossesAt( double _fCrossesAt )
         setMinimumScaleIsAuto( false );
         mxPropertySet->setPropertyValue(ORIGIN, cpo::uno::Any(_fCrossesAt));
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -210,7 +210,7 @@ ScVbaAxis::getCrossesAt(  )
     {
         mxPropertySet->getPropertyValue(ORIGIN) >>= fCrosses;
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -249,7 +249,7 @@ ScVbaAxis::setHasTitle( bool _bHasTitle )
         }
 
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -275,7 +275,7 @@ ScVbaAxis::getHasTitle(  )
                 pChart->mxDiagramPropertySet->getPropertyValue(u"HasYAxisTitle"_ustr) >>= bHasTitle;
         }
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -290,7 +290,7 @@ ScVbaAxis::setMinorUnit( double _fMinorUnit )
         if (isValueAxis())
             mxPropertySet->setPropertyValue(u"StepHelp"_ustr, cpo::uno::Any(_fMinorUnit));
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -305,7 +305,7 @@ ScVbaAxis::getMinorUnit(  )
         if (isValueAxis())
             mxPropertySet->getPropertyValue(u"StepHelp"_ustr) >>= fMinor;
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -320,7 +320,7 @@ ScVbaAxis::setMinorUnitIsAuto( bool _bMinorUnitIsAuto )
         if (isValueAxis())
             mxPropertySet->setPropertyValue(u"AutoStepHelp"_ustr, cpo::uno::Any(_bMinorUnitIsAuto));
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -337,7 +337,7 @@ ScVbaAxis::getMinorUnitIsAuto(  )
             mxPropertySet->getPropertyValue(u"AutoStepHelp"_ustr) >>= bIsAuto;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -367,7 +367,7 @@ ScVbaAxis::setMajorUnit( double _fMajorUnit )
             mxPropertySet->setPropertyValue(u"StepMain"_ustr, cpo::uno::Any(_fMajorUnit));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -382,7 +382,7 @@ ScVbaAxis::getMajorUnit(  )
         if (isValueAxis())
             mxPropertySet->getPropertyValue(u"StepMain"_ustr) >>= fMax;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -399,7 +399,7 @@ ScVbaAxis::setMajorUnitIsAuto( bool _bMajorUnitIsAuto )
             mxPropertySet->setPropertyValue(u"AutoStepMain"_ustr, cpo::uno::Any( _bMajorUnitIsAuto ));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -416,7 +416,7 @@ ScVbaAxis::getMajorUnitIsAuto(  )
             mxPropertySet->getPropertyValue(u"AutoStepMain"_ustr) >>= bIsAuto;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -433,7 +433,7 @@ ScVbaAxis::setMaximumScale( double _fMaximumScale )
             mxPropertySet->setPropertyValue(u"Max"_ustr, cpo::uno::Any(_fMaximumScale));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -450,7 +450,7 @@ ScVbaAxis::getMaximumScale(  )
             mxPropertySet->getPropertyValue(u"Max"_ustr) >>= fMax;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -467,7 +467,7 @@ ScVbaAxis::setMaximumScaleIsAuto( bool _bMaximumScaleIsAuto )
             mxPropertySet->setPropertyValue(u"AutoMax"_ustr, cpo::uno::Any( _bMaximumScaleIsAuto ));
 
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -482,7 +482,7 @@ ScVbaAxis::getMaximumScaleIsAuto(  )
         if (isValueAxis())
             mxPropertySet->getPropertyValue(u"AutoMax"_ustr) >>= bIsAuto;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception( ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -497,7 +497,7 @@ ScVbaAxis::setMinimumScale( double _fMinimumScale )
         if (isValueAxis())
             mxPropertySet->setPropertyValue(u"Min"_ustr, cpo::uno::Any( _fMinimumScale )  );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -512,7 +512,7 @@ ScVbaAxis::getMinimumScale(  )
         if (isValueAxis())
             mxPropertySet->getPropertyValue(u"Min"_ustr) >>= fMin;
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -529,7 +529,7 @@ ScVbaAxis::setMinimumScaleIsAuto( bool _bMinimumScaleIsAuto )
             mxPropertySet->setPropertyValue(u"AutoMin"_ustr, cpo::uno::Any(_bMinimumScaleIsAuto));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -546,7 +546,7 @@ ScVbaAxis::getMinimumScaleIsAuto(  )
             mxPropertySet->getPropertyValue(u"AutoMin"_ustr) >>= bIsAuto;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -580,7 +580,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType )
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -602,7 +602,7 @@ ScVbaAxis::getScaleType(  )
                 nScaleType = xlScaleLinear;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }

@@ -573,7 +573,7 @@ cpo::uno::Sequence< ucb::CommandInfo > Content::getCommands(
     {
         bFolder = isFolder( xEnv );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         return aCmdInfo;
     }

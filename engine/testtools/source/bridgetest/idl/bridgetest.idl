@@ -468,7 +468,7 @@ interface XBridgeTest : XBridgeTestBase
 };
 
 
-exception BadConstructorArguments: com::sun::star::uno::Exception {};
+exception BadConstructorArguments: cpo::uno::Exception {};
 
 service Constructors: com::sun::star::uno::XInterface {
     create1(

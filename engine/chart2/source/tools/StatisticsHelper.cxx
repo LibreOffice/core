@@ -149,7 +149,7 @@ void lcl_setXMLRangePropertyAtDataSequence(
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
             xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( rXMLRange ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

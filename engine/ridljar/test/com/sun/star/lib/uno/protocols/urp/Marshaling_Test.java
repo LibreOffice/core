@@ -43,7 +43,7 @@ public final class Marshaling_Test {
 
         Object data[] = new Object[] {
             new com.sun.star.uno.RuntimeException("testRuntimeException"),
-            new com.sun.star.uno.Exception("testException"),
+            new cpo.uno.Exception("testException"),
             Boolean.TRUE,
             Byte.valueOf((byte)47),
             Character.valueOf('k'),
@@ -125,7 +125,7 @@ public final class Marshaling_Test {
 
         TypeDescription dataTypes[] = new TypeDescription[] {
             TypeDescription.getTypeDescription(com.sun.star.uno.RuntimeException.class),
-            TypeDescription.getTypeDescription(com.sun.star.uno.Exception.class),
+            TypeDescription.getTypeDescription(cpo.uno.Exception.class),
             TypeDescription.getTypeDescription(Boolean.class),
             TypeDescription.getTypeDescription(Byte.class),
             TypeDescription.getTypeDescription(Character.class),

@@ -76,7 +76,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
                         FilePicker_getSystemPickerServiceName(),
                         context);
             }
-            catch (css::uno::Exception const &)
+            catch (cpo::uno::Exception const &)
             {
                 // Handled below (see @ fallback).
             }
@@ -143,7 +143,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
                                 FolderPicker_getSystemPickerServiceName(),
                                 context);
             }
-            catch (css::uno::Exception const &)
+            catch (cpo::uno::Exception const &)
             {
                 // Handled below (see @ fallback).
             }

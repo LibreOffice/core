@@ -25,7 +25,7 @@ module com { module sun { module star { module bridge {
 
     @see XProtocolProperties
 */
-published exception InvalidProtocolChangeException : com::sun::star::uno::Exception
+published exception InvalidProtocolChangeException : cpo::uno::Exception
 {
     /** The first invalid property.
      */

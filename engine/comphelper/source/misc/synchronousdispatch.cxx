@@ -63,7 +63,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
 
             aRet >>= aComponent;
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // can't use TOOLS_WARN_EXCEPTION, as comphelper is used by libtl!
             SAL_WARN("comphelper", "SynchronousDispatch::dispatch(): error while dispatching '"

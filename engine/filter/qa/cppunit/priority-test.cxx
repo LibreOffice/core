@@ -65,7 +65,7 @@ void PriorityFilterTest::testPriority()
                                                           RTL_TEXTENCODING_UTF8).getStr(),
                                    aFormatCorrect, aTypeName);
         }
-        catch (const uno::Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             OUString aMsg = "Exception querying for type: '" + e.Message + "'";
             CPPUNIT_FAIL(OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8).getStr());

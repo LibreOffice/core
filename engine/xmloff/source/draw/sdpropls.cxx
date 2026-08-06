@@ -1671,7 +1671,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

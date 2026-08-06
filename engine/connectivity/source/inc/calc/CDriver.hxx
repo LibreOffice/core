@@ -25,7 +25,7 @@
 
 namespace connectivity::calc
 {
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::uno::XInterface >
         ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 

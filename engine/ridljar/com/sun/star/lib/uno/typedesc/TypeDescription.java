@@ -445,7 +445,7 @@ public final class TypeDescription {
         case TypeClass.EXCEPTION_value:
             {
                 TypeDescription[] superTypes
-                    = typeName.equals("com.sun.star.uno.Exception")
+                    = typeName.equals("cpo.uno.Exception")
                     || typeName.equals("com.sun.star.uno.RuntimeException")
                     ? null
                     : new TypeDescription[] {

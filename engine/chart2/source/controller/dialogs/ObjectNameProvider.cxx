@@ -184,7 +184,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
         {
             TOOLS_WARN_EXCEPTION( "chart2", "unexpected exception caught" );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -210,7 +210,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
                     }
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }
@@ -657,7 +657,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                             }
                         }
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }
@@ -724,7 +724,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                                     fStdDev, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }

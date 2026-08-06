@@ -325,7 +325,7 @@ public class GenericModelTest extends TestCase {
         try {
             m_dbTools.revokeDB(m_dbSourceName);
         } catch (com.sun.star.container.NoSuchElementException e){
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("ERROR: Error while object test cleaning up: " + e.toString());
         }
 
@@ -479,7 +479,7 @@ public class GenericModelTest extends TestCase {
                 this.ChangePropertyValue=ChangePropertyValue;
             }
 
-            public void update() throws com.sun.star.uno.Exception {
+            public void update() throws cpo.uno.Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
                 }
@@ -515,7 +515,7 @@ public class GenericModelTest extends TestCase {
                 update.updateRow();
             }
 
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
+            public boolean wasCommited() throws cpo.uno.Exception {
                 formLoaderF.reload();
 
                 Object newValue = ps.getPropertyValue(ChangePropertyName);

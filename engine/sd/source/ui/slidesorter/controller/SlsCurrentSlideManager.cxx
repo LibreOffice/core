@@ -237,7 +237,7 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
             xSet->setPropertyValue( u"CurrentPage"_ustr, aPage );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // We have not been able to set the current page at the main view.
         // This is sad but still leaves us in a valid state.  Therefore,

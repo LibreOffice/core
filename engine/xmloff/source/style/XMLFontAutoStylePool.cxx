@@ -501,7 +501,7 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
                                 XMLBase64Export aBase64Exp(*this);
                                 aBase64Exp.exportOfficeBinaryDataElement(xInput);
                             }
-                            catch (const uno::Exception &)
+                            catch (const cpo::uno::Exception &)
                             {
                                 // opening the file failed, ignore
                             }

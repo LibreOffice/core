@@ -594,7 +594,7 @@ public final class AnyConverter_Test {
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc));
         try {
             AnyConverter.toObject(
-                new Type(com.sun.star.uno.Exception.class), any_exc);
+                new Type(cpo.uno.Exception.class), any_exc);
             fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         any_exc = new Any(com.sun.star.lang.IllegalArgumentException.class,
@@ -610,7 +610,7 @@ public final class AnyConverter_Test {
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc));
         try {
             AnyConverter.toObject(
-                new Type(com.sun.star.uno.Exception.class), any_exc);
+                new Type(cpo.uno.Exception.class), any_exc);
             fail();
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
 

@@ -231,7 +231,7 @@ public class utils {
             XPropertySet pthSettings = (XPropertySet) AnyConverter.toObject(
                 new Type(XPropertySet.class), settings);
             return (String) pthSettings.getPropertyValue(setting);
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -368,7 +368,7 @@ public class utils {
      * @param fileURL the file which existence should be checked
      * @return true if the file exists, else false
      */
-    public static boolean fileExists(XMultiServiceFactory msf, String fileURL) throws com.sun.star.uno.Exception {
+    public static boolean fileExists(XMultiServiceFactory msf, String fileURL) throws cpo.uno.Exception {
         Object fileacc = msf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
         XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 fileacc);
@@ -442,7 +442,7 @@ public class utils {
             simpleAccess.copy(oldF, newF);
         } catch (InteractiveAugmentedIOException e) {
             throw e;
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             throw new RuntimeException("Could not copy " + oldF + " to " + newF, ex);
         }
     }
@@ -552,7 +552,7 @@ public class utils {
         try {
             Object inst = xMSF.createInstance("com.sun.star.util.URLTransformer");
             xTrans = UnoRuntime.queryInterface(XURLTransformer.class, inst);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
         }
 
         if (xTrans != null)
@@ -561,7 +561,7 @@ public class utils {
         return rUrl[0];
     }
 
-    public static String getOfficeURL(XMultiServiceFactory msf) throws com.sun.star.uno.Exception {
+    public static String getOfficeURL(XMultiServiceFactory msf) throws cpo.uno.Exception {
         Object settings = msf.createInstance("com.sun.star.util.PathSettings");
         XPropertySet settingProps = UnoRuntime.queryInterface(XPropertySet.class, settings);
         String path = (String) settingProps.getPropertyValue("Module");
@@ -627,7 +627,7 @@ public class utils {
                     XToolkitExperimental.class,
                     xMSF.createInstance("com.sun.star.awt.Toolkit"));
             xToolkit.processEventsToIdle();
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             throw new RuntimeException(ex);
         }
     }

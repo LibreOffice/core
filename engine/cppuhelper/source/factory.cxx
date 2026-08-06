@@ -126,7 +126,7 @@ protected:
      * Create an instance specified by the factory. The one instance logic is implemented
      * in the createInstance and createInstanceWithArguments methods.
      * @return the newly created instance. Do not return a previous (one instance) instance.
-     * @throw css::uno::Exception
+     * @throw cpo::uno::Exception
      * @throw css::uno::RuntimeException
      */
     virtual Reference<XInterface >  createInstanceEveryTime(
@@ -386,7 +386,7 @@ public:
 
 
 private:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     Reference< XInterface > createModuleFactory();
 

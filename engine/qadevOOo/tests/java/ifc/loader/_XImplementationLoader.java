@@ -91,7 +91,7 @@ public class _XImplementationLoader extends MultiMethodTest {
             xReg.open(tmpDir + "XImpLoader_tmp.rdb", false, true) ;
 
             key = xReg.getRootKey() ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Can not create registry for writing") ;
             e.printStackTrace(log) ;
             tRes.tested("writeRegistryInfo()", false) ;
@@ -111,7 +111,7 @@ public class _XImplementationLoader extends MultiMethodTest {
         String[] keys ;
         try {
             keys = key.getKeyNames() ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Error retrieving key names from registry") ;
             tRes.tested("writeRegistryInfo()", false) ;
             return ;

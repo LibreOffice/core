@@ -95,7 +95,7 @@ public class ParcelBrowseNode extends PropertySet implements
                 creatable = false;
                 renamable = false;
             }
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             // TODO propagate potential errors
             LogUtils.DEBUG("Caught exception creating ParcelBrowseNode " + e);
             LogUtils.DEBUG(LogUtils.getTrace(e));

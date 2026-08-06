@@ -371,7 +371,7 @@ void OPropertySetHelper::setDependentFastPropertyValue(std::unique_lock<std::mut
     {
         throw; /* allowed to leave */
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // not allowed to leave this method
         WrappedTargetException aWrapped;
@@ -451,7 +451,7 @@ void OPropertySetHelper::setFastPropertyValueImpl(std::unique_lock<std::mutex>& 
     {
         throw; /* allowed to leave */
     }
-    catch (const css::uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         // not allowed to leave this method
         css::lang::WrappedTargetException aWrap;

@@ -310,7 +310,7 @@ static bool GetHelpAnchor_Impl( std::u16string_view _rURL, OUString& _rAnchor )
             SAL_WARN( "sfx.appl", "Property 'AnchorName' is missing" );
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -398,7 +398,7 @@ static OUString getCurrentModuleIdentifier_Impl()
         {
             SAL_INFO( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
@@ -473,7 +473,7 @@ OUString SfxHelp::GetHelpModuleName_Impl(std::u16string_view rHelpID)
                 if (pProp != std::cend(lProps))
                     pProp->Value >>= aFactoryShortName;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl()" );
             }
@@ -685,7 +685,7 @@ static bool impl_showOnlineHelp(const OUString& rURL, weld::Widget* pDialogParen
 #endif
         return true;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return false;
@@ -909,7 +909,7 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
 #endif
         return true;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     aTempFile.EnableKillingFile();

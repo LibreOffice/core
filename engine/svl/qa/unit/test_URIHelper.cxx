@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -136,7 +136,7 @@ cpo::uno::Any Content::execute(
         if (seg.getLength() > 0) {
             c = seg[0];
             if (c < '0' || c > '2') {
-                throw css::uno::Exception();
+                throw cpo::uno::Exception();
             }
         }
     }

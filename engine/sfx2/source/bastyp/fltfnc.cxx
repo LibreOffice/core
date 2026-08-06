@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -322,7 +322,7 @@ ErrCode  SfxFilterMatcher::GuessFilterIgnoringContent(
     {
         sTypeName = xDetection->queryTypeByURL( rMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -439,7 +439,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {}
 
     return ERRCODE_ABORT;
@@ -1100,7 +1100,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         SAL_WARN( "sfx.bastyp", "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached." );
     }

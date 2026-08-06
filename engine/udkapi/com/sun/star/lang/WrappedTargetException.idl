@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module lang {
     @see com::sun::star::container::XNameAccess
     @see com::sun::star::beans::XPropertySet
  */
-published exception WrappedTargetException: com::sun::star::uno::Exception
+published exception WrappedTargetException: cpo::uno::Exception
 {
     /** The exception is thrown by the target.
      */

@@ -38,7 +38,7 @@ module com { module sun { module star { module document {
     @see XInteractionFilterSelect
     @see com::sun::star::task::XInteractionAbort
 */
-published exception NoSuchFilterRequest : ::com::sun::star::uno::Exception
+published exception NoSuchFilterRequest : ::cpo::uno::Exception
 {
     /** transport URL which couldn't be detected
      */

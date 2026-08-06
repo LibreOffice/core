@@ -147,7 +147,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             //TODO/LATER: how to handle objects without persistence?!
                         }
                     }
-                    catch ( uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -181,7 +181,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             // Error handling?
         }

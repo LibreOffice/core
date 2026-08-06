@@ -27,7 +27,7 @@
 #include "jni_helper.h"
 #include "jniunoenvironmentdata.hxx"
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 namespace jni_uno
 {
@@ -95,14 +95,14 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     {
 #if OSL_DEBUG_LEVEL > 0
         // append java stack trace to Message member
-        static_cast< css::uno::Exception * >(
+        static_cast< cpo::uno::Exception * >(
             uno_exc->pData )->Message += jni.get_stack_trace();
 #endif
         SAL_INFO(
             "bridges",
             "exception occurred java->uno: ["
                 << OUString::unacquired(&uno_exc->pType->pTypeName) << "] "
-                << static_cast<css::uno::Exception const *>(
+                << static_cast<cpo::uno::Exception const *>(
                     uno_exc->pData)->Message);
         // signal exception
         jvalue java_exc;

@@ -65,7 +65,7 @@ void SAL_CALL DialogModelProvider::initialize(const cpo::uno::Sequence< cpo::uno
             m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {}
     //m_sURL = sURL;
 }

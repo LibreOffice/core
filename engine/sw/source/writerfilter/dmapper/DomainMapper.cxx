@@ -177,7 +177,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
             xModel->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to initialize RDF metadata");
     }
@@ -193,7 +193,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), cpo::uno::Any(u"Calibri"_ustr));
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), cpo::uno::Any(double(11)));
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to initialize default font");
         }
@@ -214,7 +214,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
             xImporter->importProperties(m_pImpl->m_xDocumentStorage,
                                         xModel->getDocumentProperties());
     }
-    catch( const uno::Exception& ) {}
+    catch( const cpo::uno::Exception& ) {}
 }
 
 void DomainMapper::setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument)
@@ -229,7 +229,7 @@ DomainMapper::~DomainMapper()
         // Remove temporary footnotes and endnotes
         m_pImpl->RemoveTemporaryFootOrEndnotes();
     }
-    catch( const uno::Exception& ) {}
+    catch( const cpo::uno::Exception& ) {}
 
     try
     {
@@ -290,7 +290,7 @@ DomainMapper::~DomainMapper()
             m_pImpl->GetTextDocument()->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to set critical document settings");
     }
@@ -1602,7 +1602,7 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                                                       cpo::uno::Any(nNumType));
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -1734,7 +1734,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         const cpo::uno::Any aFillValue = xFillPropertySet->getPropertyValue(rProp.Name);
                         xPS->setPropertyValue(rProp.Name, aFillValue);
                     }
-                    catch (uno::Exception&)
+                    catch (cpo::uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
                     }
@@ -2836,7 +2836,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_RESTART_AT_EACH_PAGE ), cpo::uno::Any(aSettings.bRestartAtEachPage) );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
 
@@ -3221,7 +3221,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                                                                     cpo::uno::Any( nNumType ));
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }

@@ -2831,7 +2831,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 

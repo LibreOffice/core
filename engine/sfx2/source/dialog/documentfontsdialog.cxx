@@ -80,7 +80,7 @@ void SfxDocumentFontsPage::Reset( const SfxItemSet* pSet )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -132,7 +132,7 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

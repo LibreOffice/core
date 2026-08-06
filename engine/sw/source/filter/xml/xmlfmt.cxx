@@ -337,7 +337,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         {
             xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, cpo::uno::Any(aSeq));
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("sw.xml", "exception when setting ParaStyleConditions");
         }

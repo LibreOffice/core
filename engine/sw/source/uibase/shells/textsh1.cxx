@@ -2356,7 +2356,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         xDictionary->setActive(true);
                     }
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                 }
             }

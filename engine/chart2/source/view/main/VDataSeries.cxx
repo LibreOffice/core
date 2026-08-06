@@ -210,7 +210,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
                     m_PropertyMap.insert(std::make_pair(aRole, aSequence));
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -253,7 +253,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
         if(m_nAxisIndex<0)
             m_nAxisIndex=0;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -622,7 +622,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Refe
 
         OSL_FAIL("no label placement supported");
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -642,7 +642,7 @@ awt::Point VDataSeries::getLabelPosition( awt::Point aTextShapePos, sal_Int32 nP
             aPos.Y = static_cast<sal_Int32>(aCustomLabelPosition.Secondary * m_aReferenceSize.Height) + aTextShapePos.Y;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "");
     }
@@ -662,7 +662,7 @@ bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
                 bCustom = true;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "");
     }
@@ -682,7 +682,7 @@ awt::Size VDataSeries::getLabelCustomSize(sal_Int32 nPointIndex) const
             aSize.Height = static_cast<sal_Int32>(aCustomLabelSize.Secondary * m_aReferenceSize.Height);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -832,7 +832,7 @@ static std::optional<Symbol> getSymbolPropertiesFromPropertySet( const uno::Refe
         else
             return std::nullopt;
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -922,7 +922,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
         uno::Reference< beans::XPropertyState > xPointState( getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
         return (xPointState->getPropertyState(u"Color"_ustr) != beans::PropertyState_DEFAULT_VALUE );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -970,7 +970,7 @@ static std::optional<DataPointLabel> getDataPointLabelFromPropertySet( const uno
         if( !(xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= *apLabel) )
             apLabel.reset();
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

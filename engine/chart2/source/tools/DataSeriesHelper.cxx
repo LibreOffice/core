@@ -219,7 +219,7 @@ void setStackModeAtSeries(
                 aAxisIndexSet.insert(nAxisIndex);
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -271,7 +271,7 @@ sal_Int32 getNumberFormatKeyFromAxis(
         if( xAxisProp.is())
             xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nResult;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -347,7 +347,7 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabel));
         }
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -370,7 +370,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, cpo::uno::Any());
         }
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

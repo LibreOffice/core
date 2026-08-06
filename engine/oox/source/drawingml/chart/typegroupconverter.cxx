@@ -618,7 +618,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         if( mrModel.mxSerLines.is() && !mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) && (isStacked() || isPercent()) )
             aDiaProp.setProperty( PROP_ConnectBars, true );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "TypeGroupConverter::convertFromModel - cannot add chart type" );
     }
@@ -802,7 +802,7 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
         Reference< XDataSeriesContainer > xSeriesCont( rxChartType, UNO_QUERY_THROW );
         xSeriesCont->addDataSeries( rxSeries );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "TypeGroupConverter::insertDataSeries - cannot add data series" );
     }

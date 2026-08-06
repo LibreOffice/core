@@ -892,7 +892,7 @@ TaskManager::setv( const OUString& aUnqPath,
             {
                 it->second.xS->setPropertyValue( values[i].Name,values[i].Value );
             }
-            catch (const uno::Exception&e)
+            catch (const cpo::uno::Exception&e)
             {
                 --propChanged; // unsuccessful setting
                 retRange[i] <<= e;

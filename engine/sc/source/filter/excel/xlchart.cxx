@@ -564,7 +564,7 @@ cpo::uno::Any XclChObjectTable::GetObject( const OUString& rObjName )
         {
             aObj = mxContainer->getByName( rObjName );
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             OSL_FAIL( "XclChObjectTable::GetObject - object not found" );
         }
@@ -595,7 +595,7 @@ OUString XclChObjectTable::InsertObject(const cpo::uno::Any& rObj)
         {
             mxContainer->insertByName( aObjName, rObj );
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             OSL_FAIL( "XclChObjectTable::InsertObject - cannot insert object" );
             aObjName.clear();

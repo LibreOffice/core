@@ -78,7 +78,7 @@ ScVbaUserForm::Show(  )
             uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
             xControlWindow->setPosSize(static_cast<sal_Int32>((aPosSize.Width - getWidth()) / 2.0), static_cast<sal_Int32>((aPosSize.Height - getHeight()) / 2.0), 0, 0, awt::PosSize::POS );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -98,7 +98,7 @@ ScVbaUserForm::Show(  )
             mbDispose = false;
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

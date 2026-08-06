@@ -1172,7 +1172,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
             } // switch (getINT32(xCol->getPropertyValue(sPropType)))
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         try
         {
@@ -1365,7 +1365,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 (*m_pFileStream).WriteUChar( dBaseIIIMemo );
         } // if (bCreateMemo)
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         try
         {
@@ -1956,7 +1956,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         {
             throw;
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             m_xColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE( xCol.is(), "ODbaseTable::UpdateBuffer column is null!" );

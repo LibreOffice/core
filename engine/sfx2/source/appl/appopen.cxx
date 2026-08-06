@@ -171,7 +171,7 @@ private:
     {
         eResult = ::comphelper::DocPasswordVerifierResult::WrongPassword;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // unknown error, report it as wrong password
         // TODO/LATER: we need an additional way to report unknown problems in this case
@@ -209,7 +209,7 @@ ErrCode CheckPasswd_Impl
                 try {
                     xStorageProps->getPropertyValue(u"HasEncryptedEntries"_ustr)
                         >>= bIsEncrypted;
-                } catch( uno::Exception& )
+                } catch( cpo::uno::Exception& )
                 {
                     // TODO/LATER:
                     // the storage either has no encrypted elements or it's just
@@ -267,7 +267,7 @@ ErrCode CheckPasswd_Impl
                                 // update the version list of the medium using the new password
                                 pFile->GetVersionList();
                             }
-                            catch( uno::Exception& )
+                            catch( cpo::uno::Exception& )
                             {
                                 // TODO/LATER: set the error code
                             }
@@ -372,7 +372,7 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
         if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, OUString() ) ) )
             throw uno::RuntimeException();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         xDoc->DoClose();
         xDoc.Clear();
@@ -1087,7 +1087,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             throw;
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
 

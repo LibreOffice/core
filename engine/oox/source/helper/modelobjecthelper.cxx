@@ -84,7 +84,7 @@ void ObjectContainer::createContainer() const
         mxContainer.set( mxModelFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
         mxModelFactory.clear();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );

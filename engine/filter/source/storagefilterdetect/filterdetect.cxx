@@ -165,7 +165,7 @@ OUString SAL_CALL StorageFilterDetect::detect(cpo::uno::Sequence<beans::Property
     {
         throw;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return aTypeName;

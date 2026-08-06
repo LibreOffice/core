@@ -98,7 +98,7 @@ SvxConfigPageHelper::GetGraphic(const css::uno::Reference<css::ui::XImageManager
                 result = aGraphicSeq[0];
             }
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             // will return empty XGraphic
         }
@@ -256,7 +256,7 @@ OUString SvxConfigPageHelper::GetUIModuleName(
     {
         throw;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 

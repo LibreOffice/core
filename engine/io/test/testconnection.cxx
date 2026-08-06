@@ -92,7 +92,7 @@ void MyThread::run()
     {
         m_rConnection = m_rAcceptor->accept( m_sConnectionDescription );
     }
-    catch ( const Exception &e)
+    catch ( const cpo::uno::Exception &e)
     {
         OString tmp= OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         printf( "Exception was thrown by acceptor thread: %s\n", tmp.getStr() );

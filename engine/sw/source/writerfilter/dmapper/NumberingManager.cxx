@@ -491,7 +491,7 @@ static rtl::Reference< SwXStyleFamily > lcl_getUnoNumberingStyles(
     {
         xStyles = xTextDoc->getSwStyleFamilies( )->GetNumberingStyles();
     }
-    catch ( const uno::Exception & )
+    catch ( const cpo::uno::Exception & )
     {
     }
 
@@ -654,7 +654,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         TOOLS_WARN_EXCEPTION( "writerfilter", "" );
         assert( !"Incorrect argument to UNO call" );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "" );
     }

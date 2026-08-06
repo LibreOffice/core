@@ -314,7 +314,7 @@ void LayoutManager::implts_reset( bool bAttached )
                         // Remove listener to old module ui configuration manager
                         xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >(this) );
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -326,7 +326,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     if ( xModuleCfgMgr.is() )
                         xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
 
@@ -357,7 +357,7 @@ void LayoutManager::implts_reset( bool bAttached )
                             // Remove listener to old ui configuration manager
                             xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >(this) );
                         }
-                        catch (const Exception&)
+                        catch (const cpo::uno::Exception&)
                         {
                         }
                     }
@@ -368,7 +368,7 @@ void LayoutManager::implts_reset( bool bAttached )
                         if ( xDocCfgMgr.is() )
                             xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -384,7 +384,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     xModuleCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >(this) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -396,7 +396,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     xDocCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >(this) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -700,7 +700,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
             xInsert->insertByName( aName, Any( aWindowState ));
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -1375,7 +1375,7 @@ void LayoutManager::implts_reparentChildWindows()
         {
             throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -2774,7 +2774,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
                     Reference<XUIConfiguration> xModuleCfgMgr(m_xModuleCfgMgr, UNO_QUERY);
                     xModuleCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(this));
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -2786,7 +2786,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
                     Reference<XUIConfiguration> xDocCfgMgr(m_xDocCfgMgr, UNO_QUERY);
                     xDocCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(this));
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

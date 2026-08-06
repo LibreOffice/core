@@ -147,7 +147,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
             xTemplateProps->getPropertyValue( CHART_UNONAME_CURVE_RESOLUTION ) >>= aRet.nCurveResolution;
             xTemplateProps->getPropertyValue( CHART_UNONAME_SPLINE_ORDER ) >>= aRet.nSplineOrder;
         }
-        catch( uno::Exception & ex )
+        catch( cpo::uno::Exception & ex )
         {
             //not all templates need to support CurveStyle, CurveResolution or SplineOrder
             ex.Context.is();//to have debug information without compilation warnings
@@ -157,7 +157,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
         {
             xTemplateProps->getPropertyValue( u"Geometry3D"_ustr ) >>= aRet.nGeometry3D;
         }
-        catch( uno::Exception& ex )
+        catch( cpo::uno::Exception& ex )
         {
             //not all templates need to support Geometry3D
             ex.Context.is();//to have debug information without compilation warnings
@@ -282,7 +282,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
                     xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , cpo::uno::Any(rParameter.nCurveResolution) );
                     xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , cpo::uno::Any(rParameter.nSplineOrder) );
                 }
-                catch( uno::Exception & ex )
+                catch( cpo::uno::Exception & ex )
                 {
                     //not all templates need to support CurveStyle, CurveResolution or SplineOrder
                     ex.Context.is();//to have debug information without compilation warnings
@@ -291,7 +291,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
                 {
                     xTemplateProps->setPropertyValue( u"Geometry3D"_ustr , cpo::uno::Any(rParameter.nGeometry3D) );
                 }
-                catch( uno::Exception & ex )
+                catch( cpo::uno::Exception & ex )
                 {
                     //not all templates need to support Geometry3D
                     ex.Context.is();//to have debug information without compilation warnings
@@ -301,7 +301,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
                 {
                     setTemplateProperties( xTemplateProps );
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }
@@ -345,7 +345,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
                 xDiagram->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(nSplitPos));
             }
         }
-        catch( uno::Exception & ex )
+        catch( cpo::uno::Exception & ex )
         {
             //not all templates need to support SplitPos
             ex.Context.is();//to have debug information without compilation warnings
@@ -867,7 +867,7 @@ void OfPieChartDialogController::fillExtraControls(
         {
             xTemplateProps->getPropertyValue( u"SplitPos"_ustr ) >>= nCompositeSize;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1580,7 +1580,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
         {
             xTemplateProps->getPropertyValue( u"NumberOfLines"_ustr ) >>= nNumLines;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

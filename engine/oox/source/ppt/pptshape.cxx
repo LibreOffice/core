@@ -225,7 +225,7 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -697,7 +697,7 @@ void PPTShape::addShape(
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

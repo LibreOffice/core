@@ -80,7 +80,7 @@ public class _XDispatchProvider extends MultiMethodTest {
             aParseURL[0].Complete = dispatchUrl;
             xParser.parseStrict(aParseURL);
             url = aParseURL[0];
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't parse URL");
         }
         XDispatch xDispatch = oObj.queryDispatch(url,
@@ -115,7 +115,7 @@ public class _XDispatchProvider extends MultiMethodTest {
             xParser.parseStrict(aParseURL);
             url1 = aParseURL[0];
             url2 = aParseURL[0];
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't parse URL");
         }
         DispatchDescriptor descs[] = new DispatchDescriptor[] {

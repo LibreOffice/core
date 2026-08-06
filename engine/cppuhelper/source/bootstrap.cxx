@@ -212,7 +212,7 @@ Reference< XComponentContext > bootstrap()
             }
         }
     }
-    catch ( Exception & e )
+    catch ( cpo::uno::Exception & e )
     {
         throw BootstrapException(
             "unexpected UNO exception caught: " + e.Message );

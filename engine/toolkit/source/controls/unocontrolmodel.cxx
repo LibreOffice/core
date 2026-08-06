@@ -999,7 +999,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     {
         setPropertyValuesImpl( aGuard, aProps, aValues );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }

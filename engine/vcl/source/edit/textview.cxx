@@ -881,7 +881,7 @@ void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboa
         if( xFlushableClipboard.is() )
             xFlushableClipboard->flushClipboard();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -904,7 +904,7 @@ void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipbo
             SolarMutexReleaser aReleaser;
             xDataObj = rxClipboard->getContents();
         }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
         {
         }
 

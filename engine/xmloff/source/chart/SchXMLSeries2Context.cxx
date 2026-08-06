@@ -501,7 +501,7 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
         xSink->setData( aSeq );
     }
-    catch( const uno::Exception &)
+    catch( const cpo::uno::Exception &)
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -525,7 +525,7 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
     }
 }
@@ -816,7 +816,7 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
             if( rSeriesDefaultsAndStyles.maRegressionCurvesDefault.hasValue() )
                 xSeries->setPropertyValue(u"RegressionCurves"_ustr,rSeriesDefaultsAndStyles.maRegressionCurvesDefault);
         }
-        catch( uno::Exception &  )
+        catch( cpo::uno::Exception &  )
         {
             //end of series reached
         }
@@ -957,7 +957,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                 lcl_insertErrorBarLSequencesToMap( rInOutLSequencesPerIndex, xSeriesProp );
 
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to series" );
         }
@@ -1022,7 +1022,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 xRegCurveCont->addRegressionCurve( xRegCurve );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to series" );
         }
@@ -1091,7 +1091,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                     }
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to series" );
             }
@@ -1174,7 +1174,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     if( bSwitchOffLinesForScatter )
                         xPointProp->setPropertyValue(u"Lines"_ustr,cpo::uno::Any(false));
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                 }
 
@@ -1285,7 +1285,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, cpo::uno::Any(aCustomlabelPosition));
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to data points" );
             }
@@ -1310,7 +1310,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::vector< DataRowPointStyl
 
             xSeries->setPropertyValue(u"Lines"_ustr,cpo::uno::Any(false));
         }
-        catch( uno::Exception &  )
+        catch( cpo::uno::Exception &  )
         {
             //end of series reached
         }

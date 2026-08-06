@@ -101,7 +101,7 @@ public final class OfficeConnection {
     /** Shut down the OOo instance.
     */
     public void tearDown()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         boolean cleanTermination = false;
         int code = 0;

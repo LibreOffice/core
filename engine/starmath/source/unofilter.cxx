@@ -81,7 +81,7 @@ bool MathTypeFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDes
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("starmath");
     }

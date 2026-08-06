@@ -74,7 +74,7 @@ namespace frm
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
         bool     convertFastPropertyValue        ( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue );
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         void     setFastPropertyValue_NoBroadcast_impl(
                      ::cppu::OPropertySetHelper & rBase,
                      void (::cppu::OPropertySetHelper::*pSet)( sal_Int32, cpo::uno::Any const&),

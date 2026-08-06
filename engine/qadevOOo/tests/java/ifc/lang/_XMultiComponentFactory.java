@@ -62,7 +62,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
                 oObj.createInstanceWithContext(
                     availableServiceNames[0], xContext);
             result = (component != null);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't create instance " + availableServiceNames[0]);
             result = false;
         }
@@ -85,7 +85,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
             component = (XInterface)oObj.createInstanceWithArgumentsAndContext(
                     availableServiceNames[0], new Object[0], xContext);
             result = (component != null);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't create instance " + availableServiceNames[0]);
             result = false;
         }

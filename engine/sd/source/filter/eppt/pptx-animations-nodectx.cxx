@@ -196,7 +196,7 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
                         mbValid = mbValid && xAudioStream.is();
                     }
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     SAL_WARN("sd", "NodeContext::initValid, invalid audio");
                     mbValid = false;

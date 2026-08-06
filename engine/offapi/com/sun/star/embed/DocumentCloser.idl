@@ -47,7 +47,7 @@ published service DocumentCloser : com::sun::star::lang::XComponent
     DocumentCloserCtor1( [in] com::sun::star::frame::XFrame xFrame )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::frame::DoubleInitializationException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 };
 

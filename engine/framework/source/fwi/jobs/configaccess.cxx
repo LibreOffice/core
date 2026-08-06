@@ -119,7 +119,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         if (eMode==E_READWRITE)
             m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("fwk", "open config");
     }

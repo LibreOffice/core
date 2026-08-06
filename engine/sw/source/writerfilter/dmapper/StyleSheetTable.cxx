@@ -322,7 +322,7 @@ void StyleSheetTable::SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>&
             {
                 xPropertyState->setPropertyToDefault(aPropertyNames[i]);
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_INFO_EXCEPTION("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed");
             }
@@ -901,7 +901,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying numbering style name to Paragraph styles");
     }
@@ -960,7 +960,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             xStyle->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), cpo::uno::Any(nOutlineLevel));
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying outlineLevel to Paragraph styles");
     }
@@ -1433,7 +1433,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             {
                                 xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                             }
-                            catch ( const uno::Exception& )
+                            catch ( const cpo::uno::Exception& )
                             {
                                 for ( const beans::PropertyValue& rValue : aSortedPropVals.getProperties() )
                                 {
@@ -1441,7 +1441,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                     {
                                        xStyle->setPropertyValue( rValue.Name, rValue.Value );
                                     }
-                                    catch ( const uno::Exception& )
+                                    catch ( const cpo::uno::Exception& )
                                     {
                                         SAL_WARN( "writerfilter", "StyleSheetTable::ApplyStyleSheets could not set property " << rValue.Name );
                                     }
@@ -1475,7 +1475,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             (void) rWrapped;
 #endif
                         }
-                        catch( const uno::Exception& )
+                        catch( const cpo::uno::Exception& )
                         {
                             OSL_FAIL( "Some style properties could not be set");
                         }
@@ -1541,7 +1541,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                 {
                     iter.second->setPropertyValue( u"FollowStyle"_ustr, cpo::uno::Any(iter.first) );
                 }
-                catch( uno::Exception & ) {}
+                catch( cpo::uno::Exception & ) {}
             }
 
             // Update the styles that were created before their linked styles.
@@ -1551,7 +1551,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                 {
                     rLinked.second->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(rLinked.first));
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION(
                         "writerfilter",
@@ -1572,7 +1572,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Styles could not be imported completely");
     }
@@ -2166,7 +2166,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 {
                     xDefault->setPropertyValue(rPropValue.Name, rPropValue.Value);
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION( "writerfilter", "setPropertyValue");
                 }
@@ -2187,14 +2187,14 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 {
                     m_xTextDefaults->setPropertyValue( rPropValue.Name, rPropValue.Value );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION( "writerfilter", "exception");
                 }
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -2225,7 +2225,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCh
             {
                 xStyle->setPropertyValueIgnoreUnknown( rCharProp.Name, rCharProp.Value );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
@@ -2233,7 +2233,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCh
         xCharStyles->insertStyleByName( sListLabel, xStyle );
         m_aListCharStylePropertyVector.emplace_back( sListLabel, std::vector(rCharProperties) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle");
     }

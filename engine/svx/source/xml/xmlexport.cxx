@@ -142,7 +142,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             }
         }
     }
-    catch(uno::Exception const&)
+    catch(cpo::uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
         bDocRet = false;
@@ -244,7 +244,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             bRet = true;
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }

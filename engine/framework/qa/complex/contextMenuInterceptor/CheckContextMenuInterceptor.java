@@ -195,7 +195,7 @@ public class CheckContextMenuInterceptor
         {
             toolkit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println("could not get Toolkit " + e.toString());
         }
@@ -295,7 +295,7 @@ public class CheckContextMenuInterceptor
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

@@ -74,7 +74,7 @@ public:
 
     // character properties have to be handled differently (via the XFormattedString elements)
     void getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, cpo::uno::Any& rValue );
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void setFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue );
 
     // ____ WrappedPropertySet ____

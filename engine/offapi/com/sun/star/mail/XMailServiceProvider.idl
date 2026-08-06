@@ -37,7 +37,7 @@ interface XMailServiceProvider: ::com::sun::star::uno::XInterface {
         @see com::sun::star::mail::MailServiceType
     */
     XMailService create([in] MailServiceType aType)
-        raises(com::sun::star::mail::NoMailServiceProviderException, com::sun::star::uno::Exception);
+        raises(com::sun::star::mail::NoMailServiceProviderException, cpo::uno::Exception);
 };
 
 }; }; }; };

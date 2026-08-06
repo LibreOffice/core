@@ -115,7 +115,7 @@ static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFra
         {
             throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -728,7 +728,7 @@ void ToolBarManager::UpdateControllers()
                 if ( xUpdatable.is() )
                     xUpdatable->update();
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -751,7 +751,7 @@ void ToolBarManager::UpdateController( const css::uno::Reference< css::frame::XT
                     xUpdatable->update();
             }
          }
-         catch (const Exception&)
+         catch (const cpo::uno::Exception&)
          {
          }
 
@@ -786,7 +786,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
             m_xDocImageManager->removeConfigurationListener(
                 Reference< XUIConfigurationListener >(this) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -798,7 +798,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
             m_xModuleImageManager->removeConfigurationListener(
                 Reference< XUIConfigurationListener >(this) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -839,7 +839,7 @@ void SAL_CALL ToolBarManager::dispose()
                 m_xDocImageManager->removeConfigurationListener(
                     Reference< XUIConfigurationListener >(this) );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -851,7 +851,7 @@ void SAL_CALL ToolBarManager::dispose()
                 m_xModuleImageManager->removeConfigurationListener(
                     Reference< XUIConfigurationListener >(this) );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -873,7 +873,7 @@ void SAL_CALL ToolBarManager::dispose()
             {
                 m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(this) );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -1019,7 +1019,7 @@ void ToolBarManager::RemoveControllers()
                 {
                     xComponent->dispose();
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -1212,7 +1212,7 @@ void ToolBarManager::CreateControllers()
             {
                 throw;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -1277,7 +1277,7 @@ void ToolBarManager::InitImageManager()
     {
         m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1351,7 +1351,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         if ( !aUIName.isEmpty() )
             m_pImpl->SetName( aUIName );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -1701,7 +1701,7 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
         {
             throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -2012,7 +2012,7 @@ void ToolBarManager::ToggleButton( const OUString& rResourceName, std::u16string
                             xUICfgMgr->store();
                     }
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
                 break;
@@ -2331,7 +2331,7 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
             pExecuteInfo->xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

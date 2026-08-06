@@ -172,7 +172,7 @@ public class XMLStylesImporter extends TestCase {
             for (int i = 0; i < names.length; i++) {
                 log.println("  " + names[i]) ;
             }
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
         }
         final XNameAccess stylesF = styles ;

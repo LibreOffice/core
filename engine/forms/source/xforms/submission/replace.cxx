@@ -100,7 +100,7 @@ CSubmission::SubmissionResult CSubmission::replace(std::u16string_view aReplace,
             // do nothing \o/
             return CSubmission::SUCCESS;
         }
-    } catch (const Exception&) {
+    } catch (const cpo::uno::Exception&) {
         TOOLS_WARN_EXCEPTION( "forms.xforms", "Exception during replace");
     }
     return CSubmission::UNKNOWN_ERROR;

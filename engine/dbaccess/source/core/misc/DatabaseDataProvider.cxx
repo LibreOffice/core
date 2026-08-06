@@ -167,7 +167,7 @@ uno::Reference< chart2::data::XDataSource > DatabaseDataProvider::createDataSour
             if ( m_xInternal->hasDataByRangeRepresentation( OUString::number( 0 ) ) )
                 m_xInternal->deleteSequence(0);
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
@@ -188,7 +188,7 @@ uno::Reference< chart2::data::XDataSource > DatabaseDataProvider::createDataSour
                 impl_fillInternalDataProvider_throw(bHasCategories,aColumnNames);
                 bRet = true;
             }
-            catch(const uno::Exception& /*e*/)
+            catch(const cpo::uno::Exception& /*e*/)
             {
             }
         }

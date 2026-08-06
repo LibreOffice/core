@@ -438,7 +438,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception & e) {
+    catch (const cpo::uno::Exception & e) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             ("[context=\"" + context + "\"] caught unexpected "
@@ -483,7 +483,7 @@ void PackageManagerImpl::disposing()
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             u"caught unexpected exception while disposing..."_ustr,
@@ -828,7 +828,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         logIntern( Any(exc) );
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -927,7 +927,7 @@ void PackageManagerImpl::removePackage(
         logIntern( Any(exc) );
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1062,7 +1062,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         logIntern( Any(exc) );
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1104,7 +1104,7 @@ PackageManagerImpl::getDeployedPackages(
         logIntern( Any(exc) );
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1163,7 +1163,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
         logIntern( Any(exc) );
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1257,7 +1257,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 bModified = true;
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             TOOLS_WARN_EXCEPTION("desktop.deployment", "");
         }
@@ -1394,7 +1394,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 }
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // Looks like exceptions being caught here is not an uncommon case.
             TOOLS_WARN_EXCEPTION("desktop.deployment", "");

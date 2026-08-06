@@ -63,7 +63,7 @@ namespace xmloff
         {
             m_pImpl->examineForms(_rxDrawPage);
         }
-        catch(Exception&)
+        catch(cpo::uno::Exception&)
         {
             OSL_FAIL("OFormLayerXMLExport::examine: could not examine the draw page!");
         }

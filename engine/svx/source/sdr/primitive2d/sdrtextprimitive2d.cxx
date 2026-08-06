@@ -51,7 +51,7 @@ namespace
                 const cpo::uno::Any aNumber(xSet->getPropertyValue(u"Number"_ustr));
                 aNumber >>= nRetval;
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 OSL_ASSERT(false);
             }

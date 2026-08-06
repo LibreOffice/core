@@ -922,7 +922,7 @@ bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                 return false;
         }
     }
-    catch (const Exception & aExc)
+    catch (const cpo::uno::Exception & aExc)
     {
         OSL_ENSURE( aExc.Message.startsWith("dum dum dum I dance around the circle..."),
                      "### unexpected exception content!" );
@@ -1037,7 +1037,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         fprintf( stderr, "> exception occurred: " );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );

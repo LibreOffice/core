@@ -62,20 +62,20 @@ module protocols { module urp {
     };
 
     interface TestXInterface : com::sun::star::uno::XInterface {
-        void method1([in] com::sun::star::uno::XInterface itf) raises( com::sun::star::uno::Exception );
-        void method2([out] com::sun::star::uno::XInterface itf) raises( com::sun::star::uno::Exception );
-        void method3([inout] com::sun::star::uno::XInterface itf) raises( com::sun::star::uno::Exception );
-        com::sun::star::uno::XInterface method4() raises( com::sun::star::uno::Exception );
+        void method1([in] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
+        void method2([out] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
+        void method3([inout] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
+        com::sun::star::uno::XInterface method4() raises( cpo::uno::Exception );
 
-        any returnAny() raises( com::sun::star::uno::Exception );
+        any returnAny() raises( cpo::uno::Exception );
 
-        void  method() raises( com::sun::star::uno::Exception );
-        void  methodWithInParameter([in] string text) raises( com::sun::star::uno::Exception );
-        void  methodWithOutParameter([out] string text) raises( com::sun::star::uno::Exception );
-        void  methodWithInOutParameter([inout] string text) raises( com::sun::star::uno::Exception );
-        string  methodWithResult() raises( com::sun::star::uno::Exception );
+        void  method() raises( cpo::uno::Exception );
+        void  methodWithInParameter([in] string text) raises( cpo::uno::Exception );
+        void  methodWithOutParameter([out] string text) raises( cpo::uno::Exception );
+        void  methodWithInOutParameter([inout] string text) raises( cpo::uno::Exception );
+        string  methodWithResult() raises( cpo::uno::Exception );
 
-        string MethodWithIn_Out_InOut_Paramters_and_result([in] string text, [out] string outtext, [inout] string inouttext) raises( com::sun::star::uno::Exception );
+        string MethodWithIn_Out_InOut_Paramters_and_result([in] string text, [out] string outtext, [inout] string inouttext) raises( cpo::uno::Exception );
     };
 
     struct TestInterfaceStruct

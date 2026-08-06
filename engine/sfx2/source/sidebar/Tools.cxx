@@ -101,7 +101,7 @@ OUString Tools::GetModuleName (
         const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xComponentContext );
         return xModuleManager->identify(rxController);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // Ignored.
     }

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module lang {
 
     @see  XConnectionPoint
  */
-published exception InvalidListenerException: com::sun::star::uno::Exception
+published exception InvalidListenerException: cpo::uno::Exception
 {
 };
 

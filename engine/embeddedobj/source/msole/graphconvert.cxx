@@ -83,7 +83,7 @@ bool ConvertBufferToFormat( void* pBuf,
                 return true;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {}
     }
 
@@ -118,7 +118,7 @@ void MainThreadNotificationRequest::notify (const cpo::uno::Any& )
                     OleEmbeddedObject::OnIconChanged_Impl();
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // ignore all the errors
         }

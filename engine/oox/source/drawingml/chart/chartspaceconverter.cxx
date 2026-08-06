@@ -43,7 +43,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
@@ -205,7 +205,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
             aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -305,7 +305,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         getFilter().importFragment( new ChartDrawingFragment(
             getFilter(), mrModel.maDrawingPath, xShapes, aChartSize, aShapesOffset, bOleSupport ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

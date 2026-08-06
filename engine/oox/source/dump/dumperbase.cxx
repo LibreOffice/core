@@ -98,7 +98,7 @@ Reference< XInputStream > InputOutputHelper::openInputStream(
         Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
         xInStrm = xFileAccess->openFileRead( rFileName );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xInStrm;
@@ -115,7 +115,7 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
         Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
         xOutStrm = xFileAccess->openFileWrite( rFileName );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xOutStrm;
@@ -132,7 +132,7 @@ Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
         xTextOutStrm->setOutputStream( rxOutStrm );
         xTextOutStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xTextOutStrm;
@@ -1797,7 +1797,7 @@ void StorageObjectBase::implDump()
         Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(getContext()));
         xFileAccess->kill( aSysOutPath );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

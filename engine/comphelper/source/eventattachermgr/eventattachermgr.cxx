@@ -429,7 +429,7 @@ void ImplEventAttacherManager::registerScriptEvent
                         rObj.aHelper, ScriptEvent.ListenerType,
                         ScriptEvent.AddListenerParam, ScriptEvent.EventMethod ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -608,7 +608,7 @@ void ImplEventAttacherManager::attach(std::unique_lock<std::mutex>& l, sal_Int32
         rCurObj.aAttachedListenerSeq = comphelper::sequenceToContainer<std::vector<Reference< XEventListener >>>(
             xAttacher->attachMultipleEventListeners(rCurObj.xTarget, aEvents));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // Fail gracefully.
     }
@@ -642,7 +642,7 @@ void ImplEventAttacherManager::detach(std::unique_lock<std::mutex>&, sal_Int32 n
                 xAttacher->removeListener( aObjIt->xTarget, rEvt.ListenerType,
                                        rEvt.AddListenerParam, aObjIt->aAttachedListenerSeq[i] );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

@@ -24,7 +24,7 @@
 /** signals that the value of the key is invalid or does not have the
     appropriate key type.
  */
-published exception InvalidValueException: com::sun::star::uno::Exception
+published exception InvalidValueException: cpo::uno::Exception
 {
 };
 

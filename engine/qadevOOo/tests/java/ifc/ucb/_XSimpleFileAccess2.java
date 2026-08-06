@@ -58,7 +58,7 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'writeFile()'");
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);

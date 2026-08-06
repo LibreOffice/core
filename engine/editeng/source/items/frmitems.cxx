@@ -3364,7 +3364,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
             cpo::uno::Sequence < cpo::uno::Any > aSeq;
             cpo::uno::Any aNew;
             try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
-            catch (const uno::Exception&) {}
+            catch (const cpo::uno::Exception&) {}
 
             aNew >>= aSeq;
             if (aSeq.getLength() >= 4 && aSeq.getLength() <= 6)
@@ -4032,7 +4032,7 @@ bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 cpo::uno::Any aNew;
                 cpo::uno::Sequence < cpo::uno::Any > aSeq;
                 try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
-                catch (const uno::Exception&) {}
+                catch (const cpo::uno::Exception&) {}
 
                 if ((aNew >>= aSeq) &&
                     aSeq.getLength() >= 4  && aSeq.getLength() <= 6)

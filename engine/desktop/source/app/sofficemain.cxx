@@ -112,7 +112,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
     return SVMain();
 #if defined ANDROID
-    } catch (const css::uno::Exception &e) {
+    } catch (const cpo::uno::Exception &e) {
         LOGI("Unhandled UNO exception: '%s'",
              OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         throw; // to get exception type printed

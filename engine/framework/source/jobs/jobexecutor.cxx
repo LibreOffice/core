@@ -246,7 +246,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     {
         aModuleIdentifier = css::frame::ModuleManager::create( m_xContext )->identify( aEvent.Source );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     /* SAFE */

@@ -114,7 +114,7 @@ void ModuleController::InstantiateStartupServices()
         // at the configuration controller.
         sd::framework::PresentationFactory::install(mxController);
     }
-    catch (Exception&)
+    catch (cpo::uno::Exception&)
     {
         SAL_WARN("sd.fwk", "ERROR in ModuleController::InstantiateStartupServices");
     }

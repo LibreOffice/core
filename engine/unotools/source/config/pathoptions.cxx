@@ -273,7 +273,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
     {
         m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ePath], a );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("unotools.config", "SetPath");
     }

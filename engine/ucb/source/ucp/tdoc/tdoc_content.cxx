@@ -1251,7 +1251,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             }
             else
             {
-                aRetRange[ n ] <<= uno::Exception(
+                aRetRange[ n ] <<= cpo::uno::Exception(
                                 u"No property set for storing the value!"_ustr,
                                 getXWeak() );
             }
@@ -1282,7 +1282,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             aOldTitle.clear();
 
             // Set error .
-            aRetRange[ nTitlePos ] <<= uno::Exception(
+            aRetRange[ nTitlePos ] <<= cpo::uno::Exception(
                     u"Exchange failed!"_ustr,
                     getXWeak() );
         }

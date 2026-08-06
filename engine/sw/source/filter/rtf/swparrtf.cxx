@@ -98,7 +98,7 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     {
         xFilter->filter(aDescriptor);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("sw.rtf", "SwRTFReader::Read()");
         ret = ERR_SWG_READ_ERROR;

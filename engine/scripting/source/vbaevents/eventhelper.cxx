@@ -359,7 +359,7 @@ ScriptEventHelper::~ScriptEventHelper()
                 xComp->dispose();
         }
         // destructor can't throw
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -866,7 +866,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                         ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
                     }
                 }
-                catch ( const uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("scripting", "event script raised" );
                 }

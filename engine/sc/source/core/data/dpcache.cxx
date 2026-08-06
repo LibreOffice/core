@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 
 ScDPCache::GroupItems::GroupItems() : mnGroupType(0) {}
 
@@ -699,7 +699,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         PostInit();
         return true;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }

@@ -40,7 +40,7 @@ namespace dbaccess
         /** saves the modified sub components of the given controller(s) to the "recovery" sub storage of the document
             storage.
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
                 in case of an error.
         */
         void saveModifiedSubComponents(
@@ -52,7 +52,7 @@ namespace dbaccess
 
             If the given document storage does not contain a recovery folder, the method silently returns.
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
                 in case of an error.
         */
         void recoverSubDocuments(

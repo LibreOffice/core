@@ -194,7 +194,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
                 if (xDispatcher != null) {
                     xDispatcher.dispatch(aURL, null);
                 }
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Couldn't open dialog");
             }
         }

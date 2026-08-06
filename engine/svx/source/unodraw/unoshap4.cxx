@@ -102,7 +102,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
                     aTmp = OutputDevice::LogicToLogic(aTmp, MapMode(MapUnit::Map100thMM), MapMode(aObjUnit));
                     xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     OSL_FAIL( "Couldn't set the visual area for the object!" );
                 }

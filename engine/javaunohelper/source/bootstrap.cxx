@@ -164,9 +164,9 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             jni_env->ThrowNew( c, cstr.getStr() );
         }
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
-        jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
+        jclass c = jni_env->FindClass( "cpo/uno/Exception" );
         if (nullptr != c)
         {
             SAL_WARN("javaunohelper",  "forwarding Exception: " << exc );

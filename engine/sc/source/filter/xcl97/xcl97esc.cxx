@@ -52,7 +52,7 @@
 #include <docsh.hxx>
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -491,7 +491,7 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

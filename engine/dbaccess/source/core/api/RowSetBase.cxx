@@ -1178,7 +1178,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
         {
             dataColumn->fireValueChange(_rOldRow.is() ? (*_rOldRow)[i+1] : ::connectivity::ORowSetValue());
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("dbaccess", "firePropertyChange: Exception on column " << i);
         }

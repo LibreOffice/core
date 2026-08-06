@@ -131,7 +131,7 @@ int ListGlyphs::Main()
 
         std::exit(0);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
         return 1;

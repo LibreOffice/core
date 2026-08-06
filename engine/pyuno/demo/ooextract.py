@@ -24,7 +24,7 @@ import uno
 from unohelper import Base,systemPathToFileUrl
 from os import getcwd
 from com.sun.star.beans import PropertyValue
-from com.sun.star.uno import Exception as UnoException
+from cpo.uno import Exception as UnoException
 from com.sun.star.io import IOException, XOutputStream
 
 class OutputStream(Base, XOutputStream):

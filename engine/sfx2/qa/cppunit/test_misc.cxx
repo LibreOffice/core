@@ -625,7 +625,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
                                                       { { "Overwrite", cpo::uno::Any(false) } }));
         CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

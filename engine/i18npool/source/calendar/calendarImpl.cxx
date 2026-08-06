@@ -108,7 +108,7 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
     {
         xCalendar->loadCalendar(uniqueID, rLocale);
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {   // restore previous calendar and re-throw
         xCalendar = std::move(xOldCalendar);
         throw;

@@ -174,7 +174,7 @@ void GalApp::Init()
         // For backwards compatibility, in case some code still uses plain
         // createInstance w/o args directly to obtain an instance:
         css::ucb::UniversalContentBroker::create(xComponentContext);
-    } catch (const uno::Exception &e) {
+    } catch (const cpo::uno::Exception &e) {
         fprintf( stderr, "Bootstrap exception '%s'\n",
                  OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         exit( 1 );
@@ -292,7 +292,7 @@ int GalApp::Main()
 
         createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "Fatal");
         return EXIT_FAILURE;

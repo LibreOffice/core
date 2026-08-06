@@ -1855,7 +1855,7 @@ void VCartesianAxis::updatePositions()
                 {
                     xShape2DText->SvxShape::setPropertyValue( u"Transformation"_ustr, aATransformation );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("chart2", "" );
                 }

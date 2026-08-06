@@ -46,7 +46,7 @@ void XDocumentIndex::testUpdate()
             css::uno::UNO_QUERY_THROW);
         xText->insertTextContent(xTextRange, xTextContentMark, true);
     }
-    catch (css::uno::Exception /*exception*/)
+    catch (cpo::uno::Exception /*exception*/)
     {
         bOK = false;
     }

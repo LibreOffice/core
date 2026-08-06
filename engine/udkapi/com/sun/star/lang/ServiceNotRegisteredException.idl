@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module lang {
     <p>Applications should throw instances of this class to indicate
     that a needed service is not registered.  </p>
  */
-published exception ServiceNotRegisteredException: com::sun::star::uno::Exception
+published exception ServiceNotRegisteredException: cpo::uno::Exception
 {
 };
 

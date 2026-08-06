@@ -75,7 +75,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
                     if (xModif)
                         xModif->setModified( true );
                 }
-                catch ( uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
 
@@ -1792,7 +1792,7 @@ SwChartDataSequence::SwChartDataSequence(
         // TODO: shouldn't there be a call to release() here?
         throw;
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     release();
@@ -1838,7 +1838,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         // TODO: shouldn't there be a call to release() here?
         throw;
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
     }
     release();

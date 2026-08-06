@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module frame {
  *  module could not be classified or does not have
  *  a valid configuration.
  */
-exception UnknownModuleException : ::com::sun::star::uno::Exception
+exception UnknownModuleException : ::cpo::uno::Exception
 {
 };
 

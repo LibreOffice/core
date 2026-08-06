@@ -540,7 +540,7 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEv
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -565,7 +565,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
             {
                 aActivationListeners[i - 1]->activeSpreadsheetChanged( aEvent );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 aActivationListeners.erase(aActivationListeners.begin() + (i - 1));
             }
@@ -1214,7 +1214,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                 if (!aMouseClickHandlers[i - 1]->mousePressed(aMouseEvent))
                     bReturn = true;
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 aMouseClickHandlers.erase(aMouseClickHandlers.begin() + (i - 1));
             }
@@ -1267,7 +1267,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         {
             bReturn = true;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -1289,7 +1289,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             cpo::uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         mbLeftMousePressed = false;
@@ -1321,7 +1321,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                     if (!aMouseClickHandlers[i - 1]->mouseReleased( aMouseEvent ))
                         bReturn = true;
                 }
-                catch ( uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                     aMouseClickHandlers.erase(aMouseClickHandlers.begin() + (i - 1));
                 }
@@ -1343,7 +1343,7 @@ void ScTabViewObj::EndMouseListening()
         {
             rListener->disposing(aEvent);
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -1360,7 +1360,7 @@ void ScTabViewObj::EndActivationListening()
         {
             rListener->disposing(aEvent);
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -1734,7 +1734,7 @@ void ScTabViewObj::SelectionChanged()
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

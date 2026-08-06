@@ -548,7 +548,7 @@ public class _XRowUpdate extends MultiMethodTest {
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Unexpected exception:") ;
             e.printStackTrace(log) ;
             result = false ;
@@ -585,7 +585,7 @@ public class _XRowUpdate extends MultiMethodTest {
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Unexpected exception:") ;
             e.printStackTrace(log) ;
             result = false ;
@@ -618,7 +618,7 @@ public class _XRowUpdate extends MultiMethodTest {
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Unexpected exception:") ;
             e.printStackTrace(log) ;
             result = false ;
@@ -651,7 +651,7 @@ public class _XRowUpdate extends MultiMethodTest {
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Unexpected exception:") ;
             e.printStackTrace(log) ;
             result = false ;

@@ -55,7 +55,7 @@ public class TestComponentMain
                 o = ctx.getServiceManager().createInstanceWithContext(
                     "com.sun.star.comp.bridge.TestComponent$_TestObject" , ctx );
             }
-            catch( com.sun.star.uno.Exception e )
+            catch( cpo.uno.Exception e )
             {
                 System.out.println( "error during instantiation" + e );
             }
@@ -63,7 +63,7 @@ public class TestComponentMain
         }
     }
 
-    public static void main(String args[]) throws Exception, com.sun.star.uno.Exception {
+    public static void main(String args[]) throws Exception, cpo.uno.Exception {
         if(args.length != 2)    {
             System.err.println("usage : com.sun.star.comp.bridge.TestComponentMain uno:connection;protocol;objectName singleaccept");
             System.exit(-1);

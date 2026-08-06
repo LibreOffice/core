@@ -91,7 +91,7 @@ public class ConfigHelper
     public ConfigHelper(XMultiServiceFactory xSMGR       ,
                         String               sConfigPath ,
                         boolean              bReadOnly   )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XMultiServiceFactory xConfigRoot = UnoRuntime.queryInterface(
           XMultiServiceFactory.class,
@@ -117,7 +117,7 @@ public class ConfigHelper
                             aConfig);
 
         if (m_xConfig == null)
-            throw new com.sun.star.uno.Exception("Could not open configuration \""+sConfigPath+"\"");
+            throw new cpo.uno.Exception("Could not open configuration \""+sConfigPath+"\"");
     }
 
 
@@ -135,7 +135,7 @@ public class ConfigHelper
                                         m_xConfig);
             xBatch.commitChanges();
         }
-        catch(com.sun.star.uno.Exception ex)
+        catch(cpo.uno.Exception ex)
         {}
     }
 
@@ -155,11 +155,11 @@ public class ConfigHelper
      * @return The [inserted] group of the set
      * @param groupName The name of the group which should be returned
      * @param setName The name of the set
-     * @throws com.sun.star.uno.Exception throws
-     *         <CODE>com.sun.star.uno.Exception</CODE> on any error.
+     * @throws cpo.uno.Exception throws
+     *         <CODE>cpo.uno.Exception</CODE> on any error.
      */
     public XNameReplace getOrInsertGroup(String setName, String groupName)
-        throws  com.sun.star.uno.Exception
+        throws  cpo.uno.Exception
 
     {
         XNameContainer xSetCont = this.getSet(setName);
@@ -193,13 +193,13 @@ public class ConfigHelper
      * @param groupName the name of the <CODE>group</CODE> which property should be changed
      * @param propName the name of the property which should be changed
      * @param propValue the value the property should get
-     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exception</CODE> on any error.
+     * @throws cpo.uno.Exception throws <CODE>cpo.uno.Exception</CODE> on any error.
      */
     public void updateGroupProperty(String setName,
                                     String groupName,
                                     String propName,
                                     Object propValue)
-        throws  com.sun.star.uno.Exception
+        throws  cpo.uno.Exception
     {
         XNameContainer xSetCont = this.getSet(setName);
 
@@ -209,14 +209,14 @@ public class ConfigHelper
                                     XPropertySet.class,
                                     xSetCont.getByName(groupName));
         } catch (com.sun.star.container.NoSuchElementException ex){
-            throw new com.sun.star.uno.Exception(ex,
+            throw new cpo.uno.Exception(ex,
                 "could not get group '" + groupName +
                "' from set '"+ setName +"'");
         }
         try{
             xProp.setPropertyValue(propName, propValue);
-        } catch (com.sun.star.uno.Exception ex) {
-             throw new com.sun.star.uno.Exception(ex,
+        } catch (cpo.uno.Exception ex) {
+             throw new cpo.uno.Exception(ex,
                 "could not set property '" + propName +
                 "' from group '"+ groupName +
                 "' from set '"+ setName +"'");
@@ -232,7 +232,7 @@ public class ConfigHelper
      *                  [should] contain the property
      * @param propName The name of the property.
      * @param propValue The value of the property.
-     * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exception</CODE> on any error.
+     * @throws cpo.uno.Exception throws <CODE>cpo.uno.Exception</CODE> on any error.
      */
     public void insertOrUpdateExtensibleGroupProperty(
                     String setName,
@@ -240,7 +240,7 @@ public class ConfigHelper
                     String extGroup,
                     String propName,
                     Object propValue)
-        throws  com.sun.star.uno.Exception
+        throws  cpo.uno.Exception
     {
         XNameContainer xSetCont = this.getSet(setName);
 
@@ -252,7 +252,7 @@ public class ConfigHelper
             xGroupAccess = UnoRuntime.queryInterface(
                             XNameReplace.class,xGroup);
         } catch(com.sun.star.container.NoSuchElementException ex) {
-             throw new com.sun.star.uno.Exception(ex,
+             throw new cpo.uno.Exception(ex,
                 "could not get group '" + group +
                 "' from set '"+ setName +"'");
         }
@@ -262,7 +262,7 @@ public class ConfigHelper
             xExtGroupCont = UnoRuntime.queryInterface(
                             XNameContainer.class,xGroup);
         } catch(com.sun.star.container.NoSuchElementException ex) {
-             throw new com.sun.star.uno.Exception(ex,
+             throw new cpo.uno.Exception(ex,
                 "could not get extensible group '"+extGroup+
                 "' from group '"+ group +
                 "' from set '"+ setName +"'");
@@ -282,18 +282,18 @@ public class ConfigHelper
      * Returns a <CODE>XNameContainer</CODE> of the <CODE>Set</CODE>
      * of the <CODE>Configuration</CODE>
      * @param setName the name of the Set which should be returned
-     * @throws com.sun.star.uno.Exception on any error
+     * @throws cpo.uno.Exception on any error
      * @return A XNameContainer of the Set
      */
     private XNameContainer getSet(String setName)
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XNameReplace xCont = UnoRuntime.queryInterface(XNameReplace.class, m_xConfig);
 
         Object oSet = xCont.getByName(setName);
 
         if (oSet == null)
-             throw new com.sun.star.uno.Exception(
+             throw new cpo.uno.Exception(
                 "could not get set '" + setName + ": null");
 
         return UnoRuntime.queryInterface(

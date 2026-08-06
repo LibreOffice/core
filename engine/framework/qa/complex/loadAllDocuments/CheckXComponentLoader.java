@@ -516,7 +516,7 @@ public class CheckXComponentLoader
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

@@ -77,7 +77,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
         // mxServiceInfo is unused,
         // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -115,7 +115,7 @@ ScVbaFormat< Ifc... >::setVerticalAlignment( const cpo::uno::Any& _oAlignment)
         }
         mxPropertySet->setPropertyValue( SC_UNONAME_CELLVJUS, aVal );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -149,7 +149,7 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  )
             }
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -187,7 +187,7 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const cpo::uno::Any& HorizontalAl
         if ( aVal.hasValue() )
             mxPropertySet->setPropertyValue( SC_UNONAME_CELLHJUS, aVal );
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -228,7 +228,7 @@ ScVbaFormat< Ifc... >::getHorizontalAlignment(  )
             }
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -267,7 +267,7 @@ ScVbaFormat< Ifc... >::setOrientation( const cpo::uno::Any& _aOrientation )
             mxPropertySet->setPropertyValue( SC_UNONAME_CELLORI, aVal );
 
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -304,7 +304,7 @@ ScVbaFormat< Ifc... >::getOrientation(  )
             }
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -319,7 +319,7 @@ ScVbaFormat< Ifc... >::setWrapText( const cpo::uno::Any& _aWrapText )
     {
         mxPropertySet->setPropertyValue( SC_UNONAME_WRAP, _aWrapText);
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -338,7 +338,7 @@ ScVbaFormat< Ifc... >::getWrapText(  )
             aWrap = mxPropertySet->getPropertyValue(aPropName);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -397,7 +397,7 @@ ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -428,7 +428,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const cpo::uno::Any& _oLocalFormatS
             nNewFormat = xNumberFormats->addNew(sLocalFormatString, aRangeLocale);
         mxPropertySet->setPropertyValue(sNumFormat, cpo::uno::Any( nNewFormat ));
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -458,7 +458,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const cpo::uno::Any& _oFormatString )
         sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, aRangeLocale);
         mxPropertySet->setPropertyValue( SC_UNO_DP_NUMBERFO, cpo::uno::Any( nNewFormat));
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -483,7 +483,7 @@ ScVbaFormat< Ifc... >::setIndentLevel( const cpo::uno::Any& _aLevel )
             mxPropertySet->setPropertyValue( sHoriJust, cpo::uno::Any( table::CellHoriJustify_LEFT) ) ;
         mxPropertySet->setPropertyValue( SC_UNONAME_PINDENT, cpo::uno::Any( sal_Int16(nLevel * 352.8) ) );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -506,7 +506,7 @@ ScVbaFormat< Ifc... >::getIndentLevel(  )
                 NRetIndentLevel <<= sal_Int32(0);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -528,7 +528,7 @@ ScVbaFormat< Ifc... >::setLocked( const cpo::uno::Any& _aLocked )
         aCellProtection.IsLocked = bIsLocked;
         mxPropertySet->setPropertyValue(sCellProt, cpo::uno::Any( aCellProtection ) );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -548,7 +548,7 @@ ScVbaFormat< Ifc... >::setFormulaHidden( const cpo::uno::Any& FormulaHidden )
         aCellProtection.IsFormulaHidden = bIsFormulaHidden;
         mxPropertySet->setPropertyValue(sCellProt,cpo::uno::Any(aCellProtection));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception( ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -581,7 +581,7 @@ ScVbaFormat< Ifc... >::getLocked(  )
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -614,7 +614,7 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  )
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -629,7 +629,7 @@ ScVbaFormat< Ifc... >::setShrinkToFit( const cpo::uno::Any& ShrinkToFit )
     {
         mxPropertySet->setPropertyValue( SC_UNONAME_SHRINK_TO_FIT, ShrinkToFit);
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {} );
     }
@@ -647,7 +647,7 @@ ScVbaFormat< Ifc... >::getShrinkToFit(  )
         if (!isAmbiguous(sShrinkToFit))
             aRet = mxPropertySet->getPropertyValue(sShrinkToFit);
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
     }
@@ -683,7 +683,7 @@ ScVbaFormat< Ifc... >::setReadingOrder( const cpo::uno::Any& ReadingOrder )
         }
         mxPropertySet->setPropertyValue( SC_UNONAME_WRITING, aVal );
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -715,7 +715,7 @@ ScVbaFormat< Ifc... >::getReadingOrder(  )
                 }
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
     }
@@ -743,7 +743,7 @@ ScVbaFormat< Ifc... >::getNumberFormat(  )
             aFormat <<= sFormat;
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -760,7 +760,7 @@ ScVbaFormat< Ifc... >::isAmbiguous(const OUString& _sPropertyName)
         if (mbCheckAmbiguoity)
             bResult = ( getXPropertyState()->getPropertyState(_sPropertyName) == beans::PropertyState_AMBIGUOUS_VALUE );
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }

@@ -380,7 +380,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -2613,7 +2613,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
             {
                 // dealing with read-only properties here. Nothing to do...
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("starmath");
             }

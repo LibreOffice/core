@@ -224,7 +224,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::DoVerb(
                 break;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         return OLEOBJ_S_CANNOT_DOVERB_NOW;
     }

@@ -216,7 +216,7 @@ void StockChartTypeTemplate::applyStyle2(
         }
 
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -327,7 +327,7 @@ void StockChartTypeTemplate::createChartTypes(
 
         rCoordSys[ 0 ]->setChartTypes( aChartTypeVec );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -390,7 +390,7 @@ bool StockChartTypeTemplate::matchesTemplate2(
             bResult = bResult && ( bHasOpenValue == bShowFirstProp );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -408,7 +408,7 @@ rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries2(
         xResult = new LineChartType();
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

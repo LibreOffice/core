@@ -218,7 +218,7 @@ void FormControlHelper::processField(rtl::Reference<SwXFieldmark> const& xFormFi
             if ( !sTmp.isEmpty() )
                 xFormField->setName( sTmp );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("writerfilter", "Set Formfield name failed");
         }

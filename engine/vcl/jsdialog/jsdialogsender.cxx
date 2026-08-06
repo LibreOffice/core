@@ -295,7 +295,7 @@ void JSDialogNotifyIdle::Invoke()
                 }
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl", "JSDialogNotifyIdle::Invoke");
         }

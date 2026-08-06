@@ -133,14 +133,14 @@ void CorrelationCircleChartTypeTemplate::applyStyle2(const rtl::Reference<DataSe
         xSeries->setPropertyAlsoToAllAttributedDataPoints(CHART_UNONAME_LABEL,
                                                           cpo::uno::Any(aLabel));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
 rtl::Reference<ChartType>
-CorrelationCircleChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+    CorrelationCircleChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
 {
     return new CorrelationCircleChartType();
 }
@@ -162,7 +162,8 @@ rtl::Reference<DataInterpreter> CorrelationCircleChartTypeTemplate::getDataInter
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(CorrelationCircleChartTypeTemplate, ChartTypeTemplate, OPropertySet)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(CorrelationCircleChartTypeTemplate, ChartTypeTemplate, OPropertySet)
+IMPLEMENT_FORWARD_XTYPEPROVIDER2(CorrelationCircleChartTypeTemplate, ChartTypeTemplate,
+                                 OPropertySet)
 
 } //  namespace chart
 

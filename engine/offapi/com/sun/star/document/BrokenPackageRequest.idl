@@ -22,7 +22,7 @@ module com { module sun { module star { module document {
 
 /** Is used for interaction handle in case package is broken.
 */
-published exception BrokenPackageRequest : ::com::sun::star::uno::Exception
+published exception BrokenPackageRequest : ::cpo::uno::Exception
 {
     /** The name of the document that is broken
      */

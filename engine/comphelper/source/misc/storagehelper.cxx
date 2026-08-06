@@ -111,7 +111,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
         } else {
             xFact = GetFileSystemStorageFactory( rxContext );
         }
-    } catch (uno::Exception &)
+    } catch (cpo::uno::Exception &)
     {
         anyEx = cppu::getCaughtException();
     }
@@ -351,7 +351,7 @@ cpo::uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionD
             ++nSha1Ind;
             aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aDigest) } };
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("comphelper", "Can not create SHA256 digest!" );
             throw; // tdf#159519 DO NOT RETURN SUCCESS
@@ -593,7 +593,7 @@ OUString OStorageHelper::GetODFVersionFromStorage(const uno::Reference<embed::XS
         if (xPropSet)
             xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
     return aODFVersion;

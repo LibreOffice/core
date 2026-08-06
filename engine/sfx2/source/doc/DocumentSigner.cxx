@@ -113,7 +113,7 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
                 rxCertificate, uno::Reference<embed::XStorage>(), xInputStream);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return bResult;

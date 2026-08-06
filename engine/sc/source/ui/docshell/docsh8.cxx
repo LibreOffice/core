@@ -167,7 +167,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
             OSL_FAIL( "transfer command not available" );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // ucb may throw different exceptions on failure now
         bRet = false;
@@ -189,7 +189,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
                         comphelper::getProcessComponentContext() );
         aCnt.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // ucb may throw different exceptions on failure now
         bRet = false;
@@ -208,7 +208,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
                         comphelper::getProcessComponentContext() );
         bRet = aCnt.isDocument();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // ucb may throw different exceptions on failure now - warning only
         TOOLS_WARN_EXCEPTION( "sc", "Any other exception" );
@@ -431,7 +431,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
     {
         nErr = SCERR_IMPORT_CONNECT;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
@@ -1074,7 +1074,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
         else
             nErr = SCERR_EXPORT_DATA;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;

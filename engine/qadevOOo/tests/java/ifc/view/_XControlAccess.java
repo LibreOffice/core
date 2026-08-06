@@ -65,7 +65,7 @@ public class _XControlAccess extends MultiMethodTest {
      * @throws StatusException If the relation was not found.
      */
     public void _getControl()
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         boolean bResult = true;
         try {

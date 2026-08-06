@@ -37,7 +37,7 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
             the location the string table data should be stored to.
     */
     void storeAsURL( [in] string URL )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
 
     /**

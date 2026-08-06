@@ -68,7 +68,7 @@ final class Implementation {
                                        + serviceType));
         } catch (RuntimeException e) {
             throw e;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
         }
         if (service == null) {
             // As a fallback, also try to instantiate the service from the

@@ -544,7 +544,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( gsModel ), uno::UNO_QUERY_THROW );
                 GetShapeTableExport()->collectTableAutoStyles( xRange );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "collecting auto styles for a table" );
             }
@@ -640,7 +640,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
         }
@@ -752,7 +752,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "exporting layer name for shape" );
             }
@@ -785,7 +785,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 if( eDisplayToken != XML_TOKEN_INVALID )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.draw");
             }
@@ -1099,7 +1099,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
     {
         xShapes3->sort(aNewOrder);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         SAL_WARN("xmloff", "FixZOrder: exception");
     }
@@ -1276,7 +1276,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     }
                 }
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 SAL_WARN( "xmloff", "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
             }
@@ -1987,7 +1987,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
             mrExport.Characters( aDescription );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "xmloff", "exporting Title and/or Description for shape" );
     }
@@ -2059,7 +2059,7 @@ void XMLShapeExport::ImpExportDiagramData( const uno::Reference< drawing::XShape
             mrExport.Characters( aDiagramQuickstyle );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "xmloff", "exporting Title and/or Description for shape" );
     }
@@ -3414,7 +3414,7 @@ static void lcl_CopyStream(
     if (!xOutStream.is())
     {
         SAL_WARN("xmloff", "no output stream");
-        throw uno::Exception(u"no output stream"_ustr,nullptr);
+        throw cpo::uno::Exception(u"no output stream"_ustr,nullptr);
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
@@ -3456,7 +3456,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
 
             return urlPath;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_INFO_EXCEPTION("xmloff", "exception while storing embedded media");
         }
@@ -3537,7 +3537,7 @@ void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvX
             aBase64Exp.exportOfficeBinaryDataElement( uno::Reference < io::XInputStream >( xPictureStream, uno::UNO_QUERY_THROW ) );
         }
     }
-    catch( uno::Exception const & )
+    catch( cpo::uno::Exception const & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.draw");
     }
@@ -5269,7 +5269,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                                 if( bBool )
                                     mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
                             }
-                            catch( uno::Exception& )
+                            catch( cpo::uno::Exception& )
                             {
                                 DBG_UNHANDLED_EXCEPTION("xmloff.draw");
                             }
@@ -5293,7 +5293,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
         ImpExportGluePoints( xShape );
         ImpExportDescription( xShape ); // #i68101#
     }
-    catch( uno::Exception const & )
+    catch( cpo::uno::Exception const & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.draw");
     }

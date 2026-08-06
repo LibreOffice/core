@@ -171,7 +171,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         aGrabBag[u"mso-pStyle"_ustr] <<= sParaStyle;
         xPropertySet->setPropertyValue(u"CharInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "oox.vml","convert() grabbag exception" );
     }

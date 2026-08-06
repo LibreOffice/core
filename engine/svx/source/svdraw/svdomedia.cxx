@@ -445,7 +445,7 @@ static bool lcl_HandlePackageURL(
         SAL_INFO("svx", "not found: '" << rURL << "'");
         return false;
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
         return false;

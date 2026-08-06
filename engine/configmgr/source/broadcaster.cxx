@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -44,7 +44,7 @@ namespace configmgr {
 namespace {
 
 void appendMessage(
-    OUStringBuffer & buffer, css::uno::Exception const & exception)
+    OUStringBuffer & buffer, cpo::uno::Exception const & exception)
 {
     buffer.append("; ");
     buffer.append(exception.Message);
@@ -112,7 +112,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->disposing(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -122,7 +122,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->elementInserted(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -132,7 +132,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->elementRemoved(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -142,7 +142,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->elementReplaced(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -152,7 +152,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->propertyChange(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -162,7 +162,7 @@ void Broadcaster::send() {
         try {
             rNotification.listener->propertiesChange(rNotification.event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             exception = cppu::getCaughtException();
             appendMessage(messages, e);
         }
@@ -174,7 +174,7 @@ void Broadcaster::send() {
             try {
                 rNotification.listener->changesOccurred(rNotification.event);
             } catch (css::lang::DisposedException &) {
-            } catch (css::uno::Exception & e) {
+            } catch (cpo::uno::Exception & e) {
                 exception = cppu::getCaughtException();
                 appendMessage(messages, e);
             }

@@ -59,7 +59,7 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
@@ -822,7 +822,7 @@ namespace svxform
                     Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
                     aCaller = xProps->getPropertyValue(u"Name"_ustr);
                 }
-                catch( Exception& ) {}
+                catch( cpo::uno::Exception& ) {}
             }
             m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs, true, aCaller.hasValue() ? &aCaller : nullptr );
         }

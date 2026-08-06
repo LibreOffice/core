@@ -1415,7 +1415,7 @@ bool BasicManager::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("basic");
     }

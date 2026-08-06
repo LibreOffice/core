@@ -84,7 +84,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

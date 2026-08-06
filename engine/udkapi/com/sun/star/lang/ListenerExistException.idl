@@ -26,7 +26,7 @@
 
     @see     XConnectionPoint
  */
-published exception ListenerExistException: com::sun::star::uno::Exception
+published exception ListenerExistException: cpo::uno::Exception
 {
 };
 

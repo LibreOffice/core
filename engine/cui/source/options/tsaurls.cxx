@@ -46,7 +46,7 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("cui.options", "TSAURLsDialog::TSAURLsDialog()");
     }

@@ -402,7 +402,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
             bRet = aVbaPrj.importVbaProject( *vbaStg );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         bRet = false;
     }
@@ -423,7 +423,7 @@ OUString BasicProjImportHelper::getProjectName() const
         sProjName = xVBA->getProjectName();
 
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
     return sProjName;
@@ -4782,7 +4782,7 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
             xPrjNameCache->insertByName( templateName, cpo::uno::Any( sVBAProjName ) );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -4897,7 +4897,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             uno::Reference<task::XInteractionHandler> xHandler;
             xModel->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sw.ww8", "failed to initialize RDF metadata");
         }
@@ -5136,7 +5136,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             {
                 aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: ooo.vba.word.Globals is not available");
             }
@@ -5488,7 +5488,7 @@ namespace
                         aPassw = pRequest->getPassword();
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }

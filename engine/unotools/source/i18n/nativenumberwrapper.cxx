@@ -47,7 +47,7 @@ NativeNumberWrapper::getNativeNumberString(
         if ( xNNS.is() )
             return xNNS->getNativeNumberString(rNumberString, rLocale, nNativeNumberMode);
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -67,7 +67,7 @@ NativeNumberWrapper::getNativeNumberStringParams(
             return xNNS->getNativeNumberStringParams(rNumberString, rLocale, nNativeNumberMode,
                                                      rNativeNumberParams);
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -84,7 +84,7 @@ NativeNumberWrapper::convertToXmlAttributes(
         if ( xNNS.is() )
             return xNNS->convertToXmlAttributes( rLocale, nNativeNumberMode );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -100,7 +100,7 @@ NativeNumberWrapper::convertFromXmlAttributes(
         if ( xNNS.is() )
             return xNNS->convertFromXmlAttributes( rAttr );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }

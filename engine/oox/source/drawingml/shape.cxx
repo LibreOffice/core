@@ -430,7 +430,7 @@ void Shape::addShape(
                         xBgProps->setPropertyValue(u"GlowEffectRadius"_ustr, cpo::uno::Any(sal_Int32(0)));
                     }
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("oox.drawingml", "Shape::addShape mbWordprocessingCanvas");
                 }
@@ -478,7 +478,7 @@ void Shape::addShape(
                     if (!sUrl.isEmpty())
                         xChildWPSProperties->setPropertyValue(UNO_NAME_HYPERLINK, aAny);
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -2472,7 +2472,7 @@ void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
             Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW))
             ->NbcSetLogicRect(aBackgroundRect);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox.drawingml", "Shape::convertSmartArtToMetafile");
     }
@@ -2750,7 +2750,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 }
 #endif
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

@@ -52,7 +52,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
         @throws ::com::sun::star::xml::sax::SAXException
             the exception is thrown in case of parsing problems
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
             the exception is thrown in case of other problems during the import
      */
 
@@ -61,7 +61,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
         [in] com::sun::star::document::XDocumentProperties xDocumentProperties )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::xml::sax::SAXException,
-                    com::sun::star::uno::Exception );
+                    cpo::uno::Exception );
 
     /** find and get core properties stream
 

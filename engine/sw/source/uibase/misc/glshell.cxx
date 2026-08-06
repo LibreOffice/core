@@ -256,7 +256,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
             if (xTitle)
                 xTitle->setTitle( aDocTitle );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

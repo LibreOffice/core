@@ -300,7 +300,7 @@ public:
             // the model ( and additionally these also update the statics object )
             return m_xModel->getPropertyValue( rPropName );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sw.vba", "");
         }

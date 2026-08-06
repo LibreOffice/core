@@ -23,7 +23,7 @@ import org.openoffice.test.tools.DocumentType;
 
 public class ImpressDocumentTest extends DrawingOrPresentationDocumentTest
 {
-    public ImpressDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    public ImpressDocumentTest( XMultiServiceFactory i_orb ) throws cpo.uno.Exception
     {
         super( i_orb, DocumentType.PRESENTATION );
     }

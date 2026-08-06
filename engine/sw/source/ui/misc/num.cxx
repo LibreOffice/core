@@ -1132,7 +1132,7 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sw.ui",
                              "SwSvxNumBulletTabDialog: failed to persist bullets/numbering defaults");

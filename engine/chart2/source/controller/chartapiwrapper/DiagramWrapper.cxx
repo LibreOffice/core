@@ -1576,7 +1576,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( cpo::uno::Any& rInnerValue 
                     xProp->getPropertyValue( m_aOuterName ) >>= nNumberOfLines;
                     bHasDetectableInnerValue = true;
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }
@@ -1622,7 +1622,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                 if( nOldValue == nNewValue )
                     return;
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -1656,7 +1656,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         xProp->setPropertyValue( u"NumberOfLines"_ustr, cpo::uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1876,7 +1876,7 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
                 xInnerPropertySet->setPropertyValue( u"RelativeSize"_ustr, Any() );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

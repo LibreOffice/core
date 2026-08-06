@@ -169,7 +169,7 @@ void VDiagram::createShapes_2d()
                 m_xWall2D->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_NAME, cpo::uno::Any( aWallCID ) );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -400,7 +400,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
         m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
             , cpo::uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -563,7 +563,7 @@ void VDiagram::createShapes_3d()
                     cpo::uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTransformation ) ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -616,7 +616,7 @@ void VDiagram::createShapes_3d()
             xShapes2->SvxShape::setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                 , cpo::uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }

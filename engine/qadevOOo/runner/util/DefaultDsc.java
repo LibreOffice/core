@@ -64,7 +64,7 @@ public class DefaultDsc extends InstDescr {
         try {
                 SrvObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
 
         XInterface Default = (XInterface)UnoRuntime.queryInterface(ifcClass, SrvObj );

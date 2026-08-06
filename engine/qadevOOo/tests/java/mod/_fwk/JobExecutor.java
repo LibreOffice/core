@@ -104,7 +104,7 @@ public class JobExecutor extends TestCase {
 
         try {
             Param.getMSF().createInstance("test.Job");
-        } catch(com.sun.star.uno.Exception e) {
+        } catch(cpo.uno.Exception e) {
             log.println("Service test.Job is not yet registered.");
             String message = "You have to register 'test.Job' before office is started.\n";
             message += "Please run '$OFFICEPATH/program/pkgchk $DOCPTH/qadevlibs/JobExecutor.jar'";

@@ -47,7 +47,7 @@ namespace svx
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::runtime::FormOperations;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::form::runtime::FeatureState;
     using ::cpo::uno::Any;

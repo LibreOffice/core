@@ -10,7 +10,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <cpo/uno/Any.hxx>
 
 void func1();
@@ -22,7 +22,7 @@ int main()
     {
         func1();
     }
-    catch (css::uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         cpo::uno::Any ex(cppu::getCaughtException());
         SAL_WARN("avmedia", "exception: " << exceptionToString(ex));
@@ -32,7 +32,7 @@ int main()
     {
         func1();
     }
-    catch (css::uno::Exception const& ex)
+    catch (cpo::uno::Exception const& ex)
     {
         SAL_WARN("xmloff", "message " << ex);
         // expected-error@-1 {{use TOOLS_WARN_EXCEPTION/TOOLS_INFO_EXCEPTION/exceptionToString to print exception nicely [loplugin:logexceptionnicely]}}

@@ -52,7 +52,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
         {
         ( xProp->getPropertyValue( bYError ? CHART_UNONAME_ERRORBAR_Y : CHART_UNONAME_ERRORBAR_X ) >>= xResult );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -76,7 +76,7 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
         xErrorBarProp->getPropertyValue( u"PositiveError"_ustr ) >>= rOutPosError;
         xErrorBarProp->getPropertyValue( u"NegativeError"_ustr ) >>= rOutNegError;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -94,7 +94,7 @@ void lcl_getErrorIndicatorValues(
         xErrorBarProp->getPropertyValue( u"ShowPositiveError"_ustr ) >>= rOutShowPosError;
         xErrorBarProp->getPropertyValue( u"ShowNegativeError"_ustr ) >>= rOutShowNegError;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

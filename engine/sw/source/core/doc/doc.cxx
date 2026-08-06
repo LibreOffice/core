@@ -2329,7 +2329,7 @@ void SwDoc::SetVbaEventProcessor()
             cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xModel) };
             mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "com.sun.star.script.vba.VBATextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

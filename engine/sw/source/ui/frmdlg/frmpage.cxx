@@ -2974,7 +2974,7 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
         if(!sTemp.isEmpty())
             xFP->setDisplayDirectory(sTemp);
     }
-    catch( const uno::Exception& ) {}
+    catch( const cpo::uno::Exception& ) {}
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         m_xURLED->set_text(xFP->getSelectedFiles().getConstArray()[0]);

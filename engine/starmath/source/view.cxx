@@ -1105,7 +1105,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
             xDesktop->setActiveFrame( xFrame );
         }
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         SAL_WARN( "starmath", "failed to properly set initial focus to edit window" );
     }
@@ -1459,7 +1459,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     Insert( aMedium );
                     GetDoc()->UpdateText();
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "starmath", "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
                 }

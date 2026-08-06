@@ -23,7 +23,7 @@
 
 /** This exception can be thrown in case an object is initialized second time.
  */
-published exception DoubleInitializationException: com::sun::star::uno::Exception
+published exception DoubleInitializationException: cpo::uno::Exception
 {
 };
 

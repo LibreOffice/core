@@ -187,7 +187,7 @@ public class XMLContentImporter extends TestCase {
                         String gName = xPageName.getName() ;
                         logF.println("Page name returned = '" + gName + "'") ;
                         return impPageName.equals(gName) ;
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;

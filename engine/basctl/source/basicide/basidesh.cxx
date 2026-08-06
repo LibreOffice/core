@@ -109,7 +109,7 @@ public:
                 xContainer->addContainerListener( xContainerListener );
             }
         }
-        catch(const uno::Exception& ) {}
+        catch(const cpo::uno::Exception& ) {}
     }
     void removeContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )
     {
@@ -122,7 +122,7 @@ public:
                 xContainer->removeContainerListener( xContainerListener );
             }
         }
-        catch(const uno::Exception& ) {}
+        catch(const cpo::uno::Exception& ) {}
     }
 
     // XEventListener

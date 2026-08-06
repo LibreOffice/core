@@ -313,7 +313,7 @@ private:
                 if (mpEntry->m_xTempFile)
                     mpEntry->deleteBufferFile();
             }
-            catch (uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
             }
             mpEntry->setFinished();

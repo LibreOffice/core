@@ -67,7 +67,7 @@ value_wrapper_get_current_value( AtkValue *value,
         if( pValue.is() )
             anyToGValue( pValue->getCurrentValue(), gval );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCurrentValue()" );
     }
 }
@@ -82,7 +82,7 @@ value_wrapper_get_maximum_value( AtkValue *value,
         if( pValue.is() )
             anyToGValue( pValue->getMaximumValue(), gval );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCurrentValue()" );
     }
 }
@@ -97,7 +97,7 @@ value_wrapper_get_minimum_value( AtkValue *value,
         if( pValue.is() )
             anyToGValue( pValue->getMinimumValue(), gval );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCurrentValue()" );
     }
 }
@@ -131,7 +131,7 @@ value_wrapper_set_current_value( AtkValue     *value,
             return pValue->setCurrentValue( cpo::uno::Any(aDouble) );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCurrentValue()" );
     }
 

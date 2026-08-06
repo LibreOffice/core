@@ -456,7 +456,7 @@ bool setTitle(
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         return false;
     }
@@ -834,7 +834,7 @@ uno::Reference< io::XInputStream > getInputStream(
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // will be handled below.
     }
@@ -869,7 +869,7 @@ uno::Reference< io::XInputStream > getInputStream(
         {
             throw;
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             OSL_FAIL( "unable to get input stream from document!" );
         }
@@ -908,7 +908,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
          OSL_FAIL( "unable to get result set from folder!" );
     }
@@ -1057,7 +1057,7 @@ void handleNameClashRename(
         {
             throw;
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
         }
     }
@@ -1508,7 +1508,7 @@ void globalTransfer_(
                 0,
                 rContext.xEnv );
     }
-    catch( uno::Exception const & )
+    catch( cpo::uno::Exception const & )
     {
     }
 }
@@ -1833,7 +1833,7 @@ void UniversalContentBroker::globalTransfer(
 
         xCommandProcessor->execute( aCommand, 0, xLocalEnv );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         OSL_FAIL( "Cannot delete source object!" );
         throw;

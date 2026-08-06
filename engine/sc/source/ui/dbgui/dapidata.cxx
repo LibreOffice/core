@@ -59,7 +59,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
             m_xLbDatabase->append_text(aName);
         }
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sc", "exception in database");
     }
@@ -159,7 +159,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
             m_xCbObject->append_text(aName);
         }
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         //  this may happen if an invalid database is selected -> no DBG_ERROR
         TOOLS_WARN_EXCEPTION( "sc", "exception in database");

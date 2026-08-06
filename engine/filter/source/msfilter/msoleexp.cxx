@@ -166,13 +166,13 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             {
                 xStor->storeToURL( u"private:stream"_ustr, aSeq );
             }
-            catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+            catch( const cpo::uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
             rtl::Reference<SotStorage> xOLEStor = new SotStorage( pStream, true );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // TODO/LATER: Error handling
             OSL_FAIL( "The object could not be exported!" );
@@ -213,7 +213,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION(
                             "filter.ms", "Unexpected exception while getting visual area size!");
@@ -260,7 +260,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
                         xStor->storeToURL( u"private:stream"_ustr, aSeq );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         // TODO/LATER: Error handling
                         OSL_FAIL( "The object could not be exported!" );
@@ -288,7 +288,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             {
                 xPers->storeToEntry( xStor, aTempName, aEmptySeq, aEmptySeq );
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {}
 
             rtl::Reference<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, StreamMode::STD_READ );

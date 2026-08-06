@@ -472,7 +472,7 @@ void DataSeriesPointWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any
     }
 
     if( !m_xDataSeries.is() )
-        throw uno::Exception(
+        throw cpo::uno::Exception(
             u"DataSeries index invalid"_ustr, static_cast< ::cppu::OWeakObject * >( this ));
 
     //todo: check upper border of point index
@@ -651,7 +651,7 @@ beans::PropertyState DataSeriesPointWrapper::getPropertyState( const OUString& r
             "wrapped Exception " + e.Message,
             css::uno::Reference<css::uno::XInterface>(), a);
     }
-    catch( const uno::Exception& e )
+    catch( const cpo::uno::Exception& e )
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(

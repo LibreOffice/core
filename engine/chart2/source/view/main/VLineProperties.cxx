@@ -52,7 +52,7 @@ void VLineProperties::initFromPropertySet(const uno::Reference<beans::XPropertyS
             DashName = xProp->getPropertyValue(u"LineDashName"_ustr);
             LineCap = xProp->getPropertyValue(u"LineCap"_ustr);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("chart2", "");
         }

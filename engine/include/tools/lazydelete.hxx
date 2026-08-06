@@ -127,7 +127,7 @@ namespace tools
             {
                 xComponent->dispose();
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

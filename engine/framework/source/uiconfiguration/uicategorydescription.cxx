@@ -304,7 +304,7 @@ void ConfigurationAccess_UICategory::initializeConfigAccess()
     catch ( const WrappedTargetException& )
     {
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

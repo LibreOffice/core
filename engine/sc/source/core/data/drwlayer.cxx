@@ -2211,7 +2211,7 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
                 {
                     aObjectClassName = SvGlobalName(xClassified->getClassID());
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     // TODO: handle error?
                 }

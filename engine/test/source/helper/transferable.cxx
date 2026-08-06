@@ -52,7 +52,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     {
         return OString();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return OString();
     }

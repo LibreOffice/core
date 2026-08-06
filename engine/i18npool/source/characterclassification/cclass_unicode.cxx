@@ -116,7 +116,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     {
         throw;
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(

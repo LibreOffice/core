@@ -491,7 +491,7 @@ XMLImageMapContext::XMLImageMapContext(
         if( xInfo.is() && xInfo->hasPropertyByName( gsImageMap ) )
             xPropertySet->getPropertyValue(gsImageMap) >>= xImageMap;
     }
-    catch(const css::uno::Exception& e)
+    catch(const cpo::uno::Exception& e)
     {
         rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, nullptr );
     }

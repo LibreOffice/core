@@ -83,7 +83,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
         else
             xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

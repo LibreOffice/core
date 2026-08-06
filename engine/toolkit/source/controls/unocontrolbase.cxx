@@ -67,7 +67,7 @@ void UnoControlBase::ImplSetPropertyValues( const cpo::uno::Sequence< OUString >
     {
         xMPS->setPropertyValues( aPropertyNames, aValues );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         if ( !bUpdateThis )
             ImplLockPropertyChangeNotifications( aPropertyNames, false );
@@ -90,7 +90,7 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
     {
         xPSet->setPropertyValue( aPropertyName, aValue );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         if ( !bUpdateThis )
             ImplLockPropertyChangeNotification( aPropertyName, false );

@@ -742,7 +742,7 @@ public class AcceleratorsConfigurationTest
 
         if (xConfig == null)
         {
-            throw new com.sun.star.uno.Exception("Could not open configuration \"" + sConfigPath + "\"");
+            throw new cpo.uno.Exception("Could not open configuration \"" + sConfigPath + "\"");
         }
 
         return xConfig;
@@ -763,7 +763,7 @@ public class AcceleratorsConfigurationTest
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

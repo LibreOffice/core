@@ -68,7 +68,7 @@ struct lcl_UpdateController
             if ( rElement.second.is() )
                 rElement.second->update();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -84,7 +84,7 @@ struct lcl_RemoveController
             if ( rElement.second.is() )
                 rElement.second->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -206,7 +206,7 @@ void SAL_CALL StatusBarManager::dispose()
             {
                 m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(this) );
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }

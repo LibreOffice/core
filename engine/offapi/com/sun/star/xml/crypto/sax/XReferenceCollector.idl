@@ -32,7 +32,7 @@ interface XReferenceCollector : com::sun::star::uno::XInterface
      * @param count   the reference count of the signature
      */
     void setReferenceCount([in] long count)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Set the keeper id of the element collector of the
@@ -42,7 +42,7 @@ interface XReferenceCollector : com::sun::star::uno::XInterface
      *             which is collecting a referenced element
      */
     void setReferenceId([in] long id)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 } ; } ; } ; } ; } ; } ;

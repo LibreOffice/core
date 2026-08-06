@@ -391,7 +391,7 @@ cpo::uno::Sequence<beans::PropertyValue>
             xTrans->commit();
         if( xSubStorage.is() )
             xSubStorage->dispose();
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
 //        fprintf (stderr, "saving etc. exception '%s'\n",
 //                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }

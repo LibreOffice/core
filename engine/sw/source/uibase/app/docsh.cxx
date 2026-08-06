@@ -721,7 +721,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 if ( xSet.is() )
                     xSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }

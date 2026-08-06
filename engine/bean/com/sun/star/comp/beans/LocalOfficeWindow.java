@@ -91,7 +91,7 @@ public class LocalOfficeWindow
     /**
      * Returns an AWT toolkit.
      */
-    private XToolkit queryAWTToolkit() throws com.sun.star.uno.Exception
+    private XToolkit queryAWTToolkit() throws cpo.uno.Exception
     {
          // Create a UNO toolkit.
          XComponentContext xContext = mConnection.getComponentContext();
@@ -199,7 +199,7 @@ public class LocalOfficeWindow
             XWindow aWindow = UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( bPeer );
         }
-        catch (com.sun.star.uno.Exception exp) {
+        catch (cpo.uno.Exception exp) {
         }
 
         return mWindow;

@@ -231,7 +231,7 @@ public class RegressionTest_i30400 implements StorageTest {
 
 
     public boolean TestCopyWithRenaming( XStorage xTempStorage, XStorage xTempSubStorage, XStorage xTempSubSubStorage )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
 
         // create a second temporary stream and copy all the staff there

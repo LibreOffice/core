@@ -97,7 +97,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
 
             chartType->setPropertyValue( m_InnerSequencePropertyName, cpo::uno::Any( aBarPositionSequence ) );
         }
-        catch( uno::Exception& e )
+        catch( cpo::uno::Exception& e )
         {
             //the above properties are not supported by all charttypes (only by column and bar)
             //in that cases this exception is ok
@@ -129,7 +129,7 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
                         bInnerValueDetected = true;
                     }
                 }
-                catch( uno::Exception& e )
+                catch( cpo::uno::Exception& e )
                 {
                     //the above properties are not supported by all charttypes (only by column and bar)
                     //in that cases this exception is ok

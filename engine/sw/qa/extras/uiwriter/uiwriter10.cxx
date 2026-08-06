@@ -1737,7 +1737,7 @@ static uno::Reference<text::XTextRange> getAssociatedTextRange(cpo::uno::Any obj
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1752,7 +1752,7 @@ static uno::Reference<text::XTextRange> getAssociatedTextRange(cpo::uno::Any obj
                 return xRange;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1763,7 +1763,7 @@ static uno::Reference<text::XTextRange> getAssociatedTextRange(cpo::uno::Any obj
         if (xRange.is())
             return xRange;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

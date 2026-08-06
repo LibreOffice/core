@@ -35,7 +35,7 @@ IMPL_LINK_NOARG(FileExportedDialog, OpenHdl, weld::Button&, void)
     {
         exec->execute(uri, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx.dialog", "opening <" << uri << "> failed:");
     }

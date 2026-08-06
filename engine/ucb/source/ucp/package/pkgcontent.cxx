@@ -1247,7 +1247,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             }
             else
             {
-                aRetRange[ n ] <<= uno::Exception(
+                aRetRange[ n ] <<= cpo::uno::Exception(
                                 u"No property set for storing the value!"_ustr,
                                 getXWeak() );
             }
@@ -1280,7 +1280,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             aNewTitle.clear();
 
             // Set error .
-            aRetRange[ nTitlePos ] <<= uno::Exception(
+            aRetRange[ nTitlePos ] <<= cpo::uno::Exception(
                     u"Exchange failed!"_ustr,
                     getXWeak() );
         }
@@ -2431,7 +2431,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             OSL_FAIL( "Content::storeData - getByHierarchicalName failed!" );
             return false;
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             // createInstanceWithArguments
             OSL_FAIL( "Content::storeData - Error!" );

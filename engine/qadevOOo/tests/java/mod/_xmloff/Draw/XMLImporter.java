@@ -165,7 +165,7 @@ public class XMLImporter extends TestCase {
                         try {
                             pageArray[i] = UnoRuntime.queryInterface
                                 (XNamed.class, xPages.getByIndex(i));
-                        } catch (com.sun.star.uno.Exception e) {
+                        } catch (cpo.uno.Exception e) {
                             e.printStackTrace(fLog) ;
                             throw new StatusException
                                 ("Can't get page name by index.", e) ;

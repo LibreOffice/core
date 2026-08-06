@@ -250,7 +250,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             aSz.Width = 5000;
             aSz.Height = 5000;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("svx.svdraw", "");
             aSz.Width = 5000;
@@ -277,7 +277,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
         else
             mpObj->ActionChanged();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.svdraw", "");
     }
@@ -390,7 +390,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                             xObject->changeState( embed::EmbedStates::RUNNING );
                     }
                 }
-                catch (css::uno::Exception& )
+                catch (cpo::uno::Exception& )
                 {}
             }
         }
@@ -422,7 +422,7 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Imp
     {
         xMan.set(xFrame->getPropertyValue(u"LayoutManager"_ustr),uno::UNO_QUERY);
     }
-    catch ( uno::Exception& ex )
+    catch ( cpo::uno::Exception& ex )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
@@ -573,7 +573,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
                     xObject->changeState( nState );
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -610,7 +610,7 @@ SdrIFrameLink::SdrIFrameLink(SdrOle2Obj* pObject)
         {
             xPersObj->reload(cpo::uno::Sequence<beans::PropertyValue>(), cpo::uno::Sequence<beans::PropertyValue>());
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 
@@ -941,7 +941,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                         if ( nCurState != embed::EmbedStates::LOADED )
                             mpImpl->mxObjRef->changeState(nCurState);
                     }
-                    catch( css::uno::Exception const & )
+                    catch( cpo::uno::Exception const & )
                     {
                         TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::UpdateLinkURL_Impl()" );
                     }
@@ -976,7 +976,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
         DisconnectFileLink_Impl();
         mpImpl->maLinkURL.clear();
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::BreakFileLink_Impl()" );
     }
@@ -1048,7 +1048,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "SdrOle2Obj::CheckFileLink_Impl()");
     }
@@ -1111,7 +1111,7 @@ void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>&
             awt::Size aSz = xObj->getVisualAreaSize(GetAspect());
             aRect.SetSize(Size(aSz.Width, aSz.Height));
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("svx.svdraw", "");
         }
@@ -1125,7 +1125,7 @@ void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>&
         {
             xObj->setVisualAreaSize(GetAspect(), aSz);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("svx.svdraw", "");
         }
@@ -1212,7 +1212,7 @@ void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
 
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Connect_Impl()" );
     }
@@ -1273,7 +1273,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
             }
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx",  "SdrOle2Obj::RemoveListeners_Impl()" );
     }
@@ -1349,7 +1349,7 @@ void SdrOle2Obj::Disconnect_Impl()
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Disconnect_Impl()" );
     }
@@ -1864,7 +1864,7 @@ bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, s
             xObj->changeState( embed::EmbedStates::LOADED );
             bResult = true;
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Unload()" );
         }
@@ -2052,7 +2052,7 @@ bool SdrOle2Obj::AddOwnLightClient()
                 try {
                     mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient );
                     return true;
-                } catch( uno::Exception& )
+                } catch( cpo::uno::Exception& )
                 {}
             }
 

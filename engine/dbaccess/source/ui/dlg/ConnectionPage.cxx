@@ -239,7 +239,7 @@ namespace dbaui
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM, o3tl::trim(m_xJavaDriver->get_text()));
             }
         }
-        catch(Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
 #endif

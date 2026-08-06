@@ -3028,7 +3028,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
         if (xServices)
             m_bIsWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 
@@ -3224,7 +3224,7 @@ struct SvxStyleToolBoxControl::Impl
                             aDefaultStyles.push_back(
                                 std::pair<OUString, OUString>(aStyle, sName) );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {}
                 }
 
@@ -3259,12 +3259,12 @@ struct SvxStyleToolBoxControl::Impl
                                     std::pair<OUString, OUString>(sStyleName, sName) );
                         }
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {}
                 }
             }
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             OSL_FAIL("error while initializing style names");
         }
@@ -3346,7 +3346,7 @@ void SvxStyleToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
             {
                 m_xBoundItems[i]->dispose();
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
 
@@ -4282,7 +4282,7 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
                 if ( nFormatKey == NUMBERFORMAT_ENTRY_NOT_FOUND )
                     nFormatKey = rxNumberFormats->addNew( m_aFormatString, aLocale );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     nFormatKey = m_nFormatKey;
                 }

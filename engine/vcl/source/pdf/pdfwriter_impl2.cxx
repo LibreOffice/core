@@ -253,7 +253,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             bUseJPGCompression = false;
         }

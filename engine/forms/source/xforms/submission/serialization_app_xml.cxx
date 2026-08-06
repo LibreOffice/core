@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;

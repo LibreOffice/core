@@ -336,7 +336,7 @@ void TreeControlPeer::onRequestChildNodes( const Reference< XTreeNode >& xNode )
         TreeExpansionEvent aEvent( xSource, xNode );
         maTreeExpansionListeners.requestChildNodes( aEvent );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -357,7 +357,7 @@ bool TreeControlPeer::onExpanding( const Reference< XTreeNode >& xNode, bool bEx
             maTreeExpansionListeners.treeCollapsing( aEvent );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         return false;
     }
@@ -381,7 +381,7 @@ void TreeControlPeer::onExpanded( const Reference< XTreeNode >& xNode, bool bExp
             maTreeExpansionListeners.treeCollapsed( aEvent );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -914,7 +914,7 @@ bool TreeControlPeer::onEditingEntry( UnoTreeListEntry const * pEntry )
         {
             return false;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -941,7 +941,7 @@ bool TreeControlPeer::onEditedEntry( UnoTreeListEntry const * pEntry, const OUSt
         }
 
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -1396,7 +1396,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
         rImage = Image(aGraphic.GetBitmap());
         return true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

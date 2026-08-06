@@ -89,7 +89,7 @@ static Reference< XConnection > getConnection(const OUString& _rURL)
         {
             xDataSource.set(xNamingContext->getRegisteredObject(_rURL), UNO_QUERY);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("extensions.biblio", "");
         }
@@ -109,7 +109,7 @@ static Reference< XConnection > getConnection(const OUString& _rURL)
         {
             // TODO : a real error handling
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -131,7 +131,7 @@ static Reference< XConnection >    getConnection(const Reference< XInterface > &
             SAL_INFO("extensions.biblio", "no active connection");
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
@@ -167,7 +167,7 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "extensions.biblio", "::getColumns");
             }
@@ -434,7 +434,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, const BibDataMan
             m_xSelectionLB->append_text(rSourceName);
         m_xSelectionLB->select_text(sActiveSource);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
@@ -631,7 +631,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             xColContainer->insertByName( rField, Any( xCurrentCol ) );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
@@ -662,7 +662,7 @@ Reference< awt::XControlModel > const & BibDataManager::updateGridModel(const Re
         Reference< XFormComponent > xFormComp( m_xGridModel, UNO_QUERY );
         InsertFields( xFormComp );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::updateGridModel: something went wrong !");
     }
@@ -743,7 +743,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::createDatabaseForm: something went wrong !");
     }
@@ -764,7 +764,7 @@ Sequence< OUString > BibDataManager::getDataSources() const
         if (xTables.is())
             aTableNameSeq = xTables->getElementNames();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::getDataSources: something went wrong !");
     }
@@ -786,7 +786,7 @@ void BibDataManager::setFilter(const OUString& rQuery)
         xFormProps->setPropertyValue( u"ApplyFilter"_ustr, Any( true ) );
         reload();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
@@ -803,7 +803,7 @@ OUString BibDataManager::getFilter() const
         Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
         OSL_VERIFY( xFormProps->getPropertyValue( u"Filter"_ustr  ) >>= aQueryString );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
@@ -983,7 +983,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::setActiveDataTable: something went wrong !");
     }
@@ -1117,7 +1117,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
                 uProp, Any(OUString(INET_HID_SCHEME + HID_BIB_DB_GRIDCTRL)));
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::createGridModel: something went wrong !");
     }
@@ -1286,7 +1286,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("::loadControlModel: something went wrong !");
     }

@@ -118,7 +118,7 @@ namespace
                 xSceneProperties->getPropertyValue( "D3DSceneLightDirection" + aIndex ) >>= aResult.aDirection;
                 xSceneProperties->getPropertyValue( "D3DSceneLightOn" + aIndex ) >>= aResult.bIsEnabled;
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -145,7 +145,7 @@ namespace
             xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
                                                 cpo::uno::Any( rLightSource.bIsEnabled ));
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -159,7 +159,7 @@ namespace
         {
             xSceneProperties->getPropertyValue(u"D3DSceneAmbientColor"_ustr) >>= nResult;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -175,7 +175,7 @@ namespace
             xSceneProperties->setPropertyValue(u"D3DSceneAmbientColor"_ustr,
                                                cpo::uno::Any( rColor ));
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

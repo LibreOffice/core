@@ -46,7 +46,7 @@ VbaEventsHelperBase::VbaEventsHelperBase( const cpo::uno::Sequence< cpo::uno::An
         mxModel = getXSomethingFromArgs< frame::XModel >( rArgs, 0, false );
         mpShell = getSfxObjShell( mxModel );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     startListening();
@@ -147,7 +147,7 @@ void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rE
     {
         ensureVBALibrary();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         return;
     }
@@ -171,7 +171,7 @@ void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rE
                 // paths to class/form/document event handlers are keyed by module name
                 maEventPaths.erase( aModuleName );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -204,7 +204,7 @@ void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const cpo:
     {
         processVbaEvent( nEventId, rArgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -231,7 +231,7 @@ void VbaEventsHelperBase::startListening()
 
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
     if( xEventBroadcaster.is() )
-        try { xEventBroadcaster->addEventListener( this ); } catch( uno::Exception& ) {}
+        try { xEventBroadcaster->addEventListener( this ); } catch( cpo::uno::Exception& ) {}
 }
 
 void VbaEventsHelperBase::stopListening()
@@ -241,7 +241,7 @@ void VbaEventsHelperBase::stopListening()
 
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
     if( xEventBroadcaster.is() )
-        try { xEventBroadcaster->removeEventListener( this ); } catch( uno::Exception& ) {}
+        try { xEventBroadcaster->removeEventListener( this ); } catch( cpo::uno::Exception& ) {}
 
     mxModel.clear();
     mpShell = nullptr;
@@ -319,7 +319,7 @@ void VbaEventsHelperBase::ensureVBALibrary()
         uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModuleInfos, uno::UNO_QUERY_THROW );
         xChangesNotifier->addChangesListener( this );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // error accessing the Basic library, so this object is useless
         stopListening();
@@ -338,7 +338,7 @@ bool VbaEventsHelperBase::hasModule(const OUString& rModuleName)
         ensureVBALibrary();
         bRet = mxModuleInfos->hasModuleInfo(rModuleName);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {}
 
     return bRet;
@@ -358,7 +358,7 @@ sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName )
     {
         return mxModuleInfos->getModuleInfo( rModuleName ).ModuleType;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     throw uno::RuntimeException();

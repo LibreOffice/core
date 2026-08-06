@@ -245,7 +245,7 @@ AccessibleTextHelper_Impl::~AccessibleTextHelper_Impl()
         // automatically freed otherwise
         Dispose();
     }
-    catch( const uno::Exception& ) {}
+    catch( const cpo::uno::Exception& ) {}
 }
 
 SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const
@@ -443,7 +443,7 @@ void AccessibleTextHelper_Impl::SetFocus( bool bHaveFocus )
             if( GetEditViewForwarder().GetSelection( aSelection ) )
                 SetChildFocus(aSelection.end.nPara, bHaveFocus);
         }
-        catch( const uno::Exception& ) {}
+        catch( const cpo::uno::Exception& ) {}
     }
     else if( bOldFocus != bHaveFocus )
     {
@@ -774,7 +774,7 @@ void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         OSL_FAIL("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
 
@@ -1053,7 +1053,7 @@ void AccessibleTextHelper_Impl::ProcessQueue()
                           cpo::uno::Any(uno::Reference<XAccessible>(getAccessibleChild(
                               aFunctor.GetParaIndex() - mnFirstVisibleChild + GetStartIndex()))));
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
             }
@@ -1192,7 +1192,7 @@ void AccessibleTextHelper_Impl::ProcessQueue()
                             UpdateSelection();
                         }
                         // maybe we're not in edit mode (this is not an error)
-                        catch( const uno::Exception& ) {}
+                        catch( const cpo::uno::Exception& ) {}
                         break;
                     default: break;
                 }
@@ -1273,10 +1273,10 @@ void AccessibleTextHelper_Impl::ProcessQueue()
                     // Note: cannot destroy it here, since we're called from there!
                     ShutdownEditSource();
                 }
-                catch( const uno::Exception& ) {}
+                catch( const cpo::uno::Exception& ) {}
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -1343,10 +1343,10 @@ void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& 
                 // Note: cannot destroy it here, since we're called from there!
                 ShutdownEditSource();
             }
-            catch( const uno::Exception& ) {}
+            catch( const cpo::uno::Exception& ) {}
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
         mbInNotify = false;
@@ -1365,7 +1365,7 @@ void AccessibleTextHelper_Impl::Dispose()
             ::comphelper::AccessibleEventNotifier::revokeClient(mnNotifierClientId);
             SAL_INFO("svx", "disposed ID: " << mnNotifierClientId );
         }
-        catch( const uno::Exception& ) {}
+        catch( const cpo::uno::Exception& ) {}
 
         mnNotifierClientId = 0;
     }
@@ -1375,7 +1375,7 @@ void AccessibleTextHelper_Impl::Dispose()
         // dispose children
         maParaManager.Dispose();
     }
-    catch( const uno::Exception& ) {}
+    catch( const cpo::uno::Exception& ) {}
 
     // quit listen on stale edit source
     if( maEditSource.IsValid() )

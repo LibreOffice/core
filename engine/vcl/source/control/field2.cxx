@@ -162,7 +162,7 @@ static bool ImplIsPatternChar( sal_Unicode cChar, char cEditMask )
         nType = ImplGetCharClass()->getCharacterType( aCharStr, 0,
                 Application::GetSettings().GetLanguageTag().getLocale() );
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("vcl.control");
         return false;

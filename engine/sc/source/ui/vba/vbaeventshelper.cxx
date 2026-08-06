@@ -108,7 +108,7 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
         uno::Reference< frame::XFrame > xFrame( rxController->getFrame(), uno::UNO_SET_THROW );
         return xFrame->getContainerWindow();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return nullptr;
@@ -203,7 +203,7 @@ ScVbaEventListener::ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno
         uno::Reference< frame::XController > xController( mxModel->getCurrentController(), uno::UNO_SET_THROW );
         startControllerListening( xController );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -214,15 +214,15 @@ void ScVbaEventListener::startControllerListening( const uno::Reference< frame::
 
     uno::Reference< awt::XWindow > xWindow = lclGetWindowForController( rxController );
     if( xWindow.is() )
-        try { xWindow->addWindowListener( this ); } catch( uno::Exception& ) {}
+        try { xWindow->addWindowListener( this ); } catch( cpo::uno::Exception& ) {}
 
     uno::Reference< awt::XTopWindow > xTopWindow( xWindow, uno::UNO_QUERY );
     if( xTopWindow.is() )
-        try { xTopWindow->addTopWindowListener( this ); } catch( uno::Exception& ) {}
+        try { xTopWindow->addTopWindowListener( this ); } catch( cpo::uno::Exception& ) {}
 
     uno::Reference< frame::XControllerBorder > xControllerBorder( rxController, uno::UNO_QUERY );
     if( xControllerBorder.is() )
-        try { xControllerBorder->addBorderResizeListener( this ); } catch( uno::Exception& ) {}
+        try { xControllerBorder->addBorderResizeListener( this ); } catch( cpo::uno::Exception& ) {}
 
     if( VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow ) )
     {
@@ -236,15 +236,15 @@ void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::X
 
     uno::Reference< awt::XWindow > xWindow = lclGetWindowForController( rxController );
     if( xWindow.is() )
-        try { xWindow->removeWindowListener( this ); } catch( uno::Exception& ) {}
+        try { xWindow->removeWindowListener( this ); } catch( cpo::uno::Exception& ) {}
 
     uno::Reference< awt::XTopWindow > xTopWindow( xWindow, uno::UNO_QUERY );
     if( xTopWindow.is() )
-        try { xTopWindow->removeTopWindowListener( this ); } catch( uno::Exception& ) {}
+        try { xTopWindow->removeTopWindowListener( this ); } catch( cpo::uno::Exception& ) {}
 
     uno::Reference< frame::XControllerBorder > xControllerBorder( rxController, uno::UNO_QUERY );
     if( xControllerBorder.is() )
-        try { xControllerBorder->removeBorderResizeListener( this ); } catch( uno::Exception& ) {}
+        try { xControllerBorder->removeBorderResizeListener( this ); } catch( cpo::uno::Exception& ) {}
 
     if( VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow ) )
     {
@@ -430,7 +430,7 @@ void ScVbaEventListener::startModelListening()
         uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
         xChangesNotifier->addChangesListener( this );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -442,7 +442,7 @@ void ScVbaEventListener::stopModelListening()
         uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
         xChangesNotifier->removeChangesListener( this );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

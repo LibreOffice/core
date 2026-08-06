@@ -30,7 +30,7 @@ using namespace ::com::sun::star::beans;
 
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 
 namespace chart
 {

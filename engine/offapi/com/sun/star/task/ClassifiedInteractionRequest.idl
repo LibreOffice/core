@@ -23,7 +23,7 @@
 
 /** A classified interaction request.
  */
-published exception ClassifiedInteractionRequest: com::sun::star::uno::Exception
+published exception ClassifiedInteractionRequest: cpo::uno::Exception
 {
     /** The classification of the request.
      */

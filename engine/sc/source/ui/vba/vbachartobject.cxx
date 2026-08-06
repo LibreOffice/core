@@ -70,7 +70,7 @@ ScVbaChartObject::setShape()
             }
         }
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
@@ -115,7 +115,7 @@ ScVbaChartObject::Activate()
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentExcelDoc(mxContext)->getCurrentController(), uno::UNO_QUERY_THROW );
         xSelectionSupplier->select(cpo::uno::Any(xShape));
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), u"ChartObject Activate internal error"_ustr );
     }

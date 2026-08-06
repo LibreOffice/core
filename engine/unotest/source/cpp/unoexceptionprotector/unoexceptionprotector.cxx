@@ -28,7 +28,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -179,7 +179,7 @@ bool Prot::protect(
 {
     try {
         return functor();
-    } catch (const css::uno::Exception &e) {
+    } catch (const cpo::uno::Exception &e) {
         cpo::uno::Any a(cppu::getCaughtException());
         std::ostringstream s;
         try {
@@ -187,7 +187,7 @@ bool Prot::protect(
                 s,
                 css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext()),
                 cppu::UnoType<cpo::uno::Any>::get(), a);
-        } catch (css::uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             // Best effort to print full details above; if that fails for whatever reason, print as
             // much detailed information as possible, followed by at least the exception type and
             // message:

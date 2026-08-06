@@ -87,7 +87,7 @@ public class AccessibleStatusBarItem {
             xTextDoc = xSOF.createTextDoc("_blank");
             getTestObject();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
@@ -115,7 +115,7 @@ public class AccessibleStatusBarItem {
             xMathDoc = xSOF.createMathDoc("_blank");
             getTestObject();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
@@ -143,7 +143,7 @@ public class AccessibleStatusBarItem {
             xDrawDoc = xSOF.createDrawDoc("_blank");
             getTestObject();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
@@ -171,7 +171,7 @@ public class AccessibleStatusBarItem {
             xImpressDoc = xSOF.createImpressDoc("_blank");
             getTestObject();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
@@ -199,7 +199,7 @@ public class AccessibleStatusBarItem {
             util.utils.waitForEventIdle(xMSF);
             getTestObject();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
@@ -241,7 +241,7 @@ public class AccessibleStatusBarItem {
 
             testObject=parentContext;
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         catch(Throwable t) {
@@ -346,7 +346,7 @@ public class AccessibleStatusBarItem {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

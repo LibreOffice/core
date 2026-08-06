@@ -226,7 +226,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
                 if ( xLayoutManager.is() )
                     xLayoutManager->setVisible( false );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }

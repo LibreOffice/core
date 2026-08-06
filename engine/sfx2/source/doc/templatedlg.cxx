@@ -712,7 +712,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
     {
         mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),u"_default"_ustr, 0, aArgs );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -735,7 +735,7 @@ IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, voi
         xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),u"_default"_ustr, 0, aArgs ),
                        uno::UNO_QUERY );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -1228,7 +1228,7 @@ static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
                 bRet = true;
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 

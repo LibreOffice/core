@@ -72,7 +72,7 @@ void NetChartTypeTemplate::applyStyle2(
         xSeries->switchLinesOnOrOff( m_bHasLines );
         xSeries->makeLinesThickOrThin( true );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -131,7 +131,7 @@ bool NetChartTypeTemplate::matchesTemplate2(
                     break;
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }

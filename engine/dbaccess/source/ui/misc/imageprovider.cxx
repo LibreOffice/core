@@ -32,7 +32,7 @@ namespace dbaui
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::sdb::application::XTableUIProvider;

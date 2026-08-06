@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, HyphenateAllHdl_Impl, weld::Button&, void)
 
         xProp->setIsHyphAuto( false );
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         SAL_WARN( "cui.dialogs", "Hyphenate All failed" );
     }

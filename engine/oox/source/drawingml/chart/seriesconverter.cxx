@@ -435,7 +435,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             convertTextProperty(aPropSet, getFormatter(), mrModel.mxText->mxTextBody);
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -625,7 +625,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "ErrorBarConverter::convertFromModel - error while creating error bars" );
     }
@@ -752,7 +752,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             xRegCurveCont->addRegressionCurve( xRegCurve );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "TrendlineConverter::convertFromModel - error while creating trendline" );
     }
@@ -803,7 +803,7 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             getFormatter().convertFrameFormatting( aPropSet, rSeries.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -955,7 +955,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
                 PropertySet aPointProp( xDataSeries->getDataPointByIndex( nIndex ) );
                 rFormatter.convertAutomaticFill( aPointProp, eObjType, bVaryColorsByPoint ? nIndex : mrModel.mnIndex );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }

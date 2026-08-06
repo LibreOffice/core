@@ -594,7 +594,7 @@ void OpenDoxygenDocumentation(const vcl::Window* pParent, const IdeSymbolInfo& r
 
         xSystemShell->execute(sUrl, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (const css::uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("basctl", "Failed to open Doxygen documentation: " << e.Message);
 

@@ -51,7 +51,7 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxProperty
         uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
         return xPropertySet->getPropertyValue(rName).get<OUString>();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -91,7 +91,7 @@ bool addOrInsertDocumentProperty(
             rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE,
                                              cpo::uno::Any(rsValue));
     }
-    catch (const uno::Exception& /*rException*/)
+    catch (const cpo::uno::Exception& /*rException*/)
     {
         return false;
     }

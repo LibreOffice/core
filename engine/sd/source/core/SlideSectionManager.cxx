@@ -263,7 +263,7 @@ void SlideSectionManager::RemoveSectionSlides(sal_Int32 nSectionIndex)
             xPages->remove(xPage);
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "SlideSectionManager::RemoveSectionSlides()");
     }

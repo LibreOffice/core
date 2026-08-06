@@ -2911,7 +2911,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             GetPage()->getSdrPageProperties().PutItemSet(aSet);
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SdMasterPage::setBackground()");
     }
@@ -2968,7 +2968,7 @@ void SdMasterPage::getBackground( Any& rValue )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SdMasterPage::getBackground()");
         rValue.clear();

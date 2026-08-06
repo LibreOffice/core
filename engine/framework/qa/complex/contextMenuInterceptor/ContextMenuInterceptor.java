@@ -118,7 +118,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor
             // do something useful
             // we used an invalid index for accessing a container
         }
-        catch (com.sun.star.uno.Exception ex)
+        catch (cpo.uno.Exception ex)
         {
             // something strange has happened!
         }

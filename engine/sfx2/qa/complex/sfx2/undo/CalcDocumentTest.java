@@ -41,7 +41,7 @@ public class CalcDocumentTest extends DocumentTestBase
         return "spreadsheet document";
     }
 
-    public void initializeDocument() throws com.sun.star.uno.Exception
+    public void initializeDocument() throws cpo.uno.Exception
     {
         final XCell cellA1 = getCellA1();
         cellA1.setValue( INIT_VALUE );
@@ -57,7 +57,7 @@ public class CalcDocumentTest extends DocumentTestBase
         }
     }
 
-    public void doSingleModification() throws com.sun.star.uno.Exception
+    public void doSingleModification() throws cpo.uno.Exception
     {
         final XCell cellA1 = getCellA1();
         assertEquals( "initial cell value not as expected", INIT_VALUE, cellA1.getValue(), 0 );
@@ -65,7 +65,7 @@ public class CalcDocumentTest extends DocumentTestBase
         assertEquals( "modified cell value not as expected", MODIFIED_VALUE, cellA1.getValue(), 0 );
     }
 
-    public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
+    public void verifyInitialDocumentState() throws cpo.uno.Exception
     {
         final XCell cellA1 = getCellA1();
         assertEquals( "cell A1 doesn't have its initial value", INIT_VALUE, cellA1.getValue(), 0 );
@@ -79,13 +79,13 @@ public class CalcDocumentTest extends DocumentTestBase
         }
     }
 
-    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
+    public void verifySingleModificationDocumentState() throws cpo.uno.Exception
     {
         final XCell cellA1 = getCellA1();
         assertEquals( "cell A1 doesn't have the value which we gave it", MODIFIED_VALUE, cellA1.getValue(), 0 );
     }
 
-    public int doMultipleModifications() throws com.sun.star.uno.Exception
+    public int doMultipleModifications() throws cpo.uno.Exception
     {
         XCellRange range = UnoRuntime.queryInterface( XCellRange.class,
             ((SpreadsheetDocument)m_document).getSheet(0) );
@@ -101,7 +101,7 @@ public class CalcDocumentTest extends DocumentTestBase
         return 12;
     }
 
-    private XCell getCellA1() throws com.sun.star.uno.Exception
+    private XCell getCellA1() throws cpo.uno.Exception
     {
         XCellRange range = UnoRuntime.queryInterface( XCellRange.class,
             ((SpreadsheetDocument)m_document).getSheet(0) );

@@ -183,7 +183,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
     {
         throw;
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -239,7 +239,7 @@ void SAL_CALL LayoutManagerListener::dispose()
     {
         throw;
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -617,7 +617,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
             Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
             aValue >>= xLayoutManager;
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }

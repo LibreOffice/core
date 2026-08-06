@@ -73,7 +73,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during opening or creation
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     ::com::sun::star::uno::XInterface createInstanceUserInit(
@@ -86,7 +86,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
             [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

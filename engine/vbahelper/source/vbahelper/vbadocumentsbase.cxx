@@ -203,7 +203,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
     {
         uno::Reference< frame::XModel >( rxComponent, uno::UNO_QUERY_THROW )->lockControllers();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -225,7 +225,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
             return;
         xWindow->setEnable( false );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -243,7 +243,7 @@ cpo::uno::Any VbaDocumentsBase::createDocument()
     {
         bInteractive = !xApplication.is() || xApplication->getInteractive();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -284,7 +284,7 @@ cpo::uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const c
     {
         bInteractive = !xApplication.is() || xApplication->getInteractive();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 

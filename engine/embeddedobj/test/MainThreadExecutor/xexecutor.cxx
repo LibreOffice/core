@@ -35,7 +35,7 @@ IMPL_LINK_NOARG( MainThreadExecutor_Impl, executor, void*, void )
     {
         try {
             m_xJob->execute( m_aArgs );
-        } catch( uno::Exception& ) {}
+        } catch( cpo::uno::Exception& ) {}
     }
 
     m_bExecuted = true;

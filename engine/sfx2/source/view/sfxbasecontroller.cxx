@@ -95,7 +95,7 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::StringPair;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XFrameActionListener;
 using ::com::sun::star::util::XCloseListener;
@@ -1154,7 +1154,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                             xFrameProps->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY_THROW );
                         xLayouterProps->setPropertyValue(u"PreserveContentSize"_ustr, cpo::uno::Any( true ) );
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION("sfx.view");
                     }
@@ -1306,7 +1306,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         }
                     }
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("sfx.view");
                 }

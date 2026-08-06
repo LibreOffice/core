@@ -429,7 +429,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -531,7 +531,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
         xProp->getPropertyValue(u"AttachedAxisIndex"_ustr) >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -734,7 +734,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             if( !aHiddenValues.hasElements() )
                 return true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             return true;
         }
@@ -940,7 +940,7 @@ lcl_TableData lcl_getDataForLocalTable(
                 pTarget[i] <<= rSource[i];
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "something went wrong during table data collection");
     }
@@ -986,7 +986,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION("xmloff.chart", "chart:exporting error bar ranges" );
         }
@@ -1649,7 +1649,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 Any aShapesAny = xDocPropSet->getPropertyValue(u"AdditionalShapes"_ustr);
                 aShapesAny >>= mxAdditionalShapes;
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "AdditionalShapes not found" );
             }
@@ -1737,7 +1737,7 @@ void SchXMLExportHelper_Impl::exportTable()
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -1993,7 +1993,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
             xNewAxis = xCooSys->getAxisByDimension( nDimensionIndex, bPrimary ? 0 : 1 );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
     }
     return xNewAxis;
@@ -2105,7 +2105,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                         rShapeExport->export3DSceneAttributes( xPropSet );
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "chart:exportPlotAreaException caught");
             }
@@ -2880,7 +2880,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 xPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
                                     aSeriesSeq[nSeriesIdx], mrExport.GetModel() );
                             }
-                            catch( const uno::Exception & )
+                            catch( const cpo::uno::Exception & )
                             {
                                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Series not found or no XPropertySet" );
                                 continue;
@@ -3079,7 +3079,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             Any aPropAny( xPropSet->getPropertyValue( u"DataMeanValueProperties"_ustr ));
                             aPropAny >>= xStatProp;
                         }
-                        catch( const uno::Exception & )
+                        catch( const cpo::uno::Exception & )
                         {
                             TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available" );
                         }
@@ -3570,7 +3570,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                 xSeries, nElement, mrExport.GetModel() );
                     bExportNumFmt = true;
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of data point" );
                 }
@@ -3675,7 +3675,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                                 xSeries, nCurrIndex, mrExport.GetModel() );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of data point" );
             }
@@ -4137,7 +4137,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }

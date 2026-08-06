@@ -33,7 +33,7 @@ import com.sun.star.sdbc.*;
 import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.task.XJob;
 import com.sun.star.text.MailMergeType;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -341,7 +341,7 @@ public class SwXMailMerge extends TestCase {
 
                 try{
                     dbt.revokeDB(databaseName);
-                } catch (com.sun.star.uno.Exception e){
+                } catch (cpo.uno.Exception e){
                 }
 
                 uniqueSuffix--;

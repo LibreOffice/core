@@ -2946,7 +2946,7 @@ static void saveFilter(const Reference< runtime::XFormController >& _rxControlle
         xFormAsSet->setPropertyValue(FM_PROP_FILTER, xControllerAsSet->getPropertyValue(FM_PROP_FILTER));
         xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, Any( true ) );
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }

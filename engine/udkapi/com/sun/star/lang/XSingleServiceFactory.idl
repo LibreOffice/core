@@ -39,7 +39,7 @@ published interface XSingleServiceFactory: com::sun::star::uno::XInterface
                 service instance
     */
     com::sun::star::uno::XInterface createInstance()
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /** Creates an instance of a service implementation initialized with
         some arguments.
@@ -50,7 +50,7 @@ published interface XSingleServiceFactory: com::sun::star::uno::XInterface
                 service instance
     */
     com::sun::star::uno::XInterface createInstanceWithArguments( [in] sequence<any> aArguments )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 

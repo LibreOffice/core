@@ -169,7 +169,7 @@ public class CalcRTL
         try {
             System.out.println("creating a sheetdocument");
             xSheetDoc = SOF.createCalcDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             // Some exception occurs.FAILED
             worked = false;
             e.printStackTrace(/*(PrintWriter) log*/ System.err);
@@ -483,7 +483,7 @@ public class CalcRTL
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         connection.tearDown();
     }

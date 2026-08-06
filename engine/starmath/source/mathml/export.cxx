@@ -370,7 +370,7 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
         xStream = xStorage->openStreamElement(
             OUString(pStreamName), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("starmath", "Can't create output stream in package");
         return false;

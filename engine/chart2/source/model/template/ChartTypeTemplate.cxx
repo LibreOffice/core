@@ -163,7 +163,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource2(
         std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq;
         FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -247,7 +247,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
 
         FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -295,7 +295,7 @@ void ChartTypeTemplate::changeDiagramData(
             aChartTypes[i]->setDataSeries( aData.Series[i] );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -348,7 +348,7 @@ bool ChartTypeTemplate::matchesTemplate2(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -399,7 +399,7 @@ void ChartTypeTemplate::applyStyle2(
                     lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -631,7 +631,7 @@ void ChartTypeTemplate::adaptScales(
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -739,7 +739,7 @@ void ChartTypeTemplate::FillDiagram(
         createChartTypes( aSeriesSeq, aCoordinateSystems, aOldChartTypesSeq );
         applyStyles( xDiagram );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -801,7 +801,7 @@ void ChartTypeTemplate::createChartTypes(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

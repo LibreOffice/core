@@ -71,7 +71,7 @@ public class RecoveryTools {
         XInterface xToolKit = null;
         try {
             xToolKit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
           return null;
         }
 

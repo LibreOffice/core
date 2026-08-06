@@ -126,7 +126,7 @@ void Acceptor::run()
         } catch (const ConnectionSetupException&) {
             TOOLS_WARN_EXCEPTION("desktop.offacc", "");
             break;
-        } catch (const Exception&) {
+        } catch (const cpo::uno::Exception&) {
             TOOLS_WARN_EXCEPTION("desktop.offacc", "");
             // connection failed...
             // something went wrong during connection setup.

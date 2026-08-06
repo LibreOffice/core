@@ -110,7 +110,7 @@ StandardFormatNormalizer::StandardFormatNormalizer(Reference<XNumberFormatter> c
         m_nFormatKey = xTypes->getStandardFormat(i_numberFormatType,
                                                  SvtSysLocale().GetLanguageTag().getLocale());
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svtools.table");
     }
@@ -292,7 +292,7 @@ bool CellValueConversion::ensureNumberFormatter()
         // done
         xNumberFormatter = xFormatter;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svtools.table");
     }
@@ -375,7 +375,7 @@ OUString CellValueConversion::convertToString(const Any& i_value)
                     sStringValue = xNumberFormatter->convertNumberToString(formatKey,
                                                                            formatterCompliantValue);
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("svtools.table");
                 }

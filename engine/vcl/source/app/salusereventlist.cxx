@@ -25,7 +25,7 @@
 #include <exception>
 #include <typeinfo>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>

@@ -169,7 +169,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 
@@ -191,7 +191,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
             xCloseable->close(true);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         // vetoed
     }
@@ -205,7 +205,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
         if (xModel)
             xModel->dispose();
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -298,7 +298,7 @@ VbaDocumentBase::getVBProject()
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return cpo::uno::Any( mxVBProject );

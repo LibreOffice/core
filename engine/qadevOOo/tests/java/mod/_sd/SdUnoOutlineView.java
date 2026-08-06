@@ -158,7 +158,7 @@ public class SdUnoOutlineView extends TestCase {
             XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
             if( xDispatcher != null )
                     xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't change mode");
         }
 

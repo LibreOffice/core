@@ -182,7 +182,7 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
                     SWUnoHelper::UCB_DeleteFile( sURL );
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -271,7 +271,7 @@ SwSendMailDialog::~SwSendMailDialog()
             xMessage = m_pImpl->xMailDispatcher->dequeueMailMessage();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

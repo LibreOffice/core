@@ -485,7 +485,7 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
         {
             aAny = xLinks->getByName( aLink );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
@@ -1088,7 +1088,7 @@ cpo::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
 
             aLTLocales = xSuppLoc->getLocales();
         }
-        catch(uno::Exception const& rException)
+        catch(cpo::uno::Exception const& rException)
         {
             SAL_WARN("kit", "Failed to set LanguageTool API settings: " << rException.Message);
         }
@@ -1487,7 +1487,7 @@ COKitDocumentType getDocumentType (COKitDocument* pThis)
             SetLastExceptionMsg(u"unknown document type"_ustr);
         }
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         SetLastExceptionMsg("exception: " + exception.Message);
     }
@@ -3829,7 +3829,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         g.dismiss();
         return pDocument;
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
         TOOLS_INFO_EXCEPTION("kit", "Document can't be loaded");
@@ -4651,7 +4651,7 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
 
         return true;
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         SetLastExceptionMsg("exception: " + exception.Message);
     }
@@ -5723,7 +5723,7 @@ static void doc_postKeyEvent(COKitDocument* pThis, COKitKeyEventType eType, int 
     {
         pDoc->postKeyEvent(eType, nCharCode, nKeyCode);
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         SetLastExceptionMsg(exception.Message);
         SAL_INFO("kit", "Failed to postKeyEvent " << exception.Message);
@@ -5979,7 +5979,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
             }
         }
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         cpo::uno::Any exAny( cppu::getCaughtException() );
         SetLastExceptionMsg(exception.Message);
@@ -6718,7 +6718,7 @@ static void doc_postMouseEvent(COKitDocument* pThis, COKitMouseEventType eType, 
     {
         pDoc->postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier);
     }
-    catch (const uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         SetLastExceptionMsg(exception.Message);
         SAL_INFO("kit", "Failed to postMouseEvent " << exception.Message);
@@ -7072,7 +7072,7 @@ static bool getFromTransferable(
         SetLastExceptionMsg("Unsupported flavor " + aFlavor.MimeType + " exception " + e.Message);
         return false;
     }
-    catch (const css::uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SetLastExceptionMsg("Exception getting " + aFlavor.MimeType + " exception " + e.Message);
         return false;
@@ -7809,7 +7809,7 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
             aDisplayName = aName;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -9066,7 +9066,7 @@ static void lo_executeScript(
         if (!value.isEmpty()) {
             *result = convertOUString(value);
         }
-    } catch (css::uno::Exception const & exception) {
+    } catch (cpo::uno::Exception const & exception) {
         SetLastExceptionMsg(exception.Message);
         *error = convertOUString(exception.Message);
     }
@@ -9697,7 +9697,7 @@ void setHelpRootURL()
             officecfg::Office::Common::Help::HelpRootURL::set(aHelpRootURL, batch);
             batch->commit();
         }
-        catch (uno::Exception const& rException)
+        catch (cpo::uno::Exception const& rException)
         {
             SAL_WARN("kit", "Failed to set the help root URL: " << rException.Message);
         }
@@ -9717,7 +9717,7 @@ void setCertificateDir()
             officecfg::Office::Common::Security::Scripting::ManualCertDir::set(aCertificateDatabasePath, pBatch);
             pBatch->commit();
         }
-        catch (uno::Exception const& rException)
+        catch (cpo::uno::Exception const& rException)
         {
             SAL_WARN("kit", "Failed to set the NSS certificate database directory: " << rException.Message);
         }
@@ -9739,7 +9739,7 @@ void setDeeplConfig()
             officecfg::Office::Linguistic::Translation::Deepl::AuthKey::set(aAuthKey, batch);
             batch->commit();
         }
-        catch(uno::Exception const& rException)
+        catch(cpo::uno::Exception const& rException)
         {
             SAL_WARN("kit", "Failed to set Deepl API settings: " << rException.Message);
         }
@@ -10115,7 +10115,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         else
             bInitialized = true;
     }
-    catch (css::uno::Exception& exception)
+    catch (cpo::uno::Exception& exception)
     {
         fprintf(stderr, "Bootstrapping exception '%s'\n",
                  OUStringToOString(exception.Message, RTL_TEXTENCODING_UTF8).getStr());

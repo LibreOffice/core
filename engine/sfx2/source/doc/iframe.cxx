@@ -69,7 +69,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
     SfxFrameDescriptor  maFrmDescr;
 
 public:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
@@ -247,7 +247,7 @@ void SAL_CALL IFrameObject::cancel()
             xClose->close( true );
         mxFrame = nullptr;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

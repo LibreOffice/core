@@ -176,7 +176,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher, void )
             }
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }

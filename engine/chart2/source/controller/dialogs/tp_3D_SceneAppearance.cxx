@@ -57,7 +57,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( rtl::Reference<::chart::ChartMod
         ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
         aProps.m_eScheme = xDiagram->detectScheme();
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -71,7 +71,7 @@ void lcl_setShadeModeAtModel( rtl::Reference<::chart::ChartModel> const & xModel
         rtl::Reference< ::chart::Diagram > xDiaProp = xModel->getFirstChartDiagram();
         xDiaProp->setPropertyValue( u"D3DSceneShadeMode"_ustr , cpo::uno::Any( aShadeMode ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

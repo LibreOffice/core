@@ -380,7 +380,7 @@ namespace svxform
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -710,7 +710,7 @@ namespace svxform
             sName = m_xUIHelper->getNodeDisplayName(
                 _pNewNode->m_xNode, m_pNaviWin->IsShowDetails() );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -1635,7 +1635,7 @@ namespace svxform
                         {
                             xUIHelper->removeInstance( sInstName );
                         }
-                        catch (const Exception&)
+                        catch (const cpo::uno::Exception&)
                         {
                             TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
                         }
@@ -2123,7 +2123,7 @@ namespace svxform
                     if ( xBindings.is() )
                         xBindings->remove( Any( m_xTempBinding ) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION( "svx.form", "AddDataItemDialog::Dtor()" );
                 }
@@ -2454,7 +2454,7 @@ namespace svxform
                         && !sTemp.isEmpty() )
                         m_xCalculateCB->set_active(true);
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION( "svx.form", "AddDataItemDialog::InitFromNode()" );
                 }
@@ -2583,7 +2583,7 @@ namespace svxform
                 if ( ( m_xBinding->getPropertyValue( u"Model"_ustr ) >>= xModel ) && xModel.is() )
                     m_xUIHelper.set( xModel, UNO_QUERY );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "svx.form", "AddConditionDialog::Ctor()" );
             }

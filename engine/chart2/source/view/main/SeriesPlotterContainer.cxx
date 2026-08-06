@@ -170,7 +170,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
 
         xDiagram->getPropertyValue(u"SplitPos"_ustr) >>= nSplitPos;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -229,7 +229,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                             PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, // "3DRelativeHeight"
                             cpo::uno::Any(n3DRelativeHeight));
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

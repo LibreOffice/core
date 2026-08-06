@@ -10641,7 +10641,7 @@ static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxV
             bOk = pPar->PutObject( aObj.get() );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return bOk;

@@ -215,7 +215,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
                     }
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 OSL_FAIL("Chart wizard couldn't be positioned automatically" );
             }

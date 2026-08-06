@@ -99,7 +99,7 @@ void ThesaurusMenuController::fillPopupMenu()
             css::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
             xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, aSynonymsImageUrl) });
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("fwk");
         }
@@ -148,7 +148,7 @@ void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, c
             }
         }
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         SAL_WARN( "fwk.uielement", "Failed to get synonyms" );
     }

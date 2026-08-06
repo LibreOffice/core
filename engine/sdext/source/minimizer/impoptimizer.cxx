@@ -80,7 +80,7 @@ static void ImpExtractCustomShow( const Reference< XModel >& rxModel, std::u16st
         for( const auto& rxPage : vNonUsedPageList )
             xDrawPages->remove( rxPage );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }
@@ -123,7 +123,7 @@ static void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -146,7 +146,7 @@ static void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
             xPropSet->setPropertyValue( u"Layout"_ustr, Any( sal_Int16(21) ) );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -194,7 +194,7 @@ static void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOpt
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -226,7 +226,7 @@ static void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicP
             rxGraphicProvider->storeGraphic( rxGraphic, aArgs );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -347,7 +347,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xNewGraphic;
@@ -444,7 +444,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
             }
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -551,7 +551,7 @@ static void DispatchURL( const Reference< XComponentContext >& xContext, const O
         if ( xDispatch.is() )
             xDispatch->dispatch( aUrl, aArgs );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

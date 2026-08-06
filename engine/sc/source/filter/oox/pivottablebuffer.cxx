@@ -473,7 +473,7 @@ void PivotTableField::finalizeImport(const rtl::Reference<ScDataPilotDescriptorB
         xDPField = xDPFieldsIA->getScDataPilotFieldObjByIndex(!bCalculatedField ? nDatabaseIdx : mnFieldIndex, bCalculatedField,
                                                               aFieldName, pCalcFormula);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -516,7 +516,7 @@ void PivotTableField::finalizeImport(const rtl::Reference<ScDataPilotDescriptorB
             OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeImport - no field name in source data found" );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -589,7 +589,7 @@ void PivotTableField::finalizeImportBasedOnCache(
             maDPFieldName = xDPField->getName();
             SAL_WARN_IF( maDPFieldName.isEmpty(), "sc.filter", "PivotTableField::finalizeImportBasedOnCache - no field name in source data found" );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -888,13 +888,13 @@ rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( s
                             pMem->SetShowDetails(rItem.mbShowDetails);
                             pMem->SetIsVisible(!rItem.mbHidden);
                         }
-                        catch( Exception& )
+                        catch( cpo::uno::Exception& )
                         {
                             // catch every failed container access to be able to process following items
                         }
                     }
                 }
-                catch (const Exception&) {}
+                catch (const cpo::uno::Exception&) {}
             }
         }
     }
@@ -1335,7 +1335,7 @@ void PivotTable::finalizeImport()
         using namespace ::com::sun::star::sheet::CellFlags;
         xSheetOp->clearContents( VALUE | DATETIME | STRING | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -1433,7 +1433,7 @@ void PivotTable::finalizeImport()
         xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
         rDoc.SetImportingXML(false);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "PivotTable::finalizeImport - exception while creating the DataPilot table" );
     }
@@ -1492,7 +1492,7 @@ rtl::Reference< ScDataPilotFieldObj > PivotTable::getDataPilotField( const OUStr
         {
             xDPField = mxDPDescriptor->getScDataPilotFields()->getScDataPilotFieldObjByName(rFieldName);
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     return xDPField;
@@ -1514,7 +1514,7 @@ rtl::Reference< ScDataPilotFieldObj > PivotTable::getDataLayoutField() const
         if (mxDPDescriptor)
             xDPField = mxDPDescriptor->getScDataLayoutField();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xDPField;

@@ -91,7 +91,7 @@ static cpo::uno::Sequence< lang::Locale > GetAvailLocales(
                                  rImplName, aArgs, xContext ),
                               uno::UNO_QUERY );
             }
-            catch (uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
             }
@@ -492,7 +492,7 @@ void LngSvcMgr::stopListening()
             uno::Reference<util::XModifyListener>  xListener(this);
             xMB->removeModifyListener(xListener);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -891,7 +891,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( bool bSetSvcList  )
     {
         xGCI = linguistic2::ProofreadingIterator::create( comphelper::getProcessComponentContext() );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
     }
     SAL_WARN_IF( !xGCI.is(), "linguistic", "instantiating grammar checking iterator failed" );
@@ -981,7 +981,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 
             pAvailSpellSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             SAL_WARN( "linguistic", "createInstance failed" );
         }
@@ -1025,7 +1025,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
 
             pAvailGrammarSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             SAL_WARN( "linguistic", "createInstance failed" );
         }
@@ -1068,7 +1068,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
             aLanguages = LocaleSeqToLangVec( aLocaleSequence );
             pAvailHyphSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             SAL_WARN( "linguistic", "createInstance failed" );
         }
@@ -1121,7 +1121,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
                 pAvailThesSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
-            catch (const uno::Exception &)
+            catch (const cpo::uno::Exception &)
             {
                SAL_WARN( "linguistic", "createInstance failed" );
             }

@@ -205,7 +205,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
                 = css::ucb::CachedDynamicResultSetStubFactory::create(
                       m_xContext );
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
         }
 

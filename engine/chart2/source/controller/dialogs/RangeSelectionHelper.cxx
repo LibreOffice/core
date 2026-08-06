@@ -57,7 +57,7 @@ Reference< sheet::XRangeSelection > const & RangeSelectionHelper::getRangeSelect
             if( xDataProvider.is())
                 m_xRangeSelection.set( xDataProvider->getRangeSelection());
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
 
@@ -89,7 +89,7 @@ void RangeSelectionHelper::raiseRangeSelectionDocument()
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -134,7 +134,7 @@ bool RangeSelectionHelper::chooseRange(
             xRangeSel->startRangeSelection( aArgs );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
         bResult = false;

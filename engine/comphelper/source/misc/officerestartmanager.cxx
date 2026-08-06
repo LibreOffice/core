@@ -66,7 +66,7 @@ void OOfficeRestartManager::requestRestart( const uno::Reference< task::XInterac
 
         xRequestCallback->addCallback( this, cpo::uno::Any() );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // the try to request restart has failed
         m_bRestartRequested = false;
@@ -106,7 +106,7 @@ void OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
             try
             {
                 bSuccess = xDesktop->terminate();
-            } catch( uno::Exception& )
+            } catch( cpo::uno::Exception& )
             {}
 
             if ( !bSuccess )
@@ -119,7 +119,7 @@ void OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
         if ( !bSuccess )
             m_bRestartRequested = false;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // the try to restart has failed
         m_bRestartRequested = false;

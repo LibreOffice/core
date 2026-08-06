@@ -330,7 +330,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
         }
-        catch( css::uno::Exception& ) {}
+        catch( cpo::uno::Exception& ) {}
 
         if ( xResultSet.is() )
         {
@@ -392,12 +392,12 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                     }
                 }
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -523,7 +523,7 @@ void SvtMatchContext_Impl::doExecute()
                             css::uno::Reference< css::sdbc::XRow > row(
                                 res, css::uno::UNO_QUERY_THROW);
                             folder = row->getBoolean(1) && !row->wasNull();
-                        } catch (css::uno::Exception &) {
+                        } catch (cpo::uno::Exception &) {
                             TOOLS_WARN_EXCEPTION("svtools.control", "ignoring");
                             return;
                         }

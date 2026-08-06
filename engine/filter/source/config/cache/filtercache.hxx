@@ -326,7 +326,7 @@ class FilterCache : public cppu::BaseMutex
             @return     true if the required fill state exists for this cache; FALSE
                         otherwise.
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         bool isFillState(EFillState eRequired) const;
 
@@ -358,7 +358,7 @@ class FilterCache : public cppu::BaseMutex
                         a list of key names, which identify items of the queried sub container.
                         May be an empty list.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -384,7 +384,7 @@ class FilterCache : public cppu::BaseMutex
                         True, if the requested sub container contains some items;
                         False otherwise.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -407,7 +407,7 @@ class FilterCache : public cppu::BaseMutex
                         a list of key names, which can be used to access the item properties
                         using some other methods of this cache.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -429,7 +429,7 @@ class FilterCache : public cppu::BaseMutex
             @param      sItem
                         the key name of the requested item inside the specified sub container.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -457,7 +457,7 @@ class FilterCache : public cppu::BaseMutex
             @throw      [css::container::NoSuchElementException]
                         if the required item does not still exist.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -467,7 +467,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO document me ...
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         void removeItem(      EItemType        eType,
                                 const OUString& sItem);
@@ -475,7 +475,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO document me ...
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         void setItem(      EItemType        eType ,
                              const OUString& sItem ,
@@ -484,7 +484,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO document me ...
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         void refreshItem(      EItemType        eType,
                                  const OUString& sItem);
@@ -516,7 +516,7 @@ class FilterCache : public cppu::BaseMutex
                         and will be used as out parameter to add the implicit
                         attributes there.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if an internal error occurred.
                         Note: if the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
@@ -530,7 +530,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO document me
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         static void removeStatePropsFromItem(CacheItem& aValue);
 
@@ -540,7 +540,7 @@ class FilterCache : public cppu::BaseMutex
 
             @descr      TODO
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -569,7 +569,7 @@ class FilterCache : public cppu::BaseMutex
                         items! Please be aware of some "NoSuchElementExceptions" if you try to
                         call any other method of this cache in relation to this key names.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if the cache itself is not valid
                         any longer, because any operation before damage it.
          */
@@ -592,7 +592,7 @@ class FilterCache : public cppu::BaseMutex
             @return     [CacheItemList&]
                         a reference(!) to the right sub container member.
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if the required list does not exist.
          */
         const CacheItemList& impl_getItemList(EItemType eType) const;
@@ -614,7 +614,7 @@ class FilterCache : public cppu::BaseMutex
                         specify the needed configuration provider.
                         see EConfigProvider for further information ...
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
 
             @attention  If a configuration access was opened successfully
                         all necessary listener connections will be established
@@ -678,7 +678,7 @@ class FilterCache : public cppu::BaseMutex
             @param      eRequiredState
                         indicates, which fill state this cache should have afterwards.
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
          */
         void impl_load(EFillState eRequiredState);
 
@@ -696,7 +696,7 @@ class FilterCache : public cppu::BaseMutex
             @attention  There is no exception, if the cache could be repaired
                         but contained wrong elements before!
 
-            @throw      [css::uno::Exception]
+            @throw      [cpo::uno::Exception]
                         if cache is invalid and could not be repaired.
          */
         void impl_validateAndOptimize();
@@ -726,7 +726,7 @@ class FilterCache : public cppu::BaseMutex
             @param  pCache
                     points to the cache member, which should be filled or updated.
 
-            @throw  [css::uno::Exception]
+            @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
         void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
@@ -754,7 +754,7 @@ class FilterCache : public cppu::BaseMutex
                     regulate, which properties of the requested item should be read.
                     See definition of EReadOption for further information.
 
-            @throw  [css::uno::Exception]
+            @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
         CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
@@ -785,7 +785,7 @@ class FilterCache : public cppu::BaseMutex
             @throw  [css::container::NoSuchElementException]
                     if the item does not exists inside the configuration layer too!
 
-            @throw  [css::uno::Exception]
+            @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
@@ -794,7 +794,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         static void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
                                  EItemType                                            eType ,
@@ -803,7 +803,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         void impl_addItem2FlushList(      EItemType        eType,
                                     const OUString& sItem);
@@ -811,7 +811,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         static void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
                                     EItemType                                           eType ,
@@ -853,7 +853,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         void impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem);
@@ -861,7 +861,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         static void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                    const CacheItem&                                           rItem);
@@ -871,7 +871,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** TODO
 
-            @throws css::uno::Exception
+            @throws cpo::uno::Exception
         */
         CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,

@@ -36,7 +36,7 @@ public:
     void openPackage( const OUString& rPackageURL, std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
 private:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder, css::uno::Reference< css::lang::XSingleServiceFactory > const & xFactory, const OUString& rSourceFile );
 
     static bool copyFile( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xIfc, OUString& rURL, std::u16string_view rTargetURL );

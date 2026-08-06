@@ -81,7 +81,7 @@ double lcl_CalcViewFontSize(
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -187,7 +187,7 @@ awt::Size lcl_createTextShapes(
 
             rOutTextShapes.push_back( xEntry );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -456,7 +456,7 @@ awt::Size lcl_placeLegendEntries(
                             aRowHeights.pop_back();
                         }
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }
@@ -821,7 +821,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -910,7 +910,7 @@ bool VLegend::isVisible( const rtl::Reference< Legend > & xLegend )
     {
         xLegend->getPropertyValue( u"Show"_ustr) >>= bShow;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1045,7 +1045,7 @@ void VLegend::createShapes(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -1100,7 +1100,7 @@ void VLegend::changePosition(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }

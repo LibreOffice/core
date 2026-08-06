@@ -109,7 +109,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
                 rExport.Characters(sTmp);
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("xmloff.draw", "exception caught during export of one layer!");
         }

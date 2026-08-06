@@ -98,7 +98,7 @@ SAL_IMPLEMENT_MAIN()
         fprintf( stderr, "missing DisposedException!\n" );
         return 1;
     }
-    catch ( const Exception & e )
+    catch ( const cpo::uno::Exception & e )
     {
         OString o =  OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         printf( "%s\n" , o.getStr() );

@@ -51,7 +51,7 @@ const std::unordered_map<std::string_view, OString> UnoProducer::m_baseTypes
         { "type", "uno::type"_ostr }, // TODO:
         { "any", "uno::any"_ostr }, // TODO:
         // TODO: These exception types need proper implementation
-        { "com.sun.star.uno.Exception", "com::sun::star::uno::Exception"_ostr } };
+        { "cpo.uno.Exception", "cpo::uno::Exception"_ostr } };
 // Note: XInterface removed from baseTypes so it can be generated like other interfaces
 
 std::string_view UnoProducer::splitName(std::string_view name)

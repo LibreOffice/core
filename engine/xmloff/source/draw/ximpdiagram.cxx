@@ -92,7 +92,7 @@ void SdXMLDiagramContext::endFastElement(sal_Int32)
         uno::Reference<beans::XPropertySet> xProps(rxTarget, uno::UNO_QUERY_THROW);
         xProps->setPropertyValue(u"DiagramData"_ustr, cpo::uno::Any(aAllDiagramData));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }

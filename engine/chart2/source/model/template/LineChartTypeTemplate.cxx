@@ -213,7 +213,7 @@ bool LineChartTypeTemplate::matchesTemplate2(
                     break;
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -240,7 +240,7 @@ bool LineChartTypeTemplate::matchesTemplate2(
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartType->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartType->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -264,7 +264,7 @@ rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int
         xResult->setPropertyValue(
             CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -290,7 +290,7 @@ rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries2(
         xResult->setPropertyValue(
             CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -312,7 +312,7 @@ void LineChartTypeTemplate::applyStyle2(
         xSeries->switchLinesOnOrOff( m_bHasLines );
         xSeries->makeLinesThickOrThin( m_nDim==2 );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

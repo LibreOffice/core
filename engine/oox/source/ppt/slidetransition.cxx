@@ -87,7 +87,7 @@ namespace oox::ppt {
                 aProps.setProperty( PROP_Change, static_cast<sal_Int32>(1));
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             // should not happen
             TOOLS_WARN_EXCEPTION( "oox", "" );
@@ -104,7 +104,7 @@ namespace oox::ppt {
             xFilter->setFadeColor( 0 );
             xFilter->setMode( mbMode );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             // should not happen
             TOOLS_WARN_EXCEPTION( "oox", "" );

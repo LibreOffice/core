@@ -96,7 +96,7 @@ DlgOrderCrit::DlgOrderCrit(weld::Window * pParent,
         m_sOrgOrder = m_xQueryComposer->getOrder();
         impl_initializeOrderList_nothrow();
     }
-    catch(const Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
@@ -138,7 +138,7 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
             m_aValueList[i]->set_active(bIsAscending ? 0 : 1);
         }
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }

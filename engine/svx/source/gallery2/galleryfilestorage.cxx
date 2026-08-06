@@ -676,7 +676,7 @@ void GalleryFileStorage::insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
     catch (const uno::RuntimeException&)
     {
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

@@ -65,7 +65,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const cpo::uno::Any &
     if (!caught.hasValue())
         return;
     sMessage.append(toOString(caught.getValueTypeName()));
-    css::uno::Exception exception;
+    cpo::uno::Exception exception;
     caught >>= exception;
     if ( !exception.Message.isEmpty() )
     {

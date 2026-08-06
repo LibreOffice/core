@@ -144,7 +144,7 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sd", "QueueProcessor");
     }

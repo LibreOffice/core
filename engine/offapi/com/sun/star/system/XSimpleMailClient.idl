@@ -51,7 +51,7 @@ published interface XSimpleMailClient: com::sun::star::uno::XInterface
             <li>The parameter xSimpleMailMessage is NULL.</li>
         </ul>
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
         if an error occurs while sending the mail.
         <p>The Message member of the exception may contain an error description.</p>
 
@@ -59,7 +59,7 @@ published interface XSimpleMailClient: com::sun::star::uno::XInterface
         @see com::sun::star::system::SimpleMailClientFlags
     */
     void sendSimpleMailMessage( [in] XSimpleMailMessage xSimpleMailMessage, [in] long aFlag )
-        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception );
+        raises( ::com::sun::star::lang::IllegalArgumentException, ::cpo::uno::Exception );
 };
 
 

@@ -44,7 +44,7 @@ void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartMod
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

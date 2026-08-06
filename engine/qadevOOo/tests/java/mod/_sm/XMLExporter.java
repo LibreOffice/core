@@ -125,7 +125,7 @@ public class XMLExporter extends TestCase {
             XPropertySet xPS = UnoRuntime.queryInterface
                 (XPropertySet.class, xMathDoc) ;
             xPS.setPropertyValue("Formula", expFormula) ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
         }

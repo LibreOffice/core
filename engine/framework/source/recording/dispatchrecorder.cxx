@@ -184,7 +184,7 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
         cpo::uno::Sequence < cpo::uno::Any > aSeq;
         cpo::uno::Any aNew;
         try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
-        catch (const css::uno::Exception&) {}
+        catch (const cpo::uno::Exception&) {}
 
         aNew >>= aSeq;
         aArgumentBuffer.append("Array(");
@@ -272,7 +272,7 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
             aNew = m_xConverter->convertToSimpleType( aValue, cpo::uno::TypeClass_STRING );
         }
         catch (const css::script::CannotConvertException&) {}
-        catch (const css::uno::Exception&) {}
+        catch (const cpo::uno::Exception&) {}
         OUString sVal;
         aNew >>= sVal;
 
@@ -309,7 +309,7 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
         {
             AppendToBuffer(lArguments[i].Value, sValBuffer);
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             sValBuffer.setLength(0);
         }

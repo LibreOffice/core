@@ -142,7 +142,7 @@ public class UnoTreeControl extends TestCase {
 
             aDialog.start();
 
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             ex.printStackTrace();
         }
         TestEnvironment tEnv = new TestEnvironment(oObj);
@@ -196,7 +196,7 @@ public class UnoTreeControl extends TestCase {
             Object fileacc = null;
             try {
                 fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            } catch (com.sun.star.uno.Exception ex) {
+            } catch (cpo.uno.Exception ex) {
                 ex.printStackTrace();
             }
             UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
@@ -211,7 +211,7 @@ public class UnoTreeControl extends TestCase {
         Object fileacc = null;
         try {
             fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             ex.printStackTrace();
         }
         XSimpleFileAccess sfa = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
@@ -237,7 +237,7 @@ public class UnoTreeControl extends TestCase {
             }
         } catch (CommandAbortedException ex) {
             ex.printStackTrace();
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             ex.printStackTrace();
         }
 

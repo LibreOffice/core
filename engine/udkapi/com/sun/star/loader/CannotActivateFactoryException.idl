@@ -32,7 +32,7 @@
     classpath, or a missing java installation. The Message should
     contain some more detailed explanations.
  */
-published exception CannotActivateFactoryException: com::sun::star::uno::Exception
+published exception CannotActivateFactoryException: cpo::uno::Exception
 {
 };
 

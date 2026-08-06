@@ -143,7 +143,7 @@ OleEmbeddedObject::~OleEmbeddedObject()
         osl_atomic_increment(&m_refCount); // to avoid crash
         try {
             Dispose();
-        } catch( const uno::Exception& ) {}
+        } catch( const cpo::uno::Exception& ) {}
     }
 
     if ( !m_aTempURL.isEmpty() )
@@ -213,7 +213,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_In
         {
             throw; // forEach handles this
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // even if the listener complains ignore it for now
         }
@@ -241,7 +241,7 @@ void OleEmbeddedObject::GetRidOfComponent(osl::ResettableMutexGuard* guard)
                 oReleaser.emplace(*guard);
             pOleComponent->close(false);
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             m_pOleComponent = std::move(pOleComponent);
             // TODO: there should be a special listener to wait for component closing
@@ -276,7 +276,7 @@ void OleEmbeddedObject::Dispose(osl::ResettableMutexGuard* guard)
     if ( m_pOleComponent )
         try {
             GetRidOfComponent(guard);
-        } catch( const uno::Exception& )
+        } catch( const cpo::uno::Exception& )
         {
             m_bDisposed = true;
             throw; // TODO: there should be a special listener that will close object when
@@ -292,7 +292,7 @@ void OleEmbeddedObject::Dispose(osl::ResettableMutexGuard* guard)
         {
             try {
                 xComp->dispose();
-            } catch( const uno::Exception& ) {}
+            } catch( const cpo::uno::Exception& ) {}
         }
         m_xObjectStream.clear();
     }

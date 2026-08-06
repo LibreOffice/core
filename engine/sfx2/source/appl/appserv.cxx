@@ -157,7 +157,7 @@ namespace
             // and the bibliography is assumed to work
             return css::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_INFO_EXCEPTION("sfx.appl", "assuming Base to be missing");
             return false;
@@ -182,7 +182,7 @@ namespace
                     SolarMutexGuard aGuard;
                     executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
                 }
-                catch (const Exception &)
+                catch (const cpo::uno::Exception &)
                 {
                     TOOLS_INFO_EXCEPTION("sfx.appl", "trying to install LibreOffice Base");
                 }
@@ -201,7 +201,7 @@ namespace
                         SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
             }
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
         }
@@ -230,7 +230,7 @@ namespace
                     xEmbeddedObj->changeState(embed::EmbedStates::LOADED);
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -274,7 +274,7 @@ static void showDocument( const char* pBaseName )
              checkURL ( pBaseName, "", aURL ) ) {
             xDesktop->loadComponentFromURL( aURL, u"_blank"_ustr, 0, args );
         }
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
     }
 }
 
@@ -969,7 +969,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     {
                         throw;
                     }
-                    catch ( css::uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -1039,7 +1039,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                                     xLayoutManager->hideElement( aResName );
                                 }
                             }
-                            catch ( const Exception& )
+                            catch ( const cpo::uno::Exception& )
                             {
                             }
                         }
@@ -1151,7 +1151,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     {
                         throw;
                     }
-                    catch ( css::uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -1393,7 +1393,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         {
                             throw;
                         }
-                        catch ( css::uno::Exception& )
+                        catch ( cpo::uno::Exception& )
                         {
                         }
                     }
@@ -1955,7 +1955,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 Reference< ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, nullptr);
                 xDialog->execute();
             }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("sfx.appl");
             }

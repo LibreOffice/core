@@ -64,7 +64,7 @@ ModelVector CreateDocumentsEnumeration(
                 models.push_back( xCurrModel );
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
     return models;
@@ -81,7 +81,7 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, bool bL
         else
             rxModel->unlockControllers();
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 }
@@ -106,12 +106,12 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
                 uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
                 xWindow->setEnable( bEnableWindows );
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {
             }
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 }
@@ -132,7 +132,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
         {
             pModifyDocumentFunc(xCurrModel, bModificator);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -176,7 +176,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
         if( !aIdentifier.isEmpty() )
             rPool.maCurrDirs[ aIdentifier ] = rPath;
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 }

@@ -222,7 +222,7 @@ bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, 
                 xResults->setResults( ContainerHelper::matrixToSequenceSequence( maResults ) );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "ExternalName::getDdeLinkData - cannot create DDE link" );
         }
@@ -483,7 +483,7 @@ Reference< XExternalSheetCache > ExternalLink::getSheetCache( sal_Int32 nTabId )
         Reference< XExternalSheetCache > xSheetCache( mxDocLink->getByIndex( nCacheIdx ), UNO_QUERY_THROW );
         return xSheetCache;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return nullptr;
@@ -564,7 +564,7 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
         else
             mxDocLink = xDocLinks->addDocLink(maTargetUrl);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

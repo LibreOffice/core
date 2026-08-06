@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
         {
             m_xBase->Run( m_aTimerInfo.first, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -126,7 +126,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
     try
     {
         m_xBase->OnTime( cpo::uno::Any( m_aTimerInfo.second.first ), m_aTimerInfo.first, cpo::uno::Any( m_aTimerInfo.second.second ), cpo::uno::Any( false ) );
-    } catch( uno::Exception& )
+    } catch( cpo::uno::Exception& )
     {}
 }
 
@@ -423,7 +423,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::getVBE()
             u"ooo.vba.vbide.VBE"_ustr , aArgs, mxContext );
         return cpo::uno::Any( xVBE );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
     return cpo::uno::Any();

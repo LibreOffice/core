@@ -298,7 +298,7 @@ void Test::createInstance(
             inst = m_xContext->getServiceManager()->createInstanceWithContext(
                 name, m_xContext);
         }
-    } catch (css::uno::Exception & e) {
+    } catch (cpo::uno::Exception & e) {
         cpo::uno::Any a(cppu::getCaughtException());
         CPPUNIT_FAIL(
             OString(

@@ -66,7 +66,7 @@ uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
         xSecCtx->setDefaultSecurityEnvironmentIndex( n );
         return xSecCtx;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         //PK11_LogoutAll();
         //NSS_Shutdown();

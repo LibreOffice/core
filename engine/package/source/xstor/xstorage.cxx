@@ -252,7 +252,7 @@ OStorage_Impl::~OStorage_Impl()
             try {
                 m_pAntiImpl->InternalDispose( false );
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
             }
@@ -266,7 +266,7 @@ OStorage_Impl::~OStorage_Impl()
                 if ( xTmp.is() )
                     try {
                         xTmp->InternalDispose( false );
-                    } catch( const uno::Exception& )
+                    } catch( const cpo::uno::Exception& )
                     {
                         TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
                     }
@@ -322,7 +322,7 @@ OStorage_Impl::~OStorage_Impl()
                     m_xStream.clear();
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
             }
@@ -349,7 +349,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( const OStorage& aStorage )
         {
             try {
                 xTmp->InternalDispose( false );
-            } catch( const uno::Exception& )
+            } catch( const cpo::uno::Exception& )
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
             }
@@ -502,7 +502,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
                                     m_xContext );
             m_nRelInfoStatus = RELINFO_READ;
         }
-        catch (css::uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "");
         }
@@ -520,7 +520,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             m_nRelInfoStatus = RELINFO_CHANGED_BROKEN;
         }
@@ -1828,7 +1828,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
                         try {
                             xTmp->dispose();
-                        } catch( const uno::Exception& )
+                        } catch( const cpo::uno::Exception& )
                         {
                             TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
                         }
@@ -2192,7 +2192,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2269,7 +2269,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2416,7 +2416,7 @@ rtl::Reference< OStorage > OStorage::openStorageElement2(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2483,7 +2483,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2541,7 +2541,7 @@ void SAL_CALL OStorage::copyLastCommitTo(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2620,7 +2620,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2673,7 +2673,7 @@ bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2731,7 +2731,7 @@ bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2811,7 +2811,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2909,7 +2909,7 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2992,7 +2992,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3086,7 +3086,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3168,7 +3168,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3243,7 +3243,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3332,7 +3332,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3429,7 +3429,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3508,7 +3508,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3559,7 +3559,7 @@ void SAL_CALL OStorage::commit()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3628,7 +3628,7 @@ void SAL_CALL OStorage::revert()
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3792,7 +3792,7 @@ cpo::uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3824,7 +3824,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3861,7 +3861,7 @@ bool SAL_CALL OStorage::hasByName( const OUString& aName )
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3907,7 +3907,7 @@ bool SAL_CALL OStorage::hasElements()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3938,7 +3938,7 @@ void SAL_CALL OStorage::dispose()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4011,7 +4011,7 @@ void SAL_CALL OStorage::removeEncryption()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4038,7 +4038,7 @@ void SAL_CALL OStorage::removeEncryption()
         TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
         throw io::IOException();
@@ -4075,7 +4075,7 @@ void SAL_CALL OStorage::setEncryptionData( const cpo::uno::Sequence< beans::Name
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4095,7 +4095,7 @@ void SAL_CALL OStorage::setEncryptionData( const cpo::uno::Sequence< beans::Name
         m_pImpl->m_bHasCommonEncryptionData = true;
         m_pImpl->m_aCommonEncryptionData = std::move(aEncryptionMap);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:" );
 
@@ -4140,7 +4140,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const cpo::uno::Sequence< beans
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4161,7 +4161,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const cpo::uno::Sequence< beans
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4197,7 +4197,7 @@ cpo::uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorith
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
             throw;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             cpo::uno::Any aCaught( ::cppu::getCaughtException() );
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4217,7 +4217,7 @@ cpo::uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorith
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
             throw;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             cpo::uno::Any aCaught( ::cppu::getCaughtException() );
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4367,7 +4367,7 @@ cpo::uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
             throw;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             cpo::uno::Any aCaught( ::cppu::getCaughtException() );
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4423,7 +4423,7 @@ cpo::uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName
                 TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
                 throw;
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 cpo::uno::Any aCaught( ::cppu::getCaughtException() );
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4661,7 +4661,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OStorage:
     {
         throw;
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(u"Can't getAllRelationships!"_ustr,
@@ -4901,7 +4901,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -4984,7 +4984,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -5040,7 +5040,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -5110,7 +5110,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -5196,7 +5196,7 @@ cpo::uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aEleme
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -5265,7 +5265,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));

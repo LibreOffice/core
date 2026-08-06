@@ -406,7 +406,7 @@ bool XSecController::WriteSignature(
 
             rc = true;
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -449,7 +449,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
 
             bRet = true;
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
 

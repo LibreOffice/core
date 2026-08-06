@@ -333,7 +333,7 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
-   catch ( const Exception& )
+   catch ( const cpo::uno::Exception& )
    {
    }
 

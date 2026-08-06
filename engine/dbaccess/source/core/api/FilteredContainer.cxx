@@ -347,7 +347,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
 
             disposeComponent( xTables );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
             disposing();

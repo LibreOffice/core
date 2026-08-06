@@ -114,7 +114,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         }
     }
 
-    private void notifyListeners_error(com.sun.star.uno.Exception exception) {
+    private void notifyListeners_error(cpo.uno.Exception exception) {
         for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.error(exception);
         }
@@ -249,7 +249,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         String[] messageParts = message.split(": ", 2);
         if (messageParts.length != 2)
         {
-            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Messages must be proceeded by 'urp: '", message))));
+            notifyListeners_error(new cpo.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Messages must be proceeded by 'urp: '", message))));
             return;
         }
 
@@ -267,7 +267,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
             _inputStreamWriter.write(messageBytes);
             _inputStreamWriter.flush();
         } catch (IOException e) {
-            notifyListeners_error(new com.sun.star.uno.Exception(e));
+            notifyListeners_error(new cpo.uno.Exception(e));
             return;
         }
 
@@ -290,7 +290,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         }
 
         if(!hasType) {
-            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: '", message))));
+            notifyListeners_error(new cpo.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: '", message))));
             return;
         }
 
@@ -309,7 +309,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
             _inputStreamWriter.write(messageBytes);
             _inputStreamWriter.flush();
         } catch (IOException e) {
-            notifyListeners_error(new com.sun.star.uno.Exception(e));
+            notifyListeners_error(new cpo.uno.Exception(e));
             return;
         }
 
@@ -318,7 +318,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
 
     @Override
     public void onError(Exception ex) {
-        notifyListeners_error(new com.sun.star.uno.Exception(ex));
+        notifyListeners_error(new cpo.uno.Exception(ex));
     }
 
 }

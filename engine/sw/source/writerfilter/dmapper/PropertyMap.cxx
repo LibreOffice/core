@@ -506,7 +506,7 @@ rtl::Reference<SwXPageStyle> SectionPropertyMap::GetPageStyle(DomainMapper_Impl&
         }
         xReturnPageStyle = m_aPageStyle;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION( "writerfilter" );
     }
@@ -639,7 +639,7 @@ void SectionPropertyMap::ApplyPaperSource(DomainMapper_Impl& rDM_Impl)
                 xFirst->setPropertyValue(getPropertyName(PROP_PAPER_TRAY),
                                          cpo::uno::Any(m_nPaperSourceFirst));
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("writerfilter", "Paper source not found");
             }
@@ -783,7 +783,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
         if ( m_xColumnContainer.is() )
             m_xColumnContainer->setPropertyValue( u"DontBalanceTextColumns"_ustr, cpo::uno::Any( true ) );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::DontBalanceTextColumns" );
     }
@@ -805,7 +805,7 @@ void SectionPropertyMap::ApplySectionProperties( const rtl::Reference< SwXTextSe
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception in SectionPropertyMap::ApplySectionProperties");
     }
@@ -829,7 +829,7 @@ void SectionPropertyMap::ApplyProtectionProperties( rtl::Reference< SwXTextSecti
                 xSection->setPropertyValue( getPropertyName(PROP_IS_PROTECTED), cpo::uno::Any(bIsProtected) );
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "ApplyProtectionProperties failed setting PROP_IS_PROTECTED");
     }
@@ -903,7 +903,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
         if ( rDM_Impl.GetSettingsTable()->GetNoColumnBalance() || rDM_Impl.GetIsLastSectionGroup() )
             DontBalanceTextColumns();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyColumnProperties" );
     }
@@ -953,7 +953,7 @@ void copyHeaderFooterTextProperty(const rtl::Reference<SwXPageStyle>& xSource,
             return;
         xTextCopyTarget->copyText(xTextCopySource);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( )" );
     }
@@ -1249,7 +1249,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
                     const cpo::uno::Any aFillValue = xDefaultPageStyle->getPropertyValue(rProp.Name);
                     m_aPageStyle->setPropertyValue(rProp.Name, aFillValue);
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
                 }
@@ -1289,7 +1289,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
                     Insert( PROP_FOOTNOTE_LINE_ADJUST, cpo::uno::Any( sal_Int16(text::HorizontalAdjust_LEFT) ), false );
             }
         }
-        catch ( const uno::Exception& ) {}
+        catch ( const cpo::uno::Exception& ) {}
     }
 
     /*** if headers/footers are available then the top/bottom margins of the
@@ -1498,7 +1498,7 @@ void AfterConvertToTextFrame(const DomainMapper_Impl& rDM_Impl, const std::deque
         {
             xCrsr->makeRedline( rFramedRedlines[i].msType, rFramedRedlines[i].maRedlineProperties );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter", "makeRedline() failed");
         }
@@ -1556,7 +1556,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
                         sSetName,
                         pageProperties->getPropertyValue(rProperty.Name));
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to copy page style property");
                 }
@@ -1634,7 +1634,7 @@ void SectionPropertyMap::EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl)
         else
             SAL_WARN("writerfilter", "Failed to transfer below spacing to last para.");
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter", "Failed to transfer below spacing to last para.");
     }
@@ -1685,7 +1685,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     {
         HandleIncreasedAnchoredObjectSpacing(rDM_Impl);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "HandleIncreasedAnchoredObjectSpacing() failed");
     }
@@ -1714,7 +1714,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     getPropertyName(PROP_PARA_LINE_NUMBER_START_VALUE),
                     cpo::uno::Any(m_nLnnMin + 1));
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper", "Exception in SectionPropertyMap::CloseSectionGroup");
             }
@@ -1852,7 +1852,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
             }
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             SAL_WARN( "writerfilter", "failed to set PageDescName!" );
         }
@@ -1884,7 +1884,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if (xRangeProperties)
                 xRangeProperties->setPropertyValue( getPropertyName( PROP_BREAK_TYPE ), cpo::uno::Any( style::BreakType_COLUMN_BEFORE ) );
         }
-        catch ( const uno::Exception& ) {}
+        catch ( const cpo::uno::Exception& ) {}
     }
     else if (!rDM_Impl.IsInComments())
     {
@@ -2028,7 +2028,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 rDM_Impl.GetTextDocument()->setPropertyValue(u"DefaultPageMode"_ustr, cpo::uno::Any(false));
             }
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper", "Exception in SectionPropertyMap::CloseSectionGroup");
         }
@@ -2093,7 +2093,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
             }
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::CloseSectionGroup" );
         }
@@ -2240,7 +2240,7 @@ void SectionPropertyMap::ApplyProperties_( const rtl::Reference<SwXPageStyle>& x
         xStyle->setPropertyValues( comphelper::containerToSequence( vNames ), comphelper::containerToSequence( vValues ) );
         return;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
     }
@@ -2267,7 +2267,7 @@ void SectionPropertyMap::SetStart( const uno::Reference< text::XTextRange >& xRa
                 m_xPreStartingRange = xPCursor;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

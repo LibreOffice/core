@@ -337,7 +337,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
         catch( const uno::RuntimeException& )
         {
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
 #endif
@@ -373,7 +373,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                             catch( const uno::RuntimeException& )
                             {
                             }
-                            catch( const uno::Exception& )
+                            catch( const cpo::uno::Exception& )
                             {
                             }
 
@@ -388,7 +388,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                 catch( const uno::RuntimeException& )
                                 {
                                 }
-                                catch( const uno::Exception& )
+                                catch( const cpo::uno::Exception& )
                                 {
                                 }
 
@@ -401,7 +401,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     catch( const css::uno::RuntimeException& )
                                     {
                                     }
-                                    catch( const css::uno::Exception& )
+                                    catch( const cpo::uno::Exception& )
                                     {
                                     }
 
@@ -414,7 +414,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                         catch( const uno::RuntimeException& )
                                         {
                                         }
-                                        catch( const uno::Exception& )
+                                        catch( const cpo::uno::Exception& )
                                         {
                                         }
                                     }
@@ -429,7 +429,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     catch( const css::uno::RuntimeException& )
                                     {
                                     }
-                                    catch( const css::uno::Exception& )
+                                    catch( const cpo::uno::Exception& )
                                     {
                                     }
 
@@ -442,7 +442,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                         catch( const uno::RuntimeException& )
                                         {
                                         }
-                                        catch( const uno::Exception& )
+                                        catch( const cpo::uno::Exception& )
                                         {
                                         }
                                     }
@@ -460,7 +460,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                         catch( const uno::RuntimeException& )
                         {
                         }
-                        catch( const uno::Exception& )
+                        catch( const cpo::uno::Exception& )
                         {
                         }
                     }
@@ -474,7 +474,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
     catch( const uno::RuntimeException& )
     {
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }

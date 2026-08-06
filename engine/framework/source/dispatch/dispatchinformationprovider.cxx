@@ -101,7 +101,7 @@ cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
     }
 

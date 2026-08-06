@@ -195,7 +195,7 @@ protected:
     OUString                                                             m_aNameBase;
     OUString                                                             m_aComment;
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
@@ -224,7 +224,7 @@ protected:
 
     void implWriteLocaleBinary( LocaleItem* pLocaleItem, BinaryOutput& rOut );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void implStoreAtStorage
     (
@@ -236,7 +236,7 @@ protected:
         bool bStoreAll
     );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void implKillRemovedLocaleFiles
     (
@@ -245,7 +245,7 @@ protected:
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void implKillChangedDefaultFiles
     (
@@ -254,7 +254,7 @@ protected:
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void implStoreAtLocation
     (

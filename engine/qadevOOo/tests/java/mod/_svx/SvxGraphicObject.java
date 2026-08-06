@@ -226,7 +226,7 @@ public class SvxGraphicObject extends TestCase {
             XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class,xDrawDoc);
             imap = oDocMSF.createInstance
                 ( "com.sun.star.image.ImageMapRectangleObject" );
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't create instance");
             e.printStackTrace(log);
         }

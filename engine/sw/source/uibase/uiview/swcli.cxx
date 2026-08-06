@@ -125,7 +125,7 @@ void SwOleClient::ViewChanged()
     {
         // Nothing will be done
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL( "Something goes wrong on requesting object size!" );
     }

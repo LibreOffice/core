@@ -1538,7 +1538,7 @@ void addExceptionBaseArguments(
             + "\" in call to addExceptionBaseArguments");
     }
     unoidl::ExceptionTypeEntity& ent2(dynamic_cast<unoidl::ExceptionTypeEntity&>(*ent));
-    bool baseException = base == "com.sun.star.uno.Exception";
+    bool baseException = base == "cpo.uno.Exception";
     if (!baseException) {
         addExceptionBaseArguments(
             manager, dependencies, methodDescriptor, code,
@@ -1567,7 +1567,7 @@ void handleExceptionType(
     bool baseException = false;
     bool baseRuntimeException = false;
     OString superClass;
-    if (className == "com/sun/star/uno/Exception") {
+    if (className == "cpo/uno/Exception") {
         baseException = true;
         superClass = "java/lang/Exception"_ostr;
     } else if (className == "com/sun/star/uno/RuntimeException") {
@@ -2218,8 +2218,8 @@ void addConstructor(
         addExceptionHandlers(
             &tree.getRoot(), tryStart, tryEnd, pos2, code.get());
         code->addException(
-            tryStart, tryEnd, pos1, "com/sun/star/uno/Exception"_ostr);
-        dependencies->insert(u"com.sun.star.uno.Exception"_ustr);
+            tryStart, tryEnd, pos1, "cpo/uno/Exception"_ostr);
+        dependencies->insert(u"cpo.uno.Exception"_ustr);
         stack = std::max< sal_uInt16 >(stack, 4);
     }
     code->setMaxStackAndLocals(stack, localIndex);

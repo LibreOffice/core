@@ -329,7 +329,7 @@ void AccessibleTableShape::Init()
         assert(pModel);
         mxImpl->init( this, pModel );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }

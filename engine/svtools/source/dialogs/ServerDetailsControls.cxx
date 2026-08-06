@@ -478,7 +478,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
             m_pDialog->m_xLBRepository->append_text(sName);
         }
     }
-    catch ( const Exception&)
+    catch ( const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "svtools.dialogs", "RefreshReposHdl" );
     }

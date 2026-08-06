@@ -109,7 +109,7 @@ namespace sdr::contact {
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::awt::XControlContainer;

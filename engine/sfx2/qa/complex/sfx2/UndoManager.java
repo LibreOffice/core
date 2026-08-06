@@ -64,7 +64,7 @@ import com.sun.star.script.ScriptEventDescriptor;
 import com.sun.star.script.XEventAttacherManager;
 import com.sun.star.script.XLibraryContainer;
 import com.sun.star.task.XJob;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -104,7 +104,7 @@ public class UndoManager
 {
 
     @Before
-    public void beforeTest() throws com.sun.star.uno.Exception
+    public void beforeTest() throws cpo.uno.Exception
     {
         m_currentTestCase = null;
         m_currentDocument = null;
@@ -160,7 +160,7 @@ public class UndoManager
 
 
     @Test
-    public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
+    public void checkBrokenScripts() throws cpo.uno.Exception, InterruptedException
     {
         System.out.println( "testing: broken scripts" );
 
@@ -247,7 +247,7 @@ public class UndoManager
 
 
     @Test
-    public void checkSerialization() throws com.sun.star.uno.Exception, InterruptedException
+    public void checkSerialization() throws cpo.uno.Exception, InterruptedException
     {
         System.out.println( "testing: request serialization" );
 
@@ -360,14 +360,14 @@ public class UndoManager
 
             basicLib.insertByName( "callbacks", brokenScriptCode );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             fail( "caught an exception while setting up the script: " + e.toString() );
         }
     }
 
 
-    private XPropertySet impl_setupButton() throws com.sun.star.uno.Exception
+    private XPropertySet impl_setupButton() throws cpo.uno.Exception
     {
         // let the document create a shape
         final XMultiServiceFactory docAsFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class,
@@ -650,7 +650,7 @@ public class UndoManager
     }
 
 
-    private void impl_testSingleModification( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testSingleModification( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         m_currentTestCase.doSingleModification();
         m_currentTestCase.verifySingleModificationDocumentState();
@@ -679,7 +679,7 @@ public class UndoManager
     }
 
 
-    private void impl_testMultipleModifications( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testMultipleModifications( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         m_undoListener.reset();
         assertEquals( "unexpected initial undo context depth", 0, m_undoListener.getCurrentUndoContextDepth() );
@@ -707,7 +707,7 @@ public class UndoManager
     }
 
 
-    private void impl_testCustomUndoActions( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testCustomUndoActions( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.clear();
         m_undoListener.reset();
@@ -766,7 +766,7 @@ public class UndoManager
     }
 
 
-    private void impl_testLocking( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testLocking( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -808,7 +808,7 @@ public class UndoManager
     }
 
 
-    private void impl_testContextHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testContextHandling( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
 
         // part I: non-empty contexts
@@ -876,7 +876,7 @@ public class UndoManager
     }
 
 
-    private void impl_testNestedContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testNestedContexts( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -904,7 +904,7 @@ public class UndoManager
     }
 
 
-    private void impl_testErrorHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testErrorHandling( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -1018,7 +1018,7 @@ public class UndoManager
     }
 
 
-    private void impl_testStackHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testStackHandling( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -1044,7 +1044,7 @@ public class UndoManager
     }
 
 
-    private void impl_testClearance( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testClearance( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -1106,7 +1106,7 @@ public class UndoManager
     }
 
 
-    private void impl_testHiddenContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testHiddenContexts( final XUndoManager i_undoManager ) throws cpo.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -1214,7 +1214,7 @@ public class UndoManager
 
 
     @AfterClass
-    public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
+    public static void tearDownConnection() throws InterruptedException, cpo.uno.Exception
     {
         System.out.println();
         System.out.println( "tearing down connection" );
@@ -1359,12 +1359,12 @@ public class UndoManager
      */
     private class CallbackComponentFactory implements XSingleComponentFactory, XServiceInfo, XComponent
     {
-        public Object createInstanceWithContext( XComponentContext i_context ) throws com.sun.star.uno.Exception
+        public Object createInstanceWithContext( XComponentContext i_context ) throws cpo.uno.Exception
         {
             return new CallbackComponent();
         }
 
-        public Object createInstanceWithArgumentsAndContext( Object[] i_arguments, XComponentContext i_context ) throws com.sun.star.uno.Exception
+        public Object createInstanceWithArgumentsAndContext( Object[] i_arguments, XComponentContext i_context ) throws cpo.uno.Exception
         {
             return createInstanceWithContext( i_context );
         }
@@ -1418,7 +1418,7 @@ public class UndoManager
         {
         }
 
-        public Object execute( NamedValue[] i_parameters ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception
+        public Object execute( NamedValue[] i_parameters ) throws com.sun.star.lang.IllegalArgumentException, cpo.uno.Exception
         {
             // this method is called from within the Basic script which is to check whether the OOo framework
             // properly cleans up unfinished Undo contexts. It is called immediately after the context has been

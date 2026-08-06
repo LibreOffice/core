@@ -1964,7 +1964,7 @@ static void maybeConvertDefaultStringToDate(Any& def, const auto& getFieldPropOr
         if (!(xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr) >>= aNull))
             return;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return;
     }
@@ -3117,7 +3117,7 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
             if ( _bAllowSQLException )
                 throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("forms.component");
         }
@@ -3152,7 +3152,7 @@ bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
             {
                 throw;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("forms.component");
             }
@@ -3199,7 +3199,7 @@ bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
         {
             throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("forms.component");
         }

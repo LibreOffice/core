@@ -1821,7 +1821,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogC
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("filter.pdf", "TSAURLsDialog::TSAURLsDialog()");
     }

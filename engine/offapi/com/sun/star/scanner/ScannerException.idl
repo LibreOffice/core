@@ -24,7 +24,7 @@ module com { module sun { module star { module scanner {
 /** A ScannerException gets thrown if an object of type XScannerManager
        could not complete a specific action.
 */
-published exception ScannerException: com::sun::star::uno::Exception
+published exception ScannerException: cpo::uno::Exception
 {
     // DOCUMENTATION CHANGED FOR ScannerException::Error
     /** Error: contains the specific reason for failure

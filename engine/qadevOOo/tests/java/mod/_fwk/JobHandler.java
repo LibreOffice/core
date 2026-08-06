@@ -51,7 +51,7 @@ public class JobHandler extends TestCase {
         try {
             Object obj = Param.getMSF().createInstance("test.Job");
             serviceRegistered = obj != null;
-        } catch(com.sun.star.uno.Exception e) {}
+        } catch(cpo.uno.Exception e) {}
 
         log.println("Service test.Job is "
             + (serviceRegistered ? "already" : "not yet")  + " registered.");

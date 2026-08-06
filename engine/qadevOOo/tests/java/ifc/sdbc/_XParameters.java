@@ -411,7 +411,7 @@ public class _XParameters extends MultiMethodTest {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
                 result = false ;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Unexpected exception:") ;
                 log.println(e) ;
                 result = false ;
@@ -441,7 +441,7 @@ public class _XParameters extends MultiMethodTest {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
                 result = false ;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Unexpected exception:") ;
                 log.println(e) ;
                 result = false ;
@@ -469,7 +469,7 @@ public class _XParameters extends MultiMethodTest {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
                 result = false ;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Unexpected exception:") ;
                 log.println(e) ;
                 result = false ;
@@ -497,7 +497,7 @@ public class _XParameters extends MultiMethodTest {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
                 result = false ;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Unexpected exception:") ;
                 log.println(e) ;
                 result = false ;

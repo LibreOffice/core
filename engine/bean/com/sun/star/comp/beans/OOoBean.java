@@ -332,7 +332,7 @@ public class OOoBean
                 xDesktop = UnoRuntime.queryInterface(
                         com.sun.star.frame.XDesktop.class, aObject );
             }
-            catch ( com.sun.star.uno.Exception aExc )
+            catch ( cpo.uno.Exception aExc )
             {} // TBD: what if no connection exists?
         }
 
@@ -686,7 +686,7 @@ public class OOoBean
                     // stop, clear and retry
                     stopOOoConnection();
                 }
-                catch ( com.sun.star.uno.Exception aExc )
+                catch ( cpo.uno.Exception aExc )
                 {
                     // TDB: handling failure in createInstance
                     java.io.IOException ex2 = new java.io.IOException();

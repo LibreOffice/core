@@ -145,7 +145,7 @@ void VbaModule::registerShortcutKeys()
             KeyEvent aKeyEvent = ooo::vba::parseKeyEvent(rKeyBinding.msApiKey);
             ooo::vba::applyShortCutKeyBinding(mxDocModel, aKeyEvent, rKeyBinding.msMethodName);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -295,7 +295,7 @@ void VbaModule::createModule( std::u16string_view rVBASourceCode,
             {
                 aModuleInfo.ModuleObject.set( rxDocObjectNA->getByName( maName ), UNO_QUERY );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         break;
@@ -328,7 +328,7 @@ void VbaModule::createModule( std::u16string_view rVBASourceCode,
         Reference< XVBAModuleInfo > xVBAModuleInfo( rxBasicLib, UNO_QUERY_THROW );
         xVBAModuleInfo->insertModuleInfo( maName, aModuleInfo );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -337,7 +337,7 @@ void VbaModule::createModule( std::u16string_view rVBASourceCode,
     {
         rxBasicLib->insertByName( maName, Any( aSourceCode.makeStringAndClear() ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL( "VbaModule::createModule - cannot insert module into library" );
     }

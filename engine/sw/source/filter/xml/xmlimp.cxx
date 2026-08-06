@@ -1441,7 +1441,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if (rValue.Name == "LineSpacingAsGapBelow")
                     bLineSpacingAsGapBelow = true;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sw", "SwXMLImport::SetConfigurationSettings" );
             }
@@ -1458,7 +1458,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             xProps->setPropertyValue( currentDatabaseCommandType->Name, currentDatabaseCommandType->Value );
         if (embeddedDatabaseName)
             xProps->setPropertyValue(embeddedDatabaseName->Name, embeddedDatabaseName->Value);
-    } catch( Exception& )
+    } catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sw", "SwXMLImport::SetConfigurationSettings" );
     }

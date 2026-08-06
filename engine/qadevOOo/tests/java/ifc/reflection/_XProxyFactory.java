@@ -74,7 +74,7 @@ public class _XProxyFactory extends MultiMethodTest {
 
         try {
             xInit.initialize(params);
-        } catch(com.sun.star.uno.Exception e) {
+        } catch(cpo.uno.Exception e) {
             log.println("Unexpected exception : " + e.getMessage());
             e.printStackTrace(log);
             tRes.tested("createProxy()", false);

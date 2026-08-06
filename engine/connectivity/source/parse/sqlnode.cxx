@@ -133,7 +133,7 @@ namespace
                 nNamePropertyId = PROPERTY_ID_REALNAME;
             rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
 
@@ -949,7 +949,7 @@ sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend, OSQLParseNode*
         {
             m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             return nErg;
         }
@@ -982,7 +982,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
             aValue >>= nType;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         return nErg;
     }
@@ -1016,7 +1016,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
                                 Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, u"Decimals"_ustr );
                                 aValue >>= nScale;
                             }
-                            catch( Exception& )
+                            catch( cpo::uno::Exception& )
                             {
                             }
 
@@ -1103,7 +1103,7 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
                 Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, u"Decimals"_ustr );
                 aValue >>= nScale;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 
@@ -1198,7 +1198,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
             // get the field type
             m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_ASSERT(false);
         }
@@ -1234,7 +1234,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                     }
                 }
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 SAL_WARN( "connectivity.parse","DateFormatKey");
             }
@@ -1541,7 +1541,7 @@ bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
         if ( !m_nFormatKey && xFormatTypes.is() )
             m_nFormatKey = ::dbtools::getDefaultNumberFormat( m_xField, xFormatTypes, m_pData->aLocale );
     }
-    catch( Exception& ) { }
+    catch( cpo::uno::Exception& ) { }
     const OUString& sValue = pLiteral->getTokenValue();
     sal_Int32 nTryFormat = m_nFormatKey;
     bool bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
@@ -1553,7 +1553,7 @@ bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
         {
             nTryFormat = xFormatTypes->getStandardFormat( NumberFormat::DATE, m_pData->aLocale );
         }
-        catch( Exception& ) { }
+        catch( cpo::uno::Exception& ) { }
         bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
     }
 
@@ -1564,7 +1564,7 @@ bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
         {
             nTryFormat = xFormatTypes->getFormatIndex( NumberFormatIndex::DATE_DIN_YYYYMMDD, m_pData->aLocale );
         }
-        catch( Exception& ) { }
+        catch( cpo::uno::Exception& ) { }
         bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
     }
 

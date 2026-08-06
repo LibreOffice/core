@@ -717,7 +717,7 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
         mpWindowImpl->mpFrameData->mxDragSource = pInst->CreateDragSource(*pEnvData);
         mpWindowImpl->mpFrameData->mxDropTarget = pInst->CreateDropTarget(*pEnvData);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         mpWindowImpl->mpFrameData->mxDropTarget.clear();
         mpWindowImpl->mpFrameData->mxDragSource.clear();

@@ -58,13 +58,13 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
+    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws cpo.uno.Exception
     {
         return implLoadAsComponent( orb, documentOrFactoryURL, new PropertyValue[0] );
     }
 
     /* ------------------------------------------------------------------ */
-    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws cpo.uno.Exception
     {
         XComponentLoader aLoader = UnoRuntime.queryInterface(
             XComponentLoader.class,
@@ -78,13 +78,13 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
+    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws cpo.uno.Exception
     {
         return implLoadDocument( orb, documentOrFactoryURL, new PropertyValue[0] );
     }
 
     /* ------------------------------------------------------------------ */
-    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws cpo.uno.Exception
     {
         XComponent document = implLoadAsComponent( orb, documentOrFactoryURL, i_args );
 
@@ -96,13 +96,13 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public static DocumentHelper loadDocument( XMultiServiceFactory orb, String documentURL ) throws com.sun.star.uno.Exception
+    public static DocumentHelper loadDocument( XMultiServiceFactory orb, String documentURL ) throws cpo.uno.Exception
     {
         return implLoadDocument( orb, documentURL );
     }
 
     /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankTextDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
+    public static DocumentHelper blankTextDocument( XMultiServiceFactory orb ) throws cpo.uno.Exception
     {
         return blankDocument( orb, DocumentType.WRITER );
     }
@@ -110,7 +110,7 @@ public class DocumentHelper
 
 
     /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
+    public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws cpo.uno.Exception
     {
         final PropertyValue[] args = new PropertyValue[] {
             new PropertyValue( "MacroExecutionMode", -1, MacroExecMode.ALWAYS_EXECUTE, PropertyState.DIRECT_VALUE )
@@ -201,7 +201,7 @@ public class DocumentHelper
             is an implementation detail) applies.
     */
     private XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
-            throws com.sun.star.uno.Exception
+            throws cpo.uno.Exception
     {
         // create a new form
         Object xNewForm = m_orb.createInstance( "com.sun.star.form.component.DataForm" );
@@ -230,7 +230,7 @@ public class DocumentHelper
             is an implementation detail) applies.
     */
     public XIndexContainer createSubForm( Object aParentContainer, String sInitialName )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XIndexContainer xParentContainer = UnoRuntime.queryInterface(
             XIndexContainer.class, aParentContainer );
@@ -246,7 +246,7 @@ public class DocumentHelper
             The initial name of the form. May be null, in this case the default (which
             is an implementation detail) applies.
     */
-    public XIndexContainer createSiblingForm( Object aForm, String sInitialName ) throws com.sun.star.uno.Exception
+    public XIndexContainer createSiblingForm( Object aForm, String sInitialName ) throws cpo.uno.Exception
     {
         // get the parent
         XIndexContainer xContainer = (XIndexContainer)dbfTools.getParent(
@@ -311,7 +311,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the <type scope="com.sun.star.drawing">DrawPage</type> of the document
     */
-    protected XDrawPage getMainDrawPage( ) throws com.sun.star.uno.Exception
+    protected XDrawPage getMainDrawPage( ) throws cpo.uno.Exception
     {
         XDrawPage xReturn;
 
@@ -339,7 +339,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the root of the hierarchy of form components
     */
-    protected XNameContainer getFormComponentTreeRoot( ) throws com.sun.star.uno.Exception
+    protected XNameContainer getFormComponentTreeRoot( ) throws cpo.uno.Exception
     {
         XFormsSupplier xSuppForms = UnoRuntime.queryInterface(
             XFormsSupplier.class, getMainDrawPage( ) );
@@ -355,7 +355,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** creates a component at the service factory provided by the document
     */
-    public XInterface createInstance( String serviceSpecifier ) throws com.sun.star.uno.Exception
+    public XInterface createInstance( String serviceSpecifier ) throws cpo.uno.Exception
     {
         XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class,
             m_documentComponent );
@@ -365,7 +365,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** creates a component at the service factory provided by the document
     */
-    public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
+    public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws cpo.uno.Exception
     {
         XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class,
             m_documentComponent );

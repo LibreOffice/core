@@ -1436,7 +1436,7 @@ getPrefixAndSuffix(
         }
     } catch (uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(u"getPrefixAndSuffix: exception"_ustr, nullptr, anyEx);
     }

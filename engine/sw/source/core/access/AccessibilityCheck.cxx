@@ -897,7 +897,7 @@ private:
                         xStyleFamily->getByName(sCharStyleName), uno::UNO_QUERY);
                     xInfo->getPropertyValue(u"CharBackColor"_ustr) >>= nCharStyleBackColor;
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

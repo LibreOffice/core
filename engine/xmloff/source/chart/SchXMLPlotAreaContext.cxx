@@ -106,7 +106,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
             maVUP.setZ( aCamGeo.vup.DirectionZ );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property NumberOfLines");
     }
@@ -371,7 +371,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
             xProp->getPropertyValue(u"NumberOfLines"_ustr) >>= mnNumOfLinesProp;
             xProp->getPropertyValue(u"Volume"_ustr) >>= mbStockHasVolume;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught");
         }
@@ -538,7 +538,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
                 xDiaProp->setPropertyValue(u"NumberOfLines"_ustr,
                                             cpo::uno::Any( mnNumOfLinesProp ));
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property NumberOfLines");
             }
@@ -553,7 +553,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
                 xDiaProp->setPropertyValue(u"Volume"_ustr,
                                             cpo::uno::Any( true ));
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property Volume");
             }

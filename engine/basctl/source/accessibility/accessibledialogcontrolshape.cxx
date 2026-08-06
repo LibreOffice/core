@@ -191,7 +191,7 @@ OUString AccessibleDialogControlShape::GetModelStringProperty( OUString const & 
                 m_xControlModel->getPropertyValue( pPropertyName ) >>= sReturn;
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "basctl", "AccessibleDialogControlShape::GetModelStringProperty" );
     }

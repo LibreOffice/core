@@ -142,7 +142,7 @@ void DocBasicItem::startListening()
     mbDisposed = !xCloseBC.is();
     if( xCloseBC.is() )
     {
-        try { xCloseBC->addCloseListener( this ); } catch(const uno::Exception& ) {}
+        try { xCloseBC->addCloseListener( this ); } catch(const cpo::uno::Exception& ) {}
     }
 }
 
@@ -157,7 +157,7 @@ void DocBasicItem::stopListening()
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
     if( xCloseBC.is() )
     {
-        try { xCloseBC->removeCloseListener( this ); } catch(const uno::Exception& ) {}
+        try { xCloseBC->removeCloseListener( this ); } catch(const cpo::uno::Exception& ) {}
     }
 }
 

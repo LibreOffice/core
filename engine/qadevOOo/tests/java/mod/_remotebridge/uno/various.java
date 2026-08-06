@@ -106,7 +106,7 @@ public class various extends TestCase {
             try {
                 return xMSF.createInstance(aInstanceName);
             }
-            catch(com.sun.star.uno.Exception e) {
+            catch(cpo.uno.Exception e) {
                 throw new StatusException("Unexpected exception", e);
             }
         }

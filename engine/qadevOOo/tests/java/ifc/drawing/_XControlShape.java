@@ -69,7 +69,7 @@ public class _XControlShape extends MultiMethodTest {
     * </ul>
     */
     public void _setControl()
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         requiredMethod("getControl()") ;
 

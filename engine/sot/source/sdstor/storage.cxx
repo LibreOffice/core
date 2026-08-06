@@ -639,7 +639,7 @@ rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference
 
         pStream = utl::UcbStreamHelper::CreateStream( xStream );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         //TODO/LATER: ErrorHandling
         pStream.reset( new SvMemoryStream );
@@ -660,7 +660,7 @@ SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::e
     {
         xProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_INFO_EXCEPTION("sot", "SotStorage::GetFormatID");
     }

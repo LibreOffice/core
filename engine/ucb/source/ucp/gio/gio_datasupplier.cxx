@@ -233,7 +233,7 @@ css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( std::u
             return xRow;
         }
     }
-    catch ( css::uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
     }
     return css::uno::Reference< css::sdbc::XRow >();

@@ -680,7 +680,7 @@ void VclPixelProcessor2D::processControlPrimitive2D(
             bDone = true;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // #i116763# removing since there is a good alternative when the xControlView
         // is not found and it is allowed to happen

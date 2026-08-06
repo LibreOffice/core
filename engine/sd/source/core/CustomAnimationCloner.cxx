@@ -123,7 +123,7 @@ namespace sd
 
             return xCloneNode;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::Clone()" );
             Reference< XAnimationNode > xEmpty;
@@ -199,7 +199,7 @@ namespace sd
                 xNode->setUserData( aUserData );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::transformNode()" );
         }
@@ -264,7 +264,7 @@ namespace sd
                 return Any( aEvent );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::transformValue()" );
         }

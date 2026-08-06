@@ -867,7 +867,7 @@ bool ImportContext::importGraphicOrImageProperty(
                 {
                     xGraphic = xGraphicStorageHandler->loadGraphic(sURL);
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     return false;
                 }
@@ -1583,7 +1583,7 @@ void ImportContext::importDefaults(
         {
                 _xControlModel->setPropertyValue( u"EnableVisible"_ustr, Any( false ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("xmlscript.xmldlg");
         }

@@ -142,7 +142,7 @@ void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
             {
                 GetDoc()->GetIDocumentUndoRedo().UndoWithOffset(nOffset);
             }
-        } catch (const css::uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Undo()");
         }
 
@@ -194,7 +194,7 @@ void SwEditShell::Redo(sal_uInt16 const nCount)
             {
                 GetDoc()->GetIDocumentUndoRedo().Redo();
             }
-        } catch (const css::uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Redo()");
         }
 
@@ -219,7 +219,7 @@ void SwEditShell::Repeat(sal_uInt16 const nCount)
     try {
         ::sw::RepeatContext context(*GetDoc(), *GetCursor());
         GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount );
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Repeat()");
     }
 

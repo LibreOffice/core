@@ -58,7 +58,7 @@ OZipFileAccess::~OZipFileAccess()
              // dispose will use refcounting so the further destruction must be avoided
             osl_atomic_increment(&m_refCount);
             dispose();
-        } catch( uno::Exception& )
+        } catch( cpo::uno::Exception& )
         {}
     }
 }
@@ -276,7 +276,7 @@ cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException( u"This package is unusable!"_ustr,
@@ -416,7 +416,7 @@ void SAL_CALL OZipFileAccess::dispose()
     if ( m_xContentStream.is() && m_bOwnContent )
         try {
             m_xContentStream->closeInput();
-        } catch( uno::Exception& )
+        } catch( cpo::uno::Exception& )
         {}
 
     m_bDisposed = true;

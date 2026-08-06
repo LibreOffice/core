@@ -1229,7 +1229,7 @@ void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboar
             SolarMutexReleaser aReleaser;
             xDataObj = rxClipboard->getContents();
         }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
         {
         }
 
@@ -1264,7 +1264,7 @@ void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboar
 
         ReplaceSelected( aText );
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

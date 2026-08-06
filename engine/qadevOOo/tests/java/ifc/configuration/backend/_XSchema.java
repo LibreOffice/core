@@ -244,7 +244,7 @@ public class _XSchema extends MultiMethodTest {
             simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
             log.println("Going to parse: "+filename);
             xStream = simpleAccess.openFileRead(filename);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
         }
 
         XActiveDataSink xSink = UnoRuntime.queryInterface(XActiveDataSink.class, oObj);

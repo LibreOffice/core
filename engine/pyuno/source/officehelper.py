@@ -61,7 +61,7 @@ import time
 
 import uno
 from com.sun.star.connection import NoConnectException
-from com.sun.star.uno import Exception as UnoException
+from cpo.uno import Exception as UnoException
 
 
 class BootstrapException(UnoException):

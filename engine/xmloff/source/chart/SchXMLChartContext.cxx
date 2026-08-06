@@ -107,7 +107,7 @@ void lcl_MoveDataToCandleStickSeries(
             xSink->setData( aData );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception caught while moving data to candlestick series" );
     }
@@ -165,7 +165,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught while removing empty chart types");
     }
@@ -196,7 +196,7 @@ void lcl_ApplyHistogramTemplate(const uno::Reference<chart2::XChartDocument>& xD
             xTemplate->changeDiagram(xHistDiagram);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.chart", "Failed to apply histogram template");
     }
@@ -335,7 +335,7 @@ void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, O
                 xChartDoc->createInternalDataProvider(false);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "SchXMLChartContext::StartElement()");
     }
@@ -501,7 +501,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
                 xDocProp->setPropertyValue(u"RefreshAddInAllowed"_ustr, cpo::uno::Any( false) );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::StartElement" );
             }
@@ -907,7 +907,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
                 // (analogously mbColHasLabels means we have "row-descriptions")
                 lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 //try to fallback to internal data
                 TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
@@ -923,7 +923,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
                         {
                             lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
                         }
-                        catch(const uno::Exception&)
+                        catch(const cpo::uno::Exception&)
                         {
                             TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
@@ -1087,7 +1087,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
             xDSContainer->setDataSeries( aNewSeries );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception while merging series for stock chart" );
     }

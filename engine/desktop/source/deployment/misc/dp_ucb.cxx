@@ -70,7 +70,7 @@ bool create_ucb_content(
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         if (throw_exc)
             throw;
     }
@@ -146,7 +146,7 @@ bool create_folder(
                 // Interaction Handler already handled the error
                 // that has occurred...
             }
-            catch (const Exception &) {
+            catch (const cpo::uno::Exception &) {
                 if (throw_exc)
                     throw;
                 return false;
@@ -175,7 +175,7 @@ bool erase_path( OUString const & url,
         catch (const RuntimeException &) {
             throw;
         }
-        catch (const Exception &) {
+        catch (const cpo::uno::Exception &) {
             if (throw_exc)
                 throw;
             return false;

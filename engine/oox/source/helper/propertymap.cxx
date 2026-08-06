@@ -472,7 +472,7 @@ void PropertyMap::dump( const Reference< XPropertySet >& rXPropSet )
 
         try {
             lclDumpAnyValue (rXPropSet->getPropertyValue( prop.Name ));
-        } catch (const Exception&) {
+        } catch (const cpo::uno::Exception&) {
             fprintf (stderr,"unable to get '%s' value\n", USS(prop.Name));
         }
     }
@@ -932,7 +932,7 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
             fprintf (stderr,"aPropertyMap.setProperty(PROP_%s, %s);\n", name.getStr(), var);
             printLevel (level);
             fprintf (stderr, "}\n");
-        } catch (const Exception&) {
+        } catch (const cpo::uno::Exception&) {
             fprintf (stderr,"unable to get '%s' value\n", USS(rProp.Name));
         }
     }

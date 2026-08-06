@@ -103,7 +103,7 @@ protected:
      * perform the security operation.
      * Any derived class will implement this method respectively.
      */
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     virtual void tryToPerform( ){};
 
@@ -121,7 +121,7 @@ protected:
          * be transferred to a listener by this method.
      * Any derived class will implement this method respectively.
          */
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     virtual void notifyResultListener() const
         {};

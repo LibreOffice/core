@@ -146,7 +146,7 @@ static bool LoadFromURL_impl(
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xTmpModel.set( xDesktop->loadComponentFromURL( rURL, u"_blank"_ustr, 0, aArgs ), UNO_QUERY );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }
@@ -229,7 +229,7 @@ namespace
                 OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
         }
@@ -261,7 +261,7 @@ namespace
             else
                 bSuccess = true;    // can't do anything here ...
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "sw", "DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
             bSuccess = true;
@@ -283,7 +283,7 @@ namespace
         {
             m_xDocument->removeCloseListener( this );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
         }
@@ -566,7 +566,7 @@ cpo::uno::Any SAL_CALL SwXMailMerge::execute(
                 if ( bEverythingsFine )
                     bValid = true;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 bValid = false;
             }
@@ -771,7 +771,7 @@ cpo::uno::Any SAL_CALL SwXMailMerge::execute(
             xStorable->storeAsURL( m_aTmpFileName, Sequence< PropertyValue >() );
             bStoredAsTemporary = true;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

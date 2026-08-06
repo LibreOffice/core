@@ -366,7 +366,7 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< XComponent >( xContext, UNO_QUERY )->dispose();
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         DBG_UNHANDLED_EXCEPTION("stoc", "### exception occurred: " << rExc );
     }

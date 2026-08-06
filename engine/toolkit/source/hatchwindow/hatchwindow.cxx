@@ -78,7 +78,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
         awt::Rectangle aUnoResultRect = m_xController->calcAdjustedRectangle( aUnoRequestRect );
         aRect = vcl::unohelper::ConvertToVCLRect(aUnoResultRect);
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Can't adjust rectangle size!" );
     }
@@ -93,7 +93,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const tools::Rectangle & aRect )
         try {
             m_xController->requestPositioning( aUnoRequestRect );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Can't request resizing!" );
         }

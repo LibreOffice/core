@@ -962,7 +962,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 }
             }
             else //unknown
-                throw uno::Exception("unknown property type " + sPropertyType, nullptr);
+                throw cpo::uno::Exception("unknown property type " + sPropertyType, nullptr);
         }
 
         if (bSaveChanges)
@@ -1005,7 +1005,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             }
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 }

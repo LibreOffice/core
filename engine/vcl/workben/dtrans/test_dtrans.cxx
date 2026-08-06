@@ -392,7 +392,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         }
     }
 
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         ENSURE( false, "*** ERROR *** exception caught." );
     }

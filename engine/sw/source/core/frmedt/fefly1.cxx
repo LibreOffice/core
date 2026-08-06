@@ -2226,7 +2226,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
             {
                 aBaseline = xSet->getPropertyValue(u"BaseLine"_ustr);
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL( "Baseline could not be retrieved from Starmath!" );
             }

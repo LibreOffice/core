@@ -202,7 +202,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
 
         bRes = true;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
        bRes = false;
     }

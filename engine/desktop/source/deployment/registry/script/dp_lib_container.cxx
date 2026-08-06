@@ -52,7 +52,7 @@ OUString LibraryContainer::get_libname(
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
     if (import.aName.isEmpty()) {
-        throw Exception( StrCannotDetermineLibName(),
+        throw cpo::uno::Exception( StrCannotDetermineLibName(),
                          Reference<XInterface>() );
     }
     return import.aName;

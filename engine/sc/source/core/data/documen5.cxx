@@ -346,7 +346,7 @@ void ScDocument::UpdateChart( const OUString& rChartName )
                 apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
             xModif->setModified( true );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -466,7 +466,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                     uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
                     bInternalDataProvider = xChartDoc->hasInternalDataProvider();
                 }
-                catch ( uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
             }

@@ -140,7 +140,7 @@ bool GlobalSettings_Access::HasToolbarStatesInfo()
         catch ( const css::container::NoSuchElementException& )
         {
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -182,7 +182,7 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
     catch ( const css::container::NoSuchElementException& )
     {
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -214,7 +214,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
     catch ( const css::lang::WrappedTargetException& )
     {
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

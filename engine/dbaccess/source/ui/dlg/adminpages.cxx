@@ -246,7 +246,7 @@ namespace dbaui
             bSuccess = aConnectionPair.first.is();
             ::comphelper::disposeComponent(aConnectionPair.first);
         }
-        catch(Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
         if ( bShowMessage )

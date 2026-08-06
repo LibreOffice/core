@@ -59,7 +59,7 @@ void SdXMLDescriptionContext::endFastElement(sal_Int32 )
             xPropSet->setPropertyValue(u"Description"_ustr, Any(msText));
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

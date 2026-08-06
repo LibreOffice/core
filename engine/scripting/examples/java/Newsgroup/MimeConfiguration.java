@@ -51,8 +51,8 @@ public class MimeConfiguration {
         } catch (com.sun.star.beans.UnknownPropertyException upe) {
             System.out.println("com.sun.star.beans.UnknownPropertyException");
             upe.printStackTrace();
-        } catch (com.sun.star.uno.Exception e) {
-            System.out.println("com.sun.star.uno.Exception");
+        } catch (cpo.uno.Exception e) {
+            System.out.println("cpo.uno.Exception");
             e.printStackTrace();
         }
 

@@ -394,7 +394,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
                         bFoundSize = true;
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -416,7 +416,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
         }
         rSymbol.Size = aSize;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -474,7 +474,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
                 return beans::PropertyState_DIRECT_VALUE;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -130,7 +130,7 @@ public class GraphicExporter extends TestCase {
         try {
             go = tParam.getMSF().createInstance(
                          "com.sun.star.drawing.GraphicExportFilter");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't create instance");
             e.printStackTrace(log);
         }
@@ -198,7 +198,7 @@ public class GraphicExporter extends TestCase {
                     }
 
                     return fAcc.exists(aURL.Complete);
-                } catch (com.sun.star.uno.Exception e) {
+                } catch (cpo.uno.Exception e) {
                     return false;
                 }
             }

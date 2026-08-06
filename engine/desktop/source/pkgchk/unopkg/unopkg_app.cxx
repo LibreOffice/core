@@ -586,7 +586,7 @@ extern "C" int unopkg_main()
         dp_misc::writeConsoleError(Concat2View(e.Message + "\n"));
         bShowFailedMsg = false;
     }
-    catch (const css::uno::Exception & e ) {
+    catch (const cpo::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
         logFatal(logger.get(), LogLevel::SEVERE, u"Exception occurred: $1$"_ustr, e.Message);

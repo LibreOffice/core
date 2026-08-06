@@ -192,7 +192,7 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
                 {
                     m_xAppEvents->replaceByName( eventName, GetPropsByName( eventName, m_appEventsHash ) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("cui.customize");
                 }
@@ -207,7 +207,7 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
                 {
                     m_xDocEvents->replaceByName( eventName, GetPropsByName( eventName, m_docEventsHash ) );
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("cui.customize");
                 }
@@ -221,7 +221,7 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     // what is the return value about??
@@ -261,7 +261,7 @@ void SvxMacroTabPage_::Reset( const SfxItemSet* )
                 }
             }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     DisplayAppEvents(bAppEvents, 0);
@@ -587,7 +587,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
         {
             m_appEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xAppEvents->getByName( eventNames[nEvent] ) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -602,7 +602,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
         {
             m_docEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xDocEvents->getByName( eventNames[nEvent] ) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

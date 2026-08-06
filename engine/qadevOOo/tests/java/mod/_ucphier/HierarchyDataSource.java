@@ -45,7 +45,7 @@ public class HierarchyDataSource extends TestCase {
             oInterface = xMSF.createInstance(
                     "com.sun.star.ucb.DefaultHierarchyDataSource");
         }
-        catch( com.sun.star.uno.Exception e ) {
+        catch( cpo.uno.Exception e ) {
             log.println("Service not available" );
         }
 

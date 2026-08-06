@@ -84,7 +84,7 @@ public:
      *          of values of EConfigurationModes.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
-     *          E.g. css::uno::Exception if the configuration could not be opened.
+     *          E.g. cpo::uno::Exception if the configuration could not be opened.
      */
     static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                   const OUString&                                           sPackage,
@@ -142,7 +142,7 @@ public:
      *
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::container::NoSuchElementException if the specified
-     *          key does not exists or css::uno::Exception if the provided configuration
+     *          key does not exists or cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this key.
      */
     static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
@@ -176,7 +176,7 @@ public:
      *          Can't be NULL .. in such case an exception occurs!
      *
      *  @throw  Any exceptions the underlying configuration can throw.
-     *          E.g. css::uno::Exception if the provided configuration
+     *          E.g. cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this set.
      */
     static css::uno::Reference< css::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface >& xCFG         ,
@@ -193,7 +193,7 @@ public:
      *          the configuration root, where changes should be committed.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
-     *          E.g. css::uno::Exception if the provided configuration
+     *          E.g. cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this set.
      */
     static void flush(const css::uno::Reference< css::uno::XInterface >& xCFG);

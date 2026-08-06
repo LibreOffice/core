@@ -155,7 +155,7 @@ public class XMLStylesImporter extends TestCase {
                         String prefix = (String) set.getPropertyValue("Prefix");
                         logF.println("Prefix returned = '" + prefix + "'") ;
                         return impPrefix.equals(prefix) ;
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;

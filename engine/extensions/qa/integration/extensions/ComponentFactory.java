@@ -77,7 +77,7 @@ public class ComponentFactory implements XSingleComponentFactory
         return newInstance;
     }
 
-    public Object createInstanceWithArgumentsAndContext(Object[] _arguments, XComponentContext _componentContext) throws com.sun.star.uno.Exception
+    public Object createInstanceWithArgumentsAndContext(Object[] _arguments, XComponentContext _componentContext) throws cpo.uno.Exception
     {
         if ( m_initConstructor != null )
             return ipml_createInstance( m_initConstructor, new Object[] { _componentContext, _arguments } );
@@ -85,7 +85,7 @@ public class ComponentFactory implements XSingleComponentFactory
             return createInstanceWithContext( _componentContext );
     }
 
-    public Object createInstanceWithContext(XComponentContext _componentContext) throws com.sun.star.uno.Exception
+    public Object createInstanceWithContext(XComponentContext _componentContext) throws cpo.uno.Exception
     {
         return ipml_createInstance( m_defaultConstructor, new Object[] { _componentContext } );
     }

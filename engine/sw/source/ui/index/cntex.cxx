@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         }
         CreateOrUpdateExample(m_eCurrentTOXType.eType);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "::CreateExample()");
     }
@@ -378,7 +378,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex->update();
 
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "::CreateExample()");
     }

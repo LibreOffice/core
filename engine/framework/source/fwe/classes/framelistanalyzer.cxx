@@ -121,7 +121,7 @@ void FrameListAnalyzer::impl_analyze()
         catch(const css::frame::UnknownModuleException&)
         {
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("fwk");
         }
@@ -193,7 +193,7 @@ void FrameListAnalyzer::impl_analyze()
                         continue;
                     }
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

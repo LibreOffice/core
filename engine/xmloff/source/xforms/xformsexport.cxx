@@ -312,7 +312,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
                     sTypeName = lcl_getXSDType( rExport, xDataType );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             ; // ignore; just use typename
         }

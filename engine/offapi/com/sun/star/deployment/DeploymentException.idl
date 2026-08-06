@@ -22,7 +22,7 @@ module com { module sun { module star { module deployment {
 
 /** A DeploymentException reflects a deployment error.
  */
-exception DeploymentException : com::sun::star::uno::Exception
+exception DeploymentException : cpo::uno::Exception
 {
     /** reflects the cause of the error.  Commonly an exception.
     */

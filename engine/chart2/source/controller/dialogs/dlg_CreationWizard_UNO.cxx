@@ -254,7 +254,7 @@ void CreationWizardUnoDlg::disposing()
         uno::Reference< frame::XTerminateListener > xListener( this );
         xDesktop->removeTerminateListener( xListener );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

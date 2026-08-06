@@ -284,7 +284,7 @@ std::map<OUString, OUString> lcl_getRDFStatements(const rtl::Reference<SwXTextDo
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
         return SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
     }
-    catch (const ::css::uno::Exception&)
+    catch (const ::cpo::uno::Exception&)
     {
     }
 
@@ -514,7 +514,7 @@ bool lcl_DoUpdateParagraphSignatureField(SwDoc& rDoc,
             return true;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // We failed; avoid crashing.
         DBG_UNHANDLED_EXCEPTION("sw.uno", "Failed to update paragraph signature");
@@ -642,7 +642,7 @@ void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTe
         if (it == aStatements.end() || it->second.isEmpty())
             return;
     }
-    catch (const ::css::uno::Exception&)
+    catch (const ::cpo::uno::Exception&)
     {
         return;
     }

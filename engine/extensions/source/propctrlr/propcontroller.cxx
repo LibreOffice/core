@@ -1269,7 +1269,7 @@ using namespace cpo::uno;
                 break;
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }

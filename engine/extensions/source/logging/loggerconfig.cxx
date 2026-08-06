@@ -55,7 +55,7 @@ namespace logging
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::util::XChangesBatch;
     using ::com::sun::star::lang::NullPointerException;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::lang::ServiceNotRegisteredException;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::logging::XLogHandler;

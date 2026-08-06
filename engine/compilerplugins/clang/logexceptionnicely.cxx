@@ -72,14 +72,8 @@ public:
         if (!BaseDefinition)
             return true;
         auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(context, BaseDefinition));
-        // need to this formatting to make css->cpo transition work nicely
-        // clang-format off
-        if (tc.Class("Exception")
-                .Namespace("uno")
-                .Namespace("star").Namespace("sun").Namespace("com")
-                .GlobalNamespace())
+        if (tc.Class("Exception").Namespace("uno").Namespace("cpo").GlobalNamespace())
             return false;
-        // clang-format on
         return true;
     }
 
@@ -88,14 +82,8 @@ public:
         if (!decl || !decl->hasDefinition())
             return false;
         auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), decl));
-        // need to this formatting to make css->cpo transition work nicely
-        // clang-format off
-        if (tc.Class("Exception")
-                .Namespace("uno")
-                .Namespace("star").Namespace("sun").Namespace("com")
-                .GlobalNamespace())
+        if (tc.Class("Exception").Namespace("uno").Namespace("cpo").GlobalNamespace())
             return true;
-        // clang-format on
         if ( // not sure what hasAnyDependentBases() does,
             // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
             !decl->hasAnyDependentBases()

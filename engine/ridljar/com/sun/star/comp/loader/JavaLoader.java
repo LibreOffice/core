@@ -120,7 +120,7 @@ public class JavaLoader implements XImplementationLoader,
                     macro + " => " + ret );
             }
             return ret;
-        } catch (com.sun.star.uno.Exception exc) {
+        } catch (cpo.uno.Exception exc) {
             throw new com.sun.star.uno.RuntimeException(exc,
                 exc.getMessage(), this );
         } catch (java.lang.Exception exc) {
@@ -164,7 +164,7 @@ public class JavaLoader implements XImplementationLoader,
      * @see         com.sun.star.comp.servicemanager.ServiceManager
      */
     public void initialize( java.lang.Object[] args )
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
         if (args.length == 0)

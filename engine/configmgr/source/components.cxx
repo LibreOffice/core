@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -454,7 +454,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
         } catch (const css::uno::RuntimeException &) {
             // Assuming these exceptions are real errors:
             throw;
-        } catch (const css::uno::Exception &)  {
+        } catch (const cpo::uno::Exception &)  {
             // Assuming these exceptions indicate that the service is not
             // installed:
             TOOLS_WARN_EXCEPTION(
@@ -661,7 +661,7 @@ void Components::parseFileLeniently(
         (*parseFile)(url, layer, data_, partial, modifications, additions);
     } catch (const css::container::NoSuchElementException &) {
         throw;
-    } catch (const css::uno::Exception &) { //TODO: more specific exception catching
+    } catch (const cpo::uno::Exception &) { //TODO: more specific exception catching
         // Ignore invalid XML files, instead of completely preventing OOo from
         // starting:
         TOOLS_WARN_EXCEPTION(

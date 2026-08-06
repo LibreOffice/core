@@ -1122,7 +1122,7 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
             }
         }
     }
-    catch(css::uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
     }
 
@@ -1187,7 +1187,7 @@ bool ImplEESdrObject::ImplGetPropertyValue( const OUString& rString )
             if( mAny.hasValue() )
                 bRetValue = true;
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             bRetValue = false;
         }

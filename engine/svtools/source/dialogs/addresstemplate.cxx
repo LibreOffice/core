@@ -838,7 +838,7 @@ void AssignmentPersistentData::ImplCommit()
                     aColumnNames = xColumns->getElementNames();
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             OSL_FAIL("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
         }

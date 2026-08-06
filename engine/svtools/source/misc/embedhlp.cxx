@@ -383,7 +383,7 @@ void EmbeddedObjectRef::Clear()
             {
                 // there's still someone who needs the object!
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("svtools.misc", "Error on switching of the object to loaded state and closing");
             }
@@ -499,7 +499,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
         else if ( !mpImpl->oGraphic )
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(false);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svtools.misc", "Something went wrong on getting the graphic");
     }
@@ -537,7 +537,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             {
                 SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetSize: no visual area size");
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("svtools.misc", "Something went wrong on getting of the size of the object");
             }
@@ -546,7 +546,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             {
                 aSourceMapMode = MapMode(VCLUnoHelper::UnoEmbed2VCLMapUnit(mpImpl->mxObj->getMapUnit(mpImpl->nViewAspect)));
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("svtools.misc", "Can not get the map mode");
             }
@@ -635,7 +635,7 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
                 pStream->MakeReadOnly();
                 return pStream;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("svtools.misc", "discarding broken embedded object preview");
                 xStream.clear();
@@ -836,7 +836,7 @@ bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbedded
         if ( xEmbObj->getCurrentState() == embed::EmbedStates::LOADED )
             xEmbObj->changeState( embed::EmbedStates::RUNNING );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }

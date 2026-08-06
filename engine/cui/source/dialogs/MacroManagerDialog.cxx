@@ -227,7 +227,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
             xNode.set(
                 xFac->createView(css::script::browse::BrowseNodeFactoryViewTypes::MACROORGANIZER));
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION(
                 "cui.dialogs", "Caught some exception whilst retrieving browse nodes from factory");
@@ -476,7 +476,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
                             cpo::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
                             value >>= sURI;
                         }
-                        catch (css::uno::Exception&)
+                        catch (cpo::uno::Exception&)
                         {
                             // do nothing, the URI will be empty
                         }
@@ -487,7 +487,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
                             cpo::uno::Any value = xPropSet->getPropertyValue(u"Description"_ustr);
                             value >>= sDescription;
                         }
-                        catch (css::uno::Exception&)
+                        catch (cpo::uno::Exception&)
                         {
                             // do nothing, the description will be empty
                         }
@@ -909,7 +909,7 @@ bool MacroManagerDialog::getBoolProperty(
     {
         xProps->getPropertyValue(propName) >>= result;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         return result;
     }
@@ -1246,7 +1246,7 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
         OUString aModName = rDocument.createObjectName(basctl::E_SCRIPTS, aLibName);
         OUString sModuleCode;
         if (!rDocument.createModule(aLibName, aModName, true, sModuleCode))
-            throw css::uno::Exception("could not create module " + aModName, nullptr);
+            throw cpo::uno::Exception("could not create module " + aModName, nullptr);
 
         // tdf#151741 - store all libraries to the file system, otherwise they
         // cannot be renamed/moved since the SfxLibraryContainer::renameLibrary
@@ -1265,7 +1265,7 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
             pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED, SfxCallMode::SYNCHRON,
                                      { &aModuleSbxItem });
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("basctl.basicide");
     }
@@ -1614,7 +1614,7 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
                 // ISSUE need code to run script here
                 xInv->invoke(u"Editable"_ustr, args, outIndex, outArgs);
             }
-            catch (css::uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to invoke");
             }
@@ -1771,7 +1771,7 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
             if (xDlgLibContainer.is() && xDlgLibContainer->hasByName(sOldName))
                 xDlgLibContainer->renameLibrary(sOldName, sNewName);
         }
-        catch (css::uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             bSuccess = false;
             TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to Rename");
@@ -2077,7 +2077,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
             cpo::uno::Any aResult = xInv->invoke(u"Renamable"_ustr, args, outIndex, outArgs);
             xBrowseNode.set(aResult, css::uno::UNO_QUERY);
         }
-        catch (css::uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to Rename");
         }
@@ -2103,7 +2103,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
                         cpo::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
                         value >>= sURI;
                     }
-                    catch (css::uno::Exception&)
+                    catch (cpo::uno::Exception&)
                     {
                         // do nothing, the URI will be empty
                     }
@@ -2150,7 +2150,7 @@ OUString MacroManagerDialog::getListOfChildren(
             }
         }
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         // ignore, will return an empty string
     }
@@ -2186,7 +2186,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rT
             cpo::uno::Any aResult = xInv->invoke(u"Deletable"_ustr, args, outIndex, outArgs);
             aResult >>= result; // or do we just assume true if no exception ?
         }
-        catch (css::uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to delete");
         }
@@ -2260,7 +2260,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
                 childNodes = xBrowseNode->getChildNodes();
             }
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             // ignore, will continue on with empty sequence
         }
@@ -2359,7 +2359,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
             cpo::uno::Any aResult = xInv->invoke(u"Creatable"_ustr, args, outIndex, outArgs);
             aChildNode.set(aResult, css::uno::UNO_QUERY);
         }
-        catch (css::uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to Create");
         }

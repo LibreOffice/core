@@ -1030,7 +1030,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     if ( !aUIName.isEmpty() )
                         rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                 }
-                catch( css::uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }

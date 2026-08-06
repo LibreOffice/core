@@ -86,7 +86,7 @@ void ScSolverUtil::GetImplementations( cpo::uno::Sequence<OUString>& rImplNames,
                     rDescriptions.getArray()[nCount] = sDescription;
                     ++nCount;
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_INFO_EXCEPTION("sc.ui", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName);
                 }

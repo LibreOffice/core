@@ -42,7 +42,7 @@
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::XInterface;
@@ -82,7 +82,7 @@ Reference< XInterface > ScfApiHelper::CreateInstance(
         {
             xInt = xFactory->createInstance( rServiceName );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "ScfApiHelper::CreateInstance - cannot create instance" );
         }
@@ -163,7 +163,7 @@ bool ScfPropertySet::HasProperty( const OUString& rPropName ) const
         Reference< XPropertyState > xPropState( mxPropSet, UNO_QUERY_THROW );
         bHasProp = xPropState->getPropertyState( rPropName ) == css::beans::PropertyState_DIRECT_VALUE;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return bHasProp;
@@ -180,7 +180,7 @@ bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) co
             bHasValue = true;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return bHasValue;
@@ -224,7 +224,7 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
                 [this](const OUString& rPropName) -> Any { return mxPropSet->getPropertyValue(rPropName); });
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -238,7 +238,7 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
         if( mxPropSet.is() )
             mxPropSet->setPropertyValue( rPropName, rValue );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("sc", "ScfPropertySet::SetAnyProperty - cannot set property \"" + rPropName + "\"");
     }
@@ -263,7 +263,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
                 mxPropSet->setPropertyValue( *pPropName, *pValue );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
     }

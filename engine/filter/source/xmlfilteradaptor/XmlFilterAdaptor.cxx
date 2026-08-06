@@ -317,7 +317,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
             return false;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("filter.xmlfa", "XmlFilterAdaptor");
         if (xStatusIndicator.is())

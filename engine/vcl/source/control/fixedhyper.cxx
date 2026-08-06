@@ -178,7 +178,7 @@ IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
         xSystemShellExecute->execute( rHyperlink.m_sURL, OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         cpo::uno::Any exc(cppu::getCaughtException());
         OUString msg(comphelper::anyToString(exc));

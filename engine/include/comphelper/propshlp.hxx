@@ -245,7 +245,7 @@ protected:
                handle
         @param rValue
                value
-        @throws css::uno::Exception
+        @throws cpo::uno::Exception
     */
     virtual void setFastPropertyValue_NoBroadcast(std::unique_lock<std::mutex>& rGuard,
                                                   sal_Int32 nHandle, const cpo::uno::Any& rValue)

@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @see        Content
 */
-published exception UnsupportedDataSinkException : com::sun::star::uno::Exception
+published exception UnsupportedDataSinkException : cpo::uno::Exception
 {
     /** contains the data sink that is not supported.
      */

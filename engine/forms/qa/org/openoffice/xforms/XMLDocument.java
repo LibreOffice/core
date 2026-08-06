@@ -23,7 +23,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.xforms.XFormsSupplier;
 import com.sun.star.xforms.XFormsUIHelper1;

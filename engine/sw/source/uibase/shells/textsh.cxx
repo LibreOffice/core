@@ -359,7 +359,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                             cpo::uno::Any( sal_Int32( aMargin.Height() ) ) );
                     }
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }

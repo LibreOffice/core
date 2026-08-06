@@ -1488,7 +1488,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // TODO better error handling
     }
@@ -1750,7 +1750,7 @@ void AutoRecovery::implts_openConfig()
         nMinSpaceDocSave = officecfg::Office::Recovery::AutoSave::MinSpaceDocSave::get();
         nMinSpaceConfigSave = officecfg::Office::Recovery::AutoSave::MinSpaceConfigSave::get();
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // These config keys are not sooooo important, that
         // we are interested on errors here really .-)
@@ -1926,7 +1926,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         else
             rInfo.Extension = u".unknown"_ustr;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         rInfo.DefaultFilter.clear();
         rInfo.Extension.clear();
@@ -2067,7 +2067,7 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // ??? can it happen that a full disc let these set of operations fail too ???
     }
@@ -2080,12 +2080,12 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
             batch->commit();
 
 #ifdef TRIGGER_FULL_DISC_CHECK
-            throw css::uno::Exception("trigger full disk check");
+            throw cpo::uno::Exception("trigger full disk check");
 #else  // TRIGGER_FULL_DISC_CHECK
             nRetry = 0;
 #endif // TRIGGER_FULL_DISC_CHECK
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             // a) FULL DISC seems to be the problem behind                              => show error and retry it forever (e.g. retry=300)
             // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
@@ -2372,7 +2372,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
 
         implts_updateTimer();
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -2755,7 +2755,7 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo const & rInfo)
             aLockFile.RemoveFile();
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 #endif
@@ -2805,7 +2805,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
                 {
                     xClose->close(false);
                 }
-                catch(const css::uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                     // At least it's only a try to close these documents before anybody else it does.
                     // So it seems to be possible to ignore any error here .-)
@@ -3090,7 +3090,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
             bUserAutoSaved = true;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 
@@ -3119,14 +3119,14 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
                                                  lNewArgs.getAsConstPropertyValueList());
 
 #ifdef TRIGGER_FULL_DISC_CHECK
-            throw css::uno::Exception("trigger full disk check");
+            throw cpo::uno::Exception("trigger full disk check");
 #else  // TRIGGER_FULL_DISC_CHECK
 
             bError = false;
             nRetry = 0;
 #endif // TRIGGER_FULL_DISC_CHECK
         }
-        catch(const css::uno::Exception& rException)
+        catch(const cpo::uno::Exception& rException)
         {
             bError = true;
 
@@ -3326,7 +3326,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             implts_openOneDoc(sURL, lDescriptor, info);
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             info.DocumentState &= ~DocState::TryLoadBackup;
             info.DocumentState &= ~DocState::TryLoadOriginal;
@@ -3430,7 +3430,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             xModel->attachResource( sURL, lDescriptor.getAsConstPropertyValueList() );
         }
         else if (!utl::UCBContentHelper::Exists(sURL))
-            throw css::uno::Exception();
+            throw cpo::uno::Exception();
         else
         {
             OUString sFilterName;
@@ -3509,7 +3509,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         Any aCaughtException( ::cppu::getCaughtException() );
 
@@ -3938,7 +3938,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     {
         aTargetContent = ::ucbhelper::Content(sTargetPath, {}, m_xContext);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         return AutoRecovery::E_WRONG_TARGET_PATH;
     }
@@ -3949,7 +3949,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation::Copy,
                                        sTargetName, css::ucb::NameClash::RENAME);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         return AutoRecovery::E_ORIGINAL_FILE_MISSING;
     }
@@ -4091,7 +4091,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 
@@ -4255,7 +4255,7 @@ void AutoRecovery::impl_flushALLConfigChanges()
         SolarMutexGuard aGuard;
         ::utl::ConfigManager::storeConfigItems();
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -4270,7 +4270,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
         ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
         aContent.executeCommand(u"delete"_ustr, cpo::uno::Any(true));
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -4285,7 +4285,7 @@ void AutoRecovery::st_impl_removeLockFile()
         OUString sLockURL = sUserURL + "/.lock";
         AutoRecovery::st_impl_removeFile(sLockURL);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

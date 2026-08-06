@@ -56,7 +56,7 @@ public class DLLComponentLoader extends TestCase {
     */
     @Override
     protected TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) throws com.sun.star.uno.Exception {
+            (TestParameters Param, PrintWriter log) throws cpo.uno.Exception {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = null;

@@ -213,7 +213,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                             aTable >>= xPropSet;
                             xColsSupplier.set(xPropSet, UNO_QUERY);
                         }
-                        catch (const Exception&)
+                        catch (const cpo::uno::Exception&)
                         {
                         }
                     }
@@ -232,7 +232,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                             aQuery >>= xPropSet;
                             xColsSupplier.set(xPropSet, UNO_QUERY);
                         }
-                        catch (const Exception&)
+                        catch (const cpo::uno::Exception&)
                         {
                         }
                     }
@@ -248,7 +248,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                     }
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -293,7 +293,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                     }
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }

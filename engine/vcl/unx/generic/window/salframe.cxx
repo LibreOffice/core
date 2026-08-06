@@ -53,7 +53,7 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -492,7 +492,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                 CreateNetWmAppIcon( mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
                                     (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), netwm_icon );
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 // can happen - no ucb during early startup
             }

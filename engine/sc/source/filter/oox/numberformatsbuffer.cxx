@@ -1684,7 +1684,7 @@ sal_Int32 lclCreatePredefinedFormat( const Reference< XNumberFormats >& rxNumFmt
             xNumFmtTypes->getFormatIndex( nPredefId, rToLocale ) :
             xNumFmtTypes->getStandardIndex( rToLocale );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( OStringBuffer( "lclCreatePredefinedFormat - cannot create predefined number format " ).
             append( OString::number( nPredefId ) ).getStr() );
@@ -1700,7 +1700,7 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     {
         nIndex = rxNumFmts->addNewConverted( rFmtCode, rFromLocale, rToLocale );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         // BIFF2-BIFF4 stores standard format explicitly in stream
         if( rFmtCode.equalsIgnoreAsciiCase( "general" ) )
@@ -1743,7 +1743,7 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
         Reference< XNumberFormatsSupplier > xNumFmtsSupp( static_cast<cppu::OWeakObject*>(rHelper.getDocument().get()), UNO_QUERY_THROW );
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );

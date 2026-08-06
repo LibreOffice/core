@@ -24,7 +24,7 @@
 #include <cstring>
 #include <typeinfo>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <o3tl/runtimetooustring.hxx>
@@ -391,7 +391,7 @@ namespace
               pCppReturn, pReturnTypeRef, bSimpleReturn,
               pStackStart, ( pStack - pStackStart ),
               pGPR, pFPR, nREG);
-      } catch (css::uno::Exception &) {
+      } catch (cpo::uno::Exception &) {
           throw;
       } catch (std::exception & e) {
           throw css::uno::RuntimeException(

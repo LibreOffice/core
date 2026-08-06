@@ -75,7 +75,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             tRes.tested("copy()",oObj.exists(copiedFile));
             oObj.kill(copiedFile);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'copy()'");
             ex.printStackTrace(log);
             tRes.tested("copy()",false);
@@ -108,7 +108,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             tRes.tested("move()",oObj.exists(copiedFile));
             oObj.kill(copiedFile);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'move()'");
             ex.printStackTrace(log);
             tRes.tested("move()",false);
@@ -137,7 +137,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             oObj.kill(copiedFile);
             tRes.tested("kill()",!oObj.exists(copiedFile));
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'kill()'");
             ex.printStackTrace(log);
             tRes.tested("kill()",false);
@@ -154,7 +154,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
             tRes.tested("isFolder()",oObj.isFolder(dirname));
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'isFolder()'");
             ex.printStackTrace(log);
             tRes.tested("isFolder()",false);
@@ -199,7 +199,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
             oObj.kill(readonlyCopy);
             tRes.tested("isReadOnly()",result);
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'isReadOnly()'");
             ex.printStackTrace(log);
             tRes.tested("isReadOnly()",false);
@@ -270,7 +270,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             tRes.tested("createFolder()",oObj.isFolder(newFolder));
             oObj.kill(newFolder);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'createFolder()'");
             ex.printStackTrace(log);
             tRes.tested("createFolder()",false);
@@ -292,7 +292,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             int fSize = oObj.getSize(filename);
             tRes.tested("getSize()", fSize == 17 );
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'getSize()'");
             ex.printStackTrace(log);
             tRes.tested("getSize()",false);
@@ -316,7 +316,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             tRes.tested("getContentType()",
                 "application/vnd.sun.staroffice.fsys-file".equals(fType) );
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'getContentType()'");
             ex.printStackTrace(log);
             tRes.tested("getContentType()",false);
@@ -370,7 +370,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
             tRes.tested("getDateTimeModified()", res);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'getDateTimeModified()'");
             ex.printStackTrace(log);
             tRes.tested("getDateTimeModified()",false);
@@ -391,7 +391,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             String[] cont = oObj.getFolderContents(dirname,false);
             tRes.tested("getFolderContents()", cont.length>0);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'getFolderContents()'");
             ex.printStackTrace(log);
             tRes.tested("getFolderContents()",false);
@@ -415,7 +415,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             tRes.tested("exists()",
                 oObj.exists(filename) && !oObj.exists(wrongname));
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'exists()'");
             ex.printStackTrace(log);
             tRes.tested("exists()",false);
@@ -437,7 +437,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             com.sun.star.io.XInputStream iStream = oObj.openFileRead(filename);
             tRes.tested("openFileRead()", iStream != null);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'openFileRead()'");
             ex.printStackTrace(log);
             tRes.tested("openFileRead()",false);
@@ -469,7 +469,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
             tRes.tested("openFileWrite()", true);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'openFileWrite()'");
             ex.printStackTrace(log);
             tRes.tested("openFileWrite()", false);
@@ -502,7 +502,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
             tRes.tested("openFileReadWrite()", true);
         }
-        catch (com.sun.star.uno.Exception ex) {
+        catch (cpo.uno.Exception ex) {
             log.println("Exception occurred while testing 'openFileReadWrite()'");
             ex.printStackTrace(log);
             tRes.tested("openFileReadWrite()", false);

@@ -37,7 +37,7 @@ std::string XTextRangeToString(uno::Reference<text::XTextRange> const& textRange
         {
             aOUStr = textRange->getString();
         }
-        catch (const uno::Exception& rException)
+        catch (const cpo::uno::Exception& rException)
         {
             result += "(exception: ";
             result += rException.Message.toUtf8().getStr();

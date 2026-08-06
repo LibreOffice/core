@@ -1063,7 +1063,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequen
                 xResult->setLabel( xLabelSeq );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }

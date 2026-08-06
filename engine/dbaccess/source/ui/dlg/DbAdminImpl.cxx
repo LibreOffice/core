@@ -377,7 +377,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     {
         xDriverManager.set( ConnectionPool::create( getORB() ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         // wrap the exception into an SQLException

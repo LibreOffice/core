@@ -582,7 +582,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
                 xAxis->setPropertyValue(u"Show"_ustr, cpo::uno::Any( false ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

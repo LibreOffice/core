@@ -63,7 +63,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
     {
         xUriRef = xUriReferenceFactory->parse(rText);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("extensions.biblio",
                  "SplitUrlAndPage: failed to parse url: " << rException.Message);
@@ -97,7 +97,7 @@ OUString MergeUrlAndPage(const OUString& rUrl, const weld::SpinButton& rPageSB)
     {
         xUriRef = xUriReferenceFactory->parse(rUrl);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("extensions.biblio",
                  "MergeUrlAndPage: failed to parse url: " << rException.Message);
@@ -440,7 +440,7 @@ void BibGeneralPage::SaveChanges()
         else
             xResUpd->updateRow();
     }
-    catch( const uno::Exception&) {}
+    catch( const cpo::uno::Exception&) {}
 }
 
 IMPL_LINK(BibGeneralPage, LastElementKeyInputHdl, const KeyEvent&, rKeyEvent, bool)

@@ -244,7 +244,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -374,7 +374,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
         xDiagram.set( createInstance( u"com.sun.star.chart2.Diagram"_ustr ), UNO_QUERY_THROW );
         getChartDocument()->setFirstDiagram( xDiagram );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -646,7 +646,7 @@ void PlotAreaConverter::convertPositionFromModel()
                 OSL_FAIL( "PlotAreaConverter::convertPositionFromModel - unknown positioning target" );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

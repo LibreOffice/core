@@ -399,7 +399,7 @@ static uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
         xVBACompat.set( xModelProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY );
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
     return xVBACompat;
@@ -1001,7 +1001,7 @@ void SbModule::SetVBASupport( bool bSupport )
         uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
         xFactory->createInstance( u"ooo.vba.VBAGlobals"_ustr );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1111,7 +1111,7 @@ void SbModule::Run( SbMethod* pMeth )
                 xVBACompat.set( getVBACompatibility( xModel ), uno::UNO_SET_THROW );
                 xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STARTED, GetName() );
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {
             }
         }
@@ -1215,7 +1215,7 @@ void SbModule::Run( SbMethod* pMeth )
                     {
                         xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STOPPED, GetName() );
                     }
-                    catch(const uno::Exception& )
+                    catch(const cpo::uno::Exception& )
                     {
                     }
                     // VBA always ensures screenupdating is enabled after completing
@@ -2231,12 +2231,12 @@ public:
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
             try
             {
                 uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->addWindowListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
         }
 
         if ( mxModel.is() )
@@ -2245,7 +2245,7 @@ public:
             {
                 uno::Reference< document::XDocumentEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->addDocumentEventListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
         }
     }
 
@@ -2264,12 +2264,12 @@ public:
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
             try
             {
                 uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeWindowListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
         }
         mxComponent.clear();
 
@@ -2279,7 +2279,7 @@ public:
             {
                 uno::Reference< document::XDocumentEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->removeDocumentEventListener( this );
             }
-            catch(const uno::Exception& ) {}
+            catch(const cpo::uno::Exception& ) {}
         }
         mxModel.clear();
     }
@@ -2656,7 +2656,7 @@ void SbUserFormModule::InitObject()
             triggerInitializeEvent();
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 

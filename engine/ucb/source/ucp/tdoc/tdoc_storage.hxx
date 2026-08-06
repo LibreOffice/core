@@ -48,7 +48,7 @@ namespace tdoc_ucp {
             rtl::Reference< OfficeDocumentsManager > xDocsMgr );
         virtual ~StorageElementFactory() override;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         createTemporaryStorage();

@@ -72,7 +72,7 @@ namespace frm
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::RuntimeException;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::sdbc::XRowSet;

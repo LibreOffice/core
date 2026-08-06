@@ -29,7 +29,7 @@ import com.sun.star.ucb.NameClash;
 import com.sun.star.ucb.TransferCommandOperation;
 import com.sun.star.ucb.XCommandInfo;
 import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import share.LogWriter;
 

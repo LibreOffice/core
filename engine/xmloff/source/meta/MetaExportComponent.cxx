@@ -21,7 +21,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -107,7 +107,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
             SetDocHandler( xDocHandler );
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!");
         }

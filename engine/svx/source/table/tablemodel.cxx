@@ -653,7 +653,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -764,7 +764,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -822,7 +822,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -924,7 +924,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -986,7 +986,7 @@ void TableModel::optimize()
                     nWidth1 = o3tl::saturating_add(nWidth1, nWidth2);
                     xSet2->setPropertyValue( sWidth, cpo::uno::Any( nWidth1 ) );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("svx", "");
                 }
@@ -1023,7 +1023,7 @@ void TableModel::optimize()
                     nHeight1 = o3tl::saturating_add(nHeight1, nHeight2);
                     xSet2->setPropertyValue( sHeight, cpo::uno::Any( nHeight1 ) );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("svx", "");
                 }

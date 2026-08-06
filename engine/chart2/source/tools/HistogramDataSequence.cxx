@@ -209,7 +209,7 @@ void HistogramDataSequence::ensureCalculated()
                 rawData.push_back(fValue);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

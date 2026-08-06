@@ -64,7 +64,7 @@ public class HangulHanjaConversion {
         try {
             ConversionDictionaryList = xMSF.createInstance(
                                                "com.sun.star.linguistic2.ConversionDictionaryList");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             fail("Couldn't create ConversionDictionaryList");
         }
 
@@ -333,7 +333,7 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

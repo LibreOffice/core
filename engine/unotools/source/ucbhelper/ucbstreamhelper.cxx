@@ -71,7 +71,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
             catch ( const ContentCreationException& )
             {
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -104,7 +104,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
             catch ( const ContentCreationException& )
             {
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -131,7 +131,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
     catch ( const ContentCreationException& )
     {
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

@@ -257,7 +257,7 @@ ErrCodeMsg ReadThroughComponent(
         TOOLS_WARN_EXCEPTION( "sw", "uno exception caught while importing" );
         return ERR_SWG_READ_ERROR;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "uno exception caught while importing" );
         return ERR_SWG_READ_ERROR;
@@ -335,7 +335,7 @@ ErrCodeMsg ReadThroughComponent(
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         OSL_FAIL( "Error on import" );
         // TODO/LATER: error handling
@@ -802,7 +802,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
                 nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something wrong?
             }
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
         }
@@ -855,7 +855,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
             if( !pStrm2->GetError() )
                 rDoc.ReadLayoutCache( *pStrm2 );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

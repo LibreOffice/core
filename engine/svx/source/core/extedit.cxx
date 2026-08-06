@@ -95,7 +95,7 @@ void ExternalToolEditThread::execute()
         xSystemShellExecute->execute(m_aFileName, OUString(),
                 SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("svx", "ExternalToolEditThread");
     }

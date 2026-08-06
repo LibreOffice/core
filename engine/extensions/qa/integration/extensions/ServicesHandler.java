@@ -73,7 +73,7 @@ public class ServicesHandler implements XPropertyHandler
 
                 dispatcher.dispatch(dispatchURL[0], dispatchArgs );
             }
-            catch( com.sun.star.uno.Exception e )
+            catch( cpo.uno.Exception e )
             {
                 e.printStackTrace( System.err );
             }

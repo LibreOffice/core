@@ -155,7 +155,7 @@ std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
 
         return pFilter;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         return nullptr;
     }
@@ -203,7 +203,7 @@ void scriptCat(const Reference< XModel >& xDoc )
             xContainer = Reference< XNameContainer >(
                 xLibraries->getByName( libName ), UNO_QUERY );
         }
-        catch (const css::uno::Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             std::cout << "[" << libName << "] - failed to load library: " << e.Message << "\n";
             continue;
@@ -231,7 +231,7 @@ void scriptCat(const Reference< XModel >& xDoc )
                                   << aCodeString.trim()
                                   << "\n[/" << rObjectName << "]\n";
                 }
-                catch (const css::uno::Exception &e)
+                catch (const cpo::uno::Exception &e)
                 {
                     std::cout << "[" << rObjectName << "] - exception " << e.Message << " fetching code\n";
                 }
@@ -470,7 +470,7 @@ bool DispatchWatcher::executeDispatchRequests(
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION(
                         "desktop.app",
@@ -714,7 +714,7 @@ bool DispatchWatcher::executeDispatchRequests(
                                 {
                                     xStorable->storeToURL(aOutFile, conversionProperties);
                                 }
-                                catch (const Exception& rException)
+                                catch (const cpo::uno::Exception& rException)
                                 {
                                     std::cerr << "Error: Please verify input parameters...";
                                     if (!rException.Message.isEmpty())

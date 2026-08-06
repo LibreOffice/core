@@ -33,7 +33,7 @@ interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
     sequence < ::com::sun::star::util::RevisionTag > load( [in] ::com::sun::star::embed::XStorage Storage)
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                cpo::uno::Exception );
 
      /** Stores a list of available revisions to a storage
         <p>
@@ -42,7 +42,7 @@ interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
      */
     void store( [in] ::com::sun::star::embed::XStorage Storage, [in] sequence < ::com::sun::star::util::RevisionTag > List )
         raises( com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                cpo::uno::Exception );
 };
 
 

@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/xmlnamespace.hxx>
@@ -40,7 +40,7 @@ using namespace ::xmloff::token;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -115,7 +115,7 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
                 SetDocHandler( xTmpDocHandler );
             }
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

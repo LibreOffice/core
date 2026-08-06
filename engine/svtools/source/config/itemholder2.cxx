@@ -48,7 +48,7 @@ ItemHolder2::ItemHolder2()
         throw;
     }
 #ifdef DBG_UTIL
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         static bool bMessage = true;
         if(bMessage)
@@ -58,7 +58,7 @@ ItemHolder2::ItemHolder2()
         }
     }
 #else
-    catch(css::uno::Exception&){}
+    catch(cpo::uno::Exception&){}
 #endif
 }
 

@@ -54,7 +54,7 @@ namespace sfx2
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::task::DocumentMacroConfirmationRequest;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::security::DocumentDigitalSignatures;
     using ::com::sun::star::security::XDocumentDigitalSignatures;
     using ::com::sun::star::embed::XStorage;
@@ -265,7 +265,7 @@ namespace sfx2
                 // (FROM_LIST_AND_SIGNED_*), or a confirmation.
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("sfx.doc");
         }
@@ -444,7 +444,7 @@ namespace sfx2
                                 )
                             );
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("sfx.doc");
             }

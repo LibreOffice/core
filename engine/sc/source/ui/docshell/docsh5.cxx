@@ -1149,7 +1149,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                         xLib->getByName( sSrcCodeName ) >>= sSource;
                     }
                 }
-                catch ( const css::uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                 }
                 VBA_InsertModule( *m_pDocument, nTabToUse, sSource );

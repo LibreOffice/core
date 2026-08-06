@@ -120,7 +120,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
                 log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);

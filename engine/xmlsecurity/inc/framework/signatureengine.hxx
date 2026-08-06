@@ -90,7 +90,7 @@ protected:
      * For a SignatureCreator, it performs signing operation;
      * for a SignatureVerifier, verification operation is performed.
      */
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>&)
         {};

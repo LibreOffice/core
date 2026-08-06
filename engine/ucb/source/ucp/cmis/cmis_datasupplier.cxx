@@ -132,7 +132,7 @@ namespace cmis
                 return xRow;
             }
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
         }
         return uno::Reference< sdbc::XRow >();

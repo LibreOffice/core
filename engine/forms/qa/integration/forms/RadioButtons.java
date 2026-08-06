@@ -59,13 +59,13 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private XPropertySet insertRadio( int nXPos, int nYPos, String label, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet insertRadio( int nXPos, int nYPos, String label, String name, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         return insertRadio( nXPos, nYPos, label, name, refValue, null );
     }
 
     /* ------------------------------------------------------------------ */
-    private XPropertySet insertRadio( int nXPos, int nYPos, String label, String name, String refValue, XPropertySet parentForm ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet insertRadio( int nXPos, int nYPos, String label, String name, String refValue, XPropertySet parentForm ) throws cpo.uno.Exception, java.lang.Exception
     {
         XIndexContainer parentContainer = dbfTools.queryIndexContainer( parentForm );
         XPropertySet xRadio = m_formLayer.createControlAndShape( "DatabaseRadioButton", nXPos, nYPos, 25, 6, parentContainer );
@@ -83,7 +83,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /** this checks whether n groups of radio buttons, consisting of only one button each,
      *  behave properly
      */
-    public void checkSingleButtons() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkSingleButtons() throws cpo.uno.Exception, java.lang.Exception
     {
         prepareTestStep( false );
 
@@ -113,7 +113,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** creates three groups of radio buttons in a sample document, and checks whether they're working
      */
-    public void checkThreeGroups( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkThreeGroups( ) throws cpo.uno.Exception, java.lang.Exception
     {
         prepareTestStep( false );
 
@@ -158,7 +158,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** tests whether radio buttons which belong to different forms behave properly
      */
-    public void checkMultipleForms( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkMultipleForms( ) throws cpo.uno.Exception, java.lang.Exception
     {
         prepareTestStep( false );
 
@@ -199,7 +199,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /** tests for a special bug which we once had, where radio buttons lost their state after
      *  switching spreadsheet pages
      */
-    public void checkCalcPageSwitch( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkCalcPageSwitch( ) throws cpo.uno.Exception, java.lang.Exception
     {
         prepareTestStep( true );
 
@@ -254,13 +254,13 @@ public class RadioButtons extends complexlib.ComplexTestCase
                 closeDoc.close( true );
             }
         }
-        catch ( com.sun.star.uno.Exception e )
+        catch ( cpo.uno.Exception e )
         {
         }
     }
 
     /* ------------------------------------------------------------------ */
-    private void prepareTestStep( boolean useSpreadsheetDocument ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void prepareTestStep( boolean useSpreadsheetDocument ) throws cpo.uno.Exception, java.lang.Exception
     {
         m_primaryForm = null;
 
@@ -277,7 +277,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** checks or unchecks the radio button (in our primary form) with the given name and the given ref value
      */
-    private void checkRadio( String groupName, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void checkRadio( String groupName, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         checkRadio( groupName, refValue, m_primaryForm );
     }
@@ -285,7 +285,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** checks or unchecks the radio button with the given name and the given ref value
      */
-    private void checkRadio( String groupName, String refValue, XPropertySet form ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void checkRadio( String groupName, String refValue, XPropertySet form ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet xRadio = getRadioModel( groupName, refValue, form );
 
@@ -295,13 +295,13 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private XPropertySet getRadioModel( String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet getRadioModel( String name, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         return getRadioModel( name, refValue, m_primaryForm );
     }
 
     /* ------------------------------------------------------------------ */
-    private XPropertySet getRadioModel( String name, String refValue, XPropertySet form ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet getRadioModel( String name, String refValue, XPropertySet form ) throws cpo.uno.Exception, java.lang.Exception
     {
         return m_formLayer.getRadioModelByRefValue( form, name, refValue );
     }
@@ -309,7 +309,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies a number of radio buttons for their states
      */
-    private boolean verifyRadios( XPropertySet[] radios, short[] expectedStates, String errorMessage ) throws com.sun.star.uno.Exception
+    private boolean verifyRadios( XPropertySet[] radios, short[] expectedStates, String errorMessage ) throws cpo.uno.Exception
     {
         short[] actualStates = new short[radios.length];
 
@@ -335,7 +335,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies the states of the 4 radio buttons from the checkSingleButtons test
      */
-    private boolean verifySingleRadios( int state1, int state2, int state3, int state4 ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifySingleRadios( int state1, int state2, int state3, int state4 ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet[] radios = new XPropertySet[4];
         radios[0] = getRadioModel( "group 1", "" );
@@ -356,7 +356,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /** verifies the states of 6 radio buttons form the checkThreeGroups test
      */
     private boolean verifySixPack( XPropertySet[] radios, String errorMessage,
-        int state1, int state2, int state3, int state4, int state5, int state6 ) throws com.sun.star.uno.Exception, java.lang.Exception
+        int state1, int state2, int state3, int state4, int state5, int state6 ) throws cpo.uno.Exception, java.lang.Exception
     {
         short[] states = new short[6];
         states[0] = (short)state1;
@@ -372,7 +372,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies the states of 6 radio buttons
      */
-    private boolean verifySixPack( int state1, int state2, int state3, int state4, int state5, int state6 ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifySixPack( int state1, int state2, int state3, int state4, int state5, int state6 ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet[] radios = new XPropertySet[6];
         radios[0] = getRadioModel( "group 1", "a" );
@@ -389,7 +389,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies the states of the 6 radio buttons in our checkMultipleForms test
      */
-    private boolean verifyTwoFormRadios( int state1, int state2, int state3, int state4, int state5, int state6 ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifyTwoFormRadios( int state1, int state2, int state3, int state4, int state5, int state6 ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet[] radios = new XPropertySet[6];
         radios[0] = getRadioModel( "group 1", "a", m_primaryForm );
@@ -406,7 +406,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies the states of the 4 radio buttons in our spreadsheet document (checkCalcPageSwitch)
      */
-    private boolean verifySheetRadios( int state1, int state2, int state3, int state4 ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifySheetRadios( int state1, int state2, int state3, int state4 ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet[] radios = new XPropertySet[4];
         radios[0] = getRadioModel( "group 1", "a", m_primaryForm );

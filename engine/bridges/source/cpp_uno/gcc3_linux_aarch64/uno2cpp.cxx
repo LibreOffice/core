@@ -28,7 +28,7 @@
 #include <types.hxx>
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <rtl/textenc.h>
@@ -292,7 +292,7 @@ void call(
         try {
             callVirtualFunction(
                 (*thisPtr)[slot.index], gpr, fpr, stack, sp, ret);
-        } catch (css::uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             throw;
         } catch (std::exception & e) {
             throw css::uno::RuntimeException(
@@ -303,7 +303,7 @@ void call(
             throw css::uno::RuntimeException(
                 "C++ code threw unknown exception");
         }
-    } catch (css::uno::Exception &) {
+    } catch (cpo::uno::Exception &) {
         __cxxabiv1::__cxa_exception * header = reinterpret_cast<__cxxabiv1::__cxa_eh_globals *>(
             __cxxabiv1::__cxa_get_globals())->caughtExceptions;
 #if !defined MACOSX && defined _LIBCPPABI_VERSION // detect libc++abi

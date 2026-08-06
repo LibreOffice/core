@@ -227,12 +227,12 @@ void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lD
         }
     }
     #if OSL_DEBUG_LEVEL > 0
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("fwk", "Job::execute(): Got exception during job execution");
     }
     #else
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
     #endif
 
@@ -523,7 +523,7 @@ void Job::impl_startListening()
             m_xDesktop->addTerminateListener(xThis);
             m_bListenOnDesktop = true;
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             m_xDesktop.clear();
         }
@@ -542,7 +542,7 @@ void Job::impl_startListening()
                 m_bListenOnFrame = true;
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             m_bListenOnFrame = false;
         }
@@ -562,7 +562,7 @@ void Job::impl_startListening()
             m_bListenOnModel = true;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         m_bListenOnModel = false;
     }
@@ -586,7 +586,7 @@ void Job::impl_stopListening()
             m_xDesktop.clear();
             m_bListenOnDesktop = false;
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -604,7 +604,7 @@ void Job::impl_stopListening()
                 m_bListenOnFrame = false;
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -623,7 +623,7 @@ void Job::impl_stopListening()
             m_bListenOnModel = false;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

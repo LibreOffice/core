@@ -42,7 +42,7 @@
 #include "com/sun/star/script/Invocation.hpp"
 #include "com/sun/star/security/AccessController.hpp"
 #include "com/sun/star/security/Policy.hpp"
-#include "com/sun/star/uno/Exception.hpp"
+#include "cpo/uno/Exception.hpp"
 #include "cpo/uno/NamingService.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -128,7 +128,7 @@ private:
                 name, context_);
         } catch (css::uno::RuntimeException &) {
             throw;
-        } catch (css::uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             throw css::uno::RuntimeException(
                 ::rtl::OUString("error creating instance"),
                 static_cast< ::cppu::OWeakObject * >(this));

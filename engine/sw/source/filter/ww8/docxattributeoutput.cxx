@@ -5977,7 +5977,7 @@ bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode ,const sal_Int
         aPostponedMathObject.nMathObjAlignment = nAlign;
         m_aPostponedMaths.push_back(aPostponedMathObject);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return true;
@@ -5993,7 +5993,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         {
             xObj->changeState(embed::EmbedStates::RUNNING);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -6321,7 +6321,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                    FSNS(XML_w, XML_dxaOrig), OString::number(aOriginalSize.Width()),
                                    FSNS(XML_w, XML_dyaOrig), OString::number(aOriginalSize.Height()) );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             m_pSerializer->startElementNS(XML_w, XML_object);
         }

@@ -78,7 +78,7 @@ using cpo::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::util::XModifyListener;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xml::dom::NodeType_ATTRIBUTE_NODE;

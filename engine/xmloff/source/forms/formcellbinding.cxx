@@ -386,7 +386,7 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
                 xReturn = xDocumentFactory->createInstance( _rService );
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             OSL_FAIL( "FormCellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
         }

@@ -72,7 +72,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::sheet;
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::cpo::uno::Sequence;
@@ -372,7 +372,7 @@ static bool lcl_IsDuplicated(const Reference<XPropertySet>& rDimProps)
         Reference< XNamed > xOriginal( aAny, UNO_QUERY );
         return xOriginal.is();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;
@@ -390,7 +390,7 @@ static OUString lcl_GetOriginalName(const Reference< XNamed >& rDim)
             Any aAny = xDimProps->getPropertyValue(SC_UNO_DP_ORIGINAL);
             aAny >>= xOriginal;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -2290,7 +2290,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                     Reference< XNameAccess > xFields( mxParent->getDataPilotFields(), UNO_QUERY_THROW );
                     aInfo.SourceField.set( xFields->getByName( pGroupDim->GetSourceDimName() ), UNO_QUERY );
                 }
-                catch( Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
 
@@ -2703,7 +2703,7 @@ rtl::Reference < ScDataPilotFieldObj > ScDataPilotFieldObj::createScDateGroup( c
         {
            xRet = mxParent->getScDataPilotFields()->getScDataPilotFieldObjByName( aGroupDimName );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     return xRet;
@@ -2737,7 +2737,7 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
                 Reference< XNamed > xItemName( xItemsIA->getByIndex( nIdx ), UNO_QUERY_THROW );
                 rMembers.push_back( xItemName->getName() );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 // ignore exceptions, go ahead with next element in the array
             }

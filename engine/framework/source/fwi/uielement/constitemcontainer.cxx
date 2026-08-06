@@ -61,7 +61,7 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
             xPropSet->getPropertyValue(u"UIName"_ustr) >>= m_aUIName;
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

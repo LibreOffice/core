@@ -701,7 +701,7 @@ cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::Get
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(

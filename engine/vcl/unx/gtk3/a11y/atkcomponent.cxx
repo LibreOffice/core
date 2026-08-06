@@ -112,7 +112,7 @@ component_wrapper_grab_focus (AtkComponent *component)
             return true;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         g_warning( "Exception in grabFocus()" );
     }
@@ -141,7 +141,7 @@ component_wrapper_contains (AtkComponent *component,
             return pComponent->containsPoint(
                 translatePoint(component, pComponent, x, y, coord_type));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         g_warning( "Exception in containsPoint()" );
     }
@@ -175,7 +175,7 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
                 return atk_object_wrapper_ref(xAccessible);
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         g_warning( "Exception in getAccessibleAtPoint()" );
     }
@@ -227,7 +227,7 @@ component_wrapper_get_position (AtkComponent   *component,
             *y = aPos.Y;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         g_warning( "Exception in getLocation[OnScreen]()" );
     }
@@ -261,7 +261,7 @@ component_wrapper_get_size (AtkComponent   *component,
             *height = aSize.Height;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         g_warning( "Exception in getSize()" );
     }

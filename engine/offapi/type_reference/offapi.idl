@@ -36,17 +36,17 @@ module com {
     };
    };
    module auth {
-    published exception AuthenticationFailedException: ::com::sun::star::uno::Exception {
+    published exception AuthenticationFailedException: ::cpo::uno::Exception {
     };
-    published exception InvalidArgumentException: ::com::sun::star::uno::Exception {
+    published exception InvalidArgumentException: ::cpo::uno::Exception {
     };
-    published exception InvalidContextException: ::com::sun::star::uno::Exception {
+    published exception InvalidContextException: ::cpo::uno::Exception {
     };
-    published exception InvalidCredentialException: ::com::sun::star::uno::Exception {
+    published exception InvalidCredentialException: ::cpo::uno::Exception {
     };
-    published exception InvalidPrincipalException: ::com::sun::star::uno::Exception {
+    published exception InvalidPrincipalException: ::cpo::uno::Exception {
     };
-    published exception PersistenceFailureException: ::com::sun::star::uno::Exception {
+    published exception PersistenceFailureException: ::cpo::uno::Exception {
     };
     published interface XSSOManager;
     published interface XSSOManagerFactory {
@@ -61,7 +61,7 @@ module com {
      void removePassword([in] string UserName, [in] boolean RemovePersist) raises (::com::sun::star::auth::InvalidArgumentException, ::com::sun::star::auth::PersistenceFailureException);
     };
     published service SSOPasswordCache: ::com::sun::star::auth::XSSOPasswordCache;
-    published exception UnsupportedException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedException: ::cpo::uno::Exception {
     };
     published interface XSSOContext {
      interface ::com::sun::star::uno::XInterface;
@@ -710,7 +710,7 @@ module com {
      const short X = 1;
      const short Y = 2;
     };
-    published exception PrinterException: ::com::sun::star::uno::Exception {
+    published exception PrinterException: ::cpo::uno::Exception {
     };
     published interface XInfoPrinter;
     published interface XPrinter;
@@ -2377,7 +2377,7 @@ module com {
     };
    };
    module util {
-    published exception VetoException: ::com::sun::star::uno::Exception {
+    published exception VetoException: ::cpo::uno::Exception {
     };
    };
    module awt {
@@ -3477,7 +3477,7 @@ module com {
     };
    };
    module util {
-    published exception CloseVetoException: ::com::sun::star::uno::Exception {
+    published exception CloseVetoException: ::cpo::uno::Exception {
     };
    };
    module style {
@@ -3681,7 +3681,7 @@ module com {
     };
    };
    module sdbc {
-    published exception SQLException: ::com::sun::star::uno::Exception {
+    published exception SQLException: ::cpo::uno::Exception {
      string SQLState;
      long ErrorCode;
      any NextException;
@@ -3793,7 +3793,7 @@ module com {
      interface ::com::sun::star::lang::XMultiServiceFactory;
      interface ::com::sun::star::lang::XComponent;
     };
-    published exception CannotLoadConfigurationException: ::com::sun::star::uno::Exception {
+    published exception CannotLoadConfigurationException: ::cpo::uno::Exception {
     };
     published service HierarchyAccess {
      interface ::com::sun::star::container::XNameAccess;
@@ -3962,7 +3962,7 @@ module com {
      published interface XLayer;
      published interface XUpdateHandler;
      published interface XSchema;
-     published exception MalformedDataException: ::com::sun::star::uno::Exception {
+     published exception MalformedDataException: ::cpo::uno::Exception {
       any ErrorDetails;
      };
     };
@@ -3970,7 +3970,7 @@ module com {
    module task {
     published interface XJob {
      interface ::com::sun::star::uno::XInterface;
-     any execute([in] sequence< ::com::sun::star::beans::NamedValue > Arguments) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception);
+     any execute([in] sequence< ::com::sun::star::beans::NamedValue > Arguments) raises (::com::sun::star::lang::IllegalArgumentException, ::cpo::uno::Exception);
     };
    };
    module configuration {
@@ -4117,7 +4117,7 @@ module com {
      ::com::sun::star::datatransfer::XMimeContentType createMimeContentType([in] string aContentType) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     published service MimeContentTypeFactory: ::com::sun::star::datatransfer::XMimeContentTypeFactory;
-    published exception UnsupportedFlavorException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedFlavorException: ::cpo::uno::Exception {
     };
     published interface XMimeContentType {
      interface ::com::sun::star::uno::XInterface;
@@ -4367,9 +4367,9 @@ module com {
     };
    };
    module ucb {
-    published exception CommandAbortedException: ::com::sun::star::uno::Exception {
+    published exception CommandAbortedException: ::cpo::uno::Exception {
     };
-    published exception CommandFailedException: ::com::sun::star::uno::Exception {
+    published exception CommandFailedException: ::cpo::uno::Exception {
      any Reason;
     };
     published enum ContentCreationError {
@@ -4380,7 +4380,7 @@ module com {
      NO_CONTENT_PROVIDER = 4,
      CONTENT_CREATION_FAILED = 5
     };
-    published exception ContentCreationException: ::com::sun::star::uno::Exception {
+    published exception ContentCreationException: ::cpo::uno::Exception {
      ::com::sun::star::ucb::ContentCreationError eError;
     };
     published interface XProgressHandler;
@@ -4391,15 +4391,15 @@ module com {
     };
    };
    module document {
-    published exception AmbigousFilterRequest: ::com::sun::star::uno::Exception {
+    published exception AmbigousFilterRequest: ::cpo::uno::Exception {
      string URL;
      string SelectedFilter;
      string DetectedFilter;
     };
-    published exception BrokenPackageRequest: ::com::sun::star::uno::Exception {
+    published exception BrokenPackageRequest: ::cpo::uno::Exception {
      string aName;
     };
-    published exception ChangedByOthersRequest: ::com::sun::star::uno::Exception {
+    published exception ChangedByOthersRequest: ::cpo::uno::Exception {
     };
     published exception CorruptedFilterConfigurationException: ::com::sun::star::uno::RuntimeException {
      string Details;
@@ -4501,7 +4501,7 @@ module com {
      [optional] interface ::com::sun::star::container::XNameContainer;
      [optional] interface ::com::sun::star::util::XFlushable;
     };
-    published exception FilterOptionsRequest: ::com::sun::star::uno::Exception {
+    published exception FilterOptionsRequest: ::cpo::uno::Exception {
      ::com::sun::star::frame::XModel rModel;
      sequence< ::com::sun::star::beans::PropertyValue > rProperties;
     };
@@ -4541,11 +4541,11 @@ module com {
     };
     published exception LockFileIgnoreRequest: ::com::sun::star::io::IOException {
     };
-    published exception LockedDocumentRequest: ::com::sun::star::uno::Exception {
+    published exception LockedDocumentRequest: ::cpo::uno::Exception {
      string DocumentURL;
      string UserInfo;
     };
-    published exception LockedOnSavingRequest: ::com::sun::star::uno::Exception {
+    published exception LockedOnSavingRequest: ::cpo::uno::Exception {
      string DocumentURL;
      string UserInfo;
     };
@@ -4561,13 +4561,13 @@ module com {
      const short USE_CONFIG_APPROVE_CONFIRMATION = 6;
      const short USE_CONFIG_REJECT_CONFIRMATION = 5;
     };
-    published exception NoSuchFilterRequest: ::com::sun::star::uno::Exception {
+    published exception NoSuchFilterRequest: ::cpo::uno::Exception {
      string URL;
     };
    };
    module xml {
     module sax {
-     published exception SAXException: ::com::sun::star::uno::Exception {
+     published exception SAXException: ::cpo::uno::Exception {
       any WrappedException;
      };
     };
@@ -4673,7 +4673,7 @@ module com {
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > InteropGrabBag;
     };
     published service OleEmbeddedServerRegistration: ::com::sun::star::uno::XInterface;
-    published exception OwnLockOnDocumentRequest: ::com::sun::star::uno::Exception {
+    published exception OwnLockOnDocumentRequest: ::cpo::uno::Exception {
      string DocumentURL;
      string TimeInfo;
      boolean IsStoring;
@@ -4700,7 +4700,7 @@ module com {
      const short NONE = 0;
      const short REMOVED = 3;
     };
-    published exception ReloadEditableRequest: ::com::sun::star::uno::Exception {
+    published exception ReloadEditableRequest: ::cpo::uno::Exception {
      string DocumentURL;
     };
    };
@@ -4834,7 +4834,7 @@ module com {
     };
    };
    module frame {
-    published exception DoubleInitializationException: ::com::sun::star::uno::Exception {
+    published exception DoubleInitializationException: ::cpo::uno::Exception {
     };
    };
    module drawing {
@@ -5734,9 +5734,9 @@ module com {
     };
    };
    module packages {
-    published exception NoEncryptionException: ::com::sun::star::uno::Exception {
+    published exception NoEncryptionException: ::cpo::uno::Exception {
     };
-    published exception WrongPasswordException: ::com::sun::star::uno::Exception {
+    published exception WrongPasswordException: ::cpo::uno::Exception {
     };
    };
    module embed {
@@ -5765,7 +5765,7 @@ module com {
      [property, optional, readonly] string URL;
     };
     published service DocumentCloser: ::com::sun::star::lang::XComponent {
-     DocumentCloserCtor1([in] ::com::sun::star::frame::XFrame xFrame) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::uno::Exception);
+     DocumentCloserCtor1([in] ::com::sun::star::frame::XFrame xFrame) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::cpo::uno::Exception);
     };
     published constants ElementModes {
      const long NOCREATE = 16;
@@ -5838,17 +5838,17 @@ module com {
     };
     published interface XEmbedObjectCreator {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceInitNew([in] sequence< byte > aClassID, [in] string sClassName, [in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceInitFromEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceInitFromMediaDescriptor([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceInitNew([in] sequence< byte > aClassID, [in] string sClassName, [in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceInitFromEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceInitFromMediaDescriptor([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
     published interface XEmbedObjectFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceUserInit([in] sequence< byte > aClassID, [in] string sClassName, [in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] long nEntryConnectionMode, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceUserInit([in] sequence< byte > aClassID, [in] string sClassName, [in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] long nEntryConnectionMode, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
     published interface XLinkCreator {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceLink([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceLink([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
    };
    module frame {
@@ -5883,20 +5883,20 @@ module com {
     };
     published interface XActionsApproval;
     published service InstanceLocker: ::com::sun::star::lang::XComponent {
-     InstanceLockerCtor1([in] ::com::sun::star::uno::XInterface xInstance, [in] long nActions) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::uno::Exception);
-     InstanceLockerCtor2([in] ::com::sun::star::uno::XInterface xInstance, [in] long nActions, [in] ::com::sun::star::embed::XActionsApproval xApprove) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::uno::Exception);
+     InstanceLockerCtor1([in] ::com::sun::star::uno::XInterface xInstance, [in] long nActions) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::cpo::uno::Exception);
+     InstanceLockerCtor2([in] ::com::sun::star::uno::XInterface xInstance, [in] long nActions, [in] ::com::sun::star::embed::XActionsApproval xApprove) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::cpo::uno::Exception);
     };
-    published exception LinkageMisuseException: ::com::sun::star::uno::Exception {
+    published exception LinkageMisuseException: ::cpo::uno::Exception {
     };
     published interface XEmbedObjectClipboardCreator {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::embed::InsertedObjectInfo createInstanceInitFromClipboard([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     ::com::sun::star::embed::InsertedObjectInfo createInstanceInitFromClipboard([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
-    published exception WrongStateException: ::com::sun::star::uno::Exception {
+    published exception WrongStateException: ::cpo::uno::Exception {
     };
     published exception NeedsRunningStateException: ::com::sun::star::embed::WrongStateException {
     };
-    published exception NoVisualAreaSizeException: ::com::sun::star::uno::Exception {
+    published exception NoVisualAreaSizeException: ::cpo::uno::Exception {
     };
     published interface XClassifiedObject {
      interface ::com::sun::star::uno::XInterface;
@@ -5919,7 +5919,7 @@ module com {
      createFromInputStream([in] ::com::sun::star::io::XInputStream xInputStream, [in] boolean bNoTempCopy);
      createFromStream([in] ::com::sun::star::io::XStream xStream, [in] boolean bNoTempCopy);
     };
-    published exception ObjectSaveVetoException: ::com::sun::star::uno::Exception {
+    published exception ObjectSaveVetoException: ::cpo::uno::Exception {
     };
     published exception StateChangeInProgressException: ::com::sun::star::embed::WrongStateException {
      long TargetState;
@@ -5966,7 +5966,7 @@ module com {
      [property] boolean UseCommonStoragePasswordEncryption;
      [property, readonly] long Size;
     };
-    published exception UnreachableStateException: ::com::sun::star::uno::Exception {
+    published exception UnreachableStateException: ::cpo::uno::Exception {
      long CurrentState;
      long NextState;
     };
@@ -5993,9 +5993,9 @@ module com {
     };
     published interface XCommonEmbedPersist {
      interface ::com::sun::star::uno::XInterface;
-     void storeOwn() raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     void storeOwn() raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
      boolean isReadonly() raises (::com::sun::star::embed::WrongStateException);
-     void reload([in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     void reload([in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
    };
    module util {
@@ -6008,16 +6008,16 @@ module com {
     };
     published interface XEmbedPersist {
      interface ::com::sun::star::embed::XCommonEmbedPersist;
-     void setPersistentEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] long nEntryConnectionMode, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     void storeToEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     void storeAsEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     void saveCompleted([in] boolean bUseNew) raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
+     void setPersistentEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] long nEntryConnectionMode, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     void storeToEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     void storeAsEntry([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     void saveCompleted([in] boolean bUseNew) raises (::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
      boolean hasEntry() raises (::com::sun::star::embed::WrongStateException);
      string getEntryName() raises (::com::sun::star::embed::WrongStateException);
     };
     published interface XEmbeddedClient {
      interface ::com::sun::star::embed::XComponentSupplier;
-     void saveObject() raises (::com::sun::star::embed::ObjectSaveVetoException, ::com::sun::star::uno::Exception);
+     void saveObject() raises (::com::sun::star::embed::ObjectSaveVetoException, ::cpo::uno::Exception);
      void visibilityChanged([in] boolean bVisible) raises (::com::sun::star::embed::WrongStateException);
     };
     published interface XStateChangeListener;
@@ -6028,10 +6028,10 @@ module com {
     };
     published interface XVisualObject {
      interface ::com::sun::star::uno::XInterface;
-     void setVisualAreaSize([in] hyper nAspect, [in] ::com::sun::star::awt::Size aSize) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::awt::Size getVisualAreaSize([in] hyper nAspect) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::embed::VisualRepresentation getPreferredVisualRepresentation([in] hyper nAspect) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
-     long getMapUnit([in] hyper nAspect) raises (::com::sun::star::uno::Exception);
+     void setVisualAreaSize([in] hyper nAspect, [in] ::com::sun::star::awt::Size aSize) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
+     ::com::sun::star::awt::Size getVisualAreaSize([in] hyper nAspect) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
+     ::com::sun::star::embed::VisualRepresentation getPreferredVisualRepresentation([in] hyper nAspect) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
+     long getMapUnit([in] hyper nAspect) raises (::cpo::uno::Exception);
     };
    };
    module util {
@@ -6054,14 +6054,14 @@ module com {
      interface ::com::sun::star::embed::XStateChangeBroadcaster;
      interface ::com::sun::star::document::XEventBroadcaster;
      interface ::com::sun::star::util::XCloseable;
-     void changeState([in] long nNewState) raises (::com::sun::star::embed::UnreachableStateException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
+     void changeState([in] long nNewState) raises (::com::sun::star::embed::UnreachableStateException, ::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
      sequence< long > getReachableStates() raises (::com::sun::star::embed::NeedsRunningStateException, ::com::sun::star::embed::WrongStateException);
      long getCurrentState() raises (::com::sun::star::embed::WrongStateException);
-     void doVerb([in] long nVerbID) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::embed::UnreachableStateException, ::com::sun::star::uno::Exception);
+     void doVerb([in] long nVerbID) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::embed::UnreachableStateException, ::cpo::uno::Exception);
      sequence< ::com::sun::star::embed::VerbDescriptor > getSupportedVerbs() raises (::com::sun::star::embed::NeedsRunningStateException, ::com::sun::star::embed::WrongStateException);
      void setClientSite([in] ::com::sun::star::embed::XEmbeddedClient xClient) raises (::com::sun::star::embed::WrongStateException);
      ::com::sun::star::embed::XEmbeddedClient getClientSite() raises (::com::sun::star::embed::WrongStateException);
-     void update() raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
+     void update() raises (::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
      void setUpdateMode([in] long nMode) raises (::com::sun::star::embed::WrongStateException);
      hyper getStatus([in] hyper nAspect) raises (::com::sun::star::embed::WrongStateException);
      void setContainerName([in] string sName);
@@ -6096,19 +6096,19 @@ module com {
     };
     published interface XInplaceObject {
      interface ::com::sun::star::uno::XInterface;
-     void setObjectRectangles([in] ::com::sun::star::awt::Rectangle aPosRect, [in] ::com::sun::star::awt::Rectangle aClipRect) raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
-     void enableModeless([in] boolean bEnable) raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
+     void setObjectRectangles([in] ::com::sun::star::awt::Rectangle aPosRect, [in] ::com::sun::star::awt::Rectangle aClipRect) raises (::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
+     void enableModeless([in] boolean bEnable) raises (::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
      void translateAccelerators([in] sequence< ::com::sun::star::awt::KeyEvent > aKeys) raises (::com::sun::star::embed::WrongStateException);
     };
     published interface XInsertObjectDialog {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::embed::InsertedObjectInfo createInstanceByDialog([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     ::com::sun::star::embed::InsertedObjectInfo createInstanceByDialog([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntName, [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
     published interface XLinkageSupport {
      interface ::com::sun::star::embed::XCommonEmbedPersist;
-     void breakLink([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     void breakLink([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
      boolean isLink() raises (::com::sun::star::embed::WrongStateException);
-     string getLinkURL() raises (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception);
+     string getLinkURL() raises (::com::sun::star::embed::WrongStateException, ::cpo::uno::Exception);
     };
    };
    module packages {
@@ -6132,8 +6132,8 @@ module com {
     };
     published interface XPersistanceHolder {
      interface ::com::sun::star::uno::XInterface;
-     void disconnectPersistence() raises (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     void connectPersistance([in] ::com::sun::star::io::XStream xStream) raises (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     void disconnectPersistence() raises (::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     void connectPersistance([in] ::com::sun::star::io::XStream xStream) raises (::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
     published interface XRelationshipAccess {
      interface ::com::sun::star::uno::XInterface;
@@ -6161,9 +6161,9 @@ module com {
     };
     published interface XTransactionListener {
      interface ::com::sun::star::lang::XEventListener;
-     void preCommit([in] ::com::sun::star::lang::EventObject aEvent) raises (::com::sun::star::uno::Exception);
+     void preCommit([in] ::com::sun::star::lang::EventObject aEvent) raises (::cpo::uno::Exception);
      void commited([in] ::com::sun::star::lang::EventObject aEvent);
-     void preRevert([in] ::com::sun::star::lang::EventObject aEvent) raises (::com::sun::star::uno::Exception);
+     void preRevert([in] ::com::sun::star::lang::EventObject aEvent) raises (::cpo::uno::Exception);
      void reverted([in] ::com::sun::star::lang::EventObject aEvent);
     };
     published interface XTransferableSupplier {
@@ -7444,7 +7444,7 @@ module com {
      interface ::com::sun::star::frame::XDocumentTemplates;
      interface ::com::sun::star::lang::XLocalizable;
     };
-    published exception TerminationVetoException: ::com::sun::star::uno::Exception {
+    published exception TerminationVetoException: ::cpo::uno::Exception {
     };
     published constants WindowArrange {
      const short CASCADE = 4;
@@ -7492,8 +7492,8 @@ module com {
     };
     published interface XLoadable {
      interface ::com::sun::star::uno::XInterface;
-     void initNew() raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
-     void load([in] sequence< ::com::sun::star::beans::PropertyValue > lArguments) raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+     void initNew() raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
+     void load([in] sequence< ::com::sun::star::beans::PropertyValue > lArguments) raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
     };
     published interface XRecordableDispatch {
      interface ::com::sun::star::uno::XInterface;
@@ -8067,7 +8067,7 @@ module com {
      const short OCTOBER = 9;
      const short SEPTEMBER = 8;
     };
-    published exception MultipleCharsOutputException: ::com::sun::star::uno::Exception {
+    published exception MultipleCharsOutputException: ::cpo::uno::Exception {
     };
     published constants NativeNumberMode {
      const short NATNUM0 = 0;
@@ -8553,9 +8553,9 @@ module com {
     };
    };
    module ldap {
-    published exception LdapConnectionException: ::com::sun::star::uno::Exception {
+    published exception LdapConnectionException: ::cpo::uno::Exception {
     };
-    published exception LdapGenericException: ::com::sun::star::uno::Exception {
+    published exception LdapGenericException: ::cpo::uno::Exception {
      long ErrorCode;
     };
    };
@@ -8931,7 +8931,7 @@ module com {
      interface ::com::sun::star::beans::XPropertySet;
     };
     module zip {
-     published exception ZipException: ::com::sun::star::uno::Exception {
+     published exception ZipException: ::cpo::uno::Exception {
      };
     };
     module manifest {
@@ -9024,7 +9024,7 @@ module com {
      INFO = 2,
      QUERY = 3
     };
-    published exception ClassifiedInteractionRequest: ::com::sun::star::uno::Exception {
+    published exception ClassifiedInteractionRequest: ::cpo::uno::Exception {
      ::com::sun::star::task::InteractionClassification Classification;
     };
    };
@@ -9514,7 +9514,7 @@ module com {
      string ScannerName;
      long InternalData;
     };
-    published exception ScannerException: ::com::sun::star::uno::Exception {
+    published exception ScannerException: ::cpo::uno::Exception {
      ::com::sun::star::scanner::ScanError Error;
     };
     published interface XScannerManager {
@@ -10004,7 +10004,7 @@ module com {
     published interface XCommandProcessor {
      interface ::com::sun::star::uno::XInterface;
      long createCommandIdentifier();
-     any execute([in] ::com::sun::star::ucb::Command aCommand, [in] long CommandId, [in] ::com::sun::star::ucb::XCommandEnvironment Environment) raises (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException);
+     any execute([in] ::com::sun::star::ucb::Command aCommand, [in] long CommandId, [in] ::com::sun::star::ucb::XCommandEnvironment Environment) raises (::cpo::uno::Exception, ::com::sun::star::ucb::CommandAbortedException);
      void abort([in] long CommandId);
     };
     published interface XCommandProcessor2 {
@@ -11982,7 +11982,7 @@ module com {
     };
     published interface XSheetOperation {
      interface ::com::sun::star::uno::XInterface;
-     double computeFunction([in] ::com::sun::star::sheet::GeneralFunction nFunction) raises (::com::sun::star::uno::Exception);
+     double computeFunction([in] ::com::sun::star::sheet::GeneralFunction nFunction) raises (::cpo::uno::Exception);
      void clearContents([in] long nContentFlags);
     };
     published interface XSubTotalCalculatable {
@@ -13117,7 +13117,7 @@ module com {
      const long NO_USER_INTERFACE = 1;
     };
     published service SimpleSystemMail: ::com::sun::star::system::XSimpleMailClientSupplier;
-    published exception SystemShellExecuteException: ::com::sun::star::uno::Exception {
+    published exception SystemShellExecuteException: ::cpo::uno::Exception {
      long PosixError;
     };
     published interface XSystemShellExecute {
@@ -13134,7 +13134,7 @@ module com {
     published interface XSimpleMailClient {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::system::XSimpleMailMessage createSimpleMailMessage();
-     void sendSimpleMailMessage([in] ::com::sun::star::system::XSimpleMailMessage xSimpleMailMessage, [in] long aFlag) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception);
+     void sendSimpleMailMessage([in] ::com::sun::star::system::XSimpleMailMessage xSimpleMailMessage, [in] long aFlag) raises (::com::sun::star::lang::IllegalArgumentException, ::cpo::uno::Exception);
     };
     published interface XSimpleMailMessage {
      interface ::com::sun::star::uno::XInterface;
@@ -13263,7 +13263,7 @@ module com {
     published exception DocumentPasswordRequest: ::com::sun::star::task::PasswordRequest {
      string Name;
     };
-    published exception ErrorCodeRequest: ::com::sun::star::uno::Exception {
+    published exception ErrorCodeRequest: ::cpo::uno::Exception {
      long ErrCode;
     };
     published service InteractionHandler: ::com::sun::star::task::XInteractionHandler2 {
@@ -13286,10 +13286,10 @@ module com {
     };
     published interface XRestartManager {
      interface ::com::sun::star::uno::XInterface;
-     void requestRestart([in] ::com::sun::star::task::XInteractionHandler xInteractionHandler) raises (::com::sun::star::uno::Exception);
-     boolean isRestartRequested([in] boolean bInitialized) raises (::com::sun::star::uno::Exception);
+     void requestRestart([in] ::com::sun::star::task::XInteractionHandler xInteractionHandler) raises (::cpo::uno::Exception);
+     boolean isRestartRequested([in] boolean bInitialized) raises (::cpo::uno::Exception);
     };
-    published exception PDFExportException: ::com::sun::star::uno::Exception {
+    published exception PDFExportException: ::cpo::uno::Exception {
      sequence< long > ErrorCodes;
     };
     published interface XMasterPasswordHandling {
@@ -14029,7 +14029,7 @@ module com {
      [property, optional] short LabelDisplayType;
      [property, maybevoid, optional] string CreateFromParagraphStyle;
     };
-    published exception InvalidTextContentException: ::com::sun::star::uno::Exception {
+    published exception InvalidTextContentException: ::cpo::uno::Exception {
      ::com::sun::star::text::XTextContent TextContent;
     };
     published constants LabelFollow {
@@ -15349,7 +15349,7 @@ module com {
     };
    };
    module ucb {
-    published exception AlreadyInitializedException: ::com::sun::star::uno::Exception {
+    published exception AlreadyInitializedException: ::cpo::uno::Exception {
     };
     published interface XAnyCompare;
     published interface XAnyCompareFactory {
@@ -15427,9 +15427,9 @@ module com {
      ::com::sun::star::sdbc::XResultSet createCachedContentResultSetStub([in] ::com::sun::star::sdbc::XResultSet xSource);
     };
     published service CachedContentResultSetStubFactory: ::com::sun::star::ucb::XCachedContentResultSetStubFactory;
-    published exception ListenerAlreadySetException: ::com::sun::star::uno::Exception {
+    published exception ListenerAlreadySetException: ::cpo::uno::Exception {
     };
-    published exception ServiceNotFoundException: ::com::sun::star::uno::Exception {
+    published exception ServiceNotFoundException: ::cpo::uno::Exception {
     };
     published interface XDynamicResultSetListener;
     published interface XDynamicResultSet {
@@ -15466,7 +15466,7 @@ module com {
      void connectToCache([in] ::com::sun::star::ucb::XDynamicResultSet Source, [in] ::com::sun::star::ucb::XDynamicResultSet TargetCache, [in] sequence< ::com::sun::star::ucb::NumberedSortingInfo > SortingInfo, [in] ::com::sun::star::ucb::XAnyCompareFactory CompareFactory) raises (::com::sun::star::ucb::ListenerAlreadySetException, ::com::sun::star::ucb::AlreadyInitializedException);
     };
     published service CachedDynamicResultSetStubFactory: ::com::sun::star::ucb::XCachedDynamicResultSetStubFactory;
-    published exception IllegalIdentifierException: ::com::sun::star::uno::Exception {
+    published exception IllegalIdentifierException: ::cpo::uno::Exception {
     };
     published interface XContentProvider {
      interface ::com::sun::star::uno::XInterface;
@@ -15568,9 +15568,9 @@ module com {
      REMOTE = 0,
      LOCAL = 1
     };
-    published exception DuplicateCommandIdentifierException: ::com::sun::star::uno::Exception {
+    published exception DuplicateCommandIdentifierException: ::cpo::uno::Exception {
     };
-    published exception DuplicateProviderException: ::com::sun::star::uno::Exception {
+    published exception DuplicateProviderException: ::cpo::uno::Exception {
     };
     published service DynamicResultSet {
      interface ::com::sun::star::ucb::XDynamicResultSet;
@@ -15832,7 +15832,7 @@ module com {
     published exception InteractiveAugmentedIOException: ::com::sun::star::ucb::InteractiveIOException {
      sequence< any > Arguments;
     };
-    published exception InteractiveBadTransferURLException: ::com::sun::star::uno::Exception {
+    published exception InteractiveBadTransferURLException: ::cpo::uno::Exception {
     };
     published exception InteractiveNetworkException: ::com::sun::star::task::ClassifiedInteractionRequest {
     };
@@ -15899,9 +15899,9 @@ module com {
      hyper Timeout;
      sequence< string > LockTokens;
     };
-    published exception MissingInputStreamException: ::com::sun::star::uno::Exception {
+    published exception MissingInputStreamException: ::cpo::uno::Exception {
     };
-    published exception MissingPropertiesException: ::com::sun::star::uno::Exception {
+    published exception MissingPropertiesException: ::cpo::uno::Exception {
      sequence< string > Properties;
     };
     published constants NameClash {
@@ -16154,31 +16154,31 @@ module com {
     };
     published interface XSimpleFileAccess {
      interface ::com::sun::star::uno::XInterface;
-     void copy([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     void move([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     void kill([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     boolean isFolder([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     boolean isReadOnly([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     void setReadOnly([in] string FileURL, [in] boolean bReadOnly) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     void createFolder([in] string NewFolderURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     long getSize([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     string getContentType([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::util::DateTime getDateTimeModified([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     sequence< string > getFolderContents([in] string FolderURL, [in] boolean bIncludeFolders) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     boolean exists([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::io::XInputStream openFileRead([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::io::XOutputStream openFileWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     ::com::sun::star::io::XStream openFileReadWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
+     void copy([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     void move([in] string SourceURL, [in] string DestURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     void kill([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     boolean isFolder([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     boolean isReadOnly([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     void setReadOnly([in] string FileURL, [in] boolean bReadOnly) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     void createFolder([in] string NewFolderURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     long getSize([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     string getContentType([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     ::com::sun::star::util::DateTime getDateTimeModified([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     sequence< string > getFolderContents([in] string FolderURL, [in] boolean bIncludeFolders) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     boolean exists([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     ::com::sun::star::io::XInputStream openFileRead([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     ::com::sun::star::io::XOutputStream openFileWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     ::com::sun::star::io::XStream openFileReadWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
      void setInteractionHandler([in] ::com::sun::star::task::XInteractionHandler Handler);
     };
     published interface XSimpleFileAccess2 {
      interface ::com::sun::star::ucb::XSimpleFileAccess;
-     void writeFile([in] string FileURL, [in] ::com::sun::star::io::XInputStream data) raises (::com::sun::star::uno::Exception);
+     void writeFile([in] string FileURL, [in] ::com::sun::star::io::XInputStream data) raises (::cpo::uno::Exception);
     };
     published interface XSimpleFileAccess3 {
      interface ::com::sun::star::ucb::XSimpleFileAccess2;
-     boolean isHidden([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
-     void setHidden([in] string FileURL, [in] boolean bHidden) raises (::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception);
+     boolean isHidden([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
+     void setHidden([in] string FileURL, [in] boolean bHidden) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
     };
     published service SimpleFileAccess: ::com::sun::star::ucb::XSimpleFileAccess3;
     published interface XSortedDynamicResultSetFactory {
@@ -16228,15 +16228,15 @@ module com {
     published service UniversalContentBroker: ::com::sun::star::ucb::XUniversalContentBroker {
      create();
     };
-    published exception UnsupportedCommandException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedCommandException: ::cpo::uno::Exception {
     };
-    published exception UnsupportedDataSinkException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedDataSinkException: ::cpo::uno::Exception {
      ::com::sun::star::uno::XInterface Sink;
     };
-    published exception UnsupportedNameClashException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedNameClashException: ::cpo::uno::Exception {
      long NameClash;
     };
-    published exception UnsupportedOpenModeException: ::com::sun::star::uno::Exception {
+    published exception UnsupportedOpenModeException: ::cpo::uno::Exception {
      short Mode;
     };
     published enum VerificationMode {
@@ -16432,9 +16432,9 @@ module com {
     };
     published interface XUIConfigurationPersistence {
      interface ::com::sun::star::uno::XInterface;
-     void reload() raises (::com::sun::star::uno::Exception);
-     void store() raises (::com::sun::star::uno::Exception);
-     void storeToStorage([in] ::com::sun::star::embed::XStorage Storage) raises (::com::sun::star::uno::Exception);
+     void reload() raises (::cpo::uno::Exception);
+     void store() raises (::cpo::uno::Exception);
+     void storeToStorage([in] ::com::sun::star::embed::XStorage Storage) raises (::cpo::uno::Exception);
      boolean isModified();
      boolean isReadOnly();
     };
@@ -16481,7 +16481,7 @@ module com {
       const short SET_HELP_URL = 100;
       const short SET_SELECT_ITEM = 5;
      };
-     published exception ExecutableDialogException: ::com::sun::star::uno::Exception {
+     published exception ExecutableDialogException: ::cpo::uno::Exception {
      };
      published constants ExecutableDialogResults {
       const short CANCEL = 0;
@@ -16675,7 +16675,7 @@ module com {
      void cancelAllJobs();
     };
     published typedef short Language;
-    published exception MalformedNumberFormatException: ::com::sun::star::uno::Exception {
+    published exception MalformedNumberFormatException: ::cpo::uno::Exception {
      long CheckPos;
     };
     published constants MeasureUnit {
@@ -16704,7 +16704,7 @@ module com {
     published struct ModeChangeEvent: ::com::sun::star::lang::EventObject {
      string NewMode;
     };
-    published exception NotNumericException: ::com::sun::star::uno::Exception {
+    published exception NotNumericException: ::cpo::uno::Exception {
     };
     published constants NumberFormat {
      const short ALL = 0;

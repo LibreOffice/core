@@ -1103,7 +1103,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         {
             xPropertySet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("sw");
         }
@@ -3509,7 +3509,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                             xDocumentPropertyContainer->addProperty(
                                 rKey, beans::PropertyAttribute::REMOVABLE, aValue);
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION("writerfilter.rtf", "failed to set property " << rKey);
                     }

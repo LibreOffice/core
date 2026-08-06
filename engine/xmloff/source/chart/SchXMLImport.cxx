@@ -154,7 +154,7 @@ void SchXMLImportHelper::DeleteDataSeries(
             }
         }
     }
-    catch( const uno::Exception &)
+    catch( const cpo::uno::Exception &)
     {
        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -233,7 +233,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -353,7 +353,7 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught");
     }

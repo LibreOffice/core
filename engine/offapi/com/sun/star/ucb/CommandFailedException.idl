@@ -31,7 +31,7 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @see        XCommandProcessor
 */
-published exception CommandFailedException : com::sun::star::uno::Exception
+published exception CommandFailedException : cpo::uno::Exception
 {
     /** contains the exception that was passed to the
         com::sun::star::task::XInteractionHandler.

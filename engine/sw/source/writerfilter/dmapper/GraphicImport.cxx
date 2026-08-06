@@ -280,7 +280,7 @@ void GraphicImport::applyName(uno::Reference<beans::XPropertySet> const & xGraph
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
             cpo::uno::Any( m_title ));
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("writerfilter", "failed");
     }
@@ -1999,7 +1999,7 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("writerfilter", "");
     }

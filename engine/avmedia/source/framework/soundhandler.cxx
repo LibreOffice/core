@@ -143,7 +143,7 @@ void SoundHandler::dispatchWithNotification(const css::util::URL&               
         m_aUpdateIdle.SetPriority( TaskPriority::HIGH_IDLE );
         m_aUpdateIdle.Start();
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         m_bError = true;
         m_xPlayer.clear();

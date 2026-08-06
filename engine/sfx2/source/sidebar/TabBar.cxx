@@ -219,7 +219,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
                     (*pItem)->maDeckActivationFunctor((*pItem)->msDeckId);
                     GrabFocusToDocument();
                 }
-                catch(const css::uno::Exception&) {};
+                catch(const cpo::uno::Exception&) {};
                 return true;
             }
         }
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OUString&, void)
     {
         aDeckActivationFunctor(sDeckId);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {} // workaround for #i123198#
 }
 

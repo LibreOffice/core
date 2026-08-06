@@ -2501,7 +2501,7 @@ ExtensionsTabPage::~ExtensionsTabPage()
         {
             m_xPage->dispose();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         m_xPage.clear();
@@ -2513,7 +2513,7 @@ ExtensionsTabPage::~ExtensionsTabPage()
         {
             m_xPageParent->dispose();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         m_xPageParent.clear();
@@ -2552,7 +2552,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler()");
     }

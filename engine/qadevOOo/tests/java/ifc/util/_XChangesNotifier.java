@@ -97,7 +97,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             if (originalElement == null && xProp != null)
                 originalElement = xProp.getPropertyValue(elementName);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             throw new StatusException("Could not get property '" + elementName + "'.", e);
         }
 
@@ -107,7 +107,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             if (originalElement == null && xNameReplace != null)
                 originalElement = xNameReplace.getByName(elementName);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             throw new StatusException("Could not get element by name '" + elementName + "'.", e);
         }
 
@@ -193,7 +193,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             try {
                 xProp.setPropertyValue(elementName, element);
             }
-            catch(com.sun.star.uno.Exception e) {
+            catch(cpo.uno.Exception e) {
                 e.printStackTrace(log);
                 return false;
             }
@@ -202,7 +202,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             try {
                 xNameReplace.replaceByName(elementName, element);
             }
-            catch(com.sun.star.uno.Exception e) {
+            catch(cpo.uno.Exception e) {
                 e.printStackTrace(log);
                 return false;
             }

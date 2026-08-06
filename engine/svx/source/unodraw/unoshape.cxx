@@ -1698,7 +1698,7 @@ void SAL_CALL SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >&
             {
                 // ignore, various code likes to opportunistically set properties on objects that don't support those properties
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("svx");
             }
@@ -1719,7 +1719,7 @@ void SAL_CALL SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >&
             {
                 DBG_UNHANDLED_EXCEPTION("svx");
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("svx");
             }
@@ -1754,7 +1754,7 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SvxShape::getPropertyValues( const 
             {
                 *pValue = getPropertyValue( *pNames );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 OSL_FAIL( "SvxShape::getPropertyValues, unknown property asked" );
             }
@@ -1771,7 +1771,7 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SvxShape::getPropertyValues( const 
             {
                 *pValue = xSet->getPropertyValue( *pNames );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 OSL_FAIL( "SvxShape::getPropertyValues, unknown property asked" );
             }

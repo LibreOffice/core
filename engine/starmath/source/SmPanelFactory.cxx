@@ -106,7 +106,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

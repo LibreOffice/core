@@ -74,7 +74,7 @@ using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::i18n::XBreakIterator;
 using ::com::sun::star::frame::XModel;
@@ -1236,7 +1236,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > const & xTitle, sal_uInt16 
                 rFrameRect.mnX = maData.maRect.mnX - nDefPosX;
                 rFrameRect.mnY = maData.maRect.mnY - nDefPosY;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
@@ -1820,7 +1820,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > const & xDataSeries,
     {
         aPropSet.Set( xDataSeries->getDataPointByIndex( nPointIdx ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "lclGetPointPropSet - no data point property set" );
     }
@@ -2324,7 +2324,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
                 mxFrame = new XclExpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND );
             mxFrame->SetAutoFlags( false, false );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "XclExpChLegend::Convert - cannot get legend shape" );
             maData.mnDockMode = EXC_CHLEGEND_RIGHT;
@@ -2893,7 +2893,7 @@ Reference< XAxis > lclGetApiAxis( Reference< XCoordinateSystem > const & xCoordS
     {
         xAxis = xCoordSystem->getAxisByDimension( nApiAxisDim, nApiAxesSetIdx );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xAxis;
@@ -2917,7 +2917,7 @@ Reference< cssc::XAxis > lclGetApiChart1Axis( Reference< XChartDocument > const 
             break;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xChart1Axis;
@@ -3223,7 +3223,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
         mxFramePos->GetFramePosData().maRect = bPieChart ? maData.maRect :
             CalcChartRectFromHmm( xPositioning->calculateDiagramPositionIncludingAxes() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

@@ -83,7 +83,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
     /* ------------------------------------------------------------------ */
     /// pre-test initialization
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws cpo.uno.Exception, java.lang.Exception
     {
         // ensure that we have a data source to work with, and the required tables
         if ( !ensureDataSource() || !ensureTables() )
@@ -99,7 +99,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkFirstRow() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkFirstRow() throws cpo.uno.Exception, java.lang.Exception
     {
         moveToFirst();
 
@@ -122,7 +122,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkInsertRow() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkInsertRow() throws cpo.uno.Exception, java.lang.Exception
     {
         // move the cursor to the insert row
         moveToInsertRow();
@@ -137,7 +137,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
     /* ------------------------------------------------------------------ */
     /// some tests with the image control
-    public void checkImageControl() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkImageControl() throws cpo.uno.Exception, java.lang.Exception
     {
         // since we did not yet insert any image, the control should not display one ...
         moveToFirst();
@@ -206,7 +206,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
      *  boxes and radio buttons: They must commit their content to the underlying column as soon
      *  as the change is made, *not* only upon explicit commit
      */
-    public void checkCrossUpdates_checkBox() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkCrossUpdates_checkBox() throws cpo.uno.Exception, java.lang.Exception
     {
         // move to the first record
         moveToFirst();
@@ -280,7 +280,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /** very similar to checkCrossUpdates_checkBox - does nearly the same for the radio buttons. See there for more
      *  explanations.
      */
-    public void checkCrossUpdates_radioButton() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkCrossUpdates_radioButton() throws cpo.uno.Exception, java.lang.Exception
     {
         // move to the first record
         moveToFirst();
@@ -350,7 +350,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     /** some tests with updating the table via our controls
      */
-    public void checkRowUpdates() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkRowUpdates() throws cpo.uno.Exception, java.lang.Exception
     {
         // start with inserting a new record
         moveToInsertRow();
@@ -413,7 +413,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /** checks the "ConvertEmptyToNull" property behavior of an edit control
      *
      */
-    public void checkEmptyIsNull() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkEmptyIsNull() throws cpo.uno.Exception, java.lang.Exception
     {
         // start with inserting a new record
         moveToInsertRow();
@@ -435,7 +435,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean verifyCleanInsertRow( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifyCleanInsertRow( ) throws cpo.uno.Exception, java.lang.Exception
     {
         // and check the content of the various controls
         return (  checkRadios( (short)0, (short)0, (short)0          )
@@ -449,7 +449,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
     /* ------------------------------------------------------------------ */
     /// post-test cleanup
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws cpo.uno.Exception, java.lang.Exception
     {
         // close our document
         if ( m_document != null )
@@ -494,7 +494,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     /** retrieves the control model with the given name
     */
-    private XPropertySet getControlModel( String name ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet getControlModel( String name ) throws cpo.uno.Exception, java.lang.Exception
     {
         XNameAccess nameAccess = UnoRuntime.queryInterface( XNameAccess.class,
             m_masterForm );
@@ -503,7 +503,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private void createSampleDocument() throws com.sun.star.uno.Exception, java.lang.Exception
+    private void createSampleDocument() throws cpo.uno.Exception, java.lang.Exception
     {
 
         m_document = DocumentHelper.blankTextDocument( m_orb );
@@ -557,7 +557,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private void insertRadio( int nYPos, String label, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void insertRadio( int nYPos, String label, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet xRadio = m_formLayer.createControlAndShape( "DatabaseRadioButton", 106, nYPos, 25, 6 );
         xRadio.setPropertyValue( "Label", label );
@@ -596,7 +596,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean ensureTables() throws com.sun.star.uno.Exception,  java.lang.Exception
+    private boolean ensureTables() throws cpo.uno.Exception,  java.lang.Exception
     {
         Connection connection = new Connection( m_dataSource.getConnection( "", "" ) );
 
@@ -628,7 +628,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
     /* ------------------------------------------------------------------ */
     /// checks the 3 radio buttons for the given states
-    private boolean checkRadios( short stateNone, short stateNormal, short stateImportant ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkRadios( short stateNone, short stateNormal, short stateImportant ) throws cpo.uno.Exception, java.lang.Exception
     {
         if ( ((Short)getRadioModel( "radio_group", "none" ).getPropertyValue( "State" )).shortValue() != stateNone )
         {
@@ -649,7 +649,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean checkNullValue( String fieldName, String propertyName ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkNullValue( String fieldName, String propertyName ) throws cpo.uno.Exception, java.lang.Exception
     {
         Object value = getControlModel( fieldName ).getPropertyValue( propertyName );
         if ( !util.utils.isVoid( value ) )
@@ -665,7 +665,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean checkIntValue( int requiredValue, String fieldName, String propertyName ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkIntValue( int requiredValue, String fieldName, String propertyName ) throws cpo.uno.Exception, java.lang.Exception
     {
         try
         {
@@ -685,7 +685,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
             else
                 return true;
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             log.println( "caught an exception while retrieving property value '" + propertyName + "' of control model '" + fieldName + "'" );
             throw e;
@@ -695,7 +695,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean checkShortValue( short requiredValue, String fieldName, String propertyName ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkShortValue( short requiredValue, String fieldName, String propertyName ) throws cpo.uno.Exception, java.lang.Exception
     {
         try
         {
@@ -709,7 +709,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
             else
                 return true;
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             log.println( "caught an exception while retrieving property value '" + propertyName + "' of control model '" + fieldName + "'" );
             throw e;
@@ -719,7 +719,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean checkDoubleValue( double requiredValue, String fieldName, String propertyName ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkDoubleValue( double requiredValue, String fieldName, String propertyName ) throws cpo.uno.Exception, java.lang.Exception
     {
         double currentValue = ((Double)getControlModel( fieldName ).getPropertyValue( propertyName )).doubleValue();
         if ( currentValue != requiredValue )
@@ -735,7 +735,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean checkStringValue( String requiredValue, String fieldName, String propertyName ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean checkStringValue( String requiredValue, String fieldName, String propertyName ) throws cpo.uno.Exception, java.lang.Exception
     {
         String currentValue = (String)getControlModel( fieldName ).getPropertyValue( propertyName );
         if ( !currentValue.equals( requiredValue ) )
@@ -751,7 +751,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private XPropertySet getRadioModel( String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet getRadioModel( String name, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         return m_formLayer.getRadioModelByRefValue( m_masterForm, name, refValue );
     }
@@ -777,7 +777,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     /** simulates a user's text input into a control given by model name
      */
-    private void userTextInput( String modelName, String text, boolean withCommit ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private void userTextInput( String modelName, String text, boolean withCommit ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet controlModel = getControlModel( modelName );
         // the form runtime environment (namely the form controller) rely on focus events for recognizing
@@ -794,21 +794,21 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private void moveToInsertRow() throws com.sun.star.uno.Exception, java.lang.Exception
+    private void moveToInsertRow() throws cpo.uno.Exception, java.lang.Exception
     {
         XResultSetUpdate xResultSet = UnoRuntime.queryInterface( XResultSetUpdate.class, m_masterForm );
         xResultSet.moveToInsertRow( );
     }
 
     /* ------------------------------------------------------------------ */
-    private void moveToFirst() throws com.sun.star.uno.Exception, java.lang.Exception
+    private void moveToFirst() throws cpo.uno.Exception, java.lang.Exception
     {
         XResultSet xResultSet = UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
         xResultSet.first( );
     }
 
     /* ------------------------------------------------------------------ */
-    private void moveToNext() throws com.sun.star.uno.Exception, java.lang.Exception
+    private void moveToNext() throws cpo.uno.Exception, java.lang.Exception
     {
         XResultSet xResultSet = UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
         xResultSet.next( );
@@ -916,7 +916,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean verifyReferenceImage( byte[] referenceBytes ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private boolean verifyReferenceImage( byte[] referenceBytes ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet xImageModel = getControlModel( "f_blob" );
 

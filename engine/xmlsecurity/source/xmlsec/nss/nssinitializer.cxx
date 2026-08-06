@@ -204,7 +204,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
                 m_sNSSPath = sUserSetCertPath;
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
         }
@@ -280,7 +280,7 @@ cpo::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
         if (!lcl_pathExists(sUserSelect))
             sUserSelect = OUString();
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
     }

@@ -700,7 +700,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
         { throw; }
     catch(const css::container::NoSuchElementException&)
         { eOp = PathSettings::E_REMOVED; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { throw; }
 
     try
@@ -721,7 +721,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation
     // we can't find a value for it inside the "old" configuration. So a NoSuchElementException
     // will be normal .-)
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     PathSettings::PathHash::iterator pPath = m_lPaths.find(sPath);
@@ -1169,7 +1169,7 @@ void PathSettings::impl_setPathValue(std::unique_lock<std::mutex>& g,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    throw css::uno::Exception(
+                    throw cpo::uno::Exception(
                         "The path '" + aChangePath.sPathName
                         + "' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.",
                         static_cast< ::cppu::OWeakObject* >(this));
@@ -1188,7 +1188,7 @@ void PathSettings::impl_setPathValue(std::unique_lock<std::mutex>& g,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    throw css::uno::Exception(
+                    throw cpo::uno::Exception(
                         "The path '" + aChangePath.sPathName
                         + "' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.",
                         static_cast< ::cppu::OWeakObject* >(this));

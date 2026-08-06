@@ -66,7 +66,7 @@ public:
     virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel(  ) override;
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     /// @throws css::uno::RuntimeException
     void Initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 

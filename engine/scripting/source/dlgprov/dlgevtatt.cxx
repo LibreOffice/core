@@ -177,7 +177,7 @@ namespace dlgprov
                 xModelProps->getPropertyValue(u"BasicLibraries"_ustr), uno::UNO_QUERY_THROW );
             mbUseFakeVBAEvents = xVBACompat->getVBACompatibilityMode();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         if ( mbUseFakeVBAEvents )
@@ -252,7 +252,7 @@ namespace dlgprov
                 if ( xListener_.is() )
                     bSuccess = true;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("scripting");
             }
@@ -267,7 +267,7 @@ namespace dlgprov
                         aDesc.AddListenerParam, aDesc.EventMethod );
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("scripting");
             }
@@ -347,7 +347,7 @@ namespace dlgprov
             {
                 xProps->getPropertyValue(u"Name"_ustr) >>= sDialogCodeName;
             }
-            catch( Exception& ){}
+            catch( cpo::uno::Exception& ){}
         }
         // go over all objects
         nestedAttachEvents( Objects, Helper, sDialogCodeName );
@@ -492,7 +492,7 @@ namespace dlgprov
                 }
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("scripting");
         }

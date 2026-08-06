@@ -45,7 +45,7 @@ void raisePyExceptionWithAny( const cpo::uno::Any &anyExc )
         }
         else
         {
-            css::uno::Exception e;
+            cpo::uno::Exception e;
             anyExc >>= e;
 
             OUString buf = "Couldn't convert uno exception to a python exception (" +

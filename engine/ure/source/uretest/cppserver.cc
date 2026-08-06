@@ -18,7 +18,7 @@
 
 #include "sal/config.h"
 
-#include "com/sun/star/uno/Exception.hpp"
+#include "cpo/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"

@@ -83,7 +83,7 @@ using ::com::sun::star::frame::XLoadable;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::cpo::uno::Sequence;
@@ -831,7 +831,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
 
         bLoadSuccess = true;
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         const Any aError( ::cppu::getCaughtException() );
         if ( !aDescriptor.getOrDefault( u"Silent"_ustr, false ) )
@@ -846,7 +846,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
             const Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
             xCloseable->close( true );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("sfx.view");
         }

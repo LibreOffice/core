@@ -134,7 +134,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
                     if ( xPersObj.is() && xPersObj->hasEntry() )
                          pSdrOleObj = pOle2Obj;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
     }
@@ -182,7 +182,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
                     if ( xPersObj.is() && xPersObj->hasEntry() )
                          pSdrOleObj = pOle2Obj;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
     }

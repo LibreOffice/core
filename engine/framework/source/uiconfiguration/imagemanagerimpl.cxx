@@ -1140,16 +1140,16 @@ void ImageManagerImpl::store()
             uno::Reference< XStorage > xUserImageStorage =
                 m_xUserConfigStorage->openStorageElement( IMAGE_FOLDER, ElementModes::READWRITE );
             if ( !xUserImageStorage.is() )
-                throw css::uno::Exception();
+                throw cpo::uno::Exception();
 
             uno::Reference< XStorage > xUserBitmapsStorage =
                 xUserImageStorage->openStorageElement( BITMAPS_FOLDER, ElementModes::READWRITE );
             if ( !xUserBitmapsStorage.is() )
-                throw css::uno::Exception();
+                throw cpo::uno::Exception();
 
             m_xUserImageStorage = std::move( xUserImageStorage );
             m_xUserBitmapsStorage = std::move( xUserBitmapsStorage );
-        } catch ( const css::uno::Exception& )
+        } catch ( const cpo::uno::Exception& )
         {
             try
             {
@@ -1165,7 +1165,7 @@ void ImageManagerImpl::store()
 
                 m_xUserImageStorage = std::move( xUserImageStorage );
                 m_xUserBitmapsStorage = std::move( xUserBitmapsStorage );
-            } catch ( const css::uno::Exception& )
+            } catch ( const cpo::uno::Exception& )
             {
             }
 

@@ -45,7 +45,7 @@ uno::Reference< linguistic2::XLanguageGuessing > const & LanguageGuessingHelper:
         {
             m_xLanguageGuesser = linguistic2::LanguageGuessing::create( m_xContext );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             SAL_WARN( "fwk", "failed to get language guessing component" );
         }

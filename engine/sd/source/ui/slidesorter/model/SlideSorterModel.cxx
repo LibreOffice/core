@@ -206,7 +206,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
                 return nNumber;
             }
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("sd");
         }

@@ -85,7 +85,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::NamedValue;
@@ -535,7 +535,7 @@ static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& r
 
             return urlPath;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_INFO_EXCEPTION("xmloff", "exception while storing embedded media");
         }
@@ -667,7 +667,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
             mxExport->getInterfaceToIdentifierMapper().registerReference( xInt );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -742,7 +742,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -1363,7 +1363,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         }
 
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -1397,7 +1397,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
         SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, true, true );
 
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -1427,7 +1427,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }

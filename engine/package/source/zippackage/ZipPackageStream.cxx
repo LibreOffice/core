@@ -340,7 +340,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         throw;
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -405,7 +405,7 @@ bool ZipPackageStream::ParsePackageRawStream()
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -576,7 +576,7 @@ bool ZipPackageStream::saveChild(
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             return false;
         }
@@ -979,7 +979,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
         TOOLS_WARN_EXCEPTION( "package", "" );
         return uno::Reference < io::XInputStream > ();
     }
-    catch ( const Exception & )
+    catch ( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION( "package", "Exception is thrown during stream wrapping!");
         return uno::Reference < io::XInputStream > ();

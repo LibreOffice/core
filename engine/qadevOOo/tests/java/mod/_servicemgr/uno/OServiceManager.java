@@ -99,7 +99,7 @@ public class OServiceManager extends TestCase {
             XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.stoc.OServiceManager" );
-        } catch( com.sun.star.uno.Exception e ) {
+        } catch( cpo.uno.Exception e ) {
             log.println("ServiceManager service not available" );
         }
 

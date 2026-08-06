@@ -276,7 +276,7 @@ void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
         if (bVisible)
             pDocShell->GetDocFunc().ShowNote( maModel.maRange.aStart, bVisible );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("sc");
     }

@@ -172,7 +172,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
         xFmtStr->setString( bAddNewLine ? (rString + "\n") : rString );
         orStringVec.emplace_back(xFmtStr );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xFmtStr;
@@ -218,7 +218,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
         // register the title and layout data for conversion of position
         registerTitleLayout( xTitle, mrModel.mxLayout, eObjType, nMainIdx, nSubIdx );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -306,7 +306,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         if (mrModel.maLegendEntries.size() > 0)
             legendEntriesFormatting(rxDiagram);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

@@ -27,7 +27,7 @@
 
     @see XEmbeddedClient
  */
-published exception ObjectSaveVetoException: com::sun::star::uno::Exception
+published exception ObjectSaveVetoException: cpo::uno::Exception
 {
 };
 

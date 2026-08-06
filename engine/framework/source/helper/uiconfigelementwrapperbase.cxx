@@ -269,7 +269,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                                 m_bConfigListening = false;
                             }
                         }
-                        catch ( const Exception& )
+                        catch ( const cpo::uno::Exception& )
                         {
                         }
                     }
@@ -287,7 +287,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                                 m_bConfigListening = true;
                             }
                         }
-                        catch ( const Exception& )
+                        catch ( const cpo::uno::Exception& )
                         {
                         }
                     }

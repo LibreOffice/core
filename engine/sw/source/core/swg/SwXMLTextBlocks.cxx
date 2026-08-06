@@ -80,7 +80,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
         m_bReadOnly = false;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         //FIXME: couldn't open the file - maybe it's readonly
     }
@@ -90,7 +90,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
         {
             refStg = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READ );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "sw", "exception while creating AutoText storage");
         }
@@ -173,7 +173,7 @@ ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
                 xTrans->commit();
             return ERRCODE_NONE;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             return ERR_SWG_WRITE_ERROR;
         }
@@ -267,7 +267,7 @@ ErrCode SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
         uno::Reference < embed::XStorage > rDestRoot = static_cast<SwXMLTextBlocks&>(rDestImp).m_xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
         rSourceRoot->copyToStorage( rDestRoot );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         nError = ERR_SWG_WRITE_ERROR;
     }
@@ -300,7 +300,7 @@ ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& 
             xRootProps->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( aMime ) );
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return ERRCODE_NONE;
@@ -359,7 +359,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
                 xTempStorage->copyToStorage( m_xRoot );
                 bOK = bTmpOK;
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
             }
         }
@@ -381,7 +381,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
                 xTmpTrans->commit();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -442,7 +442,7 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
                 m_bInPutMuchBlocks = false;
                 bRet = true;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -459,7 +459,7 @@ ErrCode SwXMLTextBlocks::OpenFile( bool bRdOnly )
                 bRdOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
         InitBlockMode ( refStg );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         //TODO/LATER: error handling
         nRet = ErrCode(1);

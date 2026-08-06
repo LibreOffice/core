@@ -767,7 +767,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
             impl_switchDiagramPositioningToExcludingPositioning();
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1129,7 +1129,7 @@ void ChartController::executeDispatch_ToggleLegend()
                 bChanged = true;
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1229,7 +1229,7 @@ void ChartController::executeDispatch_FillColor(const cpo::uno::Any& rColor)
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "chart2" );
     }
@@ -1265,7 +1265,7 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1278,7 +1278,7 @@ void ChartController::executeDispatch_LineColor(const cpo::uno::Any& rColor)
         if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
             xPropSet->setPropertyValue(u"LineColor"_ustr, rColor);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "chart2" );
     }
@@ -1291,7 +1291,7 @@ void ChartController::executeDispatch_LineWidth(const cpo::uno::Any& rWidth)
         if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
             xPropSet->setPropertyValue(u"LineWidth"_ustr, rWidth);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "chart2" );
     }
@@ -1343,7 +1343,7 @@ void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
                 xPointProperties->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( nOffset / 100.0 ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

@@ -86,7 +86,7 @@ public:
     virtual ~CloseableLifeTimeManager() override;
 
     bool    impl_isDisposedOrClosed( bool bAssert=true );
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
     bool    g_close_startTryClose(bool bDeliverOwnership);
 /// @throws css::util::CloseVetoException
     void    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );

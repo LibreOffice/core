@@ -71,7 +71,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
@@ -396,7 +396,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "(@CL)AnimationExporter::processAfterEffectNodes()" );
     }
@@ -738,7 +738,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 
         return xCloneNode;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL("(@CL)sd::ppt::AnimationExporter::createAfterEffectNodeClone(), could not create clone!" );
     }

@@ -300,7 +300,7 @@ ErrCodeMsg ReadThroughComponent(
         TOOLS_WARN_EXCEPTION( "sd.filter", "IO exception caught while importing");
         return SD_XML_READERROR;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd.filter", "uno exception caught while importing");
         return SD_XML_READERROR;
@@ -380,7 +380,7 @@ ErrCodeMsg ReadThroughComponent(
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {}
 
     return SD_XML_READERROR;
@@ -975,7 +975,7 @@ bool SdXMLFilter::Export()
                 mxStatusIndicator->end();
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION( "sd.filter", "uno Exception caught while exporting");
         bDocRet = false;

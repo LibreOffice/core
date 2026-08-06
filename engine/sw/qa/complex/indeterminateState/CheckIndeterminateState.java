@@ -82,7 +82,7 @@ public class CheckIndeterminateState {
         assertTrue("The 'INDETERMINATE' state is not set.", (oSet & AccessibleStateType.INDETERMINATE) != 0);
     }
 
-    @Before public void setUpDocument() throws com.sun.star.uno.Exception {
+    @Before public void setUpDocument() throws cpo.uno.Exception {
         document = SOfficeFactory.getFactory(getFactory()).createTextDoc(null);
     }
 
@@ -97,7 +97,7 @@ public class CheckIndeterminateState {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         connection.tearDown();
     }

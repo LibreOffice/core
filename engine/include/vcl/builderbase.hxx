@@ -13,7 +13,7 @@
 #include <vcl/image.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 #include <map>
 #include <vector>

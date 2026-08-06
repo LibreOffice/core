@@ -2354,7 +2354,7 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
         if ( xThes.is() )
             bHasLang = xThes->hasLocale( LanguageTag::convertToLocale( nLang ) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL("Error in Thesaurus");
     }

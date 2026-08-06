@@ -160,7 +160,7 @@ void OInstanceLocker::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aAr
                                             xApproval );
         m_xLockListener->Init();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         aGuard.unlock();
         dispose();
@@ -233,7 +233,7 @@ void OLockListener::Dispose()
             if ( xCloseable.is() )
                 xCloseable->close( true );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -245,7 +245,7 @@ void OLockListener::Dispose()
             if (xDesktop)
                 xDesktop->removeTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 }
@@ -269,7 +269,7 @@ void OLockListener::disposing( const lang::EventObject& aEvent )
     if ( xComponent.is() )
     {
         try { xComponent->dispose(); }
-        catch( uno::Exception& ){}
+        catch( cpo::uno::Exception& ){}
     }
 }
 
@@ -298,7 +298,7 @@ void OLockListener::queryClosing( const lang::EventObject& aEvent, bool )
         // rethrow this exception
         throw;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // no action should be done
     }
@@ -327,7 +327,7 @@ void OLockListener::notifyClosing( const lang::EventObject& aEvent )
         if ( xComponent.is() )
         {
             try { xComponent->dispose(); }
-            catch( uno::Exception& ){}
+            catch( cpo::uno::Exception& ){}
         }
     }
 }
@@ -356,7 +356,7 @@ void OLockListener::queryTermination( const lang::EventObject& aEvent )
         // rethrow this exception
         throw;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // no action should be done
     }
@@ -387,11 +387,11 @@ void OLockListener::notifyTermination( const lang::EventObject& aEvent )
             if ( xComponent.is() )
             {
                 try { xComponent->dispose(); }
-                catch( uno::Exception& ){}
+                catch( cpo::uno::Exception& ){}
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -419,7 +419,7 @@ void OLockListener::Init()
             xDesktop->addTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // dispose the wrapper;
         uno::Reference< lang::XComponent > xComponent( m_xWrapper.get(), uno::UNO_QUERY );
@@ -427,7 +427,7 @@ void OLockListener::Init()
         if ( xComponent.is() )
         {
             try { xComponent->dispose(); }
-            catch( uno::Exception& ){}
+            catch( cpo::uno::Exception& ){}
         }
 
         throw;

@@ -126,7 +126,7 @@ void PackageRegistryBackend::disposing()
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             u"caught unexpected exception while disposing!"_ustr,
@@ -178,7 +178,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     catch (const deployment::DeploymentException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
             "Error binding package: " + url,
@@ -592,7 +592,7 @@ beans::Optional< beans::Ambiguous<bool> > Package::isRegistered(
     catch (const deployment::DeploymentException &) {
         throw;
     }
-    catch (const Exception & e) {
+    catch (const cpo::uno::Exception & e) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
             "unexpected " + exc.getValueTypeName() + ": " + e.Message,
@@ -658,7 +658,7 @@ void Package::processPackage_impl(
         catch (const deployment::DeploymentException &) {
             throw;
         }
-        catch (const Exception & e) {
+        catch (const cpo::uno::Exception & e) {
             Any exc( ::cppu::getCaughtException() );
             throw deployment::DeploymentException(
                 (doRegisterPackage

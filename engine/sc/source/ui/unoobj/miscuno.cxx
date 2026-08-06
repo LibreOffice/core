@@ -43,7 +43,7 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
         {
             xProp->getPropertyValue( rName ) >>= bRet;
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
             // keep default
         }
@@ -61,7 +61,7 @@ sal_Int16 ScUnoHelpFunctions::GetShortProperty( const css::uno::Reference< css::
         {
             xProp->getPropertyValue( rName ) >>= nRet;
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
             // keep default
         }
@@ -80,7 +80,7 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
             //! type conversion???
             xProp->getPropertyValue( rName ) >>= nRet;
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
             // keep default
         }
@@ -109,7 +109,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumPropertyImpl( const uno::Reference<beans::X
                 aAny >>= nRet;
             }
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
             // keep default
         }
@@ -129,7 +129,7 @@ OUString ScUnoHelpFunctions::GetStringProperty(
         Any any = xProp->getPropertyValue(rName);
         any >>= aRet;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

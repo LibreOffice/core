@@ -95,7 +95,7 @@ public:
                 seqs.push_back( children );
                 numChildren += children.getLength();
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // some form of exception getting child nodes so they
                 // won't be displayed
@@ -127,7 +127,7 @@ public:
                     return true;
                 }
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // some form of exception getting child nodes so move
                 // on to the next one
@@ -358,7 +358,7 @@ public:
                 reflection::ProxyFactory::create( m_xCtx );
             m_xAggProxy = xProxyFac->createProxy( m_xWrappedBrowseNode );
         }
-        catch(  uno::Exception& )
+        catch(  cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "scripting", "DefaultBrowseNode::DefaultBrowseNode" );
         }

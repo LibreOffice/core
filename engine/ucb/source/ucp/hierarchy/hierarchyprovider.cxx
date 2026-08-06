@@ -154,7 +154,7 @@ HierarchyContentProvider::getConfigProvider(
                 return aEntry.xConfigProvider;
             }
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
 //            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
 //                        "caught exception!" );
@@ -213,7 +213,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
         {
             throw;
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             // createInstance, createInstanceWithArguments
 

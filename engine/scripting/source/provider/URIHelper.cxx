@@ -49,7 +49,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     {
         m_xSimpleFileAccess = ucb::SimpleFileAccess::create(xContext);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         OSL_FAIL("Scripting Framework error initialising XSimpleFileAccess");
     }
@@ -58,7 +58,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     {
         m_xUriReferenceFactory = uri::UriReferenceFactory::create( xContext );
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         OSL_FAIL("Scripting Framework error initialising XUriReferenceFactory");
     }
@@ -205,7 +205,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
             m_xUriReferenceFactory->parse( rScriptURI ), uno::UNO_QUERY_THROW );
         sLanguagePart = xURI->getName();
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         throw lang::IllegalArgumentException(
             u"Script URI not valid"_ustr,

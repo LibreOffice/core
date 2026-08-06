@@ -209,7 +209,7 @@ private:
             officecfg::UserProfile::WinUserInfo::Cache::set(sOutBuf.makeStringAndClear(), batch);
             batch->commit();
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("extensions.config",
                                  "ADsUserAccess: access to configuration data failed:");

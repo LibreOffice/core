@@ -112,7 +112,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(

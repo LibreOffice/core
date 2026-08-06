@@ -404,7 +404,7 @@ void BackendImpl::disposing()
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             u"caught unexpected exception while disposing..."_ustr,
@@ -1379,7 +1379,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         if (!startup) {
             try {
                 componentLiveInsertion(data, factories);
-            } catch (css::uno::Exception &) {
+            } catch (cpo::uno::Exception &) {
                 TOOLS_INFO_EXCEPTION("desktop.deployment", "caught");
                 try {
                     impreg->revokeImplementation(url, rdb);

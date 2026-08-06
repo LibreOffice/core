@@ -2487,7 +2487,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         // parse
         xParser->parseStream( aParserInput );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("editeng", "when loading " << sShareAutoCorrFile);
     }
@@ -2941,7 +2941,7 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

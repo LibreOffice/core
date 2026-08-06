@@ -25,7 +25,7 @@
     It can be used to transport the error code information.
     E.g. that can be useful for interactions.
  */
-exception GraphicFilterRequest : com::sun::star::uno::Exception
+exception GraphicFilterRequest : cpo::uno::Exception
 {
         /** specifies the error code. */
         long ErrCode;

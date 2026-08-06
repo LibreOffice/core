@@ -162,7 +162,7 @@ void SdXMLLayerContext::endFastElement(sal_Int32 )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }

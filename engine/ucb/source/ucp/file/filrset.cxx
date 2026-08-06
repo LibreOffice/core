@@ -522,7 +522,7 @@ XResultSet_impl::connectToCache(
                 = ucb::CachedDynamicResultSetStubFactory::create(
                     m_pMyShell->m_xContext );
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
         }
 

@@ -805,7 +805,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
         uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rFileURL );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "failed to get input stream" );
     }

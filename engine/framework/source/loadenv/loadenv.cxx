@@ -195,9 +195,9 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                     "fwk.loadenv",
                     "caught LoadEnvException " << +ex.m_nID << " \""
                         << ex.m_sMessage << "\""
-                        << (ex.m_exOriginal.has<css::uno::Exception>()
+                        << (ex.m_exOriginal.has<cpo::uno::Exception>()
                             ? (", " + ex.m_exOriginal.getValueTypeName() + " \""
-                               + (ex.m_exOriginal.get<css::uno::Exception>().
+                               + (ex.m_exOriginal.get<cpo::uno::Exception>().
                                   Message)
                                + "\"")
                             : OUString())
@@ -332,7 +332,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
             xInteractionHandler.set( css::task::InteractionHandler::createWithParent(i_rxContext, xDialogParent), css::uno::UNO_QUERY_THROW );
         }
         catch(const css::uno::RuntimeException&) {throw;}
-        catch(const css::uno::Exception&       ) {      }
+        catch(const cpo::uno::Exception&       ) {      }
     }
     // hidden mode
     else
@@ -897,7 +897,7 @@ bool LoadEnv::impl_handleContent()
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
 
         // SAFE -> -----------------------------------
@@ -951,7 +951,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
             bAllowed       = (nOpenDocuments < nMaxOpenDocuments);
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { bAllowed = true; } // !! internal errors are no reason to disturb the office from opening documents .-)
 
     if ( ! bAllowed )
@@ -1202,7 +1202,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             {}
         throw LoadEnvException(LoadEnvException::ID_INVALID_ENVIRONMENT);
     }
@@ -1239,7 +1239,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
     }
 
@@ -1409,7 +1409,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
     }
 
@@ -1691,7 +1691,7 @@ void LoadEnv::impl_reactForLoadingState()
 
     if (bThrow)
     {
-        if  ( aRequest.isExtractableTo( ::cppu::UnoType< css::uno::Exception >::get() ) )
+        if  ( aRequest.isExtractableTo( ::cppu::UnoType< cpo::uno::Exception >::get() ) )
             throw LoadEnvException(
                 LoadEnvException::ID_GENERAL_ERROR, u"interaction request"_ustr,
                 aRequest);
@@ -1815,7 +1815,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 }
 

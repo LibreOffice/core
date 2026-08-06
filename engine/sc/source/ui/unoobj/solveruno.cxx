@@ -890,7 +890,7 @@ void SAL_CALL ScSolverSettings::solve()
             {
                 xOptProp->setPropertyValue(rValue.Name, rValue.Value);
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
                 OSL_FAIL("Unable to set solver option property");
             }

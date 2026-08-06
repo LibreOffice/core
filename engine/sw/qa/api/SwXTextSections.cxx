@@ -69,7 +69,7 @@ public:
             Reference<text::XTextSectionsSupplier> xSupplier(xTextDocument, UNO_QUERY_THROW);
             xNameAccess = xSupplier->getTextSections();
         }
-        catch (Exception&)
+        catch (cpo::uno::Exception&)
         {
         }
 

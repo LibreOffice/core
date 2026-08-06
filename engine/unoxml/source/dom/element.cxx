@@ -170,7 +170,7 @@ namespace DOM
                     i_rContext.mxCurrentHandler->startFastElement( nElementToken, xAttr );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {}
 
         // recurse
@@ -195,7 +195,7 @@ namespace DOM
                 i_rContext.mxCurrentHandler->endUnknownElement( u""_ustr, aElementName );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {}
 
         // restore after children have been processed

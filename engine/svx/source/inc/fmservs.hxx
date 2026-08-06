@@ -90,17 +90,17 @@ namespace svxform
     OAddConditionDialog_GetSupportedServiceNames();
 }
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 css::uno::Reference<css::uno::XInterface>
 FmXGridControl_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 css::uno::Reference<css::uno::XInterface>
 FormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 css::uno::Reference<css::uno::XInterface>
 LegacyFormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);

@@ -23,7 +23,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XStorable;
 
 
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import cpo.uno.XNamingService;

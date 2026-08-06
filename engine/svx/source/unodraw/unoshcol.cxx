@@ -50,7 +50,7 @@ void SvxShapeCollection::release() noexcept
                 {
                     dispose();
                 }
-                catch(css::uno::Exception&)
+                catch(cpo::uno::Exception&)
                 {
                     // release should not throw exceptions
                 }
@@ -101,7 +101,7 @@ void SvxShapeCollection::dispose()
         bDisposed = true;
         bInDispose = false;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // catch exception and throw again but signal that
         // the object was disposed. Dispose should be called

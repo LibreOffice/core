@@ -4144,7 +4144,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
             {
                 aIter.next()->changesOccurred( aEvent );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
@@ -4238,7 +4238,7 @@ void ScModelObj::HandleCalculateEvents()
                     cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
                     xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }

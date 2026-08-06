@@ -808,7 +808,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     uno::Reference < frame::XLoadable > xLoad( xNewObj->GetModel(), uno::UNO_QUERY );
                     xLoad->load(aLoadArgs.getAsConstPropertyValueList());
                 }
-                catch ( uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                     xNewObj->DoClose();
                     xNewObj = nullptr;
@@ -1420,7 +1420,7 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
                     url = aProps.getOrDefault(u"Script"_ustr, url);
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
             if (!url.isEmpty())
@@ -1466,7 +1466,7 @@ css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame&
         {
             xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
         }
-        catch (const Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             SAL_WARN("sfx.view", "Failure getting layout manager: " + e.Message);
         }
@@ -1767,7 +1767,7 @@ IMPL_LINK_NOARG(SfxViewFrame, ViewSignaturesButtonHandler, weld::Button&, void)
         uno::Reference<beans::XPropertySet> xPropSet(pDoc->GetStorage(), uno::UNO_QUERY_THROW);
         xPropSet->getPropertyValue(u"Version"_ustr) >>= maODFVersion;
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -1797,7 +1797,7 @@ IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
                                                               xContainerWindow));
         bChanged = xMasterPasswd->changeMasterPassword(xTmpHandler);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {}
     if (bChanged)
         RemoveInfoBar(u"oldmasterpassword");
@@ -2214,7 +2214,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
                     if ( aAnalyzer.m_xBackingComponent.is() )
                         xFrame = aAnalyzer.m_xBackingComponent;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
 
@@ -2497,7 +2497,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
         GetBindings().LEAVEREGISTRATIONS();
         delete pOldSh;
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         // the SfxCode is not able to cope with exceptions thrown while creating views
         // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here
@@ -2655,7 +2655,7 @@ static bool impl_maxOpenDocCountReached()
             // b) count all other frames
             ++nOpenDocs;
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             // An IndexOutOfBoundsException can happen in multithreaded
             // environments, where any other thread can change this
             // container !

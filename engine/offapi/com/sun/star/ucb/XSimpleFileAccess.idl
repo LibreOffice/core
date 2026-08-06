@@ -37,7 +37,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @see move
     */
     void copy( [in] string SourceURL, [in] string DestURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Moves a file
 
@@ -49,7 +49,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @see move
     */
     void move( [in] string SourceURL, [in] string DestURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Removes a file. If the URL represents a folder, the folder will be
         removed, even if it's not empty.
@@ -60,7 +60,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @see move
     */
     void kill( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Checks if a URL represents a folder
 
@@ -71,7 +71,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         true, if the given URL represents a folder, otherwise false
     */
     boolean isFolder( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Checks if a file is "read only"
 
@@ -82,7 +82,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         true, if the given File is "read only", false otherwise
     */
     boolean isReadOnly( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Sets the "read only" of a file according to the boolean parameter,
         if the actual process has the right to do so.
@@ -94,7 +94,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         true; "read only" flag will be set, false; "read only" flag will be reset
     */
     void setReadOnly( [in] string FileURL, [in] boolean bReadOnly )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Creates a new Folder
 
@@ -102,7 +102,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         URL describing the location of the new folder
     */
     void createFolder( [in] string NewFolderURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Returns the size of a file.
 
@@ -112,7 +112,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @return Size of the file in bytes
     */
     long getSize( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Returns the content type of a file.
 
@@ -124,7 +124,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @return Content type of the file
     */
     string getContentType( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Returns the last modified date for the file
 
@@ -134,7 +134,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         @return Last modified date for the file
     */
     ::com::sun::star::util::DateTime getDateTimeModified( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Returns the contents of a folder
 
@@ -147,7 +147,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
                 in a string sequence
     */
     sequence<string> getFolderContents( [in] string FolderURL, [in] boolean bIncludeFolders )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Checks if a file exists
 
@@ -158,7 +158,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         true, if the File exists, false otherwise
     */
     boolean exists( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
 
     /** Opens file to read
@@ -170,7 +170,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         An XInputStream, if the file can be opened for reading
     */
     com::sun::star::io::XInputStream openFileRead( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Opens file to write.
 
@@ -187,7 +187,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         XSimpleFileAccess2::writeFile() may be used.
     */
     com::sun::star::io::XOutputStream openFileWrite( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Opens file to read and write
 
@@ -204,7 +204,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         XSimpleFileAccess2::writeFile() may be used.
     */
     com::sun::star::io::XStream openFileReadWrite( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Sets an interaction handler to be used for further operations.
 

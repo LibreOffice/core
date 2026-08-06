@@ -147,7 +147,7 @@ public class LocationTest {
      * passed to the caller.
      */
     public void initialize( Object[] object )
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
         /* The component describes what arguments are expected and in which
          * order! At this point you can read the objects and initialize
          * your component using these objects.

@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** indicates that a non-numeric string is to be converted to a number.
  */
-published exception NotNumericException: com::sun::star::uno::Exception
+published exception NotNumericException: cpo::uno::Exception
 {
 };
 

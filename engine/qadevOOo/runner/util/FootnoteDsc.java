@@ -63,7 +63,7 @@ public class FootnoteDsc extends InstDescr {
         try {
             ServiceObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
         XTextContent FN = (XTextContent)UnoRuntime.queryInterface( ifcClass,
                                                                 ServiceObj );

@@ -70,7 +70,7 @@ int main (int argc, char **argv)
         Reference < XInterface > x = xSMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" );
         xReg.set( x , UNO_QUERY );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         printf( "Couldn't create ImplementationRegistration service\n" );
         exit(1);
@@ -96,7 +96,7 @@ int main (int argc, char **argv)
                 xSimpleReg );
         }
     }
-    catch (const Exception &e)
+    catch (const cpo::uno::Exception &e)
     {
         printf( "Couldn't reach dll %s\n" , szBuf );
         printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -124,7 +124,7 @@ int main (int argc, char **argv)
             aDllName,
             xSimpleReg );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         printf( "Couldn't reach dll %s\n" , szBuf );
         exit(1);
@@ -168,7 +168,7 @@ int main (int argc, char **argv)
             nNewHandle = xTest->test(
                 OStringToOUString( argv[1] , RTL_TEXTENCODING_ASCII_US ) , x , nHandle );
         }
-        catch (const Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             OString o  = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "testcomponent : uncaught exception %s\n" , o.getStr() );

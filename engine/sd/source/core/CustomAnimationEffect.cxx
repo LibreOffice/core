@@ -361,7 +361,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         nSubItems = 0;
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getNumberOfSubitems(), exception caught!" );
@@ -694,7 +694,7 @@ void CustomAnimationEffect::setTarget( const cpo::uno::Any& rTarget )
         }
         checkForText();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTarget()" );
     }
@@ -729,7 +729,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTargetSubItem()" );
     }
@@ -781,7 +781,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
         }
         calculateIterateDuration();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setDuration()" );
     }
@@ -794,7 +794,7 @@ void CustomAnimationEffect::setBegin( double fBegin )
         mfBegin = fBegin;
         mxNode->setBegin( Any( fBegin ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setBegin()" );
     }
@@ -807,7 +807,7 @@ void CustomAnimationEffect::setAcceleration( double fAcceleration )
         mfAcceleration = fAcceleration;
         mxNode->setAcceleration( fAcceleration );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAcceleration()" );
     }
@@ -820,7 +820,7 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
         mfDecelerate = fDecelerate;
         mxNode->setDecelerate( fDecelerate );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setDecelerate()" );
     }
@@ -833,7 +833,7 @@ void CustomAnimationEffect::setAutoReverse( bool bAutoReverse )
         mbAutoReverse = bAutoReverse;
         mxNode->setAutoReverse( bAutoReverse );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAutoReverse()" );
     }
@@ -1081,7 +1081,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
 
         checkForText();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setIterateType()" );
     }
@@ -1122,7 +1122,7 @@ OUString CustomAnimationEffect::getPath() const
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getPath()" );
     }
@@ -1151,7 +1151,7 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setPath()" );
     }
@@ -1189,7 +1189,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, std::u16string_view
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getProperty()" );
     }
@@ -1241,7 +1241,7 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, std::u16string_vie
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setProperty()" );
     }
@@ -1294,7 +1294,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getColor()" );
     }
@@ -1351,7 +1351,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setColor()" );
     }
@@ -1386,7 +1386,7 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getTransformationProperty()" );
     }
@@ -1435,7 +1435,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTransformationProperty()" );
     }
@@ -1473,7 +1473,7 @@ void CustomAnimationEffect::createAudio( const cpo::uno::Any& rSource )
         setAudio( xAudio );
         lcl_registerEffectSoundLink( *this );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::createAudio()" );
     }
@@ -1502,7 +1502,7 @@ static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >&
                 xCommand.set( xNode, UNO_QUERY_THROW );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::findCommandNode()" );
     }
@@ -1534,7 +1534,7 @@ void CustomAnimationEffect::removeAudio()
                 xContainer->removeChild( xChild );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::removeAudio()" );
     }
@@ -1554,7 +1554,7 @@ void CustomAnimationEffect::setAudio( const Reference< css::animations::XAudio >
         if( xContainer.is() && mxAudio.is() )
             xContainer->appendChild( mxAudio );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAudio()" );
     }
@@ -1580,7 +1580,7 @@ void CustomAnimationEffect::setStopAudio()
 
         mnCommand = EffectCommands::STOPAUDIO;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setStopAudio()" );
     }
@@ -1795,7 +1795,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
 
         rebuild();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::append()" );
     }
@@ -1820,7 +1820,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
 
         rebuild();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::replace()" );
     }
@@ -1979,7 +1979,7 @@ void EffectSequenceHelper::implRebuild()
             mxSequenceRoot->setDuration( Any(0.0) );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::rebuild()" );
     }
@@ -2117,7 +2117,7 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "ppt::stl_process_after_effect_node_func::operator()" );
     }
@@ -2585,7 +2585,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
         }
         notify_listeners();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createTextGroup()" );
     }
@@ -2889,7 +2889,7 @@ void EffectSequenceHelper::create( const css::uno::Reference< css::animations::X
             createEffectsequence( xChildNode );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::create()" );
     }
@@ -2913,7 +2913,7 @@ void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode
             createEffects( xChildNode );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createEffectsequence()" );
     }
@@ -2960,7 +2960,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createEffects()" );
     }
@@ -3010,7 +3010,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::processAfterEffect()" );
     }
@@ -3161,7 +3161,7 @@ void MainSequence::createMainSequence()
         if( xNotifier.is() )
             xNotifier->addChangesListener( mxChangesListener );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::MainSequence::create()" );
         return;
@@ -3184,7 +3184,7 @@ void MainSequence::reset()
         if( xNotifier.is() )
             xNotifier->removeChangesListener( mxChangesListener );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }
@@ -3515,7 +3515,7 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::InteractiveSequence::InteractiveSequence()" );
         return;

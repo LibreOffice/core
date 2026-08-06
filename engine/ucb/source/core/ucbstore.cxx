@@ -336,7 +336,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, bool create )
                 OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                             "caught RuntimeException!" );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // createInstance
 
@@ -611,7 +611,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught RuntimeException!" );
                     return;
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     // createInstance
 
@@ -772,7 +772,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught RuntimeException!" );
                     return;
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     // createInstance
 
@@ -840,7 +840,7 @@ const Reference< XMultiServiceFactory > & PropertySetRegistry::getConfigProvider
             {
                 m_xConfigProvider = theDefaultProvider::get( m_xContext );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "ucb", "");
             }
@@ -897,7 +897,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccessImpl(std::un
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
@@ -984,7 +984,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccessImpl(std::uniqu
             "caught NoSuchElementException!" );
         return Reference< XInterface >();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
@@ -1453,7 +1453,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
         {
             throw;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // createInstance
 

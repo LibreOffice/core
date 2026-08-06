@@ -730,7 +730,7 @@ bool UCBStorageStream_Impl::Init()
         {
             m_rSource = m_pContent->openStream();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // usually means that stream could not be opened
         }
@@ -748,7 +748,7 @@ bool UCBStorageStream_Impl::Init()
                 // the temporary stream already contain all the data
                 m_bSourceRead = false;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // something is really wrong
                 m_bSourceRead = false;
@@ -789,7 +789,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
                 m_pStream->WriteBytes(aData.getConstArray(), aReaded);
             } while( aReaded == 32000 );
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("sot", "");
         }
@@ -872,7 +872,7 @@ std::size_t UCBStorageStream_Impl::GetData(void* pData, std::size_t const nSize)
             aResult += m_pStream->WriteBytes(static_cast<const void*>(aData.getConstArray()), aReaded);
             memcpy( pData, aData.getArray(), aReaded );
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("sot", "");
         }
@@ -1097,7 +1097,7 @@ CommitResult UCBStorageStream_Impl::Commit()
                 SetError( ERRCODE_IO_GENERAL );
                 return CommitResult::Failure;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // any other error - not specified
                 SetError( ERRCODE_IO_GENERAL );
@@ -1154,7 +1154,7 @@ void UCBStorageStream_Impl::Revert()
     {
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1379,7 +1379,7 @@ bool UCBStorageStream::SetProperty( const OUString& rName, const cpo::uno::Any& 
             return true;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1628,7 +1628,7 @@ void UCBStorage_Impl::Init()
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 SAL_WARN( "sot",
                           "getPropertyValue has thrown an exception! Please let developers know the scenario!" );
@@ -1786,7 +1786,7 @@ void UCBStorage_Impl::ReadContent()
         // means that the file can be broken
         SetError( ERRCODE_IO_WRONGFORMAT );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
@@ -1977,7 +1977,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
@@ -2100,7 +2100,7 @@ CommitResult UCBStorage_Impl::Commit()
             SetError( ERRCODE_IO_GENERAL );
             return CommitResult::Failure;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // any other error - not specified
             SetError( ERRCODE_IO_GENERAL );
@@ -2205,7 +2205,7 @@ CommitResult UCBStorage_Impl::Commit()
 
                     return CommitResult::Failure;
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     // how to tell the content : forget all changes ?!
                     // or should we assume that the content does it by itself because he threw an exception ?!

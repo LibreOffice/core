@@ -359,14 +359,14 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 {
                     m_xParentStorage->removeElement( aTmpStreamName );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     // the success of the removing is not so important
                 }
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // repair the object if necessary
         switch( nStep )
@@ -380,12 +380,12 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                         m_xParentStorage->removeElement( m_aEntryName );
                     m_xParentStorage->renameElement( aTmpStreamName, m_aEntryName );
                 }
-                catch ( const uno::Exception& ex )
+                catch ( const cpo::uno::Exception& ex )
                 {
                     cpo::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
-                    } catch( const uno::Exception& ) {}
+                    } catch( const cpo::uno::Exception& ) {}
 
                     m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without committing!
                     throw css::lang::WrappedTargetRuntimeException( ex.Message,
@@ -398,12 +398,12 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     m_xObjectStream = m_xParentStorage->openStreamElement( m_aEntryName, m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
                     m_nObjectState = embed::EmbedStates::LOADED;
                 }
-                catch( const uno::Exception& ex )
+                catch( const cpo::uno::Exception& ex )
                 {
                     cpo::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
-                    } catch( const uno::Exception& ) {}
+                    } catch( const cpo::uno::Exception& ) {}
 
                     throw css::lang::WrappedTargetRuntimeException( ex.Message,
                                     nullptr, anyEx ); // the repairing is not possible
@@ -415,7 +415,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 if ( !aStorageName.isEmpty() )
                     try {
                         m_xParentStorage->removeElement( aStorageName );
-                    } catch( const uno::Exception& ) { SAL_WARN( "embeddedobj.ole", "Can not remove temporary storage!" ); }
+                    } catch( const cpo::uno::Exception& ) { SAL_WARN( "embeddedobj.ole", "Can not remove temporary storage!" ); }
                 break;
         }
     }
@@ -529,7 +529,7 @@ void OleEmbeddedObject::changeState( sal_Int32 nNewState )
                                          aGuard);
                             m_bHasSizeToSet = false;
                         }
-                        catch( const uno::Exception& ) {}
+                        catch( const cpo::uno::Exception& ) {}
                     }
 
                     if ( m_nObjectState == nNewState )
@@ -554,7 +554,7 @@ void OleEmbeddedObject::changeState( sal_Int32 nNewState )
                                          aGuard);
                             m_bHasSizeToSet = false;
                         }
-                        catch( uno::Exception& ) {}
+                        catch( cpo::uno::Exception& ) {}
                     }
 
                     m_nObjectState = nNewState;
@@ -578,7 +578,7 @@ void OleEmbeddedObject::changeState( sal_Int32 nNewState )
             else
                 throw embed::UnreachableStateException();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
             throw;
@@ -886,7 +886,7 @@ void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 SaveObject_Impl();
 
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.EndControlExecution_WasModified();
@@ -932,7 +932,7 @@ void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             {
                 throw;
             }
-            catch (uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::doVerb: -9 fallback path:");
             }

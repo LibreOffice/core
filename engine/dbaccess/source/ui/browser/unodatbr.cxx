@@ -503,7 +503,7 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
 
         impl_sanitizeRowSetClauses_nothrow();
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
         return false;

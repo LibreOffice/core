@@ -18,7 +18,7 @@
 
 package util;
 
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
@@ -145,7 +145,7 @@ public class DBTools {
             dbContext = UnoRuntime.queryInterface
                 (XNamingService.class, cont) ;
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             System.out.println("caught exception: " + e);
         }
     }
@@ -165,7 +165,7 @@ public class DBTools {
     * be registered.
     */
     private void registerDB(String name, Object dataSource)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         dbContext.registerObject(name, dataSource) ;
     }
@@ -179,11 +179,11 @@ public class DBTools {
     * be registered.
     */
     public void reRegisterDB(String name, Object dataSource)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         try {
             revokeDB(name) ;
-        } catch (com.sun.star.uno.Exception e) {}
+        } catch (cpo.uno.Exception e) {}
 
         XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, dataSource);
         XStorable store = UnoRuntime.queryInterface(XStorable.class,
@@ -206,7 +206,7 @@ public class DBTools {
     * @return Connection to the data source.
     */
     public XConnection connectToSource(Object dbSource)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         Object handler = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
         XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
@@ -241,7 +241,7 @@ public class DBTools {
     * Revokes datasource from global DB context.
     * @param name DataSource name to be revoked.
     */
-    public void revokeDB(String name) throws com.sun.star.uno.Exception
+    public void revokeDB(String name) throws cpo.uno.Exception
     {
         dbContext.revokeObject(name) ;
     }

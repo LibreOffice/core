@@ -38,7 +38,7 @@
     @see XDesktop::terminate()
     @see XTerminateListener
  */
-published exception TerminationVetoException: com::sun::star::uno::Exception
+published exception TerminationVetoException: cpo::uno::Exception
 {
 };
 

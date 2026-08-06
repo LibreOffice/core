@@ -86,7 +86,7 @@ AreaChart::AreaChart( const rtl::Reference<ChartType>& xChartTypeModel
             m_xChartTypeModel->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) >>= m_nSplineOrder;
         }
     }
-    catch( uno::Exception& e )
+    catch( cpo::uno::Exception& e )
     {
         //the above properties are not supported by all charttypes supported by this class (e.g. area or net chart)
         //in that cases this exception is ok

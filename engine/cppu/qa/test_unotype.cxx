@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -50,7 +50,7 @@ struct DerivedStruct1: css::lang::EventObject {};
 
 struct DerivedStruct2: css::beans::PropertyChangeEvent {};
 
-struct DerivedException1: css::uno::Exception {};
+struct DerivedException1: cpo::uno::Exception {};
 
 struct DerivedException2: css::uno::RuntimeException {};
 
@@ -192,10 +192,10 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT_EQUAL(cpo::uno::TypeClass_STRUCT, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         u"com.sun.star.beans.Optional<byte>"_ustr, t.getTypeName());
-    t = cppu::UnoType<css::uno::Exception>::get();
+    t = cppu::UnoType<cpo::uno::Exception>::get();
     CPPUNIT_ASSERT_EQUAL(cpo::uno::TypeClass_EXCEPTION, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
-        u"com.sun.star.uno.Exception"_ustr, t.getTypeName());
+        u"cpo.uno.Exception"_ustr, t.getTypeName());
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<DerivedException1>::get(), t);
     t = cppu::UnoType<css::uno::RuntimeException>::get();
     CPPUNIT_ASSERT_EQUAL(cpo::uno::TypeClass_EXCEPTION, t.getTypeClass());
@@ -343,11 +343,11 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::UnoType<css::beans::Optional<sal_Int8>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
-            static_cast<css::uno::Exception *>(nullptr)),
-        cppu::UnoType<css::uno::Exception>::get());
+            static_cast<cpo::uno::Exception *>(nullptr)),
+        cppu::UnoType<cpo::uno::Exception>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<DerivedException1 *>(nullptr)),
-        cppu::UnoType<css::uno::Exception>::get());
+        cppu::UnoType<cpo::uno::Exception>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<css::uno::RuntimeException *>(nullptr)),
@@ -505,11 +505,11 @@ void Test::testGetTypeFavourChar() {
             static_cast<css::beans::Optional<sal_Int8> *>(nullptr)),
         cppu::UnoType<css::beans::Optional<sal_Int8>>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourChar(static_cast<css::uno::Exception *>(nullptr)),
-        cppu::UnoType<css::uno::Exception>::get());
+        cppu::getTypeFavourChar(static_cast<cpo::uno::Exception *>(nullptr)),
+        cppu::UnoType<cpo::uno::Exception>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<DerivedException1 *>(nullptr)),
-        cppu::UnoType<css::uno::Exception>::get());
+        cppu::UnoType<cpo::uno::Exception>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<css::uno::RuntimeException *>(nullptr)),

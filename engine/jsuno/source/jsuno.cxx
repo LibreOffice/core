@@ -305,7 +305,7 @@ template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
     {
         return JS_EXCEPTION;
     }
-    catch (css::uno::Exception)
+    catch (cpo::uno::Exception)
     {
         auto const e = cppu::getCaughtException();
         ValueRef val = toJs(ctx, e);
@@ -496,7 +496,7 @@ int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueCon
     {
         return -1;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         auto const e = cppu::getCaughtException();
         ValueRef val = toJs(ctx, e);
@@ -548,7 +548,7 @@ int wrapperSetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueCon
     {
         return -1;
     }
-    catch (css::uno::Exception)
+    catch (cpo::uno::Exception)
     {
         auto const e = cppu::getCaughtException();
         ValueRef val(ctx, toJs(ctx, e).release());

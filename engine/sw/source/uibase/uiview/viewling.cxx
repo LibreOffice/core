@@ -574,7 +574,7 @@ IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, cpo::uno::Sequence<beans::PropertyValue>());
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -731,7 +731,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                                     Application::PostUserEvent( LINK(nullptr, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }
-                            catch (const Exception&)
+                            catch (const cpo::uno::Exception&)
                             {
                             }
                         }

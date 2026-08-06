@@ -64,7 +64,7 @@ public:
             xTable->initialize(4, 3);
             xText->insertTextContent(xCursor, xTable2, false);
         }
-        catch (Exception&)
+        catch (cpo::uno::Exception&)
         {
         }
 

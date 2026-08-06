@@ -331,7 +331,7 @@ addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
         }
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"addFile: exception"_ustr, /*this*/nullptr, anyEx);
@@ -380,7 +380,7 @@ removeFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), nullptr);
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"removeFile: exception"_ustr,
@@ -410,7 +410,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const & i_rImpl)
         return ret;
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"getAllParts: exception"_ustr,
@@ -433,7 +433,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl const & i_rImpl,
         return xEnum->hasMoreElements();
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"isPartOfType: exception"_ustr,
@@ -477,7 +477,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         throw lang::WrappedTargetRuntimeException(u"getAllParts: exception"_ustr, nullptr,
                                                   cpo::uno::Any(e));
@@ -559,7 +559,7 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
         {
             o_rFiles.insert(s_styles);
         }
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         TOOLS_WARN_EXCEPTION("sfx", "collectFilesFromStorage");
     }
 }
@@ -613,7 +613,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     SAL_WARN("sfx", "readStream: refusing to recurse into embedded document");
                     return;
                 }
-            } catch (const uno::Exception &) { }
+            } catch (const cpo::uno::Exception &) { }
             readStream(i_rImpl, xDir, rest, i_rBaseURI+dir+"/" );
         }
     } catch (const container::NoSuchElementException & e) {
@@ -643,7 +643,7 @@ retry:
         if (handleError(e, i_xHandler)) goto retry;
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"importFile: exception"_ustr,
@@ -708,7 +708,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     SAL_WARN("sfx", "writeStream: refusing to recurse into embedded document");
                     return;
                 }
-            } catch (const uno::Exception &) { }
+            } catch (const cpo::uno::Exception &) { }
             writeStream(i_rImpl, xDir, i_xGraphName, rest, i_rBaseURI+dir+"/");
             uno::Reference<embed::XTransactedObject> const xTransaction(
                 xDir, uno::UNO_QUERY);
@@ -755,7 +755,7 @@ retry:
             iaioe = e;
             err = true;
         }
-    } catch (const uno::Exception & e) {
+    } catch (const cpo::uno::Exception & e) {
         rterr <<= e;
     }
 
@@ -797,7 +797,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
         i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext));
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"init: unexpected exception"_ustr, nullptr,
@@ -1072,7 +1072,7 @@ DocumentMetadataAccess::removeContentOrStylesFile(
 
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"DocumentMetadataAccess::removeContentOrStylesFile: exception"_ustr,
@@ -1167,7 +1167,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
         }
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"DocumentMetadataAccess::loadMetadataFromStorage: "
@@ -1202,7 +1202,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(
             u"storeMetadataToStorage: IO exception"_ustr, *this, anyEx);
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"storeMetadataToStorage: exception"_ustr, *this, anyEx);
@@ -1236,7 +1236,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
                 throw lang::WrappedTargetException(
                     u"storeMetadataToStorage: IO exception"_ustr,
                     *this, anyEx);
-            } catch (const uno::Exception &) {
+            } catch (const cpo::uno::Exception &) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw lang::WrappedTargetRuntimeException(
                     u"storeMetadataToStorage: exception"_ustr,
@@ -1281,7 +1281,7 @@ DocumentMetadataAccess::loadMetadataFromMedium(
         throw;
     } catch (const io::IOException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(
                     u"DocumentMetadataAccess::loadMetadataFromMedium: "
@@ -1295,11 +1295,11 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     uno::Reference<rdf::XURI> xBaseURI;
     try {
         xBaseURI = createBaseURI(m_pImpl->m_xContext, nullptr, BaseURL);
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         // fall back to URL
         try {
             xBaseURI = createBaseURI(m_pImpl->m_xContext, nullptr, URL);
-        } catch (const uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             OSL_FAIL("cannot create base URI");
         }
     }
@@ -1347,7 +1347,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
             xProps->setPropertyValue(
                 utl::MediaDescriptor::PROP_MEDIATYPE,
                 iter->second);
-        } catch (const uno::Exception &) { }
+        } catch (const cpo::uno::Exception &) { }
     }
     storeMetadataToStorage(xStorage);
 

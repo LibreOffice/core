@@ -657,7 +657,7 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
     {
         setPropertyValue( PROPERTY_GRAPHIC, Any( xGraphic ) );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("forms.component");
     }

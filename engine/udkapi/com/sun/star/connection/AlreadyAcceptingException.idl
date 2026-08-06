@@ -21,7 +21,7 @@
 
 /** Is thrown, when there is another thread already accepting on this instance.
  */
-published exception AlreadyAcceptingException: com::sun::star::uno::Exception
+published exception AlreadyAcceptingException: cpo::uno::Exception
 {
 };
 

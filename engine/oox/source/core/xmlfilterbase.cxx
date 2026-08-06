@@ -290,7 +290,7 @@ void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("oox","Failed to save documents grab bag");
     }
@@ -394,7 +394,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             aParser.parseStream( aSource );
             return true;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         return false;
@@ -433,12 +433,12 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             rParser.parseStream(xInStrm, aFragmentPath);
             return true;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("oox", "XmlFilterBase::importFragment - XML parser failed in fragment '" << aFragmentPath << "'" );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;
@@ -471,7 +471,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
         // create DOM from fragment
         xRet = xDomBuilder->parse(xInStrm);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -493,7 +493,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
                                      NamespaceIds() );
         return true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return false;

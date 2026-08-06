@@ -165,7 +165,7 @@ public class XMLSettingsImporter extends TestCase {
                         logF.println("'IsLayerMode' property value is '"
                             + value + "'");
                         return value.booleanValue();
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println("Exception while checking import :") ;
                         e.printStackTrace(logF) ;
                         return false ;

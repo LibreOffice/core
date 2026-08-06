@@ -141,7 +141,7 @@ openNewDoc(const OUString& aSheetName )
         removeAllSheets(xSpreadDoc,aSheetName);
         xModel.set(xSpreadDoc,uno::UNO_QUERY_THROW);
     }
-    catch ( uno::Exception & /*e*/ )
+    catch ( cpo::uno::Exception & /*e*/ )
     {
     }
     return xModel;
@@ -937,7 +937,7 @@ ScVbaWorksheet::getFormControls() const
             xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
 
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xFormControls;

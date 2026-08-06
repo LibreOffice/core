@@ -21,7 +21,8 @@ import unohelper
 import sys
 import types
 import os
-from com.sun.star.uno import Exception, RuntimeException
+from cpo.uno import Exception
+from com.sun.star.uno import RuntimeException
 from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
 

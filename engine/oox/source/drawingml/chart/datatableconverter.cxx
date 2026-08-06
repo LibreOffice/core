@@ -59,7 +59,7 @@ void DataTableConverter::convertFromModel(uno::Reference<chart2::XDiagram> const
         getFormatter().convertFormatting(aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp,
                                          OBJECTTYPE_DATATABLE);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 }

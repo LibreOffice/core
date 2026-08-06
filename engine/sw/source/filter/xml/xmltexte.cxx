@@ -286,7 +286,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     if ( bIsOwnLink )
                         sURL = xLinkage->getLinkURL();
                 }
-                catch(const uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                     // TODO/LATER: error handling
                     OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!" );

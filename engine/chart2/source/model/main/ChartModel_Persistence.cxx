@@ -174,7 +174,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -300,7 +300,7 @@ void ChartModel::storeToURL(
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -330,7 +330,7 @@ void ChartModel::impl_store(
             xExporter->setSourceDocument( Reference< lang::XComponent >( this ));
             xFilter->filter( aMD );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -357,7 +357,7 @@ void ChartModel::impl_store(
             u"SavedObject"_ustr,
             cpo::uno::Any( aMDHelper.HierarchicalDocumentName ) );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -431,14 +431,14 @@ void ChartModel::insertDefaultChart()
 
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         setIncludeHiddenCells( false );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -504,7 +504,7 @@ void ChartModel::load(
         if( aMDHelper.ISSET_URL )
             aURL = aMDHelper.URL;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -600,7 +600,7 @@ void ChartModel::impl_loadGraphics(
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -701,7 +701,7 @@ void ChartModel::modified( const lang::EventObject& rEvenObject)
             Diagram::tTemplateWithServiceName aTemplateAndService = xDiagram->getTemplate(xChartTypeManager);
             aTemplateAndService.xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

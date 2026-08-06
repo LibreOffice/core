@@ -88,7 +88,7 @@ ErrCodeMsg SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM
     {
         xFilter->filter(aDescriptor);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("sw.docx", "SwDOCXReader::Read()");
         ret = ERR_SWG_READ_ERROR;

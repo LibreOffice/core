@@ -137,7 +137,7 @@ SAL_IMPLEMENT_MAIN()
 
         bSucc = testJavaVM( xMgr );
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         DBG_UNHANDLED_EXCEPTION("stoc", "### exception occurred: " << rExc );
     }

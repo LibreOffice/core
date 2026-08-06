@@ -161,7 +161,7 @@ void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const css::util:
         PropertySet aPropSet( getCell( rModel.maCellAddr ) );
         aPropSet.setProperty( PROP_NumberFormat, nIndex );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

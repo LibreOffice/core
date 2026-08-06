@@ -286,7 +286,7 @@ bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XContr
                 return true;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return false;
@@ -946,7 +946,7 @@ void ChartModel::setArguments( const Sequence< beans::PropertyValue >& aArgument
         {
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1059,7 +1059,7 @@ cpo::uno::Any ChartModel::queryInterface( const cpo::uno::Type& aType )
             if( m_xOldModelAgg.is())
                 aResult = m_xOldModelAgg->queryAggregation( aType );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1138,7 +1138,7 @@ embed::VisualRepresentation ChartModel::getPreferredVisualRepresentation( ::sal_
 
         aResult.Data <<= aMetafile;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1171,7 +1171,7 @@ cpo::uno::Any ChartModel::getTransferData( const datatransfer::DataFlavor& aFlav
             aResult = xTransferable->getTransferData( aFlavor );
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1534,7 +1534,7 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
 
         xDiagramProperties->setPropertyValue( u"IncludeHiddenCells"_ustr, aNewValue);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

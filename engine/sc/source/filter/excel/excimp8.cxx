@@ -365,11 +365,11 @@ void ImportExcel8::ReadBasic()
                 GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -419,7 +419,7 @@ void ImportExcel8::PostDocLoad()
         uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
         sfx2::LoadOlePropertySet( xDocProps, xRootStrg.get() );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

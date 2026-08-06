@@ -67,9 +67,9 @@ public final class TypeDescription_Test {
         TypeSignature exceptionTypeSig = new TypeSignature(
             null, new String[0], null,
             new String[]{"Context"}, new TypeSignature[] { interfaceTypeSig });
-            // com.sun.star.uno.Exception.idl says that Exception (a) has no
+            // cpo.uno.Exception.idl says that Exception (a) has no
             // base exception, and (b) has two fields, Message and Context; the
-            // generated com.sun.star.uno.Exception.java, however, (a) is
+            // generated cpo.uno.Exception.java, however, (a) is
             // inherited from java.lang.Exception, and (b) has only one field,
             // Context, as Message is inherited from java.lang.Exception
         TypeSignature namingServiceTypeSig = new TypeSignature(
@@ -93,8 +93,8 @@ public final class TypeDescription_Test {
             "com.sun.star.uno.XInterface", "[Lcom.sun.star.uno.XInterface;",
             XInterface.class, TypeClass.INTERFACE };
         Object[] exceptionData = new Object [] {
-            "com.sun.star.uno.Exception", "[Lcom.sun.star.uno.Exception;",
-            com.sun.star.uno.Exception.class, TypeClass.EXCEPTION,
+            "cpo.uno.Exception", "[Lcpo.uno.Exception;",
+            cpo.uno.Exception.class, TypeClass.EXCEPTION,
             new Object[] { interfaceData } };
         Object[] namingServiceData = new Object[] {
             "cpo.uno.XNamingService",
@@ -108,10 +108,10 @@ public final class TypeDescription_Test {
         emptyTypeSig.test("TypeSignature.test(TypeClass)", typeClassData,
                           TypeDescription.getTypeDescription(
                               "cpo.uno.TypeClass"));
-        exceptionTypeSig.test("TypeSignature.test(com.sun.star.uno.Exception)",
+        exceptionTypeSig.test("TypeSignature.test(cpo.uno.Exception)",
                               exceptionData,
                               TypeDescription.getTypeDescription(
-                                  "com.sun.star.uno.Exception"));
+                                  "cpo.uno.Exception"));
         interfaceTypeSig.test("TypeSignature.test(XInterface)", interfaceData,
                               TypeDescription.getTypeDescription(
                                   "com.sun.star.uno.XInterface"));

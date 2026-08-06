@@ -66,7 +66,7 @@ using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::style::XStyle;
 using ::com::sun::star::table::XTableRows;
@@ -260,7 +260,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
             if( xTargetCell.is() )
                 xTargetCell->cloneFrom( xOldTable->getCell( rStart.mnCol + nCol, rStart.mnRow + nRow ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("svx.table", "");
         }
@@ -399,7 +399,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
             xIndexAccess->getByIndex( 0 ) >>= xNewTableStyle;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -605,7 +605,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -712,7 +712,7 @@ void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& Source )
         Reference<XNameAccess> xTableFamily(xSupplier->getStyleFamilies()->getByName(u"table"_ustr), UNO_QUERY_THROW);
         xDefaultStyle.set(xTableFamily->getByName(u"default"_ustr), UNO_QUERY_THROW);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -728,7 +728,7 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     {
         xCell = mxTable->getCell( rPos.mnCol, rPos.mnRow );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -1630,7 +1630,7 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
             mpImpl->maEditPos = rPos;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }

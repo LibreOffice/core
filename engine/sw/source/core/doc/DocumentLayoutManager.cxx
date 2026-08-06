@@ -225,7 +225,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
             {
                 pOLENd->GetOLEObj().GetOleRef()->changeState( embed::EmbedStates::LOADED );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }

@@ -21,7 +21,7 @@
 
 /** Is thrown, when it is not possible to accept on a local resource.
  */
-published exception ConnectionSetupException: com::sun::star::uno::Exception
+published exception ConnectionSetupException: cpo::uno::Exception
 {
 };
 

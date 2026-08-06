@@ -240,7 +240,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             aIndexFolderResultVectorVector.push_back( std::move(aIndexFolderResultVector) );
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("xmlhelp", "");
         }

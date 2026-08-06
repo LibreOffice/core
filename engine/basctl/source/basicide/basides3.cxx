@@ -88,7 +88,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
                 nKey = InsertWindowInTable( pWin );
             }
         }
-        catch (const uno::Exception& )
+        catch (const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }

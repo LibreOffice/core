@@ -804,7 +804,7 @@ void SAL_CALL SvXMLImport::startDocument()
             mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1142,7 +1142,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
                    < SOFFICE_FILEFORMAT_8;
         }
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.core");
     }
@@ -1539,7 +1539,7 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& 
             {
                 xStorProps->getPropertyValue(u"RepairPackage"_ustr) >>= bRepairPackage;
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
             }
         }
@@ -1751,7 +1751,7 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         {
             mxNumberStyles->insertByName(rName, Any(nKey));
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION( "xmloff.core", "Numberformat could not be inserted");
         }
@@ -1901,7 +1901,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                 {
                     xStorProps->getPropertyValue( u"RepairPackage"_ustr )
                         >>= bRepairPackage;
-                } catch ( uno::Exception& )
+                } catch ( cpo::uno::Exception& )
                 {}
 
                 // check only if not in Repair mode
@@ -1931,7 +1931,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -2160,7 +2160,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 SAL_INFO("xmloff.core", "SvXMLImport::SetXmlId: cannot set xml:id");
             }
         }
-    } catch (uno::Exception &) {
+    } catch (cpo::uno::Exception &) {
         TOOLS_WARN_EXCEPTION("xmloff.core","SvXMLImport::SetXmlId");
     }
 }

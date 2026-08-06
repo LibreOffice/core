@@ -196,7 +196,7 @@ public class AccessibleTreeListBox extends TestCase {
                 public void fireEvent() {
                     try {
                         xInit.initialize(fParams);
-                    } catch(com.sun.star.uno.Exception e) {
+                    } catch(cpo.uno.Exception e) {
                         e.printStackTrace();
                     }
                 }

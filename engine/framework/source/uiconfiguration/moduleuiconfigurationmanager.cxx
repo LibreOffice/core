@@ -925,7 +925,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
         if ( xModuleImageManager.is() )
             xModuleImageManager->dispose();
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -1025,7 +1025,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
                 impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
                 rUserElementType.bModified = false;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
@@ -1523,7 +1523,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
                 impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }
@@ -1564,7 +1564,7 @@ void SAL_CALL ModuleUIConfigurationManager::store()
                 m_pStorageHandler[i]->commitUserChanges();
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }
@@ -1595,7 +1595,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
             if ( rElementType.bModified && xElementTypeStorage.is() )
                 impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }

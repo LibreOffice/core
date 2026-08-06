@@ -58,7 +58,7 @@ public class ValueBinding extends integration.forms.TestCase
 
     /* ------------------------------------------------------------------ */
     @Override
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws cpo.uno.Exception, java.lang.Exception
     {
         super.before();
         prepareDocument();
@@ -66,7 +66,7 @@ public class ValueBinding extends integration.forms.TestCase
 
     /* ------------------------------------------------------------------ */
     @Override
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws cpo.uno.Exception, java.lang.Exception
     {
         super.waitForUserInput();
         super.closeDocument();
@@ -79,7 +79,7 @@ public class ValueBinding extends integration.forms.TestCase
 
     /* ------------------------------------------------------------------ */
     @Override
-    protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
+    protected void prepareDocument() throws cpo.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();
 

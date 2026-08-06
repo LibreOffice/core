@@ -1223,7 +1223,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
                                     bOwnEntry = aControlFile.HasOwnEntry();
                                 }
-                                catch ( uno::Exception& )
+                                catch ( cpo::uno::Exception& )
                                 {
                                 }
 
@@ -1248,7 +1248,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                 aUserName = aData[LockFileComponent::SYSUSERNAME];
                                             }
                                         }
-                                        catch ( uno::Exception& )
+                                        catch ( cpo::uno::Exception& )
                                         {
                                         }
                                         OUString aMessage( ScResId( STR_FILE_LOCKED_TRY_LATER ) );
@@ -1302,7 +1302,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     xWarn->run();
                                 }
                             }
-                            catch ( uno::Exception& )
+                            catch ( cpo::uno::Exception& )
                             {
                                 TOOLS_WARN_EXCEPTION( "sc", "SID_SHARE_DOC" );
                                 ScModule::get()->SetInSharedDocSaving(false);
@@ -1312,7 +1312,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
                                     xClose->close( true );
                                 }
-                                catch ( uno::Exception& )
+                                catch ( cpo::uno::Exception& )
                                 {
                                 }
                             }
@@ -3242,7 +3242,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             uno::UNO_QUERY_THROW );
         mod->SetInSharedDocLoading(false);
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception" );
         mod->SetInSharedDocLoading(false);
@@ -3252,7 +3252,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             xClose->close( true );
             return uno::Reference< frame::XModel >();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             return uno::Reference< frame::XModel >();
         }

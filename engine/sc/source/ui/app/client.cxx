@@ -191,7 +191,7 @@ void ScClient::ViewChanged()
     awt::Size aSz;
     try {
         aSz = xObj->getVisualAreaSize( GetAspect() );
-    } catch (const uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("sc", "The visual area size must be available!");
         return; // leave it unchanged on failure
     }

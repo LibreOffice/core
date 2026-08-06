@@ -184,7 +184,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             // create a frame wrapper for myself
             m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
             m_xFrame->initialize(m_xBeamerWin->CreateChildFrame());
-        } catch (const Exception&) {
+        } catch (const cpo::uno::Exception&) {
             m_xFrame.clear();
         }
         if(m_xFrame.is()) {
@@ -337,7 +337,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             }
         }
         m_xFilterLB->set_active( nODT );
-    } catch (const uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
     }
 }
 

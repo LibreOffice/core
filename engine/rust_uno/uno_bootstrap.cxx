@@ -65,7 +65,7 @@ SAL_DLLPUBLIC_EXPORT void* defaultBootstrap_InitialComponentContext()
         // Note: This creates a new Reference that transfers ownership to caller
         return res;
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("rustuno", "UNO exception during component context initialization: " << e.Message);
         return nullptr;

@@ -49,13 +49,13 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
+    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws cpo.uno.Exception
     {
         return implLoadAsComponent( orb, documentOrFactoryURL, new PropertyValue[0] );
     }
 
     /* ------------------------------------------------------------------ */
-    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws cpo.uno.Exception
     {
         XComponentLoader aLoader = UnoRuntime.queryInterface( XComponentLoader.class,
             orb.createInstance( "com.sun.star.frame.Desktop" ) );
@@ -67,7 +67,7 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    private static OfficeDocument implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static OfficeDocument implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws cpo.uno.Exception
     {
         XComponent document = implLoadAsComponent( orb, documentOrFactoryURL, i_args );
 
@@ -78,13 +78,13 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    public static OfficeDocument blankTextDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
+    public static OfficeDocument blankTextDocument( XMultiServiceFactory orb ) throws cpo.uno.Exception
     {
         return blankDocument( orb, DocumentType.WRITER );
     }
 
     /* ------------------------------------------------------------------ */
-    public static OfficeDocument blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
+    public static OfficeDocument blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws cpo.uno.Exception
     {
         final PropertyValue[] args = new PropertyValue[] {
             new PropertyValue( "MacroExecutionMode", -1, MacroExecMode.ALWAYS_EXECUTE, PropertyState.DIRECT_VALUE )
@@ -178,7 +178,7 @@ public class OfficeDocument
     /* ------------------------------------------------------------------ */
     /** creates a component at the service factory provided by the document
     */
-    public XInterface createInstance( String serviceSpecifier ) throws com.sun.star.uno.Exception
+    public XInterface createInstance( String serviceSpecifier ) throws cpo.uno.Exception
     {
         XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class, m_documentComponent );
         return (XInterface)xORB.createInstance( serviceSpecifier );
@@ -187,7 +187,7 @@ public class OfficeDocument
     /* ------------------------------------------------------------------ */
     /** creates a component at the service factory provided by the document, queried for a given interface type
     */
-    public <T> T createInstance( String i_serviceSpecifier, Class<T> i_interfaceClass ) throws com.sun.star.uno.Exception
+    public <T> T createInstance( String i_serviceSpecifier, Class<T> i_interfaceClass ) throws cpo.uno.Exception
     {
         return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceSpecifier ) );
     }

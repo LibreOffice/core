@@ -151,7 +151,7 @@ void ExternalSheetDataContext::setCellValue( const Any& rValue )
     {
         mxSheetCache->setCellValue( maCurrPos.Col(), maCurrPos.Row(), rValue );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

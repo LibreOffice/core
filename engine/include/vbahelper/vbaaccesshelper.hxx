@@ -47,7 +47,7 @@ namespace ooo::vba
             return xVBAFactory;
         }
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );

@@ -24,7 +24,7 @@
 /** thrown in case that a certain type name does exist, but does not meet
     some other criteria.
   */
-published exception InvalidTypeNameException : com::sun::star::uno::Exception
+published exception InvalidTypeNameException : cpo::uno::Exception
 {
 };
 

@@ -122,7 +122,7 @@ void SdtHelper::loadPropertiesXMLs()
             { u"{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"_ustr, // hardcoded id for core props
               xDomBuilder->parse(xCorePropsStream) });
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("writerfilter",
                  "SdtHelper::loadPropertiesXMLs: failed loading core properties XML");
@@ -137,7 +137,7 @@ void SdtHelper::loadPropertiesXMLs()
             { u"{6668398D-A668-4E3E-A5EB-62B293D839F1}"_ustr, // hardcoded id for extended props
               xDomBuilder->parse(xExtPropsStream) });
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("writerfilter",
                  "SdtHelper::loadPropertiesXMLs: failed loading extended properties XML");
@@ -383,7 +383,7 @@ void SdtHelper::createPlainTextControl()
     {
         xCrsr->gotoEnd(true);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
                              "Cannot get the right text range for date field");
@@ -486,7 +486,7 @@ void SdtHelper::createDateContentControl()
             xCrsr->goRight(1, false);
         xCrsr->gotoEnd(true);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
                              "Cannot get the right text range for date field");

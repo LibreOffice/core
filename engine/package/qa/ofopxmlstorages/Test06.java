@@ -70,7 +70,7 @@ public class Test06 implements StorageTest {
             }
             catch( com.sun.star.lang.IllegalArgumentException iae )
             {}
-            catch( com.sun.star.uno.Exception ue )
+            catch( cpo.uno.Exception ue )
             {}
             catch( Exception e )
             {
@@ -98,7 +98,7 @@ public class Test06 implements StorageTest {
                 m_aTestHelper.Error( "The method must throw an exception in case of try to open nonexistent stream for reading!" );
                 return false;
             }
-            catch( com.sun.star.uno.Exception ue )
+            catch( cpo.uno.Exception ue )
             {}
             catch( Exception e )
             {
@@ -113,7 +113,7 @@ public class Test06 implements StorageTest {
                 m_aTestHelper.Error( "The method must throw an exception in case of try to open nonexistent storage for reading!" );
                 return false;
             }
-            catch( com.sun.star.uno.Exception ue )
+            catch( cpo.uno.Exception ue )
             {}
             catch( Exception e )
             {
@@ -175,7 +175,7 @@ public class Test06 implements StorageTest {
             }
             catch( com.sun.star.lang.IllegalArgumentException iae )
             {}
-            catch( com.sun.star.uno.Exception ue )
+            catch( cpo.uno.Exception ue )
             {}
             catch( Exception e )
             {
@@ -192,7 +192,7 @@ public class Test06 implements StorageTest {
             }
             catch( com.sun.star.lang.IllegalArgumentException iae )
             {}
-            catch( com.sun.star.uno.Exception ue )
+            catch( cpo.uno.Exception ue )
             {}
             catch( Exception e )
             {

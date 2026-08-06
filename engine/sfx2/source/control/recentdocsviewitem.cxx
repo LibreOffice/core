@@ -59,12 +59,12 @@ bool IsDocEncrypted(const OUString& rURL)
             {
                 xStorageProps->getPropertyValue(u"HasEncryptedEntries"_ustr) >>= bIsEncrypted;
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("sfx", "caught exception trying to find out if doc <"
                                         << rURL << "> is encrypted:");

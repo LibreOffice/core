@@ -30,12 +30,12 @@ published interface XRestartManager : com::sun::star::uno::XInterface
             service implementation, that is used in case a problem is detected
             during requesting the restart.
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             to notify the caller about possible failures
     */
     void requestRestart(
         [in] com::sun::star::task::XInteractionHandler xInteractionHandler )
-            raises( com::sun::star::uno::Exception );
+            raises( cpo::uno::Exception );
 
     /** allows to get info whether the restart has been requested and provide
         the initialization status.
@@ -56,12 +56,12 @@ published interface XRestartManager : com::sun::star::uno::XInterface
             `TRUE` if the office restart has been requested,
             `FALSE` otherwise
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             to notify the caller about possible failures
     */
     boolean isRestartRequested(
         [in] boolean bInitialized )
-            raises( com::sun::star::uno::Exception );
+            raises( cpo::uno::Exception );
 };
 
 }; }; }; };

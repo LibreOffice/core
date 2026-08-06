@@ -169,7 +169,7 @@ void SfxChildWindow::Destroy()
             else
                 GetFrame()->dispose();
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

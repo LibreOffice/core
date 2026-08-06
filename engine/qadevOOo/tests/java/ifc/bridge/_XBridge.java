@@ -71,7 +71,7 @@ public class _XBridge extends MultiMethodTest {
         try {
             xInit.initialize(args);
         }
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't initialize the bridge", e);
         }

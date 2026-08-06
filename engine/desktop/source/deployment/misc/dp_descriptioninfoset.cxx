@@ -175,13 +175,13 @@ ExtensionDescription::ExtensionDescription(
         Reference<css::ucb::XCommandEnvironment> xFilter = new FileDoesNotExistFilter(xCmdEnv);
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
-        //throws a css::uno::Exception if the file is not available
+        //throws a cpo::uno::Exception if the file is not available
         Reference<css::io::XInputStream> xIn;
         try
         {   //throws com.sun.star.ucb.InteractiveIOException
             xIn = descContent.openStream();
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             if ( ! static_cast<FileDoesNotExistFilter*>(xFilter.get())->exist())
                 throw NoDescriptionException();
@@ -189,7 +189,7 @@ ExtensionDescription::ExtensionDescription(
         }
         if (!xIn.is())
         {
-            throw css::uno::Exception(
+            throw cpo::uno::Exception(
                 "Could not get XInputStream for description.xml of extension " +
                 sDescriptionUri, nullptr);
         }
@@ -200,27 +200,27 @@ ExtensionDescription::ExtensionDescription(
 
         if (!xDocBuilder->isNamespaceAware())
         {
-            throw css::uno::Exception(
+            throw cpo::uno::Exception(
                 u"Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware."_ustr, nullptr);
         }
 
         Reference<css::xml::dom::XDocument> xDoc = xDocBuilder->parse(xIn);
         if (!xDoc.is())
         {
-            throw css::uno::Exception(sDescriptionUri + " contains data which cannot be parsed. ", nullptr);
+            throw cpo::uno::Exception(sDescriptionUri + " contains data which cannot be parsed. ", nullptr);
         }
 
         //check for proper root element and namespace
         Reference<css::xml::dom::XElement> xRoot = xDoc->getDocumentElement();
         if (!xRoot.is())
         {
-            throw css::uno::Exception(
+            throw cpo::uno::Exception(
                 sDescriptionUri + " contains no root element.", nullptr);
         }
 
         if ( xRoot->getTagName() != "description")
         {
-            throw css::uno::Exception(
+            throw cpo::uno::Exception(
                 sDescriptionUri + " does not contain the root element <description>.", nullptr);
         }
 
@@ -230,13 +230,13 @@ ExtensionDescription::ExtensionDescription(
         //check if this namespace is supported
         if ( nsDescription != "http://openoffice.org/extensions/description/2006")
         {
-            throw css::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", nullptr);
+            throw cpo::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", nullptr);
         }
     } catch (const css::uno::RuntimeException &) {
         throw;
     } catch (const css::deployment::DeploymentException &) {
         throw;
-    } catch (const css::uno::Exception & e) {
+    } catch (const cpo::uno::Exception & e) {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::deployment::DeploymentException(
             e.Message, Reference< css::uno::XInterface >(), a);

@@ -409,7 +409,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
                     ? embed::ElementModes::READWRITE
                     : embed::ElementModes::READ );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
         //#i43196# try again to open the storage element - this time readonly
@@ -420,7 +420,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
                 maCurStorageName = rStorageName;
                 xRetStorage = mxRootStorage->openStorageElement( maCurStorageName, embed::ElementModes::READ );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -460,7 +460,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
                     rPictureStorageName + "/" + rPictureStreamName, nMode);
                 aRet.xStorage = mxRootStorage;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("svx",
                                      "SvXMLGraphicHelper::ImplGetGraphicStream: failed to open "

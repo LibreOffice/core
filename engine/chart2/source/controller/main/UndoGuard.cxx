@@ -61,7 +61,7 @@ void UndoGuard::commit()
             m_pDocumentSnapshot.reset();    // don't dispose, it's data went over to the UndoElement
             m_xUndoManager->addUndoAction( xAction );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -126,7 +126,7 @@ HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > 
     {
         m_xUndoManager->enterHiddenUndoContext();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
         m_xUndoManager.clear();
@@ -141,7 +141,7 @@ HiddenUndoContext::~HiddenUndoContext()
         if ( m_xUndoManager.is() )
             m_xUndoManager->leaveUndoContext();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

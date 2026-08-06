@@ -21,7 +21,7 @@ module com {  module sun {  module star {  module connection {
 
 /** Is thrown in case no one is accepting on the specified resource.
  */
-published exception NoConnectException: com::sun::star::uno::Exception
+published exception NoConnectException: cpo::uno::Exception
 {
 };
 

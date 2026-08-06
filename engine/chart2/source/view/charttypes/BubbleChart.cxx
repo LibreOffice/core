@@ -225,13 +225,13 @@ void BubbleChart::createShapes()
                     // properties
                     try {
                         xPointProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
-                    } catch (const uno::Exception&)
+                    } catch (const cpo::uno::Exception&)
                     {
                         uno::Reference< beans::XPropertySet > xSeriesProperties =
                             pSeries->getPropertiesOfSeries();
                         try {
                             xSeriesProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
-                        } catch (const uno::Exception&)
+                        } catch (const cpo::uno::Exception&)
                         {}
                     }
 

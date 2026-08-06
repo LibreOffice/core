@@ -41,7 +41,7 @@ published interface XSheetOperation: com::sun::star::uno::XInterface
      */
     double computeFunction(
             [in] com::sun::star::sheet::GeneralFunction nFunction )
-        raises( com::sun::star::uno::Exception );   //! unnecessary
+        raises( cpo::uno::Exception );   //! unnecessary
 
 
     /** clears the specified contents of the current cell range(s).

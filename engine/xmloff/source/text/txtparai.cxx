@@ -1673,7 +1673,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
             return; // Robust (defective file)
         xEnd = xCrsrRange->getStart();
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         SAL_INFO("xmloff.text", "XMLParaContext: cursor disposed?");
         return;
@@ -1703,7 +1703,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         xAttrCursor = xTxtImport->GetText()->createTextCursorByRange( xStart );
         if( !xAttrCursor.is() )
             return; // Robust (defective file)
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         // createTextCursorByRange() likes to throw runtime exception, even
         // though it just means 'we were unable to create the cursor'
         return;
@@ -1731,7 +1731,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                 }
                 SAL_WARN_IF(xEnum->hasMoreElements(), "xmloff.text", "xml:id: > 1 paragraph?");
             }
-        } catch (const uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             SAL_INFO("xmloff.text", "XMLParaContext::~XMLParaContext: exception");
         }
     }
@@ -1835,7 +1835,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                     }
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("xmloff.text", "");
             }

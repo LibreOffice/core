@@ -470,7 +470,7 @@ VclPtr<vcl::Window> ImplGetActiveFrameWindow()
         if (css::uno::Reference<css::frame::XFrame> xActiveFrame = xDesktop->getActiveFrame())
             return VCLUnoHelper::GetWindow(xActiveFrame->getComponentWindow());
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     SAL_WARN("extensions.scanner", "ImplGetActiveFrame: Could not determine active frame!");

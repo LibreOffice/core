@@ -36,7 +36,7 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 namespace comphelper
 {
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 COMPHELPER_DLLPUBLIC css::uno::Reference< css::script::XEventAttacherManager >
 createEventAttacherManager(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext );

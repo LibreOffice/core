@@ -24,7 +24,7 @@ module com { module sun { module star { module script { module provider {
     is a checked exception that represents an error encountered
         by a LanguageScriptProvider whilst executing a script
 */
-exception ScriptErrorRaisedException : com::sun::star::uno::Exception {
+exception ScriptErrorRaisedException : cpo::uno::Exception {
     /** Name of script where error occurred
      */
     string scriptName;

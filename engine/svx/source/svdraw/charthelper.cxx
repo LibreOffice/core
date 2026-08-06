@@ -43,7 +43,7 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel 
 
         xChartView->updateHard();
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -88,7 +88,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
             }
         }
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -124,7 +124,7 @@ void ChartHelper::AdaptDefaultsForChart(
             xPageProp->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_NONE));
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("svx.svdraw", "");
     }

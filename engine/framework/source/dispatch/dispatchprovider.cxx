@@ -29,7 +29,7 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCacheInfo.hpp>
@@ -467,7 +467,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                     bInitialize = false;
                 }
             }
-            catch(const css::uno::Exception&) {}
+            catch(const cpo::uno::Exception&) {}
 
             // check if initialization is necessary
             css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
@@ -483,7 +483,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                         cpo::uno::Sequence< cpo::uno::Any > lContext{ cpo::uno::Any(xOwner) };
                         xInit->initialize(lContext);
                     }
-                    catch(const css::uno::Exception&) {}
+                    catch(const cpo::uno::Exception&) {}
                 }
             }
         }

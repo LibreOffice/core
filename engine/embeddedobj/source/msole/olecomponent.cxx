@@ -434,7 +434,7 @@ OleComponent::~OleComponent()
         osl_atomic_increment(&m_refCount);
         try {
             Dispose();
-        } catch( const uno::Exception& ) {}
+        } catch( const cpo::uno::Exception& ) {}
     }
 }
 
@@ -1709,7 +1709,7 @@ void OleComponent::dispose()
     {
         close( true );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -1746,7 +1746,7 @@ sal_Int64 OleComponent::getSomething( const cpo::uno::Sequence< sal_Int8 >& aIde
         if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
             return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

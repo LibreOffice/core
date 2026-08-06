@@ -23,7 +23,7 @@ import org.openoffice.test.tools.DocumentType;
 
 public class DrawDocumentTest extends DrawingOrPresentationDocumentTest
 {
-    public DrawDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    public DrawDocumentTest( XMultiServiceFactory i_orb ) throws cpo.uno.Exception
     {
         super( i_orb, DocumentType.DRAWING );
     }

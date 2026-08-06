@@ -46,7 +46,7 @@ public class _XComponentContext extends MultiMethodTest {
                 directly.createInstanceWithContext(names[i], oObj);
                 log.println("worked... ok");
                 res &= true;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Exception occurred " + e.getMessage());
                 res &= false;
             }

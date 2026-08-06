@@ -75,7 +75,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const
         Reference< XIndexAccess > xStyle( xTableFamily->getByName( aStdName ), UNO_QUERY_THROW );
         pObj->setTableStyle( xStyle );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::apply_default_table_style()");
     }

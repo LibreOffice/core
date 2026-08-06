@@ -182,7 +182,7 @@ void RangeHighlighter::determineRanges()
             return;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -228,7 +228,7 @@ void RangeHighlighter::fillRangesForErrorBars(
               (xErrorBar->getPropertyValue( u"ErrorBarStyle"_ustr) >>= nStyle) &&
               nStyle == css::chart::ErrorBarStyle::FROM_DATA );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

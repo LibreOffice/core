@@ -150,7 +150,7 @@ public class UCBStreamHandler extends URLStreamHandler {
                 IOException newEx = new IOException(cae.getMessage());
                 newEx.initCause(cae);
                 throw newEx;
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 LogUtils.DEBUG("caught unknown exception: " + e.toString() +
                                " getting writable stream from " + url);
                 IOException newEx = new IOException(e.getMessage());
@@ -255,7 +255,7 @@ public class UCBStreamHandler extends URLStreamHandler {
             IOException ex2 = new IOException();
             ex2.initCause(ex1);
             throw ex2;
-        } catch (com.sun.star.uno.Exception ex1) {
+        } catch (cpo.uno.Exception ex1) {
             IOException ex2 = new IOException();
             ex2.initCause(ex1);
             throw ex2;

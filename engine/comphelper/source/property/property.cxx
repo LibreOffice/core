@@ -43,7 +43,7 @@ namespace comphelper
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::cpo::uno::Type;
     using ::cpo::uno::cpp_queryInterface;

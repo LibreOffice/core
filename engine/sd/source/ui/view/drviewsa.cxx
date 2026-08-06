@@ -356,7 +356,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         SAL_INFO("sd", "Scanner manager not available");
     }
-    catch (Exception const &)
+    catch (cpo::uno::Exception const &)
     {
         // Eat the exception and log it
         // We can still continue if scanner manager is not available.

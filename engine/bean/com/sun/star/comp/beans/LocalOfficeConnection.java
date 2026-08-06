@@ -414,7 +414,7 @@ public class LocalOfficeConnection
                     XBridgeFactory.class,
                     xLocalServiceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", xLocalContext));
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             throw new com.sun.star.uno.RuntimeException(e);
         }
         synchronized(this) {
@@ -423,7 +423,7 @@ public class LocalOfficeConnection
                 try {
                     connector = xLocalServiceManager.createInstanceWithContext(
                             "com.sun.star.connection.Connector", xLocalContext);
-                } catch (com.sun.star.uno.Exception e) {
+                } catch (cpo.uno.Exception e) {
                     throw new com.sun.star.uno.RuntimeException(e);
                 }
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);

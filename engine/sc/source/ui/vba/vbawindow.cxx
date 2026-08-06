@@ -221,7 +221,7 @@ ScVbaWindow::init()
     {
        m_xPane = ActivePane();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     osl_atomic_decrement( &m_refCount );

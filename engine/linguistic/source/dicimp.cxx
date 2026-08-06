@@ -279,7 +279,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
         uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rMainURL );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "failed to get input stream" );
     }
@@ -412,7 +412,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     {
         xStream = io::TempFile::create(xContext);
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         DBG_ASSERT( false, "failed to get input stream" );
     }
@@ -475,7 +475,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         //write, we're now converted to the latest version, i.e. DIC_VERSION_7
         nDicVersion = DIC_VERSION_7;
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         DBG_ASSERT( false, "failed to write stream" );
         return ErrCode(sal_uInt32(-1));

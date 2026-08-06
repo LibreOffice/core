@@ -158,7 +158,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     {
         xModelCollection->insert(cpo::uno::Any(xModel));
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         SAL_WARN( "sfx.doc", "The document seems to be in the collection already!" );
     }
@@ -261,7 +261,7 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
 
         bResult = true;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // TODO/LATER: handle the error depending on exception
         SetError(ERRCODE_IO_GENERAL);
@@ -288,7 +288,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
 
             // the temporary storage was committed by the previous method and it will die by refcount
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             SAL_WARN( "sfx.doc", "Creation of a storage copy is failed!" );
             ::utl::UCBContentHelper::Kill( aTempURL );
@@ -339,7 +339,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( aDataFlavor.MimeType ) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
     }
@@ -366,7 +366,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             // older versions can not have this property set, it exists only starting from ODF1.2
             xProps->setPropertyValue(u"Version"_ustr, getODFVersionAny(nDefVersion));
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -396,7 +396,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
         xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
     }
@@ -442,7 +442,7 @@ bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage >& 
                 SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             SAL_WARN( "sfx.doc", "Can't check storage's mediatype!" );
         }
@@ -586,7 +586,7 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
         // the medium is not allowed to dispose the storage so CloseStorage() can be used
         pMedium->CloseStorage();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -693,7 +693,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if (bWarnMediaTypeFallback || !xStorage->getElementNames().hasElements())
                     SetError(ERRCODE_IO_BROKENPACKAGE);
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 // TODO/LATER: may need error code setting based on exception
                 SetError(ERRCODE_IO_GENERAL);
@@ -825,7 +825,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -1193,7 +1193,7 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
                 // the filter name is unknown
                 nError = ERRCODE_IO_INVALIDPARAMETER;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 nError = ERRCODE_ABORT;
             }
@@ -1247,7 +1247,7 @@ bool SfxObjectShell::DoSave()
                 {   // could have been loaded with a different/old version
                     xProps->setPropertyValue(u"Version"_ustr, getODFVersionAny(nDefVersion));
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::DoSave");
                 }
@@ -1296,7 +1296,7 @@ bool SfxObjectShell::DoSave()
                     // connect to the current storage back
                     pImpl->aBasicManager.setStorage( GetMedium()->GetStorage() );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     SetError(ERRCODE_IO_GENERAL);
                     bOk = false;
@@ -1443,7 +1443,7 @@ bool SfxObjectShell::SaveTo_Impl
                 if (xPropSet)
                     xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {}
 
             // preserve only if the same filter has been used
@@ -1689,7 +1689,7 @@ bool SfxObjectShell::SaveTo_Impl
                         xProps->setPropertyValue(u"MediaType"_ustr,
                                                 cpo::uno::Any( aDataFlavor.MimeType ) );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }
@@ -1797,7 +1797,7 @@ bool SfxObjectShell::SaveTo_Impl
                             xTransact->commit();
                     }
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     SAL_WARN( "sfx.doc", "Couldn't copy versions!" );
                     bOk = false;
@@ -1895,7 +1895,7 @@ bool SfxObjectShell::SaveTo_Impl
                     if (xPropSet)
                         xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
 
@@ -1976,7 +1976,7 @@ bool SfxObjectShell::SaveTo_Impl
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 
@@ -2103,7 +2103,7 @@ bool SfxObjectShell::SaveTo_Impl
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -2148,7 +2148,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 bResult = true;
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {}
     }
     return bResult;
@@ -2183,7 +2183,7 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
 
             bResult = true;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -2211,7 +2211,7 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
                     pImpl->xDialogLibraries->setRootStorage( xTmpStorage );
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
 
         if ( !bResult )
@@ -2258,7 +2258,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
             uno::Reference< embed::XTransactedObject > xTransact( xNewStor, uno::UNO_QUERY_THROW );
             xTransact->commit();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             SAL_WARN( "sfx.doc", "The storage was not committed on DoSaveAs!" );
         }
@@ -2336,7 +2336,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
                 // old own storage was not controlled by old Medium -> dispose it
                 try {
                     xOld->dispose();
-                } catch( uno::Exception& )
+                } catch( cpo::uno::Exception& )
                 {
                     // the storage is disposed already
                     // can happen during reload scenario when the medium has
@@ -2399,7 +2399,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
                 {
                     xModel->attachResource(aURL, aMediaDescr.getAsConstPropertyValueList());
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
 
@@ -2538,7 +2538,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         {
             xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, cpo::uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             xLoader.clear();
         }
@@ -2688,7 +2688,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             {
                 xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, cpo::uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 xExporter.clear();
             }
@@ -3436,7 +3436,7 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
                     // the following code must throw an exception in case of failure
                     ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xStorage, aEncryptionData );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     // TODO/LATER: handle the error code
                 }
@@ -3524,7 +3524,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
             if (!comphelper::IsFuzzing())
                 SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::StorageChanged, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             // TODO/LATER: error handling?
             TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::GetStorage");
@@ -3596,7 +3596,7 @@ bool SfxObjectShell::SaveCompletedChildren()
                     {
                         xPersist->saveCompleted( false/*bSuccess*/ );
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                         // TODO/LATER: error handling
                         bResult = false;
@@ -3704,7 +3704,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
                     bGotMediaType =
                         ( xOptStorage->getElementPropertyValue( rSubElement, aMediaTypePropName ) >>= aMediaType );
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
 
                 if ( !bGotMediaType )
@@ -3712,7 +3712,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
                     uno::Reference< embed::XStorage > xSubStorage;
                     try {
                         xSubStorage = xSource->openStorageElement( rSubElement, embed::ElementModes::READ );
-                    } catch( uno::Exception& )
+                    } catch( cpo::uno::Exception& )
                     {}
 
                     if ( !xSubStorage.is() )
@@ -3764,7 +3764,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         SAL_WARN( "sfx.doc", "Can not check storage consistency!" );
     }
@@ -3847,7 +3847,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
                     bGotMediaType = (xOptStorage->getElementPropertyValue(rSubElement, aMediaTypePropName)
                            >>= aMediaType);
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
 
                 if ( !bGotMediaType )
@@ -3856,7 +3856,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
                     try {
                         xSubStorage
                             = xSource->openStorageElement(rSubElement, embed::ElementModes::READ);
-                    } catch( uno::Exception& )
+                    } catch( cpo::uno::Exception& )
                     {}
 
                     if ( !xSubStorage.is() )
@@ -3919,7 +3919,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bResult = false;
         // TODO/LATER: a specific error could be provided
@@ -3954,7 +3954,7 @@ bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, const uno::Refer
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -3995,7 +3995,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XS
             }
         }
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {}
 
     return bResult;

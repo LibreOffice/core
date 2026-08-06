@@ -61,7 +61,7 @@ public class Map
         }
     }
 
-    private static void impl_putAll( XMap _map, Object[] _keys, Object[] _values ) throws com.sun.star.uno.Exception
+    private static void impl_putAll( XMap _map, Object[] _keys, Object[] _values ) throws cpo.uno.Exception
     {
         for ( int i=0; i<_keys.length; ++i )
         {
@@ -69,7 +69,7 @@ public class Map
         }
     }
 
-    private static void impl_checkContent( XMap _map, Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
+    private static void impl_checkContent( XMap _map, Object[] _keys, Object[] _values, String _context ) throws cpo.uno.Exception
     {
         for ( int i=0; i<_keys.length; ++i )
         {
@@ -83,7 +83,7 @@ public class Map
     }
 
     @SuppressWarnings("unchecked")
-    private static void impl_checkMappings( Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
+    private static void impl_checkMappings( Object[] _keys, Object[] _values, String _context ) throws cpo.uno.Exception
     {
         System.out.println( "checking mapping " + _context + "..." );
 
@@ -133,7 +133,7 @@ public class Map
         //? assureException( map, "put", new Class[] { Object.class, Object.class }, new Object[] { _keys[0], _values[0] }, NoSupportException.class );
     }
 
-    @Test public void testSimpleKeyTypes() throws com.sun.star.uno.Exception
+    @Test public void testSimpleKeyTypes() throws cpo.uno.Exception
     {
         impl_checkMappings(
             new Long[] { (long)1, (long)2, (long)3, (long)4, (long)5 },
@@ -167,7 +167,7 @@ public class Map
         );
     }
 
-    @Test public void testComplexKeyTypes() throws com.sun.star.uno.Exception
+    @Test public void testComplexKeyTypes() throws cpo.uno.Exception
     {
         Type intType = new Type( Integer.class );
         Type longType = new Type( Long.class );
@@ -218,7 +218,7 @@ public class Map
             case 6: valueClass = XContainer.class; break;
             case 7: valueClass = XIdentifierAccess.class; break;
             case 8: valueClass = XElementAccess.class; break;
-            case 9: valueClass = com.sun.star.uno.Exception.class; break;
+            case 9: valueClass = cpo.uno.Exception.class; break;
             case 10: valueClass = com.sun.star.uno.RuntimeException.class; break;
             case 11: valueClass = EventObject.class; break;
             case 12: valueClass = ContainerEvent.class; break;
@@ -243,7 +243,7 @@ public class Map
             case 6: someValue = UnoRuntime.queryInterface( XContainer.class, new DummyContainer() ); break;
             case 7: someValue = UnoRuntime.queryInterface( XIdentifierAccess.class, new DummyIdentifierAccess() ); break;
             case 8: someValue = UnoRuntime.queryInterface( XElementAccess.class, new DummyElementAccess() ); break;
-            case 9: someValue = new com.sun.star.uno.Exception(); break;
+            case 9: someValue = new cpo.uno.Exception(); break;
             case 10: someValue = new com.sun.star.uno.RuntimeException(); break;
             case 11: someValue = new EventObject(); break;
             case 12: someValue = new ContainerEvent(); break;
@@ -288,7 +288,7 @@ public class Map
         public boolean hasElements() { throw new UnsupportedOperationException( "Not implemented." ); }
     }
 
-    @Test public void testValueTypes() throws com.sun.star.uno.Exception
+    @Test public void testValueTypes() throws cpo.uno.Exception
     {
         // type compatibility matrix: rows are the value types used to create the map,
         // columns are the value types fed into the map. A value "1" means the respective type
@@ -376,7 +376,7 @@ public class Map
     }
 
     private void impl_verifyEnumerationContent( XEnumeration _enum, final Object[] _expectedElements, final String _context )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         // since we cannot assume the map to preserve the ordering in which the elements where inserted,
         // we can only verify that all elements exist as expected, plus *no more* elements than expected
@@ -419,7 +419,7 @@ public class Map
         assertTrue( _context + ": too many elements returned by the enumeration", set.isEmpty() );
     }
 
-    @Test public void testEnumerations() throws com.sun.star.uno.Exception
+    @Test public void testEnumerations() throws cpo.uno.Exception
     {
         // fill a map
         final String[] keys = new String[] { "This", "is", "an", "enumeration", "test" };
@@ -459,7 +459,7 @@ public class Map
         impl_verifyEnumerationContent( enumerateAll, paired, "content enumeration" );
     }
 
-    @Test public void testSpecialValues() throws com.sun.star.uno.Exception
+    @Test public void testSpecialValues() throws cpo.uno.Exception
     {
         final Double[] keys = new Double[] { Double.valueOf( 0 ), Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY };
         final Double[] values = new Double[] { Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.valueOf( 0 ) };
@@ -505,7 +505,7 @@ public class Map
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

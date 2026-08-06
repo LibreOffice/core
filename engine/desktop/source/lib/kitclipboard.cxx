@@ -230,12 +230,12 @@ void KitClipboard::flushContents()
             {
                 xTrans->getTransferData(rFlavor);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -324,7 +324,7 @@ void KitClipboard::setContents(
             aMimeTypes.push_back(aMime);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return;
     }

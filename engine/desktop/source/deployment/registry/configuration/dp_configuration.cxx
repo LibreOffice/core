@@ -166,7 +166,7 @@ void BackendImpl::disposing()
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const cpo::uno::Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             u"caught unexpected exception while disposing..."_ustr,
@@ -225,7 +225,7 @@ BackendImpl::BackendImpl(
             {
                 pMap.reset( new PersistentMap( aCompatURL ) );
             }
-            catch (const Exception &e)
+            catch (const cpo::uno::Exception &e)
             {
                 OUString aStr = "Exception loading legacy package database: '" +
                     e.Message +

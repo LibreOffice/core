@@ -88,7 +88,7 @@ using namespace ::svxform;
 using namespace ::dbtools;
 
     using namespace ::com::sun::star;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::uno::XInterface;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -171,7 +171,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( css::uno::Reference<css::u
                 setController( xForm, nullptr );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -204,7 +204,7 @@ void FormViewPageWindowAdapter::dispose()
             // dispose the formcontroller
             xController->dispose();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -375,7 +375,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
             setController( _rxForm, xParentController );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -495,7 +495,7 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt)
                 pAdapter->updateTabOrder( xForm );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -804,7 +804,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
             return true;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -861,7 +861,7 @@ namespace
                 pFormObject->GetUnoControl( _rView, *_rWindow.GetOutDev() );
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -955,7 +955,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
             m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< vcl::Window* >( pCurrentWindow ) );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -1027,7 +1027,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
     {
         OSL_VERIFY( m_xLastCreatedControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -1061,7 +1061,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
             const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
             xWizard.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii(pWizardAsciiName), aWizardArgs.getWrappedPropertyValues(), xContext ), UNO_QUERY);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -1077,7 +1077,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
             {
                 xWizard->execute();
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("svx");
             }
@@ -1168,7 +1168,7 @@ rtl::Reference<SdrObject> FmXFormView::implCreateFieldControl( const svx::ODataA
     {
         aError.Reason = ::cppu::getCaughtException();
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         /* will be asserted below */
     }
@@ -1331,7 +1331,7 @@ rtl::Reference<SdrObject> FmXFormView::implCreateFieldControl( const svx::ODataA
 
         return pGroup; // and done
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -1460,7 +1460,7 @@ rtl::Reference<SdrObject> FmXFormView::implCreateXFormsControl( const svx::OXFor
             return rtl::Reference<SdrObject>(pControl);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx.form", "caught an exception while creating the control !");
     }
@@ -1663,7 +1663,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         {
             xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, Any( xLabelModel ) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }

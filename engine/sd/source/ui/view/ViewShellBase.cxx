@@ -1338,7 +1338,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sd.view");
     }

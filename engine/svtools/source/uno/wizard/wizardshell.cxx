@@ -33,7 +33,7 @@ namespace svt::uno
 
 
     using css::uno::Reference;
-    using css::uno::Exception;
+    using cpo::uno::Exception;
     using cpo::uno::Sequence;
     using css::ui::dialogs::XWizardController;
     using css::ui::dialogs::XWizardPage;

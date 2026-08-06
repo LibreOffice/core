@@ -220,7 +220,7 @@ IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, void*, p, void )
        // elements if a component gets detached from its frame!
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
-   catch ( const Exception& )
+   catch ( const cpo::uno::Exception& )
    {
    }
 
@@ -242,7 +242,7 @@ IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, void*, p, void )
        aEvent.aInformation = pNotifyInfo->aInfoSeq;
        pNotifyInfo->xNotifyListener->controlEvent( aEvent );
    }
-   catch ( const Exception& )
+   catch ( const cpo::uno::Exception& )
    {
    }
 

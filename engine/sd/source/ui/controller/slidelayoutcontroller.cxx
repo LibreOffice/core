@@ -178,7 +178,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
         Reference< XPropertySet > xControllerSet( m_xFrame->getController(), UNO_QUERY_THROW );
         xControllerSet->getPropertyValue( u"DrawViewMode"_ustr ) >>= eMode;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_ASSERT(false);
     }

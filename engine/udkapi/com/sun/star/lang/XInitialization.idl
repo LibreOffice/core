@@ -44,7 +44,7 @@ published interface XInitialization: com::sun::star::uno::XInterface
         <p>It should be called directly after the object is created.
      */
     void initialize( [in] sequence<any> aArguments )
-            raises( com::sun::star::uno::Exception );
+            raises( cpo::uno::Exception );
 
 };
 

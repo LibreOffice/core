@@ -235,7 +235,7 @@ public:
                 }
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
 
         if ( bReadOnly && !m_bReadOnlySupported )
@@ -251,7 +251,7 @@ public:
                 if ( m_bReadOnlySupported )
                     m_xDocumentSettings->setPropertyValue( u"LoadReadonly"_ustr, cpo::uno::Any( m_bPreserveReadOnly ) );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sfx.doc", "" );
             }
@@ -454,7 +454,7 @@ void ModelData_Impl::CheckInteractionHandler()
             m_aMediaDescrHM[ sInteractionHandler ]
                 <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr);
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -648,7 +648,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
     {
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "ignoring");
     }
@@ -1306,7 +1306,7 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -1352,7 +1352,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
         try {
             uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
             aRecommendedName = xTitle->getTitle();
-        } catch( const uno::Exception& ) {}
+        } catch( const cpo::uno::Exception& ) {}
     }
 
     if ( !aRecommendedName.isEmpty() && !aTypeName.isEmpty() )
@@ -1840,7 +1840,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             if ( nStoreMode & EXPORT_REQUESTED )
             {
@@ -1874,7 +1874,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
 #ifdef IOS
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // When using the iOS app (and maybe the Android app), the app
             // will remain blocked if we rethrow an exception.
@@ -1940,7 +1940,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
                     bUseFilterOptions = true;
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -1990,7 +1990,7 @@ void SfxStoringHelper::SetDocInfoState(
                     // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
                     xSet->setPropertyValue( rProp.Name, aValue );
                 }
-                catch ( const uno::Exception& ) {}
+                catch ( const cpo::uno::Exception& ) {}
             }
         }
 
@@ -2014,7 +2014,7 @@ void SfxStoringHelper::SetDocInfoState(
         xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
         // other attributes e.g. DocumentStatistics are not editable from dialog
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("sfx.doc", "SetDocInfoState");
     }
@@ -2087,7 +2087,7 @@ uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Refere
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -2102,7 +2102,7 @@ weld::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XMo
     {
         pWin = Application::GetFrameWeld(GetModelXWindow(xModel));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

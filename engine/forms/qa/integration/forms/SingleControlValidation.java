@@ -64,7 +64,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         {
             m_inputLabel.setPropertyValue( "Label", text );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
         }
@@ -161,7 +161,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
                 m_explanationField.setPropertyValue( "Label", validityMessage );
             }
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
         }

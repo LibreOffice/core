@@ -359,7 +359,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("xmloff.draw", "");
         }
@@ -419,7 +419,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
@@ -612,7 +612,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
         xSet->setPropertyValue(u"NavigationOrder"_ustr, Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw",
                              "unexpected exception caught while importing shape navigation order!");

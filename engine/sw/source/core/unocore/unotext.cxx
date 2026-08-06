@@ -1236,7 +1236,7 @@ SwXText::finishOrAppendParagraph(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    catch (const uno::Exception& rEx)
+    catch (const cpo::uno::Exception& rEx)
     {
         sMessage = rEx.Message;
         bRuntimeException = true;
@@ -1406,7 +1406,7 @@ SwXText::insertTextContentWithProperties(
                 }
             }
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
@@ -2159,7 +2159,7 @@ lcl_ApplyCellProperties(
                     xCell->setPropertyValue(rName, rValue);
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when setting cell property " << rName );
             }
@@ -2321,7 +2321,7 @@ SwXText::convertToSwTable(
                     xRet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when setting property: " << rTableProperty.Name  );
             }

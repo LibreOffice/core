@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module xml {  module sax {
         <li>DTD = document type definition </li>
     </ul>
  */
-published exception SAXException: com::sun::star::uno::Exception
+published exception SAXException: cpo::uno::Exception
 {
 
     /** This field may contain a  wrapped exception.

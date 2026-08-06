@@ -202,7 +202,7 @@ void SAL_CALL StatusbarController::dispose()
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -375,7 +375,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
                         if ( xOldDispatch.is() )
                             xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -391,7 +391,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
         if ( xDispatch.is() )
             xDispatch->addStatusListener( xStatusListener, aTargetURL );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -428,7 +428,7 @@ void StatusbarController::bindListener()
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -441,7 +441,7 @@ void StatusbarController::bindListener()
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
-                catch ( Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
                 listener.second = xDispatch;

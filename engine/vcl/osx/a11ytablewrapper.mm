@@ -98,7 +98,7 @@ using namespace ::com::sun::star::uno;
             }
             pResult = NSAccessibilityUnignoredChildren( cells );
         }
-        catch (const Exception &) 
+        catch (const cpo::uno::Exception &)
         {
         }
         [cells autorelease];
@@ -154,7 +154,7 @@ using namespace ::com::sun::star::uno;
                 }
                 pResult = NSAccessibilityUnignoredChildren( cells );
             }
-            catch (const Exception &) 
+            catch (const cpo::uno::Exception &)
             {
                 pResult = nil;
             }
@@ -196,7 +196,7 @@ using namespace ::com::sun::star::uno;
                 }
                 pResult = NSAccessibilityUnignoredChildren( cells );
             }
-            catch (const Exception &) 
+            catch (const cpo::uno::Exception &)
             {
                 pResult = nil;
             }

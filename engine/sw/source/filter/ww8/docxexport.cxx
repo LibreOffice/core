@@ -559,7 +559,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     {
         comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("sw.ww8", "DocxExport::WriteOLEObject");
         return OString();
@@ -2118,7 +2118,7 @@ void DocxExport::WriteEmbeddings()
                 xSeekable->seek(0); // tdf#131288: a previous save could position it elsewhere
             comphelper::OStorageHelper::CopyInputToOutput(embeddingsStream, xOutStream);
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught");
         }

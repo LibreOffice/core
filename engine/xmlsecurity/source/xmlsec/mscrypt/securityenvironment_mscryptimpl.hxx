@@ -32,7 +32,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -123,46 +123,46 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         HCRYPTPROV getCryptoProvider() ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void setCryptoProvider( HCRYPTPROV aProv ) ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         LPCTSTR getKeyContainer() ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void setKeyContainer( LPCTSTR aKeyContainer ) ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         HCERTSTORE getCryptoSlot() ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void setCryptoSlot( HCERTSTORE aKeyStore ) ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         HCERTSTORE getCertDb() ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void setCertDb( HCERTSTORE aCertDb ) ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void enableDefaultCrypt( bool enable ) ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         bool defaultEnabled() ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         xmlSecKeysMngrPtr createKeysManager() ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) ;
 } ;

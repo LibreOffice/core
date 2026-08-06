@@ -169,7 +169,7 @@ void Table::finalizeImport()
         xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, cpo::uno::Any(maStyleInfo.mbShowFirstColumn));
         xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, cpo::uno::Any(maStyleInfo.mbShowLastColumn));
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Table::finalizeImport - cannot create database range" );
     }
@@ -188,7 +188,7 @@ void Table::applyAutoFilters()
         Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
         maAutoFilters.finalizeImport( xDatabaseRange, maModel.maRange.aStart.Tab() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Table::applyAutofilters - cannot create filter" );
     }

@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 /** the base of all UNO exceptions
 
@@ -43,6 +43,6 @@ published exception Exception
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

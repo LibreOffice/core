@@ -268,7 +268,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
             uno::Reference<css::frame::XTitleChangeListener> i = pIt.next();
             i->titleChanged( aEvent );
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             aLock.lock();
             pIt.remove(aLock);
@@ -579,7 +579,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
             sTitle.append      (sUIName);
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {}
 }
 

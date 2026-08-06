@@ -962,7 +962,7 @@ namespace
                 // get result
                 rResult = (pWebDAVResponseParser.get()->*fn)();
             }
-            catch(uno::Exception&)
+            catch(cpo::uno::Exception&)
             {
                 SAL_WARN("ucb.ucp.webdav", "WebDAV Parse error (!)");
             }

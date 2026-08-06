@@ -419,14 +419,14 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
                     m_aLockedFrames.realloc( nLen + 1 );
                     m_aLockedFrames.getArray()[nLen] = xFrame;
                 }
-                catch( Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     pWindow->Enable();
                     throw;
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Not possible to lock the frame window!" );
         }
@@ -451,7 +451,7 @@ SfxOwnFramesLocker::~SfxOwnFramesLocker()
                 rFrame.clear();
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Can't unlock the frame window!" );
         }
@@ -1829,7 +1829,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
         else
             impl_store(rURL, rArgs, true);
     }
-    catch (const uno::Exception &e)
+    catch (const cpo::uno::Exception &e)
     {
         // convert to the exception we announce in the throw
         // (eg. neon likes to throw InteractiveAugmentedIOException which
@@ -2127,7 +2127,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 if( aSeq.hasElements() )
                     aAny <<= aSeq;
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -2640,7 +2640,7 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
         aContent.executeCommand( u"updateProperties"_ustr, cpo::uno::Any( aProperties ) );
         loadCmisProperties( );
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
@@ -2674,7 +2674,7 @@ void SAL_CALL SfxBaseModel::checkOut(  )
         // Reload the CMIS properties
         loadCmisProperties( );
     }
-    catch ( const Exception & e )
+    catch ( const cpo::uno::Exception & e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
@@ -2700,7 +2700,7 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  )
 
         m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
     }
-    catch ( const Exception & e )
+    catch ( const cpo::uno::Exception & e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
@@ -2740,7 +2740,7 @@ void SAL_CALL SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
             loadCmisProperties( );
         }
     }
-    catch ( const Exception & e )
+    catch ( const cpo::uno::Exception & e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
@@ -2765,7 +2765,7 @@ cpo::uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersion
             Any aResult = aContent.executeCommand( u"getAllVersions"_ustr, Any( ) );
             aResult >>= aVersions;
         }
-        catch ( const Exception & e )
+        catch ( const cpo::uno::Exception & e )
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException( e.Message,
@@ -2794,7 +2794,7 @@ bool SfxBaseModel::getBoolPropertyValue( const OUString& rName )
                     aContent.getPropertyValue( rName ) >>= bValue;
                 }
             }
-            catch ( const Exception & )
+            catch ( const cpo::uno::Exception & )
             {
                 // Simply ignore it: it's likely the document isn't versionable in that case
                 bValue = false;
@@ -3553,7 +3553,7 @@ Reference< embed::XStorage > SAL_CALL SfxBaseModel::getDocumentSubStorage( const
             {
                 xResult = xStorage->openStorageElement( aStorageName, nMode );
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }

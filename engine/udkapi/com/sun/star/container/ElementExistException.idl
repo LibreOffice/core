@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module container {
     @see     XNameContainer
     @see     XNameContainer::insertByName
  */
-published exception ElementExistException: com::sun::star::uno::Exception
+published exception ElementExistException: cpo::uno::Exception
 {
 };
 

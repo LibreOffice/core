@@ -145,7 +145,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
             xDocProps->getGenerator(), rImport.getImportInfo());
     } catch (const uno::RuntimeException&) {
         throw;
-    } catch (const uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"SvXMLMetaDocumentContext::initDocumentProperties: "
@@ -173,7 +173,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());
     } catch (const uno::RuntimeException&) {
         throw;
-    } catch (const uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"SvXMLMetaDocumentContext::initGenerator: exception"_ustr,
@@ -312,7 +312,7 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
                 xImportInfo->setPropertyValue( aPropName, cpo::uno::Any( sBuildId ) );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

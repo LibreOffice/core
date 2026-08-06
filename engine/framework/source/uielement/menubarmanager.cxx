@@ -165,7 +165,7 @@ void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
             m_xDocImageManager->removeConfigurationListener(
                 Reference< XUIConfigurationListener >(this) );
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -176,7 +176,7 @@ void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
             m_xModuleImageManager->removeConfigurationListener(
                 Reference< XUIConfigurationListener >(this) );
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -429,7 +429,7 @@ void MenuBarManager::RemoveListener()
             {
                 throw;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
 
@@ -447,7 +447,7 @@ void MenuBarManager::RemoveListener()
         if ( m_xFrame.is() )
             m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(this) );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -645,7 +645,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                     {
                         xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
                     }
-                    catch (uno::Exception const&)
+                    catch (cpo::uno::Exception const&)
                     {
                         TOOLS_WARN_EXCEPTION("fwk.uielement", "MenuBarManager::Activate(): exception from queryDispatch()");
                     }
@@ -720,7 +720,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                     menuItemHandler->xMenuItemDispatch->removeStatusListener(
                                                             static_cast< XStatusListener* >( this ), aTargetURL );
                 }
-                catch ( const Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                 }
             }
@@ -1175,7 +1175,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
             {
                 throw;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }

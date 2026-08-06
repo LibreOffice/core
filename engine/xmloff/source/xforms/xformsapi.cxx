@@ -52,7 +52,7 @@ using com::sun::star::xforms::Model;
 using com::sun::star::xforms::XModel2;
 using com::sun::star::container::XNameContainer;
 using cpo::uno::Any;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 
 using namespace com::sun::star;
 using namespace xmloff::token;

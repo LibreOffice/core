@@ -468,7 +468,7 @@ JNI_info::JNI_info(
             css::uno::TypeDescription(
                 cppu::UnoType<css::uno::XInterface>::get())
             .get())->ppMembers[ 0 ] ) ),
-      m_Exception_type(cppu::UnoType<css::uno::Exception>::get()),
+      m_Exception_type(cppu::UnoType<cpo::uno::Exception>::get()),
       m_RuntimeException_type(cppu::UnoType<css::uno::RuntimeException>::get()),
       m_void_type(cppu::UnoType<void>::get()),
       m_XInterface_type_info( nullptr )

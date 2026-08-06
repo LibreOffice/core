@@ -1097,7 +1097,7 @@ void PPTWriter::ImplExportComments( const uno::Reference< drawing::XDrawPage >& 
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }

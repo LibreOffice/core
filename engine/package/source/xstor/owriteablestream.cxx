@@ -136,7 +136,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     try {
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, cpo::uno::Any( aKey ) );
     }
-    catch ( const uno::Exception& ex )
+    catch ( const cpo::uno::Exception& ex )
     {
         TOOLS_WARN_EXCEPTION( "package.xstor", "Can't write encryption related properties");
         throw io::IOException(ex.Message); // TODO
@@ -152,7 +152,7 @@ cpo::uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPrope
     try {
         return xPropertySet->getPropertyValue(STORAGE_ENCRYPTION_KEYS_PROPERTY);
     }
-    catch ( const uno::Exception& ex )
+    catch ( const cpo::uno::Exception& ex )
     {
         TOOLS_WARN_EXCEPTION( "package.xstor", "Can't get encryption related properties");
         throw io::IOException(ex.Message); // TODO
@@ -275,7 +275,7 @@ void OWriteStream_Impl::CleanCacheStream()
         if ( xInputCache.is() )
             xInputCache->closeInput();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     try
@@ -284,7 +284,7 @@ void OWriteStream_Impl::CleanCacheStream()
         if ( xOutputCache.is() )
             xOutputCache->closeOutput();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     m_xCacheStream.clear();
@@ -469,7 +469,7 @@ void OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputS
             m_oTempFile.reset();
             throw;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             m_oTempFile.reset();
@@ -532,7 +532,7 @@ void OWriteStream_Impl::FillTempGetFileName()
                     m_oTempFile.reset();
                     throw;
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     m_oTempFile.reset();
                 }
@@ -559,7 +559,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
                 pStream->Seek(0);
                 xTempStream = new utl::OStreamWrapper(pStream, /*bOwner*/false);
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
             }
@@ -596,7 +596,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
                 pStream->Seek(0);
                 xInputStream = new utl::OStreamWrapper(pStream, /*bOwner*/false);
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
             }
@@ -734,7 +734,7 @@ void OWriteStream_Impl::Commit()
         {
             xInStream = new OSelfTerminateFileStream(m_xContext, std::move(*m_oTempFile));
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("package", "");
         }
@@ -921,7 +921,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             m_xOrigRelInfoStream.clear();
             m_nRelInfoStatus = RELINFO_READ;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
 
@@ -942,7 +942,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             m_nRelInfoStatus = RELINFO_CHANGED_BROKEN;
         }
@@ -989,7 +989,7 @@ cpo::uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamP
         try {
             rProp.Value = xPropSet->getPropertyValue( rProp.Name );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "package.xstor", "A property can't be retrieved" );
         }
@@ -1100,7 +1100,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             throw;
         }
-        catch ( const uno::Exception& ex )
+        catch ( const cpo::uno::Exception& ex )
         {
             TOOLS_WARN_EXCEPTION("package.xstor", "GetStream: decrypting stream failed");
             SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
@@ -1397,7 +1397,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
                 SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "package.xstor", "Can't open encrypted stream");
             SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
@@ -1619,12 +1619,12 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     sal_Int64 nCurPos = m_xSeekable->getPosition();
     m_xSeekable->seek( 0 );
 
-    uno::Exception eThrown;
+    cpo::uno::Exception eThrown;
     bool bThrown = false;
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput( m_xInStream, xDestOutStream );
     }
-    catch ( const uno::Exception& e )
+    catch ( const cpo::uno::Exception& e )
     {
         eThrown = e;
         bThrown = true;
@@ -1635,7 +1635,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     try {
         m_xSeekable->seek( nCurPos );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         // TODO: set the stream in invalid state or dispose
         TOOLS_WARN_EXCEPTION( "package.xstor", "The stream become invalid during copying" );
@@ -2212,7 +2212,7 @@ void SAL_CALL OWriteStream::dispose()
                     m_pImpl->Revert();
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 cpo::uno::Any aCaught( ::cppu::getCaughtException() );
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2323,7 +2323,7 @@ bool SAL_CALL OWriteStream::hasEncryptionData()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -2955,7 +2955,7 @@ void SAL_CALL OWriteStream::commit()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
@@ -3011,7 +3011,7 @@ void SAL_CALL OWriteStream::revert()
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));

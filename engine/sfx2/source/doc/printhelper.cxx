@@ -522,7 +522,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             css::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch (const css::uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "sfx.doc", "");
             }

@@ -25,7 +25,7 @@ import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XPreparedStatement;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.XTablesSupplier;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
 

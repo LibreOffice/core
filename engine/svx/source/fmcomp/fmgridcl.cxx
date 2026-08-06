@@ -493,7 +493,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 aStrResId.insert(aStrResId.begin(), RID_STR_PROPTITLE_CURRENCYFIELD);
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("svx", "");
         }

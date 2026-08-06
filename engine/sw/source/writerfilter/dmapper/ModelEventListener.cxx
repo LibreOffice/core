@@ -84,7 +84,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
             if (nIndex)
                 pTextFields->refresh();
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter", "exception while updating indexes");
         }
@@ -109,7 +109,7 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent )
         if (xBroadcaster)
             xBroadcaster->removeEventListener(uno::Reference<document::XEventListener>(this));
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }

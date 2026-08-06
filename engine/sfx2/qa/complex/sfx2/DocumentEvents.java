@@ -38,7 +38,7 @@ public class DocumentEvents
 
 
     @AfterClass
-    public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
+    public static void tearDownConnection() throws InterruptedException, cpo.uno.Exception
     {
         m_connection.tearDown();
     }

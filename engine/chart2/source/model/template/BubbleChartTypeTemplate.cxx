@@ -132,7 +132,7 @@ rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries2(
 
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

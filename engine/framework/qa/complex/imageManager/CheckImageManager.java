@@ -71,7 +71,7 @@ public class CheckImageManager  {
             xManager = xMUICMS.getUIConfigurationManager(
                     "com.sun.star.text.TextDocument");
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             fail("Exception. " + e.getMessage());
         }
         XImageManager xImageManager = UnoRuntime.queryInterface(XImageManager.class, xManager.getImageManager());
@@ -84,7 +84,7 @@ public class CheckImageManager  {
         try {
             xManager = UnoRuntime.queryInterface(XUIConfigurationManager.class, xMSF.createInstance("com.sun.star.comp.framework.UIConfigurationManager"));
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             fail("Exception. " + e.getMessage());
         }
 
@@ -191,7 +191,7 @@ public class CheckImageManager  {
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

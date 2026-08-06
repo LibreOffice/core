@@ -71,7 +71,7 @@ public:
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
-        throw( css::uno::Exception,
+        throw( cpo::uno::Exception,
                css::uno::RuntimeException );
 
     // XDiagram

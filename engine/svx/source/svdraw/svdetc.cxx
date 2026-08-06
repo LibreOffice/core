@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
                     nIndex = nCount2 - 1;
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 }

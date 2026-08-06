@@ -323,7 +323,7 @@ Diagram::~Diagram()
         ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -572,7 +572,7 @@ void Diagram::setDefaultIllumination()
         setFastPropertyValue( PROP_SCENE_LIGHT_ON_7, cpo::uno::Any( false ) );
         setFastPropertyValue( PROP_SCENE_LIGHT_ON_8, cpo::uno::Any( false ) );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -948,7 +948,7 @@ sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1181,7 +1181,7 @@ std::vector< rtl::Reference< ChartType > > Diagram::getChartTypes()
             aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1248,7 +1248,7 @@ static std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDia
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -1287,13 +1287,13 @@ uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
             {
                 xProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( u"categories"_ustr ) );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1350,7 +1350,7 @@ bool Diagram::isCategory()
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1390,7 +1390,7 @@ std::vector< rtl::Reference< ::chart::DataSeries > >
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1452,7 +1452,7 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
             xDataSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, cpo::uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1491,7 +1491,7 @@ void Diagram::replaceCoordinateSystem(
         if( xCategories.is() )
             setCategories( xCategories );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1513,7 +1513,7 @@ sal_Int32 Diagram::getDimension()
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1564,7 +1564,7 @@ void Diagram::setDimension( sal_Int32 nNewDimensionCount )
         else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
             setStackMode( StackMode::NONE );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1628,7 +1628,7 @@ void Diagram::setStackMode( StackMode eStackMode )
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1719,7 +1719,7 @@ void Diagram::setVertical( bool bVertical /* = true */ )
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1779,7 +1779,7 @@ Diagram::tTemplateWithServiceName
                 bTemplateFound = true;
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -1818,7 +1818,7 @@ double Diagram::getCameraDistance()
 
         ThreeDHelper::ensureCameraDistanceRange( fCameraDistance );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1842,7 +1842,7 @@ void Diagram::setCameraDistance(double fCameraDistance )
 
         setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, cpo::uno::Any( aCG ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2064,7 +2064,7 @@ void Diagram::setRotationAngle(
             lcl_rotateLights( aNewRotation*aInverseOldRotation, *this );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2178,7 +2178,7 @@ ThreeDLookScheme Diagram::detectScheme()
     {
         getFastPropertyValue( PROP_SCENE_SHADE_MODE )>>= aShadeMode; // "D3DSceneShadeMode"
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2244,7 +2244,7 @@ void Diagram::setScheme( ThreeDLookScheme aScheme )
 
         lcl_setLightsForScheme( *this, aScheme );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2286,7 +2286,7 @@ void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

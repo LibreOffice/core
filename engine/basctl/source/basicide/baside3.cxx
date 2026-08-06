@@ -702,7 +702,7 @@ void DialogWindow::SaveDialog()
                         {
                             xSFI->kill( rCompleteName );
                         }
-                        catch(const uno::Exception& )
+                        catch(const cpo::uno::Exception& )
                         {}
                     }
                 }
@@ -1127,7 +1127,7 @@ void DialogWindow::StoreData()
             }
         }
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("basctl.basicide");
     }

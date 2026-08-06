@@ -33,9 +33,9 @@ struct Struct3a<T, U> { U s2; };
 
 struct Struct4: Struct2 { Struct3< Struct2, Struct3< boolean, any > > s2; };
 
-published exception Exception1: com::sun::star::uno::Exception {};
+published exception Exception1: cpo::uno::Exception {};
 
-exception Exception2: com::sun::star::uno::Exception {};
+exception Exception2: cpo::uno::Exception {};
 
 published interface XBase {};
 
@@ -57,7 +57,7 @@ published interface XTest1 {
             (com::sun::star::lang::WrappedTargetException,
              com::sun::star::uno::RuntimeException);
         set raises
-            (com::sun::star::uno::Exception,
+            (cpo::uno::Exception,
              com::sun::star::lang::WrappedTargetException);
     };
 

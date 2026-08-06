@@ -202,7 +202,7 @@ class TestCase( unittest.TestCase):
                                            "constant retrieval test" )
 
       def testExceptions( self ):
-          unoExc = uno.getClass( "com.sun.star.uno.Exception" )
+          unoExc = uno.getClass( "cpo.uno.Exception" )
           ioExc = uno.getClass( "com.sun.star.io.IOException" )
           dispExc = uno.getClass( "com.sun.star.lang.DisposedException" )
           wasHere = 0
@@ -328,7 +328,7 @@ class TestCase( unittest.TestCase):
 
           tcInterface =uno.Enum( "cpo.uno.TypeClass" , "INTERFACE" )
           self.assertRaises( RuntimeException, uno.Type, "a", tcInterface )
-          self.assertRaises( RuntimeException, uno.Type, "com.sun.star.uno.Exception", tcInterface )
+          self.assertRaises( RuntimeException, uno.Type, "cpo.uno.Exception", tcInterface )
 
           self.assertRaises( (RuntimeException,exceptions.RuntimeError), uno.getTypeByName, "a" )
 

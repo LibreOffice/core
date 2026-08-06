@@ -15,7 +15,7 @@
 
 #include <alloca.h>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/unotype.hxx>
@@ -203,7 +203,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         {
             callVirtualFunction(sig, (*thisPtr)[slot.index], args.data(), ret);
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             throw;
         }
@@ -218,7 +218,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             throw css::uno::RuntimeException("C++ code threw unknown exception");
         }
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         __cxxabiv1::__cxa_exception* header
             = reinterpret_cast<__cxxabiv1::__cxa_eh_globals*>(__cxxabiv1::__cxa_get_globals())

@@ -23,7 +23,7 @@
 #include <malloc.h>
 #include <typeinfo>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <o3tl/runtimetooustring.hxx>
@@ -412,7 +412,7 @@ static void cpp_call(
                 pReturnTypeDescr->eTypeClass,
                 (sal_Int32 *)pCppStackStart,
                  nStackLongs);
-        } catch (css::uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             throw;
         } catch (std::exception & e) {
             throw css::uno::RuntimeException(

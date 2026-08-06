@@ -37,7 +37,7 @@ namespace logging
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::logging::XLogFormatter;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::logging::PlainTextFormatter;

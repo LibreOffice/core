@@ -86,7 +86,7 @@ rtl::Reference< ::chart::Diagram > Chart2ModelContact::getDiagram() const
         if( xChartModel)
             return xChartModel->getFirstChartDiagram();
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -171,7 +171,7 @@ void SwView::ImpSetVerb( SelectionType nSelType )
                 {
                     newVerbs = GetWrtShell().GetOLEObject()->getSupportedVerbs();
                 }
-                catch (css::uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("sw.ui", "Failed to retrieve supported verbs");
                 }
@@ -252,7 +252,7 @@ uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rView
         {
             xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
         }
-        catch (const Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             SAL_WARN("sw.ui", "Failure getting layout manager: " + e.Message);
         }

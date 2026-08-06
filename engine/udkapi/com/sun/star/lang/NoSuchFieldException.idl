@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module lang {
 
 /** signals that the class does not have a field of a specified name.
  */
-published exception NoSuchFieldException: com::sun::star::uno::Exception
+published exception NoSuchFieldException: cpo::uno::Exception
 {
 };
 

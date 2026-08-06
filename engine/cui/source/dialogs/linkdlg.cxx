@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
                 SetManager( pNewMgr );
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("cui.dialogs", "SvBaseLinksDlg");
         }

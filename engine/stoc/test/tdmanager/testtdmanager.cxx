@@ -31,7 +31,7 @@
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -67,7 +67,7 @@ public:
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context)
-        throw (css::uno::Exception);
+        throw (cpo::uno::Exception);
 
 private:
     explicit Service(
@@ -273,7 +273,7 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    throw (css::uno::Exception)
+    throw (cpo::uno::Exception)
 {
     return cppu::getXWeak(new Service(context));
 }

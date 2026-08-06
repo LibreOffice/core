@@ -105,7 +105,7 @@ void lcl_addErrorBarRanges(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -324,7 +324,7 @@ bool DataSourceHelper::detectRangeSegmentation(
             xCategories = xDiagram->getCategories();
         rOutHasCategories = xCategories.is();
     }
-    catch( uno::Exception & )
+    catch( cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -367,7 +367,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

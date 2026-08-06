@@ -159,7 +159,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 
         mpLastDragOverEvent.reset();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -173,7 +173,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
     {
         mrParent.ImplBeginDrag( rDTDEE.SupportedDataFlavors );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -197,7 +197,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
         else
             rDTDE.Context->acceptDrag( nRet );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -218,7 +218,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 
         mrParent.ImplEndDrag();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }

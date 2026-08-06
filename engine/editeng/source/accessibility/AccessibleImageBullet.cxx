@@ -264,7 +264,7 @@ void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
         aOldDesc <<= getAccessibleDescription();
         aOldName <<= getAccessibleName();
     }
-    catch( const uno::Exception& ) {} // optional behaviour
+    catch( const cpo::uno::Exception& ) {} // optional behaviour
 
     sal_Int32 nOldIndex = mnParagraphIndex;
 
@@ -279,7 +279,7 @@ void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
             NotifyAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, cpo::uno::Any(getAccessibleName()));
         }
     }
-    catch( const uno::Exception& ) {} // optional behaviour
+    catch( const cpo::uno::Exception& ) {} // optional behaviour
 }
 
 

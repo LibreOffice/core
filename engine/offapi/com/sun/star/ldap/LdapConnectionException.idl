@@ -23,7 +23,7 @@ module com { module sun { module star { module ldap {
   Indicates failure to connect to an LDAP server, usually because
   of wrong parameters (host/port) or down server.
   */
-published exception LdapConnectionException : ::com::sun::star::uno::Exception
+published exception LdapConnectionException : ::cpo::uno::Exception
 {
 } ;
 

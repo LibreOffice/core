@@ -236,7 +236,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
                 new Type(XDynamicResultSet.class),comProc.execute(command, 0, null));
         } catch(com.sun.star.ucb.CommandAbortedException e) {
             log.println("Couldn't execute command:" + e);
-        } catch(com.sun.star.uno.Exception e) {
+        } catch(cpo.uno.Exception e) {
             log.println("Couldn't execute command:" + e);
         }
 

@@ -91,7 +91,7 @@ void SfxStatusListener::ReBind()
             if ( m_xDispatch.is() )
                 m_xDispatch->addStatusListener( aStatusListener, m_aCommand );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -107,7 +107,7 @@ void SAL_CALL SfxStatusListener::dispose()
             Reference< XStatusListener > aStatusListener(this);
             m_xDispatch->removeStatusListener( aStatusListener, m_aCommand );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }

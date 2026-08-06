@@ -145,7 +145,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
 
         m_bHideLegendEntry = !xDataSeries->getPropertyValue(u"ShowLegendEntry"_ustr).get<bool>();
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -315,7 +315,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             bChanged = true;
                         }
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION("chart2", "" );
                     }

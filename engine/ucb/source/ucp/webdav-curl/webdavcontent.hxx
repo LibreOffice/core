@@ -110,15 +110,15 @@ private:
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     bool isFolder( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     cpo::uno::Sequence< cpo::uno::Any >
     setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
@@ -133,54 +133,54 @@ private:
     OUString
     getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     ResourceType
     getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     ResourceType
     getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                      const std::unique_ptr< DAVResourceAccess > & rResAccess,
                      bool * networkAccessAllowed = nullptr );
 
     // Command "open"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     cpo::uno::Any open(
                 const css::ucb::OpenCommandArgument3 & rArg,
                 const css::uno::Reference<
                     css::ucb::XCommandEnvironment > & xEnv );
 
     // Command "post"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void post( const css::ucb::PostCommandArgument2 & rArg,
                const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     // Command "insert"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
                  bool bReplaceExisting,
                  const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     // Command "transfer"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void transfer( const css::ucb::TransferInfo & rArgs,
                    const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     // Command "delete"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void destroy( bool bDeletePhysical );
 
     // Command "lock"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void lock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     // Command "unlock"
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void unlock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     cpo::uno::Any MapDAVException( const DAVException & e,
                                                 bool bWrite );
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void cancelCommandExecution(
                     const DAVException & e,
                     const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
@@ -286,7 +286,7 @@ public:
                        const OUString& rContentId );
 
     /// Use OPTIONS method to retrieve the type of the Web resource
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                              DAVOptions& rDAVOptions,
                              const std::unique_ptr< DAVResourceAccess > & rResAccess,

@@ -835,7 +835,7 @@ public:
 
             Application::Execute();
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("vcl.app", "Fatal");
             return 1;
@@ -861,7 +861,7 @@ protected:
 
             comphelper::setProcessServiceFactory(xMSF);
         }
-        catch (const uno::Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             Application::Abort("Bootstrap exception " + e.Message);
         }

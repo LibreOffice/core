@@ -1503,7 +1503,7 @@ bool Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
             // First veto will stop the query loop.
             return false;
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // Clean up container.
             // E.g. dead remote listener objects can make trouble otherwise.
@@ -1530,7 +1530,7 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
                 continue;
             xListenerGeneration2->cancelTermination( aEvent );
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 }
@@ -1563,7 +1563,7 @@ void Desktop::impl_sendTerminateToClipboard()
             // don't notify twice
             aIterator.remove();
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // Clean up container.
             // E.g. dead remote listener objects can make trouble otherwise.
@@ -1590,7 +1590,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
         {
             static_cast< css::frame::XTerminateListener* >(aIterator.next())->notifyTermination( aEvent );
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // Clean up container.
             // E.g. dead remote listener objects can make trouble otherwise.

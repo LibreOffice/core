@@ -78,7 +78,7 @@ public class _XInvocationAdapterFactory extends MultiMethodTest {
             xInv = UnoRuntime.queryInterface
                 (XInvocation.class, oInv) ;
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create invocation for object", e) ;
         }

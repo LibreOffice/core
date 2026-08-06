@@ -564,7 +564,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XSt
             {
                 mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()" );
             }
@@ -581,7 +581,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool, XSt
             xTarget->insertByName( sName, Any( xNewTableStyle ) );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()");
     }
@@ -1203,7 +1203,7 @@ void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
     {
         xStyle->dispose();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1361,7 +1361,7 @@ void SAL_CALL SdStyleSheetPool::dispose()
     {
         rEntry.second->dispose();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

@@ -163,7 +163,7 @@ public class _XPrintable extends MultiMethodTest {
             if (result) {
                 result &= fileExists ;
             }
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Error while checking file '" +
                 fileURL + "': ");
             e.printStackTrace(log);

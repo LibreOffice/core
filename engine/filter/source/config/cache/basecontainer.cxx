@@ -130,7 +130,7 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
     {
         aItem << aValue;
     }
-    catch(const css::uno::Exception& ex)
+    catch(const cpo::uno::Exception& ex)
     {
         throw css::lang::IllegalArgumentException(ex.Message, static_cast< css::container::XNameContainer* >(this), 2);
     }
@@ -180,7 +180,7 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
     {
         aItem << aValue;
     }
-    catch(const css::uno::Exception& ex)
+    catch(const cpo::uno::Exception& ex)
     {
         throw css::lang::IllegalArgumentException(ex.Message, static_cast< css::container::XNameContainer* >(this), 2);
     }
@@ -223,7 +223,7 @@ cpo::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // TODO invalid cache!? How should it be handled right?
     }
@@ -249,7 +249,7 @@ cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
         std::vector<OUString> lKeys  = pCache->getItemNames(m_eType);
         lNames = comphelper::containerToSequence(lKeys);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // invalid cache!?
         lNames.realloc(0);
@@ -275,7 +275,7 @@ bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
         FilterCache* pCache = impl_getWorkingCache(aLock);
         bHasOne = pCache->hasItem(m_eType, sItem);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // invalid cache!?
         bHasOne = false;
@@ -309,7 +309,7 @@ bool SAL_CALL BaseContainer::hasElements()
         FilterCache* pCache = impl_getWorkingCache(aLock);
         bHasSome = pCache->hasItems(m_eType);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // invalid cache?!
         bHasSome = false;
@@ -345,7 +345,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
         FilterCache* pCache = impl_getWorkingCache(aLock);
         lKeys = pCache->getMatchingItemsByProps(m_eType, std::span(lProperties));
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // invalid cache, internal failure, wrong conversion ...!?
         // doesn't matter
@@ -391,7 +391,7 @@ void SAL_CALL BaseContainer::flush()
         */
         GetTheFilterCache().takeOver(*m_pFlushCache);
     }
-    catch(const css::uno::Exception& ex)
+    catch(const cpo::uno::Exception& ex)
     {
         // Don't remove the clone. May be the outside
         // user wish to repair it now and calls flush()

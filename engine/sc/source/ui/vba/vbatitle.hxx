@@ -70,7 +70,7 @@ public:
         {
             xShapePropertySet->setPropertyValue(u"String"_ustr, cpo::uno::Any( Text ));
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
@@ -82,7 +82,7 @@ public:
         {
             xShapePropertySet->getPropertyValue(u"String"_ustr) >>= sText;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
@@ -111,7 +111,7 @@ public:
         {
             xShapePropertySet->setPropertyValue(u"TextRotation"_ustr, cpo::uno::Any(_nOrientation*100));
         }
-        catch (css::uno::Exception& )
+        catch (cpo::uno::Exception& )
         {
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
@@ -123,7 +123,7 @@ public:
         {
             xShapePropertySet->getPropertyValue(u"TextRotation"_ustr) >>= nSOOrientation;
         }
-        catch (css::uno::Exception& )
+        catch (cpo::uno::Exception& )
         {
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }

@@ -1355,7 +1355,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
         // convert common properties
         convertShapeProperties( xShape );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xShape;
@@ -1492,7 +1492,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 }
             }
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             // DocumentDigitalSignatures service not available.
             // We continue by rendering the "unsigned" shape instead.
@@ -1613,7 +1613,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
             xGroupShape.clear();
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

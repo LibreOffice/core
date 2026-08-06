@@ -75,7 +75,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         // convert and insert all VML shapes (mostly form controls)
         mpSlidePersistPtr->getDrawing()->convertAndInsert();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("oox", "SlideFragmentHandler dtor: VML shape insertion failed");
     }
@@ -266,7 +266,7 @@ void SlideFragmentHandler::finalizeImport()
                 xNamed->setName( maSlideName );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::SlideFragmentHandler::EndElement()" );
     }

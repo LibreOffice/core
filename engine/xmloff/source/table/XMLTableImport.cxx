@@ -319,7 +319,7 @@ void XMLTableImport::finishStyles()
                 const OUString sStyleName( mrImport.GetStyleDisplayName(XmlStyleFamily::TABLE_CELL, rStyle.second) );
                 xTemplate->replaceByName( sPropName, xCellFamily->getByName( sStyleName ) );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("xmloff.table", "");
             }
@@ -333,12 +333,12 @@ void XMLTableImport::finishStyles()
             }
 
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("xmloff.table", "");
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
@@ -392,7 +392,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XFas
             maColumnInfos.insert( maColumnInfos.end(), nRepeated, xInfo );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
@@ -433,7 +433,7 @@ void XMLTableImportContext::InitColumns()
 
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
@@ -522,7 +522,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_Int32 nElement, con
 
         return pCellContext;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
@@ -564,7 +564,7 @@ void XMLTableImportContext::endFastElement(sal_Int32 )
             Reference< XMergeableCellRange > xCursor( mxTable->createCursorByRange( xRange ), UNO_QUERY_THROW );
             xCursor->merge();
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("xmloff.table", "");
         }

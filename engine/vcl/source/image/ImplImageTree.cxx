@@ -30,7 +30,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -279,7 +279,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
                 }
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_INFO_EXCEPTION("vcl", "");
         }
@@ -319,7 +319,7 @@ uno::Reference<io::XInputStream> ImplImageTree::getImageXInputStream(OUString co
                 }
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             TOOLS_INFO_EXCEPTION("vcl", "");
         }
@@ -442,7 +442,7 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("vcl", "ImplImageTree::doLoadImage");
     }
@@ -710,7 +710,7 @@ bool ImplImageTree::checkPathAccess()
     {
         throw;
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("vcl", "ImplImageTree::zip file location " << rIconSet.maURL);
         return false;

@@ -27,7 +27,7 @@
 
     <p>This exception isn't specified and used anywhere</p>
  */
-published exception IntrospectionException: com::sun::star::uno::Exception
+published exception IntrospectionException: cpo::uno::Exception
 {
 };
 

@@ -22,7 +22,7 @@
 
 /** is an exception that provides information on an error during PDF export.
  */
-published exception PDFExportException: com::sun::star::uno::Exception
+published exception PDFExportException: cpo::uno::Exception
 {
     /** contains a number of errors that occurred during PDFExport
     */

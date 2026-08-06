@@ -159,7 +159,7 @@ public:
     EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
     css::uno::Reference< css::drawing::XShape > getTargetShape() const;
 

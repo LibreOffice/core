@@ -58,7 +58,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during opening or creation
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     ::com::sun::star::uno::XInterface createInstanceInitNew(
@@ -69,7 +69,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 
     /** creates a new object that should be based on specified storage entry.
@@ -105,7 +105,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during opening
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     ::com::sun::star::uno::XInterface createInstanceInitFromEntry(
@@ -116,7 +116,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** creates a new object and initializes it based on
         com::sun::star::document::MediaDescriptor.
@@ -146,7 +146,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems during opening or creation
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     ::com::sun::star::uno::XInterface createInstanceInitFromMediaDescriptor(
@@ -156,7 +156,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

@@ -110,7 +110,7 @@ void LegendPositionResources::writeToResources( const rtl::Reference<::chart::Ch
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -154,7 +154,7 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
             xProp->setPropertyValue( u"RelativePosition"_ustr , cpo::uno::Any());
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }

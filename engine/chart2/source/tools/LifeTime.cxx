@@ -228,7 +228,7 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         //no mutex is acquired
         g_close_endTryClose();
@@ -321,7 +321,7 @@ void CloseableLifeTimeManager::impl_doClose(std::unique_lock<std::mutex>& rGuard
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -412,7 +412,7 @@ LifeTimeGuard::~LifeTimeGuard()
             m_rManager.impl_unregisterApiCall(m_guard, m_bLongLastingCallRegistered);
         }
     }
-    catch( uno::Exception& ex )
+    catch( cpo::uno::Exception& ex )
     {
         //@todo ? allow a uno::RuntimeException from dispose to travel through??
         ex.Context.is(); //to avoid compilation warnings

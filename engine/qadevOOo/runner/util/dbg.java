@@ -177,7 +177,7 @@ public class dbg {
 
             if ((attr & PropertyAttribute.TRANSIENT) != 0)
                     out.println("\t-TRANSIENT");
-        } catch(com.sun.star.uno.Exception e) {
+        } catch(cpo.uno.Exception e) {
                 out.println("Exception!!!!");
             e.printStackTrace(out);
         }

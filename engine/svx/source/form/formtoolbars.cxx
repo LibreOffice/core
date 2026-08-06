@@ -64,7 +64,7 @@ namespace svxform
                 }
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "svx", "FormToolboxes::toggleToolbox" );
         }

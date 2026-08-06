@@ -27,7 +27,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -120,7 +120,7 @@ void Reader::execute() {
             }
             block.done();
         }
-    } catch (const css::uno::Exception & e) {
+    } catch (const cpo::uno::Exception & e) {
         SAL_WARN("binaryurp", "caught UNO exception '" << e << '\'');
     } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');

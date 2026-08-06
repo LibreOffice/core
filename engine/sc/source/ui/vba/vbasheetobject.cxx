@@ -359,7 +359,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     sal_Int32 nIndex = getModelIndexInForm();
 
     // first, remove a registered event (try/catch just in case implementation throws)
-    try { xEventMgr->revokeScriptEvent( nIndex, gaListenerType, gaEventMethod, OUString() ); } catch( uno::Exception& ) {}
+    try { xEventMgr->revokeScriptEvent( nIndex, gaListenerType, gaEventMethod, OUString() ); } catch( cpo::uno::Exception& ) {}
 
     // if a macro name has been passed, try to attach it to the event
     if( rMacroName.isEmpty() )

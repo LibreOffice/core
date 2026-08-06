@@ -83,7 +83,7 @@ public class ProviderBrowseNode extends PropertySet implements
             }
         }
         // TODO propagate errors
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             LogUtils.DEBUG("Caught exception in creation of ProviderBrowseNode ");
             LogUtils.DEBUG(LogUtils.getTrace(e));
         }

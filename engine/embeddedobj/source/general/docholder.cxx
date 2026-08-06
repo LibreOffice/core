@@ -168,7 +168,7 @@ DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContex
     {
         xDesktop->addTerminateListener( this );
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
     osl_atomic_decrement(&m_refCount);
@@ -191,7 +191,7 @@ DocumentHolder::~DocumentHolder()
     {
         try {
             CloseDocument( true, false );
-        } catch( const uno::Exception& ) {}
+        } catch( const cpo::uno::Exception& ) {}
     }
 
     if ( m_xInterceptor.is() )
@@ -217,7 +217,7 @@ void DocumentHolder::CloseFrame()
         try {
             xCloseable->close( true );
         }
-        catch( const uno::Exception& ) {
+        catch( const cpo::uno::Exception& ) {
         }
     else {
         if( m_xFrame.is() )
@@ -256,7 +256,7 @@ void DocumentHolder::FreeOffice()
 //              {
 //                  xDesktop->terminate();
 //              }
-//              catch( uno::Exception & )
+//              catch( cpo::uno::Exception & )
 //              {}
 //          }
 //      }
@@ -369,7 +369,7 @@ bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFrame >
             bResult = true;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     return bResult;
@@ -520,7 +520,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                 false );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     if ( !xResult.is() )
@@ -648,7 +648,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< css::frame::XLayoutM
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     return bMenuMerged;
@@ -671,7 +671,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
             xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
         }
-        catch( const uno::Exception& ){}
+        catch( const cpo::uno::Exception& ){}
 
         if ( xOwnLM.is() && xDocAreaAcc.is() )
         {
@@ -717,7 +717,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     m_xOwnWindow->setFocus();
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 // activation failed; reestablish old state
                 try
@@ -736,7 +736,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     uno::Reference< css::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                     xMerge->removeMergedMenuBar();
                 }
-                catch( const uno::Exception& ) {}
+                catch( const cpo::uno::Exception& ) {}
 
                 try
                 {
@@ -746,7 +746,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     if (bUnlockContainerLM)
                         xContainerLM->unlock();
                 }
-                catch( const uno::Exception& ) {}
+                catch( const cpo::uno::Exception& ) {}
             }
         }
     }
@@ -766,7 +766,7 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xOwnLM;
-        } catch( const uno::Exception& )
+        } catch( const cpo::uno::Exception& )
         {}
 
         if ( xOwnLM.is() )
@@ -796,7 +796,7 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
                 xContainerLM->doLayout();
                 bResult = true;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 SetFrameLMVisibility( m_xFrame, true );
             }
@@ -845,7 +845,7 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xOwnLM;
-        } catch( const uno::Exception& )
+        } catch( const cpo::uno::Exception& )
         {}
 
         if ( xOwnLM.is() )
@@ -893,7 +893,7 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
             xHWindow->setVisible( true );
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -908,7 +908,7 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
         // May be should be improved
         try {
             CloseDocument( true, false );
-        } catch( const uno::Exception& )
+        } catch( const cpo::uno::Exception& )
         {}
     }
 
@@ -1018,7 +1018,7 @@ bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
             xDocVis->setVisualAreaSize( nAspect, aSize );
             return true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1038,7 +1038,7 @@ bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
             *pSize = xDocVis->getVisualAreaSize( nAspect );
             return true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1057,7 +1057,7 @@ sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
         {
             return xDocVis->getMapUnit( nAspect );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1250,7 +1250,7 @@ void DocumentHolder::activated(  )
         {
             // must catch this exception because focus is grabbed while UI activation in doVerb()
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             // no outgoing exceptions specified here
         }

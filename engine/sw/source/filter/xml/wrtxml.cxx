@@ -316,7 +316,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         }
         catch (beans::UnknownPropertyException &)
         { /* ignore */ }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             bWarn = true;
         }
@@ -397,7 +397,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
                 m_pDoc->WriteLayoutCache( *pStream );
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -512,7 +512,7 @@ bool SwXMLWriter::WriteThroughComponent(
             xOutputStream, xComponent, rxContext,
             pServiceName, rArguments, rMediaDesc );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 

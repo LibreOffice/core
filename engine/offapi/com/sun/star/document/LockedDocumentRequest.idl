@@ -22,7 +22,7 @@ module com { module sun { module star { module document {
 
 /** Is used for interaction handle to query user decision regarding locked document.
 */
-published exception LockedDocumentRequest : ::com::sun::star::uno::Exception
+published exception LockedDocumentRequest : ::cpo::uno::Exception
 {
     /** The URL of the locked document.
      */

@@ -37,7 +37,7 @@ published interface XSimpleFileAccess2 : com::sun::star::ucb::XSimpleFileAccess
     */
     void writeFile( [in] string FileURL,
                     [in] com::sun::star::io::XInputStream data )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
 };
 

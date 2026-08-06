@@ -184,7 +184,7 @@ void SessionListener::StoreSession( bool bAsync )
         Sequence< PropertyValue > args{ PropertyValue(u"DispatchAsynchron"_ustr,-1,Any(bAsync),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
-    } catch (const css::uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("fwk.session", "");
         // save failed, but tell manager to go on if we haven't yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
@@ -212,7 +212,7 @@ void SessionListener::QuitSessionQuietly()
         Sequence< PropertyValue > args{ PropertyValue(u"DispatchAsynchron"_ustr,-1,Any(false),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
-    } catch (const css::uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("fwk.session", "");
     }
 }
@@ -300,7 +300,7 @@ bool SAL_CALL SessionListener::doRestore()
         xDispatch->dispatch(aURL, args);
         m_bRestored = true;
 
-    } catch (const css::uno::Exception&) {
+    } catch (const cpo::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("fwk.session", "");
     }
 
@@ -364,7 +364,7 @@ void SAL_CALL SessionListener::approveInteraction( bool bInteractionGranted )
                     m_rSessionManager->interactionDone( this );
             }
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             StoreSession( true );
             if (m_rSessionManager.is())

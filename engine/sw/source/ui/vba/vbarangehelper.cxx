@@ -100,7 +100,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         xTextCursor = rText->createTextCursorByRange( rTextRange );
         bGotTextCursor = true;
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -113,7 +113,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
             xTextCursor = xText->createTextCursor();
             bGotTextCursor = true;
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             DebugHelper::basicexception(e);
         }
@@ -125,7 +125,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         {
             xTextCursor = rText->createTextCursor();
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             DebugHelper::basicexception(e);
         }
@@ -179,7 +179,7 @@ uno::Reference< text::XTextContent > SwVbaRangeHelper::findBookmarkByPosition( c
                 if( xCompare->compareRegionStarts( xTextRange, xBkAnchor->getStart() ) == 0 )
                     return xBookmark;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 continue;
             }

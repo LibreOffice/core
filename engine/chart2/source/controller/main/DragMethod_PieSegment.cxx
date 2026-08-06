@@ -120,7 +120,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
                 xPointProperties->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( m_fAdditionalOffset+m_fInitialOffset ));
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -159,7 +159,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
                 recorder = UnoRuntime.queryInterface
                     (XDispatchRecorder.class, inst);
                 oObj.setDispatchRecorder(recorder);
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 throw new StatusException("Couldn't create recorder", e);
             }
         }

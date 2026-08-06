@@ -273,7 +273,7 @@ EmbeddedFontsManager::~EmbeddedFontsManager()
             // The following will not get executed, if setArgs throws
             return;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("xmloff.core");
         }

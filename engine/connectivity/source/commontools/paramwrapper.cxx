@@ -50,7 +50,7 @@ namespace dbtools::param
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::SQLException;

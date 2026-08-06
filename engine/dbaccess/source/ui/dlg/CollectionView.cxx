@@ -305,7 +305,7 @@ void OCollectionView::Initialize()
             m_xView->append_text(xRow->getString(ROW_TITLE));
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }

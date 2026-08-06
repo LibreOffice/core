@@ -31,12 +31,12 @@ published interface XEmbeddedClient: XComponentSupplier
         @throws com::sun::star::uno::ObjectSaveVetoException
             in case container wants to avoid saving of object
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of problems during saving
      */
     void saveObject()
         raises( ::com::sun::star::embed::ObjectSaveVetoException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** An object can use this method to notify the client when the object
         outplace window becomes visible or invisible.

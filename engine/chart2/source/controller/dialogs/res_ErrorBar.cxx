@@ -169,7 +169,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
             {
                 xProps->getPropertyValue(u"EnableDataTableDialog"_ustr) >>= m_bEnableDataTableDialog;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }

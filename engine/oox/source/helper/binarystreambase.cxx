@@ -70,7 +70,7 @@ sal_Int64 BinaryXSeekableStream::size() const
     {
         return mxSeekable->getLength();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox", "BinaryXSeekableStream::size" );
     }
@@ -83,7 +83,7 @@ sal_Int64 BinaryXSeekableStream::tell() const
     {
         return mxSeekable->getPosition();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox", "BinaryXSeekableStream::tell" );
     }
@@ -97,7 +97,7 @@ void BinaryXSeekableStream::seek( sal_Int64 nPos )
         mbEof = false;
         mxSeekable->seek( nPos );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         mbEof = true;
     }

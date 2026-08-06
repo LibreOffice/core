@@ -174,7 +174,7 @@ void SAL_CALL JobDispatch::initialize( const cpo::uno::Sequence< cpo::uno::Any >
             {
                 m_sModuleIdentifier = xModuleManager->identify( m_xFrame );
             }
-            catch( const css::uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
     }

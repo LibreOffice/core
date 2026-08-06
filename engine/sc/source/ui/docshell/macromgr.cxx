@@ -150,7 +150,7 @@ void ScMacroManager::InitUserFuncData()
         mxContainerListener = new VBAProjectListener( this );
         xModuleContainer->addContainerListener( mxContainerListener );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

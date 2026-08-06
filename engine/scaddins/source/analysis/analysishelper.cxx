@@ -273,7 +273,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt )
             if( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -2505,7 +2505,7 @@ double ScaAnyConverter::convertToDouble( const OUString& rString ) const
         {
             fValue = xFormatter->convertStringToNumber( nDefaultFormat, rString );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             throw lang::IllegalArgumentException();
         }

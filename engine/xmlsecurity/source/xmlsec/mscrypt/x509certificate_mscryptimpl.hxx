@@ -29,7 +29,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>

@@ -38,7 +38,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         com::sun::star::embed::XStorage
     */
     void storeAsStorage( [in] ::com::sun::star::embed::XStorage Storage )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
 
     /**

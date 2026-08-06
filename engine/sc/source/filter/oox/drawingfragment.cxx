@@ -92,7 +92,7 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
                               comphelper::makePropertyValue(u"Script"_ustr, rMacroUrl) };
         xEvents->replaceByName( u"OnClick"_ustr, Any( aEventProps ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -514,7 +514,7 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
         Reference< XEventAttacherManager > xEventMgr( mxCtrlFormIC, UNO_QUERY_THROW );
         xEventMgr->registerScriptEvent( mnCtrlIndex, aEventDesc );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -820,7 +820,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
         if( !pClientData->maFmlaLink.isEmpty() || !pClientData->maFmlaRange.isEmpty() )
             maControlConv.bindToSources( xCtrlModel, pClientData->maFmlaLink, pClientData->maFmlaRange, getSheetIndex() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

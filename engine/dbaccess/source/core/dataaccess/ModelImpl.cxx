@@ -254,7 +254,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
         if ( pos != m_aExposedStorages.end() )
             bSuccess = dbaccesstools::commitStorageIfWriteable( pos->second );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
@@ -921,7 +921,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
                 }
             }
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("dbaccess", "");
         }
@@ -1407,7 +1407,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(
             bResult = SfxMedium::CallApproveHandler(_rxInteraction, cpo::uno::Any(aRequest), true);
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 

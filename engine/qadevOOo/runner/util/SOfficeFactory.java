@@ -49,7 +49,7 @@ public class SOfficeFactory {
         Object oInterface;
         try {
             oInterface = xMSF.createInstance("com.sun.star.frame.Desktop");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             throw new IllegalArgumentException("Desktop Service not available", e);
         }
 
@@ -82,7 +82,7 @@ public class SOfficeFactory {
      * @see XTextDocument
      */
     public XTextDocument createTextDoc(String frameName)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XComponent oDoc = openDoc("swriter", frameName);
 
@@ -103,7 +103,7 @@ public class SOfficeFactory {
      * @see XSpreadsheetDocument
      */
     public XSpreadsheetDocument createCalcDoc(String frameName)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XComponent oDoc = openDoc("scalc", frameName);
 
@@ -121,7 +121,7 @@ public class SOfficeFactory {
      * method which opens a new DrawDocument
      */
     public XComponent createDrawDoc(String frameName)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         return openDoc("sdraw", frameName);
     } // finished createDrawDoc
@@ -132,7 +132,7 @@ public class SOfficeFactory {
      * method which opens a new ImpressDocument
      */
     public XComponent createImpressDoc(String frameName)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         return openDoc("simpress", frameName);
     } // finished createImpressDoc
@@ -143,7 +143,7 @@ public class SOfficeFactory {
      * method which opens a new MathDocument
      */
     public XComponent createMathDoc(String frameName)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         return openDoc("smath", frameName);
     } // finished createMathDoc
@@ -156,7 +156,7 @@ public class SOfficeFactory {
      * @see XChartDocument
      */
     public XChartDocument createChartDoc()
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XComponent oDoc = loadDocument("private:factory/schart");
 
@@ -263,7 +263,7 @@ public class SOfficeFactory {
      * the method create Index
      */
     public static XTextContent createIndex(XTextDocument xTextDoc, String kind)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class,
             xTextDoc);
@@ -277,7 +277,7 @@ public class SOfficeFactory {
     }
 
     public static XSpreadsheet createSpreadsheet(XSpreadsheetDocument oDoc)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc);
 
@@ -374,7 +374,7 @@ public class SOfficeFactory {
     public XComponent loadDocument(String fileName)
         throws com.sun.star.lang.IllegalArgumentException,
         com.sun.star.io.IOException,
-        com.sun.star.uno.Exception {
+        cpo.uno.Exception {
 
         // that noargs thing for load attributes
         PropertyValue[] szEmptyArgs = new PropertyValue[0];
@@ -393,7 +393,7 @@ public class SOfficeFactory {
     public XComponent loadDocument(String fileName, PropertyValue[] Args)
         throws com.sun.star.lang.IllegalArgumentException,
         com.sun.star.io.IOException,
-        com.sun.star.uno.Exception {
+        cpo.uno.Exception {
 
         // that noargs thing for load attributes
         String frameName = "_blank";
@@ -412,7 +412,7 @@ public class SOfficeFactory {
     public XComponent openDoc(String kind, String frameName)
         throws com.sun.star.lang.IllegalArgumentException,
         com.sun.star.io.IOException,
-        com.sun.star.uno.Exception {
+        cpo.uno.Exception {
 
         // that noargs thing for load attributes
         PropertyValue[] Args = null;

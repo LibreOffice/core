@@ -59,7 +59,7 @@ void BinaryXOutputStream::close()
         if ( mbAutoClose )
             mxOutStrm->closeOutput();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "BinaryXOutputStream::close - closing output stream failed" );
     }
@@ -74,7 +74,7 @@ void BinaryXOutputStream::writeData( const StreamDataSequence& rData, size_t /*n
     {
         mxOutStrm->writeBytes( rData );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "BinaryXOutputStream::writeData - stream read error" );
     }

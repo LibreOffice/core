@@ -96,7 +96,7 @@ getFirstHierarchicalStream(const OUString& URL, sal_Int32 format,
         {
             return getHierarchicalStream(xStorage, name);
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sfx", "caught exception while trying to access " << name << " of "
                                                                                    << URL);
@@ -151,7 +151,7 @@ Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
             msURL, embed::StorageFormats::PACKAGE,
             { u"Thumbnails/thumbnail.png"_ustr, u"Thumbnail/thumbnail.png"_ustr });
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx",
             "caught exception while trying to access thumbnail of "
@@ -169,7 +169,7 @@ Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
                 { u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail"_ustr,
                   u"http://purl.oclc.org/ooxml/officeDocument/relationships/metadata/thumbnail"_ustr });
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // Not an OOXML; fine
         }

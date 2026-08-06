@@ -100,7 +100,7 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot const & rRoot, const Refere
         LayoutConverter aLayoutConv( rRoot, rLayout );
         aLayoutConv.convertFromModel( xTitleShape, fAngle );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -180,7 +180,7 @@ ConverterData::ConverterData(
     {
         mxDoc->lockControllers();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -200,7 +200,7 @@ ConverterData::~ConverterData()
     {
         mxDoc->unlockControllers();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -228,7 +228,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
 
         xInt = xMSF->createInstance( rServiceName );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( xInt.is(), "ConverterRoot::createInstance - cannot create instance" );
@@ -283,7 +283,7 @@ void ConverterRoot::convertTitlePositions()
         for (auto & title : mxData->maTitles)
             title.second.convertTitlePos( *this, xChart1Doc );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

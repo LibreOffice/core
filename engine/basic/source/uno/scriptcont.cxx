@@ -215,7 +215,7 @@ Any SfxScriptLibraryContainer::importLibraryElement
             xInput = mxSFI->openFileRead( aFile );
         }
         catch(const Exception& )
-        //catch( Exception& e )
+        //catch( cpo::uno::Exception& e )
         {
             // TODO:
             //throw WrappedTargetException( e );
@@ -301,7 +301,7 @@ Any SfxScriptLibraryContainer::importLibraryElement
                 {
                     aModInfo.ModuleObject.set( mxCodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
                 }
-                catch(const uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                     SAL_WARN("basic", "Failed to get document object for " << aElementName );
                 }
@@ -623,7 +623,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     xOut->writeBytes( aBinSeq );
                     xOut->closeOutput();
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                     // TODO: handle error
                 }
@@ -653,7 +653,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     Reference< XNameContainer > xLib( pLib );
                     writeLibraryElement( xLib, aElementName, xOutput );
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                     OSL_FAIL( "Problem on storing of password library!" );
                     // TODO: error handling
@@ -780,7 +780,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY_THROW );
                     xTransact->commit();
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                     // TODO: handle error
                 }
@@ -854,7 +854,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 throw uno::RuntimeException(u"null returned from openStorageElement"_ustr);
             }
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             OSL_FAIL( "### couldn't open sub storage for library" );
             return false;
@@ -896,7 +896,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     /*bool bRet = */pMod->LoadBinaryData( *pStream );
                     // TODO: Check return value
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                     // TODO: error handling
                 }
@@ -942,7 +942,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         }
                     }
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                     bRet = false;
                 }
@@ -969,7 +969,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     xElementRootStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                             aElementPath,
                             embed::ElementModes::READ );
-                } catch(const uno::Exception& )
+                } catch(const cpo::uno::Exception& )
                 {
                     // TODO: error handling
                 }
@@ -1007,7 +1007,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             /*bool bRet = */pMod->LoadBinaryData( *pStream );
                             // TODO: Check return value
                         }
-                        catch(const uno::Exception& )
+                        catch(const cpo::uno::Exception& )
                         {
                             // TODO: error handling
                         }
@@ -1054,7 +1054,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                 }
                             }
                         }
-                        catch (const uno::Exception& )
+                        catch (const cpo::uno::Exception& )
                         {
                             bRet = false;
                         }

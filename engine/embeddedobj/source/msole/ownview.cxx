@@ -82,12 +82,12 @@ OwnView_Impl::~OwnView_Impl()
 {
     try {
         KillFile_Impl( m_aTempFileURL, m_xContext );
-    } catch( uno::Exception& ) {}
+    } catch( cpo::uno::Exception& ) {}
 
     try {
         if ( !m_aNativeTempURL.isEmpty() )
             KillFile_Impl( m_aNativeTempURL, m_xContext );
-    } catch( uno::Exception& ) {}
+    } catch( cpo::uno::Exception& ) {}
 }
 
 
@@ -145,7 +145,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
                 }
             }
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:");
         }
@@ -162,7 +162,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
     try {
         bResult = CreateModelFromURL( bUseNative ? m_aNativeTempURL : m_aTempFileURL );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -252,7 +252,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
         xNativeTempFile->setRemoveFile( false );
         aNativeTempURL = xNativeTempFile->getUri();
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -445,7 +445,7 @@ void OwnView_Impl::CreateNative()
             // TODO/LATER: No native stream, needs a new solution
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -483,7 +483,7 @@ bool OwnView_Impl::Open()
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -544,7 +544,7 @@ void OwnView_Impl::Close()
             xCloseable->close( true );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     m_bBusy = false;
@@ -578,7 +578,7 @@ void OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         if ( xCloseable.is() )
             xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >( this ) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 

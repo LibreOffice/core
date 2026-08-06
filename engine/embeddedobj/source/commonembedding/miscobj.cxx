@@ -273,7 +273,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
         try {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
             m_pInterfaceContainer->disposeAndClear( aSource );
-        } catch( const uno::Exception& ) {}
+        } catch( const cpo::uno::Exception& ) {}
         m_pInterfaceContainer.reset();
     }
 
@@ -283,12 +283,12 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
             m_xDocHolder->CloseFrame();
             try {
                 m_xDocHolder->CloseDocument( true, true );
-            } catch ( const uno::Exception& ) {}
+            } catch ( const cpo::uno::Exception& ) {}
             m_xDocHolder->FreeOffice();
 
             m_xDocHolder.clear();
         }
-    } catch( const uno::Exception& ) {}
+    } catch( const cpo::uno::Exception& ) {}
 }
 
 
@@ -308,7 +308,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
         try {
             xInplaceClient->changedPlacement( aRect );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "embeddedobj", "Exception on request to resize!" );
         }
@@ -431,7 +431,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
             // store the new timestamp
             m_pLinkFile->hasFileChanged();
         }
-        catch ( const uno::Exception& ex )
+        catch ( const cpo::uno::Exception& ex )
         {
             OUString aMsg;
             osl::FileBase::getSystemPathFromFileURL( SrcName, aMsg );
@@ -665,7 +665,7 @@ void OCommonEmbeddedObject::close( bool bDeliverOwnership )
         try {
             m_xDocHolder->CloseDocument( bDeliverOwnership, bDeliverOwnership );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             if ( bDeliverOwnership )
             {
@@ -687,7 +687,7 @@ void OCommonEmbeddedObject::close( bool bDeliverOwnership )
     {
         try {
             m_xObjectStorage->dispose();
-        } catch ( const uno::Exception& ) {}
+        } catch ( const cpo::uno::Exception& ) {}
 
         m_xObjectStorage.clear();
         m_xRecoveryStorage.clear();

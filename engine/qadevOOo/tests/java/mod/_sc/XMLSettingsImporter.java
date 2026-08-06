@@ -185,7 +185,7 @@ public class XMLSettingsImporter extends TestCase {
                         Object gVal = xPropSet.getPropertyValue("ShowGrid") ;
                         logF.println("ShowGrid = " + gVal ) ;
                         return  "false".equals(gVal) ;
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;

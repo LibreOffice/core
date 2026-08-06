@@ -135,7 +135,7 @@ void ModuleAcceleratorConfiguration::fillCache()
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 }
 

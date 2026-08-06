@@ -171,7 +171,7 @@ public class XMLImporter extends TestCase {
                             xTitleProp.getPropertyValue("String") ;
                         logF.println("Title returned = '" + title + "'") ;
                         return impValue.equals(title) ;
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (cpo.uno.Exception e) {
                         logF.println
                             ("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;

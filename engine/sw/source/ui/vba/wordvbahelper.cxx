@@ -169,13 +169,13 @@ rtl::Reference< SwXTextDocument > getCurrentWordDoc( const uno::Reference< uno::
     {
         return dynamic_cast<SwXTextDocument*>(getCurrentDoc( u"ThisWordDoc"_ustr ).get());
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         try
         {
             return getThisWordDoc( xContext );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

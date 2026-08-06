@@ -56,7 +56,7 @@ namespace dbaccess
                     _xSource->addPropertyChangeListener(property, this);
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
@@ -103,7 +103,7 @@ namespace dbaccess
                 m_xDest->setPropertyValue( evt.PropertyName, evt.NewValue );
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
@@ -136,7 +136,7 @@ namespace dbaccess
             m_xDestInfo.set( m_xDest->getPropertySetInfo(), UNO_SET_THROW );
             ::comphelper::copyProperties( m_xDest, m_xSource );
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }

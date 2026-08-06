@@ -27,7 +27,7 @@ interface XPackage;
    <p>This exception is intended to be used with an
    com::sun::star::task::XInteractionHandler.</p>
 */
-exception VersionException: com::sun::star::uno::Exception {
+exception VersionException: cpo::uno::Exception {
     /**
        the version of the extension which is being installed.
     */

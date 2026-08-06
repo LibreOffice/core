@@ -381,7 +381,7 @@ Reference<XInputStream> ZipStorageImpl::createStream(const OUString& rPath)
             xStream.set(new comphelper::OSeekableInputWrapper(
                 xInputStream, comphelper::getProcessComponentContext()));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // nothing needed
     }
@@ -609,7 +609,7 @@ librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamByName(const char* co
         {
             return createWPXStream(mpZipStorage->getStream(aName));
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // nothing needed
         }
@@ -649,7 +649,7 @@ librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamById(const unsigned i
         {
             return createWPXStream(mpZipStorage->getStream(id));
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // nothing needed
         }
@@ -709,7 +709,7 @@ bool WPXSvInputStream::isZip()
                 UNO_QUERY_THROW);
             mpZipStorage.reset(new ZipStorageImpl(xZip));
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // ignore
         }

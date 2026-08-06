@@ -40,7 +40,7 @@ namespace
             strncpy( reinterpret_cast<char *>(seq.getArray()), sBuffer, nLen );
             xOut->writeBytes( seq );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             written = -1;
         }
@@ -58,7 +58,7 @@ namespace
             if (xOut)
                 xOut->closeOutput( );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             result = -1;
         }

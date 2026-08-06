@@ -27,7 +27,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XDataSource;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +83,7 @@ public class DataSource
             queryDef.setPropertyValue("Command", _sqlCommand);
             queryDef.setPropertyValue("EscapeProcessing", Boolean.valueOf(_escapeProcessing));
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             e.printStackTrace(System.err);
         }

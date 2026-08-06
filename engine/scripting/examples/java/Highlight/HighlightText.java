@@ -59,7 +59,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
             obj = xmcf.createInstanceWithArgumentsAndContext(
                       "com.sun.star.awt.DialogProvider", args,
                       context.getComponentContext());
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             System.err.println("Error getting DialogProvider object");
             return;
         }
@@ -223,7 +223,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
             System.err.println("liblink created");
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             System.err.println("Got an exception loading lib: " + e.getMessage());
             return false;
         }

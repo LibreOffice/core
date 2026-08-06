@@ -30,7 +30,7 @@ module com { module sun { module star { module deployment {
    <p>This exception is intended to be used with an
    com::sun::star::task::XInteractionHandler.</p>
 */
-exception DependencyException: com::sun::star::uno::Exception {
+exception DependencyException: cpo::uno::Exception {
     /**
        a sequence of dependencies represented by XML elements.
 

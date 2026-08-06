@@ -2848,7 +2848,7 @@ SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDra
         if( pUnoPage )
             return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SdPage::getImplementation()" );
     }

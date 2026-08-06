@@ -50,7 +50,7 @@ namespace svx
             if ( xFrameProps.is() )
                 xFrameProps->getPropertyValue( u"LayoutManager"_ustr ) >>= m_xLayouter;
         }
-        catch ( Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             TOOLS_WARN_EXCEPTION( "svx.tbxcrtls", "ToolboxAccess::Ctor()" );
         }
@@ -77,7 +77,7 @@ namespace svx
                 }
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "svx", "ToolboxAccess::toggleToolbox" );
         }

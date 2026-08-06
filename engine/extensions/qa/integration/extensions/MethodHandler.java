@@ -40,7 +40,7 @@ public class MethodHandler implements XPropertyHandler
                 _context.getServiceManager().createInstanceWithContext( "com.sun.star.beans.Introspection", _context )
             );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             System.err.println( "MethodHandler: could not create an Introspection service, not much functionality will be available." );
         }

@@ -101,7 +101,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                             m_xOutStream);
             }
         }
-        catch(com.sun.star.uno.Exception exUno)
+        catch(cpo.uno.Exception exUno)
         {
             throw new com.sun.star.io.NotConnectedException(exUno);
         }

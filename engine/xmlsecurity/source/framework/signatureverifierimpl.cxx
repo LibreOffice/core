@@ -64,7 +64,7 @@ void SignatureVerifierImpl::startEngine( const rtl::Reference<XMLSignatureTempla
         xResultTemplate = m_xXMLSignature->validate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate), m_xXMLSecurityContext);
         m_nStatus = xResultTemplate->getStatus();
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         m_nStatus = css::xml::crypto::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }

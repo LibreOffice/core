@@ -92,7 +92,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
                 closeDoc.close( true );
             }
         }
-        catch ( com.sun.star.uno.Exception e )
+        catch ( cpo.uno.Exception e )
         {
             e.printStackTrace( System.err );
         }
@@ -101,7 +101,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
     /* ------------------------------------------------------------------ */
     /** prepares a new document to work with
      */
-    protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
+    protected void prepareDocument() throws cpo.uno.Exception, java.lang.Exception
     {
         m_document = DocumentHelper.blankDocument( m_orb, m_documentType );
         m_document.getDocument( ).addEventListener( this );

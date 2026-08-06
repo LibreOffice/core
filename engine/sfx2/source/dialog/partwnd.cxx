@@ -111,7 +111,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     {
         throw;
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

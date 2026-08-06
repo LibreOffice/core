@@ -131,7 +131,7 @@ int SAL_CALL main(int , char*, char* )
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -264,7 +264,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool component_writeInfo(
                   "active_native_singleton"))),
             css::uno::UNO_SET_THROW)->
             setStringValue(Dispatch::static_getImplementationName());
-    } catch (const css::uno::Exception & e) {
+    } catch (const cpo::uno::Exception & e) {
         SAL_INFO(
             "desktop.test",
             "active_native component_writeInfo exception: " << e.Message);

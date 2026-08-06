@@ -104,7 +104,7 @@ namespace DOM
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
             m_xEventListener = new WeakEventListener(this);
             xTarget->addEventListener(u"DOMSubtreeModified"_ustr, m_xEventListener, false/*capture*/);
-        } catch (const Exception &){
+        } catch (const cpo::uno::Exception &){
             TOOLS_WARN_EXCEPTION( "unoxml", "Exception caught while registering NodeList as listener");
         }
     }

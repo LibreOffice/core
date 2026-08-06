@@ -27,7 +27,7 @@
 
     @see PropertyContainer
  */
-published exception PropertyExistException: com::sun::star::uno::Exception
+published exception PropertyExistException: cpo::uno::Exception
 {
 };
 

@@ -105,7 +105,7 @@ void SAL_CALL PopupMenuToolbarController::initialize(
         m_bHasController = m_xPopupMenuFactory->hasController(
             m_aPopupCommand, getModuleName() );
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION( "fwk.uielement", "" );
     }
@@ -233,7 +233,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 
             m_xPopupMenuController->setPopupMenu( m_xPopupMenu );
         }
-        catch ( const css::uno::Exception & )
+        catch ( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION( "fwk.uielement", "" );
             m_xPopupMenu.clear();

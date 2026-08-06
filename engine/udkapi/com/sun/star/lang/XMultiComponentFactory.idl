@@ -41,7 +41,7 @@ published interface XMultiComponentFactory : com::sun::star::uno::XInterface
     com::sun::star::uno::XInterface createInstanceWithContext(
         [in] string aServiceSpecifier,
         [in] com::sun::star::uno::XComponentContext Context )
-        raises (com::sun::star::uno::Exception);
+        raises (cpo::uno::Exception);
 
     /** Creates an instance of a component which supports the
         services specified by the factory, and initializes the new instance
@@ -60,7 +60,7 @@ published interface XMultiComponentFactory : com::sun::star::uno::XInterface
         [in] string ServiceSpecifier,
         [in] sequence<any> Arguments,
         [in] com::sun::star::uno::XComponentContext Context )
-        raises (com::sun::star::uno::Exception);
+        raises (cpo::uno::Exception);
 
     /** Gets the names of all supported services.
 

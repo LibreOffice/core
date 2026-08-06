@@ -1226,7 +1226,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
                            >>= bIsPrintableControl);
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("drawinglayer",
                                  "VclMetafileProcessor2D: No access to printable flag of Control");
@@ -1378,7 +1378,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
                 xControlView->setGraphics(xOriginalGraphics);
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("drawinglayer",
                                  "VclMetafileProcessor2D: Printing of Control failed");

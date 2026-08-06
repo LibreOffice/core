@@ -3122,7 +3122,7 @@ std::string GetSlideHash(SdXImpressDocument* pDoc, sal_Int32 nSlideNumber)
             return GetInterfaceHash(cppu::getXWeak(pSlide));
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         CPPUNIT_FAIL("SdXImpressDocument::createKitSlideRenderer: failed");
     }

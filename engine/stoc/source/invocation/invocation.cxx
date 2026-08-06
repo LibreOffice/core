@@ -572,7 +572,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
     {
         throw;
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw InvocationTargetException(

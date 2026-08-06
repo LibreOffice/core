@@ -1138,7 +1138,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                             }
                         }
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
 
@@ -1201,7 +1201,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     {
                         xViewProperties->setPropertyValue( sShowOnlineLayout, cpo::uno::Any( true ) );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
                 }
@@ -1211,7 +1211,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     {
                         xViewProperties->setPropertyValue( sHideWhitespace, cpo::uno::Any( true ) );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
                 }
@@ -1221,7 +1221,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     {
                         xPropSet->setPropertyValue(sShowChangesPDF, Any(!bExportTrackedChanges.value()));
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }

@@ -206,7 +206,7 @@ namespace
             if (auto pWrapper = dynamic_cast<ViewShellWrapper*>(i_rViewShellWrapper.get()))
                 pViewShell = pWrapper->GetViewShell();
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("sd");
         }
@@ -223,7 +223,7 @@ namespace
             if ( !aViewIds.empty() )
                 return i_rConfigController->getResource( aViewIds[0] );
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("sd");
         }

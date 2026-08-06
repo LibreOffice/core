@@ -159,7 +159,7 @@ void RegionMapChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& x
         getFastPropertyValue(aAGeometry3D, PROP_REGIONMAP_TEMPLATE_GEOMETRY3D);
         xSeries->setPropertyAlsoToAllAttributedDataPoints(u"Geometry3D"_ustr, aAGeometry3D);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

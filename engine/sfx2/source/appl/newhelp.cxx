@@ -279,7 +279,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                 }
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "sfx.appl", "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
         }
@@ -672,7 +672,7 @@ void IndexTabPage_Impl::InitializeIndex()
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.appl", "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
@@ -1701,7 +1701,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
                 bHideBox = false;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         bHideBox = true;
     }
@@ -1771,7 +1771,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
     }
@@ -1831,7 +1831,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
@@ -1921,7 +1921,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
@@ -2387,7 +2387,7 @@ void SfxHelpWindow_Impl::openDone(std::u16string_view sURL    ,
             xController->restoreViewData(Any());
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
     }
@@ -2590,7 +2590,7 @@ void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
                     }
                 }
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
             }

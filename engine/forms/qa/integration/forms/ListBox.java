@@ -33,7 +33,7 @@ import com.sun.star.form.runtime.XFormOperations;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XPreparedStatement;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 import connectivity.tools.HsqlColumnDescriptor;
@@ -61,7 +61,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkForeignKeys() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkForeignKeys() throws cpo.uno.Exception, java.lang.Exception
     {
         try
         {
@@ -122,7 +122,7 @@ public class ListBox extends TestCase
 
     /* ------------------------------------------------------------------ */
     @Override
-    protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
+    protected void prepareDocument() throws cpo.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();
         impl_createForm();

@@ -181,7 +181,7 @@ void ScatterChartTypeTemplate::applyStyle2(
         if( m_nDim==3 )
             xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -241,7 +241,7 @@ bool ScatterChartTypeTemplate::matchesTemplate2(
                     break;
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -269,7 +269,7 @@ bool ScatterChartTypeTemplate::matchesTemplate2(
             setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
             setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -293,7 +293,7 @@ rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForIndex( sal_
         xResult->setPropertyValue(
             CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -319,7 +319,7 @@ rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries2(
         xResult->setPropertyValue(
             CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

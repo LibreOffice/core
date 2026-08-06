@@ -94,7 +94,7 @@ Any ConfigurationAccess::GetConfigurationNode (
             return rxNode->getByHierarchicalName(sPathToNode);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "caught exception while getting configuration node" << sPathToNode);
     }

@@ -514,7 +514,7 @@ public class ORowSet extends TestCase {
                 impl_deleteFile( m_tableFile );
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             log.println( "error: ");
             e.printStackTrace(log);

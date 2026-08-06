@@ -82,7 +82,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
 
             result = subKeys != null && subKeys.length > 0 ;
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Can't open registry file: " + name) ;
             e.printStackTrace(log) ;
         }

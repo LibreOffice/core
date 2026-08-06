@@ -74,7 +74,7 @@ public class ShapeDsc extends InstDescr {
         try {
             SrvObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
 
         XShape Sh = (XShape)UnoRuntime.queryInterface(ifcClass, SrvObj );

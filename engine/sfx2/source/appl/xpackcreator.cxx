@@ -124,7 +124,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

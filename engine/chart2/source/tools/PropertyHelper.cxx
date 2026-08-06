@@ -52,7 +52,7 @@ struct lcl_EqualsElement
         {
             return (m_xAccess->getByName( rName ) == m_aValue);
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -177,7 +177,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
         xNameContainer->insertByName( aUniqueName, aValue );
         return aUniqueName;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

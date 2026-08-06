@@ -51,7 +51,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws cpo.uno.Exception, java.lang.Exception
     {
         m_orb = param.getMSF();
         m_context = UnoRuntime.queryInterface( XComponentContext.class,
@@ -66,7 +66,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void interactiveObjectInspector() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void interactiveObjectInspector() throws cpo.uno.Exception, java.lang.Exception
     {
         closeExistentInspector();
 
@@ -84,7 +84,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private XObjectInspector createObjectInspector() throws com.sun.star.uno.Exception
+    private XObjectInspector createObjectInspector() throws cpo.uno.Exception
     {
         com.sun.star.awt.XWindow floatingWindow = createFloatingWindow();
 
@@ -135,7 +135,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private com.sun.star.awt.XWindow createFloatingWindow() throws com.sun.star.uno.Exception
+    private com.sun.star.awt.XWindow createFloatingWindow() throws cpo.uno.Exception
     {
         com.sun.star.awt.XToolkit toolkit = UnoRuntime.queryInterface(
                 com.sun.star.awt.XToolkit.class, m_orb.createInstance( "com.sun.star.awt.Toolkit" ) );

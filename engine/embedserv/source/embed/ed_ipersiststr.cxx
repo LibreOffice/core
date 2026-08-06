@@ -22,7 +22,7 @@
 #include <string_view>
 
 #include <embeddoc.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -106,7 +106,7 @@ static uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -145,7 +145,7 @@ static HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const 
         try {
             nReadBytes = xTempIn->readBytes( aBuffer, nConstBufferSize );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             return E_FAIL;
         }
@@ -409,7 +409,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                         // xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
                         hr = S_OK;
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
                 }
@@ -545,7 +545,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                         hr = m_pDocHolder->SetExtent( &aSizeToSet );
                         // hr = m_pDocHolder->SetVisArea( &aRectToSet );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                     }
                 }
@@ -658,7 +658,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, 
                 }
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -780,7 +780,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
 
                 m_aFileName = o3tl::toU(pszFileName);
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }
@@ -868,7 +868,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileNam
 
         hr = S_OK;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 

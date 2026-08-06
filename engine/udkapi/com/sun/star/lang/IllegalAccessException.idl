@@ -24,7 +24,7 @@
 /** This exception is thrown when an application tries to change
     a constant property.
  */
-published exception IllegalAccessException: com::sun::star::uno::Exception
+published exception IllegalAccessException: cpo::uno::Exception
 {
 };
 

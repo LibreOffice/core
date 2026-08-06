@@ -22,7 +22,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
@@ -88,7 +88,7 @@ bool prepareLocale() {
                 officecfg::Office::Linguistic::General::UILocale::set(
                     u""_ustr, batch);
                 batch->commit();
-            } catch (const css::uno::Exception &) {
+            } catch (const cpo::uno::Exception &) {
                 TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
             }
         }
@@ -116,7 +116,7 @@ bool prepareLocale() {
             comphelper::ConfigurationChanges::create());
         officecfg::Setup::L10N::ooLocale::set(locale, batch);
         batch->commit();
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));

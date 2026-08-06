@@ -1992,7 +1992,7 @@ void ImpEditView::CutCopy(uno::Reference<datatransfer::clipboard::XClipboard> co
                 if( xFlushableClipboard.is() )
                     xFlushableClipboard->flushClipboard();
             }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
             {
             }
 
@@ -2018,7 +2018,7 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
         SolarMutexReleaser aReleaser;
         xDataObj = rxClipboard->getContents();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 

@@ -400,7 +400,7 @@ static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -455,7 +455,7 @@ static bool lcl_isCategoryAxisShifted( const Reference< chart2::XDiagram >& xDia
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -488,7 +488,7 @@ static sal_Int32 lcl_getCategoryAxisType( const Reference< chart2::XDiagram >& x
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -533,7 +533,7 @@ static cssc::TimeIncrement lcl_getDateTimeIncrement( const Reference< chart2::XD
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -553,7 +553,7 @@ static bool lcl_isSeriesAttachedToFirstAxis(
         xProp->getPropertyValue(u"AttachedAxisIndex"_ustr) >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -864,7 +864,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                     }
                 }
             }
-            catch (const uno::Exception &)
+            catch (const cpo::uno::Exception &)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -905,7 +905,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                         return aFinalSplitSource;
                     }
                 }
-                catch (const uno::Exception &)
+                catch (const cpo::uno::Exception &)
                 {
                     DBG_UNHANDLED_EXCEPTION("oox");
                 }
@@ -933,7 +933,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                         }
                     }
                 }
-                catch (const uno::Exception &)
+                catch (const cpo::uno::Exception &)
                 {
                     DBG_UNHANDLED_EXCEPTION("oox");
                 }
@@ -955,7 +955,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         {
             xParser.set( xSF->createInstance(u"com.sun.star.sheet.FormulaParser"_ustr), UNO_QUERY );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -1566,7 +1566,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
             mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -2286,7 +2286,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             pDrawing->endDocument();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("xmloff.chart", "AdditionalShapes not found");
     }
@@ -3334,7 +3334,7 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("oox", "ChartExport::exportBitmapFill");
     }
@@ -3388,7 +3388,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             mpFS->endElementNS(XML_a, XML_gradFill);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("oox", "ChartExport::exportGradientFill");
     }
@@ -5077,7 +5077,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
                                 xAxisLookup->getPropertyValue(u"AxisId"_ustr)
                                     >>= nStoredId;
                             }
-                            catch (const uno::Exception&)
+                            catch (const cpo::uno::Exception&)
                             {
                                 continue;
                             }
@@ -5096,7 +5096,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         exportOneAxis_chartex(xRealAxisProp, xAxisTitle, xRealMajorGrid,
@@ -5502,7 +5502,7 @@ void ChartExport::exportOneAxis_chartex(
                         }
                     }
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                 }
 
@@ -5533,7 +5533,7 @@ void ChartExport::exportOneAxis_chartex(
                         if (aVal >>= d)
                             return d;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                     return std::nullopt;
@@ -5580,7 +5580,7 @@ void ChartExport::exportOneAxis_chartex(
         {
             xAxisProp->getPropertyValue(u"ChartexUnit"_ustr) >>= aUnitVal;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -5613,7 +5613,7 @@ void ChartExport::exportOneAxis_chartex(
         {
             xGrid->getPropertyValue(u"Show"_ustr) >>= bShow;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         if (!bShow)
@@ -5623,7 +5623,7 @@ void ChartExport::exportOneAxis_chartex(
         {
             xGrid->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         if (bHasSpPr)
@@ -6239,7 +6239,7 @@ void ChartExport::exportDataPoints(
                     xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                             xSeries, nElement, getModel() );
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
                 }
@@ -6300,7 +6300,7 @@ void ChartExport::exportDataPoints(
                 xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                         xSeries, nElement, getModel() );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
             }
@@ -6409,7 +6409,7 @@ void ChartExport::createAxes_chartex(
         {
             xSeriesProp->getPropertyValue(u"ChartexAxisIds"_ustr) >>= aAxisIds;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -6460,7 +6460,7 @@ void ChartExport::createAxes_chartex(
                             {
                                 xAxisProp->getPropertyValue(u"AxisId"_ustr) >>= nStoredId;
                             }
-                            catch (const uno::Exception&)
+                            catch (const cpo::uno::Exception&)
                             {
                                 continue;
                             }
@@ -6476,7 +6476,7 @@ void ChartExport::createAxes_chartex(
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

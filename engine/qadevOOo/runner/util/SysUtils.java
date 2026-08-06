@@ -33,10 +33,10 @@ public class SysUtils {
    * @param msf MultiserviceFactory
    * @return First found string clipboard contents or null if no
    *    text contents were found.
-   * @throws com.sun.star.uno.Exception if system clipboard is not accessible.
+   * @throws cpo.uno.Exception if system clipboard is not accessible.
    */
   public static String getSysClipboardText(XMultiServiceFactory msf)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
     XClipboard xCB = UnoRuntime.queryInterface
         (XClipboard.class, msf.createInstance

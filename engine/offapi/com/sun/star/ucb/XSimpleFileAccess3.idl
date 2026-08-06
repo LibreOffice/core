@@ -33,7 +33,7 @@ published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
         true, if the given File is "hidden", false otherwise
     */
     boolean isHidden( [in] string FileURL )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
     /** Sets the "hidden" of a file according to the boolean parameter,
         if the actual process has the right to do so and the used
@@ -46,7 +46,7 @@ published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
         true; "hidden" flag will be set, false; "hidden" flag will be reset
     */
     void setHidden( [in] string FileURL, [in] boolean bHidden )
-        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+        raises( com::sun::star::ucb::CommandAbortedException, cpo::uno::Exception );
 
 };
 

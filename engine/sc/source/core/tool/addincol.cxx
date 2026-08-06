@@ -310,7 +310,7 @@ void ScUnoAddInCollection::Initialize()
                             }
                         }
                     }
-                } catch ( const uno::Exception& ) {
+                } catch ( const cpo::uno::Exception& ) {
                     SAL_WARN ( "sc", "Failed to initialize create instance of sheet.AddIn" );
                 }
             }
@@ -627,7 +627,7 @@ void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
         if (xInterface.is())
             UpdateFromAddIn( xInterface, aServiceName );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN ("sc", "Failed to create addin component '"
                   << aServiceName << "'");
@@ -911,7 +911,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         aLocalName = xAddIn->
                             getDisplayFunctionName( aFuncU );
                     }
-                    catch(uno::Exception&)
+                    catch(cpo::uno::Exception&)
                     {
                         aLocalName = u"###"_ustr;
                     }
@@ -922,7 +922,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         aDescription = xAddIn->
                             getFunctionDescription( aFuncU );
                     }
-                    catch(uno::Exception&)
+                    catch(cpo::uno::Exception&)
                     {
                         aDescription = u"###"_ustr;
                     }
@@ -946,7 +946,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     aArgName = xAddIn->
                                         getDisplayArgumentName( aFuncU, nParamPos );
                                 }
-                                catch(uno::Exception&)
+                                catch(cpo::uno::Exception&)
                                 {
                                     aArgName = u"###"_ustr;
                                 }
@@ -956,7 +956,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     aArgDesc = xAddIn->
                                         getArgumentDescription( aFuncU, nParamPos );
                                 }
-                                catch(uno::Exception&)
+                                catch(cpo::uno::Exception&)
                                 {
                                     aArgDesc = u"###"_ustr;
                                 }
@@ -1010,7 +1010,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         {
             aEnglishName = xAddIn->getDisplayFunctionName( rFunc.aFuncU );
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
         if (aEnglishName.isEmpty()
@@ -1537,7 +1537,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(cpo::uno::Sequence<cpo::uno::Any>& rCal
         else
             nErrCode = FormulaError::NoValue;
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         nErrCode = FormulaError::NoValue;
     }

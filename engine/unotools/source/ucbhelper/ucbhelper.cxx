@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -94,7 +94,7 @@ std::vector<OUString> getContents(OUString const & url) {
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "getContents(" << url << ")");
         return std::vector<OUString>();
     }
@@ -136,7 +136,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::IsDocument(" << url << ")");
         return false;
     }
@@ -152,7 +152,7 @@ cpo::uno::Any utl::UCBContentHelper::GetProperty(
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::GetProperty(" << url << ", " << property << ")");
         return cpo::uno::Any();
     }
@@ -166,7 +166,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::IsFolder(" << url << ")");
         return false;
     }
@@ -183,7 +183,7 @@ bool utl::UCBContentHelper::GetTitle(
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::GetTitle(" << url << ")");
         return false;
     }
@@ -200,7 +200,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::Kill(" << url << ")");
         return false;
     }
@@ -246,7 +246,7 @@ bool utl::UCBContentHelper::MakeFolder(
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
             "UCBContentHelper::MakeFolder(" << title << ") ");
@@ -279,7 +279,7 @@ bool utl::UCBContentHelper::IsYounger(
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
             "UCBContentHelper::IsYounger(" << younger << ", " << older << ")");
@@ -361,7 +361,7 @@ bool utl::UCBContentHelper::IsSubPath(
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
         throw;
-    } catch (css::uno::Exception const &) {
+    } catch (cpo::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
             "UCBContentHelper::IsSubPath(" << parent << ", " << child << ")");

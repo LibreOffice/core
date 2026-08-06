@@ -175,7 +175,7 @@ public class ComponentContext implements XComponentContext, XComponent
                 }
             }
         }
-        catch (com.sun.star.uno.Exception exc)
+        catch (cpo.uno.Exception exc)
         {
             if (DEBUG)
                 System.err.println( "### exception occurred on late init of singleton instance \"" + rName + "\": " + exc.getMessage() );

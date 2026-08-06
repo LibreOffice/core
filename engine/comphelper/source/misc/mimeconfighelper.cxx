@@ -120,7 +120,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
                         aArgs ),
                      uno::UNO_QUERY );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return xConfig;
@@ -195,7 +195,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
                     prop.Value >>= aDocServiceName;
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return aDocServiceName;
@@ -235,7 +235,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -265,7 +265,7 @@ bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -311,7 +311,7 @@ cpo::uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFrom
                     pResult[nInd+1].Value = xObjectProps->getByName( aObjPropNames[nInd] );
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             aResult.realloc( 0 );
         }
@@ -331,7 +331,7 @@ OUString MimeConfigurationHelper::GetExplicitlyRegisteredObjClassID( const OUStr
         if ( xMediaTypeConfig.is() )
             xMediaTypeConfig->getByName( aMediaType ) >>= aStringClassID;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -364,7 +364,7 @@ cpo::uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsB
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
                 aObjProps = GetObjPropsFromConfigEntry( aClassID, xObjectProps );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -394,7 +394,7 @@ cpo::uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsB
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
                 aObjProps = GetObjPropsFromConfigEntry( aClassID, xObjectProps );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -452,7 +452,7 @@ cpo::uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsB
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {}
         }
     }
@@ -480,7 +480,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
                 xObjectProps->getByName(u"ObjectFactory"_ustr) >>= aResult;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             cpo::uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
             if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
@@ -518,7 +518,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( std::u16string_v
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {}
         }
     }
@@ -663,7 +663,7 @@ SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterN
                 nFlags = static_cast<SfxFilterFlags>(aFilterHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
             }
         }
-    } catch( uno::Exception& )
+    } catch( cpo::uno::Exception& )
     {}
 
     return nFlags;
@@ -745,7 +745,7 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                     }
                 }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
 
     return aResult;
@@ -774,7 +774,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                 if ( !( nFlags & SfxFilterFlags::IMPORT ) )
                 {
                     OSL_FAIL( "This is no import filter!" );
-                    throw uno::Exception(u"this is no import filter"_ustr, nullptr);
+                    throw cpo::uno::Exception(u"this is no import filter"_ustr, nullptr);
                 }
 
                 if ( nFlags & SfxFilterFlags::EXPORT )
@@ -811,7 +811,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return aExportFilterName;

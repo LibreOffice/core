@@ -22,7 +22,7 @@ module com { module sun { module star { module auth {
 /** indicates an operation unsupported by the implementation.
  */
 
-published exception UnsupportedException : ::com::sun::star::uno::Exception
+published exception UnsupportedException : ::cpo::uno::Exception
 {
 };
 

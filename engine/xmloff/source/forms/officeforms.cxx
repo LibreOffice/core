@@ -58,7 +58,7 @@ using namespace cpo::uno;
         try
         {
             pRet = GetImport().GetFormImport()->createContext( _nElement, xAttrList );
-        } catch (const Exception&)
+        } catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("xmloff.forms");
         }

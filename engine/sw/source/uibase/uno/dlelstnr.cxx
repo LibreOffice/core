@@ -61,7 +61,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
                 xBC->addLinguServiceEventListener( static_cast<XLinguServiceEventListener *>(this) );
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "SwLinguServiceEventListener c-tor" );
     }

@@ -28,7 +28,7 @@ published interface XNamingService: com::sun::star::uno::XInterface
     /** provides a previous registered object.
      */
     com::sun::star::uno::XInterface getRegisteredObject( [in] string Name )
-            raises (com::sun::star::uno::Exception);
+            raises (cpo::uno::Exception);
 
 
     /** registers one object under the specified name.
@@ -39,14 +39,14 @@ published interface XNamingService: com::sun::star::uno::XInterface
         </p>
      */
     void registerObject( [in]string Name, [in]com::sun::star::uno::XInterface Object )
-        raises (com::sun::star::uno::Exception);
+        raises (cpo::uno::Exception);
 
 
     /** revokes the registration of an object. <p>If the object was not
         previously registered, then this call does nothing.
      */
     void revokeObject( [in]string Name )
-        raises (com::sun::star::uno::Exception);
+        raises (cpo::uno::Exception);
 };
 
 

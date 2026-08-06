@@ -129,7 +129,7 @@ void OOXMLOLEHandler::attribute(Id name, const Value & val)
         try {
             mpFastContext->resolveData(val.getString());
         }
-        catch (const ::css::uno::Exception&)
+        catch (const ::cpo::uno::Exception&)
         {
             // Can't resolve OLE stream
             SAL_WARN("writerfilter.ooxml", "Failed to open OLE stream!");

@@ -67,7 +67,7 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
         {
             xProps->getPropertyValue(u"EnableComplexChartTypes"_ustr) >>= bEnableComplexChartTypes;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("chart2", "");
         }
@@ -188,7 +188,7 @@ void ChartTypePanel::Initialize()
                 xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES)
                     >>= aParameter.bSortByXValues;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -373,7 +373,7 @@ void ChartTypePanel::stateChanged()
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -423,7 +423,7 @@ void ChartTypePanel::selectMainType()
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

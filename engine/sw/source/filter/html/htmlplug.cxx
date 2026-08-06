@@ -763,7 +763,7 @@ void SwHTMLParser::InsertFloatingFrame()
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -1059,7 +1059,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
                 rWrt.Strm().WriteOString(aData);
                 HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -1145,7 +1145,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
             {
                 // Even the native data may be missing.
                 xInStream = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
-            } catch (const uno::Exception&)
+            } catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("sw.html", "OutHTML_FrameFormatOLENodeGrf: failed to open stream element");
             }

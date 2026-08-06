@@ -136,13 +136,13 @@ css::uno::Reference< css::frame::XFrame > findLinkSourceFrame(
                 if ( ::utl::UCBContentHelper::EqualURLs( sLinkURL, sFrameURL ) )
                     return xFrame;
             }
-            catch ( const css::uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 // ignore individual frame errors and keep iterating
             }
         }
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
     return nullptr;
@@ -163,7 +163,7 @@ void switchToExistingFrame( const css::uno::Reference< css::frame::XFrame >& xFr
         if ( xTopWindow.is() )
             xTopWindow->toFront();
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -200,7 +200,7 @@ OUString getSourceLockOwner( std::u16string_view sLinkURL )
              !sOwner.isEmpty() )
             return sOwner;
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -214,7 +214,7 @@ OUString getSourceLockOwner( std::u16string_view sLinkURL )
                  !sOwner.isEmpty() )
                 return sOwner;
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -360,7 +360,7 @@ void OCommonEmbeddedObject::Deactivate()
         catch( const embed::ObjectSaveVetoException& )
         {
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw embed::StorageWrappedTargetException(
@@ -399,7 +399,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
             else
                 static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // even if the listener complains ignore it for now
            }
@@ -571,7 +571,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
                     aModuleName = xManager->identify( xContDoc );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
 
                 if (!comphelper::COKit::isActive())
@@ -722,7 +722,7 @@ void OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
             SwitchStateTo_Impl( nNewState );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             if ( nOldState != m_nObjectState )
                 // notify listeners that the object has changed the state
@@ -793,7 +793,7 @@ void OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
     {
         nNewState = ConvertVerbToState_Impl( nVerbID );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     if ( nNewState == -1 )

@@ -421,7 +421,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     {
         exp->ExportRules(charStyles, numRules);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("sw.ui", "ExportStoredChapterNumberingRules");
     }
@@ -444,7 +444,7 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     {
         xImport->parseStream(source);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("sw.ui", "ImportStoredChapterNumberingRules");
     }

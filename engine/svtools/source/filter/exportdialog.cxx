@@ -507,7 +507,7 @@ void ExportDialog::GetGraphicStream()
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
 
         // ups

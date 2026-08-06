@@ -304,7 +304,7 @@ bool OFileAccess::isFolder( const OUString& FileURL )
         ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
         bRet = aCnt.isFolder();
     }
-    catch (const Exception &) {}
+    catch (const cpo::uno::Exception &) {}
     return bRet;
 }
 
@@ -464,7 +464,7 @@ bool OFileAccess::exists( const OUString& FileURL )
                 xStream->closeInput();
         }
     }
-    catch (const Exception &) {}
+    catch (const cpo::uno::Exception &) {}
     return bRet;
 }
 

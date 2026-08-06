@@ -1199,7 +1199,7 @@ cpo::uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
             }
             else
             {
-                aRetRange[ n ] <<= uno::Exception(
+                aRetRange[ n ] <<= cpo::uno::Exception(
                                 u"No property set for storing the value!"_ustr,
                                 getXWeak() );
             }
@@ -1233,7 +1233,7 @@ cpo::uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
             aOldName.clear();
 
             // Set error .
-            aRetRange[ nTitlePos ] <<= uno::Exception(
+            aRetRange[ nTitlePos ] <<= cpo::uno::Exception(
                     u"Exchange failed!"_ustr,
                     getXWeak() );
         }

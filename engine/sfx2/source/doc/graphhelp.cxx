@@ -23,7 +23,7 @@
 #include <postwin.h>
 #endif
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -221,7 +221,7 @@ bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, con
                 bResult = true;
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }

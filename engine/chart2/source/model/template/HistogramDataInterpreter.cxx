@@ -25,7 +25,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 using namespace css;
 
@@ -152,7 +152,7 @@ bool HistogramDataInterpreter::isDataCompatible(const InterpretedData& aInterpre
                         break;
                     }
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }

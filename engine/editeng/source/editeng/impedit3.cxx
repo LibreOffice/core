@@ -3965,7 +3965,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                         {
                                             EnsureWrongListForPaint(rParaPortion.GetNode());
                                         }
-                                        catch (const css::uno::Exception&)
+                                        catch (const cpo::uno::Exception&)
                                         {
                                             TOOLS_WARN_EXCEPTION("editeng", "spell check failed");
                                         }

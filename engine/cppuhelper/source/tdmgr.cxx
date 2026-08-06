@@ -584,7 +584,7 @@ static void typelib_callback(
     {
         SAL_INFO("cppuhelper", "typelibrary type not available: " << exc );
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
         SAL_INFO("cppuhelper", exc );
     }

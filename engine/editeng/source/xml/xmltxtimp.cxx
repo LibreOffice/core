@@ -221,7 +221,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
         aPaM = rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ),
             pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara -1 ), true );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 

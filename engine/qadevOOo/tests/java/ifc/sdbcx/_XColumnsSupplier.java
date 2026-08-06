@@ -56,7 +56,7 @@ public class _XColumnsSupplier extends MultiMethodTest {
         try {
             info = (XServiceInfo) UnoRuntime.queryInterface
                 (XServiceInfo.class, cols.getByName("colNames[0]")) ;
-        } catch (com.sun.star.uno.Exception e) {}
+        } catch (cpo.uno.Exception e) {}
 
         log.println("Support : " +
             info.supportsService("com.sun.star.sdbcx.Column")) ;

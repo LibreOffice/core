@@ -409,7 +409,7 @@ void CachedContentResultSetStub
         {
             setPropertyValueImpl( rGuard, m_aPropertyNameForFetchSize, aValue );
         }
-        catch( css::uno::Exception& ) {}
+        catch( cpo::uno::Exception& ) {}
     }
     if( !bSetDirection )
         return;
@@ -423,7 +423,7 @@ void CachedContentResultSetStub
     {
         setPropertyValueImpl( rGuard, m_aPropertyNameForFetchDirection, aValue );
     }
-    catch( css::uno::Exception& ) {}
+    catch( cpo::uno::Exception& ) {}
 }
 
 

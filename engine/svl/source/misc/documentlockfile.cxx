@@ -100,7 +100,7 @@ bool GenDocumentLockFile::CreateOwnLockFile()
         // try to let the file be hidden if possible
         try {
             aTargetContent.setPropertyValue(u"IsHidden"_ustr, cpo::uno::Any( true ) );
-        } catch( uno::Exception& ) {}
+        } catch( cpo::uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
     {
@@ -130,7 +130,7 @@ bool GenDocumentLockFile::OverwriteOwnLockFile()
         WriteEntryToStream( aGuard, aNewEntry, xOutput );
         xOutput->closeOutput();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         return false;
     }

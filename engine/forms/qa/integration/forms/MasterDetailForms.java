@@ -110,7 +110,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
-    private void impl_createForms( final HsqlDatabase _databaseDocument ) throws com.sun.star.uno.Exception
+    private void impl_createForms( final HsqlDatabase _databaseDocument ) throws cpo.uno.Exception
     {
         m_masterForm = dbfTools.queryPropertySet( m_orb.createInstance( "com.sun.star.form.component.DataForm" ) );
         m_masterForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection().getXConnection() );
@@ -133,7 +133,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     /* ------------------------------------------------------------------ */
     /** checks if master-detail relationships including multiple keys work
      */
-    public void checkMultipleKeys() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkMultipleKeys() throws cpo.uno.Exception, java.lang.Exception
     {
         HsqlDatabase databaseDocument = null;
         try

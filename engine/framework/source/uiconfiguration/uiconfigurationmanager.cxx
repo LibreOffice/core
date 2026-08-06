@@ -707,7 +707,7 @@ void SAL_CALL UIConfigurationManager::dispose()
             if ( m_xImageManager.is() )
                 m_xImageManager->dispose();
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
 
@@ -1182,7 +1182,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
             // Dispose old storage to be sure that it will be closed
             m_xDocConfigStorage->dispose();
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }
@@ -1253,7 +1253,7 @@ void SAL_CALL UIConfigurationManager::reload()
             if ( rDocElementType.bModified )
                 impl_reloadElementTypeData( rDocElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }
@@ -1299,7 +1299,7 @@ void SAL_CALL UIConfigurationManager::store()
                         rElementType.xStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]),
                                                                                          ElementModes::READWRITE );
                     }
-                    catch ( const Exception& )
+                    catch ( const cpo::uno::Exception& )
                     {
                         rElementType.xStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]),
                                                                                         ElementModes::READ );
@@ -1313,7 +1313,7 @@ void SAL_CALL UIConfigurationManager::store()
 
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }
@@ -1347,7 +1347,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
             if ( rElementType.bModified && xElementTypeStorage.is() )
                 impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             throw IOException();
         }

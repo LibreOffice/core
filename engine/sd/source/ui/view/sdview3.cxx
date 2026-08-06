@@ -1131,7 +1131,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         if ( xObj.is() )
                             mpDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {}
                 }
 

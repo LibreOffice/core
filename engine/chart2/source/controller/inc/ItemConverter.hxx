@@ -137,7 +137,7 @@ protected:
 
         The default implementation does nothing except showing an assertion
 
-        @throws css::uno::Exception
+        @throws cpo::uno::Exception
      */
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const;
 
@@ -150,7 +150,7 @@ protected:
 
         @return true if the item changed a property, false otherwise.
 
-        @throws css::uno::Exception
+        @throws cpo::uno::Exception
      */
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet );
 

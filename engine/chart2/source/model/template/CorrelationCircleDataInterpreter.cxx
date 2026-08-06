@@ -59,7 +59,8 @@ CorrelationCircleDataInterpreter::~CorrelationCircleDataInterpreter() {}
 
 // ____ XDataInterpreter ____
 InterpretedData CorrelationCircleDataInterpreter::interpretDataSource(
-    const Reference<chart2::data::XDataSource>& xSource, const Sequence<beans::PropertyValue>& aArguments,
+    const Reference<chart2::data::XDataSource>& xSource,
+    const Sequence<beans::PropertyValue>& aArguments,
     const std::vector<rtl::Reference<DataSeries>>& aSeriesToReUse)
 {
     if (!xSource.is())
@@ -112,7 +113,7 @@ InterpretedData CorrelationCircleDataInterpreter::interpretDataSource(
 
                 aSeriesVec.push_back(xSeries);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -146,7 +147,7 @@ CorrelationCircleDataInterpreter::reinterpretDataSeries(const InterpretedData& a
                 // three sequences keeps all of them.
                 std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(xSeries->getDataSequences2(),
-                                                               u"values"_ustr));
+                                                                u"values"_ustr));
                 for (auto const& xUsed : { xValuesFeature, xValuesY, xValuesX })
                 {
                     if (xUsed.is())
@@ -158,17 +159,17 @@ CorrelationCircleDataInterpreter::reinterpretDataSeries(const InterpretedData& a
                 }
 
                 std::size_t nNextFree = 0;
-                auto lclTakeNext =
-                    [&aValueSeqVec, &nNextFree](
-                        uno::Reference<chart2::data::XLabeledDataSequence>& rSequence,
-                        const OUString& rRole) {
-                        if (!rSequence.is() && nNextFree < aValueSeqVec.size())
-                        {
-                            rSequence = aValueSeqVec[nNextFree++];
-                            if (rSequence.is())
-                                SetRole(rSequence->getValues(), rRole);
-                        }
-                    };
+                auto lclTakeNext
+                    = [&aValueSeqVec,
+                       &nNextFree](uno::Reference<chart2::data::XLabeledDataSequence>& rSequence,
+                                   const OUString& rRole) {
+                          if (!rSequence.is() && nNextFree < aValueSeqVec.size())
+                          {
+                              rSequence = aValueSeqVec[nNextFree++];
+                              if (rSequence.is())
+                                  SetRole(rSequence->getValues(), rRole);
+                          }
+                      };
 
                 lclTakeNext(xValuesFeature, u"values-feature"_ustr);
                 lclTakeNext(xValuesY, u"values-y"_ustr);
@@ -184,7 +185,7 @@ CorrelationCircleDataInterpreter::reinterpretDataSeries(const InterpretedData& a
                     xSeries->setData(aNewSequences);
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -195,8 +196,7 @@ CorrelationCircleDataInterpreter::reinterpretDataSeries(const InterpretedData& a
 
 bool CorrelationCircleDataInterpreter::isDataCompatible(const InterpretedData& aInterpretedData)
 {
-    const std::vector<rtl::Reference<DataSeries>> aSeries(
-        FlattenSequence(aInterpretedData.Series));
+    const std::vector<rtl::Reference<DataSeries>> aSeries(FlattenSequence(aInterpretedData.Series));
     for (rtl::Reference<DataSeries> const& xSeries : aSeries)
     {
         try
@@ -204,7 +204,7 @@ bool CorrelationCircleDataInterpreter::isDataCompatible(const InterpretedData& a
             if (xSeries->getDataSequences2().size() != 3)
                 return false;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

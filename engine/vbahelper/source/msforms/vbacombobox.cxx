@@ -44,7 +44,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
        // grab the default value property name
        m_xProps->getPropertyValue( u"DataFieldProperty"_ustr ) >>= sSourceName;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     if( sSourceName.isEmpty() )

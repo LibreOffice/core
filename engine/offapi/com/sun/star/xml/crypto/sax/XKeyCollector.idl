@@ -33,7 +33,7 @@ interface XKeyCollector : com::sun::star::uno::XInterface
      *             that this security entity has included its key material internally.
      */
     void setKeyId([in] long id)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 } ; } ; } ; } ; } ; } ;

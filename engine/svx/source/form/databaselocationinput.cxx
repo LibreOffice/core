@@ -45,7 +45,7 @@ namespace svx
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
 
     namespace TemplateDescription = ::com::sun::star::ui::dialogs::TemplateDescription;
 

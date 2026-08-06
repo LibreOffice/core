@@ -35,7 +35,7 @@ public interface DocumentTest
     /**
      * initializes the document to a state where the subsequent tests can be ran
      */
-    public void initializeDocument() throws com.sun.star.uno.Exception;
+    public void initializeDocument() throws cpo.uno.Exception;
 
     /**
      * closes the document which the test is based on
@@ -46,17 +46,17 @@ public interface DocumentTest
      * does a simple modification to the document, which results in one Undo action being auto-generated
      * by the OOo implementation
      */
-    public void doSingleModification() throws com.sun.star.uno.Exception;
+    public void doSingleModification() throws cpo.uno.Exception;
 
     /**
      * verifies the document is in the same state as after {@link #initializeDocument}
      */
-    public void verifyInitialDocumentState() throws com.sun.star.uno.Exception;
+    public void verifyInitialDocumentState() throws cpo.uno.Exception;
 
     /**
      * verifies the document is in the state as expected after {@link #doSingleModification}
      */
-    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception;
+    public void verifySingleModificationDocumentState() throws cpo.uno.Exception;
 
     /**
      * does multiple modifications do the document, which would normally result in multiple Undo actions.
@@ -68,7 +68,7 @@ public interface DocumentTest
      *  the number of modifications done to the document. The caller assumes (and asserts) that the number
      *  of actions on the Undo stack equals this number.
      */
-    public int doMultipleModifications() throws com.sun.star.uno.Exception;
+    public int doMultipleModifications() throws cpo.uno.Exception;
 
     /**
      * returns the document which the test operates on

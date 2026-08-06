@@ -170,7 +170,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, weld::Button&, void)
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl()");
     }
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
-    catch ( Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         TOOLS_WARN_EXCEPTION( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl()" );
     }

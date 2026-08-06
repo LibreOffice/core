@@ -395,7 +395,7 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
                 rGuard.unlock();
             }
         }
-        catch (css::uno::Exception)
+        catch (cpo::uno::Exception)
         {
             exceptionFunc();
         }

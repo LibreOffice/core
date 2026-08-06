@@ -29,12 +29,12 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void disconnectPersistence()
         raises( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** connects the object to a persistence.
 
@@ -44,13 +44,13 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
         @throws com::sun::star::io::IOException
             in case of io problems
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void connectPersistance(
             [in] ::com::sun::star::io::XStream xStream )
         raises( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 };
 

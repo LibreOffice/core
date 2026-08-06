@@ -1165,7 +1165,7 @@ static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet
     {
         rDest.setPropertyValue( aNameStr, rSource.getPropertyValue( aNameStr ) );
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sc", "Exception in text field");
     }

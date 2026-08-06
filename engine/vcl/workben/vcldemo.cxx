@@ -2175,7 +2175,7 @@ public:
             xWidgets.disposeAndClear();
             xPopup.disposeAndClear();
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
             return 1;
@@ -2204,7 +2204,7 @@ protected:
 
             ::comphelper::setProcessServiceFactory(xMSF);
         }
-        catch (const uno::Exception &e)
+        catch (const cpo::uno::Exception &e)
         {
             Application::Abort("Bootstrap exception " + e.Message);
         }

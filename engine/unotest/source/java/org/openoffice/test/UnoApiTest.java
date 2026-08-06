@@ -28,7 +28,7 @@ public final class UnoApiTest {
     }
 
     @After public void tearDown()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         connection.tearDown();
     }

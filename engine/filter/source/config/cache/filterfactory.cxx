@@ -132,7 +132,7 @@ cpo::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { lUNOFilters.clear(); }
 
     return comphelper::containerToSequence(lUNOFilters);
@@ -308,7 +308,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
     }
 
@@ -478,7 +478,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     return std::vector<OUString>();

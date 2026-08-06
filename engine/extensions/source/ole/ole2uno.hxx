@@ -27,7 +27,7 @@
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>

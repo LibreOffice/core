@@ -402,7 +402,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
                 xFlush->commitChanges();
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -470,7 +470,7 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
                 xFlush->commitChanges();
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 
@@ -1221,7 +1221,7 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     catch ( const WrappedTargetException& )
     {
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

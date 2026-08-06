@@ -262,7 +262,7 @@ using namespace cpo::uno;
 
                                 }
                             }
-                            catch( uno::Exception& )
+                            catch( cpo::uno::Exception& )
                             {
                                 DBG_UNHANDLED_EXCEPTION("toolkit");
                             }

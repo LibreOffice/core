@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module container {
     @see     XEnumeration
     @see     XEnumeration::nextElement
  */
-published exception NoSuchElementException: com::sun::star::uno::Exception
+published exception NoSuchElementException: cpo::uno::Exception
 {
 };
 

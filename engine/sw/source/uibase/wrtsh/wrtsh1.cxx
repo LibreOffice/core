@@ -574,7 +574,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                         xSet->setPropertyValue(u"Formula"_ustr, cpo::uno::Any( aMathData ) );
                         bActivate = false;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -736,7 +736,7 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -827,7 +827,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             bLinkingChart = ( xChartDocument.is() && !xChartDocument->hasInternalDataProvider() );
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // TODO/LATER: handle the error
         return;
@@ -861,7 +861,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         OSL_FAIL("Can't get visual area size!" );
         // the scaling will not be done
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // TODO/LATER: handle the error
         OSL_FAIL("Can't get visual area size!" );

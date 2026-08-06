@@ -629,7 +629,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception(u"Can not add item. Set is finalized or mandatory!"_ustr,
+                    throw cpo::uno::Exception(u"Can not add item. Set is finalized or mandatory!"_ustr,
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
@@ -646,7 +646,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception(u"Can not change item. It's finalized or mandatory!"_ustr,
+                    throw cpo::uno::Exception(u"Can not change item. It's finalized or mandatory!"_ustr,
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
@@ -869,7 +869,7 @@ cpo::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "filter.config", "");
             aValue.clear();
@@ -923,11 +923,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             // trigger throwing of our own CorruptedFilterConfigurationException.
             // Let message empty. The normal exception text show enough information to the user.
             if (! xCfg.is())
-                throw css::uno::Exception(
+                throw cpo::uno::Exception(
                         u"Got NULL reference on opening configuration file ... but no exception."_ustr,
                         css::uno::Reference< css::uno::XInterface >());
         }
-        catch(const css::uno::Exception& ex)
+        catch(const cpo::uno::Exception& ex)
         {
             throw css::document::CorruptedFilterConfigurationException(
                     "filter configuration, caught: " + ex.Message,
@@ -1403,11 +1403,11 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
         if (!(aVal >>= xSet) || !xSet.is())
         {
             OUString sMsg("Could not open configuration set \"" + sSetName + "\".");
-            throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
+            throw cpo::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
         lItems = xSet->getElementNames();
     }
-    catch(const css::uno::Exception& ex)
+    catch(const cpo::uno::Exception& ex)
     {
         throw css::document::CorruptedFilterConfigurationException(
                 "filter configuration, caught: " + ex.Message,
@@ -1434,7 +1434,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 {
                     (*pCache)[rItem] = impl_loadItem(xSet, eType, rItem, eOption);
                 }
-                catch(const css::uno::Exception& ex)
+                catch(const cpo::uno::Exception& ex)
                 {
                     throw css::document::CorruptedFilterConfigurationException(
                             "filter configuration, caught: " + ex.Message,
@@ -1452,14 +1452,14 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 if (pItem == pCache->end())
                 {
                     OUString sMsg("item \"" + rItem + "\" not found for update!");
-                    throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
+                    throw cpo::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
                 }
                 try
                 {
                     CacheItem aItem = impl_loadItem(xSet, eType, rItem, eOption);
                     pItem->second.update(aItem);
                 }
-                catch(const css::uno::Exception& ex)
+                catch(const cpo::uno::Exception& ex)
                 {
                     throw css::document::CorruptedFilterConfigurationException(
                             "filter configuration, caught: " + ex.Message,
@@ -1994,7 +1994,7 @@ void FilterCache::impl_readOldFormat()
        but that seems to be acceptable.
        see #139088# for further information
     */
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -2006,7 +2006,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;
     if (!xItem.is())
-        throw css::uno::Exception(u"Can not read old item."_ustr, css::uno::Reference< css::uno::XInterface >());
+        throw cpo::uno::Exception(u"Can not read old item."_ustr, css::uno::Reference< css::uno::XInterface >());
 
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
@@ -2027,7 +2027,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
         (lData.empty()    )
        )
     {
-        throw css::uno::Exception( u"Can not read old item property DATA."_ustr, css::uno::Reference< css::uno::XInterface >());
+        throw cpo::uno::Exception( u"Can not read old item property DATA."_ustr, css::uno::Reference< css::uno::XInterface >());
     }
 
     sal_Int32 nProp = 0;

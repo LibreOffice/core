@@ -2525,7 +2525,7 @@ namespace cppcanvas
                     bRet &= rAction.mpAction->render( mrCanvas, maViewState, aMatrix );
                 return bRet;
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION( "cppcanvas.emf");
                 return false;

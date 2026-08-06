@@ -134,7 +134,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
             mxCellFamily.set( xFamilies->getByName( u"cell"_ustr ), UNO_QUERY_THROW );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::CustomAnimationPane()" );
     }
@@ -498,7 +498,7 @@ void TableDesignWidget::ApplyStyle()
                     { &aArg });
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::implValueSetHdl()");
     }
@@ -573,7 +573,7 @@ void TableDesignWidget::onSelectionChanged()
             xNewSelection.set( xDesc, UNO_QUERY );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::onSelectionChanged()" );
     }
@@ -665,7 +665,7 @@ void TableDesignWidget::updateControls()
         {
             mxSelectedTable->getPropertyValue( OUString(gPropNames[i]) ) >>= bUse;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::updateControls()");
         }
@@ -1056,7 +1056,7 @@ void TableDesignWidget::FillDesignPreviewControl()
             if( xTableStyle.is() )
                 m_xValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
         }
@@ -1078,7 +1078,7 @@ void TableDesignWidget::FillDesignPreviewControl()
 
         m_xValueSet->Resize();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
     }

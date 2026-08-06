@@ -146,7 +146,7 @@ public class DataOutputStream extends TestCase {
                             "com.sun.star.io.DataInputStream");
                         xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
-                    } catch(com.sun.star.uno.Exception e) {
+                    } catch(cpo.uno.Exception e) {
                         return null;
                     }
 

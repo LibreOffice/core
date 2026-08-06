@@ -393,7 +393,7 @@ bool lcl_hasAllComponentsAvailable()
     {
         return css::sdb::TextConnectionSettings::create(comphelper::getProcessComponentContext()).is();
     }
-    catch (const css::uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION(
             "sw.core", "assuming Base to be missing; caught ");
@@ -429,7 +429,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                                            pView->GetFrameWeld(), RESTART_REASON_MAILMERGE_INSTALL);
                 return;
             }
-            catch (const css::uno::Exception &)
+            catch (const cpo::uno::Exception &)
             {
                 TOOLS_INFO_EXCEPTION(
                     "sw.core",

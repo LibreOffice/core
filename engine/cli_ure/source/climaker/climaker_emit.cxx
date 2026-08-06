@@ -358,13 +358,13 @@ Assembly ^ TypeEmitter::type_resolve(
     if (nullptr == m_type_Exception)
     {
         m_type_Exception = get_type(
-            "unoidl.com.sun.star.uno.Exception", false /* no exc */ );
+            "unoidl.cpo.uno.Exception", false /* no exc */ );
         if (nullptr == m_type_Exception)
         {
-            // define hardcoded type unoidl.com.sun.star.uno.Exception
+            // define hardcoded type unoidl.cpo.uno.Exception
             Emit::TypeBuilder ^ type_builder =
                 m_module_builder->DefineType(
-                      "unoidl.com.sun.star.uno.Exception",
+                      "unoidl.cpo.uno.Exception",
                       (TypeAttributes) (TypeAttributes::Public |
                                         TypeAttributes::BeforeFieldInit |
                                         TypeAttributes::AnsiClass),
@@ -405,7 +405,7 @@ Assembly ^ TypeEmitter::type_resolve(
             {
                 ::System::Console::WriteLine(
                     "> emitting exception type "
-                    "unoidl.com.sun.star.uno.Exception" );
+                    "unoidl.cpo.uno.Exception" );
             }
             m_type_Exception = type_builder->CreateType();
         }
@@ -611,7 +611,7 @@ Assembly ^ TypeEmitter::type_resolve(
     OUString uno_name( xType->getName() );
     if (TypeClass_EXCEPTION == xType->getTypeClass())
     {
-        if ( uno_name == "com.sun.star.uno.Exception" )
+        if ( uno_name == "cpo.uno.Exception" )
         {
             return get_type_Exception();
         }
@@ -1489,7 +1489,7 @@ Assembly ^ TypeEmitter::type_resolve(
     Sequence<Reference<reflection::XServiceConstructorDescription> >  seqCtors =
         xServiceType->getConstructors();
 
-    ::System::Type ^ type_uno_exception = get_type("unoidl.com.sun.star.uno.Exception", true);
+    ::System::Type ^ type_uno_exception = get_type("unoidl.cpo.uno.Exception", true);
 
     for (int j = seqCtors.getLength() - 1; j >= 0; j--)
     {
@@ -1803,7 +1803,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 ilGen->Emit(Emit::OpCodes::Pop);
                 ilGen->Emit(Emit::OpCodes::Rethrow);
             }
-            //catch (unoidl.com.sun.star.uno.Exception) {throw DeploymentException...}
+            //catch (unoidl.cpo.uno.Exception) {throw DeploymentException...}
             ilGen->BeginCatchBlock(type_uno_exception);
 
             //Define the local variable that keeps the exception

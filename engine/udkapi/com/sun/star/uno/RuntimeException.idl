@@ -30,7 +30,7 @@
     some explicitly forbidden invalid parameters were passed ( e.g. null
     references ) or the called object has been disposed before.
  */
-published exception RuntimeException: com::sun::star::uno::Exception
+published exception RuntimeException: cpo::uno::Exception
 {
 };
 

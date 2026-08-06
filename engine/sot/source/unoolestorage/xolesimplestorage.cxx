@@ -101,7 +101,7 @@ OLESimpleStorage::OLESimpleStorage(
                 if (xSeek)
                     xSeek->seek( 0 );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {}
 
             ::comphelper::OStorageHelper::CopyInputToOutput( xInputStream, xTempOut );
@@ -143,7 +143,7 @@ OLESimpleStorage::~OLESimpleStorage()
     try {
         osl_atomic_increment(&m_refCount);
         dispose();
-    } catch( uno::Exception& )
+    } catch( cpo::uno::Exception& )
     {}
 }
 
@@ -202,7 +202,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
                 throw io::IOException();
         } while( nRead == nBytesCount );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         pNewStream.reset();
         pStorage->Remove( aName );
@@ -242,7 +242,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
                 InsertNameAccessToStorage_Impl( pNewStorage.get(), rElement, xSubNameAccess );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         pNewStorage.reset();
         pStorage->Remove( aName );
@@ -294,7 +294,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::
     {
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(u"Insert has failed!"_ustr,
@@ -439,7 +439,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         {
             throw;
         }
-        catch (const uno::Exception& ex)
+        catch (const cpo::uno::Exception& ex)
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException( ex.Message,

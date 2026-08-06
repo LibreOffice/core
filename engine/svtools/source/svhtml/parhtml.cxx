@@ -2117,7 +2117,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                             cpo::uno::Any(aContent));
                         AddMetaUserDefined(aName);
                         bChanged = true;
-                    } catch (uno::Exception &) {
+                    } catch (cpo::uno::Exception &) {
                         // ignore
                     }
                 }

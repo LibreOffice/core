@@ -33,7 +33,7 @@ bool ComEnumerationWrapper::hasMoreElements()
             bResult = ( ( m_xInvocation->getValue( u"length"_ustr ) >>= nLength ) && nLength > m_nCurInd );
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {}
 
     return bResult;
@@ -55,7 +55,7 @@ cpo::uno::Any ComEnumerationWrapper::nextElement()
                                           aNamedParam );
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {}
 
     throw container::NoSuchElementException();

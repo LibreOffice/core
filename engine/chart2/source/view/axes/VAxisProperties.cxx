@@ -236,7 +236,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
             m_eTickmarkPos = css::chart::ChartAxisMarkPosition_AT_LABELS;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -328,7 +328,7 @@ void AxisProperties::init( bool bCartesian )
             m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -389,7 +389,7 @@ void AxisLabelProperties::init( const rtl::Reference< Axis >& xAxisModel )
                 break;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

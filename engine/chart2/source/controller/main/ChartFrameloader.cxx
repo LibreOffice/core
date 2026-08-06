@@ -157,7 +157,7 @@ bool ChartFrameLoader::load( const cpo::uno::Sequence< beans::PropertyValue >& r
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

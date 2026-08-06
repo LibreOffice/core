@@ -99,7 +99,7 @@ void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& x
 
         OSL_ENSURE(m_pVclControl != nullptr, "UnoDataBrowserView::Construct : no real grid control !");
     }
-    catch(const Exception&)
+    catch(const cpo::uno::Exception&)
     {
         ::comphelper::disposeComponent(m_xGrid);
         throw;
@@ -121,7 +121,7 @@ void UnoDataBrowserView::dispose()
         ::comphelper::disposeComponent(m_xGrid);
         ::comphelper::disposeComponent(m_xMe);
     }
-    catch(const Exception&)
+    catch(const cpo::uno::Exception&)
     {}
     m_pTreeView.reset();
     m_pVclControl.reset();

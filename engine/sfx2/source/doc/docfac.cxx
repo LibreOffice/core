@@ -231,7 +231,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             ::comphelper::ConfigurationHelper::flush( xConfig );
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -317,7 +317,7 @@ OUString SfxObjectFactory::GetModuleName() const
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 

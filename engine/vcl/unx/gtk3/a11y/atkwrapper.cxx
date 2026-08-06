@@ -374,7 +374,7 @@ wrapper_get_name( AtkObject *atk_obj )
                 return atk_obj->name;
             }
         }
-        catch(const uno::Exception&) {
+        catch(const cpo::uno::Exception&) {
             g_warning( "Exception in getAccessibleName()" );
         }
     }
@@ -402,7 +402,7 @@ wrapper_get_description( AtkObject *atk_obj )
 
             return atk_obj->description;
         }
-        catch(const uno::Exception&) {
+        catch(const cpo::uno::Exception&) {
             g_warning( "Exception in getAccessibleDescription()" );
         }
     }
@@ -445,7 +445,7 @@ wrapper_get_attributes( AtkObject *atk_obj )
         if( xExtendedAttrs.is() )
             pSet = attribute_set_new_from_extended_attributes( xExtendedAttrs );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         g_warning( "Exception in getAccessibleAttributes()" );
     }
@@ -483,7 +483,7 @@ wrapper_get_n_children( AtkObject *atk_obj )
             }
             n = nChildCount;
         }
-        catch(const uno::Exception&) {
+        catch(const cpo::uno::Exception&) {
             TOOLS_WARN_EXCEPTION( "vcl", "Exception" );
         }
     }
@@ -517,7 +517,7 @@ wrapper_ref_child( AtkObject *atk_obj,
 
             child = atk_object_wrapper_ref( xAccessible );
         }
-        catch(const uno::Exception&) {
+        catch(const cpo::uno::Exception&) {
             TOOLS_WARN_EXCEPTION( "vcl", "getAccessibleChild");
         }
     }
@@ -556,7 +556,7 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
             }
             i = nIndex;
         }
-        catch(const uno::Exception&) {
+        catch(const cpo::uno::Exception&) {
             g_warning( "Exception in getAccessibleIndexInParent()" );
         }
     }
@@ -612,7 +612,7 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
                 g_object_unref(pRel);
             }
         }
-        catch(const uno::Exception &) {
+        catch(const cpo::uno::Exception &) {
             g_object_unref( G_OBJECT( pSet ) );
             pSet = nullptr;
         }
@@ -641,7 +641,7 @@ wrapper_ref_state_set( AtkObject *atk_obj )
             }
         }
 
-        catch(const uno::Exception &) {
+        catch(const cpo::uno::Exception &) {
             g_warning( "Exception in wrapper_ref_state_set" );
             atk_state_set_add_state( pSet, ATK_STATE_DEFUNCT );
         }
@@ -766,7 +766,7 @@ isOfType( uno::XInterface *pInterface, const cpo::uno::Type & rType )
 
         bIs = ( ( typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass ) &&
                 ( aRet.pReserved != nullptr ) );
-    } catch( const uno::Exception &) { }
+    } catch( const cpo::uno::Exception &) { }
 
     return bIs;
 }
@@ -801,7 +801,7 @@ static bool isTableCell(uno::XInterface* pInterface)
         css::uno::Reference<css::accessibility::XAccessibleTable> xTable(xParentContext, uno::UNO_QUERY);
         return xTable.is();
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         g_warning("Exception in isTableCell()");
     }
@@ -1036,7 +1036,7 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
 
         return ATK_OBJECT( pWrap );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         if( pWrap )
             g_object_unref( pWrap );

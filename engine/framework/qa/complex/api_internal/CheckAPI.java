@@ -70,7 +70,7 @@ public class CheckAPI  {
         try {
             oObj = xMSF.createInstance("org.openoffice.RunnerService");
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             fail("Could not create Instance of 'org.openoffice.RunnerService'");
         }
         assertNotNull("Cannot create 'org.openoffice.RunnerService'", oObj);
@@ -117,7 +117,7 @@ public class CheckAPI  {
 
                     oObj = xMSF.createInstance("org.openoffice.RunnerService");
                 }
-                catch(com.sun.star.uno.Exception e) {
+                catch(cpo.uno.Exception e) {
                     fail("Could not create Instance of 'org.openoffice.RunnerService'");
                 }
                 catch (UnsupportedEncodingException e) {
@@ -167,7 +167,7 @@ public class CheckAPI  {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

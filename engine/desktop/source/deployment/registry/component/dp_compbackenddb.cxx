@@ -84,7 +84,7 @@ void ComponentBackendDb::addEntry(OUString const & url, Data const & data)
             save();
         }
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -112,7 +112,7 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(std::u16string_view url)
         }
         return retData;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

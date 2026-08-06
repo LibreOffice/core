@@ -1131,7 +1131,7 @@ bool PasswordContainer::authorizateWithMasterPassword( std::unique_lock<std::mut
                     // ask for the password, if user provide no correct password an exception will be thrown
                     bResult = !GetMasterPassword( xTmpHandler ).isEmpty();
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
         }

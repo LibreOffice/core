@@ -398,7 +398,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
             if (pStr)
                 sHelp = *pStr;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 
@@ -1802,7 +1802,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uI
                 aRect.Height = aSize.Height;
                 bRectIsSet = true;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
 

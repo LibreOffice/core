@@ -44,7 +44,7 @@ namespace dbaui
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::container::XHierarchicalNameAccess;
     using ::com::sun::star::sdbc::SQLException;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdb::tools::XConnectionTools;
     using ::com::sun::star::uno::UNO_QUERY;

@@ -79,7 +79,7 @@ void ScGlobal::InitAddIns()
                 xResultSet = aCnt.createCursor(
                     aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // ucb may throw different exceptions on failure now
                 // no assertion if AddIn directory doesn't exist
@@ -100,13 +100,13 @@ void ScGlobal::InitAddIns()
                         while ( xResultSet->next() );
                     }
                 }
-                catch ( Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION( "sc", "" );
                 }
             }
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sc", "" );
         }
@@ -133,7 +133,7 @@ OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         else
             return OUString();
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "GetOrdinalSuffix: exception caught during init" );
     }

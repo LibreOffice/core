@@ -243,7 +243,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
                 xSeries->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 pResultSerie[nSeriesIdx] = std::move(xSeries);
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -299,7 +299,7 @@ bool StockDataInterpreter::isDataCompatible(
                 if( dataSeries->getDataSequences2().size() != nNumberOfNecessarySequences )
                     return false;
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }

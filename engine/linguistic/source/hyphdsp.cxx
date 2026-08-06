@@ -356,7 +356,7 @@ Reference< XHyphenatedWord > SAL_CALL
                                     pEntry->aSvcImplNames[0], aArgs, xContext ),
                                 UNO_QUERY );
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
@@ -487,7 +487,7 @@ Reference< XHyphenatedWord > SAL_CALL
                                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                     pEntry->aSvcImplNames[0], aArgs, xContext ), UNO_QUERY );
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
@@ -609,7 +609,7 @@ Reference< XPossibleHyphens > SAL_CALL
                                    pEntry->aSvcImplNames[0], aArgs, xContext ),
                                UNO_QUERY );
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "linguistic", "createWithArguments failed" );
                 }

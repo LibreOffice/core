@@ -143,7 +143,7 @@ public class SbaXGridControl extends TestCase {
         try {
             toolkit = (XInterface) tParam.getMSF()
                                          .createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get toolkit", e);
@@ -358,7 +358,7 @@ public class SbaXGridControl extends TestCase {
                             new ifc.form._XUpdateBroadcaster.UpdateChecker() {
             private String lastText = "";
 
-            public void update() throws com.sun.star.uno.Exception {
+            public void update() throws cpo.uno.Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
                 }
@@ -378,7 +378,7 @@ public class SbaXGridControl extends TestCase {
                 update.updateRow();
             }
 
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
+            public boolean wasCommited() throws cpo.uno.Exception {
                 String getS = (String) ps.getPropertyValue("Text");
 
                 return lastText.equals(getS);

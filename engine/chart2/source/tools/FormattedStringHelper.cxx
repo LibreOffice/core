@@ -44,7 +44,7 @@ rtl::Reference< ::chart::FormattedString >
         comphelper::copyProperties(
             xTextProperties, Reference< beans::XPropertySet >( static_cast<cppu::OWeakObject*>(xFormStr.get()), uno::UNO_QUERY_THROW ) );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

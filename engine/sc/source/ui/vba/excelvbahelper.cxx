@@ -156,7 +156,7 @@ public:
             {
                 setReplaceCellsWarning( true );
             }
-            catch ( uno::Exception& /*e*/ ){}
+            catch ( cpo::uno::Exception& /*e*/ ){}
         }
     }
 };
@@ -391,7 +391,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
         cpo::uno::Sequence< cpo::uno::Any > aArgs;
         xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -514,7 +514,7 @@ void ExportAsFixedFormatHelper(
             try {
                 xStor->storeToURL(sURL, storeProps);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 SetDocInfoState(xModel, xOldDocProps);
                 throw;
@@ -577,7 +577,7 @@ void SetDocInfoState(
                     // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
                     xSet->setPropertyValue(rProp.Name, aValue);
                 }
-                catch (const uno::Exception&) {}
+                catch (const cpo::uno::Exception&) {}
             }
         }
 
@@ -599,7 +599,7 @@ void SetDocInfoState(
         xDocPropsToFill->setEditingCycles(i_xOldDocProps->getEditingCycles());
         xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
     }
-    catch (const uno::Exception&) {}
+    catch (const cpo::uno::Exception&) {}
 
     // set the modified flag back if required
     if (bIsModified != xModifiable->isModified())

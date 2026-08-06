@@ -38,7 +38,7 @@ interface XSignatureCreationResultBroadcaster : com::sun::star::uno::XInterface
      */
     void addSignatureCreationResultListener(
         [in] XSignatureCreationResultListener listener)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Removes a signature creation result listener.

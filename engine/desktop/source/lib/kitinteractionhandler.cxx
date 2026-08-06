@@ -197,7 +197,7 @@ OUString getErrMessage(const uno::Reference<task::XInteractionRequest>& xRequest
         if (aMessage.IsPresent)
             return aMessage.Value;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return OUString();

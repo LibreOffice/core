@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
  */
 public class WriterDocumentTest extends DocumentTestBase
 {
-    public WriterDocumentTest( final XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    public WriterDocumentTest( final XMultiServiceFactory i_orb ) throws cpo.uno.Exception
     {
         super( i_orb, DocumentType.WRITER );
     }
@@ -46,33 +46,33 @@ public class WriterDocumentTest extends DocumentTestBase
         return "text document";
     }
 
-    public void initializeDocument() throws com.sun.star.uno.Exception
+    public void initializeDocument() throws cpo.uno.Exception
     {
         // TODO?
     }
 
-    public void doSingleModification() throws com.sun.star.uno.Exception
+    public void doSingleModification() throws cpo.uno.Exception
     {
         final XTextDocument textDoc = UnoRuntime.queryInterface( XTextDocument.class, getDocument().getDocument() );
         final XText docText = textDoc.getText();
         docText.setString( s_blindText );
     }
 
-    public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
+    public void verifyInitialDocumentState() throws cpo.uno.Exception
     {
         final XTextDocument textDoc = UnoRuntime.queryInterface( XTextDocument.class, getDocument().getDocument() );
         final XText docText = textDoc.getText();
         assertEquals( "document should be empty", "", docText.getString() );
     }
 
-    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
+    public void verifySingleModificationDocumentState() throws cpo.uno.Exception
     {
         final XTextDocument textDoc = UnoRuntime.queryInterface( XTextDocument.class, getDocument().getDocument() );
         final XText docText = textDoc.getText();
         assertEquals( "blind text not found", s_blindText, docText.getString() );
     }
 
-    public int doMultipleModifications() throws com.sun.star.uno.Exception
+    public int doMultipleModifications() throws cpo.uno.Exception
     {
         final XTextDocument textDoc = UnoRuntime.queryInterface( XTextDocument.class, getDocument().getDocument() );
         final XText docText = textDoc.getText();

@@ -85,7 +85,7 @@ public class DesktopTools
             xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, xMSF.createInstance("com.sun.star.comp.framework.Desktop"));
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             throw new IllegalArgumentException("Desktop Service not available", e);
         }
@@ -221,7 +221,7 @@ public class DesktopTools
             oDoc = getCLoader(xMSF).loadComponentFromURL("private:factory/" + kind,
                     "_blank", 0, Args);
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             throw new IllegalArgumentException("Document could not be opened", e);
         }
@@ -249,7 +249,7 @@ public class DesktopTools
         {
             oDoc = getCLoader(xMSF).loadComponentFromURL(url, "_blank", 0, Args);
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             throw new IllegalArgumentException("Document could not be loaded", e);
         }
@@ -332,7 +332,7 @@ public class DesktopTools
         {
             oObj = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             throw new StatusException("Couldn't get toolkit", e);
         }
@@ -433,7 +433,7 @@ public class DesktopTools
             aConfig = null;
 
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             e.printStackTrace();
         }

@@ -309,7 +309,7 @@ SAL_IMPLEMENT_MAIN()
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
-        catch (const Exception & rExc)
+        catch (const cpo::uno::Exception & rExc)
         {
             (void)rExc;
             OSL_ENSURE(

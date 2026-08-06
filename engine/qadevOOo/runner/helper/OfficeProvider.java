@@ -89,7 +89,7 @@ public class OfficeProvider implements AppProvider
         {
             System.out.println("User Variable '$(user)' not defined.");
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println("Couldn't backup user layer");
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class OfficeProvider implements AppProvider
             {
                 desk = UnoRuntime.queryInterface(XDesktop.class, msf.createInstance("com.sun.star.frame.Desktop"));
             }
-            catch (com.sun.star.uno.Exception ue)
+            catch (cpo.uno.Exception ue)
             {
                 return false;
             }
@@ -254,7 +254,7 @@ public class OfficeProvider implements AppProvider
                     {
                         msf = connect(cncstr);
                     }
-                    catch (com.sun.star.uno.Exception ue)
+                    catch (cpo.uno.Exception ue)
                     {
                         exConnectFailed = ue;
                         exc = ue.getMessage();
@@ -302,13 +302,13 @@ public class OfficeProvider implements AppProvider
      * Connect an Office
      * @param connectStr
      * @return
-     * @throws com.sun.star.uno.Exception
+     * @throws cpo.uno.Exception
      * @throws com.sun.star.uno.RuntimeException
      * @throws com.sun.star.connection.NoConnectException
      * @throws Exception
      */
     private XMultiServiceFactory connect(String connectStr)
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
             com.sun.star.uno.RuntimeException,
             com.sun.star.connection.NoConnectException,
             Exception
@@ -417,7 +417,7 @@ public class OfficeProvider implements AppProvider
         {
             msf = connect(cncstr);
         }
-        catch (com.sun.star.uno.Exception ue)
+        catch (cpo.uno.Exception ue)
         {
             exc = ue.getMessage();
         }
@@ -453,7 +453,7 @@ public class OfficeProvider implements AppProvider
                 XFastPropertySet fps = UnoRuntime.queryInterface(XFastPropertySet.class, quickStarter);
                 fps.setFastPropertyValue(0, false);
             }
-            catch (com.sun.star.uno.Exception ex)
+            catch (cpo.uno.Exception ex)
             {
                 dbg("ERROR: Could not disable QuickStarter: " + ex.toString());
             }
@@ -478,7 +478,7 @@ public class OfficeProvider implements AppProvider
                     dbg("Desktop terminated");
                 }
             }
-            catch (com.sun.star.uno.Exception ue)
+            catch (cpo.uno.Exception ue)
             {
                 result = false;
             }
@@ -573,7 +573,7 @@ public class OfficeProvider implements AppProvider
         return res;
     }
 
-    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) throws com.sun.star.uno.Exception
+    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) throws cpo.uno.Exception
     {
         Object xPathSubst = xMSF.createInstance(
                     "com.sun.star.util.PathSubstitution");

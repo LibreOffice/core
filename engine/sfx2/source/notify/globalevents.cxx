@@ -442,7 +442,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject
     }
     catch(const uno::RuntimeException&)
         { throw; }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 }
 
@@ -469,7 +469,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
        DBG_UNHANDLED_EXCEPTION("sfx.notify");
     }

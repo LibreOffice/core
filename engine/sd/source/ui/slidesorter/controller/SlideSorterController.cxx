@@ -145,7 +145,7 @@ SlideSorterController::~SlideSorterController()
         if (mpListener.is())
             mpListener->dispose();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SlideSorterController::~SlideSorterController()" );
     }
@@ -250,7 +250,7 @@ void SlideSorterController::Paint (
     {
         mrView.CompleteRedraw(pWindow->GetOutDev(), vcl::Region(rBBox));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // Ignore all exceptions.
     }

@@ -35,7 +35,7 @@ namespace svt::table
 
     using css::uno::Reference;
     using css::awt::grid::XGridColumn;
-    using css::uno::Exception;
+    using cpo::uno::Exception;
     using css::awt::grid::XGridColumnListener;
     using css::lang::EventObject;
     using css::awt::grid::GridColumnEvent;

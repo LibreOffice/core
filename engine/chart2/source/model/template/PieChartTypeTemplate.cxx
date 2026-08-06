@@ -253,7 +253,7 @@ void PieChartTypeTemplate::adaptScales(
                 xAxis->setScaleData( aScaleData );
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -289,7 +289,7 @@ void PieChartTypeTemplate::createChartTypes(
                 aFlatSeriesSeq, rCoordSys[0], getStackMode( 0 ));
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -365,7 +365,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
 
             bResult = ( eOffsetMode == ePieOffsetMode );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
             bResult = false;
@@ -407,7 +407,7 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int3
         xResult->setFastPropertyValue(
             PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -429,7 +429,7 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries2(
         xResult->setFastPropertyValue(
             PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -525,7 +525,7 @@ void PieChartTypeTemplate::applyStyle2(
         // vary colors by point
         xSeries->setFastPropertyValue( PROP_DATASERIES_VARY_COLORS_BY_POINT, cpo::uno::Any( true )); // "VaryColorsByPoint"
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -561,7 +561,7 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
                     xAxis->setScaleData( aScaleData );
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }

@@ -667,7 +667,7 @@ Color AccessibleBase::getColor( eColorType eColType )
                 xObjProp->getPropertyValue( aPropName ) >>= nResult;
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

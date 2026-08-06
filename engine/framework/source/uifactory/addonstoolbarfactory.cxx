@@ -109,7 +109,7 @@ bool AddonsToolBarFactory::hasButtonsInContext(
     {
         throw;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

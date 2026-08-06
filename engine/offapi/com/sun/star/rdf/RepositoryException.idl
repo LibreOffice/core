@@ -25,7 +25,7 @@ module com {   module sun {   module star {   module rdf {
 
     @see XRepository
  */
-exception RepositoryException : com::sun::star::uno::Exception
+exception RepositoryException : cpo::uno::Exception
 {
 };
 

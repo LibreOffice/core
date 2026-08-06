@@ -123,7 +123,7 @@ Reference< XAreaLink > lclFindAreaLink(
                 return xAreaLink;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return Reference< XAreaLink >();
@@ -260,7 +260,7 @@ void QueryTable::finalizeImport()
             aPropSet.setProperty( PROP_RefreshPeriod, nRefreshPeriod );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

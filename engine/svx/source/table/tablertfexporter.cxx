@@ -98,7 +98,7 @@ void SdrTableRtfExporter::Write()
         nPos += o3tl::toTwips(nWidth, o3tl::Length::mm100);
         aColumnStart.push_back( nPos );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -112,7 +112,7 @@ void SdrTableRtfExporter::Write()
         Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
         WriteRow( xRowSet, nRow, aColumnStart );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }

@@ -58,7 +58,7 @@ public class OfficeDocumentView
         @return
             the dispatcher for the URL in question
     */
-    private XDispatch getDispatcher( URL[] aURL ) throws com.sun.star.uno.Exception
+    private XDispatch getDispatcher( URL[] aURL ) throws cpo.uno.Exception
     {
         XDispatch xReturn = null;
 
@@ -83,13 +83,13 @@ public class OfficeDocumentView
         @return
             <TRUE/> if the URL was successfully dispatched
     */
-    public boolean dispatch( String i_url ) throws com.sun.star.uno.Exception
+    public boolean dispatch( String i_url ) throws cpo.uno.Exception
     {
         return dispatch( i_url, new PropertyValue[0] );
     }
 
     /* ------------------------------------------------------------------ */
-    private boolean dispatch( final String i_url, final PropertyValue[] i_arguments ) throws com.sun.star.uno.Exception
+    private boolean dispatch( final String i_url, final PropertyValue[] i_arguments ) throws cpo.uno.Exception
     {
         URL[] completeURL = new URL[] { new URL() };
         completeURL[0].Complete = i_url;

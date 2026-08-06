@@ -130,7 +130,7 @@ namespace dbaui
                 xModel->attachResource( xModel->getURL(), aArgs.getPropertyValues() );
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }

@@ -91,7 +91,7 @@ bool ZipArchive::open(const std::string& path, std::string& error)
             impl->mutexHolder, impl->stream, css::uno::Reference<css::uno::XComponentContext>(),
             true /* initialise */, false /* force recovery */, ZipFile::Checks::Default);
     }
-    catch (const css::uno::Exception& exception)
+    catch (const cpo::uno::Exception& exception)
     {
         error = toUtf8(exception.Message);
         if (error.empty())
@@ -165,7 +165,7 @@ const ZipEntryInfo* ZipArchive::extract(const std::string& name, std::string& ou
                        static_cast<size_t>(count));
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         out.clear();
         return nullptr;

@@ -1774,7 +1774,7 @@ namespace cmis
         {
             throw;
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
@@ -1978,7 +1978,7 @@ namespace cmis
         {
             throw;
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
@@ -2040,7 +2040,7 @@ namespace cmis
         {
             throw;
         }
-        catch (const uno::Exception& e)
+        catch (const cpo::uno::Exception& e)
         {
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(

@@ -1647,7 +1647,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                     sal_uInt16 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                     pItemAttList->add(XML_numFmtId, OString::number(nXclNumFmt));
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                     SAL_WARN("sc.filter",
                              "Couldn't get number format for data field " << rDim.GetName());

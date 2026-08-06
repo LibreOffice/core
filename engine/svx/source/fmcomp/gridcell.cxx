@@ -3605,7 +3605,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
         else
             rDev.DrawText(rRect, aText, nStyle);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx.fmcomp", "PaintFieldToCell");
     }

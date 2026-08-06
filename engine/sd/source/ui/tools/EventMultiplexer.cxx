@@ -153,7 +153,7 @@ EventMultiplexer::~EventMultiplexer()
     catch (const RuntimeException&)
     {
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

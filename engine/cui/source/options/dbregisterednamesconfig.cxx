@@ -50,7 +50,7 @@ namespace svx
                     xRegistrations->isDatabaseRegistrationReadOnly(registrationName));
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("cui.options");
         }
@@ -102,7 +102,7 @@ namespace svx
                     xRegistrations->revokeDatabaseLocation(registrationName);
             }
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
                         //DBG_UNHANDLED_EXCEPTION();
         }

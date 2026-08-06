@@ -25,7 +25,7 @@
 /** This exception can be thrown in case the object can not provide own visual
     area currently.
  */
-published exception NoVisualAreaSizeException: com::sun::star::uno::Exception
+published exception NoVisualAreaSizeException: cpo::uno::Exception
 {
 };
 

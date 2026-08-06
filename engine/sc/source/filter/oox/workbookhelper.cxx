@@ -345,7 +345,7 @@ Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) 
         Reference< XNameAccess > xFamiliesNA( mxDoc->getStyleFamilies(), UNO_SET_THROW );
         xStylesNC.set( xFamiliesNA->getByName( bPageStyles ? maPageStyles : maCellStyles ), UNO_QUERY );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( xStylesNC.is(), "WorkbookGlobals::getStyleFamily - cannot access style family" );
@@ -360,7 +360,7 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
         Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
         xStyle.set( xStylesNC->getByName( rStyleName ), UNO_QUERY );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( xStyle.is(), "WorkbookGlobals::getStyleObject - cannot access style object" );
@@ -474,7 +474,7 @@ rtl::Reference<ScDatabaseRangeObj> WorkbookGlobals::createDatabaseRangeObject( O
             throw RuntimeException(u"Could not add database range"_ustr);
         return new ScDatabaseRangeObj(pDocSh, orName);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("sc");
     }
@@ -501,7 +501,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
         ScDocShell* pDocSh = rDoc.GetDocumentShell();
         xDatabaseRange.set(new ScDatabaseRangeObj(pDocSh, aDestRange.aStart.Tab()));
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
@@ -525,7 +525,7 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
         xStyle.set( mrBaseFilter.getModelFactory()->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
         orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( xStyle.is(), "WorkbookGlobals::createStyleObject - cannot create style" );
@@ -874,7 +874,7 @@ rtl::Reference< ScTableSheetObj > WorkbookHelper::getSheetFromDoc( const OUStrin
     {
         xSheet = getDocument()->getScSheets()->GetSheetByName( rSheet );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xSheet;
@@ -889,7 +889,7 @@ Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const ScRange& rRan
         if (xSheet)
             xRange = xSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xRange;

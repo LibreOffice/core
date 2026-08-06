@@ -80,7 +80,7 @@ ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
                 // try to let the file be hidden if possible
                 try {
                     aContent.setPropertyValue(u"IsHidden"_ustr, cpo::uno::Any( true ) );
-                } catch( uno::Exception& ) {}
+                } catch( cpo::uno::Exception& ) {}
 
                 // Try to open one more time
                 xStream = aContent.openWriteableStreamNoLock();
@@ -106,7 +106,7 @@ ShareControlFile::~ShareControlFile()
     {
         Close();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -124,7 +124,7 @@ void ShareControlFile::Close()
         if ( m_xOutputStream.is() )
             m_xOutputStream->closeOutput();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     m_xStream.clear();

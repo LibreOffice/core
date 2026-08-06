@@ -150,7 +150,7 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
         for (const auto & rxChartType : m_aChartTypes)
             rxChartType->removeModifyListener( m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }

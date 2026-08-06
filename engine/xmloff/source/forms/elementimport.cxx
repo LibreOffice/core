@@ -594,7 +594,7 @@ using namespace cpo::uno;
                 try {
                     props->setPropertyValue(
                         u"Referer"_ustr, cpo::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
-                } catch (css::uno::Exception &) {
+                } catch (cpo::uno::Exception &) {
                     TOOLS_INFO_EXCEPTION("xmloff.forms", "setPropertyValue Referer failed");
                 }
             }

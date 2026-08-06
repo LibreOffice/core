@@ -51,7 +51,7 @@ namespace frm
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::beans::NotRemoveableException;
     using ::com::sun::star::beans::UnknownPropertyException;
 

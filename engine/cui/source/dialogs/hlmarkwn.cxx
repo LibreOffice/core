@@ -311,7 +311,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
         {
             aAny = xLinks->getByName( aLink );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
@@ -396,7 +396,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         mxLbTree->set_image(*xEntry, aBmp.GetXGraphic(), -1);
                     }
                 }
-                catch(const css::uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                 }
 
@@ -406,7 +406,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                 if( xLTS.is() )
                     nEntries += FillTree( xLTS->getLinks(), xEntry.get() );
             }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
             }
         }

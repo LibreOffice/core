@@ -160,7 +160,7 @@ void ScShareDocumentDlg::UpdateView()
                 m_xLbUsers->append_text(m_aStrNoUserData);
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sc", "ScShareDocumentDlg::UpdateView()" );
             m_xLbUsers->clear();

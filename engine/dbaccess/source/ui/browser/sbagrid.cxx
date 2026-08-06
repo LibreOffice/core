@@ -853,7 +853,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         else
             OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("dbaccess", "SbaGridControl::getField Exception occurred");
     }
@@ -888,7 +888,7 @@ bool SbaGridControl::IsReadOnlyDB() const
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred");
     }
@@ -1182,7 +1182,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
                 if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
                     break;
             }
-            catch (const Exception& )
+            catch (const cpo::uno::Exception& )
             {
                 // assume RO
                 break;

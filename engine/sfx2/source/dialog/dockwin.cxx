@@ -190,7 +190,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     catch ( uno::RuntimeException& )
     {
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 

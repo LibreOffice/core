@@ -520,7 +520,7 @@ OCopyTableWizard::OCopyTableWizard(weld::Window* pParent, const OUString& _rDefa
                 m_sName = sInitialTableName;
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         m_sName = sInitialTableName;
     }

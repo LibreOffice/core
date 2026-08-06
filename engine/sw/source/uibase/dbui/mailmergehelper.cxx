@@ -158,7 +158,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         xSmtpServer->connect(xConnectionContext, xAuthenticator);
         rxInMailService = xSmtpServer;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "");
     }

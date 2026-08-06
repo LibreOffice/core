@@ -216,7 +216,7 @@ public class Parcel implements XNameContainer {
     private void writeParcelDescriptor()
     throws com.sun.star.ucb.CommandAbortedException,
         com.sun.star.io.IOException,
-        com.sun.star.uno.Exception, java.io.IOException {
+        cpo.uno.Exception, java.io.IOException {
 
         String pathToDescriptor =
             PathUtils.make_url(getPathToParcel(), ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);

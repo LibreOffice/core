@@ -966,7 +966,7 @@ public class _XAccessibleText {
             try {
                 cbText =
                     util.SysUtils.getSysClipboardText(xMSF);
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 System.out.println("Couldn't access system clipboard :");
                 e.printStackTrace();
             }
@@ -981,7 +981,7 @@ public class _XAccessibleText {
 
                 try {
                     cbText = util.SysUtils.getSysClipboardText(xMSF);
-                } catch (com.sun.star.uno.Exception e) {
+                } catch (cpo.uno.Exception e) {
                     System.out.println("Couldn't access system clipboard :");
                     e.printStackTrace();
                 }

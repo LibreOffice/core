@@ -53,7 +53,7 @@ public class DBaseDriverTest extends ComplexTestCase implements TestCase
         return log;
     }
 
-    public void Functions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    public void Functions() throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         DBaseStringFunctions aStringTest = new DBaseStringFunctions(param.getMSF(), this);
         aStringTest.testFunctions();

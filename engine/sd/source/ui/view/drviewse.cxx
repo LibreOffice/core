@@ -1693,7 +1693,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                 pMarkedObj->setHyperlink(rURL);
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -1753,7 +1753,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
         mpDrawView->InsertObjectAtView(pUnoCtrl.get(), *mpDrawView->GetSdrPageView(), nOptions);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

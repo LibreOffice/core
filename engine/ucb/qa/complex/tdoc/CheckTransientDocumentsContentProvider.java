@@ -133,7 +133,7 @@ public class CheckTransientDocumentsContentProvider {
             assertTrue("Did only find " + countContentIdentifiers + " open documents." +
                         " Should have been at least 3.", countContentIdentifiers>2);
         }
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             e.printStackTrace();
             fail("Could not create test objects.");
         }
@@ -152,7 +152,7 @@ public class CheckTransientDocumentsContentProvider {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

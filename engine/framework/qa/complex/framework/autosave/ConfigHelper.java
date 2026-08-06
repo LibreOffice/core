@@ -33,7 +33,7 @@ class ConfigHelper
     public ConfigHelper(XComponentContext context,
                         String               sConfigPath ,
                         boolean              bReadOnly   )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         XMultiServiceFactory xConfigRoot = theDefaultProvider.get(context);
 
@@ -56,7 +56,7 @@ class ConfigHelper
 
         if (m_xConfig == null)
         {
-            throw new com.sun.star.uno.Exception("Could not open configuration \"" + sConfigPath + "\"");
+            throw new cpo.uno.Exception("Could not open configuration \"" + sConfigPath + "\"");
         }
     }
 
@@ -74,7 +74,7 @@ class ConfigHelper
             XPropertySet xPath = UnoRuntime.queryInterface(XPropertySet.class, m_xConfig.getByHierarchicalName(sRelPath));
             xPath.setPropertyValue(sKey, aValue);
         }
-        catch(com.sun.star.uno.Exception ex)
+        catch(cpo.uno.Exception ex)
         {
             throw new com.sun.star.container.NoSuchElementException(ex);
         }
@@ -88,7 +88,7 @@ class ConfigHelper
             XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, m_xConfig);
             xBatch.commitChanges();
         }
-        catch(com.sun.star.uno.Exception ex)
+        catch(cpo.uno.Exception ex)
         {}
     }
 }

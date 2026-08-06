@@ -28,7 +28,7 @@ module com
                 /** Is used for interaction handle to query user decision regarding reloading a
                     document that was recently made editable.
                 */
-                published exception ReloadEditableRequest : ::com::sun::star::uno::Exception
+                published exception ReloadEditableRequest : ::cpo::uno::Exception
                 {
                     /** The URL of the document that is open but was made editable.
                     */

@@ -32,7 +32,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
 
         ImplCheckButtons();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" );
     }

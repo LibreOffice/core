@@ -74,7 +74,7 @@ public class _XSet extends MultiMethodTest {
             e.printStackTrace(log) ;
             res = false ;
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace(log);
             res = false;
         }

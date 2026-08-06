@@ -693,7 +693,7 @@ static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModM
     {
         SAL_WARN("sfx", "getModuleIdentifier(): unknown module" );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx", "getModuleIdentifier(): exception of XModuleManager::identify()" );
     }

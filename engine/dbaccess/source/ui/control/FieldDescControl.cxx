@@ -356,7 +356,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                     aTmpString = xMetaData->getExtraNameCharacters();
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("dbaccess");
             }

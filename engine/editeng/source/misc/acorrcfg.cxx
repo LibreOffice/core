@@ -95,7 +95,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                         // Finally add this one.
                         SvtLanguageTable::AddLanguageTag( aLanguageTag);
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION("editeng", "Unable to get a directory entry from '" << rURL << "'");
                     }
@@ -103,7 +103,7 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("editeng", "Unable to iterate directory '" << rURL << "'");
     }

@@ -114,7 +114,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     {
                         TOOLS_WARN_EXCEPTION( "chart2", "unknown Property: " << aProperty.first);
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }
@@ -126,7 +126,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }
@@ -199,7 +199,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 {
                     TOOLS_WARN_EXCEPTION( "chart2", "unknown Property: " << aProperty.first);
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     TOOLS_WARN_EXCEPTION( "chart2", "" );
                 }

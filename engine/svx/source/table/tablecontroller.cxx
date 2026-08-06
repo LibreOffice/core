@@ -1180,7 +1180,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                         }
                     }
                 }
-                catch( Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("svx.table", "");
                 }
@@ -1190,7 +1190,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 rModel.EndUndo();
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -1988,7 +1988,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
                 rModel.EndUndo();
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx.table", "" );
     }
@@ -2008,7 +2008,7 @@ void SvxTableController::checkCell( CellPos& rPos ) const
         if( rPos.mnRow >= mxTable->getRowCount() )
             rPos.mnRow = mxTable->getRowCount()-1;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
@@ -2028,7 +2028,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
             ::findMergeOrigin( mxTable, rPos.mnCol, rPos.mnRow, rPos.mnCol, rPos.mnRow );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }

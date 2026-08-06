@@ -218,7 +218,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
             mxConfigurationSettings->setPropertyValue( u"RecognizeSmartTags"_ustr, aEnabled );
             bCommit = true;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -234,7 +234,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
             mxConfigurationSettings->setPropertyValue( u"ExcludedSmartTagTypes"_ustr, aNewTypes );
             bCommit = true;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -247,7 +247,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
             if (xChanges)
                 xChanges->commitChanges();
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -391,7 +391,7 @@ void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupN
         xConfigurationAccess = xConfProv->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArguments );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -403,7 +403,7 @@ void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupN
             xConfigurationAccess = xConfProv->createInstanceWithArguments(
                 u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArguments );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -455,7 +455,7 @@ void SmartTagMgr::RegisterListener()
             xExtensionManager->addModifyListener( xListener );
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -469,7 +469,7 @@ void SmartTagMgr::RegisterListener()
             xCN->addChangesListener( xListener );
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }

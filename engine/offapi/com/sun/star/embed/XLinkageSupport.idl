@@ -62,7 +62,7 @@ published interface XLinkageSupport: XCommonEmbedPersist
         @throws com::sun::star::io::IOException
             in case object has not persistence or other io problems
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
 
         @see also XEmbedPersist::setPersistentEntry
@@ -72,7 +72,7 @@ published interface XLinkageSupport: XCommonEmbedPersist
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 
     /** allows to detect whether the object is a linked one.
@@ -100,7 +100,7 @@ published interface XLinkageSupport: XCommonEmbedPersist
      */
     string getLinkURL()
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

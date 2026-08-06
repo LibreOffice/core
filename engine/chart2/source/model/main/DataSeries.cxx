@@ -224,7 +224,7 @@ DataSeries::~DataSeries()
             && xPropertySet.is())
             ModifyListenerHelper::removeListener( xPropertySet, m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -715,7 +715,7 @@ static bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDa
             if( !aHiddenValues.hasElements() )
                 return true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             return true;
         }
@@ -771,7 +771,7 @@ sal_Int32 DataSeries::getAttachedAxisIndex()
     {
         getFastPropertyValue( ::chart::DataSeriesProperties::PROP_DATASERIES_ATTACHED_AXIS_INDEX ) >>= nRet;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -883,7 +883,7 @@ bool DataSeries::hasDataLabelsAtSeries()
             bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName
                    || aLabel.ShowSeriesName;
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -917,7 +917,7 @@ bool DataSeries::hasDataLabelsAtPoints()
             }
         }
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -948,7 +948,7 @@ bool DataSeries::hasDataLabelAtPoint( sal_Int32 nPointIndex )
                        || aLabel.ShowSeriesName;
         }
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1005,7 +1005,7 @@ void DataSeries::impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert
             }
         }
     }
-    catch(const uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

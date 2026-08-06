@@ -131,7 +131,7 @@ Reference<css::ui::XUIElement> ChartPanelFactory::createUIElement (
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

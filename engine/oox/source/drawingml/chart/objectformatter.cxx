@@ -1008,7 +1008,7 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
         mxNumTypes.set( mxNumFmts, UNO_QUERY );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( mxNumFmts.is() && mxNumTypes.is(), "ObjectFormatterData::ObjectFormatterData - cannot get number formats" );
@@ -1135,7 +1135,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         if( nIndex >= 0 )
             rPropSet.setProperty( nPropId, nIndex );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" +
                 OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() )  + "'" ).getStr() );

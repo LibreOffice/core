@@ -68,7 +68,7 @@ OAccessibleControlContext::create(const Reference<awt::XControl>& rXControl)
     {
         pNew = new OAccessibleControlContext(rXControl);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("toolkit",
                              "OAccessibleControlContext::create: caught an exception in ctor!");
@@ -168,7 +168,7 @@ OUString OAccessibleControlContext::getModelStringProperty(const OUString& _pPro
         if (m_xModelPropsInfo.is() && m_xModelPropsInfo->hasPropertyByName(_pPropertyName))
             m_xControlModel->getPropertyValue(_pPropertyName) >>= sReturn;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("toolkit", "OAccessibleControlContext::getModelStringProperty");
     }

@@ -447,7 +447,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
                 ::dbtools::throwGenericSQLException( sError, nullptr );
             }
         }
-        catch(Exception &)
+        catch(cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION( "connectivity.drivers", "OPredicateCompiler::execute_Operand Exception");
         }

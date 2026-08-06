@@ -77,10 +77,10 @@ public class PathSubstitutionTest
             oObj = UnoRuntime.queryInterface(XStringSubstitution.class, x);
             if (oObj == null)
             {
-                throw new com.sun.star.uno.Exception();
+                throw new cpo.uno.Exception();
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println(e.getClass().getName());
             System.out.println("Message: " + e.getMessage());
@@ -152,7 +152,7 @@ public class PathSubstitutionTest
                         + "' correctly:", erg);
 
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (cpo.uno.Exception e)
             {
                 System.out.println(e.getClass().getName());
                 System.out.println("Message: " + e.getMessage());
@@ -285,7 +285,7 @@ public class PathSubstitutionTest
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

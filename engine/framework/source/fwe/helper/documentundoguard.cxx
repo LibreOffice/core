@@ -31,7 +31,7 @@ namespace framework
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::document::XUndoManagerSupplier;
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::document::XUndoManagerListener;

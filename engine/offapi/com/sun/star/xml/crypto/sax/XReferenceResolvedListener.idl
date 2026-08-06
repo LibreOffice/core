@@ -33,7 +33,7 @@ interface XReferenceResolvedListener : com::sun::star::uno::XInterface
      * @param referenceId   the id of the element collector
      */
     void referenceResolved([in] long referenceId)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 } ; } ; } ; } ; } ; } ;

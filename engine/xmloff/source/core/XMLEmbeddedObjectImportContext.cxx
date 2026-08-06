@@ -128,7 +128,7 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
         if (xModifiable2)
             xModifiable2->disableSetModified();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -251,7 +251,7 @@ void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 nElement)
             xModifiable2->setModified( true ); // trigger new replacement image generation
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

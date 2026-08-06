@@ -203,7 +203,7 @@ awt::Point GraphicHelper::convertHmmToAppFont( const awt::Point& rHmm ) const
         ::Point aDevPoint = mxDefaultOutputDevice->PixelToLogic(aVCLPoint, aMode );
         return awt::Point(aDevPoint.X(), aDevPoint.Y());
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -220,7 +220,7 @@ awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
         ::Size aDevSz = mxDefaultOutputDevice->PixelToLogic(aVCLSize, aMode );
         return awt::Size(aDevSz.Width(), aDevSz.Height());
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
@@ -254,7 +254,7 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
 
         xGraphic = mxGraphicProvider->queryGraphic( aArgs );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xGraphic;

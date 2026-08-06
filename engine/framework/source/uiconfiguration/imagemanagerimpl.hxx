@@ -128,13 +128,13 @@ namespace framework
             void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener );
 
             // XUIConfigurationPersistence
-            /// @throws css::uno::Exception
+            /// @throws cpo::uno::Exception
             /// @throws css::uno::RuntimeException
             void reload();
-            /// @throws css::uno::Exception
+            /// @throws cpo::uno::Exception
             /// @throws css::uno::RuntimeException
             void store();
-            /// @throws css::uno::Exception
+            /// @throws cpo::uno::Exception
             /// @throws css::uno::RuntimeException
             void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
             /// @throws css::uno::RuntimeException

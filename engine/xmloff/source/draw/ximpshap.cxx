@@ -313,7 +313,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
             sal_Int32 nInternalId = mxGluePoints->insert( cpo::uno::Any( aGluePoint ) );
             GetImport().GetShapeImport()->addGluePointMapping( mxShape, nId, nInternalId );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION( "xmloff", "during setting of gluepoints");
         }
@@ -516,7 +516,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
         if( xShape.is() )
             AddShape( xShape );
     }
-    catch(const uno::Exception& e)
+    catch(const cpo::uno::Exception& e)
     {
         TOOLS_WARN_EXCEPTION("xmloff", "AddShape " << serviceName);
         cpo::uno::Sequence<OUString> aSeq { serviceName };
@@ -693,7 +693,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                         }
                     }
                 }
-                catch(const uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION( "xmloff", "finding style for shape" );
                 }
@@ -706,7 +706,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                     // set style on object
                     xPropSet->setPropertyValue(u"Style"_ustr, Any(xStyle));
                 }
-                catch(const uno::Exception&)
+                catch(const cpo::uno::Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION( "xmloff", "setting style for shape" );
                 }
@@ -751,7 +751,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
         } while(false);
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -770,7 +770,7 @@ void SdXMLShapeContext::SetLayer()
             return;
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -796,7 +796,7 @@ void SdXMLShapeContext::SetThumbnail()
             xPropSet->setPropertyValue(u"ThumbnailGraphic"_ustr, cpo::uno::Any(xGraphic));
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -978,7 +978,7 @@ void SdXMLRectShapeContext::startFastElement (sal_Int32 nElement,
             {
                 xPropSet->setPropertyValue(u"CornerRadius"_ustr, cpo::uno::Any( mnRadius ) );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
@@ -1639,7 +1639,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
             {
                 xPropSet->setPropertyValue(u"CornerRadius"_ustr, cpo::uno::Any( mnRadius ) );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
@@ -1656,7 +1656,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
                 xPropSet->setPropertyValue(u"TextChainNextName"_ustr,
                                            cpo::uno::Any( maChainNextName ) );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "setting name of next chain link");
             }
@@ -2324,7 +2324,7 @@ void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
             {
                 xPropSet->setPropertyValue(u"CornerRadius"_ustr, cpo::uno::Any( mnRadius ) );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
@@ -3230,7 +3230,7 @@ void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportCon
             xComp->dispose();
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION( "xmloff", "Error in cleanup of multiple graphic object import." );
     }
@@ -3263,7 +3263,7 @@ uno::Reference<graphic::XGraphic> SdXMLFrameShapeContext::getGraphicFromImportCo
             xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff", "Error in cleanup of multiple graphic object import.");
     }
@@ -3294,7 +3294,7 @@ OUString SdXMLFrameShapeContext::getGraphicPackageURLFromImportContext(const SvX
 
             xPropSet->getPropertyValue(u"GraphicStreamURL"_ustr) >>= aRetval;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION( "xmloff", "Error in cleanup of multiple graphic object import." );
         }
@@ -3619,7 +3619,7 @@ void SdXMLCustomShapeContext::startFastElement (sal_Int32 nElement,
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
     }
@@ -3704,7 +3704,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
                 xPropSet->setPropertyValue( u"CustomShapeGeometry"_ustr, Any(aSeq) );
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
         }
@@ -3742,7 +3742,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
                 u"FlushCustomShapeUnoApiObjects"_ustr, cpo::uno::Any(true));
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("xmloff", "flushing after load");
     }

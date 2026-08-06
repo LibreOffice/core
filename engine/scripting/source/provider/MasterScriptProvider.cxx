@@ -139,7 +139,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
             {
                 m_sCtxString =  MiscUtils::xModelToTdocUrl( m_xModel, m_xContext );
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 Any aError( ::cppu::getCaughtException() );
 
@@ -203,7 +203,7 @@ void MasterScriptProvider::createPkgProvider()
             xFac->createScriptProvider( location ), UNO_SET_THROW );
 
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("scripting.provider", "Exception creating MasterScriptProvider for uno_packages in context "
                 << m_sCtxString );
@@ -458,7 +458,7 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
                 if (bResult)
                     break;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_INFO_EXCEPTION("scripting.provider", "ignoring");
             }

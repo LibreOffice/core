@@ -237,7 +237,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         // Office doesn't handle exceptions rethrown here very well, it cores,
         // all we can is log them and then set fail for the dispatch event!
         // (if there is a listener of course)
-        catch ( const Exception & e )
+        catch ( const cpo::uno::Exception & e )
         {
             aException = ::cppu::getCaughtException();
 
@@ -380,7 +380,7 @@ void ScriptProtocolHandler::createScriptProvider()
             m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_SET_THROW );
         }
     }
-    catch ( const Exception & e )
+    catch ( const cpo::uno::Exception & e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

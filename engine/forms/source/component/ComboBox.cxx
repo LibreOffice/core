@@ -743,7 +743,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
                 else
                     m_xColumnUpdate->updateString( sNewValue );
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 return false;
             }

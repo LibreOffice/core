@@ -68,7 +68,7 @@ public class DataFormatTranslator extends TestCase {
             oInterface = xMSF.createInstance
                 ( "com.sun.star.datatransfer.DataFormatTranslator" );
         }
-        catch( com.sun.star.uno.Exception e ) {
+        catch( cpo.uno.Exception e ) {
             log.println("DataFormatTranslator Service not available" );
         }
         oObj = (XInterface) oInterface;

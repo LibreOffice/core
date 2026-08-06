@@ -555,7 +555,7 @@ bool PropValue::GetPropertyValue(
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -568,7 +568,7 @@ bool PropValue::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = false;
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -587,7 +587,7 @@ css::beans::PropertyState PropValue::GetPropertyState(
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }
@@ -624,7 +624,7 @@ bool PropStateValue::ImplGetPropertyValue( const OUString& rString, bool bGetPro
         else
             ePropState = css::beans::PropertyState_DIRECT_VALUE;
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         bRetValue = false;
     }
@@ -1982,7 +1982,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
                     xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                 }
-                catch( css::uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
 
                 mpExEmbed->WriteUInt32( 0xf | ( EPP_ExControl << 16 ) )
@@ -2565,7 +2565,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
                         xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                     }
-                    catch( css::uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {}
 
                     mpExEmbed->WriteUInt32( 1 | ( EPP_ExOleObjAtom << 16 ) )
@@ -3350,7 +3350,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
             xSpgrContainer.reset(); //ESCHER_SpgrContainer
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

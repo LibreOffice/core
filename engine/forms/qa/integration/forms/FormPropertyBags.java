@@ -66,7 +66,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     }
 
     /* ------------------------------------------------------------------ */
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws cpo.uno.Exception, java.lang.Exception
     {
         m_orb = param.getMSF();
         m_document = DocumentHelper.blankTextDocument( m_orb );
@@ -74,7 +74,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     }
 
     /* ------------------------------------------------------------------ */
-    private void impl_closeDoc() throws com.sun.star.uno.Exception
+    private void impl_closeDoc() throws cpo.uno.Exception
     {
         if ( m_document != null )
         {
@@ -84,13 +84,13 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     }
 
     /* ------------------------------------------------------------------ */
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws cpo.uno.Exception, java.lang.Exception
     {
         impl_closeDoc();
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkSomething() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkSomething() throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet textFieldModel = m_formLayer.createControlAndShape( "DatabaseTextField", 10, 10, 25, 6 );
 
@@ -124,7 +124,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     }
 
     /* ------------------------------------------------------------------ */
-    private void impl_checkPropertyValueNotification( XPropertySet _controlModel ) throws com.sun.star.uno.Exception
+    private void impl_checkPropertyValueNotification( XPropertySet _controlModel ) throws cpo.uno.Exception
     {
         _controlModel.addPropertyChangeListener( "", this );
 
@@ -150,7 +150,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     }
 
     /* ------------------------------------------------------------------ */
-    private void impl_checkPropertyPersistence() throws com.sun.star.uno.Exception
+    private void impl_checkPropertyPersistence() throws cpo.uno.Exception
     {
         // store the document
         XStorable store = UnoRuntime.queryInterface( XStorable.class, m_document.getDocument() );

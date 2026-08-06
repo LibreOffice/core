@@ -91,7 +91,7 @@ ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
             if( xModel.is())
                 xModel->lockControllers();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }
@@ -108,7 +108,7 @@ ScChartLockGuard::~ScChartLockGuard()
             if( xModel.is())
                 xModel->unlockControllers();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }
@@ -132,7 +132,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
             xModel->lockControllers();
             maChartModels.emplace_back(xModel );
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }

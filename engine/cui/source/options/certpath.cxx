@@ -88,7 +88,7 @@ void CertPathDialog::Init()
         if (!sManualCertPath.isEmpty())
             AddManualCertPath(sManualCertPath, false);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -122,7 +122,7 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
         officecfg::Office::Common::Security::Scripting::ManualCertDir::set(m_sManualPath, batch);
         batch->commit();
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("cui.options", "CertPathDialog::OKHdl_Impl()");
     }
@@ -145,7 +145,7 @@ bool CertPathDialog::isActiveServicePath() const
             return true;
         return (xCipherContextSupplier->getNSSPath() == m_xCertPathList->get_id(nEntry));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
          return false;
     }
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(CertPathDialog, ManualHdl_Impl, weld::Button&, void)
                 AddCertPath(m_sManualLabel, aPath);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("cui.options", "");
     }

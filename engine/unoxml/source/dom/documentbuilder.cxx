@@ -76,7 +76,7 @@ namespace DOM
                 Content aContent(sSystemId, aEnvironment, comphelper::getProcessComponentContext());
 
                 is.aInputStream = aContent.openStream();
-            } catch (const css::uno::Exception&) {
+            } catch (const cpo::uno::Exception&) {
                 TOOLS_WARN_EXCEPTION( "unoxml", "exception in default entity resolver");
                 is.aInputStream.clear();
             }
@@ -175,7 +175,7 @@ namespace DOM
             // copy bytes to the provided buffer
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
-        } catch (const css::uno::Exception&) {
+        } catch (const cpo::uno::Exception&) {
             TOOLS_WARN_EXCEPTION( "unoxml", "");
             return -1;
         }
@@ -194,7 +194,7 @@ namespace DOM
             if (pctx->freeOnClose)
                 delete pctx;
             return 0;
-        } catch (const css::uno::Exception&) {
+        } catch (const cpo::uno::Exception&) {
             TOOLS_WARN_EXCEPTION( "unoxml", "");
             return -1;
         }
@@ -268,7 +268,7 @@ namespace DOM
                 xErrorHandler->warning(::cpo::uno::Any(saxex));
             }
         }
-        catch (const css::uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // Protect lib2xml from UNO Exception
             TOOLS_WARN_EXCEPTION("unoxml", "DOM::warning_func");
@@ -300,7 +300,7 @@ namespace DOM
                 xErrorHandler->error(::cpo::uno::Any(saxex));
             }
         }
-        catch (const css::uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // Protect lib2xml from UNO Exception
             TOOLS_WARN_EXCEPTION("unoxml", "DOM::error_func");

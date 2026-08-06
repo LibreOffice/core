@@ -146,7 +146,7 @@ public class XStorageHelper implements XEventListener {
             }
         } catch (com.sun.star.io.IOException ioe) {
             disposeObject();
-        } catch (com.sun.star.uno.Exception ex1) {
+        } catch (cpo.uno.Exception ex1) {
             disposeObject();
             IOException ex2 = new IOException();
             ex2.initCause(ex1);

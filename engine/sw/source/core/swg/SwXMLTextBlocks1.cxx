@@ -95,7 +95,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -150,7 +150,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             m_bInfoChanged = false;
             MakeBlockText(m_aCurrentText);
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -266,7 +266,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         // and finally, copy macro into table
         pDescriptor->copyMacrosIntoTable(rMacroTable);
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sw", "");
         return ERR_SWG_READ_ERROR;
@@ -333,7 +333,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
 
         m_xRoot = nullptr;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         SAL_WARN("sw", "Tried to open non-existent folder or stream: " << aStreamName << " derived from autocorr of: " << OUString(rShort));
     }
@@ -386,7 +386,7 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
             xTmpTrans->commit();
     }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         nRes = ERR_SWG_WRITE_ERROR;
     }
@@ -438,7 +438,7 @@ void SwXMLTextBlocks::ReadInfo()
         // parse
         xParser->parseStream( aParserInput );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sw", "when loading " << sDocName);
         // re throw ?
@@ -480,7 +480,7 @@ void SwXMLTextBlocks::WriteInfo()
     if ( xTrans.is() )
         xTrans->commit();
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -579,7 +579,7 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
 
             m_xRoot = nullptr;
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             nRes = ERR_SWG_WRITE_ERROR;
         }

@@ -160,7 +160,7 @@ struct lcl_RolesWithRangeAppend
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -410,7 +410,7 @@ std::vector< rtl::Reference< ChartType > >
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -439,7 +439,7 @@ std::vector< DialogModel::tSeriesWithChartTypeByName >
                         std::make_pair( dataSeries, rxChartType )));
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -517,7 +517,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
             addMissingRoles(aResult, aRoles);
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -574,7 +574,7 @@ rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
 
         xDiagram->setScheme( e3DScheme );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -603,7 +603,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > DialogModel::getCategories(
                 xResult = xDiagram->getCategories();
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -677,7 +677,7 @@ void DialogModel::detectArguments(
                 rOutRangeString, aSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -730,7 +730,7 @@ void DialogModel::setData(
             xDiagram->setScheme( e3DScheme );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -825,7 +825,7 @@ void DialogModel::applyInterpretedData(
             OSL_ASSERT( (*aDestIt).is());
             (*aDestIt)->setDataSeries( *aSrcIt );
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

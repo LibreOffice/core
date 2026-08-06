@@ -87,7 +87,7 @@ struct DisposeControlModel
         {
             ::comphelper::disposeComponent( _rxModel );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("toolkit", "caught an exception while disposing a component" );
         }
@@ -569,7 +569,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
         {
             xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, Any( Reference< resource::XStringResourceResolver >() ) );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
@@ -762,7 +762,7 @@ namespace
             Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );
             xModelProps->getPropertyValue( u"Step"_ustr ) >>= nStep;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("toolkit", "caught an exception while determining the dialog page" );
         }
@@ -1083,7 +1083,7 @@ void ResourceListener::startListening(
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -1117,7 +1117,7 @@ void ResourceListener::stopListening()
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -1145,7 +1145,7 @@ void SAL_CALL ResourceListener::modified(
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -1185,7 +1185,7 @@ void SAL_CALL ResourceListener::disposing(
             {
                 throw;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -1213,7 +1213,7 @@ void SAL_CALL ResourceListener::disposing(
             {
                 throw;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -1274,7 +1274,7 @@ void ControlContainerBase::ImplRemoveControl( Reference< XControlModel > const &
         {
             xCtrl->dispose();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
@@ -1465,7 +1465,7 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event )
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
@@ -1486,7 +1486,7 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event )
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
@@ -1508,7 +1508,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event )
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
@@ -1525,7 +1525,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event )
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
@@ -1649,7 +1649,7 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
             else
                 xPropertySet->setPropertyValue( aPropName, aNewStringResourceResolver );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

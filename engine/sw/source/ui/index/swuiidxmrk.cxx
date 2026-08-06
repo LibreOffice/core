@@ -85,7 +85,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
     {
         xUriRef = xUriReferenceFactory->parse(rText);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("sw.ui", "SplitUrlAndPage: failed to parse url: " << rException.Message);
         return false;
@@ -117,7 +117,7 @@ OUString MergeUrlAndPage(const OUString& rUrl, const std::unique_ptr<weld::SpinB
     {
         xUriRef = xUriReferenceFactory->parse(rUrl);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("sw.ui", "MergeUrlAndPage: failed to parse url: " << rException.Message);
         return rUrl;

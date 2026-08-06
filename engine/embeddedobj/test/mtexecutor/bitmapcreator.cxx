@@ -67,17 +67,17 @@ uno::Reference< uno::XInterface > VCLBitmapCreator::createInstanceWithArguments(
                 uno::RuntimeException)
 {
     if ( aArguments.getLength() != 1 )
-        throw uno::Exception(); // TODO
+        throw cpo::uno::Exception(); // TODO
 
     cpo::uno::Sequence< sal_Int8 > aOrigBitmap;
     if ( !( aArguments[0] >>= aOrigBitmap ) )
-        throw uno::Exception(); // TODO
+        throw cpo::uno::Exception(); // TODO
 
     Bitmap aBitmap;
     SvMemoryStream aStream( aOrigBitmap.getArray(), aOrigBitmap.getLength(), StreamMode::READ );
     aStream >> aBitmap;
     if ( aStream.GetError() )
-        throw uno::Exception(); // TODO
+        throw cpo::uno::Exception(); // TODO
 
     uno::Reference< uno::XInterface > aResult( VCLUnoHelper::CreateBitmap( aBitmap ), uno::UNO_QUERY );
 

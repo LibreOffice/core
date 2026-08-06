@@ -70,7 +70,7 @@ using namespace ::com::sun::star::uno;
         NSRange selectedTextRange = [ [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: wrapper ] rangeValue ];
         try {
             [ wrapper accessibleEditableText ] -> replaceText ( selectedTextRange.location, selectedTextRange.location + selectedTextRange.length, newText );
-        } catch ( const Exception & ) {
+        } catch ( const cpo::uno::Exception & ) {
             // empty
         }
         [ pool release ];
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::uno;
     NSRange range = [ value rangeValue ];
     try {
         [ wrapper accessibleText ] -> setSelection ( range.location, range.location + range.length );
-    } catch ( const Exception & ) {
+    } catch ( const cpo::uno::Exception & ) {
         // empty
     }
 }

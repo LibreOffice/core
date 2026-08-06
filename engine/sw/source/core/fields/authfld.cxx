@@ -683,7 +683,7 @@ OUString SwAuthorityField::GetRelativeURI() const
     {
         xUriRef = xUriReferenceFactory->parse(sTmp);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("sw.core",
                  "SwTOXAuthority::GetSourceURL: failed to parse url: " << rException.Message);

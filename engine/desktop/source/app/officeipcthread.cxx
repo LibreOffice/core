@@ -722,7 +722,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
     {
         aPipeIdent = dp_misc::generateOfficePipeId();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("desktop.app");
         return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!

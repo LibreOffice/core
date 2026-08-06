@@ -738,7 +738,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::cr
                     }
                 }
             }
-            catch (const css::uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff");
             }

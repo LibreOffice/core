@@ -161,7 +161,7 @@ Any IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, const Seq
         }
         aResult = invokeWithDispIdComTlb( aDescGet, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( const Exception& e )
+    catch ( const cpo::uno::Exception& e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -191,7 +191,7 @@ Any IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, const Seq
         }
         aResult = invokeWithDispIdComTlb( aDescPut, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( const Exception& e )
+    catch ( const cpo::uno::Exception& e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -248,7 +248,7 @@ Any IUnknownWrapper::invoke( const OUString& aFunctionName,
     {
          throw RuntimeException(e.message);
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -417,7 +417,7 @@ void IUnknownWrapper::setValue( const OUString& aPropertyName,
     {
         throw RuntimeException(e.message);
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -563,7 +563,7 @@ Any IUnknownWrapper::getValue( const OUString& aPropertyName )
     {
         throw RuntimeException(e.message);
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -614,7 +614,7 @@ bool IUnknownWrapper::hasMethod( const OUString& aName )
     {
         throw RuntimeException(e.message);
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
@@ -665,7 +665,7 @@ bool IUnknownWrapper::hasProperty( const OUString& aName )
     {
         throw RuntimeException(e.message);
     }
-    catch (const Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "

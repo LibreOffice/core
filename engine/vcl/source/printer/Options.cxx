@@ -93,7 +93,7 @@ void Options::ReadFromConfig(bool i_bFile)
                 }
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

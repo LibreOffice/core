@@ -616,7 +616,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno
     SolarMutexGuard aGuard;
 
     if (m_xWindow.is())
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
                 u"already initialized"_ustr,
                 getXWeak());
 
@@ -627,7 +627,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno
         (!xParentWindow.is()          )
        )
     {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
                 u"wrong or corrupt argument list"_ustr,
                 getXWeak());
     }

@@ -209,7 +209,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
                     pImpl->xForbidden->setForbiddenCharacters( aLocale, *( changedLanguage.second.oCharacters ) );
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
         }
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, weld::ComboBox&, void)
                     sEnd = aForbidden.endLine;
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
             }
@@ -394,7 +394,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, weld::Entry&, rEdit, void)
             else
                 pImpl->addForbiddenCharacters(eSelectLanguage, std::nullopt);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
         }

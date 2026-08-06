@@ -884,7 +884,7 @@ OUString SwTOXAuthority::GetSourceURL(const OUString& rText)
     {
         xUriRef = xUriReferenceFactory->parse(aText);
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("sw.core",
                  "SwTOXAuthority::GetSourceURL: failed to parse url: " << rException.Message);
@@ -925,7 +925,7 @@ void SwTOXAuthority::FillText(SwTextNode& rNd, const SwContentIndex& rInsPos, sa
             {
                 xUriRef = xUriReferenceFactory->parse(aText);
             }
-            catch (const uno::Exception& rException)
+            catch (const cpo::uno::Exception& rException)
             {
                 SAL_WARN("sw.core",
                          "SwTOXAuthority::FillText: failed to parse url: " << rException.Message);

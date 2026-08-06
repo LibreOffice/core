@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -162,7 +162,7 @@ ErrCode LoadOlePropertySet(
                     xUserDefined->addProperty( aPropName,
                         beans::PropertyAttribute::REMOVABLE, aPropValue );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     //ignore
                 }
@@ -186,7 +186,7 @@ ErrCode LoadOlePropertySet(
                 if ( xBuiltin->GetStringValue( aStrValue, PROPID_COMPANY ) )
                     xWriterProps->setCompany( aStrValue );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -291,7 +291,7 @@ bool SaveOlePropertySet(
                 }
             }
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // may happen with concurrent modification...
             SAL_INFO("sfx", "SavePropertySet: exception");

@@ -220,7 +220,7 @@ bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseab
             m_xCloseable = xCloseable;
             bResult = true;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Could not register close listener!" );
         }
@@ -238,7 +238,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
     {
         m_xCloseable->removeCloseListener( m_xPreventer );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -252,7 +252,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
                 m_xCloseable->close( true ); // TODO: do it asynchronously
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1146,7 +1146,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );
                 if ( !pSlot )
-                    throw uno::Exception(u"no slot"_ustr, nullptr);
+                    throw cpo::uno::Exception(u"no slot"_ustr, nullptr);
 
                 std::shared_ptr<SfxStoringHelper> xHelper = std::make_shared<SfxStoringHelper>();
                 if (bIsAsync && SfxViewShell::Current())
@@ -1183,7 +1183,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 TOOLS_WARN_EXCEPTION_IF(ErrCode(aErrorEx.ErrCode) != ERRCODE_IO_ABORT, "sfx.doc", "Fatal IO error during save");
                 nErrorCode = { ErrCode(aErrorEx.ErrCode), aErrorEx.Message };
             }
-            catch( Exception& e )
+            catch( cpo::uno::Exception& e )
             {
                 nErrorCode = { ERRCODE_IO_GENERAL, e.Message };
             }
@@ -1974,7 +1974,7 @@ cpo::uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::Get
                     if (xPropSet)
                         xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
 
@@ -2013,7 +2013,7 @@ cpo::uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::Get
                 }
             }
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("sfx.doc", "Failed to get document signature information");
         }
@@ -2230,7 +2230,7 @@ bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent, weld::Window* p
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             SAL_WARN("sfx.doc", "Couldn't use signing functionality!");
         }

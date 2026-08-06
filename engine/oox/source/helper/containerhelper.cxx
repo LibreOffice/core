@@ -99,7 +99,7 @@ bool ContainerHelper::insertByName(
             rxNameContainer->insertByName( rName, rObject );
         bRet = true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( bRet, "ContainerHelper::insertByName - cannot insert object" );

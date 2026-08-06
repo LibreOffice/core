@@ -125,7 +125,7 @@ public class CheckTransientDocumentsContent {
             XModel xModel = UnoRuntime.queryInterface(XModel.class, result);
             assertTrue("Did not get property 'DocumentModel'.", xModel == null);
         }
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             e.printStackTrace();
             fail("Could not create test objects.");
         }
@@ -144,7 +144,7 @@ public class CheckTransientDocumentsContent {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

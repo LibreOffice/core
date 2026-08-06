@@ -213,7 +213,7 @@ bool FileExists( const INetURLObject& rURL )
         catch( const uno::RuntimeException& )
         {
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -245,7 +245,7 @@ bool CreateDir( const INetURLObject& rURL )
         catch( const uno::RuntimeException& )
         {
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -272,7 +272,7 @@ bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     catch( const uno::RuntimeException& )
     {
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -298,7 +298,7 @@ bool KillFile( const INetURLObject& rURL )
         {
             bRet = false;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             bRet = false;
         }

@@ -234,7 +234,7 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
                 aOldDesc <<= getAccessibleDescription();
                 aOldName <<= getAccessibleName();
             }
-            catch (const uno::Exception&) // optional behaviour
+            catch (const cpo::uno::Exception&) // optional behaviour
             {
             }
             // index and therefore description changed
@@ -242,7 +242,7 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
             FireEvent( AccessibleEventId::NAME_CHANGED, cpo::uno::Any( getAccessibleName() ), aOldName );
         }
     }
-    catch (const uno::Exception&) // optional behaviour
+    catch (const cpo::uno::Exception&) // optional behaviour
     {
     }
 }
@@ -2059,7 +2059,7 @@ bool AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32
             {
                 xPropSet->setPropertyValue(rProp.Name, rProp.Value);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "dbaccess", "AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
             }

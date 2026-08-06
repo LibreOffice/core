@@ -113,7 +113,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
             xProp->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( _sMediaType ));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -167,7 +167,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -361,7 +361,7 @@ ErrCode XMLFilter::impl_Import(
             xStorage, xFactory, xGraphicStorageHandler, xImportInfo );
         nWarning = nWarning != ERRCODE_NONE ? nWarning : nContentWarning;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
 
@@ -437,7 +437,7 @@ ErrCode XMLFilter::impl_ImportStream(
 
                         xFilter = xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext);
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION("chart2", "failed to instantiate " << m_sDocumentHandler);
                     }
@@ -476,7 +476,7 @@ ErrCode XMLFilter::impl_ImportStream(
         {
             TOOLS_WARN_EXCEPTION("chart2", "");
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -541,7 +541,7 @@ ErrCode XMLFilter::impl_Export(
                 xDocHandler.set(xServiceFactory->createInstanceWithArguments(m_sDocumentHandler,aArgs), uno::UNO_QUERY );
                 xSaxWriter.set(xDocHandler,uno::UNO_QUERY);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "chart2", "Exception caught!");
             }
@@ -615,7 +615,7 @@ ErrCode XMLFilter::impl_Export(
         if ( xTransact.is() )
             xTransact->commit();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
 
@@ -658,7 +658,7 @@ ErrCode XMLFilter::impl_ExportStream(
             xStreamProp->setPropertyValue( u"Compressed"_ustr, cpo::uno::Any( true ) );//@todo?
             xStreamProp->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -688,7 +688,7 @@ ErrCode XMLFilter::impl_ExportStream(
 
         xFilter->filter(m_aMediaDescriptor);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

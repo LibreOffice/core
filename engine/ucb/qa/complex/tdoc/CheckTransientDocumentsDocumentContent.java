@@ -146,7 +146,7 @@ public class CheckTransientDocumentsDocumentContent {
             xFolderCommandProcessor.execute(titleSetCommand, 0, null);
 
         }
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             e.printStackTrace();
             fail("Could not create test objects.");
         }
@@ -166,7 +166,7 @@ public class CheckTransientDocumentsDocumentContent {
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

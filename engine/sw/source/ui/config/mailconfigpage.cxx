@@ -391,7 +391,7 @@ void SwTestAccountSettingsDialog::Test()
         if( xMailService->isConnected())
             xMailService->disconnect();
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         sException = e.Message;
     }

@@ -634,7 +634,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 {
                     xStorage = ::comphelper::OStorageHelper::GetStorageFromURL( aInitFileName, embed::ElementModes::READ );
                 }
-                catch (const uno::Exception& )
+                catch (const cpo::uno::Exception& )
                 {
                     // TODO: error handling
                 }
@@ -684,7 +684,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     {
                         xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                     }
-                    catch(const uno::Exception& )
+                    catch(const cpo::uno::Exception& )
                     {}
 
                     if( !xStream.is() )
@@ -697,7 +697,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         {
                             xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                         }
-                        catch(const uno::Exception& )
+                        catch(const cpo::uno::Exception& )
                         {}
 
                         if( !xStream.is() )
@@ -714,7 +714,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     xInput = xStream->getInputStream();
                 }
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {
                 // TODO: error handling?
             }
@@ -885,7 +885,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                             xLibraryStor = xLibrariesStor->openStorageElement( rLib.aName,
                                                                                 embed::ElementModes::READ );
                         }
-                        catch(const uno::Exception& )
+                        catch(const cpo::uno::Exception& )
                         {
                             #if OSL_DEBUG_LEVEL > 0
                             TOOLS_WARN_EXCEPTION(
@@ -944,7 +944,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         {
             implScanExtensions(guard);
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             // TODO: error handling?
             SAL_WARN("basic", "Cannot access extensions!");
@@ -1401,7 +1401,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     writeLibraryElement( xLib, aElementName, xOutput );
                 }
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {
                 SAL_WARN("basic", "Problem during storing of library!");
                 // TODO: error handling?
@@ -1534,7 +1534,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xOut = xInfoStream->getOutputStream();
             }
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             SAL_WARN("basic", "Problem during storing of library index file!");
             // TODO: error handling?
@@ -1625,7 +1625,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
                 xStorage->openStreamElement( aLibInfoPath, embed::ElementModes::READ );
             xInput = xInfoStream->getInputStream();
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {}
     }
     else
@@ -1788,7 +1788,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
             xTargetLibrariesStor.set( i_rStorage->openStorageElement( sTargetLibrariesStoreName, embed::ElementModes::READWRITE ), UNO_SET_THROW );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("basic");
             return;
@@ -1803,7 +1803,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                                                    bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("basic");
             return;
@@ -1878,7 +1878,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 {
                     xSourceLibrariesStor->copyElementTo( rLib.aName, xTargetLibrariesStor, rLib.aName );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     DBG_UNHANDLED_EXCEPTION("basic");
                     // TODO: error handling?
@@ -1898,7 +1898,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                                                                         embed::ElementModes::READWRITE );
 #if OSL_DEBUG_LEVEL > 0
                     }
-                    catch(const uno::Exception& )
+                    catch(const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION(
                             "basic",
@@ -1930,7 +1930,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                         uno::Reference< embed::XTransactedObject > xTransact( xLibraryStor, uno::UNO_QUERY_THROW );
                         xTransact->commit();
                     }
-                    catch(const uno::Exception& )
+                    catch(const cpo::uno::Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION("basic");
                         // TODO: error handling
@@ -2026,7 +2026,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
             xOut = xInfoStream->getOutputStream();
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             ErrorHandler::HandleError(  ERRCODE_IO_GENERAL );
         }
@@ -2072,7 +2072,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             xTransact->commit();
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
         SAL_WARN("basic", "Problem during storing of libraries!");
         ErrorHandler::HandleError(  ERRCODE_IO_GENERAL );
@@ -2314,7 +2314,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
             }
 #if OSL_DEBUG_LEVEL > 0
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION(
                 "basic",
@@ -2349,7 +2349,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
             {
                 xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {}
 
             if( !xElementStream.is() )
@@ -2360,7 +2360,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
                 {
                     xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {}
             }
 

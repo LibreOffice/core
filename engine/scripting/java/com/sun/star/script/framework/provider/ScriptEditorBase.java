@@ -49,7 +49,7 @@ public abstract class ScriptEditorBase implements ScriptEditor {
             boolean bMacrosDisabled = AnyConverter.toBoolean(result);
             if (bMacrosDisabled)
                 return false;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             return false;
         }
         return true;

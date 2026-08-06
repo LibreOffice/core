@@ -172,7 +172,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
                     {
                         xWindow = xFactory->createInstanceWithArgumentsAndContext( Arguments, Context );
                     }
-                    catch ( uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION("fwk");
                     }

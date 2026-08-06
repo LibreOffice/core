@@ -118,7 +118,7 @@ static ErrCode ReadThroughComponent(
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
@@ -160,7 +160,7 @@ static ErrCode ReadThroughComponent(
     {
         return ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return ErrCode(1); // TODO/LATER: error handling
     }
@@ -313,7 +313,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             {
                 throw;
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 Any aError = ::cppu::getCaughtException();
                 throw lang::WrappedTargetRuntimeException(OUString(), *this, aError);
@@ -604,7 +604,7 @@ void ODBFilter::setPropertyInfo()
         {
             xDataSource->setPropertyValue(PROPERTY_INFO,Any(aInfo));
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }

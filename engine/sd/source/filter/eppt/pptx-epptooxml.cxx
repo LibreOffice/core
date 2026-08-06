@@ -461,7 +461,7 @@ void PowerPointExport::writeDocumentProperties()
             xSettings->getPropertyValue(u"EmbedAsianScriptFonts"_ustr)  >>= mbEmbedAsianScript;
             xSettings->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= mbEmbedComplexScript;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         exportDocumentProperties(xDocProps, bSecurityOptOpenReadOnly);
@@ -1746,7 +1746,7 @@ void PowerPointExport::WriteModifyVerifier()
             mXModel->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
         xDocSettings->getPropertyValue(u"ModifyPasswordInfo"_ustr) >>= aInfo;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -3048,7 +3048,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
         else
             xAudioStream = comphelper::OStorageHelper::GetInputStreamFromURL(sUrl, getComponentContext());
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sd", "PowerPointExport::embedEffectAudio");
     }

@@ -865,7 +865,7 @@ static void ToolkitWorkerFunction( void* pArgs )
         {
             pTk->dispose();
         }
-        catch( css::uno::Exception & )
+        catch( cpo::uno::Exception & )
         {
         }
         DeInitVCL();
@@ -1350,7 +1350,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
     if ( !pParent )
     {
         // If the component needs a parent, then return NULL,
-        // some time later css::uno::Exception...
+        // some time later cpo::uno::Exception...
         bool bException = true;
         if  (   ( eType == WindowType::DIALOG )
             ||  ( eType == WindowType::MODELESSDIALOG )

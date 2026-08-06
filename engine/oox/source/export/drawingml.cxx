@@ -3153,7 +3153,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
             if( sText.isEmpty() )
                 return;
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             return;
         }
@@ -5152,7 +5152,7 @@ bool DrawingML::WriteCustomGeometry(
         if ( !aAny.hasValue() )
             return false;
     }
-    catch( const ::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         return false;
     }

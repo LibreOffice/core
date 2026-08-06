@@ -636,7 +636,7 @@ SfxDocumentMetaData::getURLProperties(
         xPropArg->addProperty(u"StreamName"_ustr,
                 css::beans::PropertyAttribute::MAYBEVOID,
                 cpo::uno::Any(s_meta));
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         // ignore
     }
     return css::uno::Reference< css::beans::XPropertySet>(xPropArg,
@@ -877,7 +877,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         cpo::uno::Any any;
         try {
             any = i_xPropSet->getPropertyValue(name);
-        } catch (const css::uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             // ignore
         }
         const cpo::uno::Type & type = any.getValueType();
@@ -1156,7 +1156,7 @@ void SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XNode> xChild = getChildNodeByName(xDocNode, u"office:document-meta");
         if (xChild)
             m_xParent = getChildNodeByName(xChild, u"office:meta");
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
     }
 
     if (!m_xParent.is()) {
@@ -1937,7 +1937,7 @@ SfxDocumentMetaData::loadFromStorage(
         xPropArg->getPropertyValue(u"BaseURI"_ustr)
             >>= input.sSystemId;
         input.sSystemId += OUString::Concat("/") + s_meta;
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         input.sSystemId = s_meta;
     }
     cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xPropArg) };
@@ -2069,7 +2069,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         throw;
     } catch (const css::io::IOException &) {
         throw;
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetException(
                 u"SfxDocumentMetaData::loadFromMedium: exception"_ustr,
@@ -2186,7 +2186,7 @@ SfxDocumentMetaData::createClone()
         pNew->init(g2, xDoc);
     } catch (const css::uno::RuntimeException &) {
         throw;
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::createClone: exception"_ustr,
@@ -2228,7 +2228,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( bool bModified )
                 event);
         } catch (const css::uno::RuntimeException &) {
             throw;
-        } catch (const css::uno::Exception &) {
+        } catch (const cpo::uno::Exception &) {
             // ignore
             TOOLS_WARN_EXCEPTION("sfx.doc", "setModified");
         }

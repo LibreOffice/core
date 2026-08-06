@@ -166,7 +166,7 @@ OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 void lcl_throwCorruptedUIConfigurationException(
     cpo::uno::Any const & exception, sal_Int32 id)
 {
-    css::uno::Exception e;
+    cpo::uno::Exception e;
     bool ok = (exception >>= e);
     OSL_ASSERT(ok);
     throw css::configuration::CorruptedUIConfigurationException(
@@ -224,7 +224,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     {
         xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
@@ -271,7 +271,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     {
         xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
@@ -417,7 +417,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
                 { xShare.clear(); xUser.clear(); }
         }
         break;
@@ -460,7 +460,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
@@ -702,7 +702,7 @@ void PresetHandler::maybeReopenStorageAsReadWrite() {
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { forgetCachedStorages(); }
     }
 }
@@ -723,7 +723,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { xPath.clear(); }
     return xPath;
 }
@@ -808,7 +808,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             {}
     }
 

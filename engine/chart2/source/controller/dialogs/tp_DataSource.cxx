@@ -750,7 +750,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                 {
                     xLabeledSeq->setValues( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     // should work as validation should have happened before
                     DBG_UNHANDLED_EXCEPTION("chart2");
@@ -813,7 +813,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                 {
                                     xNewSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                                 }
-                                catch( const uno::Exception & )
+                                catch( const cpo::uno::Exception & )
                                 {
                                     // should work as validation should have happened before
                                     DBG_UNHANDLED_EXCEPTION("chart2");
@@ -847,7 +847,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                             {
                                 xNewSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                             }
-                            catch( const uno::Exception & )
+                            catch( const cpo::uno::Exception & )
                             {
                                 // should work as validation should have happened before
                                 DBG_UNHANDLED_EXCEPTION("chart2");
@@ -879,7 +879,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
 
                 lcl_UpdateCurrentRange( *m_xLB_ROLE, aSelectedRole, aRange );
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
                 bResult = false;
@@ -901,7 +901,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                 m_rDialogModel.setTimeBasedRange(rInfo.bTimeBased, rInfo.nStart, rInfo.nEnd);
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

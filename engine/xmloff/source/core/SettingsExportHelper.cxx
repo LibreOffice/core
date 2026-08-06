@@ -474,7 +474,7 @@ void XMLSettingsExportHelper::ManipulateSetting( cpo::uno::Any& rAny, std::u16st
                 const_cast< XMLSettingsExportHelper* >(this)->mxStringSubstitution =
                     util::PathSubstitution::create( m_rContext.GetComponentContext() );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.core");
             }

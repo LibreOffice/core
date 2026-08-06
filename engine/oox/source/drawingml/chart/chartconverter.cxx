@@ -110,7 +110,7 @@ void ChartConverter::createDataProvider( const Reference< XChartDocument >&
         if( !rxChartDoc->hasInternalDataProvider() )
             rxChartDoc->createInternalDataProvider( false );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -145,7 +145,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "ChartConverter::createDataSequence - cannot create data sequence" );
         }

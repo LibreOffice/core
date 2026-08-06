@@ -68,7 +68,7 @@ public class DialogFactory {
 
         try {
             xDialog = createInputDialog(title, prompt);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             return null;
         }
 
@@ -118,7 +118,7 @@ public class DialogFactory {
     }
 
     private void setDimensions(Object o, int x, int y, int width, int height) throws
-        com.sun.star.uno.Exception {
+        cpo.uno.Exception {
 
         XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, o);
 
@@ -129,7 +129,7 @@ public class DialogFactory {
     }
 
     private XDialog createInputDialog(String title, String prompt) throws
-        com.sun.star.uno.Exception {
+        cpo.uno.Exception {
 
         if (title == null || title.length() == 0) {
             title = "Scripting Framework";

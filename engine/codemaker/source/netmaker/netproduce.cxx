@@ -54,7 +54,7 @@ const auto s_baseTypes = frozen::make_unordered_map<std::string_view, OString>(
       { "void", "void"_ostr },
       { "type", "System.Type"_ostr },
       { "any", "com.sun.star.uno.Any"_ostr },
-      { "com.sun.star.uno.Exception", "com.sun.star.uno.UnoException"_ostr },
+      { "cpo.uno.Exception", "com.sun.star.uno.UnoException"_ostr },
       { "com.sun.star.uno.XInterface", "com.sun.star.uno.IQueryInterface"_ostr } });
 
 std::tuple<bool, std::string_view, std::string_view> splitName(std::string_view name)

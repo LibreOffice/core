@@ -807,7 +807,7 @@ uno::Reference < XNameContainer >
             {
                 xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 // #i97680# Named table/column/row styles aren't supported, getByName will throw an exception.
                 // For better interoperability, these styles should then be handled as automatic styles.

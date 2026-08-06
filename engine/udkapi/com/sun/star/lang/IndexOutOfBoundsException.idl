@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module lang {
     <p>The index is either negative or greater than or equal to
     the count of the elements. </p>
  */
-published exception IndexOutOfBoundsException: com::sun::star::uno::Exception
+published exception IndexOutOfBoundsException: cpo::uno::Exception
 {
 };
 

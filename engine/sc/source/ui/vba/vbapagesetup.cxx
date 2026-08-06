@@ -157,7 +157,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const cpo::uno::Any& fitToPages
 
         mxPageProps->setPropertyValue(u"ScaleToPagesY"_ustr, cpo::uno::Any( scaleToPageY ));
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -180,7 +180,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const cpo::uno::Any& fitToPages
 
         mxPageProps->setPropertyValue(u"ScaleToPagesX"_ustr, cpo::uno::Any( scaleToPageX ));
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -226,7 +226,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const cpo::uno::Any& zoom)
             DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -242,7 +242,7 @@ OUString SAL_CALL ScVbaPageSetup::getLeftHeader()
         uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
         leftHeader = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -258,7 +258,7 @@ void SAL_CALL ScVbaPageSetup::setLeftHeader( const OUString& leftHeader)
         xText->setString( leftHeader );
         mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -272,7 +272,7 @@ OUString SAL_CALL ScVbaPageSetup::getCenterHeader()
         uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
         centerHeader = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -288,7 +288,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHeader( const OUString& centerHeader)
         xText->setString( centerHeader );
         mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -302,7 +302,7 @@ OUString SAL_CALL ScVbaPageSetup::getRightHeader()
         uno::Reference< text::XText > xText = xHeaderContent->getRightText();
         rightHeader = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -318,7 +318,7 @@ void SAL_CALL ScVbaPageSetup::setRightHeader( const OUString& rightHeader)
         xText->setString( rightHeader );
         mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -332,7 +332,7 @@ OUString SAL_CALL ScVbaPageSetup::getLeftFooter()
         uno::Reference< text::XText > xText = xFooterContent->getLeftText();
         leftFooter = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -348,7 +348,7 @@ void SAL_CALL ScVbaPageSetup::setLeftFooter( const OUString& leftFooter)
         xText->setString( leftFooter );
         mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -362,7 +362,7 @@ OUString SAL_CALL ScVbaPageSetup::getCenterFooter()
         uno::Reference< text::XText > xText = xFooterContent->getCenterText();
         centerFooter = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -378,7 +378,7 @@ void SAL_CALL ScVbaPageSetup::setCenterFooter( const OUString& centerFooter)
         xText->setString( centerFooter );
         mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -393,7 +393,7 @@ OUString SAL_CALL ScVbaPageSetup::getRightFooter()
         uno::Reference< text::XText > xText = xFooterContent->getRightText();
         rightFooter = xText->getString();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -409,7 +409,7 @@ void SAL_CALL ScVbaPageSetup::setRightFooter( const OUString& rightFooter)
         xText->setString( rightFooter );
         mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -425,7 +425,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder()
         if( !bPrintDownFirst )
             order = excel::XlOrder::xlOverThenDown;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -450,7 +450,7 @@ void SAL_CALL ScVbaPageSetup::setOrder(sal_Int32 order)
     {
         mxPageProps->setPropertyValue(u"PrintDownFirst"_ustr, cpo::uno::Any( bOrder ));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -463,7 +463,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getFirstPageNumber()
         cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"FirstPageNumber"_ustr);
         aValue >>= number;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -486,7 +486,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber)
         aValue <<= static_cast<sal_Int16>(firstPageNumber);
         mxPageProps->setPropertyValue(u"FirstPageNumber"_ustr, aValue );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -499,7 +499,7 @@ bool SAL_CALL ScVbaPageSetup::getCenterVertically()
         cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"CenterVertically"_ustr);
         aValue >>= centerVertically;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return centerVertically;
@@ -511,7 +511,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( bool centerVertically)
     {
         mxPageProps->setPropertyValue(u"CenterVertically"_ustr, cpo::uno::Any( centerVertically ));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -524,7 +524,7 @@ bool SAL_CALL ScVbaPageSetup::getCenterHorizontally()
         cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"CenterHorizontally"_ustr);
         aValue >>= centerHorizontally;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return centerHorizontally;
@@ -536,7 +536,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( bool centerHorizontally)
     {
         mxPageProps->setPropertyValue(u"CenterHorizontally"_ustr, cpo::uno::Any( centerHorizontally ));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -549,7 +549,7 @@ bool SAL_CALL ScVbaPageSetup::getPrintHeadings()
         cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"PrintHeaders"_ustr);
         aValue >>= printHeadings;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return printHeadings;
@@ -561,7 +561,7 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( bool printHeadings)
     {
         mxPageProps->setPropertyValue(u"PrintHeaders"_ustr, cpo::uno::Any( printHeadings ));
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

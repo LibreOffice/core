@@ -324,7 +324,7 @@ bool InitVCL()
             osl_setEnvironment(envVar.pData, aLocaleString.pData);
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_INFO_EXCEPTION("vcl.app", "Unable to get ui language:");
     }
@@ -500,7 +500,7 @@ void DeInitVCL()
                     comphelper::getProcessComponentContext() );
             xDesktop->addEventListener(new VCLUnoWrapperDeleter);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             // ignore
         }

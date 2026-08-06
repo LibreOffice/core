@@ -64,7 +64,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
         if (m_xRoot.is())
             m_xRoot->getByName(m_sListName) >>= m_xSet;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
             m_xRoot.clear();
@@ -93,7 +93,7 @@ bool SvtViewOptions::Exists() const
         if (m_xSet.is())
             bExists = m_xSet->hasByName(m_sViewName);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
             bExists = false;
@@ -122,7 +122,7 @@ void SvtViewOptions::Delete()
     }
     catch(const css::container::NoSuchElementException&)
         { }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -147,7 +147,7 @@ OUString SvtViewOptions::GetWindowState() const
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_WINDOWSTATE) >>= sWindowState;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
             sWindowState.clear();
@@ -179,7 +179,7 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
         xNode->setPropertyValue(PROPERTY_WINDOWSTATE, cpo::uno::Any(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -202,7 +202,7 @@ OUString SvtViewOptions::GetPageID() const
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_PAGEID) >>= sID;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -227,7 +227,7 @@ void SvtViewOptions::SetPageID(const OUString& rID)
         xNode->setPropertyValue(PROPERTY_PAGEID, cpo::uno::Any(rID));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -262,7 +262,7 @@ SvtViewOptions::State SvtViewOptions::GetVisible() const
             }
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -285,7 +285,7 @@ void SvtViewOptions::SetVisible( bool bVisible )
         xNode->setPropertyValue(PROPERTY_VISIBLE, cpo::uno::Any(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -325,7 +325,7 @@ cpo::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
             return lUserData;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -354,7 +354,7 @@ void SvtViewOptions::SetUserData( const cpo::uno::Sequence< css::beans::NamedVal
         }
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -376,7 +376,7 @@ cpo::uno::Any SvtViewOptions::GetUserItem( const OUString& sItemName ) const
     }
     catch(const css::container::NoSuchElementException&)
         { aItem.clear(); }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
             aItem.clear();
@@ -404,7 +404,7 @@ void SvtViewOptions::SetUserItem( const OUString& sItemName  ,
         }
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
@@ -438,7 +438,7 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptions::impl_getSetNode( con
     }
     catch(const css::container::NoSuchElementException&)
         { xNode.clear(); }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
             xNode.clear();

@@ -241,7 +241,7 @@ void GalleryBrowser::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData
     catch( const uno::RuntimeException& )
     {
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -636,7 +636,7 @@ IMPL_STATIC_LINK( GalleryBrowser, AsyncDispatch_Impl, void*, p, void )
             pDispatchInfo->Dispatch->dispatch( pDispatchInfo->TargetURL,
                                                pDispatchInfo->Arguments );
         }
-        catch ( const css::uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }

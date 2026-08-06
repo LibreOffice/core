@@ -96,7 +96,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -143,7 +143,7 @@ bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, base
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -475,7 +475,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
         }
         while( bCheckVert || bCheckHorz );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -932,7 +932,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     {
         xCell = mxTable->getCell( rPos.mnCol, rPos.mnRow );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -1185,7 +1185,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
 
         LayoutTable( rArea, !bMinimize, false );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -1269,7 +1269,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
 
         LayoutTable( rArea, false, !bMinimize );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }

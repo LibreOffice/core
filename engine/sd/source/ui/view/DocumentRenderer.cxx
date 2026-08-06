@@ -1356,7 +1356,7 @@ namespace {
             {
                 xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(mnHandoutPageIndex) ) );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
             rViewShell.SetPrintedHandoutPageNum( mnHandoutPageIndex + 1 );
@@ -1380,7 +1380,7 @@ namespace {
             {
                 xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(0) ) );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
             rViewShell.SetPrintedHandoutPageNum(1);

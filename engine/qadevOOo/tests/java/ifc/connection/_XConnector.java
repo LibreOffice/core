@@ -117,7 +117,7 @@ public class _XConnector extends MultiMethodTest {
         try {
             x = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.connection.Acceptor") ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create service", e) ;
         }

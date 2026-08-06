@@ -84,7 +84,7 @@ namespace pcr
     using ::com::sun::star::script::ScriptEventDescriptor;
     using ::com::sun::star::script::XScriptEventsSupplier;
     using ::com::sun::star::lang::NullPointerException;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::script::XEventAttacherManager;

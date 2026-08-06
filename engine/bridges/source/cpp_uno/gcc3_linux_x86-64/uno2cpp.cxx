@@ -233,7 +233,7 @@ static void cpp_call(
                 pCppReturn, pReturnTypeRef, bSimpleReturn,
                 pStackStart, ( pStack - pStackStart ),
                 pGPR, pFPR );
-        } catch (const Exception &) {
+        } catch (const cpo::uno::Exception &) {
             throw;
         } catch (const std::exception & e) {
             throw RuntimeException(

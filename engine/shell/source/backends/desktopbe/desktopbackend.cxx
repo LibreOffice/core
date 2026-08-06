@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -264,7 +264,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     } catch (css::uno::RuntimeException &) {
         // Assuming these exceptions are real errors:
         throw;
-    } catch (const css::uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         // Assuming these exceptions indicate that the service is not installed:
         TOOLS_WARN_EXCEPTION("shell", "createInstance(" << name << ") failed");
         return css::uno::Reference< css::uno::XInterface >();

@@ -206,7 +206,7 @@ cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController
                 }
             }
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
             aNewStrings.clear();

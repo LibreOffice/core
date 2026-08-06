@@ -235,7 +235,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
 
         try {
             reg = RegistryTools.createRegistryService(tParam.getMSF());
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.print("Can't create registry service: ");
             e.printStackTrace(log);
             tRes.tested("mergeKey()", false);

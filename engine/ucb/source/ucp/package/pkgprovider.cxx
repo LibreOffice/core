@@ -223,7 +223,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     {
         throw;
     }
-    catch ( uno::Exception const & e )
+    catch ( cpo::uno::Exception const & e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

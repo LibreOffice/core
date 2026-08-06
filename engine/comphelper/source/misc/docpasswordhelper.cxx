@@ -40,7 +40,7 @@
 #include <string.h>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
@@ -614,7 +614,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
             eRequestMode = PasswordRequestMode_PASSWORD_REENTER;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

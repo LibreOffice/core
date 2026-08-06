@@ -23,7 +23,7 @@ module com { module sun { module star { module deployment {
 /** A DeploymentException indicates that the current platform
     is not supported.
  */
-exception PlatformException : com::sun::star::uno::Exception
+exception PlatformException : cpo::uno::Exception
 {
     /** The package which does not support the current platform.
     */

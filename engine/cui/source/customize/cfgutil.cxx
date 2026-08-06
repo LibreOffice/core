@@ -148,7 +148,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { aStyle.sLabel.clear(); }
 
     if (aStyle.sLabel.isEmpty())
@@ -190,7 +190,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { return std::vector< SfxStyleInfo_Impl >(); }
 
         lFamilies.push_back(aFamilyInfo);
@@ -212,7 +212,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { return std::vector< SfxStyleInfo_Impl >(); }
 
     std::vector< SfxStyleInfo_Impl > lStyles;
@@ -235,7 +235,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { continue; }
 
         lStyles.push_back(aStyleInfo);
@@ -499,7 +499,7 @@ sal_Int32 CuiConfigGroupListBox::InitModule()
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
     return 0;
 }
@@ -817,7 +817,7 @@ OUString CuiConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(css::uno::Exception&)
+    catch(cpo::uno::Exception&)
         { sUIName.clear(); }
 
     // fallback for missing UINames !?

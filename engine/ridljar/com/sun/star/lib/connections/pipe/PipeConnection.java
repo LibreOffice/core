@@ -113,7 +113,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         }
     }
 
-    private void notifyListeners_error(com.sun.star.uno.Exception exception) {
+    private void notifyListeners_error(cpo.uno.Exception exception) {
         for (XStreamListener xStreamListener : _aListeners) {
             xStreamListener.error(exception);
         }

@@ -92,7 +92,7 @@ Bitmap convertPrimitive2DSequenceToBitmap(
             if(xBitmap)
                 aRetval = *xBitmap;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl", "Got no graphic::XPrimitive2DRenderer!");
         }

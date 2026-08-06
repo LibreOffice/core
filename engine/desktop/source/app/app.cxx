@@ -284,7 +284,7 @@ void SetRestartState() {
             comphelper::ConfigurationChanges::create());
         officecfg::Setup::Office::OfficeRestartInProgress::set(true, batch);
         batch->commit();
-    } catch (css::uno::Exception) {
+    } catch (cpo::uno::Exception) {
         TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
     }
 }
@@ -417,7 +417,7 @@ void Desktop::Init()
     {
         InitApplicationServiceManager();
     }
-    catch (css::uno::Exception & e)
+    catch (cpo::uno::Exception & e)
     {
         HandleBootstrapErrors( BE_UNO_SERVICEMANAGER, e.Message );
         std::abort();
@@ -439,7 +439,7 @@ void Desktop::Init()
             SetBootstrapError( BE_LANGUAGE_MISSING, OUString() );
         }
     }
-    catch (css::uno::Exception & e)
+    catch (cpo::uno::Exception & e)
     {
         SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
     }
@@ -1511,7 +1511,7 @@ bool Desktop::InitializeConfiguration()
                                                 OUString() ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
                                                 OUString() ));
@@ -1684,7 +1684,7 @@ void Desktop::OpenClients()
 
             xRecovery->dispatch(aCmd, cpo::uno::Sequence< css::beans::PropertyValue >());
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "desktop.app", "Could not disable AutoRecovery.");
         }
@@ -1701,7 +1701,7 @@ void Desktop::OpenClients()
             xSessionListener = SessionListener::createWithOnQuitFlag(
                     ::comphelper::getProcessComponentContext(), bUIOnSessionShutdownAllowed);
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "desktop.app", "Registration of session listener failed");
         }
@@ -1713,7 +1713,7 @@ void Desktop::OpenClients()
             {
                 xSessionListener->doRestore();
             }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "desktop.app", "Error in session management");
             }
@@ -2063,7 +2063,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     xDispatch->dispatch(aCommand, cpo::uno::Sequence< css::beans::PropertyValue >());
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("desktop.app", "exception thrown by dialog");
         }
@@ -2175,7 +2175,7 @@ IMPL_STATIC_LINK_NOARG(Desktop, AsyncInitFirstRun, Timer *, void)
         officecfg::Office::Common::Misc::FirstRun::set(false, batch);
         batch->commit();
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "desktop.app", "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor" );
     }

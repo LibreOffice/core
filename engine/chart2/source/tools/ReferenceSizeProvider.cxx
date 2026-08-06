@@ -84,7 +84,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
         setValuesAtPropertySet( xTitleProp, /* bAdaptFontSizes = */ false );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -116,7 +116,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                         elem->getDataPointByIndex( idx ) );
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -158,7 +158,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -179,7 +179,7 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
             else
                 eSingleState = AUTO_RESIZE_NO;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // unknown property -> state stays unknown
         }
@@ -284,7 +284,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

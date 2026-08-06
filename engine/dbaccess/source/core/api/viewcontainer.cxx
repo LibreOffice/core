@@ -227,7 +227,7 @@ void OViewContainer::elementRemoved( const ContainerEvent& Event )
     {
         dropByName(sName);
     }
-    catch(Exception&)
+    catch(cpo::uno::Exception&)
     {
         m_bInElementRemoved = false;
         throw;

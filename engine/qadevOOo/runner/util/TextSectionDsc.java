@@ -63,7 +63,7 @@ public class TextSectionDsc extends InstDescr {
         try {
             ServiceObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
         XTextContent PG = (XTextContent)UnoRuntime.queryInterface( ifcClass,
                                                                 ServiceObj );

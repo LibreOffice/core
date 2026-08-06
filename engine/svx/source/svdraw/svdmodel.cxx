@@ -821,7 +821,7 @@ SdrModel::GetDocumentStream( OUString const& rURL,
     {
         SAL_INFO("svx", "not found");
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }

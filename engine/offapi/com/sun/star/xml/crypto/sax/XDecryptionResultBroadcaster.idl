@@ -38,7 +38,7 @@ interface XDecryptionResultBroadcaster : com::sun::star::uno::XInterface
      */
     void addDecryptionResultListener(
         [in] XDecryptionResultListener listener)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Removes a decryption result listener.

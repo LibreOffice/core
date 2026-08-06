@@ -64,13 +64,13 @@ published interface XEmbeddedObject
         @throws com::sun::star::embed::WrongStateException
             in case object is in invalid state
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void changeState( [in] long nNewState )
         raises( ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** returns supported states for the object.
 
@@ -115,14 +115,14 @@ published interface XEmbeddedObject
         @throws com::sun::star::embed::UnreachableStateException
             the state, required by the verb, can not be reached
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void doVerb( [in] long nVerbID )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::embed::UnreachableStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** returns supported verbs for the object.
 
@@ -168,12 +168,12 @@ published interface XEmbeddedObject
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state to call the function
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case problems detected
      */
     void update()
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** specifies how often the object's representation should be updated.
 

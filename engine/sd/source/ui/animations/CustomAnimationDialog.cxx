@@ -76,7 +76,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::beans::XPropertySet;
@@ -1422,7 +1422,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
         mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, u""_ustr ), uno::UNO_SET_THROW );
         mxPlayer->start();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "CustomAnimationEffectTabPage::onSoundPreview()" );
     }

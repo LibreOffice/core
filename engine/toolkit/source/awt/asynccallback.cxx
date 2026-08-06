@@ -102,7 +102,7 @@ IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
         if ( pCallbackData && pCallbackData->xCallback.is() )
             pCallbackData->xCallback->notify( pCallbackData->aData );
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 

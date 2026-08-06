@@ -178,7 +178,7 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
     {
         m_vbaListener =  new ScriptEventListenerWrapper( _rModel );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

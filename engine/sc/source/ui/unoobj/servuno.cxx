@@ -205,7 +205,7 @@ public:
                     }
                 }
             }
-            catch( uno::Exception& ) {}
+            catch( cpo::uno::Exception& ) {}
             if ( bMatched )
                 break;
         }
@@ -233,7 +233,7 @@ public:
                         return aName;
                 }
             }
-            catch( uno::Exception& ) {}
+            catch( cpo::uno::Exception& ) {}
         }
         return OUString();
     }

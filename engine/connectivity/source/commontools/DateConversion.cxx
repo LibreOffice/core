@@ -185,7 +185,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                 } break;
             }
         }
-        catch ( const Exception&  )
+        catch ( const cpo::uno::Exception&  )
         {
             OSL_FAIL("TypeConversion Error");
         }
@@ -207,7 +207,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
             xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr) >>= aDate;
             return aDate;
         }
-        catch ( const Exception&  )
+        catch ( const cpo::uno::Exception&  )
         {
         }
     }
@@ -423,7 +423,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xC
     {
         _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= nKey;
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "connectivity.commontools", "DBTypeConversion::getValue: caught an exception while asking for the format key!");
     }

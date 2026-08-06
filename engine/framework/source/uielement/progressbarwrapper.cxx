@@ -60,7 +60,7 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
             if ( m_xStatusBar.is() )
                 m_xStatusBar->dispose();
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
         m_xStatusBar.clear();

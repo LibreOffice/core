@@ -116,7 +116,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 
         return sCompleteCommand;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {}
 
     return OUString();

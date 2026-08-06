@@ -230,7 +230,7 @@ void ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aEl
     {
         throw;
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetException(

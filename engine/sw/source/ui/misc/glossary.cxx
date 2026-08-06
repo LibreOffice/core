@@ -754,7 +754,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, weld::Button&, void)
                     bIsWritable = !*o3tl::doAccess<bool>(aAny);
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
             if(bIsWritable)

@@ -143,7 +143,7 @@ void PopupMenuControllerBase::dispatchCommandImpl( std::unique_lock<std::mutex>&
         Application::PostUserEvent( LINK(nullptr, PopupMenuControllerBase, ExecuteHdl_Impl), new PopupMenuControllerBaseDispatchInfo( xDispatch, std::move(aURL), rArgs ) );
 
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

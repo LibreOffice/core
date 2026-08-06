@@ -59,7 +59,7 @@
 
 using namespace css;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::cpo::uno::Sequence;
 
 using namespace com::sun::star;
@@ -96,7 +96,7 @@ std::string ucbGet(const OUString& rURL, const css::uno::Reference<css::awt::XWi
         }
         return response_body;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("cui.dialogs", "Download failed");
         return {};
@@ -113,7 +113,7 @@ void ucbDownload(const OUString& rURL, const OUString& sFolderURL, const OUStrin
                              ucbhelper::InsertOperation::Copy, fileName,
                              css::ucb::NameClash::OVERWRITE);
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("cui.dialogs", "Download failed");
     }
@@ -218,7 +218,7 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
         if (!xFileAccess->exists(userFolder + aPreviewFile))
             ucbDownload(aPreviewURL, userFolder, aPreviewFile);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }
@@ -707,7 +707,7 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
         if (!xFileAccess->exists(userFolder + aExtensionsFile))
             ucbDownload(aExtensionsURL, userFolder, aExtensionsFile);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }
@@ -797,7 +797,7 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
         m_xButtonInstall->set_label(CuiResId(RID_CUISTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
-    catch (const css::uno::Exception)
+    catch (const cpo::uno::Exception)
     {
         TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_CUISTR_ADDITIONS_INSTALLBUTTON));

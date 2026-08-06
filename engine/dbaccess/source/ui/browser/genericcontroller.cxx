@@ -819,7 +819,7 @@ Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Refere
         {
             xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr),UNO_QUERY);
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }

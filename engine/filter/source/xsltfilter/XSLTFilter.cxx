@@ -239,7 +239,7 @@ namespace XSLT
                         {Any{rArgs}}, m_xContext),
                     css::uno::UNO_QUERY_THROW);
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // TODO: put a dialog telling about the need to install
                 // xslt2-transformer extension here

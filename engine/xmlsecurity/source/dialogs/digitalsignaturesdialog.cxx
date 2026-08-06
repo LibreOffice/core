@@ -562,7 +562,7 @@ void DigitalSignaturesDialog::AddButtonHdlImpl()
                 AddButtonHdlImpl();
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "adding a signature!" );
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
 
             ImplFillSignaturesBox();
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "Exception while removing a signature!" );
             // Don't keep invalid entries...

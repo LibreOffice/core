@@ -169,7 +169,7 @@ RDFaExportHelper::AddRDFa(
 
         m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_ABOUT, about);
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("xmloff.core", "");
     }

@@ -58,7 +58,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sfx.bastyp", "GetResultSet" );
         }
@@ -83,13 +83,13 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
                     aList.push_back( aRow );
                 }
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "sfx.bastyp", "XContentAccess::next()" );
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.bastyp", "GetResultSet");
     }
@@ -119,7 +119,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
         catch( const ucb::CommandAbortedException& )
         {
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
 
@@ -143,12 +143,12 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
             catch( const ucb::CommandAbortedException& )
             {
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -179,7 +179,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
             nRead = xStream->readBytes( lData, 1024 );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -200,7 +200,7 @@ bool SfxContentHelper::IsHelpErrorDocument( std::u16string_view rURL )
             SAL_WARN( "sfx.bastyp", "Property 'IsErrorDocument' is missing" );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -218,7 +218,7 @@ sal_Int64 SfxContentHelper::GetSize( std::u16string_view rContent )
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.getPropertyValue( u"Size"_ustr ) >>= nSize;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sfx.bastyp", "" );
     }

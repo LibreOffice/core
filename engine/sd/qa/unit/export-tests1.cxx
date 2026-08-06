@@ -79,7 +79,7 @@ uno::Reference<awt::XBitmap> SdExportTest1::getBitmapFromTable(OUString const& r
             return rValue.get<uno::Reference<awt::XBitmap>>();
         }
     }
-    catch (const uno::Exception& /*rEx*/)
+    catch (const cpo::uno::Exception& /*rEx*/)
     {
     }
 

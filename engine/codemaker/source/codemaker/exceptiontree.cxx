@@ -49,7 +49,7 @@ void ExceptionTree::add(
 {
     std::vector< OString > list;
     bool bRuntimeException = false;
-    for (OString n(name); n != "com.sun.star.uno.Exception";) {
+    for (OString n(name); n != "cpo.uno.Exception";) {
         if (n == "com.sun.star.uno.RuntimeException") {
             bRuntimeException = true;
             break;

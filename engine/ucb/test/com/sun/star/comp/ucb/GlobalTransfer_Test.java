@@ -64,7 +64,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
             = xMSF.createInstance( "com.sun.star.ucb.UniversalContentBroker" );
                // unconfigured instance
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace((PrintWriter)log);
 
             // After this exception the test has failed and cannot continue.
@@ -90,7 +90,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
         try {
             cp.copyResource( httpSourceDir, fileTargetDir, fileName );
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace((PrintWriter)log);
 
             // After this exception the test has failed and cannot continue.

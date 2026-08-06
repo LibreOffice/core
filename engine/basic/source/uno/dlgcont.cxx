@@ -209,7 +209,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                 mbOasis2OOoFormat = true;
             }
         }
-        catch (const Exception& )
+        catch (const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("basic", "");
             // if we cannot get the version then the
@@ -312,7 +312,7 @@ Any SfxDialogLibraryContainer::importLibraryElement
             xInput = mxSFI->openFileRead( aFile );
         }
         catch(const Exception& )
-        //catch( Exception& e )
+        //catch( cpo::uno::Exception& e )
         {
             // TODO:
             //throw WrappedTargetException( e );
@@ -392,7 +392,7 @@ Reference< css::resource::XStringResourcePersistence >
             if ( !xLibraryStor.is() )
                 throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
         }
-        catch(const uno::Exception& )
+        catch(const cpo::uno::Exception& )
         {
             // Something went wrong while trying to get the storage library.
             // Return an object that supports StringResourceWithStorage, give it a storage location later.
@@ -445,7 +445,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
                 if( xStringResourceWithStorage.is() )
                     xStringResourceWithStorage->setStorage( xLibraryStor );
             }
-            catch(const uno::Exception& )
+            catch(const cpo::uno::Exception& )
             {
                 // TODO: Error handling?
             }

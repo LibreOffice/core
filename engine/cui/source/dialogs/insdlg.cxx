@@ -240,7 +240,7 @@ short SvInsertOleDlg::run()
                     {
                         // the user has pressed cancel
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                         // TODO: Error handling
                     }
@@ -502,7 +502,7 @@ short SfxInsertFloatingFrameDialog::run()
 
             bOK = true;
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL( "No IFrame!" );
         }
@@ -586,7 +586,7 @@ short SfxInsertFloatingFrameDialog::run()
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL( "No IFrame!" );
             }

@@ -20,7 +20,7 @@
 #include <embeddoc.hxx>
 
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 

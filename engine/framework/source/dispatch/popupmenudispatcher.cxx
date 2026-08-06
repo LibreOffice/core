@@ -149,7 +149,7 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     {
         throw;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
     return xDispatch;
@@ -252,7 +252,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
     {
         throw;
     }
-    catch ( const css::uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

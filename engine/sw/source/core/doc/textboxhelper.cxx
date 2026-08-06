@@ -1333,7 +1333,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
                 }
             }
         }
-        catch (uno::Exception& e)
+        catch (cpo::uno::Exception& e)
         {
             SAL_WARN("sw.core", "SwTextBoxHelper::changeAnchor(): " << e.Message);
         }

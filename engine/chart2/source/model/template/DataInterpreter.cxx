@@ -93,7 +93,7 @@ InterpretedData DataInterpreter::interpretDataSource(
                     SetRole( labeledData->getValues(), u"values-y"_ustr);
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -165,7 +165,7 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
                 aSeries[i]->setData( aNewSequences );
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -186,7 +186,7 @@ bool DataInterpreter::isDataCompatible(
             if( i->getDataSequences2().size() != 1 )
                 return false;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -275,7 +275,7 @@ rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -303,7 +303,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->getPropertyValue( u"Role"_ustr) >>= aResult;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -319,7 +319,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( rRole ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

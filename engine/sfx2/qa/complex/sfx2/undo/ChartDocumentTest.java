@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 
 public class ChartDocumentTest implements DocumentTest
 {
-    public ChartDocumentTest( final XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    public ChartDocumentTest( final XMultiServiceFactory i_orb ) throws cpo.uno.Exception
     {
         m_textDocument = OfficeDocument.blankDocument( i_orb, DocumentType.WRITER );
 
@@ -95,7 +95,7 @@ public class ChartDocumentTest implements DocumentTest
         return "chart document";
     }
 
-    public void initializeDocument() throws com.sun.star.uno.Exception
+    public void initializeDocument() throws cpo.uno.Exception
     {
         final XPropertySet wallProperties = impl_getWallProperties();
         wallProperties.setPropertyValue( "FillStyle", com.sun.star.drawing.FillStyle.SOLID );
@@ -135,7 +135,7 @@ public class ChartDocumentTest implements DocumentTest
         return undoManager;
     }
 
-    public void doSingleModification() throws com.sun.star.uno.Exception
+    public void doSingleModification() throws cpo.uno.Exception
     {
         final XPropertySet wallProperties = impl_getWallProperties();
 
@@ -145,19 +145,19 @@ public class ChartDocumentTest implements DocumentTest
             // (the UndoAction will actually set the property value)
     }
 
-    public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
+    public void verifyInitialDocumentState() throws cpo.uno.Exception
     {
         final XPropertySet wallProperties = impl_getWallProperties();
         assertEquals( 0x00FFFFFF, ((Integer)wallProperties.getPropertyValue( "FillColor" )).intValue() );
     }
 
-    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
+    public void verifySingleModificationDocumentState() throws cpo.uno.Exception
     {
         final XPropertySet wallProperties = impl_getWallProperties();
         assertEquals( 0xCCFF44, ((Integer)wallProperties.getPropertyValue( "FillColor" )).intValue() );
     }
 
-    public int doMultipleModifications() throws com.sun.star.uno.Exception
+    public int doMultipleModifications() throws cpo.uno.Exception
     {
         final XPropertySet axisProperties = impl_getYAxisProperties();
 
@@ -207,7 +207,7 @@ public class ChartDocumentTest implements DocumentTest
 
     private static class PropertyUndoAction implements XUndoAction
     {
-        PropertyUndoAction( final XPropertySet i_component, final String i_propertyName, final Object i_newValue ) throws com.sun.star.uno.Exception
+        PropertyUndoAction( final XPropertySet i_component, final String i_propertyName, final Object i_newValue ) throws cpo.uno.Exception
         {
             m_component = i_component;
             m_propertyName = i_propertyName;
@@ -228,7 +228,7 @@ public class ChartDocumentTest implements DocumentTest
             {
                 m_component.setPropertyValue( m_propertyName, m_oldValue );
             }
-            catch ( com.sun.star.uno.Exception ex )
+            catch ( cpo.uno.Exception ex )
             {
                 throw new UndoFailedException( "", this, ex );
             }
@@ -240,7 +240,7 @@ public class ChartDocumentTest implements DocumentTest
             {
                 m_component.setPropertyValue( m_propertyName, m_newValue );
             }
-            catch ( com.sun.star.uno.Exception ex )
+            catch ( cpo.uno.Exception ex )
             {
                 throw new UndoFailedException( "", this, ex );
             }

@@ -125,7 +125,7 @@ void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource
         if (xChgNot)
             xChgNot->removeChangesListener(this);
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 }
@@ -154,7 +154,7 @@ SvtUserOptions::Impl::Impl() :
         {
         }
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
         m_xCfg.clear();
@@ -170,7 +170,7 @@ ValueType SvtUserOptions::Impl::GetValue_Impl (UserOptToken nToken) const
         if (m_xData.is())
             m_xData->getPropertyValue(vOptionNames[nToken]) >>= sToken;
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
@@ -186,7 +186,7 @@ void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& 
              m_xData->setPropertyValue(vOptionNames[nToken], cpo::uno::Any(sToken));
         comphelper::ConfigurationHelper::flush(m_xCfg);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION("unotools.config");
     }

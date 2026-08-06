@@ -383,7 +383,7 @@ Sequence< bool > ConfigItem::GetReadOnlyStates(const cpo::uno::Sequence< OUStrin
             Property aProp = xInfo->getPropertyByName(sProperty);
             plStates[i] = (aProp.Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -414,7 +414,7 @@ Sequence< Any > ConfigItem::GetProperties(
         {
             pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION(
                 "unotools.config",
@@ -493,7 +493,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                     xTopNodeReplace->replaceByName(sProperty, pValues[i]);
                 }
             }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from PutProperties");
             }
@@ -503,7 +503,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             xBatch->commitChanges();
         }
-        catch (css::uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
         }
@@ -574,7 +574,7 @@ bool ConfigItem::PutProperties(
                     xTopNodeReplace->replaceByName(sProperty, pValues[i]);
                 }
             }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from PutProperties");
             }
@@ -584,7 +584,7 @@ bool ConfigItem::PutProperties(
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             xBatch->commitChanges();
         }
-        catch (css::uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
         }
@@ -640,7 +640,7 @@ void ConfigItem::RemoveChangesListener()
             xChgNot->removeChangesListener( xChangeLstnr );
             xChangeLstnr = nullptr;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -718,7 +718,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(
         }
 
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("unotools.config", "Exception from GetNodeNames");
     }
@@ -760,7 +760,7 @@ bool ConfigItem::ClearNodeSet(
             {
                 xCont->removeByName(rName);
             }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from removeByName");
             }
@@ -768,7 +768,7 @@ bool ConfigItem::ClearNodeSet(
         xBatch->commitChanges();
         bRet = true;
     }
-    catch (css::uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ClearNodeSet");
     }
@@ -803,13 +803,13 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > c
                 Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
                 xBatch->commitChanges();
             }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges()");
             }
             bRet = true;
         }
-        catch (css::uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             TOOLS_WARN_EXCEPTION("unotools.config", "Exception from GetNodeNames()");
         }
@@ -900,7 +900,7 @@ bool ConfigItem::SetSetProperties(
             {
                 xBatch->commitChanges();
             }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges()");
             }
@@ -938,7 +938,7 @@ bool ConfigItem::SetSetProperties(
                     OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(rValue.Name),
                         "Invalid config path" );
                 }
-                catch (css::uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName()");
                 }
@@ -946,7 +946,7 @@ bool ConfigItem::SetSetProperties(
             xBatch->commitChanges();
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("unotools.config", "Exception from SetSetProperties");
         bRet = false;
@@ -1005,7 +1005,7 @@ bool ConfigItem::ReplaceSetProperties(
                     {
                         xCont->removeByName(rContainerSubNode);
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         if (isSimpleValueSet)
                         {
@@ -1023,7 +1023,7 @@ bool ConfigItem::ReplaceSetProperties(
                     }
             }
             try { xBatch->commitChanges(); }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
             }
@@ -1042,7 +1042,7 @@ bool ConfigItem::ReplaceSetProperties(
                 }
             }
             try { xBatch->commitChanges(); }
-            catch (css::uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
             }
@@ -1077,7 +1077,7 @@ bool ConfigItem::ReplaceSetProperties(
                     else
                         xCont->insertByName(sSubNode, rValue.Value);
                 }
-                catch (css::uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName");
                 }
@@ -1085,7 +1085,7 @@ bool ConfigItem::ReplaceSetProperties(
             xBatch->commitChanges();
         }
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ReplaceSetProperties");
         bRet = false;
@@ -1128,7 +1128,7 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
                 {
                     xBatch->commitChanges();
                 }
-                catch (css::uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
                 }
@@ -1141,14 +1141,14 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
                     if(!xCont->hasByName(rNewNode))
                         xCont->insertByName(rNewNode, Any());
                 }
-                catch (css::uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     TOOLS_WARN_EXCEPTION("unotools.config", "Exception from AddNode");
                 }
             }
             xBatch->commitChanges();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("unotools.config");
             bRet = false;

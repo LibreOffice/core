@@ -54,7 +54,7 @@ cpo::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
         catch( css::ucb::CommandAbortedException& )
         {
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -69,12 +69,12 @@ cpo::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
             catch( css::ucb::CommandAbortedException& )
             {
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

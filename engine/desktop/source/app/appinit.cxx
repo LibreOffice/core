@@ -29,7 +29,7 @@
 #include <strings.hrc>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <officecfg/Setup.hxx>
@@ -186,7 +186,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             rAcceptor->initialize( aSeq );
             rMap.emplace(aAcceptString, rAcceptor);
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // no error handling needed...
             // acceptor just won't come up

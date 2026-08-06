@@ -220,7 +220,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         // return final sheet index if sheet exists
         return IndexNamePair( nCalcSheet, aSheetName );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL( "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
     }

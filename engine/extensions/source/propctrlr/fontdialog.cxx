@@ -311,7 +311,7 @@ using namespace cpo::uno;
             aPropExtractor.invalidateItem(PROPERTY_FONT_RELIEF, FontItemIds::CFID_RELIEF, *_pSet);
             aPropExtractor.invalidateItem(PROPERTY_FONT_EMPHASIS_MARK, FontItemIds::CFID_EMPHASIS, *_pSet);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "ControlCharacterDialog::translatePropertiesToItems");
         }
@@ -484,7 +484,7 @@ using namespace cpo::uno;
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, Any(static_cast<sal_Int16>(rEmphMarkItem.GetEmphasisMark())) );
             }
         }
-        catch (const Exception& )
+        catch (const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }

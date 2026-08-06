@@ -119,7 +119,7 @@ namespace
                     rDesc.xDriver.set(
                         rDesc.xComponentFactory->createInstanceWithContext(mxContext), css::uno::UNO_QUERY);
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     //failure, abandon driver
                     rDesc.xComponentFactory.clear();

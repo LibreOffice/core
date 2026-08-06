@@ -23,7 +23,7 @@ module com { module sun { module star { module ucb {
 /** This exception is thrown to indicate that a needed service was
     not registered.
 */
-published exception ServiceNotFoundException: com::sun::star::uno::Exception
+published exception ServiceNotFoundException: cpo::uno::Exception
 {
 };
 

@@ -84,11 +84,11 @@ private:
 
         virtual OUString SAL_CALL getSecurityEnvironmentInformation(  ) override;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void setCertDb( CERTCertDBHandle* aCertDb ) ;
 
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         void adoptSymKey( PK11SymKey* aSymKey ) ;
 
@@ -115,7 +115,7 @@ private:
         //Native methods
         /// @throws css::uno::RuntimeException
         xmlSecKeysMngrPtr createKeysManager() ;
-        /// @throws css::uno::Exception
+        /// @throws cpo::uno::Exception
         /// @throws css::uno::RuntimeException
         static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) ;
 
@@ -130,7 +130,7 @@ private:
 
         static rtl::Reference<X509Certificate_NssImpl> createX509CertificateFromDER(const cpo::uno::Sequence<sal_Int8>& raDerCertificate);
 
-          /// @throws css::uno::Exception
+          /// @throws cpo::uno::Exception
           /// @throws css::uno::RuntimeException
           void addCryptoSlot( PK11SlotInfo* aSlot ) ;
 } ;

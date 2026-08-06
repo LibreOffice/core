@@ -452,7 +452,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                     // input may already be a localized UI name

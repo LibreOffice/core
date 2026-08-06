@@ -28,7 +28,7 @@ import com.sun.star.registry.RegistryKeyType ;
 import com.sun.star.registry.RegistryValueType ;
 import com.sun.star.registry.InvalidRegistryException ;
 import com.sun.star.lang.XMultiServiceFactory ;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 
 public class RegistryTools {
 
@@ -39,7 +39,7 @@ public class RegistryTools {
     * @return Service created.
     */
     public static XSimpleRegistry createRegistryService
-        (XMultiServiceFactory xMSF) throws com.sun.star.uno.Exception {
+        (XMultiServiceFactory xMSF) throws cpo.uno.Exception {
 
         Object oInterface = xMSF.createInstance
             ("com.sun.star.registry.SimpleRegistry");
@@ -56,7 +56,7 @@ public class RegistryTools {
     */
     public static XSimpleRegistry openRegistry
         (String file, XMultiServiceFactory xMSF)
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
 
         XSimpleRegistry reg = createRegistryService(xMSF) ;
 
@@ -347,7 +347,7 @@ public class RegistryTools {
             } else {
                 out.println("") ;
             }
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             out.println("Exception occurred : ") ;
             e.printStackTrace(out) ;
         } finally {

@@ -158,7 +158,7 @@ bool WpftLoader::impl_load()
         xModel->unlockControllers();
         return bLoaded;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // ignore
     }

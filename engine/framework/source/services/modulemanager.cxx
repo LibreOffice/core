@@ -309,7 +309,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
             if (lModuleProps.match(lSearchProps))
                 lResult.push_back(cpo::uno::Any(lModuleProps.getAsConstPropertyValueList()));
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }

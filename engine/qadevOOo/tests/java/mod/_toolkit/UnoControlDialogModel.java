@@ -160,7 +160,7 @@ public class UnoControlDialogModel extends TestCase {
             tEnv.addObjRelation("INSTANCE",
                                 xMultiServiceFactory.createInstance(
                                         "com.sun.star.awt.UnoControlFixedTextModel"));
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Could not add object relations 'INSTANCEn'");
             e.printStackTrace(log);
         }

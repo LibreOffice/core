@@ -65,7 +65,7 @@ public class _XInitialization {
                 oObj.initialize(args);
             }
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             System.out.println("Exception occurred while method calling.") ;
             result = false ;
         }

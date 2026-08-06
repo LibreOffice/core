@@ -1303,7 +1303,7 @@ using namespace cpo::uno;
             // a form should always have the command type table as default
             xPropertySet->setPropertyValue( FM_PROP_COMMANDTYPE, Any(sal_Int32(CommandType::TABLE)));
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             OSL_FAIL("NavigatorTree::NewForm : could not set essential properties!");
         }

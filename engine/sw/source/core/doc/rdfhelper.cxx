@@ -54,7 +54,7 @@ SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
         uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
         return getGraphNames(xModel, xType);
     }
-    catch (const ::css::uno::Exception&)
+    catch (const ::cpo::uno::Exception&)
     {
         return cpo::uno::Sequence<uno::Reference<rdf::XURI>>();
     }

@@ -32,7 +32,7 @@ interface XBlockerMonitor : com::sun::star::uno::XInterface
      * @param id   the keeper id of the blocker
      */
     void setBlockerId([in] long id)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 } ; } ; } ; } ; } ; } ;

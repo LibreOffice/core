@@ -63,7 +63,7 @@ static int tablecell_wrapper_get_column_span(AtkTableCell* cell)
             nColumnExtent = xTable->getAccessibleColumnExtentAt(nRow, nColumn);
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_column_span");
     }
@@ -99,7 +99,7 @@ static GPtrArray* tablecell_wrapper_get_column_header_cells(AtkTableCell* cell)
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_column_header_cells");
     }
@@ -124,7 +124,7 @@ static gboolean tablecell_wrapper_get_position(AtkTableCell* cell, gint* row, gi
             return true;
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_position()");
     }
@@ -150,7 +150,7 @@ static gint tablecell_wrapper_get_row_span(AtkTableCell* cell)
             nRowExtent = xTable->getAccessibleRowExtentAt(nRow, nColumn);
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_row_span");
     }
@@ -186,7 +186,7 @@ static GPtrArray* tablecell_wrapper_get_row_header_cells(AtkTableCell* cell)
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_row_header_cells");
     }
@@ -216,7 +216,7 @@ static gboolean tablecell_wrapper_get_row_column_span(AtkTableCell* cell, gint* 
             return true;
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_row_column_span");
     }
@@ -240,7 +240,7 @@ static AtkObject* tablecell_wrapper_get_table(AtkTableCell* cell)
         return atk_object_wrapper_ref(xParent);
     }
 
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         g_warning("Exception in tablecell_wrapper_get_table()");
     }

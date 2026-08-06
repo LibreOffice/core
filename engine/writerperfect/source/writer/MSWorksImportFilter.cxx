@@ -85,7 +85,7 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                 else if (aDlg.hasUserCalledCancel())
                     return false;
             }
-            catch (css::uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
             }

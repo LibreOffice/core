@@ -82,7 +82,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
         {
             xProps->getPropertyValue(u"EnableComplexChartTypes"_ustr) >>= bEnableComplexChartTypes;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
@@ -192,7 +192,7 @@ void ChartTypeTabPage::stateChanged()
         if (xDiagram)
             xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -270,7 +270,7 @@ void ChartTypeTabPage::selectMainType()
         if (xDiagram)
             xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -350,7 +350,7 @@ void ChartTypeTabPage::initializePage()
             {
                 xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }

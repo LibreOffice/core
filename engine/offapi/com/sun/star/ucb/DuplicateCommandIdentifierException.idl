@@ -32,7 +32,7 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @see        XCommandProcessor
 */
-published exception DuplicateCommandIdentifierException : com::sun::star::uno::Exception
+published exception DuplicateCommandIdentifierException : cpo::uno::Exception
 {
 };
 

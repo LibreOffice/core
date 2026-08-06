@@ -215,7 +215,7 @@ using namespace cpo::uno;
             // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             // now we're definitely invalid
             m_eState = INVALID;

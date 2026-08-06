@@ -2493,7 +2493,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         OUString aFilter;
         aSrcDoc.maShell = loadSrcDocument(nFileId, aFilter);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     if (!aSrcDoc.maShell.is())
@@ -3014,7 +3014,7 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
         OUString aFilter;
         xDocShell = loadSrcDocument(nFileId, aFilter);
     }
-    catch ( const css::uno::Exception& ) {}
+    catch ( const cpo::uno::Exception& ) {}
 
     if (!xDocShell.is())
         // Failed to load the document.  Bail out.

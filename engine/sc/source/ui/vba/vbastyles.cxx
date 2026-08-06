@@ -50,7 +50,7 @@ ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
         mxMSF = mxModel;
         mxNameContainerCellStyles.set( m_xNameAccess, uno::UNO_QUERY_THROW );
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -109,7 +109,7 @@ public:
             {
                 throw;
             }
-            catch (const uno::Exception& e)
+            catch (const cpo::uno::Exception& e)
             {
                 cpo::uno::Any a(cppu::getCaughtException());
                 throw css::lang::WrappedTargetException(
@@ -161,7 +161,7 @@ ScVbaStyles::Add( const OUString& _sName, const cpo::uno::Any& _aBasedOn )
         }
         aRet.set( Item( cpo::uno::Any( _sName ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -176,7 +176,7 @@ ScVbaStyles::Delete(const OUString& _sStyleName)
         if (mxNameContainerCellStyles->hasByName( _sStyleName ) )
             mxNameContainerCellStyles->removeByName( _sStyleName );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }

@@ -459,7 +459,7 @@ namespace dbaui
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xEDDriverClass->get_text());
             }
         }
-        catch(Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
 #endif

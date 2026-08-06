@@ -185,7 +185,7 @@ uno::Reference<css::text::XText> XTextFromTextRangeProp(const Reference<XPropert
     {
         return xPropSet->getPropertyValue(u"TextRange"_ustr).query<css::text::XText>();
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         return {};
     }

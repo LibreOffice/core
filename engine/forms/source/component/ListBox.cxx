@@ -1173,7 +1173,7 @@ using namespace cpo::uno;
                 {
                     m_xColumnUpdate->updateObject( aCurrentValue.makeAny() );
                 }
-                catch ( const Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     return false;
                 }

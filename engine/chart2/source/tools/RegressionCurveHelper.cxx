@@ -50,7 +50,7 @@ using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 
 namespace
 {
@@ -552,7 +552,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
             bRemovedSomething = true;
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -582,7 +582,7 @@ void RegressionCurveHelper::removeEquations(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -835,7 +835,7 @@ void RegressionCurveHelper::resetEquationPosition(
         if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
             xEqProp->setPropertyValue( aPosPropertyName, cpo::uno::Any());
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }

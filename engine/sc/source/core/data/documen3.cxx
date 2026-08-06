@@ -722,7 +722,7 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bW
                 mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), cpo::uno::Sequence< cpo::uno::Any >() ))
                 return true;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

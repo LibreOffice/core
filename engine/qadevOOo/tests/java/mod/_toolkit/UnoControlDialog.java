@@ -181,7 +181,7 @@ public class UnoControlDialog extends TestCase {
             aGraphic = aDevice.createGraphics();
 
             oObj = dlgControl;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Error creating dialog :");
             e.printStackTrace(log);
         }

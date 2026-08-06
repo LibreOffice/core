@@ -40,7 +40,7 @@ namespace frm
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
 
     typedef ::cppu::WeakImplHelper <   XWindowListener2
                                     >   WindowStateGuard_Impl_Base;

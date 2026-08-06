@@ -27,7 +27,7 @@
 #include <cpo/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
 #include <memory>
 
@@ -1354,7 +1354,7 @@ bool SbiParser::IsUnoInterface(const OUString& sTypeName)
         return css::reflection::theCoreReflection::get(
             comphelper::getProcessComponentContext())->forName(sTypeName).is();
     }
-    catch(const Exception&)
+    catch(const cpo::uno::Exception&)
     {
         OSL_FAIL("Could not create reflection.CoreReflection.");
     }

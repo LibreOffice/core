@@ -36,7 +36,7 @@ interface XSubmissionVetoListener : com::sun::star::lang::XEventListener
             member of the structure describes the component which is about to submit its data.
 
         @throws com::sun::star::util::VetoException
-            when the submission is vetoed. com::sun::star::uno::Exception::Message
+            when the submission is vetoed. cpo::uno::Exception::Message
             should contain a justification for the veto then.
      */
     void    submitting( [in] com::sun::star::lang::EventObject event )

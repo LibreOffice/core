@@ -81,7 +81,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)
              : OUSTRING_TO_OSTRING_CVTFLAGS)))
     {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             ("Could not convert \"" + word + "\" to encoding #"
              + OUString::number(osl_getThreadTextEncoding())),
             css::uno::Reference<css::uno::XInterface>());
@@ -92,7 +92,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
         switch (c) {
         case 0:
             if (strict) {
-                throw css::uno::Exception(
+                throw cpo::uno::Exception(
                     "Could not convert word containing NUL, \"" + word + "\"",
                     css::uno::Reference<css::uno::XInterface>());
             }
@@ -120,7 +120,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     if( ! m_xConfigurationProvider.is() )
     {
-        throw css::uno::Exception( u"Can not access configuration"_ustr ,
+        throw cpo::uno::Exception( u"Can not access configuration"_ustr ,
             static_cast < XSimpleMailClient * > (this) );
     }
 
@@ -131,7 +131,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     OUString aProgram;
     if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
     {
-        throw css::uno::Exception(u"Could not convert executable path"_ustr,
+        throw cpo::uno::Exception(u"Could not convert executable path"_ustr,
             static_cast < XSimpleMailClient * > (this));
     }
 
@@ -256,7 +256,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     FILE * f = popen(cmd.getStr(), "w");
     if (f == nullptr || pclose(f) != 0)
     {
-        throw css::uno::Exception(u"No mail client configured"_ustr,
+        throw cpo::uno::Exception(u"No mail client configured"_ustr,
             static_cast < XSimpleMailClient * > (this) );
     }
 }

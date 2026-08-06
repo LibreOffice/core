@@ -74,7 +74,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         throw;
     }
-    catch ( uno::Exception & )
+    catch ( cpo::uno::Exception & )
     {
         cpo::uno::Any e(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
@@ -100,7 +100,7 @@ VbaGlobalsBase::~VbaGlobalsBase()
         if (xComponent)
             xComponent->dispose();
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

@@ -45,7 +45,7 @@ public class _XUIConfigurationPersistence {
         try {
             oObj.reload();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
 
         }
         return true;
@@ -55,7 +55,7 @@ public class _XUIConfigurationPersistence {
         try {
             oObj.store();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
 
         }
         return true;
@@ -66,7 +66,7 @@ public class _XUIConfigurationPersistence {
         try {
             oObj.storeToStorage(xStore);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             result = false;
 
         }

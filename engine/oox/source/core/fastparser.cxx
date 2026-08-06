@@ -56,7 +56,7 @@ InputStreamCloseGuard::InputStreamCloseGuard( const Reference< XInputStream >& r
 
 InputStreamCloseGuard::~InputStreamCloseGuard()
 {
-    if( mxInStream.is() && mbCloseStream ) try { mxInStream->closeInput(); } catch( Exception& ) {}
+    if( mxInStream.is() && mbCloseStream ) try { mxInStream->closeInput(); } catch( cpo::uno::Exception& ) {}
 }
 
 } // namespace

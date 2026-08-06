@@ -140,7 +140,7 @@ void ResourceMenuController::updatePopupMenu()
             css::uno::Reference< css::frame::XModuleManager > xModuleManager( css::frame::ModuleManager::create( m_xContext ) );
             m_aModuleName = xModuleManager->identify( m_xFrame );
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 

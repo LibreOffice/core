@@ -58,7 +58,7 @@ BarChart::BarChart( const rtl::Reference<ChartType>& xChartTypeModel
             m_xChartTypeModel->getPropertyValue( u"GapwidthSequence"_ustr ) >>= m_aGapwidthSequence;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -308,7 +308,7 @@ rtl::Reference< SvxShape > BarChart::createDataPoint3D_Bar(
                 bRoundedEdges = false;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -716,13 +716,13 @@ void BarChart::doXSlot(
             // check point properties, and if none then series properties
             try {
                 xPointProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
-            } catch (const uno::Exception&)
+            } catch (const cpo::uno::Exception&)
             {
                 uno::Reference< beans::XPropertySet > xSeriesProperties =
                     pSeries->getPropertiesOfSeries();
                 try {
                     xSeriesProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
-                } catch (const uno::Exception&)
+                } catch (const cpo::uno::Exception&)
                 {}
             }
 
@@ -773,7 +773,7 @@ void BarChart::doXSlot(
         {
             xDataPointProperties->getPropertyValue( u"Geometry3D"_ustr) >>= nGeometry3D;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }

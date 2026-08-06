@@ -79,7 +79,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @throws com::sun::star::io::IOException
             in case of io problems during opening or creation
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void setPersistentEntry(
@@ -91,7 +91,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** lets the object store itself to an entry in destination storage,
         the own persistence entry is not changed.
@@ -119,7 +119,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @throws com::sun::star::io::IOException
             in case of io problems during storing
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void storeToEntry(
@@ -130,7 +130,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** lets the object store itself to an entry in destination storage and
         prepare to use the new entry for own persistence.
@@ -168,7 +168,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @throws com::sun::star::io::IOException
             in case of io problems during storing
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void storeAsEntry(
@@ -179,7 +179,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 
     /** specifies whether the object should use an old storage or a new one
@@ -192,13 +192,13 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
 
     void saveCompleted( [in] boolean bUseNew )
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** allows to detect if the object has entry.
 

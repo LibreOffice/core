@@ -1690,7 +1690,7 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ORDER ) >>= sOrder );
         xComposer->setOrder( sOrder );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }

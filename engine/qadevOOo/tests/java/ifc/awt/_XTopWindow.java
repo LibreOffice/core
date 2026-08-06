@@ -171,7 +171,7 @@ public class _XTopWindow extends MultiMethodTest {
                 com.sun.star.awt.MenuItemStyle.CHECKABLE, (short)1) ;
 
             oObj.setMenuBar(menu) ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Can't instantiate MenuBar service") ;
             result = false ;
         }

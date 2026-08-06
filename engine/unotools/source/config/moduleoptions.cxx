@@ -966,7 +966,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { return EFactory::UNKNOWN_FACTORY; }
 
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
@@ -986,7 +986,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             { /* do nothing here ... may the following code can help!*/ }
     }
 
@@ -1018,7 +1018,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { /* do nothing here ... may the following code can help!*/ }
 
     // no filter/no type/no detection result => no fun :-)

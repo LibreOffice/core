@@ -58,7 +58,7 @@ public class _XTypeConverter extends MultiMethodTest {
         try {
             value = xMSF.createInstance
                 ("com.sun.star.comp.stoc.TypeDescriptionManager") ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Can't create value to convert") ;
             e.printStackTrace(log) ;
             tRes.tested("convertTo()", false) ;

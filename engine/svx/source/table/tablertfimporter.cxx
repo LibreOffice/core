@@ -352,7 +352,7 @@ void SdrTableRTFParser::FillTable()
         mrTableObj.NbcSetSnapRect( aRect );
 
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }

@@ -36,7 +36,7 @@ public class _XUIConfigurationPersistence extends MultiMethodTest {
         try {
             oObj.reload();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace(log);
         }
         tRes.tested("reload()", true);
@@ -46,7 +46,7 @@ public class _XUIConfigurationPersistence extends MultiMethodTest {
         try {
             oObj.store();
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace(log);
         }
         tRes.tested("store()", true);
@@ -57,7 +57,7 @@ public class _XUIConfigurationPersistence extends MultiMethodTest {
         try {
             oObj.storeToStorage(xStore);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             result = false;
             e.printStackTrace(log);
         }

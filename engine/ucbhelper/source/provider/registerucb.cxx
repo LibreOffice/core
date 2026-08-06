@@ -63,7 +63,7 @@ registerAtUcb(
             {
                 xProxyFactory = ucb::ContentProviderProxyFactory::create( rxContext );
             }
-            catch (uno::Exception const &) {}
+            catch (cpo::uno::Exception const &) {}
             OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
             if (xProxyFactory.is())
                 xProvider = xProxyFactory->createContentProvider(rName);
@@ -78,7 +78,7 @@ registerAtUcb(
                     uno::UNO_QUERY);
             }
             catch (uno::RuntimeException const &) { throw; }
-            catch (uno::Exception const &) {}
+            catch (cpo::uno::Exception const &) {}
     }
 
     uno::Reference< ucb::XParameterizedContentProvider >

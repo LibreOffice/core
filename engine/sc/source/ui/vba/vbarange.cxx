@@ -258,7 +258,7 @@ void ScVbaRange::fireChangeEvent()
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< excel::XRange >( this )) };
         xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1575,7 +1575,7 @@ ScVbaRange::setValue( const cpo::uno::Any& aValue, ValueSetter& valueSetter )
                 visitArray( setter );
             }
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("sc", "Bahhh, caught" );
         }
@@ -2182,7 +2182,7 @@ ScVbaRange::Font()
     {
         pRangeObj = getCellRangeObj();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return  new ScVbaFont( this, mxContext, aPalette, xProps, pRangeObj );
@@ -2232,7 +2232,7 @@ ScVbaRange::CellsHelper( const ScDocument& rDoc,
             aConverted = xConverter->convertTo( nRowIndex, cppu::UnoType<sal_Int32>::get() );
             bIsIndex = ( aConverted >>= nRow );
         }
-        catch( uno::Exception& ) {} // silence any errors
+        catch( cpo::uno::Exception& ) {} // silence any errors
     }
 
     if ( bIsColumnIndex )
@@ -2259,7 +2259,7 @@ ScVbaRange::CellsHelper( const ScDocument& rDoc,
                     aConverted = xConverter->convertTo( nColumnIndex, cppu::UnoType<sal_Int32>::get() );
                     bIsColumnIndex = ( aConverted >>= nColumn );
                 }
-                catch( uno::Exception& ) {} // silence any errors
+                catch( cpo::uno::Exception& ) {} // silence any errors
             }
        }
     }
@@ -2314,7 +2314,7 @@ ScVbaRange::Select()
         uno::Reference< awt::XWindow > xWin( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
         xWin->setFocus();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -3048,7 +3048,7 @@ ScVbaRange::getHidden()
         if ( !( xProps->getPropertyValue( ISVISIBLE ) >>= bIsVisible ) )
             throw uno::RuntimeException(u"Failed to get IsVisible property"_ustr );
     }
-    catch( const uno::Exception& e )
+    catch( const cpo::uno::Exception& e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
@@ -3077,7 +3077,7 @@ ScVbaRange::setHidden( const cpo::uno::Any& _hidden )
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
         xProps->setPropertyValue( ISVISIBLE, cpo::uno::Any( !bHidden ) );
     }
-    catch( const uno::Exception& e )
+    catch( const cpo::uno::Exception& e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
@@ -4283,7 +4283,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
         {
             xReferrer.set ( xNamed->getByName( sRangeName ), uno::UNO_QUERY );
         }
-        catch( uno::Exception& /*e*/ )
+        catch( cpo::uno::Exception& /*e*/ )
         {
             // do nothing
         }
@@ -4307,7 +4307,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
 
         xSheetRange.set(xView->getActiveSheet(), uno::UNO_QUERY_THROW);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return uno::Reference<excel::XRange>();
     }
@@ -4557,7 +4557,7 @@ ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criter
         {
             Field = xConverter->convertTo( aField, cppu::UnoType<sal_Int32>::get() );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -5628,7 +5628,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const cpo::uno::Any& _oValue)
             xRange = lcl_makeXRangeFromSheetCellRanges( getParent(), mxContext, xLocSheetCellRanges, getScDocShell() );
         }
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"No cells were found");
     }
@@ -5708,7 +5708,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const cpo::
         xSubDesc->addNew(aColumns, _nGroupBy - 1);
         xSub->applySubTotals(xSubDesc, bDoReplace);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }

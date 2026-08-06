@@ -24,7 +24,7 @@
 #include <cstring>
 #include <typeinfo>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <o3tl/runtimetooustring.hxx>
@@ -351,7 +351,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
                               bSimpleReturn, pStackStart, (pStack - pStackStart), pGPR, pFPR,
                               pReturnTypeDescr);
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             throw;
         }

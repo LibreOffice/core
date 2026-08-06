@@ -83,7 +83,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                 catch (const css::container::NoSuchElementException&)
                 {
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -116,13 +116,13 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                         }
                     }
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("error while initializing style names");
     }

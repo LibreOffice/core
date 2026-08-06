@@ -49,7 +49,7 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
     {
         return xDBContext->getByName(rData.sDataSource).hasValue();
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         rUsedDataSource = rData.sDataSource;
         return false;

@@ -388,7 +388,7 @@ void Cell::dispose()
             Reference< XEventListener > xThis( this );
             mxTable->removeEventListener( xThis );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("svx.table", "");
         }
@@ -1266,7 +1266,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         {
             TOOLS_WARN_EXCEPTION("svx.table", "unknown property!");
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("svx.table", "");
         }
@@ -1298,7 +1298,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         {
             TOOLS_WARN_EXCEPTION("svx.table", "unknown property!");
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("svx.table", "");
         }
@@ -1501,7 +1501,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
             {
                 return getPropertyState( rName );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 return PropertyState_AMBIGUOUS_VALUE;
             }

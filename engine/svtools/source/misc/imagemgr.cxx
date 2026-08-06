@@ -260,7 +260,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     {
         throw; // don't hide it!
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // type detection failed -> no extension
     }
@@ -319,7 +319,7 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
     {
         throw; // don't hide it!
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // type detection failed -> no extension
     }
@@ -350,7 +350,7 @@ static SvImageId GetFolderImageId_Impl( const OUString& rURL )
     {
         throw; // don't hide it!
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
 
     }
@@ -367,7 +367,7 @@ static bool isFolder(
     } catch (css::ucb::CommandAbortedException &) {
         assert(false); // this cannot happen
         throw;
-    } catch (css::uno::Exception &) {
+    } catch (cpo::uno::Exception &) {
         TOOLS_INFO_EXCEPTION("svtools.misc", "isFolder(" << url << ")");
         return false;
     }
@@ -500,7 +500,7 @@ static TranslateId GetFolderDescriptionId_Impl( const OUString& rURL )
     {
         throw; // don't hide it!
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
 
     }

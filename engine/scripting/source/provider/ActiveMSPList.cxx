@@ -240,7 +240,7 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
         Reference< lang::XComponent > xBroadcaster( xComponent, UNO_QUERY_THROW );
         xBroadcaster->addEventListener( this );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("scripting");
     }
@@ -261,7 +261,7 @@ void SAL_CALL ActiveMSPList::disposing( const css::lang::EventObject& Source )
                 m_mScriptComponents.erase( pos );
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         // if we get an exception here, there is not much we can do about
         // it can't throw as it will screw up the model that is calling dispose

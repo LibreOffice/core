@@ -230,7 +230,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
                 // IllegalArgumentException, or so
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }

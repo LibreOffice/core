@@ -208,7 +208,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             OutMeta( rStrm, pIndent, name, valstr, false,
                      pNonConvertableChars );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // may happen with concurrent modification...
             SAL_INFO("sfx", "SfxFrameHTMLWriter::Out_DocInfo: exception");
@@ -291,7 +291,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         rOut.WriteOString( sOut );
         sOut.setLength(0);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

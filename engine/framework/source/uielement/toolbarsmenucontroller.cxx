@@ -268,7 +268,7 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
                     aToolBarArray.push_back( aToolBarInfo );
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -358,7 +358,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
                     }
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
 
@@ -593,7 +593,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                             catch ( const RuntimeException& )
                             {
                             }
-                            catch ( const Exception& )
+                            catch ( const cpo::uno::Exception& )
                             {
                             }
                         }
@@ -605,7 +605,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
             {
                 throw;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
             }
         }
@@ -749,7 +749,7 @@ void ToolbarsMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuar
                 m_xDocCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }
@@ -767,7 +767,7 @@ IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
             pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, Sequence<PropertyValue>());
         }
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

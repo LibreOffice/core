@@ -195,7 +195,7 @@ void SecurityEnvironment_NssImpl::adoptSymKey( PK11SymKey* aSymKey ) {
 
     try {
         m_tSymKeyList.push_back( symkey ) ;
-    } catch ( Exception& ) {
+    } catch ( cpo::uno::Exception& ) {
         PK11_FreeSymKey( symkey ) ;
     }
 }

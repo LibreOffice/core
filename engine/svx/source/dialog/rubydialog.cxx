@@ -386,7 +386,7 @@ void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
         if (xSelSupp.is())
             xSelSupp->addSelectionChangeListener(this);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -401,7 +401,7 @@ void SvxRubyData_Impl::disposing(const EventObject&)
         if (xSelSupp.is())
             xSelSupp->removeSelectionChangeListener(this);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     xController = nullptr;
@@ -582,7 +582,7 @@ void SvxRubyDialog::Activate()
                     }
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("svx.dialog", "exception in style access");
             }
@@ -787,7 +787,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, weld::Button&, void)
         {
             xSelection->setRubyList(aRubyValues, false);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("svx.dialog", "");
         }

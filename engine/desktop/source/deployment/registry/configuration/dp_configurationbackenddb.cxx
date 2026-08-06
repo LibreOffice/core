@@ -76,7 +76,7 @@ void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -108,7 +108,7 @@ ConfigurationBackendDb::getEntry(std::u16string_view url)
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -143,7 +143,7 @@ std::vector<OUString> ConfigurationBackendDb::getAllDataUrls()
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

@@ -101,7 +101,7 @@ class UCBHELPER_DLLPUBLIC Content final
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException,
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     cpo::uno::Any createCursorAny(const cpo::uno::Sequence<OUString>& rPropertyNames,
                                   ResultSetInclude eMode);
 
@@ -233,7 +233,7 @@ public:
       *         to obtain meta data of the commands supported by this content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::ucb::XCommandInfo> getCommands();
     /**
@@ -244,7 +244,7 @@ public:
       *         to obtain meta data of the properties supported by this content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::beans::XPropertySetInfo> getProperties();
 
@@ -258,7 +258,7 @@ public:
       * @return the property value.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Any getPropertyValue(const OUString& rPropertyName);
     /**
@@ -279,14 +279,14 @@ public:
       *           that the property value is not acceptable. For instance,
       *           setting an empty title may be illegal.
       *         - Any other exception derived from
-      *           css::uno::Exception indicates, that the value was
+      *           cpo::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
       *           com::sun::star::ucb::InteractiveAugmentedIOException
       *           transporting the error code
       *           css::ucb::IOErrorCode::ACCESS_DENIED.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Any setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue);
     /**
@@ -297,7 +297,7 @@ public:
       * @return the property values.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Sequence<cpo::uno::Any>
     getPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames);
@@ -309,7 +309,7 @@ public:
       * @return the property values.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::sdbc::XRow>
     getPropertyValuesInterface(const cpo::uno::Sequence<OUString>& rPropertyNames);
@@ -338,14 +338,14 @@ public:
       *           that the property value is not acceptable. For instance,
       *           setting an empty title may be illegal.
       *         - Any other exception derived from
-      *           css::uno::Exception indicates, that the value was
+      *           cpo::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
       *           com::sun::star::ucb::InteractiveAugmentedIOException
       *           transporting the error code
       *           css::ucb::IOErrorCode::ACCESS_DENIED.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Sequence<cpo::uno::Any>
     setPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames,
@@ -364,7 +364,7 @@ public:
       * @return the result of the command according to its specification.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Any executeCommand(const OUString& rCommandName,
                                  const cpo::uno::Any& rCommandArgument);
@@ -387,7 +387,7 @@ public:
       *         get access to the children of a content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::sdbc::XResultSet>
     createCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
@@ -408,7 +408,7 @@ public:
       *         get access to the children of a content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::ucb::XDynamicResultSet>
     createDynamicCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
@@ -416,7 +416,7 @@ public:
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference<css::sdbc::XResultSet>
     createSortedCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                        const cpo::uno::Sequence<css::ucb::NumberedSortingInfo>& rSortInfo,
@@ -432,7 +432,7 @@ public:
       *         be used to read the content's data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::io::XInputStream> openStream();
     /**
@@ -445,7 +445,7 @@ public:
       *         be used to read the content's data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::io::XInputStream> openStreamNoLock();
 
@@ -458,7 +458,7 @@ public:
       *         be used to read/write the content's data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::io::XStream> openWriteableStream();
     /**
@@ -471,7 +471,7 @@ public:
       *         be used to read/write the content's data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     css::uno::Reference<css::io::XStream> openWriteableStreamNoLock();
 
@@ -484,7 +484,7 @@ public:
       *        which shall be used by the content to deliver the data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool openStream(const css::uno::Reference<css::io::XActiveDataSink>& rSink);
     /**
@@ -496,7 +496,7 @@ public:
       *        which shall be used by the content to deliver the data.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool openStream(const css::uno::Reference<css::io::XOutputStream>& rStream);
     /**
@@ -510,7 +510,7 @@ public:
       *        shall be overwritten.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     void writeStream(const css::uno::Reference<css::io::XInputStream>& rStream,
                      bool bReplaceExisting);
@@ -523,7 +523,7 @@ public:
       *         created by this content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     cpo::uno::Sequence<css::ucb::ContentInfo> queryCreatableContentsInfo();
 
@@ -551,7 +551,7 @@ public:
       *        with the new content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool insertNewContent(const OUString& rContentType,
                           const cpo::uno::Sequence<OUString>& rPropertyNames,
@@ -584,7 +584,7 @@ public:
       *        with the new content.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool insertNewContent(const OUString& rContentType,
                           const cpo::uno::Sequence<OUString>& rPropertyNames,
@@ -622,7 +622,7 @@ public:
       * @param rDocumentId is the document Id ( in case of CMIS ).
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     void transferContent(const Content& rSourceContent, InsertOperation eOperation,
                          const OUString& rTitle, const sal_Int32 nNameClashAction,
@@ -636,7 +636,7 @@ public:
       *
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     void lock();
 
@@ -645,7 +645,7 @@ public:
       *
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     void unlock();
 
@@ -658,7 +658,7 @@ public:
       *         UCB contents). false, otherwise.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool isFolder();
     /**
@@ -668,7 +668,7 @@ public:
       *         false, otherwise.
       * @throws css::ucb::CommandAbortedException
       * @throws css::uno::RuntimeException
-      * @throws css::uno::Exception
+      * @throws cpo::uno::Exception
       */
     bool isDocument();
 };

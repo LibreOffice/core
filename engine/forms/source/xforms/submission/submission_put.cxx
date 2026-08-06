@@ -53,7 +53,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const css::uno::Reference< 
 
         // no content as a result of put...
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "forms.misc", "Exception during UCB operation." );
         return UNKNOWN_ERROR;

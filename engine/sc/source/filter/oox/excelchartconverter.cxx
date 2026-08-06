@@ -59,7 +59,7 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
             u"com.sun.star.chart2.data.DataProvider"_ustr ), UNO_QUERY_THROW );
         xDataRec->attachDataProvider( xDataProv );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

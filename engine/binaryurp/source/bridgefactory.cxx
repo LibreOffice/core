@@ -24,7 +24,7 @@
 #include <com/sun/star/bridge/BridgeExistsException.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -164,7 +164,7 @@ void BridgeFactory::disposing() {
         try {
             css::uno::Reference<css::lang::XComponent>(
                 item, css::uno::UNO_QUERY_THROW)->dispose();
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }
     }
@@ -173,7 +173,7 @@ void BridgeFactory::disposing() {
         try {
             css::uno::Reference<css::lang::XComponent>(
                 item.second, css::uno::UNO_QUERY_THROW)->dispose();
-        } catch (css::uno::Exception & e) {
+        } catch (cpo::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }
     }

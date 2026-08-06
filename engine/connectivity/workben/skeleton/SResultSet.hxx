@@ -114,7 +114,7 @@ namespace connectivity::skeleton
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                                  )
-                                 throw (css::uno::Exception);
+                                 throw (cpo::uno::Exception);
         virtual void getFastPropertyValue(
                                 cpo::uno::Any& rValue,
                                 sal_Int32 nHandle

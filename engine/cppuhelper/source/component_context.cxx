@@ -321,7 +321,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     {
         throw;
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
         SAL_WARN(
             "cppuhelper",

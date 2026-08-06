@@ -192,7 +192,7 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
         m_xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr , cpo::uno::Any( aMode ));
         m_xDiagram->setPropertyValue( u"Perspective"_ustr , cpo::uno::Any( static_cast<sal_Int32>(m_xMFPerspective->get_value(FieldUnit::PERCENT)) ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

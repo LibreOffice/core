@@ -113,7 +113,7 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
         if (pViewShell->mpSlideSorter == nullptr)
             pViewShell.reset();
     }
-    catch(Exception&)
+    catch(cpo::uno::Exception&)
     {
         pViewShell.reset();
     }
@@ -155,7 +155,7 @@ SlideSorterViewShell::~SlideSorterViewShell()
                 pAccessible->dispose();
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SlideSorterViewShell::~SlideSorterViewShell()" );
     }

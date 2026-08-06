@@ -819,7 +819,7 @@ void MetaField::GetPrefixAndSuffix(
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix, o_pShadowsColor);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw", "");
     }

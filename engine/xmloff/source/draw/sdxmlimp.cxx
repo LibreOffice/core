@@ -554,7 +554,7 @@ void SdXMLImport::SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyV
     {
         xPropSet->setPropertyValue(u"VisibleArea"_ustr, cpo::uno::Any( aVisArea )  );
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
 /* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, {}, e.Message, NULL );
@@ -595,7 +595,7 @@ void SdXMLImport::SetConfigurationSettings(const cpo::uno::Sequence<css::beans::
             if( xInfo->hasPropertyByName( rProperty ) )
                 xProps->setPropertyValue( rProperty, rValue.Value );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             SAL_INFO("xmloff.draw",  "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }

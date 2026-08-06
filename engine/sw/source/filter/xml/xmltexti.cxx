@@ -127,7 +127,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
     {
         xObj->setVisualAreaSize( nAspect, aSz );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Couldn't set visual area of the object!" );
     }
@@ -268,7 +268,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 if( pOLENd )
                     aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -296,7 +296,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                                                                          aTmpName );
                         aName = aTmpName;
                     }
-                    catch ( uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                         OSL_FAIL( "Couldn't create a copy of the object!" );
                     }
@@ -750,7 +750,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 

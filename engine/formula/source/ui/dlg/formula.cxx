@@ -478,7 +478,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
             nOldTokPos = nTokPos;
         } // while ( pIter != pEnd )
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("formula.ui", "FormulaDlg_Impl::GetFunctionPos");
     }
@@ -738,7 +738,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
             MakeTree( _pTree, pParent, _pToken, m_oTokenArrayIterator->PrevRPN(), Count);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("formula.ui");
     }
@@ -765,7 +765,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
         const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
         m_aTokenList = m_pHelper->getFormulaParser()->parseFormula( rStrExp, aRefPos);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("formula.ui");
     }
@@ -997,7 +997,7 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
 
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("formula.ui", "FormulaDlg_Impl::RepairFormula");
     }

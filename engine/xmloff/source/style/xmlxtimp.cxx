@@ -133,7 +133,7 @@ namespace
             XMLGradientStyleImport aGradientStyle( GetImport() );
             aGradientStyle.importXML( xAttrList, maAny, maStrName );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -282,7 +282,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
@@ -320,7 +320,7 @@ void SvxXMLTableImportContext::importMarker( const uno::Reference< XFastAttribut
         XMLMarkerStyleImport aMarkerStyle( GetImport() );
         aMarkerStyle.importXML( xAttrList, rAny, rName );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -333,7 +333,7 @@ void SvxXMLTableImportContext::importDash( const uno::Reference< XFastAttributeL
         XMLDashStyleImport aDashStyle( GetImport() );
         aDashStyle.importXML( xAttrList, rAny, rName );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -346,7 +346,7 @@ void SvxXMLTableImportContext::importHatch( const uno::Reference< XFastAttribute
         XMLHatchStyleImport aHatchStyle( GetImport() );
         aHatchStyle.importXML( xAttrList, rAny, rName );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -366,7 +366,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttribut
                 rAny <<= xBitmap;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -457,7 +457,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                 xSubStorage = comphelper::OStorageHelper::GetStorageAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
             if( xSubStorage.is() )
@@ -484,7 +484,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
             if (xSeek)
                 xSeek->seek( 0 );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

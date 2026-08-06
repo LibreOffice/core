@@ -388,7 +388,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
         OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
 #endif
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
@@ -628,7 +628,7 @@ namespace
                 {
                     m_aOriginalSize = m_xVisObject->getVisualAreaSize( Aspects::MSOLE_CONTENT );
                 }
-                catch ( const Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION( "dbaccess", "PreserveVisualAreaSize::PreserveVisualAreaSize" );
                 }
@@ -643,7 +643,7 @@ namespace
                 {
                     m_xVisObject->setVisualAreaSize( Aspects::MSOLE_CONTENT, m_aOriginalSize );
                 }
-                catch ( const Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION( "dbaccess", "PreserveVisualAreaSize::~PreserveVisualAreaSize" );
                 }

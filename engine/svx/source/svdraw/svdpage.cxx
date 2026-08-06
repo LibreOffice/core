@@ -1377,7 +1377,7 @@ SdrPage::~SdrPage()
         auto xPageComponent( std::move(mxUnoPage) );
         xPageComponent->dispose();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }

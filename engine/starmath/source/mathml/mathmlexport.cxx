@@ -282,7 +282,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
         xStream = xStorage->openStreamElement(sStreamName, embed::ElementModes::READWRITE
                                                                | embed::ElementModes::TRUNCATE);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package");
         return false;

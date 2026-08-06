@@ -397,7 +397,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
         m_pIOleIPSite->DiscardUndoState();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         hr = ERROR;
     }
@@ -608,7 +608,7 @@ void DocumentHolder::DisconnectFrameDocument( bool bComplete )
         uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
         xModifiable->removeModifyListener( static_cast<util::XModifyListener*>(this) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     try
@@ -617,7 +617,7 @@ void DocumentHolder::DisconnectFrameDocument( bool bComplete )
             m_xDocument, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     try
@@ -626,7 +626,7 @@ void DocumentHolder::DisconnectFrameDocument( bool bComplete )
             m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     if ( bComplete )
@@ -650,7 +650,7 @@ void DocumentHolder::CloseDocument()
         {
             xCloseable->close( true );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
 
@@ -667,7 +667,7 @@ void DocumentHolder::CloseFrame()
             m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     uno::Reference<util::XCloseable> xCloseable(
@@ -676,7 +676,7 @@ void DocumentHolder::CloseFrame()
         try {
             xCloseable->close(true);
         }
-        catch( const uno::Exception& ) {
+        catch( const cpo::uno::Exception& ) {
         }
     else if (m_xFrame.is())
         m_xFrame->dispose();
@@ -737,7 +737,7 @@ bool DocumentHolder::ExecuteSuspendCloseFrame()
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -839,7 +839,7 @@ void DocumentHolder::show()
                     uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
                     xModifiable->addModifyListener( static_cast<util::XModifyListener*>(this) );
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {}
             }
 
@@ -847,7 +847,7 @@ void DocumentHolder::show()
                 setTitle(m_aDocumentNamePart);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         OSL_FAIL( "Can not show the frame!" );
     }
@@ -945,7 +945,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                             }
                     }
                 }
-                catch(const uno::Exception& ) {
+                catch(const cpo::uno::Exception& ) {
                     // nothing better to do here
                     m_aFilterName = aFilterName;
                 }
@@ -956,7 +956,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
         try {
             m_xFrame->setTitle( aTotalName );
         }
-        catch( const uno::Exception& ) {
+        catch( const cpo::uno::Exception& ) {
         }
     }
 
@@ -1023,7 +1023,7 @@ IDispatch* DocumentHolder::GetIDispatch()
                     CoTaskMemFree( pVariant );
                 }
             }
-            catch ( const uno::Exception& )
+            catch ( const cpo::uno::Exception& )
             {}
         }
     }
@@ -1083,7 +1083,7 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 
                 return S_OK;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
     }
@@ -1117,7 +1117,7 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 
                 return S_OK;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {}
         }
     }
@@ -1314,7 +1314,7 @@ DocumentHolder::notifyClosing(
             aSource.Source, uno::UNO_QUERY_THROW );
         xEventBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {}
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )

@@ -162,7 +162,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                                     pImplNames[i], aArgs, xContext ),
                                 UNO_QUERY );
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }

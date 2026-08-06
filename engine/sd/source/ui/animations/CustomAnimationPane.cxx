@@ -98,7 +98,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 
 namespace sd {
 
@@ -199,7 +199,7 @@ void CustomAnimationPane::initialize()
         mxView = mrBase.GetDrawController();
         addListener();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::CustomAnimationPane()" );
     }
@@ -841,7 +841,7 @@ void CustomAnimationPane::onSelectionChanged()
         mxCustomAnimationList->onSelectionChanged( maViewSelection );
         updateControls();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::onSelectionChanged()" );
     }
@@ -1071,7 +1071,7 @@ static bool hasVisibleShape( const Reference< XShape >& xShape )
             return eFillStyle != FillStyle_NONE || eLineStyle != css::drawing::LineStyle_NONE;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return true;
@@ -1646,7 +1646,7 @@ void CustomAnimationPane::onChangeCurrentPage()
             updateControls();
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::onChangeCurrentPage()" );
     }
@@ -1708,7 +1708,7 @@ static bool getTextSelection(const Reference< XTextRange >& xSelectedText, Refer
 
         return true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::getTextSelection()" );
     }

@@ -49,7 +49,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
             Reference< XDevice > xDevice( xWindow, UNO_QUERY_THROW );
             aDeviceInfo = xDevice->getInfo();
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -179,7 +179,7 @@ static void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF,
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -197,7 +197,7 @@ static void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& r
         if ( xPropertySet->getPropertyValue( u"Background"_ustr ) >>= xBackgroundPropSet )
             ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -227,7 +227,7 @@ static void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMS
             awt::Size aLogicalSize( xShape->getSize() );
             ImpAddFillBitmapEntity( rxMSF, xShapePropertySet, aLogicalSize, rGraphicEntities, rGraphicSettings, xEmptyPagePropSet );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -315,7 +315,7 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
                 rGraphic.maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -352,7 +352,7 @@ static void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF,
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -381,7 +381,7 @@ static void ImpCountBackgroundGraphic(
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -414,7 +414,7 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMS
             ImpCountGraphicObjects( rxMSF, xMasterPage, rGraphicSettings, rnGraphics );
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }

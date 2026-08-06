@@ -376,7 +376,7 @@ void SwViewShellImp::UpdateAccessible()
         {
             GetAccessibleMap().GetDocumentView();
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("sw.a11y", "");
             assert(!"SwViewShellImp::UpdateAccessible: unhandled exception");

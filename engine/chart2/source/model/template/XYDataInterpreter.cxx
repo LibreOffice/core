@@ -95,7 +95,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
                     SetRole( labelData->getValues(), u"values-y"_ustr);
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -207,7 +207,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 aSeries[i]->setData( aNewSequences );
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -228,7 +228,7 @@ bool XYDataInterpreter::isDataCompatible(
             if( dataSeries->getDataSequences2().size() != 2 )
                 return false;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

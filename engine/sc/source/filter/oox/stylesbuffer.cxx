@@ -2878,7 +2878,7 @@ void CellStyleBuffer::finalizeImport()
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

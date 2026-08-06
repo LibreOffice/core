@@ -1171,7 +1171,7 @@ namespace pcr
                         pControl->SetDefaultValue(nDefault);
                 }
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // just ignore it
             }
@@ -2338,7 +2338,7 @@ namespace pcr
                 _rFieldNames.insert( _rFieldNames.end(), aNames.begin(), aNames.end() );
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_initFieldList_nothrow" );
         }
@@ -2377,7 +2377,7 @@ namespace pcr
         }
         catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }
         catch ( const WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
-        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION("extensions.propctrlr"); }
+        catch ( const cpo::uno::Exception& ) { DBG_UNHANDLED_EXCEPTION("extensions.propctrlr"); }
 
         // report errors, if necessary
         if ( aError.isValid() )
@@ -2442,7 +2442,7 @@ namespace pcr
                 break;
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_describeCursorSource_nothrow");
         }

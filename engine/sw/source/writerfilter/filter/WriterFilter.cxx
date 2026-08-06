@@ -81,7 +81,7 @@ static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e)
     {
         return lcl_GetExceptionMessage(saxe);
     }
-    uno::Exception ue;
+    cpo::uno::Exception ue;
     if (e.WrappedException >>= ue)
     {
         return ue.Message;
@@ -143,7 +143,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
         {
             throw;
         }
-        catch (uno::Exception& e)
+        catch (cpo::uno::Exception& e)
         {
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": "
@@ -178,7 +178,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
                 new ::oox::core::FilterDetect(m_xContext));
             xInputStream = xDetector->extractUnencryptedPackage(aMediaDesc);
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
         }
 
@@ -226,7 +226,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
         {
             throw;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             cpo::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN("writerfilter",

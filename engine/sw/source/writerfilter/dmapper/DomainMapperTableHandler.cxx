@@ -1336,7 +1336,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                         aProps.push_back(comphelper::makePropertyValue(u"FillStyle"_ustr,  cpo::uno::Any(drawing::FillStyle_SOLID)));
                     }
                 }
-                catch ( const uno::Exception & )
+                catch ( const cpo::uno::Exception & )
                 {
                     TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
                 }
@@ -1694,7 +1694,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             TagLogger::getInstance().chars(std::string("failed to import table!"));
 #endif
         }
-        catch ( const uno::Exception & )
+        catch ( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table creation");
         }

@@ -35,7 +35,7 @@ public class DBaseStringFunctions extends SubTestCase
         m_xORB = _xORB;
     }
 
-    public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    public void testFunctions() throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRowSet xRowRes = UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
@@ -193,7 +193,7 @@ public class DBaseStringFunctions extends SubTestCase
         }
     }
 
-    private XRow execute(final XRowSet xRowRes, String sql) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private XRow execute(final XRowSet xRowRes, String sql) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("Command", "SELECT " + sql + where);
@@ -204,14 +204,14 @@ public class DBaseStringFunctions extends SubTestCase
         return UnoRuntime.queryInterface(XRow.class, xRes);
     }
 
-    private void upper(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void upper(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "upper('test'),UCASE('test') ");
         assure("upper('test') failed!", row.getString(1).equals("TEST"));
         assure("ucase('test') failed!", row.getString(2).equals("TEST"));
     }
 
-    private void lower(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void lower(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "lower('TEST'),LCASE('TEST') ");
         assure("lower('TEST') failed!", row.getString(1).equals("test"));
@@ -222,13 +222,13 @@ public class DBaseStringFunctions extends SubTestCase
         where = temp;
     }
 
-    private void ascii(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void ascii(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "ASCII('2') ");
         assure("ascii('2') failed!", row.getInt(1) == 50);
     }
 
-    private void char_length(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void char_length(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "char_length('test'),character_length('test'),OCTET_LENGTH('test') ");
         assure("char_length('test') failed!", row.getInt(1) == 4);
@@ -236,73 +236,73 @@ public class DBaseStringFunctions extends SubTestCase
         assure("OCTET_LENGTH('test') failed!", row.getInt(3) == 4);
     }
 
-    private void concat(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void concat(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "CONCAT('Hello',' ','World') ");
         assure("CONCAT('Hello',' ',,'World') failed!", row.getString(1).equals("Hello World"));
     }
 
-    private void locate(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void locate(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "LOCATE('bar', 'foobarbar') ");
         assure("LOCATE('bar', 'foobarbar') failed!", row.getInt(1) == 4);
     }
 
-    private void substring(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void substring(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "SUBSTRING('Quadratically',5) ");
         assure("SUBSTRING('Quadratically',5) failed!", row.getString(1).equals("ratically"));
     }
 
-    private void ltrim(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void ltrim(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "LTRIM('  barbar') ");
         assure("LTRIM('  barbar') failed!", row.getString(1).equals("barbar"));
     }
 
-    private void rtrim(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void rtrim(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "RTRIM('barbar  ') ");
         assure("RTRIM('barbar  ') failed!", row.getString(1).equals("barbar"));
     }
 
-    private void space(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void space(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "space(6) ");
         assure("space(6) failed!", row.getString(1).equals("      "));
     }
 
-    private void replace(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void replace(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "REPLACE('www.OOo.com', 'w', 'Ww') ");
         assure("REPLACE('www.OOo.com', 'w', 'Ww') failed!", row.getString(1).equals("WwWwWw.OOo.com"));
     }
 
-    private void repeat(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void repeat(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "REPEAT('OOo', 3) ");
         assure("REPEAT('OOo', 3) failed!", row.getString(1).equals("OOoOOoOOo"));
     }
 
-    private void insert(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void insert(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "INSERT('Quadratic', 3, 4, 'What') ");
         assure("INSERT('Quadratic', 3, 4, 'What') failed!", row.getString(1).equals("QuWhattic"));
     }
 
-    private void left(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void left(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "LEFT('foobarbar', 5) ");
         assure("LEFT('foobarbar', 5) failed!", row.getString(1).equals("fooba"));
     }
 
-    private void right(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void right(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "RIGHT('foobarbar', 4) ");
         assure("RIGHT('foobarbar', 4) failed!", row.getString(1).equals("rbar"));
     }
 
-    private void chartest(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void chartest(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "CHAR(ascii('t'),ascii('e'),ascii('s'),ascii('t')) ");
         assure("CHAR(ascii('t'),ascii('e'),ascii('s'),ascii('t')) failed!", row.getString(1).equals("test"));

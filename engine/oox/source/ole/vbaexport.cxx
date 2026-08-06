@@ -1180,7 +1180,7 @@ rtl_TextEncoding VbaExport::getVBATextEncoding() const
         {
             xProps->getPropertyValue(u"VBATextEncoding"_ustr) >>= aTextEncoding;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
 

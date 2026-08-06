@@ -407,7 +407,7 @@ void ObjectHierarchy::createDataSeriesTree(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -435,7 +435,7 @@ void ObjectHierarchy::createAdditionalShapesTree(tChildContainer& rContainer)
             }
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

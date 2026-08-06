@@ -518,7 +518,7 @@ sal_Int32 SAL_CALL SwVbaFields::Update()
         xRef->refresh();
         nUpdate = 0;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         nUpdate = 1;
     }

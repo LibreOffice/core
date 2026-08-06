@@ -178,7 +178,7 @@ bool lcl_ExecuteFilterDialog(const cpo::uno::Sequence<beans::PropertyValue>& rPr
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "ignoring");
     }
@@ -478,7 +478,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
             GraphicHelper::SaveShapeAsGraphicToPath(xComponent, xShape, aExportMimeType, sPath);
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 }

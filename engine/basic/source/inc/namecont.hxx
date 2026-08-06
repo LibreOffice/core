@@ -239,7 +239,7 @@ protected:
           const OUString& StorageURL, bool ReadOnly ) = 0;
     virtual cpo::uno::Any createEmptyLibraryElement() = 0;
     virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const = 0;
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     virtual void writeLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,

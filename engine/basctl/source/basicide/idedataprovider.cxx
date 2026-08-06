@@ -220,7 +220,7 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
             rMembers.push_back(std::move(pMember));
         }
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("basctl", "Exception while getting members of UNO type: " << e.Message);
     }
@@ -399,7 +399,7 @@ void IdeDataProvider::Initialize()
                             xLibContainer->loadLibrary(rLibName);
                         }
                     }
-                    catch (const Exception& e)
+                    catch (const cpo::uno::Exception& e)
                     {
                         SAL_WARN("basctl", "Exception while preloading application library '"
                                                << rLibName << "': " << e.Message);
@@ -408,7 +408,7 @@ void IdeDataProvider::Initialize()
             }
         }
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("basctl", "Could not retrieve Application library container: " << e.Message);
     }
@@ -434,7 +434,7 @@ void IdeDataProvider::Initialize()
                                 xDocLibContainer->loadLibrary(rLibName);
                             }
                         }
-                        catch (const Exception& e)
+                        catch (const cpo::uno::Exception& e)
                         {
                             SAL_WARN("basctl", "Exception while preloading document library '"
                                                    << rLibName << "' in document '"
@@ -445,7 +445,7 @@ void IdeDataProvider::Initialize()
             }
         }
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("basctl", "Could not iterate through document libraries: " << e.Message);
     }
@@ -502,7 +502,7 @@ void IdeDataProvider::performFullUnoScan()
                         nProcessedCount++;
                     }
                 }
-                catch (const Exception& e)
+                catch (const cpo::uno::Exception& e)
                 {
                     SAL_WARN("basctl",
                              "performFullUnoScan: Exception processing a single UNO type: "
@@ -511,7 +511,7 @@ void IdeDataProvider::performFullUnoScan()
             }
         }
     }
-    catch (const Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         SAL_WARN("basctl", "Full UNO scan failed with exception: " << e.Message);
     }

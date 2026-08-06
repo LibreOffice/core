@@ -89,7 +89,7 @@ ScVbaControl::getWindowPeer()
             uno::Reference< awt::XControl > xControl = xControlAccess->getControl( xControlModel );
             xWinPeer =  xControl->getPeer();
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             throw uno::RuntimeException( u"The Control does not exist"_ustr );
         }
@@ -317,7 +317,7 @@ ScVbaControl::getControlSource()
         xConvertor->setPropertyValue( u"Address"_ustr , cpo::uno::Any( aAddress ) );
         xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sControlSource;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return sControlSource;
@@ -354,7 +354,7 @@ ScVbaControl::setControlSource( const OUString& _controlsource )
                 }
             }
         }
-        catch( uno::Exception& ) {}
+        catch( cpo::uno::Exception& ) {}
         if ( bMatched )
             break;
     }
@@ -384,7 +384,7 @@ ScVbaControl::getRowSource()
         xConvertor->setPropertyValue( u"Address"_ustr , cpo::uno::Any( aAddress ) );
         xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sRowSource;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return sRowSource;
@@ -562,7 +562,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             }
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

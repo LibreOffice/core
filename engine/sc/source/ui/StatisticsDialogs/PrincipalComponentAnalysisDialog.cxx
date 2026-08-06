@@ -624,7 +624,7 @@ void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
                                                    cpo::uno::Any(false));
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // The sheet of numbers stands on its own, so a chart that cannot be
         // built is left out.
@@ -680,7 +680,7 @@ void ScPrincipalComponentAnalysisDialog::AddCorrelationCircleChart(ScDocShell& r
             }
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sc.ui", "adding the correlation circle chart");
     }

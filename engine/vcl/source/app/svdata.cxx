@@ -283,7 +283,7 @@ vcl::Window *ImplGetDefaultContextWindow()
                 pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create(nullptr, WB_DEFAULTWIN);
                 pSVData->mpDefaultWin->SetText( u"VCL ImplGetDefaultWindow"_ustr );
             }
-            catch (const css::uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("vcl", "unable to create Default Window");
             }

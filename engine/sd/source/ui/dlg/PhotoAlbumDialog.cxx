@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     if (bCreateCaptions)
                         createCaption( aPageSize );
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION( "sd", "" );
                 }
@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
@@ -277,7 +277,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         if(bCreateCaptions)
                             createCaption( aPageSize );
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
@@ -435,7 +435,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     {
                         xSlide->add(xShape);
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         if(bCreateCaptions)
                             createCaption( aPageSize );
                     }
-                    catch (const css::uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION( "sd", "" );
                     }

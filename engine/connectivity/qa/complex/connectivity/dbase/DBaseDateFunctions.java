@@ -37,7 +37,7 @@ public class DBaseDateFunctions extends SubTestCase
         m_xORB = _xORB;
     }
 
-    public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    public void testFunctions() throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRowSet xRowRes = UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
@@ -186,7 +186,7 @@ public class DBaseDateFunctions extends SubTestCase
         }
     }
 
-    private XRow execute(final XRowSet xRowRes, final String sql) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private XRow execute(final XRowSet xRowRes, final String sql) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("Command", "SELECT " + sql + where);
@@ -197,43 +197,43 @@ public class DBaseDateFunctions extends SubTestCase
         return UnoRuntime.queryInterface(XRow.class, xRes);
     }
 
-    private void dayofweek(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void dayofweek(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "DAYOFWEEK('1998-02-03') ");
         assure("DAYOFWEEK('1998-02-03') failed!", row.getInt(1) == 3);
     }
 
-    private void dayofmonth(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void dayofmonth(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "DAYOFMONTH('1998-02-03') ");
         assure("DAYOFMONTH('1998-02-03') failed!", row.getInt(1) == 3);
     }
 
-    private void dayofyear(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void dayofyear(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "DAYOFYEAR('1998-02-03') ");
         assure("DAYOFYEAR('1998-02-03') failed!", row.getInt(1) == 34);
     }
 
-    private void month(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void month(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "month('1998-02-03') ");
         assure("month('1998-02-03') failed!", row.getInt(1) == 2);
     }
 
-    private void dayname(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void dayname(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "DAYNAME('1998-02-05') ");
         assure("DAYNAME('1998-02-05') failed!", row.getString(1).equals("Thursday"));
     }
 
-    private void monthname(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void monthname(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "MONTHNAME('1998-02-05') ");
         assure("MONTHNAME('1998-02-05') failed!", row.getString(1).equals("February"));
     }
 
-    private void quarter(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void quarter(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "QUARTER('98-01-01'),QUARTER('98-04-01'),QUARTER('98-07-01'),QUARTER('98-10-01') ");
         assure("QUARTER('98-01-01') failed!", row.getInt(1) == 1);
@@ -242,51 +242,51 @@ public class DBaseDateFunctions extends SubTestCase
         assure("QUARTER('98-10-01') failed!", row.getInt(4) == 4);
     }
 
-    private void week(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void week(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "WEEK('1998-02-20') ");
         assure("WEEK('1998-02-20') failed!", row.getInt(1) == 7);
     }
 
-    private void year(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void year(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "YEAR('98-02-03') ");
         assure("YEAR('98-02-03') failed!", row.getInt(1) == 98);
     }
 
-    private void hour(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void hour(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "HOUR('10:05:03') ");
         assure("HOUR('10:05:03') failed!", row.getInt(1) == 10);
     }
 
-    private void minute(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void minute(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "MINUTE('98-02-03 10:05:03') ");
         assure("MINUTE('98-02-03 10:05:03') failed!", row.getInt(1) == 5);
     }
 
-    private void second(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void second(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "SECOND('10:05:03') ");
         assure("SECOND('10:05:03') failed!", row.getInt(1) == 3);
     }
 
-    private void curdate(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void curdate(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "CURDATE() ");
         final com.sun.star.util.Date aDate = row.getDate(1);
         getLog().println("CURDATE() is '" + aDate.Year + "-" + aDate.Month + "-" + aDate.Day + "'");
     }
 
-    private void curtime(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void curtime(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "CURTIME() ");
         final com.sun.star.util.Time aTime = row.getTime(1);
         getLog().println("CURTIME() is '" + aTime.Hours + ":" + aTime.Minutes + ":" + aTime.Seconds + "'");
     }
 
-    private void now(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void now(final XRowSet xRowRes) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "NOW() ");
         final com.sun.star.util.DateTime aTime = row.getTimestamp(1);

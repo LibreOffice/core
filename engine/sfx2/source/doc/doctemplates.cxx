@@ -56,7 +56,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -633,7 +633,7 @@ bool SfxDocTplService::setTitleForURL( const OUString& rURL, const OUString& aTi
             m_xDocProps->storeToStorage(xStorage, medium);
             return true;
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -652,7 +652,7 @@ void SfxDocTplService::getTitleFromURL( const OUString& rURL, OUString& aTitle, 
             m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
             aTitle = m_xDocProps->getTitle();
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -672,7 +672,7 @@ void SfxDocTplService::getTitleFromURL( const OUString& rURL, OUString& aTitle, 
                                 OUString() );
                 }
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {}
     }
 
@@ -713,7 +713,7 @@ bool SfxDocTplService::addEntry( Content& rParentFolder,
             setProperty( aLink, PROPERTY_TYPE, Any( rType ) );
             bAddedEntry = true;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
     return bAddedEntry;
@@ -806,7 +806,7 @@ bool SfxDocTplService::CreateNewUniqueFolderWithPrefix( std::u16string_view aPat
             {
                 // if there is already an element, retry
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 INetURLObject aObjPath( aDirPath );
                 aObjPath.insertName( aTryName, false,
@@ -863,7 +863,7 @@ OUString SfxDocTplService::CreateNewUniqueFileWithPrefix( std::u16string_view aP
             {
                 // if there is already an element, retry
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 INetURLObject aObjPath( aPath );
                 aObjPath.insertName( aTryName, false,
@@ -898,7 +898,7 @@ bool SfxDocTplService::removeContent( Content& rContent )
         bRemoved = true;
     }
     catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     return bRemoved;
 }
@@ -980,7 +980,7 @@ bool SfxDocTplService::setProperty( Content& rContent,
         bPropertySet = true;
     }
     catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     return bPropertySet;
 }
@@ -1036,7 +1036,7 @@ bool SfxDocTplService::getProperty(Content& rContent, const OUString& rPropName,
         bGotProperty = true;
     }
     catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     return bGotProperty;
 }
@@ -1190,7 +1190,7 @@ std::vector< beans::StringPair > SfxDocTplService::ReadUINamesForTemplateDir_Imp
             if ( xLocStream.is() )
                 aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, mxContext );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -1287,7 +1287,7 @@ bool SfxDocTplService::WriteUINamesForTemplateDir_Impl( std::u16string_view aUse
         try {
             // the SAX writer might close the stream
             xOutStream->closeOutput();
-        } catch( uno::Exception& )
+        } catch( cpo::uno::Exception& )
         {}
 
         Content aTargetContent( OUString(aUserPath), maCmdEnv, comphelper::getProcessComponentContext() );
@@ -1300,7 +1300,7 @@ bool SfxDocTplService::WriteUINamesForTemplateDir_Impl( std::u16string_view aUse
 
         bResult = true;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
@@ -1544,7 +1544,7 @@ bool SfxDocTplService::removeGroup( const OUString& rGroupName )
                 }
             }
         }
-        catch ( Exception& ) {}
+        catch ( cpo::uno::Exception& ) {}
     }
 
     return bResult;
@@ -1622,13 +1622,13 @@ bool SfxDocTplService::renameGroup( const OUString& rOldName,
             while ( xResultSet->next() )
             {
                 if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, xRow->getString( 1 ) ) )
-                    throw uno::Exception(u"not sub path"_ustr, nullptr);
+                    throw cpo::uno::Exception(u"not sub path"_ustr, nullptr);
             }
 
             bCanBeRenamed = true;
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     if ( bCanBeRenamed )
     {
@@ -1825,7 +1825,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         // add the template to hierarchy
         return addEntry( aGroup, rTemplateName, aNewTemplateTargetURL, aMediaType );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         // the template was not stored
         return false;
@@ -1951,7 +1951,7 @@ bool SfxDocTplService::addTemplate( const OUString& rGroupName,
     }
     catch ( ContentCreationException& )
     { return false; }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     { return false; }
 
 
@@ -2212,7 +2212,7 @@ void SfxDocTplService::addHierGroup( GroupList_Impl& rList,
             pData->setUpdateType( bUpdateType );
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 
@@ -2274,7 +2274,7 @@ void SfxDocTplService::addFsysGroup( GroupList_Impl& rList,
         aContent = Content( rOwnURL, aQuietEnv, comphelper::getProcessComponentContext() );
         xResultSet = aContent.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     if ( !xResultSet.is() )
         return;
@@ -2299,7 +2299,7 @@ void SfxDocTplService::addFsysGroup( GroupList_Impl& rList,
             pGroup->addEntry( aChildTitle, aTargetURL, aType, OUString() );
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 
@@ -2332,7 +2332,7 @@ void SfxDocTplService::createFromContent( GroupList_Impl& rList,
     {
         xResultSet = rContent.createCursor( aProps, INCLUDE_FOLDERS_ONLY );
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     if ( !xResultSet.is() )
         return;
@@ -2364,7 +2364,7 @@ void SfxDocTplService::createFromContent( GroupList_Impl& rList,
             }
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 

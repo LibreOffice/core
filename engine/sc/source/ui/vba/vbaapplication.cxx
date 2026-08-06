@@ -203,7 +203,7 @@ ScVbaApplication::invoke( const OUString& FunctionName, const cpo::uno::Sequence
         uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
         aAny = xWSF->invoke( FunctionName, Params, OutParamIndex, OutParam );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         aAny <<= script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), 1000, OUString() );
     }
@@ -797,7 +797,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
                 // IllegalArgumentException, or so
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sc.ui");
     }
@@ -989,7 +989,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType )
             sUrl = sUrl.copy( nIndex + 1 );
         ::osl::File::getSystemPathFromFileURL( sUrl, sRetPath );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);
     }

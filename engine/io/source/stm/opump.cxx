@@ -292,7 +292,7 @@ void Pump::run()
         {
             fireError( Any( e ) );
         }
-        catch ( const Exception & e )
+        catch ( const cpo::uno::Exception & e )
         {
             fireError( Any( e ) );
         }
@@ -300,7 +300,7 @@ void Pump::run()
         close();
         fireClose();
     }
-    catch ( const css::uno::Exception &e )
+    catch ( const cpo::uno::Exception &e )
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes

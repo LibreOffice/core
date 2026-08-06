@@ -156,7 +156,7 @@ namespace dbp
             OOptionGroupLayouter aLayouter( getComponentContext() );
             aLayouter.doLayout(getContext(), getSettings());
         }
-        catch(const Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("extensions.dbpilots",
                                  "caught an exception while creating the radio shapes!");

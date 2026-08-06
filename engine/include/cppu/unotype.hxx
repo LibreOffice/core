@@ -33,11 +33,10 @@
 #include "typelib/typedescription.h"
 
 namespace com { namespace sun { namespace star { namespace uno {
-    class Exception;
     template< typename > class Reference;
     class XInterface;
 } } } }
-namespace cpo::uno { class Any; class Type; }
+namespace cpo::uno { class Any; class Exception; class Type; }
 namespace cpo::uno { template< typename > class Sequence; }
 namespace rtl { class OUString; }
 
@@ -227,7 +226,7 @@ cppu_detail_getUnoType(
 }
 
 inline cpo::uno::Type const & cppu_detail_getUnoType(
-    SAL_UNUSED_PARAMETER css::uno::Exception const *)
+    SAL_UNUSED_PARAMETER cpo::uno::Exception const *)
 {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_EXCEPTION);
 }

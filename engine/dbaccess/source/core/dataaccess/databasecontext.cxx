@@ -465,7 +465,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
         // We don't need him anymore, we only come here once for a datasource.
         _rModelImpl.m_bAskPassword = false;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
@@ -632,7 +632,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
     {   // let these exceptions through
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {   // exceptions other than the specified ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );

@@ -1,5 +1,18 @@
+module com {
+ module sun {
+  module star {
+   module uno {
+    published interface XInterface;
+   };
+  };
+ };
+};
 module cpo {
    module uno {
+    published exception Exception {
+     string Message;
+     ::com::sun::star::uno::XInterface Context;
+    };
     published enum TypeClass {
      VOID = 0,
      CHAR = 1,
@@ -56,15 +69,8 @@ module com {
      string Name;
     };
    };
-   module uno {
-    published interface XInterface;
-    published exception Exception {
-     string Message;
-     ::com::sun::star::uno::XInterface Context;
-    };
-   };
    module beans {
-    published exception IllegalTypeException: ::com::sun::star::uno::Exception {
+    published exception IllegalTypeException: ::cpo::uno::Exception {
     };
    };
    module uno {
@@ -81,7 +87,7 @@ module com {
      ::com::sun::star::beans::XIntrospectionAccess inspect([in] any aObject);
     };
     /** @deprecated */ published service Introspection: ::com::sun::star::beans::XIntrospection;
-    /** @deprecated */ published exception IntrospectionException: ::com::sun::star::uno::Exception {
+    /** @deprecated */ published exception IntrospectionException: ::cpo::uno::Exception {
     };
     published constants MethodConcept {
      const long ALL = -1;
@@ -96,7 +102,7 @@ module com {
      string Name;
      any Value;
     };
-    published exception NotRemoveableException: ::com::sun::star::uno::Exception {
+    published exception NotRemoveableException: ::cpo::uno::Exception {
     };
     published struct Property {
      string Name;
@@ -122,20 +128,20 @@ module com {
      any Value;
      ::com::sun::star::beans::PropertyState State;
     };
-    published exception PropertyVetoException: ::com::sun::star::uno::Exception {
+    published exception PropertyVetoException: ::cpo::uno::Exception {
     };
-    published exception UnknownPropertyException: ::com::sun::star::uno::Exception {
+    published exception UnknownPropertyException: ::cpo::uno::Exception {
     };
    };
    module uno {
-    published exception RuntimeException: ::com::sun::star::uno::Exception {
+    published exception RuntimeException: ::cpo::uno::Exception {
     };
    };
    module lang {
     published exception IllegalArgumentException: ::com::sun::star::uno::RuntimeException {
      short ArgumentPosition;
     };
-    published exception WrappedTargetException: ::com::sun::star::uno::Exception {
+    published exception WrappedTargetException: ::cpo::uno::Exception {
      any TargetException;
     };
    };
@@ -145,7 +151,7 @@ module com {
      sequence< ::com::sun::star::beans::PropertyValue > getPropertyValues();
      void setPropertyValues([in] sequence< ::com::sun::star::beans::PropertyValue > aProps) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
     };
-    published exception PropertyExistException: ::com::sun::star::uno::Exception {
+    published exception PropertyExistException: ::cpo::uno::Exception {
     };
     published interface XPropertyContainer {
      interface ::com::sun::star::uno::XInterface;
@@ -266,11 +272,11 @@ module com {
     };
    };
    module container {
-    published exception NoSuchElementException: ::com::sun::star::uno::Exception {
+    published exception NoSuchElementException: ::cpo::uno::Exception {
     };
    };
    module lang {
-    published exception NoSuchMethodException: ::com::sun::star::uno::Exception {
+    published exception NoSuchMethodException: ::cpo::uno::Exception {
     };
    };
    module reflection {
@@ -386,7 +392,7 @@ module com {
     };
     published interface XInitialization {
      interface ::com::sun::star::uno::XInterface;
-     void initialize([in] sequence< any > aArguments) raises (::com::sun::star::uno::Exception);
+     void initialize([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
     };
    };
    module bridge {
@@ -395,7 +401,7 @@ module com {
      interface ::com::sun::star::bridge::XBridge;
      interface ::com::sun::star::lang::XComponent;
     };
-    published exception BridgeExistsException: ::com::sun::star::uno::Exception {
+    published exception BridgeExistsException: ::cpo::uno::Exception {
     };
     published interface XInstanceProvider;
    };
@@ -423,7 +429,7 @@ module com {
      string Name;
      any Value;
     };
-    published exception InvalidProtocolChangeException: ::com::sun::star::uno::Exception {
+    published exception InvalidProtocolChangeException: ::cpo::uno::Exception {
      ::com::sun::star::bridge::ProtocolProperty invalidProperty;
      long reason;
     };
@@ -452,8 +458,8 @@ module com {
    module lang {
     published interface XMultiServiceFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstance([in] string aServiceSpecifier) raises (::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] string ServiceSpecifier, [in] sequence< any > Arguments) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstance([in] string aServiceSpecifier) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] string ServiceSpecifier, [in] sequence< any > Arguments) raises (::cpo::uno::Exception);
      sequence< string > getAvailableServiceNames();
     };
    };
@@ -463,9 +469,9 @@ module com {
     };
    };
    module connection {
-    published exception ConnectionSetupException: ::com::sun::star::uno::Exception {
+    published exception ConnectionSetupException: ::cpo::uno::Exception {
     };
-    published exception NoConnectException: ::com::sun::star::uno::Exception {
+    published exception NoConnectException: ::cpo::uno::Exception {
     };
    };
    module bridge {
@@ -491,7 +497,7 @@ module com {
     };
    };
    module connection {
-    published exception AlreadyAcceptingException: ::com::sun::star::uno::Exception {
+    published exception AlreadyAcceptingException: ::cpo::uno::Exception {
     };
     published interface XAcceptor {
      interface ::com::sun::star::uno::XInterface;
@@ -510,7 +516,7 @@ module com {
     };
    };
    module io {
-    published exception IOException: ::com::sun::star::uno::Exception {
+    published exception IOException: ::cpo::uno::Exception {
     };
    };
    module connection {
@@ -544,7 +550,7 @@ module com {
      any Element;
      any ReplacedElement;
     };
-    published exception ElementExistException: ::com::sun::star::uno::Exception {
+    published exception ElementExistException: ::cpo::uno::Exception {
     };
     published interface XElementAccess {
      interface ::com::sun::star::uno::XInterface;
@@ -553,7 +559,7 @@ module com {
     };
    };
    module lang {
-    published exception NoSupportException: ::com::sun::star::uno::Exception {
+    published exception NoSupportException: ::cpo::uno::Exception {
     };
    };
    module container {
@@ -650,7 +656,7 @@ module com {
     };
    };
    module lang {
-    published exception IndexOutOfBoundsException: ::com::sun::star::uno::Exception {
+    published exception IndexOutOfBoundsException: ::cpo::uno::Exception {
     };
    };
    module container {
@@ -955,7 +961,7 @@ module com {
     published exception MissingJavaRuntimeException: ::com::sun::star::java::JavaInitializationException {
      string URLRuntimeLib;
     };
-    published exception WrongJavaVersionException: ::com::sun::star::uno::Exception {
+    published exception WrongJavaVersionException: ::cpo::uno::Exception {
      string LowestSupportedVersion;
      string HighestSupportedVersion;
      string DetectedVersion;
@@ -970,15 +976,15 @@ module com {
    module lang {
     published exception ArrayIndexOutOfBoundsException: ::com::sun::star::lang::IndexOutOfBoundsException {
     };
-    published exception ClassNotFoundException: ::com::sun::star::uno::Exception {
+    published exception ClassNotFoundException: ::cpo::uno::Exception {
     };
     published exception DisposedException: ::com::sun::star::uno::RuntimeException {
     };
-    published exception IllegalAccessException: ::com::sun::star::uno::Exception {
+    published exception IllegalAccessException: ::cpo::uno::Exception {
     };
-    published exception InvalidListenerException: ::com::sun::star::uno::Exception {
+    published exception InvalidListenerException: ::cpo::uno::Exception {
     };
-    published exception ListenerExistException: ::com::sun::star::uno::Exception {
+    published exception ListenerExistException: ::cpo::uno::Exception {
     };
     published struct Locale {
      string Language;
@@ -992,19 +998,19 @@ module com {
    module lang {
     published interface XMultiComponentFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
      sequence< string > getAvailableServiceNames();
     };
     published service MultiServiceFactory {
      interface ::com::sun::star::lang::XMultiServiceFactory;
      interface ::com::sun::star::lang::XMultiComponentFactory;
     };
-    published exception NoSuchFieldException: ::com::sun::star::uno::Exception {
+    published exception NoSuchFieldException: ::cpo::uno::Exception {
     };
     published exception NotInitializedException: ::com::sun::star::uno::RuntimeException {
     };
-    published exception NullPointerException: ::com::sun::star::uno::Exception {
+    published exception NullPointerException: ::cpo::uno::Exception {
     };
     published service ServiceManager {
      service ::com::sun::star::lang::MultiServiceFactory;
@@ -1025,7 +1031,7 @@ module com {
      interface ::com::sun::star::beans::XPropertySet;
      [property, readonly] ::com::sun::star::registry::XSimpleRegistry Registry;
     };
-    published exception ServiceNotRegisteredException: ::com::sun::star::uno::Exception {
+    published exception ServiceNotRegisteredException: ::cpo::uno::Exception {
     };
     /** @deprecated */ published constants SystemDependent {
      const short SYSTEM_ANDROID = 8;
@@ -1081,13 +1087,13 @@ module com {
     };
     published interface XSingleComponentFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
     };
     published interface XSingleServiceFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstance() raises (::com::sun::star::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstance() raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
     };
     published interface XTypeProvider {
      interface ::com::sun::star::uno::XInterface;
@@ -1100,11 +1106,11 @@ module com {
     };
    };
    module loader {
-    published exception CannotActivateFactoryException: ::com::sun::star::uno::Exception {
+    published exception CannotActivateFactoryException: ::cpo::uno::Exception {
     };
    };
    module registry {
-    published exception CannotRegisterImplementationException: ::com::sun::star::uno::Exception {
+    published exception CannotRegisterImplementationException: ::cpo::uno::Exception {
     };
     published interface XRegistryKey;
    };
@@ -1138,7 +1144,7 @@ module com {
      WRITEONLY = 2,
      /** @deprecated */ CONST = 3
     };
-    published exception InvalidTypeNameException: ::com::sun::star::uno::Exception {
+    published exception InvalidTypeNameException: ::cpo::uno::Exception {
     };
     published exception InvocationTargetException: ::com::sun::star::lang::WrappedTargetException {
     };
@@ -1146,7 +1152,7 @@ module com {
      ONEWAY = 0,
      TWOWAY = 1
     };
-    published exception NoSuchTypeNameException: ::com::sun::star::uno::Exception {
+    published exception NoSuchTypeNameException: ::cpo::uno::Exception {
     };
     published enum ParamMode {
      IN = 0,
@@ -1347,9 +1353,9 @@ module com {
     };
    };
    module registry {
-    published exception InvalidRegistryException: ::com::sun::star::uno::Exception {
+    published exception InvalidRegistryException: ::cpo::uno::Exception {
     };
-    /** @deprecated */ published exception MergeConflictException: ::com::sun::star::uno::Exception {
+    /** @deprecated */ published exception MergeConflictException: ::cpo::uno::Exception {
     };
     published interface XSimpleRegistry {
      interface ::com::sun::star::uno::XInterface;
@@ -1373,7 +1379,7 @@ module com {
      sequence< string > checkInstantiation([in] string implementationName);
     };
     published service ImplementationRegistration: ::com::sun::star::registry::XImplementationRegistration;
-    published exception InvalidValueException: ::com::sun::star::uno::Exception {
+    published exception InvalidValueException: ::cpo::uno::Exception {
     };
     published service NestedRegistry {
      interface ::com::sun::star::registry::XSimpleRegistry;
@@ -1440,16 +1446,16 @@ module com {
      ::com::sun::star::uno::XInterface createAllListerAdapter([in] type xListenerType, [in] ::com::sun::star::script::XAllListener xListener, [in] any aHelper);
     };
     published service AllListenerAdapter: ::com::sun::star::script::XAllListenerAdapterService;
-    published exception BasicErrorException: ::com::sun::star::uno::Exception {
+    published exception BasicErrorException: ::cpo::uno::Exception {
      long ErrorCode;
      string ErrorMessageArgument;
     };
-    published exception CannotConvertException: ::com::sun::star::uno::Exception {
+    published exception CannotConvertException: ::cpo::uno::Exception {
      ::cpo::uno::TypeClass DestinationTypeClass;
      long Reason;
      long ArgumentIndex;
     };
-    published exception CannotCreateAdapterException: ::com::sun::star::uno::Exception {
+    published exception CannotCreateAdapterException: ::cpo::uno::Exception {
     };
     published interface XTypeConverter {
      interface ::com::sun::star::uno::XInterface;
@@ -1753,9 +1759,9 @@ module cpo {
     };
     published interface XNamingService {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::com::sun::star::uno::Exception);
-     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::com::sun::star::uno::Exception);
-     void revokeObject([in] string Name) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::cpo::uno::Exception);
+     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::cpo::uno::Exception);
+     void revokeObject([in] string Name) raises (::cpo::uno::Exception);
     };
     published service NamingService: ::cpo::uno::XNamingService;
     /** @deprecated */ published interface XUnloadingPreference {

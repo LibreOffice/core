@@ -498,7 +498,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
         aDecryptBuffer = xCipher->convertWithCipherContext( aReadBuffer );
         aDecryptBuffer2 = xCipher->finalizeCipherContextAndDispose();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // decryption with padding will throw the exception in finalizing if the buffer represent only part of the stream
         // it is no problem, actually this is why we read 32 additional bytes ( two of maximal possible encryption blocks )
@@ -553,7 +553,7 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
             xSeek->seek(0);
             return xRet;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             return {};
         }
@@ -786,7 +786,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(
             pRet->seek(0);
             return pRet;
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             throw packages::WrongPasswordException();
         }
@@ -1924,7 +1924,7 @@ bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
         getSizeAndCRC( aEntry.nOffset, aEntry.nCompressedSize, &nSize, &nCRC );
         return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         return false;
     }

@@ -81,7 +81,7 @@ public class ObjectOutputStream extends TestCase {
         try {
             oPersObj = xMSF.createInstance("com.sun.star.cmp.PersistObject");
         }
-        catch( com.sun.star.uno.Exception e ) {
+        catch( cpo.uno.Exception e ) {
             log.println("Could not create instance of PersistObject");
             e.printStackTrace(log);
             log.println("Going on with test...");
@@ -252,7 +252,7 @@ public class ObjectOutputStream extends TestCase {
                             "com.sun.star.io.ObjectInputStream");
                         xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
-                    } catch(com.sun.star.uno.Exception e) {
+                    } catch(cpo.uno.Exception e) {
                         return null;
                     }
 

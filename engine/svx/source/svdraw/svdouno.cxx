@@ -162,7 +162,7 @@ SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
             uno::Reference< util::XCloneable > xClone( xSourceControlModel, uno::UNO_QUERY_THROW );
             m_xUnoControlModel.set( xClone->createClone(), uno::UNO_QUERY_THROW );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -216,7 +216,7 @@ SdrUnoObj::~SdrUnoObj()
                 m_pImpl->pEventListener->StopListening(xComp);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "svx", "SdrUnoObj::~SdrUnoObj" );
     }
@@ -252,7 +252,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
         uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
         xModelProperties->setPropertyValue( u"ContextWritingMode"_ustr, cpo::uno::Any( _nContextWritingMode ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }

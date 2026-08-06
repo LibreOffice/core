@@ -105,7 +105,7 @@ table_wrapper_ref_at (AtkTable *table,
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCellAt( row, column ) );
     }
 
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleCellAt()" );
     }
 
@@ -137,7 +137,7 @@ table_wrapper_get_index_at (AtkTable      *table,
             return nIndex;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleIndex()" );
     }
 
@@ -156,7 +156,7 @@ table_wrapper_get_column_at_index (AtkTable      *table,
         if( pTable.is() )
             return pTable->getAccessibleColumn( nIndex );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleColumn()" );
     }
 
@@ -175,7 +175,7 @@ table_wrapper_get_row_at_index( AtkTable *table,
         if( pTable.is() )
             return pTable->getAccessibleRow( nIndex );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleRow()" );
     }
 
@@ -193,7 +193,7 @@ table_wrapper_get_n_columns( AtkTable *table )
         if( pTable.is() )
             return pTable->getAccessibleColumnCount();
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleColumnCount()" );
     }
 
@@ -211,7 +211,7 @@ table_wrapper_get_n_rows( AtkTable *table )
         if( pTable.is() )
             return pTable->getAccessibleRowCount();
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleRowCount()" );
     }
 
@@ -231,7 +231,7 @@ table_wrapper_get_column_extent_at( AtkTable *table,
         if( pTable.is() )
             return pTable->getAccessibleColumnExtentAt( row, column );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleColumnExtentAt()" );
     }
 
@@ -251,7 +251,7 @@ table_wrapper_get_row_extent_at( AtkTable *table,
         if( pTable.is() )
             return pTable->getAccessibleRowExtentAt( row, column );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleRowExtentAt()" );
     }
 
@@ -270,7 +270,7 @@ table_wrapper_get_caption( AtkTable *table )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCaption() );
     }
 
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleCaption()" );
     }
 
@@ -289,7 +289,7 @@ table_wrapper_get_row_description( AtkTable *table,
         if( pTable.is() )
             return getAsConst( pTable->getAccessibleRowDescription( row ) );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleRowDescription()" );
     }
 
@@ -308,7 +308,7 @@ table_wrapper_get_column_description( AtkTable *table,
         if( pTable.is() )
             return getAsConst( pTable->getAccessibleColumnDescription( column ) );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleColumnDescription()" );
     }
 
@@ -331,7 +331,7 @@ table_wrapper_get_row_header( AtkTable *table,
                 return atk_object_wrapper_conditional_ref( xRowHeaders->getAccessibleCellAt( row, 0 ) );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleRowHeaders()" );
     }
 
@@ -354,7 +354,7 @@ table_wrapper_get_column_header( AtkTable *table,
                 return atk_object_wrapper_conditional_ref( xColumnHeaders->getAccessibleCellAt( 0, column ) );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleColumnHeaders()" );
     }
 
@@ -374,7 +374,7 @@ table_wrapper_get_summary( AtkTable *table )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleSummary() );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleSummary()" );
     }
 
@@ -409,7 +409,7 @@ table_wrapper_get_selected_columns( AtkTable      *table,
         if( pTable.is() )
             return convertToGIntArray( pTable->getSelectedAccessibleColumns(), pSelected );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleColumns()" );
     }
 
@@ -429,7 +429,7 @@ table_wrapper_get_selected_rows( AtkTable      *table,
         if( pTable.is() )
             return convertToGIntArray( pTable->getSelectedAccessibleRows(), pSelected );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleRows()" );
     }
 
@@ -448,7 +448,7 @@ table_wrapper_is_column_selected( AtkTable      *table,
         if( pTable.is() )
             return pTable->isAccessibleColumnSelected( column );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in isAccessibleColumnSelected()" );
     }
 
@@ -467,7 +467,7 @@ table_wrapper_is_row_selected( AtkTable      *table,
         if( pTable.is() )
             return pTable->isAccessibleRowSelected( row );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in isAccessibleRowSelected()" );
     }
 
@@ -487,7 +487,7 @@ table_wrapper_is_selected( AtkTable      *table,
         if( pTable.is() )
             return pTable->isAccessibleSelected( row, column );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in isAccessibleSelected()" );
     }
 
@@ -504,7 +504,7 @@ table_wrapper_add_row_selection(AtkTable *pTable, gint row)
         if (xTableSelection.is())
             return xTableSelection->selectRow(row);
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in selectRow()" );
     }
 
@@ -521,7 +521,7 @@ table_wrapper_remove_row_selection(AtkTable *pTable, gint row)
         if (xTableSelection.is())
             return xTableSelection->unselectRow(row);
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in unselectRow()" );
     }
 
@@ -538,7 +538,7 @@ table_wrapper_add_column_selection(AtkTable *pTable, gint column)
         if (xTableSelection.is())
             return xTableSelection->selectColumn(column);
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in selectColumn()" );
     }
 
@@ -555,7 +555,7 @@ table_wrapper_remove_column_selection(AtkTable *pTable, gint column)
         if (xTableSelection.is())
             return xTableSelection->unselectColumn(column);
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in unselectColumn()" );
     }
 

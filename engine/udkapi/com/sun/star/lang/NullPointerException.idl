@@ -29,7 +29,7 @@
 
     @see com::sun::star::reflection::XIdlReflection::forName
  */
-published exception NullPointerException: com::sun::star::uno::Exception
+published exception NullPointerException: cpo::uno::Exception
 {
 };
 

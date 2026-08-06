@@ -255,7 +255,7 @@ void NotebookBarContextChangeEventListener::setupListener(bool bListen)
         {
             xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

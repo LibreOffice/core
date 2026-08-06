@@ -57,7 +57,7 @@ using ::cpo::uno::Sequence;
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -174,7 +174,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet" );
         }
@@ -206,7 +206,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
                 }
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet" );
         }

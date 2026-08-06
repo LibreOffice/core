@@ -722,7 +722,7 @@ void XMLShapeImportHelper::popGroupAndPostProcess()
     {
         mpImpl->mpGroupContext->popGroupAndPostProcess();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff", "exception while sorting shapes, sorting failed");
     }

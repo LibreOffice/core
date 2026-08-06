@@ -165,7 +165,7 @@ public class _XBridgeFactory extends MultiMethodTest {
             util.utils.shortWait();
             conn = xCntr.connect(connectString) ;
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create connection", e);
         }

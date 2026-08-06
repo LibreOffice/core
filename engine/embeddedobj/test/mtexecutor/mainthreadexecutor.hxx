@@ -61,7 +61,7 @@ public:
     DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );
 
     // XJob
-       virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
+       virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, cpo::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString getImplementationName() throw (css::uno::RuntimeException);

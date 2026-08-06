@@ -609,7 +609,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
     {
          throw;
     }
-    catch (const css::uno::Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError("[automation bridge] unexpected exception in "
                                  "UnoConversionUtilities<T>::variantToAny ! Message : \n" +
@@ -693,7 +693,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
     {
         throw;
     }
-    catch(const css::uno::Exception & e)
+    catch(const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError(
                   "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
@@ -1019,7 +1019,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
     {
         throw;
     }
-    catch(const css::uno::Exception & e)
+    catch(const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError(
                   "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
@@ -1632,7 +1632,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno:
     {
          throw;
     }
-    catch (const css::uno::Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError("[automation bridge] unexpected exception in "
                                  "UnoConversionUtilities<T>::variantToAny ! Message : \n" +
@@ -1944,7 +1944,7 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, cpo::
     {
          throw;
     }
-    catch (const css::uno::Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError("[automation bridge] unexpected exception in "
                                  "UnoConversionUtilities<T>::convertValueObject ! Message : \n" +
@@ -2079,7 +2079,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
     {
         throw;
     }
-    catch (const css::uno::Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         throw BridgeRuntimeError("[automation bridge] unexpected exception in "
                                  "UnoConversionUtilities<T>::convertValueObject ! Message : \n" +

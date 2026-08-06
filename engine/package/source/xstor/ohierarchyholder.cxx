@@ -234,7 +234,7 @@ void OHierarchyElement_Impl::TestForClosing()
                     {
                         m_xOwnStorage->dispose();
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {}
                 }
 
@@ -261,7 +261,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
 
         TestForClosing();
     }
-    catch( uno::Exception& ex )
+    catch( cpo::uno::Exception& ex )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( ex.Message,
@@ -297,7 +297,7 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
     {
         Commit();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module io {
 
 /** is thrown when an input or output error has occurred.
  */
-published exception IOException: com::sun::star::uno::Exception
+published exception IOException: cpo::uno::Exception
 {
 };
 

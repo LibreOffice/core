@@ -2754,7 +2754,7 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
         uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
         xText->setString( sText );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
 
     }

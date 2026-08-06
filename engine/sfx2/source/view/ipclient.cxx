@@ -265,7 +265,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             {
                 throw;
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -276,7 +276,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         xPersist->storeOwn();
         m_xObject->update();
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         //TODO/LATER: what should happen if object can't be saved?!
     }
@@ -295,7 +295,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     {
         throw;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 
@@ -413,7 +413,7 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::get
         cpo::uno::Any aAny = xFrame->getPropertyValue( u"LayoutManager"_ustr );
         aAny >>= xMan;
     }
-    catch ( uno::Exception& ex )
+    catch ( cpo::uno::Exception& ex )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
@@ -617,7 +617,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
             xInplace->setObjectRectangles( getPlacement(), getClipRectangle() );
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // TODO/LATER: handle error
     }
@@ -687,7 +687,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
     {
         GetObject()->changeState( nState );
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {}
 }
 
@@ -721,7 +721,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             {
                 m_xImp->m_xObject->setClientSite( nullptr );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 OSL_FAIL( "Can not clean the client site!" );
             }
@@ -745,7 +745,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         {
             rObject->setClientSite( m_xImp );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "Can not set the client site!" );
         }
@@ -849,7 +849,7 @@ bool SfxInPlaceClient::IsObjectUIActive() const
     try {
         return ( m_xImp->m_xObject.is() && ( m_xImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return false;
@@ -870,7 +870,7 @@ bool SfxInPlaceClient::IsObjectInPlaceActive() const
                )
               );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 
     return false;
@@ -933,7 +933,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 {
                     nError = ErrCode(aErrorEx.ErrCode);
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                     nError = ERRCODE_IO_GENERAL;
                     // TODO/LATER: better error handling
@@ -997,7 +997,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                                 m_xImp->m_fScaleHeight = static_cast<double>(aScaledArea.GetHeight()) / aNewSize.Height();
                             }
                         }
-                        catch (uno::Exception const&)
+                        catch (cpo::uno::Exception const&)
                         {
                             TOOLS_WARN_EXCEPTION("embeddedobj", "SfxInPlaceClient::DoVerb: -9 fallback path");
                             nError = ErrCodeMsg(ERRCODE_SO_GENERALERROR, e.Message);
@@ -1009,7 +1009,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                     // TODO/LATER: it would be nice to be able to provide the current target state outside
                     nError = ERRCODE_SO_CANNOT_DOVERB_NOW;
                 }
-                catch (uno::Exception const&)
+                catch (cpo::uno::Exception const&)
                 {
                     TOOLS_WARN_EXCEPTION("embeddedobj", "SfxInPlaceClient::DoVerb");
                     nError = ERRCODE_SO_GENERALERROR;
@@ -1106,7 +1106,7 @@ void SfxInPlaceClient::DeactivateObject()
         rFrame.GetFrame().LockResize_Impl(false);
         rFrame.GetFrame().Resize();
     }
-    catch (css::uno::Exception& )
+    catch (cpo::uno::Exception& )
     {}
 }
 
@@ -1130,7 +1130,7 @@ void SfxInPlaceClient::ResetObject()
                 m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
         }
     }
-    catch (css::uno::Exception& )
+    catch (cpo::uno::Exception& )
     {}
 }
 

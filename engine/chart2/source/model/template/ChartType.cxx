@@ -271,7 +271,7 @@ void ChartType::addModifyListener( const uno::Reference< util::XModifyListener >
     {
         m_xModifyEventForwarder->addModifyListener( aListener );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -283,7 +283,7 @@ void ChartType::removeModifyListener( const uno::Reference< util::XModifyListene
     {
         m_xModifyEventForwarder->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -668,7 +668,7 @@ void ChartType::deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSer
         createCalculatedDataSeries();
         fireModifyEvent();
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

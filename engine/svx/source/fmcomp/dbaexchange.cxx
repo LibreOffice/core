@@ -385,7 +385,7 @@ using namespace cpo::uno;
         {
             _rxLivingForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sCompleteStatement;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
             return;

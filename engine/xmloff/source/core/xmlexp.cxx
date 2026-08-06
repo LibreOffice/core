@@ -625,7 +625,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 }
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -818,7 +818,7 @@ bool SAL_CALL SvXMLExport::filter( const cpo::uno::Sequence< beans::PropertyValu
 
         exportDoc( meClass );
     }
-    catch(const uno::Exception& e)
+    catch(const cpo::uno::Exception& e)
     {
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
@@ -1258,7 +1258,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
             }
         }
@@ -1297,7 +1297,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 mxExtHandler.set( mxHandler, UNO_QUERY );
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -2160,7 +2160,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
                 sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }

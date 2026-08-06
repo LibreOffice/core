@@ -267,7 +267,7 @@ public class ODatabaseForm extends TestCase {
 
                 dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Error while object test initialization :");
                 e.printStackTrace(log);
                 throw new StatusException("Error while object test" +
@@ -283,7 +283,7 @@ public class ODatabaseForm extends TestCase {
 
                 dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 log.println("Error while object test initialization :");
                 e.printStackTrace(log);
                 throw new StatusException(
@@ -449,7 +449,7 @@ public class ODatabaseForm extends TestCase {
             connection = (XConnection) AnyConverter.toObject(
                                  new Type(XConnection.class),
                                  xSetProp.getPropertyValue("ActiveConnection"));
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't get Form");
             e.printStackTrace(log);
         }
@@ -704,7 +704,7 @@ public class ODatabaseForm extends TestCase {
         log.println("closing connection...");
         try {
             conn.close();
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Can't close the connection");
             e.printStackTrace(log);
         } catch (com.sun.star.lang.DisposedException e) {
@@ -740,7 +740,7 @@ public class ODatabaseForm extends TestCase {
         try {
             dbTools.revokeDB(dbSourceName);
         } catch (com.sun.star.container.NoSuchElementException e){
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Error while object test cleaning up :");
             e.printStackTrace(log);
             throw new StatusException("Error while object test cleaning up", e);

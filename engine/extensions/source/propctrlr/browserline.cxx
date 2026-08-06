@@ -43,7 +43,7 @@ namespace pcr
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::inspection::XPropertyControlContext;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::graphic::GraphicProvider;
     using ::com::sun::star::graphic::XGraphicProvider;
     using ::cpo::uno::Sequence;

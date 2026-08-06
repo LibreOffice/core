@@ -478,7 +478,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
                 xLegend->setPropertyValue(u"Show"_ustr, cpo::uno::Any( bNewValue ));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -502,7 +502,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
         else
             aRet <<= false;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -555,7 +555,7 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
         else
             TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getDocumentModel() );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -568,7 +568,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     {
         aRet <<= TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getDocumentModel() ).is();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -621,7 +621,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
         else
             TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getDocumentModel() );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -634,7 +634,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     {
         aRet <<= TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getDocumentModel() ).is();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -684,7 +684,7 @@ void WrappedNullDateProperty::setPropertyValue( const Any& rOuterValue, const Re
     {
         m_spChart2ModelContact->getDocumentModel()->changeNullDate(aDateTime);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -701,7 +701,7 @@ Any WrappedNullDateProperty::getPropertyValue( const Reference< beans::XProperty
             aRet <<= *moDateTime;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -799,7 +799,7 @@ Reference< XDiagram > ChartDocumentWrapper::getDiagram()
         {
             m_xDiagram = new DiagramWrapper( m_spChart2ModelContact );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -831,7 +831,7 @@ void ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& _xDiagram )
                 m_xDiagram = xDiagram;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -993,7 +993,7 @@ void ChartDocumentWrapper::dispose()
             // this is ok, don't panic
         }
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1030,7 +1030,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -1334,7 +1334,7 @@ uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
 
                 xResult = static_cast< ::cppu::OWeakObject* >( new DiagramWrapper( m_spChart2ModelContact ));
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -1363,7 +1363,7 @@ uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
                                             Any(true) }; // bRefreshAddIn
                 xChartView->initialize(aArguments);
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -1396,7 +1396,7 @@ uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
                 bServiceFound = true;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // couldn't create shape
         }
@@ -1416,7 +1416,7 @@ uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
                 xResult = xAddIn;
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // couldn't create service
         }
@@ -1465,7 +1465,7 @@ void ChartDocumentWrapper::setDelegator(
         {
             dispose();
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

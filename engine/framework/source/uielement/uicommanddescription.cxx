@@ -375,7 +375,7 @@ void ConfigurationAccess_UICommand::addGenericInfoToCache()
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -389,7 +389,7 @@ void ConfigurationAccess_UICommand::addGenericInfoToCache()
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -511,7 +511,7 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
     catch (const WrappedTargetException&)
     {
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

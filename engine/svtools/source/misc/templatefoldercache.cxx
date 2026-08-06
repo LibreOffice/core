@@ -557,7 +557,7 @@ namespace svt
                 TOOLS_WARN_EXCEPTION( "svtools.misc", "" );
                 return false;
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 

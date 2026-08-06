@@ -137,7 +137,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         {
             return ERRCODE_IO_BROKENPACKAGE;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             return SCERR_IMPORT_UNKNOWN;
         }
@@ -260,7 +260,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
 
         nReturn = SCERR_IMPORT_OPEN;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("sc.filter", "uno exception caught while importing");
 
@@ -400,7 +400,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
                 rError = SCWARN_IMPORT_FEATURES_LOST;
             }
         }
-        catch ( const uno::Exception &)
+        catch ( const cpo::uno::Exception &)
         {
             rError = SCWARN_IMPORT_FEATURES_LOST;
         }
@@ -566,7 +566,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
                     u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
                 xVBACompat->setVBACompatibilityMode( true );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
         }
@@ -677,7 +677,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
                     if (xSrcStream.is())
                         xSrcInput = xSrcStream->getInputStream();
                 }
-                catch ( const uno::Exception&)
+                catch ( const cpo::uno::Exception&)
                 {
                     // stream not available (for example, password protected) - save normally (xSrcInput is null)
                 }
@@ -854,7 +854,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             catch ( const beans::UnknownPropertyException &)
             {
             }
-            catch ( const uno::Exception &)
+            catch ( const cpo::uno::Exception &)
             {
             }
         }

@@ -1024,7 +1024,7 @@ static bool raiseException(XBridgeTest xLBT )
              }
 		}
 	}
-	catch (unoidl.com.sun.star.uno.Exception  rExc)
+	catch (unoidl.cpo.uno.Exception  rExc)
 	{
 		if (rExc.Context == xLBT.Interface)
 		{

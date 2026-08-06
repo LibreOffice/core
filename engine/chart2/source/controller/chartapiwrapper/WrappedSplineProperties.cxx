@@ -86,7 +86,7 @@ public:
                 }
                 bHasDetectableInnerValue = true;
             }
-            catch( uno::Exception & ex )
+            catch( cpo::uno::Exception & ex )
             {
                 //spline properties are not supported by all charttypes
                 //in that cases this exception is ok
@@ -119,7 +119,7 @@ public:
             {
                 aChartTypes[nN]->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(cpo::uno::Any(aNewValue)));
             }
-            catch( uno::Exception & ex )
+            catch( cpo::uno::Exception & ex )
             {
                 //spline properties are not supported by all charttypes
                 //in that cases this exception is ok

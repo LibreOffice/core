@@ -50,7 +50,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
         {
             xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any( true ) );
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -98,7 +98,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -133,7 +133,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                 }
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }

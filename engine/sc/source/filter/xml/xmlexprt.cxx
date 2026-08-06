@@ -2746,7 +2746,7 @@ static uno::Reference<sheet::XSheetCellRange> lclGetSheetRange(const uno::Refere
     {
         return uno::Reference<sheet::XSheetCellRange>(xTable->getCellRangeByPosition(nCol, nRow, nCol, nRow), uno::UNO_QUERY);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sc", "Exception in getCellRangeByPosition, col: " << nCol << ", row: " << nRow);
         assert(false && "try and capture this in crashtesting");

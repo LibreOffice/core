@@ -73,7 +73,7 @@ namespace dbaui
         {
             showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }

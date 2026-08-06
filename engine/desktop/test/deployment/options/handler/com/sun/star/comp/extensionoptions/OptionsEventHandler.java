@@ -27,7 +27,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.awt.XContainerWindowEventHandler;
 import com.sun.star.awt.XControl;
@@ -89,7 +89,7 @@ public class OptionsEventHandler {
                     XNameAccess.class, xConfig.createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", args));
 
-            } catch (com.sun.star.uno.Exception e) {
+            } catch (cpo.uno.Exception e) {
                 e.printStackTrace();
                 return;
             }
@@ -134,7 +134,7 @@ public class OptionsEventHandler {
             if (sMethod.equals("external_event") ){
                 try {
                     return handleExternalEvent(aWindow, aEventObject);
-                } catch (com.sun.star.uno.Exception e) {
+                } catch (cpo.uno.Exception e) {
                     throw new WrappedTargetException(e, sMethod, this, e);
                 }
             }
@@ -148,7 +148,7 @@ public class OptionsEventHandler {
         }
 
         private boolean handleExternalEvent(com.sun.star.awt.XWindow aWindow, Object aEventObject)
-            throws com.sun.star.uno.Exception {
+            throws cpo.uno.Exception {
             try {
                 String sMethod = AnyConverter.toString(aEventObject);
                 if (sMethod.equals("ok")) {
@@ -167,7 +167,7 @@ public class OptionsEventHandler {
 
         private void saveData(com.sun.star.awt.XWindow aWindow)
             throws com.sun.star.lang.IllegalArgumentException,
-            com.sun.star.uno.Exception {
+            cpo.uno.Exception {
 
             //Determine the name of the options page. This serves two purposes. First, if this
             //options page is supported by this handler and second we use the name two locate
@@ -182,7 +182,7 @@ public class OptionsEventHandler {
             XControlContainer xContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, aWindow);
             if (xContainer == null)
-                throw new com.sun.star.uno.Exception(
+                throw new cpo.uno.Exception(
                     "Could not get XControlContainer from window.", this);
 
             //This is an implementation which will be used for several options pages
@@ -207,7 +207,7 @@ public class OptionsEventHandler {
                     XPropertySet.class, xControl.getModel());
 
                 if (xProp == null)
-                    throw new com.sun.star.uno.Exception(
+                    throw new cpo.uno.Exception(
                         "Could not get XPropertySet from control.", this);
                 //Get the "Text" property.
                 Object aText = xProp.getPropertyValue("Text");
@@ -232,7 +232,7 @@ public class OptionsEventHandler {
                 XPropertySet xLeaf = UnoRuntime.queryInterface(
                     XPropertySet.class, m_xAccessLeaves.getByName(sWindowName));
                 if (xLeaf == null)
-                    throw new  com.sun.star.uno.Exception(
+                    throw new  cpo.uno.Exception(
                         "XPropertySet not supported.", this);
 
                 //Finally we can set the value
@@ -246,7 +246,7 @@ public class OptionsEventHandler {
         }
 
         private void loadData(com.sun.star.awt.XWindow aWindow)
-            throws com.sun.star.uno.Exception {
+            throws cpo.uno.Exception {
 
             //Determine the name of the window. This serves two purposes. First, if this
             //window is supported by this handler and second we use the name two locate
@@ -261,7 +261,7 @@ public class OptionsEventHandler {
             XControlContainer xContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, aWindow);
             if (xContainer == null)
-                throw new com.sun.star.uno.Exception(
+                throw new cpo.uno.Exception(
                     "Could not get XControlContainer from window.", this);
 
             //This is an implementation which will be used for several options pages
@@ -277,7 +277,7 @@ public class OptionsEventHandler {
                 XPropertySet xLeaf = UnoRuntime.queryInterface(
                     XPropertySet.class, m_xAccessLeaves.getByName(sWindowName));
                 if (xLeaf == null)
-                    throw new  com.sun.star.uno.Exception(
+                    throw new  cpo.uno.Exception(
                         "XPropertySet not supported.", this);
 
                 //The properties in the registry have the same name as the respective
@@ -302,7 +302,7 @@ public class OptionsEventHandler {
                     XPropertySet.class, xControl.getModel());
 
                 if (xProp == null)
-                    throw new com.sun.star.uno.Exception(
+                    throw new cpo.uno.Exception(
                         "Could not get XPropertySet from control.", this);
 
                 //This handler supports only text controls, which are named "Pattern Field"
@@ -314,7 +314,7 @@ public class OptionsEventHandler {
         //Checks if the name property of the window is one of the supported names and returns
         //always a valid string or null
         private String getWindowName(com.sun.star.awt.XWindow aWindow)
-            throws com.sun.star.uno.Exception {
+            throws cpo.uno.Exception {
 
             if (aWindow == null)
                 throw new com.sun.star.lang.IllegalArgumentException(
@@ -327,20 +327,20 @@ public class OptionsEventHandler {
                 XControl.class, aWindow);
 
             if (xControlDlg == null)
-                throw new com.sun.star.uno.Exception(
+                throw new cpo.uno.Exception(
                     "Cannot obtain XControl from XWindow in method external_event.");
             //Now get model
             XControlModel xModelDlg = xControlDlg.getModel();
 
             if (xModelDlg == null)
-                throw new com.sun.star.uno.Exception(
+                throw new cpo.uno.Exception(
                     "Cannot obtain XControlModel from XWindow in method external_event.", this);
             //The model itself does not provide any information except that its
             //implementation supports XPropertySet which is used to access the data.
             XPropertySet xPropDlg = UnoRuntime.queryInterface(
                 XPropertySet.class, xModelDlg);
             if (xPropDlg == null)
-                throw new com.sun.star.uno.Exception(
+                throw new cpo.uno.Exception(
                     "Cannot obtain XPropertySet from window in method external_event.", this);
 
             //Get the "Name" property of the window
@@ -351,7 +351,7 @@ public class OptionsEventHandler {
             try {
                 sName = AnyConverter.toString(aWindowName);
             } catch (com.sun.star.lang.IllegalArgumentException ex) {
-                throw new com.sun.star.uno.Exception(ex,
+                throw new cpo.uno.Exception(ex,
                     "Name - property of window is not a string.", this);
             }
 
@@ -411,7 +411,7 @@ public class OptionsEventHandler {
      * passed to the caller.
      */
     public void initialize( Object[] object )
-        throws com.sun.star.uno.Exception {
+        throws cpo.uno.Exception {
     }
 
 }

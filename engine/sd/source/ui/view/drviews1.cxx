@@ -229,7 +229,7 @@ void DrawViewShell::SelectionHasChanged()
             //HMHmpDrView->ShowMarkHdl();
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::DrawViewShell::SelectionHasChanged()" );
     }

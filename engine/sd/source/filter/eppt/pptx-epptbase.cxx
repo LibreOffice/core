@@ -70,7 +70,7 @@ using ::com::sun::star::style::XStyle;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::text::XSimpleText;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
@@ -612,7 +612,7 @@ bool PPTWriterBase::GetStyleSheets()
                             }
                         }
                     }
-                    catch( Exception& )
+                    catch( cpo::uno::Exception& )
                     {
 
                     }

@@ -23,7 +23,7 @@
 
 /** This exception can be thrown in case object is encrypted when it is not allowed
  */
-exception EncryptionNotAllowedException: com::sun::star::uno::Exception
+exception EncryptionNotAllowedException: cpo::uno::Exception
 {
 };
 

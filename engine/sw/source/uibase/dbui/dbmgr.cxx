@@ -200,7 +200,7 @@ static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pPara
             if( aCount >>= rCount )
                 return true;
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -367,7 +367,7 @@ static bool lcl_MoveAbsolute(const SwDSParam* pParam, tools::Long nAbsPos)
             OSL_FAIL("no absolute positioning available");
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return bRet;
@@ -398,7 +398,7 @@ static bool lcl_MoveSelectionOrAbsolute(SwDSParam *const pParam, tools::Long con
             bRet = lcl_MoveAbsolute(pParam, nAbsPos);
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return bRet;
@@ -1660,7 +1660,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         for( const OUString &sFileURL : aFilesToRemove )
             SWUnoHelper::UCB_DeleteFile( sFileURL );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         if (xProgressDlg)
         {
@@ -1734,7 +1734,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( const OUString& rDBName,
             {
                 xCols = xColsSupp->getColumns();
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("sw.mailmerge", "Exception in getColumns()");
             }
@@ -1826,14 +1826,14 @@ sal_uInt32 SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> cons
                         nRet = nFormat;
                         bUseDefault = false;
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                         TOOLS_WARN_EXCEPTION("sw.mailmerge", "illegal number format key");
                     }
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             SAL_WARN("sw.mailmerge", "no FormatKey property found");
         }
@@ -1904,7 +1904,7 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
             return xConnection;
         xConnection = xComplConnection->connectWithCompletion( xHandler );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 
@@ -1951,7 +1951,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         xRowSet->execute();
         xRet.set( xRowSet, uno::UNO_QUERY );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier");
     }
@@ -2018,7 +2018,7 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
                     }
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
             }
@@ -2098,7 +2098,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         {
             nOldRow = pFound->xResultSet->getRow();
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             return false;
         }
@@ -2268,7 +2268,7 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
         ++pParam->nSelectionIndex;
         bRet = !pParam->bEndOfDB;
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         // we allow merging with empty databases, so don't warn on init
         TOOLS_WARN_EXCEPTION_IF(action == SwDBNextRecord::NEXT,
@@ -2298,7 +2298,7 @@ sal_uInt32  SwDBManager::GetSelectedRecordId()
     {
         nRet = m_pImpl->pMergeData->xResultSet->getRow();
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return nRet;
@@ -2341,7 +2341,7 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
                 pFound->bScrollable = xMetaData
                         ->supportsResultSetType(sal_Int32(sdbc::ResultSetType::SCROLL_INSENSITIVE));
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 // DB driver may not be ODBC 3.0 compliant
                 pFound->bScrollable = true;
@@ -2355,7 +2355,7 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
             pFound->bEndOfDB = !pFound->xResultSet->next();
             ++pFound->nSelectionIndex;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             pFound->xResultSet = nullptr;
             pFound->xStatement = nullptr;
@@ -2379,7 +2379,7 @@ uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUStr
             if(xComponent.is())
                 xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -2422,7 +2422,7 @@ sal_uInt32      SwDBManager::GetSelectedRecordId(
                 else
                     nRet = pFound->xResultSet->getRow();
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
             }
         }
@@ -2446,7 +2446,7 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
                 if(!m_bInMerge && pParam->xResultSet.is())
                     pParam->xResultSet->first();
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {}
         }
     }
@@ -2493,7 +2493,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
             if(xComponent.is())
                 xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -2531,7 +2531,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
             if(xComponent.is())
                 xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }
@@ -2776,7 +2776,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         }
         xDBContext->registerObject(sFind, xNewInstance);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         sFind.clear();
     }
@@ -3084,7 +3084,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                 {
                     pDlg->DataToDoc( aSelection , xSource, xTmpConnection, xResSet);
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
                 }
@@ -3106,7 +3106,7 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
         if ( !xSource.is() )
             xSource = dbtools::getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sw.mailmerge", "getDataSourceAsParent()");
     }
@@ -3146,7 +3146,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sw.mailmerge", "Caught exception while creating a new RowSet");
     }

@@ -805,7 +805,7 @@ Public Class BridgeTest
 			    End If
                 xLBT.RuntimeException = CType(&Hcafebabe, Integer)
     	    End Try
-	    Catch rExc As unoidl.com.sun.star.uno.Exception
+        Catch rExc As unoidl.cpo.uno.Exception
 		    If rExc.Context Is xLBT.Interface
 		        nCount = nCount + 1
 		    Else

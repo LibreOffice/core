@@ -39,7 +39,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
@@ -633,7 +633,7 @@ public class GridControl
 
     @AfterClass
     public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
+        throws InterruptedException, cpo.uno.Exception
     {
         System.out.println();
         System.out.println( "tearing down connection" );

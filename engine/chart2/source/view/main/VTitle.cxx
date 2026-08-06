@@ -86,7 +86,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         aM.translate( m_nXPos, m_nYPos);
         m_xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, cpo::uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -99,7 +99,7 @@ bool VTitle::isVisible(const rtl::Reference< Title >& xTitle) {
     bool bShow = true;
     try {
         xTitle->getPropertyValue(u"Visible"_ustr) >>= bShow;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bShow;
@@ -130,7 +130,7 @@ void VTitle::createShapes(
         xTitleProperties->getPropertyValue( u"TextRotation"_ustr ) >>= fAngleDegree;
         m_fRotationAngleDegree += fAngleDegree;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

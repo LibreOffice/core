@@ -437,7 +437,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 
         TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
@@ -557,7 +557,7 @@ bool HierarchyEntry::move(
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
@@ -826,7 +826,7 @@ bool HierarchyEntry::remove()
         OSL_FAIL(
             "HierarchyEntry::remove - caught WrappedTargetException!" );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
@@ -889,7 +889,7 @@ bool HierarchyEntry::first( iterator & it )
 
             TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
@@ -1001,7 +1001,7 @@ HierarchyEntry::getRootReadAccess()
             {
                 throw;
             }
-            catch ( uno::Exception const & )
+            catch ( cpo::uno::Exception const & )
             {
                 // createInstance, createInstanceWithArguments
 

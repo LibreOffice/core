@@ -267,7 +267,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         cpo::uno::Any anyTest = xPropSet->getPropertyValue(rName);
         return any != anyTest;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         std::cout << "Exception thrown while retrieving with property: " << rName << "\n";
         CPPUNIT_ASSERT_MESSAGE("XPropertySet::isPropertyValueChangeable: exception thrown while "
@@ -332,7 +332,7 @@ bool XPropertySet::getSinglePropertyValue(const uno::Reference<beans::XPropertyS
         xPropSet->getPropertyValue(rName);
         return true;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return false;

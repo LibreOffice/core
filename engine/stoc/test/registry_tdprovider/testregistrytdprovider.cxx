@@ -35,7 +35,7 @@
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -69,7 +69,7 @@ public:
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context)
-        throw (css::uno::Exception);
+        throw (cpo::uno::Exception);
 
 private:
     explicit Service(
@@ -153,10 +153,10 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     css::uno::Reference< css::reflection::XCompoundTypeDescription > exception;
     exception.set(
             provider->getByHierarchicalName(
-                OUString( "com.sun.star.uno.Exception")),
+                OUString( "cpo.uno.Exception")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_EXCEPTION, exception->getTypeClass());
-    assertEqual( OUString( "com.sun.star.uno.Exception"),
+    assertEqual( OUString( "cpo.uno.Exception"),
         exception->getName());
     assertFalse(exception->getBaseType().is());
     exception.set(
@@ -166,7 +166,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     assertEqual(cpo::uno::TypeClass_EXCEPTION, exception->getTypeClass());
     assertEqual( OUString( "com.sun.star.uno.RuntimeException"),
         exception->getName());
-    assertEqual( OUString( "com.sun.star.uno.Exception"),
+    assertEqual( OUString( "cpo.uno.Exception"),
         exception->getBaseType()->getName());
 
     css::uno::Reference< css::reflection::XStructTypeDescription > structure;
@@ -332,7 +332,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     setExceptions = attribute->getSetExceptions();
     assertEqual< sal_Int32 >(2, setExceptions.getLength());
     assertEqual(
-        OUString( "com.sun.star.uno.Exception"),
+        OUString( "cpo.uno.Exception"),
         setExceptions[0]->getName());
     assertEqual(
         OUString( "com.sun.star.lang.WrappedTargetException"),
@@ -739,7 +739,7 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    throw (css::uno::Exception)
+    throw (cpo::uno::Exception)
 {
     return cppu::getXWeak(new Service(context));
 }

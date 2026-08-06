@@ -233,7 +233,7 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
                     return true;
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL("Numberformat not found");
             }
@@ -261,7 +261,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
                     return nNumberType;
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 OSL_FAIL("Numberformat not found");
             }
@@ -317,7 +317,7 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
                 return true;
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL("Numberformat not found");
         }
@@ -345,7 +345,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL("Numberformat not found");
         }

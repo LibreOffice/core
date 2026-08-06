@@ -176,7 +176,7 @@ public class OTimeModel extends GenericModelTest {
 
             private int lastTime = 0;
 
-            public void update() throws com.sun.star.uno.Exception {
+            public void update() throws cpo.uno.Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
                 }
@@ -201,7 +201,7 @@ public class OTimeModel extends GenericModelTest {
                 update.updateRow();
             }
 
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
+            public boolean wasCommited() throws cpo.uno.Exception {
                 formLoaderF.reload();
 
                 Integer getT = (Integer) ps.getPropertyValue("Time");

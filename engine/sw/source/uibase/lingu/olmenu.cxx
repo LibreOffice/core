@@ -822,7 +822,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             xSystemShellExecute->execute( m_sExplanationLink, OUString(),
                     css::system::SystemShellExecuteFlags::URIS_ONLY );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );

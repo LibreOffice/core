@@ -2712,7 +2712,7 @@ void XMLDdeFieldDeclImportContext::startFastElement(
         }
         // else: ignore
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         //ignore
     }
@@ -3190,7 +3190,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportCon
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

@@ -279,7 +279,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
         {
             return rdf::URI::create( m_xContext, i_rURI );
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
             SAL_WARN("xmloff.core", "MakeURI: cannot create URI");
             return nullptr;
@@ -352,7 +352,7 @@ void RDFaInserter::InsertRDFaEntry(
             i_rEntry.m_xObject,
             i_rEntry.m_xRDFaAttributes->m_Content, xDatatype);
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         SAL_WARN("xmloff.core", "InsertRDFaEntry: setStatementRDFa failed?");
     }

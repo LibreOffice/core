@@ -186,7 +186,7 @@ public class OListBoxModel extends GenericModelTest {
                 this.ChangePropertyName=ChangePropertyName;
             }
 
-            public void update() throws com.sun.star.uno.Exception {
+            public void update() throws cpo.uno.Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
                 }
@@ -205,7 +205,7 @@ public class OListBoxModel extends GenericModelTest {
                 update.updateRow();
             }
 
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
+            public boolean wasCommited() throws cpo.uno.Exception {
                 formLoaderF.reload();
 
                 short[] getS = (short[]) ps.getPropertyValue(ChangePropertyName);

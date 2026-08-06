@@ -67,7 +67,7 @@ public:
     // Non-Interface methods
 
 private:
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments,

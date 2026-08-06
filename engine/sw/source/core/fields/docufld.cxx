@@ -1006,7 +1006,7 @@ OUString SwDocInfoFieldType::Expand( SwDocInfoSubType nSub, sal_uInt32 nFormat,
                 cpo::uno::Any aNew = xConverter->convertToSimpleType( aAny, cpo::uno::TypeClass_STRING );
                 aNew >>= sVal;
             }
-            catch (uno::Exception&) {}
+            catch (cpo::uno::Exception&) {}
             return sVal;
         }
 
@@ -1182,7 +1182,7 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
                     const_cast<SwDocInfoField*>(this)->m_aContent = sVal;
                 }
             }
-            catch (uno::Exception&) {}
+            catch (cpo::uno::Exception&) {}
         }
         else
             const_cast<SwDocInfoField*>(this)->m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, GetFormat(), GetLanguage(), m_aName);

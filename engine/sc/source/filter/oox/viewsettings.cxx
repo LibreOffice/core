@@ -605,7 +605,7 @@ void ViewSettings::finalizeImport()
         xContainer->insertByIndex( 0, Any( aPropMap.makePropertyValueSequence() ) );
         getDocument()->setViewData( xContainer );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "ViewSettings::finalizeImport - cannot create document view settings" );
     }

@@ -531,7 +531,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XSt
         SAL_WARN("starmath", "Failed to unzip file");
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -573,7 +573,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentMS(
         SAL_WARN("starmath", "Failed to unzip file");
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -1367,7 +1367,7 @@ void SmMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfPr
             {
                 // dealing with read-only properties here. Nothing to do...
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 SAL_WARN("starmath", "Unexpected issue while loading document properties");
             }

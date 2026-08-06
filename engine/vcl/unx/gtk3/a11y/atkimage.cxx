@@ -68,7 +68,7 @@ image_get_image_description( AtkImage *image )
         if( pImage.is() )
             return getAsConst( pImage->getAccessibleImageDescription() );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleImageDescription()" );
     }
 
@@ -107,7 +107,7 @@ image_get_image_size( AtkImage *image,
             *height = pImage->getAccessibleImageHeight();
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getAccessibleImageHeight() or Width" );
     }
 }

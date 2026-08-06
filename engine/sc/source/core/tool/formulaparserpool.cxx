@@ -75,11 +75,11 @@ ScParserFactoryMap::ScParserFactoryMap() :
             if( !aNamespace.isEmpty() )
                 maFactories[ aNamespace ] = std::move(xCompFactory);
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -94,7 +94,7 @@ Reference< XFormulaParser > ScParserFactoryMap::createFormulaParser(
         Sequence< Any > aArgs{ Any(rxComponent) };
         xParser.set( aIt->second->createInstanceWithArgumentsAndContext( aArgs, mxContext ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return xParser;
@@ -134,7 +134,7 @@ Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUStrin
         Reference< XComponent > xComponent( pDocShell->GetModel() );
         rxParser = theScParserFactoryMap.createFormulaParser( xComponent, rNamespace );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return rxParser;

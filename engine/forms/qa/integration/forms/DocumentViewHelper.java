@@ -142,7 +142,7 @@ public class DocumentViewHelper
         @return
             the control tied to the model
     */
-    public XControl getControl( XControlModel xModel ) throws com.sun.star.uno.Exception
+    public XControl getControl( XControlModel xModel ) throws cpo.uno.Exception
     {
         // the current view of the document
         XControlAccess xCtrlAcc = query( XControlAccess.class );
@@ -151,14 +151,14 @@ public class DocumentViewHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public XControl getControl( Object aModel ) throws com.sun.star.uno.Exception
+    public XControl getControl( Object aModel ) throws cpo.uno.Exception
     {
         XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return getControl( xModel );
     }
 
     /* ------------------------------------------------------------------ */
-    public <T> T getControl( Object aModel, Class<T> aInterfaceClass ) throws com.sun.star.uno.Exception
+    public <T> T getControl( Object aModel, Class<T> aInterfaceClass ) throws cpo.uno.Exception
     {
         XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return UnoRuntime.queryInterface( aInterfaceClass, getControl( xModel ) );
@@ -200,7 +200,7 @@ public class DocumentViewHelper
             a control model. The focus is set to that control which is part of our view
             and associated with the given model.
     */
-    public void grabControlFocus( Object xModel ) throws com.sun.star.uno.Exception
+    public void grabControlFocus( Object xModel ) throws cpo.uno.Exception
     {
         // look for the control from the current view which belongs to the model
         XControl xControl = getControl( xModel );

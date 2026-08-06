@@ -260,7 +260,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
             Any a = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             a >>= xLayoutManager;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }

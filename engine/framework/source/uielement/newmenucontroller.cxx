@@ -472,7 +472,7 @@ void NewMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard
     {
         throw;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 }

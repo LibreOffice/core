@@ -52,7 +52,7 @@ public class SpreadsheetView extends integration.forms.DocumentViewHelper
                 XSpreadsheetView.class, getController() );
             view.setActiveSheet( sheet );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
         }
     }

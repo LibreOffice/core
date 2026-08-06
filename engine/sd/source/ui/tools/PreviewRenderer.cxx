@@ -128,7 +128,7 @@ Image PreviewRenderer::RenderPage (
                 mpView->HideSdrPage();
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("sd.tools");
         }
@@ -187,7 +187,7 @@ Image PreviewRenderer::RenderSubstitution (
             mpPreviewDevice->PixelToLogic(Point(0,0)),
             mpPreviewDevice->PixelToLogic(aSize)));
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sd.tools");
     }
@@ -294,7 +294,7 @@ void PreviewRenderer::PaintPage (
     {
         mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion, pRedirector.get());
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sd.tools");
     }

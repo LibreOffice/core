@@ -114,7 +114,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
         sal_Int32 nSubGridIndex = bSubGrid ? 0 : -1;
         xRet = AxisHelper::getGridProperties( xCooSys , nDimensionIndex, MAIN_AXIS_INDEX, nSubGridIndex );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

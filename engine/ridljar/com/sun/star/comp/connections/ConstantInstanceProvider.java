@@ -81,7 +81,7 @@ public class ConstantInstanceProvider implements XInstanceProvider {
     protected Object _instance;
 
 
-    public void setInstance(String serviceName) throws com.sun.star.uno.Exception {
+    public void setInstance(String serviceName) throws cpo.uno.Exception {
         _instance = _serviceManager.createInstance(serviceName);
         _serviceName = serviceName;
     }

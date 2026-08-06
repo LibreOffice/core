@@ -68,7 +68,7 @@ public class TableDsc extends InstDescr {
         try {
             SrvObj = docMSF.createInstance( service );
         }
-        catch( com.sun.star.uno.Exception cssuE ){
+        catch( cpo.uno.Exception cssuE ){
         }
 
         XTextTable TT = (XTextTable)UnoRuntime.queryInterface(

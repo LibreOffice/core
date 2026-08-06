@@ -87,7 +87,7 @@ public class FormComponent
             if ( m_nameAccess != null )
                 return new FormComponent( m_nameAccess.getByName( name ) );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             System.err.println( e );
             e.printStackTrace( System.err );
@@ -103,7 +103,7 @@ public class FormComponent
             if ( m_indexAccess != null )
                 return new FormComponent( m_indexAccess.getByIndex( index ) );
         }
-        catch( com.sun.star.uno.Exception e )
+        catch( cpo.uno.Exception e )
         {
             System.err.println( e );
             e.printStackTrace( System.err );

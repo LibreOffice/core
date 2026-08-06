@@ -199,7 +199,7 @@ OUString SAL_CALL FilterDetect::detect( cpo::uno::Sequence< css::beans::Property
             }
         }
     }
-    catch (const Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("filter.xmlfd", "An Exception occurred while opening File stream");
     }

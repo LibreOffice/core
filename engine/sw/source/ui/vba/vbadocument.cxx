@@ -192,7 +192,7 @@ SwVbaDocument::Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd )
             xStart = mxTextDocument->getText()->getStart();
             xEnd = mxTextDocument->getText()->getEnd();
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
         }
@@ -702,7 +702,7 @@ SwVbaDocument::getFormControls() const
         // implementation detail
         xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return xFormControls;

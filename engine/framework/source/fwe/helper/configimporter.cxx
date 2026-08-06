@@ -61,7 +61,7 @@ bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
         {
             throw;
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
         }
     }

@@ -73,7 +73,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             }
         }
     }
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 }

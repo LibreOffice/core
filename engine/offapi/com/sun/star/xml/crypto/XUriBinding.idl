@@ -35,7 +35,7 @@ interface XUriBinding : com::sun::star::uno::XInterface
      */
     void setUriBinding([in] string uri,
             [in] com::sun::star::io::XInputStream InputStream)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Gets the XInputStream interface for a uri.
@@ -44,7 +44,7 @@ interface XUriBinding : com::sun::star::uno::XInterface
      * @return      the XInputStream bound with the uri
      */
     com::sun::star::io::XInputStream getUriBinding([in] string uri)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 };
 
 } ; } ; } ; } ; } ;

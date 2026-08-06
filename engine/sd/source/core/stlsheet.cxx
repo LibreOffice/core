@@ -325,7 +325,7 @@ bool SdStyleSheet::IsUsed() const
                         if (xPropertySet->getPropertyValue(u"IsPhysical"_ustr).get<bool>())
                             return true;
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                     return xStyle.is() && xStyle->isInUse();
@@ -777,7 +777,7 @@ void SAL_CALL SdStyleSheet::dispose(  )
     {
         throw;
     }
-    catch (const Exception & exc)
+    catch (const cpo::uno::Exception & exc)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

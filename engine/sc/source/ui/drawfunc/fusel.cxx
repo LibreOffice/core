@@ -199,7 +199,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                {
                                    aCaller = xProps->getPropertyValue(u"Name"_ustr);
                                }
-                               catch( uno::Exception& ) {}
+                               catch( cpo::uno::Exception& ) {}
                            }
                            cpo::uno::Any aRet;
                            cpo::uno::Sequence< sal_Int16 > aOutArgsIndex;

@@ -474,7 +474,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                 pDrawModelWrapper->GetItemPool().SetUserDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -1310,7 +1310,7 @@ void formatPage(
         ShapeFactory::createRectangle(
             xTarget, rPageSize, awt::Point(0, 0), aNames, aValues);
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -1362,7 +1362,7 @@ void ChartView::impl_refreshAddIn()
                 xAddIn->refresh();
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1518,7 +1518,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
         m_bViewUpdatePending = false;
         m_bInViewUpdate = false;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
         m_bViewDirty = m_bViewUpdatePending;
@@ -1620,7 +1620,7 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
             m_aModeChangeListeners.notifyEach( g, &css::util::XModeChangeListener::modeChanged, aEvent);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -2109,7 +2109,7 @@ bool lcl_getPropertySwapXAndYAxis(const rtl::Reference<Diagram>& xDiagram)
             {
                 aCooSysList[0]->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bSwapXAndY;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("chart2", "");
             }

@@ -37,7 +37,7 @@ import cpo.uno.XNamingService;
 public class TestPGP {
 
 
-    static void doSomething(Object r) throws com.sun.star.uno.Exception, Exception {
+    static void doSomething(Object r) throws cpo.uno.Exception, Exception {
         XNamingService rName = UnoRuntime.queryInterface(XNamingService.class, r);
 
         if(rName != null) {

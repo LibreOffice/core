@@ -594,7 +594,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
                     SAL_WARN( "linguistic", "grammar checker does not support required locale" );
                 }
             }
-            catch (uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 SAL_WARN( "linguistic", "instantiating grammar checker failed" );
             }
@@ -746,7 +746,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                         AddEntry( xFPIterator, xFlatParaNext, aCurDocId, 0, aFPEntryItem.m_bAutomatic );
                     }
                 }
-                catch (css::uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     TOOLS_WARN_EXCEPTION("linguistic", "GrammarCheckingIterator::DequeueAndCheck ignoring");
                 }
@@ -894,7 +894,7 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
             }
         } while (!bFound && nStartPos < rText.getLength());
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("linguistic",
                              "GrammarCheckingIterator::checkSentenceAtPosition ignoring");
@@ -1022,7 +1022,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
     {
          throw;
     }
-    catch (const ::uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         // ignore
         TOOLS_WARN_EXCEPTION("linguistic", "processLinguServiceEvent");
@@ -1145,7 +1145,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
                         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps ),
                         uno::UNO_QUERY_THROW );
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
         }
     }
@@ -1183,7 +1183,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
             }
         }
     }
-    catch (uno::Exception const &)
+    catch (cpo::uno::Exception const &)
     {
         TOOLS_WARN_EXCEPTION( "linguistic", "exception caught. Failed to get configured services" );
     }

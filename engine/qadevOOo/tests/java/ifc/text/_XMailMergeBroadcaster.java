@@ -98,7 +98,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
         } catch ( com.sun.star.lang.IllegalArgumentException e) {
             throw new StatusException(Status.failed
                 ("'could not fire event: " + e)) ;
-        } catch ( com.sun.star.uno.Exception e) {
+        } catch ( cpo.uno.Exception e) {
             throw new StatusException(Status.failed
                 ("'could not fire event: " + e)) ;
         }
@@ -125,7 +125,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
         } catch ( com.sun.star.lang.IllegalArgumentException e) {
             throw new StatusException(Status.failed
                 ("'could not fire event: " + e)) ;
-        } catch ( com.sun.star.uno.Exception e) {
+        } catch ( cpo.uno.Exception e) {
             throw new StatusException(Status.failed
                 ("'could not fire event: " + e)) ;
         }

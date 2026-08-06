@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @see        XCommandProcessor
 */
-published exception UnsupportedCommandException: com::sun::star::uno::Exception
+published exception UnsupportedCommandException: cpo::uno::Exception
 {
 };
 

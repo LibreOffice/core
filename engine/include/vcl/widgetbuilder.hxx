@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/builderbase.hxx>
 #include <xmlreader/span.hxx>
@@ -68,7 +68,7 @@ protected:
             xmlreader::XmlReader reader(getUIFileUrl());
             handleChild(pParent, nullptr, reader);
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
             assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");

@@ -1666,7 +1666,7 @@ void SdDrawDocument::InitLayoutVector()
             for(int index=0; index < nElements; index++)
                 maLayoutInfo.push_back( layoutlist->item(index) );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // skip missing config. files
         }
@@ -1703,7 +1703,7 @@ void SdDrawDocument::InitObjectVector()
             for(int index=0; index < nElements; index++)
                 maPresObjectInfo.push_back( objectlist->item(index) );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // skip missing config. files
         }

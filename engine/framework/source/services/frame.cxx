@@ -2047,7 +2047,7 @@ void XFrameImpl::implts_forgetSubFrames()
             if (xFrame.is())
                 xFrame->setCreator(css::uno::Reference< css::frame::XFramesSupplier >());
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             // Ignore errors here.
             // Nobody can guarantee a stable index in multi threaded environments .-)
@@ -3032,7 +3032,7 @@ void XFrameImpl::implts_setIconOnWindow()
             if ( xPSI->hasPropertyByName( u"IconId"_ustr ) )
                 xSet->getPropertyValue( u"IconId"_ustr ) >>= nIcon;
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("fwk");
         }
@@ -3226,7 +3226,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 }
 

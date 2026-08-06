@@ -9,7 +9,7 @@
 
 module com { module sun { module star { module testuno {
 
-exception Exception: com::sun::star::uno::Exception {
+exception Exception: cpo::uno::Exception {
     long m1;
     double m2;
     string m3;

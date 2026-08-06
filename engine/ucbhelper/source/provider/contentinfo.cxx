@@ -74,7 +74,7 @@ const cpo::uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         m_xProps.emplace();
     }
@@ -205,7 +205,7 @@ const cpo::uno::Sequence< css::ucb::CommandInfo > & CommandProcessorInfo::getCom
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         m_xCommands.emplace();
     }

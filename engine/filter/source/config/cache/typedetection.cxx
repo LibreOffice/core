@@ -458,7 +458,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("filter.config", "caught exception while querying type of " << sURL);
         sType.clear();
@@ -530,7 +530,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
                     if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::PREFERED)
                         break;
                 }
-                catch(const css::uno::Exception&) {}
+                catch(const cpo::uno::Exception&) {}
                 aLock.unlock();
                 // <- SAFE
             }
@@ -543,7 +543,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
                 return;
             }
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
             {}
     }
 
@@ -566,7 +566,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
         rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= sFilter;
         return;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     // d)
@@ -596,7 +596,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
                 if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::IMPORT)
                     break;
             }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
                 { continue; }
 
             sFilter.clear();
@@ -609,7 +609,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
             return;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 }
 
@@ -856,7 +856,7 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
                 {
                     xSeek->seek(nPos);
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             });
@@ -865,7 +865,7 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
         if (magic.getLength() < 2 || magic[0] != 'P' || magic[1] != 'K')
             return false;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return false;
     }
@@ -899,11 +899,11 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
                 if (bool bHasElements; xPackage->getPropertyValue(u"HasElements"_ustr) >>= bHasElements)
                     return bHasElements;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     // The package is either not broken, or is not a repairable ZIP
@@ -979,7 +979,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
                 }
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // No problem
         }
@@ -1075,7 +1075,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::SequenceAsHashMap const& r
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -1219,7 +1219,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(comphelper::Sequen
         rDescriptor[utl::MediaDescriptor::PROP_TYPENAME] >>= sType;
         return sType;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     return OUString();
@@ -1240,7 +1240,7 @@ void TypeDetection::impl_openStream(comphelper::SequenceAsHashMap& rDescriptor)
         bSuccess = utl::MediaDescriptor::addInputStream(rDescriptor);
 
     if ( !bSuccess )
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             "Could not open stream for <" + sURL + ">",
             getXWeak());
 

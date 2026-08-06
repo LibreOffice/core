@@ -40,7 +40,7 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
                 instance
     */
     com::sun::star::uno::XInterface createInstance( [in] string aServiceSpecifier )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /** Creates an instance classified by the specified name and passes the arguments
         to that instance.
@@ -55,7 +55,7 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
     com::sun::star::uno::XInterface createInstanceWithArguments(
         [in] string ServiceSpecifier,
         [in] sequence<any> Arguments )
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /** Provides the available names of the factory to be used to create instances.
 

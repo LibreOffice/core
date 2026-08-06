@@ -276,7 +276,7 @@ text_wrapper_get_text (AtkText *text,
             ret = g_strdup( OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getText()" );
     }
 
@@ -299,7 +299,7 @@ text_wrapper_get_text_after_offset (AtkText          *text,
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in get_text_after_offset()" );
     }
 
@@ -342,7 +342,7 @@ text_wrapper_get_text_at_offset (AtkText          *text,
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in get_text_at_offset()" );
     }
 
@@ -384,7 +384,7 @@ text_wrapper_get_text_before_offset (AtkText          *text,
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in text_before_offset()" );
     }
 
@@ -402,7 +402,7 @@ text_wrapper_get_caret_offset (AtkText          *text)
         if( pText.is() )
             offset = pText->getCaretPosition();
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCaretPosition()" );
     }
 
@@ -419,7 +419,7 @@ text_wrapper_set_caret_offset (AtkText *text,
         if( pText.is() )
             return pText->setCaretPosition( offset );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setCaretPosition()" );
     }
 
@@ -579,7 +579,7 @@ text_wrapper_get_run_attributes( AtkText        *text,
                     offset, pSet, start_offset, end_offset );
         }
     }
-    catch(const uno::Exception&){
+    catch(const cpo::uno::Exception&){
 
         g_warning( "Exception in get_run_attributes()" );
 
@@ -611,7 +611,7 @@ text_wrapper_get_default_attributes( AtkText *text )
             pSet = attribute_set_new_from_property_values( aAttributeList, false, text );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
 
         g_warning( "Exception in get_default_attributes()" );
 
@@ -662,7 +662,7 @@ text_wrapper_get_character_extents( AtkText          *text,
             *height = aRect.Height;
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCharacterBounds" );
     }
 }
@@ -678,7 +678,7 @@ text_wrapper_get_character_count (AtkText *text)
         if( pText.is() )
             rv = pText->getCharacterCount();
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getCharacterCount" );
     }
 
@@ -710,7 +710,7 @@ text_wrapper_get_offset_at_point (AtkText     *text,
             return pText->getIndexAtPoint( awt::Point(x - origin_x, y - origin_y) );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getIndexAtPoint" );
     }
 
@@ -730,7 +730,7 @@ text_wrapper_get_n_selections (AtkText *text)
         if( pText.is() )
             rv = ( pText->getSelectionEnd() > pText->getSelectionStart() ) ? 1 : 0;
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectionEnd() or getSelectionStart()" );
     }
 
@@ -756,7 +756,7 @@ text_wrapper_get_selection (AtkText *text,
             return OUStringToGChar( pText->getSelectedText() );
         }
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in getSelectionEnd(), getSelectionStart() or getSelectedText()" );
     }
 
@@ -777,7 +777,7 @@ text_wrapper_add_selection (AtkText *text,
         if( pText.is() )
             return pText->setSelection( start_offset, end_offset ); // ?
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setSelection()" );
     }
 
@@ -798,7 +798,7 @@ text_wrapper_remove_selection (AtkText *text,
         const sal_Int32 nCaretPos = xText->getCaretPosition();
         return xText->setSelection(nCaretPos, nCaretPos);
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setSelection()" );
     }
 
@@ -819,7 +819,7 @@ text_wrapper_set_selection (AtkText *text,
         if( pText.is() )
             return pText->setSelection( start_offset, end_offset );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in setSelection()" );
     }
 
@@ -840,7 +840,7 @@ text_wrapper_scroll_substring_to(AtkText       *text,
             return pText->scrollSubstringTo( start_offset, end_offset,
                                              scroll_type_from_scroll_type( scroll_type ) );
     }
-    catch(const uno::Exception&) {
+    catch(const cpo::uno::Exception&) {
         g_warning( "Exception in scrollSubstringTo()" );
     }
 

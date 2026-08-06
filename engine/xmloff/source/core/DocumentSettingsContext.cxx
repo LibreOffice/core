@@ -522,7 +522,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
             aURL = xStringSubstitution->substituteVariables( aURL, false );
             mrAny <<= aURL;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -647,7 +647,7 @@ void XMLConfigItemMapIndexedContext::endFastElement(sal_Int32 )
                             {
                                 xForbChars->setForbiddenCharacters( aLocale, aForbid );
                             }
-                            catch (uno::Exception const&)
+                            catch (cpo::uno::Exception const&)
                             {
                                 TOOLS_WARN_EXCEPTION("xmloff.core",
                                     "Exception while importing forbidden characters");

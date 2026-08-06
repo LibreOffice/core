@@ -66,7 +66,7 @@ bool SfxGlobalNameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
     cpo::uno::Any aNew;
 
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < sal_Int8 >>::get() ); }
-    catch (css::uno::Exception&) {}
+    catch (cpo::uno::Exception&) {}
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )
     {

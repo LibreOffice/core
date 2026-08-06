@@ -61,7 +61,7 @@ public final class ProxyFactory_Test {
             proxy, new Object[] { "TestName" },
             new Class[] { null, MappingException.class,
                           com.sun.star.uno.RuntimeException.class,
-                          com.sun.star.uno.Exception.class,
+                          cpo.uno.Exception.class,
                           NullPointerException.class, Exception.class });
     }
 
@@ -109,7 +109,7 @@ public final class ProxyFactory_Test {
             case 2:
                 throw new com.sun.star.uno.RuntimeException();
             case 3:
-                throw new com.sun.star.uno.Exception();
+                throw new cpo.uno.Exception();
             case 4:
                 throw new NullPointerException();
             default:

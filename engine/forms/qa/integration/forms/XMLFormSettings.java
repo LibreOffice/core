@@ -104,7 +104,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws cpo.uno.Exception, java.lang.Exception
     {
         impl_closeDocument();
     }
@@ -133,7 +133,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** checks if master-detail relationships including multiple keys work
      */
-    public void checkExternalData() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkExternalData() throws cpo.uno.Exception, java.lang.Exception
     {
         // some controls
         XPropertySet stringControl = m_formLayer.createLabeledControl(

@@ -112,7 +112,7 @@ public class SwXTextEmbeddedObject extends TestCase {
 
             xTextDoc.getText().insertTextContent( xCursor, xTextContent, false );
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             e.printStackTrace(log);
         }
 

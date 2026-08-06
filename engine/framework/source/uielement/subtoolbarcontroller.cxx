@@ -473,7 +473,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     {
         throw;
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {}
 }
 

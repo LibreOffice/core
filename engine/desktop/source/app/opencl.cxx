@@ -119,7 +119,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
         ::svt::DocumentLockFile lockFile( rURL );
         lockFile.RemoveFileDirectly();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -163,7 +163,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
             bSuccess = true;
         }
     }
-    catch (const css::uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         TOOLS_WARN_EXCEPTION("opencl", "OpenCL testing failed - disabling");
     }

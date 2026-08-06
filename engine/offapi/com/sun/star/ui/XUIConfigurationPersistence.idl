@@ -35,7 +35,7 @@ published interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterf
         interface.
         </p>
     */
-    void reload() raises ( ::com::sun::star::uno::Exception );
+    void reload() raises ( ::cpo::uno::Exception );
 
     /** stores the configuration data to the storage provided by
         setStorage() from the storage and initialize the
@@ -45,7 +45,7 @@ published interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterf
         store() cannot store its data into the internal
         storage.
     */
-    void store() raises ( ::com::sun::star::uno::Exception );
+    void store() raises ( ::cpo::uno::Exception );
 
     /** stores the configuration data to the provided storage, ignoring
         the previously set storage by setStorage(). Can
@@ -57,7 +57,7 @@ published interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterf
         @param Storage
             all configuration data will be stored to this storage.
     */
-    void storeToStorage( [in] ::com::sun::star::embed::XStorage Storage ) raises ( ::com::sun::star::uno::Exception );
+    void storeToStorage( [in] ::com::sun::star::embed::XStorage Storage ) raises ( ::cpo::uno::Exception );
 
     /** provides the current modify state of the configuration manager
         instance.

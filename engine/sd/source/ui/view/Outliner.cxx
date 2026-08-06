@@ -1264,7 +1264,7 @@ void SdOutliner::ProvideNextTextObject()
     {
         mpView->SdrEndTextEdit();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sd.view");
     }

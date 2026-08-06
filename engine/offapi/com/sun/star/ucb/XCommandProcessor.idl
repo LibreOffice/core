@@ -97,7 +97,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     any execute( [in] Command aCommand,
                  [in] long CommandId,
                  [in] XCommandEnvironment Environment )
-        raises ( com::sun::star::uno::Exception, CommandAbortedException );
+        raises ( cpo::uno::Exception, CommandAbortedException );
 
     /** ends the command associated with the given id.
 

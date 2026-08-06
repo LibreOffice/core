@@ -81,10 +81,10 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
         // get reply
         try {
             m_aResultStream = aContent.openStream();
-        } catch (const Exception&) {
+        } catch (const cpo::uno::Exception&) {
             OSL_FAIL("Cannot open reply stream from content");
         }
-    } catch (const Exception&)
+    } catch (const cpo::uno::Exception&)
     {
         // XXX
         TOOLS_WARN_EXCEPTION( "forms.misc", "Exception during UCB operation.");

@@ -80,7 +80,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & 
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
         xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, _rURL) });
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
@@ -648,7 +648,7 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
             break;
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );

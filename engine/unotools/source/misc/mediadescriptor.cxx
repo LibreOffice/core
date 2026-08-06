@@ -132,7 +132,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         TOOLS_WARN_EXCEPTION("unotools.misc", "url: '" << sURL << "'");
         return false; // TODO error handling
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("unotools.misc", "url: '" << sURL << "'");
         return false; // TODO error handling
@@ -167,7 +167,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         {
             throw;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any ex(cppu::getCaughtException());
             // ignore exception, if reason was problem reasoned on
@@ -220,7 +220,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         {
             throw;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         { /* no error handling if IsReadOnly property does not exist for UCP */
         }
 
@@ -241,7 +241,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         {
             throw;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_INFO_EXCEPTION("unotools.misc", "url: '" << sURL << "'");
             return false;
@@ -332,7 +332,7 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
         // get result
         xResultStream = xSink->getInputStream();
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -387,12 +387,12 @@ bool impl_addInputStream(comphelper::SequenceAsHashMap& rMediaDescriptor, bool b
         // b) ... or we must get it from the given URL
         OUString sURL = rMediaDescriptor.getUnpackedValueOrDefault(PROP_URL, OUString());
         if (sURL.isEmpty())
-            throw css::uno::Exception(u"Found no URL."_ustr,
+            throw cpo::uno::Exception(u"Found no URL."_ustr,
                                       css::uno::Reference<css::uno::XInterface>());
 
         return impl_openStreamWithURL(rMediaDescriptor, removeFragment(sURL), bLockFile);
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("unotools.misc", "invalid MediaDescriptor detected");
         return false;
@@ -450,7 +450,7 @@ bool isStreamReadOnly(const comphelper::SequenceAsHashMap& rMediaDescriptor)
     }
     catch(const css::uno::RuntimeException& )
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     return bReadOnly;

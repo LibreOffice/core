@@ -50,7 +50,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
@@ -329,7 +329,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                 break;
             }
         }
-    } catch( Exception& ) {
+    } catch( cpo::uno::Exception& ) {
         return false;
     }
 
@@ -368,7 +368,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
         return bRet;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::TransitionPreset::importResources()" );
     }

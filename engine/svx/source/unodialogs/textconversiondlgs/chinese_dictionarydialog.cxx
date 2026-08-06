@@ -87,7 +87,7 @@ void DictionaryList::save()
                 m_xDictionary->addEntry( pE->m_aTerm, pE->m_aMapping );
                 xPropertyType->setPropertyType( pE->m_aTerm, pE->m_aMapping, pE->m_nConversionPropertyType );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
 
             }
@@ -370,7 +370,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
                         xDictionary_To_Traditional->setActive( true );
 
                 }
-                catch(const uno::Exception& )
+                catch(const cpo::uno::Exception& )
                 {
                 }
             }

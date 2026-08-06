@@ -755,7 +755,7 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
 
         return utl::OConfigurationTreeRoot(xContext, aPathComposer, false);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sfx.sidebar");
     }

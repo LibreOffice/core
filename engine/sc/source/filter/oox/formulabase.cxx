@@ -1291,7 +1291,7 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
         // OPCODE_PLUS_SIGN and OPCODE_ADD should be equal, otherwise "+" has to be passed above
         OSL_ENSURE( OPCODE_PLUS_SIGN == OPCODE_ADD, "OpCodeProviderImpl::OpCodeProviderImpl - need opcode mapping for OPCODE_PLUS_SIGN" );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "OpCodeProviderImpl::OpCodeProviderImpl - cannot receive formula opcode mapper" );
     }
@@ -1521,7 +1521,7 @@ ApiParserWrapper::ApiParserWrapper(
     {
         mxParser.set( rxModelFactory->createInstance( u"com.sun.star.sheet.FormulaParser"_ustr ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     OSL_ENSURE( mxParser.is(), "ApiParserWrapper::ApiParserWrapper - cannot create API formula parser object" );
@@ -1540,7 +1540,7 @@ ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const
         aTokenSeq = mxParser->parseFormula( rFormula,
                                             CellAddress(rRefPos.Tab(), rRefPos.Col(), rRefPos.Row()) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return aTokenSeq;

@@ -140,7 +140,7 @@ bool SAL_CALL PDFIHybridAdaptor::filter( const cpo::uno::Sequence< beans::Proper
                         m_xContext ),
                     uno::UNO_QUERY );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_INFO_EXCEPTION("sdext.pdfimport", "subfilter");
             }

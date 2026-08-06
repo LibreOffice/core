@@ -70,7 +70,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
     {
         initialise();
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -86,7 +86,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
     {
         initialise();
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
@@ -117,7 +117,7 @@ ScVbaStyle::setNameLocal( const OUString& NameLocal )
     {
         mxPropertySet->setPropertyValue(DISPLAYNAME, cpo::uno::Any( NameLocal ) );
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         DebugHelper::basicexception(e);
     }
@@ -131,7 +131,7 @@ ScVbaStyle::getNameLocal()
     {
         mxPropertySet->getPropertyValue(DISPLAYNAME) >>= sName;
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -145,7 +145,7 @@ ScVbaStyle::Delete()
     {
         mxStyleFamilyNameContainer->removeByName(mxStyle->getName());
     }
-    catch (const uno::Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }

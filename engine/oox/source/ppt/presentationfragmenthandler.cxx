@@ -367,7 +367,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveThemeToGrabBag, Failed to save grab bag");
     }
@@ -421,7 +421,7 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveColorMapToGrabBag, Failed to save grab bag");
     }
@@ -485,7 +485,7 @@ void PresentationFragmentHandler::saveSections()
         xDocProps->setPropertyValue(u"SlideSections"_ustr,
                                     cpo::uno::Any(comphelper::containerToSequence(aSectionsList)));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveSections failed");
     }
@@ -538,7 +538,7 @@ void PresentationFragmentHandler::saveLayoutColorMapToGrabBag(
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveLayoutColorMapToGrabBag, Failed to save grab bag");
     }
@@ -729,7 +729,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument()" );
     }
@@ -780,7 +780,7 @@ void PresentationFragmentHandler::finalizeImport()
 
             saveSections();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::PresentationFragmentHandler::finalizeImport()" );
         }
@@ -951,7 +951,7 @@ void PresentationFragmentHandler::finalizeImport()
                         uno::UNO_QUERY);
                     xDocSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, cpo::uno::Any(aResult));
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -1007,7 +1007,7 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
             xPropertySet->setPropertyValue( u"IsDateTimeVisible"_ustr, Any( aHeaderFooter.mbDateTime ) );
             xPropertySet->setPropertyValue( u"IsPageNumberVisible"_ustr, Any( aHeaderFooter.mbSlideNumber ) );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

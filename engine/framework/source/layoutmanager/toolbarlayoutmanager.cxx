@@ -488,7 +488,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
                     xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(this) );
                     xDockWindow->enableDocking( true );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -598,7 +598,7 @@ bool ToolbarLayoutManager::destroyToolbar( std::u16string_view rResourceURL )
                 if ( xWindow.is() )
                     xWindow->removeWindowListener( uno::Reference< awt::XWindowListener >(this) );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -607,7 +607,7 @@ bool ToolbarLayoutManager::destroyToolbar( std::u16string_view rResourceURL )
                 if ( xDockWindow.is() )
                     xDockWindow->removeDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(this) );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
         }
@@ -951,7 +951,7 @@ void ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
                 {
                     throw;
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -1116,7 +1116,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                         if ( xWindow.is() )
                             xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(this) );
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -1262,7 +1262,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1343,7 +1343,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
             {
                 throw;
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -1595,7 +1595,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             xInsert->insertByName( aName, cpo::uno::Any( aWindowState ));
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -3158,13 +3158,13 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                         xReplace->replaceByName( rWindowElementName, cpo::uno::Any( aPropValueSeq ));
                     }
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -3441,7 +3441,7 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
             else
                 m_aDockUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

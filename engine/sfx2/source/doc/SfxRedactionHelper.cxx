@@ -293,7 +293,7 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
     {
         throw;
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
     }

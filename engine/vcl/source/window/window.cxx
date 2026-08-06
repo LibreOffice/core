@@ -206,7 +206,7 @@ void Window::dispose()
             if( xComponent.is() )
                 xComponent->dispose();
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // can be safely ignored here.
         }
@@ -3873,7 +3873,7 @@ namespace
             if (pAccessible.is())
                 xText = lcl_FindFocusedEditableText(pAccessible);
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "vcl.gtk3", "Exception in getting input method surrounding text");
         }

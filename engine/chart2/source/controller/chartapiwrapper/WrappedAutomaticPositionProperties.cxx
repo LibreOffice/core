@@ -70,7 +70,7 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
                 xInnerPropertySet->setPropertyValue( u"RelativePosition"_ustr, Any() );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

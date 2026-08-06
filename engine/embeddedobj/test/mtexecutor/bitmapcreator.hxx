@@ -44,8 +44,8 @@ public:
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) throw (cpo::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (cpo::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString getImplementationName() throw (css::uno::RuntimeException);

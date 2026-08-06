@@ -260,7 +260,7 @@ public class FormLayer
      *  @param refValue
      *      the reference value of the radio button
     */
-    public XPropertySet getRadioModelByRefValue( XPropertySet form, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public XPropertySet getRadioModelByRefValue( XPropertySet form, String name, String refValue ) throws cpo.uno.Exception, java.lang.Exception
     {
         XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class, form );
 
@@ -280,7 +280,7 @@ public class FormLayer
     /* ------------------------------------------------------------------ */
     /** retrieves a control model with a given (integer) access path
      */
-    public XPropertySet getControlModel( int[] _accessPath ) throws com.sun.star.uno.Exception
+    public XPropertySet getControlModel( int[] _accessPath ) throws cpo.uno.Exception
     {
         XIndexAccess indexAcc = UnoRuntime.queryInterface( XIndexAccess.class,
             m_document.getFormComponentTreeRoot() );
@@ -302,7 +302,7 @@ public class FormLayer
     /* ------------------------------------------------------------------ */
     /** simulates a user's text input into a control given by control model
      */
-    public void userTextInput( XPropertySet controlModel, String text ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void userTextInput( XPropertySet controlModel, String text ) throws cpo.uno.Exception, java.lang.Exception
     {
         // we will *not* simply set the value property at the model. This is not the same as
         // doing a user input, as the latter will trigger a lot of notifications, which the forms runtime environment

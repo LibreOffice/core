@@ -49,13 +49,13 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in invalid state
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void setObjectRectangles( [in] ::com::sun::star::awt::Rectangle aPosRect,
                          [in] ::com::sun::star::awt::Rectangle aClipRect )
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** enables or disables modeless dialogs of the object.
 
@@ -72,12 +72,12 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void enableModeless( [in] boolean bEnable )
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** provides accelerator table the container wants to use during inplace
         editing.

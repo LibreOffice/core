@@ -1727,7 +1727,7 @@ void KitDocumentFocusListener::attachRecursive(
 
         attachRecursive(xAccessible, xContext, nStateSet);
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         KIT_WARN("kit.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
     }
@@ -2023,7 +2023,7 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -2107,7 +2107,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         }
                     }
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                 }
             }
@@ -2218,7 +2218,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                 throw;
             }
-            catch (const css::uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
             }
 
@@ -2541,7 +2541,7 @@ void SfxViewShell::Activate( bool bMDI )
             {
                 xModel->setCurrentController(GetController());
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("sfx.view", "SfxViewShell::Activate: failed to set current controller");
             }
@@ -3525,7 +3525,7 @@ void SfxViewShell::SetKitAccessibilityState(bool bEnabled)
         {
             rDocumentFocusListener.attachRecursive(xAccessible);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             KIT_WARN("SetKitAccessibilityState", "Exception caught processing KitDocumentFocusListener::attachRecursive");
         }
@@ -3536,7 +3536,7 @@ void SfxViewShell::SetKitAccessibilityState(bool bEnabled)
         {
             rDocumentFocusListener.detachRecursive(xAccessible, /*bForce*/ true);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             KIT_WARN("SetKitAccessibilityState", "Exception caught processing KitDocumentFocusListener::detachRecursive");
         }
@@ -3755,7 +3755,7 @@ void SfxViewShell::CheckIPClient_Impl(
         {
             pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sfx.view", "SfxViewShell::CheckIPClient_Impl");
         }
@@ -4066,7 +4066,7 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

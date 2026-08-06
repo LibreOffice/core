@@ -1708,7 +1708,7 @@ void DocumentStateManager::YrsInitAcceptor()
     //AddComment would have done this    m_pYrsSupplier->GetWriteTransaction();
         YrsNotifyCursorUpdate();
     }
-    catch (uno::Exception const&) // exception here will cause UAF from SwView later
+    catch (cpo::uno::Exception const&) // exception here will cause UAF from SwView later
     {
         DBG_UNHANDLED_EXCEPTION("sw");
         abort();

@@ -97,7 +97,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
             oObj = (XInterface) AnyConverter.toObject(
                             new Type(XInterface.class),oInterface);
         }
-        catch( com.sun.star.uno.Exception e ) {
+        catch( cpo.uno.Exception e ) {
             log.println("Service not available" );
         }
 

@@ -475,7 +475,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::callNoBroadcast(Func&& fn)
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         css::lang::WrappedTargetException aWrap;
         aWrap.TargetException = cppu::getCaughtException();

@@ -549,7 +549,7 @@ public class RecoveryTest extends ComplexTestCase {
         XTextDocument xTextDoc = null;
         try {
             xTextDoc = SOF.createTextDoc(frameName);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Exception occurred while creating text document '"+frameName+"':");
             failed("Couldn't create test environment");
         }

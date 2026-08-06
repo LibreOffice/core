@@ -26,7 +26,7 @@ interface XPackage;
    called with a different value for the <code>removed</code> parameter and that
    the XPackage object created by that call still exist.
 */
-exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
+exception InvalidRemovedParameterException: cpo::uno::Exception {
     /** the value of the <code>removed</code> parameter which was used in
         XPackageRegistry::bindPackage() to create the currently
         existing XPackage object.

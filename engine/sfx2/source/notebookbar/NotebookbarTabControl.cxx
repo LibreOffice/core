@@ -323,7 +323,7 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
                     pShortcuts->InsertItem( aCommandURL, xFrame, ToolBoxItemBits::ICON_ONLY, Size( ICON_SIZE, ICON_SIZE ) );
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             break;
         }

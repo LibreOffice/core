@@ -1257,7 +1257,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     rtl::Reference< Node > tmpl(
         components_.getTemplate(tmplName));
     if (!tmpl.is()) {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             "unknown template " + tmplName,
             getXWeak());
     }
@@ -1272,7 +1272,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     if (aArguments.hasElements()) {
-        throw css::uno::Exception(
+        throw cpo::uno::Exception(
             (u"configuration SimpleSetUpdate createInstanceWithArguments"
              " must not specify any arguments"_ustr),
             getXWeak());

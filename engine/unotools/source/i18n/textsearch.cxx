@@ -214,7 +214,7 @@ bool TextSearch::SearchForward( const OUString &rStr,
             }
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -254,7 +254,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
             }
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }

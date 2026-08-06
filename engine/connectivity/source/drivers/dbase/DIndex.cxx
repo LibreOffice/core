@@ -160,7 +160,7 @@ bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
                 *rKey = ONDXKey(rValue.getDouble(), nRec );
         }
     }
-    catch (Exception&)
+    catch (cpo::uno::Exception&)
     {
         OSL_ASSERT(false);
         return false;
@@ -498,7 +498,7 @@ void ODbaseIndex::CreateImpl()
 
         xSet.set( xStmt->executeQuery(aStatement),UNO_SET_THROW );
     }
-    catch(const Exception& )
+    catch(const cpo::uno::Exception& )
     {
         impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }

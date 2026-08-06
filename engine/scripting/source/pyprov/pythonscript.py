@@ -35,7 +35,7 @@ from com.sun.star.task import XInteractionHandler
 from com.sun.star.beans import XPropertySet, Property
 from com.sun.star.container import XNameContainer
 from com.sun.star.xml.sax import XDocumentHandler, InputSource
-from com.sun.star.uno import Exception as UnoException
+from cpo.uno import Exception as UnoException
 from com.sun.star.script import XInvocation
 from com.sun.star.awt import XActionListener
 

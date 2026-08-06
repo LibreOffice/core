@@ -426,7 +426,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
             if ( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
         }
     }

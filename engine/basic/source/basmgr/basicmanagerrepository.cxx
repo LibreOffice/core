@@ -57,7 +57,7 @@ namespace basic
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::script::XStorageBasedLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::document::XEmbeddedScripts;
 

@@ -472,7 +472,7 @@ OUString GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
     {
         return xRef->identify(rxFrame);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {}
 
     return OUString();

@@ -43,7 +43,7 @@ published service Package
        an XSeekable interface, and the XOutputStream must support an
        XTruncate interface.
 
-    It will throw a css::uno::Exception if initialized with bad data or
+    It will throw a cpo::uno::Exception if initialized with bad data or
     if the package has an invalid format (for example, a corrupt central
     directory record if the file is a ZIP file).
     */

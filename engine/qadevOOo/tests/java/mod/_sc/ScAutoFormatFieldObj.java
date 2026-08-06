@@ -83,7 +83,7 @@ public class ScAutoFormatFieldObj extends TestCase {
             oObj = (XInterface) AnyConverter.toObject(
                         new Type(XInterface.class),formatIndex.getByIndex(0));
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println ("Exception occurred while creating test Object.") ;
             e.printStackTrace(log) ;
         }

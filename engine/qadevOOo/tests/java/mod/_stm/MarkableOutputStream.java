@@ -169,7 +169,7 @@ public class MarkableOutputStream extends TestCase {
                             "com.sun.star.io.MarkableInputStream");
                         xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
-                    } catch(com.sun.star.uno.Exception e) {
+                    } catch(cpo.uno.Exception e) {
                         return null;
                     }
 

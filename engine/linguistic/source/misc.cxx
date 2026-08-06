@@ -326,7 +326,7 @@ bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicLi
                     xStor->store();
             }
         }
-        catch(uno::Exception &)
+        catch(cpo::uno::Exception &)
         {
             bRet = false;
         }
@@ -695,7 +695,7 @@ uno::Reference< XSearchableDictionaryList > GetDictionaryList()
     {
         xRef = DictionaryList::create(xContext);
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "createInstance failed" );
     }
@@ -728,7 +728,7 @@ AppExitListener::AppExitListener()
     {
         xDesktop = frame::Desktop::create(xContext);
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "createInstance failed" );
     }

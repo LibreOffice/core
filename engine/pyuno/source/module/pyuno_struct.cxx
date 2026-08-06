@@ -33,7 +33,7 @@ using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::script::XInvocation2;
 using com::sun::star::beans::XMaterialHolder;

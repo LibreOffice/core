@@ -1190,7 +1190,7 @@ SAL_IMPLEMENT_MAIN()
         bSucc = test_introsp( xMgr, xRefl, xIntrosp );
         fprintf(stderr, "after test_introsp\n" );
     }
-    catch (const Exception & rExc)
+    catch (const cpo::uno::Exception & rExc)
     {
         DBG_UNHANDLED_EXCEPTION("stoc", "### exception occurred: " << rExc );
     }

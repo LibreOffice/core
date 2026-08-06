@@ -501,7 +501,7 @@ void TableManager::resolveCurrentTable()
 
             mpTableDataHandler->endTable(mTableDataStack.size() - 1);
         }
-        catch (css::uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("writerfilter", "resolving of current table failed");
         }
@@ -692,7 +692,7 @@ void TableManager::endRow()
                                                          /*bAddBefore=*/true);
                 }
             }
-            catch (css::uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 // don't add gridBefore cells in not valid TextRange
                 setCurrentGridBefore(0);

@@ -617,7 +617,7 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
         {
             xComp->dispose();
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         if (mbBroadcast)
@@ -793,7 +793,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
     // {
     //  xComp->dispose();
     // }
-    // catch( css::uno::Exception& )
+    // catch( cpo::uno::Exception& )
     // {
     // }
     Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) );

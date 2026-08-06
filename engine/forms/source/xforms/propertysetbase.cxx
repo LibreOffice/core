@@ -25,7 +25,7 @@
 
 using cpo::uno::Any;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;

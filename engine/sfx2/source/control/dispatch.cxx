@@ -1082,7 +1082,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
             cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             aValue >>= xLayoutManager;
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }

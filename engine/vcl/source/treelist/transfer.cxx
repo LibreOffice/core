@@ -257,7 +257,7 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
             }
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -457,7 +457,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
             if( !maAny.hasValue() )
                 GetData(rFlavor, rDestDoc);
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
 
@@ -484,7 +484,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
         if(maFormats.empty())
             AddSupportedFormats();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -501,7 +501,7 @@ bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlav
         if (maFormats.empty())
             AddSupportedFormats();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -533,7 +533,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
 
         ObjectReleased();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -553,7 +553,7 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
         DragFinished( rDSDE.DropSuccess ? ( rDSDE.DropAction & ~DNDConstants::ACTION_DEFAULT ) : DNDConstants::ACTION_NONE );
         ObjectReleased();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -592,7 +592,7 @@ void TransferableHelper::ImplFlush()
         if( xFlushableClipboard.is() )
              xFlushableClipboard->flushClipboard();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         OSL_FAIL( "Could not flush clipboard" );
     }
@@ -977,7 +977,7 @@ void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard
 
         mxClipboard->setContents(this, this);
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -1006,7 +1006,7 @@ void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection
 
         rSelection->setContents(this, this);
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -1051,7 +1051,7 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
 
         xDragSource->startDrag( aEvt, nDnDSourceActions, DND_POINTER_NONE, DND_IMAGE_NONE, this, this );
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -1233,7 +1233,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 if( !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
-            catch( const css::uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
             }
 
@@ -1309,7 +1309,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             }
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -1400,7 +1400,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
             xRet->getTransferDataFlavors();
 
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             xRet.clear();
         }
@@ -1475,7 +1475,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             }
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 
@@ -2184,7 +2184,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromClipboard(const css::un
                 aRet.mxClipboard = rClipboard;
             }
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -2223,7 +2223,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
                            aRet.mxClipboard = std::move(xSelection);
                    }
                }
-           catch( const css::uno::Exception& )
+           catch( const cpo::uno::Exception& )
                {
                }
     }
@@ -2277,7 +2277,7 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
             }
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         bRet = rInternalFlavor.MimeType.equalsIgnoreAsciiCase( rRequestFlavor.MimeType );
     }

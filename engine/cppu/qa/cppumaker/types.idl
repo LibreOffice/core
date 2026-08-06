@@ -35,7 +35,7 @@ interface XTest {
     [attribute, bound, readonly] long A2;
     [attribute] long A3 {
         get raises
-            (com::sun::star::uno::Exception,
+            (cpo::uno::Exception,
              com::sun::star::lang::ClassNotFoundException);
         set raises (com::sun::star::uno::RuntimeException);
     };
@@ -86,7 +86,7 @@ service S1: XTest {
     create2([in] any... create2)
         raises (com::sun::star::uno::RuntimeException,
                 com::sun::star::lang::ClassNotFoundException,
-                com::sun::star::uno::Exception,
+                cpo::uno::Exception,
                 com::sun::star::lang::IllegalAccessException,
                 com::sun::star::uno::DeploymentException);
 

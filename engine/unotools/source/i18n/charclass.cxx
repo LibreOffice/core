@@ -105,7 +105,7 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                  nCharClassAlphaType) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -123,7 +123,7 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                  nCharClassLetterType) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -146,7 +146,7 @@ bool CharClass::isLetter( const OUString& rStr ) const
         }
         return true;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -164,7 +164,7 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                  KCharacterType::DIGIT) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -187,7 +187,7 @@ bool CharClass::isNumeric( const OUString& rStr ) const
         }
         return true;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -205,7 +205,7 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | nCharClassNumericType)) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -223,7 +223,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassLetterType | nCharClassNumericType)) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -246,7 +246,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
         }
         return true;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -263,7 +263,7 @@ bool CharClass::isBase( const OUString& rStr, sal_Int32 nPos ) const
     {
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) & nCharClassBaseType ) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -281,7 +281,7 @@ bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos ) const
         return (xCC->getCharacterType( rStr, nPos, getMyLocale()) &
                 KCharacterType::UPPER) != 0;
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -294,7 +294,7 @@ OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nC
     {
         return xCC->toTitle( rStr, nPos, nCount, getMyLocale() );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -307,7 +307,7 @@ OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         return xCC->toUpper( rStr, nPos, nCount, getMyLocale() );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -320,7 +320,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         return xCC->toLower( rStr, nPos, nCount, getMyLocale() );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -333,7 +333,7 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     {
         return xCC->getType( rStr, nPos );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -346,7 +346,7 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     {
         return static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( rStr, nPos ));
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -359,7 +359,7 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     {
         return static_cast<css::i18n::UnicodeScript>(xCC->getScript( rStr, nPos ));
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -372,7 +372,7 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     {
         return xCC->getCharacterType( rStr, nPos, getMyLocale() );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
@@ -393,7 +393,7 @@ css::i18n::ParseResult CharClass::parseAnyToken(
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "parseAnyToken" );
     }
@@ -415,7 +415,7 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "parsePredefinedToken" );
     }

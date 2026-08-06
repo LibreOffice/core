@@ -302,7 +302,7 @@ static PyObject* getComponentContext(
     {
         raisePySystemException( "RuntimeException", e.Message );
     }
-    catch (const css::uno::Exception & e)
+    catch (const cpo::uno::Exception & e)
     {
         raisePySystemException( "uno::Exception", e.Message );
     }
@@ -357,7 +357,7 @@ static PyObject* initTestEnvironment(
         reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
         testModule = &mod;
     }
-    catch (const css::uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         abort();
     }
@@ -376,7 +376,7 @@ static PyObject* deinitTestEnvironment(
             if (!pFunc) { abort(); }
             reinterpret_cast<void (SAL_CALL *)()>(pFunc)();
         }
-        catch (const css::uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             abort();
         }
@@ -479,7 +479,7 @@ static PyObject *createUnoStructHelper(
     {
         raisePyExceptionWithAny( Any( e ) );
     }
-    catch( const css::uno::Exception & e )
+    catch( const cpo::uno::Exception & e )
     {
         raisePyExceptionWithAny( Any( e ) );
     }
@@ -791,7 +791,7 @@ static PyObject *getCurrentContext(
         ret = runtime.any2PyObject(
             Any( cpo::uno::getCurrentContext() ) );
     }
-    catch( const css::uno::Exception & e )
+    catch( const cpo::uno::Exception & e )
     {
         raisePyExceptionWithAny( Any( e ) );
     }
@@ -832,7 +832,7 @@ static PyObject *setCurrentContext(
                 PyExc_RuntimeError, buf.getStr() );
         }
     }
-    catch( const css::uno::Exception & e )
+    catch( const cpo::uno::Exception & e )
     {
         raisePyExceptionWithAny( Any( e ) );
     }

@@ -87,7 +87,7 @@ namespace {
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = e; \
         }\
-        catch( const css::uno::Exception &e ) {\
+        catch( const cpo::uno::Exception &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = WrappedTargetRuntimeException(u"Non-runtime UNO exception caught during parse"_ustr, e.Context, cpo::uno::Any(e)); \

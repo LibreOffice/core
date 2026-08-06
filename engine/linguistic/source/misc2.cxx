@@ -69,7 +69,7 @@ bool FileExists( const OUString &rMainURL )
                     comphelper::getProcessComponentContext());
             bExists = aContent.isDocument();
         }
-        catch (uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
         }
     }
@@ -99,7 +99,7 @@ static std::vector< OUString > GetMultiPaths_Impl(
         xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
         xPathSettings->getPropertyValue( aWriteable ) >>= aWritablePath;
     }
-    catch (uno::Exception &)
+    catch (cpo::uno::Exception &)
     {
         bSuccess = false;
     }

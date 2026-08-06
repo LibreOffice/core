@@ -193,7 +193,7 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
     {
         xParser->parseStream(aInputSource);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerperfect", "parseStream() failed");
         return;
@@ -406,7 +406,7 @@ PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGProper
     {
         xUriRef = mxUriReferenceFactory->parse(rURL);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerperfect", "XUriReference::parse() failed");
     }

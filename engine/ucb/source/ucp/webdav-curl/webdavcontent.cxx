@@ -310,7 +310,7 @@ cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
         {
             throw;
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             return cpo::uno::Any();
         }
@@ -338,7 +338,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
     }
 
@@ -412,7 +412,7 @@ OUString SAL_CALL Content::getContentType()
     {
         throw;
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
     }
 
@@ -916,7 +916,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
                         break;
                     }
                 }
-                catch ( uno::Exception const & )
+                catch ( cpo::uno::Exception const & )
                 {
                     SAL_WARN( "ucb.ucp.webdav",
                                 "Content::addProperty - "
@@ -1022,7 +1022,7 @@ void Content::removeProperty( const OUString& Name,
                         break;
                     }
                 }
-                catch ( uno::Exception const & )
+                catch ( cpo::uno::Exception const & )
                 {
                     SAL_WARN( "ucb.ucp.webdav",
                                 "Content::removeProperty - "
@@ -1970,7 +1970,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
                     }
                     else
                     {
-                        aRetRange[ n ] <<= uno::Exception(
+                        aRetRange[ n ] <<= cpo::uno::Exception(
                                 u"No property set for storing the value!"_ustr,
                                 getXWeak() );
                     }
@@ -2081,7 +2081,7 @@ cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
                 aNewTitle.clear();
 
                 // Set error .
-                aRetRange[ nTitlePos ] <<= uno::Exception(
+                aRetRange[ nTitlePos ] <<= cpo::uno::Exception(
                     u"Exchange failed!"_ustr,
                     getXWeak() );
             }

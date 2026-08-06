@@ -114,7 +114,7 @@ namespace svxform
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::container::XIndexAccess;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::cpo::uno::Sequence;
@@ -1653,7 +1653,7 @@ void FormController::focusGained(const FocusEvent& e)
                         m_xFormOperations->execute( FormFeature::MoveToPrevious );
                 }
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 // don't handle this any further. That's an ... admissible error.
                 DBG_UNHANDLED_EXCEPTION("svx");
@@ -3066,7 +3066,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                     if (!xField.is())
                         continue;
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     continue;
                 }

@@ -126,7 +126,7 @@ namespace frm
             {
                 _rxListener->statusChanged( _rEvent );
             }
-            catch( const Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION( "forms.richtext", "ORichTextFeatureDispatcher::doNotify" );
             }

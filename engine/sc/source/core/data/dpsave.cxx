@@ -1120,7 +1120,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             if (mnRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW)
                 lcl_SetBoolProperty(xSourceProp, SC_UNO_DP_REPEATEMPTY, bool(mnRepeatEmptyMode));
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
             // no error
         }
@@ -1209,7 +1209,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                 lcl_SetBoolProperty(xSourceProp, SC_UNO_DP_ROWGRAND, bool(mnRowGrandMode));
         }
     }
-    catch(uno::Exception const &)
+    catch(cpo::uno::Exception const &)
     {
         TOOLS_WARN_EXCEPTION("sc.core", "WriteToSource");
     }

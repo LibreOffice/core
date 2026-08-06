@@ -172,7 +172,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                     m_aKeyColumns = pCursor->getJoinedKeyColumns();
                     return;
                 }
-                catch (const Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("dbaccess.core", "ORowSetCache");
                 }

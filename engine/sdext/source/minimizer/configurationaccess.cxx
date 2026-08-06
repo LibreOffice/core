@@ -72,7 +72,7 @@ void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAcc
                 default: break;
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -123,7 +123,7 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
         {
             rSettings->replaceByName( pNames[ i ], pValues[ i ] );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -186,7 +186,7 @@ void ConfigurationAccess::LoadConfiguration()
                             maSettings.back().LoadSettingsFromConfiguration( xTemplates );
                         }
                     }
-                    catch (const Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }
@@ -194,7 +194,7 @@ void ConfigurationAccess::LoadConfiguration()
         }
         while( false );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -236,7 +236,7 @@ void ConfigurationAccess::SaveConfiguration()
         }
         while( false );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -261,7 +261,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         xRoot = xProvider->createInstanceWithArguments(
             sAccessService, aCreationArguments );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return xRoot;
@@ -285,7 +285,7 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sdext.minimizer", "caught exception while getting configuration node "
                   << sPathToNode);
@@ -321,7 +321,7 @@ cpo::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnu
                 break;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return aRetValue;
@@ -355,7 +355,7 @@ void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum eProper
                 break;
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

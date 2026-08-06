@@ -4168,7 +4168,7 @@ void WW8Export::RestoreMacroCmds()
                 m_pTableStrm->WriteBytes(pBuffer.get(), m_pFib->m_lcbCmds);
         }
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
     }
 

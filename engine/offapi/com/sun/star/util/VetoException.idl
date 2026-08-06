@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module util {
 
 /** thrown to indicate a general veto.
 */
-published exception VetoException : com::sun::star::uno::Exception
+published exception VetoException : cpo::uno::Exception
 {
 };
 

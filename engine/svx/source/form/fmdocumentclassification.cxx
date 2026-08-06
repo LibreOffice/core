@@ -133,7 +133,7 @@ namespace svxform
             // last: uhm, there is no last resort
             OSL_FAIL( "DocumentClassification::classifyDocument: unknown document!" );
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
@@ -153,7 +153,7 @@ namespace svxform
                 return eUnknownDocumentType;
             eType = classifyDocument( xDocument );
         }
-        catch( const Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "svx", "DocumentClassification::classifyHostDocument" );
         }

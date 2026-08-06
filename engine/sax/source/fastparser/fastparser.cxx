@@ -936,7 +936,7 @@ OUString const & FastSaxParserImpl::getNamespaceURL( std::u16string_view rPrefix
     {
         return GetNamespaceURL( OUStringToOString( rPrefix, RTL_TEXTENCODING_UTF8 ) );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     throw IllegalArgumentException();

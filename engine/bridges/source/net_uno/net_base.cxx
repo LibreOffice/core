@@ -36,7 +36,7 @@ const std::unordered_map<std::u16string_view, std::u16string_view> s_typeNames{
     { u"System.String", u"string" },
     { u"System.Type", u"type" },
     { u"com.sun.star.uno.Any", u"any" },
-    { u"com.sun.star.uno.UnoException", u"com.sun.star.uno.Exception" },
+    { u"com.sun.star.uno.UnoException", u"cpo.uno.Exception" },
     { u"com.sun.star.uno.IQueryInterface", u"com.sun.star.uno.XInterface" },
 };
 

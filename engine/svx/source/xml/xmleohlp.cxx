@@ -343,7 +343,7 @@ void SvXMLEmbeddedObjectHelper::ImplReadObject(
                     xStm->getOutputStream()->closeOutput();
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 return;
             }
@@ -354,7 +354,7 @@ void SvXMLEmbeddedObjectHelper::ImplReadObject(
             {
                 xCntnrStor->copyElementTo( aSrcObjName, xDocStor, rObjName );
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
                 return;
             }
@@ -464,7 +464,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
                 // switch back to loaded state; that way we have a minimum cache confusion
                 xObj->changeState( embed::EmbedStates::LOADED );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
     }
 
@@ -517,7 +517,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetRuntimeException(
@@ -614,7 +614,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                     }
                 }
             }
-            catch ( uno::Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -731,7 +731,7 @@ namespace svx {
                 xDashes->cancel();
             }
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("svx", "dropUnusedNamedItems(): exception during clearing of unused named items");
         }

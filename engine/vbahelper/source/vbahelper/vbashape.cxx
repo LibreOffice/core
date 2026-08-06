@@ -77,7 +77,7 @@ ScVbaShape::disposing( const lang::EventObject& rEventObject )
     if ( xShape.is() )
         removeShapeListener();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -265,7 +265,7 @@ ScVbaShape::getLeft()
     {
         left = m_aShapeHelper.getLeft();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // fail to get position by using XShape::getPosition()
         sal_Int32 nLeft = 0;
@@ -282,7 +282,7 @@ ScVbaShape::setLeft( double _left )
     {
         m_aShapeHelper.setLeft( _left );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         sal_Int32 nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
         m_xPropertySet->setPropertyValue( u"HoriOrientPosition"_ustr , cpo::uno::Any( nLeft ) );
@@ -297,7 +297,7 @@ ScVbaShape::getTop()
     {
         top = m_aShapeHelper.getTop();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         sal_Int32 nTop = 0;
         m_xPropertySet->getPropertyValue( u"VertOrientPosition"_ustr ) >>= nTop;
@@ -313,7 +313,7 @@ ScVbaShape::setTop( double _top )
     {
         m_aShapeHelper.setTop( _top );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         sal_Int32 nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
         m_xPropertySet->setPropertyValue( u"VertOrientPosition"_ustr , cpo::uno::Any( nTop ) );

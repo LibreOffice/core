@@ -27,7 +27,7 @@ import com.sun.star.ucb.ContentProviderInfo;
 import com.sun.star.ucb.DuplicateProviderException;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XContentProviderManager;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 /**

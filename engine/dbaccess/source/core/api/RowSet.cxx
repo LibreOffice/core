@@ -1509,7 +1509,7 @@ void ORowSet::approveExecution()
         }
         catch ( const RuntimeException& ) { throw; }
         catch ( const RowSetVetoException& ) { throw; }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
@@ -1623,7 +1623,7 @@ void ORowSet::impl_ensureStatement_throw()
 
             setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             // this exception doesn't matter here because when we catch an exception
             // then the driver doesn't support this feature
@@ -2163,7 +2163,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
             {
                 throw;
             }
-            catch ( const Exception& )
+            catch ( const cpo::uno::Exception& )
             {
                 Any aError = ::cppu::getCaughtException();
                 OUString sMessage = ResourceManager::loadString( RID_NO_SUCH_DATA_SOURCE,
@@ -2249,7 +2249,7 @@ void ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
         {
             m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
         }
-        catch (const Exception& ) { m_xComposer = nullptr; }
+        catch (const cpo::uno::Exception& ) { m_xComposer = nullptr; }
     }
     if ( !m_xComposer.is() )
         m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_aContext );

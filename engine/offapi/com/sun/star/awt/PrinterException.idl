@@ -27,7 +27,7 @@
     <p>It is an error if the exception occurs in a non-transacted task.
     A transacted task repeats later.</p>
  */
-published exception PrinterException: com::sun::star::uno::Exception
+published exception PrinterException: cpo::uno::Exception
 {
 };
 

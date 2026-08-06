@@ -96,7 +96,7 @@ using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::task::InteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::cpo::uno::Any;
 using ::com::sun::star::task::XInteractionRequest;
 
@@ -145,7 +145,7 @@ void UUIInteractionHelper::handlerequest(
             = pUUI->handleRequest_impl(pHND->m_rRequest, false, bDummy, aDummy);
         pHND->set();
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("uui", "");
     }
@@ -837,7 +837,7 @@ UUIInteractionHelper::handleRequest_impl(
     {
         throw;  // allowed to leave here
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("uui");
     }

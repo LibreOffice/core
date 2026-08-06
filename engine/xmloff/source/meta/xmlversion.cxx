@@ -337,7 +337,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
         xVerStream.clear(); // use refcounting for now to dispose
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // TODO: error handling
     }
@@ -363,7 +363,7 @@ cpo::uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load
                 try {
                     xProps->getPropertyValue(u"URL"_ustr) >>= aParserInput.sSystemId;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
             }
 
@@ -392,7 +392,7 @@ cpo::uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load
             catch( io::IOException& )    {}
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         // TODO: error handling
     }

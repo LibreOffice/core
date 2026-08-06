@@ -254,7 +254,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
         {
             aIt.next()->notifyEvent(_rEvent);
         }
-        catch (Exception&)
+        catch (cpo::uno::Exception&)
         {
             // no assertion, because a broken access remote bridge or something like this
             // can cause this exception

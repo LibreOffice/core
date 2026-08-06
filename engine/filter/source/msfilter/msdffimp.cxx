@@ -2806,7 +2806,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                         }
                     }
                 }
-                catch( css::uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {
                 }
             }
@@ -7451,7 +7451,7 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
                         xObj->setVisualAreaSize( nAspect, aAwtSz );
                         //xInplaceObj->EnableSetModified( true );
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         OSL_FAIL( "Could not set visual area of the object!" );
                     }
@@ -7485,7 +7485,7 @@ bool SvxMSDffManager::SetPropValue( const cpo::uno::Any& rAny, const uno::Refere
         if ( aXPropSetInfo.is() )
             bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         bRetValue = false;
     }
@@ -7496,7 +7496,7 @@ bool SvxMSDffManager::SetPropValue( const cpo::uno::Any& rAny, const uno::Refere
             rXPropSet->setPropertyValue( rPropName, rAny );
             bRetValue = true;
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -7656,7 +7656,7 @@ css::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobSha
         auto xDocBuilder(css::xml::dom::DocumentBuilder::create(xContext));
         return xDocBuilder->parse(xInStr);
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("filter.ms", "Opening/Parsing of metroBlob failed");
     }

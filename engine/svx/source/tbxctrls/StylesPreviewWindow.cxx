@@ -545,7 +545,7 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
     {
         m_xStatusListener->dispose();
     }
-    catch (css::uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 
@@ -717,7 +717,7 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
 
         aFilter.bValid = true;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

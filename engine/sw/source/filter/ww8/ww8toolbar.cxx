@@ -462,7 +462,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
 #endif
         bRes = true;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_INFO_EXCEPTION("sw.ww8","***** For some reason we have an" );
         bRes = false;

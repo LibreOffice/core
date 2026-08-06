@@ -26,7 +26,7 @@ module com { module sun { module star { module datatransfer {
     @see com::sun::star::datatransfer::DataFlavor
     @see com::sun::star::datatransfer::XTransferable
 */
-published exception UnsupportedFlavorException: com::sun::star::uno::Exception
+published exception UnsupportedFlavorException: cpo::uno::Exception
 {
 };
 

@@ -515,7 +515,7 @@ void SvxSearchDialog::Construct_Impl()
             m_xSearchComponent2PB->set_label( sTemp );
         }
     }
-    catch(uno::Exception&){}
+    catch(cpo::uno::Exception&){}
 
     if(!m_xSearchComponent1PB->get_label().isEmpty() && bSearchComponent1 )
     {
@@ -726,7 +726,7 @@ namespace
             OUString aModuleIdentifier = xModuleManager->identify( xFrame );
             eFactory = SvtModuleOptions::ClassifyFactoryByServiceName(aModuleIdentifier);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         return eFactory;

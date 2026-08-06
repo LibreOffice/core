@@ -591,7 +591,7 @@ bool ExtensionManager::doChecksForAddExtension(
         throw;
     } catch (const uno::RuntimeException &) {
         throw;
-    } catch (const uno::Exception &) {
+    } catch (const cpo::uno::Exception &) {
         cpo::uno::Any excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
             u"Extension Manager: exception in doChecksForAddExtension"_ustr,
@@ -741,7 +741,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                         throw;
                     } catch (const uno::RuntimeException &) {
                         throw;
-                    } catch (const uno::Exception &) {
+                    } catch (const cpo::uno::Exception &) {
                         cpo::uno::Any excOccurred = ::cppu::getCaughtException();
                         css::deployment::DeploymentException exc(
                             u"Extension Manager: Exception on fireModified() "

@@ -9,7 +9,7 @@
 
 #include <comphelper/threadpool.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <config_options.h>
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
@@ -323,7 +323,7 @@ void ThreadTask::exec()
     {
         SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.what());
     }
-    catch (const css::uno::Exception &e)
+    catch (const cpo::uno::Exception &e)
     {
         SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e);
     }

@@ -462,7 +462,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
             addTarget(JSONtoRedactionTarget(rValue));
         }
     }
-    catch (css::uno::Exception& e)
+    catch (cpo::uno::Exception& e)
     {
         SAL_WARN("sfx.doc",
                  "Exception caught while trying to load the targets JSON from file: " << e.Message);
@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
 
         boost::property_tree::write_json(sPathStr, aTargetsTree);
     }
-    catch (css::uno::Exception& e)
+    catch (cpo::uno::Exception& e)
     {
         SAL_WARN("sfx.doc",
                  "Exception caught while trying to save the targets JSON to file: " << e.Message);
@@ -606,7 +606,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
                 addTarget(JSONtoRedactionTarget(rValue));
             }
         }
-        catch (css::uno::Exception& e)
+        catch (cpo::uno::Exception& e)
         {
             SAL_WARN("sfx.doc",
                      "Exception caught while trying to load the last dialog state: " << e.Message);
@@ -660,7 +660,7 @@ void SfxAutoRedactDialog::ImplDestroy()
         if (!m_bTargetsCopied)
             clearTargets();
     }
-    catch (css::uno::Exception& e)
+    catch (cpo::uno::Exception& e)
     {
         SAL_WARN("sfx.doc",
                  "Exception caught while trying to store the dialog state: " << e.Message);

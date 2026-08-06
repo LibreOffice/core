@@ -72,13 +72,13 @@ public class CellBinding extends complexlib.ComplexTestCase
                 closeDoc.close( true );
             }
         }
-        catch ( com.sun.star.uno.Exception e )
+        catch ( cpo.uno.Exception e )
         {
         }
     }
 
     /* ------------------------------------------------------------------ */
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws cpo.uno.Exception, java.lang.Exception
     {
         /* our service factory */
         XMultiServiceFactory orb = param.getMSF();
@@ -93,7 +93,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkTextFieldBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkTextFieldBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         final short col = 0;
         final short row = 2;
@@ -125,7 +125,7 @@ public class CellBinding extends complexlib.ComplexTestCase
             failed( "Changes in the cell are not forwarded to the text field." );
     }
     /* ------------------------------------------------------------------ */
-    public void checkBooleanRadioBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkBooleanRadioBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         // two radio buttons
         XPropertySet primaryRadio = createRadio( 28, "radio button no. 1", "radio group", "primary" );
@@ -162,7 +162,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkStringRadioBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkStringRadioBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         // two radio buttons
         XPropertySet primaryRadio = createRadio( 46, "radio button A", "radio ref group", "primary" );
@@ -198,7 +198,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkBooleanCheckBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkBooleanCheckBoxBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet checkBox = m_formLayer.createControlAndShape( "DatabaseCheckBox", 30, 59, 40, 4 );
         checkBox.setPropertyValue( "Label", "check box" );
@@ -226,7 +226,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkStringCheckBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkStringCheckBoxBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         String refValue = "checked ";
 
@@ -260,7 +260,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /** verifies that a list box, which is bound via an ordinary value binding,
      *  works as expected
      */
-    public void checkListBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkListBoxBinding( ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 80, 40, 6 );
         listBox.setPropertyValue( "Dropdown", Boolean.TRUE );
@@ -301,7 +301,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /** verifies that a list box, which is bound via a value binding exchanging the <b>index</b>
      *  of the selected entry, works as expected
      */
-    public void checkListBoxIndexBinding() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkListBoxIndexBinding() throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 94, 40, 6 );
         listBox.setPropertyValue( "Dropdown", Boolean.TRUE );
@@ -341,7 +341,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies that the content of a given cell equals a given string
     */
-    private XPropertySet createRadio( int yPos, String label, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception
+    private XPropertySet createRadio( int yPos, String label, String name, String tag ) throws cpo.uno.Exception, java.lang.Exception
     {
         XPropertySet radio = m_formLayer.createControlAndShape( "DatabaseRadioButton", 30, yPos, 40, 4 );
         radio.setPropertyValue( "Label", label );
@@ -354,7 +354,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /** verifies the states of two radio button
     */
     private boolean verifyRadioStates( XPropertySet radio1, XPropertySet radio2, short value1, short value2,
-        String errorMessage ) throws com.sun.star.uno.Exception, java.lang.Exception
+        String errorMessage ) throws cpo.uno.Exception, java.lang.Exception
     {
         if (  ( ((Short)radio1.getPropertyValue( "State" )).shortValue() != value1 )
            || ( ((Short)radio2.getPropertyValue( "State" )).shortValue() != value2 )
@@ -369,7 +369,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies that the content of a given cell equals a given string
     */
-    private boolean verifyVoidCell( short col, short row, String failErrorMessage ) throws com.sun.star.uno.Exception
+    private boolean verifyVoidCell( short col, short row, String failErrorMessage ) throws cpo.uno.Exception
     {
         XCellRangeData cell = UnoRuntime.queryInterface( XCellRangeData.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
@@ -386,7 +386,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies that the content of a given cell equals a given string
     */
-    private boolean verifyNumericCellContent( short col, short row, double value, String failErrorMessage ) throws com.sun.star.uno.Exception
+    private boolean verifyNumericCellContent( short col, short row, double value, String failErrorMessage ) throws cpo.uno.Exception
     {
         XCell cell = UnoRuntime.queryInterface( XCell.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
@@ -402,7 +402,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** verifies that the content of a given cell equals a given string
     */
-    private boolean verifyStringCellContent( short col, short row, String text, String failErrorMessage ) throws com.sun.star.uno.Exception
+    private boolean verifyStringCellContent( short col, short row, String text, String failErrorMessage ) throws cpo.uno.Exception
     {
         XTextRange cell = UnoRuntime.queryInterface( XTextRange.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
@@ -418,7 +418,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** sets the text of a given cell to a given string
     */
-    private void setCellText( short col, short row, String text ) throws com.sun.star.uno.Exception
+    private void setCellText( short col, short row, String text ) throws cpo.uno.Exception
     {
         XTextRange cell = UnoRuntime.queryInterface( XTextRange.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
@@ -429,7 +429,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** sets a numeric value in a given cell
     */
-    private void setCellValue( short col, short row, double value ) throws com.sun.star.uno.Exception
+    private void setCellValue( short col, short row, double value ) throws cpo.uno.Exception
     {
         XCell cell = UnoRuntime.queryInterface( XCell.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
@@ -440,7 +440,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** sets a numeric value in a given cell
     */
-    private void setCellEmpty( short col, short row ) throws com.sun.star.uno.Exception
+    private void setCellEmpty( short col, short row ) throws cpo.uno.Exception
     {
         // as long as #i29130# is not fixed, we do not set the cell to "empty", but to
         // an invalid form, which serves well for our purpose
@@ -455,7 +455,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /** binds the given control model to the given cell in the first sheet,
      *  using the given service name for the binding
      */
-    private void bindToCell( XPropertySet controlModel, short column, short row, String _bindingServiceName ) throws com.sun.star.uno.Exception
+    private void bindToCell( XPropertySet controlModel, short column, short row, String _bindingServiceName ) throws cpo.uno.Exception
     {
         XBindableValue bindableModel = UnoRuntime.queryInterface( XBindableValue.class,
             controlModel
@@ -480,7 +480,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** binds the given control model to the given cell in the first sheet
     */
-    private void bindToCell( XPropertySet _controlModel, short _column, short _row ) throws com.sun.star.uno.Exception
+    private void bindToCell( XPropertySet _controlModel, short _column, short _row ) throws cpo.uno.Exception
     {
         bindToCell( _controlModel, _column, _row, "com.sun.star.table.CellValueBinding" );
     }
@@ -488,7 +488,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** simulates a user action to check a radio button
     */
-    private void simulateUserRadioCheck( XPropertySet radioModel ) throws com.sun.star.uno.Exception
+    private void simulateUserRadioCheck( XPropertySet radioModel ) throws cpo.uno.Exception
     {
         XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( radioModel ) );
@@ -503,7 +503,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** simulates a user action to check a radio button
     */
-    private void simulateUserCheckBoxCheck( XPropertySet checkBox, short state ) throws com.sun.star.uno.Exception
+    private void simulateUserCheckBoxCheck( XPropertySet checkBox, short state ) throws cpo.uno.Exception
     {
         XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( checkBox ) );
@@ -517,7 +517,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** simulates a user selecting an entry in a list box
     */
-    private void simulateUserListBoxSelection( XPropertySet _listBox, String _selectEntry ) throws com.sun.star.uno.Exception
+    private void simulateUserListBoxSelection( XPropertySet _listBox, String _selectEntry ) throws cpo.uno.Exception
     {
         XListBox listBoxControl = UnoRuntime.queryInterface(
             XListBox.class, m_document.getCurrentView().getControl( _listBox ) );
@@ -527,7 +527,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** simulates text input into the control belonging to the given model
     */
-    private void simulateUserTextInput( XPropertySet controlModel, String text ) throws com.sun.star.uno.Exception
+    private void simulateUserTextInput( XPropertySet controlModel, String text ) throws cpo.uno.Exception
     {
         XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( controlModel ) );

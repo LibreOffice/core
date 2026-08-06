@@ -121,7 +121,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
                     vcl::EndAllDialogs(pWindow);
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             // ignore all the errors
         }
@@ -132,7 +132,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
             if (xCloseable)
                 xCloseable->close( true );
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
             // ignore all the errors
         }

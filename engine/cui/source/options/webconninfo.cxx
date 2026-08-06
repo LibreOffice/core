@@ -116,7 +116,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl, weld::Button&, void)
             m_xPasswordsLB->remove(nEntry);
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -168,7 +168,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl, weld::Button&, v
 
         m_xPasswordsLB->clear();
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 
@@ -200,7 +200,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, weld::Button&, void)
             }
         }
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {}
 }
 

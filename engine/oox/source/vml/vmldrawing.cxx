@@ -183,7 +183,7 @@ void Drawing::convertAndInsert() const
                     RadioButtonMap[aProps] = aRect;
             }
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("oox.vml");
         }

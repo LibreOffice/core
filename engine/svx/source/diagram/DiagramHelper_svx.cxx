@@ -727,7 +727,7 @@ DiagramHelperFactory_svx& DiagramHelperFactory_svx::getDiagramHelperFactory_svx(
         {
             comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.comp.oox.FormatDetector"_ustr);
         }
-        catch (const uno::Exception&) {}
+        catch (const cpo::uno::Exception&) {}
     }
 
     assert(nullptr != pSingleGlobalDiagramHelperFactory_svx && "DiagramHelperFactory not yet initialized (!)");

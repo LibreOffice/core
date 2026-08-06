@@ -385,7 +385,7 @@ Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& r
 
         return aBitmap;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("vcl", "Got no graphic::XPrimitive2DRenderer!");
     }

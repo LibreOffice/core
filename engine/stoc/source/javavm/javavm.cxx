@@ -39,7 +39,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -110,7 +110,7 @@ using stoc_javavm::JavaVirtualMachine;
 namespace {
 
 
-class NoJavaIniException: public css::uno::Exception
+class NoJavaIniException: public cpo::uno::Exception
 {
 };
 
@@ -159,7 +159,7 @@ bool askForRetry(cpo::uno::Any const & rException)
 
 // Only gets the properties if the "Proxy Server" entry in the option dialog is
 // set to manual (i.e. not to none)
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
                             const css::uno::Reference<css::uno::XComponentContext> &xCtx )
@@ -222,7 +222,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
@@ -322,7 +322,7 @@ void getDefaultLocaleFromConfig(
     xConfRegistry_simple->close();
 }
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 void getJavaPropsFromJavaSettings(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::uno::XComponentContext> &xCtx)
@@ -420,7 +420,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
         pjvm->pushProp(u"user.timezone=ECT"_ustr);
 }
 
-/// @throws css::uno::Exception
+/// @throws cpo::uno::Exception
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
@@ -430,14 +430,14 @@ void initVMConfiguration(
     try {
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
-    catch(const css::uno::Exception & exception) {
+    catch(const cpo::uno::Exception & exception) {
         SAL_INFO("stoc", "can not get INETProps because of " << exception);
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(const css::uno::Exception & exception) {
+    catch(const cpo::uno::Exception & exception) {
         SAL_INFO("stoc", "can not get locale because of " << exception);
     }
 
@@ -445,7 +445,7 @@ void initVMConfiguration(
     {
         getJavaPropsFromJavaSettings(&jvm, xCtx);
     }
-    catch(const css::uno::Exception & exception) {
+    catch(const cpo::uno::Exception & exception) {
         SAL_INFO("stoc", "couldn't get Java settings because of " << exception);
     }
 
@@ -1033,9 +1033,9 @@ JavaVirtualMachine::~JavaVirtualMachine()
         {
             m_xInetConfiguration->removeContainerListener(this);
         }
-        catch (css::uno::Exception &)
+        catch (cpo::uno::Exception &)
         {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
+            OSL_FAIL("cpo.uno.Exception caught");
         }
 }
 
@@ -1086,7 +1086,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 m_xInetConfiguration->addContainerListener(this);
 
         }
-    }catch(const css::uno::Exception & e)
+    }catch(const cpo::uno::Exception & e)
     {
         SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e << "<");
     }

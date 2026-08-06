@@ -115,7 +115,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
-            catch(const css::uno::Exception&)
+            catch(const cpo::uno::Exception&)
                 {
                     /* TODO URGENT!
                         in case we found some "already existing storages" on the path before and increased its UseCount ...
@@ -382,7 +382,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     {
         throw;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         // b) readonly already tried? => forward last error!
         if ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE) // fallback possible ?
@@ -391,7 +391,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
 
     // b) readonly already tried, throw error
     if ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE) // fallback possible ?
-        throw css::uno::Exception();
+        throw cpo::uno::Exception();
 
     // c) try it readonly
     //    don't catch exception here! Outside code wish to know, if operation failed or not.

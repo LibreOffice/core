@@ -148,7 +148,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
         uno::Reference<util::XURLTransformer> xParser( util::URLTransformer::create(xContext) );
         xParser->parseStrict (url);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return;
     }
@@ -246,13 +246,13 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
     {
         xModel = getCurrentDoc( u"ThisExcelDoc"_ustr );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         try
         {
             xModel = getThisExcelDoc( xContext );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -620,7 +620,7 @@ PointerStyle getPointerStyle( const uno::Reference< frame::XModel >& xModel )
         if ( pWindow )
             nPointerStyle = pWindow->GetSystemWindow()->GetPointer();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("vbahelper");
     }
@@ -997,7 +997,7 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::basicexception( const css::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ )
+void DebugHelper::basicexception( const cpo::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), sal_uInt32(err), OUString() );
@@ -1005,10 +1005,10 @@ void DebugHelper::basicexception( const css::uno::Exception& ex, ErrCode err, st
 
 void DebugHelper::basicexception( ErrCode err,  std::u16string_view additionalArgument )
 {
-    basicexception( css::uno::Exception(), err, additionalArgument );
+    basicexception( cpo::uno::Exception(), err, additionalArgument );
 }
 
-void DebugHelper::basicexception( const css::uno::Exception& ex )
+void DebugHelper::basicexception( const cpo::uno::Exception& ex )
 {
     basicexception( ex, ERRCODE_BASIC_INTERNAL_ERROR, {} );
 }
@@ -1016,7 +1016,7 @@ void DebugHelper::basicexception( const css::uno::Exception& ex )
 void DebugHelper::runtimeexception( ErrCode err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
+    throw css::uno::RuntimeException( cpo::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
                                       css::uno::Reference< css::uno::XInterface >() );
 }
 
@@ -1058,7 +1058,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
         xDocProps->getPropertyValue( u"CodeName"_ustr ) >>= aCodeName;
         xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return xIf;

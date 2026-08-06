@@ -25,7 +25,7 @@
 /** is thrown when a NumberFormat string is syntactically
     incorrect.
  */
-published exception MalformedNumberFormatException: com::sun::star::uno::Exception
+published exception MalformedNumberFormatException: cpo::uno::Exception
 {
 
     /** contains the character position in the string where the malformation

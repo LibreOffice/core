@@ -362,7 +362,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 m_xNotifier->addChangesListener( this );
         }
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
         OSL_FAIL( "InternetProxyDecider - Exception!" );

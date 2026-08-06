@@ -74,7 +74,7 @@ namespace anim
                 }
             }
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

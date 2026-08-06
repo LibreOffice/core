@@ -49,7 +49,7 @@ namespace logging
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::util::PathSubstitution;
     using ::com::sun::star::util::XStringSubstitution;

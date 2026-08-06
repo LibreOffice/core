@@ -166,7 +166,7 @@ bool SfxSaveAsTemplateDialog::SaveTemplate()
             if ( pFilter )
                 aServiceName = pFilter->GetServiceName();
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {}
 
         if(!aServiceName.isEmpty())

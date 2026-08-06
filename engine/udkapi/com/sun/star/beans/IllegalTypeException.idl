@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module beans {
     <p>This problem can occur, if you use an `any`.  </p>
     @see PropertyContainer
  */
-published exception IllegalTypeException: com::sun::star::uno::Exception
+published exception IllegalTypeException: cpo::uno::Exception
 {
 };
 

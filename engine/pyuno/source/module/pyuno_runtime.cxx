@@ -55,7 +55,7 @@ using com::sun::star::uno::TypeDescription;
 using cpo::uno::Sequence;
 using cpo::uno::Type;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::WrappedTargetRuntimeException;
@@ -506,7 +506,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                         a.getValueTypeName() );
         }
 
-        if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
+        if( auto e = o3tl::tryAccess<cpo::uno::Exception>(a) )
         {
             // add the message in a standard python way !
             PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
@@ -563,7 +563,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                     PyTuple_SetItem( tuple.get(), i, element.getAcquired() );
                 }
             }
-            catch( css::uno::Exception & )
+            catch( cpo::uno::Exception & )
             {
                 for( ; i < s.getLength() ; i ++ )
                 {
@@ -805,7 +805,7 @@ Any Runtime::pyObject2Any(const PyRef & source) const
             {
                 a = getImpl()->cargo->xTypeConverter->convertTo( a, t );
             }
-            catch( const css::uno::Exception & e )
+            catch( const cpo::uno::Exception & e )
             {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetRuntimeException(
@@ -882,7 +882,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             {
                 unoModule = impl->cargo->getUnoModule();
             }
-            catch (const Exception &ei)
+            catch (const cpo::uno::Exception &ei)
             {
                 e=ei;
             }

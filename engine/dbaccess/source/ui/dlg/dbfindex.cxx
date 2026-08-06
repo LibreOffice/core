@@ -416,7 +416,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
         aContent.executeCommand( u"delete"_ustr, Any( true ) );
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         // simply silent this. The strange algorithm here does a lot of
         // things even if no files at all were created or accessed, so it's

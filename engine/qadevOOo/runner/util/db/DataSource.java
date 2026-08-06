@@ -22,7 +22,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XDataSource;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XNamingService;
 import lib.StatusException;

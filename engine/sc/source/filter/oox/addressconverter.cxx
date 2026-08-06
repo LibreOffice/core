@@ -316,7 +316,7 @@ void AddressConverter::initializeMaxPos(
             maMaxPos = getBaseFilter().isImportFilter() ? maMaxApiPos : maMaxXlsPos;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "AddressConverter::AddressConverter - cannot get sheet limits" );
     }

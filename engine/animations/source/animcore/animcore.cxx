@@ -69,7 +69,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::cpo::uno::XWeak;
 using ::cpo::uno::Type;
 using ::cpo::uno::Any;

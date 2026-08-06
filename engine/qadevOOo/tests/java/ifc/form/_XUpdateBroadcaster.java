@@ -55,17 +55,17 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
         /**
         * Method must make some data update in the object tested.
         */
-        void update() throws com.sun.star.uno.Exception ;
+        void update() throws cpo.uno.Exception ;
         /**
         * Method must commit data change made by method <code>update</code>.
         */
-        void commit() throws com.sun.star.uno.Exception ;
+        void commit() throws cpo.uno.Exception ;
         /**
         * Checks if the data committed by <code>commit</code> method
         * became permanent in data source.
         * @return <code>true</code> if data was committed.
         */
-        boolean wasCommited() throws com.sun.star.uno.Exception ;
+        boolean wasCommited() throws cpo.uno.Exception ;
     }
 
     /**
@@ -173,7 +173,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
             bResult = listener.approveCalled &&
                       listener.updateCalled &&
                       committed ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             bResult = false ;
             e.printStackTrace(log) ;
         }
@@ -210,7 +210,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
             bResult = ! listener.approveCalled &&
                       ! listener.updateCalled ;
         }
-        catch (com.sun.star.uno.Exception e) {
+        catch (cpo.uno.Exception e) {
             log.println("Exception occurred during removeUpdateListener()");
             e.printStackTrace(log);
             bResult = false;

@@ -456,7 +456,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         SAL_WARN_IF( (nRowSpan < 1) || (nColSpan < 1), "xmloff", "xmloff::XMLTableExport::ExportCell(), illegal row or col span < 1?" );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.table", "exception while exporting a table cell");
     }

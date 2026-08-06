@@ -122,7 +122,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
         if (pSdrObject)
             pSymbolList = pSdrObject->GetSubList();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

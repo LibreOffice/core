@@ -70,7 +70,7 @@ public:
         {
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             cpo::uno::Any anyEx(cppu::getCaughtException());
             throw lang::WrappedTargetException(
@@ -123,7 +123,7 @@ ScVbaChartObjects::getChartObjectNames() const
         }
         sChartNames = comphelper::containerToSequence( aChartNamesVector );
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
@@ -149,7 +149,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
         return cpo::uno::Any( xChartObject );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("sc");
     }

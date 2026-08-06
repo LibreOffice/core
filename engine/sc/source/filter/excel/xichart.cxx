@@ -106,7 +106,7 @@ using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
@@ -851,7 +851,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
                 ScfPropertySet aSeqProp( xDataSeq );
                 aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
     //            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
             }
@@ -866,7 +866,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
                 ScfPropertySet aSeqProp( xDataSeq );
                 aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
             }
-            catch( Exception& ) { }
+            catch( cpo::uno::Exception& ) { }
         }
     }
     return xDataSeq;
@@ -1227,7 +1227,7 @@ void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
         // set the resulting position at the title shape
         xTitleShape->setPosition( aTitlePos );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -2008,7 +2008,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > const & xDataSeries,
     {
         aPropSet.Set( xDataSeries->getDataPointByIndex( static_cast< sal_Int32 >( nPointIdx ) ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "lclGetPointPropSet - no data point property set" );
     }
@@ -2190,7 +2190,7 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > const & xDataSe
                 xRegCurveCont->addRegressionCurve( xRegCurve );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             OSL_FAIL( "XclImpChSeries::ConvertTrendLines - cannot add regression curve" );
         }
@@ -2892,7 +2892,7 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChart
     {
         xSeriesCont->addDataSeries( xSeries );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "XclImpChTypeGroup::InsertDataSeries - cannot add data series" );
     }
@@ -3666,7 +3666,7 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > const & xDiagram ) const
         if( !aCoordSystems.hasElements() )
             xCoordSystemCont->addCoordinateSystem( xCoordSystem );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "XclImpChAxesSet::Convert - cannot insert coordinate system" );
     }
@@ -3781,7 +3781,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
                 if( xChartType.is() )
                     xChartTypeCont->addChartType( xChartType );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
                 OSL_FAIL( "XclImpChAxesSet::CreateCoordSystem - cannot add chart type" );
             }
@@ -3810,7 +3810,7 @@ void XclImpChAxesSet::ConvertAxis(
         Reference< XTitle > xTitle( xChAxisTitle->CreateTitle(), UNO_SET_THROW );
         xTitled->setTitleObject( xTitle );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "XclImpChAxesSet::ConvertAxis - cannot set axis title" );
     }
@@ -3822,7 +3822,7 @@ void XclImpChAxesSet::ConvertAxis(
         sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
         xCoordSystem->setAxisByDimension( nApiAxisDim, xAxis, nApiAxesSetIdx );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "XclImpChAxesSet::ConvertAxis - cannot set axis" );
     }
@@ -3996,7 +3996,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
         Reference< XTitle > xTitle( mxTitle->CreateTitle(), UNO_SET_THROW );
         xTitled->setTitleObject( xTitle );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -4046,7 +4046,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
                     xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -4262,7 +4262,7 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
             pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
             pSdrModel = pSdrPage ? &pSdrPage->getSdrModelFromSdrPage() : nullptr;
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

@@ -415,7 +415,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     GetBodyText();
     if (!m_bIsNewDoc && !m_xBodyText)
     {
-        throw uno::Exception(u"failed to find body text of the insert position"_ustr, nullptr);
+        throw cpo::uno::Exception(u"failed to find body text of the insert position"_ustr, nullptr);
     }
 
     m_aTextAppendStack.push(TextAppendContext(m_xBodyText,
@@ -581,7 +581,7 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         {
             xSettings->setPropertyValue( rPropName, rValue );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -672,7 +672,7 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
     {
         xCursor = xTextAppend->createTextCursorByRange(pSectionContext->GetStartingRange());
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "failed to create text cursor by range");
     }
@@ -774,7 +774,7 @@ static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
             aShapes.insert(aShapes.end(), aSeq.begin(), aSeq.end());
             bFastPathDone = true;
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
     }
@@ -803,7 +803,7 @@ static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
                     aShapes.push_back(xShape);
                 }
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // Can happen e.g. in compareRegion*, when the shape is in a header,
                 // and paragraph in body
@@ -925,7 +925,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -1866,7 +1866,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
                 rFrameProperties.push_back(aValue);
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -2100,7 +2100,7 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             getPropertyName(PROP_BOTTOM_MARGIN),
             nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -3282,7 +3282,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
         {
             TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::finishParagraph" );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "finishParagraph()" );
         }
@@ -3601,7 +3601,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                     SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                     if (!xTextRange.is())
-                        throw uno::Exception(u"insertTextPortion failed"_ustr, nullptr);
+                        throw cpo::uno::Exception(u"insertTextPortion failed"_ustr, nullptr);
                     m_StreamStateStack.top().bTextInserted = true;
                     xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                     if (m_nStartGenericField == 0)
@@ -3660,7 +3660,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::appendTextPortion" );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::appendTextPortion" );
     }
@@ -3689,7 +3689,7 @@ void DomainMapper_Impl::appendTextContent(
     catch(const lang::IllegalArgumentException&)
     {
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -3798,7 +3798,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             pOLEHandler->importStream(m_xComponentContext, GetTextDocument(), xOLE);
 
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "in creation of OLE object" );
     }
@@ -3857,7 +3857,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         // size) if the finished paragraph turns out to hold more than just it.
         m_StreamStateStack.top().aParagraphFormulas.emplace_back(xStarMath, xInterface);
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "in creation of StarMath object" );
     }
@@ -3889,7 +3889,7 @@ void DomainMapper_Impl::finalizeParagraphFormulas()
                                           cpo::uno::Any(sal_Int32(aSize.Height())));
             }
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("writerfilter", "in finalizing StarMath object");
         }
@@ -3978,7 +3978,7 @@ static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
                                         comphelper::containerToSequence(values));
             return;
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
         }
@@ -3991,7 +3991,7 @@ static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
         {
             xToProps->setPropertyValue(props[i], values[i]);
         }
-        catch (css::uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
         }
@@ -4040,7 +4040,7 @@ rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
         // Remove the extra paragraph (last inside the section)
         xEndPara->dispose();
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return xSection;
@@ -4242,7 +4242,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
 
         m_bDiscardHeaderFooter = false; // set only on success!
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
@@ -4395,7 +4395,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         else
             EndCustomFootnote();
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "PushFootOrEndnote");
     }
@@ -4509,7 +4509,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             m_aStoredRedlines[eType].emplace_back(StoredRedline{xRange, sType, aRedlineProperties});
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "in makeRedline" );
     }
@@ -4621,7 +4621,7 @@ void DomainMapper_Impl::PushAnnotation()
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
                     m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xAnnotationText->createTextCursorByRange(xAnnotationText->getStart())));
     }
-    catch( const uno::Exception&)
+    catch( const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
@@ -4645,7 +4645,7 @@ static void lcl_CopyRedlines(
         {
             xRangeCursor = xSrc->createTextCursorByRange( xRange );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
         if (xRangeCursor.is())
@@ -4689,7 +4689,7 @@ static void lcl_PasteRedlines(
         try {
             xRedline->makeRedline( rRedlines[i].msType, rRedlines[i].maRedlineProperties );
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             // ignore (footnotes of tracked deletions)
         }
@@ -4835,7 +4835,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 else
                     m_bSaxError = true;
             }
-            catch (uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Cannot insert footnote/endnote");
                 m_bSaxError = true;
@@ -4944,7 +4944,7 @@ void DomainMapper_Impl::PopAnnotation()
         CheckRedline(m_xAnnotationField->getAnchor());
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Cannot insert annotation field");
     }
@@ -5051,14 +5051,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                     }
                                 }
                             }
-                            catch (const uno::Exception&)
+                            catch (const cpo::uno::Exception&)
                             {
                                 TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "PushShapeContext() text stylesheet property exception" );
                             }
                         }
                     }
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "PushShapeContext()" );
                 }
@@ -5247,7 +5247,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         m_StreamStateStack.top().bParaChanged = true;
         getTableManager().setIsInShape(true);
     }
-    catch ( const uno::Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception when adding shape");
     }
@@ -5325,7 +5325,7 @@ void DomainMapper_Impl::PopShapeContext()
             if ( xDrawPage.is() )
                 xDrawPage->remove( xShape );
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }
@@ -5551,7 +5551,7 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
             xDocInsert->insertDocumentFromURL(u"private:stream"_ustr, aDescriptor);
         }
     }
-    catch (const uno::Exception& rException)
+    catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("writerfilter", "DomainMapper_Impl::HandleAltChunk: failed to handle alt chunk: "
                                      << rException.Message);
@@ -6071,7 +6071,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
                 else
                     sFormatString += " hh:mm:ss AM/PM";
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
             }
@@ -6099,7 +6099,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
             getPropertyName(PROP_NUMBER_FORMAT),
             cpo::uno::Any( nKey ));
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -6257,7 +6257,7 @@ void DomainMapper_Impl::ChainTextFrames()
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
@@ -6286,7 +6286,7 @@ void DomainMapper_Impl::PushTextBoxContent()
         appendTableHandler();
         getTableManager().startLevel();
     }
-    catch (uno::Exception& e)
+    catch (cpo::uno::Exception& e)
     {
         SAL_WARN("writerfilter.dmapper", "Exception during creating textbox (" + e.Message + ")!");
     }
@@ -6343,7 +6343,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
     {
         xProps->setPropertyValue(u"TextBoxContent"_ustr, cpo::uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to attach textboxes!");
         return;
@@ -6406,7 +6406,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
             m_vTextFramesForChaining.push_back(xShape);
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to link textboxes!");
     }
@@ -7372,7 +7372,7 @@ OUString DomainMapper_Impl::extractTocTitle()
 
         return sResult;
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 
@@ -7407,7 +7407,7 @@ DomainMapper_Impl::StartIndexSectionChecked(std::u16string_view sServiceName)
             xTOCTextCursor->gotoEnd(false);
             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
                                  "DomainMapper_Impl::StartIndexSectionChecked:");
@@ -7860,7 +7860,7 @@ rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
             return {};
         xSection->attach( static_cast<text::XSentenceCursor*>(xCursor.get()) );
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
     return xSection;
@@ -8055,7 +8055,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             xProp->setPropertyValue(rPropValue.Name, rPropValue.Value);
                         }
-                        catch(uno::Exception&)
+                        catch(cpo::uno::Exception&)
                         {
                             TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "Unknown Field PropVal");
                         }
@@ -8529,7 +8529,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 //                             "FieldCode",
 //                             uno::makeAny( pContext->GetCommand().copy( nIndex + 1 )));
                     if (!xFieldInterface)
-                        throw uno::Exception();
+                        throw cpo::uno::Exception();
                     xFieldInterface->attachTextFieldMaster( xMaster );
                 }
                 break;
@@ -8952,7 +8952,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 m_StreamStateStack.top().bParaHadField = false;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "Exception in CloseFieldCommand()" );
     }
@@ -9184,7 +9184,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "DomainMapper_Impl::SetFieldResult");
     }
@@ -9408,7 +9408,7 @@ void DomainMapper_Impl::PopFieldContext()
             {
                 TOOLS_WARN_EXCEPTION( "writerfilter", "PopFieldContext()" );
             }
-            catch(const uno::Exception&)
+            catch(const cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "writerfilter", "PopFieldContext()" );
             }
@@ -9548,7 +9548,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
             m_sCurrentBkmkName.clear();
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }
@@ -9674,7 +9674,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
             m_sCurrentPermEdGrp.clear();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }
@@ -9839,7 +9839,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
                     m_bRedlineImageInPreviousRun = true;
                     m_previousRedline = m_currentRedline;
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                 }
             }
@@ -9906,7 +9906,7 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
             xProperties->setPropertyValue( getPropertyName( PROP_NUMBERING_TYPE         ), cpo::uno::Any( style::NumberingType::ARABIC));
             xProperties->setPropertyValue( getPropertyName( PROP_RESTART_AT_EACH_PAGE   ), cpo::uno::Any( nLnc == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage ));
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {}
     }
     m_bLineNumberingSet = true;
@@ -9991,7 +9991,7 @@ void DomainMapper_Impl::ExecuteFrameConversion()
 
             lcl_PasteRedlines(xTextContent, m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
         }
-        catch( const uno::Exception&)
+        catch( const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION( "writerfilter.dmapper", "Exception caught when converting to frame");
         }
@@ -10122,7 +10122,7 @@ void DomainMapper_Impl::RemoveTopRedline( )
         if (GetFootnoteCount() > -1 || GetEndnoteCount() > -1)
             return;
         SAL_WARN("writerfilter.dmapper", "RemoveTopRedline called with empty stack");
-        throw uno::Exception(u"RemoveTopRedline failed"_ustr, nullptr);
+        throw cpo::uno::Exception(u"RemoveTopRedline failed"_ustr, nullptr);
     }
     m_aRedlines.top().pop_back( );
     m_currentRedline.clear();
@@ -10211,7 +10211,7 @@ void DomainMapper_Impl::ApplySettingsTable()
         xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr,
                                     cpo::uno::Any(m_pSettingsTable->GetAdjustLineHeightInTable()));
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }
@@ -10269,7 +10269,7 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
             xNumberingRules->getPropertyByIndex(nNumberingLevel, aProp) >>= nRet;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // This can happen when the doc contains some hand-crafted invalid list level.
     }

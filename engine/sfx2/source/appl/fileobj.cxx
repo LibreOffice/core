@@ -265,7 +265,7 @@ static OUString impl_getFilter( const OUString& _rURL )
             }
         }
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 

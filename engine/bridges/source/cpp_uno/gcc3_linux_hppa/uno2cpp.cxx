@@ -21,7 +21,7 @@
 #include <rtl/alloc.h>
 
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
@@ -318,7 +318,7 @@ static void cpp_call(
                 pCppReturn, pReturnTypeDescr, bRegisterReturn,
                 pStackStart,
                 (pStack - pStackStart), pGPR, pFPR);
-        } catch (css::uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             throw;
         } catch (std::exception & e) {
             throw css::uno::RuntimeException(

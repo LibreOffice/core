@@ -1362,7 +1362,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }

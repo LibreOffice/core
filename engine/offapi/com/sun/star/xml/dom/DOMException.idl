@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module xml {  module dom {
 encapsulates the details of an XML parse error or warning.
 */
 
-exception DOMException: com::sun::star::uno::Exception
+exception DOMException: cpo::uno::Exception
 {
     DOMExceptionType Code;
 };

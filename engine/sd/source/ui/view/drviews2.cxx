@@ -415,7 +415,7 @@ std::optional<AIDesignManifest> ReadAIDesignManifest(SdDrawDocument& rTemplate)
             return std::nullopt;
         xUserProps->getPropertyValue(u"AIDesignManifest"_ustr) >>= aJson;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return std::nullopt;
     }

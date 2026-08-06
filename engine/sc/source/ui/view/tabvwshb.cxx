@@ -258,7 +258,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                             xPopupRequest->addCallback(xCallback, aAny);
                         }
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         TOOLS_WARN_EXCEPTION( "sc", "Exception caught while querying chart" );
                     }
@@ -850,7 +850,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                         }
                     }
                 }
-                catch ( const uno::Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     // no need to handle. By definition, the UndoManager handled this by clearing the
                     // Undo/Redo stacks

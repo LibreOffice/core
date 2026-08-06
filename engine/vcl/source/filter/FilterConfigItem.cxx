@@ -65,7 +65,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
                     u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArguments );
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             bAvailable = false;
         }
@@ -123,7 +123,7 @@ void FilterConfigItem::ImpInitTree( std::u16string_view rSubTree )
         if ( xUpdatableView.is() )
             xPropSet.set( xUpdatableView, UNO_QUERY );
     }
-    catch ( css::uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
     }
@@ -171,7 +171,7 @@ void FilterConfigItem::WriteModifiedConfig()
             xUpdateControl->commitChanges();
             bModified = false;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not update configuration data" );
         }
@@ -192,7 +192,7 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
         if ( bRetValue )
@@ -203,7 +203,7 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
                 if ( !rAny.hasValue() )
                     bRetValue = false;
             }
-            catch( css::uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
                 bRetValue = false;
             }
@@ -346,7 +346,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, bool bNewValue )
             xPropSet->setPropertyValue( rKey, Any(bNewValue) );
             bModified = true;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL( "FilterConfigItem::WriteBool - could not set PropertyValue" );
         }
@@ -379,7 +379,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
             xPropSet->setPropertyValue( rKey, Any(nNewValue) );
             bModified = true;
         }
-        catch ( css::uno::Exception& )
+        catch ( cpo::uno::Exception& )
         {
             OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
         }

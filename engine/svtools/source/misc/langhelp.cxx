@@ -93,7 +93,7 @@ public:
             css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             xSyncDbusSessionHelper->InstallPackageNames(comphelper::containerToSequence(m_aPackages), OUString());
         }
-        catch (const css::uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_INFO_EXCEPTION("svl", "trying to install a LibreOffice langpack");
         }

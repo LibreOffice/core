@@ -57,7 +57,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::drawing::XShape;
@@ -145,7 +145,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
                 xSet->getPropertyValue(aPropName2) >>= aDescription;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::getShapeDescription()" );
     }
@@ -931,7 +931,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
             mxLastParentEntry = std::move(xEntry);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationList::append()" );
     }
@@ -994,7 +994,7 @@ void CustomAnimationList::onSelectionChanged(const Any& rSelection)
 
         Select();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationList::onSelectionChanged()" );
     }

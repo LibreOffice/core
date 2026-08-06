@@ -34,7 +34,7 @@ public class DBaseSqlTests extends SubTestCase
         m_xORB = _xORB;
     }
 
-    public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    public void testFunctions() throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRowSet xRowRes = UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
@@ -62,7 +62,7 @@ public class DBaseSqlTests extends SubTestCase
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where (1 = 1 and 2 = 1) or 3 = 33 or 4 = 44 or ('a' = 'a' and 'b' = 'b')");
     }
 
-    private void execute(final XRowSet xRowRes, String sql) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void execute(final XRowSet xRowRes, String sql) throws cpo.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         try
         {

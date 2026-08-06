@@ -67,7 +67,7 @@ using namespace cpo::uno;
             if (m_xDSContext.is())
                 fillListBox(*m_xDatasource, m_xDSContext->getElementNames());
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             OSL_FAIL("OTableSelectionPage::OTableSelectionPage: could not collect the data source names!");
         }
@@ -287,7 +287,7 @@ using namespace cpo::uno;
             catch(const SQLContext& e) { aSQLException <<= e; }
             catch(const SQLWarning& e) { aSQLException <<= e; }
             catch(const SQLException& e) { aSQLException <<= e; }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
@@ -319,7 +319,7 @@ using namespace cpo::uno;
             catch(const SQLContext& e) { aSQLException <<= e; }
             catch(const SQLWarning& e) { aSQLException <<= e; }
             catch(const SQLException& e) { aSQLException <<= e; }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }

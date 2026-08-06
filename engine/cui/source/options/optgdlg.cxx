@@ -797,7 +797,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         }
 
     }
-    catch (const Exception &)
+    catch (const cpo::uno::Exception &)
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
@@ -949,7 +949,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
                 GetDialogController()->response(RET_OK);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
@@ -1194,7 +1194,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         aCTLLang >>= aLocale;
         eCurLangCTL = LanguageTag::convertToLanguageType( aLocale, false);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     //overwrite them by the values provided by the DocShell

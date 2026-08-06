@@ -22,7 +22,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 /** Base class of all XExecutableDialog related exceptions.
  */
-published exception ExecutableDialogException: com::sun::star::uno::Exception
+published exception ExecutableDialogException: cpo::uno::Exception
 {
 };
 

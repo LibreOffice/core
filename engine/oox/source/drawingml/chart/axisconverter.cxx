@@ -518,7 +518,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         AxisDispUnitsConverter axisDispUnitsConverter (*this, mrModel.mxDispUnits.getOrCreate());
         axisDispUnitsConverter.convertFromModel(xAxis);
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -527,7 +527,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         // insert axis into coordinate system
         rxCoordSystem->setAxisByDimension( nAxisIdx, xAxis, nAxesSetIdx );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "AxisConverter::convertFromModel - cannot insert axis into coordinate system" );
     }
@@ -549,7 +549,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

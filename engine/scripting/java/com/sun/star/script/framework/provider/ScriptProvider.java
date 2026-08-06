@@ -65,7 +65,7 @@ import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XUniversalContentBroker;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
@@ -150,7 +150,7 @@ public abstract class ScriptProvider implements
     }
 
     public void initialize(Object[] aArguments)
-    throws com.sun.star.uno.Exception {
+    throws cpo.uno.Exception {
         LogUtils.DEBUG("entering XInit for language " + language);
         boolean isPkgProvider = false;
 
@@ -175,7 +175,7 @@ public abstract class ScriptProvider implements
                 }
 
                 if (m_xModel == null) {
-                    throw new com.sun.star.uno.Exception(
+                    throw new cpo.uno.Exception(
                         "ScriptProvider argument must be either a string, a valid XScriptInvocationContext, "
                         + "or an XModel", this);
                 }

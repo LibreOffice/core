@@ -65,7 +65,7 @@ namespace offapp
                     m_aImplNames.push_back(xDriverSI->getImplementationName());
             }
         }
-        catch(const Exception&)
+        catch(const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "cui.options", "ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
         }

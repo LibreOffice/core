@@ -70,7 +70,7 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
     for (const auto& rTgtProp : tgtprops) {
         try {
             xTargetUD->removeProperty(rTgtProp.Name);
-        } catch (uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             // ignore
         }
     }
@@ -84,7 +84,7 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
             OUString name = rSrcProp.Name;
             xTargetUD->addProperty(name, rSrcProp.Attributes,
                 xSourceUDSet->getPropertyValue(name));
-        } catch (uno::Exception &) {
+        } catch (cpo::uno::Exception &) {
             // ignore
         }
     }

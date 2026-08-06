@@ -459,7 +459,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const cpo::uno::S
                 m_xDatMan->setFilter( sNewFilter );
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "extensions.biblio", "BibFrameController_Impl::dispatch" );
         }
@@ -697,7 +697,7 @@ void BibFrameController_Impl::addStatusListener(
                             SolarMutexReleaser aReleaser;
                             xDataObj = xClip->getContents();
                         }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                         {
                         }
 
@@ -712,7 +712,7 @@ void BibFrameController_Impl::addStatusListener(
                             aData >>= aText;
                             aEvent.IsEnabled  = !aText.isEmpty();
                         }
-                        catch( const uno::Exception& )
+                        catch( const cpo::uno::Exception& )
                         {
                         }
                     }

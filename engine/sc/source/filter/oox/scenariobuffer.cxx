@@ -154,7 +154,7 @@ void Scenario::finalizeImport()
             aPropSet.setProperty( PROP_PrintBorder, false );
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

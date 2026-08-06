@@ -187,7 +187,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                         aPropNames, aPropValues );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

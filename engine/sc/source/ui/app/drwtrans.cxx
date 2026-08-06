@@ -20,7 +20,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -103,7 +103,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                     if ( xPersObj.is() && xPersObj->hasEntry() )
                         m_bOleObj = true;
                 }
-                catch( uno::Exception& )
+                catch( cpo::uno::Exception& )
                 {}
                 // aOleData is initialized later
             }
@@ -503,7 +503,7 @@ bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uIn
                                 xTrans->commit();
                         }
                     }
-                    catch ( uno::Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -540,7 +540,7 @@ bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uIn
                     xWorkStore->dispose();
                     xWorkStore.clear();
                 }
-                catch ( uno::Exception& )
+                catch ( cpo::uno::Exception& )
                 {}
 
                 bRet = ( rOStm.GetError() == ERRCODE_NONE );

@@ -68,7 +68,7 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const cpo::uno::Any& _aOperato
         pFormatConditions->removeFormatCondition(msStyleName, false);
         pFormatConditions->Add(_nType, _aOperator, _aFormula1, _aFormula2, mxStyle);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -133,7 +133,7 @@ ScVbaFormatCondition::notifyRange()
     {
         mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, cpo::uno::Any( mxSheetConditionalEntries));
     }
-    catch (uno::Exception& )
+    catch (cpo::uno::Exception& )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }

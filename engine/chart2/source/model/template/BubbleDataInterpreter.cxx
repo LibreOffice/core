@@ -110,7 +110,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
                 bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -243,7 +243,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 aSeries[i]->setData( aNewSequences );
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
@@ -263,7 +263,7 @@ bool BubbleDataInterpreter::isDataCompatible(
             if( dataSeries->getDataSequences2().size() != 3 )
                 return false;
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

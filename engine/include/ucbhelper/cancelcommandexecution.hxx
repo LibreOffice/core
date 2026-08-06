@@ -50,7 +50,7 @@ namespace ucbhelper
     @param xEnv is the command environment that may contain an Interaction
            Handler to use before throwing the appropriate exception.
 
-    @throws css::uno::Exception
+    @throws cpo::uno::Exception
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rException,
                              const css::uno::Reference<
@@ -86,7 +86,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rExceptio
            Used as debugging aid only. Passed to the member 'Context' of the
            uno::Exception thrown by this function.
 
-    @throws css::uno::Exception
+    @throws cpo::uno::Exception
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eError,
                              const cpo::uno::Sequence< cpo::uno::Any > & rArgs,

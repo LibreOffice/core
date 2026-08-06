@@ -79,7 +79,7 @@ OStreamSection::~OStreamSection()
             m_xMarkStream->deleteMark(m_nBlockStart);
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 }

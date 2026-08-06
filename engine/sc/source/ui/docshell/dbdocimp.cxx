@@ -358,7 +358,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     {
         aErrorMessage = rError.Message;
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
     }

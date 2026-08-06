@@ -196,7 +196,7 @@ namespace oox::ppt {
                 }
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             SAL_INFO("oox.ppt","fixMainSequenceTiming(), exception caught!" );
         }
@@ -219,7 +219,7 @@ namespace oox::ppt {
                 xClickNode->setBegin( aBegin );
             }
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
             SAL_INFO("oox.ppt","fixInteractiveSequenceTiming(), exception caught!" );
         }

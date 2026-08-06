@@ -50,14 +50,14 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
             the object failed to resize
      */
     void setVisualAreaSize( [in] hyper nAspect,
                          [in] ::com::sun::star::awt::Size aSize )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** gets the size of object's visual area.
 
@@ -82,7 +82,7 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
     ::com::sun::star::awt::Size getVisualAreaSize( [in] hyper nAspect )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
     /** retrieves visual representation of the object in preferable format.
 
@@ -105,14 +105,14 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
             in case of problems
 
      */
     VisualRepresentation getPreferredVisualRepresentation( [in] hyper nAspect )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 
 
     /** retrieves map mode the object communicates in.
@@ -128,11 +128,11 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
             in case of problems
      */
     long getMapUnit( [in] hyper nAspect )
-        raises( ::com::sun::star::uno::Exception );
+        raises( ::cpo::uno::Exception );
 };
 
 

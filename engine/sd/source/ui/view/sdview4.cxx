@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                             xObj->setVisualAreaSize( nAspect,aSz );
                         }
                     }
-                    catch( uno::Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                         nError = ERRCODE_IO_GENERAL;
                         // TODO/LATER: better error handling

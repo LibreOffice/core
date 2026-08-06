@@ -166,7 +166,7 @@ IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 

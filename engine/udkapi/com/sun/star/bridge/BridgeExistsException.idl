@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module bridge {
 /** Indicates, that it was tried to create a remote bridge with a name,
     which already existed.
  */
-published exception BridgeExistsException: com::sun::star::uno::Exception
+published exception BridgeExistsException: cpo::uno::Exception
 {
 };
 

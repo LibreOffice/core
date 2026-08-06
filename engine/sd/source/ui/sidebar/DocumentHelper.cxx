@@ -220,7 +220,7 @@ SdPage* DocumentHelper::AddMasterPage (
             // master page.
             rTargetDocument.InsertMasterPage (pClonedMasterPage.get());
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("sd");
             pClonedMasterPage = nullptr;

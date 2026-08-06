@@ -89,7 +89,7 @@ void OOXMLDocument::resolveFastSubStream(Stream & rStreamHandler,
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveFastSubStream: exception while "
                 "resolving stream " << static_cast<int>(nType));
@@ -142,7 +142,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocument::importSubStream(OOXMLStream::
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
                 "importing stream " << static_cast<int>(nType));
@@ -158,7 +158,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocument::importSubStream(OOXMLStream::
             uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
             xRet = xDomBuilder->parse(xInputStream);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
                      "parsing stream " << static_cast<int>(nType));
@@ -187,7 +187,7 @@ void OOXMLDocument::importSubStreamRelations(const OOXMLStream::Pointer_t& pStre
     {
         cStream = OOXMLDocumentFactory::createStream(pStream, nType);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.ooxml", "importSubStreamRelations: exception while "
             "importing stream " << static_cast<int>(nType));
@@ -208,7 +208,7 @@ void OOXMLDocument::importSubStreamRelations(const OOXMLStream::Pointer_t& pStre
              uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
              xRelation = xDomBuilder->parse(xcpInputStream);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             TOOLS_WARN_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
                      "parsing stream " << static_cast<int>(nType));
@@ -542,7 +542,7 @@ void OOXMLDocument::resolve(Stream & rStream)
         throw;
     }
     // note: cannot throw anything other than SAXException out of here?
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         SAL_WARN("writerfilter.ooxml", "OOXMLDocument::resolve(): " << exceptionToString(anyEx));
@@ -635,7 +635,7 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, OOXMLStream::StreamType_t::GLOSSARY);
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveGlossaryStream: exception while "
                  "createStream for glossary" << static_cast<int>(OOXMLStream::StreamType_t::GLOSSARY));
@@ -708,7 +708,7 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
                 uno::Reference xDom = xDomBuilder->parse(xInputStream);
                 aRelDefinition.put(u"_relDom"_ustr, xDom);
             }
-            catch (uno::Exception const&)
+            catch (cpo::uno::Exception const&)
             {
                 TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
                     "parsing stream of Type" << static_cast<int>(nType));
@@ -772,7 +772,7 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
                         if (Stream)
                             resolveEmbeddingsStream(Stream);
                     }
-                    catch (uno::Exception const&)
+                    catch (cpo::uno::Exception const&)
                     {
                         TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
                                "resolving stream " << static_cast<int>(streamType));

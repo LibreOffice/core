@@ -174,7 +174,7 @@ public class _XPersistObject extends MultiMethodTest {
                 }
             }
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Exception occurred : ");
             e.printStackTrace(log) ;
             bResult = false;
@@ -240,7 +240,7 @@ public class _XPersistObject extends MultiMethodTest {
             oStream = UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
 
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             System.out.println("exc " + e);
         }
 

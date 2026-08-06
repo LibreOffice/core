@@ -540,7 +540,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertMgrPBHdl, weld::Button&, void)
         officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sCurCertMgr, pBatch);
         pBatch->commit();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("cui.options", "CertMgrPBHdl");
     }
@@ -612,7 +612,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Toggleable&, void)
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         m_xSavePasswordsCB->set_active( !m_xSavePasswordsCB->get_active() );
     }
@@ -632,7 +632,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, weld::Button&, void)
             xMasterPasswd->changeMasterPassword(xTmpHandler);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {}
 }
 
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::Toggleable&, void
             }
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         m_xSavePasswordsCB->set_active( !m_xSavePasswordsCB->get_active() );
     }
@@ -697,7 +697,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, weld::Button&, void)
             aDlg.run();
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {}
 }
 
@@ -732,7 +732,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, weld::Button&, void)
         xD->setParentWindow(GetDialogController()->getDialog()->GetXWindow());
         xD->manageTrustedSources();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "cui.options", "");
     }
@@ -782,7 +782,7 @@ void SvxSecurityTabPage::InitControls()
             m_xMasterPasswordImg->set_visible(true);
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         m_xSavePasswordsCB->set_sensitive( false );
     }
@@ -813,7 +813,7 @@ void SvxSecurityTabPage::InitControls()
         m_xCertPathImg->set_visible(!bEnable);
 #endif
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

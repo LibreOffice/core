@@ -175,7 +175,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
                 try{
                     OUString appModule = xModuleManager->identify( xDocumentModel );
                     xModuleManager->getByName(appModule) >>= moduleDescr;
-                } catch(const uno::Exception&)
+                } catch(const cpo::uno::Exception&)
                     {}
 
                 for (const beans::PropertyValue& prop : moduleDescr)
@@ -252,7 +252,7 @@ SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > co
             langNode = tryFind();
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // if getChildNodes() throws an exception we just return
         // the empty Reference
@@ -273,7 +273,7 @@ void SvxScriptOrgDialog::RequestSubEntries(const weld::TreeIter& rRootEntry, Ref
     {
         children = node->getChildNodes();
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // if we catch an exception in getChildNodes then no entries are added
     }
@@ -629,7 +629,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
             {
                 SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(re));
             }
-            catch ( Exception& e )
+            catch ( cpo::uno::Exception& e )
             {
                 SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(e));
             }
@@ -734,7 +734,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
                 childNodes = node->getChildNodes();
             }
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // ignore, will continue on with empty sequence
         }
@@ -975,7 +975,7 @@ bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet > const
     {
         xProps->getPropertyValue( propName ) >>= result;
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         return result;
     }
@@ -1003,7 +1003,7 @@ OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowse
             }
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
         // ignore, will return an empty string
     }

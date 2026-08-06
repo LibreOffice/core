@@ -189,7 +189,7 @@ void OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDe
         disposeComponent( xCommandDefinitionPart );
         throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         disposeComponent( xNewObject );
         disposeComponent( xCommandDefinitionPart );

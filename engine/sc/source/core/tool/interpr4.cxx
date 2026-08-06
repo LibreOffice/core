@@ -3330,7 +3330,7 @@ void ScInterpreter::ScExternal()
                         css::lang::EventObject aEvent;
                         pLis->disposing(aEvent);    // pLis is dead hereafter
                     }
-                    catch (const uno::Exception&)
+                    catch (const cpo::uno::Exception&)
                     {
                     }
                 }

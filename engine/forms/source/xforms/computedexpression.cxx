@@ -105,7 +105,7 @@ bool ComputedExpression::_evaluate(
         mxResult = _getXPathAPI(rContext)->eval( rContext.mxContextNode,
                                                  sExpression );
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         ; // ignore exception -> mxResult will be empty
     }

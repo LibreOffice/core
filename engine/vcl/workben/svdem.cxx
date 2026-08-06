@@ -63,7 +63,7 @@ SAL_IMPLEMENT_MAIN()
 
         DeInitVCL();
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
         return 1;

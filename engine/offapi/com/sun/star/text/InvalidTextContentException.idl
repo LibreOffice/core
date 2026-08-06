@@ -25,7 +25,7 @@
     as an actual argument when the text content cannot be used for that
     operation.
  */
-published exception InvalidTextContentException: com::sun::star::uno::Exception
+published exception InvalidTextContentException: cpo::uno::Exception
 {
     /** contains the interface of the text content that caused the exception.
      */

@@ -149,7 +149,7 @@ bool ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB 
                 bError = true;      // unknown type
         }
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         bError = true;
     }

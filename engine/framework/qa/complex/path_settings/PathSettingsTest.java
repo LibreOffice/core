@@ -122,7 +122,7 @@ public class PathSettingsTest
                 aListOfWorkingProperty.add(xPropertyInfoOfPathSettings[i]);
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println(e.getClass().getName());
             System.out.println("Message: " + e.getMessage());
@@ -509,7 +509,7 @@ public class PathSettingsTest
                 bResult = false;
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println(" FAIL: getFastPropertyValue(handle:=" + handle + ", name:='" + name + "')" + e.getMessage());
             bResult = false;
@@ -615,7 +615,7 @@ public class PathSettingsTest
                 System.out.println("  OK: Change value back to original on property " + name);
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (cpo.uno.Exception e)
         {
             System.out.println(" FAIL: getFastPropertyValue(handle:=" + handle + ", name:='" + name + "')" + e.getMessage());
             bResult = false;
@@ -712,7 +712,7 @@ public class PathSettingsTest
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
+            throws InterruptedException, cpo.uno.Exception
     {
         System.out.println("tearDownConnection()");
         connection.tearDown();

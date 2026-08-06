@@ -115,7 +115,7 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         return xModuleManager->identify(rxFrame);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx.sidebar", "can not determine module name");
     }

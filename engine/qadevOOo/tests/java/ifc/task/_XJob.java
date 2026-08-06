@@ -80,7 +80,7 @@ public class _XJob extends MultiMethodTest {
             } catch ( com.sun.star.lang.IllegalArgumentException e) {
                 bOK = false;
                 log.println("Could not success XJobArgs[" + n + "]: " + e);
-            } catch ( com.sun.star.uno.Exception e) {
+            } catch ( cpo.uno.Exception e) {
                 bOK = false;
                 log.println("Could not success XJobArgs[" + n + "]: " + e);
             }

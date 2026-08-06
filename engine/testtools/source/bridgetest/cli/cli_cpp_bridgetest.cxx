@@ -845,7 +845,7 @@ static bool raiseException(XBridgeTest* xLBT )
             xLBT->RuntimeException = (int) 0xcafebabe;
         }
     }
-    catch (unoidl::com::sun::star::uno::Exception*  rExc)
+    catch (unoidl::cpo::uno::Exception*  rExc)
     {
         if (rExc->Context == xLBT->Interface)
         {

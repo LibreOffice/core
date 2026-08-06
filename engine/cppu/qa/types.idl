@@ -33,9 +33,9 @@ struct Poly< T > { long member; };
 
 struct Rec { sequence< Rec > x; };
 
-exception Exception1: com::sun::star::uno::Exception { long member; };
+exception Exception1: cpo::uno::Exception { long member; };
 
-exception Exception2: com::sun::star::uno::Exception { long member; };
+exception Exception2: cpo::uno::Exception { long member; };
 
 exception Exception2a: Exception2 { long member2; };
 

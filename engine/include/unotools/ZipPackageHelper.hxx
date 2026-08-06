@@ -37,11 +37,11 @@ public:
 
     void savePackage();
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     void addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                   const OUString& rSourceFile );
 
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                                                            const OUString& rName );
 

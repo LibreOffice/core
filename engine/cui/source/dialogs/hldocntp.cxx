@@ -25,7 +25,7 @@
 #include <svl/stritem.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -351,7 +351,7 @@ void SvxHyperlinkNewDocTp::DoApply()
             bCreate = xWarn->run() == RET_YES;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

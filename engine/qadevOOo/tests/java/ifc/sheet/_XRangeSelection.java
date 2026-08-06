@@ -171,7 +171,7 @@ public class _XRangeSelection extends MultiMethodTest {
 
         try {
             toolkit = tParam.getMSF().createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get toolkit", e);
@@ -221,7 +221,7 @@ public class _XRangeSelection extends MultiMethodTest {
         try {
             aToolkit = xMSF.createInstance("com.sun.star.awt.Toolkit");
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch(cpo.uno.Exception e) {
             throw new StatusException("Could not create 'com.sun.star.awt.Toolkit'.", e);
         }
         XExtendedToolkit xExtendedToolkit = UnoRuntime.queryInterface(XExtendedToolkit.class, aToolkit);

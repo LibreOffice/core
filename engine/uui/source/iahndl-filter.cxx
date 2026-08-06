@@ -93,7 +93,7 @@ handleNoSuchFilterRequest_(
                                   u"com.sun.star.document.FilterFactory"_ustr, xContext ),
                               uno::UNO_QUERY );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
     }
 
@@ -142,7 +142,7 @@ handleNoSuchFilterRequest_(
         {
             throw;
         }
-        catch(const uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             continue;
         }
@@ -195,7 +195,7 @@ handleFilterOptionsRequest_(
                             u"com.sun.star.document.FilterFactory"_ustr, xContext ),
                         uno::UNO_QUERY );
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
     }
 
@@ -264,7 +264,7 @@ handleFilterOptionsRequest_(
         {
             // the filter name is unknown
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

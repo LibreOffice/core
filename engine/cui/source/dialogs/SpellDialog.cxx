@@ -680,7 +680,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
                 aXDictionary->setActive(true);
             }
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
     }

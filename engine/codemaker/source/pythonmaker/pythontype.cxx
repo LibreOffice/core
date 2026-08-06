@@ -604,7 +604,7 @@ PythonStubGenerator::getAllExceptionMembers(const unoidl::ExceptionTypeEntity* e
     {
         // Stop recursion at the root UNO Exception, as its members (Message, Context)
         // are handled specially or are part of Python's built-in Exception.
-        if (baseName != u"com.sun.star.uno.Exception")
+        if (baseName != u"cpo.uno.Exception")
         {
             rtl::Reference<unoidl::Entity> baseEntity;
             if (m_typeManager->getSort(baseName, &baseEntity)
@@ -828,7 +828,7 @@ void PythonStubGenerator::generateException(const unoidl::ExceptionTypeEntity* e
     // Determine the base class for Python stub
     OString baseClass;
     OUString unoBaseName = entity->getDirectBase();
-    bool isRootUnoException = (m_unoName == u"com.sun.star.uno.Exception");
+    bool isRootUnoException = (m_unoName == u"cpo.uno.Exception");
     if (unoBaseName.isEmpty() || isRootUnoException)
     {
         // If it has no base or the base is the root UNO Exception,

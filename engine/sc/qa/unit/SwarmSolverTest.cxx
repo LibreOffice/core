@@ -735,7 +735,7 @@ void SwarmSolverTest::testControllersUnlockedAfterError()
     {
         xSolver->solve();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         bThrew = true;
     }

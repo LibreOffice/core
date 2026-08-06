@@ -27,7 +27,7 @@ namespace pcr
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::inspection::XPropertyControlContext;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControl;
 
     CommonBehaviourControlHelper::CommonBehaviourControlHelper( sal_Int16 _nControlType, XPropertyControl& _rAntiImpl )

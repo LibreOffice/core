@@ -948,7 +948,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
 
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -974,7 +974,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
         if ( !sAddress.isEmpty() )
             addAttribute( rAttrName, sAddress );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -1113,7 +1113,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("xmlscript.xmldlg");
     }

@@ -179,7 +179,7 @@ void Writer::execute() {
                 }
             }
         }
-    } catch (const css::uno::Exception & e) {
+    } catch (const cpo::uno::Exception & e) {
         SAL_INFO("binaryurp", "caught " << e);
     } catch (const std::exception & e) {
         SAL_INFO("binaryurp", "caught C++ exception " << e.what());

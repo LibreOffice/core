@@ -191,7 +191,7 @@ namespace drawinglayer::primitive2d
                                     aContent,
                                     aBitmapTransform);
                             }
-                            catch( const uno::Exception& )
+                            catch( const cpo::uno::Exception& )
                             {
                                 DBG_UNHANDLED_EXCEPTION("drawinglayer");
                             }
@@ -316,7 +316,7 @@ namespace drawinglayer::primitive2d
                 uno::Reference<awt::XWindow2> xControlWindow(rXControl, uno::UNO_QUERY_THROW);
                 return rXControl->getPeer().is() && xControlWindow->isVisible();
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 // #i116763# since there is a good alternative when the xControlView
                 // is not found and it is allowed to happen

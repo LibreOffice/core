@@ -211,7 +211,7 @@ void BarChartTypeTemplate::applyStyle2(
         getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
         xSeries->setPropertyAlsoToAllAttributedDataPoints( u"Geometry3D"_ustr, aAGeometry3D );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

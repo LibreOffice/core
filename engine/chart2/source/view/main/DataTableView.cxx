@@ -266,7 +266,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     {
         m_xTableShape->getPropertyValue(u"Model"_ustr) >>= m_xTable;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         return;
     }

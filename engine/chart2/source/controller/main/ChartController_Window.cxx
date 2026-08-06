@@ -441,7 +441,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
                 pDrawViewWrapper->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -854,7 +854,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         }
                     }
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }
@@ -1078,7 +1078,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:FormatStockGain"_ustr );
                         }
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }
@@ -1849,7 +1849,7 @@ bool ChartController::impl_DragDataPoint( std::u16string_view rCID, double fAddi
                 bResult = true;
             }
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }

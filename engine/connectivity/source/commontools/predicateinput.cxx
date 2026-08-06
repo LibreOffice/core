@@ -47,7 +47,7 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;

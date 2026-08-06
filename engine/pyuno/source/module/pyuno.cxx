@@ -53,7 +53,7 @@ using cpo::uno::Type;
 using cpo::uno::TypeClass;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Exception;
+using cpo::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::XTypeProvider;
@@ -434,7 +434,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch (const css::uno::Exception &e)
+    catch (const cpo::uno::Exception &e)
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }

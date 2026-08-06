@@ -255,7 +255,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         // get CMIS properties
         m_aCmisProperties = i_cmisProps;
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 
@@ -1341,7 +1341,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
                     xProps->getPropertyValue(u"ImagePreferredDPI"_ustr) >>= nImagePreferredDPI;
             }
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

@@ -217,7 +217,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
                 m_aPosHelper.m_fRingDistance = 0.1;
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -225,7 +225,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
     {
         xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE) >>= m_eSubType; //  "SubType"
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -233,7 +233,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
     {
         xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_SPLIT_POS) >>= m_nSplitPos; //  "CompositeSize"
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -1002,7 +1002,7 @@ void PieChart::createShapes()
             cpo::uno::Any aAny = m_xChartTypeModel->getFastPropertyValue( PROP_PIECHARTTYPE_3DRELATIVEHEIGHT ); // "3DRelativeHeight"
             aAny >>= n3DRelativeHeight;
         }
-        catch (const uno::Exception&) { }
+        catch (const cpo::uno::Exception&) { }
     }
     ///iterate over each xslot, that is on each data series (there is
     ///only one data series in each data series group!); note that if the chart
@@ -1301,7 +1301,7 @@ void PieChart::createOneRing(
             {
                 xPointProperties->getPropertyValue( u"Offset"_ustr) >>= aParam.mfExplodePercentage;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -1384,7 +1384,7 @@ void PieChart::createOneRing(
                             , ObjectIdentifier::createPointCID( aPointCIDStub,
                                 nPropIdx ) );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }

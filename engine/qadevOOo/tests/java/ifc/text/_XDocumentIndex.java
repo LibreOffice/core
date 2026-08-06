@@ -85,7 +85,7 @@ public class _XDocumentIndex extends MultiMethodTest {
             XTextContent xTC = UnoRuntime.queryInterface
                 (XTextContent.class, idxMark);
             xText.insertTextContent(xTR, xTC, true);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't insert index mark.");
             e.printStackTrace(log);
             bOK = false ;

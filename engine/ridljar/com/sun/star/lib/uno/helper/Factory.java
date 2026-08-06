@@ -195,7 +195,7 @@ public class Factory
 
 
     private Object instantiate( XComponentContext xContext )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         try
         {
@@ -224,10 +224,10 @@ public class Factory
                 throw (java.lang.RuntimeException)targetException;
             else if (targetException instanceof com.sun.star.uno.RuntimeException)
                 throw (com.sun.star.uno.RuntimeException)targetException;
-            else if (targetException instanceof com.sun.star.uno.Exception)
-                throw (com.sun.star.uno.Exception)targetException;
+            else if (targetException instanceof cpo.uno.Exception)
+                throw (cpo.uno.Exception)targetException;
             else
-                throw new com.sun.star.uno.Exception(targetException, targetException.getMessage(), this);
+                throw new cpo.uno.Exception(targetException, targetException.getMessage(), this);
         }
         catch (IllegalAccessException exc)
         {
@@ -242,14 +242,14 @@ public class Factory
 
     public final Object createInstanceWithContext(
         XComponentContext xContext )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         return instantiate( xContext );
     }
 
     public final Object createInstanceWithArgumentsAndContext(
         Object arguments [], XComponentContext xContext )
-        throws com.sun.star.uno.Exception
+        throws cpo.uno.Exception
     {
         Object inst = instantiate( xContext );
         XInitialization xInit = UnoRuntime.queryInterface(

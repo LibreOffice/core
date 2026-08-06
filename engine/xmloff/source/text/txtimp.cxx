@@ -1336,7 +1336,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                 xCrsr->gotoRange( rCursor->getEnd(), true );
                                 xCrsr->setString( OUString() );
                             }
-                            catch(const uno::Exception&)
+                            catch(const cpo::uno::Exception&)
                             {
                             }
                         }

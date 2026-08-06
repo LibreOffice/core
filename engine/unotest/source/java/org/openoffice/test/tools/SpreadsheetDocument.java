@@ -30,7 +30,7 @@ public class SpreadsheetDocument extends OfficeDocument
 {
     /** Creates a new blank spreadsheet document */
     /* ------------------------------------------------------------------ */
-    public SpreadsheetDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
+    public SpreadsheetDocument( XMultiServiceFactory orb ) throws cpo.uno.Exception
     {
         super( orb, implLoadAsComponent( orb, "private:factory/scalc" ) );
     }
@@ -53,7 +53,7 @@ public class SpreadsheetDocument extends OfficeDocument
     /* ------------------------------------------------------------------ */
     /** returns the sheet with the given index
     */
-    public XCellRange getSheet( int index ) throws com.sun.star.uno.Exception
+    public XCellRange getSheet( int index ) throws cpo.uno.Exception
     {
         XIndexAccess sheets = UnoRuntime.queryInterface( XIndexAccess.class, getSheets() );
         return UnoRuntime.queryInterface( XCellRange.class, sheets.getByIndex( index ) );

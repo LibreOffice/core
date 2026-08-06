@@ -55,7 +55,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -204,7 +204,7 @@ namespace
                 {
                     bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 }
-                catch( const css::uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     SAL_INFO( "fpicker.office", "Exception in lcl_autoUpdateFileExtension" );
                 }
@@ -822,7 +822,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
             {
                 exists = utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("fpicker.office");
                 ErrorHandler::HandleError(ERRCODE_IO_GENERAL);

@@ -119,7 +119,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
         {
             TOOLS_INFO_EXCEPTION("basic", "" );
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("basic", "" );
         }
@@ -523,7 +523,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
     // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
     // create dialog fails.  So, in this case let's not throw, just leave basic
     // detect the unset object.
-    catch(const uno::Exception& )
+    catch(const cpo::uno::Exception& )
     {
     }
 

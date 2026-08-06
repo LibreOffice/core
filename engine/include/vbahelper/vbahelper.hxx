@@ -256,13 +256,13 @@ class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
     /// @throws css::script::BasicErrorException
-    static void basicexception( const css::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ );
+    static void basicexception( const cpo::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ );
 
     /// @throws css::script::BasicErrorException
     static void basicexception( ErrCode err, std::u16string_view additionalArgument );
 
     /// @throws css::script::BasicErrorException
-    static void basicexception( const css::uno::Exception& ex );
+    static void basicexception( const cpo::uno::Exception& ex );
 
     /// @throws css::script::BasicErrorException
     static void runtimeexception( ErrCode err );

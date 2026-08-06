@@ -114,7 +114,7 @@ Reference< XNumberFormatter > OColumnControlWindow::GetFormatter() const
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
         }
-        catch(Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
     return m_xFormatter;

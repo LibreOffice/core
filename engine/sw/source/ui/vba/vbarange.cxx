@@ -160,7 +160,7 @@ SwVbaRange::setText( const OUString& rText )
                 sName = xNamed->getName();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // do nothing
     }

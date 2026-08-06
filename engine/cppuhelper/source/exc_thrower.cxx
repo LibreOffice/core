@@ -229,7 +229,7 @@ void throwException( Any const & exc )
     {
         throw RuntimeException(
             u"no UNO exception given "
-            "(must be derived from com::sun::star::uno::Exception)!"_ustr );
+            "(must be derived from cpo::uno::Exception)!"_ustr );
     }
 
 #if RETHROW_FAKE_EXCEPTIONS

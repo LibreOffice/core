@@ -156,7 +156,7 @@ public class FactoryHelper {
 
         public Object createInstanceWithContext(
             XComponentContext xContext )
-            throws com.sun.star.uno.Exception
+            throws cpo.uno.Exception
         {
             Object args[];
             switch (_nCode)
@@ -200,22 +200,22 @@ public class FactoryHelper {
 
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
-                else if (targetException instanceof com.sun.star.uno.Exception)
-                    throw (com.sun.star.uno.Exception)targetException;
+                else if (targetException instanceof cpo.uno.Exception)
+                    throw (cpo.uno.Exception)targetException;
                 else if (targetException instanceof com.sun.star.uno.RuntimeException)
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
-                    throw new com.sun.star.uno.Exception( targetException );
+                    throw new cpo.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.Exception( illegalAccessException );
+                throw new cpo.uno.Exception( illegalAccessException );
             } catch (InstantiationException instantiationException) {
-                throw new com.sun.star.uno.Exception( instantiationException );
+                throw new cpo.uno.Exception( instantiationException );
             }
         }
 
         public Object createInstanceWithArgumentsAndContext(
             Object rArguments[], XComponentContext xContext )
-            throws com.sun.star.uno.Exception
+            throws cpo.uno.Exception
         {
             Object args[];
 
@@ -276,16 +276,16 @@ public class FactoryHelper {
 
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
-                else if (targetException instanceof com.sun.star.uno.Exception)
-                    throw (com.sun.star.uno.Exception)targetException;
+                else if (targetException instanceof cpo.uno.Exception)
+                    throw (cpo.uno.Exception)targetException;
                 else if (targetException instanceof com.sun.star.uno.RuntimeException)
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
-                    throw new com.sun.star.uno.Exception( targetException );
+                    throw new cpo.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.Exception( illegalAccessException );
+                throw new cpo.uno.Exception( illegalAccessException );
             } catch (InstantiationException instantiationException) {
-                throw new com.sun.star.uno.Exception( instantiationException );
+                throw new cpo.uno.Exception( instantiationException );
             }
         }
 
@@ -296,7 +296,7 @@ public class FactoryHelper {
          * @see     com.sun.star.lang.XSingleServiceFactory
          */
         public Object createInstance()
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
         {
             return createInstanceWithContext( null );
@@ -311,7 +311,7 @@ public class FactoryHelper {
          * @see     com.sun.star.lang.XSingleServiceFactory
          */
         public Object createInstanceWithArguments(Object[] args)
-            throws com.sun.star.uno.Exception,
+            throws cpo.uno.Exception,
                    com.sun.star.uno.RuntimeException
         {
             return createInstanceWithArgumentsAndContext( args, null );

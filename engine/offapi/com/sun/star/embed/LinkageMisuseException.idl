@@ -28,7 +28,7 @@
     Or if embedded object is misused as a linked object.
     </p>
  */
-published exception LinkageMisuseException: com::sun::star::uno::Exception
+published exception LinkageMisuseException: cpo::uno::Exception
 {
 };
 

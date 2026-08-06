@@ -22,7 +22,7 @@ module com { module sun { module star { module java {
 /** indicates that an operation involving Java (probably executing Java code)
     failed due to a wrong Java version.
  */
-published exception WrongJavaVersionException: com::sun::star::uno::Exception
+published exception WrongJavaVersionException: cpo::uno::Exception
 {
     /** contains the lowest Java version for which the operation would
         succeed, or is left empty if this is unknown.

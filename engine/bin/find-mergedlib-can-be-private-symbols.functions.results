@@ -20144,7 +20144,7 @@ ooo::vba::ConcreteXShapeGeometryAttributes::setTop(double)
 ooo::vba::ConcreteXShapeGeometryAttributes::setWidth(double)
 ooo::vba::ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
 ooo::vba::ContainerUtilities::FieldInList(cpo::uno::Sequence<rtl::OUString> const&, rtl::OUString const&)
-ooo::vba::DebugHelper::basicexception(com::sun::star::uno::Exception const&, ErrCode, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
+ooo::vba::DebugHelper::basicexception(cpo::uno::Exception const&, ErrCode, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 ooo::vba::Millimeter::Millimeter()
 ooo::vba::Millimeter::Millimeter(double)
 ooo::vba::Millimeter::getInHundredthsOfOneMillimeter() const

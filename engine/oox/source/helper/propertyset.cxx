@@ -40,7 +40,7 @@ void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
     {
         mxPropSetInfo = mxPropSet->getPropertySetInfo();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -52,7 +52,7 @@ bool PropertySet::hasProperty( sal_Int32 nPropId ) const
         const OUString& rPropName = PropertyMap::getPropertyName( nPropId );
         return mxPropSetInfo->hasPropertyByName( rPropName );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;
@@ -83,7 +83,7 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
         mxMultiPropSet->setPropertyValues( rPropNames, rValues );
         return;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         SAL_WARN( "oox", "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
     }

@@ -1203,7 +1203,7 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
     {                                                       \
         throw;                                              \
     }                                                       \
-    catch (const Exception& e)                              \
+    catch (const cpo::uno::Exception& e)                              \
     {                                                       \
         Any a(cppu::getCaughtException());                  \
         throw WrappedTargetRuntimeException(                \

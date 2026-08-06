@@ -1412,7 +1412,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 pBasicBox->select(*xRootEntry);
             }
         }
-        catch (const uno::Exception& )
+        catch (const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }

@@ -336,7 +336,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         css::uno::Reference<css::lang::XComponent>(
             xContext, css::uno::UNO_QUERY_THROW)->dispose();
         return nError;
-    } catch (css::uno::Exception & e) {
+    } catch (cpo::uno::Exception & e) {
         std::cerr << "ERROR: " << e.Message << '\n';
         return EXIT_FAILURE;
     }

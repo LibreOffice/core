@@ -148,7 +148,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase() + "-" + sDesktopName.toAsciiLowerCase();
 #endif
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
     }
 #else
@@ -188,7 +188,7 @@ bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame:
         bool bSuccess = !rInfo.sID.isEmpty();
         return bSuccess;
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {}
 
     return false;
@@ -244,7 +244,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
             if ( xPSI->hasPropertyByName( u"IconId"_ustr ) )
                 xSet->getPropertyValue( u"IconId"_ustr ) >>= nIcon;
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("fwk");
         }

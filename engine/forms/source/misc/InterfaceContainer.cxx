@@ -200,7 +200,7 @@ void OInterfaceContainer::clonedFrom(const OInterfaceContainer& _cloneSource)
     {
         throw;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         throw WrappedTargetRuntimeException(
             u"Could not clone the given interface hierarchy."_ustr,

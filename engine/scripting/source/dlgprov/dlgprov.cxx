@@ -245,7 +245,7 @@ namespace dlgprov
             {
                 xInput = xSFI->openFileRead( aURL );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {}
         }
         else
@@ -580,7 +580,7 @@ namespace dlgprov
             }
         }
         catch ( const RuntimeException& ) { throw; }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             const Any aError( ::cppu::getCaughtException() );
             throw WrappedTargetRuntimeException( OUString(), *this, aError );

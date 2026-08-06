@@ -187,7 +187,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::Exception&)
+    catch(const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }

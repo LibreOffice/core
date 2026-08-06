@@ -80,12 +80,12 @@ def createUnoStruct(typeName, *args, **kwargs):
 
     1) No additional argument.
        In this case, you get a default constructed UNO structure.
-       (e.g. `createUnoStruct("com.sun.star.uno.Exception")`)
+       (e.g. `createUnoStruct("cpo.uno.Exception")`)
     2) Exactly one additional argument that is an instance of typeName.
        In this case, a copy constructed instance of typeName is returned
-       (e.g. `createUnoStruct("com.sun.star.uno.Exception" , e)`)
+       (e.g. `createUnoStruct("cpo.uno.Exception" , e)`)
     3) As many additional arguments as the number of elements within typeName
-       (e.g. `createUnoStruct("com.sun.star.uno.Exception", "foo error" , self)`).
+       (e.g. `createUnoStruct("cpo.uno.Exception", "foo error" , self)`).
     4) Keyword arguments to give values for each element of the struct by name.
     5) A mix of 3) and 4), such that each struct element is given a value exactly once,
        either by a positional argument or by a keyword argument.

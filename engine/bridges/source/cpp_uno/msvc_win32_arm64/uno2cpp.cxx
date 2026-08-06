@@ -28,7 +28,7 @@
 #include <types.hxx>
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <rtl/textenc.h>

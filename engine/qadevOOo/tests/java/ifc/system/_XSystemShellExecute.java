@@ -75,7 +75,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
             XMultiServiceFactory xMSF = tParam.getMSF();
             Object fa = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             xFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Couldn't create SimpleFileAccess:" + e);
             tRes.tested("execute()", false);
             return;
@@ -88,7 +88,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
         while (i < 20 && !bExist) {
             try {
                 bExist = xFileAccess.exists(cResURL);
-            } catch(com.sun.star.uno.Exception e) {
+            } catch(cpo.uno.Exception e) {
                 log.println("Exception:" + e);
             }
             waitForEventIdle();

@@ -87,7 +87,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const cpo::uno::Any& aAny )
     {
         // conflicts with core and extended properties are possible
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "Can not add custom property!" );
     }
@@ -700,7 +700,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     {
         throw;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw xml::sax::SAXException(

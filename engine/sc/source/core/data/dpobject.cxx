@@ -89,7 +89,7 @@ using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
@@ -247,7 +247,7 @@ void DBConnector::getValue(tools::Long nCol, ScDPItemData &rData, SvNumFormatTyp
                     mrCache.InternString(nCol, mxRow->getString(nCol+1)));
         }
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         rData.SetEmpty();
     }
@@ -894,7 +894,7 @@ void ScDPObject::CreateObjects()
             {
                 xRef->refresh();
             }
-            catch(uno::Exception&)
+            catch(cpo::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION( "sc", "exception in refresh");
             }
@@ -1388,7 +1388,7 @@ OUString ScDPObject::GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int3
                 {
                     aName = xDimName->getName();
                 }
-                catch(uno::Exception&)
+                catch(cpo::uno::Exception&)
                 {
                 }
                 if ( bData )
@@ -1431,7 +1431,7 @@ bool ScDPObject::IsDuplicated( tools::Long nDim )
                     if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                         bDuplicated = true;
                 }
-                catch(uno::Exception&)
+                catch(cpo::uno::Exception&)
                 {
                 }
             }
@@ -1451,7 +1451,7 @@ tools::Long ScDPObject::GetDimCount()
             if ( xDimsName.is() )
                 nRet = xDimsName->getElementNames().getLength();
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
     }
@@ -2286,7 +2286,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
                 {
                     aSubAny = xLevProp->getPropertyValue( SC_UNO_DP_SUBTOTAL2 );
                 }
-                catch(uno::Exception&)
+                catch(cpo::uno::Exception&)
                 {
                 }
                 cpo::uno::Sequence<sal_Int16> aSeq;
@@ -2381,7 +2381,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
                 if (aOrigAny >>= nTmp)
                     nDupSource = nTmp;
             }
-            catch(uno::Exception&)
+            catch(cpo::uno::Exception&)
             {
             }
 
@@ -2426,7 +2426,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
                     xDimProp->getPropertyValue(SC_UNO_DP_REFVALUE)
                         >>= rField.maFieldRef;
             }
-            catch (uno::Exception&)
+            catch (cpo::uno::Exception&)
             {
             }
         }
@@ -2495,7 +2495,7 @@ void ScDPObject::FillOldParam(ScPivotParam& rParam) const
         rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
                     SC_UNO_DP_REPEATEMPTY );
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
         // no error
     }
@@ -2541,7 +2541,7 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
         xLevProp->getPropertyValue( SC_UNO_DP_AUTOSHOW )
             >>= rData.maShowInfo;
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
     }
 }
@@ -2568,7 +2568,7 @@ void ScDPObject::FillLabelDataForDimension(
         cpo::uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
         aOrigAny >>= nOrigPos;
     }
-    catch(uno::Exception&)
+    catch(cpo::uno::Exception&)
     {
     }
 
@@ -2778,7 +2778,7 @@ OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSour
                 {
                     aName = xDimName->getName();
                 }
-                catch(uno::Exception&)
+                catch(cpo::uno::Exception&)
                 {
                 }
             }
@@ -3052,7 +3052,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             }
             xRet.set( xInterface, uno::UNO_QUERY );
         }
-        catch(uno::Exception&)
+        catch(cpo::uno::Exception&)
         {
         }
     }
@@ -3556,7 +3556,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
                                                       rError.Message));
         xInfoBox->run();
     }
-    catch ( uno::Exception& )
+    catch ( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
     }

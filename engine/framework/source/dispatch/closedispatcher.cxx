@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             if( aVal >>= bState )
                 bQuickstarterRunning = bState;
         }
-        catch( const css::uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
         }
         bSuccess = bQuickstarterRunning ? implts_terminateApplication() : implts_establishBackingMode();

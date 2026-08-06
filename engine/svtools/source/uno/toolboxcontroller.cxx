@@ -127,7 +127,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
         {
             xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr),UNO_QUERY);
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
         }
     }
@@ -230,7 +230,7 @@ void ToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
                 if ( xDispatch.is() && xStatusListener.is() )
                     xDispatch->removeStatusListener( xStatusListener, aTargetURL );
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -376,7 +376,7 @@ void ToolboxController::addStatusListener( const OUString& rCommandURL )
                         if ( xOldDispatch.is() )
                             xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -392,7 +392,7 @@ void ToolboxController::addStatusListener( const OUString& rCommandURL )
         if ( xDispatch.is() )
             xDispatch->addStatusListener( xStatusListener, aTargetURL );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -419,7 +419,7 @@ void ToolboxController::removeStatusListener( const OUString& rCommandURL )
         if ( xDispatch.is() && xStatusListener.is() )
             xDispatch->removeStatusListener( xStatusListener, aTargetURL );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -456,7 +456,7 @@ void ToolboxController::bindListener()
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -469,7 +469,7 @@ void ToolboxController::bindListener()
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
-                catch ( Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
 
@@ -491,7 +491,7 @@ void ToolboxController::bindListener()
                             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                         }
                     }
-                    catch ( Exception& )
+                    catch ( cpo::uno::Exception& )
                     {
                     }
                 }
@@ -526,13 +526,13 @@ void ToolboxController::bindListener()
                     aFeatureStateEvent.State = Any();
                     xStatusListener->statusChanged( aFeatureStateEvent );
                 }
-                catch ( Exception& )
+                catch ( cpo::uno::Exception& )
                 {
                 }
             }
         }
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -566,7 +566,7 @@ void ToolboxController::unbindListener()
             {
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
             }
-            catch ( Exception& )
+            catch ( cpo::uno::Exception& )
             {
             }
         }
@@ -615,7 +615,7 @@ void ToolboxController::updateStatus( const OUString& rCommandURL )
         xDispatch->addStatusListener( xStatusListener, aTargetURL );
         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
     }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     {
     }
 }
@@ -638,7 +638,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
             pDispatchInfo.release();
 
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

@@ -170,7 +170,7 @@ bool RtfFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescript
         // cannot throw WrongFormatException directly :(
         throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), anyEx);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter", "Exception caught");
     }

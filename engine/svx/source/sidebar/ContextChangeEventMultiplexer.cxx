@@ -76,7 +76,7 @@ OUString ContextChangeEventMultiplexer::GetModuleName (
             frame::ModuleManager::create( comphelper::getProcessComponentContext() );
         return xModuleManager->identify(rxFrame);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // An exception typically means that a context change is notified
         // during initialization or destruction of a view.

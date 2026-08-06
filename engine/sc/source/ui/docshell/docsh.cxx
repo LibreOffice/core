@@ -743,7 +743,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pScHint->GetTab1()) };
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
-            catch( uno::Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
         }
@@ -869,7 +869,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                         }
                     }
-                    catch ( uno::Exception & )
+                    catch ( cpo::uno::Exception & )
                     {
                     }
 
@@ -915,7 +915,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
                                     bOwnEntry = aControlFile.HasOwnEntry();
                                 }
-                                catch ( uno::Exception& )
+                                catch ( cpo::uno::Exception& )
                                 {
                                     bEntriesNotAccessible = true;
                                 }
@@ -943,7 +943,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                                 aUserName = aData[LockFileComponent::SYSUSERNAME];
                                             }
                                         }
-                                        catch ( uno::Exception& )
+                                        catch ( cpo::uno::Exception& )
                                         {
                                             bNoLockAccess = true;
                                         }
@@ -1061,7 +1061,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     }
                                 }
                             }
-                            catch ( uno::Exception& )
+                            catch ( cpo::uno::Exception& )
                             {
                                 TOOLS_WARN_EXCEPTION( "sc", "SfxEventHintId::SaveDoc" );
                                 mod->SetInSharedDocSaving(false);
@@ -1071,7 +1071,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
                                     xClose->close( true );
                                 }
-                                catch ( uno::Exception& )
+                                catch ( cpo::uno::Exception& )
                                 {
                                 }
                             }
@@ -3062,7 +3062,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
     {
         bSlotExecutable = false;
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return bSlotExecutable;
@@ -3108,7 +3108,7 @@ bool ScDocShell::PrepareClose( bool bUI )
             // if event processor throws VetoException, macro has vetoed close
             return false;
         }
-        catch( uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }

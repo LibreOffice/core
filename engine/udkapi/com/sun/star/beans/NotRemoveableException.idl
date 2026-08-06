@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module beans {
 /** This exception is thrown to indicate that removing a property from an
     XPropertyContainer is not allowed.
  */
-published exception NotRemoveableException: com::sun::star::uno::Exception
+published exception NotRemoveableException: cpo::uno::Exception
 {
 };
 

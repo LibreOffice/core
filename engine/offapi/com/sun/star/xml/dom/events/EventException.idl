@@ -20,7 +20,7 @@
 module com { module sun { module star { module xml { module dom { module events {
 
 // Introduced in DOM Level 2:
-exception EventException: com::sun::star::uno::Exception {
+exception EventException: cpo::uno::Exception {
     short code;
 };
 

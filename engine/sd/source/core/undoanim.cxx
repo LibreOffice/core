@@ -33,7 +33,7 @@
 namespace com::sun::star::animations { class XAnimationNode; }
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using ::cpo::uno::Exception;
 using namespace ::com::sun::star::animations;
 
 namespace sd
@@ -58,7 +58,7 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
         if( pThePage->mxAnimationNode.is() )
             mpImpl->mxOldNode = ::sd::Clone( pThePage->getAnimationNode() );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::UndoAnimation()");
     }
@@ -85,7 +85,7 @@ void UndoAnimation::Undo()
 
         mpImpl->mpPage->setAnimationNode( xOldNode );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::Undo()");
     }
@@ -100,7 +100,7 @@ void UndoAnimation::Redo()
             xNewNode = ::sd::Clone( mpImpl->mxNewNode );
         mpImpl->mpPage->setAnimationNode( xNewNode );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::Redo()");
     }

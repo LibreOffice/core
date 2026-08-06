@@ -164,7 +164,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
                         uno::UNO_SET_THROW);
                     mxPlayer->start();
                 }
-                catch (uno::Exception&)
+                catch (cpo::uno::Exception&)
                 {
                 }
             }

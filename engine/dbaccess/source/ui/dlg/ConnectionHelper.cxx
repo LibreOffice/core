@@ -490,7 +490,7 @@ using namespace cpo::uno;
             const bool bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
             eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             eExists = pHandler->isDoesNotExist() ? PATH_NOT_EXIST : (bIsFile ? PATH_NOT_EXIST : PATH_NOT_KNOWN);
         }
@@ -573,7 +573,7 @@ using namespace cpo::uno;
                     return false;
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
             return false;

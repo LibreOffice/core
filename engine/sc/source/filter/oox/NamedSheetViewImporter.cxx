@@ -124,7 +124,7 @@ void NamedSheetViewImporter::finalizeImport()
                         }
                     }
                 }
-                catch (const css::uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     SAL_WARN("sc", "Failed to apply filter to named sheet view");
                 }

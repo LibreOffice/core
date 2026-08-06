@@ -532,7 +532,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         o_rEmbeddedURL = "vnd.sun.star.Package:" + media + "/" + filename;
         return true;
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         SAL_WARN("avmedia",
                 "Exception while trying to embed media");
@@ -570,7 +570,7 @@ bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
                 comphelper::getProcessComponentContext());
         tempContent.writeStream(xInStream, true); // copy stream to file
     }
-    catch (uno::Exception const&)
+    catch (cpo::uno::Exception const&)
     {
         TOOLS_WARN_EXCEPTION("avmedia", "");
         return false;

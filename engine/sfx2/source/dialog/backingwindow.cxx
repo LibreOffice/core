@@ -179,7 +179,7 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     {
         mxContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "fwk", "BackingWindow" );
     }
@@ -533,7 +533,7 @@ IMPL_STATIC_LINK_NOARG(BackingWindow, ExtLinkClickHdl, weld::Button&, void)
         xSystemShellExecute->execute(sURL, OUString(),
             css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }
@@ -651,7 +651,7 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
     {
         dispatchURL( pTemplateItem->getPath(), u"_default"_ustr, xFrame, aArgs );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -672,7 +672,7 @@ IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
     {
         dispatchURL( pViewItem->getPath(), u"_default"_ustr, xFrame, aArgs );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }
@@ -704,7 +704,7 @@ static void implDispatchDelayed( void*, void* pArg )
     {
         pDispatch->xDispatch->dispatch( pDispatch->aDispatchURL, pDispatch->aArgs );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -750,7 +750,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
     {
         throw;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

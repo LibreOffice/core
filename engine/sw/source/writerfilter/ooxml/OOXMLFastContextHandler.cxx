@@ -1059,7 +1059,7 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const cpo::uno::Exception& e)
     {
         auto a = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(e.Message, e.Context, a);

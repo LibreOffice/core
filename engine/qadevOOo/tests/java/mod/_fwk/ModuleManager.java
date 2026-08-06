@@ -28,7 +28,7 @@ import util.DesktopTools;
 import util.SOfficeFactory;
 
 
-import com.sun.star.uno.Exception;
+import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;

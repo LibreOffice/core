@@ -24,7 +24,7 @@ module com { module sun { module star { module configuration { module backend {
 /** is passed to an InteractionHandler when merging fails due to
     invalid layer data or access problems.
  */
-exception MergeRecoveryRequest: ::com::sun::star::uno::Exception
+exception MergeRecoveryRequest: ::cpo::uno::Exception
 {
     /**
         data that provides more detailed information about the

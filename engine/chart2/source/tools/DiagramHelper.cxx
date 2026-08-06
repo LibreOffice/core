@@ -135,7 +135,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -243,7 +243,7 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
                 {
                     xKeyProps = xNumberFormats->getByKey( nNumberFormat );
                 }
-                catch( const uno::Exception & )
+                catch( const cpo::uno::Exception & )
                 {
                     DBG_UNHANDLED_EXCEPTION("chart2");
                 }

@@ -42,7 +42,7 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
         m_xTruncate.set( m_xOutputStream, uno::UNO_QUERY );
         m_xAsyncOutputMonitor.set( m_xOutputStream, uno::UNO_QUERY );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
         m_xStream.clear();
         m_xSeekable.clear();

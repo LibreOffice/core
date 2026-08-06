@@ -415,7 +415,7 @@ public class ParcelContainer implements XNameAccess {
                            + getParcelContainerDir());
             LogUtils.DEBUG("TRACE: " + LogUtils.getTrace(e));
             throw new com.sun.star.lang.WrappedTargetException(e);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             LogUtils.DEBUG("ParcelContainer.loadParcels caught exception processing folders for "
                            + getParcelContainerDir());
             LogUtils.DEBUG("TRACE: " + LogUtils.getTrace(e));
@@ -530,7 +530,7 @@ public class ParcelContainer implements XNameAccess {
             LogUtils.DEBUG("ParcelContainer.loadParcel() caught IOException while accessing "
                            + parcelDescUrl + ": " + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = "
                            + parcelDescUrl + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
@@ -588,7 +588,7 @@ public class ParcelContainer implements XNameAccess {
         } catch (com.sun.star.ucb.CommandAbortedException ce) {
             LogUtils.DEBUG(" ** ParcelContainer Renaming failed with " + ce);
             throw new com.sun.star.lang.WrappedTargetException(ce);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             LogUtils.DEBUG(" ** ParcelContainer Renaming failed with " + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
@@ -665,7 +665,7 @@ public class ParcelContainer implements XNameAccess {
                        XUriReferenceFactory.class, xMcFac.createInstanceWithContext(
                            "com.sun.star.uri.UriReferenceFactory", m_xCtx));
 
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             LogUtils.DEBUG("Problems parsing  URL:" + e.toString());
             throw new com.sun.star.lang.IllegalArgumentException(
                 e, "Problems parsing URL");

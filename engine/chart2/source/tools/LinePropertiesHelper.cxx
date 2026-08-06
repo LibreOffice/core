@@ -125,7 +125,7 @@ bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -150,7 +150,7 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
                 xLineProperties->setPropertyValue( u"LineTransparence"_ustr, cpo::uno::Any( sal_Int16(0) ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -169,7 +169,7 @@ void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
                 xLineProperties->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
@@ -185,7 +185,7 @@ void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
             xLineProperties->setPropertyValue( u"LineColor"_ustr, cpo::uno::Any( nColor ) );
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -118,7 +118,7 @@ void OLEHandler::lcl_attribute(Id rName, const Value & rVal)
                         uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
                         xShapeProps->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(false));
                     }
-                    catch( const uno::Exception& )
+                    catch( const cpo::uno::Exception& )
                     {
                         TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
                     }
@@ -185,7 +185,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                     if( m_rDomainMapper.IsInHeaderFooter() )
                         xShapeProps->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(m_nWrapMode != text::WrapTextMode_THROUGH));
                 }
-                catch( const uno::Exception& )
+                catch( const cpo::uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
                 }
@@ -316,7 +316,7 @@ OUString OLEHandler::copyOLEOStream(rtl::Reference<SwXTextDocument> const& xText
         xEmbeddedResolver->dispose();
         m_aURL = aURL;
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "OLEHandler::createOLEObject");
     }

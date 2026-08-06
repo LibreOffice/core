@@ -56,7 +56,7 @@ XMLThemeContext::~XMLThemeContext()
         {
             xPropertySet->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(xTheme));
         }
-        catch (uno::Exception&)
+        catch (cpo::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("xmloff");
         }

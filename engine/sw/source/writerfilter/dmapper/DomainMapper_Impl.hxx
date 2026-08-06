@@ -704,7 +704,7 @@ private:
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
-    /// @throws css::uno::Exception
+    /// @throws cpo::uno::Exception
     rtl::Reference<SwXFieldMaster> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
     rtl::Reference<SwXDocumentSettings> const & GetDocumentSettings();
 

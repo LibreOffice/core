@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
         {
             xGraphic = xGraphicHelper->loadGraphic(u"NoneExistent.png"_ustr);
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
         }
         CPPUNIT_ASSERT_EQUAL(false, xGraphic.is());

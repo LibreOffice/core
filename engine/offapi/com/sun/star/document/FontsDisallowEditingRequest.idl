@@ -12,7 +12,7 @@ module com { module sun { module star { module document {
 /** Some fonts embedded in the document have no editing permissions.
     The document can only be opened read-only.
 */
-exception FontsDisallowEditingRequest : ::com::sun::star::uno::Exception
+exception FontsDisallowEditingRequest : ::cpo::uno::Exception
 {
     /** The names of the fonts that lack editing permission (\n-separated) */
     string aFontNames;

@@ -912,7 +912,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
             xPropSet->setPropertyValue( sIsContinuousNumbering, Any(m_bConsecutive) );
         }
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.style", "" );
     }

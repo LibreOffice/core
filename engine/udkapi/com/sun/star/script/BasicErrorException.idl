@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module script {
 
 /** is thrown in order to transport an error to Basic.
  */
-published exception BasicErrorException: com::sun::star::uno::Exception
+published exception BasicErrorException: cpo::uno::Exception
 {
 
     /** The error code.

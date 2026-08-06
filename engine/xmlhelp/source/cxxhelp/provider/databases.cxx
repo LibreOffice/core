@@ -1749,7 +1749,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
 
                 m_xSFA->kill( aCreateTestFolder );
             }
-            catch (const Exception &)
+            catch (const cpo::uno::Exception &)
             {
             }
 
@@ -1776,7 +1776,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                         {
                             m_xSFA->kill( aTempFileURL );
                         }
-                        catch (const Exception &)
+                        catch (const cpo::uno::Exception &)
                         {
                         }
                         m_xSFA->createFolder( aTempFileURL );
@@ -1794,7 +1794,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 else
                     aIndexFolder = aZipDir + "/help.idxl";
             }
-            catch (const Exception &)
+            catch (const cpo::uno::Exception &)
             {
             }
         }
@@ -1813,7 +1813,7 @@ void IndexFolderIterator::deleteTempIndexFolder( std::u16string_view aIndexFolde
         {
             m_xSFA->kill( aTmpFolder );
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
         }
     }

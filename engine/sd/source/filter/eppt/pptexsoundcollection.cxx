@@ -47,7 +47,7 @@ ExSoundEntry::ExSoundEntry(OUString aString)
         aCnt.getPropertyValue(u"Size"_ustr) >>= nVal;
         nFileSize = static_cast<sal_uInt32>(nVal);
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }
@@ -151,7 +151,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             }
         }
     }
-    catch( css::uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }

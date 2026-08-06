@@ -61,7 +61,7 @@ void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::fram
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
 
     }
@@ -86,7 +86,7 @@ void PageCollector::CollectNonCustomShowPages( const css::uno::Reference< css::f
             }
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }
@@ -127,7 +127,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             aIter->bUsed = true;
         }
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 }

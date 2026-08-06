@@ -115,7 +115,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         xShell->execute(sSystemURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);
     }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         {
             impl_notifyResultListener(xListener, css::frame::DispatchResultState::FAILURE);
         }

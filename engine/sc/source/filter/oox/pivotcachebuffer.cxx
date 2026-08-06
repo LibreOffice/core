@@ -679,7 +679,7 @@ OUString PivotCacheField::createDateGroupField( const rtl::Reference< ScDataPilo
         {
             xDPGroupField = rxBaseDPField->createScDateGroup( aGroupInfo );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
@@ -773,7 +773,7 @@ OUString PivotCacheField::createParentGroupField( const rtl::Reference< ScDataPi
                         aAutoName = xGroupName->getName();
                     }
                 }
-                catch( Exception const & )
+                catch( cpo::uno::Exception const & )
                 {
                     TOOLS_WARN_EXCEPTION("sc", "PivotCacheField::createParentGroupField" );
                 }
@@ -801,7 +801,7 @@ OUString PivotCacheField::createParentGroupField( const rtl::Reference< ScDataPi
                             pName->maGroupName = aGroupName;
                 }
             }
-            catch( Exception const & )
+            catch( cpo::uno::Exception const & )
             {
                 TOOLS_WARN_EXCEPTION("sc", "PivotCacheField::createParentGroupField" );
             }

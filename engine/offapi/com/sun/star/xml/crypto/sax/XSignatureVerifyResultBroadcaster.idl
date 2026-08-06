@@ -38,7 +38,7 @@ interface XSignatureVerifyResultBroadcaster : com::sun::star::uno::XInterface
      */
     void addSignatureVerifyResultListener(
         [in] XSignatureVerifyResultListener listener)
-        raises( com::sun::star::uno::Exception );
+        raises( cpo::uno::Exception );
 
     /**
      * Removes a signature verify result listener.

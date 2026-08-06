@@ -134,7 +134,7 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
     {
         xHandler->handle( xReq );
     }
-    catch( uno::Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

@@ -43,7 +43,7 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
     {
         m_xMetaData = _xConnection->getMetaData();
     }
-    catch(const Exception&)
+    catch(const cpo::uno::Exception&)
     {
         OSL_FAIL("No Metadata available!");
     }
@@ -85,7 +85,7 @@ Reference< XNameAccess > OCatalog::getTables(  )
         // allowed to leave this method
         throw;
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // allowed
     }
@@ -109,7 +109,7 @@ Reference< XNameAccess > OCatalog::getViews(  )
         // allowed to leave this method
         throw;
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // allowed
     }
@@ -133,7 +133,7 @@ Reference< XNameAccess > OCatalog::getUsers(  )
         // allowed to leave this method
         throw;
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // allowed
     }
@@ -157,7 +157,7 @@ Reference< XNameAccess > OCatalog::getGroups(  )
         // allowed to leave this method
         throw;
     }
-    catch( const Exception& )
+    catch( const cpo::uno::Exception& )
     {
         // allowed
     }

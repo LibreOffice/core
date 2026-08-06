@@ -270,7 +270,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     }
                 }
             }
-            catch( const uno::Exception & )
+            catch( const cpo::uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
@@ -362,7 +362,7 @@ rtl::Reference< Axis > AxisHelper::createAxis(
         if( pRefSizeProvider )
             pRefSizeProvider->setValuesAtPropertySet( xAxis );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -563,7 +563,7 @@ rtl::Reference< Axis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, bool bMai
         rtl::Reference< BaseCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 );
         xRet = AxisHelper::getAxis( nDimensionIndex, bMainAxis ? 0 : 1, xCooSys );
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
     }
     return xRet;
@@ -790,7 +790,7 @@ std::vector< rtl::Reference< Axis > > AxisHelper::getAllAxesOfCoordinateSystem(
                                 aAxisVector.push_back( xAxis );
                         }
                     }
-                    catch( const uno::Exception & )
+                    catch( const cpo::uno::Exception & )
                     {
                         DBG_UNHANDLED_EXCEPTION("chart2");
                     }
@@ -1046,7 +1046,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
             xVerticalMainAxis->setScaleData(aScale);
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
@@ -1071,7 +1071,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
             xVerticalSecondaryAxis->setScaleData(aScale);
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

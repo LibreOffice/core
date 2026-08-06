@@ -286,7 +286,7 @@ void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
         if( xFlushableClipboard.is() )
             xFlushableClipboard->flushClipboard();
     }
-    catch( const css::uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
     }
 }

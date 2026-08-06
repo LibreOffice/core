@@ -256,7 +256,7 @@ bool OAuth2Request::Impl::openBrowser() const
         exec->execute(authUrl, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         return true;
     }
-    catch (const css::uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any exc(::cppu::getCaughtException());
         OUString msg(::comphelper::anyToString(exc));

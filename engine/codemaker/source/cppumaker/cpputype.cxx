@@ -292,7 +292,7 @@ void CppuType::addGetCppuTypeIncludes(codemaker::cppumaker::Includes & includes)
 const
 {
     if (name_ == "com.sun.star.uno.XInterface"
-        || name_ == "com.sun.star.uno.Exception") {
+        || name_ == "cpo.uno.Exception") {
         includes.addType();
         includes.addCppuUnotypeHxx();
         includes.addSalTypesH();
@@ -552,7 +552,7 @@ void CppuType::dumpHFileContent(
     }
     dumpDeclaration(out);
     if (!(name_ == "com.sun.star.uno.XInterface"
-          || name_ == "com.sun.star.uno.Exception"
+          || name_ == "cpo.uno.Exception"
           || isPolymorphic())) {
         out << "\n" << indent()
             << ("inline ::cpo::uno::Type const &"
@@ -569,7 +569,7 @@ void CppuType::dumpHFileContent(
 void CppuType::dumpGetCppuType(FileStream & out)
 {
     if (name_ == "com.sun.star.uno.XInterface") {
-    } else if (name_ == "com.sun.star.uno.Exception") {
+    } else if (name_ == "cpo.uno.Exception") {
     } else if (m_cppuTypeLeak) {
         dumpLightGetCppuType(out);
     } else if (m_cppuTypeDynamic) {
@@ -2711,7 +2711,7 @@ private:
 void ExceptionType::dumpHdlFile(
         FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    if (name_ == "com.sun.star.uno.Exception")
+    if (name_ == "cpo.uno.Exception")
     {
         includes.addCustom(u"#if OSL_DEBUG_LEVEL > 0"_ustr);
         includes.addCustom(u"#include <o3tl/source_location.hxx>"_ustr);
@@ -2739,7 +2739,7 @@ void ExceptionType::dumpHppFile(
     includes.dump(out, &name_, true);
 
     // for the output operator below
-    if (name_ == "com.sun.star.uno.Exception")
+    if (name_ == "cpo.uno.Exception")
     {
         out << "#include <ostream>\n";
         out << "#include <typeinfo>\n";
@@ -2786,7 +2786,7 @@ void ExceptionType::dumpHppFile(
     } else {
         out << " ";
     }
-    if (name_ == "com.sun.star.uno.Exception")
+    if (name_ == "cpo.uno.Exception")
     {
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
         out << "    if (!Message.isEmpty())\n";
@@ -2839,7 +2839,7 @@ void ExceptionType::dumpHppFile(
         } else {
             out << " ";
         }
-        if (name_ == "com.sun.star.uno.Exception")
+        if (name_ == "cpo.uno.Exception")
         {
             out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
             out << "    if (!Message.isEmpty())\n";
@@ -2851,11 +2851,11 @@ void ExceptionType::dumpHppFile(
     }
 
     // Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
-    if (name_ == "com.sun.star.uno.Exception")
+    if (name_ == "cpo.uno.Exception")
     {
         out << "template< typename charT, typename traits >\n";
         out << "inline ::std::basic_ostream<charT, traits> & operator<<(\n";
-        out << "    ::std::basic_ostream<charT, traits> & os, ::com::sun::star::uno::Exception const & exception)\n";
+        out << "    ::std::basic_ostream<charT, traits> & os, ::cpo::uno::Exception const & exception)\n";
         out << "{\n";
         out << "    // the class name is useful because exception throwing code does not always pass in a useful message\n";
         out << "    os << typeid(exception).name();\n";
@@ -2900,7 +2900,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
     OUString base(entity_->getDirectBase());
     bool baseException = false;
     if (!base.isEmpty()) {
-        if (base == "com.sun.star.uno.Exception") {
+        if (base == "cpo.uno.Exception") {
             baseException = true;
         } else {
             out << indent()
@@ -3112,7 +3112,7 @@ bool ExceptionType::dumpBaseMembers(
         // constructors, since most of the time we don't pass a Context object in to the exception
         // throw sites.
         if (eligibleForDefaults
-            && base == "com.sun.star.uno.Exception"
+            && base == "cpo.uno.Exception"
             && memberCount == 1
             && member.name == "Context"
             && member.type == "com.sun.star.uno.XInterface") {
@@ -3450,7 +3450,7 @@ void ServiceType::dumpHppFile(
         includes.add("com.sun.star.uno.XComponentContext"_ostr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : entity_->getConstructors()) {
             if (cons.defaultConstructor) {
-                includes.add("com.sun.star.uno.Exception"_ostr);
+                includes.add("cpo.uno.Exception"_ostr);
                 includes.add("com.sun.star.uno.RuntimeException"_ostr);
             } else {
                 if (!hasRestParameter(cons)) {
@@ -3472,7 +3472,7 @@ void ServiceType::dumpHppFile(
                     tree.add(u2b(ex), m_typeMgr);
                 }
                 if (!tree.getRoot().present) {
-                    includes.add("com.sun.star.uno.Exception"_ostr);
+                    includes.add("cpo.uno.Exception"_ostr);
                     includes.add("com.sun.star.uno.RuntimeException"_ostr);
                     includeExceptions(includes, &tree.getRoot());
                 }
@@ -3553,7 +3553,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "throw;\n";
                 dec();
                 o << indent()
-                  << "} catch (const ::css::uno::Exception & the_exception) {\n";
+                  << "} catch (const ::cpo::uno::Exception & the_exception) {\n";
                 inc();
                 o << indent() << "throw ::css::uno::DeploymentException(";
                 failsToSupply(o, name_, baseName);
@@ -3705,7 +3705,7 @@ void ServiceType::dumpHppFile(
                     dec();
                     dumpCatchClauses(o, &tree.getRoot());
                     o << indent()
-                      << ("} catch (const ::css::uno::Exception &"
+                      << ("} catch (const ::cpo::uno::Exception &"
                           " the_exception) {\n");
                     inc();
                     o << indent() << "throw ::css::uno::DeploymentException(";

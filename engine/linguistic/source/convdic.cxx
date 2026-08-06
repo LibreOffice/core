@@ -77,7 +77,7 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
         uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xIn = xAccess->openFileRead( rMainURL );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "failed to get input stream" );
     }
@@ -216,7 +216,7 @@ void ConvDic::Save()
         uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
-    catch (const uno::Exception &)
+    catch (const cpo::uno::Exception &)
     {
         SAL_WARN( "linguistic", "failed to get input stream" );
     }

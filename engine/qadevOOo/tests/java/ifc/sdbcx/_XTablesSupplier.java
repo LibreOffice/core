@@ -56,7 +56,7 @@ public class _XTablesSupplier extends MultiMethodTest {
         try {
             info = UnoRuntime.queryInterface
                 (XServiceInfo.class, tabs.getByName(tabNames[0])) ;
-        } catch (com.sun.star.uno.Exception e) {}
+        } catch (cpo.uno.Exception e) {}
 
         if (info != null) {
             log.println("Support : " +

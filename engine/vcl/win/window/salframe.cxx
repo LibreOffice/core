@@ -72,7 +72,7 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 
 #include <time.h>
 
@@ -803,7 +803,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         nScreenDX = aRect.GetWidth() + 1;
         nScreenDY = aRect.GetHeight() + 1;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

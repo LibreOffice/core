@@ -559,7 +559,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
             {
                 xProps->getPropertyValue(u"EnableDataTableDialog"_ustr) >>= bEnableDataTableDialog;
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -855,7 +855,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "");
     }

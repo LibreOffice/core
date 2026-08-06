@@ -118,7 +118,7 @@ OUString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
         xProps->getPropertyValue(u"VBAGlobalConstantName"_ustr) >>= aConstName;
         return aConstName;
     }
-    catch (const uno::Exception&) // not supported
+    catch (const cpo::uno::Exception&) // not supported
     {
     }
     return OUString();
@@ -421,7 +421,7 @@ bool SfxObjectShell::CloseInternal()
             {
                 xCloseable->close( true );
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 pImpl->bClosing = false;
             }
@@ -737,7 +737,7 @@ namespace
                                 :   DocumentDialogLibraryContainer::create(
                                         xContext, xStorageDoc ));
             }
-            catch (const Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("sfx.doc");
             }
@@ -1069,7 +1069,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     {
         xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps.getAsConstPropertyValueList());
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1086,7 +1086,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInte
         static const Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         return comphelper::getSomething_cast<SfxObjectShell>(xTunnel->getSomething(aSeq));
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -1102,7 +1102,7 @@ SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<css::un
         if (css::uno::Reference<css::container::XChild> xChildModel{ xChild, css::uno::UNO_QUERY })
             pResult = GetShellFromComponent(xChildModel->getParent());
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 

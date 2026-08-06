@@ -401,7 +401,7 @@ public:
             xDocProps->setPropertyValue(u"SlideSections"_ustr,
                                         cpo::uno::Any(comphelper::containerToSequence(aSectionsList)));
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             SAL_WARN("xmloff.draw", "Failed to import sections");
         }

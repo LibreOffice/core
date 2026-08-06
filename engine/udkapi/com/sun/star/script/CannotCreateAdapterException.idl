@@ -28,7 +28,7 @@
     @see com::sun::star::script::XEventAttacher
     @see com::sun::star::script::XEventAttacherManager
  */
-published exception CannotCreateAdapterException: com::sun::star::uno::Exception
+published exception CannotCreateAdapterException: cpo::uno::Exception
 {
 };
 

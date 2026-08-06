@@ -94,7 +94,7 @@ public class MutableTreeNode extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-    private void fillNode( XMutableTreeNode xNode ) throws com.sun.star.uno.Exception {
+    private void fillNode( XMutableTreeNode xNode ) throws cpo.uno.Exception {
 
         if( xNode.getChildCount() == 0 )
         {
@@ -114,7 +114,7 @@ public class MutableTreeNode extends TestCase {
         Object fileacc = null;
         try {
             fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             ex.printStackTrace();
         }
         XSimpleFileAccess sfa = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
@@ -140,7 +140,7 @@ public class MutableTreeNode extends TestCase {
             }
         } catch (CommandAbortedException ex) {
             ex.printStackTrace();
-        } catch (com.sun.star.uno.Exception ex) {
+        } catch (cpo.uno.Exception ex) {
             ex.printStackTrace();
         }
 

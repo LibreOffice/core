@@ -184,7 +184,7 @@ void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponen
         mxModel.set( rxComponent, UNO_QUERY_THROW );
         mxModelFactory.set( rxComponent, UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         throw IllegalArgumentException();
     }
@@ -417,7 +417,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
     {
         mxImpl->maArguments << rArgs[ 1 ];
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -573,7 +573,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
         sal_Int32 nVersion = aProps.getUnpackedValueOrDefault( u"FileFormatVersion"_ustr, sal_Int32( 0 ) );
         mxImpl->meVersion = OoxmlVersion( nVersion );
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         // Not ISO OOXML
     }

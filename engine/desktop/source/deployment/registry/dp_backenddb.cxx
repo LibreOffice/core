@@ -140,7 +140,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
         OSL_ASSERT(! nextNode.is());
 #endif
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -175,7 +175,7 @@ void BackendDb::revokeEntry(std::u16string_view url)
             save();
         }
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -199,7 +199,7 @@ bool BackendDb::activateEntry(std::u16string_view url)
         }
         return ret;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -223,7 +223,7 @@ bool BackendDb::hasActiveEntry(std::u16string_view url)
         return ret;
 
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -252,7 +252,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         return xpathApi->selectSingleNode(root, sExpression);
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -322,7 +322,7 @@ void BackendDb::writeVectorOfPair(
                     secondTextNode, css::uno::UNO_QUERY_THROW));
         }
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -368,7 +368,7 @@ BackendDb::readVectorOfPair(
         }
         return retVector;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -412,7 +412,7 @@ void BackendDb::writeSimpleList(
             memberNode->appendChild(textNode);
         }
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -443,7 +443,7 @@ void BackendDb::writeSimpleElement(
             doc->createTextNode(value), UNO_QUERY_THROW);
         dataNode->appendChild(dataValue);
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -493,7 +493,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         root->appendChild(keyNode);
         return keyNode;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -516,7 +516,7 @@ OUString BackendDb::readSimpleElement(
             return val->getNodeValue();
         return OUString();
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -550,7 +550,7 @@ std::deque< OUString> BackendDb::readList(
         }
         return retList;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -595,7 +595,7 @@ std::vector<OUString> BackendDb::getOneChildFromAllEntries(
     {
         throw;
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -643,7 +643,7 @@ void RegisteredDb::addEntry(OUString const & url)
             save();
         }
     }
-    catch(const css::uno::Exception &)
+    catch(const cpo::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

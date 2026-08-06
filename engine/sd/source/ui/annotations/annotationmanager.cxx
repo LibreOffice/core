@@ -199,7 +199,7 @@ void AnnotationManagerImpl::init()
         addListener();
         mxView = mrBase.GetDrawController();
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::AnnotationManagerImpl()" );
     }
@@ -210,7 +210,7 @@ void AnnotationManagerImpl::init()
         uno::Reference<document::XEventListener> xListener( this );
         xModel->addEventListener( xListener );
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 }
@@ -240,7 +240,7 @@ void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
         uno::Reference<document::XEventListener> xListener( this );
         xModel->removeEventListener( xListener );
     }
-    catch (uno::Exception&)
+    catch (cpo::uno::Exception&)
     {
     }
 

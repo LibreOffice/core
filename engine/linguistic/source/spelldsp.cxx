@@ -371,7 +371,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                                     pImplNames[i], aArgs, xContext ),
                                 UNO_QUERY );
                 }
-                catch (uno::Exception &)
+                catch (cpo::uno::Exception &)
                 {
                     SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
@@ -555,7 +555,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                                 pImplNames[i], aArgs, xContext ),
                             UNO_QUERY );
             }
-            catch (uno::Exception &)
+            catch (cpo::uno::Exception &)
             {
                 SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
             }

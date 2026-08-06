@@ -213,7 +213,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
             try {
                 xDispatch->dispatch (aURL, cpo::uno::Sequence< css::beans::PropertyValue >());
             }
-            catch(const css::uno::Exception&ev)
+            catch(const cpo::uno::Exception&ev)
             {
                 SAL_INFO("svtools", "exception on key emission: " << ev.Message);
             }
@@ -394,7 +394,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
+    catch(const cpo::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
@@ -508,7 +508,7 @@ IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback, LinkParamNone*, void)
                 m_xFrame->removeEventListener(this);
             m_xDispatch->dispatch(m_aURL, cpo::uno::Sequence< css::beans::PropertyValue >());
         }
-        catch(const css::uno::Exception&)
+        catch(const cpo::uno::Exception&)
         {
         }
     }

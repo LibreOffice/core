@@ -65,7 +65,7 @@ public class _XNamingService extends MultiMethodTest {
     public void _registerObject() throws StatusException{
         try {
             oObj.registerObject("MyFactory", regObject) ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Exception while registering object :" + e) ;
             tRes.tested("registerObject()", false) ;
             return ;
@@ -93,7 +93,7 @@ public class _XNamingService extends MultiMethodTest {
 
             tRes.tested("getRegisteredObject()" ,
                 regObject.equals(getObject)) ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Exception calling method :" + e) ;
             tRes.tested("getRegisteredObject()", false) ;
             return ;
@@ -122,7 +122,7 @@ public class _XNamingService extends MultiMethodTest {
         try {
             oObj.revokeObject("MyFactory");
             log.println("Object was revoked");
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (cpo.uno.Exception e) {
             log.println("Exception revoking object :" + e) ;
             tRes.tested("revokeObject()", false) ;
         }
@@ -137,7 +137,7 @@ public class _XNamingService extends MultiMethodTest {
             if (res) {
                 log.println("But NULL was returned");
             }
-        } catch(com.sun.star.uno.Exception e) {
+        } catch(cpo.uno.Exception e) {
             log.println("Expected exception - OK");
         }
 

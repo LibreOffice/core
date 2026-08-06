@@ -542,7 +542,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         aTemplDate = xTemplateDocProps->getModificationDate();
         bOK = true;
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("sfx.doc", "");
     }

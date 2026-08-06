@@ -141,7 +141,7 @@ void BinaryXInputStream::close()
     {
         mxInStrm->closeInput();
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         OSL_FAIL( "BinaryXInputStream::close - closing input stream failed" );
     }
@@ -158,7 +158,7 @@ sal_Int32 BinaryXInputStream::readData( StreamDataSequence& orData, sal_Int32 nB
         nRet = mxInStrm->readBytes( orData, nBytes );
         mbEof = nRet != nBytes;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         mbEof = true;
     }
@@ -192,7 +192,7 @@ void BinaryXInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     {
         mxInStrm->skipBytes( nBytes );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         mbEof = true;
     }

@@ -393,7 +393,7 @@ void BackendImpl::implProcessHelp(
                         "No help folder";
                     OWeakObject* oWeakThis = this;
                     throw deployment::DeploymentException( OUString(), oWeakThis,
-                                                           Any( uno::Exception( aErrStr, oWeakThis ) ) );
+                                                           Any( cpo::uno::Exception( aErrStr, oWeakThis ) ) );
                 }
 
                 // Scan languages
@@ -530,7 +530,7 @@ void BackendImpl::implProcessHelp(
 
                             OWeakObject* oWeakThis = this;
                             throw deployment::DeploymentException( OUString(), oWeakThis,
-                                                                   Any( uno::Exception( aErrStr, oWeakThis ) ) );
+                                                                   Any( cpo::uno::Exception( aErrStr, oWeakThis ) ) );
                         }
                     }
                 }

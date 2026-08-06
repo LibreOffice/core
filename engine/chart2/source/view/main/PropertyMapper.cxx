@@ -77,7 +77,7 @@ void PropertyMapper::setMappedProperties(
     {
         xShapeMultiProp->setPropertyValues( aNames, aValues );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
     }
@@ -130,7 +130,7 @@ void PropertyMapper::setMappedProperties(
             xShapeMultiProp->setPropertyValues( aNames, aValues );
             return; // successful
         }
-        catch( const uno::Exception& )
+        catch( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
         }
@@ -144,13 +144,13 @@ void PropertyMapper::setMappedProperties(
             {
                 xTarget->setPropertyValue( aNames[i], aValues[i] );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
@@ -225,7 +225,7 @@ void PropertyMapper::getValueMap(
                 if( aAny.hasValue() )
                     rValueMap.emplace(  rTarget, aAny );
             }
-            catch( const uno::Exception& )
+            catch( const cpo::uno::Exception& )
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
@@ -530,7 +530,7 @@ void PropertyMapper::setMultiProperties(
     {
         xTarget.setPropertyValues( rNames, rValues );
     }
-    catch( const uno::Exception& )
+    catch( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
     }

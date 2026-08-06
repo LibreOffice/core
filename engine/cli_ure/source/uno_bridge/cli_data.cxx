@@ -1050,7 +1050,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             sal_Int32 nPos = 0;
             try
             {
-                OUString usUnoException("com.sun.star.uno.Exception");
+                OUString usUnoException("cpo.uno.Exception");
                 for (; nPos < nMembers; ++nPos)
                 {
                     typelib_TypeDescriptionReference * member_type= comp_td->ppTypeRefs[nPos];
@@ -1060,7 +1060,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         sr::FieldInfo^ aField= cliType->GetField(
                             mapUnoString(comp_td->ppMemberNames[nPos]));
                         // special case for Exception.Message property
-                        // The com.sun.star.uno.Exception.Message field is mapped to the
+                        // The cpo.uno.Exception.Message field is mapped to the
                         // System.Exception property. Type.GetField("Message") returns null
                         if ( ! aField && usUnoException.equals(td.get()->pTypeName))
                         {// get Exception.Message property
@@ -1556,11 +1556,11 @@ void Bridge::map_to_cli(
         {
             //Special handling for Exception conversion. We must call constructor System::Exception
             //to pass the message string
-            if (ucss::uno::Exception::typeid->IsAssignableFrom(cliType))
+            if (ucpo::uno::Exception::typeid->IsAssignableFrom(cliType))
             {
                 //We need to get the Message field. Therefore we must obtain the offset from
                 //the typedescription. The base interface of all exceptions is
-                //com::sun::star::uno::Exception which contains the message
+                //cpo::uno::Exception which contains the message
                 typelib_CompoundTypeDescription* pCTD = comp_td;
                 while (pCTD->pBaseTypeDescription)
                     pCTD = pCTD->pBaseTypeDescription;
@@ -1586,7 +1586,7 @@ void Bridge::map_to_cli(
                 sr::ConstructorInfo^ ctorInfo = nullptr;
                 int numCtors = arCtorInfo->Length;
                 //Constructor must at least have 2 params for the base
-                //unoidl.com.sun.star.uno.Exception (String, Object);
+                //unoidl.cpo.uno.Exception (String, Object);
                 cli::array<sr::ParameterInfo^>^ arParamInfo;
                 for (int i = 0; i < numCtors; i++)
                 {
@@ -1623,7 +1623,7 @@ void Bridge::map_to_cli(
                 ((typelib_TypeDescription *)comp_td->pBaseTypeDescription)->pWeakRef, nullptr,
                 true);
         }
-        OUString usUnoException("com.sun.star.uno.Exception");
+        OUString usUnoException("cpo.uno.Exception");
         for (sal_Int32 nPos = comp_td->nMembers; nPos--; )
         {
             typelib_TypeDescriptionReference * member_type = comp_td->ppTypeRefs[ nPos ];

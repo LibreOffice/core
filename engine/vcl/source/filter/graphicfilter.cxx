@@ -1771,7 +1771,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                             }
                         }
                     }
-                    catch(const css::uno::Exception&)
+                    catch(const cpo::uno::Exception&)
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                     }

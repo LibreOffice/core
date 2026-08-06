@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module beans {
 
     @see XPropertySet
  */
-published exception PropertyVetoException: com::sun::star::uno::Exception
+published exception PropertyVetoException: cpo::uno::Exception
 {
 };
 

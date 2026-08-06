@@ -34,7 +34,7 @@ module com { module sun { module star { module document {
 
     @see XInteractionFilterSelect
 */
-published exception AmbigousFilterRequest : ::com::sun::star::uno::Exception
+published exception AmbigousFilterRequest : ::cpo::uno::Exception
 {
     /** transport URL which couldn't be detected right
      */

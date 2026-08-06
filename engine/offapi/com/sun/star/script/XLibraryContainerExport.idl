@@ -34,7 +34,7 @@ interface XLibraryContainerExport : com::sun::star::uno::XInterface
 
         An interaction handler can be passed to be used for internal
         ucb operations. Exceptions not processed by this handler will
-        be passed as com::sun::star::uno::Exception. If this parameter
+        be passed as cpo::uno::Exception. If this parameter
         is null this applies to all exceptions thrown by ucb.
 
         @see com::sun::star::task::InteractionHandler
@@ -44,7 +44,7 @@ interface XLibraryContainerExport : com::sun::star::uno::XInterface
      */
     void exportLibrary( [in] string Name, [in] string URL,
         [in] com::sun::star::task::XInteractionHandler Handler )
-            raises( com::sun::star::uno::Exception,
+            raises( cpo::uno::Exception,
                     com::sun::star::container::NoSuchElementException );
 };
 

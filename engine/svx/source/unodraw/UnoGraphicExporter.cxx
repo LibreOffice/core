@@ -1202,7 +1202,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
     }
     while( false );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 
@@ -1318,7 +1318,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape )
         ExportSettings aSettings;
         xExporter->GetGraphic( aSettings, aGraphic, true/*bVector*/ );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }

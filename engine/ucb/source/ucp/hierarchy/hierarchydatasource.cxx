@@ -389,7 +389,7 @@ HierarchyDataSource::createInstanceWithArguments(
                                 aNewArgs );
         }
     }
-    catch ( uno::Exception const & )
+    catch ( cpo::uno::Exception const & )
     {
         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                     "Cannot instantiate configuration access!" );
@@ -417,7 +417,7 @@ HierarchyDataSource::getConfigProvider()
         {
             m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
         }
-        catch ( uno::Exception const & )
+        catch ( cpo::uno::Exception const & )
         {
             OSL_FAIL( "HierarchyDataSource::getConfigProvider - "
                            "caught exception!" );

@@ -80,7 +80,7 @@ public:
             for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
                 SetArrayElementTo( sXControls[ i ], i );
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             // accept the case when the dialog already does not exist
             // in this case the wrapper should work in dummy mode
@@ -389,7 +389,7 @@ cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cp
                 cpo::uno::Sequence< cpo::uno::Any > aOutDummy;
                 xControlInvoke->invoke( u"SOAddAXControl"_ustr , aArgs, aOutIDDummy, aOutDummy );
             }
-            catch (const uno::Exception&)
+            catch (const cpo::uno::Exception&)
             {
                 xDialogContainer->removeByName( aNewName );
                 throw;
@@ -412,7 +412,7 @@ cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cp
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( u"Can not create AXControl!"_ustr,
@@ -475,7 +475,7 @@ void SAL_CALL ScVbaControls::Remove( const cpo::uno::Any& StringKeyOrIndex )
 
         // throw;
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // throw lang::WrappedTargetException("Can not create AXControl!",
         //         uno::Reference< uno::XInterface >(),

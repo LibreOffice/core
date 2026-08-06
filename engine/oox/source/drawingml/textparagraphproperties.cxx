@@ -509,7 +509,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
                 aPropSet.setProperty( PROP_NumberingRules, xNumRule );
             }
         }
-        catch (const Exception &)
+        catch (const cpo::uno::Exception &)
         {
             // Don't warn for now, expected to fail for Writer.
         }

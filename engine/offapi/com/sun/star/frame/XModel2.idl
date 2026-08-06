@@ -84,12 +84,12 @@ interface XModel2 : com::sun::star::frame::XModel
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if one of the given parameter was wrong
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
                 if creation of a new view failed by other reasons
      */
     com::sun::star::frame::XController2 createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame )
         raises (com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::Exception                );
+                cpo::uno::Exception                );
 
     /** creates a new view instance classified by the specified name and arguments.
 
@@ -113,14 +113,14 @@ interface XModel2 : com::sun::star::frame::XModel
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if one of the given parameter was wrong
 
-        @throws ::com::sun::star::uno::Exception
+        @throws ::cpo::uno::Exception
                 if creation of a new view failed by other reasons
      */
     com::sun::star::frame::XController2 createViewController( [in]  string                                           ViewName       ,
                                                               [in]  sequence< com::sun::star::beans::PropertyValue > Arguments      ,
                                                               [in]  com::sun::star::frame::XFrame                    Frame          )
         raises (com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::Exception                );
+                cpo::uno::Exception                );
 
     /** Sets com::sun::star::document::MediaDescriptor properties
         of the current model during runtime.

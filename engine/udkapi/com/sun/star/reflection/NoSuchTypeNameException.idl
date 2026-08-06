@@ -23,7 +23,7 @@
 
 /** thrown in case that a certain type name does not exist.
   */
-published exception NoSuchTypeNameException : com::sun::star::uno::Exception
+published exception NoSuchTypeNameException : cpo::uno::Exception
 {
 };
 

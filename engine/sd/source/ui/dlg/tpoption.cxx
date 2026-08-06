@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <com/sun/star/uno/Exception.hpp>
+#include <cpo/uno/Exception.hpp>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Draw.hxx>
 #include <sfx2/module.hxx>
@@ -892,7 +892,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
 
         } while (false); // One 'loop'.
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.

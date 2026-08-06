@@ -66,7 +66,7 @@ SAL_IMPLEMENT_MAIN()
 
         uno::Reference< lang::XComponent >(xContext, uno::UNO_QUERY_THROW)->dispose();
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
         return 1;

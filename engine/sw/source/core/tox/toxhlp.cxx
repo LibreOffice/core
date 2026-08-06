@@ -31,7 +31,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     try {
         m_xIES = i18n::IndexEntrySupplier::create(xContext);
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "IndexEntrySupplierWrapper" );
     }
@@ -49,7 +49,7 @@ OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
     try {
         sRet = m_xIES->getIndexKey( rText, rTextReading, rLocale );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "getIndexKey" );
     }
@@ -62,7 +62,7 @@ OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
     try {
         sRet = m_xIES->getIndexFollowPageWord( bMorePages, m_aLcl );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "getIndexFollowPageWord" );
     }
@@ -76,7 +76,7 @@ cpo::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( cons
     try {
         sRet = m_xIES->getAlgorithmList( rLcl );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "getAlgorithmList" );
     }
@@ -91,7 +91,7 @@ bool IndexEntrySupplierWrapper::LoadAlgorithm(
     try {
         bRet = m_xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "loadAlgorithm" );
     }
@@ -109,7 +109,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         nRet = m_xIES->compareIndexEntry( rText1, rTextReading1, rLocale1,
                                         rText2, rTextReading2, rLocale2 );
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sw.core", "compareIndexEntry" );
     }

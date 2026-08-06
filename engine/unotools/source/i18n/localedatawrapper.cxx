@@ -185,7 +185,7 @@ void LocaleDataWrapper::loadData()
     {
         aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( rMyLocale );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateAcceptancePatterns" );
         aDateAcceptancePatterns = {};
@@ -198,7 +198,7 @@ void LocaleDataWrapper::loadData()
     {
         aReservedWords = comphelper::sequenceToContainer<std::vector<OUString>>(xLD->getReservedWord( rMyLocale ));
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
     }
@@ -207,7 +207,7 @@ void LocaleDataWrapper::loadData()
     {
         aLocaleDataItem = xLD->getLocaleItem2( rMyLocale );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLocaleItem" );
         static const css::i18n::LocaleDataItem2 aEmptyItem;
@@ -242,7 +242,7 @@ css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
     {
         return xLD->getLanguageCountryInfo( getMyLocale() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLanguageCountryInfo" );
     }
@@ -260,7 +260,7 @@ cpo::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies()
     {
         return xLD->getAllCurrencies2( getMyLocale() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCurrencies" );
     }
@@ -273,7 +273,7 @@ cpo::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats(
     {
         return xLD->getAllFormats( getMyLocale() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllFormats" );
     }
@@ -286,7 +286,7 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
     {
         return xLD->getForbiddenCharacters( getMyLocale() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getForbiddenCharacters" );
     }
@@ -304,7 +304,7 @@ const cpo::uno::Sequence< css::lang::Locale > & LocaleDataWrapper::getAllInstall
     {
         rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
-    catch ( const Exception& )
+    catch ( const cpo::uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllInstalledLocaleNames" );
     }
@@ -1490,7 +1490,7 @@ cpo::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
     {
         return xLD->getAllCalendars2( getMyLocale() );
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCalendars" );
     }
@@ -1515,7 +1515,7 @@ void LocaleDataWrapper::loadDateAcceptancePatterns(
         {
             aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( maLanguageTag.getLocale() );
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION( "unotools.i18n", "setDateAcceptancePatterns" );
         }

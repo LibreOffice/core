@@ -11,7 +11,7 @@ module com { module sun { module star { module document {
 
 /** An exception used to notify loading of an exotic file format
 */
-exception ExoticFileLoadException : ::com::sun::star::uno::Exception
+exception ExoticFileLoadException : ::cpo::uno::Exception
 {
     /** contains the URL of the document
      */

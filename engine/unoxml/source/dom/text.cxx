@@ -53,7 +53,7 @@ namespace DOM
             {
                 io_rContext.mxCurrentHandler->characters( getData() );
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {}
         }
     }

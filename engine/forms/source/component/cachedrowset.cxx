@@ -36,7 +36,7 @@ namespace frm
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::beans::XPropertySet;
     using ::cpo::uno::Any;

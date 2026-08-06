@@ -244,7 +244,7 @@ void WorkbookSettings::finalizeImport()
         if( maFileSharing.mnPasswordHash != 0 )
             aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
 

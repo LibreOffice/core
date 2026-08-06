@@ -777,7 +777,7 @@ bool SfxDocumentTemplates::CopyTo
     }
     catch ( ContentCreationException& )
     { return false; }
-    catch ( Exception& )
+    catch ( cpo::uno::Exception& )
     { return false; }
 
     return true;
@@ -851,7 +851,7 @@ bool SfxDocumentTemplates::CopyFrom
 
             xDocPropsSupplier.set( xStorable, UNO_QUERY );
         }
-        catch( Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
 
@@ -1484,7 +1484,7 @@ void SfxDocTemplate_Impl::AddRegion( std::unique_lock<std::mutex>& /*rGuard*/,
     {
         xResultSet = rContent.createSortedCursor( { TITLE, TARGET_URL }, { { 1, true } }, m_rCompareFactory, INCLUDE_DOCUMENTS_ONLY );
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     if ( !xResultSet.is() )
         return;
@@ -1498,7 +1498,7 @@ void SfxDocTemplate_Impl::AddRegion( std::unique_lock<std::mutex>& /*rGuard*/,
             pRegionTmp->AddEntry(INetURLObject(maRootURL), xRow->getString( 1 ), xRow->getString( 2 ), nullptr);
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 void SfxDocTemplate_Impl::CreateFromHierarchy( std::unique_lock<std::mutex>& rGuard, Content &rTemplRoot )
@@ -1519,7 +1519,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( std::unique_lock<std::mutex>& rGu
                          INCLUDE_FOLDERS_ONLY
                      );
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     if ( !xResultSet.is() )
         return;
@@ -1538,7 +1538,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( std::unique_lock<std::mutex>& rGu
             AddRegion( rGuard, xRow->getString( 1 ), aContent );
         }
     }
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 }
 
 
@@ -1650,7 +1650,7 @@ bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         {
             mxInfo->read( rURL );
         }
-        catch ( Exception& )
+        catch ( cpo::uno::Exception& )
         {
             // the document is not a StarOffice document
             return false;
@@ -1668,7 +1668,7 @@ bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         }
         catch ( IOException& ) {}
         catch ( UnknownPropertyException& ) {}
-        catch ( Exception& ) {}
+        catch ( cpo::uno::Exception& ) {}
     }
 
     if ( aTitle.isEmpty() )
@@ -1722,7 +1722,7 @@ bool getTextProperty_Impl( Content& rContent,
         bGotProperty = true;
     }
     catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    catch ( cpo::uno::Exception& ) {}
 
     return bGotProperty;
 }

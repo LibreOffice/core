@@ -115,7 +115,7 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
                 sRet = xColumn->getString();
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
     return sRet;
@@ -602,7 +602,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         {
             nErrorCode = ErrCode(rErrorEx.ErrCode);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             nErrorCode = ERRCODE_IO_GENERAL;
         }
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         {
             nErrorCode = ErrCode(rErrorEx.ErrCode);
         }
-        catch (const Exception&)
+        catch (const cpo::uno::Exception&)
         {
             nErrorCode = ERRCODE_IO_GENERAL;
         }
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                     uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
                     xTempStore->storeToURL( sOutPath, aValues   );
                 }
-                catch (const uno::Exception&)
+                catch (const cpo::uno::Exception&)
                 {
                     bFailed = true;
                 }

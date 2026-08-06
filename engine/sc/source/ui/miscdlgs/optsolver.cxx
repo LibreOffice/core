@@ -1117,7 +1117,7 @@ void ScOptSolverDlg::CallSolver()
             {
                 xOptProp->setPropertyValue( rValue.Name, rValue.Value );
             }
-            catch ( uno::Exception & )
+            catch ( cpo::uno::Exception & )
             {
                 OSL_FAIL("Exception in solver option property");
             }

@@ -70,7 +70,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
                 meDocType = UNKNOWN;
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 
@@ -95,7 +95,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (const cpo::uno::Exception&)
     {
     }
 }

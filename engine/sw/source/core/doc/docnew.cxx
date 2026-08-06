@@ -133,7 +133,7 @@ using namespace ::com::sun::star::document;
         {
             m_xGCIterator = sw::proofreadingiterator::get( xContext );
         }
-        catch (const uno::Exception &)
+        catch (const cpo::uno::Exception &)
         {
             OSL_FAIL( "No GCIterator" );
         }

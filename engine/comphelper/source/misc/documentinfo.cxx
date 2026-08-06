@@ -38,7 +38,7 @@ namespace comphelper {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::frame::XController;
@@ -142,11 +142,11 @@ namespace comphelper {
                     return xTitle->getTitle();
             }
         }
-        catch ( const Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             // Cannot use tools::exceptionToString here, because the tools module depends on the comphelper module
             cpo::uno::Any caught( ::cppu::getCaughtException() );
-            css::uno::Exception exception;
+            cpo::uno::Exception exception;
             caught >>= exception;
             SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()
                                     << "\nmessage: " << exception

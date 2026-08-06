@@ -84,7 +84,7 @@ bool isLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel)
                 return bShow;
             }
         }
-        catch(const uno::Exception &)
+        catch(const cpo::uno::Exception &)
         {
         }
     }
@@ -121,7 +121,7 @@ bool isLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel)
                 return bOverlay;
             }
         }
-        catch(const uno::Exception &)
+        catch(const cpo::uno::Exception &)
         {
         }
     }

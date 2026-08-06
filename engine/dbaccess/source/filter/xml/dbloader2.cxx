@@ -139,7 +139,7 @@ OUString DBTypeDetection::detect( cpo::uno::Sequence< css::beans::PropertyValue 
                         if ( xInStream.is() )
                             xInStream->closeInput();
                     }
-                    catch( Exception& )
+                    catch( cpo::uno::Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }

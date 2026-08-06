@@ -109,7 +109,7 @@ ProviderCache::getAllProviders()
                     xScriptProvider = createProvider(rDetail.second);
                     pproviders[ providerIndex++ ] = std::move(xScriptProvider);
                 }
-                catch ( const Exception& )
+                catch ( const cpo::uno::Exception& )
                 {
                     DBG_UNHANDLED_EXCEPTION("scripting");
                 }
@@ -165,7 +165,7 @@ ProviderCache::populateCache()
             }
         }
     }
-    catch ( const Exception &e )
+    catch ( const cpo::uno::Exception &e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
@@ -183,7 +183,7 @@ ProviderCache::createProvider( ProviderDetails& details )
         details.provider.set(
             details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
     }
-    catch ( const Exception& e )
+    catch ( const cpo::uno::Exception& e )
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(

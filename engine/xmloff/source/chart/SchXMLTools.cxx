@@ -542,7 +542,7 @@ void CreateCategories(
             }
         }
     }
-    catch( uno::Exception & )
+    catch( cpo::uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception caught while creating Categories" );
     }
@@ -750,7 +750,7 @@ void setXMLRangePropertyAtDataSequence(
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
             xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( rXMLRange ));
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
@@ -777,7 +777,7 @@ bool getXMLRangePropertyFromDataSequence(
             if( bClearProp && bResult )
                 xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( OUString()));
         }
-        catch( const uno::Exception & )
+        catch( const cpo::uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("xmloff.chart");
         }
@@ -809,7 +809,7 @@ void copyProperties(
             }
         }
     }
-    catch( const uno::Exception & )
+    catch( const cpo::uno::Exception & )
     {
         SAL_WARN("xmloff.chart", "Copying property sets failed!" );
     }

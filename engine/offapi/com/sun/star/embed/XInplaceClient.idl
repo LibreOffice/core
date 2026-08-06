@@ -166,12 +166,12 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object state is not correct
 
-        @throws com::sun::star::uno::Exception
+        @throws cpo::uno::Exception
             in case of other problems
      */
     void changedPlacement( [in] ::com::sun::star::awt::Rectangle aPosRect )
         raises( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception );
+                ::cpo::uno::Exception );
 };
 
 

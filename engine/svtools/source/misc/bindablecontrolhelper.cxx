@@ -49,7 +49,7 @@ static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< fr
         uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
         xReferrer.set ( xNamed->getByName( sAddress ), uno::UNO_QUERY );
     }
-    catch( uno::Exception& /*e*/ )
+    catch( cpo::uno::Exception& /*e*/ )
     {
         // do nothing
     }

@@ -26,7 +26,7 @@ interface XPackage;
    because the extension was removed. XPackage::isRemoved() will
    return true on that object.
 */
-exception ExtensionRemovedException: com::sun::star::uno::Exception {
+exception ExtensionRemovedException: cpo::uno::Exception {
 
 };
 

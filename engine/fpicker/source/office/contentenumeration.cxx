@@ -65,7 +65,7 @@ namespace
 
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Exception;
+    using ::cpo::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::sdbc::XResultSet;
@@ -187,7 +187,7 @@ namespace
             {
                 TOOLS_WARN_EXCEPTION( "svtools.contnr", "");
             }
-            catch( Exception& )
+            catch( cpo::uno::Exception& )
             {
             }
 

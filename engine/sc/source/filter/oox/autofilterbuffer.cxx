@@ -991,7 +991,7 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
         // return true to indicate enabled autofilter
         return true;
     }
-    catch( Exception& )
+    catch( cpo::uno::Exception& )
     {
     }
     return false;

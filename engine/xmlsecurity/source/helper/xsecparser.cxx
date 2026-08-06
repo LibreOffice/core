@@ -1530,7 +1530,7 @@ void SAL_CALL XSecParser::startElement(
             m_xNextHandler->startElement(rName, xAttribs);
         }
     }
-    catch (css::uno::Exception& )
+    catch (cpo::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
         cpo::uno::Any exc =  cppu::getCaughtException();
         throw css::xml::sax::SAXException(
@@ -1558,7 +1558,7 @@ void SAL_CALL XSecParser::endElement(const OUString& rName)
             m_xNextHandler->endElement(rName);
         }
     }
-    catch (css::uno::Exception& )
+    catch (cpo::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
         cpo::uno::Any exc =  cppu::getCaughtException();
         throw css::xml::sax::SAXException(

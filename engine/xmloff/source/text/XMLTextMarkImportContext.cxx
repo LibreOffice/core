@@ -248,7 +248,7 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
             rHelper.GetCursor()->setString(OUString()); // undo AppendTextNode from InsertFieldmark
             rHelper.GetCursor()->gotoRange(xField->getAnchor()->getEnd(), false);
         }
-        catch (uno::Exception const&)
+        catch (cpo::uno::Exception const&)
         {
             assert(false); // must succeed
         }
@@ -383,7 +383,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                             xEndRange);
                     try {
                         xInsertionCursor->gotoRange(xStartRange, true);
-                    } catch (uno::Exception&) {
+                    } catch (cpo::uno::Exception&) {
                         TOOLS_WARN_EXCEPTION("xmloff.text",
                             "cannot go to end position of bookmark");
                     }

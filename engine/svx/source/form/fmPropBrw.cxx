@@ -194,7 +194,7 @@ FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _
         m_xMeAsFrame->initialize(xFrameContainerWindow);
         m_xMeAsFrame->setName(u"form property browser"_ustr);
     }
-    catch (const Exception&)
+    catch (const cpo::uno::Exception&)
     {
         OSL_FAIL("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
@@ -230,7 +230,7 @@ FmPropBrw::~FmPropBrw()
                 xName->removeByName( i );
         }
     }
-    catch (const Exception& )
+    catch (const cpo::uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }

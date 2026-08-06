@@ -406,7 +406,7 @@ public class Type {
      * of t2.
      *
      * Following the conventions of the Java UNO language binding,
-     * com.sun.star.uno.Exception is not considered a supertype of
+     * cpo.uno.Exception is not considered a supertype of
      * com.sun.star.uno.RuntimeException or any exception type derived from
      * com.sun.star.uno.RuntimeException.
      *
@@ -515,7 +515,7 @@ public class Type {
             _class = zClass;
         } else if (Throwable.class.isAssignableFrom(zClass)) {
             _typeClass
-                = com.sun.star.uno.Exception.class.isAssignableFrom(zClass)
+                = cpo.uno.Exception.class.isAssignableFrom(zClass)
                 || com.sun.star.uno.RuntimeException.class.isAssignableFrom(
                     zClass)
                 ? TypeClass.EXCEPTION : TypeClass.UNKNOWN;
