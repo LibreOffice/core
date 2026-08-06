@@ -161,6 +161,101 @@ static void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Un
         pTopView->InsertText( aString );
 }
 
+namespace
+{
+
+// One URL field occupies a single character, so every returned selection is one index wide.
+// The field data is cloned because the item set it is read from is a temporary one.
+std::vector<std::pair<ESelection, std::unique_ptr<const SvxFieldData>>>
+lcl_CollectURLFields(EditEngine& rEditEngine)
+{
+    std::vector<std::pair<ESelection, std::unique_ptr<const SvxFieldData>>> aFields;
+
+    const sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
+    for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
+    {
+        ESelection aSel(nPara, 0);
+        std::vector<sal_Int32> aPosList;
+        rEditEngine.GetPortions(nPara, aPosList);
+        for (const auto& rPos : aPosList)
+        {
+            aSel.end.nIndex = rPos;
+
+            SfxItemSet aEditSet(rEditEngine.GetAttribs(aSel));
+            if (aSel.start.nIndex + 1 == aSel.end.nIndex)
+            {
+                // test if the character is a text field
+                if (const SvxFieldItem* pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false))
+                {
+                    const SvxFieldData* pField = pItem->GetField();
+                    if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
+                        aFields.emplace_back(aSel, pUrlField->Clone());
+                }
+            }
+            aSel.start.nIndex = aSel.end.nIndex;
+        }
+    }
+
+    return aFields;
+}
+
+// Turns every URL field outside the selection back into its displayed text, so that the cell
+// ends up carrying a single hyperlink. The selection follows the length each replacement adds,
+// so it still covers the same text afterwards.
+void lcl_UnlinkURLFieldsOutsideSelection(EditView& rView)
+{
+    EditEngine& rEditEngine = rView.getEditEngine();
+
+    ESelection aSel = rView.GetSelection();
+    aSel.Adjust();
+
+    auto aFields = lcl_CollectURLFields(rEditEngine);
+
+    // Walk from the last field to the first, so replacing one leaves the positions of the
+    // fields still to come untouched.
+    for (auto it = aFields.rbegin(); it != aFields.rend(); ++it)
+    {
+        const ESelection& rField = it->first;
+
+        // A field the selection already covers is replaced along with the rest of it.
+        const bool bInsideSelection = !(rField.start < aSel.start) && !(aSel.end < rField.end);
+        if (bInsideSelection)
+            continue;
+
+        const OUString aRepresentation
+            = static_cast<const SvxURLField*>(it->second.get())->GetRepresentation();
+        rEditEngine.QuickInsertText(aRepresentation, rField);
+
+        const sal_Int32 nGrowth = aRepresentation.getLength() - 1;
+        for (EPaM* pPaM : { &aSel.start, &aSel.end })
+        {
+            if (pPaM->nPara == rField.start.nPara && pPaM->nIndex >= rField.end.nIndex)
+                pPaM->nIndex += nGrowth;
+        }
+    }
+
+    rView.SetSelection(aSel);
+    rView.Invalidate();
+}
+
+}
+
+bool ScEditShell::IsCellLinkOnly(const EditView* pActiveView) const
+{
+    const std::shared_ptr<const SfxFilter> pFilter
+        = rViewData.GetSfxDocShell()->GetMedium()->GetFilter();
+    const bool bMSOFormat = pFilter && pFilter->IsMSOFormat();
+
+    if (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel() && bMSOFormat)
+        return true;
+
+    // Online keeps a cell down to a single hyperlink. The link covers the selected text when
+    // there is one, and the whole cell otherwise. A spreadsheet in one of the OOXML formats
+    // stores a single link per cell, so there the link always covers the whole cell.
+    return comphelper::COKit::isActive()
+           && (bMSOFormat || !pActiveView || !pActiveView->GetSelection().HasRange());
+}
+
 void ScEditShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
@@ -604,13 +699,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    bool bCellLinksOnly
-                        = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
-                          || comphelper::COKit::isActive();
+                    const bool bCellLinksOnly = IsCellLinkOnly(pTableView);
+
+                    // Under Online the link covers the whole of the selected text.
+                    const bool bLinkOverSelection
+                        = comphelper::COKit::isActive() && !bCellLinksOnly;
 
                     bool bDone = false;
-                    if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly )
+                    if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly
+                         && !bLinkOverSelection )
                     {
                         std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
                         const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
@@ -660,6 +757,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
                                 if (pTopView)
                                     pTopView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
                             }
+                        }
+                        else if (bLinkOverSelection)
+                        {
+                            lcl_UnlinkURLFieldsOutsideSelection(*pTableView);
+                            if (pTopView)
+                                lcl_UnlinkURLFieldsOutsideSelection(*pTopView);
                         }
                         rViewData.GetViewShell()->
                             InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
@@ -817,10 +920,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 {
                     SvxHyperlinkItem aHLinkItem;
                     aHLinkItem.SetShowName(false);
-                    bool bCellLinksOnly
-                        = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
-                          || comphelper::COKit::isActive();
+                    const bool bCellLinksOnly = IsCellLinkOnly(pActiveView);
                     std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
                     const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                     if (!bCellLinksOnly)
@@ -939,35 +1039,11 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetURLField()
 
 std::unique_ptr<const SvxFieldData> ScEditShell::GetFirstURLFieldFromCell()
 {
-    EditEngine& rEditEngine = GetEditView()->getEditEngine();
-    sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
-    for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
-    {
-        ESelection aSel(nPara, 0);
-        std::vector<sal_Int32> aPosList;
-        rEditEngine.GetPortions(nPara, aPosList);
-        for (const auto& rPos : aPosList)
-        {
-            aSel.end.nIndex = rPos;
+    auto aFields = lcl_CollectURLFields(GetEditView()->getEditEngine());
+    if (aFields.empty())
+        return std::unique_ptr<const SvxFieldData>();
 
-            SfxItemSet aEditSet(rEditEngine.GetAttribs(aSel));
-            if (aSel.start.nIndex + 1 == aSel.end.nIndex)
-            {
-                // test if the character is a text field
-                if (const SvxFieldItem* pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false))
-                {
-                    const SvxFieldData* pField = pItem->GetField();
-                    if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
-                    {
-                        return pUrlField->Clone();
-                    }
-                }
-            }
-            aSel.start.nIndex = aSel.end.nIndex;
-        }
-    }
-
-    return std::unique_ptr<const SvxFieldData>();
+    return std::move(aFields.front().second);
 }
 
 IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )

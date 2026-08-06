@@ -193,7 +193,7 @@ public:
     // InputHandler:
     bool                IsEditMode();   // not for SC_INPUT_TYPE
     bool                IsInputMode();  // also for SC_INPUT_TYPE
-    void                SetInputMode( ScInputMode eMode, const OUString* pInitText = nullptr );
+    SC_DLLPUBLIC void   SetInputMode( ScInputMode eMode, const OUString* pInitText = nullptr );
     bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
     SC_DLLPUBLIC void   InputEnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInKit = false );
     void                InputCancelHandler();

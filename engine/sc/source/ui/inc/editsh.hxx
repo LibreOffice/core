@@ -50,6 +50,9 @@ private:
     std::unique_ptr<const SvxFieldData> GetURLField();
     std::unique_ptr<const SvxFieldData> GetFirstURLFieldFromCell();
 
+    /// True when a hyperlink has to cover the whole cell rather than the selected text.
+    bool IsCellLinkOnly(const EditView* pActiveView) const;
+
     ScInputHandler* GetMyInputHdl();
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );

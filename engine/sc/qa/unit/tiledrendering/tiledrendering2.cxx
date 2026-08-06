@@ -15,6 +15,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
@@ -22,12 +23,18 @@
 
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>
+#include <document.hxx>
 #include <scmod.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/hlnkitem.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <postit.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <vcl/virdev.hxx>
 
@@ -515,6 +522,228 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditTextPaintStartInTiledMode)
     // the cell, rather than staying at the output area top-left
     const Point aStartPos = pEditView->CalculateTextPaintStartPosition();
     CPPUNIT_ASSERT_EQUAL(pEditView->GetOutputArea().Left() - nVisDocLeft, aStartPos.X());
+}
+
+namespace
+{
+// A text field takes up a single character of the paragraph text.
+constexpr sal_Unicode CH_FIELD = u'\x0001';
+
+// Reads a cell back as the text it displays, with each hyperlink written out as
+// [displayed text](url), so that an assertion shows how much of the cell the link covers.
+OUString lcl_getCellTextWithLinks(ScDocument& rDocument, const ScAddress& rPosition)
+{
+    const EditTextObject* pEditText = rDocument.GetEditText(rPosition);
+    if (!pEditText)
+        return rDocument.GetString(rPosition);
+
+    OUStringBuffer aBuffer;
+    for (sal_Int32 nPara = 0; nPara < pEditText->GetParagraphCount(); ++nPara)
+    {
+        if (nPara > 0)
+            aBuffer.append('\n');
+
+        const OUString aParaText = pEditText->GetText(nPara);
+        size_t nField = 0;
+        for (sal_Int32 nIndex = 0; nIndex < aParaText.getLength(); ++nIndex)
+        {
+            if (aParaText[nIndex] != CH_FIELD)
+            {
+                aBuffer.append(aParaText[nIndex]);
+                continue;
+            }
+
+            const SvxFieldData* pField
+                = pEditText->GetFieldData(nPara, nField++, text::textfield::Type::URL);
+            auto pURLField = dynamic_cast<const SvxURLField*>(pField);
+            CPPUNIT_ASSERT(pURLField);
+            aBuffer.append("[" + pURLField->GetRepresentation() + "](" + pURLField->GetURL() + ")");
+        }
+    }
+
+    return aBuffer.makeStringAndClear();
+}
+
+// Places the caret in the text of the cell that is being edited, and selects from nStart to
+// nEnd. Clicking into the text is what puts the cell into the table input mode, so the mode is
+// set here too.
+void lcl_selectInCell(ScTabViewShell* pView, sal_Int32 nStart, sal_Int32 nEnd)
+{
+    ScModule::get()->SetInputMode(SC_INPUT_TABLE);
+
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, nStart, 0, nEnd));
+}
+
+// The text the hyperlink dialog would show in its Text entry for the current selection.
+OUString lcl_getHyperlinkDialogText(ScTabViewShell* pView)
+{
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    pView->GetViewFrame().GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    return pState->GetName();
+}
+
+cpo::uno::Sequence<beans::PropertyValue> lcl_hyperlinkArgs(const OUString& rText,
+                                                           const OUString& rURL)
+{
+    return {
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, cpo::uno::Any(rText)),
+        comphelper::makePropertyValue(u"Hyperlink.URL"_ustr, cpo::uno::Any(rURL)),
+    };
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertHyperlinkOverSelectionInCell)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("Docs and reference", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    // the word "reference" is selected inside the cell
+    lcl_selectInCell(pView, 9, 18);
+
+    // the dialog offers the selected text, so that confirming it keeps that word as the label
+    CPPUNIT_ASSERT_EQUAL(u"reference"_ustr, lcl_getHyperlinkDialogText(pView));
+
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"reference"_ustr, u"http://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    // Only the selected word becomes the link. Without the fix the whole cell did:
+    // - Expected: Docs and [reference](http://www.example.com/)
+    // - Actual  : [Docs and reference](http://www.example.com/)
+    CPPUNIT_ASSERT_EQUAL(u"Docs and [reference](http://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertHyperlinkWithoutSelectionCoversWholeCell)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("Docs and reference", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    // the caret sits in the cell with nothing selected
+    lcl_selectInCell(pView, 18, 18);
+
+    // with nothing selected the dialog offers the whole cell
+    CPPUNIT_ASSERT_EQUAL(u"Docs and reference"_ustr, lcl_getHyperlinkDialogText(pView));
+
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"Docs and reference"_ustr, u"http://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    // the link covers the whole cell
+    CPPUNIT_ASSERT_EQUAL(u"[Docs and reference](http://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertHyperlinkInOOXMLCoversWholeCell)
+{
+    // An OOXML format stores a single hyperlink per cell and no link on part of a cell's text,
+    // so a link there covers the whole cell even when only some of the text is selected.
+    ScModelObj* pModelObj = createDoc("empty.xlsx");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("Docs and reference", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 9, 18);
+
+    // the dialog offers the whole cell, not the selected word
+    CPPUNIT_ASSERT_EQUAL(u"Docs and reference"_ustr, lcl_getHyperlinkDialogText(pView));
+
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"Docs and reference"_ustr, u"http://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"[Docs and reference](http://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertHyperlinkDropsTheCellsOtherLink)
+{
+    // A cell holds a single hyperlink, so linking a selection turns the link the rest of the
+    // cell carries back into plain text.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("Docs and reference", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    // "Docs" is linked first
+    lcl_selectInCell(pView, 0, 4);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"Docs"_ustr, u"http://www.example.com/docs"_ustr));
+
+    // "reference" is linked next. The field left by the first link takes up one character, so
+    // the word now starts at index 6.
+    lcl_selectInCell(pView, 6, 15);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"reference"_ustr, u"http://www.example.com/reference"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    // the newer link stays and "Docs" is left as plain text
+    CPPUNIT_ASSERT_EQUAL(u"Docs and [reference](http://www.example.com/reference)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // both links go away together, because they were added in one edit of the cell
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Docs and reference"_ustr, lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkOverSelectionSavedToOOXML)
+{
+    // A link on part of a cell's text is what ODF stores. An OOXML format has nowhere to put
+    // it, so on the way out the link grows to cover the whole cell.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("Docs and references", aA1.Col(), aA1.Row(), pView, pModelObj,
+                    /*bInEdit*/ false, /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    // the word "references" is selected and linked
+    lcl_selectInCell(pView, 9, 19);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"references"_ustr, u"http://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"Docs and [references](http://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pModelObj->GetDocument(), aA1));
+
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocument* pReloadedDoc = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent)->GetDocument();
+    CPPUNIT_ASSERT(pReloadedDoc);
+
+    // the whole cell carries the link now, and the text it displays is unchanged
+    CPPUNIT_ASSERT_EQUAL(u"[Docs and references](http://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pReloadedDoc, aA1));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
