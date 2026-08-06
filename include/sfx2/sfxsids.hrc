@@ -695,7 +695,7 @@ class SvxZoomItem;
 #define FN_NOUPDATE                         TypedWhichId<SfxBoolItem>(FN_PARAM+67)
 #define FN_FAX                              (SID_SW_START + 28)   /* Fax */
 
-#define SID_KEYFUNC_START                   (SID_SC_START + 521)
+#define SID_KEYFUNC_START                   (SID_SC_START + 525)
 #define SID_CURSORDOWN_SEL                  (SID_KEYFUNC_START + 0)
 #define SID_CURSORUP_SEL                    (SID_KEYFUNC_START + 1)
 #define SID_CURSORLEFT_SEL                  (SID_KEYFUNC_START + 2)

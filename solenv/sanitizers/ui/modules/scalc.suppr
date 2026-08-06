@@ -756,3 +756,7 @@ sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnDrawExtrusionSur
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnObjectXLineStyle'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnMediaAnchorMenu'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnToolsAutoCorrectDlg'] button-no-label
+sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnTogglePrintGrid'] button-no-label
+sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnTogglePrintComment'] button-no-label
+sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnTogglePrintColRowHeader'] button-no-label
+sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnTogglePrintZeroValues'] button-no-label

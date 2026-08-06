@@ -913,6 +913,10 @@ void ScPreview::StaticInvalidate()
     rBindings.Invalidate(SID_ZOOM_OUT);
     rBindings.Invalidate(SID_PREVIEW_SCALINGFACTOR);
     rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
+    rBindings.Invalidate(SID_TOGGLEPRINTGRID);
+    rBindings.Invalidate(SID_TOGGLEPRINTCOLROWHEADER);
+    rBindings.Invalidate(SID_TOGGLEPRINTCOMMENTS);
+    rBindings.Invalidate(SID_TOGGLEPRINTZEROVALUES);
 }
 
 IMPL_STATIC_LINK_NOARG( ScPreview, InvalidateHdl, void*, void )

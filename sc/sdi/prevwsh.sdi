@@ -129,6 +129,11 @@ interface TablePrintPreview
     SID_PREVIEW_CLOSE   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_CANCEL          [ ExecMethod = Execute; StateMethod = GetState; ]
 
+    SID_TOGGLEPRINTGRID          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_TOGGLEPRINTCOLROWHEADER  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_TOGGLEPRINTCOMMENTS      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_TOGGLEPRINTZEROVALUES    [ ExecMethod = Execute; StateMethod = GetState; ]
+
     SID_SAVEDOC         [ StateMethod = GetState; ]
     SID_SAVEASDOC       [ StateMethod = GetState; ]
     SID_MAIL_SENDDOC    [ StateMethod = GetState; ]

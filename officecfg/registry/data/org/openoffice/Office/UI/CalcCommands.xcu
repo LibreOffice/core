@@ -2665,6 +2665,38 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:TogglePrintGrid" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Grid Lines</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Print grid lines</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TogglePrintColRowHeader" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Col/Row Header</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Print column and row header</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TogglePrintComments" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Print comments</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TogglePrintZeroValues" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Zero Values</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Print zero values</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:InsertFieldMenu" oor:op="replace">

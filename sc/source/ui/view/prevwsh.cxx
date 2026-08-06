@@ -750,6 +750,43 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 ScViewUtil::SetFullScreen( *this, false );
             break;
 
+        case SID_TOGGLEPRINTGRID:
+        case SID_TOGGLEPRINTCOLROWHEADER:
+        case SID_TOGGLEPRINTCOMMENTS:
+        case SID_TOGGLEPRINTZEROVALUES:
+        {
+            OUString sStyle = pDocShell->GetDocument().GetPageStyle(pPreview->GetTab());
+            ScStyleSheetPool* pStylePool = pDocShell->GetDocument().GetStyleSheetPool();
+            SfxStyleSheetBase* pStyleSheet = pStylePool->Find(sStyle, SfxStyleFamily::Page);
+            OSL_ENSURE(pStyleSheet, "PageStyle not found! :-/");
+
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            bool bOn;
+            switch (nSlot)
+            {
+                case SID_TOGGLEPRINTGRID:
+                    bOn = rItemSet.Get(ATTR_PAGE_GRID).GetValue();
+                    rItemSet.Put(SfxBoolItem(ATTR_PAGE_GRID, !bOn));
+                    break;
+                case SID_TOGGLEPRINTCOLROWHEADER:
+                    bOn = rItemSet.Get(ATTR_PAGE_HEADERS).GetValue();
+                    rItemSet.Put(SfxBoolItem(ATTR_PAGE_HEADERS, !bOn));
+                    break;
+                case SID_TOGGLEPRINTCOMMENTS:
+                    bOn = rItemSet.Get(ATTR_PAGE_NOTES).GetValue();
+                    rItemSet.Put(SfxBoolItem(ATTR_PAGE_NOTES, !bOn));
+                    break;
+                case SID_TOGGLEPRINTZEROVALUES:
+                    bOn = rItemSet.Get(ATTR_PAGE_NULLVALS).GetValue();
+                    rItemSet.Put(SfxBoolItem(ATTR_PAGE_NULLVALS, !bOn));
+                    break;
+            }
+            rReq.Done();
+            GetViewFrame().GetBindings().Invalidate(nSlot);
+            pPreview->Invalidate();
+        }
+        break;
+
         default:
             break;
     }
@@ -856,6 +893,42 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                 if( pDocShell->IsReadOnly() )
                     rSet.DisableItem( nWhich );
                 break;
+
+            case SID_TOGGLEPRINTGRID:
+            case SID_TOGGLEPRINTCOLROWHEADER:
+            case SID_TOGGLEPRINTCOMMENTS:
+            case SID_TOGGLEPRINTZEROVALUES:
+            {
+                if (pDocShell->IsReadOnly())
+                    rSet.DisableItem(nWhich);
+                else
+                {
+                    OUString sStyle = pDocShell->GetDocument().GetPageStyle(pPreview->GetTab());
+                    ScStyleSheetPool* pStylePool = pDocShell->GetDocument().GetStyleSheetPool();
+                    SfxStyleSheetBase* pStyleSheet = pStylePool->Find(sStyle, SfxStyleFamily::Page);
+                    OSL_ENSURE(pStyleSheet, "PageStyle not found! :-/");
+                    const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+
+                    bool bOn = false;
+                    switch (nWhich)
+                    {
+                        case SID_TOGGLEPRINTGRID:
+                            bOn = rItemSet.Get(ATTR_PAGE_GRID).GetValue();
+                            break;
+                        case SID_TOGGLEPRINTCOLROWHEADER:
+                            bOn = rItemSet.Get(ATTR_PAGE_HEADERS).GetValue();
+                            break;
+                        case SID_TOGGLEPRINTCOMMENTS:
+                            bOn = rItemSet.Get(ATTR_PAGE_NOTES).GetValue();
+                            break;
+                        case SID_TOGGLEPRINTZEROVALUES:
+                            bOn = rItemSet.Get(ATTR_PAGE_NULLVALS).GetValue();
+                            break;
+                    }
+                    rSet.Put(SfxBoolItem(nWhich, bOn));
+                }
+            }
+            break;
         }
 
         nWhich = aIter.NextWhich();
