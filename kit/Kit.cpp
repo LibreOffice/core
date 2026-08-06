@@ -4314,26 +4314,45 @@ void lokit_main(
 
             LOG_INF("Kit core version is " << versionString);
 
-            // Extend the list on new releases
-            static const char *denyVersions[] = {
-                "\"22.05\"", "\"23.05\""
-            };
-            for (auto const &deny: denyVersions)
+            Poco::JSON::Object::Ptr versionJSON =
+                Poco::JSON::Parser().parse(versionString).extract<Poco::JSON::Object::Ptr>();
+
+            // The office library and coolwsd are versioned together, in one commit, so
+            // they belong to the same release line. Anything else means the packages
+            // were not installed from the same release, and we have no idea what the
+            // library we just loaded expects of us. The point release below the line is
+            // not checked, only warned about, because a build tree that was configured
+            // before a version bump legitimately carries the older one.
+            const std::string coreVersion =
+                versionJSON->optValue<std::string>("ProductVersion", std::string());
+            std::string wsdReleaseLine = Util::getCoolVersion();
+            const std::size_t pointRelease =
+                wsdReleaseLine.find('.', wsdReleaseLine.find('.') + 1);
+            if (pointRelease != std::string::npos)
+                wsdReleaseLine.resize(pointRelease);
+
+            if (coreVersion != wsdReleaseLine)
             {
-                if (Util::findSubArray(versionString.c_str(), versionString.length(),
-                                       deny, strlen(deny)) >= 0)
-                {
-                    LOG_FTL("Mis-matching, obsolete core version, "
-                            "please update your packages: " << versionString);
-                    Util::forcedExit(EX_SOFTWARE);
-                }
+                LOG_FTL("Mis-matching core version, please update your packages: the office "
+                        "library is ["
+                        << coreVersion << "] but coolwsd is [" << Util::getCoolVersion()
+                        << "]. Exiting.");
+                Util::forcedExit(EX_SOFTWARE);
+            }
+
+            const std::string coreFullVersion =
+                coreVersion + versionJSON->optValue<std::string>("ProductExtension", std::string());
+            if (coreFullVersion != Util::getCoolVersion())
+            {
+                LOG_WRN("The office library is ["
+                        << coreFullVersion << "] but coolwsd is [" << Util::getCoolVersion()
+                        << "]; they are from different point releases.");
             }
 
             // Add some parameters we want to pass to the client. Could not figure out how to get
             // the configuration parameters from COOLWSD.cpp's initialize() or coolwsd.xml here, so
             // oh well, just have the value hardcoded in KitHelper.hpp. It isn't really useful to
             // "tune" it at end-user installations anyway, I think.
-            auto versionJSON = Poco::JSON::Parser().parse(versionString).extract<Poco::JSON::Object::Ptr>();
             versionJSON->set("tunnelled_dialog_image_cache_size", std::to_string(LOKitHelper::tunnelledDialogImageCacheSize));
             std::stringstream ss;
             versionJSON->stringify(ss);
