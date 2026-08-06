@@ -10,6 +10,8 @@
 #pragma once
 
 #include <sal/types.h>
+#include <o3tl/safeint.hxx>
+#include <cassert>
 #include <cmath>
 #include <compare>
 #include <limits>
@@ -138,10 +140,27 @@ public:
     static constexpr LengthBase fromUnit(INPUT_TYPE nValue)
     {
         constexpr sal_Int64 nFactor = factorForUnit(UNIT);
+        // Catch a value that would overflow the EMU storage, e.g. a twip
+        // sentinel like LONG_MAX wrapped by mistake.
         if constexpr (std::is_floating_point_v<INPUT_TYPE>)
+        {
+            assert(nFactor * nValue >= double(SAL_MIN_INT64)
+                   && nFactor * nValue <= double(SAL_MAX_INT64)
+                   && "gfx::Length: value out of range, EMU storage would overflow");
             return LengthBase(TYPE(std::round(nFactor * nValue)));
-        else
+        }
+        else if constexpr (std::is_signed_v<INPUT_TYPE>)
+        {
+            assert(nValue >= SAL_MIN_INT64 / nFactor && nValue <= SAL_MAX_INT64 / nFactor
+                   && "gfx::Length: value out of range, EMU storage would overflow");
             return LengthBase(TYPE(nFactor * nValue));
+        }
+        else
+        {
+            assert(nValue <= o3tl::make_unsigned(SAL_MAX_INT64 / nFactor)
+                   && "gfx::Length: value out of range, EMU storage would overflow");
+            return LengthBase(TYPE(nFactor * nValue));
+        }
     }
 
     template <typename INPUT_TYPE> static constexpr LengthBase cm(INPUT_TYPE nValue)
