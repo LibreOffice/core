@@ -19,7 +19,6 @@
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 
-#include <array>
 #include <cstddef>
 #include <sstream>
 #include <string>
@@ -29,14 +28,9 @@
 namespace
 {
 
-/// One slide part: the role a slide plays in the deck. A template offers a
+/// The slide parts: the role a slide plays in the deck. A template offers a
 /// distinct master design per part.
-const std::array<std::string_view, 4>& partNames()
-{
-    static const std::array<std::string_view, 4> parts = { "opening", "divider", "body",
-                                                            "closing" };
-    return parts;
-}
+constexpr std::string_view PartNames[] = { "opening", "divider", "body", "closing" };
 
 /// The layout and block-count rules for one slide intent. The bullets and text
 /// counts are inclusive ranges; a slide's blocks must fall within them. The
@@ -55,26 +49,22 @@ struct IntentRule
 
 /// The intent table. Each intent maps to one auto layout and a shape rule for
 /// the blocks a slide of that intent may carry.
-const std::vector<IntentRule>& intentRules()
-{
-    static const std::vector<IntentRule> rules = {
-        { "title", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
-        { "agenda", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
-        { "bullets", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
-        { "two-column", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
-        { "comparison", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
-        { "quote", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
-        { "big-number", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
-        { "image", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 0, 0, true },
-        { "section", "AUTOLAYOUT_TITLE_ONLY", 0, 0, 0, 0, false },
-        { "closing", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
-    };
-    return rules;
-}
+constexpr IntentRule IntentRules[] = {
+    { "title", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
+    { "agenda", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
+    { "bullets", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
+    { "two-column", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
+    { "comparison", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
+    { "quote", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
+    { "big-number", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
+    { "image", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 0, 0, true },
+    { "section", "AUTOLAYOUT_TITLE_ONLY", 0, 0, 0, 0, false },
+    { "closing", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
+};
 
 const IntentRule* findIntentRule(const std::string& intent)
 {
-    for (const auto& rule : intentRules())
+    for (const auto& rule : IntentRules)
         if (intent == rule.intent)
             return &rule;
     return nullptr;
@@ -649,7 +639,7 @@ std::string limitsSentence(const Budgets& budgets)
 
 bool isKnownPart(const std::string& part)
 {
-    for (const auto& name : partNames())
+    for (const auto& name : PartNames)
         if (part == name)
             return true;
     return false;
@@ -663,7 +653,7 @@ bool isKnownIntent(const std::string& intent)
 std::string partList()
 {
     std::string list;
-    for (const auto& name : partNames())
+    for (const auto& name : PartNames)
     {
         if (!list.empty())
             list += ", ";
@@ -675,7 +665,7 @@ std::string partList()
 std::string intentList()
 {
     std::string list;
-    for (const auto& rule : intentRules())
+    for (const auto& rule : IntentRules)
     {
         if (!list.empty())
             list += ", ";
@@ -888,7 +878,7 @@ rewriteGenerateImageCommands(const Poco::JSON::Object::Ptr& transformObj, int nE
                 pageCount--;
         }
 
-        static const std::string kGenerateImagePrefix = "GenerateImage.";
+        constexpr std::string_view kGenerateImagePrefix = "GenerateImage.";
         for (const auto& key : cmd->getNames())
         {
             if (key.substr(0, kGenerateImagePrefix.size()) != kGenerateImagePrefix)
