@@ -586,11 +586,18 @@ internal static class SheetTextLayout
     /// <param name="portions">The stretches it is split into.</param>
     /// <param name="face">The cell's own face, which names the layouter to break with.</param>
     /// <param name="available">The room its lines have, margins already taken off.</param>
+    /// <param name="device">
+    /// The grid every portion's em size is rounded onto before it is measured, or null to measure
+    /// at the size the file states. Non-null only when a row is being measured rather than drawn:
+    /// Calc decides a row's height against a 96 dpi virtual device, which can only set a font at a
+    /// whole number of pixels. See <see cref="MetricGrid.ToEmSize"/>.
+    /// </param>
     internal static IReadOnlyList<(int Start, int End)> RichLineRanges(
         string text,
         IReadOnlyList<SheetTextPortion> portions,
         SheetFace face,
-        Length available)
+        Length available,
+        MetricGrid? device = null)
     {
         if (text.Length == 0) return [];
 
@@ -598,7 +605,7 @@ internal static class SheetTextLayout
             face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
 
         LaidOutParagraph laid = layouter.Layout(
-            Measured(text, portions, scale: 1.0), textAreaWidth: available);
+            Measured(text, portions, scale: 1.0, device), textAreaWidth: available);
 
         List<(int Start, int End)> ranges = new(laid.Lines.Count);
         foreach (LineBox box in laid.Lines)
@@ -947,19 +954,21 @@ internal static class SheetTextLayout
 
     /// <summary>A rich cell's text, shaped run by run so that it can be broken into lines.</summary>
     private static MeasuredParagraph Measured(
-        string text, IReadOnlyList<SheetTextPortion> portions, double scale)
+        string text,
+        IReadOnlyList<SheetTextPortion> portions,
+        double scale,
+        MetricGrid? device = null)
     {
         List<FormattedRun> runs = [];
         foreach (SheetTextPortion portion in portions)
         {
             if (SheetFonts.For(portion.Format) is not { } face) continue;
 
+            Length size = SheetText.SizeOf(portion.Format.FontSize, scale, 100);
+            if (device is { } grid) size = grid.ToEmSize(size);
+
             runs.Add(new FormattedRun(
-                portion.Start,
-                portion.Length,
-                face.Face,
-                SheetText.SizeOf(portion.Format.FontSize, scale, 100),
-                SheetText.NoKerning));
+                portion.Start, portion.Length, face.Face, size, SheetText.NoKerning));
         }
 
         return MeasuredParagraph.Measure(text, runs);

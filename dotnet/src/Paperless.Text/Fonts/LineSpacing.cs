@@ -78,6 +78,22 @@ public readonly record struct MetricGrid(int Dpi)
     /// <summary>Whole device pixels back in whole twips.</summary>
     public Length ToLength(long pixels)
         => Dpi <= 0 ? Length.Zero : Length.FromTwips((long)Math.Round(pixels * TwipsPerPixel));
+
+    /// <summary>
+    /// An em size as the device can actually set it: rounded to whole pixels and back.
+    /// </summary>
+    /// <remarks>
+    /// A font is instantiated at an integer pixel size, so 11 pt on a 96 dpi device is 15 pixels
+    /// rather than 14.667 and every advance it measures is 2.3% wider than the size asked for.
+    /// That is invisible when the same device draws the text, and it is not invisible when one
+    /// device measures and another draws — which is exactly what Calc does to decide a row's
+    /// height (<see cref="MetricGrid"/>'s other users round the vertical metrics for the same
+    /// reason).
+    /// </remarks>
+    public Length ToEmSize(Length emSize)
+        => Dpi <= 0 || emSize <= Length.Zero
+            ? emSize
+            : ToLength((long)Math.Round(emSize.Twips / TwipsPerPixel));
 }
 
 /// <summary>

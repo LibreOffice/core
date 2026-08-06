@@ -40,6 +40,16 @@ namespace Paperless.Spreadsheets.Layout;
 /// and reproduces all thirty exactly.
 /// </para>
 /// <para>
+/// <strong>The device is coarse horizontally too, and differently.</strong> A row is a line count
+/// before it is a height, so the width that decides where the text breaks is as much of the answer
+/// as the pitch is — and two things make that width Calc's rather than the document's. The em is
+/// rounded to whole pixels before a single advance is measured, so 11 pt text is set at 15 pixels
+/// and runs 2.3% wide while 10 pt is set at 13 and runs 2.5% narrow. And the paper is the column
+/// width times <c>nPPTX</c>, which <see cref="OutputFactor"/> has divided and <c>nPPTY</c> has not.
+/// Neither is visible in the drawn page — LibreOffice draws the same text at the same advances
+/// Paperless does, measured off its own PDF — and only the row it reserved for it disagrees.
+/// </para>
+/// <para>
 /// What is still not reproduced is a turned or stacked cell, whose size is its text's *width* put
 /// through an angle. A row holding one takes the larger of the arithmetic answer and the
 /// height its file already states. That fallback is not a fudge — the arithmetic answer really is
@@ -72,7 +82,7 @@ internal static class SheetOptimalRowHeights
     private const int StandardRowHeightDifference = 23;
 
     /// <summary>
-    /// A cell's top and bottom margins, together, in twips.
+    /// A cell's margin on any one side, in twips.
     /// </summary>
     /// <remarks>
     /// Calc's default <c>ATTR_MARGIN</c> is 20 twips on all four sides
@@ -82,7 +92,18 @@ internal static class SheetOptimalRowHeights
     /// than a lookup, and it is the constant that turns a 12 pt font's 283 twips into the 300 Calc
     /// writes.
     /// </remarks>
-    private const int VerticalMarginTwips = 40;
+    private const int CellMarginTwips = 20;
+
+    /// <summary>
+    /// A cell's top and bottom margins, together, in twips.
+    /// </summary>
+    /// <remarks>
+    /// The pair, because the arithmetic height adds both at once. The horizontal pair is not the
+    /// same number of *pixels*: it comes off the paper as two truncations of
+    /// <c>CellMarginTwips × nPPTX</c>, and <c>nPPTX</c> has been divided by
+    /// <see cref="OutputFactor"/>.
+    /// </remarks>
+    private const int VerticalMarginTwips = 2 * CellMarginTwips;
 
     /// <summary>
     /// The twips a pixel is worth on the device Calc measures rows against.
@@ -94,7 +115,16 @@ internal static class SheetOptimalRowHeights
     /// 96 dpi, so a pixel is 15 twips.
     /// </para>
     /// <para>
-    /// It matters because <c>lcl_pixelSizeChanged</c> (<c>sc/source/core/data/table2.cxx:3388</c>)
+    /// It is used in two places and they are not the same number as <see cref="PixelsPerTwip"/>'s
+    /// reciprocal. Turning a paper width in pixels back into a length is
+    /// <c>pDev->PixelToLogic(aPaper, aHMMMode)</c> (<c>column2.cxx:481-486</c>), which uses the
+    /// device's real resolution — 2540/96 per pixel in hundredths of a millimetre, so 15 twips.
+    /// The row height that comes back the other way is divided by <c>nPPTY</c>, which is Calc's
+    /// rounded 0.067. Both are below, deliberately.
+    /// </para>
+    /// <para>
+    /// It also matters because <c>lcl_pixelSizeChanged</c>
+    /// (<c>sc/source/core/data/table2.cxx:3388</c>)
     /// refuses to replace a stated height with a computed one that rounds to the same pixel, so a
     /// file whose heights are already Calc's own answers keeps them exactly. That guard is applied
     /// here to all three formats although Calc applies it to two: the BIFF filter reaches rows
@@ -134,6 +164,32 @@ internal static class SheetOptimalRowHeights
     /// of them is worth 2 pixels rather than the 2.68 the twips would give.
     /// </remarks>
     private const int MarginPixels = 1;
+
+    /// <summary>
+    /// The print-to-screen factor the horizontal resolution — and only the horizontal — is
+    /// divided by.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScSizeDeviceProvider</c> derives both resolutions from its virtual device and then does
+    /// one more thing to one of them: <c>nPPTX /= rDocSh.GetOutputFactor()</c>
+    /// (<c>sc/source/ui/docshell/sizedev.cxx:52</c>). <c>nPPTY</c> is left alone. So a row's
+    /// <em>height</em> is worked out on a 96 dpi grid and its <em>paper width</em> is not, and the
+    /// paper <c>GetNeededSize</c> hands the EditEngine is this much narrower than the column
+    /// (<c>nDocWidth = GetOriginalWidth(nCol) * nPPTX</c>, <c>column2.cxx:463</c>).
+    /// </para>
+    /// <para>
+    /// <c>ScDocShell::CalcOutputFactor</c> (<c>sc/source/ui/docshell/docsh3.cxx:380-426</c>) sets
+    /// it once per document, before the import, as the ratio of one fixed 72-character test string
+    /// measured on the reference device to the same string measured on the screen device — so it
+    /// is a property of the machine and the application's default cell font rather than of the
+    /// workbook, which is why it is a constant here alongside the 96 dpi and the 0.067. Like
+    /// those two it is fitted to this machine's headless <c>soffice</c>: see the probe workbooks
+    /// in <c>SheetRowHeightDeviceTests</c>, whose 2114 rows it reproduces exactly and which are
+    /// what a different machine would have to be re-fitted against.
+    /// </para>
+    /// </remarks>
+    private const double OutputFactor = 1.0345;
 
     /// <summary>
     /// The grid a sheet is laid out on, with its hinted row heights re-derived from its content.
@@ -428,13 +484,15 @@ internal static class SheetOptimalRowHeights
         // `aPaper.setWidth(nDocWidth)`: the column in whole pixels, less a pixel of margin either
         // side, less the one the gridline takes — "output size is width-1 pixel (due to gridline)"
         // (`column2.cxx:466-470`). A left- or right-aligned indent comes off as well.
-        long paper = (long)(width * PixelsPerTwip) - (2 * MarginPixels) - 1;
+        double horizontal = PixelsPerTwip / OutputFactor;
+        long paper = (long)(width * horizontal)
+                     - (2 * (long)(CellMarginTwips * horizontal)) - 1;
         if (format.Horizontal is SheetHorizontalAlignment.Left or SheetHorizontalAlignment.Right)
-            paper -= (long)(format.Indent.Twips * PixelsPerTwip);
+            paper -= (long)(format.Indent.Twips * horizontal);
 
         if (paper <= 0) return 0;
 
-        Length available = Length.FromTwips((long)(paper / PixelsPerTwip));
+        Length available = Length.FromTwips(paper * TwipsPerPixel);
         MetricGrid grid = new(ScreenDpi);
 
         long pixels = portions is { Count: > 0 }
@@ -448,7 +506,7 @@ internal static class SheetOptimalRowHeights
     private static long PlainPixels(
         string text, SheetFace face, Length size, Length available, MetricGrid grid)
     {
-        int lines = SheetTextLayout.LineCount(text, face, size, available);
+        int lines = SheetTextLayout.LineCount(text, face, grid.ToEmSize(size), available);
         if (lines <= 0) return 0;
 
         long line = LinePixels(face, size, grid);
@@ -484,7 +542,7 @@ internal static class SheetOptimalRowHeights
         long total = 0;
 
         foreach ((int start, int end) in
-                 SheetTextLayout.RichLineRanges(text, portions, face, available))
+                 SheetTextLayout.RichLineRanges(text, portions, face, available, grid))
         {
             long ascent = 0;
             long descent = 0;

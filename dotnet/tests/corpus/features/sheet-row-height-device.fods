@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri"/>
+ </office:font-face-decls>
+ <office:automatic-styles>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.1783in"
+    style:use-optimal-row-height="true"/></style:style>
+  <style:style style:name="co_p10w3800" style:family="table-column"><style:table-column-properties style:column-width="2.6389in"/></style:style>
+  <style:style style:name="ce_p10w3800" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="10pt"/></style:style>
+  <style:style style:name="co_p10w3850" style:family="table-column"><style:table-column-properties style:column-width="2.6736in"/></style:style>
+  <style:style style:name="ce_p10w3850" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="10pt"/></style:style>
+  <style:style style:name="co_p11w4400" style:family="table-column"><style:table-column-properties style:column-width="3.0556in"/></style:style>
+  <style:style style:name="ce_p11w4400" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="11pt"/></style:style>
+  <style:style style:name="co_p11w4450" style:family="table-column"><style:table-column-properties style:column-width="3.0903in"/></style:style>
+  <style:style style:name="ce_p11w4450" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="11pt"/></style:style>
+  <style:style style:name="co_p12w4700" style:family="table-column"><style:table-column-properties style:column-width="3.2639in"/></style:style>
+  <style:style style:name="ce_p12w4700" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="12pt"/></style:style>
+  <style:style style:name="co_p12w4750" style:family="table-column"><style:table-column-properties style:column-width="3.2986in"/></style:style>
+  <style:style style:name="ce_p12w4750" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="12pt"/></style:style>
+ </office:automatic-styles>
+ <office:body><office:spreadsheet>
+  <table:table table:name="p10w3800">
+   <table:table-column table:style-name="co_p10w3800"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3800" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3800" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3800" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3800" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="p10w3850">
+   <table:table-column table:style-name="co_p10w3850"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3850" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3850" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3850" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p10w3850" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="p11w4400">
+   <table:table-column table:style-name="co_p11w4400"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4400" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4400" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4400" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4400" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="p11w4450">
+   <table:table-column table:style-name="co_p11w4450"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4450" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4450" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4450" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p11w4450" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="p12w4700">
+   <table:table-column table:style-name="co_p12w4700"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4700" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4700" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4700" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4700" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="p12w4750">
+   <table:table-column table:style-name="co_p12w4750"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4750" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4750" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4750" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce_p12w4750" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+  </table:table>
+ </office:spreadsheet></office:body>
+</office:document>
