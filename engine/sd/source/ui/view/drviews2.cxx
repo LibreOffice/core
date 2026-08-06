@@ -32,6 +32,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
 
 #include <avmedia/mediaplayer.hxx>
 
@@ -261,8 +262,7 @@ bool lcl_IsValidDesignTemplateName(const OUString& rName)
     for (sal_Int32 i = 0; i < rName.getLength(); ++i)
     {
         const sal_Unicode cChar = rName[i];
-        const bool bAllowed = (cChar >= 'a' && cChar <= 'z') || (cChar >= 'A' && cChar <= 'Z')
-                              || (cChar >= '0' && cChar <= '9') || cChar == ' ' || cChar == '-'
+        const bool bAllowed = rtl::isAsciiAlphanumeric(cChar) || cChar == ' ' || cChar == '-'
                               || cChar == '_';
         if (!bAllowed)
             return false;
@@ -281,7 +281,7 @@ bool lcl_IsValidDesignIntentWord(const OUString& rWord)
     for (sal_Int32 i = 0; i < rWord.getLength(); ++i)
     {
         const sal_Unicode cChar = rWord[i];
-        if (!((cChar >= 'a' && cChar <= 'z') || cChar == '-'))
+        if (!(rtl::isAsciiLowerCase(cChar) || cChar == '-'))
             return false;
     }
     return true;
