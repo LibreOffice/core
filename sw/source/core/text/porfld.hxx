@@ -24,6 +24,7 @@
 #include <string_view>
 
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include <swfont.hxx>
 #include "porexp.hxx"
 #include <o3tl/enumarray.hxx>
@@ -174,7 +175,7 @@ class SwGrfNumPortion : public SwNumberPortion
     std::unique_ptr<SvxBrushItem> m_pBrush;
     tools::Long            m_nId;    // For StopAnimation
     SwTwips         m_nYPos;  // _Always_ contains the current RelPos
-    SwTwips         m_nGrfHeight;
+    gfx::Length     m_nGrfHeight;
     sal_Int16       m_eOrient;
 public:
     SwGrfNumPortion( const OUString& rGraphicFollowedBy,
@@ -201,7 +202,7 @@ public:
     void SetId( tools::Long nNew ) const
         { const_cast<SwGrfNumPortion*>(this)->m_nId = nNew; }
     SwTwips GetRelPos() const { return m_nYPos; }
-    SwTwips GetGrfHeight() const { return m_nGrfHeight; }
+    gfx::Length GetGrfHeight() const { return m_nGrfHeight; }
     sal_Int16 GetOrient() const { return m_eOrient; }
 private:
     void ImplDestroy();
