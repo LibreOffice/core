@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:body>
+    <office:text>
+      <!-- A standard text paragraph containing an Input Field -->
+      <text:p>Here is the field: <text:text-input text:description="MyInput">User Typed This</text:text-input></text:p>
+    </office:text>
+  </office:body>
+</office:document>

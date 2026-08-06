@@ -2557,6 +2557,57 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testCenterFlyWarichuTab)
                 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testThaiJustifyPortxt)
+{
+    // Trigger Thai/CTL justification handling in portxt.cxx. Thai script has no
+    // spaces to break on, so justified Thai text must be measured/compressed as a
+    // single run rather than incorrectly split into word-like portions.
+    createSwDoc("thai_justify_portxt.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The full 21-character Thai string stays intact as one SwTextPortion.
+    assertXPath(pXmlDoc,
+                "//SwLineLayout/SwLinePortion[contains(@symbol, 'SwTextPortion')][@length='21']",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testRefPageGetField)
+{
+    createSwDoc("ref_page_get_field.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The "Get" field must resolve and expand to its computed value ("1"),
+    // proving RefPageGet correctly evaluated the set/get + page-adjust logic
+    // rather than rendering blank or unresolved.
+    assertXPath(pXmlDoc, "//SwFieldPortion[contains(@symbol, 'SwFieldPortion')][@expand='1']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testInputFieldName)
+{
+    // Load document with an Input Field
+    createSwDoc("input_field_name.fodt");
+
+    // Grab the Writer Shell to modify the view options
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Simulate pressing Ctrl+F9 (View -> Field Names)
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetFieldName(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Dump the layout. The engine MUST evaluate IsFieldName() == true
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // With field names shown, the input field must render its name ("Input field")
+    // instead of the typed content ("*User Typed This*").
+    assertXPath(pXmlDoc,
+                "//SwFieldPortion[contains(@symbol, 'SwFieldPortion')][@expand='Input field']", 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

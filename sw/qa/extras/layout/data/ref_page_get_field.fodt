@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:body>
+    <office:text>
+      <!-- Page Variable Set and Get fields trigger SwFieldIds::RefPageGet -->
+      <text:p>
+        <text:page-variable-set text:page-adjust="1">1</text:page-variable-set>
+        Page Ref: <text:page-variable-get text:page-adjust="1">1</text:page-variable-get>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>
