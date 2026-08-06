@@ -871,8 +871,8 @@ SwGrfNumPortion::SwGrfNumPortion(
     }
     Width( rGrfSize.Width() + 2 * GRFNUM_SECURE );
     m_nFixWidth = Width();
-    m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
-    Height(m_nGrfHeight);
+    m_nGrfHeight = gfx::Length::twip(rGrfSize.Height() + 2 * GRFNUM_SECURE);
+    Height(m_nGrfHeight.as_twip<SwTwips>());
     m_bNoPaint = false;
 }
 
@@ -981,7 +981,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
     Point aPos( rInf.X() + GRFNUM_SECURE, rInf.Y() - GetRelPos() + GRFNUM_SECURE );
     tools::Long nTmpWidth = std::max( tools::Long(0), static_cast<tools::Long>(m_nFixWidth - 2 * GRFNUM_SECURE) );
-    Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
+    Size aSize( nTmpWidth, GetGrfHeight().as_twip<SwTwips>() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
                               ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
@@ -1099,31 +1099,31 @@ void SwGrfNumPortion::SetBase( tools::Long nLnAscent, tools::Long nLnDescent,
 
     SetRelPos( 0 );
     if ( GetOrient() == text::VertOrientation::CENTER )
-        SetRelPos( GetGrfHeight() / 2 );
+        SetRelPos( GetGrfHeight().as_twip<SwTwips>() / 2 );
     else if ( GetOrient() == text::VertOrientation::TOP )
-        SetRelPos( GetGrfHeight() - GRFNUM_SECURE );
+        SetRelPos( GetGrfHeight().as_twip<SwTwips>() - GRFNUM_SECURE );
     else if ( GetOrient() == text::VertOrientation::BOTTOM )
         ;
     else if ( GetOrient() == text::VertOrientation::CHAR_CENTER )
-        SetRelPos( ( GetGrfHeight() + nLnAscent - nLnDescent ) / 2 );
+        SetRelPos( ( GetGrfHeight().as_twip<SwTwips>() + nLnAscent - nLnDescent ) / 2 );
     else if ( GetOrient() == text::VertOrientation::CHAR_TOP )
         SetRelPos( nLnAscent );
     else if ( GetOrient() == text::VertOrientation::CHAR_BOTTOM )
-        SetRelPos( GetGrfHeight() - nLnDescent );
+        SetRelPos( GetGrfHeight().as_twip<SwTwips>() - nLnDescent );
     else
     {
-        if( GetGrfHeight() >= nFlyAsc + nFlyDesc )
+        if( GetGrfHeight().as_twip<SwTwips>() >= nFlyAsc + nFlyDesc )
         {
             // If I'm as large as the line, I do not need to adjust
             // at the line; I'll leave the max. ascent unchanged
             SetRelPos( nFlyAsc );
         }
         else if ( GetOrient() == text::VertOrientation::LINE_CENTER )
-            SetRelPos( ( GetGrfHeight() + nFlyAsc - nFlyDesc ) / 2 );
+            SetRelPos( ( GetGrfHeight().as_twip<SwTwips>() + nFlyAsc - nFlyDesc ) / 2 );
         else if ( GetOrient() == text::VertOrientation::LINE_TOP )
             SetRelPos( nFlyAsc );
         else if ( GetOrient() == text::VertOrientation::LINE_BOTTOM )
-            SetRelPos( GetGrfHeight() - nFlyDesc );
+            SetRelPos( GetGrfHeight().as_twip<SwTwips>() - nFlyDesc );
     }
 }
 
