@@ -1013,6 +1013,12 @@ sal_uInt16 SwSubFont::GetHangingBaseline( SwViewShell const *pSh, const OutputDe
     return aFntAccess.Get()->GetFontHangingBaseline( pSh, rOut );
 }
 
+bool SwSubFont::HasCJKCodePages(SwViewShell const* pSh, const OutputDevice& rOut)
+{
+    SwFntAccess aFntAccess(m_nFontCacheId, m_nFontIndex, this, pSh);
+    return aFntAccess.Get()->GetFontHasCJKCodePages(pSh, rOut);
+}
+
 Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
 {
     // Robust: the font is supposed to be set already, but better safe than
