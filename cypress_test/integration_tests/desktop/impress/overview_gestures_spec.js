@@ -238,6 +238,82 @@ describe(['tagdesktop'], 'Overview page gestures', { testIsolation: false }, fun
 		});
 	});
 
+	it('A middle-button drag pans the overview page', function() {
+		const win = this.win;
+		ensureOverviewPage(win);
+		// Fit one preview to the view first, so the overview page is larger than the
+		// visible area and has room to scroll in both directions.
+		let zoomBefore;
+		cy.then(function() {
+			zoomBefore = win.app.map.getZoom();
+			win.app.dispatcher.dispatch('fitslidetoview', { part: 1 });
+		});
+		cy.then(() => helper.processToIdle(win));
+		cy.then(function() {
+			const anchor = win.app.sectionContainer.getDocumentAnchorSection();
+			const layout = win.app.activeDocument.activeLayout;
+			expect(layout.canScrollHorizontal(anchor), 'page wider than view').to.equal(true);
+			expect(layout.canScrollVertical(anchor), 'page taller than view').to.equal(true);
+		});
+
+		// The container reads the held-buttons mask straight off each mouse event, so
+		// MouseEvents constructed with buttons: 4 (middle held) drive the pan; no real
+		// input path is needed. The events are dispatched directly in the document's
+		// window: the mousedown lands on the canvas element, the moves and the release
+		// go to the document, where the container listens for them.
+		let before, center;
+		cy.then(function() {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			center = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+			const viewed = win.app.activeDocument.activeLayout.viewedRectangle;
+			before = [viewed.pX1, viewed.pY1];
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				button: 1, buttons: 4, clientX: center.x, clientY: center.y, bubbles: true,
+			}));
+		});
+		cy.then(function() {
+			expect(win.document.getElementById('document-canvas').style.cursor)
+				.to.equal('grabbing');
+			win.document.dispatchEvent(new win.MouseEvent('mousemove', {
+				buttons: 4, clientX: center.x - 30, clientY: center.y - 20, bubbles: true,
+			}));
+			win.document.dispatchEvent(new win.MouseEvent('mousemove', {
+				buttons: 4, clientX: center.x - 60, clientY: center.y - 40, bubbles: true,
+			}));
+			win.document.dispatchEvent(new win.MouseEvent('mouseup', {
+				button: 1, buttons: 0, clientX: center.x - 60, clientY: center.y - 40,
+				bubbles: true,
+			}));
+			// A move without the middle button held ends the pan even when no release
+			// reached a handler, so this also puts the cursor back for the check below.
+			win.document.dispatchEvent(new win.MouseEvent('mousemove', {
+				buttons: 0, clientX: center.x - 60, clientY: center.y - 40, bubbles: true,
+			}));
+		});
+		// The pan queues its scroll for the next animation frame, so the view catches
+		// up with the events a beat after they are dispatched; the should() retries
+		// until it has.
+		cy.wrap(win, { log: false }).should(function(w) {
+			// The grabbed page follows the mouse: dragging up and left scrolls the
+			// view down and right by the same distance, in core pixels.
+			const viewed = w.app.activeDocument.activeLayout.viewedRectangle;
+			expect(viewed.pX1 - before[0]).to.be.closeTo(60 * w.app.dpiScale, 2);
+			expect(viewed.pY1 - before[1]).to.be.closeTo(40 * w.app.dpiScale, 2);
+			expect(w.document.getElementById('document-canvas').style.cursor)
+				.to.not.equal('grabbing');
+		});
+		// Put the zoom back where it was; the part switch the flag below triggers
+		// re-derives only the scroll position, not the zoom level.
+		cy.then(function() {
+			win.app.zoomControl.zoomTo(zoomBefore, undefined, false);
+		});
+		cy.then(() => helper.processToIdle(win));
+		cy.then(function() {
+			viewNeedsRefresh = true;
+		});
+	});
+
 	it('A single click selects the preview without core resize handles', function() {
 		const win = this.win;
 		ensureOverviewPage(win);

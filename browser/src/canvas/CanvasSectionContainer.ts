@@ -223,6 +223,10 @@ class CanvasSectionContainer {
 	// press on the canvas.
 	private middleClickOnHyperlink: boolean = false;
 
+	// Canvas-locale position of the previous step of a middle-button pan of the overview
+	// page, or null when no pan is running.
+	private middlePanPosition: Array<number> = null;
+
 	constructor (canvasDOMElement: HTMLCanvasElement, disableDrawing?: boolean) {
 		this.canvas = canvasDOMElement;
 		this.context = canvasDOMElement.getContext('2d', { alpha: false });
@@ -1219,11 +1223,33 @@ class CanvasSectionContainer {
 			&& app.map._docLayer._coreMousePointer === 'pointer';
 	}
 
+	private startMiddlePan(e: MouseEvent) {
+		this.middlePanPosition = this.convertPositionToCanvasLocale(e);
+		this.canvas.style.cursor = 'grabbing';
+	}
+
+	private stopMiddlePan() {
+		this.middlePanPosition = null;
+		// An empty style lets the sections claim the cursor again on the next
+		// mouse move.
+		this.canvas.style.cursor = '';
+	}
+
 	public onAuxClick (e: MouseEvent) {
 		// Only the middle button is handled here. The right button opens the
 		// context menu through its own path.
 		if (e.button !== 1)
 			return;
+
+		// A press that grabbed the overview page ends here. Consuming the
+		// click keeps the browser from pasting the primary selection where
+		// the pan happened to stop.
+		if (this.middlePanPosition !== null) {
+			this.stopMiddlePan();
+			e.preventDefault();
+			e.stopPropagation();
+			return;
+		}
 
 		// A middle click that did not land on a hyperlink is left to the
 		// browser, so pasting the primary selection keeps working.
@@ -1276,6 +1302,25 @@ class CanvasSectionContainer {
 	}
 
 	private onMouseMove (e: MouseEvent) {
+		if (this.middlePanPosition !== null) {
+			if ((e.buttons & 4) === 0) {
+				// The release happened where no handler saw it, so the first
+				// move without the middle button ends the pan.
+				this.stopMiddlePan();
+			}
+			else {
+				const position = this.convertPositionToCanvasLocale(e);
+				// The grabbed page follows the mouse, so the view scrolls the
+				// opposite way.
+				app.activeDocument.activeLayout.scroll(
+					this.middlePanPosition[0] - position[0],
+					this.middlePanPosition[1] - position[1],
+					true);
+				this.middlePanPosition = position;
+				return;
+			}
+		}
+
 		// Early exit. If mouse is outside and "draggingSomething = false", then there is no reason to check further.
 		// Add an exception for leaflet, check after removing it.
 		if (!this.mouseIsInside && !this.draggingSomething && !this.isLongPressActive())
@@ -1342,19 +1387,28 @@ class CanvasSectionContainer {
 			if (this.middleClickOnHyperlink) {
 				e.preventDefault();
 				e.stopPropagation();
-			} else {
-				// A middle-button press elsewhere is left to the browser, so
-				// pasting the primary selection keeps working, but the paste is
-				// that press's own default action - it happens before any event
-				// fired after this one, such as auxclick. Move the cell or text
-				// cursor to the pointer now, the same as a left click would, so
-				// the paste lands there instead of wherever the cursor was left
-				// before.
-				const mousePosition = this.convertPositionToCanvasLocale(e);
-				const section: CanvasSectionObject = this.findSectionContainingPoint(mousePosition);
-				if (section) {
-					this.propagateOnMiddleClick(section, this.convertPositionToSectionLocale(section, mousePosition), e, /* openHyperlink */ false);
-				}
+				return;
+			}
+			// On the overview page the middle button grabs the page: the view
+			// follows the mouse while the button stays held. Consuming the
+			// press keeps the browser from starting its own autoscroll.
+			if (OverviewNavigation.isOverviewActive()) {
+				this.startMiddlePan(e);
+				e.preventDefault();
+				e.stopPropagation();
+				return;
+			}
+			// A middle-button press elsewhere is left to the browser, so
+			// pasting the primary selection keeps working, but the paste is
+			// that press's own default action - it happens before any event
+			// fired after this one, such as auxclick. Move the cell or text
+			// cursor to the pointer now, the same as a left click would, so
+			// the paste lands there instead of wherever the cursor was left
+			// before.
+			const mousePosition = this.convertPositionToCanvasLocale(e);
+			const section: CanvasSectionObject = this.findSectionContainingPoint(mousePosition);
+			if (section) {
+				this.propagateOnMiddleClick(section, this.convertPositionToSectionLocale(section, mousePosition), e, /* openHyperlink */ false);
 			}
 			return;
 		}
@@ -1400,8 +1454,10 @@ class CanvasSectionContainer {
 				// The browser pastes the primary selection when the middle
 				// button is released. For a press that landed on a
 				// hyperlink, consume the release, so the click only opens
-				// the link.
-				if (this.middleClickOnHyperlink) {
+				// the link. A press that grabbed the overview page is
+				// consumed the same way; the pan state itself stays set
+				// until the auxclick that follows this release.
+				if (this.middleClickOnHyperlink || this.middlePanPosition !== null) {
 					e.preventDefault();
 					e.stopPropagation();
 				}
