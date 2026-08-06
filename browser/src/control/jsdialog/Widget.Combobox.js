@@ -333,6 +333,30 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	container.addEventListener('click', function () { content.focus(); });
 
 	content.addEventListener('keyup', function (event) {
+		// Suggest the first entry that starts with what has been typed so far, with the
+		// suggested remainder selected: typing further replaces it, accepting it (Tab,
+		// Return, or an arrow past it) keeps it. event.key.length === 1 excludes named
+		// keys (Backspace, arrows, Enter, ...), whose native effect on the field is left
+		// alone here.
+		if (data.entrycompletion !== false && event.key.length === 1) {
+			const typed = this.value.substring(0, this.selectionStart);
+			const match = typed.length > 0 && entries.find(function (entry) {
+				return entry.text.length > typed.length &&
+					entry.text.toLowerCase().startsWith(typed.toLowerCase());
+			});
+			if (match) {
+				this.value = match.text;
+				this.setSelectionRange(typed.length, match.text.length);
+			}
+		}
+
+		if (event.key === 'Enter') {
+			// Accepting a suggested completion commits it outright: the ghost-highlighted
+			// remainder is no longer a pending choice, so clear it and leave the cursor
+			// at the end, the same as it would be after picking an entry from the list.
+			this.setSelectionRange(this.value.length, this.value.length);
+		}
+
 		const shouldTriggerChange = data.changeOnEnterOnly ? event.key === 'Enter' : true;
 		if (shouldTriggerChange) {
 			builder.callback('combobox', 'change', data, this.value, builder);

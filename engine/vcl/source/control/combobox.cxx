@@ -1601,6 +1601,11 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (IsUserDrawEnabled())
         rJsonWriter.put("customEntryRenderer", true);
+
+    // Autocomplete is on by default for every combo box (see the constructor), so only
+    // report it when a dialog turned it off, rather than repeating "true" everywhere.
+    if (!IsAutocompleteEnabled())
+        rJsonWriter.put("entrycompletion", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

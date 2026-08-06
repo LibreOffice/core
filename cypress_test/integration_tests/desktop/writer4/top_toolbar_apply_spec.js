@@ -81,6 +81,35 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 		cy.cGet('#copy-paste-container p font').should('have.attr', 'face', 'Alef');
 	});
 
+	it('Font name box suggests a matching entry while typing.', function() {
+		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').click().clear();
+		helper.typeText('#fontnamecombobox.notebookbar .ui-combobox-content', 'Ale', 100);
+
+		// The suggested remainder of 'Alef' is selected, so accepting or continuing
+		// to type replaces it, but nothing has been committed yet.
+		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content')
+			.should('have.prop', 'value', 'Alef')
+			.should('have.prop', 'selectionStart', 3)
+			.should('have.prop', 'selectionEnd', 4);
+	});
+
+	it('Return clears the suggestion highlight and commits the full name.', function() {
+		helper.setDummyClipboardForCopy();
+
+		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').click().clear();
+		helper.typeText('#fontnamecombobox.notebookbar .ui-combobox-content', 'Liberation Ser', 100);
+		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').type('{enter}');
+
+		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content')
+			.should('have.prop', 'value', 'Liberation Serif')
+			.should('have.prop', 'selectionStart', 16)
+			.should('have.prop', 'selectionEnd', 16);
+
+		refreshCopyPasteContainer();
+		helper.copy();
+		cy.cGet('#copy-paste-container p font').should('have.attr', 'face', 'Liberation Serif, serif');
+	});
+
 	it('Apply bold font.', function() {
 		helper.setDummyClipboardForCopy();
 		desktopHelper.getNbIcon('Bold').click();
