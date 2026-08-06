@@ -134,6 +134,27 @@ vcl::filter::PDFObjectElement* findEncryptionObject(vcl::filter::PDFDocument& rD
     return nullptr;
 }
 
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_6)
+{
+    loadFromURL(u"private:factory/swriter"_ustr);
+
+    // Save PDF
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(16)) },
+          { "EncryptFile", cpo::uno::Any(true) },
+          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+    maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+
+    // Load the exported result in PDFium
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    int nFileVersion = pPdfDocument->getFileVersion();
+    CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
+}
+
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
 {
     loadFromURL(u"private:factory/swriter"_ustr);

@@ -350,8 +350,13 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
 
     if (xEncryptionMaterialHolder.is())
     {
-        if (m_aContext.Version == PDFWriter::PDFVersion::PDF_2_0 || m_aContext.Version == PDFWriter::PDFVersion::PDF_A_4)
+        // Default PDF 1.7 to R6 encryption, it is much better.
+        if (m_aContext.Version == PDFWriter::PDFVersion::PDF_1_7
+            || m_aContext.Version == PDFWriter::PDFVersion::PDF_2_0
+            || m_aContext.Version == PDFWriter::PDFVersion::PDF_A_4)
+        {
             m_pPDFEncryptor.reset(new PDFEncryptorR6);
+        }
         else
             m_pPDFEncryptor.reset(new PDFEncryptor);
         m_pPDFEncryptor->prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
@@ -4465,6 +4470,14 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append("/Dests ");
         aLine.append( nNamedDestinationsDictionary );
         aLine.append( " 0 R\n" );
+    }
+
+    // Adobe added AES-256 encryption to Acrobat X as "PDF 1.7 Adobe ExtensionLevel 8"
+    if (m_aContext.Version == PDFWriter::PDFVersion::PDF_1_7 && m_pPDFEncryptor
+        && m_pPDFEncryptor->getRevision() == 6 && m_aContext.Encryption.canEncrypt())
+    {
+        aLine.append("/Extensions<</ADBE<</Type/DeveloperExtensions/BaseVersion/1.7"
+                     "/ExtensionLevel 8>>>>\n");
     }
 
     if (!m_aDocumentAttachedFiles.empty())
