@@ -363,7 +363,7 @@ std::vector<sal_uInt8> PDFEncryptorR6::getEncryptedAccessPermissions(std::vector
 void PDFEncryptorR6::initEncryption(EncryptionHashTransporter& rEncryptionHashTransporter,
                                     const OUString& rOwnerPassword, const OUString& rUserPassword)
 {
-    if (rUserPassword.isEmpty())
+    if (rOwnerPassword.isEmpty() && rUserPassword.isEmpty())
         return;
 
     std::vector<sal_uInt8> aEncryptionKey = vcl::pdf::generateKey();
