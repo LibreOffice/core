@@ -31,7 +31,6 @@
 #include <cstdint>
 #include <cstring>
 #include <iomanip>
-#include <limits>
 #include <map>
 #include <memory.h>
 #include <mutex>
@@ -803,29 +802,6 @@ int main(int argc, char**argv)
         }
 
         return 0;
-    }
-
-    /// Return the position of sub-array @sub in array @data, if found, -1 otherwise.
-    inline int findSubArray(const char* data, const std::size_t dataLen, const char* sub,
-                            const std::size_t subLen)
-    {
-        assert(subLen < std::numeric_limits<unsigned int>::max() &&
-               "Invalid sub-array length to find");
-        if (sub && subLen && dataLen >= subLen)
-        {
-            for (std::size_t i = 0; i < dataLen; ++i)
-            {
-                std::size_t j;
-                for (j = 0; j < subLen && i + j < dataLen && data[i + j] == sub[j]; ++j)
-                {
-                }
-
-                if (j >= subLen)
-                    return i;
-            }
-        }
-
-        return -1;
     }
 
     inline
