@@ -134,7 +134,6 @@ public static partial class FontSubstitutions
             ["heiseimin"] = ["msmincho", "mspmincho", "minchol", "mincho", "heiseimin", "minchou", "arialunicodems", "lucidaunicode"],
             ["helmet"] = ["albanyamt", "albany", "liberationsans", "arial", "nimbussansl", "helvetica", "lucidasans", "lucida", "geneva", "helmet", "sansserif", "nimbussans", "andalesansui", "arialunicodems", "lucidaunicode"],
             ["helmetcondensed"] = ["arialnarrow", "helveticanarrow", "dejavusanscondensed", "nimbussanslcondensed", "nimbussanscondensed"],
-            ["helv"] = ["albanyamt", "albany", "liberationsans", "arial", "nimbussansl", "helvetica", "lucidasans", "lucida", "geneva", "helmet", "sansserif", "nimbussans", "andalesansui", "arialunicodems", "lucidaunicode"],
             ["helvetica"] = ["albanyamt", "albany", "liberationsans", "arial", "nimbussansl", "lucidasans", "lucida", "geneva", "helmet", "sansserif", "nimbussans", "andalesansui", "arialunicodems", "lucidaunicode"],
             ["helveticanarrow"] = ["liberationsansnarrow", "arialnarrow", "helmetcondensed", "dejavusanscondensed", "nimbussanslcondensed", "nimbussanscondensed"],
             ["hiraginokakugothicpronw3"] = ["hiraginokakugothicprow3", "msgothic"],
