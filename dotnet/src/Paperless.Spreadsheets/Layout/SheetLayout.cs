@@ -250,6 +250,57 @@ public sealed class SheetLayout
     private SheetRange? _usedRange;
 
     /// <summary>
+    /// The last row holding data in each column that holds any, keyed by zero-based column.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Calc's attribute scan is asked per column and answered per column:
+    /// <c>ScColumn::GetLastVisibleAttr</c> passes <em>that column's own</em>
+    /// <c>GetLastDataPos()</c> — "always including notes, 0 if none" — into
+    /// <c>ScAttrArray::GetLastVisibleAttr</c> (<c>sc/inc/column.hxx:892-897</c>). A column
+    /// holding no data therefore has its formatting scanned from the top of the sheet rather
+    /// than from wherever the sheet's data happens to end, and the run arithmetic that decides
+    /// whether the column prints is a different sum. See <see cref="SheetDecorationArea"/>.
+    /// </para>
+    /// <para>
+    /// A column with no data is absent from the map; the scan reads that as Calc's "0 if none".
+    /// </para>
+    /// </remarks>
+    public IReadOnlyDictionary<int, int> LastDataRowByColumn
+    {
+        get
+        {
+            if (_lastDataRowByColumn is { } cached) return cached;
+
+            Dictionary<int, int> byColumn = [];
+
+            foreach (ContentTableRow row in (Cells?.Children ?? []).OfType<ContentTableRow>())
+            {
+                foreach (ContentTableCell cell in row.Children.OfType<ContentTableCell>())
+                {
+                    // The same "is this content" test UsedRange makes, for the same reason.
+                    if (cell.Value is null && cell.GetText().Length == 0) continue;
+
+                    int rowEnd = cell.Row + Math.Max(1, cell.RowSpan) - 1;
+                    int columnEnd = cell.Column + Math.Max(1, cell.ColumnSpan) - 1;
+
+                    for (int column = cell.Column; column <= columnEnd; column++)
+                    {
+                        if (column < 0) continue;
+                        if (!byColumn.TryGetValue(column, out int last) || rowEnd > last)
+                            byColumn[column] = rowEnd;
+                    }
+                }
+            }
+
+            _lastDataRowByColumn = byColumn;
+            return byColumn;
+        }
+    }
+
+    private IReadOnlyDictionary<int, int>? _lastDataRowByColumn;
+
+    /// <summary>
     /// The block the sheet actually prints: its used range, widened for the drawings floating
     /// over it and then for overflowing text.
     /// </summary>
@@ -285,7 +336,9 @@ public sealed class SheetLayout
             // pass is part of GetPrintArea itself rather than a widening applied to its answer
             // (`// Test attribute`, table1.cxx:710) — see SheetDecorationArea.
             SheetRange used = SheetDrawingArea.Extend(
-                SheetDecorationArea.Extend(UsedRange, Formatting), Drawings, Grid);
+                SheetDecorationArea.Extend(UsedRange, Formatting, LastDataRowByColumn),
+                Drawings,
+                Grid);
             SheetRange printed = used.IsValid && Setup.PrintAreas.Count == 0
                 ? used with { LastColumn = SheetTextOverflow.ExtendedLastColumn(this, used) }
                 : used;

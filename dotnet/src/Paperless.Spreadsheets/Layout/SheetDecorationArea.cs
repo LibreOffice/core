@@ -33,6 +33,18 @@ namespace Paperless.Spreadsheets.Layout;
 /// same answer Calc arrives at and reaches it without materialising a million rows.
 /// </para>
 /// <para>
+/// <strong>The scan is asked per column and starts per column.</strong>
+/// <c>ScColumn::GetLastVisibleAttr</c> passes that column's <em>own</em> <c>GetLastDataPos()</c>,
+/// "0 if none" (<c>sc/inc/column.hxx:892-897</c>), so a column holding no data is scanned from
+/// the top of the sheet rather than from wherever the sheet's data ends. Starting every column
+/// at the sheet's last data row instead loses the columns whose only formatting is above it —
+/// measured on <c>Computer and Software Services_50 State Comparison.xlsx</c>, whose columns I
+/// to O carry a fill on all 129 rows and no data at all: the sheet's data stops at row 42, the
+/// fill below it is one run of 112 equal rows and stops the scan, and the one run short enough
+/// to be taken is the header row above the data. The print area therefore ended at column H and
+/// Calc's reaches O, which is a whole third column band — 24 pages against 26.
+/// </para>
+/// <para>
 /// Measured on <c>e-pass-contact-details-template.xlsx</c>, a form whose only values are its nine
 /// column headings and whose row 14 is a ruled box across two of them: the print area stopped at
 /// row 1, so the box was never placed on a page and never drawn, and the second page differed from
@@ -52,7 +64,16 @@ internal static class SheetDecorationArea
     /// </summary>
     /// <param name="used">The block of cells the sheet holds, which may be invalid.</param>
     /// <param name="formatting">The sheet's fills and borders.</param>
-    public static SheetRange Extend(SheetRange used, SheetFormatting formatting)
+    /// <param name="lastDataRowByColumn">
+    /// The last row holding data in each column that holds any, as
+    /// <see cref="SheetLayout.LastDataRowByColumn"/> supplies it. Null falls back to the sheet's
+    /// own last data row for every column, which is the narrower answer and the one this scan
+    /// gave before the per-column start was implemented.
+    /// </param>
+    public static SheetRange Extend(
+        SheetRange used,
+        SheetFormatting formatting,
+        IReadOnlyDictionary<int, int>? lastDataRowByColumn = null)
     {
         ArgumentNullException.ThrowIfNull(formatting);
         if (formatting.IsEmpty) return used;
@@ -62,9 +83,15 @@ internal static class SheetDecorationArea
         int lastData = used.IsValid ? used.LastRow : -1;
 
         Dictionary<int, SortedList<int, SheetCellDecoration>> columns = [];
+        Dictionary<int, int> columnStart = [];
         foreach ((int row, int column, SheetCellDecoration format) in formatting.Cells)
         {
-            if (row <= lastData) continue;
+            if (!columnStart.TryGetValue(column, out int start))
+                columnStart[column] = start = StartOf(column, lastData, lastDataRowByColumn);
+
+            // Calc processes the attribute run *containing* the column's last data row, so the
+            // row itself is inside the scan and only the rows above it are out of it.
+            if (row < start) continue;
 
             if (!columns.TryGetValue(column, out SortedList<int, SheetCellDecoration>? rows))
                 columns[column] = rows = [];
@@ -83,7 +110,7 @@ internal static class SheetDecorationArea
 
         foreach ((int column, SortedList<int, SheetCellDecoration> rows) in columns)
         {
-            if (LastVisible(rows, lastData) is not { } reached) continue;
+            if (LastVisible(rows, columnStart[column]) is not { } reached) continue;
 
             // Calc widens the block to the column only when that column's own scan found
             // something inside the run limit — `bFound` gates both `nMaxX` and `nMaxY`
@@ -103,6 +130,31 @@ internal static class SheetDecorationArea
                 LastColumn = Math.Max(used.LastColumn, lastColumn),
             }
             : new SheetRange(0, 0, Math.Max(lastColumn, 0), Math.Max(lastRow, 0));
+    }
+
+    /// <summary>
+    /// The row one column's attribute scan is measured from — Calc's <c>nLastData</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScColumn::GetLastVisibleAttr</c> passes that column's own <c>GetLastDataPos()</c>,
+    /// documented as "always including notes, <strong>0 if none</strong>"
+    /// (<c>sc/inc/column.hxx:892-897</c>). So a column holding no data is measured from row zero
+    /// and not from the sheet's last data row, which is what lets an empty but filled column to
+    /// the right of the data keep the sheet's print area — the run above the sheet's data is
+    /// what the scan reads, and it never reached it before.
+    /// </para>
+    /// <para>
+    /// Without a per-column map the sheet's own last data row stands in for every column, which
+    /// is the narrower answer: every scan then starts lower down and finds less.
+    /// </para>
+    /// </remarks>
+    private static int StartOf(
+        int column, int sheetLastData, IReadOnlyDictionary<int, int>? lastDataRowByColumn)
+    {
+        if (lastDataRowByColumn is null) return sheetLastData;
+
+        return lastDataRowByColumn.TryGetValue(column, out int last) ? last : 0;
     }
 
     /// <summary>
@@ -152,7 +204,14 @@ internal static class SheetDecorationArea
                 end++;
             }
 
-            if (rows.Keys[end] + 1 - start >= VisibleAttributeStop) return found;
+            // Calc measures a run from the row after the last data row, not from where the run
+            // itself begins: `if (nAttrStartRow <= nLastData) nAttrStartRow = nLastData + 1`
+            // (attarray.cxx:1961-1962). Only the first run can start that high up, and for a
+            // run that is nothing but the last data row the sum is zero — which is how a column
+            // whose formatting begins on the row Calc calls its last data row is kept at all.
+            if (rows.Keys[end] + 1 - Math.Max(start, lastData + 1) >= VisibleAttributeStop)
+                return found;
+
             if (!rows.Values[end].IsNone) found = rows.Keys[end];
 
             at = end + 1;
