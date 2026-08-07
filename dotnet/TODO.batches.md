@@ -3483,8 +3483,8 @@ Five of the ten files changed are below the presentation family — `Paperless.C
 
 Per project, each run redirected to its own file, 0 failed and 0 skipped everywhere:
 Core **243** (was 238), Text 196, Containers 109, Rendering 104, Markup 259, OpenDocument 125,
-WordProcessing 553, Spreadsheets 410, Presentations **496** (was 488), Vector 291, Fidelity 538.
-The two that moved are the thirteen tests added and nothing else.
+WordProcessing 553, Spreadsheets 410, Presentations **497** (was 488), Vector 291, Fidelity 538.
+The two that moved are the fourteen tests added and nothing else.
 
 One fixture: `slide-pattern-fill.pptx`, five presets plus a preset-less pattern plus a table
 whose cells state their own, every expectation read out of LibreOffice's flat-ODF export of it.
