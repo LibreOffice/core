@@ -2142,6 +2142,117 @@ feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the refe
 do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
 border grid.
 
+## Sheets, round seventeen (in progress): the substitution chain is not what the binary follows
+
+Whole track swept before anything was changed, 171 documents, two workers. **The brief reproduced
+to the digit** — 136 of 171, total absolute page error 113, 145 documents with an exactly correct
+page count, `batch-001`–`008` at 80/80, and every per-batch figure as handed over: 009 6/9,
+010 5/10, 011 6/10, 012 8/10, 013 7/10, 014 8/10, 015 5/9, 016 4/9, 017 4/10, 018 3/4. 171 rows,
+no path twice, no `ref-failed`.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 136 | **137** |
+| documents with an exactly correct page count | 145 | **146** |
+| total absolute page error | 113 | **112** |
+| `batch-001`–`008` | 80/80 | **80/80** |
+| `batch-009` | 6/9 | **7/9** |
+| every other batch | — | unchanged |
+
+**Two rows changed in 171 and neither regressed.** `airports_6.xlsx` 18 pages against 17 → 17/17
+and into parity; `ans_mappings_of_eccairs_terms.xlsx` one word closer on 28 183.
+
+### `airports_6.xlsx`: `Helv` is not Liberation Sans, whatever VCL.xcu says
+
+The handover called this one "a fixed 75% scale, so the shortfall is cumulative row height, not
+zoom — a cleaner test of the row model". **The measurement reproduces and the explanation was
+wrong, in the way this file keeps recording.** The row model is not involved at all: our dominant
+row pitch is 8.99 pt on both sides, and the fault is horizontal.
+
+`pdftotext -bbox` on both PDFs, page 1: the reference draws column B's text from x = 130.26 and
+column C's from 149.97; we draw them from 120.73 and 137.98, with the same 0.73 pt cell margin on
+both sides. That makes our column A 1760 twips against the reference's 2014 and our column B 460
+against 526 — **the same 0.874 ratio on every column**, which is 111 twips a character unit
+against 127. LibreOffice's own flat-ODF export gives **127.0 twips** for all eight stated columns.
+111 is Liberation Sans at 10 pt and 127 is DejaVu Sans at 10 pt, and the workbook's `fonts[0]` —
+which is what `StylesBuffer::getDefaultFont` hands the unit converter — is **`Helv` at 10 pt**.
+Being 12.6% narrow, column C wrapped to two lines where the reference draws one, and the extra
+line height accumulated into an eighteenth page. The reference PDF embeds **DejaVu Sans alone**;
+ours embedded DejaVu Sans and Liberation Sans.
+
+### The chain is dead code on Linux, and that is in the source
+
+`PhysicalFontCollection::FindFontFamily` asks the pre-match hook at
+`vcl/source/font/PhysicalFontCollection.cxx:1142` and returns its answer at `:1151`.
+`ImplFontSubstitute` — the `SubstFonts` list from `officecfg/registry/data/org/openoffice/VCL.xcu`,
+which is what `FontSubstitutions.Tables.cs` is generated from — is only reached in the *second*
+loop at `:1180`. On Linux the hook is `FcPreMatchSubstitution::FindFontSubstitute`
+(`vcl/unx/generic/font/fontsubst.cxx:98`), which asks fontconfig about every request that is not
+symbol-encoded, and fontconfig always answers — with its own default family for a name it has no
+rule for. So **for an uninstalled, non-symbol family the chain never runs.**
+
+### The probe, because the source is not the binary
+
+A flat-ODS probe naming **all 296 families the whole 534-document corpus mentions**, each row
+drawing `Hamburgefonstiv` and `0123456789` in that family, rendered by LibreOffice 24.2.7.2 and
+read back with `pdftotext -bbox`. The two drawn widths name the face outright — the eight
+installed faces are more than a point apart on both — so this is a gold table of what the binary
+actually does, and it is worth keeping rather than re-deriving. It is
+`scratchpad/sheets-r17/lo-faces.tsv`, built by `mkprobe2.py` and `facewidth2.py` beside it.
+
+**Our resolver agrees with it on 270 of the 293 families it could name.** Two of the 23 are acted
+on this round — `Helv` and `SansSerif`, where the chain reaches an installed face fontconfig would
+not choose and the family is Latin and not symbol-encoded. The other 21 are recorded and
+deliberately left:
+
+| Family | ours | LibreOffice | why it is not acted on |
+|---|---|---|---|
+| `Wingdings`, `Wingdings 2`, `Wingdings 3`, `Webdings` | OpenSymbol | DejaVu Sans | **the probe is the wrong instrument.** ODF states no charset, so the request was not symbol-encoded and the hook did not bail at `fontsubst.cxx:101` as it does for a DOCX or XLSX font carrying `charset="2"`. Our OpenSymbol answer is probably right |
+| `MS Gothic`, `MS PGothic` | IPAGothic, IPAPGothic | DejaVu Sans | fontconfig answers by *character*, and the probe asked in Latin |
+| `Book Antiqua`, `Bookman Old Style`, `Century`, `Century Schoolbook`, `NewCenturySchlbk`, `CG Times`, `Times-Roman` | DejaVu Serif / Liberation Serif | DejaVu Sans | needs `ClassOf` replaced by fontconfig's own classification — `45-latin.conf` files these as sans where VCL.xcu's `FontType` says roman |
+| `Lucida Console` | DejaVu Sans Mono | DejaVu Sans | same |
+| `Palatino Linotype`, `SimSun`, `ＭＳ 明朝` | DejaVu Sans | DejaVu Serif | same, in the other direction |
+| `Nimbus Sans L` | DejaVu Sans | Liberation Sans | a metric alias our chain does not name |
+| `Times New Roman CE`, `Times New Roman CYR`, `TimesNewRoman,Bold` | DejaVu Sans | Liberation Serif | name canonicalisation — LibreOffice's `GetEnglishSearchFontName` strips the suffix and `Normalise` does not |
+
+**That is the next round's work on this, and it is not a sheets change**: 91 corpus documents name
+at least one of these families, 63 of them slide decks and 24 word processing. Whoever takes it
+should sweep all three tracks, and should not take the four symbol rows from this probe.
+
+### What it costs the other two tracks: three documents in 534, and one of them by a word
+
+The change is in a shared layer, so words and slides are owed. **A whole-track baseline is not the
+sharpest instrument here and was not the only one used**, because the change is exactly one thing:
+`ChainFor` returns nothing for two keys. A document that never asks for `Helv` or `SansSerif`
+cannot move, and that is a property of the file rather than a guess about the code. So the 40
+corpus documents naming either family — 16 sheets, 17 words, 7 slides — were rendered on both
+binaries and joined to the reference column of the sweeps:
+
+```
+    pages b/a/ref        words b/a/ref
+   18/17  /17       11077/11043 /11053   better   sheets/batch-009/xlsx/airports_6.xlsx
+  192/192 /191      28196/28195 /28183   better   sheets/batch-015/xlsx/ans_mappings_of_eccairs_terms.xlsx
+   21/21  /23        4124/4123  /4142    a word   words/batch-017/doc/762.doc
+```
+
+**Three of the 40 moved; the other 37 have an identical page count and word count** — which is
+what was measured, and is weaker than "identical output". The words document moves by one word
+inside a 2% band it already passed, on a document failing on pagination in both binaries — its
+verdict is `pages` before and after. Nothing regressed anywhere.
+
+Whole tracks were then swept anyway, at the changed binary. The figures are absolutes rather than
+deltas, since neither track had a baseline at this commit and neither was re-swept without the
+change: **words 147 of 200, page error 119, 156 page-exact**; **slides 152 of 163, total absolute
+page error 0, all 163 page counts exact.** Both are 163 and 200 rows with no path twice and no
+`ref-failed`.
+
+Test counts, each project run on its own and the whole output kept: Core 243, Text **234**
+(was 217; the seventeen new ones are this round's three positive and fourteen negative resolution
+theories), Containers 109, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 565,
+Spreadsheets 426, Presentations 505, Vector 291, Fidelity 538. **Zero failed and zero skipped
+throughout** — every count is the known-good figure except Text, which is the only project the
+change touches.
+
 ## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
 
 Baseline swept whole at `22ed440e0`, 171 documents, and it reproduced the brief exactly —

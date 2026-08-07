@@ -394,6 +394,54 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The seventeenth sweep: the workbook's default font is not the one the chain names
+
+Swept whole at `196774051` before anything was changed, 171 documents: **136 of 171, page error
+113, 145 exact page counts**, batches 001 to 008 at 80/80 — the handover to the digit. After the
+one change, **137 of 171, page error 112, 146 exact**, batches 001 to 008 unchanged at 80/80 and
+`batch-009` 6/9 → 7/9. Two rows moved in 171 and neither regressed.
+
+The fix is in `Paperless.Text` and is written up in `dotnet/TODO.batches.md`: `Helv` resolves to
+DejaVu Sans, not to the Liberation Sans `VCL.xcu` names, because fontconfig's pre-match hook runs
+before the substitution chain and always answers. What matters here is *why a spreadsheet felt it*
+— a column width in SpreadsheetML is a count of digits of the workbook's default font, so a wrong
+face is a wrong grid, and `airports_6.xlsx`'s columns came out at 111 twips a character unit
+against the 127 LibreOffice's own flat-ODF export states for all eight of them. Column C was
+12.6% narrow, wrapped to two lines where the reference draws one, and the extra line height
+accumulated into an eighteenth page. **The handover's measurement reproduced and its explanation
+did not**: it read as cumulative row height, and the drawn row pitch is 8.99 pt on both sides.
+
+### `Company_Seniority_Date_Calculator.xlsx`: measured to a tdf#103516 nudge that does not fire
+
+13 pages against 12, and the extra page is `Bulletin Clarification`, sheet 4 of 7. It states
+`<pageSetUpPr fitToPage="1"/>` with `fitToWidth` absent (so 1) and `fitToHeight="0"`, on Legal
+landscape with quarter-inch margins — 972 pt of printable width and 576 pt of printable height —
+and a print area of `A1:Y49`, 25 columns of 963.2 twips.
+
+Measured off both PDFs, page 8: the reference draws a 300-twip row at a pitch of **11.67 pt** and
+we draw it at **12.0**, and one line of body text spans 323.01 pt there against 331.38 pt here.
+Both say the same thing — **the reference prints this sheet at zoom 78 and we print it at 80** —
+and at 80 the last row does not fit, so we start a thirteenth page holding one row and 35 words.
+
+Zoom 80 is what a fit-to-width search gives: 25 × 963.2 = 24080 twips against 19440 of paper, and
+80 is the largest whole percent that fits. **78 is what `tdf#103516` gives** — `CalcZoom`'s tail at
+`sc/source/ui/view/printfun.cxx:2988` multiplies a width-only fit by 0.98 and keeps the result when
+the *vertical* page count drops. `SheetPagination.CalcZoom` already implements that rule and it
+does not fire here, so either its `before` or its `Count(nudged).Rows` disagrees with Calc's
+`m_nPagesY`.
+
+**What is not yet reconciled, stated plainly so the next reader does not trust the arithmetic.**
+LibreOffice's own row heights for this sheet, out of its flat-ODF export, sum to **14750.6 twips**
+over rows 1 to 48, and the print area's row 49 is empty and takes the default 300 more.
+`AdjustPrintArea(false)` does *not* crop it — the `#i53558#` fuzziness at `printfun.cxx:717-727`
+only crops when more than `23*42` empty rows follow the data, and one does not. With 49 rows the
+band count is 2 at both 80 and 78, so on this reading Calc would revert the nudge and print at 80,
+which it demonstrably does not. With 48 rows it is 2 at 80 and 1 at 78 and everything agrees. So
+one of the three inputs — the row sum, the printable height, or which row the band ends at — is
+not what it is assumed to be here, and that is the thing to measure first rather than adjusting
+the nudge to fit. Our own row heights are within 35 twips of LibreOffice's across the whole sheet
+(measured span by span off the two PDFs), so the row model is not the suspect.
+
 ## The sixteenth sweep: the attribute scan is asked per column, and it stops twice
 
 Swept whole at `22ed440e0` before anything was changed, 171 documents: **134 of 171, page error
