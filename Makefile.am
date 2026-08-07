@@ -265,6 +265,28 @@ coolforkit_sources = \
                      kit/Kit.cpp \
                      kit/KitWebSocket.cpp
 
+# Sources that only gbuild compiles: the tools, the two coolforkit variants and
+# the kit globals.  No automake _SOURCES mentions them, so they reach the
+# distribution tarball (which the packaging builds unpack and build with gbuild)
+# only through EXTRA_DIST below.
+gbuild_sources = \
+                 kit/KitGlobals.cpp \
+                 kit/forkit-main.cpp \
+                 kit/forkit-variant-caps.cpp \
+                 kit/forkit-variant-ns.cpp \
+                 net/clientnb.cpp \
+                 tools/Benchmark.cpp \
+                 tools/Config.cpp \
+                 tools/ConfigMigrationAssistant.cpp \
+                 tools/Connect.cpp \
+                 tools/KitClient.cpp \
+                 tools/Stress.cpp \
+                 tools/Tool.cpp \
+                 tools/WebSocketDump.cpp \
+                 tools/coconvert.cpp \
+                 tools/map.cpp \
+                 tools/mount.cpp
+
 if ENABLE_DEBUG
 coolwsd_inproc_SOURCES = $(coolwsd_sources) \
                          $(shared_sources) \
@@ -345,6 +367,7 @@ shared_headers = \
                  common/Common.hpp \
                  common/ConfigUtil.hpp \
                  common/ContainerUtil.hpp \
+                 common/CoolMount.hpp \
                  common/Crypto.hpp \
                  common/FileUtil.hpp \
                  common/Globals.hpp \
@@ -357,11 +380,14 @@ shared_headers = \
                  common/MobileApp.hpp \
                  common/NumUtil.hpp \
                  common/Png.hpp \
+                 common/Prefs.hpp \
                  common/ProcUtil.hpp \
                  common/Protocol.hpp \
+                 common/RecentFiles.hpp \
                  common/Rectangle.hpp \
                  common/RegexUtil.hpp \
                  common/RenderTiles.hpp \
+                 common/RotatingToken.hpp \
                  common/Seccomp.hpp \
                  common/Session.hpp \
                  common/SettingsStorage.hpp \
@@ -421,6 +447,8 @@ noinst_HEADERS = \
                  $(wsd_headers) \
                  test/HttpTestServer.hpp \
                  test/KitPidHelpers.hpp \
+                 test/MockStreamSocket.hpp \
+                 test/TestWopiFileServer.hpp \
                  test/UnitHTTP.hpp \
                  test/UnitWSDClient.hpp \
                  test/WOPIUploadConflictCommon.hpp \
@@ -430,7 +458,8 @@ noinst_HEADERS = \
                  test/lokassert.hpp \
                  test/test.hpp \
                  test/testlog.hpp \
-                 tools/COOLWebSocket.hpp
+                 tools/COOLWebSocket.hpp \
+                 tools/ConfigMigrationAssistant.hpp
 
 dist-hook:
 	git log -1 --format=%h --abbrev=10 > $(distdir)/dist_git_hash 2> /dev/null || rm $(distdir)/dist_git_hash
@@ -452,6 +481,7 @@ dist-hook:
 
 EXTRA_DIST = \
              $(man_MANS) \
+             $(gbuild_sources) \
              README.md \
              THIRDPARTYLICENSES \
              cool-sbom-template.spdx.json \
