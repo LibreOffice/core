@@ -49,6 +49,17 @@ public class SlideAutofitTests
     private static readonly Length Width = Length.FromPoints(60);
 
     /// <summary>
+    /// Forty points as the draw layer holds it: <strong>1411</strong> hundredths of a millimetre,
+    /// which is 39.9969 pt and not 40.
+    /// </summary>
+    /// <remarks>
+    /// Every "nothing shrank" assertion below is written against this rather than against
+    /// <c>Length.FromPoints(40)</c>, because a body that is not shrunk is still drawn at the size
+    /// the model can hold — see <see cref="AnUnshrunkEmIsOnTheDrawLayersOwnGrid"/>.
+    /// </remarks>
+    private const long UnshrunkForty = 1411;
+
+    /// <summary>
     /// One 40 pt line, in boxes from 20 to 48 pt, comes out at the sizes LibreOffice draws.
     /// </summary>
     /// <remarks>
@@ -90,6 +101,48 @@ public class SlideAutofitTests
     }
 
     /// <summary>
+    /// A body nothing shrinks is still drawn on the draw layer's 1/100 mm grid, not at the exact
+    /// number of points the file states.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The character height lives in an <c>SvxFontHeightItem</c> in the model's map unit, and for
+    /// a draw object that unit is a hundredth of a millimetre — so a 20 pt run is 706 units and is
+    /// drawn at <strong>20.0126 pt</strong>. Every advance width the reference measures, every
+    /// line break it takes and every height the shrink-to-fit search compares is taken at that
+    /// size.
+    /// </para>
+    /// <para>
+    /// The expectations are the sizes LibreOffice 24.2.7.2's own PDFs carry, read off the
+    /// <c>Tf</c> operator with <c>research/probes/slides-r17/size-census.py</c>: `20.01`, `24.01`
+    /// and `28.01` where we wrote `20`, `24` and `28`. Over the forty documents
+    /// <c>mm100-grid.py</c> checked, 82.27% of the reference's show operators sit on this grid
+    /// against 45.81% of ours, and every one of the fifteen commonest offending sizes was a whole
+    /// number of points.
+    /// </para>
+    /// <para>
+    /// 13.33 pt is the case that separates the conversion the property setter performs — points to
+    /// twips to hundredths of a millimetre — from a direct ratio. 13.33 pt is 267 twips and
+    /// therefore 471 units; the direct ratio gives 470. See <c>SlideAutofit.Quantised</c>.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData(20, 706)]
+    [InlineData(24, 847)]
+    [InlineData(28, 988)]
+    [InlineData(40, 1411)]
+    [InlineData(13.33, 471)]
+    public void AnUnshrunkEmIsOnTheDrawLayersOwnGrid(double statedPoints, long expectedMm100)
+    {
+        // A box far taller than the text, so the search returns before it shrinks anything and
+        // the only thing under test is the size the run is drawn at.
+        Length drawn = Drawn(Body(statedPoints, lines: 1), boxHeightPoints: 400);
+
+        drawn.Mm100.ShouldBe(expectedMm100);
+        drawn.Emu.ShouldBe(expectedMm100 * Length.EmuPerMm100);
+    }
+
+    /// <summary>
     /// A body that does not ask for the fit keeps its size however small the box.
     /// </summary>
     /// <remarks>
@@ -101,7 +154,7 @@ public class SlideAutofitTests
     public void WithoutTheFlagNothingShrinks()
     {
         Drawn(Body(40, lines: 2) with { AutoFit = false }, boxHeightPoints: 20)
-            .ShouldBe(Length.FromPoints(40));
+            .Mm100.ShouldBe(UnshrunkForty);
     }
 
     /// <summary>
@@ -119,11 +172,10 @@ public class SlideAutofitTests
     {
         SlideTextBody stated = Body(40, lines: 1) with { AutoFit = false, FontScale = 0.5 };
 
-        Drawn(stated, boxHeightPoints: 200).ShouldBe(Length.FromPoints(20));
+        Drawn(stated, boxHeightPoints: 200).Mm100.ShouldBe(706);
 
         // The same body asking for the fit in a box that needs none ignores the stated scale.
-        Drawn(stated with { AutoFit = true }, boxHeightPoints: 200)
-            .ShouldBe(Length.FromPoints(40));
+        Drawn(stated with { AutoFit = true }, boxHeightPoints: 200).Mm100.ShouldBe(UnshrunkForty);
     }
 
     /// <summary>
@@ -132,7 +184,7 @@ public class SlideAutofitTests
     [Fact]
     public void AnEmptyBoxLeavesTheTextAlone()
     {
-        Drawn(Body(40, lines: 1), boxHeightPoints: 0).ShouldBe(Length.FromPoints(40));
+        Drawn(Body(40, lines: 1), boxHeightPoints: 0).Mm100.ShouldBe(UnshrunkForty);
     }
 
     /// <summary>
@@ -165,7 +217,7 @@ public class SlideAutofitTests
             Paragraphs = [.. Body(40, lines: 2).Paragraphs, Empty(40)],
         };
 
-        Drawn(trailing, boxHeightPoints: 100).ShouldBe(Length.FromPoints(40));
+        Drawn(trailing, boxHeightPoints: 100).Mm100.ShouldBe(UnshrunkForty);
 
         // The same empty paragraph between the two others is measured, so the body no longer fits
         // and the search shrinks it.
