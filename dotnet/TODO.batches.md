@@ -4678,3 +4678,52 @@ pointed at. The fix is exact on the controlled fixture (6/6 against the referenc
 worst case 0.00094 pt, against 0.032 for the arithmetic it replaces) and the track is flat
 without that deck, so this is not a wrong fix; it is a fix that has uncovered something on one
 document. That deck is the next thing to look at, not the change.
+
+### `2015-Civil-Rights-Website-training.ppt`: a near-tie in the search, not a line-height error
+
+The brief named this deck's line pitch as the round's best lead — ours 36.14 pt against the
+reference's 41.73/37.64, "text 5.5% larger", "it is that deck's whole 25.10 of ink". The
+measurement reproduces and **the explanation is the wrong way round**: the pitch is not a
+line-height error at all, and the fold that fixes the line height makes this deck worse.
+
+Page 21, read straight out of both content streams with `probes/slides-r15/pdfops.py`:
+
+| | reference | ours |
+|---|---|---|
+| body em | 18.992 pt (670 mm100) | 20.013 pt (706 mm100) |
+| baseline pitch | 18.227 pt (643 mm100) | 17.291 pt (610 mm100) |
+| lines on the page | 18 | 19 |
+| **block height** | **328.1 pt** | **328.5 pt** |
+
+The deck states 20 pt and 80% line spacing. The reference shrank the *font* to 19 pt and kept
+the spacing; we keep the font at 20 and shrink the *spacing* to nine-tenths. Our pitch is
+exactly `fround(fround(706 × 1.2) × 0.8 × 0.9)` = 610 and the reference's is
+`fround(fround(670 × 1.2) × 0.8)` = 643, so **both sides' arithmetic is the same arithmetic**
+— the fold is not in question here. What differs is which candidate the search keeps.
+
+**And the two candidates are 0.4 pt apart on a 328 pt block — 0.12%.** `Solve` keeps the
+tightest fit at or above one seen anywhere in the search, so a tenth of a per cent decides
+between "20 pt at nine-tenths" and "19 pt at full", and the fold moved the line height by
+enough to tip it. That is why this deck holds the round's whole `|ink|%` loss while the other
+162 net to −0.14.
+
+So the open question on this deck is **the search's preference between a font reduction and a
+spacing reduction when both fit**, and it is not the line height. Two things make that the
+right next probe rather than a guess:
+
+- The same shape was recorded on page 39 last round — reference `(0.85, 1.00)`, ours
+  `(0.90, 0.90)`. Two pages, same disagreement: the reference takes the smaller font at full
+  spacing, we take the larger font at reduced spacing.
+- It is **not** that the reference refuses to reduce spacing. `slide-autofit-grid.pptx`'s six
+  cases have the reference choosing 0.8 and 0.9 spacings, and the predecessor's 33-box probes
+  record the binary picking `(90.000, 80)` and `(94.960, 90)`. So the rule is an ordering, not
+  a prohibition, and naming it needs a probe that puts two nearly-tied candidates in front of
+  the binary deliberately.
+
+### One correction to the track's parity record
+
+The brief states "batches 001–013 and 015 at full parity". Measured on both this round's
+baseline and the predecessor's, that is not the case: **batch-008 is 9/10, batch-010 8/10 and
+batch-012 8/10**, and were so before anything moved this round. The batches actually at full
+parity are **001–007, 011, 013 and 015** — ten of seventeen — plus 009 until the round-fifteen
+autofit fix cost it a document.
