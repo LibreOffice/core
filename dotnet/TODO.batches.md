@@ -2921,3 +2921,35 @@ the checked-out source a `fontRef idx="none"` contributes neither the face nor t
 opposite reading. That predates this round and is **not measured against the running binary** —
 the tree here is a development branch and the reference is 24.2.7.2. No corpus deck states
 `idx="none"` with a colour, so nothing here turns on it.
+
+### `a:pattFill` on a table cell — measured, bounded, and the best-placed lead left
+
+`171128IPAP.pptx` was carried into this round as "residue of round ten's fix" at 45.05
+unaccounted ink, 18 of 40 pages major. Its page 24 is a five-column table whose data rows the
+reference paints in a green, an orange and a red **crosshatch** and we paint white. Sampled at
+512 px over one cell: the reference's commonest colour there is `(221,238,224)` at 40% of the
+region — the fill's own `bgClr` of `DDEEE0` — and ours is `(255,255,255)` at 100%.
+
+The markup names it outright, 18 times on that one slide:
+
+```xml
+<a:pattFill prst="pct25">
+  <a:fgClr><a:srgbClr val="00B050"/></a:fgClr>
+  <a:bgClr><a:srgbClr val="DDEEE0"/></a:bgClr>
+</a:pattFill>
+```
+
+`PptxSlideLayout.cs:1156` says so in as many words — "Four of DrawingML's six kinds.
+`a:pattFill` is left unpainted" — so this is a known gap rather than a discovery. What was
+missing is its size.
+
+Reach, parsed from all 112 corpus `pptx`: **65 pattern fills across 7 decks**, and three of
+those decks are in the track's ink top twenty — `NAS-Infrastructure-Roadmaps-v16.0.pptx`
+(368.41, nine of them), `171128IPAP.pptx` (45.05, eighteen) and
+`B2B-Center-Readiness-and-Student-Retention.pptx` (16.23, eighteen). Only **five** presets
+appear: `wdUpDiag` 32, `pct25` 18, `pct5` 12, `pct50` 2, `wdDnDiag` 1. So five patterns cover
+the whole corpus.
+
+It is a feature rather than a fix — a pattern is a paint kind the drawing IR does not have, so
+it touches `Paperless.Core/Graphics` and both sinks — but it is the best-bounded one left on
+this track: five presets, a named location, and three of the largest documents behind it.
