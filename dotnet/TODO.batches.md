@@ -4967,3 +4967,164 @@ Checked rather than argued. Both other tracks swept on the same two checksummed 
 | `sheets` | 137/171 | 137/171 | two rows differ, both in the *reference's* word count (5557→5552, 10245→10244); every one of our own figures is unchanged and no verdict moved |
 
 The words track was also re-swept after the gating landed: 150/200 and page error 109 either way.
+
+
+## After the seventeenth round: slides — the em was never on the draw layer's grid
+
+Whole track swept before and after, 163 documents each time, both against checksummed CLI
+snapshots of this worktree. The second sweep reuses the first's reference PDFs, verified
+identical row for row on every reference-side column (`probes/slides-r16/ref-check.py`,
+163 documents, **0 mismatches**). No duplicate paths, 0 `ref-failed`, in both.
+
+| | baseline `7e1b7c79e` | after |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1403.48 | 1406.70 |
+| unsigned `\|ink\|%` | 1752.86 | **1752.00** |
+| major pages | 464 | **462** |
+
+**The baseline reproduced all four of the brief's headline figures to the digit** — 151/163,
+1403.48, 1752.86, 464 — and its per-batch correction with them: full parity is **001–007, 011,
+013 and 015**, with 008 9/10, 009 9/10, 010 8/10, 012 8/10, 014 7/10, 016 8/10 and 017 4/5.
+
+**Not one verdict changed on any of the 163 documents**, and no batch moved. 155 documents moved
+on ink — 72 better, 69 worse, 22 unchanged; 11.23 of `|ink|%` won against 10.37 lost.
+
+The signed figure rising while the unsigned falls is the pattern the ink columns exist to
+separate, not a contradiction: filling a deficit uncancels a surplus elsewhere in the signed sum
+and has nowhere to hide in the unsigned one.
+
+### The em size, and the reference's own evidence for it
+
+A slide's character height lives in an `SvxFontHeightItem` in the model's map unit, and for a
+draw object that unit is **a hundredth of a millimetre**. So LibreOffice draws a 20 pt run at 706
+units — **20.0126 pt** — and takes every advance width, every line break and every height the
+shrink-to-fit search compares at that size. We drew exactly 20 pt: a systematic **0.06% narrower
+on every run in every deck**.
+
+It is visible directly in the reference's own PDFs, which is what makes it checkable rather than
+argued. `probes/slides-r17/size-census.py` compares the `/Tf` sizes two renderings use page by
+page, and `mm100-grid.py` asks whether a size could have come off that grid at all:
+
+```
+ours   12367 of 26996 show operators sit on the 1/100 mm grid  (45.81%)
+ref    22167 of 26943                                          (82.27%)
+```
+
+over forty documents — and all fifteen of the commonest sizes we wrote that the reference cannot
+hold are whole points: 24, 16, 20, 12, 28, 17, 10, 9, 15, 44. The reference's residual 18% is
+text it rasterises or plays out of a metafile, which is on no grid by construction.
+
+The conversion is the property setter's rather than a direct ratio.
+`SvxFontHeightItem::PutValue` takes `nHeight = (long)(fPoint * 20.0 + 0.5)` to twips and then
+`convertTwipToMm100`, which is `(n * 127 + 36) / 72`
+(`editeng/source/items/textitem.cxx`:774-776, 24.2.7.2). For a whole number of points the twip
+step is exact and the pair reduces to `o3tl::convert(pt, pt, mm100)`, which is what the PPT filter
+calls directly — **so one implementation is faithful to the PPT, PPTX and ODP readers alike.** A
+DrawingML `sz` of 1333 separates them: 13.33 pt is 267 twips and therefore **471** units, where
+the direct ratio gives 470.
+
+`SlideAutofit.Quantised`, applied in `Scaling.Scaled` because that is the one place every measured
+and drawn em passes through — `LargestSize` reads it back off `RunStyle.Size`, the shaper takes it
+as `FormattedRun.EmSize`, and the sink writes it as `/Tf`. **Nothing outside
+`Paperless.Presentations` was touched**, so the words and sheets tracks cannot be affected and are
+not owed a sweep.
+
+### The brief's headline lead was the wrong half of the mechanism
+
+The round-sixteen brief hands on *"the autofit search prefers shrinking the spacing where
+LibreOffice shrinks the font … `Solve` keeps the tightest fit, so a near-tie tips the wrong way"*
+and points at the search's **preference rule**.
+
+The preference rule is already the reference's. `svx/source/svdraw/svdotext.cxx` at tag
+`libreoffice-24.2.7.2` — the release that made the reference PDFs, and *not* the 27.2-alpha in
+this checkout, which has replaced the function outright — was compared against `SlideAutofit.Solve`
+statement by statement: the bisection, the tenth-of-a-point grid, the `{100, 90, 80}` spacing
+order, the `continue` that abandons the spacings once one fits, the min/max update, the tie-break
+and the ten iterations are **all identical**, ties included. Both sides walk the same grid in the
+same order and keep the same candidate, so a disagreement about which candidate wins can only come
+from the *heights measured*.
+
+That pins the box on `2015-Civil-Rights-Website-training.ppt` page 21 rather than leaving it open.
+The reference's 19 pt at full spacing is 18 x 643 = 11574 mm100 and our 20 pt at nine-tenths is
+19 x 610 = 11590; less the search's 50 units of slack, 11524 and 11540. Ours is the *taller* block
+and therefore the tighter fit, so for the reference to have kept 19 pt the 20 pt/90% candidate must
+have failed to fit for it — which puts the box in **[11524, 11540)**, a window of 16 mm100, 0.45 pt,
+**0.14% of the block**.
+
+**The em fix did not close it.** That deck's differing pages fall 55 to 30 — exactly the
+quantisation class disappearing — and page 21 is still 20.01 against 18.99. So 0.06% was not
+enough to add the twentieth line, and the residue is a height measurement worth about a third of
+a point over nineteen lines. The deck is 33.52 → 33.20.
+
+### The census, and what the track's residue actually is
+
+Run over the baseline (`probes/slides-r17/base-size-census.txt`, 129 of 163 documents before it
+was stopped to give the sweep its CPU back; `census-summary.py` reads it):
+
+```
+pages differing on the dominant /Tf size   1642
+  by <= 1%  — the 1/100 mm grid            1043
+  by  > 1%                                  599
+     of those, both sides drawing text      537  over 101 documents
+```
+
+Two-thirds of the page-level size disagreements are the class this round removes. **The other 537
+are a size disagreement of more than one per cent on a page where both sides draw a comparable
+amount of text** — so not the raster ceiling, where the reference's dominant size carries one or
+two show operators against our dozens.
+
+Its ranking lines up with the ink ranking rather than cutting across it: of its ten worst
+documents, five are in the top twelve by `|ink|%` — `NAS` (42 pages), `2014BSA_Sunday_Killion`
+(29), `2015-Civil-Rights` (29), `ITE106-Chapter 4` (22), `171128IPAP` (18), `FAA_Form_337` (17),
+`Intersil_Italy_CAN_Bus` (14), `Reporting_responsibilities_matrix` (12).
+
+**This is the instrument the next round should take, not more pixels.** `pdf-image-diff.py`'s
+*"marks displaced or reshaped"* is what a font-size disagreement looks like at 512 pixels and the
+hint cannot separate it from an indent or a line break; the census names a page and a number on
+each side.
+
+### Batches 008, 010 and 012 are at the word gate's ceiling, and two records are wrong
+
+Every remaining failure in the three batches this round was pointed at is over-drawing, and in
+four of the five the excess is confined to pages already on `TODO.raster-ceiling.md`. Split per
+page with `probes/slides-r17/page-words.py`:
+
+| Document | pages carrying the excess | residue | reference |
+|---|---|---|---|
+| `batch-010/…/W3_Case_Study…ppt` | 10 (+93) | 817 | 817 |
+| `batch-010/…/Fundamentals_Module_1_basics.ppt` | 6 (+50) | 1096 | 1099 |
+| `batch-012/…/OnTrac_StarCertification…pptx` | 9 (+46), 10 (+251) | 1047 | 1045 |
+| `batch-012/…/NAS-Infrastructure-Roadmaps-v16.0.pptx` | the 24 `Requires="v"` pages | — | the named ceiling |
+| `batch-008/…/8_P-Pavese…pptx` | 5 (+44), 6 (+44) | 2152 | 2108 — still out |
+
+So none of the three can be advanced on the gate. Two corrections fall out:
+
+**`8_P-Pavese` page 6 belongs on the raster list and is not on it.** `pdfimages -list` shows the
+reference drawing the *same* 692x240 JPEG with a soft mask on pages 5 and 6 and us drawing neither.
+Page 6 is +44 on a base of 180 — **24.4%**, just under the list's 25% threshold, as is page 16 at
+23%. The threshold is excluding pages of the list's own class, and it should either be lowered or
+described in that file as a deliberate under-count.
+
+**Page 16 of the same deck is not the ceiling, and it is what keeps the document failing.** No
+raster on either side, ink 0.30 signed over 26 regions, and **`Tm=0`** in our content stream so
+nothing on it is rotated. The reference sets `chart5.xml`'s category labels on one line — *lundi
+mardi mercredi jeudi vendredi samedi dimanche* — and we break each into a narrow column. The axis
+states `<a:bodyPr rot="-60000000"/>` and `ObjectFormatter::convertTextRotation` discards anything
+outside ±5400000 (`oox/source/drawingml/chart/objectformatter.cxx`:1087-1091, **byte-identical in
+24.2.7.2**), so the rotation reads as zero and line breaking is allowed on both sides — and
+`DrawingChartPlot.AxisTextOf` already implements exactly that. **The rotation clamp is not the
+bug.** What differs is how much width the axis gives each category slot, in `Paperless.Core/Charts`,
+which is a shared layer and was left alone. Removing pages 5, 6 and 16 leaves 2106 against 2108.
+
+### What the next round should take, in order
+
+1. **The 537 pages of size disagreement**, ranked above, starting with `2015-Civil-Rights` page 21,
+   whose box height is now pinned to a 16 mm100 window.
+2. **Quantise the shape's text area the way the em now is.** oox converts a shape's `a:ext` from
+   EMU to 1/100 mm on import, so the width the reference breaks lines against is a whole number of
+   units and ours carries the file's full EMU precision. Same defect, an order of magnitude
+   smaller — and worth doing *after* the em rather than with it, or the two are not separable.
+3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`; a shared layer, so it
+   owes the words and sheets sweeps.
+4. **The raster list's 25% threshold**, above.

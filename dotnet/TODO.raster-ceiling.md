@@ -38,6 +38,21 @@ Matching on dimensions rather than on content is deliberate: a rasterised metafi
 differ in size by orders of magnitude, and decoding every image to compare pixels would cost more
 than the whole scan.
 
+### The 25% threshold is excluding pages of this list's own class
+
+Measured in round seventeen on `slides/batch-008/…/8_P-Pavese…pptx`. `pdfimages -list` shows the
+reference drawing the **same 692x240 JPEG with a soft mask on pages 5 and 6**, and us drawing
+neither; page 5 is on the list at +44 on 70 and page 6 is not, at +44 on **180 — 24.4%**. Page 16
+of the same deck sits at +23% and is a different defect entirely (see below). So condition 3's
+"at least 25% more" is not separating the class from anything here; it is dropping half of one
+document's instances of it.
+
+Either lower it, or say in this file that the list is a deliberate under-count and that a page
+just under the bar should be checked with `pdfimages` before being treated as a defect. Note the
+consequence for that document: it fails the word gate at 2240 against 2108, and **excusing only
+its listed page leaves it at 2152, still outside the 2% band** — so a reader working from this
+list alone would conclude the residue is ours when two-thirds of it is not.
+
 ## The numbers
 
 | | |

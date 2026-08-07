@@ -120,17 +120,62 @@ public static partial class SlideTextLayout
         /// </remarks>
         public Length Scaled(Length size)
         {
-            if (Font is <= 0 or 1.0) return size;
+            if (Font is <= 0 or 1.0) return Quantised(size);
 
             if (!RoundToPoints)
             {
-                return Length.FromEmu((long)Math.Round(size.Emu * Font));
+                return Quantised(Length.FromEmu((long)Math.Round(size.Emu * Font)));
             }
 
-            double points = Rounded((double)size.Mm100 / Mm100PerPoint);
+            double points = Rounded((double)Quantised(size).Mm100 / Mm100PerPoint);
 
             return Length.FromMm100((long)Rounded(Rounded(points * Font) * Mm100PerPoint));
         }
+    }
+
+    /// <summary>
+    /// A character height on the grid the draw layer can actually hold it on.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A slide's em size is never an exact number of points, and ours was.</strong> The
+    /// height lives in an <c>SvxFontHeightItem</c> in the model's own map unit, which for a draw
+    /// object is a hundredth of a millimetre — so a 20 pt run is drawn at
+    /// <strong>706 units, 20.0126 pt</strong>, and every advance width, line break and autofit
+    /// measurement in the reference is taken at that size rather than at 20.
+    /// </para>
+    /// <para>
+    /// Measured on the round-seventeen baseline sweep with
+    /// <c>research/probes/slides-r17/mm100-grid.py</c>: of the reference's show operators over
+    /// forty documents, <strong>82.27% sit on the 1/100 mm grid against our 45.81%</strong>, and
+    /// every one of the fifteen commonest sizes we wrote that it cannot hold is a whole number of
+    /// points — 24, 16, 20, 12, 28, 17, 10, 9, 15, 44. The residual 18% on the reference's side is
+    /// text it rasterises or plays out of a metafile, which is not on any grid by construction.
+    /// </para>
+    /// <para>
+    /// The conversion is the one the property setter performs, not a direct ratio:
+    /// <c>SvxFontHeightItem::PutValue</c> takes <c>nHeight = (long)(fPoint * 20.0 + 0.5)</c> —
+    /// points to twips — and then <c>convertTwipToMm100</c>, which is
+    /// <c>(n * 127 + 36) / 72</c> (<c>editeng/source/items/textitem.cxx:774-776</c>, 24.2.7.2).
+    /// For a whole number of points the twip step is exact and the pair reduces to
+    /// <c>o3tl::convert(pt, pt, mm100)</c>, which is what the PPT filter calls directly — so one
+    /// implementation is faithful to all three readers. For a DrawingML <c>sz</c> of 1333 it is
+    /// not: 13.33 pt is 267 twips and therefore <strong>471</strong> units, where the direct ratio
+    /// gives 470.
+    /// </para>
+    /// <para>
+    /// Applied here rather than in the three readers because this is the one place every measured
+    /// and drawn em passes through — <c>LargestSize</c> reads it back off <c>RunStyle.Size</c>,
+    /// the shaper takes it as <c>FormattedRun.EmSize</c>, and the sink writes it as <c>/Tf</c>.
+    /// </para>
+    /// </remarks>
+    private static Length Quantised(Length size)
+    {
+        if (size.Emu <= 0) return size;
+
+        long twips = (long)((size.Points * 20.0) + 0.5);
+
+        return Length.FromMm100(((twips * 127) + 36) / 72);
     }
 
     /// <summary>Hundredths of a millimetre in a point, which is where the fit's rounding happens.</summary>
