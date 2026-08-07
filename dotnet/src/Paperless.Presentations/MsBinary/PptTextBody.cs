@@ -143,8 +143,14 @@ internal static class PptTextBody
         PptCharacterLevel characters = styles?.Character(run.Kind, depth)
                                        ?? new PptCharacterLevel(0, 0, 0xFFFF, 18, 0x08000001, 0);
 
+        // U+2028, which is what the PPTX and ODF readers already produce for a manual break, so
+        // one layout rule serves all three. A newline breaks the same way — the break set accepts
+        // both — but it is also what a reader may leave on the end of a paragraph's text to mean
+        // the paragraph ends there, and the rule that gives a trailing break its own empty line
+        // has to be able to tell those apart. Reading `\n` here left this deck's bullets a line
+        // short each: `2015-Civil-Rights-Website-training.ppt` ends every paragraph in a `\x0B`.
         string text = run.Text.Substring(start, length).Replace(
-            PptTextReader.LineBreak, '\n');
+            PptTextReader.LineBreak, '\u2028');
 
         List<SlideTextRun> runs = Runs(run, scheme, fonts, characters, start, length, text.Length);
 
