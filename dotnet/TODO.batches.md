@@ -5392,23 +5392,25 @@ break on a document that is already near one.
 Whole track before and after, 171 documents each time, two workers, 171 rows with no duplicate
 path and no `ref-failed` in either.
 
-| | baseline `09a35cdae` | after |
-|---|---|---|
-| matches | 142 / 171 | **144 / 171** |
-| total absolute page error | 106 | **99** |
-| exactly-correct page counts | 149 | **151** |
-| `sheets/batch-001`–`009`, the gate | 89/89, page error 0 | **89/89, page error 0** |
-| `sheets/batch-010` | 6/10 | 6/10 |
-| `sheets/batch-011` | 5/10 | **6/10** |
-| `sheets/batch-012` | 8/10 | 8/10 |
-| `sheets/batch-017` | 5/10 | **6/10** |
+Two changes, each swept whole on its own.
+
+| | baseline `09a35cdae` | + the row-height grid | + the embedded chart |
+|---|---|---|---|
+| matches | 142 / 171 | **144 / 171** | 144 / 171 |
+| total absolute page error | 106 | 99 | **94** |
+| exactly-correct page counts | 149 | 151 | **153** |
+| `sheets/batch-001`–`009`, the gate | 89/89, page error 0 | 89/89, page error 0 | **89/89, page error 0** |
+| `sheets/batch-010` | 6/10, error 9 | 6/10, error 9 | 6/10, **error 4** |
+| `sheets/batch-011` | 5/10 | **6/10** | 6/10 |
+| `sheets/batch-012` | 8/10 | 8/10 | 8/10 |
+| `sheets/batch-017` | 5/10 | **6/10** | 6/10 |
 
 **The baseline reproduces round twenty's closing figures to the digit** — 142, 106, 149 — which is
 the first round on this track where the inherited numbers needed no correction at all. Per batch
 at the baseline, for whoever needs it next: 001–008 10/10, 009 9/9, 010 6/10, 011 5/10, 012 8/10,
 013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 5/10, 018 3/4.
 
-### The change
+### The first change: a row height Excel wrote is read on a 0.75 pt grid
 
 LibreOffice's OOXML filter rounds a row height **down** to a multiple of 0.75 pt —
 `fHeight -= fmod(fHeight, 0.75)` — on `sheetFormatPr/@defaultRowHeight`
@@ -5451,27 +5453,60 @@ NAARMO is exactly the lead round twenty exposed and predicted. It had been passi
 cancelling; once the header band was fixed its drawn row pitch was measured at 14.40 pt against
 the reference's 14.23, and the stated 14.4 snaps to **14.25**.
 
-**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot be
-affected and were not swept.
+### The second change: a chart on an `.xls` worksheet took its pages down with it
+
+`XlsDrawing.Build` kept only shapes carrying a picture or `TXO` text — right for a solver entry
+or a group's own frame, wrong for a chart, whose `OBJ` is `ftCmo` type 5 and carries neither. It
+therefore never reached `sheet.Drawings`, so `SheetDrawingArea` could not widen `PrintedRange`,
+the range stayed invalid, and a sheet whose only content is a chart printed **nothing at all** —
+not one blank page but none. Calc has the object on its draw page and `ScDocument::GetPrintArea`
+takes the maximum of the cells' extent and the drawing layer's (`documen2.cxx:649-658`).
+
+The chart substream that follows the object is now read too, and deliberately *not* the way a
+chart sheet's is: an embedded chart's page records describe the chart's notional page rather than
+the sheet's and arrive after the worksheet's own, so routing them onward overwrites the
+worksheet's header, footer, margins and `SETUP`. Only the chart records are taken, and the
+corpus fixture is built to prove it — its chart sheet carries a header and nothing else in the
+workbook does.
+
+Reach is a census rather than a grep: every `ftCmo` type across the track's 62 `.xls` gives 13
+chart objects in **4 workbooks**. Five documents moved and none regressed.
+`Template Pilot Logbook JAR-FCL V3.0.xls` goes 35/38 → **38/38** and
+`EHEST-Pre-departure-checklist…xls` 22/24 → **24/24**. `TOGAF9-Tool-ConfReqts-CSQ.xls` was the
+risk — it matched before and carries a chart — and it still matches.
+
+**It wins no match and it is right anyway**: page error 99 → 94, exact page counts 151 → 153, and
+`batch-010`'s page error 9 → 4. Neither of the two documents whose pages are now correct passes
+the word gate, because an `.xls` chart states its series as cell ranges on another sheet and
+nothing resolves them: the chart draws its title and axis titles and then a value axis scaled
+from an empty series, 0 to 12 where the reference reads 0 to 180. That is worth 305 words on the
+Logbook and 557 on EHEST and is the next piece of the same work.
+
+**Nothing outside `Paperless.Spreadsheets` was touched** by either change, so the words and slides
+tracks cannot be affected and were not swept.
 
 ### Tests
 
 Per project, run separately, each redirected to a file. **0 failed and 0 skipped in every one.**
 
 Core 243, Containers 109, Text 237, Vector 291, Rendering 104, Markup 259, OpenDocument 125,
-WordProcessing 608, Spreadsheets **442** (was 437 — one new file of five, replacing nothing),
+WordProcessing 608, Spreadsheets **446** (was 437 — two new files, of five and four),
 Presentations 517, Fidelity 542.
+
+One trap worth passing on, because it produced a red run that meant nothing. A mutation script
+that restores the source but does not rebuild leaves the *mutant's* assemblies on disk, and the
+per-project loop this file recommends runs `--no-build`. That reported `Failed: 1` on exactly the
+test the last mutation had been written to break. Rebuild between restoring and re-running, or
+the suite measures the mutation.
 
 ### What the next round should take, in order
 
-1. **An embedded chart on an `.xls` worksheet is dropped, and its pages with it.**
-   `XlsDrawing.Build` keeps only shapes carrying a picture or `Txo` text, and a chart `OBJ`
-   (`ftCmo` type 5) carries neither — so it never widens `PrintedRange` and a sheet whose only
-   content is a chart prints **nothing**. `Template Pilot Logbook JAR-FCL V3.0.xls` is 35/38 and
-   1279/1610 words entirely for this reason, and `EHEST-Pre-departure-checklist…xls` is 22/24 with
-   nine chart objects. A census of every `ftCmo` type across the track's 62 `.xls` is in
-   `src/Paperless.Spreadsheets/TODO.md`; 13 chart objects live in 4 workbooks, and **one of the
-   four matches today**, so this can cost a match as well as win two and must be swept.
+1. **An `.xls` chart's series are not resolved.** The chart now draws, and it draws a value axis
+   fitted to no data. `XlsChartBuilder` gets the chart records; what it does not get is the cell
+   ranges the `BRAI` records name, which on both corpus documents live on a different sheet. Worth
+   305 words on `Template Pilot Logbook JAR-FCL V3.0.xls` and 557 on
+   `EHEST-Pre-departure-checklist…xls`, which are the only two things standing between those and a
+   match now that their page counts agree.
 2. **`FAA-2019-0995-0002_attachment_2.xlsx`** (32/33) is a *wrap* difference, not a pitch one: the
    reference's repeating row group on its "Accessory List" sheet is 28.70 pt against our 14.93,
    because it breaks each row onto two lines where we fit one. The residue is the width the text

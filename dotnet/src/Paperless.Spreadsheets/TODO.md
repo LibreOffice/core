@@ -401,8 +401,14 @@ twice and no `ref-failed`: **142 of 171, total absolute page error 106, 149 exac
 batches 001 to 009 at 89/89 with page error 0. That reproduces round twenty's closing figures to
 the digit, so nothing has drifted under the scoreboard.
 
-After the change, at the same commit plus it: **144 of 171, page error 99, 151 exact**, and the
-gate is unchanged at 89/89.
+Two changes landed, each swept whole on its own:
+
+| | baseline | + the row-height grid | + the embedded chart |
+|---|---|---|---|
+| matches | 142 | **144** | 144 |
+| total absolute page error | 106 | 99 | **94** |
+| exactly-correct page counts | 149 | 151 | **153** |
+| batches 001–009, the gate | 89/89 | 89/89 | **89/89** |
 
 ### The rule
 
@@ -475,36 +481,36 @@ then measured at 14.40 pt against the reference's 14.23, and 14.4 snaps to **14.
 paginate further; page error and exact page counts both improve over the same change, so it
 stands.
 
-### The next lead: a chart on an `.xls` worksheet is dropped, and its pages with it
+### The second change: a chart on an `.xls` worksheet was dropped, and its pages with it
 
-`Template Pilot Logbook JAR-FCL V3.0.xls` renders **35 pages against 38** and 1279 words against
+`Template Pilot Logbook JAR-FCL V3.0.xls` rendered **35 pages against 38** and 1279 words against
 1610. Its sheets `GraphHDV` and `Real TT` hold **no cells at all** — LibreOffice's own flat-ODF
 export of them is one `draw:frame` carrying a `draw:object` chart and nothing else — and the
-reference prints two pages for the first and one for the second, worth 333 words of axis labels
-and legend. We print none.
+reference prints two pages for the first and one for the second. We printed none.
 
-The mechanism is one line. `XlsDrawing.Build` drops any Escher shape that carries neither a
-picture nor `Txo` text:
+The mechanism was one line. `XlsDrawing.Build` dropped any Escher shape carrying neither a picture
+nor `TXO` text, which is the right rule for a solver entry or a group's own frame and the wrong
+one for a chart: an embedded chart's `OBJ` is `ftCmo` type 5 and carries neither. It therefore
+never reached `sheet.Drawings`, `SheetDrawingArea` could not widen `PrintedRange`, the range
+stayed invalid, `SheetPagination` returned no placements, and `SheetEmptyPages.Occupied`'s "a
+sheet always prints one" floor never fired because there was nothing to floor. Calc has the
+object on its draw page, so `ScDocument::GetPrintArea` takes the maximum of the cells' extent and
+the drawing layer's (`documen2.cxx:649-658`) and finds a print area where we found none.
 
-```csharp
-SheetPicture picture = PictureOf(shape);
-if (picture.IsEmpty && entry.Text is not { Length: > 0 }) continue;
-```
+The chart records were skipped rather than missing: `ReadSheetRecords` counts `BOF` depth and
+stepped over everything inside the embedded chart's substream. They are now read, and
+**deliberately not the way a chart sheet's are**. A chart sheet's substream carries the sheet's
+own page setup and the drawing objects laid over the chart, and both are routed onward; an
+embedded chart's carries a page setup belonging to the chart's notional page and drawing objects
+anchored inside the chart's rectangle, and both arrive *after* the worksheet's own records — so
+routing them onward overwrites the worksheet's header, footer, margins and `SETUP`. Only the
+chart records are taken. That claim is asserted rather than stated: the corpus fixture's chart
+sheet carries a header and nothing else in the workbook does, and a mutation reading the
+substream the chart-sheet way blanks it.
 
-An embedded chart's `OBJ` is `ftCmo` type 5 and carries neither, so it never reaches
-`sheet.Drawings`; `SheetDrawingArea` then cannot widen `PrintedRange`, the range stays invalid,
-`SheetPagination` returns no placements, and `SheetEmptyPages.Occupied`'s "never all of them"
-floor never fires because there was nothing to floor. Calc has the object on its draw page, so
-`ScDocument::GetPrintArea` takes the maximum of the cells' extent and the drawing layer's
-(`documen2.cxx:649-658`) and finds a print area where we find none.
-
-The chart records themselves are skipped rather than missing: `ReadSheetRecords` counts `BOF`
-depth and `continue`s over everything inside the embedded chart's substream
-(`XlsWorkbookReader.cs`, "A chart or a drawing embedded in a sheet opens its own BOF/EOF pair").
-`ReadChartRecords` and `XlsChartBuilder` already exist for chart *sheets* and produce a
-`SheetDrawing { IsChart = true, Chart = plot }` that `SheetPageGraphics` paints, so the work is
-to run that machinery at depth 1 and join the n-th chart substream to the n-th chart-typed `OBJ`
-— both sequences being the sheet's own order.
+The plot joins the `OBJ` that opened the substream by adjacency, which is what
+`XclImpChartObj::ReadChartSubStream` does too; no identifier is needed because a chart substream
+can only follow its own object.
 
 **Reach, counted from the files rather than grepped for**: a census of every `ftCmo` type across
 the track's 62 `.xls` finds 13 chart objects in **4 workbooks**, and the wider census is worth
@@ -516,11 +522,27 @@ picture  130 / 8                         note      47 / 9       rect  13 / 3
 button    60 / 2                         line      41 / 1       group 16 / 2
 ```
 
-Two of the four would gain: `Template Pilot Logbook JAR-FCL V3.0.xls` (−3) and
-`EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls` (−2, nine chart objects). The third is
-`orbus_togaf_tool_csq.xls`, whose −42 is the fabricated `DPCache` sheet and not this. **The
-fourth, `TOGAF9-Tool-ConfReqts-CSQ.xls`, matches today** — so this change can cost a match as
-well as win two, and it must be swept rather than reasoned about.
+Measured whole-track, five documents moved and none regressed:
+
+| document | before | after |
+|---|---|---|
+| `Template Pilot Logbook JAR-FCL V3.0.xls` | 35/38 | **38/38**, 1279 → 1305 words |
+| `EHEST-Pre-departure-checklist…xls` | 22/24 | **24/24**, 7734 → 7825 words |
+| `TOGAF9-Tool-ConfReqts-CSQ.xls` | 28/28, matching | 28/28, still matching |
+| `orbus_togaf_tool_csq.xls` | 33/75 | 33/75, +15 words |
+| `ans_mappings_of_eccairs_terms.xlsx` | — | the *reference's* word count moved by one |
+
+**It wins no match, and it is right anyway**: total page error 99 → **94** and exact page counts
+151 → **153**, `batch-010`'s page error 9 → 4 and its exact counts 7 → 9. Neither of the two
+documents whose pages are now right passes the word gate, because an `.xls` chart states its
+series as cell ranges on another sheet and nothing resolves them — the chart draws its title and
+both axis titles and then a value axis scaled from an empty series, 0 to 12 where the reference
+reads 0 to 180. **That is the next piece of this**, and it is worth 305 words on the Logbook and
+557 on EHEST.
+
+`TOGAF9-Tool-ConfReqts-CSQ.xls` was the risk and is worth recording: it matched before the change
+and carries a chart object, so it could have been the cost. It moved by 14 words out of 24 141 and
+stayed a match.
 
 ### Where the rest of batches 010–012 stands
 
@@ -535,6 +557,15 @@ well as win two, and it must be swept rather than reasoned about.
   different defect from the `.xls` one above.
 - `Application_Compliance_Checklist_5_Apr_2021.xlsx` is unchanged and still deliberately unfixed;
   see below.
+
+### A harness trap that produced a red run meaning nothing
+
+A mutation script that restores the source but does not rebuild leaves the *mutant's* assemblies
+on disk, and the per-project test loop this project recommends runs `--no-build`. The suite then
+reported `Failed: 1` on exactly the test the last mutation had been written to break, on a tree
+whose source was clean. Rebuild between restoring and re-running — or, better, make the restore
+step rebuild — because the failure looks like a real regression in the change you just made and
+the diff that would explain it is not there.
 
 ## The twentieth sweep: a header's band is measured, not stated
 
@@ -686,6 +717,12 @@ corpus that later grows an outline-heavy workbook has the diagnosis waiting.
 
 ### The next leads on this track
 
+- **An `.xls` chart's series are not resolved**, which is round twenty-one's unfinished half. The
+  chart on a worksheet now draws its title, both axis titles and a value axis fitted to no data —
+  0 to 12 where the reference reads 0 to 180 — because the series are stated as cell ranges on
+  another sheet and nothing resolves them. Worth 305 words on
+  `Template Pilot Logbook JAR-FCL V3.0.xls` and 557 on `EHEST-Pre-departure-checklist…xls`, which
+  are the only things left between those two and a match now that their page counts agree.
 - **The three under-paginating documents with no furniture** —
   `flightstandards-doc-Cross-reference-table_version02.xlsx` (461/464),
   `tk-syllabus-comparison-document-v5.xlsx` (852/855) and
