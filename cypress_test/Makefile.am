@@ -892,9 +892,12 @@ endef
 # 2 - config: cypress configuration (e.g. cypress' --config argument).
 # 3 - env:    list of environment variables (e.g. cypress' --env argument).
 # 4 - spec:   test file path (e.g. cypress' --spec argument)
+# No setsid here: it would put cypress in a session of its own, out of reach
+# of the terminal's Ctrl-C. Headless runs keep it, an interactive one is
+# driven by hand and has to stay interruptible.
 define run_interactive_single
 	DEBUG='cypress:*' \
-		$(SETSID) $(CYPRESS_BINARY) run \
+		$(CYPRESS_BINARY) run \
 		--browser $(BROWSER) \
 		--headed --no-exit \
 		--config-file $(CYPRESS_CONFIG) \
