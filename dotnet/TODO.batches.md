@@ -3373,6 +3373,27 @@ it** — `015` and `019` each one lower than recorded and `018` one higher, whic
 and is the shape of a document that renders differently under load rather than of a record
 being wrong. Everything else reproduced exactly.
 
+### The round, swept whole three times
+
+Each sweep against a checksummed CLI snapshot, two workers, 200 rows and no path twice.
+
+| | base `1aefcdfdb` | after the spacing fix | after the metrics fix |
+|---|---|---|---|
+| match | 145/200 | **146/200** | 146/200 |
+| total absolute page error | 121 | **120** | 120 |
+| pages exactly correct | 154 | **155** | 155 |
+| total absolute word error | 7095 | **7083** | 7083 |
+
+`batch-007` 9/10 → **10/10**; every other batch unchanged, and the gate `001`–`006` still
+10/10 apart from `006`'s known row-split document. Two documents changed state across the
+whole round and both improved. The second sweep moved nothing at all, which is the honest
+result for a change whose corpus reach is one document that it does not flip.
+
+Test counts after: Core 238, Text 196, Containers 109, Rendering 104, Markup 259,
+OpenDocument 125, WordProcessing **559** (553 plus this round's six), Spreadsheets 410,
+Presentations 488, Vector 291, Fidelity 538, 0 skipped in every one. Nothing outside
+`Paperless.WordProcessing` was touched, so the other two tracks were not swept.
+
 ### `batch-007` is 10/10: a style that states half of `w:spacing` freezes the other half
 
 `final-technical-report-template.docx` was five pages against six, and the reference's sixth
