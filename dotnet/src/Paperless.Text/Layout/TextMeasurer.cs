@@ -509,7 +509,9 @@ public sealed class LineFiller
     /// boundary is correspondingly nearer.
     /// </remarks>
     private static Length? RightEdge(ParagraphFormat tabs, bool isFirstLine, Length? lineWidth)
-        => lineWidth is { } width ? tabs.TabLineOffset(isFirstLine) + width : null;
+        => tabs.ClampsTabsAtLineEdge && lineWidth is { } width
+            ? tabs.TabLineOffset(isFirstLine) + width
+            : null;
 
     /// <summary>
     /// Where a line's visible text ends: past its trailing spaces and its terminating break.

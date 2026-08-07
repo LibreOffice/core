@@ -980,7 +980,7 @@ public static class PageDrawing
             paragraph.Format,
             (from, to) => WidthBetween(paragraph, from, to),
             isFirstLine,
-            areaWidth is { } width
+            paragraph.Format.ClampsTabsAtLineEdge && areaWidth is { } width
                 ? width - paragraph.Format.EndIndent - paragraph.Format.TabOrigin
                 : null);
     }

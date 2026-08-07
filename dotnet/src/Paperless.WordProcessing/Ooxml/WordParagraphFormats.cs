@@ -212,6 +212,7 @@ internal static class WordParagraphFormats
             // writerfilter's DomainMapper sets TABS_RELATIVE_TO_INDENT to false on every document it
             // maps, citing #i24363#.
             TabsRelativeToIndent = false,
+            ClampsTabsAtLineEdge = true,
 
             ShrinksJustifiedBlanks = shrinksJustifiedBlanks,
         };

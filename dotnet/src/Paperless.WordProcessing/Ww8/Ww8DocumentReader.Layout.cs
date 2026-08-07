@@ -937,6 +937,7 @@ public sealed partial class Ww8DocumentReader
             // Word measures its tab stops from the text area rather than from the paragraph's
             // indent, which is what `ww8par.cxx` records by clearing TABS_RELATIVE_TO_INDENT.
             TabsRelativeToIndent = false,
+            ClampsTabsAtLineEdge = true,
         };
 
         // The level is looked up whether or not it draws a label, because a continuation paragraph of a
