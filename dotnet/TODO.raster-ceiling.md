@@ -132,6 +132,51 @@ difference between the two, but that is a correlation on two documents and is **
 Naming that path would let the flag become a rule rather than a list. Until then this is the
 record.
 
+## A second ceiling, with a different mechanism and a named cause
+
+Rasterisation is not the only way the reference draws less than we do. The slides track's
+largest single ink figure turned out to be half this, and unlike the rasterisation class the
+mechanism is **named and verified** rather than open.
+
+`slides/batch-012/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx` puts each of its data tables in
+a `p:graphicFrame` wrapped in `mc:AlternateContent`:
+
+```xml
+<mc:Choice xmlns:v="urn:schemas-microsoft-com:vml" Requires="v">
+  <p:oleObj r:id="rId3" progId="Excel.Sheet.12"><p:link/></p:oleObj>
+</mc:Choice>
+<mc:Fallback>
+  <p:oleObj …><p:link/><p:pic>…<a:blip r:embed="rId4"/>…</p:pic></p:oleObj>
+</mc:Fallback>
+```
+
+`rId3` is an *external* relationship to a SharePoint workbook. `rId4` is `image14.emf`, sitting
+in the package, and it is a picture of the table's data.
+
+`oox/source/core/contexthandler2.cxx:238-249` lists the namespaces LibreOffice will take a
+`mc:Choice` for, and **`v` is on it** — so LibreOffice takes the Choice, gets a linked OLE
+object with no local replacement picture, cannot reach the link, and draws nothing. We do not
+claim VML, take the Fallback, and draw the EMF. Ours is the better output by any reading, and
+the spec's rule — take the first Choice whose namespaces you understand — is on our side, since
+we have no VML reader at all.
+
+Measured, splitting the document's per-page ink by whether the page carries one:
+
+| | pages | ink | major |
+|---|---|---|---|
+| carrying a `Requires="v"` `p:oleObj` | 24 | **152.12** | 24 |
+| everything else | 113 | 73.21 | 42 |
+
+The 152.12 did not move under either of this round's fixes — it is the same figure before and
+after, which is what says it is a property of those pages rather than noise.
+
+Corpus-wide the pattern is small: ten decks have a slide with a `Requires="v"` choice around a
+`p:oleObj`, and only NAS has it on more than four slides. So this is one document's ceiling
+rather than a class to build a tool around — but it is 10% of the track's ink and it had been
+recorded twice as "linked Excel OLE, known" without the number being split, which is what let
+its other 216.29 sit unexamined for two rounds. **Split a big document's ink before believing
+its attribution.**
+
 ## Sheets is nearly untouched by this
 
 One flagged page on the whole track. That track's image problem is the opposite one, and note
