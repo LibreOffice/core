@@ -2242,6 +2242,19 @@ void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPa
     }
 }
 
+// Sends the presentation-info-changed callback to every view of the document.
+// The payload is empty.
+void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell)
+{
+    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+    while (pShell)
+    {
+        if (pShell->GetObjectShell() == pDocShell)
+            pShell->viewCallback(COKitCallbackType::PRESENTATION_INFO, OString());
+        pShell = SfxViewShell::GetNext(*pShell, false);
+    }
+}
+
 /// A master change shows on every slide that uses the master, so raise
 /// those slides' versions, remember the master change and tell the
 /// views. A master's page number is a position in the master-page
@@ -2329,6 +2342,18 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
 
                             notifyViewsVectorPartChanged(mpDocShell, nPart);
+
+                            // An animated image was added, moved, resized,
+                            // replaced or removed on the slide, so re-send the
+                            // presentation info. A move is coalesced by the
+                            // drawing layer into one change at drop, so this
+                            // fires once per committed edit.
+                            if (const SdrGrafObj* pGraphicObject
+                                    = dynamic_cast<const SdrGrafObj*>(pObject))
+                            {
+                                if (pGraphicObject->GetGraphic().IsAnimated())
+                                    notifyViewsPresentationInfoChanged(mpDocShell);
+                            }
                         }
                     }
                 }
@@ -5403,6 +5428,12 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
         //  we have painted the tile, resulting in an invalidate, followed
         //  by the tile being rerendered - which is wasteful and ugly).
         pDrawView->SetSwapAsynchron(false);
+
+        // Send the presentation info once the view is ready at load. The
+        // images are already forced in above, so the animated ones are
+        // detectable now.
+        if (comphelper::COKit::isActive() && mpDocShell)
+            notifyViewsPresentationInfoChanged(mpDocShell);
     }
 
     // when the "This document may contain formatting or content that cannot

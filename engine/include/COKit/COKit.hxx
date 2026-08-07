@@ -1171,7 +1171,18 @@ enum class COKitCallbackType
      * with the part, the version, the object order, the changed objects and,
      * when the master page changed, its content.
      */
-    VECTOR_PRIMITIVES_DELTA = 76
+    VECTOR_PRIMITIVES_DELTA = 76,
+
+    /**
+     * The presentation info of an Impress or Draw document changed and
+     * should be re-sent.
+     *
+     * Pushed to every view of the document when a slide's content changes
+     * (a shape is added, moved, resized or deleted) or the set or order of
+     * pages changes. The payload is empty; the receiving view rebuilds the
+     * full presentationinfo JSON for itself.
+     */
+    PRESENTATION_INFO = 77
 };
 
 enum class COKitKeyEventType
@@ -1351,6 +1362,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_SHAPE_DRAG_PREVIEW";
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
         return "KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA";
+    case COKitCallbackType::PRESENTATION_INFO:
+        return "KIT_CALLBACK_PRESENTATION_INFO";
     }
 
     assert(!"Unknown COKitCallbackType type.");

@@ -3927,6 +3927,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         if (!sendZstdFrame("zstdvectorprimitivesdelta:\n", payload.data(), payload.size()))
             sendTextFrame("commandvalues: " + payload);
         break;
+    case COKitCallbackType::PRESENTATION_INFO:
+        // The engine signalled that the presentation info changed. Rebuild
+        // and resend it through the same path the getpresentationinfo
+        // command uses, so the frame and the media-URL rewrite in wsd are
+        // identical to the pull path.
+        getPresentationInfo();
+        break;
     case COKitCallbackType::INVALIDATE_TILES:
         {
             StringVector tokens(StringVector::tokenize(payload, ','));
