@@ -356,6 +356,20 @@ internal static class XlsxDrawings
                     Family(runProperties, fonts) ?? inheritedFamily));
             }
 
+            // A paragraph with nothing in it still occupies a line, and `a:endParaRPr` is what
+            // says how tall: the properties the next character typed would take. LibreOffice's own
+            // flat-ODS export of a blank paragraph carries them as an empty span, so they are kept
+            // here as an empty run rather than dropped — without them the gap between two blocks
+            // of a text box is reserved at the body default instead of at the body's own size.
+            if (runs.Count == 0)
+            {
+                XElement? ending = Child(paragraph, MainNamespace, "endParaRPr");
+                runs.Add(new SheetShapeRun(
+                    string.Empty,
+                    Points(ending) ?? inherited,
+                    Family(ending, fonts) ?? inheritedFamily));
+            }
+
             // `a:br` is a line break inside a paragraph. Splitting the paragraph at one gives the
             // same lines, since a break and a paragraph end both start a new line here.
             paragraphs.Add(new SheetShapeParagraph
