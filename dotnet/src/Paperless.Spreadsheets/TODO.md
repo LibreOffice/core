@@ -394,6 +394,87 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The eighteenth sweep: an empty row band is not a page the zoom search can count
+
+Swept whole at `54729fdc7` before anything was changed, 171 documents, two workers, no path twice
+and no `ref-failed`: **137 of 171, total absolute page error 112, 146 exact page counts**, batches
+001 to 008 at 80/80. After the one change, **138 of 171, page error 111, 147 exact**, the gate
+still 80/80 and `batch-009` 7/9 → 8/9.
+
+**The brief handed over round sixteen's figures, not round seventeen's** — 136/113/145 with
+`batch-009` at 6/9, and a description of `airports_6.xlsx` as "a fixed 75% scale, so the shortfall
+is cumulative row height". Round seventeen is already merged at this commit; it had refuted that
+explanation (the fault was horizontal — `Helv` resolving to Liberation Sans where the binary takes
+DejaVu Sans) and the document already matched. Check the base commit's own numbers before taking a
+handover's, on this track especially: two consecutive rounds have now been described by a brief
+written before their merge.
+
+### `m_nPagesY` is not the number of bands the geometry produces
+
+`CalcZoom` bisected on the raw row-band count. Calc's does not:
+`PrintPageRanges::calculate` increments `m_nPagesY` only for a band `IsPrintEmpty` is false across
+— `printfun.cxx:3176` for each band the row-break iterator ends, `:3220` for the last one — so
+every predicate in `ScPrintFunc::CalcZoom` compares the smaller number, the tdf#103516 nudge at
+`:2955` included.
+
+Measured on `Company_Seniority_Date_Calculator.xlsx`, which the seventeenth round left
+unreconciled. Its `Bulletin Clarification` sheet states a print area of `A1:Y49` over a sheet whose
+**last `<row>` element is 48**. Fitting to width alone gives zoom 80; the nudge tries 78, where the
+rows split into 1–48 and the empty row 49 — **one page to Calc and two to us** — so the count
+looked unchanged, the nudge was abandoned, and the sheet printed at 80, spilling a thirteenth page
+holding one row. **13 pages against 12, and 12 now.**
+
+The predecessor's note said one of three inputs — the row sum, the printable height, or the row the
+band ends at — was not what it assumed, and asked for that to be measured first. **It was none of
+the three**, and the arithmetic it distrusted was right: 14750.6 twips of rows against a printable
+14769 at zoom 78 and 14400 at 80. The missing input was that the count skips empty bands.
+
+`SheetEmptyPages.IsPrintEmpty` is now reachable from inside pagination as well as after it, threaded
+in as a predicate rather than by giving `SheetPagination` the sheet, so the class still needs only
+the grid and the print setup to answer a geometric question.
+
+Corpus document and test: `sheet-fit-empty-band.xlsx`, built to the *shape* rather than copied from
+the workbook — A4 portrait, quarter-inch margins, fit-to-width with the height unconstrained, 54
+rows pinned at 15 pt summing to 16200 twips against a printable 16118 at zoom 100 and 16447 at 98,
+print area `A1:B55`. One page in LibreOffice 24.2.7.2 and one page here. **Verified against a
+faithful wrong implementation rather than a mutation**: restoring the previous call —
+`Paginate(setup, grid, range)` with no emptiness test threaded in, which is exactly what the code
+did before — renders it on two pages.
+
+### `RegChangeReport.xlsx`: the residue is one visible band, and the pitch theory is refuted
+
+Still `words`, at **3060 against 3137** — 77 short of a 3137 total whose 2% band allows 63. Measured
+per page, ours minus the reference: page 6 is **−72** and every other page is within 4.
+
+The reference's page 6 **opens with a yellow-filled, bordered continuation band** carrying the tail
+of the row above — three sentences ending `(Bulletin 2026-32)`. It is plainly visible in the
+rendered page, so this is not the text layer differing: we omit that band and start at
+`Modernize Resources`, and everything below is shifted up by its height. We draw the same text at
+the foot of **page 5** instead, where the reference clips it away and re-emits it on page 6.
+
+**Two mechanisms fit that, and one is now refuted.** If our line pitch inside the 35-row merge were
+tighter, the text would end on page 5 for that reason alone. Measured off both PDFs on page 5, the
+description column: **46 lines on both sides**, dominant pitch **10.1 pt against 10.0**, spanning
+y 55.0–752.2 here and 54.9–758.1 there. The pitch agrees and the line count agrees, so the cause is
+the remaining one — **we do not clip a cell's text at the page boundary and redraw the remainder on
+the following page**, which is what `ScOutputData` does and what puts that band on page 6.
+
+Note what this means for the gate: the reference emits that tail **twice**, once clipped away on
+page 5 and once visibly on page 6, and we emit it once. So the word deficit is partly the
+reference's draw-and-clip strategy — but the *visible* difference is real and ours is the wrong
+page, so this is a defect and not a ceiling. It is the same family as the reverted
+`CRFlags::ManualSize` work, and it is a feature rather than a wiring change.
+
+### The footer's stated font is not honoured, on a document where it is measurable
+
+Independent of the above and found on the same file. `RegChangeReport.xlsx`'s footer is
+`&L_x000D_&1#&"Calibri"&10&K000000 Security Classification: Protected A`, and the reference PDF
+embeds **Carlito-Regular on every one of its twelve pages** beside Liberation Sans regular, italic
+and bold. Ours embeds three Liberation Sans subsets and no Carlito — every font in the workbook's
+`styles.xml` is Arial, so **Calibri can only have come from the footer's `&"…"` code**. The gate
+sees it as the steady −1 a page that accompanies the page-6 deficit; `pdffonts` sees it outright.
+Whether `&"font"` and `&<size>` are parsed at all was not chased further this round.
+
 ## The seventeenth sweep: the workbook's default font is not the one the chain names
 
 Swept whole at `196774051` before anything was changed, 171 documents: **136 of 171, page error
