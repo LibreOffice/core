@@ -465,6 +465,17 @@ sweep before touching the tree, or snapshot the CLI first and point the sweep at
 When in doubt, discard and re-run: a sweep is cheap next to a wrong number that reaches a
 report.
 
+### Give absolute paths for anything outside the repository
+
+A brief pointed an agent at `scratchpad/salvage5/<id>.patch`. The agent resolved it against its
+own worktree, found nothing, and reported the file as missing — correctly, from where it stood.
+The file was there all along under the session's absolute scratchpad path.
+
+Two costs, and the second is the worse one: the agent worked without material it was meant to
+have, and its report contained a confident, wrong statement of fact that a reader could have
+acted on. **Write every path outside the repo in full**, and if a brief hands over an artefact,
+say how to check it is the right one.
+
 ### Name scratch directories after the agent, not after the sweep
 
 The scratchpad is shared by every agent in a session, and worktrees do not isolate it. One
