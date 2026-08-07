@@ -4967,3 +4967,166 @@ Checked rather than argued. Both other tracks swept on the same two checksummed 
 | `sheets` | 137/171 | 137/171 | two rows differ, both in the *reference's* word count (5557→5552, 10245→10244); every one of our own figures is unchanged and no verdict moved |
 
 The words track was also re-swept after the gating landed: 150/200 and page error 109 either way.
+
+## Words, the eleventh round: a page break that keeps no space, and a table style that draws
+
+Scope was `batch-013` then `batch-014`, with `001`–`012` re-proved. **Only batches 001–014 were
+swept**, so the whole-track figure is not restated here; the gate that was measured is 138
+documents.
+
+| words 001–014 | baseline | after | |
+|---|---|---|---|
+| full match | 122/138 | **124/138** | +2 |
+| exactly correct page count | 128 | **130** | +2 |
+| total absolute page error | 12 | **10** | −2 |
+
+Per batch, baseline → after: 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10,
+010 8/9, 011 9/10, 012 9/10, **013 5/9 → 6/9**, **014 3/10 → 4/10**. Every one of the fourteen
+briefed baseline figures reproduced exactly, which is the first time that has been true here.
+
+Both sweeps ran against checksummed CLI snapshots of this worktree, 138 rows, no duplicated path.
+
+### The fix that moved the number: a page break keeps no space from Word 2013
+
+`SwFrame::IsCollapseUpper` (`sw/source/core/layout/calcmove.cxx`:1120), whose own comment reads
+"Word >= 2013 style: when we're at the top of the page's body, but not on the first page, then
+ignore the upper margin for paragraphs". It runs *after* `HasParaSpaceAtPages` has decided the
+space is due and zeroes it, so it is a second rule rather than a different setting of the first.
+
+`Paginator.cs`:728 granted the space to every paragraph carrying an explicit break at every
+compatibility mode, which is the ≤ 14 behaviour applied everywhere.
+
+The discriminator is the mode and **not** the kind of break, which is the opposite of what
+reading `HasParaSpaceAtPages` alone suggests. Eleven synthetics carrying 20 pt of space-before,
+reading the first word of page two against a 72 pt top margin:
+
+| shape | mode 15 | mode 14 / 12 / absent |
+|---|---|---|
+| the document's own first paragraph | 92.35 | 92.35 |
+| automatic break | 72.35 | 72.35 |
+| `w:pageBreakBefore` | **72.35** | **92.35** |
+| leading `w:br w:type="page"` | **72.35** | **92.35** |
+| `nextPage` section break | 72.35 | — |
+
+`SettingsTable.cxx`:685 sets `TabOverMargin` for a mode of 14 or less and an absent mode defaults
+to 12 (`SettingsTable.cxx`:637); a DOC always sets it (`ww8par.cxx`:2047) and a native ODF
+document sets neither, so both keep the older rule and neither reader was touched.
+
+Two documents moved and nothing else did — `batch-013/docx/bulletin.docx` 15 pages → 14 against
+14, and `batch-014/docx/SPA-11_mcar_part-11_v2.9.docx` 50 → 49 against 49.
+
+Not implemented: `IsCollapseUpper` also declines when the paragraph carries a `RES_PAGEDESC`,
+"after applying a new page style (but do it after page breaks)". A plain `nextPage` section break
+does not set one — measured, it collapses like any other break — so this bites only where a
+section also changes the page's geometry.
+
+### The lead the brief named: a table style's borders are never read, and it is worth measuring by ink
+
+`Borders()` consulted only `w:tblPr/w:tblBorders` on the table itself, never the table style's,
+and `w:insideH`/`w:insideV` were not read from anywhere. The brief's headline reproduces: a table
+using **`Table Grid`** — which states nothing but a `w:tblBorders` and is used by tables that state
+no borders of their own — drew **no line at all**.
+
+One correction. The brief's "LibreOffice draws 19 path segments, we draw none" is half right. The
+"we draw none" half is exact. The 19 does not travel: LibreOffice consolidates each grid line into
+one stroke rather than drawing it per cell edge, so a three-by-three is **8** strokes, a
+three-by-one 6, a one-by-three 6 and a one-cell table 4. Ours is now 8, 6, 6 and 4.
+
+Which of the six sides reaches a given cell is `lcl_computeCellBorders`
+(`DomainMapperTableHandler.cxx`:126); the style layer is merged under the table's own per property
+at `:438`; and a table one row tall has `insideH` erased first (`:915-940`).
+
+**The word gate cannot see any of it.** The sweep across 001–014 is identical before and after:
+124/138, page error 10. Two rows moved and both were already matching, their word counts going to
+exact agreement. The instrument that sees it is `pdf-image-diff.py`, over the 17 documents in
+these batches whose table style states a `w:tblBorders` their table does not:
+
+| major pages | before | after |
+|---|---|---|
+| `part-145-approval list (1).docx` | 8 | 5 |
+| `part-145-approval list 2025.docx` | 7 | 3 |
+| `PAT-047 - Architecture and Detailed Design…docx` | 4 | 4 |
+| `slcc-architecture-uu-architecture.docx` | 3 | **0** |
+| `mde087077~283.docx` | 3 | 2 |
+| `form_1123_application_form_rvsm_spa.docx` | 3 | 3 |
+| `Lessons-Learned-Bulletin-Dorset…docx` | 3 | 3 |
+| `gpp-pr-top-7-office-markets-4q-2023.docx` | 2 | 1 |
+| `UAS-SGI_waiver_approval_request_form.docx` | 2 | **0** |
+| `SDL_FSDO_Part91_LOA_Checklist.docx` | 2 | 2 |
+| `part-147_approval list_20230119.docx` | 2 | 1 |
+| `cacs-206-1751218225.docx` | 2 | **0** |
+| `2015-April-SWIM_Users_Forum-Q&A.docx` | 1 | **0** |
+| `Software Architecture Document Template.docx` | 1 | **0** |
+| `4400-91_Proposal_To_Lease_Space_10-2024.docx` | 1 | **0** |
+| `DRX-Ascend System Course Description.docx` | 0 | 0 |
+| `review-welsh-government-communications…docx` | 0 | 0 |
+| **total** | **44** | **24** |
+
+Seven documents lose every major page they had and not one document is worse. **46 of the words
+track's 134 DOCX** hold at least one table in this shape, so most of that reach is in batches
+015–021, which were not swept.
+
+It is height as well as ink, and that is the half a word count could in principle see: a border is
+a band the text may not enter and neighbouring rows share it, so the three-by-three fixture's last
+line moved 109.945 → 111.445 pt against the reference's 111.796.
+
+Cell margins came with it, for the same reason: `w:tblCellMar` is a table-level property and a
+style stating one is stating how tall every row in the table is.
+
+Not implemented, and worth naming: `w:tblStylePr` conditional formatting — `firstRow`, `lastRow`,
+the banding — which needs `w:tblLook` read as well. Only the horizontal half of the
+degenerate-table erasure is implemented; the vertical half provably cannot bite in a per-cell
+model, because a lone cell in a row is both the first and the last.
+
+### An integer attribute with a decimal point
+
+`w:w="8730.0"`, `w:tblInd w:w="-85.0"`, `w:spacing w:line="360.0"` — 129 of them in one document.
+LibreOffice reads every one, because its attribute list uses `rtl_ustr_toInt32`, which parses as
+far as it can and stops. `int.TryParse` rejected the lot, so the property fell back to its default:
+no cell margin, no column width, no table indent.
+
+It truncates rather than rounds, measured on three documents differing only in `w:before` of 240,
+240.9 and 241 — the reference puts the second paragraph at 96.996, 96.996 and 97.046 pt.
+
+**Measured reach: one document of the words track's 134 DOCX**, and that is stated rather than
+dressed up. What justifies it is agreeing with the reference reader on a class of malformed input.
+`batch-013/docx/template---tpr…docx` now gets its cell margins and its table geometry right and
+still fails its page count for an unrelated reason — see below.
+
+### A standing difference this round measured but did not fix: 0.35 pt at the top of every page
+
+Our first line on a page sits at exactly the top margin; LibreOffice's sits one line gap below it.
+On the probe documents that is 72.000 against 72.345 with Liberation Sans at 11 pt, and it holds
+on every page of every document compared this round. So LibreOffice puts a face's external leading
+*above* the ascent in a line box and we put it below, which cancels within a paragraph — the pitch
+agrees to 0.001 pt — and leaves us 0.35 pt more room at the bottom of each page. It is invisible
+with Carlito, whose declared line gap is zero. Small, systematic, and capable of deciding a page
+break on a document that is already near one.
+
+### What is left in `batch-013`, named rather than guessed
+
+- **`template---tpr-technical-progress-report-with-guidance.docx`** — 7 pages against 8, words
+  1865/1862. The decimal fix corrected its table geometry and its cell margins; what remains is
+  that the reference emits a **near-empty page 4** (six lines, ending at 118.64 pt) and we do not.
+  Something after the bullet at the top of that page cannot be split or cannot be kept with what
+  precedes it. Not diagnosed.
+- **`A1. EASA Form 2.docx`** — 9 pages against 7 and 2091 words against 2228. Untouched this round.
+- **`AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx`** — page-exact, 145 words against 139, and
+  the whole of the six is one footer. Its footer is a table cell holding `Page <PAGE> of
+  <NUMPAGES>` reached through a `w:tab`. **The reference draws the word "Page" and neither number**;
+  we draw "Page 1 of 2" — on *both* pages, which is the known `WritingFieldKind.PageNumber` cache
+  defect showing at the same time. Two things are wrong at once here and neither is established:
+  do not excuse this document on "the reference is wrong" until the mechanism that loses those two
+  fields is named.
+
+### What the next round should take, in order
+
+1. **`w:tblStylePr` conditional formatting.** The table-style layer is now read and its
+   `firstRow`/`lastRow`/banding half is not, which is the rest of the same defect and the rest of
+   the same 46 documents. It needs `w:tblLook` and `GetLocalPropertiesFromMask`
+   (`StyleSheetTable.cxx`:233).
+2. **Re-sweep batches 015–021 for the border change.** Its reach is measured only on 001–014 here;
+   the census says 29 of the 46 affected documents are in batches 015–021, including the four with
+   the most affected tables in the corpus.
+3. **The 0.35 pt line-gap placement**, above.
+4. `A1. EASA Form 2.docx`, which is the largest single failure left in `batch-013`.
