@@ -4164,3 +4164,140 @@ with the reference to 2.65 pt once the OLE object is read, and every page after 
 The header/footer fields also differ — we print the `FILENAME` field's cached result
 (`FSH_5709.16_40_DD_1_0`) where LibreOffice recomputes it to the file's name, and `Page 21 of 33`
 where it says `Page 2 of 32`. Neither changes the page count.
+
+## Slides, round fifteen: the autofit search's grid is a length, not a round number of points
+
+The baseline reproduced the brief **to the digit** — 152/163 on the word gate, **1409.81**
+signed ink, **466** major pages, every page count exact, 0 `ref-failed`. (The worktree was 384
+commits behind when the round opened and was fast-forwarded before anything was measured. Every
+recent agent has hit this; it is now five in a row.)
+
+**`|ink|%` measured across the track for the first time: 1759.63** against the signed 1409.81.
+`research/probes/slides-r15/ink-columns.py` totals both columns per document and diffs two
+sweeps by them, since `track-ink-sweep.sh` sums only the signed one.
+
+### The two columns rank the track differently, and it matters for what gets worked next
+
+Fourteen of the top thirty move at least two places between them, and three move by a dozen:
+
+```
+signed #26 -> unsigned #14    13.04 / 21.80   southern-classic-kennesaw-state-university-final.pptx
+signed #65 -> unsigned #25     5.83 / 15.94   airbus-…-without-video_diy_2019-20.pptx
+signed #32 -> unsigned #21    10.62 / 17.30   Intersil_Italy_CAN_Bus_Transceiver…pptx
+signed #5  -> unsigned #2     48.41 / 74.66   Reporting_responsibilities_matrix.pptx
+```
+
+`Reporting_responsibilities_matrix.pptx` is the one to note. Round fourteen looked at it, called
+it "a thin uniform difference, not repeated furniture", and left it fifth. Unsigned it is
+**second on the whole track**, 74.66 over 268 pages — which says the thinness is a lot of
+cancelling rather than a little difference, and that it is worth a second look after all.
+`Snowbirds_High_Show.pptx` is the same shape in miniature: 13.92 signed, 19.18 unsigned, and
+**zero major pages**, so neither figure the track has ever steered by points at it.
+
+### The defect: `EE_CHAR_FONTHEIGHT` is read from hundredths of a millimetre
+
+`SdrTextObj::autoFitTextForCompatibility` bisects a font scale and floors each candidate to a
+tenth of a point **of the object's `EE_CHAR_FONTHEIGHT`** before trying it. That height is a
+length, and the code converts it *from hundredths of a millimetre*
+(`svx/source/svdraw/svdotext.cxx`, 24.2.7), so a 20 pt default is 706 units and comes back as
+**20.0126 pt** — never 20. `SlideAutofit` hardcoded a round `12.0`.
+
+Whole-number grids are pathological, and the mechanism is exact. At the 87.5 per cent candidate
+a grid of 12 puts the scaled size on precisely 17.5 pt; `basegfx::fround` takes that *up* to 18,
+the body overshoots the box, `fMaxY` drops to 87.5, and every larger candidate becomes
+unreachable. The reference's 11.99055 lands the same candidate on 17.489, rounds *down* to 17,
+and the search keeps climbing. **Every disagreement measured has that one shape: we settle for a
+looser fit — smaller text on wider-spaced lines — than the reference.**
+
+### How it was found, and the two hypotheses killed on the way
+
+Four probes, none of which assumes a height model
+(`research/probes/slides-r15/`). `make-autofit-probe.py` builds a deck of one autofit box per
+slide over a range of box heights, plus a `--sizes` mode that renders the same text *unshrunk* at
+every size; `read-autofit.py` reads the chosen font scale off `/Tf` and the chosen spacing scale
+off the baseline pitch; `pdfops.py` walks the content stream, because poppler gives glyph boxes
+and never a font size and a font size is what settles this; `sim-autofit.py` transcribes 24.2.7's
+search and runs it on the reference's own measured line counts.
+
+- **The unshrunk line counts and pitches agree with the reference at all 14 sizes**, so the
+  height model was never in question.
+- *Killed: the fit is seeded by the shared draw outliner.* `fInitialFontScaleY` is read off the
+  outliner and never reset when the item states no max scale, so a box's answer could have
+  depended on the shape laid out before it. It does not — the same 33 boxes emitted largest-first
+  come back **identical row for row**.
+- *Killed: the binary picks the tightest fit that exists.* Brute-forcing every whole-point size
+  against every spacing agrees with the binary on 28 of 33. It is a search that misses, not an
+  optimiser.
+- *Held.* The transcribed search reproduces the binary on **33/33 and 33/33** under a grid
+  derived from the body's character height, and on **27/33 and 33/33** under a round twelve.
+
+### What moved
+
+| probe | boxes | before | after |
+|---|---|---|---|
+| 20 pt text, 80% line spacing, heights 40–200 pt | 33 | 25 | **31** |
+| 40 pt text, 80% line spacing, heights 80–400 pt | 33 | 31 | **31** |
+| `slide-autofit-grid.pptx`, heights 90–200 pt | 23 | — | **23** |
+
+The fixture is the committed one and covers exactly the range where the grid bites; it agrees
+with the reference on the chosen size *and* the chosen spacing scale on all 23.
+
+### Two things that are inferred, not measured
+
+**Which run's height, when a body states several.** A deck putting a 20 pt paragraph in front of
+three 40 pt ones comes back 33 of 33 under either reading, so first-run and largest-run are
+indistinguishable on this evidence. The largest is taken because it is the more stable of the
+two. The code says so.
+
+**The predecessor's note said the opposite and was not wrong about its own measurement.** It
+recorded a fixed twelve beating the run's own size, 225 probe boxes to 210. That experiment took
+the run's size in *points*, which for its 25, 32 and 40 pt boxes is a whole number every time —
+so what it actually compared was two whole-point grids. Its 227 boxes all still pass: they are
+one- and two-line bodies at a single size and none of them turns on the grid, which is why they
+never caught this.
+
+### The two probe boxes still wrong, and their cause is located
+
+`fit80`'s 40 pt and 45 pt boxes. The transcribed search gets both right, so this is our
+arithmetic rather than the algorithm, and it is the **line height going through whole twips**.
+
+`SlideTextLayout.Spacing` sends a proportional rule to `LineSpacingRule.Apply`, which computes
+in whole twips because that is Writer's unit. EditEngine computes in hundredths of a millimetre:
+`nHeight = fround(pLine->GetHeight() * fProportionalScale * fSpacingFactor)`
+(`editeng/source/editeng/impedit3.cxx:1502`, 24.2.7). Worked through on the 40 pt box at 8 pt and
+nine-tenths spacing:
+
+| | |
+|---|---|
+| natural line, both | 338 |
+| reference: `fround(338 × 0.8 × 0.9)` | **243** |
+| ours: 338 → 191.62 twips → **192**, less 20 per cent → 154 twips → 271.6, then × 0.9 | **244.5** |
+| six lines, less the 50-unit slack | 1408 against **1417** |
+| the box | 1413 |
+
+Nine hundredths of a millimetre decide it: the reference fits 8 pt at nine-tenths and we do not,
+so we fall back to 7 pt at full spacing. The same rounding is worth about 0.01 pt a line on
+ordinary sizes, which is why nothing else has ever noticed it. `Spacing`'s own comment already
+argues that a twip is too coarse for the draw layer and then routes the proportional case
+through twips anyway — the single-spacing case is the one it exempted.
+
+Not attempted this round: folding the spacing scale into that single `fround` also moves the
+ascent rule (`impedit3.cxx:1497-1500` carries an extra four-fifths factor the current
+`Spaced` does not), and every iteration of it costs a whole-track sweep.
+
+### The brief's headline lead did **not** move, and that is worth stating plainly
+
+`2015-Civil-Rights-Website-training.ppt`'s page 39 is still set at 18 pt at nine-tenths spacing
+against the reference's 17.008 at full spacing — byte-identical to the baseline. The deck's frame
+is not one the grid change reaches. What the round did establish about it, which the brief did
+not have:
+
+- The line pitch is **not** a line-height rule error. Both sides give the deck's unshrunk 32 pt
+  title a pitch of **38.41 pt**, exactly; the body differs only because the fit answers differ.
+- The two answers are `(0.85, 1.00)` and `(0.90, 0.90)` — 0.85 against 0.81 of the natural line —
+  and the size difference is what makes our last paragraph wrap to five lines where the
+  reference's takes four.
+
+So the deck is an autofit-search residue, and the twips arithmetic above is the best-placed
+candidate for it rather than anything about line spacing as such.
+
