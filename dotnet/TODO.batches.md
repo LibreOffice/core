@@ -2241,9 +2241,9 @@ verdict is `pages` before and after. Nothing regressed anywhere.
 
 Whole tracks were then swept anyway, at the changed binary. The figures are absolutes rather than
 deltas, since neither track had a baseline at this commit and neither was re-swept without the
-change: **words 147 of 200, page error 119, 156 page-exact.** The slides sweep was still running
-when this round ended and its figure is deliberately left blank rather than guessed — the
-40-document check above is what carries the claim for that track.
+change: **words 147 of 200, page error 119, 156 page-exact**; **slides 152 of 163, total absolute
+page error 0, all 163 page counts exact.** Both are 163 and 200 rows with no path twice and no
+`ref-failed`.
 
 Test counts, each project run on its own and the whole output kept: Core 243, Text **234**
 (was 217; the seventeen new ones are this round's three positive and fourteen negative resolution
