@@ -129,6 +129,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});
 
+	it('General tab offers a password for a document in the ODF format.', function() {
+		writerHelper.openFileProperties(this.win);
+
+		cy.cGet('#changepass-button').should('not.be.disabled');
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
+
 	it('Duration edit button keeps its "..." label.', function() {
 		writerHelper.openFileProperties(this.win);
 
@@ -194,6 +202,26 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 
 		nameBox(2).should('have.value', 'Telephone number');
 		yesButton(2).should('be.checked');
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
+});
+
+describe(['tagdesktop'], 'File Property Tests on a binary format', function() {
+
+	beforeEach(function() {
+		cy.viewport(1400, 1000);
+		helper.setupAndLoadDocument('writer/testfile.doc');
+		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('General tab offers no password for a document in the 97-2003 binary format.', function() {
+		writerHelper.openFileProperties(this.win);
+
+		cy.cGet('#changepass-button').should('be.disabled');
 
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});

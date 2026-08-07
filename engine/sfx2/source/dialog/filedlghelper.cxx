@@ -135,6 +135,28 @@ namespace
                 ||  aFilterName == u"Impress Office Open XML AutoPlay"
                 ||  aFilterName == u"Office Open XML Text";
     }
+
+    bool lclIsBinaryFormat(std::u16string_view const filterName)
+    {
+        return filterName == u"MS Word 97"
+            || filterName == u"MS Word 97 Vorlage"
+            || filterName == u"MS Word 95"
+            || filterName == u"MS Word 95 Vorlage"
+            || filterName == u"MS WinWord 6.0"
+            || filterName == u"MS WinWord 5"
+            || filterName == u"MS Excel 97"
+            || filterName == u"MS Excel 97 Vorlage/Template"
+            || filterName == u"MS Excel 95"
+            || filterName == u"MS Excel 95 Vorlage/Template"
+            || filterName == u"MS Excel 5.0/95"
+            || filterName == u"MS Excel 5.0/95 Vorlage/Template"
+            || filterName == u"MS Excel 4.0"
+            || filterName == u"MS Excel 4.0 Vorlage/Template"
+            || filterName == u"MS PowerPoint 97"
+            || filterName == u"MS PowerPoint 97 Vorlage"
+            || filterName == u"MS PowerPoint 97 AutoPlay"
+            || filterName == u"PowerPoint 3";
+    }
 }
 
 static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context _eContext )
@@ -2747,6 +2769,11 @@ bool IsOOXML(const std::shared_ptr<const SfxFilter>& pCurrentFilter)
 {
     // For OOXML we can use the standard password ("unlimited" characters)
     return IsMSType(pCurrentFilter) && lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName());
+}
+
+bool IsBinaryMSType(std::shared_ptr<SfxFilter const> const& pCurrentFilter)
+{
+    return IsMSType(pCurrentFilter) && lclIsBinaryFormat(pCurrentFilter->GetFilterName());
 }
 
 ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet,

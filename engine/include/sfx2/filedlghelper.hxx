@@ -300,6 +300,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
                     bool bAllowPasswordReset = false);
 bool IsOOXML(const std::shared_ptr<const SfxFilter>& pCurrentFilter);
 bool IsMSType(const std::shared_ptr<const SfxFilter>& pCurrentFilter);
+bool IsBinaryMSType(const std::shared_ptr<const SfxFilter>& pCurrentFilter);
 }
 
 #endif

@@ -1003,6 +1003,15 @@ void SfxDocumentPage::ImplCheckPasswordState()
     {
         if (!pShell)
             break;
+
+        // better not allow user to set password on obsolete formats
+        std::shared_ptr<SfxFilter const> const& pFilter{pShell->GetMedium()->GetFilter()};
+        if (pFilter && sfx2::IsBinaryMSType(pFilter))
+        {
+            m_xChangePassBtn->set_sensitive(false);
+            return;
+        }
+
         const SfxUnoAnyItem* pEncryptionDataItem = pShell->GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
         if (pEncryptionDataItem)
