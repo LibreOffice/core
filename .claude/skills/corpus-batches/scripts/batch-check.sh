@@ -33,9 +33,28 @@ OUT="${3:-$(mktemp -d)}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 WORKERS="${4:-3}"
 
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
-CLI="$REPO/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
-[ -x "$CLI" ] || { echo "no CLI at $CLI — build it first" >&2; exit 1; }
+# Which CLI to measure. `$PAPERLESS_CLI` wins; otherwise the tree this script was invoked
+# *from*, not the tree it lives in.
+#
+# A git worktree shares .claude/ with the main checkout, so `dirname $BASH_SOURCE/../../../..`
+# resolves to the MAIN checkout however deep in a worktree you are. An agent sweeping its own
+# branch was silently measuring another session's binary — and the first such sweep looked
+# entirely normal, because the two checkouts happened to sit near the same commit. Cost two
+# sweeps before the pattern was recognised.
+#
+# $PWD is right because the workflow is always run from the tree under test. The check below
+# refuses rather than guesses when it is not.
+CLI="${PAPERLESS_CLI:-}"
+if [ -z "$CLI" ]; then
+  ROOT="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
+  CLI="$ROOT/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+fi
+[ -x "$CLI" ] || {
+  echo "no CLI at $CLI" >&2
+  echo "run this from the tree you want measured, or set PAPERLESS_CLI" >&2
+  exit 1
+}
+echo "measuring $CLI" >&2
 
 mkdir -p "$OUT/ours" "$OUT/ref"
 : > "$OUT/rows.tsv"

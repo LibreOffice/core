@@ -675,7 +675,8 @@ public static class PageDrawing
 
         if (end <= start) return runs;
 
-        List<TabbedSegment> stretches = Stretches(paragraph, start, end, line.StartsParagraph);
+        List<TabbedSegment> stretches =
+            Stretches(paragraph, start, end, line.StartsParagraph, area.Width);
 
         for (int index = 0; index < stretches.Count; index++)
         {
@@ -953,8 +954,19 @@ public static class PageDrawing
     /// measurement handed to the ruler is the same one the layout used, so the stops land in the same
     /// places here as they did when the line's width was decided.
     /// </remarks>
+    /// <param name="paragraph">The paragraph the line belongs to.</param>
+    /// <param name="start">Where the line's text starts.</param>
+    /// <param name="end">Where its visible text ends.</param>
+    /// <param name="isFirstLine">True for the paragraph's own first line.</param>
+    /// <param name="areaWidth">
+    /// How wide the rectangle holding the line is — the column for a body paragraph, the cell's inner
+    /// width for one in a table — or null when the caller does not have it. It is what turns a right stop
+    /// declared past the margin into one at the margin, and the layout resolved it the same way, so
+    /// omitting it here would draw a leader running off the page that the line was never measured to
+    /// have. See <c>TabRuler.Place</c>.
+    /// </param>
     private static List<TabbedSegment> Stretches(
-        PageParagraph paragraph, int start, int end, bool isFirstLine)
+        PageParagraph paragraph, int start, int end, bool isFirstLine, Length? areaWidth = null)
     {
         if (!TabRuler.HasTab(paragraph.Text, start, end))
         {
@@ -967,7 +979,10 @@ public static class PageDrawing
             end,
             paragraph.Format,
             (from, to) => WidthBetween(paragraph, from, to),
-            isFirstLine);
+            isFirstLine,
+            paragraph.Format.ClampsTabsAtLineEdge && areaWidth is { } width
+                ? width - paragraph.Format.EndIndent - paragraph.Format.TabOrigin
+                : null);
     }
 
     /// <summary>

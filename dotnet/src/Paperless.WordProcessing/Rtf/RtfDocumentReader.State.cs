@@ -1154,6 +1154,7 @@ public sealed partial class RtfDocumentReader
                 // As for DOCX: writerfilter's DomainMapper clears TABS_RELATIVE_TO_INDENT for every
                 // document it maps, and RTF goes through the same mapper.
                 TabsRelativeToIndent = false,
+                ClampsTabsAtLineEdge = true,
             },
             _fontFamilies.GetValueOrDefault(state.FontIndex),
             SizeOf(state),

@@ -353,6 +353,29 @@ public sealed record ParagraphFormat
     public bool TabsRelativeToIndent { get; init; } = true;
 
     /// <summary>
+    /// Whether a right, centred or decimal stop declared past the line's right edge is honoured at the
+    /// edge instead of where it was declared.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's rule and Writer's alone: <c>SwTabPortion::PostFormat</c>
+    /// (<c>sw/source/core/text/txttab.cxx</c>:503) sets
+    /// <c>nRight = std::min(GetTabPos(), rInf.Width())</c> above the comment <em>"If the tab position is
+    /// larger than the right margin, it gets scaled down by default"</em>. A <em>left</em> stop past the
+    /// edge is never clamped — <c>PreFormat</c> breaks the line there instead, which is what this engine
+    /// does already.
+    /// </para>
+    /// <para>
+    /// A flag rather than unconditional behaviour because the code that states it is the text frame's,
+    /// so it governs a word-processing document and says nothing about a slide's text body or a
+    /// spreadsheet cell, which Impress and Calc lay out through other code entirely. Every
+    /// word-processing reader turns it on; the presentation and spreadsheet layouts leave it off and
+    /// place such a stop exactly where it was declared, as they did before this existed.
+    /// </para>
+    /// </remarks>
+    public bool ClampsTabsAtLineEdge { get; init; }
+
+    /// <summary>
     /// Whether a justified line may squeeze its blanks below their natural width to fit another word.
     /// </summary>
     /// <remarks>

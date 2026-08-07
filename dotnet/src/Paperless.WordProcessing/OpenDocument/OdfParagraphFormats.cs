@@ -152,6 +152,7 @@ internal static class OdfParagraphFormats
             WidowLines = Count(styles, styleName, "widows"),
             StartsNewPage = StartsNewPage(styles, styleName),
             TabStops = Tabs(styles, styleName),
+            ClampsTabsAtLineEdge = true,
             DefaultTabInterval = TabInterval(styles),
         };
     }

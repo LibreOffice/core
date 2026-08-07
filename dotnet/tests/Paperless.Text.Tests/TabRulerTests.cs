@@ -195,4 +195,43 @@ public sealed class TabRulerTests
                 "ab\tcd", 0, 5, With(new TabStop(Length.FromPoints(30), Leader: ' ')), Measure)[1]
             .HasLeader.ShouldBeFalse();
     }
+
+    [Fact]
+    public void ARightStopPastTheLineEdgeIsHonouredAtTheEdge()
+    {
+        // `nRight = std::min(GetTabPos(), rInf.Width())` — SwTabPortion::PostFormat,
+        // sw/source/core/text/txttab.cxx:503. Without it "cd" ends at 30 pt on a line 20 pt wide, the
+        // line does not fit, and a contents entry breaks into one line per stretch.
+        ParagraphFormat format = With(new TabStop(Length.FromPoints(30), TabAlignment.Right, '.'));
+
+        TabRuler.Segments("ab\tcd", 0, 5, format, Measure)[1]
+            .Left.ShouldBe(Length.FromPoints(28));
+
+        TabRuler.Segments("ab\tcd", 0, 5, format, Measure, rightEdge: Length.FromPoints(20))[1]
+            .Left.ShouldBe(Length.FromPoints(18));
+
+        TabRuler.WidthOf("ab\tcd", 0, 5, format, Measure, rightEdge: Length.FromPoints(20))
+            .ShouldBe(Length.FromPoints(20));
+    }
+
+    [Fact]
+    public void ACentredStopPastTheLineEdgeCentresOnTheEdge()
+    {
+        ParagraphFormat format = With(new TabStop(Length.FromPoints(40), TabAlignment.Centre));
+
+        // "cd" is 2 pt, so centring it on 20 pt puts its left edge at 19.
+        TabRuler.Segments("ab\tcd", 0, 5, format, Measure, rightEdge: Length.FromPoints(20))[1]
+            .Left.ShouldBe(Length.FromPoints(19));
+    }
+
+    [Fact]
+    public void ALeftStopPastTheLineEdgeIsNotClamped()
+    {
+        // Writer breaks the line at such a tab rather than pulling it back — PreFormat's `bFull`, same
+        // file — so the ruler must leave it where it was declared and let the filler decide.
+        ParagraphFormat format = With(new TabStop(Length.FromPoints(30)));
+
+        TabRuler.Segments("ab\tcd", 0, 5, format, Measure, rightEdge: Length.FromPoints(20))[1]
+            .Left.ShouldBe(Length.FromPoints(30));
+    }
 }

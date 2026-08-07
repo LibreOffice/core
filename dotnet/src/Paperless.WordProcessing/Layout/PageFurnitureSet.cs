@@ -53,15 +53,21 @@ public sealed class PageFurnitureSet
     /// adding it — see <see cref="FlowLayouter.LayOut"/>. A header is a frame like any other and Writer
     /// measures the gap above its paragraphs with the same method it uses in the body.
     /// </param>
+    /// <param name="addsCellLineSpacing">
+    /// Whether a table in the running head grows its cells by their last paragraph's proportional line
+    /// spacing — see <see cref="PaginationOptions.AddsCellLineSpacing"/>. A header laid out as a table is
+    /// the ordinary way a Word document puts a logo beside a title, so this reaches many of them.
+    /// </param>
     public PlacedFlow? Header(
         WritingSection section,
         PageGeometry geometry,
         int pageNumber,
         bool isFirstPageOfSection,
-        bool collapsesSpacing = false)
+        bool collapsesSpacing = false,
+        bool addsCellLineSpacing = false)
         => Resolve(
             _headers, _laidOutHeaders, section, geometry.HeaderArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: Length.Zero, collapsesSpacing);
+            offsetFromTop: Length.Zero, collapsesSpacing, addsCellLineSpacing);
 
     /// <summary>
     /// The footer a page takes, laid out, or null when it has none.
@@ -76,6 +82,7 @@ public sealed class PageFurnitureSet
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
     /// <param name="collapsesSpacing">As <see cref="Header"/>'s.</param>
+    /// <param name="addsCellLineSpacing">As <see cref="Header"/>'s.</param>
     /// <remarks>
     /// The title-page suppression <see cref="Header"/> applies is deliberately <em>not</em> applied here.
     /// It is measured for headers in both directions and the footer evidence contradicts itself: the
@@ -89,10 +96,12 @@ public sealed class PageFurnitureSet
         PageGeometry geometry,
         int pageNumber,
         bool isFirstPageOfSection,
-        bool collapsesSpacing = false)
+        bool collapsesSpacing = false,
+        bool addsCellLineSpacing = false)
         => Resolve(
             _footers, _laidOutFooters, section, geometry.FooterArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: geometry.FooterOffset, collapsesSpacing, mayBeSuppressed: false);
+            offsetFromTop: geometry.FooterOffset, collapsesSpacing, addsCellLineSpacing,
+            mayBeSuppressed: false);
 
     /// <summary>
     /// True when something — a header or a footer — was named for a first page.
@@ -115,6 +124,7 @@ public sealed class PageFurnitureSet
         bool isFirstPageOfSection,
         Length? offsetFromTop,
         bool collapsesSpacing,
+        bool addsCellLineSpacing,
         bool mayBeSuppressed = true)
     {
         PageFurnitureSlot? chosen = ChosenSlot(
@@ -127,7 +137,9 @@ public sealed class PageFurnitureSet
         if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
         PlacedFlow? placed = FlowLayouter.LayOut(
-            blocks, area, offsetFromTop, collapsesSpacing: collapsesSpacing);
+            blocks, area, offsetFromTop,
+            collapsesSpacing: collapsesSpacing,
+            addsCellLineSpacing: addsCellLineSpacing);
         cache[slot] = placed;
         return placed;
     }

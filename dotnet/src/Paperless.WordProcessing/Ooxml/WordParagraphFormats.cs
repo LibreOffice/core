@@ -203,7 +203,8 @@ internal static class WordParagraphFormats
             WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl", tableStyle) ? 2 : 0,
 
             StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId, tableStyle),
-            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs", tableStyle)),
+            TabStops = Tabs(
+                styles.ParagraphPropertyLayers("tabs", paragraphProperties, styleId, tableStyle)),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
 
@@ -211,6 +212,7 @@ internal static class WordParagraphFormats
             // writerfilter's DomainMapper sets TABS_RELATIVE_TO_INDENT to false on every document it
             // maps, citing #i24363#.
             TabsRelativeToIndent = false,
+            ClampsTabsAtLineEdge = true,
 
             ShrinksJustifiedBlanks = shrinksJustifiedBlanks,
         };
@@ -572,38 +574,71 @@ internal static class WordParagraphFormats
     }
 
     /// <summary>
-    /// The paragraph's tab stops, from a <c>w:tabs</c>.
+    /// The paragraph's tab stops, merged down its style chain.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Taken whole from whichever layer declares the element, because <c>w:tabs</c> is a list and the
-    /// direct formatting replaces the style's rather than adding to it.
+    /// A <c>w:tabs</c> <em>adds to</em> the set its style already has rather than replacing it, one stop at
+    /// a time and keyed on position. That is not a guess: <c>DomainMapper</c> seeds the set from the
+    /// paragraph style's own stops before it reads a single <c>w:tab</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx</c>:2604, <c>InitTabStopFromStyle</c>) and then
+    /// folds each one in with <c>IncorporateTabStop</c> (<c>DomainMapper_Impl.cxx</c>:1485), which replaces
+    /// a stop standing at the same position, deletes it when the incoming stop is <c>w:val="clear"</c>, and
+    /// appends otherwise.
     /// </para>
     /// <para>
-    /// <c>w:val="clear"</c> is a stop that <em>removes</em> one the style set — Word's way of cancelling an
-    /// inherited stop — so it contributes nothing here. Keeping it as a left stop would put a column
-    /// boundary exactly where the document asked for none.
+    /// <c>w:val="clear"</c> is the proof that merging is the rule: a set that replaced its style's outright
+    /// would leave a clear entry nothing to cancel. Taking the innermost <c>w:tabs</c> whole loses every
+    /// stop the style set and the paragraph did not restate — the ordinary shape of a running head, where
+    /// the style holds the centre and right stops and the paragraph moves one of them. Measured on
+    /// <c>johnson_hall_service_log.pdf.docx</c>, whose footer clears the style's right stop at 9360 twips
+    /// and adds its own at 10710: with only the paragraph's own stops the third of its three tabs has none
+    /// left to reach, so the trailing text starts past the margin and the footer wraps to two lines, taking
+    /// a line off the body and a table row off the page.
     /// </para>
     /// </remarks>
-    private static List<TabStop> Tabs(XElement? tabs)
+    /// <param name="layers">Every layer stating a <c>w:tabs</c>, innermost first.</param>
+    private static List<TabStop> Tabs(List<XElement> layers)
     {
         List<TabStop> stops = [];
 
+        // Outermost first — the document defaults, then the style chain from its root down, then the
+        // paragraph's own — because each layer edits what the one outside it left.
+        for (int i = layers.Count - 1; i >= 0; i--) Incorporate(stops, layers[i]);
+
+        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
+        return stops;
+    }
+
+    /// <summary>Folds one layer's <c>w:tab</c> children into a set of stops, keyed on position.</summary>
+    private static void Incorporate(List<TabStop> stops, XElement? tabs)
+    {
         foreach (XElement tab in Word.Children(tabs, "tab"))
         {
-            string? kind = Word.Attribute(tab, "val");
-            if (kind == "clear") continue;
-
             if (Word.Attribute(tab, "pos") is not { } text
                 || !long.TryParse(text, CultureInfo.InvariantCulture, out long twips))
             {
                 continue;
             }
 
+            Length position = Length.FromTwips(twips);
+            int existing = stops.FindIndex(stop => stop.Position == position);
+
+            string? kind = Word.Attribute(tab, "val");
+
+            // A clear removes the stop standing at that position, and finding none does nothing at all —
+            // Writer keeps it in the list marked deleted and filters it out at the end, which is the same
+            // answer by a longer route.
+            if (kind == "clear")
+            {
+                if (existing >= 0) stops.RemoveAt(existing);
+                continue;
+            }
+
             string? leader = Word.Attribute(tab, "leader");
 
-            stops.Add(new TabStop(
-                Length.FromTwips(twips),
+            TabStop stop = new(
+                position,
                 kind switch
                 {
                     "center" => TabAlignment.Centre,
@@ -618,11 +653,10 @@ internal static class WordParagraphFormats
                     "underscore" => '_',
                     "middleDot" => '\u00B7',
                     _ => '\0',
-                }));
-        }
+                });
 
-        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
-        return stops;
+            if (existing >= 0) stops[existing] = stop; else stops.Add(stop);
+        }
     }
 
     private static bool IsOn(

@@ -635,6 +635,14 @@ whichever lost. Use `<stem>__<ext>.pdf` throughout.
 documents in about 25. Make it resumable and run it in the background; do not hold a
 foreground shell for it.
 
+**A worktree shares `.claude/` with the main checkout, so a script in it resolves to the wrong
+tree.** `batch-check.sh` located the CLI relative to its own path, four levels up — which from
+inside any agent worktree is the *main* checkout, not the agent's. An agent measured another
+session's binary for two sweeps, and the first looked entirely normal because the two trees
+happened to sit near the same commit. It now takes `$PAPERLESS_CLI`, else the git root of `$PWD`,
+and prints which binary it is measuring on every run. **Read that line.** The same trap waits for
+any script under `.claude/` that infers a tree from `$BASH_SOURCE`.
+
 **A crash in your own CLI is indistinguishable from a mismatch.** One baseline row reported
 zero pages and was read as a parity failure; it was a SIGBUS, and the document re-ran cleanly
 at 2/2. A sweep records what came back, not why. Treat a zero-page result as "did not run"

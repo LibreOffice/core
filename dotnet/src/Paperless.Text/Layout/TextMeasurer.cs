@@ -308,7 +308,7 @@ public sealed class LineFiller
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
                 Length width = Measure(
-                    text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0);
+                    text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0, limit);
 
                 // The allowance belongs to the candidate rather than to the line already chosen: the
                 // word being tried brings a blank with it, and that blank can be squeezed too.
@@ -340,7 +340,7 @@ public sealed class LineFiller
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
                 chosenWidth = Measure(
-                    text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0);
+                    text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0, limit);
                 chosenAllowance = shrinks
                     ? JustificationShrink.AllowanceFor(
                         text, lineStart, chosenVisibleEnd, widthBetween)
@@ -355,7 +355,7 @@ public sealed class LineFiller
             {
                 chosen = cut;
                 chosenVisibleEnd = cut;
-                chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs, lines.Count == 0);
+                chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs, lines.Count == 0, limit);
 
                 // A chop lands inside a word, so the line it leaves holds no blank between two words
                 // and there is nothing left to squeeze.
@@ -455,7 +455,7 @@ public sealed class LineFiller
             if (middle <= first) { low = first + 1; continue; }
             if (middle >= end) { high = middle - 2; continue; }
 
-            if (Measure(text, lineStart, middle, widthBetween, tabs, isFirstLine) <= limit)
+            if (Measure(text, lineStart, middle, widthBetween, tabs, isFirstLine, limit) <= limit)
             {
                 best = middle;
                 low = middle + 1;
@@ -490,10 +490,28 @@ public sealed class LineFiller
         int end,
         Func<int, int, Length> widthBetween,
         ParagraphFormat? tabs,
-        bool isFirstLine)
+        bool isFirstLine,
+        Length? lineWidth = null)
         => tabs is not null && TabRuler.HasTab(text, start, end)
-            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween, isFirstLine)
+            ? TabRuler.WidthOf(
+                text, start, end, tabs, widthBetween, isFirstLine,
+                RightEdge(tabs, isFirstLine, lineWidth))
             : widthBetween(start, end);
+
+    /// <summary>
+    /// The line's right boundary in the coordinates the tab stops are stated in, or null when the caller
+    /// did not say how wide the line is.
+    /// </summary>
+    /// <remarks>
+    /// The stops are measured from the paragraph's tab origin and the width from the line's own start, so
+    /// the two agree only after the line's offset is added back. See
+    /// <see cref="ParagraphFormat.TabLineOffset"/>, which is negative inside a hanging indent — where the
+    /// boundary is correspondingly nearer.
+    /// </remarks>
+    private static Length? RightEdge(ParagraphFormat tabs, bool isFirstLine, Length? lineWidth)
+        => tabs.ClampsTabsAtLineEdge && lineWidth is { } width
+            ? tabs.TabLineOffset(isFirstLine) + width
+            : null;
 
     /// <summary>
     /// Where a line's visible text ends: past its trailing spaces and its terminating break.

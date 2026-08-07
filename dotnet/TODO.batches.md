@@ -1989,11 +1989,11 @@ track total is **146 of 200** by addition and has not been re-swept whole since.
 | `batch-009` | 10 | 208–226 | doc:5 docx:5 | ✅ |
 | `batch-010` | 9 | 228–260 | doc:2 docx:8 | 8/9 |
 | `batch-011` | 10 | 260–296 | doc:2 docx:8 | 9/10 |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 8/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 9/10 |
 | `batch-013` | 9 | 338–370 | docx:10 | 5/9 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 3/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 4/10 |
-| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 7/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 5/10 |
+| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 8/10 |
 | `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
 | `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 3/10 |
@@ -4845,3 +4845,125 @@ arithmetic is 6 of 6.
 3. `Reporting_responsibilities_matrix.pptx` — still second on the unsigned ranking at 74.66 over
    268 pages, with two regions repeating at byte-identical extents on all six of its major
    pages. Untouched this round.
+
+
+## Words, the tenth round: a cell's line spacing and two things a tab stop does — swept whole at `1094f13f5`
+
+**147/200 → 150/200; total absolute page error 117 → 109; documents with an exactly correct page
+count 158 → 160.** Both sweeps against checksummed CLI snapshots of the same worktree, 200 rows,
+no duplicates. The baseline reproduced all twenty-one recorded batch figures exactly.
+
+| Batch | before | after | |
+|---|---|---|---|
+| `batch-012` | 8/10 | **9/10** | `slcc-architecture-uu-architecture.docx` 3 pages → 4 against 4 |
+| `batch-015` | 4/10 | **5/10** | `hdss-bulletin-issue-285…docx` 11 → 10 against 10 |
+| `batch-016` | 7/10 | **8/10** | `150_5300_13_chg8.doc` 20 → 18 against 18 |
+| every other batch | — | unchanged | |
+
+Batches 001–005 are 10/10, 006 is 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9, 011 9/10 — the
+gate for moving on is green and unmoved.
+
+**A trap worth putting at the top: `batch-check.sh` resolves the CLI from its own location**, four
+levels up from `.claude/skills/corpus-batches/scripts`, which is the *main checkout* and not the
+agent's worktree. Two sweeps this round measured a binary another session was rebuilding, and the
+first of them looked entirely normal — right row count, no duplicates, and figures that matched the
+scoreboard, because the main checkout happened to be near the same commit. Copy the script and take
+the CLI from an environment variable, or run the worktree's own copy of it.
+
+### A table cell grows by its last paragraph's proportional line spacing
+
+`AddParaLineSpacingToTableCells`, which `WriterFilter.cxx`:314 switches on for every DOCX, DOC and
+RTF and which a native ODF document leaves off — so it is exactly the split between
+`PaginationOptions.Word` and `.Default`. `SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell`
+(`sw/source/core/layout/flowfrm.cxx`:1946) charges the cell for it beside the space-after this
+engine already charged, and only for the cell's *last* flow frame.
+
+The amount is the part worth writing down, because it is not the leading the layout engine
+computes. `SwBorderAttrs::CalcLineSpacing_` (`sw/source/core/layout/frmtool.cxx`:2681) is
+
+```
+nFontSize × (prop − 100) × 1.15 / 100
+```
+
+in twips — the paragraph's **font size**, not its measured line height, with a 1.15 fudge added for
+tdf#125300 that stands in for the ratio between the two. Reproduced to the digit including the
+order of operations: the integer product is formed first and only then multiplied by a binary
+`1.15` a shade under the decimal one, which is what makes 125% come out at 68 twips rather than 69.
+Measured against LibreOffice on a one-cell fixture at 110, 115, 125, 150, 200 and 250 per cent —
+27, 41, 68, 137, 275 and 414 twips at twelve point, all six exact.
+
+Before it, a cell was 14.65 pt tall at every one of those six percentages. `TableLayouter.cs`,
+`CellLineSpacing`.
+
+### A paragraph's tab stops merge with its style's rather than replacing them
+
+`DomainMapper` seeds the set from the paragraph style before it reads a single `w:tab`
+(`DomainMapper.cxx`:2604, `InitTabStopFromStyle`) and folds each one in with `IncorporateTabStop`
+(`DomainMapper_Impl.cxx`:1485): replace at the same position, delete on `w:val="clear"`, append
+otherwise. We took the innermost `w:tabs` whole — and `w:val="clear"` is the proof that is wrong,
+since a set that replaced its style's outright would leave a clear entry nothing to cancel.
+
+### An aligned tab stop past the line's right edge clamps to it
+
+`SwTabPortion::PostFormat` (`sw/source/core/text/txttab.cxx`:503):
+`nRight = std::min(GetTabPos(), rInf.Width())` for a right, centred or decimal stop. A **left** stop
+past the edge still breaks the line — `PreFormat`'s `bFull` — which is what this engine already did.
+
+**The two tab changes have to land together.** The merge alone was +1 match and **+24 page error**:
+restoring the dotted right stops that `toc 2`–`toc 4` styles declare put those stops past a
+paragraph that also carries a right indent, and every contents entry then broke into four lines —
+one for its number, one for its title, one of leader dots and one for its page.
+`02_mcar_part-2_and_IS_v2.10.docx` went 317 → 329 pages against 312 and `SPA-02_mcar…docx`
+270 → 282 against 266. With the clamp they are 315 and 267, and their contents pages now set one
+entry per line with leaders exactly as the reference does.
+
+### Where the clamp is an approximation, and by how much
+
+Writer has three behaviours, not two, and this implements the middle one everywhere:
+
+| flag | set for | clamp |
+|---|---|---|
+| `TabOverMargin` | DOCX with `compatibilityMode` ≤ 14 (`SettingsTable.cxx`:688) | none at all |
+| `TabOverSpacing` | every writerfilter document (`WriterFilter.cxx`:325) | the **frame's** right edge |
+| neither | — | the **line's** right edge, indents included |
+
+We clamp at the line's edge always. On a paragraph with a right indent that is tighter than
+LibreOffice's by exactly the indent, so a leader stops half a centimetre short of where the
+reference draws it. Implementing `TabOverSpacing` properly needs the other half of the rule as
+well — Writer lets the tabbed run overrun the indent *without breaking the line*, which this
+engine's filler cannot express — so it was left alone deliberately rather than overlooked.
+Measured cost: `EHEST-SMS-Safety-Management-Manual-V2.docx` went 82/82 to 78/82, the only
+regression of the round, and `ABCD-FE-01-00 Flight Envelope…docx` 15/15 to 14/15 while already
+failing on words. Both are documents whose lines *should* overrun and wrap.
+
+### What is left in `batch-012`, and what was measured on 013 and 014
+
+`batch-012` is 9/10 and its remaining failure is `手机免提系统TSB.doc`, which is the glyph-fallback
+item recorded above this section and unchanged: 36 words against 40, on a page where we draw no CJK
+glyphs at all.
+
+`batch-013` is 5/9 and `batch-014` 3/10, both unmoved. Their thirteen failures were measured and
+not diagnosed beyond the page deltas: `A1. EASA Form 2.docx` +2 pages and 137 words short;
+`bulletin.docx` +1; `template---tpr…docx` −1; `AW-104D-RVSM…docx` page-exact and six words long;
+in 014 four documents off by one page in each direction, `UG.CAO.00133…docx` page-exact and 245
+words *over* — which is the raster-ceiling file's own worked false positive, so re-measure it
+before subtracting anything — and `xx_SETIS_PWS_template_10.19.22.docx` page-exact and 541 short
+with no text boxes to blame.
+
+### The shared layer, and the check that it is a no-op elsewhere
+
+`Paperless.Text` changed: `TabRuler.Segments`/`WidthOf` take a right edge and `TextMeasurer` computes
+one per line. Both parameters default to null, and the clamp is gated on a new
+`ParagraphFormat.ClampsTabsAtLineEdge` that only the four word-processing readers set — Impress and
+Calc reach the same `ParagraphLayouter` but leave it off, so their right edge is null and `TabRuler`
+does exactly what it did. That gating is not cosmetic: `SlideTextLayout.Stretches` has no line width
+to hand, so an ungated clamp would have made a slide *measure* clamped and *draw* unclamped.
+
+Checked rather than argued. Both other tracks swept on the same two checksummed snapshots:
+
+| track | before | after | |
+|---|---|---|---|
+| `slides` | 152/163 | 152/163 | `parity.tsv` identical row for row |
+| `sheets` | 137/171 | 137/171 | two rows differ, both in the *reference's* word count (5557→5552, 10245→10244); every one of our own figures is unchanged and no verdict moved |
+
+The words track was also re-swept after the gating landed: 150/200 and page error 109 either way.
