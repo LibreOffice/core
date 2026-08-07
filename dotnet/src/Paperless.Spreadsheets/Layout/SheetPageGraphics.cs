@@ -71,6 +71,12 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
         foreach (SheetDrawing drawing in sheet.Drawings.Items)
         {
             if (drawing.IsHidden) continue;
+
+            // An object the file says does not print keeps its place in the model — it still
+            // widens the printed block, exactly as a hidden one does — and puts no ink on the
+            // page. See `SheetDrawing.IsPrintable` for why the two flags are not one.
+            if (!drawing.IsPrintable) continue;
+
             if (drawing.Image is null && drawing.Vector is null && drawing.Chart is null
                 && drawing.Text is null)
             {

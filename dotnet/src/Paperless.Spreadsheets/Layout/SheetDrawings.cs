@@ -124,6 +124,27 @@ public sealed record SheetDrawing
 
     /// <summary>True when the drawing is hidden and therefore not printed.</summary>
     public bool IsHidden { get; init; }
+
+    /// <summary>
+    /// False when the file marks the object as one that does not print.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Separate from <see cref="IsHidden"/>, and deliberately, because the two differ in the one
+    /// place it matters: both stop the object being painted, and <em>neither</em> stops it moving
+    /// the page break. <see cref="SheetDrawingArea.Extend"/> counts every drawing it is given, as
+    /// <c>ScDrawLayer::GetPrintArea</c> does (<c>sc/source/core/data/drwlayer.cxx:1395-1424</c>,
+    /// whose only exclusion is the hidden-comment layer) — so an unprintable button anchored to
+    /// the right of the last cell still widens the printed block, and dropping it from the model
+    /// instead of flagging it would quietly narrow the print area of every workbook carrying one.
+    /// </para>
+    /// <para>
+    /// In BIFF this is <c>ftCmo</c>'s <c>fPrint</c> bit and it is acted on for form controls
+    /// alone — see <c>XlsDrawing.IsFormControl</c> for why, and for what LibreOffice does with a
+    /// plain shape carrying the same bit clear.
+    /// </para>
+    /// </remarks>
+    public bool IsPrintable { get; init; } = true;
 }
 
 /// <summary>

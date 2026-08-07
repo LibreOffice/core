@@ -263,13 +263,6 @@ internal sealed class XlsDrawingCollector(
             // NOTE record marks the comment visible, which is the case this drops with it.
             if (entry.Type == NoteObject) continue;
 
-            // A form control the file marks unprintable is on the screen and not on the paper.
-            // Calc writes `ftCmo`'s `fPrint` to the control model's `Printable` property and the
-            // printer honours it, so a button's caption is drawn in the application and absent
-            // from the reference PDF — measured on `PC1000.xls`, whose two visible buttons put
-            // exactly nine words on each of eight otherwise-matching pages.
-            if (!entry.IsPrintable && IsFormControl(entry.Type)) continue;
-
             if (ClientAnchor(buffer, shape) is not { } anchor) continue;
             if (place(anchor) is not { } placed) continue;
 
@@ -279,6 +272,11 @@ internal sealed class XlsDrawingCollector(
                 Image = picture.Raster,
                 Vector = picture.Vector,
                 Name = NameOf(shape),
+
+                // A form control the file marks unprintable is on the screen and not on the
+                // paper. It stays in the model rather than being dropped, because its anchor
+                // still widens the printed block — see `SheetDrawing.IsPrintable`.
+                IsPrintable = entry.IsPrintable || !IsFormControl(entry.Type),
             });
         }
 
