@@ -137,7 +137,7 @@ internal static class DocxPageGeometry
     /// </remarks>
     private static Length? Dimension(XElement? element, string attribute)
         => Word.Attribute(element, attribute) is { } text
-           && long.TryParse(text, CultureInfo.InvariantCulture, out long twips)
+           && Word.Long(text, out long twips)
            && twips is > 0 and <= MaxDimensionTwips
             ? Length.FromTwips(twips)
             : null;
@@ -152,7 +152,7 @@ internal static class DocxPageGeometry
     /// </remarks>
     private static Length? Twips(XElement? element, string attribute)
         => Word.Attribute(element, attribute) is { } text
-           && long.TryParse(text, CultureInfo.InvariantCulture, out long twips)
+           && Word.Long(text, out long twips)
             ? Length.FromTwips(twips)
             : null;
 
@@ -168,7 +168,7 @@ internal static class DocxPageGeometry
         if (columns is null) return 1;
 
         if (Word.Attribute(columns, "num") is { } text
-            && int.TryParse(text, CultureInfo.InvariantCulture, out int declared)
+            && Word.Integer(text, out int declared)
             && declared > 0)
         {
             return declared;
@@ -180,7 +180,7 @@ internal static class DocxPageGeometry
 
     private static int? RestartAt(XElement? sectionProperties)
         => Word.Attribute(Word.Child(sectionProperties, "pgNumType"), "start") is { } text
-           && int.TryParse(text, CultureInfo.InvariantCulture, out int start)
+           && Word.Integer(text, out int start)
             ? start
             : null;
 }

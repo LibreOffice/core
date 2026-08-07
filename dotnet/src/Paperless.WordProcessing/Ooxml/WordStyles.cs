@@ -122,6 +122,7 @@ public sealed class WordStyle
 
         ParagraphProperties = Word.Child(element, "pPr");
         RunProperties = Word.Child(element, "rPr");
+        TableProperties = Word.Child(element, "tblPr");
     }
 
     /// <summary>The identifier content refers to. Not the user-visible name.</summary>
@@ -153,6 +154,17 @@ public sealed class WordStyle
 
     /// <summary>The style's <c>w:rPr</c>, or null.</summary>
     public XElement? RunProperties { get; }
+
+    /// <summary>
+    /// A table style's <c>w:tblPr</c>, or null. Meaningless on any other kind of style.
+    /// </summary>
+    /// <remarks>
+    /// Where <c>Table Grid</c> — the style Word puts on nearly every table — keeps the grid lines that
+    /// make it a grid, and where a style states the cell margins that decide how tall a row is. Both are
+    /// table-level properties that a table then overrides per element, which is why the chain is exposed
+    /// rather than a resolved value.
+    /// </remarks>
+    public XElement? TableProperties { get; }
 
     /// <summary>
     /// Replaces the style's <c>w:pPr</c> with an equivalent that states one more attribute, for
@@ -525,6 +537,37 @@ public sealed class WordStyles
         for (int depth = 0; current is not null && depth < MaxBasedOnDepth; depth++)
         {
             if (current.ParagraphProperties is { } properties) chain.Add(properties);
+            if (!visited.Add(current.StyleId)) break;
+            current = Find(current.BasedOn, WordStyleType.Table);
+        }
+
+        return chain;
+    }
+
+    /// <summary>
+    /// A table style's <c>w:tblPr</c> elements, its own first and then its <c>w:basedOn</c> chain.
+    /// </summary>
+    /// <remarks>
+    /// The table-level half of <see cref="TableStyleParagraphProperties"/>, and the one that draws:
+    /// <c>DomainMapperTableHandler::endTableGetTableStyle</c> merges the style's properties into the
+    /// table's own — <c>m_aTableProperties-&gt;InsertProps(pMergedProperties)</c> then
+    /// <c>InsertProps(pTableProps)</c>, so the table wins per property
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx</c>:438) — and
+    /// <c>GetMergedInheritedProperties</c> walks <c>w:basedOn</c> parent-first for the same reason.
+    /// <c>Table Grid</c> states its whole grid here and nothing else, so a reader that skipped this
+    /// drew no line anywhere in the commonest table in Word.
+    /// </remarks>
+    /// <param name="tableStyleId">The <c>w:tblStyle</c> the table names, or null.</param>
+    public List<XElement> TableStyleTableProperties(string? tableStyleId)
+    {
+        List<XElement> chain = [];
+
+        WordStyle? current = Find(tableStyleId, WordStyleType.Table);
+        HashSet<string> visited = new(StringComparer.Ordinal);
+
+        for (int depth = 0; current is not null && depth < MaxBasedOnDepth; depth++)
+        {
+            if (current.TableProperties is { } properties) chain.Add(properties);
             if (!visited.Add(current.StyleId)) break;
             current = Find(current.BasedOn, WordStyleType.Table);
         }

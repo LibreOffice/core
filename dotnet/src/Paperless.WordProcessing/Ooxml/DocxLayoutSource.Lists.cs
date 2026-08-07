@@ -218,9 +218,7 @@ public sealed partial class DocxLayoutSource
     /// </remarks>
     private static Length LabelSize(WordNumberingLevel definition, WordTextStyle text)
         => Word.Attribute(Word.Child(definition.RunProperties, "sz"), "val") is { } stated
-           && int.TryParse(
-               stated, System.Globalization.NumberStyles.Integer,
-               System.Globalization.CultureInfo.InvariantCulture, out int halfPoints)
+           && Word.Integer(stated, out int halfPoints)
            && halfPoints > 0
             ? Length.FromPoints(halfPoints / 2.0)
             : text.Size;
@@ -239,8 +237,7 @@ public sealed partial class DocxLayoutSource
     /// <summary>One twips-valued attribute, or null when it is absent or unreadable.</summary>
     private static Length? Twips(XElement? element, string name)
         => Word.Attribute(element, name) is { } value
-           && long.TryParse(value, System.Globalization.NumberStyles.Integer,
-                            System.Globalization.CultureInfo.InvariantCulture, out long twips)
+           && Word.Long(value, out long twips)
             ? Length.FromTwips(twips)
             : null;
 }

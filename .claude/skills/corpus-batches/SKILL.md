@@ -465,6 +465,17 @@ sweep before touching the tree, or snapshot the CLI first and point the sweep at
 When in doubt, discard and re-run: a sweep is cheap next to a wrong number that reaches a
 report.
 
+### Name scratch directories after the agent, not after the sweep
+
+The scratchpad is shared by every agent in a session, and worktrees do not isolate it. One
+agent had its probe files deleted mid-round by another; a second had its `run-tests.sh`
+overwritten. Both survived because the *sweep output* directories happened to carry
+agent-specific names while the loose files did not.
+
+So the rule is not "name your outputs" but **name the directory**: `scratchpad/<track>-<agent>/`
+and everything under it. A brief should say so, because the failure is silent — a probe that
+vanishes looks like a probe that was never written.
+
 ### Worktrees isolate the code, not the scratch directory
 
 Agents get their own git worktree and share one filesystem everywhere else. Two agents this

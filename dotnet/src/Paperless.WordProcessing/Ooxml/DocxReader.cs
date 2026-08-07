@@ -270,6 +270,13 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             // because the write that decides this never runs; WordCompatibility.AddsParagraphSpacing
             // says why, and measures it.
             CollapsesSpacing = !compatibility.AddsParagraphSpacing,
+
+            // `SwFrame::IsCollapseUpper`, gated on `TAB_OVER_SPACING && !TAB_OVER_MARGIN` — which is
+            // `compatibilityMode` 15 or more, since `SettingsTable.cxx`:685 sets `TabOverMargin` at 14
+            // and below and an absent mode means 12. From Word 2013 a paragraph at the top of any page
+            // but the first drops its space-before even when it is the paragraph that broke the page.
+            CollapsesUpperAtPageTop = compatibility.CompatibilityMode >= 15,
+
             JustifiesLinesEndedByBreak = !compatibility.DoNotExpandShiftReturn,
             MaxPages = options?.MaxPages is > 0
                 ? options.MaxPages

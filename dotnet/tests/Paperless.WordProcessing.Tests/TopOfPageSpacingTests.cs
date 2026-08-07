@@ -24,6 +24,14 @@ namespace Paperless.WordProcessing.Tests;
 /// 72.03 pt. Keeping the space on every page put every page after the first 20 pt low, which on a long
 /// document is a page.
 /// </para>
+/// <para>
+/// The explicit-break half of that has a second rule over it, and the same measurement on
+/// <c>compatibilityMode</c> 15 finds the opposite answer: <c>SwFrame::IsCollapseUpper</c>
+/// (<c>calcmove.cxx</c>:1120) takes the space back on every page but the first, so from Word 2013
+/// onwards a <c>w:pageBreakBefore</c> keeps nothing either. See
+/// <see cref="PaginationOptions.CollapsesUpperAtPageTop"/>, which carries the eleven-fixture
+/// measurement.
+/// </para>
 /// </remarks>
 public sealed class TopOfPageSpacingTests
 {
@@ -47,15 +55,56 @@ public sealed class TopOfPageSpacingTests
     }
 
     /// <summary>
-    /// A page reached by an explicit break keeps it.
+    /// A page reached by an explicit break keeps it, in a file written before Word 2013.
     /// </summary>
     /// <remarks>
     /// <c>HasParaSpaceAtPages</c> returns true for <c>IsPageBreak(true)</c> before it ever looks at which
     /// page the frame is on, so a paragraph that asked to start a page is treated as though it were the
     /// first — which is how a heading styled with both a page break and space above keeps its gap.
+    /// Measured on <c>compatibilityMode</c> 14, 12 and absent alike: the reference puts page two's first
+    /// word at 92.35 pt against 72.35 for an automatic break.
     /// </remarks>
     [Fact]
     public void APageReachedByAnExplicitBreakKeepsIt()
+    {
+        List<LaidOutPage> pages = PaginateWithBreak(PaginationOptions.Word);
+
+        pages.Count.ShouldBe(2);
+        pages[1].Lines[0].Top.ShouldBe(SpaceBefore);
+    }
+
+    /// <summary>
+    /// From Word 2013 it does not, which is the rule that sits on top of the one above.
+    /// </summary>
+    /// <remarks>
+    /// The same two-paragraph document at <c>compatibilityMode</c> 15 puts page two's first word at
+    /// 72.35 pt, not 92.35 — <c>SwFrame::IsCollapseUpper</c> zeroing the upper space that
+    /// <c>HasParaSpaceAtPages</c> had just granted.
+    /// </remarks>
+    [Fact]
+    public void FromWord2013AnExplicitBreakDoesNot()
+    {
+        List<LaidOutPage> pages = PaginateWithBreak(
+            PaginationOptions.Word with { CollapsesUpperAtPageTop = true });
+
+        pages.Count.ShouldBe(2);
+        pages[1].Lines[0].Top.ShouldBe(Length.Zero);
+    }
+
+    /// <summary>
+    /// The collapse spares the document's own first page, which is what makes it a page rule rather
+    /// than a paragraph one.
+    /// </summary>
+    [Fact]
+    public void TheFirstPageKeepsItEvenFromWord2013()
+    {
+        List<LaidOutPage> pages = PaginateWithBreak(
+            PaginationOptions.Word with { CollapsesUpperAtPageTop = true });
+
+        pages[0].Lines[0].Top.ShouldBe(SpaceBefore);
+    }
+
+    private static List<LaidOutPage> PaginateWithBreak(PaginationOptions options)
     {
         List<PageBlock> blocks =
         [
@@ -63,11 +112,7 @@ public sealed class TopOfPageSpacingTests
             Paragraph("second", startsNewPage: true),
         ];
 
-        List<LaidOutPage> pages = new Paginator(PaginationOptions.Word).Paginate(
-            blocks, new WritingSection { Page = Geometry });
-
-        pages.Count.ShouldBe(2);
-        pages[1].Lines[0].Top.ShouldBe(SpaceBefore);
+        return new Paginator(options).Paginate(blocks, new WritingSection { Page = Geometry });
     }
 
     /// <summary>An ODF document drops it everywhere, which is Writer's own behaviour.</summary>

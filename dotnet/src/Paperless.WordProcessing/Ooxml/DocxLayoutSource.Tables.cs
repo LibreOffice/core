@@ -65,8 +65,14 @@ public sealed partial class DocxLayoutSource
 
         List<Length> columns = [.. declared.Select(width => width ?? Length.Zero)];
 
+        string? styleId = Word.Attribute(Word.Child(properties, "tblStyle"), "val");
+
+        // The style's cell margins under the table's own, side by side with its borders and for the same
+        // reason: `w:tblCellMar` is a table-level property, `endTableGetTableStyle` merges the style's in
+        // before the table's, and a style that states one is stating how tall every row in the table is.
         CellPadding tablePadding = Padding(
-            Word.Child(properties, "tblCellMar"), DefaultCellPadding);
+            Word.Child(properties, "tblCellMar"),
+            StyleCellPadding(styleId, DefaultCellPadding));
 
         List<PendingRow> rows = [];
 
@@ -78,8 +84,7 @@ public sealed partial class DocxLayoutSource
         // sets `w:spacing w:after="0" w:line="240"`. Saved and restored so a nested table's style applies
         // only inside it.
         IReadOnlyList<XElement>? enclosing = _tableStyle;
-        _tableStyle = _styles.TableStyleParagraphProperties(
-            Word.Attribute(Word.Child(properties, "tblStyle"), "val"));
+        _tableStyle = _styles.TableStyleParagraphProperties(styleId);
 
         _tableDepth++;
         try
@@ -93,6 +98,9 @@ public sealed partial class DocxLayoutSource
         }
 
         if (rows.Count == 0) return null;
+
+        // Before LeftEdge, which measures the table's position from the first cell's left border.
+        ApplyGridBorders(rows, TableBorders(properties, styleId));
 
         return new PageTable
         {
@@ -347,9 +355,9 @@ public sealed partial class DocxLayoutSource
                     Padding = Padding(Word.Child(cellProperties, "tcMar"), tablePadding),
                     VerticalAlignment = VerticalAlignment(cellProperties),
                     Shading = Shading(cellProperties),
-                    Borders = Borders(cellProperties, tableProperties),
                 },
-                Merge(cellProperties)));
+                Merge(cellProperties),
+                OwnBorders(cellProperties)));
 
             // By the span, because DOCX writes no placeholder for a swallowed column.
             column += span;
@@ -453,7 +461,7 @@ public sealed partial class DocxLayoutSource
         // row. That is how this was found: the bug had been silent since the heights were first read.
         Length measured =
             Word.Attribute(height, "val") is { } text
-            && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int twips)
+            && Word.Integer(text, out int twips)
                 ? Length.FromTwips(Math.Abs(twips))
                 : Length.Zero;
 
@@ -493,6 +501,29 @@ public sealed partial class DocxLayoutSource
     private static Length? Side(XElement margins, string logical, string? physical)
         => Twips(Word.Child(margins, logical))
            ?? (physical is null ? null : Twips(Word.Child(margins, physical)));
+
+    /// <summary>
+    /// The cell padding a table style states, or the fallback when neither it nor its parents do.
+    /// </summary>
+    /// <remarks>
+    /// Applied per side and innermost-first, the same way the borders are: a style stating only a top
+    /// margin inherits the other three from its <c>w:basedOn</c> chain and then from Word's default,
+    /// rather than replacing all four.
+    /// </remarks>
+    private CellPadding StyleCellPadding(string? styleId, CellPadding fallback)
+    {
+        CellPadding padding = fallback;
+
+        // Reversed so the outermost ancestor is applied first and the style's own last, which leaves the
+        // innermost statement of each side standing.
+        List<XElement> chain = _styles.TableStyleTableProperties(styleId);
+        for (int i = chain.Count - 1; i >= 0; i--)
+        {
+            padding = Padding(Word.Child(chain[i], "tblCellMar"), padding);
+        }
+
+        return padding;
+    }
 
     private static CellVerticalAlignment VerticalAlignment(XElement? properties)
         => Word.Attribute(Word.Child(properties, "vAlign"), "val") switch
@@ -541,39 +572,83 @@ public sealed partial class DocxLayoutSource
     }
 
     /// <summary>
-    /// A cell's four borders, its own overriding the table's.
+    /// A cell's own four borders — <c>w:tcBorders</c> and nothing else — with null for a side it
+    /// leaves unstated.
     /// </summary>
     /// <remarks>
-    /// <c>w:tblBorders</c> states the table's and <c>w:tcBorders</c> a cell's, and the cell's wins per side
-    /// rather than whole — which is what a table with an outline and one cell with a heavier bottom edge means.
-    /// The table's <c>w:insideH</c> and <c>w:insideV</c> are not read: they describe the *interior* lines, which
-    /// is a per-position rule rather than a per-cell one and needs the cell's place in the grid.
+    /// The table's are not folded in here any more, because which of the table's six sides reaches a cell
+    /// depends on where that cell sits in the grid: see <see cref="ApplyGridBorders"/>. A cell's own
+    /// <c>w:insideH</c>/<c>w:insideV</c> are deliberately not read either — <c>DomainMapperTableHandler</c>
+    /// erases them before it does anything else, "meaningless without a context (tdf#82177)"
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx</c>:814).
     /// </remarks>
-    private CellBorders Borders(XElement? cellProperties, XElement? tableProperties)
+    private CellBorderSet OwnBorders(XElement? cellProperties)
     {
         XElement? cell = Word.Child(cellProperties, "tcBorders");
-        XElement? table = Word.Child(tableProperties, "tblBorders");
 
         // `w:start`/`w:end` first and `w:left`/`w:right` as the fallback. OOXML has both — the logical pair is
         // the ISO spelling and the physical pair the legacy one — and LibreOffice's own export writes the
         // *logical* names, so a reader that knew only `w:left` finds no vertical borders at all and draws five
         // strokes where the reference draws nine. The two only differ in a right-to-left table, which nothing
         // here lays out yet.
-        return new CellBorders(
-            Border(cell, table, "start", "left"),
-            Border(cell, table, "end", "right"),
-            Border(cell, table, "top"),
-            Border(cell, table, "bottom"));
+        return new CellBorderSet(
+            Border(cell, "start", "left"),
+            Border(cell, "end", "right"),
+            Border(cell, "top"),
+            Border(cell, "bottom"));
     }
 
     /// <summary>
-    /// One border, from the cell's own set or the table's.
+    /// The table's six borders: its own <c>w:tblBorders</c> over its style's, per side.
     /// </summary>
     /// <remarks>
+    /// <c>DomainMapperTableHandler::endTableGetTableStyle</c> inserts the style's properties and then the
+    /// table's own, so the table wins per property rather than wholesale
+    /// (<c>DomainMapperTableHandler.cxx</c>:438-439). Reading the style's is what makes <c>Table Grid</c>
+    /// draw anything at all: it states nothing but a <c>w:tblBorders</c>, and a table using it states no
+    /// borders of its own, so a reader that consulted only <c>w:tblPr/w:tblBorders</c> drew no line
+    /// anywhere in the commonest table Word writes.
+    /// </remarks>
+    private TableBorderSet TableBorders(XElement? tableProperties, string? styleId)
+    {
+        List<XElement?> layers = [Word.Child(tableProperties, "tblBorders")];
+        foreach (XElement style in _styles.TableStyleTableProperties(styleId))
+        {
+            layers.Add(Word.Child(style, "tblBorders"));
+        }
+
+        return new TableBorderSet(
+            Side("start", "left"),
+            Side("end", "right"),
+            Side("top", null),
+            Side("bottom", null),
+            Side("insideH", null),
+            Side("insideV", null));
+
+        TableBorder? Side(string side, string? legacySide)
+        {
+            foreach (XElement? layer in layers)
+            {
+                if (Border(layer, side, legacySide) is { } found) return found;
+            }
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// One border from a <c>w:tblBorders</c> or <c>w:tcBorders</c> block, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// Null and a zero-width border are different answers and the difference decides the merge: a stated
+    /// <c>w:val="none"</c> is a border of no width that <em>beats</em> whatever the layer below would have
+    /// given, which is how a cell switches one edge of its table's grid off. LibreOffice keeps the same
+    /// distinction by inserting a zero-width <c>BorderLine2</c> for <c>none</c> and then merging with
+    /// <c>Insert(..., false)</c>, which does not overwrite.
+    /// <para>
     /// <c>w:sz</c> is in <em>eighths</em> of a point, which is the one unit in OOXML that is neither twips nor
-    /// half-points — reading it as either gives a border eight or four times too thick. <c>w:val</c> of
-    /// <c>none</c> or <c>nil</c> means there is no border and has to beat the table's, the same way ODF's
-    /// <c>none</c> beats its shorthand.
+    /// half-points — reading it as either gives a border eight or four times too thick.
+    /// </para>
     /// <para>
     /// The colour is themed the ordinary way — <c>w:color</c> caching what <c>w:themeColor</c> with
     /// <c>w:themeTint</c>/<c>w:themeShade</c> resolves to — so it goes through the same reader a
@@ -581,23 +656,18 @@ public sealed partial class DocxLayoutSource
     /// still a border.
     /// </para>
     /// </remarks>
-    private TableBorder Border(
-        XElement? cell, XElement? table, string side, string? legacySide = null)
+    private TableBorder? Border(XElement? borders, string side, string? legacySide = null)
     {
         XElement? stated =
-            Word.Child(cell, side)
-            ?? (legacySide is null ? null : Word.Child(cell, legacySide))
-            ?? Word.Child(table, side)
-            ?? (legacySide is null ? null : Word.Child(table, legacySide));
+            Word.Child(borders, side)
+            ?? (legacySide is null ? null : Word.Child(borders, legacySide));
 
-        if (stated is null) return default;
+        if (stated is null) return null;
 
-        if (Word.Attribute(stated, "val") is null or "none" or "nil") return default;
+        if (Word.Attribute(stated, "val") is null or "none" or "nil") return default(TableBorder);
 
         Length width =
-            int.TryParse(
-                Word.Attribute(stated, "sz"), NumberStyles.Integer, CultureInfo.InvariantCulture,
-                out int eighths) && eighths > 0
+            Word.Integer(Word.Attribute(stated, "sz"), out int eighths) && eighths > 0
                 ? Length.FromPoints(eighths / 8.0)
                 : HairlineBorder;
 
@@ -606,6 +676,130 @@ public sealed partial class DocxLayoutSource
             ?? Colour.Black;
 
         return new TableBorder(width, colour);
+    }
+
+    /// <summary>
+    /// Gives every cell the borders its position in the grid earns it, once all the rows are read.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>lcl_computeCellBorders</c> (<c>DomainMapperTableHandler.cxx</c>:126), which is where
+    /// <c>w:insideH</c> and <c>w:insideV</c> finally land: the interior lines are stated once for the whole
+    /// table and become a <em>right</em> border on every cell but the last in its row, a <em>left</em> on
+    /// every cell but the first, and a top and bottom on every row but the outermost edges. The cell's own
+    /// <c>w:tcBorders</c> beats all of it, which is why this fills in only what is still null.
+    /// </para>
+    /// <para>
+    /// A table too small for an interior line does not get one. LibreOffice erases <c>insideH</c> for a
+    /// table a single row tall and <c>insideV</c> for one a single column wide, and both for a table of
+    /// one cell (<c>DomainMapperTableHandler.cxx</c>:915-940) — without which the table's own edges would
+    /// be drawn at the interior width instead of the outline's. Measured on a fixture stating a 3 pt
+    /// interior against a 0.5 pt outline: LibreOffice's PDF of the single-row table holds four strokes at
+    /// 0.5 and two at 3, the two being its <em>vertical</em> interiors, and the single-column table's is
+    /// the mirror of that.
+    /// </para>
+    /// <para>
+    /// Only the horizontal half of that is implemented, because the vertical half provably cannot bite
+    /// here: a lone cell in a row is both the first and the last, and the two lines below that place a
+    /// vertical interior are guarded on it being neither. LibreOffice needs its erasure because it hands
+    /// the interior lines to the <em>table</em> as a <c>TableBorder</c> structure rather than to the
+    /// cells.
+    /// </para>
+    /// <para>
+    /// Run before the table is built rather than during the row walk, because three of the rules need
+    /// facts no row knows on its own: whether it is the last, whether it is the only one, and how far a
+    /// vertical merge starting in it reaches.
+    /// </para>
+    /// </remarks>
+    private static void ApplyGridBorders(List<PendingRow> rows, TableBorderSet table)
+    {
+        int rowCount = rows.Count;
+
+        for (int row = 0; row < rowCount; row++)
+        {
+            List<PendingCell> cells = rows[row].Cells;
+            int lastCell = cells.Count - 1;
+            bool isEndRow = row == rowCount - 1;
+
+            TableBorder? horizontal = rowCount <= 1 ? null : table.InsideH;
+            TableBorder? vertical = table.InsideV;
+
+            for (int index = 0; index <= lastCell; index++)
+            {
+                PendingCell cell = cells[index];
+                CellBorderSet own = cell.Own;
+
+                bool isStartCol = index == 0;
+                bool isEndCol = index == lastCell;
+
+                // "Checking if current cell is vertically merged with all the other cells below to the
+                // bottom", which is what earns the merge's first cell the table's bottom border.
+                int continuations = cell.Merge == VerticalMerge.Restart
+                    ? Continuations(rows, row, cell.Definition.Column)
+                    : 0;
+                bool mergedToBottom =
+                    cell.Merge == VerticalMerge.Restart && row + continuations == rowCount - 1;
+
+                TableBorder? left = own.Left;
+                TableBorder? right = own.Right;
+                TableBorder? top = own.Top;
+
+                // "Only consider the bottom border setting from the last merged cell": a merge's own
+                // bottom edge is the one its last continuation states, not the one its first does.
+                TableBorder? bottom = continuations > 0
+                    ? BottomOfMerge(rows, row + continuations, cell.Definition.Column)
+                    : own.Bottom;
+
+                if (isStartCol) left ??= table.Left;
+                if (isEndCol) right ??= table.Right;
+
+                if (vertical is not null)
+                {
+                    if (!isEndCol) right ??= vertical;
+                    if (!isStartCol) left ??= vertical;
+                }
+
+                if (row == 0)
+                {
+                    top ??= table.Top;
+                    if (horizontal is not null && !mergedToBottom) bottom ??= horizontal;
+                }
+
+                if (mergedToBottom) bottom ??= table.Bottom;
+
+                if (isEndRow)
+                {
+                    bottom ??= table.Bottom;
+                    if (horizontal is not null) top ??= horizontal;
+                }
+
+                if (row > 0 && !isEndRow && horizontal is not null)
+                {
+                    top ??= horizontal;
+                    bottom ??= horizontal;
+                }
+
+                cells[index] = cell with
+                {
+                    Definition = cell.Definition with
+                    {
+                        Borders = new CellBorders(
+                            left ?? default, right ?? default, top ?? default, bottom ?? default),
+                    },
+                };
+            }
+        }
+    }
+
+    /// <summary>The bottom border stated by the cell a vertical merge ends in, if it states one.</summary>
+    private static TableBorder? BottomOfMerge(List<PendingRow> rows, int row, int column)
+    {
+        foreach (PendingCell cell in rows[row].Cells)
+        {
+            if (cell.Definition.Column == column) return cell.Own.Bottom;
+        }
+
+        return null;
     }
 
     /// <summary>The width a border with no usable <c>w:sz</c> is drawn at: half a point.</summary>
@@ -727,14 +921,14 @@ public sealed partial class DocxLayoutSource
         if (type is not (null or "" or "dxa")) return null;
 
         return Word.Attribute(element, "w") is { } text
-               && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int twips)
+               && Word.Integer(text, out int twips)
             ? Length.FromTwips(twips)
             : null;
     }
 
     private static int? Number(XElement? element)
         => Word.Attribute(element, "val") is { } text
-           && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value)
+           && Word.Integer(text, out int value)
             ? value
             : null;
 
@@ -752,7 +946,33 @@ public sealed partial class DocxLayoutSource
     }
 
     /// <summary>A cell before its row span is known.</summary>
-    private readonly record struct PendingCell(PageTableCell Definition, VerticalMerge Merge);
+    /// <param name="Definition">The cell as read, whose borders are filled in by
+    /// <see cref="ApplyGridBorders"/> once the grid is known.</param>
+    /// <param name="Merge">What its <c>w:vMerge</c> said.</param>
+    /// <param name="Own">Its own <c>w:tcBorders</c>, with null for each side it left unstated.</param>
+    private readonly record struct PendingCell(
+        PageTableCell Definition, VerticalMerge Merge, CellBorderSet Own);
+
+    /// <summary>
+    /// The four borders a cell states for itself, each null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from <see cref="CellBorders"/>, whose sides are always answers: this is the question,
+    /// and a null side is what lets the table's own border through.
+    /// </remarks>
+    private readonly record struct CellBorderSet(
+        TableBorder? Left, TableBorder? Right, TableBorder? Top, TableBorder? Bottom);
+
+    /// <summary>
+    /// The six borders a table states, its own over its style's, each null when neither states one.
+    /// </summary>
+    private readonly record struct TableBorderSet(
+        TableBorder? Left,
+        TableBorder? Right,
+        TableBorder? Top,
+        TableBorder? Bottom,
+        TableBorder? InsideH,
+        TableBorder? InsideV);
 
     /// <summary>A row before its cells' row spans are known.</summary>
     private readonly record struct PendingRow(
