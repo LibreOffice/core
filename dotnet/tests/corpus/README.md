@@ -372,6 +372,20 @@ of the page goes blank. The margin either side of the band is a whole 28 pt spac
 delicately balanced — but it does depend on the trailing space being charged to the row, which is why all
 five formats are exported from the one flat-ODF source rather than hand-written per format.
 
+`table-row-min-height.*` pins a **negative** result, which is why it is here rather than in a test file
+alone. Its middle row states an at-least height of 5.2 cm — `style:min-row-height` in the source,
+`w:trHeight w:hRule="atLeast"` after export — and holds twelve one-line paragraphs, with about 3.5 cm left
+on page one of a 10 cm page. LibreOffice 24.2.7.2 **breaks that row anyway**, keeping the seven paragraphs
+that fit, and the declared height changes nothing: rendered at 0, 5.2, 6 and 7 cm the output is the same,
+and so it is on two further sweeps of the same shape at A4 with the head row varied.
+
+That matters because the opposite is plausible and is spelled out in Writer's own source — *"the remaining
+size is less than the minimum row height, then don't even try to split the row, just move it forward"*,
+`SwTabFrame::Split`, `sw/source/core/layout/tabfrm.cxx:1188-1196`. That branch is reached only for a table
+inside a splittable fly. Implementing it for body text moved twelve pages of one corpus document into exact
+agreement with the reference and still cost the track a match, and this fixture is what tells the next
+agent so before they spend the round finding out.
+
 Two things about writing these by hand, both learned the hard way:
 
 - A table's **column and cell styles must be automatic styles**. Declared in `office:styles`, LibreOffice

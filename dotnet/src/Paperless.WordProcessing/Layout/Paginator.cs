@@ -1664,10 +1664,7 @@ public sealed class Paginator
         }
 
         // Finally the first part of the row that does not fit, when the document lets it break.
-        if (end < heights.Count
-            && MaySplit(table, end)
-            && MinHeightLeavesRoomToBreak(table.Rows[end], room - placed, columnIsEmpty && end == from)
-            && !IsCoveredByAMerge(laid, end))
+        if (end < heights.Count && MaySplit(table, end) && !IsCoveredByAMerge(laid, end))
         {
             List<PlacedTableCell> rowCells = RowCells(laid, end);
 
@@ -1739,38 +1736,6 @@ public sealed class Paginator
         => row >= Math.Max(table.HeaderRowCount, 0)
            && table.Rows[row].CanSplit
            && !table.Rows[row].HasExactHeight;
-
-    /// <summary>
-    /// Whether a row that overflows the page may be broken here, or has to move whole.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// A row's <em>declared</em> minimum height is not only a floor on how tall it ends up: Writer also
-    /// consults it before breaking one, and refuses the break when the minimum does not fit in what is
-    /// left. <c>SwTabFrame::Split</c> states the rule outright — "the remaining size is less than the
-    /// minimum row height, then don't even try to split the row, just move it forward"
-    /// (<c>sw/source/core/layout/tabfrm.cxx:1188-1196</c>). This is why a document full of tall stated row
-    /// heights gets pages the reference leaves a third empty and we used to fill.
-    /// </para>
-    /// <para>
-    /// The declared height rather than the laid-out one, which is what makes this a separate test instead
-    /// of "does the row fit". Measured on <c>f445896eb008d14c1746fc37d412dc22.docx</c>: rewriting a row's
-    /// <c>w:trHeight</c> across 4200–4300 twips flips LibreOffice between breaking the row and moving it,
-    /// while the row's laid-out height — 5147 twips of content — is byte-identical either side, so the
-    /// geometry cannot be what it reads.
-    /// </para>
-    /// <para>
-    /// <paramref name="nowhereToMove"/> is the escape a row taller than a whole page needs. Moving it
-    /// gains nothing and would not terminate, so it is broken where it stands — Writer reaches the same
-    /// answer by failing the split outright for the part's first row, which sends the whole table forward
-    /// once and no further.
-    /// </para>
-    /// </remarks>
-    /// <param name="row">The row that does not fit.</param>
-    /// <param name="left">How much of the column is left below what is already placed.</param>
-    /// <param name="nowhereToMove">True when the row already starts an otherwise-empty column.</param>
-    private static bool MinHeightLeavesRoomToBreak(PageTableRow row, Length left, bool nowhereToMove)
-        => nowhereToMove || row.MinHeight <= left;
 
     private static PlacedTable Part(
         PageTable table,
