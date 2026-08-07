@@ -2249,7 +2249,9 @@ page error 0, all 163 page counts exact.** Both are 163 and 200 rows with no pat
 Test counts, each project run on its own and the whole output kept: Core 243, Text **234**
 (was 217; the seventeen new ones are this round's three positive and fourteen negative resolution
 theories), Containers 109, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 565,
-Spreadsheets 426, Presentations 505, Vector 291. **Zero failed and zero skipped throughout.**
+Spreadsheets 426, Presentations 505, Vector 291, Fidelity 538. **Zero failed and zero skipped
+throughout** — every count is the known-good figure except Text, which is the only project the
+change touches.
 
 ## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
 
