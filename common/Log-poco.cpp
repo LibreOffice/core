@@ -199,8 +199,14 @@ namespace Log
                 if (wrote < 0 && errno == EINTR)
                     continue;
 
-                if (wrote < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)
-                    && stalls++ < MaxStalls)
+                // EAGAIN and EWOULDBLOCK are the same value on Linux, where
+                // testing both is a -Wlogical-op warning.
+#if EAGAIN == EWOULDBLOCK
+                const bool wouldBlock = errno == EAGAIN;
+#else
+                const bool wouldBlock = errno == EAGAIN || errno == EWOULDBLOCK;
+#endif
+                if (wrote < 0 && wouldBlock && stalls++ < MaxStalls)
                 {
                     struct pollfd pfd;
                     pfd.fd = LOG_FILE_FD;
