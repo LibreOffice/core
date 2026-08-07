@@ -86,6 +86,41 @@ public static class OoxmlMetadata
     }
 
     /// <summary>
+    /// Whether a Microsoft application wrote this package.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice carries this as <c>XmlFilterBase::isMSODocument()</c> and sets it in
+    /// <c>checkDocumentProperties</c> from one test and one test only: <c>app.xml</c>'s
+    /// <c>Application</c> begins with "Microsoft", ignoring case
+    /// (<c>oox/source/core/xmlfilterbase.cxx:241-245</c>). No version is consulted — that is
+    /// <see cref="IsOffice2007(OpcPackage)"/>'s extra condition, and the two must not be confused.
+    /// </para>
+    /// <para>
+    /// It is not a metadata nicety. The OOXML filters branch on it where Excel's own numbers are
+    /// known to be written on a coarser grid than the schema allows, most visibly on row heights
+    /// (<c>sc/source/filter/oox/sheetdatacontext.cxx:316</c>), so a workbook's geometry depends on
+    /// who wrote it.
+    /// </para>
+    /// </remarks>
+    /// <param name="package">The package to inspect.</param>
+    public static bool IsMicrosoftGenerated(OpcPackage package)
+    {
+        ArgumentNullException.ThrowIfNull(package);
+
+        XElement? app = LoadByRelationship(package, ExtendedPropertiesRelationship, "docProps/app.xml");
+        return IsMicrosoftGenerated(app);
+    }
+
+    /// <summary>
+    /// Whether an already-loaded <c>docProps/app.xml</c> names a Microsoft application.
+    /// </summary>
+    /// <param name="app">The <c>Properties</c> root of the extended-properties part.</param>
+    public static bool IsMicrosoftGenerated(XElement? app)
+        => Text(app, ExtendedProperties, "Application") is { } generator
+           && generator.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
     /// Whether Office 2007 wrote this package, which changes what an unstated setting means.
     /// </summary>
     /// <remarks>
@@ -120,14 +155,7 @@ public static class OoxmlMetadata
     /// <param name="app">The <c>Properties</c> root of the extended-properties part.</param>
     public static bool IsOffice2007(XElement? app)
     {
-        if (app is null) return false;
-
-        string? generator = Text(app, ExtendedProperties, "Application");
-        if (generator is null
-            || !generator.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase))
-        {
-            return false;
-        }
+        if (!IsMicrosoftGenerated(app)) return false;
 
         string? version = Text(app, ExtendedProperties, "AppVersion");
         return version is not null && version.StartsWith("12.", StringComparison.Ordinal);
