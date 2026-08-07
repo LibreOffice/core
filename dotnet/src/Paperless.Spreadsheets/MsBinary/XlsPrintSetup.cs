@@ -351,9 +351,19 @@ internal sealed class XlsSheetPrintState
     /// wins.
     /// </para>
     /// </remarks>
-    private static Length Band(double inches)
+    /// <param name="inches">The distance the two margins leave between them.</param>
+    /// <param name="codes">
+    /// The band's own <c>&amp;</c>-code string. The band that prints is not the one the margins
+    /// imply — Calc keeps the distance from the text to the body and measures the text again at
+    /// print time, so the band grows by however much the real line height exceeds the bare point
+    /// size. <see cref="SheetBandHeight"/> is the port; the floor below still applies on top of
+    /// it, because for BIFF it is <c>nManHeight</c> and this is <c>nHeight</c>.
+    /// </param>
+    /// <param name="defaultFont">The workbook's own default cell font, which the band is set in.</param>
+    private static Length Band(double inches, string? codes, SheetDefaultFont? defaultFont)
     {
-        Length stated = Length.FromInches(Math.Max(0, inches));
+        Length stated = SheetBandHeight.Printed(
+            codes, Length.FromInches(Math.Max(0, inches)), defaultFont);
         return Length.Max(stated, DefaultBandHeight);
     }
 
@@ -383,8 +393,12 @@ internal sealed class XlsSheetPrintState
             RightMargin = Length.FromInches(_rightMargin),
             TopMargin = Length.FromInches(hasHeader ? _headerMargin : _topMargin),
             BottomMargin = Length.FromInches(hasFooter ? _footerMargin : _bottomMargin),
-            HeaderHeight = hasHeader ? Band(_topMargin - _headerMargin) : Length.Zero,
-            FooterHeight = hasFooter ? Band(_bottomMargin - _footerMargin) : Length.Zero,
+            HeaderHeight = hasHeader
+                ? Band(_topMargin - _headerMargin, _header, DefaultFont)
+                : Length.Zero,
+            FooterHeight = hasFooter
+                ? Band(_bottomMargin - _footerMargin, _footer, DefaultFont)
+                : Length.Zero,
             HeaderText = _header,
             FooterText = _footer,
 

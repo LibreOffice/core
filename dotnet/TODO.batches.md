@@ -5380,3 +5380,88 @@ break on a document that is already near one.
    the most affected tables in the corpus.
 3. **The 0.35 pt line-gap placement**, above.
 4. `A1. EASA Form 2.docx`, which is the largest single failure left in `batch-013`.
+
+## Sheets, round twenty: a header's band is measured, not stated — swept whole at `b7950ffd5`
+
+Whole track before and after, 171 documents each time, two workers, no duplicate path and no
+`ref-failed` in either.
+
+| | baseline `b7950ffd5` | after |
+|---|---|---|
+| matches | 139 / 171 | **142 / 171** |
+| total absolute page error | 111 | **106** |
+| exactly-correct page counts | 147 | **149** |
+| `sheets/batch-001`–`008`, the gate | 80/80 | **80/80** |
+| `sheets/batch-009` | 8/9 | **9/9** |
+
+**The baseline is one match above what round nineteen reported at its final commit** (138) with
+the same page error and the same exact count. The row that differs is a word-count verdict, so
+this is most likely LibreOffice's own non-determinism — already recorded on this track, where
+`PBN Matrix NAAs (V01).xlsx` returned 5554, 5557 and 5556 across three runs of the same binary
+on the same file. Every other figure in the brief reproduced.
+
+### The change
+
+SpreadsheetML and BIFF state a header band as the difference of two margins, and Calc keeps
+neither number. Its filter measures the band's text as the bare point size, stores
+`bodyDistance = statedBand − nominal`, and then re-measures the text properly at print time and
+adds the distance back. So
+
+```
+printedBand = statedBand + max(0, measuredLineHeight − nominalPointSize)
+```
+
+which is about a tenth of the font size, taken off the printable body on every page. The
+citations and the arithmetic — which reproduces LibreOffice's own flat-ODF export to the digit
+on three separate workbooks — are in `src/Paperless.Spreadsheets/TODO.md`. The band's default
+font is the workbook's own default cell font and not a fixed ten point, which two documents
+disagreeing with each other were needed to establish.
+
+This resolves the contradiction round nineteen left on `RegChangeReport.xlsx`. Its "the exported
+page geometry gives 661.6 pt, which reproduces none of the breaks" is not a number Calc
+paginates with: its page rectangle subtracts the footer's *height* and not its *spacing*
+(`printfun.cxx:3003`). The body is 684.0 pt and the breaks want `[681.62, 682.14)`, so the gap
+was 1.9 pt rather than 20. That document now matches, at 3131 words against 3137.
+
+### Four documents gained, one lost, and the lost one is right
+
+`NAARMO_Mexico_RVSM_Approvals.xlsx` went 16/16 to 17/16. It was passing because two errors
+cancelled: its drawn row pitch is 14.40 pt against the reference's 14.23, 1.2% tall, and a body
+2.4 pt too long was hiding it. Page error and exact page counts both improved over the same
+change, so it stands — this is the pattern this file already records under "fixes that cancel".
+
+`fy2011-aip-grants.xls` is a BIFF workbook and moved only on the second of the two commits, the
+one that takes the band's default font from the workbook. The rule reaches both filters.
+
+**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot
+be affected and were not swept.
+
+### Tests
+
+Per project, run separately, each redirected to a file. **0 failed and 0 skipped in every one.**
+
+Core 243, Containers 109, Text 237, Vector 291, Rendering 104, Markup 259, OpenDocument 125,
+WordProcessing 608, Spreadsheets **437** (was 432 — one new test file of five; one existing test
+was rewritten rather than added to), Presentations 516, Fidelity 541.
+
+`SheetPaginationTests.AnOoxmlTopMarginSurvivesTheHeaderBandConversion` asserted that
+`TopMargin + HeaderHeight` comes back out as the file's own `top` margin. That is not an
+invariant Calc keeps and the test is rewritten to the measured value rather than relaxed.
+
+### What the next round should take, in order
+
+1. **The three documents that under-paginate with no header or footer anywhere** —
+   `flightstandards-doc-Cross-reference-table_version02.xlsx` (461/464),
+   `tk-syllabus-comparison-document-v5.xlsx` (852/855),
+   `sectors-defense-and-aerospace.xlsx` (225/227). The band rule cannot reach them by
+   construction. On the last, both renderings put page 20's ink between y 71.8 and y 745.6, so
+   the body agrees and the residue is row heights; note the sign, because rows measured too
+   *tall* should over-paginate and these under-paginate.
+2. **`Application_Compliance_Checklist_5_Apr_2021.xlsx`** is diagnosed and deliberately not
+   fixed: collapsed row outline groups our XLSX reader never hides, worth +4 pages and +8635
+   words on that one document and reaching **1 of the 109** corpus SpreadsheetML files. Take it
+   only if the corpus grows more of them.
+3. **`RegChangeReport.xlsx`'s footer face.** The band now honours `&"font"` and `&<size>` for its
+   *height*; `SheetPageDecoration` still draws every band at one size in one face. Splitting a
+   band into sized, faced runs closes both the missing Carlito embedding and the `&1` code that
+   puts the reference's `#` on its own baseline.

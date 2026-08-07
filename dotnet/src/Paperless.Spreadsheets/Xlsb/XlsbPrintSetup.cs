@@ -253,8 +253,18 @@ internal static class XlsbPrintSetup
             RightMargin = Length.FromInches(right),
             TopMargin = Length.FromInches(hasHeader ? header : top),
             BottomMargin = Length.FromInches(hasFooter ? footer : bottom),
-            HeaderHeight = hasHeader ? Length.FromInches(Math.Max(0, top - header)) : Length.Zero,
-            FooterHeight = hasFooter ? Length.FromInches(Math.Max(0, bottom - footer)) : Length.Zero,
+            // Not the band the two margins imply: Calc re-measures the text at print time and
+            // the band grows by what the real line height adds over the bare point size. XLSB is
+            // SpreadsheetML's binary spelling and takes the same OOXML filter path, so it takes
+            // the same rule — see SheetBandHeight.
+            HeaderHeight = hasHeader
+                ? SheetBandHeight.Printed(
+                    headerText, Length.FromInches(Math.Max(0, top - header)), defaultFont)
+                : Length.Zero,
+            FooterHeight = hasFooter
+                ? SheetBandHeight.Printed(
+                    footerText, Length.FromInches(Math.Max(0, bottom - footer)), defaultFont)
+                : Length.Zero,
             HeaderText = headerText,
             FooterText = footerText,
             Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),

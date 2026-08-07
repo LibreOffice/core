@@ -394,6 +394,169 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The twentieth sweep: a header's band is measured, not stated
+
+Swept whole at `b7950ffd5` before anything was changed, 171 documents, two workers, no path
+twice and no `ref-failed`: **139 of 171, total absolute page error 111, 147 exact page counts**,
+batches 001 to 008 at 80/80 and `batch-009` at 8/9.
+
+Round nineteen reported **138** at its final commit with the same page error (111) and the same
+exact count (147). One row differs and it is a word-count verdict, so LibreOffice's own
+non-determinism is the likely explanation rather than a code difference — this file already
+records `PBN Matrix NAAs (V01).xlsx` returning 5554, 5557 and 5556 across three runs of the same
+binary on the same file. **The brief's other figures were right**, which is worth saying because
+three consecutive rounds before this one were handed stale ones.
+
+### `RegChangeReport.xlsx`: the contradiction was in the model, not in either measurement
+
+Round nineteen left this document with two numbers that could not both be right. Both reproduce
+here exactly. Greedy pagination over LibreOffice's own row heights matches its page breaks only
+for a body height in **[681.62, 682.14)**; the page geometry it exported gives **661.6 pt**, which
+matches none of them.
+
+**661.6 is not a number Calc paginates with.** It is the body left over once the footer's
+*spacing* and its *height* are both subtracted, and Calc's page rectangle subtracts only the
+height —
+
+```
+aPageRect.SetBottom( ( aPageRect.Bottom() - nBottomMargin ) * 100 / nZoom - aFtr.nHeight );
+                                                        printfun.cxx:3003
+```
+
+— so the body is `pageHeight - top - bottom - hdr.nHeight - ftr.nHeight` = **684.0 pt** on this
+workbook, which is what we already computed. The real gap was never twenty points. It is 1.9.
+
+### Where the 1.9 pt goes, and why it is on every page of every sheet with furniture
+
+The band a header or footer occupies is stated twice in a SpreadsheetML file and Calc believes
+neither. It measures the text itself, and it does so twice with two different rulers:
+
+1. **At import, crudely.** A line is as tall as the largest *bare point size* on it — no ascent,
+   no descent, no leading. `HeaderFooterParser::getCurrHeight` returns `maFontModel.mfHeight`
+   (`sc/source/filter/oox/pagesettings.cxx:738-741`) and `XclImpHFConverter::GetMaxLineHeight`
+   is the same function under another name (`sc/source/filter/excel/xihelper.cxx:504-508`).
+   Both total it down a portion's lines and take the maximum across the three portions, and an
+   empty portion still stands one line tall.
+2. **It stores the difference as a distance.** `bodyDistance = statedBand - nominal`, with the
+   stated band kept as a minimum (`pagesettings.cxx:1029-1040`, `xipage.cxx:311-330`). A
+   negative distance means the text does not fit, and the band is pinned rather than dynamic
+   (`#i23296`).
+3. **At print, properly.** `ScPrintFunc::UpdateHFHeight` throws the crude figure away and asks
+   the EditEngine: `nHeight = nMaxHeight + nDistance`, floored at the stated band
+   (`printfun.cxx:838-849`).
+
+Composed: **`printedBand = statedBand + max(0, measured - nominal)`**. For ordinary one-line
+furniture that is about a tenth of the font size, and it comes off the printable body on every
+page.
+
+`Layout/SheetBandHeight.cs` is the port. It walks the `&`-code string a second time rather than
+reusing `SheetHeaderFooter.ParseCodes`, because the two want opposite halves of it: `ParseCodes`
+discards the size and face codes precisely because they do not print, and this needs exactly
+those and can ignore the literal text.
+
+**The arithmetic reproduces LibreOffice's own export to the digit**, which is what makes this a
+port rather than a fitted constant. On `RegChangeReport.xlsx`: stated band 0.45 in, one 10 pt
+line, so `bodyDistance = 1143 - 353 = 790` hundredths of a millimetre — and the export states
+`fo:min-height="0.45in"` and `fo:margin-top="0.311in"`.
+
+### The band's default font is the workbook's, and that took two documents to see
+
+The first cut used a fixed 10 pt Liberation Sans. Calc uses the workbook's own default cell font
+— `ScPrintFunc::MakeEditEngine` fills the band's defaults from `getDefaultCellAttribute`
+(`printfun.cxx:1769-1774`) and both filters' parsers start from the workbook's first font
+(`XclImpHFConverter::ResetFontData`, `xihelper.cxx:534-542`). Two documents disagree with each
+other and settle it, both read out of LibreOffice's export rather than inferred:
+
+| document | band states | export | nominal |
+|---|---|---|---|
+| `NAARMO_Mexico_RVSM_Approvals.xlsx` | no size; default font Calibri 11 | `min-height="0.45in"`, `margin-bottom="0.2972in"` | **11.0 pt** |
+| `sheet-ooxml-features.xlsx` | `&"Times New Roman,Regular"&12` | `min-height="0.2654in"`, `margin-bottom="0.0984in"` | **12.02 pt** |
+
+`SheetDefaultFont` was already threaded into all three print-setup readers for column widths, so
+this is a parameter rather than new plumbing. The growth on the second resolves exactly against
+Liberation Serif — ascent 0.891 em plus descent 0.216 em is 1.107 em, 13.29 pt at 12 point.
+
+`SheetPaginationTests.AnOoxmlTopMarginSurvivesTheHeaderBandConversion` asserted the invariant
+this breaks: that `TopMargin + HeaderHeight` comes back out as the file's own `top` margin. It is
+not an invariant Calc keeps — the first printed row sits *below* the file's top margin by the
+growth — and the test is rewritten to the measured value rather than relaxed.
+
+### What it bought, and the one document it cost
+
+Reach is stated as documents whose rendering changed, measured by rendering them, because
+counting files that state a header overstates it: **28 of the 109 corpus SpreadsheetML documents
+state a header or footer at all, and 10 documents in the track rendered differently.**
+
+After the change, swept whole again: **142 of 171, page error 106, 149 exact**, batches 001 to
+008 still 80/80 and `batch-009` at 9/9. Four documents gained a match and one lost it.
+
+| document | before | after |
+|---|---|---|
+| `RegChangeReport.xlsx` | 12/12, 3060 words of 3137 | 12/12, **3131** |
+| `fy20-may20-sep20.xlsx` | 95/96 | **96/96** |
+| `fy2011-aip-grants.xls` | 90/93 | **93/93** |
+| `certification-type-…-Light-Prop-14-28112013.xlsx` | 341/343 | **343/343**, words exact |
+| `NAARMO_Mexico_RVSM_Approvals.xlsx` | 16/16 | 17/16 — lost, see below |
+
+`fy2011-aip-grants.xls` is a BIFF workbook and it moved only on the *second* commit, the one
+that takes the default font from the workbook. That is the evidence that the refinement is not
+cosmetic and that the rule reaches both filters.
+
+Of the eleven documents that were under-paginating by one to three pages with their word counts
+already inside the gate's band — the cluster this was aimed at — **three have no header or footer
+anywhere in the workbook**, so the rule cannot reach them and their two or three pages have a
+different cause. **Three of the remaining eight closed.**
+
+`NAARMO_Mexico_RVSM_Approvals.xlsx` went 16/16 to 17/16 and is the round's one lost match. It was
+passing because two errors cancelled: measured off both PDFs, its drawn row pitch is **14.40 pt
+against the reference's 14.23**, 1.2% tall, and a body 2.4 pt too long was hiding it. The change
+is right on its own evidence and on the continuous measures, so it stands.
+
+### `Application_Compliance_Checklist_5_Apr_2021.xlsx`: collapsed outline groups, and reach 1
+
+The track's largest single word error — 18 pages against 14 and **26 353 words against 17 718** —
+and round eight's two candidate mechanisms both still hold as refutations: the vertical clip and
+`EnableSkipOutsideFormat` were implemented for this document and measured to move nothing, and
+its five hidden sheets are already dropped by `SpreadsheetPages.IsPrinted`.
+
+Narrowed this round with the round-trip:
+
+- **Extraction agrees between the readers** — 70 008 words from the `.xlsx` against 70 047 from
+  LibreOffice's own flat-ODF export of it. The cell content is not in question, so this is a
+  value only rendering resolves.
+- **Rendering that same `.fods` through our own layout engine gives 12 pages and 17 016 words**
+  against the reference's 14 and 17 718, and its per-page counts track the reference page for
+  page across the offending sheet (2497/2785, 2631/2880, 2764/2995, …). From the `.xlsx` the
+  same engine gives 18 and 26 353. **So the defect is in the XLSX reader and the layout engine
+  is exonerated.**
+- The sheet states `outlineLevel` on 1025 rows and `collapsed="1"` on 31, and the string
+  `hidden` **does not occur anywhere** in `xl/worksheets/sheet3.xml`. LibreOffice's export marks
+  329 rows of that sheet `table:visibility="collapse"` or `"filter"` — 548 and 457 across the
+  workbook. Calc derives the hidden state from the outline structure and the `autoFilter`; we
+  read only `hidden="1"` and hide none of them, so we draw text the reference draws nowhere at
+  all (`(2) Section 450.139(e)(1) regarding toxic hazards for flight;`, cell `E94`, appears once
+  in ours and zero times in both the reference and the `.fods` render).
+
+**Not implemented, and the reason is reach rather than difficulty.** Exactly **1 of the 109
+corpus SpreadsheetML documents uses row outline levels at all**, and it is this one. A fix that
+helps one document is not a fix. Recorded so the next agent does not re-derive it, and so that a
+corpus that later grows an outline-heavy workbook has the diagnosis waiting.
+
+### The next leads on this track
+
+- **The three under-paginating documents with no furniture** —
+  `flightstandards-doc-Cross-reference-table_version02.xlsx` (461/464),
+  `tk-syllabus-comparison-document-v5.xlsx` (852/855) and
+  `sectors-defense-and-aerospace.xlsx` (225/227). On the last of these both renderings put page
+  20's ink between y 71.8 and y 745.6, so the body height agrees and the residue is row heights
+  somewhere in the document; the sampled pitch is 14.64 against 14.60. Not diagnosed, and note
+  the sign: rows too *tall* should over-paginate, and these under-paginate.
+- **`RegChangeReport.xlsx`'s footer face** is still a fidelity defect. The reference embeds
+  Carlito on all twelve pages from the footer's `&"Calibri"` code and we embed none; the band
+  now honours the face for its *height* and `SheetPageDecoration` still draws every band at
+  `SheetBandText.DefaultSize` in the default face. Splitting a band into sized, faced runs is the
+  same work as the `&<size>` code that puts the reference's `#` on its own baseline.
+
 ## The nineteenth sweep: a button is on the screen and not on the paper
 
 Swept whole at `7e1b7c79e` before anything was changed, 171 documents, two workers, no path twice

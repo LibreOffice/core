@@ -98,18 +98,34 @@ public class SheetPaginationTests
     }
 
     [Fact]
-    public void AnOoxmlTopMarginSurvivesTheHeaderBandConversion()
+    public void AnOoxmlHeaderBandIsTallerThanTheMarginsImply()
     {
         // SpreadsheetML measures its top margin to the first row and its header margin to the
-        // header; Calc measures the top margin to the header and holds the band separately. The
-        // invariant the conversion has to preserve is that the two still add up.
+        // header; Calc measures the top margin to the header and holds the band separately.
+        //
+        // This test used to assert that the two still add up to the file's own top margin. They
+        // do not, and Calc is where they stop: the band it prints is not the one the margins
+        // imply. Its filter measures the header text as the bare point size, keeps
+        // `bodyDistance = statedBand - nominal`, and re-measures the text properly at print time
+        // (SheetBandHeight has the citations). So the first row sits *below* the file's top
+        // margin by however much the real line height exceeds the point size.
         using IPaginatedDocument document = Open("sheet-ooxml-features.xlsx");
         SheetLayout sales = ((SpreadsheetPages)document.Layout()).Sheets[0];
 
-        // top="1.05277777777778" header="0.7875" in the file.
-        (sales.Setup.TopMargin + sales.Setup.HeaderHeight).Inches.ShouldBe(1.0528, 0.001);
+        // top="1.05277777777778" header="0.7875" in the file, so the stated band is 0.2653 in.
+        // LibreOffice's own flat-ODF export of this workbook gives the header
+        // fo:min-height="0.2654in" and fo:margin-bottom="0.0984in" — a nominal height of
+        // 12.02 pt, which is the &12 the header states
+        // (&C&"Times New Roman,Regular"&12&A) and not a coincidence.
         sales.Setup.TopMargin.Inches.ShouldBe(0.7875, 0.001);
         sales.Setup.LeftMargin.Inches.ShouldBe(0.7875, 0.001);
+
+        // The band is the stated 0.2653 in plus one Liberation Serif line at 12 pt less 12 pt.
+        // That face is ascent 0.891 em and descent 0.216 em, so the line is 1.107 em = 13.29 pt
+        // and the growth is about 1.3 pt: the band lands near 0.283 in and the first row near
+        // 1.071 in down the page.
+        sales.Setup.HeaderHeight.Inches.ShouldBeGreaterThan(1.0528 - 0.7875);
+        (sales.Setup.TopMargin + sales.Setup.HeaderHeight).Inches.ShouldBe(1.0707, 0.002);
     }
 
     [Fact]

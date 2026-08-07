@@ -120,11 +120,18 @@ internal static class XlsxPrintSetup
         // Only a header with content occupies a band. Calc's "header is on" flag is set from
         // whether any of the three header strings is non-empty, not from the margin being
         // written (pagesettings.cxx:1003).
+        //
+        // The band the two margins imply is not the band that prints: Calc keeps the distance
+        // between the text and the body and re-measures the text itself when it prints, so the
+        // band grows by however much the real line height exceeds the bare point size. See
+        // SheetBandHeight, which is the port.
         Length headerBand = hasHeader
-            ? Length.FromInches(Math.Max(0, top - header))
+            ? SheetBandHeight.Printed(
+                headerText, Length.FromInches(Math.Max(0, top - header)), defaultFont)
             : Length.Zero;
         Length footerBand = hasFooter
-            ? Length.FromInches(Math.Max(0, bottom - footer))
+            ? SheetBandHeight.Printed(
+                footerText, Length.FromInches(Math.Max(0, bottom - footer)), defaultFont)
             : Length.Zero;
 
         bool landscape = string.Equals(
