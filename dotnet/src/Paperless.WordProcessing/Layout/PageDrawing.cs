@@ -773,7 +773,8 @@ public static class PageDrawing
     private static DocRect Band(
         PageParagraph paragraph, PageRun run, Length pen, Length extent, Length baseline)
     {
-        LineMetrics metrics = LineSpacing.Resolve(run.Face, paragraph.Metrics);
+        LineMetrics metrics = LineSpacing.Resolve(
+            run.Face, paragraph.Metrics, WriterLineBox.LeadingAboveText);
         Length size = run.MetricEmSize > Length.Zero ? run.MetricEmSize : run.EmSize;
 
         Length ascent = metrics.ScaledAscent(size);

@@ -89,6 +89,16 @@ public sealed class ParagraphLeadingComparisonTests : IDisposable
     [InlineData("paragraph-spacing-collapsed.rtf")]
     [InlineData("paragraph-spacing-collapsed.odt")]
     [InlineData("paragraph-spacing-collapsed.fodt")]
+    // Where a face's *external* leading sits in the line box, which is a different quantity from the
+    // inter-paragraph leading above and needs its own document. Writer charges it to the ascent
+    // (SwFntObj::GetFontAscent, sw/source/core/txtnode/fntcache.cxx:326-329) and we used to leave it
+    // below the text, which cancels between two lines of a paragraph and shows only against the top
+    // margin — so this is the one comparison in the project that can see it. Two halves: Liberation
+    // Sans, whose hhea gap is 67/2048 and which was 0.35 pt out on the first line of every page
+    // (LibreOffice 82.3008 against our 81.95), and Carlito, whose gap is zero and which was always
+    // right. The second half is why the defect survived: Carlito is what nearly every OOXML document in
+    // the corpus resolves to through its theme, so the corpus could not see it either.
+    [InlineData("page-top-line-gap.docx")]
     public void EveryBaselineIsWhereLibreOfficePutsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

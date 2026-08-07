@@ -469,7 +469,8 @@ public sealed class Paginator
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[i];
-            ParagraphLayouter layouter = new(paragraph.Face, breaker: null, paragraph.Metrics);
+            ParagraphLayouter layouter = new(
+                paragraph.Face, breaker: null, paragraph.Metrics, WriterLineBox.LeadingAboveText);
             ParagraphFormat? previous = PreviousFormat(blocks, i);
 
             // A paragraph with runs is measured across them, so each line is as tall as its own tallest

@@ -255,7 +255,7 @@ public sealed record PageLabel
     /// <param name="grid">The device grid the paragraph's metrics are rounded through, or null.</param>
     public (Length Height, Length Ascent) LineExtent(MetricGrid? grid = null)
     {
-        LineMetrics metrics = LineSpacing.Resolve(Face, grid);
+        LineMetrics metrics = LineSpacing.Resolve(Face, grid, WriterLineBox.LeadingAboveText);
 
         // Whole twips, as MeasuredParagraph.Accumulate takes them: a fraction kept here would eventually
         // put a line on a different page from the one the runs beside it were measured onto.
