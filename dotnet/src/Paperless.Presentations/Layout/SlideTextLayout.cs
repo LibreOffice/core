@@ -398,7 +398,25 @@ public static partial class SlideTextLayout
 
         if (face is null) return null;
 
-        string text = Recoded(marker, reference);
+        string text = marker.Text;
+        if (Recoded(marker, reference) is { } recoded)
+        {
+            // The recode and the face go together: the code point means nothing anywhere but
+            // OpenSymbol, so a resolution that failed leaves both alone rather than drawing it
+            // out of whatever the request happened to land on.
+            (OpenTypeFace? symbol, FontReference? symbolReference) = fonts.Resolve(
+                SymbolFontRecode.SubstituteFamily, first.Weight, first.IsItalic);
+
+            if (symbol is not null)
+            {
+                (face, reference, text) = (symbol, symbolReference, recoded);
+            }
+        }
+
+        if (ReferenceEquals(text, marker.Text))
+        {
+            text = OutlineNumbers.NormaliseBullet(marker.Text);
+        }
 
         // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
         // bullet left at its authored size on a node scaled to a third overwhelms its own line.
@@ -424,28 +442,46 @@ public static partial class SlideTextLayout
     /// to, which is why it is decided here and not in either reader.
     /// </para>
     /// <para>
-    /// When the face itself is installed, the slot is drawn from it unchanged. When it is not —
-    /// and Wingdings, Webdings and Monotype Sorts are not fonts Linux has — the substitution chain
-    /// lands on <c>OpenSymbol</c>, whose F000–F0FF coverage is ten code points, so drawing the
-    /// slot there would be <c>.notdef</c>. <see cref="SymbolFontRecode"/> is LibreOffice's own
-    /// table from the slot to the code point holding the same picture in OpenSymbol.
+    /// <strong>The trigger is that the face itself is absent, not that the request happened to
+    /// resolve to OpenSymbol.</strong> When the face is installed, the slot is drawn from it
+    /// unchanged. When it is not — and Wingdings, Webdings and Monotype Sorts are not fonts Linux
+    /// has — LibreOffice substitutes OpenSymbol and recodes, whose F000–F0FF coverage is ten code
+    /// points, so drawing the slot there instead would be <c>.notdef</c>.
     /// </para>
     /// <para>
-    /// Anything left in the Private Use Area after that — a symbol face with no table, or one
-    /// substituted to something that is not OpenSymbol — still becomes U+2022, which is what this
-    /// layout drew for every symbol bullet before the tables existed.
+    /// Keying on the resolved family was the first reading and it was too narrow. It works for
+    /// the faces <c>VCL.xcu</c> happens to give a substitution chain — Wingdings' names
+    /// <c>opensymbol</c> fourth — and silently fails for the ones it does not: nothing in that
+    /// table mentions <c>monotypesorts</c> or <c>mtextra</c>, so those went to fontconfig and came
+    /// back as a text face. LibreOffice never asks fontconfig about a symbol font at all
+    /// (<c>FcPreMatchSubstitution::FindFontSubstitute</c> returns false outright for one,
+    /// <c>vcl/unx/generic/font/fontsubst.cxx:100-107</c>), which is why the absence of a chain
+    /// costs it nothing. Caught by the fixture, where Monotype Sorts drew U+2022 while the
+    /// reference drew the glyph.
+    /// </para>
+    /// <para>
+    /// Returns null when nothing should change, which leaves the caller to collapse whatever is
+    /// left in the Private Use Area to U+2022 — a symbol face with no table, or one whose own
+    /// file is installed — exactly as this layout did for every symbol bullet before the tables
+    /// existed.
     /// </para>
     /// </remarks>
-    private static string Recoded(SlideMarker marker, FontReference? reference)
+    private static string? Recoded(SlideMarker marker, FontReference? reference)
     {
-        if (marker is { IsSymbol: true, Text.Length: 1 }
-            && SymbolFontRecode.IsSubstituteFamily(reference?.FamilyName)
-            && SymbolFontRecode.TryRecode(marker.Typeface, marker.Text[0], out char recoded))
+        if (marker is not { IsSymbol: true, Text.Length: 1 }) return null;
+        if (!SymbolFontRecode.IsRecodeable(marker.Typeface)) return null;
+
+        // The face's own file is present, so its slots are drawable as they stand.
+        if (reference is not null
+            && !reference.IsSubstituted
+            && !SymbolFontRecode.IsSubstituteFamily(reference.FamilyName))
         {
-            return recoded.ToString();
+            return null;
         }
 
-        return OutlineNumbers.NormaliseBullet(marker.Text);
+        return SymbolFontRecode.TryRecode(marker.Typeface, marker.Text[0], out char recoded)
+            ? recoded.ToString()
+            : null;
     }
 
     /// <summary>A paragraph's marker, resolved once for both the width and the placement.</summary>
