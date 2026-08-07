@@ -26,12 +26,15 @@
                                                               Oscar Papa
   Row 6  three paragraphs, the first bold                   — the rich-cell path, three lines
 
-  Row 2 is here as a measurement rather than as an assertion, and the test says so: the two
-  importers disagree about it. ODF makes a multi-paragraph edit cell whatever the wrap says,
-  which is the three lines above; BIFF folds the same content onto one paragraph when the XF
-  has no line-break flag (`rEngine.SetSingleLine(!pXF->GetLineBreak())`,
-  sc/source/filter/excel/xihelper.cxx:250-256), so the same three strings in an .xls come back
-  as one line. Nothing here reproduces the ODF side yet.
+  Row 2 is here as a measurement rather than as an assertion, and the test says so: ODF's
+  importer disagrees with the other two about it. It makes a multi-paragraph edit cell whatever
+  the wrap option says, which is the three lines above. BIFF and SpreadsheetML both fold the
+  same content onto one paragraph when the cell does not wrap — `SetSingleLine(!GetLineBreak())`
+  in sc/source/filter/excel/xihelper.cxx:250-256, and `bSingleLine = !mbWrapText` in
+  sc/source/filter/oox/sheetdatabuffer.cxx:120-135, which a string holding U+000A always
+  reaches because RichString::extractPlainString refuses it (richstring.cxx:363-378). Since the
+  sheets corpus is entirely .xls and .xlsx, what we do — one line — is what those two ask for,
+  and only the ODF side is unimplemented.
 -->
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"

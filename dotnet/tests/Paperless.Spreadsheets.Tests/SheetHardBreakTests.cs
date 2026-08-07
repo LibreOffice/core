@@ -30,13 +30,15 @@ namespace Paperless.Spreadsheets.Tests;
 /// 11.197 pt, so "two pitches apart" below is the empty paragraph in row 3 taking a line.
 /// </para>
 /// <para>
-/// Row 2 of the fixture is deliberately not asserted. It is the same three strings in a cell
-/// that does not wrap, and the two importers disagree about it: ODF makes a multi-paragraph edit
-/// cell whatever the wrap says — LibreOffice draws three lines — while BIFF folds them onto one
-/// paragraph when the XF carries no line-break flag
-/// (<c>XclImpStringHelper::SetToDocument</c>, <c>xihelper.cxx:250-256</c>). Neither side of that
-/// is implemented, and asserting the behaviour we happen to have would be a change detector
-/// rather than a test.
+/// Row 2 of the fixture is deliberately not asserted as correct. It is the same three strings in
+/// a cell that does not wrap, and ODF's importer disagrees with the other two about it: it makes
+/// a multi-paragraph edit cell whatever the wrap option says, so LibreOffice draws three lines,
+/// while BIFF and SpreadsheetML both fold them onto one paragraph
+/// (<c>XclImpStringHelper::SetToDocument</c>, <c>xihelper.cxx:250-256</c>;
+/// <c>SheetDataBuffer::setStringCell</c>, <c>sheetdatabuffer.cxx:120-135</c>, which every string
+/// holding U+000A reaches because <c>RichString::extractPlainString</c> refuses it at
+/// <c>richstring.cxx:375</c>). The sheets corpus is entirely <c>.xls</c> and <c>.xlsx</c>, so the
+/// one line we draw is what those two ask for and only the ODF side is outstanding.
 /// </para>
 /// </remarks>
 public sealed class SheetHardBreakTests
@@ -181,9 +183,11 @@ public sealed class SheetHardBreakTests
     /// <remarks>
     /// LibreOffice draws row 2 on three lines — <c>Delta</c> at 92.74, <c>Echo</c> at 103.93 and
     /// <c>Foxtrot</c> at 115.13 — because ODF makes a multi-paragraph edit cell whatever the
-    /// wrap option says. We draw one run holding all three and both breaks. This states the gap
-    /// so that the next change to <see cref="SheetTextLayout"/> has to decide about it
-    /// deliberately, and it is the assertion to delete rather than to keep passing.
+    /// wrap option says. We draw one run holding all three and both breaks, which is what the
+    /// BIFF and SpreadsheetML importers ask for and what the whole sheets corpus therefore
+    /// wants. This states the gap so that the next change to <see cref="SheetTextLayout"/> has
+    /// to decide about it deliberately, and it is the assertion to delete rather than the one to
+    /// keep passing.
     /// </remarks>
     [Fact]
     public void ANonWrappingCellStillLosesItsBreaks()
