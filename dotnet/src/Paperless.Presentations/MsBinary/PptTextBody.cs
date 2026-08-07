@@ -4,6 +4,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 using Paperless.Presentations.Layout;
+using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
 
 namespace Paperless.Presentations.MsBinary;
@@ -216,16 +217,22 @@ internal static class PptTextBody
             ? properties.BulletColour
             : level.BulletColour;
 
-        string text = OutlineNumbers.NormaliseBullet(
-            PptTextReader.Symbolised(character, fonts, font).ToString());
+        char symbol = PptTextReader.Symbolised(character, fonts, font);
+        string? face = fonts[font];
+
+        // A face whose slots LibreOffice has a recode table for keeps both its code point and its
+        // own name, because the two only mean anything together: `SlideTextLayout` turns the slot
+        // into the OpenSymbol glyph holding the same picture, and it needs the face to know which
+        // table to use. Anything else keeps the old answer — U+2022, drawn in the paragraph's own
+        // face, since a symbol face's name with a non-symbol code point resolves to nothing.
+        bool recodeable = fonts.IsSymbol(font) && SymbolFontRecode.IsRecodeable(face);
+
+        string text = recodeable
+            ? symbol.ToString()
+            : OutlineNumbers.NormaliseBullet(symbol.ToString());
         if (text.Length == 0) return null;
 
-        // A symbol face's own name goes with its own code points, and both have just been given
-        // up: what is drawn is U+2022, which Wingdings has no mapping for at all. Asking for the
-        // paragraph's face instead is what makes the substitution land on a glyph — LibreOffice
-        // reaches the same place from the other side, keeping the code point and substituting
-        // OpenSymbol for the missing face.
-        string? typeface = fonts.IsSymbol(font) ? null : fonts[font];
+        string? typeface = recodeable ? face : fonts.IsSymbol(font) ? null : face;
 
         return new SlideMarker(
             text,

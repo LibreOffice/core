@@ -66,6 +66,21 @@ public static partial class SymbolFontRecode
         => Tables.ContainsKey(FontSubstitutions.Normalise(familyName));
 
     /// <summary>
+    /// Whether a <em>resolved</em> face is the one these tables target.
+    /// </summary>
+    /// <remarks>
+    /// This is the condition that makes recoding correct rather than merely available.
+    /// LibreOffice only recodes when the substitution actually landed on StarSymbol or
+    /// OpenSymbol (<c>ConvertChar::GetRecodeData</c>, <c>fontcvt.cxx:1345-1356</c>) — on a
+    /// machine that really has Wingdings installed the Private Use Area code point is drawn
+    /// from Wingdings directly and recoding it would pick the wrong glyph. Mirrors
+    /// <c>IsOpenSymbol</c>, which accepts both names
+    /// (<c>unotools/source/misc/fontdefs.cxx:408-413</c>).
+    /// </remarks>
+    public static bool IsSubstituteFamily(string? familyName)
+        => FontSubstitutions.Normalise(familyName) is "opensymbol" or "starsymbol";
+
+    /// <summary>
     /// Recodes one symbol slot, reporting whether the face and the code point were both in range.
     /// </summary>
     /// <remarks>

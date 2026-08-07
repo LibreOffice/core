@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
@@ -351,7 +352,7 @@ public static partial class SlideTextLayout
         }
 
         placed.Add(new PlacedGlyphRun(
-            Build(shaped, marker.Text, size, marked.Reference ?? Reference(face),
+            Build(shaped, marked.Text, size, marked.Reference ?? Reference(face),
                   new DocPoint(pen, baseline), Length.Zero),
             marker.Colour ?? first.Colour));
     }
@@ -397,6 +398,8 @@ public static partial class SlideTextLayout
 
         if (face is null) return null;
 
+        string text = Recoded(marker, reference);
+
         // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
         // bullet left at its authored size on a node scaled to a third overwhelms its own line.
         Length runSize = scaling.Scaled(first.Size);
@@ -404,15 +407,62 @@ public static partial class SlideTextLayout
             ? Length.FromEmu((long)Math.Round(runSize.Emu * marker.Scale))
             : runSize;
 
-        ShapedText shaped = TextShaper.Default.Shape(face, marker.Text, default);
+        ShapedText shaped = TextShaper.Default.Shape(face, text, default);
         return shaped.Glyphs.Count == 0
             ? null
-            : new MarkedParagraph(marker, face, reference, size, shaped);
+            : new MarkedParagraph(marker, text, face, reference, size, shaped);
+    }
+
+    /// <summary>
+    /// A symbol marker's slot turned into the glyph the resolved face actually holds.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A symbol face is a set of glyph slots, and its slot numbers mean nothing to any
+    /// other face.</strong> Both readers hand the slot over in the Private Use Area, where a
+    /// symbol-encoded font really maps it. What happens next depends on what the request resolved
+    /// to, which is why it is decided here and not in either reader.
+    /// </para>
+    /// <para>
+    /// When the face itself is installed, the slot is drawn from it unchanged. When it is not —
+    /// and Wingdings, Webdings and Monotype Sorts are not fonts Linux has — the substitution chain
+    /// lands on <c>OpenSymbol</c>, whose F000–F0FF coverage is ten code points, so drawing the
+    /// slot there would be <c>.notdef</c>. <see cref="SymbolFontRecode"/> is LibreOffice's own
+    /// table from the slot to the code point holding the same picture in OpenSymbol.
+    /// </para>
+    /// <para>
+    /// Anything left in the Private Use Area after that — a symbol face with no table, or one
+    /// substituted to something that is not OpenSymbol — still becomes U+2022, which is what this
+    /// layout drew for every symbol bullet before the tables existed.
+    /// </para>
+    /// </remarks>
+    private static string Recoded(SlideMarker marker, FontReference? reference)
+    {
+        if (marker is { IsSymbol: true, Text.Length: 1 }
+            && SymbolFontRecode.IsSubstituteFamily(reference?.FamilyName)
+            && SymbolFontRecode.TryRecode(marker.Typeface, marker.Text[0], out char recoded))
+        {
+            return recoded.ToString();
+        }
+
+        return OutlineNumbers.NormaliseBullet(marker.Text);
     }
 
     /// <summary>A paragraph's marker, resolved once for both the width and the placement.</summary>
+    /// <param name="Marker">The marker as its reader stated it.</param>
+    /// <param name="Text">
+    /// What is drawn, which is <see cref="SlideMarker.Text"/> after <see cref="Recoded"/> has had
+    /// the resolved face's say. It is carried beside the marker rather than replacing it because
+    /// the shaped run and the string handed to <c>Build</c> must be the same text, and the marker
+    /// is resolved twice — once for the width the first line clears and once for the placement.
+    /// </param>
+    /// <param name="Face">The face the marker resolved to, or null when nothing could be read.</param>
+    /// <param name="Reference">That face's resolution record, for the embedded-font catalogue.</param>
+    /// <param name="Size">The marker's size, after its own scale and the body's fit.</param>
+    /// <param name="Shaped">The shaped run, shared by the placement and by the width.</param>
     private readonly record struct MarkedParagraph(
         SlideMarker Marker,
+        string Text,
         OpenTypeFace? Face,
         FontReference? Reference,
         Length Size,

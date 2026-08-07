@@ -6,6 +6,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
+using Paperless.Text.Fonts;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
 
@@ -476,14 +477,22 @@ internal static class PptxTextBody
         // face the level names for its bullet, and recoding it would make nonsense of it.
         bool symbolFont = isSymbol && IsSymbolFont(font);
 
+        // A recodeable face keeps its Private Use Area slot: SlideTextLayout turns it into the
+        // OpenSymbol glyph holding the same picture, which needs the slot and the face together.
+        // A symbol face with no table still collapses to U+2022, as every symbol bullet did before.
+        string? typeface = Drawing.Attribute(font, "typeface");
+        string symbolised = symbolFont ? Symbolised(text) : text;
+
         return new SlideMarker(
-                symbolFont ? OutlineNumbers.NormaliseBullet(Symbolised(text)) : text,
+                symbolFont && !SymbolFontRecode.IsRecodeable(typeface)
+                    ? OutlineNumbers.NormaliseBullet(symbolised)
+                    : symbolised,
 
                 // The face is kept even for a symbol bullet: LibreOffice sets both PROP_BulletFont
                 // and PROP_BulletFontName from it and lets the substitution find OpenSymbol
                 // (textparagraphproperties.cxx:347-348). Dropping it here draws the bullet in the
                 // body face instead, which is a different glyph and a different embedded program.
-                Drawing.Attribute(font, "typeface"),
+                typeface,
                 Drawing.Number(Child(chain, "buSzPct"), "val") is { } percent && percent > 0
                     ? percent / 100000.0
                     : 1.0,
