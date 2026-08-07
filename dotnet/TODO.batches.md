@@ -4727,3 +4727,30 @@ baseline and the predecessor's, that is not the case: **batch-008 is 9/10, batch
 batch-012 8/10**, and were so before anything moved this round. The batches actually at full
 parity are **001–007, 011, 013 and 015** — ten of seventeen — plus 009 until the round-fifteen
 autofit fix cost it a document.
+
+### The document round fifteen cost, diagnosed: the grid's floor is six times finer
+
+`NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, `match → words`, 596/586 words to 537/586 at an
+unchanged 13/13 pages. **The pages still match**: total `|ink|%` is 0.67 over thirteen pages and
+**zero of them are major**. What is missing is text drawn so small the reference's own rendering
+shows it as a column of one-pixel dashes — 26 words on page 6 and 32 on page 12, which
+`pdftotext` reads and a human cannot.
+
+This deck already has a commit of its own — `068b0eb44`, "Stop the PDF sink writing text at an
+em of nothing" — for a shape where autofit concludes that *no* positive scale fits, because each
+of sixteen paragraphs carries an absolute 12 pt top margin that does not shrink with the font.
+The guard is right and the reference agrees with it on the page it was written for.
+
+The round-fifteen grid fix moved two more shapes across that threshold, and the arithmetic is
+exact. The search floors each candidate to a tenth of a point *of the grid height*, so the
+smallest non-zero scale it can reach is `0.1 / grid`:
+
+| grid | smallest reachable font scale |
+|---|---|
+| a round 12 pt, as shipped before | 0.1 / 12 = **0.00833** |
+| the body's own 60 pt height, as shipped now | 0.1 / 60 = **0.00167** |
+
+**Six times smaller**, so runs that used to round to a representable em now round to zero and the
+sink correctly declines to write them. The grid fix is not wrong and the guard is not wrong; what
+is missing is a floor on the search itself, and the reference plainly has one because it draws
+those marks. Naming what that floor is, is the work — it is not a change to either piece.
