@@ -1103,7 +1103,7 @@ public sealed partial class DocxLayoutSource
     /// </remarks>
     private static Length TabInterval(XElement? settings)
         => Word.Attribute(Word.Child(settings, "defaultTabStop"), "val") is { } text
-           && long.TryParse(text, CultureInfo.InvariantCulture, out long twips)
+           && Word.Long(text, out long twips)
            && twips > 0
             ? Length.FromTwips(twips)
             : Length.FromTwips(720);

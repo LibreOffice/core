@@ -616,7 +616,7 @@ internal static class WordParagraphFormats
         foreach (XElement tab in Word.Children(tabs, "tab"))
         {
             if (Word.Attribute(tab, "pos") is not { } text
-                || !long.TryParse(text, CultureInfo.InvariantCulture, out long twips))
+                || !Word.Long(text, out long twips))
             {
                 continue;
             }
@@ -825,7 +825,7 @@ internal static class WordParagraphFormats
     private static LineSpacingRule Spacing(XElement? spacing)
     {
         if (Word.Attribute(spacing, "line") is not { } text
-            || !long.TryParse(text, CultureInfo.InvariantCulture, out long line)
+            || !Word.Long(text, out long line)
             || line == 0)
         {
             return LineSpacingRule.SingleSpaced;
@@ -862,7 +862,7 @@ internal static class WordParagraphFormats
     /// </remarks>
     private static Length? Twips(XElement? element, string attribute)
         => Word.Attribute(element, attribute) is { } text
-           && long.TryParse(text, CultureInfo.InvariantCulture, out long twips)
+           && Word.Long(text, out long twips)
             ? Length.FromTwips(twips)
             : null;
 

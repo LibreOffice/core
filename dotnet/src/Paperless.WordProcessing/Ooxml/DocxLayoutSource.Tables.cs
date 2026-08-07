@@ -461,7 +461,7 @@ public sealed partial class DocxLayoutSource
         // row. That is how this was found: the bug had been silent since the heights were first read.
         Length measured =
             Word.Attribute(height, "val") is { } text
-            && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int twips)
+            && Word.Integer(text, out int twips)
                 ? Length.FromTwips(Math.Abs(twips))
                 : Length.Zero;
 
@@ -667,9 +667,7 @@ public sealed partial class DocxLayoutSource
         if (Word.Attribute(stated, "val") is null or "none" or "nil") return default(TableBorder);
 
         Length width =
-            int.TryParse(
-                Word.Attribute(stated, "sz"), NumberStyles.Integer, CultureInfo.InvariantCulture,
-                out int eighths) && eighths > 0
+            Word.Integer(Word.Attribute(stated, "sz"), out int eighths) && eighths > 0
                 ? Length.FromPoints(eighths / 8.0)
                 : HairlineBorder;
 
@@ -923,14 +921,14 @@ public sealed partial class DocxLayoutSource
         if (type is not (null or "" or "dxa")) return null;
 
         return Word.Attribute(element, "w") is { } text
-               && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int twips)
+               && Word.Integer(text, out int twips)
             ? Length.FromTwips(twips)
             : null;
     }
 
     private static int? Number(XElement? element)
         => Word.Attribute(element, "val") is { } text
-           && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value)
+           && Word.Integer(text, out int value)
             ? value
             : null;
 

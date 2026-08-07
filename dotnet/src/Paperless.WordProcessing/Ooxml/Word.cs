@@ -38,6 +38,75 @@ internal static class Word
     public static string? Value(XElement? element, string localName)
         => Attribute(Child(element, localName), "val");
 
+    /// <summary>
+    /// An integer attribute, read the way the reference reads one: leading sign, digits, and
+    /// everything from the first character that is not a digit ignored.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The schema says these are integers and real files write <c>w:w="8730.0"</c> anyway — a
+    /// whole document of them, produced by something that is not Word. LibreOffice takes them:
+    /// its attribute list hands the string to <c>rtl_ustr_toInt32</c>, which parses as far as it
+    /// can and stops, so <c>8730.0</c> is 8730. A reader using <c>int.TryParse</c> instead gets
+    /// nothing at all, and the property falls back to its default — which for a cell margin means
+    /// no margin, for a column no width, and for a table indent no indent.
+    /// </para>
+    /// <para>
+    /// It truncates rather than rounds, which is worth stating because rounding is the plausible
+    /// alternative and it is wrong. Measured on three otherwise identical documents whose
+    /// paragraph states <c>w:before</c> of <c>240</c>, <c>240.9</c> and <c>241</c>: LibreOffice
+    /// puts the second paragraph's first word at 96.996, 96.996 and 97.046 pt — the decimal one
+    /// landing exactly on 240 and not on 241.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The attribute's value, or null.</param>
+    /// <param name="value">The number read, or zero.</param>
+    /// <returns>True when at least one digit was read.</returns>
+    public static bool Integer(string? text, out int value)
+    {
+        value = 0;
+        if (string.IsNullOrEmpty(text)) return false;
+
+        int index = 0;
+        bool negative = false;
+
+        if (text[0] is '-' or '+')
+        {
+            negative = text[0] == '-';
+            index = 1;
+        }
+
+        long magnitude = 0;
+        int digits = 0;
+
+        for (; index < text.Length && char.IsAsciiDigit(text[index]); index++, digits++)
+        {
+            // Saturating, so a number too long to hold does not wrap into a small one. The
+            // reference's own conversion saturates too.
+            if (magnitude <= int.MaxValue) magnitude = (magnitude * 10) + (text[index] - '0');
+        }
+
+        if (digits == 0) return false;
+
+        magnitude = Math.Min(magnitude, negative ? -(long)int.MinValue : int.MaxValue);
+        value = (int)(negative ? -magnitude : magnitude);
+        return true;
+    }
+
+    /// <summary>
+    /// The same, widened — for the measures that are counted in twips and can legitimately be
+    /// larger than a page.
+    /// </summary>
+    /// <param name="text">The attribute's value, or null.</param>
+    /// <param name="value">The number read, or zero.</param>
+    /// <returns>True when at least one digit was read.</returns>
+    public static bool Long(string? text, out long value)
+    {
+        bool read = Integer(text, out int narrow);
+        value = narrow;
+        return read;
+    }
+
     /// <summary>True when an element is in the WordprocessingML namespace.</summary>
     public static bool Is(XElement element, string localName)
     {
