@@ -2165,9 +2165,16 @@ Three consecutive rounds have now been described by a brief written before their
 | every other batch | — | unchanged |
 
 **Two rows changed in 171 and neither regressed.** `PC1000.xls` 957 words against 873 → 863/873 and
-into parity; `TK-Syllabus-Comparison-Document-v2.xlsx`'s *reference* word count drifted
-258368 → 258369 with ours unchanged at 258709, verdict `match` on both sides — the same
-LibreOffice non-determinism this file already records.
+into parity; `PBN Matrix NAAs (V01).xlsx`'s *reference* word count drifted 5557 → 5555 with ours
+unchanged at 5559, verdict `match` on both sides.
+
+That second row is the known LibreOffice non-determinism and it is worth one more line, because it
+moved differently in two sweeps of the same change. An intermediate sweep — of a variant that
+dropped the object instead of flagging it — had `PBN Matrix` steady and
+`TK-Syllabus-Comparison-Document-v2.xlsx` drifting 258368 → 258369 instead. **In both cases only
+the reference column moved and ours did not**, on two documents whose verdict was `match` before
+and after. So the noise is real, it is not confined to one file, and the way to tell it from a
+regression is that our own number is unchanged.
 
 ### The flag was read for every object and acted on for eleven types
 
