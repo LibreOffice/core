@@ -1225,6 +1225,10 @@ internal sealed partial class PptxSlideLayout
             if (SolidFill(source, context.Theme, placeholder: null) is { } fill) return fill;
             if (Gradient(Drawing.Child(source, "gradFill"), context) is { } gradient) return gradient;
             if (Bitmap(Drawing.Child(source, "blipFill"), source, context) is { } bitmap) return bitmap;
+            if (DrawingHatch.Read(Drawing.Child(source, "pattFill"), context.Theme) is { } hatch)
+            {
+                return hatch;
+            }
         }
 
         return null;

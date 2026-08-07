@@ -138,7 +138,7 @@ public static class DrawingTableGeometry
                     IsCovered = covered,
                     Margins = MarginsOf(properties),
                     Anchor = Drawing.Attribute(properties, "anchor"),
-                    Fill = FillOf(properties, theme) ?? themed.Fill,
+                    Fill = FillOf(properties, theme, themed.Fill),
                     TextBody = Drawing.Child(cell, "txBody"),
                     Left = Side(properties, "lnL", themed.Left, position == 0, themed, theme),
                     Right = Side(properties, "lnR", themed.Right, position >= lastColumn, themed, theme),
@@ -202,17 +202,46 @@ public static class DrawingTableGeometry
         Length.FromEmu(Emu(properties, "marR", 91440)),
         Length.FromEmu(Emu(properties, "marB", 45720)));
 
-    private static Colour? FillOf(XElement? properties, DrawingTheme? theme)
+    /// <summary>
+    /// A cell's background: its own <c>a:tcPr</c>, then the table style's.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b><c>a:noFill</c> is a decision and beats the style, exactly as it does on a shape.</b>
+    /// <c>tablecell.cxx:550</c> builds the style part's fill first and then
+    /// <c>aFillProperties.assignUsed( maFillProperties )</c> lays the cell's own over it, and
+    /// <c>assignUsed</c> copies <c>moFillType</c> whenever the cell stated one — so a cell
+    /// stating <c>a:noFill</c> under a banded style is empty rather than banded.
+    /// </para>
+    /// <para>
+    /// Reading an absent element and a stated <c>a:noFill</c> as the same thing is what made
+    /// <c>slides/batch-012/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx</c> the largest single
+    /// figure on the slides track. Its layout carries a seventeen-column year ruler whose cells
+    /// each state <c>a:noFill</c> under <c>Medium Style 2 - Accent 1</c>, so every one of its
+    /// 137 pages was ruled in the theme's green where the reference leaves it clear.
+    /// </para>
+    /// <para>
+    /// A solid colour or a pattern. The other three DrawingML fills are not read here because a
+    /// cell cannot be given one: <c>tablecell.cxx</c> pushes the cell's fill properties through
+    /// the same <c>FillProperties::pushToPropMap</c> a shape uses, so a gradient or a picture in
+    /// a cell is legal and drawn — but no corpus deck states one and a table cell is not a shape,
+    /// so the two remaining kinds are left for a document that needs them.
+    /// </para>
+    /// </remarks>
+    private static Paint? FillOf(XElement? properties, DrawingTheme? theme, Colour? themed)
     {
-        XElement? solid = Drawing.Child(properties, "solidFill");
-        if (solid is null) return null;
+        if (Drawing.Child(properties, "noFill") is not null) return null;
 
-        foreach (XElement child in solid.Elements())
+        if (Drawing.Child(properties, "solidFill") is { } solid)
         {
-            if (DrawingColour.Read(child)?.Resolve(theme) is { } colour) return colour;
+            foreach (XElement child in solid.Elements())
+            {
+                if (DrawingColour.Read(child)?.Resolve(theme) is { } colour) return Paint.Solid(colour);
+            }
         }
 
-        return null;
+        return DrawingHatch.Read(Drawing.Child(properties, "pattFill"), theme)
+               ?? (themed is { } inherited ? Paint.Solid(inherited) : null);
     }
 
     /// <summary>
@@ -303,7 +332,14 @@ public sealed record DrawingTableCellBox
     public string? Anchor { get; init; }
 
     /// <summary>Its background, or null when it states none.</summary>
-    public Colour? Fill { get; init; }
+    /// <remarks>
+    /// A <see cref="Paint"/> rather than a <see cref="Colour"/> because a cell may state an
+    /// <c>a:pattFill</c>, which is a hatch and not a colour. Measured on
+    /// <c>slides/batch-011/pptx/171128IPAP.pptx</c>: its page 24 is a table whose three data
+    /// rows the reference paints in a green, an orange and a red crosshatch over pale
+    /// backgrounds, and a cell fill narrowed to one colour has nowhere to put either half.
+    /// </remarks>
+    public Paint? Fill { get; init; }
 
     /// <summary>
     /// The element its text lives in, left unread so that each family reads it its own way.

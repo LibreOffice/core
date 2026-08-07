@@ -3585,3 +3585,175 @@ a page. Kept on the evidence of the seven-pair sweep rather than on a corpus num
 4. Everything the twelfth round listed and this one did not reach: the `mcar` family at 0/5,
    `WritingFieldKind.PageNumber` (still no consumer, and still a feature rather than a wiring
    change), the footer half of the title-page rule, and `batch-006`'s row-split document.
+## Slides, round thirteen: 1567.96 -> 1408.90 unaccounted ink, 478 -> 465 major pages
+
+Whole track swept **five** times at 163 documents each — a baseline, then one sweep per change —
+rendering our side each time against a checksummed CLI snapshot and reusing the baseline's
+reference PDFs, since nothing this round touches `soffice`. The baseline reproduced the brief
+**to the digit**: 152/163 on the word gate, **1567.96** ink, **478** major pages, every page
+count exact, 0 `ref-failed`.
+
+| | baseline | `a:pattFill` | + cell `a:noFill` | + hatch phase | + empty-paragraph bullet |
+|---|---|---|---|---|---|
+| matching the word gate | 152/163 | 152/163 | 152/163 | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 | 163/163 | 163/163 | **163/163** |
+| documents the reference could not render | 0 | 0 | 0 | 0 | **0** |
+| total unaccounted ink | 1567.96 | 1566.38 | 1408.48 | 1408.51 | **1408.90** |
+| pages the image tool calls major | 478 | 479 | 465 | 465 | **465** |
+| documents whose ink moved | — | 4 | 4 more | 1 | **30 more** |
+
+**Four of the 163 gate rows moved and none changed verdict, page count or unembedded-font
+count.** Three decks now embed one or two fewer faces, because a bullet the reference does not
+draw was the only thing asking for that face; one word count went 6180 to 6179.
+
+### The headline number was not what it said it was
+
+`NAS-Infrastructure-Roadmaps-v16.0.pptx` is 23% of the track's ink and had been carried for two
+rounds as "linked Excel OLE, known". **Splitting its per-page ink by whether the page carries one
+is what unstuck it**: 152.12 on the 24 pages that do and 216.29 on the other 113. The second half
+had never been looked at because the attribution covered the whole document.
+
+- The 152.12 **is** a ceiling and now has a named, verified mechanism rather than a label —
+  `mc:Choice Requires="v"` around a linked `p:oleObj` with no local replacement, which
+  LibreOffice takes (`oox/source/core/contexthandler2.cxx:238-249` lists `v`) and then draws
+  nothing for. We take the `mc:Fallback` and draw its EMF of the table's data. Ours is the better
+  output and the specification is on our side, since we have no VML reader at all. Written up in
+  `TODO.raster-ceiling.md`.
+- The 216.29 was a defect: **a table cell's own `a:noFill` was read as silence** and lost to the
+  table style's banding. That document's slide layout carries a seventeen-column year ruler under
+  `Medium Style 2 - Accent 1` with `a:noFill` on every cell, so all 137 pages were ruled in the
+  theme's green — `#00cc99` sixteen times and `#ccecdd` six on page 53, against a reference that
+  draws neither, while the colours the *slide* states matched on both sides. `tablecell.cxx:550`
+  is the rule: the style part's fill is built and the cell's own is laid over it with
+  `assignUsed`, which copies `moFillType` whenever the cell stated one.
+
+That fix alone is **−157.90 over four documents and nothing up**: NAS `v16.0` 367.92 → 225.33
+(77 major pages → 66), `…-Weather` 21.34 → 13.16, `…-HSI` 9.64 → 2.63, `PAL Block Intro 2023`
+2.14 → 2.02. Reach parsed from all 112 corpus `pptx`: 8 decks, 215 cells.
+
+### `a:pattFill` is a hatch, not a pattern — and it is worth 4.85, not 45
+
+The lead was the best-bounded thing left and it paid the least. The gap was never "a pattern
+bitmap we cannot synthesise": LibreOffice does not draw those bitmaps either.
+`oox/inc/drawingml/hatchmap.hxx` maps each of the fifty-four `ST_PresetPatternVal` presets onto a
+`drawing::Hatch` — a style, a distance and an angle — and `fillproperties.cxx:755-783` pushes
+that beside the background colour, so the reference *is* the hatch and drawing the real bitmap
+would move us away from it. The whole table is ported.
+
+LibreOffice's own flat-ODF export of the new fixture confirms all five presets the corpus uses,
+to the digit: `pct25` `double 0.2cm 450`, `pct5` `single 0.25cm 450`, `wdUpDiag`
+`single 0.1cm 450`, `wdDnDiag` `single 0.1cm 1350`, `pct50` `double 0.125cm 450`, each beside a
+`draw:fill-color` holding the `a:bgClr`.
+
+```
+ 45.11 ->  41.40   171128IPAP.pptx                (page 24 alone 5.59 -> 1.88)
+ 10.29 ->   9.64   NAS-Infrastructure-Roadmaps-HSI.pptx
+368.41 -> 367.92   NAS-Infrastructure-Roadmaps-v16.0.pptx
+  0.47 ->   3.74   BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx
+```
+
+**Three of the seven decks do not move at all**, and knowing why saves the next agent the search:
+`B2B-Center`'s eighteen fills are all on picture placeholders in *slide layouts* whose slides
+fill them with pictures; `airbus-…-diy`'s two are on `a:rPr`, a run's text fill, deliberately
+left alone because painting a hatch there would make the text invisible; `3492`'s one is a single
+shape on one slide.
+
+**The `BMFE` cost is a measurement artefact and was chased far enough to say so.** Its page 3 is
+the deck's one hatched column. Measured at 80 dpi across it, **49–50 crossings per raster row on
+both sides** — the spacing and the count are right — and per-row ink 49 against 58, so our
+hairlines are the lighter of the two. The tool's own report names what happened: the page went
+from 42 small `shifted` regions to 41 with one covering 25% of the page, so the new pixels merged
+pre-existing text drift into a single region and the imbalance is measured over all of it. The
+page is visibly closer than the blank column it drew before.
+
+**The hatch phase was the obvious suspect and it was wrong.** `GeoTexSvxHatch` anchors a family
+on the grown box's leading edge — `fround(H/distance + 0.5)` steps, a line at `a × distance` for
+`a` from 1 — where we centred it, which is up to half a step out on every line. Reproducing it
+exactly took BMFE's page 3 from **3.28 to 3.25**, and the whole track from 1408.48 to 1408.51.
+Kept because it is what LibreOffice draws and costs nothing, not because it fixed anything.
+
+### An empty paragraph draws no bullet: right, wide, and worth 0.00
+
+Both of LibreOffice's presentation readers say so in their own comments and on the same condition
+— the paragraph's own character count: `oox/source/drawingml/textparagraph.cxx:193`, *"empty
+paragraphs do not have bullets in ppt"*, and `filter/source/msfilter/svdfppt.cxx:2363`, *"in PPT
+empty paragraphs never gets a bullet"*. `SlideTextLayout.Shaped` guarded on the paragraph having
+*runs*, and an empty paragraph has one — carrying its height.
+
+Reach, counting extracted lines holding nothing but a bullet glyph: **75 of the 163 documents
+drew more than the reference, 2405 lines in all** — 293, 185, 170, 129, 127, 119 on the worst
+six. **The word gate cannot see any of it**: `wc -w` in the POSIX locale ignores a token made of
+non-ASCII bytes alone, so `2015-Civil-Rights-Website-training.ppt` reads 6145/6145 exactly while
+drawing 293 bullets the reference does not.
+
+And the ink metric barely sees it either: **+0.39 across 30 documents**, 18 down and 12 up, no
+verdict and no major-page count moved. Only `.ppt` documents move, because `PptxTextBody` already
+declines a marker for a paragraph with no text. **Kept because it is right on its own evidence** —
+the deck that moved most, `ITE106-Chapter 4.ppt`, went from 119 bare bullets to none and from
+25.95 ink to 26.62, its residue being a font-size difference the bullets were sitting inside.
+
+### No document fixture could be made for it, and that was measured
+
+A four-paragraph probe was authored as `.pptx` and converted to `.ppt` through LibreOffice.
+**Both forms render identically with the rule and without it**, for two separate reasons: our
+PPTX reader already declines the marker (`PptxTextBody`, `if (!hasText) return null`), and
+LibreOffice's own PPT export writes those empty paragraphs with no bullet at all. The corpus
+decks that show it are PowerPoint's own output. Both fixtures were deleted rather than committed
+as green files that prove nothing, and the assertion is on `SlideTextLayout.Place` with a body
+built in the test.
+
+### The regression guards, and the tests
+
+Five of the ten files changed are below the presentation family — `Paperless.Core/Graphics`
+(`HatchPaint` and `Hatching`) and `Paperless.Ooxml/DrawingML` (`DrawingFill`, `DrawingHatch`,
+`DrawingHatchPresets`, `DrawingTableGeometry`) — so the other two tracks were swept.
+
+| | |
+|---|---|
+| `slides/batch-001`–`017`, whole track | **152/163**, every page count exact, 0 `ref-failed` |
+| `words/batch-001`–`006` | **59/60** — the one failure is `batch-006`'s `f445896eb008d14c1746fc37d412dc22.docx` at 15/16 pages and 5575/5575 words, which the words round-twelve entry above takes apart at length. It is the recorded state of that batch, not this round's |
+| `sheets/batch-001`–`006` | **59/60** — the one failure is `batch-005/xls/Praktikastellen_…xls` at 34/34 pages and 2019/1828 words, the `Tj`-granularity artefact in the shared PDF sink that round twelve measured on both its base and its final binary and found identical |
+
+Per project, each run redirected to its own file, 0 failed and 0 skipped everywhere:
+Core **243** (was 238), Text 196, Containers 109, Rendering 104, Markup 259, OpenDocument 125,
+WordProcessing 553, Spreadsheets 410, Presentations **497** (was 488), Vector 291, Fidelity 538.
+The two that moved are the fourteen tests added and nothing else.
+
+One fixture: `slide-pattern-fill.pptx`, five presets plus a preset-less pattern plus a table
+whose cells state their own, every expectation read out of LibreOffice's flat-ODF export of it.
+Each test verified by reintroducing its bug — and one assertion was *dropped* for failing that
+check: flipping the sign of a hatch's second family changes nothing, because a line at plus and
+minus ninety degrees is the same line.
+
+### What the next agent on this track should take
+
+```
+225.33  66 of 137 major  NAS-Infrastructure-Roadmaps-v16.0.pptx  (152.12 of it is the OLE ceiling)
+ 66.12   1 of  30        N2_E_Maestroni_Swarm_COP.pptx           (the Gantt)
+ 56.67  10 of  41        Wildlife for REDAC September 11.pptx    (circle gradient, do not)
+ 49.65  18 of  54        Thailand17.ppt
+ 48.41   6 of 268        Reporting_responsibilities_matrix.pptx  (467 fontRefs, moved 0.00)
+ 41.40  18 of  40        171128IPAP.pptx                         (residue of the pattFill fix)
+ 28.31  13 of  94        8.16_AOD_FINAL_Provider_Training…ppt    (p59 alone is 16.05: text path)
+ 26.67   6 of  10        Demick_JetBlue.pptx                     (chart label density)
+ 26.62  12 of  47        ITE106-Chapter 4.ppt                    (autofit — see below)
+ 25.03  10 of  52        ghgp-supply-chain-initiative…pptx
+ 23.99  10 of  24        Framing Europe.ppt                      (bullet glyphs: the recode table)
+ 22.86   9 of  94        2015-Civil-Rights-Website-training.ppt  (bullet glyphs)
+ 20.54   5 of  37        16 - UTM - (NASA).pptx                  (rose in round twelve)
+ 16.82   2 of  55        ws_prod-g-doc-Events-2007-september-M.017…ppt
+```
+
+1. **`ITE106-Chapter 4.ppt`'s text is set smaller than the reference's**, and it is now the clean
+   case for it: with the bullets gone its text layer matches the reference line for line, and its
+   page 11 still breaks *later* than the reference's on every bullet. That is an autofit or a
+   font-size resolution difference on a `.ppt`, with 47 pages of instances.
+2. **The symbol-font bullet recode table**, unchanged from round twelve's write-up and now the
+   largest named item: `Framing Europe.ppt` and `2015-Civil-Rights-Website-training.ppt` are
+   46.85 between them. `unotools/source/misc/fontcvt.cxx` holds the tables — `aWingDingsTab[224]`
+   maps `U+F0D8` to `U+E49E`, which is a glyph OpenSymbol does have, and
+   `aStarSymbolRecodeTable` names the face-to-table mapping. Porting it is mechanical.
+3. **`8.16_AOD`'s page 59**, 16.05 of its 28.31 in one arched WordArt — the `.ppt` twin of
+   `a:prstTxWarp`, so scoping that feature as pptx-only would miss it.
+4. **`Reporting_responsibilities_matrix.pptx`**, 48.41 over 268 pages and untouched by two rounds
+   of `a:fontRef` work. Nobody has looked at a page of it.
