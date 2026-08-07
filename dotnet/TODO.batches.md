@@ -1727,6 +1727,53 @@ The single remaining failure in the swept range is the word gate's ceiling rathe
 LibreOffice rasterises an embedded metafile where we emit real searchable text, so closing the
 number would mean making the output worse.
 
+## The cross-track sweep at `7038ae8c1`: 186 of 188, and one new word-gate artefact
+
+Owed because the last words merge cut the anchor character in the **shaper**, which all three
+families share, and nothing had measured that against the other two tracks on one tree.
+
+| Track | Batches | | |
+|---|---|---|---|
+| `words` | 001–005 | **50/50** | — |
+| `slides` | 001–009 | **87/88** | `8_P-Pavese_AIRBUS…pptx` — the known ceiling |
+| `sheets` | 001–005 | **49/50** | `Praktikastellen_…xls` — see below |
+
+The shared shaper change is clean: words and sheets hold, and slides' single failure is the
+ceiling entry already on the list.
+
+### A URL that draws correctly and extracts as two words
+
+`sheets/batch-005/xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls` is **34 pages
+against 34** and **2019 words against 1828**. The whole +191 is URL fragmentation: `http://www.`
+appears as its own token 48 times in our text layer and never in the reference's.
+
+**It is not a wrapping defect, and the first two hypotheses were wrong.** The cells state
+`no-wrap` (27 of them do, against 7 that wrap) so a wrap would have been a real bug — but
+`pdftotext -bbox` settles it: our `http://www.` is reported spanning **51.39–225.70**, which is
+the width of the *entire* URL, against the reference's whole string at 52.38–226.41. We draw the
+full URL in the right place. The page is right; only the text layer disagrees.
+
+The mechanism is how the two writers emit a long run:
+
+| | text-showing operators | mean glyphs each | longest |
+|---|---|---|---|
+| ours | 54 `Tj` | 12.8 | **28** |
+| reference | 44 `TJ` arrays + 14 `Tj` | 6.0 | 7 |
+
+A `TJ` array carries its kerning *inside* one operator, so a string of any length stays one
+show. We emit `Tj` with a `Td`/`Tm` reposition between segments, and **28 glyphs is our
+ceiling** — `http://www.europeanchamber.com.cn` is 33 characters, so it spans two operators and
+poppler reads the reposition as a word boundary.
+
+This is the word gate's blind spot pointing the other way. The raster ceiling is *our output
+being better and scoring worse*; this is our output being **worse** in a way no geometric check
+can see — a URL nobody can select as one string. The reference does it better and the corpus
+caught it only because a page-exact document's word count moved.
+
+Unfixed. It belongs in the PDF sink every family shares, so it wants its own round and a
+cross-track sweep; and since the 28-glyph ceiling is ours, any document with a long unbroken
+run is affected, not only this one.
+
 ### `words` — 200 documents, 21 batches
 
 Measured whole-track at the commit that landed the group reader: **143 of 200**, page error 122.

@@ -160,7 +160,26 @@ Once a page differs, narrow it down before theorising:
    attribute name and check *both* readers handle it — a value resolved in one and taken
    literally in the other is a standing bug waiting for a corpus big enough to show it.
 
-8. **Check whether the field is read but never used.** A property parsed by every reader and
+8. **A word count can fault output that is geometrically perfect.** The ceiling case is
+   well known — LibreOffice rasterises and we draw real text, so we score worse for being
+   better. The inverse exists too and is easier to miss, because it looks like a layout bug.
+
+   Measured on one `.xls`: 34 pages against 34, **2019 words against 1828**, the whole excess
+   being `http://www.` appearing as its own token 48 times. The cells state `no-wrap`, so a
+   wrap looked like the obvious cause — and `pdftotext -bbox` refuted it outright, reporting
+   our `http://www.` as spanning the width of the *entire* URL. The glyphs are in the right
+   place; only the text layer splits.
+
+   The cause is operator granularity. A `TJ` array carries kerning inside one show, so a
+   string of any length stays one token; a sequence of `Tj` with a `Td` between segments does
+   not, and poppler reads each reposition as a word boundary. Ours capped at 28 glyphs per
+   operator against the reference's single arrays, so any run longer than that fragments.
+
+   **So when a page-exact document's word count moves, compare bounding boxes before
+   diagnosing layout.** If the box of the first token spans the whole string, the layout is
+   right and the defect is in how the text was written.
+
+9. **Check whether the field is read but never used.** A property parsed by every reader and
    consumed by nothing is invisible to unit tests and produces a quiet, systematic error.
 
    This has now been the cause four times, once on each family, which makes it worth *grepping
