@@ -25,6 +25,16 @@
   <style:style style:name="gr1" style:family="graphic">
    <style:graphic-properties draw:stroke="none" draw:fill="none"/>
   </style:style>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"
+       style:print-orientation="portrait"/>
+   <style:header-style><style:header-footer-properties fo:min-height="0.6cm"
+       fo:margin-bottom="0.25cm"/></style:header-style>
+  </style:page-layout>
+  <style:style style:name="ta2" style:family="table" style:master-page-name="WithHeader">
+   <style:table-properties table:display="true"/>
+  </style:style>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
        fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"
@@ -38,6 +48,12 @@
    <style:footer style:display="false"/>
    <style:footer-left style:display="false"/>
   </style:master-page>
+   <style:master-page style:name="WithHeader" style:page-layout-name="pm2">
+    <style:header><text:p>CHART SHEET HEADER</text:p></style:header>
+    <style:header-left style:display="false"/>
+    <style:footer style:display="false"/>
+    <style:footer-left style:display="false"/>
+   </style:master-page>
  </office:master-styles>
  <office:body>
   <office:spreadsheet>
@@ -72,7 +88,7 @@
      <table:table-cell/>
     </table:table-row>
    </table:table>
-   <table:table table:name="Graph" table:style-name="ta1">
+   <table:table table:name="Graph" table:style-name="ta2">
     <table:table-column table:style-name="co1" table:number-columns-repeated="3"/>
     <table:table-row table:style-name="ro1">
      <table:table-cell>

@@ -74,6 +74,23 @@ public sealed class SheetEmbeddedChartTests
     }
 
     [Fact]
+    public void TheChartsOwnPageRecordsDoNotBecomeTheWorksheets()
+    {
+        // An embedded chart's substream carries a `HEADER`, a `FOOTER`, a `SETUP` and a
+        // `PRINTSIZE` of its own — verified on this fixture and on the corpus workbooks — and they
+        // describe the chart's notional page rather than the sheet's. They also arrive *after* the
+        // worksheet's own, so a reader that routes them onward simply overwrites it.
+        //
+        // The chart sheet is the only one in the fixture carrying a header, and the chart's own is
+        // empty, so this is the assertion that separates reading the substream for its chart
+        // records alone from reading it the way a chart *sheet's* is read. Without the header the
+        // two are indistinguishable: every other page record on both sides is the same default.
+        SheetPrintSetup graph = Pages().Sheets[1].Setup;
+
+        graph.HeaderText.ShouldNotBeNull().ShouldContain("CHART SHEET HEADER");
+    }
+
+    [Fact]
     public void TheDataSheetIsUnaffectedAndKeepsItsCells()
     {
         // The control. A change that made every sheet print a chart page, or that consumed the
@@ -82,7 +99,7 @@ public sealed class SheetEmbeddedChartTests
 
         revenue.Name.ShouldBe("Revenue");
         revenue.Drawings.IsEmpty.ShouldBeTrue("the chart is on the other sheet");
-        revenue.CellAt(0, 1).ShouldNotBeNull().Text.ShouldBe("North");
-        revenue.CellAt(4, 2).ShouldNotBeNull().Text.ShouldBe("121");
+        revenue.CellAt(0, 1).ShouldNotBeNull().Value.ShouldBe("North");
+        revenue.CellAt(4, 2).ShouldNotBeNull().Value.ShouldBe(121.0);
     }
 }
