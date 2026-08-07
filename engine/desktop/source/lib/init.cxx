@@ -9191,9 +9191,13 @@ static void lo_setDocumentPassword(COKit* pThis,
     assert(pThis);
     assert(pURL);
     COKitImpl *const pLib = static_cast<COKitImpl*>(pThis);
-    auto it = pLib->mInteractionMap.find(OString(pURL));
+    std::map<OString, rtl::Reference<KitInteractionHandler>>::const_iterator const it
+        = pLib->mInteractionMap.find(OString(pURL));
     assert(it != pLib->mInteractionMap.end());
-    it->second->SetPassword(pPassword);
+    if (it != pLib->mInteractionMap.end())
+        it->second->SetPassword(pPassword);
+    else
+        SetLastExceptionMsg(u"lo_setDocumentPassword: no interaction handler for the given URL"_ustr);
 }
 
 static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER COKit* /*pThis*/)

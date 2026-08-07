@@ -109,6 +109,7 @@ public:
     void testPaintPartTile( COKit* pOffice );
     void testDocumentLoadLanguage(COKit* pOffice);
     void testMultiKeyInput(COKit *pOffice);
+    void testSetDocumentPasswordAfterLoad(COKit* pOffice);
 #if 0
     void testOverlay( COKit* pOffice );
 #endif
@@ -143,6 +144,7 @@ void TiledRenderingTest::runAllTests()
     testCalcSheetNames( pOffice.get() );
     testPaintPartTile( pOffice.get() );
     testDocumentLoadLanguage(pOffice.get());
+    testSetDocumentPasswordAfterLoad(pOffice.get());
 #if 0
     testOverlay( pOffice.get() );
 #endif
@@ -463,6 +465,36 @@ void TiledRenderingTest::testMultiKeyInput(COKit *pOffice)
     // get track changes ?
     char *values = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::cerr << "Values: '" << values << "'\n";
+}
+
+// Regression test: a password request can be raised after the initial load has
+// returned - e.g. when a reload switches the document to editable. In that case
+// the kit answers it by calling setDocumentPassword() for the document's URL.
+// The load interaction handler used to be removed from the interaction map as
+// soon as documentLoad() returned, so this lookup found nothing and dereferenced
+// an end() iterator, crashing in KitInteractionHandler::SetPassword(). The
+// handler must stay registered for the whole document lifetime.
+void TiledRenderingTest::testSetDocumentPasswordAfterLoad(COKit* pOffice)
+{
+    const string sDocPath = m_sSrcRoot + "/kit/qa/data/blank_text.odt";
+    const string sLockFile = m_sSrcRoot + "/kit/qa/data/.~lock.blank_text.odt#";
+    remove(sLockFile.c_str());
+
+    // documentLoad() turns its argument into an absolute URL and uses that as
+    // the interaction-map key, so pass a file URL and reuse the exact same
+    // string for setDocumentPassword() below.
+    OUString aDocURL;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+        osl::FileBase::getFileURLFromSystemPath(
+            OUString::createFromAscii(sDocPath), aDocURL));
+    const OString aDocURLUtf8 = aDocURL.toUtf8();
+
+    std::unique_ptr<COKitDocument> pDocument(pOffice->documentLoad(aDocURLUtf8.getStr()));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Supplying a password now (as the kit does in response to a post-load
+    // password request) must not crash. nullptr means "no password given".
+    pOffice->setDocumentPassword(aDocURLUtf8.getStr(), nullptr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiledRenderingTest);
