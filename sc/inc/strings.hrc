@@ -79,7 +79,7 @@
 #define SCSTR_VALID_LIST                            NC_("SCSTR_VALID_LIST", "~Entries")
 // for dialogues:
 #define SCSTR_CHARSET_USER                          NC_("SCSTR_CHARSET_USER", "System")
-#define SCSTR_COLUMN_USER                           NC_("SCSTR_COLUMN_USER", "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide")
+#define SCSTR_COLUMN_USER                           NC_("SCSTR_COLUMN_USER", "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Skip")
 #define SCSTR_FIELDSEP_TAB                          NC_("SCSTR_FIELDSEP_TAB", "Tab")
 #define SCSTR_FIELDSEP_SPACE                        NC_("SCSTR_FIELDSEP_SPACE", "space")
 #define SCSTR_UNDO_GRAFFILTER                       NC_("SCSTR_UNDO_GRAFFILTER", "Image Filter")
