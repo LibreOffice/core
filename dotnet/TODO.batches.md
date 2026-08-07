@@ -2953,3 +2953,14 @@ the whole corpus.
 It is a feature rather than a fix — a pattern is a paint kind the drawing IR does not have, so
 it touches `Paperless.Core/Graphics` and both sinks — but it is the best-bounded one left on
 this track: five presets, a named location, and three of the largest documents behind it.
+
+### The text-path gap has a `.ppt` instance too, and it is one page's worth of ink
+
+`8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt` (28.32 unaccounted ink, 13 of 94
+pages major, never examined) is **16.05 of that on page 59 alone** — over half the document in
+one page. The reference bends "Do you know what these are?" around an arch; we lay it straight.
+
+That is the same class as `016 FAAAIandtheArtandScienceofV&Vfinal.pptx`'s `a:prstTxWarp`, which
+this file already records as absent from `dotnet/src` — but through the binary path's WordArt
+rather than through DrawingML, so a fix for one does not automatically reach the other. Worth
+knowing before anyone scopes `prstTxWarp` as a `pptx`-only feature.
