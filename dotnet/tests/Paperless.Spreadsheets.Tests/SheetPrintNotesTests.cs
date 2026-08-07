@@ -30,6 +30,19 @@ namespace Paperless.Spreadsheets.Tests;
 /// layout-preserved text layer is identical to it.
 /// </para>
 /// <para>
+/// <strong>Its three object identifiers were then permuted to 31, 11 and 21</strong>, and that is
+/// the only edit. LibreOffice numbers the comment objects it writes 1, 2, 3 in the order it writes
+/// their <c>NOTE</c> records, which makes "the n-th <c>OBJ</c> is the n-th <c>NOTE</c>" — the
+/// pairing the rest of <c>XlsDrawingCollector</c> uses for shapes, and the plausible wrong
+/// implementation here — indistinguishable from the identifier join the format specifies.
+/// Measured: with the sequential identifiers, replacing the join with ordinal pairing left all six
+/// of these tests green; with the permuted ones it fails five of them. Real workbooks number
+/// comments arbitrarily — <c>RMP 2011-2014 and Inventory.xls</c> uses 1029, 1030, 1033, 1036,
+/// 1037, 1124, 1125 and 1126 — so the permutation makes the fixture more like a real file rather
+/// than less. LibreOffice's own PDF for the permuted file is identical to the one for the
+/// original.
+/// </para>
+/// <para>
 /// Measured on the corpus: exactly two of the 171 sheets-track documents ask for this.
 /// <c>Hazard Analysis Template.xls</c> went from 2 pages against 3 and 460 words against 682 to
 /// 3 against 3 and 682 against 682; <c>RMP 2011-2014 and Inventory.xls</c> gained the two note
