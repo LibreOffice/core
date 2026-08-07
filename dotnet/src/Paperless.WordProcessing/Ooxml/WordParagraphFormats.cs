@@ -31,6 +31,12 @@ namespace Paperless.WordProcessing.Ooxml;
 /// <em>Off</em> is the default, and that is not an omission — see
 /// <see cref="WordParagraphFormats.AutoKerningOf"/>.
 /// </param>
+/// <param name="Tracking">
+/// The fixed distance <c>w:spacing</c> puts between the run's characters, zero for none — and not to be
+/// confused with the <c>w:spacing</c> of a <c>w:pPr</c>, which is the gap between paragraphs. This one
+/// lives in <c>w:rPr</c>, is stated in twips, and is commonly negative. See
+/// <see cref="Paperless.Text.Layout.FormattedRun.Tracking"/> for what a reader owes it.
+/// </param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
@@ -43,7 +49,8 @@ public readonly record struct WordTextStyle(
     Colour? Highlight = null,
     bool IsUnderlined = false,
     bool IsStruckThrough = false,
-    bool AutoKerning = false)
+    bool AutoKerning = false,
+    Length Tracking = default)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -408,6 +415,11 @@ internal static class WordParagraphFormats
         WordProperty kerning =
             styles.ResolveRunProperty("kern", runProperties, styleId, characterStyleId);
 
+        // The character `w:spacing`, which shares its name with the paragraph one and nothing else. The
+        // resolution only ever looks inside `w:rPr`, so the two cannot reach each other.
+        WordProperty tracking =
+            styles.ResolveRunProperty("spacing", runProperties, styleId, characterStyleId);
+
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
         return new WordTextStyle(
@@ -432,8 +444,29 @@ internal static class WordParagraphFormats
             // Folded onto one flag, as the extraction side folds them: `w:dstrike` is a second line
             // rather than a different decoration, and nothing below this models a doubled rule.
             strike.IsOn || doubleStrike.IsOn,
-            AutoKerningOf(kerning));
+            AutoKerningOf(kerning),
+            TrackingOf(tracking));
     }
+
+    /// <summary>
+    /// The distance a character <c>w:spacing</c> puts between letters, zero when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Twips, and signed: <c>DomainMapper</c> converts the value straight to <c>CharKerning</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx</c>:2468–2480), which is
+    /// <c>SvxKerningItem</c> — a constant added between characters rather than the face's own pair
+    /// kerning, which is <c>w:kern</c> and a different item entirely.
+    /// </para>
+    /// <para>
+    /// Negative is the common case in real files and it is the one that matters: 58 of the words track's
+    /// 134 DOCX state one, at values down to −28 twips, and a run of −16 over a fifty-character line is
+    /// 40 pt of width the reference does not spend. A reader ignoring it breaks its lines late and
+    /// paginates long.
+    /// </para>
+    /// </remarks>
+    private static Length TrackingOf(WordProperty spacing)
+        => spacing.IntegerValue is { } twips and not 0 ? Length.FromTwips(twips) : Length.Zero;
 
     /// <summary>
     /// Whether a <c>w:kern</c> switches pair kerning on.

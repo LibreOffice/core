@@ -521,6 +521,7 @@ public sealed partial class DocxLayoutSource
             Language = text.Language,
             Shaping = new ShapingOptions(
                 Language: text.Language, DisableKerning: !text.AutoKerning),
+            Tracking = text.Tracking,
             Runs = runs,
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames),
@@ -702,7 +703,10 @@ public sealed partial class DocxLayoutSource
                 // Kerning, unlike the two rules, does change a measurement — so a run that kerns
                 // inside a paragraph that does not has to survive the shortcut or its width is the
                 // paragraph's answer rather than its own.
-                || style.AutoKerning != paragraph.AutoKerning)
+                || style.AutoKerning != paragraph.AutoKerning
+                // And tracking, for the same reason and more sharply: it is a distance per character,
+                // so a run that disagrees with its paragraph mark is wrong by its own length.
+                || style.Tracking != paragraph.Tracking)
             {
                 varies = true;
             }
@@ -719,7 +723,8 @@ public sealed partial class DocxLayoutSource
                 style.CaseMap,
                 Highlight: style.Highlight ?? default,
                 IsUnderlined: style.IsUnderlined,
-                IsStruckThrough: style.IsStruckThrough));
+                IsStruckThrough: style.IsStruckThrough,
+                Tracking: style.Tracking));
         }
 
         return varies ? runs : [];

@@ -725,7 +725,8 @@ public static class PageDrawing
                     run.EmSize,
                     run.Font ?? Reference(run.Face),
                     new DocPoint(pen, baseline - run.Rise),
-                    spaceAdd);
+                    spaceAdd,
+                    run.Tracking);
 
                 runs.Add((glyphRun, run.EffectiveColour));
 
@@ -991,7 +992,8 @@ public static class PageDrawing
                         paragraph.EmSize,
                         paragraph.Font,
                         paragraph.Colour,
-                        paragraph.Shaping),
+                        paragraph.Shaping,
+                        Tracking: paragraph.Tracking),
                 ]);
         }
 
@@ -1190,6 +1192,11 @@ public static class PageDrawing
         {
             string text = paragraph.Text[run.Start..run.End];
             total += TextShaper.Default.Shape(run.Face, text, run.Shaping).Width(run.EmSize);
+
+            // One tracking unit per character, which is exactly what the prefix table charges across a
+            // range: it puts the gap *before* each character, so a range of n of them carries n. Any other
+            // count here would put a tab stop somewhere the layout did not measure.
+            if (run.Tracking != Length.Zero) total += run.Tracking * run.Length;
         }
 
         return total;
@@ -1218,15 +1225,24 @@ public static class PageDrawing
         Length emSize,
         FontReference font,
         DocPoint origin,
-        Length spaceAdd)
+        Length spaceAdd,
+        Length tracking = default)
     {
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
 
         Length pen = Length.Zero;
+        int remaining = shaped.Glyphs.Count;
+
         foreach (ShapedGlyph glyph in shaped.Glyphs)
         {
             Length advance = shaped.Scale(glyph.Advance, emSize);
+
+            // Tracking is the gap *between* characters, so the run's last glyph does not carry one —
+            // which is what the reference draws (`SvxFont::QuickGetTextSize` adds one per advance and
+            // then takes the trailing one back off) and what keeps the drawn pen within one tracking
+            // unit of the width the measurement charged.
+            if (tracking != Length.Zero && --remaining > 0) advance += tracking;
 
             // A blank on a justified line is wider than the font says. Tested on the character the
             // cluster names rather than on the glyph id, because a glyph id means nothing without the
