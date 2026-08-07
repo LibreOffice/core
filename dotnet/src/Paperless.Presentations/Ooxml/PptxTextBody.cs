@@ -85,13 +85,27 @@ internal static class PptxTextBody
     /// bottom edge and three words a page go with it.
     /// </para>
     /// </param>
+    /// <param name="shapeTextStyle">
+    /// <para>
+    /// What the shape's own <c>p:style/a:fontRef</c> states — normally
+    /// <see cref="PptxTextStyles.ShapeTextStyleFor"/>. It is the one rung of the chain with no
+    /// element inside the text body, so it cannot arrive as part of
+    /// <paramref name="inherited"/>: the colour sits directly under the <c>a:fontRef</c> and the
+    /// typefaces are an <c>idx</c> into the theme's font scheme.
+    /// </para>
+    /// <para>
+    /// Null leaves the chain as the body and its placeholders describe it, which is right for a
+    /// shape with no <c>p:style</c> and wrong for the 1197 corpus slide shapes that have one.
+    /// </para>
+    /// </param>
     public static SlideTextBody Read(
         XElement body,
         DrawingTheme? theme = null,
         string? defaultTypeface = null,
         Func<int, IReadOnlyList<XElement>>? inherited = null,
         SlideFields? fields = null,
-        IReadOnlyList<XElement?>? inheritedBodyProperties = null)
+        IReadOnlyList<XElement?>? inheritedBodyProperties = null,
+        DrawingCharacterStyle? shapeTextStyle = null)
     {
         ArgumentNullException.ThrowIfNull(body);
 
@@ -120,7 +134,7 @@ internal static class PptxTextBody
             paragraphs.Add(
                 Paragraph(
                     paragraph, listStyle, theme, defaultTypeface, counters, counting, inherited,
-                    fields));
+                    fields, shapeTextStyle));
         }
 
         // The autofit choice is taken whole from the nearest a:bodyPr that states one of the
@@ -224,7 +238,8 @@ internal static class PptxTextBody
         int[] counters,
         bool[] counting,
         Func<int, IReadOnlyList<XElement>>? inherited,
-        SlideFields? fields)
+        SlideFields? fields,
+        DrawingCharacterStyle? shapeTextStyle)
     {
         XElement? paragraphProperties = Drawing.Child(paragraph, "pPr");
         int level = Math.Clamp(Drawing.Number(paragraphProperties, "lvl") ?? 0, 0, 8);
@@ -234,12 +249,24 @@ internal static class PptxTextBody
         List<XElement> chain = [];
         if (paragraphProperties is not null) chain.Add(paragraphProperties);
         if (LevelStyle(listStyle, level) is { } levelStyle) chain.Add(levelStyle);
+        int withinBody = chain.Count;
         if (inherited is not null) chain.AddRange(inherited(level));
 
         // Every a:defRPr the chain offers, most specific first. A run states only what differs
         // from these, and on a PowerPoint-authored deck it commonly states nothing at all.
         XElement?[] defaults =
             [.. chain.Select(source => Drawing.Child(source, "defRPr")).OfType<XElement>()];
+
+        // Where the shape's own p:style/a:fontRef sits, and it is neither end: it beats
+        // everything the shape inherits and loses to everything the body states. Counting the
+        // *sources* rather than the surviving a:defRPr elements would put the boundary in the
+        // wrong place whenever a paragraph or a level style has no defRPr at all, which is the
+        // common case.
+        int bodyDefaults = chain
+            .Take(withinBody)
+            .Count(source => Drawing.Child(source, "defRPr") is not null);
+
+        RunSources sources = new(defaults, bodyDefaults, shapeTextStyle);
 
         StringBuilder text = new();
         List<SlideTextRun> runs = [];
@@ -252,7 +279,7 @@ internal static class PptxTextBody
                 if (content.Length == 0) continue;
 
                 runs.Add(Run(
-                    Drawing.Child(child, "rPr"), defaults, text.Length, content.Length,
+                    Drawing.Child(child, "rPr"), sources, text.Length, content.Length,
                     theme, defaultTypeface));
                 text.Append(content);
             }
@@ -276,7 +303,7 @@ internal static class PptxTextBody
                 if (content.Length == 0) continue;
 
                 runs.Add(Run(
-                    Drawing.Child(child, "rPr"), defaults, text.Length, content.Length,
+                    Drawing.Child(child, "rPr"), sources, text.Length, content.Length,
                     theme, defaultTypeface));
                 text.Append(content);
             }
@@ -287,7 +314,7 @@ internal static class PptxTextBody
             // An empty paragraph is still a line, and it is as tall as the text that would go on
             // it — which is what a:endParaRPr records and the only thing it is for.
             runs.Add(Run(
-                Drawing.Child(paragraph, "endParaRPr"), defaults, 0, 0, theme, defaultTypeface));
+                Drawing.Child(paragraph, "endParaRPr"), sources, 0, 0, theme, defaultTypeface));
         }
 
         // The size a percentage spacing is a percentage of: the tallest run in the paragraph, as
@@ -548,12 +575,14 @@ internal static class PptxTextBody
 
     private static SlideTextRun Run(
         XElement? runProperties,
-        XElement?[] defaults,
+        RunSources sources,
         int start,
         int length,
         DrawingTheme? theme,
         string? defaultTypeface)
     {
+        XElement?[] defaults = sources.Defaults;
+
         int size = First(runProperties, defaults, element => Drawing.Number(element, "sz"))
                    ?? DefaultSizeHundredthsOfPoint;
 
@@ -566,14 +595,15 @@ internal static class PptxTextBody
         // called "+mn-lt", which exists nowhere and falls all the way through to the generic
         // sans-serif — DejaVu Sans against the reference's Carlito, some 39 per cent wider, so
         // every line breaks early and the tail of a full placeholder overflows off the slide.
-        string? typeface = First(
-            runProperties, defaults,
+        string? typeface = sources.Resolve(
+            runProperties,
+            style => style.LatinTypeface,
             element => theme?.Fonts is { } fonts
                 ? fonts.Resolve(Drawing.Attribute(Drawing.Child(element, "latin"), "typeface"))
                 : Literal(Drawing.Attribute(Drawing.Child(element, "latin"), "typeface")));
 
-        Colour? colour = First(
-            runProperties, defaults, element => SolidColour(element, theme));
+        Colour? colour = sources.Resolve(
+            runProperties, style => style.Colour, element => SolidColour(element, theme));
 
         // a:rPr/@spc, in hundredths of a point, and negative far more often than not: a deck's
         // designer pulls a heading in and PowerPoint records it per run. LibreOffice reads it into
@@ -635,6 +665,67 @@ internal static class PptxTextBody
         }
 
         return default;
+    }
+
+    /// <summary>
+    /// The sources behind one run, split where the shape's own text style goes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A shape's <c>p:style/a:fontRef</c> is the one rung of the character chain that is not an
+    /// <c>a:defRPr</c> anywhere: its colour is a colour reference sitting directly inside the
+    /// element and its typefaces are an <c>idx</c> into the theme's font scheme. So it cannot be
+    /// appended to <see cref="Defaults"/>, and it needs a place in the order rather than a place
+    /// at either end — it <em>beats everything the shape inherits</em> and <em>loses to
+    /// everything the body states</em>, which is
+    /// <c>TextParagraph::getCharacterStyle</c> (<c>oox/source/drawingml/textparagraph.cxx</c>
+    /// :52-67) read from the other end, and exactly what
+    /// <see cref="DrawingCharacterStyle.Resolve"/> already does for extraction.
+    /// </para>
+    /// <para>
+    /// Putting it at either extreme is right on every shape that states nothing else, which is
+    /// most of them. It is wrong precisely where a deck bothered to state two — a body
+    /// placeholder whose <c>a:fontRef</c> names <c>lt1</c> over a master <c>bodyStyle</c> naming
+    /// <c>tx1</c> draws white text on a dark panel if the order is right and black text on it if
+    /// the shape style loses.
+    /// </para>
+    /// </remarks>
+    /// <param name="Defaults">Every <c>a:defRPr</c> in the chain, most specific first.</param>
+    /// <param name="BodyDefaults">
+    /// How many of <paramref name="Defaults"/> come from inside the text body — the paragraph's
+    /// own <c>a:pPr</c> and the body's <c>a:lstStyle</c> entry for its level. The rest are the
+    /// placeholders, the master's <c>p:txStyles</c> and the presentation's default.
+    /// </param>
+    /// <param name="ShapeStyle">What the shape's <c>p:style/a:fontRef</c> states, or null.</param>
+    private readonly record struct RunSources(
+        XElement?[] Defaults, int BodyDefaults, DrawingCharacterStyle? ShapeStyle)
+    {
+        /// <summary>
+        /// The first source that states this property, with the shape's own text style consulted
+        /// after the body's sources and before everything the shape inherits.
+        /// </summary>
+        /// <param name="own">The run's own <c>a:rPr</c>, or null.</param>
+        /// <param name="fromShape">Reads the property out of the shape's text style.</param>
+        /// <param name="read">Reads the property out of one <c>a:rPr</c> or <c>a:defRPr</c>.</param>
+        public T? Resolve<T>(
+            XElement? own, Func<DrawingCharacterStyle, T?> fromShape, Func<XElement, T?> read)
+        {
+            if (own is not null && read(own) is { } fromRun) return fromRun;
+
+            for (int i = 0; i < BodyDefaults; i++)
+            {
+                if (Defaults[i] is { } source && read(source) is { } value) return value;
+            }
+
+            if (ShapeStyle is { } style && fromShape(style) is { } stated) return stated;
+
+            for (int i = BodyDefaults; i < Defaults.Length; i++)
+            {
+                if (Defaults[i] is { } source && read(source) is { } value) return value;
+            }
+
+            return default;
+        }
     }
 
     private static Colour? SolidColour(XElement properties, DrawingTheme? theme)
