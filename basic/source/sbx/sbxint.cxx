@@ -136,6 +136,8 @@ template <> void assignTo<double>(SbxDecimal& dest, double n) { dest.setWithOver
 template <> void assignTo<float>(SbxDecimal& dest, float n) { dest.setWithOverflow(n); }
 
 template <std::integral I> void assignTo(OUString& dest, I n, bool) { dest = OUString::number(n); }
+// tdf#171370: a character stringifies to itself, not to its numeric code
+void assignTo(OUString& dest, sal_Unicode n, bool) { dest = OUString(n); }
 void assignTo(OUString& dest, double n, bool bCoreString)
 {
     // tdf#107953 - show 17 significant digits
