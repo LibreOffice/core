@@ -125,6 +125,45 @@ public sealed class SheetFormattedAreaTests
     }
 
     /// <summary>
+    /// Thirty equally-formatted columns behind the data end the block before them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The sideways twin of the run limit, and the two straddle their constants the same way:
+    /// twenty-nine identical ruled columns are all kept and thirty are all dropped, so a
+    /// renderer cannot satisfy this by choosing a side. <c>SC_COLUMNS_STOP</c> = 30,
+    /// <c>ScTable::GetPrintArea</c> (<c>table1.cxx:737-757</c>).
+    /// </para>
+    /// <para>
+    /// The row the columns reached is kept either way, because Calc's cut-back touches
+    /// <c>nMaxX</c> alone and <c>nMaxY</c> was already set by the pass that found them.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ThirtyEquallyRuledColumnsBehindTheDataAreDropped()
+    {
+        SheetRange used = new(0, 0, 3, 10);
+
+        SheetRange kept = SheetDecorationArea.Extend(used, RuledBand(4, 29));
+        kept.LastColumn.ShouldBe(32, "twenty-nine is one short of the limit");
+        kept.LastRow.ShouldBe(25);
+
+        SheetRange cut = SheetDecorationArea.Extend(used, RuledBand(4, 30));
+        cut.LastColumn.ShouldBe(3, "thirty ends the block before the whole band");
+        cut.LastRow.ShouldBe(25, "the cut is sideways only");
+    }
+
+    /// <summary>A band of identically ruled, entirely empty columns.</summary>
+    private static SheetFormatting RuledBand(int first, int count)
+    {
+        (int Row, int Column)[] cells =
+            [.. Enumerable.Range(first, count).SelectMany(
+                c => Enumerable.Range(20, 6).Select(r => (r, c)))];
+
+        return Ruled(cells);
+    }
+
+    /// <summary>
     /// A filled cell keyed to a column, for the per-column scan below.
     /// </summary>
     private static (SheetFormatting Formatting, Dictionary<int, int> LastData) Filled(

@@ -83,11 +83,18 @@ internal static class SheetDecorationArea
         int lastData = used.IsValid ? used.LastRow : -1;
 
         Dictionary<int, SortedList<int, SheetCellDecoration>> columns = [];
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole = [];
         Dictionary<int, int> columnStart = [];
         foreach ((int row, int column, SheetCellDecoration format) in formatting.Cells)
         {
             if (!columnStart.TryGetValue(column, out int start))
                 columnStart[column] = start = StartOf(column, lastData, lastDataRowByColumn);
+
+            // The whole column, unfiltered, for the column-run comparison below: Calc's
+            // `IsVisibleAttrEqual` asks about rows 0 to MaxRow and not about the scan's window.
+            if (!whole.TryGetValue(column, out SortedList<int, SheetCellDecoration>? all))
+                whole[column] = all = [];
+            all[row] = format;
 
             // Calc processes the attribute run *containing* the column's last data row, so the
             // row itself is inside the scan and only the rows above it are out of it.
@@ -121,7 +128,10 @@ internal static class SheetDecorationArea
 
         if (LastVisible(wholeRows, lastData) is { } byRow && byRow > lastRow) lastRow = byRow;
 
-        if (lastRow <= lastData && lastColumn <= (used.IsValid ? used.LastColumn : -1)) return used;
+        int lastDataColumn = used.IsValid ? used.LastColumn : -1;
+        lastColumn = StopAtEqualColumns(lastColumn, lastDataColumn, whole, columns, columnStart);
+
+        if (lastRow <= lastData && lastColumn <= lastDataColumn) return used;
 
         return used.IsValid
             ? used with
@@ -130,6 +140,93 @@ internal static class SheetDecorationArea
                 LastColumn = Math.Max(used.LastColumn, lastColumn),
             }
             : new SheetRange(0, 0, Math.Max(lastColumn, 0), Math.Max(lastRow, 0));
+    }
+
+    /// <summary>
+    /// How many equally-formatted columns behind the data end the sideways scan.
+    /// </summary>
+    /// <remarks><c>SC_COLUMNS_STOP</c>, <c>sc/source/core/data/table1.cxx:655</c>.</remarks>
+    public const int EqualColumnsStop = 30;
+
+    /// <summary>
+    /// Cuts the block back before the first run of equally-formatted columns behind the data.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The sideways twin of <see cref="VisibleAttributeStop"/> and needed for the same reason.
+    /// A ruled grid does not stop where the data does, so the attribute pass can widen a sheet
+    /// by a hundred columns of identical empty ruling; Calc walks right from the last data
+    /// column grouping columns that are <em>visually equal over every row</em>, and the first
+    /// group of <see cref="EqualColumnsStop"/> or more ends the block before it
+    /// (<c>table1.cxx:737-757</c>). It then walks back over any column whose own scan found
+    /// nothing, so the block ends on a column that actually paints something.
+    /// </para>
+    /// <para>
+    /// The run past the last formatted column is unbounded and equal to itself, which is what
+    /// stops the walk on an ordinary sheet — so on those this changes nothing, and only a sheet
+    /// with thirty or more identically ruled empty columns feels it. Measured on
+    /// <c>environment-edb-docs-edb-emissions-databank.xls</c>, whose <c>ICAO databank</c> sheet
+    /// holds data to column 104 and formatting to column 228: without this the block keeps all
+    /// 124 of them, which is nine extra column bands and nine extra pages.
+    /// </para>
+    /// <para>
+    /// The cut is sideways only. <c>nMaxY</c> was set by the pass that found those columns and
+    /// Calc does not undo it, so a row a dropped column reached stays inside the block.
+    /// </para>
+    /// </remarks>
+    private static int StopAtEqualColumns(
+        int lastColumn,
+        int lastDataColumn,
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole,
+        Dictionary<int, SortedList<int, SheetCellDecoration>> columns,
+        Dictionary<int, int> columnStart)
+    {
+        if (lastColumn <= lastDataColumn) return lastColumn;
+
+        for (int start = lastDataColumn + 1; start <= lastColumn;)
+        {
+            int end = start;
+            while (end < lastColumn && SameColumn(whole, start, end + 1)) end++;
+
+            if (end + 1 - start < EqualColumnsStop)
+            {
+                start = end + 1;
+                continue;
+            }
+
+            int cut = start - 1;
+            while (cut > lastDataColumn
+                   && (!columns.TryGetValue(cut, out SortedList<int, SheetCellDecoration>? rows)
+                       || LastVisible(rows, columnStart[cut]) is null))
+            {
+                cut--;
+            }
+
+            return cut;
+        }
+
+        // The columns past the last formatted one are equal to one another for ever, so a walk
+        // that reaches the end has found a run without end and stops there.
+        return lastColumn;
+    }
+
+    /// <summary>Whether two columns paint the same thing on every row.</summary>
+    /// <remarks><c>ScAttrArray::IsVisibleEqual</c> over rows 0 to <c>MaxRow</c>.</remarks>
+    private static bool SameColumn(
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole, int left, int right)
+    {
+        whole.TryGetValue(left, out SortedList<int, SheetCellDecoration>? a);
+        whole.TryGetValue(right, out SortedList<int, SheetCellDecoration>? b);
+
+        if (a is null || b is null) return a is null && b is null;
+        if (a.Count != b.Count) return false;
+
+        for (int at = 0; at < a.Count; at++)
+        {
+            if (a.Keys[at] != b.Keys[at] || a.Values[at] != b.Values[at]) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
