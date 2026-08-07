@@ -360,15 +360,35 @@ public static partial class SlideTextLayout
     /// A paragraph's marker shaped and sized, or null when it draws none.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Shared by the placement and by the width the first line has to clear, so the two cannot
     /// disagree about how wide the bullet is — which would put the text a fraction of a point
     /// inside it or a fraction clear of it on every bulleted line in the deck.
+    /// </para>
+    /// <para>
+    /// <b>A paragraph with no text draws no marker</b>, and both of LibreOffice's presentation
+    /// readers say so in as many words. <c>oox/source/drawingml/textparagraph.cxx:193-197</c>
+    /// — "empty paragraphs do not have bullets in ppt" — sets <c>NumberingLevel</c> to −1 when
+    /// the paragraph's runs came to nothing, and
+    /// <c>filter/source/msfilter/svdfppt.cxx:2363-2366</c> — "in PPT empty paragraphs never gets
+    /// a bullet" — puts <c>EE_PARA_BULLETSTATE</c> false on the same condition. Both fire on the
+    /// paragraph's own character count and neither looks at what the level says, so an author's
+    /// blank line between two bullets is a blank line rather than a bare bullet.
+    /// </para>
+    /// <para>
+    /// Measured across the slides track by counting extracted lines holding nothing but a bullet
+    /// glyph: <b>75 of the 163 documents drew more of them than the reference, 2405 lines in
+    /// all</b> — 293 on <c>2015-Civil-Rights-Website-training.ppt</c>, 185 on
+    /// <c>71393_pp7.ppt</c>, 170 on <c>171128IPAP.pptx</c>. Both families, so it is this layout
+    /// rather than either reader.
+    /// </para>
     /// </remarks>
     private static MarkedParagraph? Shaped(
         SlideParagraph paragraph, Scaling scaling, SlideFonts fonts)
     {
         if (paragraph.Marker is not { } marker) return null;
         if (marker.Text.Length == 0) return null;
+        if (paragraph.Text.Length == 0) return null;
         if (paragraph.Runs.Count == 0) return null;
 
         SlideTextRun first = paragraph.Runs[0];
