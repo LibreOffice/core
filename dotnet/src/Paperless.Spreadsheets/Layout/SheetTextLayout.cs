@@ -924,7 +924,14 @@ internal static class SheetTextLayout
     {
         SheetTextRun? whole = shape(0, text.Length, percent);
         if (whole is null) return [];
-        if (available <= Length.Zero || whole.Width <= available) return [whole];
+
+        // A hard break is not a suggestion, so the "it all fits" shortcut cannot take it: the
+        // text has to reach the layouter, which breaks at one whatever the width says. Only the
+        // shortcut is conditional — a cell with no break in it measures and draws exactly as it
+        // did. `LineCount` beside this has always split on the break first, so before this the
+        // reserved row height and the drawn lines were computed by two rules that disagreed.
+        if (available <= Length.Zero || (whole.Width <= available && !HoldsHardBreak(text)))
+            return [whole];
 
         ParagraphLayouter layouter = Layouters.GetOrAdd(
             face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
@@ -944,12 +951,44 @@ internal static class SheetTextLayout
         {
             // To End rather than to VisibleEnd: Calc's own output shows a line's trailing spaces,
             // so a reference PDF's first wrapped line of "Wrapped text that needs …" holds
-            // eighteen glyphs, not the seventeen the visible text has.
-            if (shape(box.Line.Start, Math.Min(box.Line.End, text.Length), percent) is { } shaped)
-                lines.Add(shaped);
+            // eighteen glyphs, not the seventeen the visible text has. The break character
+            // itself is the one thing dropped — it is Writer's break portion, "zero width, and
+            // no glyph", and a cell whose lines carry it would both measure the character's
+            // advance into a centred line's width and put it in the PDF's text layer.
+            int start = box.Line.Start;
+            int end = Math.Min(box.Line.End, text.Length);
+            while (end > start && IsHardBreak(text[end - 1])) end--;
+
+            // Unless that leaves nothing: a break on its own is an empty line, and an empty line
+            // still takes a line's height. Shaping the break keeps it, since a run's height comes
+            // from the face rather than from its glyphs.
+            if (end == start) end = Math.Min(box.Line.End, text.Length);
+
+            if (shape(start, end, percent) is { } shaped) lines.Add(shaped);
         }
 
         return lines.Count == 0 ? [whole] : lines;
+    }
+
+    /// <summary>Whether a cell's text holds a break that starts a line whatever the width is.</summary>
+    /// <remarks>
+    /// The same two characters <see cref="LineCount"/> splits on, and deliberately no more: the
+    /// row height it derives and the lines <see cref="Wrap"/> draws have to be computed from one
+    /// rule. Every reader that can put a break inside a cell produces one of these — BIFF's own
+    /// U+000A survives <c>ReadRawUnicodeString</c> unchanged, SpreadsheetML writes
+    /// <c>&amp;#10;</c>, and ODF's <c>text:line-break</c> is read as <c>'\n'</c>.
+    /// </remarks>
+    private static bool IsHardBreak(char character) => character is '\n' or '\r';
+
+    /// <inheritdoc cref="IsHardBreak"/>
+    private static bool HoldsHardBreak(string text)
+    {
+        foreach (char c in text)
+        {
+            if (IsHardBreak(c)) return true;
+        }
+
+        return false;
     }
 
     /// <summary>A rich cell's text, shaped run by run so that it can be broken into lines.</summary>
