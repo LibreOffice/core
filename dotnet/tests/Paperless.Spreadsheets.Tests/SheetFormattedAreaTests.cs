@@ -123,4 +123,83 @@ public sealed class SheetFormattedAreaTests
 
         sink.Pages[0].Strokes.Count.ShouldBeGreaterThan(0, "the ruling reaches the page");
     }
+
+    /// <summary>
+    /// A filled cell keyed to a column, for the per-column scan below.
+    /// </summary>
+    private static (SheetFormatting Formatting, Dictionary<int, int> LastData) Filled(
+        (int Column, int First, int Last, bool HeadDiffers)[] bands,
+        params (int Column, int LastDataRow)[] data)
+    {
+        SheetFormatting formatting = new();
+        int fill = formatting.Intern(new SheetCellDecoration(Colour.FromRgb(0xDCE6F1), default));
+        int head = formatting.Intern(new SheetCellDecoration(
+            Colour.FromRgb(0xDCE6F1),
+            new SheetCellBorders(
+                SheetBorder.None,
+                SheetBorder.None,
+                SheetBorder.None,
+                SheetBorder.Line(Core.Units.Length.FromTwips(20), Colour.Black))));
+
+        foreach ((int column, int first, int last, bool headDiffers) in bands)
+        {
+            for (int row = first; row <= last; row++)
+                formatting.SetCell(row, column, headDiffers && row == first ? head : fill);
+        }
+
+        return (formatting, data.ToDictionary(x => x.Column, x => x.LastDataRow));
+    }
+
+    /// <summary>
+    /// An empty column's scan starts at its own last data row, which Calc reads as row zero.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScColumn::GetLastVisibleAttr</c> passes that column's own <c>GetLastDataPos()</c>, "0 if
+    /// none" (<c>sc/inc/column.hxx:892-897</c>). Column 4 here is filled on rows 1 to 100 and holds
+    /// nothing, and everything Calc uses from it is its <em>first</em> row: the 99 rows below are
+    /// one run past <c>SC_VISATTR_STOP</c> and end the scan. Starting the scan at the sheet's last
+    /// data row instead puts that row above the start and loses the column outright.
+    /// </para>
+    /// <para>
+    /// Column 2 is the other half. Filled on rows 1 to 84, it is inside the limit only because
+    /// <c>ScAttrArray::GetLastVisibleAttr</c> clamps a run's start to <c>nLastData + 1</c>
+    /// (<c>attarray.cxx:1961</c>) and so measures 83 rather than 84 — which is what makes "0 if
+    /// none" different from "no data at all", one row apart and worth one column of print area.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AnEmptyColumnIsScannedFromItsOwnLastDataRow()
+    {
+        (SheetFormatting formatting, Dictionary<int, int> lastData) = Filled(
+            [(2, 0, 83, false), (4, 0, 99, true)],
+            (0, 9), (1, 9));
+
+        SheetRange extended = SheetDecorationArea.Extend(new SheetRange(0, 0, 1, 9), formatting, lastData);
+
+        extended.LastColumn.ShouldBe(4, "column 4's first row is inside its own scan");
+        extended.LastRow.ShouldBe(83, "column 2's run measures 83 rows, one inside the limit");
+    }
+
+    /// <summary>
+    /// The same sheet as a document: the band Calc keeps is drawn, and it was not before.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's own rendering of <c>sheet-empty-column-band.fods</c> confirms the column
+    /// half — it paints column E's fill to the right edge of the block, 481 pt into a 596 pt page,
+    /// where columns A to D end at 397. The row half is not visible in a PDF from either side,
+    /// because the page rows 58 to 84 would add holds no data and Calc suppresses it.
+    /// </remarks>
+    [Fact]
+    public void AFilledColumnWithNoDataIsInsideThePrintedArea()
+    {
+        using IPaginatedDocument document = (IPaginatedDocument)PaperlessDocument.Open(
+            Corpus.Require("sheet-empty-column-band.fods"));
+
+        SpreadsheetPages pages = (SpreadsheetPages)document.Layout();
+        SheetRange printed = pages.Sheets[0].PrintedRange;
+
+        printed.LastColumn.ShouldBe(4, "column E is filled on every row and holds nothing");
+        printed.LastRow.ShouldBe(83, "column C's fill stops one row inside the run limit");
+    }
 }
