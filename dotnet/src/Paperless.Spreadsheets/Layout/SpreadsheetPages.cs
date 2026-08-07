@@ -11,7 +11,8 @@ namespace Paperless.Spreadsheets.Layout;
 /// </summary>
 public sealed class SheetPage : IPage
 {
-    private readonly SheetPageDrawing _drawing;
+    private readonly SheetPageDrawing? _drawing;
+    private readonly SheetNotePageDrawing? _notes;
 
     internal SheetPage(int index, int number, SheetLayout sheet, SheetPagePlacement placement)
     {
@@ -21,6 +22,25 @@ public sealed class SheetPage : IPage
         Placement = placement;
         _drawing = new SheetPageDrawing(sheet, placement);
     }
+
+    /// <summary>A page listing the sheet's notes rather than its cells.</summary>
+    /// <remarks>
+    /// A separate constructor rather than a flag on <see cref="SheetPagePlacement"/>, because a
+    /// note page holds no block of cells and no scale: <c>ScPrintFunc::PrintNotes</c> shares only
+    /// the paper, the margins and the furniture with <c>PrintPage</c> and draws everything else
+    /// itself (<c>sc/source/ui/view/printfun.cxx:2004-2066</c>).
+    /// </remarks>
+    internal SheetPage(int index, int number, SheetLayout sheet, IReadOnlyList<PlacedNote> notes)
+    {
+        Index = index;
+        Number = number;
+        Sheet = sheet;
+        Placement = default;
+        _notes = new SheetNotePageDrawing(sheet, notes);
+    }
+
+    /// <summary>True when the page lists the sheet's notes rather than its cells.</summary>
+    public bool IsNotePage => _notes is not null;
 
     /// <inheritdoc/>
     public int Index { get; }
@@ -58,7 +78,11 @@ public sealed class SheetPage : IPage
     public int PageCount { get; internal set; } = 1;
 
     /// <inheritdoc/>
-    public void Draw(IDrawingSink sink) => _drawing.Draw(sink, HeaderContext());
+    public void Draw(IDrawingSink sink)
+    {
+        if (_notes is { } notes) notes.Draw(sink, HeaderContext());
+        else _drawing?.Draw(sink, HeaderContext());
+    }
 
     /// <summary>
     /// What this page's header and footer fields stand for.
@@ -173,6 +197,17 @@ public sealed class SpreadsheetPages : IPageSequence
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 
                 pages.Add(new SheetPage(pages.Count, number, sheet, placement));
+                number++;
+            }
+
+            // The sheet's notes are listed after its cells and before the next sheet, which is
+            // where `ScPrintFunc::CountNotePages` puts them: the note pages are counted onto the
+            // end of the table's own page count (`printfun.cxx:2557`) and numbered with them.
+            foreach (IReadOnlyList<PlacedNote> notes in SheetNotePages.Paginate(sheet))
+            {
+                if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
+
+                pages.Add(new SheetPage(pages.Count, number, sheet, notes));
                 number++;
             }
         }

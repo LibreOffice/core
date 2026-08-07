@@ -217,6 +217,16 @@ public sealed record SheetPrintSetup
     /// <summary>True when the cell grid is printed.</summary>
     public bool PrintsGrid { get; init; }
 
+    /// <summary>True when the sheet's cell notes are listed on pages of their own after it.</summary>
+    /// <remarks>
+    /// Excel's "Comments: at end of sheet". <c>ATTR_PAGE_NOTES</c> in Calc, from
+    /// <c>EXC_SETUP_PRINTNOTES</c> in a BIFF <c>SETUP</c> record
+    /// (<c>sc/source/filter/excel/xipage.cxx:84</c>, <c>:257</c>) and from
+    /// <c>pageSetup/@cellComments</c> in SpreadsheetML. Pagination has to know: the pages are
+    /// extra ones after the sheet's content, not decoration on it. See <see cref="SheetNotes"/>.
+    /// </remarks>
+    public bool PrintsNotes { get; init; }
+
     /// <summary>True when the printed block is centred horizontally on the page.</summary>
     public bool CentresHorizontally { get; init; }
 

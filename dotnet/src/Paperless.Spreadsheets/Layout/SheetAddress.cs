@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Paperless.Spreadsheets.Layout;
 
 /// <summary>
@@ -71,6 +73,36 @@ public static class SheetAddress
             Math.Max(firstRow, lastRow));
 
         return range.IsValid;
+    }
+
+    /// <summary>
+    /// Writes an address back in A1 notation.
+    /// </summary>
+    /// <remarks>
+    /// The inverse of <see cref="TryParseCell"/>, undecorated: no dollars and no sheet name, which
+    /// is what <c>ScAddress::Format</c> gives for <c>ScRefFlags::VALID</c> alone and what Calc
+    /// prints beside a note (<c>sc/source/ui/view/printfun.cxx:1978</c>).
+    /// </remarks>
+    /// <param name="column">The zero-based column.</param>
+    /// <param name="row">The zero-based row.</param>
+    public static string Format(int column, int row)
+    {
+        if (column < 0 || row < 0) return string.Empty;
+
+        Span<char> letters = stackalloc char[4];
+        int at = letters.Length;
+        int remaining = column;
+
+        // Bijective base 26: A is 1 rather than 0, so Z is followed by AA and there is no digit
+        // that means nothing. Subtracting one before each division is what makes it bijective.
+        do
+        {
+            letters[--at] = (char)('A' + (remaining % 26));
+            remaining = (remaining / 26) - 1;
+        }
+        while (remaining >= 0 && at > 0);
+
+        return string.Concat(letters[at..], (row + 1).ToString(CultureInfo.InvariantCulture));
     }
 
     /// <summary>

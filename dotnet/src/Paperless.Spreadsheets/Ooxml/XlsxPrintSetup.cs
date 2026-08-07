@@ -164,6 +164,20 @@ internal static class XlsxPrintSetup
             RepeatRows = repeatRows,
             PrintsGrid = Xlsx.Flag(options, "gridLines"),
             PrintsHeadings = Xlsx.Flag(options, "headings"),
+
+            // `asDisplayed`, not `atEnd`, and that is not a slip. Calc has one mode — the notes
+            // are listed after the sheet — so its OOXML filter has to pick which of the two
+            // SpreadsheetML values turns it on, and it picks the other one:
+            // `PROP_PrintAnnotations` is set from `mnCellComments == XML_asDisplayed`
+            // (`sc/source/filter/oox/pagesettings.cxx:968`), where the BIFF filter sets the same
+            // property from `EXC_SETUP_PRINTNOTES` and the BIFF12 path maps *both* non-`none`
+            // values onto it (`:270`). Reading `atEnd` here instead would print pages the
+            // reference does not. Neither value appears in the corpus, so this follows the
+            // binary rather than a measurement.
+            PrintsNotes = string.Equals(
+                Xlsx.Attribute(setupElement, "cellComments"),
+                "asDisplayed",
+                StringComparison.Ordinal),
             CentresHorizontally = Xlsx.Flag(options, "horizontalCentered"),
             CentresVertically = Xlsx.Flag(options, "verticalCentered"),
 

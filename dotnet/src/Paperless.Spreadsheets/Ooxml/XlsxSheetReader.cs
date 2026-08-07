@@ -180,6 +180,37 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
         }
     }
 
+    /// <summary>
+    /// Reads a sheet's comments for the pages they may be listed on.
+    /// </summary>
+    /// <remarks>
+    /// The same part <see cref="ReadComments"/> reads, and read again rather than shared, because
+    /// the two want different things: extraction wants the author and the text as a section, and
+    /// layout wants the cell and the text as one string. Splicing the address into the extraction
+    /// path to serve both would change what a caller indexing a workbook sees.
+    /// </remarks>
+    /// <param name="sheet">The sheet.</param>
+    public SheetNotes ReadNotes(XlsxSheetEntry sheet)
+    {
+        XElement? root = _file.LoadComments(sheet);
+        if (root is null) return SheetNotes.Empty;
+
+        List<SheetNote> notes = [];
+        foreach (XElement comment in Xlsx.Children(Xlsx.Child(root, "commentList"), "comment"))
+        {
+            string text = XlsxSharedStrings.ReadRichString(Xlsx.Child(comment, "text"));
+            if (text.Length == 0) continue;
+
+            if (!SheetAddress.TryParseCell(Xlsx.Attribute(comment, "ref"), out int column, out int row))
+                continue;
+            if (column < 0 || row < 0) continue;
+
+            notes.Add(new SheetNote(column, row, text));
+        }
+
+        return notes.Count == 0 ? SheetNotes.Empty : new SheetNotes { Items = notes };
+    }
+
     private void FlushEmptyRows(List<ContentTableRow> rows, int beforeRow, ref int pending)
     {
         if (pending == 0) return;

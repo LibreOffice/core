@@ -55,6 +55,17 @@ internal static class BiffPageRecords
     /// <summary>Set when <c>SETUP</c>'s start page is meant rather than the sheet continuing.</summary>
     public const ushort SetupStartPage = 0x0080;
 
+    /// <summary>
+    /// Excel's "Comments: at end of sheet": the cell notes are listed after the sheet.
+    /// </summary>
+    /// <remarks>
+    /// <c>EXC_SETUP_PRINTNOTES</c> (<c>sc/source/filter/inc/xlpage.hxx:89</c>), read only from
+    /// BIFF5 — <c>XclImpPageSettings::ReadSetup</c> takes it inside the same
+    /// <c>GetBiff() &gt;= EXC_BIFF5</c> branch as the draft-quality and start-page flags
+    /// (<c>xipage.cxx:75-86</c>).
+    /// </remarks>
+    public const ushort SetupPrintNotes = 0x0020;
+
     /// <summary>Portrait, when <see cref="SetupInvalid"/> is clear.</summary>
     public const ushort SetupPortrait = 0x0002;
 
@@ -133,6 +144,7 @@ internal sealed class XlsSheetPrintState
     private bool _centresVertically;
     private bool _printsHeadings;
     private bool _printsGrid;
+    private bool _printsNotes;
     private string? _header;
     private string? _footer;
 
@@ -173,6 +185,7 @@ internal sealed class XlsSheetPrintState
         // and, less obviously, the scale.
         _setupIsValid = (flags & BiffPageRecords.SetupInvalid) == 0;
         _usesStartPage = (flags & BiffPageRecords.SetupStartPage) != 0;
+        _printsNotes = (flags & BiffPageRecords.SetupPrintNotes) != 0;
 
         if (headerMargin is { } header) _headerMargin = header;
         if (footerMargin is { } footer) _footerMargin = footer;
@@ -395,6 +408,7 @@ internal sealed class XlsSheetPrintState
             PageOrder = _printsInRows ? PagePrintOrder.AcrossThenDown : PagePrintOrder.DownThenAcross,
             PrintsGrid = _printsGrid,
             PrintsHeadings = _printsHeadings,
+            PrintsNotes = _printsNotes,
             CentresHorizontally = _centresHorizontally,
             CentresVertically = _centresVertically,
             FirstPageNumber = _usesStartPage ? _startPage : 0,
