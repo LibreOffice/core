@@ -353,6 +353,19 @@ writes that cell as a single `table:table-cell` holding **four `<text:p>` elemen
 containing a newline — checked on `ECA Sinters.xls` too, also zero — so the break is lost in the
 BIFF reader rather than in the layout.
 
+> **Disproved, and both halves of it.** The BIFF reader keeps every break. Counted on the
+> same two exports rather than argued: LibreOffice's `.ods` of this workbook holds **578**
+> multi-paragraph `table:table-cell` elements out of 1505 cells, and our own XHTML extraction
+> of it holds **578** `<br/>` — the same number, cell for cell, and `<p>ME 2.1<br />ME 2.2<br
+> />PO 9.5<br />PO 9.6</p>` is line 158 of it. `BiffRecordReader.ReadRawUnicodeString` appends
+> U+000A like any other code point and nothing downstream removes it; `ContentTableCell`
+> strips only a *trailing* newline. **1403 is not a count of multi-paragraph cells in that
+> file** and no measurement in the tree reproduces it.
+>
+> This is render-comparison's rule 7 exactly — extraction is right and rendering is wrong, so
+> the defect is in the value only rendering resolves. Everything below the line about
+> `SheetTextLayout` stands; everything above it about the reader does not.
+
 Two things to hold onto before starting:
 
 - **`SheetTextLayout.Wrap` would drop them anyway**, even once the reader keeps them. Its first
