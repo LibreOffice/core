@@ -187,7 +187,7 @@ pinned on `2015-Civil-Rights-Website-training.ppt` page 21 to a **16 mm100 windo
 
 Per project, each run redirected to its own file, on the final tree: Core 243, Text 237,
 Containers 109, Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608,
-Spreadsheets 432, Presentations 516, Fidelity 542. **Zero failed and zero skipped throughout.**
+Spreadsheets 432, Presentations 517, Fidelity 542. **Zero failed and zero skipped throughout.**
 
 Nothing outside `Paperless.Presentations/Ooxml` was touched, so the words and sheets tracks are
 not owed a sweep.

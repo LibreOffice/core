@@ -5509,7 +5509,7 @@ that moved is a `.pptx`.
 
 Per project on the final tree, each run redirected to its own file: Core 243, Text 237,
 Containers 109, Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608,
-Spreadsheets 432, Presentations 516, Fidelity 542. **Zero failed and zero skipped throughout.**
+Spreadsheets 432, Presentations 517, Fidelity 542. **Zero failed and zero skipped throughout.**
 
 Three assertions, each verified by putting the fallback back and watching it fail:
 `AMastersOtherStyleReachesNothingThatHasText`,
