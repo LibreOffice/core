@@ -2235,7 +2235,8 @@ binaries and joined to the reference column of the sweeps:
    21/21  /23        4124/4123  /4142    a word   words/batch-017/doc/762.doc
 ```
 
-**Three of the 40 moved and 37 are identical to the byte.** The words document moves by one word
+**Three of the 40 moved; the other 37 have an identical page count and word count** — which is
+what was measured, and is weaker than "identical output". The words document moves by one word
 inside a 2% band it already passed, on a document failing on pagination in both binaries — its
 verdict is `pages` before and after. Nothing regressed anywhere.
 
