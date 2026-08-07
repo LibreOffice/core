@@ -1871,7 +1871,9 @@ AS_IF([test -n "$OPENSSL_ENGINE_LIB" -a -f "$OPENSSL_ENGINE_LIB/libssl.a"],
       [AC_MSG_NOTICE([using OpenSSL built in the engine: $OPENSSL_ENGINE_LIB])
        CPPFLAGS="$CPPFLAGS -isystem ${OPENSSL_ENGINE_INCLUDE}"
        LDFLAGS="$LDFLAGS -L${OPENSSL_ENGINE_LIB}"],
-      [AC_MSG_NOTICE([OpenSSL not built in the engine workdir, falling back to system OpenSSL])])
+      [AC_MSG_NOTICE([OpenSSL not built in the engine workdir, falling back to system OpenSSL])
+       OPENSSL_ENGINE_INCLUDE=
+       OPENSSL_ENGINE_LIB=])
 
 AS_IF([test -n "$ZSTDINCLUDE"],
       [CPPFLAGS="$CPPFLAGS -isystem ${ZSTDINCLUDE}"])
@@ -2272,7 +2274,14 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
            AC_DEFINE([DISABLE_SECCOMP],1,[Whether to disable SECCOMP])
        fi
 
-       PKG_CHECK_MODULES([OPENSSL], [openssl])
+       dnl OpenSSL, like libpng and zstd above: the engine's own copy when it
+       dnl built one (there is no openssl.pc to ask pkg-config for then, and a
+       dnl packaging container need not have a system OpenSSL at all), the
+       dnl system one otherwise.
+       AS_IF([test -n "$OPENSSL_ENGINE_LIB"],
+             [OPENSSL_CFLAGS="-isystem $OPENSSL_ENGINE_INCLUDE"
+              OPENSSL_LIBS="-L$OPENSSL_ENGINE_LIB -lssl -lcrypto"],
+             [PKG_CHECK_MODULES([OPENSSL], [openssl])])
        AC_MSG_CHECKING([whether OpenSSL is recent enough])
        AC_COMPILE_IFELSE([AC_LANG_SOURCE([
        #include <openssl/opensslv.h>
