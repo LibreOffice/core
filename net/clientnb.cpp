@@ -51,7 +51,9 @@ using Poco::Net::WebSocket;
 
 const char *const HostName = "127.0.0.1";
 constexpr int HttpPortNumber = 9191;
+#if ENABLE_SSL
 constexpr int SslPortNumber = 9193;
+#endif
 
 static bool EnableHttps = false;
 bool EnableExperimental = false;
