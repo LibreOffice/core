@@ -79,7 +79,7 @@ internal static class SheetBandText
     /// </summary>
     /// <remarks>
     /// Ascent plus descent plus the line gap, which is the face's own line height and not
-    /// <see cref="LineHeightAt"/>'s. The two differ because a chart is not laid out by Calc: its
+    /// <see cref="LineHeightAt(Length)"/>'s. The two differ because a chart is not laid out by Calc: its
     /// labels are made by <c>chart2</c>'s view as plain text shapes, which take the face's metrics
     /// whole, where a cell's height comes from <c>ScDrawStringsVars</c> and drops the gap
     /// (<c>sc/source/ui/view/output2.cxx:734</c>). Liberation Sans is 1.1499 em here against
@@ -115,6 +115,14 @@ internal static class SheetBandText
     /// <param name="family">The family name, or null for the furniture's own face.</param>
     public static Length AscentAt(Length size, string? family)
         => FaceFor(family).Metrics is { } metrics ? metrics.ScaledAscent(size) : size * 0.9;
+
+    /// <inheritdoc cref="LineHeightAt(Length)"/>
+    /// <param name="size">The em size.</param>
+    /// <param name="family">The family name, or null for the furniture's own face.</param>
+    public static Length LineHeightAt(Length size, string? family)
+        => FaceFor(family).Metrics is { } metrics
+            ? metrics.ScaledAscent(size) + metrics.ScaledDescent(size)
+            : size * 1.15;
 
     /// <inheritdoc cref="ChartLineHeightAt(Length)"/>
     /// <param name="size">The em size.</param>
