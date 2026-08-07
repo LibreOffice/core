@@ -170,7 +170,7 @@ public static partial class SlideTextLayout
         if (!body.AutoFit) return Scaling.Stated(body);
         if (area.Height <= Length.Zero) return Scaling.None;
 
-        const double fontHeightPoints = GridFontHeightPoints;
+        double fontHeightPoints = GridFontHeightPoints(body);
 
         Dictionary<(double, double), double> measured = [];
 
@@ -237,32 +237,75 @@ public static partial class SlideTextLayout
     }
 
     /// <summary>
+    /// The pool default the reference falls back on: 24 pt, held as 847 hundredths of a
+    /// millimetre.
+    /// </summary>
+    /// <remarks>
+    /// <c>SdrEngineDefaults::GetFontHeight()</c> is <c>o3tl::convert(24, pt, mm100)</c>
+    /// (<c>include/svx/svdetc.hxx:69</c>) and <c>SdrModel</c> makes it the pool's
+    /// <c>EE_CHAR_FONTHEIGHT</c> (<c>svdmodel.cxx:133</c>, <c>SetTextDefaults</c>). 24 pt is
+    /// 846.67 hundredths of a millimetre, which that conversion rounds to <strong>847</strong> —
+    /// and the rounding is the point, not a detail. See <see cref="GridFontHeightPoints"/>.
+    /// </remarks>
+    private const long DefaultFontHeightMm100 = 847;
+
+    /// <summary>
     /// The font height the search snaps its candidates to, in points.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The reference reads <c>EE_CHAR_FONTHEIGHT</c> off the <em>object's</em> item set — the
-    /// shape's default character height, not any run's — and uses it for one purpose: each
-    /// candidate scale is floored to a tenth of a point <em>of that height</em> before it is
-    /// tried, so the search walks a grid of <c>0.1 / height</c> rather than a continuum.
-    /// Paperless models no such default, so this is EditEngine's own: 240 twips, twelve points
-    /// (<c>editeng/source/editeng/eerdll.cxx:130</c>).
+    /// The reference reads <c>EE_CHAR_FONTHEIGHT</c> off the <em>object's</em> item set and uses
+    /// it for one purpose: each candidate scale is floored to a tenth of a point <em>of that
+    /// height</em> before it is tried, so the search walks a grid of <c>0.1 / height</c> rather
+    /// than a continuum.
     /// </para>
     /// <para>
-    /// <strong>The largest run's size is the wrong answer, and it is the tempting one.</strong>
-    /// Measured over 227 probe boxes — a text box per box height from 8 to 100 pt at 25, 32 and
-    /// 40 pt, one line and two, in four faces — taking the grid from the run's own size agrees
-    /// with the reference on 210 and the fixed twelve agrees on 225. The failures are not near
-    /// misses: a 40 pt line in a 20 pt box comes out at 17 pt against the reference's 19,
-    /// because the grid decides which candidates the bisection ever visits and a grid derived
-    /// from the run steps straight past the answer.
+    /// <strong>It is a length in hundredths of a millimetre, and it is therefore never a whole
+    /// number of points.</strong> That is the whole of this method, and getting it wrong was
+    /// worth six of thirty-three probe boxes. <c>autoFitTextForCompatibility</c> converts the
+    /// item's height from hundredths of a millimetre
+    /// (<c>svx/source/svdraw/svdotext.cxx</c>, 24.2.7), so a 20 pt default is 706 units and comes
+    /// back as <strong>20.0126 pt</strong>, not 20. The difference decides which candidates the
+    /// bisection ever visits: at the 87.5 per cent candidate a grid of exactly 12 puts the scaled
+    /// size on precisely 17.5 pt, which rounds <em>up</em> to 18, overshoots the box, and drops
+    /// the search's ceiling below every larger candidate; the reference's 11.99055 lands the same
+    /// candidate on 17.489, rounds <em>down</em> to 17, and the search keeps climbing. Every
+    /// disagreement measured was that shape — we settled for a looser fit than the reference.
     /// </para>
     /// <para>
-    /// Twelve is not the only value that works — 18 and 20 also agree on 225 of the 227, while
-    /// 16 and 24 agree on 208. So the grid is load-bearing and its exact value, within a band,
-    /// is not; twelve is chosen because it is the one the reference would actually hold for a
-    /// shape that states no default of its own.
+    /// Measured on two probe decks of 33 autofit boxes each, one stating 20 pt and one 40 pt,
+    /// simulating 24.2.7's search against its own rendering
+    /// (<c>research/probes/slides-r15/sim-autofit.py</c>). A round twelve agrees on
+    /// <strong>27 of 33 and 33 of 33</strong>; the body's own character height through hundredths
+    /// of a millimetre agrees on <strong>33 and 33</strong>. The pool default alone — 847 units,
+    /// 24.00945 pt — manages 33 and 30, which is what refutes reading a fixed default here.
+    /// </para>
+    /// <para>
+    /// <strong>Which run's height, when a body states several, is not separated by any probe
+    /// here.</strong> A deck putting a 20 pt paragraph in front of three 40 pt ones comes back
+    /// 33 of 33 under either reading, so first-run and largest-run are indistinguishable on the
+    /// evidence; the largest is taken because it is the more stable of the two — a body's leading
+    /// run is as often a stray label as its dominant size. Treat that half as inferred.
+    /// </para>
+    /// <para>
+    /// The predecessor of this note recorded the opposite conclusion — that a fixed twelve beat
+    /// the run's own size, 225 probe boxes to 210. It was measured with the run's size in
+    /// <em>points</em>, which for the 25, 32 and 40 pt boxes it used is a whole number every
+    /// time, so what that experiment actually compared was two whole-point grids.
     /// </para>
     /// </remarks>
-    private const double GridFontHeightPoints = 12.0;
+    private static double GridFontHeightPoints(SlideTextBody body)
+    {
+        long mm100 = 0;
+
+        foreach (SlideParagraph paragraph in body.Paragraphs)
+        {
+            foreach (SlideTextRun run in paragraph.Runs)
+            {
+                if (run.Size.Mm100 > mm100) mm100 = run.Size.Mm100;
+            }
+        }
+
+        return (mm100 > 0 ? mm100 : DefaultFontHeightMm100) / Mm100PerPoint;
+    }
 }

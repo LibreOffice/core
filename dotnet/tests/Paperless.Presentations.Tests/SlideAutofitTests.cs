@@ -2,6 +2,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Presentations.Layout;
+using Paperless.Text.Layout;
 using Shouldly;
 
 namespace Paperless.Presentations.Tests;
@@ -15,17 +16,25 @@ namespace Paperless.Presentations.Tests;
 /// plain text boxes — one shape per box height, an <c>a:normAutofit</c> on each, a throwaway
 /// shape first so nothing measures the reference's shared-outliner state leak — converted by
 /// <c>soffice --convert-to pdf</c>, with the drawn em size read back out of the content stream's
-/// <c>Tf</c> operator. Across 227 such boxes at 25, 32 and 40 pt in four faces, Paperless now
-/// agrees with the reference on 225.
+/// <c>Tf</c> operator. Across 227 such boxes at 25, 32 and 40 pt in four faces, Paperless agrees
+/// with the reference on 225; across a further 66 that wrap and space their lines at 80 per cent
+/// (<c>research/probes/slides-r15</c>), on 62.
 /// </para>
 /// <para>
 /// The sizes look arbitrary and are not. The search bisects a font scale between nothing and
-/// one, ten halvings deep, snapping each candidate down to a tenth of a point of a twelve-point
-/// grid, and keeps the <em>closest fit at or above one</em> it saw anywhere — not the last one it
-/// tried. So the answer is not monotonic in the box: a 28 pt box keeps 30 pt by tightening its
-/// lines to four-fifths, and a 32 pt box, which has more room, drops to 27 pt at full spacing
-/// because that is a closer fit than anything else the bisection visited. Both are what
-/// LibreOffice draws.
+/// one, ten halvings deep, snapping each candidate down to a tenth of a point of the body's own
+/// character height, and keeps the <em>closest fit at or above one</em> it saw anywhere — not the
+/// last one it tried. So the answer is not monotonic in the box: a 28 pt box keeps 30 pt by
+/// tightening its lines to four-fifths, and a 32 pt box, which has more room, drops to 27 pt at
+/// full spacing because that is a closer fit than anything else the bisection visited. Both are
+/// what LibreOffice draws.
+/// </para>
+/// <para>
+/// <strong>That grid is a length in hundredths of a millimetre and is therefore never a whole
+/// number of points</strong>, which decides four of the six cases in
+/// <see cref="AWrappingBodyLandsOnTheReferencesSizeAndSpacing"/>. The boxes above are all
+/// single-line or two-line bodies at one size and none of them turns on it, so they passed under
+/// the whole-point grid this file used to describe as well — which is why they did not catch it.
 /// </para>
 /// <para>
 /// The sizes are reported in hundredths of a millimetre rather than in points because that is
@@ -199,6 +208,110 @@ public class SlideAutofitTests
         Length unfitted = Baseline(body with { AutoFit = false }, boxHeightPoints: 200);
 
         (fitted - unfitted).Points.ShouldBe(48.0, tolerance: 0.5);
+    }
+
+    /// <summary>
+    /// A wrapping body at 80 per cent line spacing lands on the size and the spacing scale the
+    /// reference chooses, including the four boxes a whole-point candidate grid gets wrong.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The fixture is <c>tests/corpus/features/slide-autofit-grid.pptx</c>, one 360 pt-wide box
+    /// per slide holding three paragraphs of the same sentence at 20 pt with
+    /// <c>a:lnSpc/a:spcPct val="80000"</c> and <c>a:normAutofit</c>. Every expectation below is
+    /// read out of <c>soffice --convert-to pdf</c>'s own content stream — the em size from
+    /// <c>Tf</c> and the spacing scale from the baseline pitch over
+    /// <c>1.2 x size x 0.8</c> — with <c>research/probes/slides-r15/read-autofit.py</c>.
+    /// </para>
+    /// <para>
+    /// <strong>Four of the six fail against a grid of exactly twelve points</strong>, which is
+    /// what this file's predecessor shipped: 110 pt comes out 15 pt at four-fifths spacing rather
+    /// than 14 at nine-tenths, 135 pt comes out 15 pt at full spacing rather than 17 at
+    /// nine-tenths, and 175 and 200 pt both come out 18 pt rather than 19. The other two are
+    /// controls that a whole-point grid already gets right, so the test distinguishes the change
+    /// from a blanket shift. See <c>SlideAutofit.GridFontHeightPoints</c>.
+    /// </para>
+    /// <para>
+    /// The pitch is allowed a twentieth of a point because it is not the quantity under test and
+    /// we do not yet compute it in the reference's unit: <c>SlideTextLayout.Spacing</c> puts a
+    /// proportional line height through whole twips, where EditEngine works in hundredths of a
+    /// millimetre, which costs up to a fortieth of a point a line. The em size is asserted exactly.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData(90, 459, 10.006)]
+    [InlineData(110, 494, 12.103)]
+    [InlineData(135, 600, 14.683)]
+    [InlineData(150, 600, 16.327)]
+    [InlineData(175, 670, 14.598)]
+    [InlineData(200, 670, 16.412)]
+    public void AWrappingBodyLandsOnTheReferencesSizeAndSpacing(
+        double boxHeightPoints, long expectedMm100, double expectedPitchPoints)
+    {
+        SlideTextBody body = Wrapping(20, paragraphs: 3, proportion: 0.8);
+        DocRect area = new(
+            Length.Zero, Length.Zero, Length.FromPoints(360), Length.FromPoints(boxHeightPoints));
+
+        List<PlacedGlyphRun> placed = SlideTextLayout.Place(body, area, new SlideFonts());
+        placed.ShouldNotBeEmpty();
+
+        placed[0].Run.FontSize.Mm100.ShouldBe(expectedMm100);
+        Pitch(placed).Points.ShouldBe(expectedPitchPoints, tolerance: 0.05);
+    }
+
+    /// <summary>The smallest gap between two distinct baselines, which is one line's height.</summary>
+    /// <remarks>
+    /// The smallest rather than the first, because a paragraph boundary carries the paragraph's
+    /// own spacing on top of the line and would measure that instead.
+    /// </remarks>
+    private static Length Pitch(List<PlacedGlyphRun> placed)
+    {
+        List<double> baselines = [.. placed.Select(p => p.Run.Origin.Y.Emu).Distinct().Order()
+            .Select(y => (double)y)];
+
+        baselines.Count.ShouldBeGreaterThan(1);
+
+        double smallest = double.MaxValue;
+        for (int i = 1; i < baselines.Count; i++)
+        {
+            smallest = Math.Min(smallest, baselines[i] - baselines[i - 1]);
+        }
+
+        return Length.FromEmu((long)smallest);
+    }
+
+    /// <summary>
+    /// The probe deck's body: three paragraphs of one long sentence at one size, wrapping.
+    /// </summary>
+    /// <remarks>
+    /// The sentence and the face are the fixture's, so the line counts are the ones both
+    /// renderers were measured to agree on — six lines up to 12 pt, nine to 17 and twelve beyond.
+    /// A wrapping body is what makes the fit search interesting: the line count changes under it,
+    /// so the height is not linear in the size and the search's path decides the answer.
+    /// </remarks>
+    private static SlideTextBody Wrapping(double points, int paragraphs, double proportion)
+    {
+        const string sentence =
+            "Proficient in more than one language and able to convey meaning "
+            + "accurately between two parties without adding or omitting anything";
+
+        return new SlideTextBody
+        {
+            AutoFit = true,
+            FontIndependentLineSpacing = true,
+            Insets = new Margins(Length.Zero, Length.Zero, Length.Zero, Length.Zero),
+            Paragraphs =
+            [
+                .. Enumerable.Range(0, paragraphs).Select(_ => new SlideParagraph(
+                    sentence,
+                    [
+                        new SlideTextRun(
+                            0, sentence.Length, "Liberation Sans", Length.FromPoints(points), 400,
+                            false, Colour.Black),
+                    ],
+                    LineSpacing: LineSpacingRule.Multiple(proportion))),
+            ],
+        };
     }
 
     /// <summary>Where the first glyph run's baseline lands.</summary>
