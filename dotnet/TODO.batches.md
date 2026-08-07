@@ -4580,3 +4580,32 @@ The deck names four faces: Arial, Times, Verdana and Wingdings. The reference re
 them to a serif, which makes `Times` — the bare name, not `Times New Roman` — the candidate to
 check first. One run, one page, and the whole of the round-fourteen regression.
 
+
+## Slides, round sixteen: the round-fifteen work was not merged, and the sweep it "never ran" exists
+
+Two corrections to the record before any measurement, both found by checking rather than by
+being told.
+
+**The autofit grid fix was not on the track branch.** The brief for this round said round
+fifteen's fix "is merged and is on your base". It was not: `0264f7f86` and the five commits
+around it were reachable only from `worktree-agent-a3b51381a3030c1ce`, and
+`claude/paperless-odf-phase-1-rnyzcu` at `54729fdc7` did not contain them
+(`git branch -a --contains 0264f7f86` names exactly one branch). This worktree was
+additionally **402 commits behind** that branch — the sixth agent in a row to open on a stale
+base, and the first for which fast-forwarding was not sufficient, because the work being built
+on had never reached the branch at all. Both were repaired before anything was measured:
+fast-forward to `54729fdc7`, then merge the six round-fifteen commits, keeping *both* sides of
+the one `TODO.batches.md` conflict (the words round-fifteen section and the slides one were
+appended at the same anchor).
+
+**A post-fix whole-track sweep does exist**, contrary to "its whole-track sweep never ran":
+`scratchpad/sl15-grid/` holds a complete 163-row `rows.tsv` and `ink.tsv`, written at 11:41
+against a fix committed at 11:16, and its ink column differs from the pre-fix `sl15-base/`
+on dozens of documents rather than being a copy. Its TSVs are preserved at
+`scratchpad/slides-r16-keep/`.
+
+**It still does not describe this tree, and that is the point worth keeping.** It was measured
+18 commits back, and those 18 commits include `d3bf1c445` — a `Paperless.Text` change to how a
+font substitution chain is resolved, which is a shared layer below every slide. A sweep of the
+slides track taken before it is not a baseline for a tree that has it. The round's own baseline
+is measured fresh, and the r15 numbers are kept only to compare against.
