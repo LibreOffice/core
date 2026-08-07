@@ -728,6 +728,10 @@ class SettingIframe {
 		extensionsUpload: () => this.settingConfigBasePath() + '/extensions/',
 	};
 	private browserSettingOptions: Record<string, any> = {};
+	// The Interface Settings as browsersetting.json holds them, before the
+	// built-in defaults are merged in. A key is absent or empty when the user has
+	// saved no choice of their own for it.
+	private storedBrowserSetting: Record<string, any> = {};
 
 	getViewSettings(): ViewSettings {
 		return this._viewSetting;
@@ -1554,6 +1558,8 @@ class SettingIframe {
 				this.browserSettingOptions = JSON.parse(
 					JSON.stringify(defaultBrowserSetting),
 				);
+				// A reset drops every choice the user had saved.
+				this.storedBrowserSetting = {};
 				this.createBrowserSettingForm(sharedConfigsContainer);
 			},
 			true, // icon-only
@@ -3349,13 +3355,17 @@ class SettingIframe {
 						await this.settingsStorage.fetchSettingFile(
 							data.browsersetting[0].uri,
 						);
+					this.storedBrowserSetting = browserSettingContent
+						? JSON.parse(browserSettingContent)
+						: {};
 					this.browserSettingOptions = browserSettingContent
 						? this.mergeWithDefault(
 								defaultBrowserSetting,
-								JSON.parse(browserSettingContent),
+								this.storedBrowserSetting,
 							)
 						: defaultBrowserSetting;
 				} else {
+					this.storedBrowserSetting = {};
 					this.browserSettingOptions = defaultBrowserSetting;
 				}
 				this.createBrowserSettingForm(settingsContainer);
