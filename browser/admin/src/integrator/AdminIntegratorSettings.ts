@@ -616,6 +616,7 @@ class SettingIframe {
 		lockAccessibilityOn: _('In-document Screen Reader'),
 		darkTheme: _('Dark Mode'),
 		spellOnline: _('Automatic Spell Checking'),
+		followServerZoom: _("Use this server's zoom settings"),
 		smartZoom: _('Smart Zoom'),
 		defaultZoom: _('Default Zoom'),
 		smoothScroll: _('Smooth scrolling'),
@@ -771,9 +772,8 @@ class SettingIframe {
 		if (this._browserSettingSection) {
 			saves.push(
 				(async () => {
-					this.collectBrowserSettingsFromUI();
 					const file = new File(
-						[JSON.stringify(this.browserSettingOptions)],
+						[this.browserSettingsPayload()],
 						'browsersetting.json',
 						{ type: 'application/json', lastModified: Date.now() },
 					);
@@ -1369,6 +1369,16 @@ class SettingIframe {
 		zoomContainer.className = 'section';
 		zoomContainer.appendChild(this.createHeading(_('Zoom Behaviour')));
 
+		// The checkbox starts from what has been saved and is read back off the
+		// page when saving, so the object it writes into is a throwaway.
+		zoomContainer.appendChild(
+			this.createCheckboxToggle(
+				'followServerZoom',
+				this.isFollowingServerZoom(),
+				'common-followServerZoom',
+				{},
+			),
+		);
 		zoomContainer.appendChild(
 			this.createCheckboxToggle(
 				'smartZoom',
@@ -1407,12 +1417,39 @@ class SettingIframe {
 		container.appendChild(this.createParagraph(text));
 	}
 
-	private _updateZoomDropdownState() {
+	// True when the user has saved no zoom choice of their own. The zoom the
+	// server configured applies then, and goes on applying as the server changes
+	// it.
+	private isFollowingServerZoom(): boolean {
+		const isChosen = (value: any) =>
+			value !== undefined && value !== null && value !== '';
+		return (
+			!isChosen(this.storedBrowserSetting.smartZoom) &&
+			!isChosen(this.storedBrowserSetting.defaultZoom)
+		);
+	}
+
+	private _updateZoomControlsState() {
+		const followServerZoomCheckbox: HTMLInputElement | null =
+			document.querySelector('#common-followServerZoom-input');
+		if (!followServerZoomCheckbox) {
+			console.error('#common-followServerZoom-input does not exist!');
+			return;
+		}
+
 		const smartZoomCheckbox: HTMLInputElement | null = document.querySelector(
 			'#common-smartZoom-input',
 		);
 		if (!smartZoomCheckbox) {
 			console.error('#common-smartZoom-input does not exist!');
+			return;
+		}
+
+		const smartZoomWrapper: HTMLElement | null = document.querySelector(
+			'#common-smartZoom-container',
+		);
+		if (!smartZoomWrapper) {
+			console.error('#common-smartZoom-container does not exist!');
 			return;
 		}
 
@@ -1433,20 +1470,31 @@ class SettingIframe {
 			return;
 		}
 
-		const updateDropdownState = () => {
-			defaultZoomDropdown.disabled = smartZoomCheckbox.checked;
-			if (smartZoomCheckbox.checked) {
-				defaultZoomLabel.classList.add('disabled-label');
-			} else {
-				defaultZoomLabel.classList.remove('disabled-label');
-			}
+		const updateControlsState = () => {
+			const followsServer = followServerZoomCheckbox.checked;
+			smartZoomCheckbox.disabled = followsServer;
+			smartZoomWrapper.classList.toggle(
+				'checkbox-radio-switch--disabled',
+				followsServer,
+			);
+			// Smart zoom fits the document to the window, so it decides the zoom
+			// on its own and leaves the dropdown with nothing to say.
+			defaultZoomDropdown.disabled = followsServer || smartZoomCheckbox.checked;
+			defaultZoomLabel.classList.toggle(
+				'disabled-label',
+				defaultZoomDropdown.disabled,
+			);
 		};
 
-		smartZoomCheckbox.addEventListener('change', () => {
-			updateDropdownState();
+		followServerZoomCheckbox.addEventListener('change', () => {
+			updateControlsState();
 		});
 
-		updateDropdownState();
+		smartZoomCheckbox.addEventListener('change', () => {
+			updateControlsState();
+		});
+
+		updateControlsState();
 	}
 
 	/** The way we construct the list of toggles is really brittle, there's no
@@ -1462,6 +1510,12 @@ class SettingIframe {
 	 */
 	public addSubElements() {
 		this.addCheckboxDescription(
+			'#common-followServerZoom-container',
+			_(
+				'When on, text documents open at the zoom this server chooses. Turn it off to choose the zoom yourself.',
+			),
+		);
+		this.addCheckboxDescription(
 			'#common-smartZoom-container',
 			_(
 				'When on, Writer fits the document to the viewport width on open. When off, the document opens at the Default Zoom level set below.',
@@ -1476,7 +1530,7 @@ class SettingIframe {
 	 * setup listeners...
 	 */
 	public installSettingsHooks() {
-		this._updateZoomDropdownState();
+		this._updateZoomControlsState();
 	}
 
 	private createBrowserSettingTabsNav(
@@ -1573,10 +1627,9 @@ class SettingIframe {
 			['button-primary'],
 			async (button) => {
 				button.disabled = true;
-				this.collectBrowserSettingsFromUI();
 
 				const file = new File(
-					[JSON.stringify(this.browserSettingOptions)],
+					[this.browserSettingsPayload()],
 					'browsersetting.json',
 					{
 						type: 'application/json',
@@ -1893,6 +1946,28 @@ class SettingIframe {
 		);
 	}
 
+	// The Interface Settings as they should be written to browsersetting.json,
+	// collected from what the page shows.
+	private browserSettingsPayload(): string {
+		this.collectBrowserSettingsFromUI();
+
+		const settings = { ...this.browserSettingOptions };
+
+		const followServerZoomCheckbox =
+			this._zoomSection?.querySelector<HTMLInputElement>(
+				'#common-followServerZoom-input',
+			);
+		// An empty zoom is what the document, the settings form and the zoom
+		// dropdown all read as "the user chose none of their own", so it is how a
+		// user hands the choice back to the server.
+		if (followServerZoomCheckbox?.checked) {
+			settings.smartZoom = '';
+			settings.defaultZoom = '';
+		}
+
+		return JSON.stringify(settings);
+	}
+
 	/**!
 	 * Reads the Interface Settings back off the page. They are shown in two
 	 * sections, the Interface Settings and the Zoom Behaviour beside it.
@@ -1929,6 +2004,10 @@ class SettingIframe {
 			}
 
 			if (sectionRaw === 'common') {
+				// Following the server is not a setting of its own. It is written
+				// out as an empty zoom, which every reader takes as "not chosen".
+				if (settingKey === 'followServerZoom') return;
+
 				if (settingKey === 'defaultZoom') value = parseInt(value);
 
 				this.browserSettingOptions[settingKey] = value;
