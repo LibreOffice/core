@@ -4754,3 +4754,41 @@ smallest non-zero scale it can reach is `0.1 / grid`:
 sink correctly declines to write them. The grid fix is not wrong and the guard is not wrong; what
 is missing is a floor on the search itself, and the reference plainly has one because it draws
 those marks. Naming what that floor is, is the work — it is not a change to either piece.
+
+### Round sixteen, final: neutral on the track, better on major pages, one deck against it
+
+Both changes swept whole, reference PDFs reused and verified identical row for row each time:
+
+| | baseline | fold | + `Off` branch |
+|---|---|---|---|
+| word gate | 151 / 163 | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1402.67 | 1404.07 | **1403.48** |
+| unsigned `\|ink\|%` | 1751.40 | 1753.40 | **1752.86** |
+| major pages | 466 | 465 | **464** |
+
+**Read it per document rather than as a total.** 56 better, 44 worse, 63 unchanged; 7.10 of
+`|ink|%` won and 8.56 lost. `2015-Civil-Rights-Website-training.ppt` alone is +2.14 of that
+loss, so **without it the round is −0.68**, and major pages are down 2 with the word gate
+holding on every batch and not one verdict changing anywhere.
+
+So the honest summary is: the change is right where it can be checked against the reference
+directly, neutral-to-better on 162 documents, and it loses on the 163rd by tipping a near-tie
+in a search whose preference rule is a separate, now-named defect. `|ink|%` says +1.46 and
+that number should be reported as it stands; it is one document's worth of a different bug.
+
+**Reverting is one commit** if the total is preferred to the parts — but it would restore the
+whole-twip line height, which is 0 of 6 against the reference on the fixture where the folded
+arithmetic is 6 of 6.
+
+### What the next round should take, in order
+
+1. **The search's preference between a font reduction and a spacing reduction.** Named and
+   measured above on two pages of one deck, and it is what the brief's headline lead actually
+   is. Needs a probe deck built to tie two candidates deliberately — the existing probes sweep
+   box heights, which produces ties only by accident.
+2. **A floor on the search**, which is what cost round fifteen its document. The reference draws
+   marks at a scale we round to nothing; `0.1 / grid` is our smallest reachable scale and the
+   grid is now six times larger than it was.
+3. `Reporting_responsibilities_matrix.pptx` — still second on the unsigned ranking at 74.66 over
+   268 pages, with two regions repeating at byte-identical extents on all six of its major
+   pages. Untouched this round.
