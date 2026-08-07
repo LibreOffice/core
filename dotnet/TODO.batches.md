@@ -2801,3 +2801,43 @@ The reverted code is at `b62aaf38b` and the tests that assert it at `3997fb739`.
    `w:pict`, `w:object` and `w:commentReference` and adds no frame, so a VML picture is not laid
    out or drawn. 48 of the track's 134 DOCX carry one, 332 occurrences. A feature rather than a
    fix, and unmeasured.
+
+## After the twelfth round: words 006, and the quantity behind a row LibreOffice will not split
+
+### Baseline, measured at `5ec407cf3`
+
+`words/batch-006` **9/10** and `words/batch-001`–`005` **50/50**, reproducing the brief to the
+digit. The one failure is `f445896eb008d14c1746fc37d412dc22.docx`, 15 pages against 16 with the
+word counts identical at 5575/5575.
+
+Per page, ours against the reference: `370/370 355/355 416/323 409/127 439/416 439/485 474/67
+438/531 481/434 368/460 353/329 350/389 327/327 349/364 7/347 0/251`. The reference's pages 4 and
+7 hold 127 and 67 words — it is leaving most of those pages blank — and every page from 3 onwards
+holds a different part of the document.
+
+### The reference refuses to split rows, and the trigger is the *declared* height
+
+The document is one 30-row table. Its rows state a `w:trHeight` with no `w:hRule`, so an at-least
+minimum, and the values are large: 4965, 10026, 13800, 4241, 13800 twips. The reference splits
+exactly one row in sixteen pages; every other row that does not fit is moved whole, which is where
+its blank pages come from. We split every one of them.
+
+The predecessor's measurement reproduced exactly. Rewriting row 9's `w:trHeight` in place and
+re-rendering through `soffice` 24.2.7.2, the row splits at 4267 twips and moves whole at 4282,
+with 2697 twips of room left on the page.
+
+**The declared height is not the row's height here, which is what makes the flip informative.**
+With row 9 placed at the top of a page its content measures 5147 twips, so at any stated height
+below that the row is exactly as tall either way — 4200 and 4300 give byte-identical geometry —
+and only the split decision changes. So the rule reads `w:trHeight`, not the laid-out row.
+
+Varying the room by rewriting row 8's height as well:
+
+| room left | split threshold on row 9 |
+|---|---|
+| 2697 twips | 4267–4282 |
+| 2202 | 4267–4282 |
+| 1202 | 3316–3330 |
+
+Recorded as a measurement with the explanation still open: the threshold is not the room, is not
+proportional to it, and is unchanged across the first two rows of the table.
