@@ -2801,3 +2801,42 @@ The reverted code is at `b62aaf38b` and the tests that assert it at `3997fb739`.
    `w:pict`, `w:object` and `w:commentReference` and adds no frame, so a VML picture is not laid
    out or drawn. 48 of the track's 134 DOCX carry one, 332 occurrences. A feature rather than a
    fix, and unmeasured.
+
+## Slides, round twelve
+
+### The picture-frame fill rule is settled: storage decides, rasterisation does not
+
+Round ten measured five cases and found two explanations fitting all of them, and could not
+separate them because the corpus holds no instance that does. It named exactly what would:
+**a rasterised metafile that is not inline, whose frame states a fill.** The corpus has none —
+so author one.
+
+`8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` slide 5 is the only ingredient needed. Its
+`ppt/media/image8.emf` is a package entry, and the reference demonstrably rasterises it: a
+692x240 RGB image with a soft mask, no extractable text. Its `p:pic` states `<a:noFill/>`.
+Replace only that, in only that shape, and render both:
+
+| deck | page 5 |
+|---|---|
+| the frame as found, `<a:noFill/>` | 692x240 raster + smask |
+| the same frame stating `<a:solidFill><a:srgbClr val="FF0000"/>` | **byte-identical PNG at 60 dpi, 0 red pixels** |
+| the same red fill, `image8.emf`'s bytes swapped for a half-clear PNG | **8736 red pixels**, bbox (188,56)-(299,133) |
+
+The third row is the control, and it is what makes the second mean anything: the same edit to
+the same shape in the same deck *is* observable when the graphic is one the rule calls
+transparent, so a null result on the EMF is the renderer's answer rather than an edit that
+never arrived.
+
+The probe is also non-vacuous, which is the other way it could have been empty. The extracted
+soft mask is **84.03% value 0** — the frame is transparent over five-sixths of its area, so a
+fill drawn behind it would have covered most of the box in red rather than a sliver.
+
+**So the competing explanation is refuted.** Rasterising a metafile does not make its frame's
+fill appear; a package-stored metafile loses the fill whether the reference plays it as vectors
+(`2014BSA_Sunday_Killion.pptx` slide 5) or rasterises it (this deck's slide 5). The shipped rule
+— inline `office:binary-data` and Escher blips keep the frame's fill, package entries lose it —
+is the one that fits all six measurements, and it is what the code already does. **No code
+change**; the value is that the alternative is now closed rather than carried.
+
+Reproduce with `scratchpad/sl12-frame/mk.py` + `mk2.py` (probe decks), `sample.py` (red-pixel
+count) and `mask.py` (soft-mask histogram). Reference: LibreOffice 24.2.7.2 420(Build:2).
