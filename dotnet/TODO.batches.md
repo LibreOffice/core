@@ -4609,3 +4609,41 @@ on dozens of documents rather than being a copy. Its TSVs are preserved at
 font substitution chain is resolved, which is a shared layer below every slide. A sweep of the
 slides track taken before it is not a baseline for a tree that has it. The round's own baseline
 is measured fresh, and the r15 numbers are kept only to compare against.
+
+### The round-sixteen baseline, and the number the autofit fix actually moved
+
+Whole track, `scratchpad/sl16-base`, 163 rows, no duplicate paths, 0 `ref-failed`:
+
+| | round fifteen's baseline | **round sixteen's** |
+|---|---|---|
+| word gate | 152 / 163 | **151 / 163** |
+| signed `ink%` | 1409.81 | **1402.67** |
+| unsigned `\|ink\|%` | 1759.63 | **1751.40** |
+| major pages | 466 | **466** |
+
+**The three-way split says the base is right and the harness is right.** The predecessor's
+pre-fix sweep, its post-fix sweep and this one differ in exactly the places they should:
+
+| | word gate | `ink%` | major |
+|---|---|---|---|
+| `r15base` — no autofit fix, no shared-layer commits | 152 | 1409.81 | 466 |
+| `r15grid` — autofit fix only | 151 | 1402.46 | 466 |
+| `sl16-base` — autofit fix + 18 commits | 151 | 1402.67 | 466 |
+
+`r15grid → sl16-base` moves **one document by 0.21** and nothing else. So the eighteen
+commits between the two — including `d3bf1c445`, the `Paperless.Text` font-substitution
+change that was the reason to re-measure at all — are worth 0.21 of ink on the whole slides
+track. Re-measuring was still right; it is the only thing that could have said so.
+
+**The autofit grid fix is therefore worth −7.35 of signed ink over 31 documents, no change in
+major pages, and one document on the word gate.** The predecessor never got to state this,
+and it is smaller than the probe result suggested — 31 documents move, 20 of them for the
+better, and the eleven that move the other way take back a third of the gain.
+
+#### The one document it cost, and it is a real regression rather than a gate artefact
+
+`NWD-GLA-Community-Outreach-Day-Oct-2025.pptx` went `match → words`, **596/586 words to
+537/586**, with its page count untouched at 13/13. The sign is what makes it worth naming: it
+was over-drawing by 1.7% and inside tolerance, and it is now *under*-drawing by 8.4%. A fix
+that makes the search settle on a larger font can only lose text by overflowing something, so
+this is the autofit fix's own consequence and not the gate's ceiling. Open.
