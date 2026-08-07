@@ -170,6 +170,20 @@ Measured, splitting the document's per-page ink by whether the page carries one:
 The 152.12 did not move under either of this round's fixes — it is the same figure before and
 after, which is what says it is a property of those pages rather than noise.
 
+**Re-derived independently in round fourteen and it reproduces to the digit**: 152.12 on the 24
+pages carrying one and 73.28 on the other 113, against the 152.12 and 73.21 recorded here. That
+makes this one of the few claims on this track to survive an independent check with its *sentence*
+intact as well as its number — the usual result is the reverse.
+
+Round fourteen also took the other half apart, and it is **not** a second discrete defect waiting
+to be found. Its worst pages carry none of `p:graphicFrame`, `a:tbl`, `a:blipFill`,
+`a:pattFill`, `a:gradFill`, `dgm:relIds`, `a:prstTxWarp` or `a:outerShdw` in any
+concentration, and the diff
+report calls 40-50% of each one *"marks displaced or reshaped"*: a reflow spread thin over 113
+pages at about 0.65 each, worst page 4.27. So the splitting method paid here once and has now been
+run to the end on this document; the next instrument for what is left is the extraction
+comparison, not more pixels.
+
 Corpus-wide the pattern is small: ten decks have a slide with a `Requires="v"` choice around a
 `p:oleObj`, and only NAS has it on more than four slides. So this is one document's ceiling
 rather than a class to build a tool around — but it is 10% of the track's ink and it had been
