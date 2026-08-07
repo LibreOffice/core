@@ -204,8 +204,8 @@ public class DrawingTableStyleTests
             table, DrawingTheme.Read(Theme()), Style(), matrix: null);
 
         // Stated fill wins over the header part's; the cell beside it still takes the style's.
-        box.Cells[0].Fill.ShouldBe(Colour.FromRgb(0xFF0000));
-        box.Cells[1].Fill.ShouldBe(Accent);
+        box.Cells[0].Fill.ShouldBe(Paint.Solid(Colour.FromRgb(0xFF0000)));
+        box.Cells[1].Fill.ShouldBe(Paint.Solid(Accent));
         box.Cells[1].TextColour.ShouldBe(Light);
 
         // An explicit a:noFill on a border is a decision and removes the style's interior rule;

@@ -90,7 +90,7 @@ public static class SlideTable
                     AffineTransform.Concat(
                         AffineTransform.Translation(area.X.Emu, area.Y.Emu), placement),
                     area.Size),
-                Fill = cell.Box.Fill is { } colour ? Paint.Solid(colour) : null,
+                Fill = cell.Box.Fill,
                 Text = Text(cell, area, placement, upright, fonts),
             });
         }

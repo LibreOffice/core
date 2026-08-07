@@ -138,7 +138,8 @@ public static class DrawingTableGeometry
                     IsCovered = covered,
                     Margins = MarginsOf(properties),
                     Anchor = Drawing.Attribute(properties, "anchor"),
-                    Fill = FillOf(properties, theme) ?? themed.Fill,
+                    Fill = FillOf(properties, theme)
+                           ?? (themed.Fill is { } inherited ? Paint.Solid(inherited) : null),
                     TextBody = Drawing.Child(cell, "txBody"),
                     Left = Side(properties, "lnL", themed.Left, position == 0, themed, theme),
                     Right = Side(properties, "lnR", themed.Right, position >= lastColumn, themed, theme),
@@ -202,17 +203,28 @@ public static class DrawingTableGeometry
         Length.FromEmu(Emu(properties, "marR", 91440)),
         Length.FromEmu(Emu(properties, "marB", 45720)));
 
-    private static Colour? FillOf(XElement? properties, DrawingTheme? theme)
+    /// <summary>
+    /// A cell's own background, or null when its <c>a:tcPr</c> states none.
+    /// </summary>
+    /// <remarks>
+    /// A solid colour or a pattern. The other three DrawingML fills are not read here because a
+    /// cell cannot be given one: <c>oox/source/drawingml/table/tablecell.cxx</c> pushes the
+    /// cell's fill properties through the same <c>FillProperties::pushToPropMap</c> a shape
+    /// uses, so a gradient or a picture in a cell is legal and drawn — but no corpus deck states
+    /// one and a table cell is not a shape, so the two remaining kinds are left for a document
+    /// that needs them.
+    /// </remarks>
+    private static Paint? FillOf(XElement? properties, DrawingTheme? theme)
     {
-        XElement? solid = Drawing.Child(properties, "solidFill");
-        if (solid is null) return null;
-
-        foreach (XElement child in solid.Elements())
+        if (Drawing.Child(properties, "solidFill") is { } solid)
         {
-            if (DrawingColour.Read(child)?.Resolve(theme) is { } colour) return colour;
+            foreach (XElement child in solid.Elements())
+            {
+                if (DrawingColour.Read(child)?.Resolve(theme) is { } colour) return Paint.Solid(colour);
+            }
         }
 
-        return null;
+        return DrawingHatch.Read(Drawing.Child(properties, "pattFill"), theme);
     }
 
     /// <summary>
@@ -303,7 +315,14 @@ public sealed record DrawingTableCellBox
     public string? Anchor { get; init; }
 
     /// <summary>Its background, or null when it states none.</summary>
-    public Colour? Fill { get; init; }
+    /// <remarks>
+    /// A <see cref="Paint"/> rather than a <see cref="Colour"/> because a cell may state an
+    /// <c>a:pattFill</c>, which is a hatch and not a colour. Measured on
+    /// <c>slides/batch-011/pptx/171128IPAP.pptx</c>: its page 24 is a table whose three data
+    /// rows the reference paints in a green, an orange and a red crosshatch over pale
+    /// backgrounds, and a cell fill narrowed to one colour has nowhere to put either half.
+    /// </remarks>
+    public Paint? Fill { get; init; }
 
     /// <summary>
     /// The element its text lives in, left unread so that each family reads it its own way.

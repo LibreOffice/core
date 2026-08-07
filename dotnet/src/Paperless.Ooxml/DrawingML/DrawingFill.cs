@@ -4,8 +4,8 @@ using System.Xml.Linq;
 namespace Paperless.Ooxml.DrawingML;
 
 /// <summary>
-/// Reads the two DrawingML fills that are not a colour: <c>a:gradFill</c> and
-/// <c>a:blipFill</c>.
+/// Reads the three DrawingML fills that are not a colour: <c>a:gradFill</c>,
+/// <c>a:blipFill</c> and <c>a:pattFill</c>.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -163,6 +163,69 @@ public static class DrawingFill
             Percentage(Drawing.Attribute(element, "r")) ?? 0,
             Percentage(Drawing.Attribute(element, "b")) ?? 0);
     }
+
+    /// <summary>Reads an <c>a:pattFill</c>, or null when the element is not one.</summary>
+    /// <remarks>
+    /// The two colours are read but not resolved, for the same reason a gradient's stops are:
+    /// either may be a scheme colour or a <c>phClr</c> placeholder, and only the family's own
+    /// reader holds the theme that settles it.
+    /// </remarks>
+    /// <param name="element">The candidate <c>a:pattFill</c>.</param>
+    public static DrawingPatternFill? ReadPattern(XElement? element)
+    {
+        if (!Drawing.Is(element, "pattFill")) return null;
+
+        return new DrawingPatternFill
+        {
+            Preset = Drawing.Attribute(element, "prst"),
+            Foreground = Colour(Drawing.Child(element, "fgClr")),
+            Background = Colour(Drawing.Child(element, "bgClr")),
+        };
+
+        static DrawingColour? Colour(XElement? parent)
+        {
+            if (parent is null) return null;
+
+            foreach (XElement child in parent.Elements())
+            {
+                if (DrawingColour.Read(child) is { } colour) return colour;
+            }
+
+            return null;
+        }
+    }
+}
+
+/// <summary>An <c>a:pattFill</c> as the file states it.</summary>
+/// <remarks>
+/// A preset name and two colours, which is all the element carries.
+/// <see cref="DrawingHatchPresets.Hatch"/> turns the name into the geometry LibreOffice draws
+/// for it.
+/// </remarks>
+public sealed record DrawingPatternFill
+{
+    /// <summary>
+    /// <c>@prst</c>, one of the fifty-four <c>ST_PresetPatternVal</c> tokens, or null.
+    /// </summary>
+    /// <remarks>
+    /// The attribute is required by the schema and absent in the wild. Its absence is not the
+    /// same as an unrecognised value: <c>fillproperties.cxx:758-760</c> tests
+    /// <c>moPattPreset.has_value()</c> before taking the hatch branch at all, so a pattern with
+    /// no preset falls through to being painted in its background colour alone, while one
+    /// naming a preset <c>createHatch</c> does not know becomes a hatch of distance nought —
+    /// visually the same thing, by a different route.
+    /// </remarks>
+    public string? Preset { get; init; }
+
+    /// <summary>
+    /// <c>a:fgClr</c>, the colour the pattern's lines are drawn in, or null when absent.
+    /// </summary>
+    public DrawingColour? Foreground { get; init; }
+
+    /// <summary>
+    /// <c>a:bgClr</c>, the colour behind them, or null when absent.
+    /// </summary>
+    public DrawingColour? Background { get; init; }
 }
 
 /// <summary>

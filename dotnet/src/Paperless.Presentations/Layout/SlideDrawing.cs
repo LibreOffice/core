@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 
 namespace Paperless.Presentations.Layout;
 
@@ -53,7 +54,7 @@ public static class SlideDrawing
 
         if (shape.Fill is { } fill && FillReachesThePage(shape.Picture))
         {
-            sink.FillPath(shape.Outline, fill);
+            Fill(shape.Outline, fill, sink);
         }
 
         if (shape.Picture is { } picture) DrawPicture(shape, picture, sink);
@@ -80,6 +81,91 @@ public static class SlideDrawing
         {
             sink.Restore();
         }
+    }
+
+    /// <summary>
+    /// Fills a shape's outline, expanding a hatch into the commands that draw one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A hatch is the one <see cref="Paint"/> no backend implements, deliberately — see the
+    /// note on <see cref="Paint"/> itself. It is expanded here, at the last point that still
+    /// knows the shape's own outline, into the background fill and the clipped hairlines
+    /// <c>FillHatchPrimitive2D</c> decomposes into, so the sink is handed nothing it did not
+    /// already understand.
+    /// </para>
+    /// <para>
+    /// Clipped to the outline rather than intersected with it, because a hatch fills a rounded
+    /// rectangle and a chevron as readily as a box and the segments
+    /// <see cref="Hatching.Lines"/> produces span the outline's whole bounding box.
+    /// </para>
+    /// </remarks>
+    private static void Fill(GraphicsPath outline, Paint fill, IDrawingSink sink)
+    {
+        if (fill is not HatchPaint hatch)
+        {
+            sink.FillPath(outline, fill);
+            return;
+        }
+
+        if (hatch.Background is { } background)
+        {
+            sink.FillPath(outline, Paint.Solid(background));
+        }
+
+        Stroke pen = new(Paint.Solid(hatch.LineColour), Length.Zero);
+
+        sink.Save();
+        try
+        {
+            sink.ClipPath(outline);
+
+            foreach ((DocPoint from, DocPoint to) in Hatching.Lines(Bounds(outline), hatch))
+            {
+                sink.StrokePath(new GraphicsPath().MoveTo(from).LineTo(to), pen);
+            }
+        }
+        finally
+        {
+            sink.Restore();
+        }
+    }
+
+    /// <summary>The bounding box of a path's own points.</summary>
+    /// <remarks>
+    /// Control points included, which overstates a curved outline's box slightly and is right
+    /// here: the hatch is clipped to the outline, so a box that is too large costs a few
+    /// segments the clip discards and a box that is too small leaves a corner unhatched.
+    /// </remarks>
+    private static DocRect Bounds(GraphicsPath path)
+    {
+        bool any = false;
+        Length left = default, top = default, right = default, bottom = default;
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+
+            foreach (DocPoint point in command.Verb == PathVerb.CubicTo
+                         ? (ReadOnlySpan<DocPoint>)[command.Point, command.Control1, command.Control2]
+                         : (ReadOnlySpan<DocPoint>)[command.Point])
+            {
+                if (!any)
+                {
+                    left = right = point.X;
+                    top = bottom = point.Y;
+                    any = true;
+                    continue;
+                }
+
+                if (point.X < left) left = point.X;
+                if (point.X > right) right = point.X;
+                if (point.Y < top) top = point.Y;
+                if (point.Y > bottom) bottom = point.Y;
+            }
+        }
+
+        return any ? DocRect.FromCorners(new DocPoint(left, top), new DocPoint(right, bottom)) : DocRect.Empty;
     }
 
     /// <summary>
@@ -189,6 +275,10 @@ public static class SlideDrawing
                 stop => stop with { Colour = colour.WithAlpha(stop.Colour.A) })],
         },
 
+        // A hatch's shadow is its background box in the shadow's colour. Drawing the lines again
+        // would be more faithful and is not worth a second expansion: a hatch that states no
+        // background casts a shadow here that Impress would leave as lines, which no corpus deck
+        // asks for — none of the seven carrying an a:pattFill puts a shadow on it.
         // A bitmap or mesh fill has per-pixel alpha this layer cannot see without a codec, so its
         // shadow is the flat colour — right for an opaque one and too solid for a masked one.
         _ => Paint.Solid(colour),

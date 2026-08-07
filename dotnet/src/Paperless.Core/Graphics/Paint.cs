@@ -4,13 +4,24 @@ using Paperless.Core.Units;
 namespace Paperless.Core.Graphics;
 
 /// <summary>
-/// How to fill a region: a colour, a gradient, a tiled bitmap, or a coloured triangle mesh.
+/// How to fill a region: a colour, a gradient, a tiled bitmap, a coloured triangle mesh,
+/// or a hatch.
 /// </summary>
 /// <remarks>
+/// <para>
 /// Deliberately narrower than what the source formats express. LibreOffice supports
 /// hatch and pattern fills as first-class kinds (<c>XFillStyleItem</c>); Paperless
 /// resolves those into a tiled <see cref="BitmapPaint"/> or an explicit set of
-/// stroked lines at read time, so backends have four cases instead of seven.
+/// stroked lines, so <b>backends still have four cases instead of seven</b>.
+/// </para>
+/// <para>
+/// <see cref="HatchPaint"/> is the one kind no backend implements, and that is deliberate
+/// rather than an omission. It survives as a <see cref="Paint"/> only far enough to reach
+/// whoever draws the shape carrying it, which expands it through
+/// <see cref="Hatching.Lines"/> into a background fill plus stroked hairlines and hands the
+/// sink nothing new. A sink that is nevertheless given one draws nothing, which is what it
+/// drew before the kind existed.
+/// </para>
 /// </remarks>
 public abstract record Paint
 {
@@ -197,6 +208,77 @@ public readonly record struct MeshVertex(DocPoint Position, Colour Colour);
 /// <param name="B">The second corner.</param>
 /// <param name="C">The third corner.</param>
 public readonly record struct MeshTriangle(int A, int B, int C);
+
+/// <summary>
+/// A hatch: one, two or three families of evenly spaced parallel lines, over an optional
+/// background colour.
+/// </summary>
+/// <remarks>
+/// <para>
+/// This is <c>com::sun::star::drawing::Hatch</c> plus the <c>FillBackground</c> flag that
+/// travels beside it, and it is what both of the office formats' pattern fills become:
+/// DrawingML's <c>a:pattFill</c> names one of fifty-four presets that
+/// <c>oox/inc/drawingml/hatchmap.hxx</c> maps onto exactly this triple of style, distance and
+/// angle, and ODF states the three fields outright in a <c>draw:hatch</c>.
+/// </para>
+/// <para>
+/// It is <em>not</em> the 8×8 monochrome bitmap the preset's name suggests. LibreOffice does
+/// not reproduce PowerPoint's pattern bitmaps at all — it approximates each with a hatch, and
+/// the reference renderings this project is measured against are that approximation. Storing
+/// lines rather than pixels also keeps the fill resolution-independent, which a synthesised
+/// tile would not be.
+/// </para>
+/// </remarks>
+/// <param name="LineColour">The colour of the lines — <c>a:pattFill/a:fgClr</c>.</param>
+/// <param name="Kind">How many families of lines.</param>
+/// <param name="Distance">The perpendicular distance between neighbouring lines.</param>
+/// <param name="Angle">
+/// The angle the first family of lines runs at, in radians, measured anticlockwise from the
+/// x-axis — so a positive angle tilts a line <em>upwards</em> to the right in the y-down
+/// document space. LibreOffice states it in tenths of a degree with the same sense.
+/// </param>
+/// <param name="Background">
+/// The colour behind the lines, or null when the shape shows through. DrawingML's
+/// <c>a:bgClr</c>; LibreOffice's <c>FillColor</c> under <c>FillBackground</c>.
+/// </param>
+public sealed record HatchPaint(
+    Colour LineColour,
+    HatchKind Kind,
+    Length Distance,
+    double Angle,
+    Colour? Background) : Paint;
+
+/// <summary>How many families of parallel lines a <see cref="HatchPaint"/> draws.</summary>
+/// <remarks>
+/// <para>
+/// The extra families are at fixed offsets from the stated angle rather than at angles of
+/// their own — a quarter turn for the second and an eighth for the third
+/// (<c>drawinglayer/source/primitive2d/fillhatchprimitive2d.cxx:59-97</c>, which falls through
+/// from triple to double to single so each kind includes the ones below it).
+/// </para>
+/// <para>
+/// LibreOffice spells the three <c>HatchStyle_SINGLE</c>, <c>_DOUBLE</c> and <c>_TRIPLE</c>.
+/// Two of those names are .NET type names, so they are spelled by the number of directions
+/// here instead — a two-way hatch being the ordinary drafting term for a cross-hatch.
+/// </para>
+/// </remarks>
+public enum HatchKind
+{
+    /// <summary>One family, at the stated angle. LibreOffice's <c>HatchStyle_SINGLE</c>.</summary>
+    OneWay = 0,
+
+    /// <summary>
+    /// Two families, the second a quarter turn from the first — a cross-hatch.
+    /// LibreOffice's <c>HatchStyle_DOUBLE</c>.
+    /// </summary>
+    TwoWay,
+
+    /// <summary>
+    /// Three families, the third an eighth of a turn from the first. LibreOffice's
+    /// <c>HatchStyle_TRIPLE</c>.
+    /// </summary>
+    ThreeWay,
+}
 
 /// <summary>How to stroke a path.</summary>
 /// <param name="Paint">What to stroke with.</param>

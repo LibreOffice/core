@@ -187,7 +187,7 @@ internal static class OdfTableGeometry
             Margins = Margins(file, style),
             Anchor = Graphic(file, style, OdfNamespaces.Draw, "textarea-vertical-align").Value
                      ?? Cellwise(file, style, OdfNamespaces.Style, "vertical-align").Value,
-            Fill = Fill(file, style),
+            Fill = Fill(file, style) is { } background ? Paint.Solid(background) : null,
             TextBody = cell,
             Left = Edge(file, style, "left"),
             Right = Edge(file, style, "right"),
