@@ -76,6 +76,9 @@ internal sealed class XlsWorkbookReader
     private XlsSheetDecoration _sheetDecoration = new();
     private XlsSheetPrintState _page = new();
     private XlsDrawingCollector _drawings = new([]);
+
+    /// <summary>The sheet's <c>NOTE</c> records, joined to their objects once it is read.</summary>
+    private readonly List<(int Column, int Row, ushort Object)> _notes = [];
     private readonly List<byte> _drawingGroup = [];
     private Dictionary<int, EscherBlip>? _blips;
     private bool _reportedFormat;
@@ -942,6 +945,7 @@ internal sealed class XlsWorkbookReader
         _rowFormats.Clear();
         _columnFormats.Clear();
         _richCells.Clear();
+        _notes.Clear();
 
         if (StartSubstream(sheet))
         {
@@ -999,6 +1003,7 @@ internal sealed class XlsWorkbookReader
             Drawings = _drawings.IsEmpty
                 ? SheetDrawings.Empty
                 : new SheetDrawings(_drawings.BuildForSheet(grid)),
+            Notes = BuildNotes(),
             FileName = FileName,
         });
 
@@ -1133,6 +1138,10 @@ internal sealed class XlsWorkbookReader
                     _drawings.ReadText(_stream);
                     break;
 
+                case BiffRecords.Note:
+                    ReadNote();
+                    break;
+
                 case BiffRecords.Dimensions or BiffRecords.Dimensions2:
                     ReadDimensions(builder);
                     break;
@@ -1142,6 +1151,54 @@ internal sealed class XlsWorkbookReader
                     break;
             }
         }
+    }
+
+    /// <summary>Joins the sheet's <c>NOTE</c> records to the comment objects they name.</summary>
+    private SheetNotes BuildNotes()
+    {
+        if (_notes.Count == 0) return SheetNotes.Empty;
+
+        Dictionary<ushort, string> texts = _drawings.NoteTexts();
+        if (texts.Count == 0) return SheetNotes.Empty;
+
+        List<SheetNote> notes = [];
+        foreach ((int column, int row, ushort identifier) in _notes)
+        {
+            if (texts.TryGetValue(identifier, out string? text))
+                notes.Add(new SheetNote(column, row, text));
+        }
+
+        return notes.Count == 0 ? SheetNotes.Empty : new SheetNotes { Items = notes };
+    }
+
+    /// <summary>
+    /// Reads one <c>NOTE</c> record: which cell a comment hangs off and which object holds it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// BIFF8 only. The pre-BIFF8 layout put the comment's characters in the record itself and
+    /// continued them in further NOTEs with a row of <c>0xFFFF</c>; from BIFF8 the record names an
+    /// object instead and the text is that object's <c>TXO</c>
+    /// (<c>XclImpNote</c>, <c>sc/source/filter/excel/xicontent.cxx</c>). Only the newer form is
+    /// read, because it is the only one that appears in the corpus and because the older one is a
+    /// separate continuation scheme rather than a shorter record.
+    /// </para>
+    /// <para>
+    /// The join is deferred: a NOTE may arrive before its OBJ, so the identifier is kept and
+    /// resolved against <see cref="XlsDrawingCollector.NoteTexts"/> once the sheet has been read.
+    /// </para>
+    /// </remarks>
+    private void ReadNote()
+    {
+        if (_stream.Version != BiffVersion.Biff8) return;
+        if (_stream.RecordLeft < 8) return;
+
+        int row = _stream.ReadUInt16();
+        int column = _stream.ReadUInt16();
+        _stream.Skip(2);
+        ushort identifier = _stream.ReadUInt16();
+
+        _notes.Add((column, row, identifier));
     }
 
     private void ReadDimensions(SheetBuilder builder)

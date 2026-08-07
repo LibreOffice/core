@@ -14,6 +14,26 @@ namespace Paperless.Spreadsheets.Layout;
 /// out at full size inside a half-size rectangle wraps at half the words it should.
 /// </para>
 /// <para>
+/// <strong>Every run is measured at its own size and in its own face.</strong> A paragraph is not
+/// one size and one face: <c>TextRun::insertAt</c> pushes each run's character properties
+/// separately (<c>oox/source/drawingml/textrun.cxx:82-86</c>) and the EditEngine breaks a portion
+/// at every one of those boundaries, so a paragraph mixing 11 pt body text with a 12 pt trailing
+/// space wraps the body at eleven. Collapsing a paragraph to the largest size any run states —
+/// which is what this did — measures every word of a long body at the size of one stray character
+/// and breaks each line early. Measured on a probe round-tripped through LibreOffice's own
+/// flat-ODS export: a body at <c>sz="1100"</c> followed by an unsized space wraps in the same
+/// place as the same body alone, and a run stating <c>sz="1800"</c> after it leaves the body's own
+/// breaks untouched.
+/// </para>
+/// <para>
+/// <strong>A word may span a run boundary</strong>, so the wrap cannot be done run by run either.
+/// <c>SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx</c> splits "either" across two runs
+/// as <c>" e"</c> and <c>"ither the date…"</c>, which is what authoring tools leave behind when a
+/// character property is applied and then undone. The paragraph is therefore flattened to text
+/// with a per-character format beside it, wrapped as one string, and each line then cut back into
+/// the maximal stretches that share a format.
+/// </para>
+/// <para>
 /// <strong>Wrapping is by whole words.</strong> That is what <c>wrap="square"</c> means and what
 /// every text box in the corpus asks for; a body stating <c>wrap="none"</c> is drawn on one line.
 /// A single word too wide for the box is left to run past it rather than broken, which is the one
@@ -77,31 +97,44 @@ internal static class SheetShapePainter
             // absent from the output rather than half-drawn (svdoutl.hxx:56-59).
             if (clipping && pen + line.Height > top + room) break;
 
-            // A blank paragraph carries no run and only advances the pen, which is what keeps the
-            // gap a text box puts between its blocks.
-            if (line.Run is { } run)
+            // A blank paragraph carries no piece and only advances the pen, which is what keeps
+            // the gap a text box puts between its blocks.
+            if (line.Pieces.Count > 0)
             {
                 Length x = line.Alignment switch
                 {
-                    SheetShapeAlignment.Centre => left + ((available - run.Width) / 2),
-                    SheetShapeAlignment.Right => right - run.Width,
+                    SheetShapeAlignment.Centre => left + ((available - line.Width) / 2),
+                    SheetShapeAlignment.Right => right - line.Width,
                     _ => left,
                 };
 
-                sink.DrawGlyphRun(
-                    run.At(new DocPoint(x, pen + SheetBandText.AscentAt(line.Size, line.Family))),
-                    Paint.Solid(Colour.Black));
+                // The baseline is shared by every piece of the line and sits at the deepest
+                // ascent any of them needs, so a large run does not drag a small one off it.
+                Length baseline = pen + line.Ascent;
+                foreach (BandRun piece in line.Pieces)
+                {
+                    sink.DrawGlyphRun(piece.At(new DocPoint(x, baseline)), Paint.Solid(Colour.Black));
+                    x += piece.Width;
+                }
             }
 
             pen += line.Height;
         }
     }
 
+    /// <summary>The size and face one stretch of a paragraph is set in.</summary>
+    private readonly record struct Format(Length Size, string? Family);
+
     /// <summary>
-    /// One laid-out line: its run, its size and face, the height it advances, and its alignment.
+    /// One laid-out line: the shaped stretches it is made of, its width, the ascent its pieces
+    /// share, the height it advances, and its alignment.
     /// </summary>
     private readonly record struct Line(
-        BandRun? Run, Length Size, string? Family, Length Height, SheetShapeAlignment Alignment);
+        IReadOnlyList<BandRun> Pieces,
+        Length Width,
+        Length Ascent,
+        Length Height,
+        SheetShapeAlignment Alignment);
 
     /// <summary>Shapes every paragraph into the lines it wraps to.</summary>
     private static List<Line> Lines(SheetShapeText text, Length available, double scale)
@@ -111,29 +144,26 @@ internal static class SheetShapePainter
 
         foreach (SheetShapeParagraph paragraph in text.Paragraphs)
         {
-            Length size = paragraph.Size;
-            if (size <= Length.Zero) size = SheetShapeText.DefaultSize;
-            size *= scale;
-
-            // The face reaches all three of the measurements below and not only the ink: it sets
-            // the line's height, it sets the advance widths the wrap is decided by, and it sets
-            // the ascent the baseline is placed at. Drawing one face and measuring another is the
-            // worst of the two, because every line then breaks in a place the metrics did not pick.
-            string? family = paragraph.Family;
-            Length height = SheetBandText.ChartLineHeightAt(size, family);
             string body = paragraph.Text;
+            Format[] formats = Formats(paragraph, body.Length, scale);
 
             if (body.Length == 0)
             {
-                lines.Add(new Line(null, size, family, height, paragraph.Alignment));
+                Format blank = Blank(paragraph, scale);
+                lines.Add(new Line(
+                    [],
+                    Length.Zero,
+                    SheetBandText.AscentAt(blank.Size, blank.Family),
+                    SheetBandText.ChartLineHeightAt(blank.Size, blank.Family),
+                    paragraph.Alignment));
                 continue;
             }
 
-            foreach (string line in Wrap(body, size, family, available, text.Wraps))
+            foreach ((int start, int end) in Wrap(body, formats, available, text.Wraps))
             {
-                if (SheetBandText.Shape(line, size, family) is not { } run) continue;
-                lines.Add(new Line(run, size, family, height, paragraph.Alignment));
-                anyInk = true;
+                Line line = Compose(body, formats, start, end, paragraph.Alignment);
+                lines.Add(line);
+                if (line.Pieces.Count > 0) anyInk = true;
             }
         }
 
@@ -142,32 +172,138 @@ internal static class SheetShapePainter
         return anyInk ? lines : [];
     }
 
-    /// <summary>Breaks one paragraph into lines that fit the width.</summary>
-    private static List<string> Wrap(
-        string body, Length size, string? family, Length available, bool wraps)
+    /// <summary>The format of every character of the paragraph, with the zoom already in it.</summary>
+    private static Format[] Formats(SheetShapeParagraph paragraph, int length, double scale)
     {
-        if (!wraps) return [body];
+        Format[] formats = new Format[length];
+        int at = 0;
 
-        List<string> lines = [];
-        string current = string.Empty;
-
-        foreach (string word in body.Split(' ', StringSplitOptions.None))
+        foreach (SheetShapeRun run in paragraph.Runs)
         {
-            string candidate = current.Length == 0 ? word : current + " " + word;
-            if (current.Length > 0 && Width(candidate, size, family) > available)
+            Format format = Scaled(run, scale);
+            for (int i = 0; i < run.Text.Length && at < length; i++) formats[at++] = format;
+        }
+
+        // A model that named fewer characters than the text holds would leave the tail unset, and
+        // a zero size shapes nothing at all; the last run's format is the honest continuation.
+        Format tail = at > 0 ? formats[at - 1] : Scaled(default, scale);
+        while (at < length) formats[at++] = tail;
+
+        return formats;
+    }
+
+    /// <summary>The format a paragraph holding no text reserves its line at.</summary>
+    private static Format Blank(SheetShapeParagraph paragraph, double scale)
+        => Scaled(paragraph.Runs.Count > 0 ? paragraph.Runs[0] : default, scale);
+
+    private static Format Scaled(SheetShapeRun run, double scale)
+    {
+        Length size = run.Size > Length.Zero ? run.Size : SheetShapeText.DefaultSize;
+        return new Format(size * scale, run.Family);
+    }
+
+    /// <summary>
+    /// Breaks one paragraph into the character ranges its lines cover.
+    /// </summary>
+    /// <remarks>
+    /// Words are separated by single spaces, so a line is a contiguous range of the paragraph and
+    /// every character keeps the format its run gave it. Splitting into strings and rejoining them
+    /// would lose that correspondence, which is the whole reason the ranges are carried instead.
+    /// </remarks>
+    private static List<(int Start, int End)> Wrap(
+        string body, Format[] formats, Length available, bool wraps)
+    {
+        if (!wraps) return [(0, body.Length)];
+
+        List<(int Start, int End)> words = [];
+        int from = 0;
+        for (int i = 0; i <= body.Length; i++)
+        {
+            if (i == body.Length || body[i] == ' ')
             {
-                lines.Add(current);
-                current = word;
+                words.Add((from, i));
+                from = i + 1;
+            }
+        }
+
+        List<(int Start, int End)> lines = [];
+        int start = words[0].Start;
+        int taken = 0;
+
+        for (int i = 0; i < words.Count; i++)
+        {
+            if (taken > 0 && Width(body, formats, start, words[i].End) > available)
+            {
+                lines.Add((start, words[i - 1].End));
+                start = words[i].Start;
+                taken = 1;
                 continue;
             }
 
-            current = candidate;
+            taken++;
         }
 
-        if (current.Length > 0) lines.Add(current);
-        return lines.Count == 0 ? [body] : lines;
+        lines.Add((start, words[^1].End));
+        return lines;
     }
 
-    private static Length Width(string text, Length size, string? family)
-        => SheetBandText.Shape(text, size, family)?.Width ?? Length.Zero;
+    /// <summary>
+    /// Shapes one line's range into the maximal stretches that share a format.
+    /// </summary>
+    private static Line Compose(
+        string body, Format[] formats, int start, int end, SheetShapeAlignment alignment)
+    {
+        List<BandRun> pieces = [];
+        Length width = Length.Zero;
+        Length ascent = Length.Zero;
+        Length height = Length.Zero;
+
+        int at = start;
+        while (at < end)
+        {
+            int stop = at + 1;
+            while (stop < end && formats[stop] == formats[at]) stop++;
+
+            Format format = formats[at];
+
+            // The line's metrics come from the formats it spans and not from the pieces that
+            // shaped, so a face that cannot be resolved loses its ink and not the line's height.
+            Length pieceAscent = SheetBandText.AscentAt(format.Size, format.Family);
+            Length pieceHeight = SheetBandText.ChartLineHeightAt(format.Size, format.Family);
+            if (pieceAscent > ascent) ascent = pieceAscent;
+            if (pieceHeight > height) height = pieceHeight;
+
+            if (SheetBandText.Shape(body[at..stop], format.Size, format.Family) is { } run)
+            {
+                pieces.Add(run);
+                width += run.Width;
+            }
+
+            at = stop;
+        }
+
+        return new Line(pieces, width, ascent, height, alignment);
+    }
+
+    /// <summary>How wide one range of the paragraph is, measured stretch by stretch.</summary>
+    private static Length Width(string body, Format[] formats, int start, int end)
+    {
+        Length width = Length.Zero;
+        int at = start;
+
+        while (at < end)
+        {
+            int stop = at + 1;
+            while (stop < end && formats[stop] == formats[at]) stop++;
+
+            if (SheetBandText.Shape(body[at..stop], formats[at].Size, formats[at].Family) is { } run)
+            {
+                width += run.Width;
+            }
+
+            at = stop;
+        }
+
+        return width;
+    }
 }

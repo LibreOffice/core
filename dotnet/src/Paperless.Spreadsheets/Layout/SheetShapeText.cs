@@ -38,6 +38,12 @@ public enum SheetShapeAnchor
 public readonly record struct SheetShapeRun(string Text, Length Size, string? Family = null);
 
 /// <summary>One paragraph of a shape's text.</summary>
+/// <remarks>
+/// <strong>A paragraph holding no text still carries one run.</strong> A blank paragraph occupies
+/// a line, and DrawingML says how tall in <c>a:endParaRPr</c> — the properties the next character
+/// typed would take. Carrying them as an empty run rather than as a separate pair of properties
+/// lets the painter read the size and face the same way whether or not there is ink.
+/// </remarks>
 public sealed record SheetShapeParagraph
 {
     /// <summary>The runs, in order.</summary>
@@ -54,41 +60,6 @@ public sealed record SheetShapeParagraph
         _ => string.Concat(Runs.Select(run => run.Text)),
     };
 
-    /// <summary>The largest size any run states, which is what sets the line's height.</summary>
-    public Length Size
-    {
-        get
-        {
-            Length largest = Length.Zero;
-            foreach (SheetShapeRun run in Runs)
-            {
-                if (run.Size > largest) largest = run.Size;
-            }
-
-            return largest;
-        }
-    }
-
-    /// <summary>The face the paragraph is set in, or null where no run names one.</summary>
-    /// <remarks>
-    /// The <em>first</em> face any run states, where <see cref="Size"/> takes the largest. The two
-    /// rules differ because the quantities differ: a line's height is decided by its tallest run,
-    /// and its face is not a maximum of anything. A paragraph mixing faces is drawn wholly in the
-    /// first, which is the same single-face approximation the rest of this path makes and is
-    /// exact for every text box in the corpus — each states one face for the whole body.
-    /// </remarks>
-    public string? Family
-    {
-        get
-        {
-            foreach (SheetShapeRun run in Runs)
-            {
-                if (!string.IsNullOrWhiteSpace(run.Family)) return run.Family;
-            }
-
-            return null;
-        }
-    }
 }
 
 /// <summary>
@@ -114,13 +85,29 @@ public sealed record SheetShapeParagraph
 /// </remarks>
 public sealed record SheetShapeText
 {
-    /// <summary>The default em size a run that states none is set at.</summary>
+    /// <summary>The em size a run that states none, and inherits none, is set at.</summary>
     /// <remarks>
-    /// DrawingML's own default, <c>1800</c> in hundredths of a point
-    /// (<c>oox/source/drawingml/textcharacterproperties.cxx</c> leaves the size unset and the
-    /// default character properties supply 18 pt).
+    /// <para>
+    /// <strong>Twelve point, not the shape's own eighteen.</strong> A DrawingML shape carries a
+    /// default character height of 18 pt (<c>Shape::setDefaults</c>,
+    /// <c>oox/source/drawingml/shape.cxx:334</c>) and that is what the exported shape style
+    /// states — but it is not what a run inherits. <c>TextBody::insertAt</c> reads the
+    /// <em>text cursor's</em> <c>CharHeight</c> before any of the body is inserted
+    /// (<c>oox/source/drawingml/textbody.cxx:62</c>) and hands it down as
+    /// <c>nDefaultCharHeight</c>, which <c>TextRun::insertAt</c> puts on any run whose own
+    /// <c>moHeight</c> is unset (<c>oox/source/drawingml/textrun.cxx:82-85</c>). On a fresh Calc
+    /// drawing object that cursor reports the EditEngine pool's own default, 240 twips.
+    /// </para>
+    /// <para>
+    /// Measured rather than derived, because the two candidates are both in the file. A probe
+    /// workbook with three text boxes was round-tripped through LibreOffice 24.2.7.2's flat-ODS
+    /// export: a box whose only run states no <c>sz</c> comes back as <c>fo:font-size="12pt"</c>,
+    /// a box whose body states <c>sz="1100"</c> and whose trailing space states nothing comes back
+    /// as 11 pt and 12 pt in two spans, and every one of the three shapes' default paragraph style
+    /// states 18 pt while none of their runs does.
+    /// </para>
     /// </remarks>
-    public static Length DefaultSize { get; } = Length.FromPoints(18);
+    public static Length DefaultSize { get; } = Length.FromPoints(12);
 
     /// <summary>The paragraphs, in order.</summary>
     public IReadOnlyList<SheetShapeParagraph> Paragraphs { get; init; } = [];

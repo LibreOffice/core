@@ -120,6 +120,7 @@ public static class XlsxReader
                     RichText = rich,
                     Drawings = XlsxDrawings.Read(
                         file.Package, entry.PartName, theme, themeFonts),
+                    Notes = setup.PrintsNotes ? reader.ReadNotes(entry) : SheetNotes.Empty,
                     FileName = source.FileName ?? string.Empty,
                 });
 

@@ -58,6 +58,17 @@ public static class BiffRecords
     public const ushort Obj = 0x005D;
     public const ushort Txo = 0x01B6;
 
+    /// <summary>
+    /// A <c>NOTE</c> record: which cell a comment hangs off, and which object holds its text.
+    /// </summary>
+    /// <remarks>
+    /// The text is not here. From BIFF8 the record carries the cell, a flags word, the object's
+    /// identifier and the author's name, and the comment itself is the <c>TXO</c> of the object
+    /// with that identifier (<c>XclImpNote::XclImpNote</c>,
+    /// <c>sc/source/filter/excel/xicontent.cxx</c>).
+    /// </remarks>
+    public const ushort Note = 0x001C;
+
     // Sheet structure.
     public const ushort Dimensions2 = 0x0000;
     public const ushort Dimensions = 0x0200;

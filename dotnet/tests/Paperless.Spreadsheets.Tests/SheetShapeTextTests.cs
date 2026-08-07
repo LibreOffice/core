@@ -57,9 +57,9 @@ public sealed class SheetShapeTextTests
     /// A run's stated size is kept, because it decides the line height and the wrap.
     /// </summary>
     /// <remarks>
-    /// <c>sz</c> is in hundredths of a point. Nothing else on the run is read — the sheet path can
-    /// shape in one face only — so the size is the whole of what a body mixing 7 pt and 12 pt runs
-    /// needs to lay out at all.
+    /// <c>sz</c> is in hundredths of a point, and it is kept per run rather than per paragraph:
+    /// the EditEngine breaks a portion at every run boundary, so a body mixing 7 pt and 12 pt runs
+    /// wraps each stretch at its own size.
     /// </remarks>
     [Fact]
     public void ARunKeepsTheSizeItStates()
@@ -70,7 +70,7 @@ public sealed class SheetShapeTextTests
         SheetShapeParagraph paragraph = text.Paragraphs
             .First(p => p.Text.Contains("Ships", StringComparison.Ordinal));
 
-        paragraph.Size.Points.ShouldBe(11.0, 0.01);
+        paragraph.Runs[0].Size.Points.ShouldBe(11.0, 0.01);
     }
 
     /// <summary>

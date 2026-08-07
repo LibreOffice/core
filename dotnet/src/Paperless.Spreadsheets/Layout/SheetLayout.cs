@@ -193,6 +193,17 @@ public sealed class SheetLayout
     public SheetDrawings Drawings { get; init; } = SheetDrawings.Empty;
 
     /// <summary>
+    /// The cell notes the sheet holds, for the pages they are listed on.
+    /// </summary>
+    /// <remarks>
+    /// Beside the cells for the same reason a drawing is, and with a further one: a note is not
+    /// drawn where its cell is at all. It is listed on a page of its own after the sheet, and only
+    /// when the sheet asks — see <see cref="SheetNotes"/> and
+    /// <see cref="SheetPrintSetup.PrintsNotes"/>.
+    /// </remarks>
+    public SheetNotes Notes { get; init; } = SheetNotes.Empty;
+
+    /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
     /// </summary>
     /// <remarks>

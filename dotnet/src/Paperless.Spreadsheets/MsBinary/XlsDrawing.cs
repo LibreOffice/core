@@ -99,6 +99,7 @@ internal sealed class XlsDrawingCollector(
         ArgumentNullException.ThrowIfNull(stream);
 
         ushort type = ushort.MaxValue;
+        ushort identifier = 0;
         while (stream.RecordLeft >= 4)
         {
             ushort id = stream.ReadUInt16();
@@ -109,7 +110,11 @@ internal sealed class XlsDrawingCollector(
             if (id == ObjectCommon && left >= 6)
             {
                 type = stream.ReadUInt16();
-                stream.Skip(2);
+
+                // `ftCmo`'s second field is the object's own identifier, which is what a NOTE
+                // record names its comment by (`XclImpNote`, xicontent.cxx). Reading it is what
+                // lets a note's text be joined to the cell it hangs off.
+                identifier = stream.ReadUInt16();
                 stream.Skip(left - 4);
             }
             else
@@ -118,7 +123,29 @@ internal sealed class XlsDrawingCollector(
             }
         }
 
-        _objects.Add(new ObjectEntry(type, _dff.Count));
+        _objects.Add(new ObjectEntry(type, _dff.Count, identifier));
+    }
+
+    /// <summary>
+    /// The text of every cell-comment object read so far, by the identifier a <c>NOTE</c> names.
+    /// </summary>
+    /// <remarks>
+    /// A comment's text is in a <c>TXO</c> like any other object's, and the cell it belongs to is
+    /// in the <c>NOTE</c> record, which names the object rather than pointing at it. So the join
+    /// is by <c>ftCmo</c>'s identifier, and it has to happen after the whole sheet is read because
+    /// a NOTE may precede or follow its OBJ.
+    /// </remarks>
+    public Dictionary<ushort, string> NoteTexts()
+    {
+        Dictionary<ushort, string> texts = [];
+        foreach (ObjectEntry entry in _objects)
+        {
+            if (entry.Type != NoteObject) continue;
+            if (entry.Text is not { Length: > 0 } text) continue;
+            texts[entry.Id] = text;
+        }
+
+        return texts;
     }
 
     /// <summary>
@@ -471,7 +498,12 @@ internal sealed class XlsDrawingCollector(
         int LastColumn, int RightOffset, int LastRow, int BottomOffset);
 
     private readonly record struct ObjectEntry(
-        ushort Type, int DrawingOffset, string? Text = null, int Horizontal = 0, int Vertical = 0);
+        ushort Type,
+        int DrawingOffset,
+        ushort Id = 0,
+        string? Text = null,
+        int Horizontal = 0,
+        int Vertical = 0);
 
     /// <summary>The <c>ftCmo</c> subrecord identifier, <c>EXC_ID_OBJCMO</c>.</summary>
     private const ushort ObjectCommon = 0x0015;

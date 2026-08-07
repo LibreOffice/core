@@ -58,14 +58,14 @@ public sealed class SheetShapeFontTests
     [Fact]
     public void AnIndirectTypefaceIsResolvedThroughTheThemesFontScheme()
     {
-        Paragraph(Sheet(), "Themed box").Family.ShouldBe(
+        Paragraph(Sheet(), "Themed box").Runs[0].Family.ShouldBe(
             "Calibri", "+mn-lt is the theme's minor Latin face, not a family called \"+mn-lt\"");
     }
 
     [Fact]
     public void AStatedTypefaceIsKeptAsItStands()
     {
-        Paragraph(Sheet(), "Stated box").Family.ShouldBe("Times New Roman");
+        Paragraph(Sheet(), "Stated box").Runs[0].Family.ShouldBe("Times New Roman");
     }
 
     /// <summary>
