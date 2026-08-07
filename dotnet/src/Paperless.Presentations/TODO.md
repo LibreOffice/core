@@ -858,12 +858,31 @@ Two reference artefacts worth knowing before chasing them:
       deliberately.
 - [x] Text bodies with anchoring, insets and the stated autofit scale.
 - [x] Groups with nested transforms, including a child coordinate space that scales.
-- [ ] Picture *effects*: `a:effectLst` (shadow, glow, reflection, soft edge), `a:duotone`,
-      `a:grayscl`, `a:biLevel` and the brightness/contrast pair. All are per-pixel work on a
-      decoded bitmap, which is the one thing this library must not do — they belong beside the
-      decoder in `Paperless.Rendering`, as a transform the display list names rather than
-      performs. `a:alphaModFix` is the exception and is honoured, because a uniform opacity is
-      already a parameter of `DrawImage`.
+- [ ] Picture *effects*: `a:effectLst` (shadow, glow, reflection, soft edge), `a:grayscl` and
+      `a:biLevel`. All are per-pixel work on a decoded bitmap, which is the one thing this
+      library must not do — they belong beside the decoder in `Paperless.Rendering`, as a
+      transform the display list names rather than performs. `a:alphaModFix` is the exception
+      and is honoured, because a uniform opacity is already a parameter of `DrawImage`.
+
+      **Done on that pattern**: `a:duotone` (`DuotoneRecolour`) and the brightness/contrast pair
+      (`LuminanceRecolour`), both named by the reader and carried out by `RasterImageDecoder`.
+      The second is worth reading before adding a third: **the pair a file states is not always
+      the pair that is applied.** `bright="70000" contrast="-70000"` is PowerPoint's washout and
+      the reference maps it to its own `ColorMode_WATERMARK`, applying **+50 and −70**
+      (`oox/source/drawingml/fillproperties.cxx`:826-831 with
+      `vcl/source/graphic/GraphicObject.cxx`:53-54); both-stated is baked with MSO's own
+      formula and one-alone goes through the colour modifier, which are two different
+      arithmetics. Measured against the binary's pixels, not just cited — see
+      `research/probes/slides-r19/NOTES.md`.
+
+      Two traps that will catch the next one of these. `RasterImageDecoder.Ensure` copies named
+      fields across the decode, so a new pending transform reaches the page only if it is added
+      to that list — and forgetting it is silent on *every* picture, since a decoded one never
+      takes that branch. And `.ppt` states the same thing as Escher properties, with the same
+      washout rule: `DFF_Prop_pictureBrightness`/`DFF_Prop_pictureContrast` and
+      `GraphicDrawMode::Watermark` at `filter/source/msfilter/msdffimp.cxx`:3906-3960, the
+      contrast on a non-linear scale about `0x10000`. Not implemented, and not counted in the
+      corpus either.
 - [ ] **A rotated picture.** `IDrawingSink.DrawImage` takes a rectangle and not a matrix, so a
       `p:pic` with a non-zero `rot` is drawn upright inside its rotated clip. The clip is right
       and the pixels are not turned. Fixing it means either a matrix on `DrawImage` or a
