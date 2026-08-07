@@ -2015,24 +2015,25 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
-Measured whole-track at `22ed440e0`, three times, 171 documents each time. The baseline reproduced
+Measured whole-track at `22ed440e0`, four times, 171 documents each time. The baseline reproduced
 the brief's three headline figures to the digit — **134 of 171, page error 116, 143 exact** — and
-after the sixteenth round's two changes: **135 of 171, page error 114, 144 exact.** Batches 001 to
-008 are now full parity.
+after the sixteenth round's three changes: **136 of 171, page error 113, 145 exact.** Batches 001
+to 008 are now full parity.
 
-**Exactly one document moved on our side across the whole track.** The intermediate sweep is the
-reason to say it that way: the first of the two changes moved two, one of them
-`environment-edb-docs-edb-emissions-databank.xls` from 195 pages to 204 and out of `match`, and
-the second change put it back. The one other row that differs between the baseline and the final
-sweep is `PBN Matrix NAAs (V01).xlsx`, whose *reference* word count went 5554 to 5557 between two
-runs of the same `soffice` on the same file — a match before and after, and a reminder that the
-reference column is not perfectly reproducible either.
+**Seven documents moved and every one improved.** The eighth row that differs between the baseline
+and the final sweep is `PBN Matrix NAAs (V01).xlsx`, whose *reference* word count went 5554, then
+5557, then 5556 across three runs of the same `soffice` on the same file — a match throughout, and
+a reminder that the reference column is not perfectly reproducible either.
 
 | Batch | before | after |
 | --- | --- | --- |
+| `batch-007` | 9/10 | **10/10** |
 | `batch-008` | 9/10 | **10/10** |
 | `batch-017` | 4/10 | 4/10 (9/10 → 4/10 mid-round, restored) |
 | every other batch | — | unchanged |
+
+**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot
+have moved and were not swept.
 
 Measured whole-track at `1aefcdfdb`, twice, 171 documents each time. The baseline reproduced the
 brief's three headline figures to the digit — **129 of 171, page error 116, 143 exact** — and after
@@ -2086,7 +2087,7 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | ✅ |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | **9/10** |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | ✅ |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | ✅ |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
@@ -2134,9 +2135,9 @@ not fixed.
 
 | | before | after |
 | --- | --- | --- |
-| documents matching | 134 | **135** |
-| documents with an exactly correct page count | 143 | **144** |
-| total absolute page error | 116 | **114** |
+| documents matching | 134 | **136** |
+| documents with an exactly correct page count | 143 | **145** |
+| total absolute page error | 116 | **113** |
 | `batch-001`–`batch-008` | 78/80 | **80/80** |
 
 ### `batch-008`: an empty column's scan starts at its own last data row
@@ -2175,7 +2176,7 @@ The lesson is procedural. **A change that only ever widens a print area cannot b
 documents it was aimed at**; the cost is entirely on documents whose print area was already right,
 and it took a whole-track sweep to see one.
 
-### `batch-007`: `dragon-175066A.xlsx` is one twip of digit width
+### `batch-007`: `dragon-175066A.xlsx` was one twip of digit width
 
 14 pages against 13 with the words exact. Measured off both PDFs with `pdftotext -bbox`: column B
 starts at 80.528 pt in the reference and 81.153 in ours, column C at 357.0 and 363.1, so column B
@@ -2197,13 +2198,20 @@ because Carlito 11 pt measures 111.50 where LibreOffice writes 111 and Carlito i
 65 of the 171 corpus spreadsheets. What is new is the price. A one-twip column width is normally
 invisible; a fit-to-width sheet's integer zoom turns it into a page.
 
-**Not changed, and the reason is not caution.** All nine faces the record measures are satisfied by
-truncating unless the fraction exceeds a threshold somewhere between 0.64 and 0.70 — Carlito 12 pt
-is 121.64 → 121, DejaVu Sans 12 pt is 152.70 → 153 — but only two of the nine discriminate, there
-is no mechanism behind the constant, and the reach is every spreadsheet in the corpus rather than
-the thirteen DejaVu documents. That wants its own round with a sweep behind it, and the sweep is
-cheap: the reference side does not move for a Paperless-only change, so rendering our side alone
-and joining the existing reference column answers it.
+**Changed, and on the corpus rather than on the faces.** All nine faces the record measures are
+satisfied by truncating unless the fraction carries past a threshold somewhere in (0.64, 0.70] —
+Carlito 12 pt is 121.64 → 121, DejaVu Sans 12 pt is 152.70 → 153 — but only two of the nine
+discriminate and there is no mechanism behind the constant, so on its own that is a fudge fitted
+to two points. The corpus is what settles it, and the measurement is cheap because **the reference
+side does not move for a Paperless-only change**: render our side alone over all 171 and join the
+existing reference column. The harness was checked first by reproducing the previous sweep's
+135/114/144 with *zero* rows differing, and the change then gave **136, 113, 145** with six
+documents moved and every one improved — `dragon-175066A.xlsx` 14 pages to 13 and into parity, and
+five word counts closer to the reference, four of them exact. A confirming full sweep against a
+freshly generated reference gave the same three numbers.
+
+The reach is every spreadsheet in the corpus and six of the 171 felt it, which is also the answer
+to how far a grep would have overstated it.
 
 ## After the ninth round: slides, and two defects the gate is structurally blind to
 

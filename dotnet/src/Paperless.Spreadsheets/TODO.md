@@ -399,7 +399,9 @@ Two things to hold onto before starting:
 Swept whole at `22ed440e0` before anything was changed, 171 documents: **134 of 171, page error
 116, 143 exact page counts** — the brief's three headline figures to the digit, and batches 001 to
 006 at full parity. `batch-007` and `batch-008` were each 9/10 and their single misses were the
-two documents the handover named.
+two documents the handover named. Both were taken, and the round ends at **136 of 171, page error
+113, 145 exact**, with batches 001 to 008 at full parity. Seven documents moved and every one
+improved.
 
 ### An empty column's scan starts at its own last data row, not at the sheet's
 
@@ -475,13 +477,23 @@ workbook alone renders it at **13 pages and 8143 words against 8142**, which is 
 column error is normally invisible; on a fit-to-width sheet the integer zoom amplifies it into a
 whole page.
 
-The experiment that would settle it is specified and not run: take the nine measured faces in
-`DigitWidthTwips`'s remarks, note that *every one of them* is satisfied by truncating unless the
-fraction exceeds a threshold between 0.64 and 0.70 — Carlito 12 pt is 121.64 → 121 and DejaVu
-Sans 12 pt is 152.70 → 153 — and then sweep the whole track with that rule before believing it.
-**A threshold fitted to nine points, two of which are the only ones that discriminate, is a fudge
-until a sweep says otherwise**, and the reach is every spreadsheet in the corpus rather than the
-thirteen the record attributes to DejaVu.
+The experiment was then run rather than left for the next round. Every one of the nine measured
+faces is satisfied by truncating unless the fraction carries past a threshold in (0.64, 0.70] —
+Carlito 12 pt is 121.64 → 121 and DejaVu Sans 12 pt is 152.70 → 153 — and a threshold fitted to
+nine points, two of which are the only ones that discriminate, is a fudge until a corpus says
+otherwise. So the corpus was asked, and cheaply: **the reference side does not move for a
+Paperless-only change**, so rendering our side alone over all 171 and joining the reference column
+of an existing sweep answers it in one pass. The harness was validated first by reproducing that
+sweep's 135/114/144 with zero rows differing.
+
+At 0.67 the whole track goes **135 → 136, page error 114 → 113, page-exact 144 → 145**, and *six
+documents moved with every one improving*: `dragon-175066A.xlsx` 14 pages to 13 and into parity,
+and five word counts closer — 345 → 344 of 344, 799 → 798 of 798, 4176 → 4184 of 4184,
+6257 → 6246 of 6245, 73991 → 73750 of 73542, four of them exact. No page count moved anywhere
+else. A confirming full sweep against a freshly generated reference gave the same three numbers.
+
+The constant is still fitted and `DigitWidthCarry`'s remarks say so in those words; what changed
+is that it is now fitted to two independent bodies of evidence rather than to two data points.
 
 ## The fifteenth sweep: the break was in the drawing, and it was worth five documents
 
