@@ -159,11 +159,16 @@ internal sealed class FrameResolution
     /// Whether the paragraphs inside a frame collapse their spacing against one another rather than adding
     /// it — see <see cref="FlowLayouter.LayOut"/>. A frame's own text is a frame's text like a cell's.
     /// </param>
+    /// <param name="addsCellLineSpacing">
+    /// Whether a table inside a frame grows its cells by their last paragraph's proportional line
+    /// spacing — see <see cref="PaginationOptions.AddsCellLineSpacing"/>.
+    /// </param>
     public static FrameResolution Of(
         IReadOnlyList<PageBlock> blocks,
         IReadOnlyList<PaginatedSection> sections,
         IReadOnlyList<LaidOutPage> pages,
-        bool collapsesSpacing = false)
+        bool collapsesSpacing = false,
+        bool addsCellLineSpacing = false)
     {
         Dictionary<int, Placement> placements = [];
 
@@ -232,7 +237,8 @@ internal sealed class FrameResolution
                     byPage[pageIndex] = placed = [];
                 }
 
-                placed.Add(new PlacedFrame(frame, area, Content(frame, area, collapsesSpacing)));
+                placed.Add(new PlacedFrame(
+                    frame, area, Content(frame, area, collapsesSpacing, addsCellLineSpacing)));
 
                 // A run-through frame is not an obstacle at all: it neither narrows a line nor pushes one
                 // down, which is exactly what `SwTextFly::ForEach` skips it for.
@@ -293,7 +299,8 @@ internal sealed class FrameResolution
                 // Never an obstacle, whatever the document says its wrap is. An as-character frame is
                 // part of the text rather than something the text flows around, which is why Writer
                 // gives it a portion and not an entry in `SwTextFly`'s object list.
-                placed.Add(new PlacedFrame(frame, placedAt, Content(frame, placedAt, collapsesSpacing)));
+                placed.Add(new PlacedFrame(
+                    frame, placedAt, Content(frame, placedAt, collapsesSpacing, addsCellLineSpacing)));
             }
         }
 
@@ -479,14 +486,16 @@ internal sealed class FrameResolution
     /// does. An image frame has no blocks and gets null, since the raster is decoded elsewhere and the
     /// rectangle is all the wrap ever needed.
     /// </remarks>
-    private static PlacedFlow? Content(PageFrame frame, DocRect area, bool collapsesSpacing)
+    private static PlacedFlow? Content(
+        PageFrame frame, DocRect area, bool collapsesSpacing, bool addsCellLineSpacing)
         => frame.Blocks.Count == 0
             ? null
             : FlowLayouter.LayOut(
                 frame.Blocks,
                 area.Deflate(frame.Padding),
                 Length.Zero,
-                collapsesSpacing: collapsesSpacing);
+                collapsesSpacing: collapsesSpacing,
+                addsCellLineSpacing: addsCellLineSpacing);
 
     /// <param name="Index">Which page the block starts on.</param>
     /// <param name="Page">That page.</param>

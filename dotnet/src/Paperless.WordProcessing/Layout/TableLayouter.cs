@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
+using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Layout;
 
@@ -45,6 +46,10 @@ public static class TableLayouter
     /// it — see <see cref="FlowLayouter.LayOut"/>. It decides a cell's height, and so a row's, so passing
     /// the document's answer matters as much here as it does in the body.
     /// </param>
+    /// <param name="addsCellLineSpacing">
+    /// Whether a cell grows by its last paragraph's proportional line spacing — Writer's
+    /// <c>AddParaLineSpacingToTableCells</c>. See <see cref="CellLineSpacing"/>.
+    /// </param>
     /// <returns>
     /// The cells with page-coordinate rectangles, and each row's height in order — the caller needs the
     /// heights to decide where the table ends and which rows fit on the page.
@@ -54,7 +59,8 @@ public static class TableLayouter
         DocPoint origin,
         int nesting = 0,
         Length? available = null,
-        bool collapsesSpacing = false)
+        bool collapsesSpacing = false,
+        bool addsCellLineSpacing = false)
     {
         ArgumentNullException.ThrowIfNull(table);
 
@@ -79,13 +85,18 @@ public static class TableLayouter
                         new DocRect(Length.Zero, Length.Zero, inner, Length.Zero),
                         Length.Zero,
                         nesting,
-                        collapsesSpacing)
+                        collapsesSpacing,
+                        addsCellLineSpacing)
                     : null;
 
                 // The advance rather than the ink: a cell is as tall as its content plus the space after
                 // its last paragraph, which is what `AddParaSpacingToTableCells` — on for every Word
                 // document — makes Writer do. See `PlacedFlow.Advance`.
                 Length text = content is null ? Length.Zero : content.Advance;
+
+                // And its last paragraph's proportional line spacing on top of that, which is the second
+                // half of the same compatibility rule. See `CellLineSpacing`.
+                if (addsCellLineSpacing) text += CellLineSpacing(cell.Blocks);
 
                 int last = Math.Min(row + Math.Max(1, cell.RowSpan), rows) - 1;
                 measured.Add(new Measured(row, last, cell, width, content, text));
@@ -490,6 +501,49 @@ public static class TableLayouter
         }
 
         return (top + bottom) / 2;
+    }
+
+    /// <summary>
+    /// How much a cell grows for the proportional line spacing on its last paragraph.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>AddParaLineSpacingToTableCells</c>, which <c>WriterFilter.cxx</c>:314 switches on for
+    /// every document the OOXML, DOC and RTF importers read and which is off for a native ODF one. It is
+    /// the companion of <c>AddParaSpacingToTableCells</c> — that one charges the cell for its last
+    /// paragraph's space-after, this one for the space its line spacing would have handed to a paragraph
+    /// below it. <c>SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell</c>
+    /// (<c>sw/source/core/layout/flowfrm.cxx</c>:1946) adds both, and only for the last flow frame in the
+    /// cell, which is why this is measured from the last block rather than from every paragraph.
+    /// </para>
+    /// <para>
+    /// The amount is not the leading the layout engine computes. <c>SwBorderAttrs::CalcLineSpacing_</c>
+    /// (<c>sw/source/core/layout/frmtool.cxx</c>:2681) is
+    /// <c>nFontSize × (prop − 100) × 1.15 / 100</c> in twips — the paragraph's <em>font size</em> rather
+    /// than its measured line height, with a 1.15 fudge factor added for tdf#125300 that stands in for the
+    /// ratio between the two. Reproduced here to the digit, including the truncation and the order of
+    /// operations: the integer product is formed first and only then multiplied by a binary <c>1.15</c>
+    /// slightly below the decimal one, which is what makes 125% come out at 68 twips rather than 69.
+    /// Measured against LibreOffice on a one-cell fixture at 110, 115, 125, 150, 200 and 250 per cent,
+    /// where every one of the six matched exactly.
+    /// </para>
+    /// <para>
+    /// A cell ending in a nested table gets nothing: the attribute set consulted there is the table's,
+    /// which carries no line spacing item at all.
+    /// </para>
+    /// </remarks>
+    /// <param name="blocks">The cell's blocks.</param>
+    private static Length CellLineSpacing(IReadOnlyList<PageBlock> blocks)
+    {
+        if (blocks.Count == 0 || blocks[^1] is not PageParagraph last) return Length.Zero;
+
+        LineSpacingRule spacing = last.Format.LineSpacing;
+        if (spacing.Mode != LineSpacingMode.Proportional) return Length.Zero;
+
+        long percent = (long)Math.Round(spacing.Proportion * 100.0, MidpointRounding.AwayFromZero);
+        if (percent <= 100) return Length.Zero;
+
+        return Length.FromTwips((long)(last.EmSize.Twips * (percent - 100) * 1.15 / 100.0));
     }
 
     private static DocRect Shift(DocRect area, Length dx, Length dy)

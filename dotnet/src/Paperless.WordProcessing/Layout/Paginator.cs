@@ -33,6 +33,7 @@ public sealed record PaginationOptions
     {
         KeepsSpacingAtTopOfPage = true,
         CollapsesSpacing = true,
+        AddsCellLineSpacing = true,
     };
 
     /// <summary>
@@ -73,6 +74,20 @@ public sealed record PaginationOptions
     /// source document, exported both ways. On a five-page document that is one page break.
     /// </remarks>
     public bool CollapsesSpacing { get; init; }
+
+    /// <summary>
+    /// Whether a table cell grows by the proportional line spacing on its last paragraph.
+    /// </summary>
+    /// <remarks>
+    /// Writer's <c>ADD_PARA_LINE_SPACING_TO_TABLE_CELLS</c>, the companion of the
+    /// <c>ADD_PARA_SPACING_TO_TABLE_CELLS</c> rule that already charges a cell for its last paragraph's
+    /// space-after. It is not read from the document at all: <c>WriterFilter.cxx</c>:314 sets it on every
+    /// file the DOCX, DOC and RTF importers open, and a native ODF document leaves it at its off default —
+    /// which is exactly the split between the two presets here. See <see cref="TableLayouter"/>'s
+    /// <c>CellLineSpacing</c> for the amount, which is a function of the font size rather than of the
+    /// measured line height.
+    /// </remarks>
+    public bool AddsCellLineSpacing { get; init; }
 
     /// <summary>
     /// Whether a justified line ended by a manual break is stretched to the margin.
@@ -311,7 +326,7 @@ public sealed class Paginator
         // reached through the flow it landed in, which exists only once a page has been filled. Scanning
         // the blocks instead returned early on exactly those documents and left their frames unplaced.
         FrameResolution resolution = FrameResolution.Of(
-            blocks, withFrames, pages, _options.CollapsesSpacing);
+            blocks, withFrames, pages, _options.CollapsesSpacing, _options.AddsCellLineSpacing);
         if (resolution.IsEmpty) return pages;
 
         for (int pass = 0; pass < MaxFramePasses; pass++)
@@ -328,7 +343,7 @@ public sealed class Paginator
             }
 
             FrameResolution settled = FrameResolution.Of(
-                blocks, withFrames, next, _options.CollapsesSpacing);
+                blocks, withFrames, next, _options.CollapsesSpacing, _options.AddsCellLineSpacing);
             pages = next;
 
             bool converged = settled.SameAs(resolution);
@@ -409,7 +424,8 @@ public sealed class Paginator
                         new DocPoint(Length.Zero, Length.Zero),
                         0,
                         width,
-                        _options.CollapsesSpacing);
+                        _options.CollapsesSpacing,
+                        _options.AddsCellLineSpacing);
 
                 laid.Add(new LaidBlock(null, cells, rowHeights));
                 continue;
@@ -491,14 +507,14 @@ public sealed class Paginator
                 page,
                 pageFurniture?.Header(
                     pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
-                    _options.CollapsesSpacing));
+                    _options.CollapsesSpacing, _options.AddsCellLineSpacing));
 
             body = PulledUpBy(
                 body,
                 page,
                 pageFurniture?.Footer(
                     pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
-                    _options.CollapsesSpacing));
+                    _options.CollapsesSpacing, _options.AddsCellLineSpacing));
 
             bodyHeight = body.TextHeight;
         }
@@ -1234,8 +1250,12 @@ public sealed class Paginator
         bool first)
         => furniture is null
             ? (null, null)
-            : (furniture.Header(section, geometry, pageNumber, first, _options.CollapsesSpacing),
-               furniture.Footer(section, geometry, pageNumber, first, _options.CollapsesSpacing));
+            : (furniture.Header(
+                   section, geometry, pageNumber, first,
+                   _options.CollapsesSpacing, _options.AddsCellLineSpacing),
+               furniture.Footer(
+                   section, geometry, pageNumber, first,
+                   _options.CollapsesSpacing, _options.AddsCellLineSpacing));
 
     /// <summary>
     /// A page's geometry with the body moved down to clear a running head that outgrew its margin.
@@ -1470,7 +1490,10 @@ public sealed class Paginator
         if (_noteHeights.TryGetValue(note, out Length cached)) return cached;
 
         Length height = FlowLayouter.HeightOf(
-            note.Blocks, _noteWidth, collapsesSpacing: _options.CollapsesSpacing);
+            note.Blocks,
+            _noteWidth,
+            collapsesSpacing: _options.CollapsesSpacing,
+            addsCellLineSpacing: _options.AddsCellLineSpacing);
         _noteHeights[note] = height;
         return height;
     }
@@ -1493,7 +1516,8 @@ public sealed class Paginator
 
         return FlowLayouter.LayOut(
             blocks, page.TextArea, offsetFromTop: null,
-            collapsesSpacing: _options.CollapsesSpacing);
+            collapsesSpacing: _options.CollapsesSpacing,
+            addsCellLineSpacing: _options.AddsCellLineSpacing);
     }
 
     /// <summary>
