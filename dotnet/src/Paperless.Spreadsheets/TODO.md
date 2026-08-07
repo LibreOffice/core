@@ -214,6 +214,127 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the tenth sheets sweep found: a paragraph is not one size, and a note is not on its cell
+
+Swept whole at `5ec407cf3` before anything was changed: **127 of 171**, page error 117, 142 exact
+page counts. The brief said 132, 119 and 141, measured at `6b6d54d37` plus its fix; the two
+continuous quantities reproduce within two and the match count is five lower. Ten of the fourteen
+per-batch figures reproduce exactly and 007, 008, 014 and 018 are each one lower — every one of
+the four extra failures a word-gate verdict on a page-exact document, and two of them measurably
+the `Tj`-splitting artefact the brief names (see below).
+
+### An unsized DrawingML run is twelve point, and the paragraph around it keeps its own
+
+`SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx` was page-exact and 31 words short, and
+the missing words were in the two paragraphs of its methodology box that end with a run stating no
+`sz`:
+
+```xml
+<a:r><a:rPr lang="en-GB"><a:effectLst/></a:rPr><a:t> </a:t></a:r>
+```
+
+Two bugs met on that one character. `SheetShapeText.DefaultSize` was 18 pt, cited as DrawingML's
+own default — which it is, for the *shape*: `Shape::setDefaults` puts 18 pt on it
+(`oox/source/drawingml/shape.cxx:334`) and LibreOffice's flat-ODS export writes exactly that as
+every text box's default paragraph style. It is not what a **run** inherits. `TextBody::insertAt`
+reads the text cursor's `CharHeight` before any of the body is inserted
+(`oox/source/drawingml/textbody.cxx:62`) and `TextRun::insertAt` puts that on a run whose own
+`moHeight` is unset (`textrun.cxx:82-85`); on a fresh Calc drawing object that is the EditEngine
+pool's 240 twips. And `SheetShapeParagraph` collapsed a paragraph to the largest size any run
+states, so one stray character re-measured 440 characters of body text.
+
+**Measured against the binary, not derived, because both candidates are in the file.** A probe
+workbook with three text boxes, round-tripped through the flat-ODS export:
+
+| box | runs | export says | breaks after |
+|---|---|---|---|
+| one run, no `sz` | — | `fo:font-size="12pt"` | "decides" |
+| `sz="1100"` body + unsized space | two spans | 11 pt and 12 pt | "every" |
+| `sz="1100"` body + `sz="1800"` run | two spans | 11 pt and 18 pt | "every" |
+
+All three shapes' default paragraph style says 18 pt and none of their runs does. The third row is
+the clean statement of the second rule: a large run that is real, stated and drawn still does not
+reach the words in front of it.
+
+**A word may span a run boundary**, so wrapping run by run would not have worked either — SSRO
+splits "either" as `" e"` + `"ither the date…"`, which is what an authoring tool leaves behind
+when a character property is applied and undone. The painter now flattens a paragraph to text with
+a per-character format beside it, wraps the whole string once, and cuts each line back into the
+maximal stretches that share a format; a line's height and ascent are the largest its stretches
+need, and its pieces are drawn end to end on one baseline. `a:endParaRPr` also reaches a blank
+paragraph now, so the gap between two blocks is reserved at the body's own size.
+
+Reach, measured by rendering rather than by grepping: **eleven of the track's documents have shape
+text with runs at all**, all eleven were rendered before and after, and **two moved** — SSRO 519
+words to 548 of 550, and `Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx` 1530 to **1505 of 1504**,
+which is its `vertOverflow="clip"` notes box now cutting in the right place. No page count moved
+on any of them.
+
+### A sheet's notes are printed on pages of their own, and nothing read the flag
+
+`Hazard Analysis Template.xls` was 2 pages against 3 and 460 words against 682, and the missing
+page is a list of its cell comments. Excel's "Comments: at end of sheet" —
+`EXC_SETUP_PRINTNOTES` → `ATTR_PAGE_NOTES` (`sc/source/filter/excel/xipage.cxx:84`, `:257`),
+`ScPrintFunc::PrintNotes` and `DoNotes` (`printfun.cxx:1930-2066`).
+
+The rules are all in `DoNotes` and short enough to state whole: the page is divided by the width
+of `"GW99999:"` in the default cell font, capped at half the printable width; the marks are flush
+left and the note text wraps in what is left; a note is placed only while
+`nPosY + nTextHeight < aPageRect.Bottom()`, and the pen then advances by its height plus 200
+twips. Nothing is scaled — `DoNotes` sets `aTwipMode` rather than the page's zoomed map mode. The
+order is **column-major** (`CountNotePages`, `printfun.cxx:2591-2600`), which is visible in the
+reference: `Hazard Analysis Template.xls`'s note page runs D1, F2, H2, J2, L1, N2, P2, R2.
+
+Reading it needed a join neither record holds. BIFF8's `NOTE` carries the cell and *names* an
+object; the characters are in that object's `TXO`. `ftCmo`'s identifier was being skipped, and is
+now kept and joined after the sheet is read, since a `NOTE` may precede or follow its `OBJ`.
+
+Reach: **two of the 171 documents ask for this**, and 15 more hold comments without asking.
+
+| | before | after |
+|---|---|---|
+| `Hazard Analysis Template.xls` | 2 pages / 460 words against 3 / 682 | **3 / 682**, exact |
+| `RMP 2011-2014 and Inventory.xls` | 37 pages against 38 | 39 against 38 |
+
+RMP now draws **both** of the note pages the reference draws — its pages 22 and 38, eight marks
+and four, same order, same text. Its remaining page is not this: our first sheet takes 22 pages of
+cells where the reference takes 21, and that predates this round untouched. It cost a while to see
+because the reference's note pages are *not* at the end of the file: they follow each sheet, so
+sheet 0's sits at page 22 in the middle of the document and reads as content at a glance.
+
+**SpreadsheetML's `cellComments` is read as `asDisplayed`, not `atEnd`.** That looks backwards and
+is what the binary does: Calc has one mode, so its OOXML filter has to choose which of the two
+values turns it on, and `PROP_PrintAnnotations` comes from `mnCellComments == XML_asDisplayed`
+(`sc/source/filter/oox/pagesettings.cxx:968`) where the BIFF12 path maps *both* non-`none` values
+onto it (`:270`). No corpus XLSX states either value, so that half follows the source and is
+unmeasured. **ODS is not wired at all** — `style:print="… annotations …"` on the page layout plus
+`office:annotation` on the cells would be the two halves, and no corpus spreadsheet asks for it
+there. Worth doing for symmetry, not for a number.
+
+One instrument note for the next agent: **LibreOffice's flat-ODS export drops cell annotations
+entirely.** Measured on two documents whose notes demonstrably print — `office:annotation` appears
+zero times in the `.fods` and twenty-four times in the `.ods` of the same workbook. So the
+`--convert-to fods` trick, which has settled several questions on this track, is the wrong
+instrument for anything about notes; use `--convert-to ods` and read `content.xml`.
+
+### The `Tj`-splitting artefact costs this track three matches, not one
+
+The brief names `Praktikastellen_…xls` as the one gate miss and says the same artefact inflates
+word counts wherever a workbook holds long tokens. Measured, with a token-length histogram of both
+text layers — the signature is a hard ceiling on our side that the reference does not have:
+
+| document | ours | reference | tokens over 28 chars |
+|---|---|---|---|
+| `Praktikastellen_…xls` (005) | max 33 | max 55 | 1 against 19 |
+| `FY2021-AIP-grants.xlsx` (014) | max 37 | max 49 | 15 against 92 |
+| `STC_WebList.xlsx` (018) | max 89 | max 107 | 734 against 1348 |
+
+Those three are `words`-only failures on page-exact documents and are the same defect. The other
+two word-gate failures in the four batches that came in below the brief are **not** this:
+`CSA_CCM_v1.2.xls` (007) over-counts by 1227 with the same 36-character maximum on both sides, and
+`SLSA_Directory_031423.xlsx` (008) is 187 words *short*, which splitting cannot cause. Both are
+undiagnosed.
+
 ## What the ninth sheets sweep found: a row is measured on a device Calc never draws with
 
 Swept whole at `6b6d54d37`: **125 of 171**, page error 192, 134 exact page counts — the briefed
