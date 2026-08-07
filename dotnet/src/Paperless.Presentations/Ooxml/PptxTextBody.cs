@@ -6,6 +6,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
+using Paperless.Text.Fonts;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
 
@@ -430,8 +431,12 @@ internal static class PptxTextBody
             string? character = Drawing.Attribute(bullet, "char");
             if (string.IsNullOrEmpty(character)) return null;
 
-            return Marked(
-                OutlineNumbers.NormaliseBullet(FirstCodePoint(character)), chain, theme);
+            // The Private Use Area collapse belongs to `Marked`, which is the only place that
+            // knows whether the face has a recode table. Doing it here destroyed the slot before
+            // the table could be reached: a bullet stated as `char="&#xF0D8;"` — which is a
+            // quarter of the corpus's symbol bullets — became U+2022 and was then re-symbolised
+            // into slot 0x22, so every one of them drew the *same* wrong glyph.
+            return Marked(FirstCodePoint(character), chain, theme);
         }
 
         counting[slot] = false;
@@ -476,14 +481,22 @@ internal static class PptxTextBody
         // face the level names for its bullet, and recoding it would make nonsense of it.
         bool symbolFont = isSymbol && IsSymbolFont(font);
 
+        // A recodeable face keeps its Private Use Area slot: SlideTextLayout turns it into the
+        // OpenSymbol glyph holding the same picture, which needs the slot and the face together.
+        // Everything else is collapsed to U+2022 here, which is what the whole of this method's
+        // input used to arrive already collapsed to.
+        string? typeface = Drawing.Attribute(font, "typeface");
+        bool recodeable = symbolFont && SymbolFontRecode.IsRecodeable(typeface);
+        string symbolised = symbolFont ? Symbolised(text) : text;
+
         return new SlideMarker(
-                symbolFont ? OutlineNumbers.NormaliseBullet(Symbolised(text)) : text,
+                recodeable ? symbolised : OutlineNumbers.NormaliseBullet(symbolised),
 
                 // The face is kept even for a symbol bullet: LibreOffice sets both PROP_BulletFont
                 // and PROP_BulletFontName from it and lets the substitution find OpenSymbol
                 // (textparagraphproperties.cxx:347-348). Dropping it here draws the bullet in the
                 // body face instead, which is a different glyph and a different embedded program.
-                Drawing.Attribute(font, "typeface"),
+                typeface,
                 Drawing.Number(Child(chain, "buSzPct"), "val") is { } percent && percent > 0
                     ? percent / 100000.0
                     : 1.0,

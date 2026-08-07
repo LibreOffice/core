@@ -3865,3 +3865,186 @@ minus ninety degrees is the same line.
    `a:prstTxWarp`, so scoping that feature as pptx-only would miss it.
 4. **`Reporting_responsibilities_matrix.pptx`**, 48.41 over 268 pages and untouched by two rounds
    of `a:fontRef` work. Nobody has looked at a page of it.
+
+## Slides, round fourteen: the symbol-font bullet recode — ink flat, embedded faces 72 → 94
+
+The baseline reproduced the brief **to the digit** — 152/163 on the word gate, **1408.90** ink,
+**465** major pages, every page count exact, 0 `ref-failed` — which is the tell that the base
+commit and the instrument are both right. (The worktree was 353 commits behind when the round
+opened and was fast-forwarded before anything was measured. Every recent agent has hit this.)
+
+Whole track swept twice at 163 documents, against a checksummed CLI snapshot, reusing the
+baseline's reference PDFs since nothing this round touches `soffice`.
+
+| | baseline | after the recode |
+|---|---|---|
+| matching the word gate | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | **163/163** |
+| documents the reference could not render | 0 | **0** |
+| total unaccounted ink | 1408.90 | **1409.81** |
+| pages the image tool calls major | 465 | **466** |
+| embed exactly the reference's face count | 72 | **94** |
+| total absolute face-count error | 107 | **83** |
+
+**The metric this round was asked to drive did not move: ink is +0.91, 0.06%, on a change
+reaching 83 of the track's 163 documents.** 62 documents moved, 37 down by 7.34 and 25 up by
+8.25. That is stated first because it is the honest headline; what follows is the case for
+keeping the change anyway, and it rests on three measures that did move.
+
+### What the change is
+
+Both readers already did LibreOffice's first step — a symbol face addresses glyphs by byte
+position, so `0xD8` in Wingdings means "slot 0xD8", and both moved it into the Private Use Area
+as `(c & 0x00ff) | 0xf000`. Neither did the second. Nothing could draw `U+F0D8`, so it was
+collapsed to `U+2022`: a 6.30 pt dot where the reference draws a 13.72 pt arrowhead, on every
+bullet of every affected deck.
+
+`unotools/source/misc/fontcvt.cxx` holds the missing half — ten 224-entry tables mapping each
+face's slots to the code point holding the *same picture* in OpenSymbol, which ships with
+LibreOffice and is therefore always installed. `scripts/generate-symbol-recode.py` reads them,
+as `generate-font-substitutions.py` reads `VCL.xcu` and for the same reason: nothing else states
+the mapping.
+
+Reach, measured before writing anything: **83 of 163 documents** name a recodeable face — 51
+`pptx` on an `a:buFont` and 32 `ppt`. Of the 900 concrete bullet uses in the `pptx` half,
+**876 (97%) recode to a code point OpenSymbol actually has**, none hit a table hole, 8 do not
+(one deck's Webdings `a`) and 16 are outside the symbol range entirely.
+
+### The three measures that did move
+
+1. **Embedded faces, and this is the strongest of the three.** The gate's third check is
+   independent of both the word count and the ink figure, and it is precisely what this fix
+   should move: drawing `U+2022` out of the body face embeds no OpenSymbol and drawing the
+   recoded glyph does. **72 → 94 documents embed exactly the number the reference does**; 25 are
+   closer and one is further. Twenty-four of them go from *N*−1 to exactly *N*.
+2. **Glyph geometry, against LibreOffice's own rendering.** `Framing Europe.ppt` page 12: our
+   bullet was 6.30 pt wide at x = 61.09 against the reference's 13.72; it is now **13.73 at the
+   same pen**, and a 150 dpi row profile across the bullet band reports **zero differing pixels**.
+   On the new fixture the recoded advances agree to a hundredth of a point — `F0D8` 15.94 against
+   15.93, `F0FC` 16.56 against 16.57, `F06E` 15.25 against 15.25.
+3. **Raw pixel difference.** Summed per page, which unlike `ink%` is not affected by how the tool
+   groups pixels into regions, it **falls on every document examined in detail**: Framing Europe
+   221.61 → 220.29 with all 23 moved pages closer and **none further**, 2015-Civil-Rights
+   752.65 → 748.75, 171128IPAP 424.23 → 423.50.
+
+### Why the ink figure can rise while the pixels fall
+
+Worth writing down, because it is a property of the instrument this track now steers by.
+`pdf-image-diff.py` computes a page's figure as `abs(sum over regions of luma_gap × area)`
+(`pdf-image-diff.py:417-420`). **The sum is signed and the absolute value is taken over the
+total**, so regions of opposite sign cancel before the magnitude is read — and removing a deficit
+can therefore *raise* the number when it was cancelling a surplus.
+
+That the bullet regions were doing exactly that is **inferred, not measured**: the direct check
+wants the base binary's renderings, which had been deleted to free disk. What is measured is
+consistent with it and does not prove it — on Framing Europe page 12 the region count falls
+14 → 12, which is the two bullets, every remaining region's extent is byte-identical, and `diff%`
+falls 13.84 → 13.78 while `ink%` rises 1.38 → 1.40.
+
+The worst riser is `2015-Civil-Rights-Website-training.ppt` at +2.24, and it is a document with
+an independently wrong line pitch: ours 36.14 pt against the reference's 41.73/37.64, **unchanged
+by this commit**, so a correctly-sized bullet now sits in a place that was already drifting. Round
+twelve measured that autofit residue and it is still open. This is the "fixes that cancel" shape
+the skill describes for page counts, showing up in the ink metric.
+
+### Two defects in this round's own wiring, both found by a test rather than by reading
+
+Recorded because the pattern is the useful part: each was a plausible reading that worked on
+most inputs.
+
+- **The pptx bullet was normalised before the table could see it.** `PptxTextBody.Marker` applied
+  `NormaliseBullet` at the call site, so a bullet stated as `char="&#xF0D8;"` became `U+2022`
+  and was then re-symbolised into slot `0x22` — every Private-Use-Area-stated bullet in every
+  deck recoding to the *same* wrong glyph, `U+E401`. It survived the first reading because the
+  other three quarters worked: a bullet stated as a plain byte (`char="Ø"`) is untouched by
+  `NormaliseBullet` and recoded correctly. **231 of the 900 pptx bullet uses are stated the first
+  way.** Two tests differing only in how the same slot is spelled disagreed, which localised it.
+- **The trigger was the resolved family rather than the face being absent.** Keying on "did this
+  resolve to OpenSymbol" works for a face `VCL.xcu` gives a chain to — Wingdings names
+  `opensymbol` fourth — and fails silently for one it does not. Nothing in that table mentions
+  `monotypesorts` or `mtextra`, so those went to fontconfig, came back a text face, and fell
+  through to `U+2022`. LibreOffice never asks fontconfig about a symbol font at all
+  (`FcPreMatchSubstitution::FindFontSubstitute` returns false outright,
+  `vcl/unx/generic/font/fontsubst.cxx:100-107`), which is why a missing chain costs it nothing.
+
+A third trap is in the generator rather than the code: **a table hole is written as a bare `0`,
+not `0x0000`**, so the obvious `0x[0-9a-f]+` regex drops it and shifts every later index —
+`aWingDingsTab` then reads 223 entries and sends `U+F0D8` to `U+E49F` instead of `U+E49E`. Both
+readings look entirely plausible. The generator asserts the length is 224 so the wrong one cannot
+ship, and five of the unit tests fail against it.
+
+### The fixture, and one assertion that was narrowed rather than weakened
+
+`tests/corpus/features/slide-symbol-bullet.pptx` — nine bulleted paragraphs chosen to separate
+behaviours rather than repeat one: the same slot spelled both ways (the pair that caught the
+first bug), the corpus's commonest slot, the same slot through two different faces, a table hole,
+a symbol face with no table, and a non-symbol face. `pdf-image-diff.py` against LibreOffice's own
+rendering of it: 1 page, **0 major**, ink 0.33.
+
+One assertion claimed every recoded bullet is wider than the `U+2022` it replaces, and failed
+correctly: `Symbol`'s `0xB7` and the table hole both recode to `U+E12C`, which is OpenSymbol's
+*own bullet* and is **narrower** than Calibri's at the same size, 8.23 pt against 9.96. The claim
+is false for the bullets that really are bullets. It now asserts the width over the five
+pictorial markers and pins the two exceptions as exceptions.
+
+Two of the fixture's nine still differ from the reference and both are understood: our
+unknown-dingbat case draws `U+2022` where LibreOffice draws a glyph, having generic symbol
+handling behind the table that we do not; and the reference's text layer reports every recoded
+bullet by its *original* code point, because LibreOffice writes the slot into `ToUnicode` and
+draws the OpenSymbol glyph, while ours reports the recoded point. Both are Private Use Area code
+points meaning nothing outside one font, so no consumer is worse off and `wc -w` sees neither.
+
+### `NAS-Infrastructure-Roadmaps-v16.0.pptx`: the split reproduces, and the remainder is diffuse
+
+Re-derived from this round's own sweep rather than trusted. Splitting its 225.40 by whether the
+slide carries a `Requires="v"` `p:oleObj`:
+
+| | pages | ink | major |
+|---|---|---|---|
+| carrying one | 24 | **152.12** | 24 |
+| everything else | 113 | **73.28** | 42 |
+
+Both halves match the record (152.12 and 73.21). **So the ceiling attribution holds** — this is
+one of the few predecessor claims on this track to survive an independent check with its sentence
+intact.
+
+The unexamined 73.28 was taken apart and is **not** a second discrete defect. Its worst pages
+carry none of `graphicFrame`, `a:tbl`, `a:blipFill`, `a:pattFill`, `a:gradFill`, `dgm:relIds`,
+`a:prstTxWarp` or `a:outerShdw` in any concentration, and the diff report calls 40–50% of each
+one *"marks displaced or reshaped"* — a reflow spread over 113 pages at about 0.65 each, worst
+page 4.27. The next instrument for it is the extraction comparison, not more pixels.
+
+### What the next agent on this track should take
+
+```
+225.40  66 of 137 major  NAS-Infrastructure-Roadmaps-v16.0.pptx  (152.12 ceiling; the rest is reflow)
+ 66.12   1 of  30        N2_E_Maestroni_Swarm_COP.pptx           (the Gantt)
+ 56.72  10 of  41        Wildlife for REDAC September 11.pptx    (circle gradient, do not)
+ 49.65  18 of  54        Thailand17.ppt
+ 48.41   6 of 268        Reporting_responsibilities_matrix.pptx  (see below)
+ 41.70  18 of  40        171128IPAP.pptx
+ 28.10  13 of  94        8.16_AOD_FINAL_Provider_Training…ppt    (p59 alone is 16.05: text path)
+ 27.00   6 of  10        Demick_JetBlue.pptx                     (chart label density)
+ 26.62  12 of  47        ITE106-Chapter 4.ppt                    (autofit)
+ 25.10   9 of  94        2015-Civil-Rights-Website-training.ppt  (the line pitch, below)
+ 25.03  10 of  52        ghgp-supply-chain-initiative…pptx
+ 24.48  10 of  24        Framing Europe.ppt
+```
+
+1. **`2015-Civil-Rights-Website-training.ppt`'s line pitch is the best-located thing left.** Ours
+   is 36.14 pt where the reference's is 41.73 then 37.64, measured off page 39 with
+   `pdftotext -bbox`, and the reference sets the frame's text about 5.5% smaller than we do (the
+   word "client's" 60.97 pt against our 64.54). Round twelve attributed this to an autofit shrink
+   and fixed the trailing-break half of it; this is the residue, it is now the deck's whole 25.10,
+   and it is what makes the correctly-sized bullet cost ink instead of saving it.
+2. **`Reporting_responsibilities_matrix.pptx` was looked at and is a thin uniform difference**, not
+   repeated furniture: 48.41 over 268 pages, only 6 of them major, `diff%` running 2–15% a page
+   and `ink%` 0.03–0.2. It matches the word gate exactly. Note the tool prints region detail only
+   for major pages, so grouping region signatures across a document only ever describes those.
+3. **`8.16_AOD`'s page 59**, still 16.05 of its 28.10 in one arched WordArt — the `.ppt` twin of
+   `a:prstTxWarp`, so scoping that feature as pptx-only would miss it.
+4. **`…industrymeeting18112004-Aercap.ppt` now embeds 4 faces against the reference's 3**, the one
+   document this round moved *away* on the font check. Small and precisely located.
+5. **The word gate's 11 failures are unchanged and all still attributed** — 8 rasterisation
+   ceiling, `mc:Choice Requires="a14"`, the linked-OLE ceiling, and `Sylva`. Nothing there is
+   winnable without making the output worse.
