@@ -2964,3 +2964,28 @@ That is the same class as `016 FAAAIandtheArtandScienceofV&Vfinal.pptx`'s `a:prs
 this file already records as absent from `dotnet/src` — but through the binary path's WordArt
 rather than through DrawingML, so a fix for one does not automatically reach the other. Worth
 knowing before anyone scopes `prstTxWarp` as a `pptx`-only feature.
+
+### The symbol-font bullet, and why the obvious fix draws tofu
+
+Round eleven named this on `Framing Europe.ppt` — "the reference draws its bullets as a
+Wingdings filled square 13.7 pt wide and we draw a 6.3 pt `•`". It is on
+`2015-Civil-Rights-Website-training.ppt` too, where the reference draws a Wingdings arrowhead
+and we draw a dot, on every bullet of 94 pages.
+
+Three facts, so the next attempt starts from the right place:
+
+1. **The reference keeps the private-use code point.** `pdftotext` on the reference's page 39
+   extracts `U+F0D8` for each bullet, and `pdffonts` reports it drawn from a subset of
+   **OpenSymbol**, which is installed here.
+2. **OpenSymbol's own `cmap` does not contain `U+F0D8`.** Parsed from
+   `/usr/share/fonts/truetype/libreoffice/opens___.ttf`: its whole `F000`–`F0FF` coverage is
+   ten code points, `F030`–`F039`, and `F0D8`, `F0A7`, `F0FC` and `F075` are all absent. So
+   asking a shaper for `U+F0D8` in OpenSymbol gets `.notdef`.
+3. Therefore LibreOffice is going through a **recode table** — its `ConvertChar`/StarSymbol
+   machinery — from the symbol face's byte to an OpenSymbol *glyph*, and writing the original
+   code point back into the PDF's `ToUnicode`. Porting that table is the work; drawing
+   `U+F0D8` in OpenSymbol is not a shortcut, it is tofu.
+
+`PptxTextBody.Symbolised` and `OutlineNumbers.NormaliseBullet` are where our side ends: we map
+the byte to `0xF000 | (c & 0xFF)` exactly as LibreOffice does and then fall back to `U+2022`
+because nothing can draw the result. Point 3 is what would let that fallback go.
