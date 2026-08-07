@@ -2107,7 +2107,7 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | ✅ |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | ✅ |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | **8/9** |
-| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
+| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | **6/10** |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
 | `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 8/10 |
 | `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
@@ -2141,6 +2141,89 @@ first wants the extraction comparison rather than more pixels. The sharpest sing
 feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the reference has and we
 do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
 border grid.
+
+## Sheets, round nineteen: a button is on the screen and not on the paper
+
+Whole track swept before anything was changed, 171 documents, two workers, 171 rows, no path twice
+and no `ref-failed`. **The brief's two headline figures reproduced and its per-batch figures did
+not**, in the way this file now records every round: it gave the track as 138 with page error ~111,
+which is right, alongside `batch-009` at 6/9 with `airports_6.xlsx` and
+`Company_Seniority_Date_Calculator.xlsx` open — those are round *sixteen*'s numbers, both documents
+have matched since rounds seventeen and eighteen, and the base measures `batch-009` at **8/9**. It
+also repeated the "fixed 75% scale, so the shortfall is cumulative row height" account of
+`airports_6.xlsx` that round seventeen refuted (the fault was horizontal, in font substitution).
+Three consecutive rounds have now been described by a brief written before their merge.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 138 | **139** |
+| documents with an exactly correct page count | 147 | 147 |
+| total absolute page error | 111 | 111 |
+| `batch-001`–`008` | 80/80 | **80/80** |
+| `batch-009` | 8/9 | 8/9 |
+| `batch-010` | 5/10 | **6/10** |
+| every other batch | — | unchanged |
+
+**Two rows changed in 171 and neither regressed.** `PC1000.xls` 957 words against 873 → 863/873 and
+into parity; `TK-Syllabus-Comparison-Document-v2.xlsx`'s *reference* word count drifted
+258368 → 258369 with ours unchanged at 258709, verdict `match` on both sides — the same
+LibreOffice non-determinism this file already records.
+
+### The flag was read for every object and acted on for eleven types
+
+`ftCmo`'s third field is a flag word and the reader skipped it, so `fPrint`
+(`EXC_OBJCMO_PRINTABLE`, `sc/source/filter/inc/xlescher.hxx:228`) never reached the page. Excel
+leaves "Print object" off for a button by default, which makes this common rather than exotic.
+
+The rule is narrower than the flag. Calc reads the bit for every object and acts on it only in
+`XclImpControlHelper::ProcessControl`, which writes it to the control model's `Printable` property
+(`sc/source/filter/excel/xiescher.cxx:1998`); a plain shape with the bit clear is merely traced by
+`DoPreProcessSdrObj` (`xiescher.cxx:843-845`) and printed anyway. `PC1000.xls` states both cases in
+one file — six Buttons at `0x4001`, a Rectangle at `0x6001` and a Picture at `0x6001`, every one
+with the bit clear — and the reference draws the rectangle and the picture and none of the buttons.
+
+Its signature is as clean as this track has produced: **exactly +9 words on each of pages 2 to 9**
+of a document whose 13 pages already matched, the nine being two button captions.
+
+**The object is flagged rather than dropped**, because `ScDrawLayer::GetPrintArea` counts every
+object and excludes only the hidden-comment layer (`drwlayer.cxx:1395-1424`) — so an unprintable
+button anchored past the last cell still widens the printed block. Dropping it would have drawn the
+right page and paginated the wrong number of them, which is the failure mode this file already
+records under "a change that only ever widens a print area".
+
+### Reach, and the honest second number beside it
+
+**16 of the corpus's 62 binary workbooks carry an unprintable form control**, across batches 005,
+008, 010, 011, 012, 013, 014, 016 and 017 — the rule is general. **One of the sixteen moved**: the
+others' controls carry no `TXO` text and were already drawing nothing. Both figures belong in the
+same sentence, because the first alone overstates the change by an order of magnitude and the
+second alone reads like a special case.
+
+**Zero of the 109 corpus SpreadsheetML documents state `fPrintsWithSheet="0"` or a VML
+`<x:PrintObject>False</x:PrintObject>`**, so the OOXML side is left unimplemented rather than
+written blind.
+
+### `RegChangeReport.xlsx`: round eighteen's measurements hold, two of its conclusions do not
+
+Both figures reproduce exactly — 3060 words against 3137 with page 6 alone at −72, and the
+reference embedding Carlito on all twelve pages where we embed none.
+
+**It is a page break, not a missing clip-and-redraw.** `DrawCoveredMerge` already redraws a
+straddling merge from its true origin and its own remark cites this workbook; the band at the top
+of the reference's page 6 is **row 135 alone**, which is 95.25 pt tall. LibreOffice ends page 5 at
+row 134 and we fit row 135 onto it, so our page 6 has no covered cell to reach back from. Off
+LibreOffice's own flat-ODF export: page 5 starts at row 100 on both sides, rows 100–134 sum to
+586.90 pt and 100–135 to 682.14 pt, and a greedy pagination over those heights reproduces every one
+of LibreOffice's breaks for a body height in **[681.62, 682.14)**. Ours admits 682.14. The exported
+page geometry does **not** give that number — margins 0.75 in and 0.3 in with a 0.45 in footer and
+0.311 in of footer spacing come to a 661.6 pt body, and 661.6 breaks page 5 at row 133, which is not
+what the reference draws. That contradiction is the thing to measure first next round.
+
+**The steady −1 a page is the `&<size>` code, not the unhonoured `&"Calibri"`.** Both sides draw
+the footer's `_x000D_`, its `#` and its sentence; `&1` puts the reference's `#` on its own baseline
+(y 766.70 against 758.10 on page 5) so poppler counts it separately, and we draw the part at one
+size so `wc -w` reads `_x000D_#` as one word. Honouring the size is worth +12 across the document,
+taking −77 to −65 against a 2% band of 62.7 — still short. Only page 6's band closes it.
 
 ## Sheets, round eighteen: an empty row band is not a page the zoom search can count
 

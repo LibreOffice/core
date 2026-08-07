@@ -394,6 +394,102 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The nineteenth sweep: a button is on the screen and not on the paper
+
+Swept whole at `7e1b7c79e` before anything was changed, 171 documents, two workers, no path twice
+and no `ref-failed`: **138 of 171, total absolute page error 111, 147 exact page counts**, batches
+001 to 008 at 80/80 with zero page error and `batch-009` at **8/9**.
+
+**The brief handed over round sixteen's per-batch figures again, and this time the whole-track
+headline was round eighteen's.** It gave `batch-009` as 6/9 with `airports_6.xlsx` and
+`Company_Seniority_Date_Calculator.xlsx` open; both have matched since rounds seventeen and
+eighteen respectively, and `RegChangeReport.xlsx` is the only document left in that batch. It also
+repeated the "fixed 75% scale, so the shortfall is cumulative row height" account of
+`airports_6.xlsx` that round seventeen had already refuted. That is three consecutive rounds
+described by a brief written before their merge; the base commit's own numbers are the only ones
+worth starting from.
+
+### `ftCmo`'s flag word was skipped, and its `fPrint` bit with it
+
+`XlsDrawingCollector.ReadObject` read `ftCmo`'s object type and identifier and skipped the rest, so
+the third field — the flag word — never reached the page. Its `fPrint` bit
+(`EXC_OBJCMO_PRINTABLE = 0x0010`, `sc/source/filter/inc/xlescher.hxx:228`) is what Excel's
+"Print object" checkbox writes, and Excel leaves it **off** for a button by default.
+
+**The rule is narrower than the flag, and getting that wrong loses shapes the reference draws.**
+Calc reads the bit for every object but acts on it in exactly one place:
+`XclImpControlHelper::ProcessControl` writes it to the control model's `Printable` property
+(`sc/source/filter/excel/xiescher.cxx:1998`). A plain shape with the bit clear reaches
+`XclImpDrawObjBase::DoPreProcessSdrObj`, which merely *traces* that the object is not printable
+(`xiescher.cxx:843-845`) and prints it anyway. `PC1000.xls` states both cases at once: its OBJ
+records are six Buttons at `0x4001`, one Rectangle at `0x6001` and one Picture at `0x6001` — every
+one of them with `fPrint` clear — and the reference PDF draws the rectangle and the picture and
+none of the buttons. So the flag is honoured for the eleven types Calc's factory turns into an
+`XclImpTbxObjBase` (`xiescher.cxx:280-292` against `xiescher.hxx:503-776`): button, check box,
+option button, edit box, label, dialog, spin, scroll bar, list box, group box, drop-down.
+
+Measured on `sheets/batch-010/xls/PC1000.xls`, which is as clean a signature as this track has
+produced: **exactly +9 words on each of pages 2 to 9** and +17 on page 1, on a document whose page
+count already matched at 13. The nine are the captions of two buttons — `Clear Individual Lot Data`
+and `Clear Data From all Lots`. **957 words against 873 before and 863 after**, and the document is
+inside the gate's band.
+
+### The object is flagged, not dropped, because its anchor still moves the page break
+
+The first cut skipped the object in the reader. That is wrong and the corpus would have shown it
+somewhere unrelated: `ScDrawLayer::GetPrintArea` walks every object on the page and excludes
+exactly one thing, the hidden layer a closed comment's caption sits on
+(`sc/source/core/data/drwlayer.cxx:1395-1424`) — so an unprintable button anchored past the last
+cell **still widens the printed block**, which is what `SheetDrawingArea.Extend` reproduces.
+`SheetDrawing` therefore carries `IsPrintable` beside `IsHidden`, and only `SheetPageGraphics`
+reads it.
+
+### Reach, measured on the files rather than grepped
+
+**16 of the corpus's 62 binary workbooks carry an unprintable form control**, spread across batches
+005, 008, 010, 011, 012, 013, 014, 016 and 017 — so this is not a one-document rule. What it is
+*not* is a change with sixteen documents' worth of effect: only one of the sixteen moved, because
+the others' controls carry no `TXO` text and were drawing nothing to begin with. Both figures are
+worth stating together; the first says the rule is general and the second says what it bought.
+
+**Zero of the 109 SpreadsheetML documents in the corpus state `fPrintsWithSheet="0"` or a VML
+`<x:PrintObject>False</x:PrintObject>`**, so the OOXML side of this is deliberately not implemented:
+there is nothing in the corpus to measure it against, and a reader written blind is the thing this
+file keeps recording as a mistake.
+
+### `RegChangeReport.xlsx` is a page break, not a redraw — and the −1 a page is not the footer face
+
+Both of round eighteen's measurements reproduce exactly: **3060 words against 3137**, page 6 alone
+**−72** and every other page within 4; and the reference embeds **Carlito-Regular** on all twelve
+pages where we embed three Liberation Sans subsets and no Carlito. Two of its conclusions need
+correcting.
+
+**The mechanism is not a missing clip-and-redraw.** `SpreadsheetPages.DrawCoveredMerge` already
+redraws a merge straddling a page break from its true origin, and its own remark cites this
+workbook. The band the reference draws at the top of its page 6 is **row 135 alone**, and row 135
+is 95.25 pt tall: LibreOffice ends page 5 at row 134 and we fit row 135 onto it, so there is no
+covered cell on our page 6 for the existing code to reach back from. Measured off LibreOffice's own
+flat-ODF export of the sheet: page 5 begins at row 100 on both sides, rows 100–134 sum to
+**586.90 pt** and rows 100–135 to **682.14 pt**, and a greedy row-band pagination over those heights
+reproduces LibreOffice's own breaks — pages 1–4 at rows 1–28, 29–57, 58–83, 84–99 — for a usable
+body height in **[681.62, 682.14)**. Ours admits 682.14. So this is one number, and it is about four
+points of page rather than anything about merges.
+
+**And the exported page geometry does not explain that number**, which is the thing to measure
+first next round rather than assume. The flat-ODF page layout states `fo:margin-top="0.75in"`,
+`fo:margin-bottom="0.3in"`, a footer `fo:min-height="0.45in"` and a footer `fo:margin-top="0.311in"`,
+which sum to a body of **661.6 pt** — and 661.6 puts page 5 at rows 99–133 and page 6 starting at
+row 134, which is not what the reference draws.
+
+**The steady −1 a page is the `&<size>` code, not the `&"font"` code.** The footer is
+`&L_x000D_&1#&"Calibri"&10&K000000 Security Classification: Protected A`. Both renderings draw the
+literal `_x000D_`, the `#` and the sentence; the reference draws the `#` **on its own baseline** —
+page 5 has `Security Classification: Protected A` at y 758.10, `_x000D_` at 758.60 and `#` at
+766.70 — because `&1` sets it to one point, and poppler therefore reads it as a separate token. We
+draw the whole part at one size and `wc -w` sees `_x000D_#` as one word. Honouring the size would
+be worth +1 a page, +12 in all, taking −77 to −65 against a 2% band of 62.7 — still short. **Only
+page 6's band closes this document**, and the face is a fidelity defect with no effect on the gate.
+
 ## The eighteenth sweep: an empty row band is not a page the zoom search can count
 
 Swept whole at `54729fdc7` before anything was changed, 171 documents, two workers, no path twice
