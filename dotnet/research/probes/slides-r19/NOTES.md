@@ -72,8 +72,8 @@ like one on a single measurement.
 ## A blip's `a:lum` is a picture recolour, and washout is not the pair it states
 
 Found by ranking the baseline by `|ink|%` and looking at the second document rather than the
-first. `N2_E_Maestroni_Swarm_COP.pptx` carries **66.29 over thirty pages with one major page**,
-and page 1 alone is **63.62** — the reference washes its full-bleed satellite photograph almost
+first. `N2_E_Maestroni_Swarm_COP.pptx` carries **67.34 of unsigned ink over thirty pages with one
+major page**, and page 1 alone is **63.62** — the reference washes its full-bleed satellite photograph almost
 white and we drew it at full strength.
 
 The slide states `<a:blip r:embed="rId3"><a:lum bright="70000" contrast="-70000"/></a:blip>`.
@@ -159,3 +159,57 @@ brightness is the raw value over 327.
 **Unmeasured**: I did not count how many corpus `.ppt` files carry either property. Recording
 it because the brief's own `a:prstTxWarp` note is the same shape of trap — scoping a DrawingML
 feature to pptx alone misses its binary twin, and half the instances with it.
+
+## The text-rectangle fix, swept whole
+
+`sweep-grid`, 163 rows, no path twice, 0 `ref-failed`, against a checksummed snapshot that was
+verified to move the fixture before the run started.
+
+| | baseline | after |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1360.08 | **1357.76** |
+| unsigned `\|ink\|%` | 1680.10 | **1677.66** |
+| major pages | 438 | **438** |
+
+**114 documents moved — 68 better, 46 worse, 5.39 won against 2.95 lost.** No verdict changed on
+any document and no batch moved. That is the shape the brief predicted: a change that touches
+nearly every deck by a fraction of a point each, and wins about twice what it loses.
+
+### And it did not close the one-point band, which refutes my own hypothesis
+
+I took this fix partly on the argument that the autofit search is a *threshold* comparison, so a
+box that is one or two units out lands on the wrong side of a 16-unit window. The pinned document
+says otherwise. `2015-Civil-Rights-Website-training.ppt` page 21 is
+
+```
+ours 20.010 x31   ref 18.990 x31   +5.37%
+```
+
+**before and after, unchanged**, and the deck's 30 differing pages stayed 30 — its `|ink|%` went
+33.20 → 33.34, slightly the wrong way. So the box is not what decided it.
+
+That is worth more than the fix is. With the em on the grid since round seventeen and the box on
+it now — and a fixture proving both edges land where the reference's do — **the only unquantised
+quantity left in that comparison is the measured text height**, which is what rounds seventeen and
+eighteen both attributed it to. The elimination is now complete rather than argued.
+
+One caveat, specific to this document: `2015-Civil-Rights` is a `.ppt`, and `PptSlideLayout`
+scales a grouped shape's rectangle by `Math.Round(width.Emu * placement.A)` before `Place` sees
+it. If that group path disagrees with LibreOffice's by more than a unit, the box on *this* deck is
+still not the reference's and the elimination does not hold here. I did not measure the group
+scale itself.
+
+## Tests
+
+Per project, each run redirected to its own file, on the final tree. **0 failed and 0 skipped in
+every one.**
+
+Core 243, Text 237, Containers 109, Vector 291, Rendering **115**, Markup 259, OpenDocument 125,
+WordProcessing 608, Spreadsheets 437, Presentations **520**, Fidelity **544**.
+
+The three that moved are this round's own: Rendering +11 (`LuminanceRecolourTests`),
+Presentations +3 (`SlideTextAreaGridTests`), Fidelity +2 (`SlideTextAreaGridComparisonTests`,
+`SlidePictureRecolourComparisonTests`). Every other count is the base's to the digit — and note
+that the base's Spreadsheets is **437** and not the 432 slides round eighteen recorded, because
+sheets round twenty landed in the same merge.
