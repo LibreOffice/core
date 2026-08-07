@@ -243,15 +243,11 @@ void SbRtl_CDec(StarBASIC *, SbxArray & rPar, bool)
 {
 #ifdef _WIN32
     SbxDecimal* pDec = nullptr;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        pDec = pSbxVariable->GetDecimal();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    pDec = pSbxVariable->GetDecimal();
     rPar.Get(0)->PutDecimal(pDec);
 #else
     rPar.Get(0)->PutEmpty();
@@ -543,8 +539,9 @@ void SbRtl_Choose(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
+
     sal_Int16 nIndex = rPar.Get(1)->GetInteger();
     sal_uInt32 nCount = rPar.Count();
     nCount--;
@@ -606,8 +603,9 @@ void SbRtl_FreeLibrary(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
+
     GetSbData()->pInst->GetDllMgr()->FreeDll(rPar.Get(1)->GetOUString());
 }
 bool IsBaseIndexOne()
