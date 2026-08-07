@@ -213,6 +213,7 @@ class SwTOXSelectTabPage final : public SfxTabPage
     DECL_LINK(ModifyEntryHdl, weld::TextWidget&, void);
     DECL_LINK(ModifySpinHdl, weld::SpinButton&, void);
     DECL_LINK(ModifyListBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(TitleFocusOutHdl, weld::Widget&, void);
 
     void ModifyHdl();
     void ApplyTOXDescription();

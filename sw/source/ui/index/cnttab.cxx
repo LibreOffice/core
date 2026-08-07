@@ -863,6 +863,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     m_xTitleToggleCB->connect_toggled(aLk);
 
     m_xTitleED->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyEntryHdl));
+    m_xTitleED->connect_focus_out(LINK(this, SwTOXSelectTabPage, TitleFocusOutHdl));
     m_xLevelNF->connect_value_changed(LINK(this, SwTOXSelectTabPage, ModifySpinHdl));
     m_xSortAlgorithmLB->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyListBoxHdl));
     m_xParaStyleLB->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyListBoxHdl));
@@ -1401,8 +1402,26 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifySpinHdl, weld::SpinButton&, void)
     ModifyHdl();
 }
 
+IMPL_LINK_NOARG(SwTOXSelectTabPage, TitleFocusOutHdl, weld::Widget&, void)
+{
+    if (m_xTitleED->get_text().isEmpty())
+    {
+        m_xTitleToggleCB->set_active(false);
+        m_xTitleED->set_sensitive(false);
+        ModifyHdl();
+    }
+}
+
 IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::Toggleable&, rButton, void)
 {
+    if (&rButton == m_xTitleToggleCB.get())
+    {
+        bool bActive = m_xTitleToggleCB->get_active();
+        m_xTitleED->set_sensitive(bActive);
+        if (bActive)
+            m_xTitleED->grab_focus();
+    }
+
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if(TOX_CONTENT == aCurType.eType)
