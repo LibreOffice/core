@@ -13,6 +13,7 @@
 #include <editeng/unolingu.hxx>
 
 #include <wrtsh.hxx>
+#include <ndtxt.hxx>
 #include <rootfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
@@ -2606,6 +2607,108 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testInputFieldName)
     // instead of the typed content ("*User Typed This*").
     assertXPath(pXmlDoc,
                 "//SwFieldPortion[contains(@symbol, 'SwFieldPortion')][@expand='Input field']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropLenAsian)
+{
+    // Hit the ASIAN script branch in SwTextNode::GetDropLen.
+    // The paragraph is a single 7-character katakana word (リブレオフィス) with a
+    // word-length drop cap, so GetDropLen must return the full word length.
+    createSwDoc("drop_asian_word.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pNode->GetDropLen(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropLenComplex)
+{
+    // Hit the COMPLEX (CTL) script branch in SwTextNode::GetDropLen.
+    // The paragraph is a single Bengali word (লিব্রেঅফিস, 10 UTF-16 code units)
+    // with a word-length drop cap; GetDropLen returns the full code-unit length.
+    createSwDoc("drop_complex_word.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pNode->GetDropLen(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropLenDefault)
+{
+    // Hit the DEFAULT (Latin/English) script branch in SwTextNode::GetDropLen.
+    // Word-length drop cap over the paragraph's first word, "Proin" (5 chars).
+    createSwDoc("drop_fly_overlap.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pNode->GetDropLen(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropSize)
+{
+    // Direct C++ unit test for SwTextNode::GetDropSize.
+    createSwDoc("drop_asian_word.fodt");
+
+    // Ensure that all text portions are calculated before testing, so that
+    // GetDropSize() below is deterministic.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    int nFontHeight = 0;
+    int nDropHeight = 0;
+    int nDropDescent = 0;
+    bool bHasDropSize = pNode->GetDropSize(nFontHeight, nDropHeight, nDropDescent);
+
+    // With layout fully reformatted, GetDropSize should reliably succeed and
+    // report a real, positive font height with a non-negative drop height.
+    CPPUNIT_ASSERT(bHasDropSize);
+    CPPUNIT_ASSERT_GREATER(0, nFontHeight);
+    CPPUNIT_ASSERT_GREATEREQUAL(0, nDropHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropSizeUnformatted)
+{
+    // Force the fallback "guessing" branch in GetDropSize by
+    // querying it before the frame has ever been formatted.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    SwFormatDrop aDrop;
+    aDrop.SetLines(3);
+    aDrop.SetChars(1);
+    pNode->SetAttr(aDrop);
+
+    int nFontHeight = 0;
+    int nDropHeight = 0;
+    int nDropDescent = 0;
+
+    // Deliberately no parseLayoutDump()/formatting call here — the frame must
+    // stay unformatted so rFontHeight/rDropHeight start at 0, forcing the
+    // fallback estimation logic to run instead of reading real frame metrics.
+    bool bRet = pNode->GetDropSize(nFontHeight, nDropHeight, nDropDescent);
+
+    // Returns false to signal it's an estimate, not a measured value...
+    CPPUNIT_ASSERT(!bRet);
+    // ...but still produces a usable non-zero guessed height.
+    CPPUNIT_ASSERT_GREATER(0, nDropHeight);
 }
 
 } // end of anonymous namespace
