@@ -190,7 +190,9 @@
 #define RID_SVXITEMS_NOHYPHENATION_TRUE         NC_("RID_SVXITEMS_NOHYPHENATION_TRUE", "No hyphenation")
 #define RID_SVXITEMS_WORDLINE_TRUE              NC_("RID_SVXITEMS_WORDLINE_TRUE", "Individual words")
 #define RID_SVXITEMS_WORDLINE_FALSE             NC_("RID_SVXITEMS_WORDLINE_FALSE", "Not Words Only")
+// To translators: Outline as in the lines of the shape of a character
 #define RID_SVXITEMS_CONTOUR_TRUE               NC_("RID_SVXITEMS_CONTOUR_TRUE", "Outline")
+// To translators: Outline as in the lines of the shape of a character
 #define RID_SVXITEMS_CONTOUR_FALSE              NC_("RID_SVXITEMS_CONTOUR_FALSE", "No Outline")
 #define RID_SVXITEMS_PRINT_TRUE                 NC_("RID_SVXITEMS_PRINT_TRUE", "Print")
 #define RID_SVXITEMS_PRINT_FALSE                NC_("RID_SVXITEMS_PRINT_FALSE", "Don't print")

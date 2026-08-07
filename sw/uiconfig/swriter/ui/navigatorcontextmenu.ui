@@ -490,6 +490,7 @@
       <object class="GtkMenuItem" id="4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <!-- To translators: Outline refers to the overview of the headers in the document -->
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_TRACKING">Outline Tracking</property>
         <property name="use-underline">True</property>
         <child type="submenu">

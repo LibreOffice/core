@@ -13469,6 +13469,7 @@
               <object class="GtkLabel" id="OutlineLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <!-- To translators: Outline refers to an overview of the slides -->
                 <property name="label" translatable="yes" context="TabbedImpress|OutlineTabLabel">~Outline</property>
                 <property name="use-underline">True</property>
                 <style>

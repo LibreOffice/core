@@ -693,6 +693,7 @@
 #define STR_OUTLINE_LEVEL                       NC_("STR_OUTLINE_LEVEL", "Outline Level")
 #define STR_DRAGMODE                            NC_("STR_DRAGMODE", "Drag Mode")
 #define STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY     NC_("STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY", "Send Outline to Clipboard")
+// To translators: Outline refers to the overview of the headers in the document
 #define STR_OUTLINE_TRACKING                    NC_("STR_OUTLINE_TRACKING", "Outline Tracking")
 #define STR_OUTLINE_TRACKING_DEFAULT            NC_("STR_OUTLINE_TRACKING_DEFAULT", "Default")
 #define STR_OUTLINE_TRACKING_FOCUS              NC_("STR_OUTLINE_TRACKING_FOCUS", "Focus")
@@ -1437,6 +1438,7 @@
 #define STR_TEXTOPTIONS                         NC_("STR_TEXTOPTIONS", "Text document")
 #define STR_SCAN_NOSOURCE                       NC_("STR_SCAN_NOSOURCE", "Source not specified.")
 #define STR_NUM_LEVEL                           NC_("STR_NUM_LEVEL", "Level ")
+// To translators: The outline will be followed by a number indicating the outline level
 #define STR_NUM_OUTLINE                         NC_("STR_NUM_OUTLINE", "Outline ")
 #define STR_EDIT_FOOTNOTE                       NC_("STR_EDIT_FOOTNOTE", "Edit Footnote/Endnote")
 #define STR_NB_REPLACED                         NC_("STR_NB_REPLACED", "Search key replaced XX times.")

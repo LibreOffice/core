@@ -27,6 +27,7 @@
             <property name="vexpand">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="valueset-atkobject">
+                <!-- To translators: Outline as in the hierarchy of a list -->
                 <property name="AtkObject::accessible-description" translatable="yes" context="pickoutlinepage|extended_tip|valueset">Click the outline style that you want to use.</property>
               </object>
             </child>

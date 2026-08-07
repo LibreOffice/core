@@ -64,7 +64,9 @@
 #define STR_UNDO_OUTLINELEVEL                   NC_("STR_UNDO_OUTLINELEVEL", "Select outline level")
 #define STR_UNDO_DOOUTLINEBLK                   NC_("STR_UNDO_DOOUTLINEBLK", "View Details")
 #define STR_UNDO_REDOOUTLINEBLK                 NC_("STR_UNDO_REDOOUTLINEBLK", "Hide details")
+// To translators: Outline refers to a group of cells
 #define STR_UNDO_REMOVEALLOTLNS                 NC_("STR_UNDO_REMOVEALLOTLNS", "Clear Outline")
+// To translators: Outline refers to a group of cells
 #define STR_UNDO_AUTOOUTLINE                    NC_("STR_UNDO_AUTOOUTLINE", "AutoOutline")
 #define STR_UNDO_SUBTOTALS                      NC_("STR_UNDO_SUBTOTALS", "Subtotals")
 #define STR_UNDO_TABLETOTALS                    NC_("STR_UNDO_TABLETOTALS", "Table Total Row")

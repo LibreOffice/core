@@ -62,6 +62,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="outlineCB">
+                <!-- To translators: Outline as in the borders of a table -->
                 <property name="label" translatable="yes" context="tp_DataTable|outlineCB">Show outline</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>

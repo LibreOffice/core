@@ -827,6 +827,7 @@
       </node>
       <node oor:name=".uno:OutlineMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <!-- To translators: Outline refers to a mode that shows an overview of the slides -->
           <value xml:lang="en-US">~Outline</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">

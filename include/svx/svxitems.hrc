@@ -40,6 +40,7 @@ const std::pair<TranslateId, sal_uInt16> RID_ATTR_NAMES[] =
     { NC_("RID_ATTR_NAMES", "Font weight")             ,   SID_ATTR_CHAR_WEIGHT },
     { NC_("RID_ATTR_NAMES", "Shadowed")            ,       SID_ATTR_CHAR_SHADOWED },
     { NC_("RID_ATTR_NAMES", "Individual words")        ,   SID_ATTR_CHAR_WORDLINEMODE },
+    // To translators: Outline refers to the lines of the shape of a character
     { NC_("RID_ATTR_NAMES", "Outline")         ,           SID_ATTR_CHAR_CONTOUR },
     { NC_("RID_ATTR_NAMES", "Strikethrough")           ,   SID_ATTR_CHAR_STRIKEOUT },
     { NC_("RID_ATTR_NAMES", "Underline")           ,       SID_ATTR_CHAR_UNDERLINE },

@@ -740,6 +740,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="outline">
+                    <!-- To translators: Outline refers to a grouping of cells -->
                     <property name="label" translatable="yes" context="tpviewpage|outline">_Outline symbols</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>

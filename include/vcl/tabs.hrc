@@ -65,6 +65,7 @@ inline constexpr TabData RID_TAB_TEXTGRID{ NC_("RID_TAB_TEXTGRID", "Text Grid"),
 //  list
 inline constexpr TabData RID_TAB_UNOORDERED{ NC_("RID_TAB_UNOORDERED", "Unordered"), u"defaultbullet.png"_ustr };
 inline constexpr TabData RID_TAB_ORDERED{ NC_("RID_TAB_ORDERED", "Ordered"), u"defaultnumbering.png"_ustr };
+// Translators: Outline as in an overview
 inline constexpr TabData RID_TAB_OUTLINE{ NC_("RID_TAB_OUTLINE", "Outline"), u"setoutline.png"_ustr };
 inline constexpr TabData RID_TAB_IMAGE{ NC_("RID_TAB_IMAGE", "Image"), u"imagebutton.png"_ustr };
 inline constexpr TabData RID_TAB_CUSTOMIZE{ NC_("RID_TAB_CUSTOMIZE", "Customize"), u"developmenttoolsdockingwindow.png"_ustr };

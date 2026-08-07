@@ -3104,12 +3104,15 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:SetOutline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <!-- To translators: Outline as in the style of list -->
           <value xml:lang="en-US">Outline Format</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
+          <!-- To translators: Outline as in the style of list -->
           <value xml:lang="en-US">~Outline Format</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <!-- To translators: Outline as in the style of list -->
           <value xml:lang="en-US">Select Outline Format</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -4095,6 +4098,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:ClearOutline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <!-- To translators: Outline refers to a group of cells -->
           <value xml:lang="en-US">~Remove Outline</value>
         </prop>
       </node>

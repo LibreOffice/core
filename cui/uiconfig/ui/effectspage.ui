@@ -505,6 +505,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="outlinecb">
+                <!-- To translators: Outline as in the lines of the shape of the characters -->
                 <property name="label" translatable="yes" context="effectspage|outlinecb">Outli_ne</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>

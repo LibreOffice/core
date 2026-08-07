@@ -610,6 +610,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="outlinecb">
+                    <!-- To translators: Outline refers to an overview of the slides -->
                     <property name="label" translatable="yes" context="prntopts|outlinecb">Outline</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
