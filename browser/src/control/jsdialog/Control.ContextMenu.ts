@@ -213,6 +213,14 @@ class ContextMenuControl extends JSControl {
 				return false;
 			}
 
+			if (key === 'fitslidetoview') {
+				app.dispatcher.dispatch('fitslidetoview', {
+					part: app.impress.selectedPreviewPart,
+				});
+				this._map?.focus();
+				return false;
+			}
+
 			const unoentry = entry as MenuDefinition;
 			Util.ensureValue(unoentry.uno);
 			const uno =
@@ -337,6 +345,23 @@ class ContextMenuControl extends JSControl {
 					});
 				}
 			}
+		}
+
+		// On the overview page a right click on a preview selects it; offer to fit that
+		// preview to the view.
+		if (
+			app.map._docLayer._docType === 'presentation' &&
+			app.impress.hasOverviewPage &&
+			app.map._docLayer._selectedPart === 0 &&
+			!app.impress.previewEditMode.active &&
+			app.impress.selectedPreviewPart >= 1
+		) {
+			obj.menu.splice(0, 0, {
+				text: _('Fit slide to view'),
+				type: 'command',
+				command: 'fitslidetoview',
+				enabled: 'true',
+			});
 		}
 	}
 

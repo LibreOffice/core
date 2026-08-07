@@ -35,6 +35,16 @@ describe(['tagdesktop'], 'Overview zoom continuity', { testIsolation: false }, f
 		return win.app.impress.previewRects.find((p) => p.part === part).rectangle;
 	}
 
+	// Converts canvas-page twips to client (CSS) coordinates for cy events on the
+	// document container.
+	function toClient(win, x, y) {
+		const viewed = win.app.activeDocument.activeLayout.viewedRectangle;
+		return {
+			x: (x * win.app.twipsToPixels - viewed.pX1) / win.app.dpiScale,
+			y: (y * win.app.twipsToPixels - viewed.pY1) / win.app.dpiScale,
+		};
+	}
+
 	// Passes when the preview of the given part is centered in the visible area (within
 	// 5% of the viewport on each axis) and fills most of the tighter viewport axis. The
 	// integer zoom steps make the exact fill vary, so the fill check is a range; when the
@@ -129,5 +139,25 @@ describe(['tagdesktop'], 'Overview zoom continuity', { testIsolation: false }, f
 			() => win.app.map._docLayer._selectedPart === 2,
 			{ errorMsg: 'never switched to the slide nearest the viewport center' }
 		));
+	});
+
+	it('Preview context menu offers Fit slide to view', function() {
+		const win = this.win;
+		ensureOverviewPage(win);
+		goToPart(win, 0);
+		cy.then(function() {
+			const rect = previewRect(win, 2);
+			const point = toClient(win, rect.center[0], rect.center[1]);
+			// A right click alone does not select the shape under the pointer, so
+			// click once to select the preview before opening its context menu.
+			cy.cGet('#document-canvas').click(point.x, point.y, { force: true });
+			cy.cGet('#document-canvas').rightclick(point.x, point.y, { force: true });
+		});
+		cy.then(() => helper.processToIdle(win));
+		cy.then(function() {
+			expect(win.app.impress.selectedPreviewPart).to.equal(2);
+		});
+		helper.getContextMenuItem('Fit slide to view').click();
+		assertPreviewCentered(win, 2, 0.6, 0.95);
 	});
 });
