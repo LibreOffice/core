@@ -767,6 +767,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 case SdrObjKind::Annotation:
                                     aPopupId = u"annotation"_ustr;
                                     break;
+                                case SdrObjKind::Page:
+                                    aPopupId = u"pageobject"_ustr;
+                                    break;
                                 default: ;
                             }
                         }

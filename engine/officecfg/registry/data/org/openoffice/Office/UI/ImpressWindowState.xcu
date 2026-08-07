@@ -115,6 +115,11 @@
           <value xml:lang="en-US">Slide</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/pageobject" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Preview</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/pagepane" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Slide Sorter/Pane</value>
