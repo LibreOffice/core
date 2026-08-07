@@ -96,7 +96,60 @@ public static partial class FontSubstitutions
     /// the request first regardless would defeat entries that deliberately prefer a substitute.
     /// </remarks>
     public static IReadOnlyList<string> ChainFor(string? familyName)
-        => Chains.TryGetValue(Normalise(familyName), out string[]? chain) ? chain : [];
+    {
+        string key = Normalise(familyName);
+        return !FontconfigOverridesTheChain.Contains(key)
+               && Chains.TryGetValue(key, out string[]? chain)
+            ? chain
+            : [];
+    }
+
+    /// <summary>
+    /// Families whose <c>SubstFonts</c> chain the running binary demonstrably does not follow.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The chain is not the first thing LibreOffice consults on this platform.</strong>
+    /// <c>PhysicalFontCollection::FindFontFamily</c> calls the pre-match hook at
+    /// <c>vcl/source/font/PhysicalFontCollection.cxx:1142</c> and returns whatever it names if that
+    /// family is installed (<c>:1151</c>); <c>ImplFontSubstitute</c>, which is this table, is only
+    /// reached in the *second* loop at <c>:1180</c>. On Linux the hook is
+    /// <c>FcPreMatchSubstitution::FindFontSubstitute</c>
+    /// (<c>vcl/unx/generic/font/fontsubst.cxx:98</c>), which asks fontconfig about every request
+    /// that is not symbol-encoded — and fontconfig always answers, with its own default family when
+    /// it has no rule for the name. So for an uninstalled, non-symbol family the chain never runs.
+    /// </para>
+    /// <para>
+    /// <strong>Measured rather than reasoned.</strong> A flat-ODS probe naming all 296 families the
+    /// sample corpus mentions, each row carrying <c>Hamburgefonstiv</c> and <c>0123456789</c> in
+    /// that family, was rendered by LibreOffice 24.2.7.2 and read back with <c>pdftotext -bbox</c>:
+    /// the two drawn widths identify the face exactly, since the eight installed faces' letter and
+    /// digit runs are all more than a point apart. 270 of the 293 it could name agree with this
+    /// resolver already. The two below are the ones where the chain reaches an installed face
+    /// fontconfig would not have chosen and the family is Latin and not symbol-encoded:
+    /// <c>Helv</c> and <c>SansSerif</c> both come back DejaVu Sans, 86.45 and 63.64 points against
+    /// Liberation Sans's 75.61 and 55.63.
+    /// </para>
+    /// <para>
+    /// <strong>What is deliberately not here, and why.</strong> The probe disagrees on twenty more
+    /// families and none of them is safe to act on from it. Four are <c>Wingdings</c>,
+    /// <c>Wingdings 2</c>, <c>Wingdings 3</c> and <c>Webdings</c>, where the probe is the wrong
+    /// instrument: ODF states no charset, so the request was not symbol-encoded and the hook did not
+    /// bail at <c>fontsubst.cxx:101</c> as it does for a DOCX or XLSX font carrying
+    /// <c>charset="2"</c>. Two are <c>MS Gothic</c> and <c>MS PGothic</c>, where fontconfig's answer
+    /// depends on the characters asked for and the probe asked in Latin. The rest —
+    /// <c>Book Antiqua</c>, <c>Bookman Old Style</c>, <c>Century</c>, <c>Century Schoolbook</c>,
+    /// <c>NewCenturySchlbk</c>, <c>CG Times</c>, <c>Times-Roman</c>, <c>Lucida Console</c> reading
+    /// DejaVu Sans against our serif or fixed answer, and <c>Nimbus Sans L</c>,
+    /// <c>Palatino Linotype</c>, <c>SimSun</c> and the <c>Times New Roman CE</c> family reading a
+    /// face we do not reach — need <see cref="ClassOf"/> replaced by fontconfig's own classification
+    /// rather than an entry here, which is a larger change than this one and reaches the words and
+    /// slides tracks. The measurement is recorded in <c>dotnet/TODO.batches.md</c> so the next round
+    /// has it.
+    /// </para>
+    /// </remarks>
+    private static readonly HashSet<string> FontconfigOverridesTheChain =
+        new(StringComparer.Ordinal) { "helv", "sansserif" };
 
     /// <summary>
     /// The shape LibreOffice files a family under, or <see cref="FontFamilyClass.Unknown"/>.

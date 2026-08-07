@@ -373,4 +373,57 @@ public class FontResolutionTests
 
         resolver.Index.Family(reference.FamilyName)[0].IsFixedPitch.ShouldBeTrue();
     }
+
+    // ------------------------------------- the chain the running binary does not actually follow
+
+    [Theory]
+    [InlineData("Helv")]
+    [InlineData("SansSerif")]
+    [InlineData("Sans-serif")]
+    public void AChainFontconfigOverridesIsNotConsulted(string requested)
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(
+            resolver.Index.Has("DejaVu Sans") && resolver.Index.Has("Liberation Sans"),
+            "both families are needed to tell the two answers apart");
+
+        // VCL.xcu sends both of these to Liberation Sans through albanyamt/albany. The running
+        // binary does not: PhysicalFontCollection::FindFontFamily asks the fontconfig pre-match hook
+        // at PhysicalFontCollection.cxx:1142 and returns its answer at :1151, while
+        // ImplFontSubstitute — the .xcu chain — is only reached at :1180. fontconfig has no rule for
+        // either name, so it answers with its default family.
+        //
+        // Measured on LibreOffice 24.2.7.2: a flat-ODS probe drawing "Hamburgefonstiv" and
+        // "0123456789" in each comes back 86.45 pt and 63.64 pt, which is DejaVu Sans. Liberation
+        // Sans would be 75.61 and 55.63.
+        resolver.Resolve(new FontRequest(requested)).FamilyName.ShouldBe("DejaVu Sans");
+    }
+
+    [Theory]
+    [InlineData("Helvetica", "Liberation Sans")]
+    [InlineData("Albany", "Liberation Sans")]
+    [InlineData("Arial", "Liberation Sans")]
+    [InlineData("Times", "Liberation Serif")]
+    [InlineData("Times New Roman", "Liberation Serif")]
+    [InlineData("Courier", "Liberation Mono")]
+    [InlineData("Courier New", "Liberation Mono")]
+    [InlineData("Calibri", "Carlito")]
+    [InlineData("Cambria", "Caladea")]
+    [InlineData("Garamond", "DejaVu Serif")]
+    [InlineData("Georgia", "DejaVu Serif")]
+    [InlineData("Constantia", "DejaVu Serif")]
+    [InlineData("Consolas", "DejaVu Sans Mono")]
+    [InlineData("Monospace", "DejaVu Sans Mono")]
+    public void TheChainsFontconfigAgreesWithAreUntouched(string requested, string expected)
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(resolver.Index.Has(expected), $"{expected} is not installed");
+
+        // The negative half, and the reason the override is a named pair rather than the whole
+        // table: the same probe measured all fourteen of these and every one agrees with what this
+        // resolver already answered. Suppressing the chain wholesale would move all of them —
+        // Helvetica and Albany off Liberation Sans in particular, which are the substitutions that
+        // preserve a document's line breaks.
+        resolver.Resolve(new FontRequest(requested)).FamilyName.ShouldBe(expected);
+    }
 }
