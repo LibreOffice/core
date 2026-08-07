@@ -5632,3 +5632,186 @@ literals and compares the reference against those.
 **Do not spend a round on the census's top line.** Its raw ranking counts metafile text and
 operator-granularity artefacts as size disagreements, and on the two documents it ranked first and
 second those are more than half the signal. Run `size-census-2.py`, not `size-census.py`.
+
+## Slides, round nineteen: a text rectangle on the grid, and a washout that is not the pair it states
+
+Swept whole three times at `09a35cdae` — baseline, the text-rectangle fix alone, and both fixes —
+163 documents each, every one against a checksummed CLI snapshot of this worktree, each snapshot
+verified to move a document I knew it moved before its run started. 163 rows, no path twice,
+0 `ref-failed`, all three times.
+
+| | baseline `09a35cdae` | text rectangle | + picture recolour |
+|---|---|---|---|
+| word gate | 151 / 163 | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1360.08 | 1357.76 | **1283.56** |
+| unsigned `\|ink\|%` | 1680.10 | 1677.66 | **1603.00** |
+| major pages | 438 | 438 | **430** |
+
+**Whole round: `|ink|%` 1680.10 → 1603.00 — 77.10, or 4.6 per cent of the track's residue — and
+438 major pages → 430, with the word gate flat.**
+
+**The baseline reproduced all four of round eighteen's post-fix figures to the digit** — 151/163,
+1360.08, 1680.10, 438 — and its per-batch split with them. No batch moved and **no verdict changed
+on any of the 163 documents in either sweep**, so `batch-check.sh` stands as the regression guard
+it is now only good for: 001–007, 011, 013 and 015 full, 008 9/10, 009 9/10, 010 8/10, 012 8/10,
+014 7/10, 016 8/10, 017 4/5.
+
+The worktree opened **481 commits behind**, the ninth in a row and the largest gap yet.
+
+### The text rectangle was never on the draw layer's grid — worth 2.44, and it refutes its own lead
+
+`SlideTextLayout.Place` broke and anchored text against the rectangle the reader produced, at the
+file's full EMU precision. The reference cannot: oox builds a shape's matrix in EMUs and scales it
+into hundredths of a millimetre at the end (`oox/source/drawingml/shape.cxx`:1226-1230 at tag
+`libreoffice-24.2.7.2`), `SvxShape` hands the result to `SdrObject::SetSnapRect`, and a
+`tools::Rectangle` holds four `sal_Int32` of the model's map unit. The four text distances are
+`SdrMetricItem`s of the same unit. `src/Paperless.Presentations/Layout/SlideTextLayout.cs`:69.
+
+**Both edges round and the extent does not.** `round(bottom) − round(top)` is not
+`round(bottom − top)`, so a box of one extent is a whole unit taller or shorter depending on where
+on the slide it sits — which is why this cannot be written as a rounding of the width and height,
+and why the fixture states two origins at one extent.
+
+`tests/corpus/features/slide-text-area-grid.pptx` separates the readings: three boxes with all four
+insets at zero and one 18 pt run each, at 2540.497, 5080.503 and 8890.497 units — two directions of
+rounding on two axes. LibreOffice draws 72.000 and 144.028 pt across and a 216.000 pt baseline
+separation; unquantised gives 72.0141, 144.0143 and 216.0141, and we drew exactly those.
+
+**114 documents moved — 68 better, 46 worse, 5.39 won against 2.95 lost**, `|ink|%` 1680.10 →
+1677.66, and no major page either way. That is the shape the brief predicted for it: nearly every
+deck by a fraction of a point, winning about twice what it loses.
+
+#### The lead I took it on was wrong, and the negative result is the more useful half
+
+I argued that the autofit search is a *threshold* comparison, so a box one or two units out lands
+on the wrong side of round seventeen's 16 mm100 window — which reads that window's *width* as the
+size of the error when it is only where the true box lies. The pinned document refutes it.
+`2015-Civil-Rights-Website-training.ppt` page 21 is **`ours 20.010 x31` against `ref 18.990 x31`
+before and after, unchanged**, its 30 differing pages stayed 30, and its `|ink|%` went 33.20 →
+33.34.
+
+So the box is not what decides the one-point band. With the em on the grid since round seventeen
+and the box on it now — and a fixture proving both edges land where the reference's do — **the only
+unquantised quantity left in that comparison is the measured text height.** Rounds seventeen and
+eighteen both said so; it is now an elimination rather than an attribution.
+
+One caveat that is specific to that deck: it is a `.ppt`, and `PptSlideLayout.cs`:1240-1245 scales a
+grouped shape's rectangle by `Math.Round(width.Emu * placement.A)` before `Place` sees it. I did
+not measure that group scale against LibreOffice's, so on this document the box may still not be
+the reference's.
+
+### A blip's `a:lum` is a picture recolour, and PowerPoint's washout is not the pair it states
+
+Found by ranking the baseline by `|ink|%` and looking at the *second* document.
+`N2_E_Maestroni_Swarm_COP.pptx` carries 67.34 over thirty pages with one major page, and **page 1
+alone is 63.62** — the reference washes its full-bleed satellite photograph almost white and we
+drew it at full strength. The slide states `<a:lum bright="70000" contrast="-70000"/>` on its blip.
+
+`GraphicProperties::pushToPropMap` (`oox/source/drawingml/fillproperties.cxx`:797-926, 24.2.7.2)
+sorts that pair into three cases using **two different arithmetics**, and the first case discards
+the numbers the file gives:
+
+1. **70 and −70 exactly** selects LibreOffice's own `ColorMode_WATERMARK`, which is a fixed **+50
+   luminance and −70 contrast** (`fillproperties.cxx`:826-831; `WATERMARK_LUM_OFFSET` and
+   `WATERMARK_CON_OFFSET`, `vcl/source/graphic/GraphicObject.cxx`:53-54; applied through
+   `BColorModifier_RGBLuminanceContrast`, `basegfx/source/color/bcolormodifier.cxx`:367-441).
+2. **Both non-zero otherwise** is baked with *MSO's* formula, half the brightness either side of
+   the contrast (`Bitmap::Adjust`'s `msoBrightness` branch, `vcl/source/bitmap/bitmap.cxx`:1694-98).
+3. **One alone** goes through the colour modifier, all the brightness after the contrast.
+
+**Measured against the binary rather than read out of this checkout's 27.2 alpha.**
+`research/probes/slides-r19/check-washout.py` predicts the reference's page one from ours: mean
+absolute error per channel is **7.15 of 255** under the watermark mapping, **30.98** under the pair
+the file states through the same modifier, and 163.03 for drawing the picture untouched. Four times
+better, so the mapping is the running binary's and not merely the source's.
+
+`src/Paperless.Ooxml/DrawingML/DrawingFill.cs`:100-104 reads it, `LuminanceRecolour`
+(`src/Paperless.Core/Graphics/GlyphRun.cs`) carries it, `PptxSlideLayout.cs`:1359 attaches it and
+`RasterImageDecoder.ChannelMap` carries it out — the pattern `a:duotone` already used, because
+turning a JPEG into a recoloured bitmap needs a codec and a reader has none.
+
+**Swept: four documents moved, all four better, 74.66 won against 0.00 lost**, `|ink|%` 1677.66 →
+1603.00 and major pages 438 → 430. Word counts and verdicts are identical between the two sweeps,
+which is what a picture recolour should do.
+
+| document | `\|ink\|%` | major |
+|---|---|---|
+| `N2_E_Maestroni_Swarm_COP.pptx` | 67.30 → **3.68** | 1 → **0** |
+| `3492.pptx` | 15.35 → **7.26** | 3 → 3 |
+| `Presentation - Identify Components of the Airport (1).pptx` | 2.73 → **0.81** | 7 → **0** |
+| `111006 COMSTAC STOWG Aero spaceports IFG.pptx` | 1.25 → **0.22** | 1 → 1 |
+
+The third is worth reading beside the headline: 2.73 of ink and **seven major pages**, all now
+gone. A recolour that is wrong over a large pale area moves the region classifier without moving
+much ink, which is the case `pdf-image-diff.py`'s two columns exist to separate.
+
+**Reach**: `count-bliplum.py` parses rather than greps, since a *colour*'s `<a:lum>` shares its tag
+name. Of the track's 112 pptx-family decks, **15 carry a blip `a:lum`** — twelve blips state the
+washout pair, one states 20 and 20, and thirty-two state it empty and mean nothing by it. All three
+cases occur in the corpus and the commonest is the no-op, which has to stay one: recolouring costs
+the JPEG pass-through. **Fifteen carry one and four move** — the reach trap the skill warns about,
+in the direction it warns about, and the reported reach is the four measured by rendering them.
+
+#### The wiring defect this round found in itself
+
+The first build changed nothing. `RasterImageDecoder.Ensure` builds a fresh image from the encoded
+bytes and copies across only the fields it names; it named `Duotone` and not the new one, so the
+recolouring was dropped on **every** picture — a decoded one never reaches that branch. The symptom
+is a picture that decodes perfectly and draws untouched, which looks exactly like the feature not
+being implemented. Found by rendering a deck, not by reading the code.
+
+### The regression guards, and the tests
+
+Per project on the final tree, each run redirected to its own file: Core 243, Text 237,
+Containers 109, Vector 291, Rendering **115**, Markup 259, OpenDocument 125, WordProcessing 608,
+Spreadsheets 437, Presentations **520**, Fidelity **544**. **Zero failed and zero skipped
+throughout.** The three that moved are this round's own tests. Note the base's Spreadsheets is 437
+and not the 432 round eighteen recorded — sheets round twenty landed in the same merge.
+
+Five assertions, each verified by reintroducing the defect and watching it fail:
+
+- `ATextRectangleIsAWholeNumberOfHundredthsOfAMillimetre` (two cases) and
+  `TwoBoxesOfOneExtentShareABottomEdgeWhenTheirEdgesRoundAlike` — unit, so the wiring is covered on
+  a machine with no LibreOffice.
+- `ATextRectangleIsRoundedToTheDrawLayersOwnGrid` — fidelity, **at a 0.005 pt tolerance rather than
+  this suite's usual 0.1**, which is seven times the whole effect and could not fail.
+- `AChannelLandsWhereTheReferencePutsIt` (eight levels × three arithmetics) and
+  `TheRecolouringSurvivesADecode` — the expectations are LibreOffice's own levels, read column by
+  column off the fixture's page.
+- `EveryPictureRecolourIsTheOneLibreOfficeApplies` — fidelity, bounded by the *control band's own
+  error plus one level* rather than by a constant, because both writers resample a 256-pixel ramp
+  to 560 and that costs two levels whatever the recolouring does.
+
+**Nothing outside `Paperless.Presentations` decides anything here, and that is checkable rather
+than asserted**: `grep 'Luminance = '` over `src/` finds one setter and it is in
+`PptxSlideLayout`, and `DrawingFill.ReadBlip`'s only callers are the two slide readers. The Core
+and Rendering edits are an optional record field and a branch guarded on it being non-null. **I did
+not run the words or sheets sweeps**; the claim above is from the call graph, and it is the same
+claim the `a:duotone` work rested on.
+
+### What the next round should take, in order
+
+1. **The measured text height, which is now what is left of the one-point band.** The em and the
+   box are both on the reference's grid and the search was compared statement by statement at
+   24.2.7.2 in round seventeen, so `Measure`'s output is the remaining term. Start by settling the
+   caveat above — measure `PptSlideLayout`'s group scale on `2015-Civil-Rights` against
+   LibreOffice's flat-ODF export of the same deck, which states the box in mm100 outright and needs
+   no inference.
+2. **`Demick_JetBlue.pptx`'s charts**, 27.00 `|ink|%` over 6 major pages of 10, which is the
+   densest unexplained document I looked at. Its series are drawn black where the reference draws
+   them in three colours, and its legend comes out as overlapping text at one position where the
+   reference lays out a horizontal legend with markers. Both are in `Paperless.Core/Charts`, a
+   shared layer, so it owes the words and sheets sweeps — and `8_P-Pavese` page 16's axis slot
+   width is in the same file and should be done in the same round.
+3. **The `.ppt` twin of the picture recolour.** Escher states it as
+   `DFF_Prop_pictureBrightness`/`DFF_Prop_pictureContrast` and LibreOffice applies the *same*
+   washout rule to it — `nContrast == -70 && nBrightness == 70` selects
+   `GraphicDrawMode::Watermark` (`filter/source/msfilter/msdffimp.cxx`:3906-3960) — with the
+   contrast on a non-linear scale about `0x10000`. **Unmeasured**: I did not count how many corpus
+   `.ppt` files carry either property. Recorded because it is the same shape as the brief's own
+   `a:prstTxWarp` warning, where scoping a DrawingML feature to pptx alone missed half its
+   instances.
+4. **`TODO.raster-ceiling.md`'s 25% threshold is already fully documented** and needs no work:
+   that file's own "The threshold is a bar, and pages sit just under it" section states the
+   under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
+   not the fix. Round seventeen's action item is done; it should come off the list.

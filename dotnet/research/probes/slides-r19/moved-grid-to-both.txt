@@ -1,0 +1,9 @@
+sweep-grid               signed   1357.76  |ink|   1677.66  major   438  over 163 documents
+sweep-both               signed   1283.56  |ink|   1603.00  major   430  over 163 documents
+
+4 documents moved on |ink| or major pages
+  4 better, 0 worse; 74.66 won against 0.00 lost
+    -63.62  |ink|    67.30 ->     3.68   major   1 ->   0   N2_E_Maestroni_Swarm_COP__pptx
+     -8.09  |ink|    15.35 ->     7.26   major   3 ->   3   3492__pptx
+     -1.92  |ink|     2.73 ->     0.81   major   7 ->   0   Presentation - Identify Components of the Airport (1)__pptx
+     -1.03  |ink|     1.25 ->     0.22   major   1 ->   1   111006 COMSTAC STOWG Aero spaceports IFG__pptx

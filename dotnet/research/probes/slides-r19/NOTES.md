@@ -213,3 +213,54 @@ Presentations +3 (`SlideTextAreaGridTests`), Fidelity +2 (`SlideTextAreaGridComp
 `SlidePictureRecolourComparisonTests`). Every other count is the base's to the digit — and note
 that the base's Spreadsheets is **437** and not the 432 slides round eighteen recorded, because
 sheets round twenty landed in the same merge.
+
+## The picture recolour, swept whole
+
+`sweep-both`, 163 rows, no path twice, 0 `ref-failed`, against a snapshot verified on the fixture
+before the run started.
+
+| | baseline | + text rectangle | + picture recolour |
+|---|---|---|---|
+| word gate | 151 / 163 | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1360.08 | 1357.76 | **1283.56** |
+| unsigned `\|ink\|%` | 1680.10 | 1677.66 | **1603.00** |
+| major pages | 438 | 438 | **430** |
+
+Against the text-rectangle sweep, **four documents moved, all four better: 74.66 won against
+0.00 lost.** Word counts and verdicts are byte-identical between the two sweeps, which is what a
+picture recolour should do — it changes no text.
+
+| document | `\|ink\|%` | major |
+|---|---|---|
+| `N2_E_Maestroni_Swarm_COP.pptx` | 67.30 → **3.68** | 1 → **0** |
+| `3492.pptx` | 15.35 → **7.26** | 3 → 3 |
+| `Presentation - Identify Components of the Airport (1).pptx` | 2.73 → **0.81** | 7 → **0** |
+| `111006 COMSTAC STOWG Aero spaceports IFG.pptx` | 1.25 → **0.22** | 1 → 1 |
+
+### Reach: fifteen carry one and four move
+
+That gap is the point, and it is the reach trap the `corpus-batches` skill warns about, in the
+direction it warns about. Fifteen decks carry a blip `a:lum`; **thirty-two of the elements state
+neither attribute** and mean nothing at all, and of the rest most sit on a picture small enough
+that recolouring it moves no measurable ink. Reported reach is the four documents whose rendering
+actually changed, measured by rendering them.
+
+`Presentation - Identify Components of the Airport (1).pptx` is the one worth noting beside the
+headline: its `|ink|%` was already small at 2.73 and it carried **seven major pages**, all of
+which are now gone. A recolour that is wrong over a large pale area moves the region classifier
+without moving much ink, which is exactly the case `pdf-image-diff.py`'s two columns exist to
+separate — and the reason to read both.
+
+## Round nineteen, whole
+
+| | baseline `09a35cdae` | after both |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1360.08 | **1283.56** |
+| unsigned `\|ink\|%` | 1680.10 | **1603.00** |
+| major pages | 438 | **430** |
+
+**77.10 of `|ink|%`, 4.6 per cent of the track's residue, and eight major pages.** No verdict
+changed on any of the 163 documents in either sweep and no batch moved, so the word gate stands
+where round eighteen left it: 001–007, 011, 013 and 015 full, 008 9/10, 009 9/10, 010 8/10,
+012 8/10, 014 7/10, 016 8/10, 017 4/5.
