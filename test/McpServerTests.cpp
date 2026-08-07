@@ -38,6 +38,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testToolsListDescribesBothDocumentTools);
     CPPUNIT_TEST(testToolsListDescribesTheWritePathTools);
     CPPUNIT_TEST(testToolsListDescribesTheDesignTemplateTool);
+    CPPUNIT_TEST(testToolsListDescribesThePresentationTool);
     CPPUNIT_TEST(testConvertArgumentsRequireAFormat);
     CPPUNIT_TEST(testTransformArgumentsRequireParsableJson);
     CPPUNIT_TEST(testToolsCallUnknownToolIsRejected);
@@ -48,6 +49,10 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testUnknownMethodIsRejected);
     CPPUNIT_TEST(testInvalidRequestsAreRejected);
     CPPUNIT_TEST(testUnsupportedProtocolHeaderIsRejected);
+    CPPUNIT_TEST(testToolsListMarksEveryToolReadOnly);
+    CPPUNIT_TEST(testDescriptionsNameTheEndpointAddress);
+    CPPUNIT_TEST(testCommandArgumentsAreSingleTokens);
+    CPPUNIT_TEST(testResourceAddressEncodesTheFileName);
     CPPUNIT_TEST(testExtractArgumentsNameAViewAndACellRange);
     CPPUNIT_TEST(testDownloadNameIsOfferedInPlainAndInFull);
     CPPUNIT_TEST_SUITE_END();
@@ -60,6 +65,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testToolsListDescribesBothDocumentTools();
     void testToolsListDescribesTheWritePathTools();
     void testToolsListDescribesTheDesignTemplateTool();
+    void testToolsListDescribesThePresentationTool();
     void testConvertArgumentsRequireAFormat();
     void testTransformArgumentsRequireParsableJson();
     void testToolsCallUnknownToolIsRejected();
@@ -70,6 +76,10 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testUnknownMethodIsRejected();
     void testInvalidRequestsAreRejected();
     void testUnsupportedProtocolHeaderIsRejected();
+    void testToolsListMarksEveryToolReadOnly();
+    void testDescriptionsNameTheEndpointAddress();
+    void testCommandArgumentsAreSingleTokens();
+    void testResourceAddressEncodesTheFileName();
     void testExtractArgumentsNameAViewAndACellRange();
     void testDownloadNameIsOfferedInPlainAndInFull();
 
@@ -359,6 +369,30 @@ void McpServerTests::testToolsListDescribesTheDesignTemplateTool()
     LOK_ASSERT(requiredOf(schema).empty());
 }
 
+void McpServerTests::testToolsListDescribesThePresentationTool()
+{
+    constexpr std::string_view testname = __func__;
+
+    const McpServer::McpResponse response = listTools();
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+
+    // The deck is the one argument a caller must give; the design and the file format are optional.
+    const Poco::JSON::Object::Ptr schema = inputSchemaOf(response.body, "create_presentation");
+    LOK_ASSERT(schema);
+    LOK_ASSERT(requiredOf(schema) == std::vector<std::string>{ "spec" });
+    LOK_ASSERT(hasProperty(schema, "design"));
+    LOK_ASSERT(hasProperty(schema, "format"));
+    // The description carries the slide shape a caller writes the deck in.
+    LOK_ASSERT(contains(response.body, R"(\"part\": one of)"));
+    // So does the schema, so a caller that builds its arguments from the schema alone knows what a
+    // slide holds and which names a part and an intent take.
+    const std::string text = schemaText(schema);
+    LOK_ASSERT(contains(text, R"("required":["slides"])"));
+    LOK_ASSERT(contains(text, R"("required":["part","intent","title"])"));
+    LOK_ASSERT(contains(text, R"("enum":["opening","divider","body","closing"])"));
+    LOK_ASSERT(contains(text, R"("enum":["bullets","text"])"));
+}
+
 void McpServerTests::testConvertArgumentsRequireAFormat()
 {
     constexpr std::string_view testname = __func__;
@@ -564,6 +598,101 @@ void McpServerTests::testUnsupportedProtocolHeaderIsRejected()
         LOK_ASSERT_EQUAL(200, response.statusCode);
         LOK_ASSERT(contains(response.body, R"("result":{})"));
     }
+}
+
+void McpServerTests::testToolsListMarksEveryToolReadOnly()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Every tool reads what it is given and returns a new document, so each is marked read-only and
+    // carries a title. No tool reaches outside the server.
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":3,"method":"tools/list"})", std::string(),
+             toolsWithStubExecutor(true));
+    Poco::JSON::Object::Ptr root;
+    LOK_ASSERT(JsonUtil::parseJSON(response.body, root));
+    Poco::JSON::Array::Ptr tools = root->getObject("result")->getArray("tools");
+    LOK_ASSERT(tools && tools->size() == 6);
+    for (std::size_t i = 0; i < tools->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr tool = tools->getObject(i);
+        LOK_ASSERT(!tool->optValue<std::string>("title", std::string()).empty());
+        Poco::JSON::Object::Ptr annotations = tool->getObject("annotations");
+        LOK_ASSERT(annotations);
+        LOK_ASSERT(annotations->optValue<bool>("readOnlyHint", false));
+        LOK_ASSERT(!annotations->optValue<bool>("openWorldHint", true));
+    }
+}
+
+void McpServerTests::testDescriptionsNameTheEndpointAddress()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The description of a tool that takes a document names the upload address of the endpoint the
+    // client reaches, once that address is put in.
+    bool found = false;
+    for (const McpServer::McpTool& tool : McpServer::documentToolDefinitions())
+    {
+        if (tool.name != McpServer::ToolName::ConvertDocument)
+            continue;
+        found = true;
+        const std::string description = McpServer::withEndpointAddress(
+            tool.description, "https://office.example/root/cool/mcp");
+        LOK_ASSERT(contains(description, "https://office.example/root/cool/mcp/upload"));
+        LOK_ASSERT(!contains(description, "{mcp_endpoint}"));
+    }
+    LOK_ASSERT(found);
+}
+
+void McpServerTests::testCommandArgumentsAreSingleTokens()
+{
+    constexpr std::string_view testname = __func__;
+
+    const auto check = [](const std::string& json)
+    {
+        Poco::JSON::Object::Ptr arguments;
+        JsonUtil::parseJSON(json, arguments);
+        return McpServer::validateCommandArguments(arguments);
+    };
+
+    // A format is an extension and a lang is a language tag, and options sit on one line.
+    LOK_ASSERT(!check(R"({"format":"pdf","lang":"en-US","options":"{\"a\": 1}"})"));
+    LOK_ASSERT(!check(R"({})"));
+
+    const std::optional<McpServer::McpToolResult> format = check(R"({"format":"pdf options=x"})");
+    LOK_ASSERT(format && format->isError && contains(format->text, "format"));
+    const std::optional<McpServer::McpToolResult> lang = check(R"({"lang":"en US"})");
+    LOK_ASSERT(lang && lang->isError && contains(lang->text, "lang"));
+    const std::optional<McpServer::McpToolResult> options = check(R"({"options":"a\nb"})");
+    LOK_ASSERT(options && options->isError && contains(options->text, "options"));
+}
+
+void McpServerTests::testResourceAddressEncodesTheFileName()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A produced document whose name holds a space comes back under a valid address.
+    std::vector<McpServer::McpTool> tools = McpServer::documentToolDefinitions();
+    for (McpServer::McpTool& tool : tools)
+    {
+        tool.executor = [](const Poco::JSON::Object::Ptr&,
+                           const McpServer::McpToolCompletion& complete)
+        {
+            McpServer::McpToolResult outcome;
+            outcome.isDocument = true;
+            outcome.documentBytes = "%PDF-";
+            outcome.documentFilename = "my report.pdf";
+            outcome.documentMimeType = "application/pdf";
+            complete(std::move(outcome));
+            return true;
+        };
+    }
+
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":11,"method":"tools/call",)"
+             R"("params":{"name":"convert_document","arguments":{}}})",
+             std::string(), tools);
+    LOK_ASSERT(contains(response.body, "cool://converted/my%20report.pdf"));
 }
 
 void McpServerTests::testExtractArgumentsNameAViewAndACellRange()

@@ -25,6 +25,7 @@
 #include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ContentType.hpp>
+#include <wsd/DeckSpec.hpp>
 #include <wsd/McpDeck.hpp>
 #include <wsd/McpServer.hpp>
 #include <wsd/McpTools.hpp>
@@ -322,6 +323,74 @@ bool startMcpConversion(const std::string& requestType, const std::string& forma
 
     return startMcpDocumentRequest(brokerRequest, input, installResponder, disposition, id,
                                    complete);
+}
+
+/// Build a presentation from a deck spec and deliver it through complete. The deck is compiled into
+/// one transform and run over a blank presentation, so it takes the same broker path a transform on
+/// a caller's own document takes. The deck comes back inline when asLink is false, and as a
+/// download link made from downloadBase otherwise. Returns true when the request was started and
+/// will complete later, false when it failed right away and complete has already been called.
+bool startMcpPresentation(const Poco::JSON::Object::Ptr& arguments,
+                          const std::string& downloadBase, bool asLink,
+                          SocketDisposition& disposition, const std::string& id,
+                          const McpServer::McpToolCompletion& complete)
+{
+    if (std::optional<McpServer::McpToolResult> invalid =
+            McpServer::validateCommandArguments(arguments))
+    {
+        complete(*invalid);
+        return false;
+    }
+
+    // A named design decides both the masters the deck is styled with and the limits it is checked
+    // against. A name no template goes by is reported back as a failure the model can put right by
+    // listing the designs.
+    McpDeck::DesignTemplate design;
+    design.budgets = DeckSpec::budgetsFromConfig();
+    const std::string designName = arguments->optValue<std::string>("design", std::string());
+    if (!designName.empty())
+    {
+        std::optional<McpDeck::DesignTemplate> named = McpDeck::findDesignTemplate(designName);
+        if (!named)
+        {
+            complete({ /*isError=*/true, "There is no design template named \"" + designName +
+                                             "\". Call list_design_templates for the names on "
+                                             "offer." });
+            return false;
+        }
+        design = *named;
+    }
+
+    const McpDeck::CompiledDeck deck =
+        McpDeck::compileDeck(arguments->getObject("spec"), design);
+    if (!deck.ok)
+    {
+        complete({ /*isError=*/true, deck.errorText });
+        return false;
+    }
+
+    McpTools::ResolvedInput input;
+    input.filename = "presentation.fodp";
+    input.fromPath = McpTools::writeIncomingDocument(input.filename, McpDeck::blankPresentation());
+    if (input.fromPath.empty())
+    {
+        complete({ /*isError=*/true, "The presentation could not be started." });
+        return false;
+    }
+    input.ok = true;
+
+    // The transform is a JSON string that may hold spaces and other characters the engine-side
+    // command is split on, so it is percent-encoded.
+    std::string encodedTransform;
+    Poco::URI::encode(deck.transformJSON, "", encodedTransform);
+
+    std::string format = arguments->optValue<std::string>("format", std::string());
+    if (format.empty())
+        format = "odp";
+
+    return startMcpConversion("transform-document-structure", format, /*options=*/std::string(),
+                              /*lang=*/std::string(), encodedTransform, downloadBase, asLink,
+                              input, disposition, id, complete);
 }
 }
 
@@ -781,6 +850,10 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
     {
         tool.description = McpServer::withEndpointAddress(tool.description, endpointUrl);
 
+        // The deck limits come from the configuration, so they are told as they stand now.
+        if (tool.name == McpServer::ToolName::CreatePresentation)
+            tool.description += DeckSpec::limitsSentence(DeckSpec::budgetsFromConfig());
+
         if (tool.name == McpServer::ToolName::ExtractDocumentStructure)
         {
             tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
@@ -918,6 +991,19 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
             {
                 complete({ /*isError=*/false, makeDesignTemplateListing() });
                 return true;
+            };
+        }
+        else if (tool.name == McpServer::ToolName::CreatePresentation)
+        {
+            tool.executor = [&disposition, sessionId, downloadBase](
+                                const Poco::JSON::Object::Ptr& arguments,
+                                const McpServer::McpToolCompletion& complete)
+            {
+                const bool asLink =
+                    arguments->optValue<std::string>("output", std::string()) == "link";
+                const bool started = startMcpPresentation(arguments, downloadBase, asLink,
+                                                          disposition, sessionId, complete);
+                return !started;
             };
         }
 

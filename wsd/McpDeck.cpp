@@ -24,6 +24,7 @@
 #include <Poco/DOM/Element.h>
 #include <Poco/DOM/NodeList.h>
 #include <Poco/DirectoryIterator.h>
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/Path.h>
 #include <Poco/StreamCopier.h>
@@ -171,8 +172,8 @@ DesignTemplate designTemplateFromManifest(const std::string& name,
 
     // The image style comes from a file an integrator may edit, and it only ever composes an image
     // prompt, so it is sanitized here at the trust boundary.
-    design.artDirection =
-        DeckSpec::sanitizeArtDirection(manifest->optValue<std::string>("artDirection", std::string()));
+    design.artDirection = DeckSpec::sanitizeArtDirection(
+        manifest->optValue<std::string>("artDirection", std::string()));
 
     // A manifest limit applies only when it is lower than the configured one, so a template can ask
     // for a smaller deck than the server allows but never a larger one.
@@ -233,6 +234,117 @@ std::vector<DesignTemplate> installedDesignTemplates()
     }
 
     return designs;
+}
+
+std::optional<DesignTemplate> findDesignTemplate(const std::string& name)
+{
+    const std::string wanted = Util::toLower(name);
+    for (DesignTemplate& design : installedDesignTemplates())
+    {
+        if (Util::toLower(design.name) == wanted)
+            return design;
+    }
+    return std::nullopt;
+}
+
+CompiledDeck compileDeck(const Poco::JSON::Object::Ptr& spec, const DesignTemplate& design)
+{
+    CompiledDeck compiled;
+
+    Poco::JSON::Array::Ptr slides = spec ? spec->getArray("slides") : nullptr;
+    if (!slides || slides->size() == 0)
+    {
+        compiled.errorText = "Set \"slides\" to an array of at least one slide.";
+        return compiled;
+    }
+    if (static_cast<int>(slides->size()) > design.budgets.maxSlides)
+    {
+        compiled.errorText = "A deck may have at most " +
+                             std::to_string(design.budgets.maxSlides) +
+                             " slides, and this one has " + std::to_string(slides->size()) + '.';
+        return compiled;
+    }
+
+    // Every slide is checked before any of them is compiled, so the deck is built only once the
+    // whole spec is known to be sound.
+    for (std::size_t i = 0; i < slides->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr slide = slides->getObject(i);
+        if (std::optional<std::string> error =
+                DeckSpec::validateSlideSpec(slide, i, design.budgets))
+        {
+            compiled.errorText = *error;
+            return compiled;
+        }
+
+        const std::string intent = slide->optValue<std::string>("intent", std::string());
+        if (DeckSpec::intentNeedsGeneratedImage(intent))
+        {
+            compiled.errorText = "Slide " + std::to_string(i + 1) + " asks for a generated "
+                                 "picture, which this tool cannot make. Give the slide another "
+                                 "intent, or leave the picture out and add it yourself afterwards.";
+            return compiled;
+        }
+    }
+
+    const DeckSpec::CompileOptions options{ !design.name.empty(), design.artDirection };
+
+    Poco::JSON::Array::Ptr deckCommands = new Poco::JSON::Array();
+
+    // The design goes on first so the engine maps every slide the commands produce onto the
+    // template's masters.
+    if (!design.name.empty())
+    {
+        Poco::JSON::Object::Ptr applyTemplate = new Poco::JSON::Object();
+        applyTemplate->set("ApplyTemplate", design.name);
+        deckCommands->add(applyTemplate);
+    }
+
+    // Each slide compiles against the number of slides already built, then the sequences join end
+    // to end. The engine runs them in order against one document, so the deck grows a slide at a
+    // time exactly as the counts say.
+    for (std::size_t i = 0; i < slides->size(); ++i)
+    {
+        const std::string slideTransform = DeckSpec::compileSlideSpec(
+            slides->getObject(i), static_cast<int>(i), options);
+
+        Poco::JSON::Object::Ptr parsed = new Poco::JSON::Object();
+        if (!JsonUtil::parseJSON(slideTransform, parsed))
+        {
+            compiled.errorText = "Slide " + std::to_string(i + 1) + " could not be built.";
+            return compiled;
+        }
+
+        Poco::JSON::Object::Ptr transforms = parsed->getObject("Transforms");
+        Poco::JSON::Array::Ptr slideCommands =
+            transforms ? transforms->getArray("SlideCommands") : nullptr;
+        for (std::size_t index = 0; slideCommands && index < slideCommands->size(); ++index)
+            deckCommands->add(slideCommands->get(index));
+    }
+
+    Poco::JSON::Object::Ptr transforms = new Poco::JSON::Object();
+    transforms->set("SlideCommands", deckCommands);
+    Poco::JSON::Object::Ptr transform = new Poco::JSON::Object();
+    transform->set("Transforms", transforms);
+
+    std::ostringstream stream;
+    transform->stringify(stream);
+
+    compiled.ok = true;
+    compiled.transformJSON = stream.str();
+    return compiled;
+}
+
+std::string blankPresentation()
+{
+    return R"(<?xml version="1.0" encoding="UTF-8"?>)"
+           R"(<office:document )"
+           R"(xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" )"
+           R"(xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" )"
+           R"(office:version="1.2" )"
+           R"(office:mimetype="application/vnd.oasis.opendocument.presentation">)"
+           R"(<office:body><office:presentation><draw:page/>)"
+           R"(</office:presentation></office:body></office:document>)";
 }
 
 } // namespace McpDeck

@@ -109,6 +109,15 @@ std::string limitsSentence(const Budgets& budgets);
 bool isKnownPart(const std::string& part);
 /// True when the name is one of the known slide intents.
 bool isKnownIntent(const std::string& intent);
+/// True when a slide of this intent fills its content placeholder with a picture
+/// the server has to generate, so the slide needs an image generator behind it.
+bool intentNeedsGeneratedImage(const std::string& intent);
+
+/// The valid slide-part names, in the order they are offered.
+std::vector<std::string> partNames();
+/// The valid slide-intent names, in the order they are offered.
+std::vector<std::string> intentNames();
+
 /// The comma-separated list of valid part names, for error messages.
 std::string partList();
 /// The comma-separated list of valid intent names, for error messages.

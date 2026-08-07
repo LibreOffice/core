@@ -384,6 +384,21 @@ public:
                                 "The data argument is not valid base64"));
         }
 
+        // A deck asked for in a design that no template has is a tool failure that points to the
+        // list of designs.
+        {
+            const std::string slide = R"({"part":"body","intent":"bullets","title":"Slide",)"
+                                      R"("blocks":[{"kind":"bullets","items":["one"]}]})";
+            auto response =
+                toolCall(session, 29, "create_presentation",
+                         R"({"design":"No Such Design","spec":{"slides":[)" + slide + "]}}");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            const std::string text = textResultFrom(response->getBody());
+            LOK_ASSERT(contains(text, "There is no design template named \"No Such Design\"."));
+            LOK_ASSERT(contains(text, "Call list_design_templates"));
+        }
+
         // Converting a small text document to PDF inline returns the produced PDF as an embedded
         // resource whose bytes begin with the PDF marker.
         {

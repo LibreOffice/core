@@ -14,6 +14,7 @@
 #include <wsd/McpServer.hpp>
 
 #include <wsd/AIUtil.hpp>
+#include <wsd/DeckSpec.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
 
 #include <common/Log.hpp>
@@ -172,6 +173,20 @@ void addStringProperty(Poco::JSON::Object::Ptr properties, const std::string& na
     properties->set(name, property);
 }
 
+// Add a string property whose value must be one of the given names.
+void addEnumProperty(Poco::JSON::Object::Ptr properties, const std::string& name,
+                     const std::string& description, const std::vector<std::string>& allowed)
+{
+    Poco::JSON::Object::Ptr property = new Poco::JSON::Object();
+    property->set("type", "string");
+    property->set("description", description);
+    Poco::JSON::Array::Ptr values = new Poco::JSON::Array();
+    for (const std::string& value : allowed)
+        values->add(value);
+    property->set("enum", values);
+    properties->set(name, property);
+}
+
 // Add the properties that say which document to work on. Every tool shares these, so they are
 // described in one place.
 void addInputProperties(Poco::JSON::Object::Ptr properties)
@@ -201,17 +216,11 @@ const std::string OutputDescription =
 // Add the output property that says how a produced document is returned.
 void addOutputProperty(Poco::JSON::Object::Ptr properties)
 {
-    Poco::JSON::Object::Ptr property = new Poco::JSON::Object();
-    property->set("type", "string");
-    property->set("description",
-                  "How the produced document is returned. \"inline\" returns the document in the "
-                  "result. \"link\" returns a download_url, fetched once within 15 minutes with "
-                  "the bearer token the MCP client is configured with.");
-    Poco::JSON::Array::Ptr allowed = new Poco::JSON::Array();
-    allowed->add("inline");
-    allowed->add("link");
-    property->set("enum", allowed);
-    properties->set("output", property);
+    addEnumProperty(properties, "output",
+                    "How the produced document is returned. \"inline\" returns the document in "
+                    "the result. \"link\" returns a download_url, fetched once within 15 "
+                    "minutes with the bearer token the MCP client is configured with.",
+                    { "inline", "link" });
 }
 
 Poco::JSON::Object::Ptr makeObjectSchema(const Poco::JSON::Object::Ptr& properties)
@@ -356,9 +365,102 @@ std::string makeListDesignTemplatesDescription()
 {
     return "List the design templates a new presentation can be built with. Each entry gives the "
            "template's name, the slide parts it has a design for, the image style its pictures "
-           "follow, and the limits a deck built on it must stay within. A design is picked by its "
-           "name. The list is empty when the server has no design templates installed, in which "
-           "case a presentation is built unstyled.";
+           "follow, and the limits a deck built on it must stay within. Call this before "
+           "create_presentation to pick a design by name. The list is empty when the server has no "
+           "design templates installed, in which case a presentation is built unstyled.";
+}
+
+// The shape of one content block of a slide: what it holds, and the text it holds.
+Poco::JSON::Object::Ptr makeSlideBlockSchema()
+{
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    addEnumProperty(properties, "kind", "What the block holds: bullet items, or a run of text.",
+                    { "bullets", "text" });
+
+    Poco::JSON::Object::Ptr itemText = new Poco::JSON::Object();
+    itemText->set("type", "string");
+    Poco::JSON::Object::Ptr items = new Poco::JSON::Object();
+    items->set("type", "array");
+    items->set("items", itemText);
+    items->set("description", "The bullet items of a \"bullets\" block, one string for each.");
+    properties->set("items", items);
+
+    addStringProperty(properties, "text", "The text of a \"text\" block.");
+    return makeObjectSchema(properties);
+}
+
+// The shape of one slide: where it sits in the deck, what it is for, its title, its content blocks,
+// its speaker notes and its picture.
+Poco::JSON::Object::Ptr makeSlideSchema()
+{
+    Poco::JSON::Object::Ptr blocks = new Poco::JSON::Object();
+    blocks->set("type", "array");
+    blocks->set("items", makeSlideBlockSchema());
+    blocks->set("description", "The content of the slide, in the order it appears.");
+
+    Poco::JSON::Object::Ptr imageProperties = new Poco::JSON::Object();
+    addStringProperty(imageProperties, "brief", "What the picture on the slide shows.");
+    addStringProperty(imageProperties, "alt", "The text that stands in for the picture.");
+    Poco::JSON::Object::Ptr image = makeObjectSchema(imageProperties);
+    image->set("description", "The picture the slide carries.");
+
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    addEnumProperty(properties, "part", "Where the slide sits in the deck.",
+                    DeckSpec::partNames());
+    addEnumProperty(properties, "intent", "What the slide is for, which settles its layout.",
+                    DeckSpec::intentNames());
+    addStringProperty(properties, "title", "The title of the slide.");
+    properties->set("blocks", blocks);
+    addStringProperty(properties, "notes", "The speaker notes of the slide.");
+    properties->set("image", image);
+
+    Poco::JSON::Object::Ptr slide = makeObjectSchema(properties);
+    setRequired(slide, { "part", "intent", "title" });
+    return slide;
+}
+
+Poco::JSON::Object::Ptr makeCreatePresentationSchema()
+{
+    Poco::JSON::Object::Ptr slides = new Poco::JSON::Object();
+    slides->set("type", "array");
+    slides->set("items", makeSlideSchema());
+    slides->set("description", "The slides of the deck, in the order they appear.");
+
+    Poco::JSON::Object::Ptr spec = new Poco::JSON::Object();
+    spec->set("type", "object");
+    spec->set("description", "The deck to build, an object with a \"slides\" array.");
+    Poco::JSON::Object::Ptr specProperties = new Poco::JSON::Object();
+    specProperties->set("slides", slides);
+    spec->set("properties", specProperties);
+    setRequired(spec, { "slides" });
+
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    properties->set("spec", spec);
+    addStringProperty(properties, "design",
+                      "The name of a design template from list_design_templates. Leave it out to "
+                      "build the deck unstyled.");
+    addStringProperty(properties, "format",
+                      "The file format of the produced presentation, as an extension. Defaults to "
+                      "\"odp\".");
+    addOutputProperty(properties);
+
+    Poco::JSON::Object::Ptr schema = makeObjectSchema(properties);
+    setRequired(schema, { "spec" });
+    return schema;
+}
+
+std::string makeCreatePresentationDescription()
+{
+    return std::string(
+               "Build a new presentation from a description of its slides and return it. Pass "
+               "\"spec\" as an object with a \"slides\" array. Each slide describes what it is "
+               "about rather than how to draw it, and the server lays it out.\n\n") +
+           DocumentToolDescriptions::DECK_SLIDE_SHAPE +
+           "\n\nThe \"image\" intent needs a picture generator, which this tool does not have, so "
+           "a slide asking for one is refused. Set \"design\" to a name from "
+           "list_design_templates to style the deck; the limits that design declares are the ones "
+           "the deck is checked against." +
+           OutputDescription;
 }
 
 // Serialise the tools as the array a tools/list response carries.
@@ -441,6 +543,13 @@ std::vector<McpServer::McpTool> McpServer::documentToolDefinitions()
         designs.description = makeListDesignTemplatesDescription();
         designs.inputSchema = makeListDesignTemplatesSchema();
         tools.push_back(std::move(designs));
+
+        McpTool presentation;
+        presentation.name = ToolName::CreatePresentation;
+        presentation.title = "Create presentation";
+        presentation.description = makeCreatePresentationDescription();
+        presentation.inputSchema = makeCreatePresentationSchema();
+        tools.push_back(std::move(presentation));
 
         return tools;
     }();

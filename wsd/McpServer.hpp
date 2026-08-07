@@ -125,6 +125,7 @@ public:
         static constexpr std::string_view TransformDocumentStructure =
             "transform_document_structure";
         static constexpr std::string_view ListDesignTemplates = "list_design_templates";
+        static constexpr std::string_view CreatePresentation = "create_presentation";
     };
 
     /// The document tools with their names, descriptions and argument schemas filled in and their

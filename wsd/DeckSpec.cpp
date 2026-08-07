@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <iterator>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -80,7 +81,7 @@ const IntentRule* findIntentRule(const std::string& intent)
 /// not a string.
 std::string getString(const Poco::JSON::Object::Ptr& obj, const std::string& key)
 {
-    if (!obj || !obj->has(key))
+    if (!obj || !obj->has(key) || !obj->get(key).isString())
         return std::string();
     try
     {
@@ -342,6 +343,14 @@ std::vector<std::string> splitLines(const std::string& text)
     return out;
 }
 
+/// True when the raw text is longer than any text whose visible part fits in limit characters.
+/// A visible character takes at most four bytes, and at most one run of up to three emphasis
+/// markers sits before each one and after the last, so the bound is eight bytes per character.
+bool exceedsRawLength(const std::string& text, int limit)
+{
+    return text.size() > 8 * static_cast<std::size_t>(std::max(limit, 0)) + 8;
+}
+
 std::string slidePrefix(unsigned index, const std::string& intent)
 {
     std::string prefix = "Slide " + std::to_string(index + 1);
@@ -406,8 +415,9 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
                     return prefix + "a bullet item must not be empty.";
                 // The emphasis markers are stripped before display, so the
                 // length rule counts only the visible text.
-                if (static_cast<int>(utf16Length(parseEmphasis(item).plain)) >
-                    budgets.maxItemLength)
+                if (exceedsRawLength(item, budgets.maxItemLength) ||
+                    static_cast<int>(utf16Length(parseEmphasis(item).plain)) >
+                        budgets.maxItemLength)
                     return prefix + "a bullet item exceeds " +
                            std::to_string(budgets.maxItemLength) + " characters.";
             }
@@ -418,6 +428,9 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
             const std::string text = getString(block, "text");
             if (text.empty())
                 return prefix + "a text block needs a non-empty \"text\" string.";
+            if (exceedsRawLength(text, budgets.maxItemLength))
+                return prefix + "a text block exceeds " +
+                       std::to_string(budgets.maxItemLength) + " characters.";
             const std::string plain = parseEmphasis(text).plain;
             if (static_cast<int>(utf16Length(plain)) > budgets.maxItemLength)
                 return prefix + "a text block exceeds " +
@@ -740,10 +753,35 @@ bool isKnownIntent(const std::string& intent)
     return findIntentRule(intent) != nullptr;
 }
 
-std::string partList()
+bool intentNeedsGeneratedImage(const std::string& intent)
+{
+    const IntentRule* rule = findIntentRule(intent);
+    return rule && rule->requiresImage;
+}
+
+std::vector<std::string> partNames()
+{
+    std::vector<std::string> names;
+    names.reserve(std::size(PartNames));
+    for (const auto& name : PartNames)
+        names.emplace_back(name);
+    return names;
+}
+
+std::vector<std::string> intentNames()
+{
+    std::vector<std::string> names;
+    names.reserve(std::size(IntentRules));
+    for (const auto& rule : IntentRules)
+        names.emplace_back(rule.intent);
+    return names;
+}
+
+/// The names joined with commas, as an error message lists them.
+static std::string joinNames(const std::vector<std::string>& names)
 {
     std::string list;
-    for (const auto& name : PartNames)
+    for (const std::string& name : names)
     {
         if (!list.empty())
             list += ", ";
@@ -752,17 +790,9 @@ std::string partList()
     return list;
 }
 
-std::string intentList()
-{
-    std::string list;
-    for (const auto& rule : IntentRules)
-    {
-        if (!list.empty())
-            list += ", ";
-        list += rule.intent;
-    }
-    return list;
-}
+std::string partList() { return joinNames(partNames()); }
+
+std::string intentList() { return joinNames(intentNames()); }
 
 std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slideObj,
                                              unsigned index, const Budgets& budgets)

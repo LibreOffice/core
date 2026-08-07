@@ -54,6 +54,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testRejectNotes);
     CPPUNIT_TEST(testCompileEmphasis);
     CPPUNIT_TEST(testEmphasisVisibleLength);
+    CPPUNIT_TEST(testTextLongInBytesAndShortOnScreenIsRefused);
     CPPUNIT_TEST(testCompileSlideSpecFirst);
     CPPUNIT_TEST(testCompileSlideSpecAppend);
     CPPUNIT_TEST(testCompileSlideSpecImage);
@@ -78,6 +79,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     void testRejectNotes();
     void testCompileEmphasis();
     void testEmphasisVisibleLength();
+    void testTextLongInBytesAndShortOnScreenIsRefused();
     void testCompileSlideSpecFirst();
     void testCompileSlideSpecAppend();
     void testCompileSlideSpecImage();
@@ -321,6 +323,13 @@ void DeckSpecTests::testValidateHostileShapes()
     LOK_ASSERT(
         slideError(R"({"part":"body","intent":"image","title":"T","image":"flat"})").has_value());
     LOK_ASSERT(slideError(R"({"part":3,"intent":true,"title":null})").has_value());
+    // A number or an object where text belongs is refused, not turned into its text.
+    LOK_ASSERT(slideError(R"({"part":"body","intent":"bullets","title":42,)"
+                          R"("blocks":[{"kind":"bullets","items":["a"]}]})")
+                   .has_value());
+    LOK_ASSERT(slideError(R"({"part":"body","intent":"quote","title":"T",)"
+                          R"("blocks":[{"kind":"text","text":{"a":1}}]})")
+                   .has_value());
 
     // The outline validator holds to the same rule for its container and its
     // slide entries.
@@ -639,6 +648,39 @@ void DeckSpecTests::testEmphasisVisibleLength()
                    R"({"part":"body","intent":"bullets","title":"X",
                        "blocks":[{"kind":"bullets","items":["**)" + overLimit + R"(**"]}]})")
                    .has_value());
+}
+
+void DeckSpecTests::testTextLongInBytesAndShortOnScreenIsRefused()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Each group is a byte that starts a four-byte character and three letters, each letter after
+    // a run of emphasis markers. Once the markers are taken out, the four bytes count as one
+    // visible character, so a group is 16 bytes long and one character wide.
+    const auto longInBytes = [](int visibleCharacters)
+    {
+        std::string text;
+        for (int group = 0; group < visibleCharacters; ++group)
+            text += "\xf0***A***A***A***";
+        return text;
+    };
+
+    // Each text is within its limit on screen, and longer in bytes than any text that fits, so
+    // the slide is refused for its length.
+    const std::string item = longInBytes(DeckSpec::MaxItemLength * 3 / 4);
+    Poco::JSON::Object::Ptr bullets = parse(R"({"part":"body","intent":"bullets","title":"X",
+                                                "blocks":[{"kind":"bullets","items":[""]}]})");
+    bullets->getArray("blocks")->getObject(0)->getArray("items")->set(0, item);
+    const std::optional<std::string> bulletsError =
+        DeckSpec::validateSlideSpec(bullets, 0, kDefaultBudgets);
+    LOK_ASSERT(bulletsError && bulletsError->find("bullet item exceeds") != std::string::npos);
+
+    Poco::JSON::Object::Ptr quote =
+        parse(R"({"part":"body","intent":"quote","title":"X","blocks":[{"kind":"text"}]})");
+    quote->getArray("blocks")->getObject(0)->set("text", item);
+    const std::optional<std::string> quoteError =
+        DeckSpec::validateSlideSpec(quote, 0, kDefaultBudgets);
+    LOK_ASSERT(quoteError && quoteError->find("text block exceeds") != std::string::npos);
 }
 
 void DeckSpecTests::testUnreadableSlideCapGivesTheDefault()

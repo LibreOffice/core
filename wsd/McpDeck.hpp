@@ -25,6 +25,9 @@
 
 #include <wsd/DeckSpec.hpp>
 
+#include <Poco/JSON/Object.h>
+
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -64,6 +67,37 @@ std::string readDesignManifest(const std::string& templatePath);
 /// the server allows.
 DesignTemplate designTemplateFromManifest(const std::string& name,
                                           const std::string& manifestJson);
+
+/// The design of the given name, or no value when no template goes by it. The name is matched
+/// without regard to case, the way the document engine matches it.
+std::optional<DesignTemplate> findDesignTemplate(const std::string& name);
+
+/// A deck turned into the commands that build it.
+struct CompiledDeck
+{
+    /// True when the deck is ready to run, false when the spec was refused.
+    bool ok = false;
+    /// When ok is false, a readable message naming the slide at fault and what is wrong with it,
+    /// meant to be handed to the calling model so it can send a corrected spec.
+    std::string errorText;
+    /// When ok is true, the transform JSON that builds the whole deck.
+    std::string transformJSON;
+};
+
+/// Turn a deck spec into the single transform that builds it.
+///
+/// The spec is {"slides": [ ... ]}, each entry a slide in the shape DeckSpec::validateSlideSpec
+/// accepts. Every slide is checked against the design's budgets before any of them is compiled, so
+/// a spec is either built whole or refused whole. The slides compile into one command sequence
+/// applied in order, led by the command that puts the deck on the design when one is named.
+///
+/// A slide whose intent asks for a generated picture is refused: this path has no image generator
+/// behind it.
+CompiledDeck compileDeck(const Poco::JSON::Object::Ptr& spec, const DesignTemplate& design);
+
+/// A presentation of one empty slide, as the bytes of a flat ODF document. It is the document a new
+/// deck starts from, which is why a deck's first slide fills a slide that is already there.
+std::string blankPresentation();
 
 } // namespace McpDeck
 
