@@ -53,6 +53,11 @@ public static class XlsxReader
                     (OpcPackage)file.Package, DocumentFamily.Spreadsheet),
             };
 
+            // Read once for the whole package: Calc's OOXML filter decides it in
+            // `checkDocumentProperties` before a single sheet is parsed, and it changes how a
+            // row height is read on every one of them.
+            bool isMicrosoftGenerated = OoxmlMetadata.IsMicrosoftGenerated((OpcPackage)file.Package);
+
             XlsxSheetReader reader = new(file, diagnostics);
 
             // The print names are workbook-level and scoped to a sheet by position, so they are
@@ -100,7 +105,7 @@ public static class XlsxReader
                 XlsxSheetPrintNames print = names.GetValueOrDefault(entry.Index, XlsxSheetPrintNames.None);
                 (SheetPrintSetup setup, SheetGrid grid) = XlsxPrintSetup.Read(
                     worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows,
-                    cellFormats.DefaultColumnFont);
+                    cellFormats.DefaultColumnFont, isMicrosoftGenerated);
 
                 (SheetCellFormats formats, SheetRichText rich) =
                     XlsxSheetFormats.Read(worksheet, cellFormats, file);

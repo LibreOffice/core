@@ -81,6 +81,35 @@ internal static class XlsxPrintSetup
     /// <remarks><c>rAttribs.getInteger(XML_baseColWidth, 8)</c>, <c>worksheetfragment.cxx:672</c>.</remarks>
     private const int DefaultBaseColumnWidth = 8;
 
+    /// <summary>
+    /// The grid a row height written by a Microsoft application is snapped down onto, in points.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Excel stores a row height as a count of screen pixels and writes it out in points, so its
+    /// numbers are only ever multiples of a pixel; LibreOffice takes the file at less than its
+    /// word and rounds every one of them <em>down</em> to a multiple of 0.75 pt —
+    /// <c>fHeight -= fmod(fHeight, 0.75)</c>, applied to <c>sheetFormatPr/@defaultRowHeight</c>
+    /// (<c>sc/source/filter/oox/worksheetfragment.cxx:681-684</c>) and to every
+    /// <c>row/@ht</c> (<c>sc/source/filter/oox/sheetdatacontext.cxx:316-319</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Both places are gated on <c>isMSODocument()</c></strong>, which is the generator
+    /// string and nothing else, so the same bytes in the same sheet are read as two different
+    /// heights depending on what <c>docProps/app.xml</c> says wrote them. Measured on two
+    /// packages differing in that one element and in nothing else: <c>ht="18.6"</c> comes back
+    /// 360 twips from the Microsoft copy and 372 from the other, <c>ht="29.4"</c> 585 against
+    /// 588, and a sheet default of 14.4 gives 285 against 288.
+    /// </para>
+    /// <para>
+    /// <strong>The rounding is the XML filter's, not the format's.</strong> BIFF12 states a row
+    /// height in whole twips and its own <c>importRow</c> and <c>importSheetFormatPr</c> apply
+    /// nothing (<c>sheetdatacontext.cxx:412-440</c>, <c>worksheetfragment.cxx:790-808</c>), so
+    /// XLSB is left alone — see <c>XlsbPrintSetup</c>, which deliberately does not do this.
+    /// </para>
+    /// </remarks>
+    private const double MicrosoftRowHeightGridPoints = 0.75;
+
     /// <summary>Builds a sheet's layout input from its <c>worksheet</c> element.</summary>
     /// <param name="worksheet">The worksheet part's root, or null when it did not load.</param>
     /// <param name="printAreas">The print areas the workbook's defined names gave this sheet.</param>
@@ -90,12 +119,17 @@ internal static class XlsxPrintSetup
     /// The workbook's default font, which a column width is stated in digits of. Null falls back
     /// to Calc's own — see <see cref="SheetColumnDigits"/>.
     /// </param>
+    /// <param name="isMicrosoftGenerated">
+    /// Whether <c>docProps/app.xml</c> names a Microsoft application, which is what decides
+    /// whether row heights are snapped onto <see cref="MicrosoftRowHeightGridPoints"/>.
+    /// </param>
     public static (SheetPrintSetup Setup, SheetGrid Grid) Read(
         XElement? worksheet,
         IReadOnlyList<SheetRange> printAreas,
         SheetRange? repeatColumns,
         SheetRange? repeatRows,
-        SheetDefaultFont? defaultFont = null)
+        SheetDefaultFont? defaultFont = null,
+        bool isMicrosoftGenerated = false)
     {
         if (worksheet is null)
             return (SheetPrintSetup.Default with { PrintAreas = printAreas }, SheetGrid.Standard);
@@ -197,7 +231,7 @@ internal static class XlsxPrintSetup
             ManualRowBreaks = Breaks(Xlsx.Child(worksheet, "rowBreaks")),
         };
 
-        return (setup, ReadGrid(worksheet, defaultFont));
+        return (setup, ReadGrid(worksheet, defaultFont, isMicrosoftGenerated));
     }
 
     /// <summary>
@@ -287,7 +321,8 @@ internal static class XlsxPrintSetup
     /// for a row that holds something, and the rest take <c>defaultRowHeight</c>. So neither
     /// axis needs expanding and the empty remainder of the sheet costs nothing.
     /// </remarks>
-    private static SheetGrid ReadGrid(XElement worksheet, SheetDefaultFont? defaultFont)
+    private static SheetGrid ReadGrid(
+        XElement worksheet, SheetDefaultFont? defaultFont, bool isMicrosoftGenerated)
     {
         XElement? format = Xlsx.Child(worksheet, "sheetFormatPr");
 
@@ -301,7 +336,8 @@ internal static class XlsxPrintSetup
         // at 963 and seven at 1280, which is two pages against three.
         SheetDigitWidth defaultWidth = Digits(Xlsx.Attribute(format, "defaultColWidth"))
                                        ?? BaseWidth(Xlsx.Integer(format, "baseColWidth"));
-        Length? statedHeight = Points(Xlsx.Attribute(format, "defaultRowHeight"));
+        Length? statedHeight = RowHeight(
+            Xlsx.Attribute(format, "defaultRowHeight"), isMicrosoftGenerated);
         Length defaultHeight = statedHeight ?? SheetGrid.StandardRowHeight;
 
         List<SheetDigitRun> columns = [];
@@ -324,7 +360,7 @@ internal static class XlsxPrintSetup
             if (index <= 0) continue;
 
             bool hidden = Xlsx.Flag(row, "hidden");
-            Length? height = Points(Xlsx.Attribute(row, "ht"));
+            Length? height = RowHeight(Xlsx.Attribute(row, "ht"), isMicrosoftGenerated);
             if (height is null && !hidden) continue;
 
             // customHeight is the flag that says the height came from a user rather than from
@@ -394,6 +430,30 @@ internal static class XlsxPrintSetup
     {
         double? points = Xlsx.Double(value);
         return points is { } measure && measure >= 0 ? Length.FromPoints(measure) : null;
+    }
+
+    /// <summary>
+    /// A row height in points, snapped down onto Excel's own pixel grid where Calc snaps it.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="MicrosoftRowHeightGridPoints"/> for the two citations and the measurement.
+    /// The subtraction is written as Calc's own — <c>fHeight -= fmod(fHeight, 0.75)</c> — to keep
+    /// the correspondence readable, and <em>not</em> because it differs from a floor-divide.
+    /// Checked rather than assumed: the two agree on every one of the 49142 heights Excel can
+    /// write, being each hundredth of a point and each twip up to the 409.5 pt ceiling. So do not
+    /// read the form as load-bearing, and do not write a test that claims it is.
+    /// </remarks>
+    private static Length? RowHeight(string? value, bool isMicrosoftGenerated)
+    {
+        double? points = Xlsx.Double(value);
+        if (points is not { } measure || measure < 0) return null;
+
+        // Calc guards the per-row rounding on a positive height and leaves an unstated sheet
+        // default at zero, where the remainder is zero anyway; both come out the same here.
+        if (isMicrosoftGenerated && measure > 0)
+            measure -= measure % MicrosoftRowHeightGridPoints;
+
+        return Length.FromPoints(measure);
     }
 
     /// <summary>An explicit paper dimension, which carries its unit as a suffix.</summary>
