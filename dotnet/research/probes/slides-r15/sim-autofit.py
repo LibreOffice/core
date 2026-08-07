@@ -93,11 +93,48 @@ REF = [
 ]
 
 
+def brute(box_mm100, base_pt, prop=0.8):
+    """The tightest fit over every whole-point size and every spacing the search allows.
+
+    Not an algorithm anyone implements — it is the yardstick that says whether the
+    bisection's answer is the best one available, or merely the best one it looked at.
+    """
+    best = None
+    for size_pt in range(1, int(base_pt) + 1):
+        scale = size_pt / base_pt * 100.0
+        for spacing in (100.0, 90.0, 80.0):
+            h = text_height(base_pt, scale, spacing, prop) - 50
+            if h <= 0:
+                continue
+            fit = box_mm100 / h
+            if fit < 1.0:
+                continue
+            if best is None or fit < best[2]:
+                best = (size_pt, spacing, fit)
+    return best
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
+    ap.add_argument('--brute', action='store_true',
+                    help='compare the binary against the tightest fit that exists')
     ap.add_argument('--grid', type=float, action='append', default=None)
     ap.add_argument('--trace', type=int, help='1-based page to print the search trace for')
     a = ap.parse_args()
+    if a.brute:
+        agree = 0
+        print('page\thpt\tbest size/spacing\tfit\tbinary size/spacing\tsame')
+        for i, (rf, rs) in enumerate(REF):
+            h_pt = 40.0 + 5.0 * i
+            box = fround(h_pt * 12700 / 360) + 1
+            size, spacing, fit = brute(box, 20.0)
+            same = size == round(20.0 * rf / 100.0) and abs(spacing - rs) < 0.5
+            agree += same
+            print(f'{i + 1}\t{h_pt:.0f}\t{size:6d} {spacing:5.0f}\t\t{fit:.4f}\t'
+                  f'{round(20.0 * rf / 100.0):6d} {rs:5.0f}\t\t{"ok" if same else "NO"}')
+        print(f'agree {agree}/{len(REF)}')
+        raise SystemExit(0)
+
     grids = a.grid or [12.0, 20.0]
 
     for grid in grids:
