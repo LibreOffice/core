@@ -76,6 +76,14 @@ public sealed class PageFurnitureSet
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
     /// <param name="collapsesSpacing">As <see cref="Header"/>'s.</param>
+    /// <remarks>
+    /// The title-page suppression <see cref="Header"/> applies is deliberately <em>not</em> applied here.
+    /// It is measured for headers in both directions and the footer evidence contradicts itself: the
+    /// reference's first page of <c>final-technical-report-template.docx</c> has no footer, and its first
+    /// page of <c>Agile_Arc_SysDes.docx</c> — the same shape of section, a default header and footer with
+    /// <c>w:titlePg</c> and nothing named for a first page — has one. Suppressing both cost that document
+    /// eight words and bought nothing, so the half that is established is the half that is applied.
+    /// </remarks>
     public PlacedFlow? Footer(
         WritingSection section,
         PageGeometry geometry,
@@ -84,9 +92,21 @@ public sealed class PageFurnitureSet
         bool collapsesSpacing = false)
         => Resolve(
             _footers, _laidOutFooters, section, geometry.FooterArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: geometry.FooterOffset, collapsesSpacing);
+            offsetFromTop: geometry.FooterOffset, collapsesSpacing, mayBeSuppressed: false);
 
-    private static PlacedFlow? Resolve(
+    /// <summary>
+    /// True when something — a header or a footer — was named for a first page.
+    /// </summary>
+    /// <remarks>
+    /// Asked of both maps together on purpose, and it is the whole of what distinguishes the two
+    /// behaviours below: a section that names <em>any</em> first-page part gets a first-page page style,
+    /// and the part it did not name is copied onto that style from the section's ordinary one. A section
+    /// that names none gets no such style, and its first page carries no furniture at all.
+    /// </remarks>
+    private bool HasFirstPageFurniture
+        => _headers.ContainsKey(PageFurnitureSlot.First) || _footers.ContainsKey(PageFurnitureSlot.First);
+
+    private PlacedFlow? Resolve(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         Dictionary<PageFurnitureSlot, PlacedFlow?> cache,
         WritingSection section,
@@ -94,12 +114,15 @@ public sealed class PageFurnitureSet
         int pageNumber,
         bool isFirstPageOfSection,
         Length? offsetFromTop,
-        bool collapsesSpacing)
+        bool collapsesSpacing,
+        bool mayBeSuppressed = true)
     {
-        PageFurnitureSlot slot = ChosenSlot(
+        PageFurnitureSlot? chosen = ChosenSlot(
             slots, pageNumber, isFirstPageOfSection,
-            section.HasDifferentFirstPage, section.HasDifferentEvenPages);
+            section.HasDifferentFirstPage, section.HasDifferentEvenPages,
+            hasFirstPageFurniture: HasFirstPageFurniture || !mayBeSuppressed);
 
+        if (chosen is not { } slot) return null;
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
         if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
@@ -113,22 +136,59 @@ public sealed class PageFurnitureSet
     /// Which slot a page takes, as a slot rather than as its contents.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The same rules <see cref="PageFurnitureSlots"/> states, asked in terms of the slot so that the
     /// answer can be cached against it. Asking for the contents and caching against those would key the
     /// cache on a list that two slots could share.
+    /// </para>
+    /// <para>
+    /// Null means <em>no furniture at all</em>, which is not the same as "fall back to the default one",
+    /// and which of the two a title page gets is decided by a pair of corpus documents that differ in
+    /// exactly one thing. Both state <c>w:titlePg</c> and neither names a first-page <em>header</em>:
+    /// </para>
+    /// <list type="bullet">
+    /// <item><description>
+    /// <c>batch-007/final-technical-report-template.docx</c> names a default header, a default footer and
+    /// nothing for a first page. LibreOffice's page one carries <em>neither</em> a running head nor a
+    /// footer.
+    /// </description></item>
+    /// <item><description>
+    /// <c>batch-016/JEMIT_Template.docx</c> names even and default headers, even and default footers, and
+    /// a <c>w:footerReference w:type="first"</c>. LibreOffice's page one carries the <em>default</em>
+    /// header — the one it never named for a first page — along with that first-page footer.
+    /// </description></item>
+    /// </list>
+    /// <para>
+    /// So the switch is whether the section named a first page part at all, of either kind: naming one
+    /// makes a first-page style and the other kind is copied onto it, naming none means the first page has
+    /// no furniture. That is the shape of writerfilter's <c>copyHeaderFooter</c>
+    /// (<c>writerfilter/dmapper/PropertyMap.cxx:1117-1125</c>), which links a section's page style to the
+    /// previous one's for the parts it did not set, beside the branch at <c>:594-598</c> that forces
+    /// <c>HeaderIsOn</c> false for a section that pushed no applicable header. Which of the two wins was
+    /// left unnamed by an earlier round; the pair above settles it by measurement.
+    /// </para>
+    /// <para>
+    /// Inheritance across sections is settled before this is asked — <c>DocxReader.Paginated</c> carries
+    /// each slot forward per ECMA-376 §17.10.1 — so a First slot missing here is one no earlier section
+    /// supplied either.
+    /// </para>
     /// </remarks>
-    private static PageFurnitureSlot ChosenSlot(
+    private static PageFurnitureSlot? ChosenSlot(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         int pageNumber,
         bool isFirstPageOfSection,
         bool hasDifferentFirstPage,
-        bool hasDifferentEvenPages)
+        bool hasDifferentEvenPages,
+        bool hasFirstPageFurniture)
     {
-        if (isFirstPageOfSection
-            && hasDifferentFirstPage
-            && slots.ContainsKey(PageFurnitureSlot.First))
+        if (isFirstPageOfSection && hasDifferentFirstPage)
         {
-            return PageFurnitureSlot.First;
+            if (slots.ContainsKey(PageFurnitureSlot.First)) return PageFurnitureSlot.First;
+            if (!hasFirstPageFurniture) return null;
+
+            // The section named a first-page part of the other kind, so it has a first-page style and this
+            // kind is copied onto it from the ordinary one.
+            return PageFurnitureSlot.Default;
         }
 
         if (hasDifferentEvenPages

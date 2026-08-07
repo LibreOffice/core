@@ -1,5 +1,7 @@
+using Paperless.Core.Documents;
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
+using Paperless.TestKit;
 using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
 using Paperless.WordProcessing.Layout;
@@ -139,6 +141,92 @@ public sealed class TableRowSplitTests
             .ShouldBeInRange(1, 3, "some lines stay behind and at least one goes over");
     }
 
+    /// <summary>
+    /// A stated minimum row height is a floor on the row's size and <em>not</em> a bar on breaking it:
+    /// a row whose declared minimum is far larger than the room left is still broken where it stands.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This pins a negative result that cost a round to establish, because the opposite is plausible and
+    /// is even spelled out in Writer's own source — "the remaining size is less than the minimum row
+    /// height, then don't even try to split the row, just move it forward"
+    /// (<c>SwTabFrame::Split</c>, <c>sw/source/core/layout/tabfrm.cxx:1188-1196</c>). That branch is
+    /// reached only for a table inside a splittable fly, and LibreOffice 24.2.7.2 does not apply it to
+    /// body text.
+    /// </para>
+    /// <para>
+    /// Measured on the fixture beside this test — <c>table-row-min-height</c>, whose middle row states an
+    /// at-least height of 5.2 cm with 3.5 cm left on the page — and on two further sweeps of the same
+    /// shape at A4 with the declared height varied from nought to 10 cm: LibreOffice breaks the row in
+    /// every one of them, keeping exactly the lines that fit, and the declared height changes nothing.
+    /// Making the minimum bar the break instead cost <c>batch-008</c> a document and bought none.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AStatedMinimumHeightDoesNotStopARowBeingBroken()
+    {
+        PageTable free = Table(rows: 2, linesPerCell: 8);
+        PageTable floored = Table(rows: 2, linesPerCell: 8, minHeight: Length.FromTwips(1400));
+
+        // The floor is under the row's own height, so the two tables lay out identically and only the
+        // break decision could differ.
+        TableLayouter.LayOut(floored, new DocPoint(Length.Zero, Length.Zero)).RowHeights
+            .ShouldBe(TableLayouter.LayOut(free, new DocPoint(Length.Zero, Length.Zero)).RowHeights);
+
+        List<LaidOutPage> broken = Paginate(free);
+        List<LaidOutPage> stillBroken = Paginate(floored);
+
+        broken.Count.ShouldBe(2);
+        stillBroken.Count.ShouldBe(2);
+        LinesOn(broken[0]).ShouldBeGreaterThan(8, "the second row gives up the lines that fit");
+        LinesOn(stillBroken[0]).ShouldBe(LinesOn(broken[0]), "the floor decides nothing here");
+        LinesOn(stillBroken[1]).ShouldBe(LinesOn(broken[1]));
+    }
+
+    /// <summary>
+    /// The same negative result on a real document, in all four formats.
+    /// </summary>
+    /// <remarks>
+    /// <c>table-row-min-height</c> is a 10 cm page whose middle row states an at-least height of 5.2 cm
+    /// and holds twelve paragraphs, with about 3.5 cm left on page one. LibreOffice 24.2.7.2 breaks that
+    /// row and keeps the seven paragraphs that fit — verified by converting the one flat-ODF source to
+    /// each format and rendering all of them, so a reader that drops the height or reads it as a bar on
+    /// breaking shows up here rather than three batches later.
+    /// </remarks>
+    [Theory]
+    [InlineData("table-row-min-height.docx")]
+    [InlineData("table-row-min-height.doc")]
+    [InlineData("table-row-min-height.odt")]
+    [InlineData("table-row-min-height.rtf")]
+    public void TheFlooredRowOfTheCorpusFixtureIsBrokenRatherThanMoved(string name)
+    {
+        using IDocument document =
+            new WordProcessingReader().Read(DocumentSource.FromFile(Corpus.Require(name)));
+
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+        pages.Pages.Count.ShouldBe(2, $"{name} is two pages");
+
+        List<PlacedTable> first = [.. pages.Pages[0].Tables];
+        List<PlacedTable> second = [.. pages.Pages[1].Tables];
+
+        first.Count.ShouldBe(1);
+        second.Count.ShouldBe(1);
+
+        // Row one is the floored row, and it is on both pages: the part on page one ends past it and the
+        // part on page two begins at it.
+        first[0].FirstRow.ShouldBe(0);
+        first[0].RowEnd.ShouldBeGreaterThan(1, $"{name}: the floored row must give up the lines that fit");
+        second[0].FirstRow.ShouldBe(1);
+
+        LinesIn(first[0], 1).ShouldBeGreaterThan(0, $"{name}: part of the floored row stays behind");
+        LinesIn(second[0], 1).ShouldBeGreaterThan(0, $"{name}: the rest of it carries over");
+    }
+
+    /// <summary>How many lines of one row of a table part were drawn, over every cell.</summary>
+    private static int LinesIn(PlacedTable table, int row)
+        => table.Cells.Where(cell => cell.Row == row).Sum(cell => cell.Content?.Lines.Count ?? 0);
+
     /// <summary>How many of a page's table lines were drawn, over every cell of every part.</summary>
     private static int LinesOn(LaidOutPage page)
         => page.Tables
@@ -154,7 +242,8 @@ public sealed class TableRowSplitTests
         int linesPerCell,
         bool canSplit = true,
         Length exactHeight = default,
-        Length spacing = default)
+        Length spacing = default,
+        Length minHeight = default)
         => new()
         {
             ColumnWidths = [Length.FromTwips(4000)],
@@ -174,7 +263,7 @@ public sealed class TableRowSplitTests
                         },
                     ],
                     CanSplit = canSplit,
-                    MinHeight = exactHeight,
+                    MinHeight = exactHeight > Length.Zero ? exactHeight : minHeight,
                     HasExactHeight = exactHeight > Length.Zero,
                 }),
             ],

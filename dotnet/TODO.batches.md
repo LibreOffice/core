@@ -2801,3 +2801,133 @@ The reverted code is at `b62aaf38b` and the tests that assert it at `3997fb739`.
    `w:pict`, `w:object` and `w:commentReference` and adds no frame, so a VML picture is not laid
    out or drawn. 48 of the track's 134 DOCX carry one, 332 occurrences. A feature rather than a
    fix, and unmeasured.
+
+
+## After the twelfth round: words 006 and 007, one rule named and one refuted
+
+Swept the whole 200-document track four times, at the base and after each of three forms of the two
+changes. **The base reproduced the brief exactly** — 146/200, 154 documents page-exact, 120 of
+absolute page error, and all twenty-one per-batch figures — and `words/batch-001`–`005` swept
+separately came back 50/50 with no row differing from the base in page count, word count or verdict.
+
+| | base | shipped | wide form | row-height rule |
+|---|---|---|---|---|
+| match | 146/200 | **146/200** | 146 | 145 |
+| documents page-exact | 154 | **155** | 155 | 154 |
+| total absolute page error | 120 | **120** | 121 | 120 |
+| total absolute word error | 7110 | **7191** | 7214 | 7206 |
+| documents whose output moved | — | **14** | 18 | 2 |
+
+Per batch, unchanged from the base everywhere: 001–005 10/10, 006 9/10, 007 9/10, 008 10/10, 009
+10/10, 010 7/9, 011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 5/10, 016 7/10, 017 5/10, 018 4/10, 019
+3/10, 020 3/10, 021 0/2. **No document changed verdict in either direction**, so the round bought no
+match; what it bought is a rule named and a rule struck off, and the second cost more to establish
+than the first.
+
+Tests, per project: Core 238, Text 185, Containers 109, Vector 291, Rendering 104, Markup 259,
+OpenDocument 125, WordProcessing 553, Spreadsheets 401, Presentations 485, Fidelity 538 — **0 failed
+and 0 skipped in every one**. Nothing outside `Paperless.WordProcessing` was touched, so the other
+two tracks were not swept.
+
+### A title page with nothing named for it draws nothing — and one with a *footer* named for it does not
+
+`ChosenSlot` fell through to the Default slot whenever a section stated "different first page" and no
+first-page part existed, so a title page got the running head and a line's worth of room it should
+not have had. The eighth round recorded the rule as needing "its own before-and-after sweep rather
+than a spare hour"; this is that sweep, and the sweep is also what narrowed the rule twice.
+
+Two corpus documents differ in exactly one thing and settle a question the eighth round left open
+after four probes. Both state `w:titlePg`; neither names a first-page **header**:
+
+| Document | What its first section names | LibreOffice's page one |
+|---|---|---|
+| `007 final-technical-report-template.docx` | default header, default footer | **no** running head |
+| `016 JEMIT_Template.docx` | even + default headers, even + default footers, and a `w:footerReference w:type="first"` | the **default** header, which it never named for a first page |
+
+So naming *any* first-page part, of either kind, makes a first-page style and the kind that was not
+named is copied onto it; naming none leaves the first page bare. That is the shape of
+`copyHeaderFooter` (`writerfilter/dmapper/PropertyMap.cxx:1117-1125`) beside the branch at `:594-598`
+that forces `HeaderIsOn` false for a section that pushed no applicable header — which of the two wins
+was the open question, and the pair above answers it by measurement rather than by reading.
+`PageFurnitureSet.cs:98` is the test and `:145` the rule.
+
+**The footer half of it is not established and is deliberately not applied.** `final-technical-report`'s
+reference page one has no footer either, which says it should be; `017 Agile_Arc_SysDes.docx` — the
+same shape of section, a default header and footer with `w:titlePg` and nothing named for a first
+page — has one, which says it should not. Suppressing both cost that document eight words for
+nothing. Measured across the track, the wide form moved 18 documents for +2 of page error and +19 of
+word error, and the header-only form moves **14 for +1 and −4**. Eight of the fourteen are closer to
+the reference and six further; the one page count that moved is
+`019 ESPN-R - MCF - RA - Ed1.docx`, 58 pages to 57 against 59.
+
+Fixture: `tests/corpus/features/title-page-header.*` in five formats, generated from one flat-ODF
+source, whose DOCX export has exactly the corpus shape — a lone `w:headerReference w:type="default"`
+beside a `w:titlePg`. Asserted on `.docx`, `.doc` and `.rtf`. **The `.odt` is committed and
+deliberately not asserted**: ODF states the distinction as two master pages joined by
+`style:next-style-name`, nothing reads that, and every page of that file comes out bare — a separate
+reader defect with its fixture already in place.
+
+### The row LibreOffice will not split: the threshold reproduces, and both explanations of it are wrong
+
+`batch-006`'s one failure is `f445896eb008d14c1746fc37d412dc22.docx`, 15 pages against 16 with the
+word counts identical at 5575. It is one 30-row table whose rows state large at-least heights — 4965,
+10026, 13800 twips — and the reference splits exactly one row in sixteen pages, moving every other
+one whole and leaving pages a third empty. We split all of them. Per page ours against the
+reference: `370/370 355/355 416/323 409/127 439/416 439/485 474/67 …`.
+
+**The predecessor's measurement reproduced exactly and is now much better bounded.** Rewriting row
+9's `w:trHeight` in place, the row splits at 4267 twips and moves whole at 4282, with 2697 twips of
+room left. The declared height is *not* the row's height there — placed at the top of a page the row
+measures 5147 twips at any stated height below that, so 4200 and 4300 give identical geometry and
+only the decision moves. Removing every `w:trHeight` from the document makes all its rows split and
+takes it to 15 pages, so the stated height is what does it.
+
+Varying the room as well, by rewriting row 8's height, the threshold is not the room, is not
+proportional to it, and is not continuous in it:
+
+| room left (twips) | 2697 | 2202 | 1952 | 1702 | 1202 | 1102 | 1052 | 802 |
+|---|---|---|---|---|---|---|---|---|
+| threshold on row 9 | 4275 | 4275 | 3323 | 3323 | 3323 | 3323 | 2107 | 2107 |
+
+The three values are the bottom of the last line of a paragraph, plus about 70 twips, and the
+paragraph is the *second* one of what would be left over. That fit was tested rather than admired: it
+predicts that moving the room from 1102 to 1052 — fifty twips, across one paragraph boundary — drops
+the threshold by 1216, and it does.
+
+**Both readings then died on a controlled fixture.** `tests/corpus/features/table-row-min-height.*`
+states an at-least height of 5.2 cm on a row with 3.5 cm left on the page, and LibreOffice breaks it
+anyway; so does the same shape at A4 in the corpus document's own geometry, with the declared height
+swept from nought to 10 cm, with symmetric and with lopsided cells. Whatever the corpus document is
+doing, it is neither "a minimum that does not fit bars the break" — which is spelled out in Writer's
+own source at `sw/source/core/layout/tabfrm.cxx:1188-1196` and reached only inside a splittable fly —
+nor the paragraph rule the eight probes fit.
+
+Implemented anyway and measured, because the source citation was persuasive: the whole track came
+back **145/200 with page error unchanged at 120 and word error 7110 → 7206**, costing
+`008 4400-91_Proposal_To_Lease_Space_10-2024.docx` its page count and buying nothing. It did take
+`f445896`'s exactly-agreeing pages from 2 to 12 — pages 1–12 matched the reference word for word —
+without changing its count, which is why the numbers are worth reading together. Reverted.
+
+What is left of that document, once the rows are placed correctly, is one line: on page 13 we fit
+`industry.` at the end of a cell line where the reference wraps it, our line reaching x = 519.74 in a
+column whose text edge both renderers use out to about 524. Everything after that is downstream of
+those 13.45 pt.
+
+### What the next agent on this track should take
+
+1. **`batch-010`, two documents, both −1 page with the words already right.** `195584360.docx` 19
+   against 20 and `5709.16 ch.40_mgfinal.docx` 31 against 32. Untouched this round.
+2. **The `mcar` family, 0/5**, unchanged from the eleventh round's list and still the largest single
+   cause named on the track.
+3. **`WritingFieldKind.PageNumber` still has no consumer**, and this round establishes what it would
+   cost: `PageFurnitureSet` lays a slot out **once and caches it**, deliberately, because most pages
+   share one header and re-shaping it per page is the largest cost in paginating a long document. A
+   page number is the one thing that changes per page, so the substitution needs either a field range
+   carried on `PageParagraph` — which holds a bare string today — or a per-page re-layout. It is a
+   feature, not a wiring change, and `final-technical-report-template.docx` prints `Page 3 of 1`
+   against the reference's `Page 1 of 1` as the worked example.
+4. **The footer half of the title-page rule**, with `final-technical-report-template.docx` and
+   `Agile_Arc_SysDes.docx` as the A/B pair that currently disagree.
+5. **`table-row-min-height`'s corpus document**, if anyone wants to name what really stops LibreOffice
+   splitting those rows. Everything above is reproducible in minutes with the probe recipe: rewrite
+   `w:trHeight` in place, convert with `soffice`, and read which page each row's timecode lands on.
