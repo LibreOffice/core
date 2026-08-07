@@ -3351,3 +3351,24 @@ five styled boxes are exactly the `a:fontRef` ordering cases.
 `a:pattFill` is the best-bounded of these — five presets, 65 fills, 7 decks, three of them in
 this list. `ITE106-Chapter 4.ppt` and `NAS-Infrastructure-Roadmaps-Weather.pptx` have never
 been looked at.
+
+## Words, round thirteen — baseline at `1aefcdfdb`
+
+Swept whole-track against a checksummed CLI snapshot, two workers, 200 of 200 rows and no
+path twice.
+
+| | |
+|---|---|
+| match | **145/200** |
+| total absolute page error | **121** |
+| documents with an exactly correct page count | **154** |
+| total absolute word error | **7095** |
+
+Per batch: `001`–`005` 10/10, `006` 9/10, `007` 9/10, `008`–`009` 10/10, `010` 7/9,
+`011` 8/10, `012` 8/10, `013` 5/9, `014` 3/10, `015` 4/10, `016` 7/10, `017` 5/10,
+`018` 4/10, `019` 3/10, `020` 3/10, `021` 0/2.
+
+**The brief said 146/200, page error 120, 155 page-exact, and this is one document short of
+it** — `015` and `019` each one lower than recorded and `018` one higher, which nets to −1
+and is the shape of a document that renders differently under load rather than of a record
+being wrong. Everything else reproduced exactly.
