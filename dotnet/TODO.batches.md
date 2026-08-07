@@ -2106,7 +2106,7 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | ✅ |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | ✅ |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | ✅ |
-| `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
+| `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | **8/9** |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
 | `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 8/10 |
@@ -2142,7 +2142,60 @@ feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the refe
 do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
 border grid.
 
-## Sheets, round seventeen (in progress): the substitution chain is not what the binary follows
+## Sheets, round eighteen: an empty row band is not a page the zoom search can count
+
+Whole track swept before anything was changed, 171 documents, two workers, no path twice and no
+`ref-failed`. **The brief did not reproduce, and the reason is worth recording**: it handed over
+round *sixteen*'s figures — 136 of 171, page error 113, 145 exact, `batch-009` 6/9 — while round
+seventeen was already merged at the briefed commit `54729fdc7`. The base measured
+**137 of 171, page error 112, 146 exact, `batch-009` 7/9**, which is round seventeen's result to
+the digit. It also meant `airports_6.xlsx` already matched and the brief's account of it (a fixed
+75% scale, so a cumulative row-height shortfall) had already been refuted upstream as a horizontal
+fault in font substitution.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 137 | **138** |
+| documents with an exactly correct page count | 146 | **147** |
+| total absolute page error | 112 | **111** |
+| `batch-001`–`008` | 80/80 | **80/80** |
+| `batch-009` | 7/9 | **8/9** |
+| every other batch | — | unchanged |
+
+**Two rows changed in 171 and neither regressed.** `Company_Seniority_Date_Calculator.xlsx` 13
+pages against 12 → 12/12 and into parity; `SIL_TDB648.xlsx`'s *reference* word count drifted
+7678 → 7679 with ours unchanged at 7680 and its verdict `pages` on both sides.
+
+### The count the fit-to-page search bisects on excludes empty bands
+
+`PrintPageRanges::calculate` increments `m_nPagesY` only for a row band `IsPrintEmpty` is false
+across (`printfun.cxx:3176`, `:3220`), so it is not the number of bands the geometry produces, and
+`ScPrintFunc::CalcZoom` compares the smaller number everywhere — the tdf#103516 nudge included.
+
+`Company_Seniority_Date_Calculator.xlsx` states a print area of `A1:Y49` on a sheet whose last
+`<row>` element is 48. Fitting to width gives zoom 80; the nudge tries 78, where the rows split
+into 1–48 and the empty row 49 — one page to Calc, two to us — so the nudge saw an unchanged count,
+was abandoned, and the sheet printed at 80, spilling a thirteenth page holding one row. The
+seventeenth round had measured this to the nudge and distrusted its own arithmetic, suspecting the
+row sum, the printable height or the band's end row. **All three were right**; the missing input was
+the empty-band rule.
+
+### `RegChangeReport.xlsx` narrowed to one visible band, and a second defect found beside it
+
+The long-standing words-only failure is **3060 against 3137**, and **page 6 alone is −72** of that.
+The reference's page 6 opens with a yellow-filled, bordered continuation band holding the tail of
+the row above; we omit it and draw that text at the foot of page 5, where the reference clips it
+away and re-emits it. A tighter line pitch would explain the same symptom and is **refuted**: 46
+lines on page 5 on both sides, dominant pitch 10.1 pt against 10.0. So the cause is that we do not
+clip a cell at the page boundary and redraw the remainder on the next page — a feature, and the
+same family as the reverted `CRFlags::ManualSize` work.
+
+Separately, the reference embeds **Carlito on all twelve pages** and we embed none. Every font in
+the workbook's `styles.xml` is Arial, so Calibri can only come from the footer code
+`&"Calibri"&10` — the footer's stated font is not honoured. That is the steady −1 a page beside
+page 6's −72.
+
+## Sheets, round seventeen: the substitution chain is not what the binary follows
 
 Whole track swept before anything was changed, 171 documents, two workers. **The brief reproduced
 to the digit** — 136 of 171, total absolute page error 113, 145 documents with an exactly correct

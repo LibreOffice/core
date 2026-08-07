@@ -186,13 +186,16 @@ public sealed class SpreadsheetPages : IPageSequence
 
             if (sheet.Setup.FirstPageNumber > 0) number = sheet.Setup.FirstPageNumber;
 
-            // Paginated, then thinned. The two are separate because Calc keeps them separate: the
-            // page grid is decided by geometry alone, and only afterwards is each page asked
-            // whether anything lands on it (`bSkipEmpty`, printfun.cxx:3174). Numbering follows the
-            // thinning — a dropped page takes its number with it.
+            // Paginated, then thinned. The grid a page lands on is geometry, but the page *count*
+            // is not: Calc's `m_nPagesY` skips a row band `IsPrintEmpty` is true across
+            // (printfun.cxx:3176), and the fit-to-page zoom search bisects on that count — so the
+            // emptiness test has to be reachable from inside pagination as well as after it.
+            // Numbering follows the thinning: a dropped page takes its number with it.
             foreach (SheetPagePlacement placement in SheetEmptyPages.Occupied(
                          sheet,
-                         SheetPagination.Paginate(sheet.Setup, sheet.Grid, sheet.PrintedRange)))
+                         SheetPagination.Paginate(
+                             sheet.Setup, sheet.Grid, sheet.PrintedRange,
+                             block => SheetEmptyPages.IsPrintEmpty(sheet, block))))
             {
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 
