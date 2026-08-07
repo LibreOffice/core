@@ -96,18 +96,26 @@ public sealed class SheetRowHeightGridTests
     }
 
     [Fact]
-    public void TheRoundingLandsOnAnExactMultipleRatherThanAUnitBelowIt()
+    public void TheGateIsTheReadersParameterAndNotOnlyThePackage()
     {
-        // `h - h % 0.75` is exact in binary floating point where `floor(h / 0.75) * 0.75` is
-        // free to land an ulp low; 29.4 is the case that separates them, at 585 twips against
-        // 584. Asserted against the reader rather than the fixture so that it says which
-        // arithmetic is meant.
-        (_, SheetGrid grid) = XlsxPrintSetup.Read(
-            XElement.Parse(
-                $"<worksheet xmlns=\"{Namespace}\"><sheetFormatPr defaultRowHeight=\"15\"/>"
-                + "<sheetData><row r=\"1\" ht=\"29.4\" customHeight=\"1\"/></sheetData></worksheet>"),
-            [], null, null, null, isMicrosoftGenerated: true);
+        // The two fixtures prove the gate end to end and cannot say where it is read. This says
+        // the reader itself honours the flag, so that a change moving the decision out of
+        // `XlsxReader` has to move this with it.
+        (_, SheetGrid rounded) = Read(isMicrosoftGenerated: true);
+        (_, SheetGrid whole) = Read(isMicrosoftGenerated: false);
 
-        grid.Rows.SizeAt(0).Twips.ShouldBe(585);
+        rounded.Rows.SizeAt(0).Twips.ShouldBe(585);
+        whole.Rows.SizeAt(0).Twips.ShouldBe(588);
+
+        // The sheet default is rounded at its own site, so it moves independently of `ht`.
+        rounded.OptimalMinimumRowHeight.Twips.ShouldBe(285);
+        whole.OptimalMinimumRowHeight.Twips.ShouldBe(288);
     }
+
+    private static (SheetPrintSetup Setup, SheetGrid Grid) Read(bool isMicrosoftGenerated)
+        => XlsxPrintSetup.Read(
+            XElement.Parse(
+                $"<worksheet xmlns=\"{Namespace}\"><sheetFormatPr defaultRowHeight=\"14.4\"/>"
+                + "<sheetData><row r=\"1\" ht=\"29.4\" customHeight=\"1\"/></sheetData></worksheet>"),
+            [], null, null, null, isMicrosoftGenerated);
 }

@@ -437,11 +437,11 @@ internal static class XlsxPrintSetup
     /// </summary>
     /// <remarks>
     /// See <see cref="MicrosoftRowHeightGridPoints"/> for the two citations and the measurement.
-    /// The subtraction is Calc's own — <c>fHeight -= fmod(fHeight, 0.75)</c> — rather than a
-    /// multiply-floor-divide, because that is what keeps the result an exact multiple of 0.75 in
-    /// binary floating point: 14.4 gives 14.25 and 29.4 gives 29.25 to the last bit, where
-    /// <c>floor(h / 0.75) * 0.75</c> is free to land a unit in the last place below and turn 585
-    /// twips into 584.
+    /// The subtraction is written as Calc's own — <c>fHeight -= fmod(fHeight, 0.75)</c> — to keep
+    /// the correspondence readable, and <em>not</em> because it differs from a floor-divide.
+    /// Checked rather than assumed: the two agree on every one of the 49142 heights Excel can
+    /// write, being each hundredth of a point and each twip up to the 409.5 pt ceiling. So do not
+    /// read the form as load-bearing, and do not write a test that claims it is.
     /// </remarks>
     private static Length? RowHeight(string? value, bool isMicrosoftGenerated)
     {
