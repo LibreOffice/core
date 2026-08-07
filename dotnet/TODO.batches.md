@@ -4519,3 +4519,21 @@ in 014 four documents off by one page in each direction, `UG.CAO.00133…docx` p
 words *over* — which is the raster-ceiling file's own worked false positive, so re-measure it
 before subtracting anything — and `xx_SETIS_PWS_template_10.19.22.docx` page-exact and 541 short
 with no text boxes to blame.
+
+### The shared layer, and the check that it is a no-op elsewhere
+
+`Paperless.Text` changed: `TabRuler.Segments`/`WidthOf` take a right edge and `TextMeasurer` computes
+one per line. Both parameters default to null, and the clamp is gated on a new
+`ParagraphFormat.ClampsTabsAtLineEdge` that only the four word-processing readers set — Impress and
+Calc reach the same `ParagraphLayouter` but leave it off, so their right edge is null and `TabRuler`
+does exactly what it did. That gating is not cosmetic: `SlideTextLayout.Stretches` has no line width
+to hand, so an ungated clamp would have made a slide *measure* clamped and *draw* unclamped.
+
+Checked rather than argued. Both other tracks swept on the same two checksummed snapshots:
+
+| track | before | after | |
+|---|---|---|---|
+| `slides` | 152/163 | 152/163 | `parity.tsv` identical row for row |
+| `sheets` | 137/171 | 137/171 | two rows differ, both in the *reference's* word count (5557→5552, 10245→10244); every one of our own figures is unchanged and no verdict moved |
+
+The words track was also re-swept after the gating landed: 150/200 and page error 109 either way.
