@@ -2219,6 +2219,32 @@ deliberately left:
 at least one of these families, 63 of them slide decks and 24 word processing. Whoever takes it
 should sweep all three tracks, and should not take the four symbol rows from this probe.
 
+### What it costs the other two tracks: three documents in 534, and one of them by a word
+
+The change is in a shared layer, so words and slides are owed. **A whole-track baseline is not the
+sharpest instrument here and was not the only one used**, because the change is exactly one thing:
+`ChainFor` returns nothing for two keys. A document that never asks for `Helv` or `SansSerif`
+cannot move, and that is a property of the file rather than a guess about the code. So the 40
+corpus documents naming either family — 16 sheets, 17 words, 7 slides — were rendered on both
+binaries and joined to the reference column of the sweeps:
+
+```
+    pages b/a/ref        words b/a/ref
+   18/17  /17       11077/11043 /11053   better   sheets/batch-009/xlsx/airports_6.xlsx
+  192/192 /191      28196/28195 /28183   better   sheets/batch-015/xlsx/ans_mappings_of_eccairs_terms.xlsx
+   21/21  /23        4124/4123  /4142    a word   words/batch-017/doc/762.doc
+```
+
+**Three of the 40 moved and 37 are identical to the byte.** The words document moves by one word
+inside a 2% band it already passed, on a document failing on pagination in both binaries — its
+verdict is `pages` before and after. Nothing regressed anywhere.
+
+Whole tracks were then swept anyway, at the changed binary. The figures are absolutes rather than
+deltas, since neither track had a baseline at this commit and neither was re-swept without the
+change: **words 147 of 200, page error 119, 156 page-exact.** The slides sweep was still running
+when this round ended and its figure is deliberately left blank rather than guessed — the
+40-document check above is what carries the claim for that track.
+
 ## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
 
 Baseline swept whole at `22ed440e0`, 171 documents, and it reproduced the brief exactly —
