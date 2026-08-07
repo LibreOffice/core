@@ -5632,3 +5632,168 @@ literals and compares the reference against those.
 **Do not spend a round on the census's top line.** Its raw ranking counts metafile text and
 operator-granularity artefacts as size disagreements, and on the two documents it ranked first and
 second those are more than half the signal. Run `size-census-2.py`, not `size-census.py`.
+
+## Words, the twelfth round finished: the leading is Writer's rule, not every engine's
+
+The predecessor's fix (`3db1d2816`, merged, measured and backed out) was right about where the
+leading goes and wrong about who it goes for. It changed `LineMetrics.ScaledAscent` for everybody,
+and nine tests across three families said so. **Seven of the nine were right**; re-deriving each
+from LibreOffice's own rendering is what this round did, and the answer changed the fix rather
+than the tests.
+
+### The measurement that separates the two engines
+
+Everything below is read out of LibreOffice 24.2.7.2's own PDF **content stream** — the text
+matrix's translation at a `Tj`/`TJ`, not `pdftotext -bbox`, whose boxes come from the font
+descriptor's declared ascent and which the two producers set differently.
+
+| Engine | What LibreOffice does | Measured |
+|---|---|---|
+| **Writer**, own text | ascent **+** external leading | Liberation Sans 11 pt in a 72 pt top margin: first baseline **82.3008**, i.e. 206 twips (199.15 + 7.20, each rounded), not 199 |
+| **EditEngine** — Impress, Calc, Writer's drawing objects | ascent only | Impress, Liberation Sans 18 pt table cell: two baselines **20.154 pt** apart, which is ascent + descent; the gap would make it 20.698. Calc, Liberation Sans 10.006 pt wrapping cell: **11.197 pt** pitch = round(ascent) + round(descent) in mm100, 320 + 75 = 395 |
+
+LibreOffice draws the line itself, and both halves are one `if`:
+
+- `SwFntObj::GetFontAscent` adds the external leading to the ascent, guarded only by
+  `#if !defined(MACOSX)` (`sw/source/core/txtnode/fntcache.cxx`:326-329); `GetFontHeight` adds it
+  to ascent-plus-descent (`:370-371`), so the descent stays the face's own and the three close.
+- `ImpEditEngine::RecalcFormatterFontMetrics` adds it **only when `IsAddExtLeading()`**
+  (`editeng/source/editeng/impedit3.cxx`:3133-3135), and that is false unless something turns it
+  on — `ImpEditEngine` initialises it so (`impedit2.cxx`:118), as does `SdrModel`
+  (`svx/source/svdraw/svdmodel.cxx`:161). Only Writer's own compatibility setting and Math's
+  engine ever set it. `FormatterFontMetric::GetHeight()` is `nMaxAscent + nMaxDescent`.
+
+**This was already in the tree.** `SlideTextLayout.cs`:613-620 states the Impress half, with the
+20.15-against-20.70 measurement, in a comment written two rounds ago. A shared-layer change that
+contradicts a recorded measurement one layer up is the shape to watch for.
+
+### The shape of the fix
+
+`LineMetrics` gains `LeadingAboveText`, **default false**. `ParagraphLayouter` and
+`MeasuredParagraph.Measure` thread it, because all three families share them. The six Writer sites
+opt in through `WriterLineBox.LeadingAboveText`, which carries the citations in one place.
+
+Deliberately left at the default, and worth stating because each is a judgement rather than an
+oversight: `Paperless.Vector`'s metafile and EMF+ text engines (VCL's `mnAscent` excludes
+`mnExtLeading`, and a metafile is played through `OutputDevice::DrawText`), `FrameChart` (a chart's
+text is drawn by its own model, not by Writer's layout), and every `Paperless.Spreadsheets` and
+`Paperless.Presentations` site. The predecessor's version changed all of these.
+
+### Re-derived, not re-fitted
+
+| Test | Value | From | Agreed with the fix? |
+|---|---|---|---|
+| `SlideTablePlacementTests.ACellsTextStartsAtItsOwnMarginAndNotAtTheBodysInsets` | 91.928 | reference PDF of `slide-table-grid.pptx`, exact | **No** — assertion was right |
+| `SlideTablePlacementTests.ACellsLineHeightIsTheFacesAndNotTheEm` | 20.154 | same PDF, baselines 235.9280 and 256.0820 | **No** — assertion was right |
+| `SlideTablePlacementTests.ARowWithNoStatedHeightGrowsToItsText` | 263.537 | same PDF, the last two stroke paths | **No** — assertion was right |
+| `SheetHardBreakTests.ABreakBreaksEvenWhenTheWholeTextWouldFit` | 11.197 | reference PDF of `sheet-cell-hard-break.fods`, 66.7848 → 77.9818 | **No** — assertion was right |
+| `SheetHardBreakTests.ARichCellBreaksAtItsParagraphs` | 11.197 | same PDF, 171.8938 → 183.0908 | **No** — assertion was right |
+| `SheetHardBreakTests.AnEmptyParagraphTakesALineOfItsOwn` | 22.394 | same PDF, 136.8858 → 159.2798 | **No** — assertion was right |
+| `SheetPaginationTests.AnOoxmlHeaderBandIsTallerThanTheMarginsImply` | — | not named in the handover; the fourth Spreadsheets failure | **No** — assertion was right |
+| `PictureReadingTests.AnInlinePictureWidensTheLineItSitsOn` ×3 | **30.95**, was 31.46 | reference PDFs of `picture-anchor.{fodt,odt,docx}`, all three identical | **Yes** — the assertion was wrong |
+
+The one that changed is worth spelling out, because its document cannot see the defect directly.
+All three spellings put LibreOffice's two baselines at **85.0508 and 98.8508**, and *both* models
+predict exactly that: the gap leaves line 1's descent and arrives in line 2's ascent, so it cancels.
+What does not cancel is the box boundary between them. Line 1's ascent is the picture's centimetre
+(85.0508 − 56.6929 = 28.358) and line 2's ascent is Liberation Serif's plus its 87/2048 gap
+(11.203), so line 1's box is 98.8508 − 11.203 − 56.6929 = **30.955**; independently of the margin,
+13.80 pt of pitch − 11.203 + 28.347 = 30.944. The old 31.46 is the same arithmetic with the gap
+charged to line 1's descent. Our own baselines on that document are 85.0429/98.8429 before *and*
+after — unmoved, and 0.008 pt from the reference either way.
+
+`sheet-cell-hard-break.fods`' class remark quotes `Golf` at 127.83 and `Hotel` at 150.22; today's
+render puts them at 136.8858 and 159.2798. **The delta it asserts, 22.394, is unchanged** — only
+the absolute positions have moved since it was written. Left alone rather than restated.
+
+### The probe, re-measured at this commit with the fix in
+
+First baseline below a 72 pt top margin, ours against LibreOffice's, both from the content stream.
+The "before" column is the predecessor's, reproduced here at 11 pt exactly and inherited for the
+rest:
+
+| face, pt | ours before | ours after | LibreOffice | after − LO |
+|---|---|---|---|---|
+| Sans 8 | 79.2500 | **79.5000** | 79.5008 | 0.0008 |
+| Sans 11 | 81.9500 | **82.3000** | 82.3008 | 0.0008 |
+| Sans 16 | 86.5000 | **87.0000** | 87.0508 | 0.0508 |
+| Sans 22 | 91.9000 | **92.6500** | 92.6008 | −0.0492 |
+| Sans 40 | 108.2000 | **109.5000** | 109.5008 | 0.0008 |
+| Carlito 8/16/22/40 | — | unchanged | — | 0.0008 |
+| Carlito 11 | — | unchanged | 82.5008 | 0.0508 |
+
+Up to 1.30 pt out before, at most 0.051 pt — one twip — after. **Carlito does not move at all**,
+its `hhea` gap being zero, which is why a systematic error survived: Carlito is what nearly every
+OOXML document in this corpus resolves to through its theme. The 16 pt residue is also the only
+size whose *pitch* differs (18.40 against 18.45), so a second quantisation acts there; not chased,
+because naming it would not change the placement rule.
+
+### Refuted, and worth recording so it is not re-derived
+
+Writer's `ADD_EXT_LEADING` really is a document compatibility setting — false for a flat ODF that
+omits it (`sw/source/filter/xml/xmlimp.cxx`:1482), true for DOCX since `w:noLeading` defaults false
+(`SettingsTable.hxx`:157) — so the obvious hypothesis is that it has to be modelled. It does not.
+Rendering the same content with the setting present-true, present-false and absent gives
+**byte-identical baselines** in 24.2.7.2, on three faces at 11 pt. Not modelled.
+
+### Sweeps: all three tracks, because `LineSpacing.cs` is shared
+
+Two checksummed builds (`Paperless.Text.dll` md5 `19318bb…` before, `349739f…` after) with
+demonstrably different output — `page-top-line-gap.docx` first baseline 81.95 against 82.30 — and
+no rebuild during either sweep.
+
+| | rows | match before → after | page-exact | page error | word error |
+|---|---|---|---|---|---|
+| words 001–019 | 188 | 152 → **152** | 160 → 160 | 69 → 69 | 4604 → 4606 |
+| slides 001–009 | 88 | 86 → **86** | 88 → 88 | 0 → 0 | 378 → 378 |
+| sheets 001–009 | 89 | 89 → **89** | 89 → 89 | 0 → 0 | 817 → 815 |
+
+No duplicated path in any of the six, no `ref-failed`, every row count exact. The words baseline
+reproduces `b7950ffd5`'s **to the digit and per batch** — 001–005 10/10, 006 9/10, 007 10/10,
+008 9/10, 009 10/10, 010 8/9, 011 9/10, 012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 8/10, 017 6/10,
+018 6/10, 019 3/10 — which is the tell that the base and the measurement are both right.
+
+What actually moved: **words, two rows of 188, one word each**, neither verdict changing
+(`JEMIT_Template.docx` 1678 → 1677 against 1684, `24-25_FAA_Holdover_Tables.docx` 70714 → 70715
+against 70663). **Slides, nothing at all** — every one of the 88 rows byte-identical, which is the
+strongest available statement that the change does not reach Impress. **Sheets, one row**, and it
+moved on the *reference* side: `PBN Matrix NAAs (V01).xlsx` is 5559 ours both times against 5555
+then 5557 theirs. Our output there is unchanged; treat LibreOffice's word count on that document as
+not quite reproducible rather than as a result.
+
+The gate is unmoved on purpose. The change costs 0.35 pt of vertical budget per page on a
+Liberation Sans document and nothing at all on a Carlito one, so it can only flip a document
+already within a third of a point of a break. It is kept on its own evidence.
+
+### Tests, and the three defects each was watched failing under
+
+`Paperless.Text` +3, `Paperless.Fidelity` +1 (`page-top-line-gap.docx`, recovered from the
+abandoned branch and re-validated against LibreOffice before use).
+
+| defect put back | what failed |
+|---|---|
+| **A**: gridless ascent excludes the gap (the original bug) | `TheLeadingSitsAboveTheTextWithoutAGridToo`; `AnInlinePictureWidensTheLineItSitsOn` ×3 at 31.45 against 30.95; the new fidelity case. Presentations and Spreadsheets **0** |
+| **B**: gridless ascent always includes it (the predecessor's version) | `AnEngineThatDoesNotAddTheLeadingLeavesTheLineShortOfItsHeight`; the three `SlideTablePlacementTests`; the four `SheetHardBreakTests`/`SheetPaginationTests`. WordProcessing **0** |
+| **C**: grid path never adds it | `TheLeadingSitsAboveTheTextRatherThanBelowIt` |
+
+`AFaceStatingNoLineGapIsUnaffectedByWhereTheLeadingSits` passes under **A and B both** and is not
+claimed to detect either. It is a control: it pins that the change is a placement rather than an
+addition, and it would catch a constant added to the ascent.
+
+Per project, each run redirected to its own file: Core 243, Text **240** (was 237), Containers 109,
+Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608, Spreadsheets **437**,
+Presentations 517, Fidelity **543** (was 542). Zero failed and zero skipped throughout.
+**Spreadsheets 437 is not this round's doing** — nothing under `Paperless.Spreadsheets` was
+touched. The 432 recorded last round is one round stale; `68d68502d` and `24e525b46` are in
+`09a35cdae`.
+
+### Still open on this track, unchanged and inherited rather than re-measured
+
+- **`w:pBdr` is not implemented at all** — no reader, no model, no drawing. The predecessor's
+  census (56 of 134 words-track DOCX; 39 in `styles.xml`, 26 in a header or footer part, 36 in
+  batches 013–021) is preserved at
+  `scratchpad/words-a9aac8dbdd3a09338/pbdr-census-words.tsv`. **Not re-verified this round.**
+- **Refuted last round, still refuted**: `w:tblStylePr` is 14 of 134 DOCX and exactly one of them
+  is in batches 013–015.
+- Batches 013–015 remain the weakest of the early range at 6/9, 4/10 and 5/10, and 29 of the
+  track's DOCX in batches 015–021 have never been swept with the image check.
