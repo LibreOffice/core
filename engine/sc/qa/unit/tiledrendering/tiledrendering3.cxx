@@ -29,12 +29,15 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/virdev.hxx>
+#include <editeng/colritem.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/useroptions.hxx>
 
 #include <postit.hxx>
 #include <attrib.hxx>
+#include <patattr.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
@@ -1283,6 +1286,46 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     // Switch back to first view and make sure it's the same
     KitHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+}
+
+// Cell text with a dark color of its own is drawn in a light variant once the document background
+// is inverted, also when the color scheme of the view stays light
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvertedBackgroundLightensText)
+{
+    svtools::EditableColorConfig aColorConfig;
+    aColorConfig.AddScheme(u"Dark"_ustr);
+    aColorConfig.AddScheme(u"Light"_ustr);
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "NewTheme", cpo::uno::Any(u"Light"_ustr) } }));
+
+    // An automatic color is resolved against the background and would stay readable on its own, so
+    // the cell needs a color of its own to show the mapping.
+    ScDocument* pDoc = pModelObj->GetDocument();
+    pDoc->SetString(ScAddress(0, 0, 0), u"Lorem ipsum"_ustr);
+    pDoc->ApplyAttr(0, 0, 0, SvxColorItem(COL_BLACK, ATTR_FONT_COLOR));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pDoc->GetPattern(0, 0, 0)->GetItem(ATTR_FONT_COLOR).GetValue());
+
+    // The document background is inverted on its own, the color scheme of the view stays light.
+    dispatchCommand(mxComponent, u".uno:InvertBackground"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "NewTheme", cpo::uno::Any(u"Dark"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(
+        ScTabViewShell::GetActiveViewShell()->GetViewRenderingData().GetDocColor().IsDark());
+
+    // Without the fix the cell kept its own black, which cannot be read on the dark background.
+    model::ComplexColor aDisplayColor;
+    pDoc->GetPattern(0, 0, 0)->fillColor(aDisplayColor, ScAutoFontColorMode::Display);
+    CPPUNIT_ASSERT(!aDisplayColor.getFinalColor().IsDark());
+
+    // Saving is not affected, the stored color stays what the document says.
+    model::ComplexColor aRawColor;
+    pDoc->GetPattern(0, 0, 0)->fillColor(aRawColor, ScAutoFontColorMode::Raw);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aRawColor.getFinalColor());
 }
 
 /*

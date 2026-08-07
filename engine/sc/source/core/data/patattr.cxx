@@ -772,6 +772,23 @@ void ScPatternAttr::fillFontOnly(
     rFont.SetTransparent( true );
 }
 
+// The document background of the view that is being painted. Every view of a document has a
+// background of its own, so the view is asked first; pBackConfigColor is a caller-side copy of the
+// configured color and saves the lookup where a single background serves the whole process.
+static Color lcl_getViewDocBackgroundColor(const Color* pBackConfigColor)
+{
+    if (comphelper::COKit::isActive())
+    {
+        if (ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current()))
+            return pViewShell->GetViewRenderingData().GetDocColor();
+    }
+
+    if (pBackConfigColor)
+        return *pBackConfigColor;
+
+    return ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+}
+
 void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
     const SvxColorItem* pColorItem
@@ -876,10 +893,12 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
     // display. Raw returns the stored value unchanged (persistence/export), and
     // Print keeps the real colors; otherwise the display-only light variant would
     // be baked into the saved document.
-    else if (svtools::ColorConfig::IsDarkMode()
-             && eAutoMode != ScAutoFontColorMode::Raw
-             && eAutoMode != ScAutoFontColorMode::Print)
+    else if (eAutoMode != ScAutoFontColorMode::Raw && eAutoMode != ScAutoFontColorMode::Print)
     {
+        // The document background of the view being painted decides whether the lightening runs, so
+        // a dark and a light view of the same document each get their own answer.
+        const Color aViewDocBackColor = lcl_getViewDocBackgroundColor(pBackConfigColor);
+
         const SvxBrushItem* pItem
             = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);
 
@@ -888,22 +907,9 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aBackColor = pItem->GetColor();
 
         if (aBackColor.IsFullyTransparent())
-        {
-            if (pBackConfigColor)
-                aBackColor = *pBackConfigColor;
-            else if (SfxViewShell::Current())
-            {
-                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-                if (pViewShell)
-                    aBackColor = pViewShell->GetViewRenderingData().GetDocColor();
-                else
-                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            }
-            else
-                aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-        }
+            aBackColor = aViewDocBackColor;
 
-        if (aBackColor.IsDark())
+        if (aViewDocBackColor.IsDark() && aBackColor.IsDark())
         {
             const sal_uInt8 nOriginalAlpha = aColor.GetAlpha();
             aColor = Color(basegfx::utils::getLightVariant(aColor.getBColor()));
