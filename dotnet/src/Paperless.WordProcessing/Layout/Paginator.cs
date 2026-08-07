@@ -64,6 +64,43 @@ public sealed record PaginationOptions
     public bool KeepsSpacingAtTopOfPage { get; init; }
 
     /// <summary>
+    /// Whether a paragraph at the top of a page that is not the first drops its space-before
+    /// <em>whatever</em> broke the page, explicit break included.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>SwFrame::IsCollapseUpper</c> (<c>sw/source/core/layout/calcmove.cxx</c>:1120), whose
+    /// own comment calls it "Word &gt;= 2013 style: when we're at the top of the page's body, but not on
+    /// the first page, then ignore the upper margin for paragraphs". It runs <em>after</em>
+    /// <see cref="KeepsSpacingAtTopOfPage"/> has decided the space is due and zeroes it, so it is a
+    /// second rule rather than a different setting of the first.
+    /// </para>
+    /// <para>
+    /// The gate is <c>TAB_OVER_SPACING &amp;&amp; !TAB_OVER_MARGIN</c>, which is
+    /// <c>compatibilityMode</c> 15 or more: <c>SettingsTable.cxx</c>:685 sets <c>TabOverMargin</c> for a
+    /// mode of 14 or less, and an absent <c>compatibilityMode</c> defaults to 12
+    /// (<c>SettingsTable.cxx</c>:637). A DOC always sets <c>TabOverMargin</c>
+    /// (<c>ww8par.cxx</c>:2047) and a native ODF document sets neither, so both keep the older rule.
+    /// </para>
+    /// <para>
+    /// Measured on eleven synthetics carrying 20 pt of space-before, reading the first word of page two
+    /// with a 72 pt top margin. At mode 15 the reference puts it at 72.35 for an automatic break, a
+    /// <c>w:pageBreakBefore</c>, a leading <c>w:br w:type="page"</c> and a <c>nextPage</c> section break
+    /// alike, and at 92.35 for the document's own first paragraph. At modes 14, 12 and none the two
+    /// explicit breaks come back to 92.35 while the automatic one stays at 72.35. So the discriminator
+    /// is the mode and not the kind of break — which is the opposite of what reading
+    /// <c>HasParaSpaceAtPages</c> alone suggests, since that grants the space to every explicit break.
+    /// </para>
+    /// <para>
+    /// One carve-out of Writer's is not implemented: <c>IsCollapseUpper</c> declines when the paragraph
+    /// carries a <c>RES_PAGEDESC</c>, "after applying a new page style (but do it after page breaks)".
+    /// A plain <c>nextPage</c> section break does not set one — measured above, and it collapses like
+    /// any other break — so this bites only where a section also changes the page's geometry.
+    /// </para>
+    /// </remarks>
+    public bool CollapsesUpperAtPageTop { get; init; }
+
+    /// <summary>
     /// Whether the space between two paragraphs is the larger of the two rather than their sum.
     /// </summary>
     /// <remarks>
@@ -688,8 +725,14 @@ public sealed class Paginator
             // at all: the document's first page keeps a paragraph's space-before, an explicit page break
             // keeps it, and an automatic break in the body drops it. Only asked where the rule can bite —
             // at the top of a column, where `SpaceAbove` would otherwise take the option's word for it.
+            //
+            // `CollapsesUpperAtPageTop` is the second rule on top of it — `SwFrame::IsCollapseUpper`,
+            // which takes the space back on every page but the first from Word 2013 onwards, so at
+            // `compatibilityMode` 15 an explicit break keeps nothing either.
             bool keepsSpaceHere =
-                column == 0 && (pages.Count == 0 || paragraph.Format.StartsNewPage);
+                column == 0
+                && (pages.Count == 0
+                    || (paragraph.Format.StartsNewPage && !_options.CollapsesUpperAtPageTop));
 
             Length ownSpaceAbove = Length.Zero;
             Length spaceAbove = lineIndex == 0
