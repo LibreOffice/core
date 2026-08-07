@@ -5787,12 +5787,21 @@ Presentations 517, Fidelity **543** (was 542). Zero failed and zero skipped thro
 touched. The 432 recorded last round is one round stale; `68d68502d` and `24e525b46` are in
 `09a35cdae`.
 
-### Still open on this track, unchanged and inherited rather than re-measured
+### Still open on this track
 
-- **`w:pBdr` is not implemented at all** — no reader, no model, no drawing. The predecessor's
-  census (56 of 134 words-track DOCX; 39 in `styles.xml`, 26 in a header or footer part, 36 in
-  batches 013–021) is preserved at
-  `scratchpad/words-a9aac8dbdd3a09338/pbdr-census-words.tsv`. **Not re-verified this round.**
+- **`w:pBdr` is not implemented at all** — no reader, no model, no drawing; `grep -rn pBdr
+  dotnet/src` still returns nothing. The census was **re-run this round and reproduces the
+  predecessor's exactly**: of the words track's **134 DOCX, 56 declare a `w:pBdr`** — 39 in
+  `styles.xml`, 26 in a header or footer part, 23 in the body, and **36 of the 56 in batches
+  013–021**. Written to `scratchpad/words-<agent>/pbdr-census.tsv` as
+  `path / styles / header-footer / body`.
+
+  Read that as a reach *ceiling* rather than a prediction: counting files that state a property is
+  not counting files whose output changes, and this project has measured that overstating by an
+  order of magnitude before. What makes it the strongest lead anyway is that a paragraph border
+  both draws **and takes height**, so it is an ink defect and a pagination defect at once — the
+  eleventh round measured an empty bordered paragraph costing LibreOffice 1.50 pt we do not spend,
+  26 times in one document.
 - **Refuted last round, still refuted**: `w:tblStylePr` is 14 of 134 DOCX and exactly one of them
   is in batches 013–015.
 - Batches 013–015 remain the weakest of the early range at 6/9, 4/10 and 5/10, and 29 of the
