@@ -359,9 +359,11 @@ internal sealed class XlsSheetPrintState
     /// size. <see cref="SheetBandHeight"/> is the port; the floor below still applies on top of
     /// it, because for BIFF it is <c>nManHeight</c> and this is <c>nHeight</c>.
     /// </param>
-    private static Length Band(double inches, string? codes)
+    /// <param name="defaultFont">The workbook's own default cell font, which the band is set in.</param>
+    private static Length Band(double inches, string? codes, SheetDefaultFont? defaultFont)
     {
-        Length stated = SheetBandHeight.Printed(codes, Length.FromInches(Math.Max(0, inches)));
+        Length stated = SheetBandHeight.Printed(
+            codes, Length.FromInches(Math.Max(0, inches)), defaultFont);
         return Length.Max(stated, DefaultBandHeight);
     }
 
@@ -391,8 +393,12 @@ internal sealed class XlsSheetPrintState
             RightMargin = Length.FromInches(_rightMargin),
             TopMargin = Length.FromInches(hasHeader ? _headerMargin : _topMargin),
             BottomMargin = Length.FromInches(hasFooter ? _footerMargin : _bottomMargin),
-            HeaderHeight = hasHeader ? Band(_topMargin - _headerMargin, _header) : Length.Zero,
-            FooterHeight = hasFooter ? Band(_bottomMargin - _footerMargin, _footer) : Length.Zero,
+            HeaderHeight = hasHeader
+                ? Band(_topMargin - _headerMargin, _header, DefaultFont)
+                : Length.Zero,
+            FooterHeight = hasFooter
+                ? Band(_bottomMargin - _footerMargin, _footer, DefaultFont)
+                : Length.Zero,
             HeaderText = _header,
             FooterText = _footer,
 

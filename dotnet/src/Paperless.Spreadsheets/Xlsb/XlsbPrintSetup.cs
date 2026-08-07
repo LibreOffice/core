@@ -258,10 +258,12 @@ internal static class XlsbPrintSetup
             // SpreadsheetML's binary spelling and takes the same OOXML filter path, so it takes
             // the same rule — see SheetBandHeight.
             HeaderHeight = hasHeader
-                ? SheetBandHeight.Printed(headerText, Length.FromInches(Math.Max(0, top - header)))
+                ? SheetBandHeight.Printed(
+                    headerText, Length.FromInches(Math.Max(0, top - header)), defaultFont)
                 : Length.Zero,
             FooterHeight = hasFooter
-                ? SheetBandHeight.Printed(footerText, Length.FromInches(Math.Max(0, bottom - footer)))
+                ? SheetBandHeight.Printed(
+                    footerText, Length.FromInches(Math.Max(0, bottom - footer)), defaultFont)
                 : Length.Zero,
             HeaderText = headerText,
             FooterText = footerText,

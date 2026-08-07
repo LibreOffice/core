@@ -61,13 +61,6 @@ namespace Paperless.Spreadsheets.Layout;
 /// </remarks>
 internal static class SheetBandHeight
 {
-    /// <summary>Calc's default furniture size, ten point.</summary>
-    /// <remarks>
-    /// <c>XclImpHFConverter::ResetFontData</c> falls back to <c>mnHeight = 200</c> twips
-    /// (<c>xihelper.cxx:534-542</c>) and the OOXML filter's font model carries the same default.
-    /// </remarks>
-    private static readonly Length DefaultSize = Length.FromPoints(10);
-
     /// <summary>
     /// The band a header or footer prints in, given the band the file states for it.
     /// </summary>
@@ -80,11 +73,26 @@ internal static class SheetBandHeight
     /// <param name="statedBand">
     /// The band the file's two margins imply — <c>top - header</c>, or <c>bottom - footer</c>.
     /// </param>
-    public static Length Printed(string? codes, Length statedBand)
+    /// <param name="defaultFont">
+    /// The workbook's own default cell font, which is what a run naming none is set in. Not a
+    /// fixed ten-point face: <c>ScPrintFunc::MakeEditEngine</c> fills the band's defaults from
+    /// <c>getDefaultCellAttribute</c> (<c>printfun.cxx:1769-1774</c>), and both filters' parsers
+    /// start from the workbook's first font rather than a constant
+    /// (<c>XclImpHFConverter::ResetFontData</c>, <c>xihelper.cxx:534-542</c>).
+    /// <para>
+    /// Measured on <c>NAARMO_Mexico_RVSM_Approvals.xlsx</c>, whose header states no size and
+    /// whose default font is Calibri 11: LibreOffice's flat-ODF export gives the header
+    /// <c>fo:min-height="0.45in"</c> and <c>fo:margin-bottom="0.2972in"</c>, a difference of
+    /// <strong>11.0 pt</strong> and not 10. Taking the nominal height as ten there makes the
+    /// band a point too tall and costs the workbook a page.
+    /// </para>
+    /// </param>
+    public static Length Printed(
+        string? codes, Length statedBand, SheetDefaultFont? defaultFont = null)
     {
         if (string.IsNullOrEmpty(codes) || statedBand <= Length.Zero) return statedBand;
 
-        (Length nominal, Length measured) = Measure(codes);
+        (Length nominal, Length measured) = Measure(codes, defaultFont ?? SheetDefaultFont.Calc);
 
         // A band whose text already overflows it is pinned, not dynamic, so the stated height is
         // what prints. Testing the nominal height is deliberate: it is the figure the *filter*
@@ -108,7 +116,8 @@ internal static class SheetBandHeight
     /// unconditionally (<c>xihelper.cxx:479-481</c>) and an empty EditEngine is one empty
     /// paragraph — so a band is never shorter than a single line of its own font.
     /// </remarks>
-    private static (Length Nominal, Length Measured) Measure(string codes)
+    private static (Length Nominal, Length Measured) Measure(
+        string codes, SheetDefaultFont defaultFont)
     {
         // Left, centre, right. Text before any switch belongs to the centre, which is where
         // both filters' parsers start.
@@ -118,8 +127,8 @@ internal static class SheetBandHeight
         Length[] lineHeight = [Length.Zero, Length.Zero, Length.Zero];
 
         int part = 1;
-        Length size = DefaultSize;
-        string? family = null;
+        Length size = defaultFont.Size;
+        string? family = defaultFont.Family;
 
         int at = 0;
         while (at < codes.Length)

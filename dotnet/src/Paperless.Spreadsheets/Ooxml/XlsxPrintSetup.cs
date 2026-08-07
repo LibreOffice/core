@@ -126,10 +126,12 @@ internal static class XlsxPrintSetup
         // band grows by however much the real line height exceeds the bare point size. See
         // SheetBandHeight, which is the port.
         Length headerBand = hasHeader
-            ? SheetBandHeight.Printed(headerText, Length.FromInches(Math.Max(0, top - header)))
+            ? SheetBandHeight.Printed(
+                headerText, Length.FromInches(Math.Max(0, top - header)), defaultFont)
             : Length.Zero;
         Length footerBand = hasFooter
-            ? SheetBandHeight.Printed(footerText, Length.FromInches(Math.Max(0, bottom - footer)))
+            ? SheetBandHeight.Printed(
+                footerText, Length.FromInches(Math.Max(0, bottom - footer)), defaultFont)
             : Length.Zero;
 
         bool landscape = string.Equals(
