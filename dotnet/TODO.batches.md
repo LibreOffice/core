@@ -2840,3 +2840,44 @@ change**; the value is that the alternative is now closed rather than carried.
 
 Reproduce with `scratchpad/sl12-frame/mk.py` + `mk2.py` (probe decks), `sample.py` (red-pixel
 count) and `mask.py` (soft-mask histogram). Reference: LibreOffice 24.2.7.2 420(Build:2).
+
+### A paragraph ending in a line break is one line short — measured, not yet implemented
+
+`slides/batch-015/ppt/2015-Civil-Rights-Website-training.ppt` (31.84 unaccounted ink, 28 of 94
+pages major, never examined) matches the word gate exactly and looks obviously different: the
+reference spaces its bullets a whole line apart and sets them smaller than we do.
+
+Two numbers off page 39, both from `pdftotext -bbox`:
+
+| | ours | reference |
+|---|---|---|
+| line pitch *inside* a paragraph | 19.200 | 16.328 |
+| baseline pitch *between* single-line paragraphs | 24.200 | 37.645 |
+| width of the word "Proficient" | 93.70 | 80.41 |
+
+The width ratio is **0.858** and the inner line-pitch ratio is **0.8504**, so the reference is
+setting the whole frame at about 85% — an autofit shrink. Our 24.200 is 19.200 + 4.99, and
+LibreOffice's own flat-ODF export states `fo:margin-top="0.176cm"` — 4.99 pt — so our paragraph
+spacing is *right*. The reference's 37.645 is 4.99 + **two** line heights.
+
+The export names the cause outright. Every one of those paragraphs ends
+`…<text:span><text:line-break/></text:span><text:span/>`: the PPT text stream carries a trailing
+`\x0B`, LibreOffice's EditEngine opens a line after it, and the paragraph is two lines tall.
+`TextMeasurer.Fit`'s loop is `while (lineStart < text.Length)`, so a mandatory break at the very
+end leaves `lineStart == text.Length` and the loop exits without emitting the line the break
+opened. `PptTextBody` does carry the character through — it maps `\v` to `\n`, which
+`IsMandatoryBreak` accepts.
+
+**The two defects are one.** The frame is overfull in the reference *because* of the extra
+lines, which is what triggers the 85% autofit; ours fits at 100% because it is short a line per
+bullet. So the pitch ratio is downstream of the missing line rather than a second bug.
+
+Not implemented here. `TextMeasurer` is in `Paperless.Text/Layout` and serves all three
+families, and the mandatory-break set it would key on includes `\r`, `\n` and U+2029 — which
+some reader may be leaving on the end of a paragraph to *mean* "paragraph ends here". Getting
+that wrong adds a line to every paragraph in the corpus. It needs the probe deck below and a
+sweep of all three tracks, which is more than this round had left after the `a:fontRef` work.
+
+The probe to write first: one `.pptx` with two text boxes differing only in a trailing
+`<a:br/>`, rendered through `soffice`, to confirm the extra line is a line break's own rule
+rather than something in the binary reader.
