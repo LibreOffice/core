@@ -4647,3 +4647,34 @@ better, and the eleven that move the other way take back a third of the gain.
 was over-drawing by 1.7% and inside tolerance, and it is now *under*-drawing by 8.4%. A fix
 that makes the search settle on a larger font can only lose text by overflowing something, so
 this is the autofit fix's own consequence and not the gate's ceiling. Open.
+
+### The fold swept: right on the fixture, flat on the track, and one deck holds the whole delta
+
+Whole track with the folded rounding, reference PDFs reused from the baseline run and verified
+identical row for row on every reference-side column (`probes/slides-r16/ref-check.py`, 163
+documents, 0 mismatches):
+
+| | baseline | fold |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1402.67 | 1404.07 |
+| unsigned `\|ink\|%` | 1751.40 | 1753.40 |
+| major pages | 466 | **465** |
+
+**102 documents moved: 55 better, 43 worse, 65 unchanged.** 6.63 of `|ink|%` won and 8.63
+lost. That is a change that is doing something real and roughly cancelling — except that the
+cancelling is not even:
+
+```
++2.14   31.38 -> 33.52   major +1   2015-Civil-Rights-Website-training.ppt
++1.36  277.21 -> 278.57  major  0   NAS-Infrastructure-Roadmaps-v16.0.pptx
+-1.21   65.04 -> 63.83   major  0   Thailand17.ppt
+-1.00   11.43 -> 10.43   major -1   berlin.ppt
+```
+
+**Without `2015-Civil-Rights-Website-training.ppt` the net is −0.14.** One deck — the brief's
+headline lead — carries more than the whole loss, and it is the one document the round was
+pointed at. The fix is exact on the controlled fixture (6/6 against the reference's own PDF,
+worst case 0.00094 pt, against 0.032 for the arithmetic it replaces) and the track is flat
+without that deck, so this is not a wrong fix; it is a fix that has uncovered something on one
+document. That deck is the next thing to look at, not the change.
