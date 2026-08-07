@@ -149,6 +149,7 @@ all_la_unit_tests = \
 	unit-bad-doc-load.la \
 	unit-mcp.la \
 	unit-mcp-service-root.la \
+	unit-mcp-busy.la \
 	unit-hosting.la \
 	unit-legacy-uno-api-warning.la \
 	unit-legacy-uno-api-warning-suppressed.la \
@@ -278,6 +279,7 @@ clienttest_SOURCES = \
 	TestGlobals.cpp \
 	TestStubs.cpp \
 	ClientRequestDispatcherTests.cpp \
+	McpDeckTests.cpp \
 	McpUploadsTests.cpp \
 	XcuScrubWhiteBoxTests.cpp \
 	test.cpp
@@ -337,6 +339,8 @@ unit_mcp_la_SOURCES = UnitMcp.cpp
 unit_mcp_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_mcp_service_root_la_SOURCES = UnitMcpServiceRoot.cpp
 unit_mcp_service_root_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_mcp_busy_la_SOURCES = UnitMcpBusy.cpp
+unit_mcp_busy_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_csv_la_SOURCES = UnitConvertCSV.cpp
 unit_convert_csv_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_to_password_protected_la_SOURCES = UnitConvertToPasswordProtected.cpp

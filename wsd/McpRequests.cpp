@@ -25,6 +25,7 @@
 #include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ContentType.hpp>
+#include <wsd/McpDeck.hpp>
 #include <wsd/McpServer.hpp>
 #include <wsd/McpTools.hpp>
 #include <wsd/McpUploads.hpp>
@@ -32,6 +33,7 @@
 #include <wsd/ServerURL.hpp>
 #include <wsd/SpecialBrokers.hpp>
 
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/StringTokenizer.h>
@@ -210,6 +212,43 @@ McpServer::McpToolResult makeDownloadLinkResult(const std::string& path, std::si
     std::ostringstream stream;
     object->stringify(stream);
     return { /*isError=*/false, stream.str() };
+}
+
+/// The installed design templates as the JSON text a list_design_templates result carries: one
+/// entry per design with its name, the slide parts it has a master for, its image style, and the
+/// limits a deck built on it must respect.
+std::string makeDesignTemplateListing()
+{
+    Poco::JSON::Array::Ptr designs = new Poco::JSON::Array();
+    for (const McpDeck::DesignTemplate& design : McpDeck::installedDesignTemplates())
+    {
+        Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+        entry->set("name", design.name);
+
+        Poco::JSON::Array::Ptr parts = new Poco::JSON::Array();
+        for (const std::string& part : design.parts)
+            parts->add(part);
+        entry->set("parts", parts);
+
+        if (!design.artDirection.empty())
+            entry->set("artDirection", design.artDirection);
+
+        Poco::JSON::Object::Ptr budgets = new Poco::JSON::Object();
+        budgets->set("maxSlides", design.budgets.maxSlides);
+        budgets->set("maxItemsPerBullets", design.budgets.maxItemsPerBullets);
+        budgets->set("maxItemLength", design.budgets.maxItemLength);
+        budgets->set("maxTitleLength", design.budgets.maxTitleLength);
+        entry->set("budgets", budgets);
+
+        designs->add(entry);
+    }
+
+    Poco::JSON::Object::Ptr listing = new Poco::JSON::Object();
+    listing->set("designs", designs);
+
+    std::ostringstream stream;
+    listing->stringify(stream);
+    return stream.str();
 }
 
 /// The tool result for the produced document at pathOrError: the document inline when asLink is
@@ -870,6 +909,15 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
                                                   downloadBase, asLink, input, disposition,
                                                   sessionId, complete);
                     });
+            };
+        }
+        else if (tool.name == McpServer::ToolName::ListDesignTemplates)
+        {
+            tool.executor = [](const Poco::JSON::Object::Ptr&,
+                               const McpServer::McpToolCompletion& complete)
+            {
+                complete({ /*isError=*/false, makeDesignTemplateListing() });
+                return true;
             };
         }
 

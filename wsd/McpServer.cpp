@@ -346,6 +346,21 @@ std::string makeTransformDocumentStructureDescription()
            InputAlternativesDescription + OutputDescription;
 }
 
+Poco::JSON::Object::Ptr makeListDesignTemplatesSchema()
+{
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    return makeObjectSchema(properties);
+}
+
+std::string makeListDesignTemplatesDescription()
+{
+    return "List the design templates a new presentation can be built with. Each entry gives the "
+           "template's name, the slide parts it has a design for, the image style its pictures "
+           "follow, and the limits a deck built on it must stay within. A design is picked by its "
+           "name. The list is empty when the server has no design templates installed, in which "
+           "case a presentation is built unstyled.";
+}
+
 // Serialise the tools as the array a tools/list response carries.
 Poco::JSON::Array::Ptr makeToolsArray(const std::vector<McpServer::McpTool>& tools)
 {
@@ -419,6 +434,13 @@ std::vector<McpServer::McpTool> McpServer::documentToolDefinitions()
         transform.description = makeTransformDocumentStructureDescription();
         transform.inputSchema = makeTransformDocumentStructureSchema();
         tools.push_back(std::move(transform));
+
+        McpTool designs;
+        designs.name = ToolName::ListDesignTemplates;
+        designs.title = "List design templates";
+        designs.description = makeListDesignTemplatesDescription();
+        designs.inputSchema = makeListDesignTemplatesSchema();
+        tools.push_back(std::move(designs));
 
         return tools;
     }();

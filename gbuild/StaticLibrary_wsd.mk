@@ -66,6 +66,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wsd, \
     wsd/FileServerUtil \
     wsd/HealthCheck \
     wsd/HostUtil \
+    wsd/McpDeck \
     wsd/McpRequests \
     wsd/McpServer \
     wsd/McpTools \

@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <wsd/AIUtil.hpp>
 #include <wsd/DeckSpec.hpp>
@@ -20,6 +21,7 @@
 
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/Util/MapConfiguration.h>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -41,6 +43,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testValidateHostileShapes);
     CPPUNIT_TEST(testLimitsSentence);
     CPPUNIT_TEST(testCustomBudgets);
+    CPPUNIT_TEST(testUnreadableSlideCapGivesTheDefault);
     CPPUNIT_TEST(testValidateOutline);
     CPPUNIT_TEST(testSanitizeOutline);
     CPPUNIT_TEST(testCompileTitleSlideNoTemplate);
@@ -64,6 +67,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     void testValidateHostileShapes();
     void testLimitsSentence();
     void testCustomBudgets();
+    void testUnreadableSlideCapGivesTheDefault();
     void testValidateOutline();
     void testSanitizeOutline();
     void testCompileTitleSlideNoTemplate();
@@ -635,6 +639,33 @@ void DeckSpecTests::testEmphasisVisibleLength()
                    R"({"part":"body","intent":"bullets","title":"X",
                        "blocks":[{"kind":"bullets","items":["**)" + overLimit + R"(**"]}]})")
                    .has_value());
+}
+
+void DeckSpecTests::testUnreadableSlideCapGivesTheDefault()
+{
+    constexpr std::string_view testname = __func__;
+
+    // An empty or unreadable slide cap in the configuration gives the built-in one, and a
+    // number is taken as it is.
+    const int builtIn = DeckSpec::Budgets().maxSlides;
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+
+    // The configuration in use before the test is put back when the test ends, whether or not
+    // an assertion fails.
+    struct ConfigurationRestorer
+    {
+        const Poco::Util::AbstractConfiguration* previous;
+        ~ConfigurationRestorer() { ConfigUtil::setConfigForTest(previous); }
+    };
+    const ConfigurationRestorer restorer{ ConfigUtil::setConfigForTest(config) };
+
+    for (const char* value : { "", "many" })
+    {
+        config->setString("ai.deck_budgets.max_slides", value);
+        LOK_ASSERT_EQUAL(builtIn, DeckSpec::budgetsFromConfig().maxSlides);
+    }
+    config->setString("ai.deck_budgets.max_slides", "12");
+    LOK_ASSERT_EQUAL(12, DeckSpec::budgetsFromConfig().maxSlides);
 }
 
 void DeckSpecTests::testValidateOutline()

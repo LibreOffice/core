@@ -37,6 +37,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testPingIsAnswered);
     CPPUNIT_TEST(testToolsListDescribesBothDocumentTools);
     CPPUNIT_TEST(testToolsListDescribesTheWritePathTools);
+    CPPUNIT_TEST(testToolsListDescribesTheDesignTemplateTool);
     CPPUNIT_TEST(testConvertArgumentsRequireAFormat);
     CPPUNIT_TEST(testTransformArgumentsRequireParsableJson);
     CPPUNIT_TEST(testToolsCallUnknownToolIsRejected);
@@ -58,6 +59,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testPingIsAnswered();
     void testToolsListDescribesBothDocumentTools();
     void testToolsListDescribesTheWritePathTools();
+    void testToolsListDescribesTheDesignTemplateTool();
     void testConvertArgumentsRequireAFormat();
     void testTransformArgumentsRequireParsableJson();
     void testToolsCallUnknownToolIsRejected();
@@ -339,6 +341,22 @@ void McpServerTests::testToolsListDescribesTheWritePathTools()
     LOK_ASSERT(hasProperty(transform, "format"));
     LOK_ASSERT(hasProperty(transform, "output"));
     LOK_ASSERT(requiredOf(transform) == std::vector<std::string>{ "transform" });
+}
+
+void McpServerTests::testToolsListDescribesTheDesignTemplateTool()
+{
+    constexpr std::string_view testname = __func__;
+
+    const McpServer::McpResponse response = listTools();
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+
+    // The design listing takes no argument at all, so its schema carries an empty property set and
+    // names nothing as required.
+    const Poco::JSON::Object::Ptr schema = inputSchemaOf(response.body, "list_design_templates");
+    LOK_ASSERT(schema);
+    LOK_ASSERT(schema->getObject("properties"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), schema->getObject("properties")->size());
+    LOK_ASSERT(requiredOf(schema).empty());
 }
 
 void McpServerTests::testConvertArgumentsRequireAFormat()

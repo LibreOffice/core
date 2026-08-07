@@ -78,9 +78,10 @@ struct CompileOptions
 };
 
 /// The budgets a deck is checked against, with the slide cap read from
-/// configuration. A setting of zero or less gives 1, so every deck of one slide
-/// passes. The other limits are the built-in constants. A template manifest may
-/// lower any of them further.
+/// configuration. An empty or unreadable setting gives the built-in MaxSlides,
+/// and a setting of zero or less gives 1, so every deck of one slide passes. The
+/// other limits are the built-in constants. A template manifest may lower any of
+/// them further.
 Budgets budgetsFromConfig();
 
 /// True when the name is one a design template or master may travel under: at

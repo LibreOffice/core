@@ -14,6 +14,7 @@
 #include "DeckSpec.hpp"
 
 #include <common/ConfigUtil.hpp>
+#include <common/NumUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 
@@ -666,8 +667,9 @@ namespace DeckSpec
 Budgets budgetsFromConfig()
 {
     Budgets budgets;
-    const int maxSlides =
-        ConfigUtil::getConfigValue<int>("ai.deck_budgets.max_slides", budgets.maxSlides);
+    // An empty or unreadable setting gives the default.
+    const int maxSlides = NumUtil::i32FromString(
+        ConfigUtil::getString("ai.deck_budgets.max_slides", std::string()), budgets.maxSlides);
     budgets.maxSlides = maxSlides < 1 ? 1 : maxSlides;
     return budgets;
 }

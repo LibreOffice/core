@@ -272,6 +272,7 @@ coolwsd_sources = \
                   wsd/FileServerUtil.cpp \
                   wsd/HealthCheck.cpp \
                   wsd/HostUtil.cpp \
+                  wsd/McpDeck.cpp \
                   wsd/McpRequests.cpp \
                   wsd/McpServer.cpp \
                   wsd/McpTools.cpp \
@@ -381,6 +382,7 @@ wsd_headers = \
               wsd/FileServer.hpp \
               wsd/HealthCheck.hpp \
               wsd/HostUtil.hpp \
+              wsd/McpDeck.hpp \
               wsd/McpRequests.hpp \
               wsd/McpServer.hpp \
               wsd/McpTools.hpp \
