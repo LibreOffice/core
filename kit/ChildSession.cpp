@@ -1361,7 +1361,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         // compression fails.
         const bool isFont = command.rfind(".uno:VectorRenderingFont", 0) == 0;
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        const char* json = values.get() ? values.get() : "{}";
+        const char* json = values ? values.get() : "{}";
         const std::string_view header = isFont
                                             ? std::string_view("zstdvectorrenderingfont:\n")
                                             : std::string_view("zstdvectorprimitives:\n");
