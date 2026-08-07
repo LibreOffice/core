@@ -146,6 +146,12 @@ public static partial class SlideTextLayout
     /// one such decision to a window 16 units wide. A quantity that is only ever one or two units
     /// out still lands on the wrong side of a boundary that close.
     /// </para>
+    /// <para>
+    /// Applied in <see cref="Place"/> and deliberately not in <see cref="Height"/>, whose caller
+    /// is a table's row sizing and hands over a width it has already computed from column edges
+    /// rather than a rectangle. Quantising a width on its own is not this rule — the rule is
+    /// about two edges — and a table's own grid is a separate measurement.
+    /// </para>
     /// </remarks>
     private static DocRect OnGrid(DocRect rectangle)
     {
