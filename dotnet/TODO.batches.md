@@ -2245,6 +2245,11 @@ change: **words 147 of 200, page error 119, 156 page-exact.** The slides sweep w
 when this round ended and its figure is deliberately left blank rather than guessed — the
 40-document check above is what carries the claim for that track.
 
+Test counts, each project run on its own and the whole output kept: Core 243, Text **234**
+(was 217; the seventeen new ones are this round's three positive and fourteen negative resolution
+theories), Containers 109, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 565,
+Spreadsheets 426, Presentations 505, Vector 291. **Zero failed and zero skipped throughout.**
+
 ## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
 
 Baseline swept whole at `22ed440e0`, 171 documents, and it reproduced the brief exactly —
