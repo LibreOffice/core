@@ -319,6 +319,19 @@ instrument for anything about notes; use `--convert-to ods` and read `content.xm
 
 ### The `Tj`-splitting artefact costs this track three matches, not one
 
+> **Corrected, and the correction is the more useful half.** The histogram below reproduces —
+> our text layer really does have a ceiling the reference's does not — but on all three
+> documents it was a *symptom of the in-cell hard break*, not the cause of the miss. Once the
+> break was honoured, `Praktikastellen_…xls` went 2019 → **1828 of 1828**, `FY2021-AIP-grants.xlsx`
+> 161982 → **156679 of 156662** and `STC_WebList.xlsx` 1354164 → **1297910 of 1293910**; all three
+> now match, and the `Tj` split costs this track **nothing**. Nothing about the sink changed.
+>
+> Read it as the standing warning about a plausible signature: a concatenated cell is broken
+> mid-token by the wrap, and mid-token fragments are exactly what an operator-granularity
+> defect also produces. The histogram cannot tell the two apart, and neither of the two agents
+> that ran it asked whether the long token should have been there at all. Compare the two
+> renderings' *lines* before believing a token-length histogram.
+
 The brief names `Praktikastellen_…xls` as the one gate miss and says the same artefact inflates
 word counts wherever a workbook holds long tokens. Measured, with a token-length histogram of both
 text layers — the signature is a hard ceiling on our side that the reference does not have:
@@ -353,6 +366,19 @@ writes that cell as a single `table:table-cell` holding **four `<text:p>` elemen
 containing a newline — checked on `ECA Sinters.xls` too, also zero — so the break is lost in the
 BIFF reader rather than in the layout.
 
+> **Disproved, and both halves of it.** The BIFF reader keeps every break. Counted on the
+> same two exports rather than argued: LibreOffice's `.ods` of this workbook holds **578**
+> multi-paragraph `table:table-cell` elements out of 1505 cells, and our own XHTML extraction
+> of it holds **578** `<br/>` — the same number, cell for cell, and `<p>ME 2.1<br />ME 2.2<br
+> />PO 9.5<br />PO 9.6</p>` is line 158 of it. `BiffRecordReader.ReadRawUnicodeString` appends
+> U+000A like any other code point and nothing downstream removes it; `ContentTableCell`
+> strips only a *trailing* newline. **1403 is not a count of multi-paragraph cells in that
+> file** and no measurement in the tree reproduces it.
+>
+> This is render-comparison's rule 7 exactly — extraction is right and rendering is wrong, so
+> the defect is in the value only rendering resolves. Everything below the line about
+> `SheetTextLayout` stands; everything above it about the reader does not.
+
 Two things to hold onto before starting:
 
 - **`SheetTextLayout.Wrap` would drop them anyway**, even once the reader keeps them. Its first
@@ -368,7 +394,96 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
-## What the ninth sheets sweep found: a row is measured on a device Calc never draws with
+## The fifteenth sweep: the break was in the drawing, and it was worth five documents
+
+Swept whole at `1aefcdfdb`, 171 documents, before and after. The baseline reproduced the brief's
+three headline figures to the digit — **129 of 171, page error 116, 143 exact page counts** — and
+after the fix: **134 of 171, page error 116, 143 exact.**
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 129 | **134** |
+| documents with an exactly correct page count | 143 | 143 |
+| total absolute page error | 116 | 116 |
+| **total absolute word error** | 107 780 | **44 496** |
+
+**No page count moved anywhere on the track**, which is the tell that the diagnosis was right:
+`LineCount` had always split on the break, so the row heights were already correct and only the
+drawing was not. Five documents went to `match` and none left it; the one other verdict change is
+`dragon-175066A.xlsx`, which went from failing pages *and* words to failing pages alone at 8143
+words against 8142.
+
+Fourteen documents' word error rose, twelve of them by five or fewer; the two that are not are
+`CIS_Debian_Linux_8_Benchmark_v1.0.0.xls` (a 1227-word shortfall became 1316, still a `words`
+failure) and `afn-afn-20250801-fy25-jan25-mar25.xlsx` (407 to 449 on 73 542, still a match).
+
+### What it was
+
+Not the reader. `SheetTextLayout.Wrap` shaped the cell's whole text and returned it as one line
+whenever that fitted the column — `if (available <= Length.Zero || whole.Width <= available)
+return [whole]` — so a break never reached the line breaker unless the concatenation happened to
+overrun. `LineCount` beside it split on the break first, so the two disagreed by exactly the
+cells that fitted.
+
+Calc does not have the choice to make: a BIFF or SpreadsheetML string holding U+000A becomes a
+`CELLTYPE_EDIT` cell (`XclImpStringHelper::SetToDocument`,
+`sc/source/filter/excel/xihelper.cxx:245-258`; `SheetDataBuffer::setStringCell`,
+`sc/source/filter/oox/sheetdatabuffer.cxx:120-135`, which every such string reaches because
+`RichString::extractPlainString` refuses one at `richstring.cxx:375`), and
+`ScOutputData::LayoutStringsImpl` sends every edit cell to `DrawEdit` without asking anything
+else about it (`output2.cxx:1711-1712`). One paragraph is one line; the column width decides
+where a paragraph is broken and never whether it is.
+
+Three changes, all in `SheetTextLayout`, all narrow:
+
+- the shortcut asks whether the text holds a break before taking itself, so a cell with none
+  measures and draws exactly as it did;
+- a line's shaped range backs off over the break that ends it — Writer's break portion is "zero
+  width, and no glyph", and keeping it measured the character's advance into a centred line and
+  put a U+000A in the text layer;
+- an empty paragraph is shaped from its break for the metrics and then emptied, so it takes its
+  pitch without drawing a `.notdef` box.
+
+`sheet-cell-hard-break.fods` and `SheetHardBreakTests` are the fixture and the ten tests, every
+asserted figure read out of LibreOffice 24.2.7.2's own PDF of the fixture with `pdftotext -bbox`.
+Each half was verified by reintroducing it: restoring the unconditional shortcut fails 4 of the
+10, restoring the shaped range to the line's full end fails the same 4, and dropping only the
+empty-paragraph line fails exactly 1.
+
+### One case is deliberately not implemented, and it is ODF's alone
+
+A cell that holds a break and does **not** wrap. ODF's importer makes a multi-paragraph edit cell
+whatever the wrap option says, so LibreOffice draws three lines for row 2 of the fixture; BIFF and
+SpreadsheetML both fold the same content onto one paragraph (`SetSingleLine(!GetLineBreak())`,
+`xihelper.cxx:250-256`; `bSingleLine = !mbWrapText`, `sheetdatabuffer.cxx:120-135`). The sheets
+corpus is entirely `.xls` and `.xlsx`, so the one line we draw is what its two importers ask for.
+`ANonWrappingCellStillLosesItsBreaks` states the gap rather than blessing it, and is the
+assertion to delete when the ODF side is done.
+
+### The next lead: an empty column's attribute scan starts from its own last data row
+
+`Computer and Software Services_50 State Comparison.xlsx` (008) is **24 pages against 26** with
+the words all but matching, 2816 against 2819. The two extra pages are pages 5 and 6 of the
+reference and their entire text is `5` and `6` — the footer's page number on a blank body. The
+sheet is `pageOrder="downThenOver"` over two row bands, so those two are a **third column band**
+that we do not produce at all: our print area stops at column H and LibreOffice's reaches O.
+
+Columns I to O of that sheet hold **129 rows of cells that carry a visible fill and no data
+whatever**. `SheetDecorationArea.Extend` skips every row at or before the *sheet's* last data row
+— 42 here — and then applies `SC_VISATTR_STOP`, so it sees one run of 87 equal rows, gives up,
+and never widens. Calc asks the question per column: `ScColumn::GetLastVisibleAttr`
+(`sc/inc/column.hxx:892-897`) passes `GetLastDataPos()`, **that column's own** last data row,
+"0 if none", into `ScAttrArray::GetLastVisibleAttr` (`attarray.cxx:1922`). For a column with no
+data the scan therefore starts at the top of the sheet rather than 43 rows down, and the run
+arithmetic that follows is a different sum.
+
+That difference is stated and cited; it is **not yet measured to be the cause here**, because the
+run lengths still have to come out under 84 for Calc to keep the columns and I did not get as far
+as reproducing its `IsVisibleEqual` grouping. Start by making that one change and rendering this
+document: it is a one-line change to which row the scan starts from, and the whole track has to be
+swept behind it because `SheetDecorationArea` decides the print area of every sheet.
+
+## What the ninth sweep found: a row is measured on a device Calc never draws with
 
 Swept whole at `6b6d54d37`: **125 of 171**, page error 192, 134 exact page counts — the briefed
 figures to the digit. After the fix below, at the same commit plus it: **132 of 171, page error

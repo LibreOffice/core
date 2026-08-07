@@ -144,6 +144,25 @@ So the order is **page count → words → font embedding → image**, each chec
 one meaningful. Run the image diff over documents that already pass, not over the failures:
 the failures already have a cheaper explanation.
 
+### Excusing a document needs a higher bar than fixing one
+
+The ceiling is real and worth marking. But a mark that says *not ours* stops anyone looking,
+so it has to be held to a stricter standard than a fix — a wrong fix gets measured and
+reverted, a wrong exemption sits there quietly costing matches.
+
+Measured: three spreadsheets were marked as the PDF sink's `Tj` splitting, on a token-length
+histogram that reproduced exactly and a `pdftotext -bbox` reading showing the first token
+spanning a whole URL. Every measurement held. **All three were a dropped hard break inside a
+cell**, whose concatenated text then overran its column and was wrapped mid-token — which
+produces the same histogram and the same bounding box. They now match with nothing about the
+sink changed, and the mark had been excusing them for a round.
+
+The rule that would have caught it: **never excuse a document on a symptom two causes share.**
+Before marking anything *not ours*, name the mechanism, then find the observation that
+*separates* it from the nearest alternative. If no such observation exists in the corpus,
+author the document that provides one — that is how the picture-frame fill question was closed
+after two rounds of both explanations fitting the same five measurements.
+
 ### Know when the gate has hit its ceiling
 
 Word count drives progress efficiently until the residue stops being about words. Measured on
