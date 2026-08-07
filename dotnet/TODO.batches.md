@@ -2989,3 +2989,19 @@ Three facts, so the next attempt starts from the right place:
 `PptxTextBody.Symbolised` and `OutlineNumbers.NormaliseBullet` are where our side ends: we map
 the byte to `0xF000 | (c & 0xFF)` exactly as LibreOffice does and then fall back to `U+2022`
 because nothing can draw the result. Point 3 is what would let that fallback go.
+
+### A `grep -c` guard that fires on a missing file, met in the wild
+
+The skill's note about `grep -c` reporting a count where a verdict is wanted has a second form
+worth writing down, because it cost a wait here. This wait loop declared both runs finished
+after four minutes:
+
+```sh
+fd=$(grep -c '^TOTAL' "$log" 2>/dev/null || echo 0)
+[ "$fd" != "0" ] && ...
+```
+
+`grep -c` on a **missing** file prints its own `0` on stdout *and* exits non-zero, so the `||`
+branch runs too and `fd` is the two-line string `"0\n0"` — which is not equal to `"0"`, so
+every test on it is true. The failure is silent and looks exactly like success. Use `grep -q`
+and set a flag, and never take a count where a verdict will do.
