@@ -2015,6 +2015,25 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
+Measured whole-track at `22ed440e0`, three times, 171 documents each time. The baseline reproduced
+the brief's three headline figures to the digit — **134 of 171, page error 116, 143 exact** — and
+after the sixteenth round's two changes: **135 of 171, page error 114, 144 exact.** Batches 001 to
+008 are now full parity.
+
+**Exactly one document moved on our side across the whole track.** The intermediate sweep is the
+reason to say it that way: the first of the two changes moved two, one of them
+`environment-edb-docs-edb-emissions-databank.xls` from 195 pages to 204 and out of `match`, and
+the second change put it back. The one other row that differs between the baseline and the final
+sweep is `PBN Matrix NAAs (V01).xlsx`, whose *reference* word count went 5554 to 5557 between two
+runs of the same `soffice` on the same file — a match before and after, and a reminder that the
+reference column is not perfectly reproducible either.
+
+| Batch | before | after |
+| --- | --- | --- |
+| `batch-008` | 9/10 | **10/10** |
+| `batch-017` | 4/10 | 4/10 (9/10 → 4/10 mid-round, restored) |
+| every other batch | — | unchanged |
+
 Measured whole-track at `1aefcdfdb`, twice, 171 documents each time. The baseline reproduced the
 brief's three headline figures to the digit — **129 of 171, page error 116, 143 exact** — and after
 the fifteenth round's one fix: **134 of 171, page error 116, 143 exact, total word error 107 780 →
@@ -2068,7 +2087,7 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | ✅ |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | **9/10** |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | **9/10** |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | ✅ |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
@@ -2104,6 +2123,87 @@ first wants the extraction comparison rather than more pixels. The sharpest sing
 feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the reference has and we
 do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
 border grid.
+
+## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
+
+Baseline swept whole at `22ed440e0`, 171 documents, and it reproduced the brief exactly —
+**134 of 171, page error 116, 143 exact**, batches 001 to 006 at full parity, `batch-007` and
+`batch-008` each 9/10 with their single misses being the two documents the handover named. Both
+named leads were then taken; one is fixed and the other is measured to its cause and deliberately
+not fixed.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 134 | **135** |
+| documents with an exactly correct page count | 143 | **144** |
+| total absolute page error | 116 | **114** |
+| `batch-001`–`batch-008` | 78/80 | **80/80** |
+
+### `batch-008`: an empty column's scan starts at its own last data row
+
+`SheetDecorationArea.Extend` started every column's attribute scan at the *sheet's* last data row.
+Calc asks per column and answers per column: `ScColumn::GetLastVisibleAttr` passes that column's
+own `GetLastDataPos()`, "0 if none" (`sc/inc/column.hxx:892-897`).
+
+On `Computer and Software Services_50 State Comparison.xlsx` columns I to O carry a solid fill on
+all 129 rows and hold no data, and the sheet's data stops at row 42. Below row 42 the fill is one
+run of 112 equal rows, past `SC_VISATTR_STOP`, so the old start found nothing at all. What Calc
+takes is the **header row above the data** — `nAttrStartRow` is clamped to `nLastData + 1`
+(`attarray.cxx:1961`), so a run that is nothing but row 1 measures **zero** rows. The print area
+ended at column H where Calc's reaches O, a whole third column band. **26 pages now against 26.**
+
+The handover cited this mechanism and said in as many words that it was not measured to be the
+cause. It was, and the citation was right — which is worth recording, because on this project the
+usual outcome is the opposite.
+
+### The same change cost nine pages elsewhere, and that is why the round has three sweeps
+
+An intermediate whole-track sweep moved **exactly four rows**, two of them the reference's own word
+count drifting. The other two were the target above and
+`environment-edb-docs-edb-emissions-databank.xls`, **195 pages to 204** and out of `match`.
+
+Probed, not guessed: its `ICAO databank` sheet holds data to column 104 and per-cell formatting to
+column 228, and the printed range came back `0..228` where it had been `0..104` — 124 empty ruled
+columns the old start had never been able to reach. Calc drops them by `SC_COLUMNS_STOP` = 30
+(`table1.cxx:655`, `737-757`), the sideways twin of `SC_VISATTR_STOP`, which was not implemented at
+all: the walk groups columns visually equal over every row, and the first group of thirty or more
+ends the block before it. On an ordinary sheet the run past the last formatted column is unbounded
+and equal to itself, so the walk stops exactly where it did before — which is why nothing had ever
+needed it, and why implementing it changed nothing else on the track.
+
+The lesson is procedural. **A change that only ever widens a print area cannot be checked on the
+documents it was aimed at**; the cost is entirely on documents whose print area was already right,
+and it took a whole-track sweep to see one.
+
+### `batch-007`: `dragon-175066A.xlsx` is one twip of digit width
+
+14 pages against 13 with the words exact. Measured off both PDFs with `pdftotext -bbox`: column B
+starts at 80.528 pt in the reference and 81.153 in ours, column C at 357.0 and 363.1, so column B
+is drawn 276.47 pt wide against 281.95. LibreOffice's own flat-ODF export gives column B as
+`10.3783in` = 747.24 pt, which makes the scales **0.3700 and 0.3773** — zoom **37** against **38**.
+
+The sheet is `fitToPage` with `fitToWidth` 1 and `fitToHeight` 0, and `ScPrintFunc::CalcZoom`
+bisects on **integer** percentages, so the exact fit ratio only has to cross a whole percent for
+the answer to move by 2.7% and take a page with it.
+
+It crosses because our columns are 0.7% narrower. The workbook's default font is 宋体 at 11 pt,
+which fontconfig resolves to DejaVu Sans — LibreOffice's too, since its export gives exactly 140.0
+twips per character unit for all three columns. Our exact metric is **139.9701** and
+`SheetFonts.DigitWidthTwips` truncates it to 139. **Forcing 140 for this workbook renders it 13 of
+13 at 8143 words against 8142.**
+
+The truncation is not a new defect: it is a rule that section already documents and justifies,
+because Carlito 11 pt measures 111.50 where LibreOffice writes 111 and Carlito is the default of
+65 of the 171 corpus spreadsheets. What is new is the price. A one-twip column width is normally
+invisible; a fit-to-width sheet's integer zoom turns it into a page.
+
+**Not changed, and the reason is not caution.** All nine faces the record measures are satisfied by
+truncating unless the fraction exceeds a threshold somewhere between 0.64 and 0.70 — Carlito 12 pt
+is 121.64 → 121, DejaVu Sans 12 pt is 152.70 → 153 — but only two of the nine discriminate, there
+is no mechanism behind the constant, and the reach is every spreadsheet in the corpus rather than
+the thirteen DejaVu documents. That wants its own round with a sweep behind it, and the sweep is
+cheap: the reference side does not move for a Paperless-only change, so rendering our side alone
+and joining the existing reference column answers it.
 
 ## After the ninth round: slides, and two defects the gate is structurally blind to
 
