@@ -78,8 +78,13 @@ namespace Paperless.WordProcessing.Ooxml;
 ///   <item>
 ///     <term><c>w:usePrinterMetrics</c></term>
 ///     <description>
-///     <b>Identified and inert.</b> It disables printer-independent layout, which has no meaning
-///     without a printer; headless LibreOffice ignores it and so does this.
+///     <b>Read and applied.</b> It was recorded here as inert on the grounds that headless
+///     LibreOffice ignores it, and that is refuted by the importer:
+///     <c>DomainMapper_Impl::ApplySettingsTable</c>
+///     (<c>sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx</c>:10173) sets
+///     <c>PrinterIndependentLayout::DISABLED</c> from it, which is the same state
+///     <c>WW8Dop::fUsePrinterMetrics</c> puts a DOC into. So the metrics are rounded onto a
+///     300 dpi grid, exactly as <c>DocReader</c> already does for the binary format.
 ///     </description>
 ///   </item>
 ///   <item>
@@ -116,6 +121,10 @@ namespace Paperless.WordProcessing.Ooxml;
 /// True when external leading is suppressed. Read and reported; see the remarks for why nothing
 /// consumes it.
 /// </param>
+/// <param name="UsesPrinterMetrics">
+/// True when the document asks to be measured on a printer's pixel grid rather than
+/// printer-independently, so every font metric is rounded to a 300 dpi step.
+/// </param>
 /// <param name="HasSettingsPart">
 /// True when the package actually carried a <c>word/settings.xml</c>. Distinct from every flag
 /// being off; <see cref="AddsParagraphSpacing"/> is the one place the difference shows.
@@ -125,10 +134,11 @@ public sealed record WordCompatibility(
     bool DoNotUseHtmlParagraphAutoSpacing,
     bool DoNotExpandShiftReturn,
     bool NoLeading,
+    bool UsesPrinterMetrics,
     bool HasSettingsPart)
 {
     /// <summary>What a package with no settings part gets: every flag off.</summary>
-    public static WordCompatibility None { get; } = new(-1, false, false, false, false);
+    public static WordCompatibility None { get; } = new(-1, false, false, false, false, false);
 
     /// <summary>
     /// True when two consecutive paragraphs' spacings add rather than the larger one winning.
@@ -184,6 +194,7 @@ public sealed record WordCompatibility(
             Word.IsOn(Word.Child(compat, "doNotUseHTMLParagraphAutoSpacing")),
             Word.IsOn(Word.Child(compat, "doNotExpandShiftReturn")),
             Word.IsOn(Word.Child(compat, "noLeading")),
+            Word.IsOn(Word.Child(compat, "usePrinterMetrics")),
             HasSettingsPart: true);
     }
 

@@ -3452,3 +3452,136 @@ five styled boxes are exactly the `a:fontRef` ordering cases.
 `a:pattFill` is the best-bounded of these — five presets, 65 fills, 7 decks, three of them in
 this list. `ITE106-Chapter 4.ppt` and `NAS-Infrastructure-Roadmaps-Weather.pptx` have never
 been looked at.
+
+## Words, round thirteen — baseline at `1aefcdfdb`
+
+Swept whole-track against a checksummed CLI snapshot, two workers, 200 of 200 rows and no
+path twice.
+
+| | |
+|---|---|
+| match | **145/200** |
+| total absolute page error | **121** |
+| documents with an exactly correct page count | **154** |
+| total absolute word error | **7095** |
+
+Per batch: `001`–`005` 10/10, `006` 9/10, `007` 9/10, `008`–`009` 10/10, `010` 7/9,
+`011` 8/10, `012` 8/10, `013` 5/9, `014` 3/10, `015` 4/10, `016` 7/10, `017` 5/10,
+`018` 4/10, `019` 3/10, `020` 3/10, `021` 0/2.
+
+**The brief said 146/200, page error 120, 155 page-exact, and this is one document short of
+it** — `015` and `019` each one lower than recorded and `018` one higher, which nets to −1
+and is the shape of a document that renders differently under load rather than of a record
+being wrong. Everything else reproduced exactly.
+
+### The round, swept whole three times
+
+Each sweep against a checksummed CLI snapshot, two workers, 200 rows and no path twice.
+
+| | base `1aefcdfdb` | after the spacing fix | after the metrics fix |
+|---|---|---|---|
+| match | 145/200 | **146/200** | 146/200 |
+| total absolute page error | 121 | **120** | 120 |
+| pages exactly correct | 154 | **155** | 155 |
+| total absolute word error | 7095 | **7083** | 7083 |
+
+`batch-007` 9/10 → **10/10**; every other batch unchanged, and the gate `001`–`006` still
+10/10 apart from `006`'s known row-split document. Two documents changed state across the
+whole round and both improved. The second sweep moved nothing at all, which is the honest
+result for a change whose corpus reach is one document that it does not flip.
+
+Test counts after: Core 238, Text 196, Containers 109, Rendering 104, Markup 259,
+OpenDocument 125, WordProcessing **559** (553 plus this round's six), Spreadsheets 410,
+Presentations 488, Vector 291, Fidelity 538, 0 skipped in every one. Nothing outside
+`Paperless.WordProcessing` was touched, so the other two tracks were not swept.
+
+### `batch-007` is 10/10: a style that states half of `w:spacing` freezes the other half
+
+`final-technical-report-template.docx` was five pages against six, and the reference's sixth
+page holds nothing but the running head and the footer — eight trailing empty paragraphs
+overflowing. Every one of its `Heading1` paragraphs sits 12 pt lower in the reference than in
+ours, at the top of a page as well as in the middle of one, and the style states no space above
+at all: `<w:pPr><w:numPr…/><w:spacing w:after="240"/><w:outlineLvl w:val="0"/></w:pPr>`, based
+on the file's own `Heading2`.
+
+LibreOffice keeps a paragraph's two vertical margins in **one** item, `SvxULSpaceItem`, while
+writerfilter sets them through two separate UNO properties. Setting one is therefore a
+read-modify-write of the pair: the importer takes what the style resolves to at that moment,
+replaces the half the file states, and writes **both** back as *direct* values. Styles are
+applied in the order `styles.xml` declares them, so a parent declared further down has not had
+its own definition applied yet and is still sitting at Writer's pool default for the built-in
+style its `w:name` names.
+
+Measured on LibreOffice 24.2.7.2 rather than argued, with the parent stating
+`w:before="480"` as a control:
+
+| child states | parent | parent declared | space above the child |
+|---|---|---|---|
+| `w:after` only | `heading 2` | after the child | **12 pt** — never the 480 |
+| `w:after` only | `heading 2` | before the child | 24 pt — the 480, inherited normally |
+| `w:after` only | a custom style | after the child | **nought** — a suppression, not a fall-through |
+| `w:after` only | a custom style | before the child | 24 pt |
+| nothing | `heading 2` | after the child | nought — the read-modify-write never happens |
+| `w:before` only | `heading 2` | after the child | 6 pt *below*, symmetrically |
+
+The pool values, each one rendered rather than read off the source: **12 pt / 6 pt** under
+`heading 1`–`heading 9`, `Title` and `Subtitle`; **0 / 7 pt** under `Body Text` and `List`;
+**6 pt / 6 pt** under `caption`; nought for everything else including every custom style. They
+line up with `DocumentStylePoolManager.cxx:810` (the `Heading` base), `:699` (`Text body`) and
+`:974` (`Caption`), which is the check that the measurement describes a rule rather than a
+coincidence — and worth stating, because the same file's `bNoDefault` guard says these defaults
+should not apply at all, and they demonstrably do.
+
+`WordStyles.cs:255` is the completion pass and `WriterPoolSpacing.cs:52` the table. Fixture
+`tests/corpus/features/style-one-sided-spacing.docx`, four styles differing in one thing each,
+whose nine rendered baselines match LibreOffice's to a tenth of a point.
+
+**Reach, measured by rendering rather than by grepping.** Fifteen of the 134 words-track DOCX
+declare a one-sided `w:spacing` against a parent declared later, and only six of those name a
+parent Writer has a non-zero pool default for. Two documents changed on the sweep: this one, and
+`016 AFS-050-004-F2_0i.docx` by one word. Nothing regressed.
+
+### `w:usePrinterMetrics` was recorded as inert on DOCX, and is not
+
+`WordCompatibility` listed it under "identified and inert — headless LibreOffice ignores it".
+`DomainMapper_Impl::ApplySettingsTable` (`DomainMapper_Impl.cxx:10173`) sets
+`PrinterIndependentLayout::DISABLED` from it, which is the same state `WW8Dop::fUsePrinterMetrics`
+puts a DOC into and which `DocReader.cs:202` has honoured all along. Line pitch, LibreOffice
+against ours, over seven face and size pairs:
+
+| face, size | ref off | ref on | ours off | ours on |
+|---|---|---|---|---|
+| Calibri 11 | 13.45 | 13.45 | 13.45 | 13.45 |
+| Calibri 10 | 12.20 | 12.25 | 12.20 | 12.25 |
+| Arial 10 | 11.50 | 11.55 | 11.50 | 11.55 |
+| Arial 12 | 13.80 | 13.95 | 13.80 | 13.95 |
+| Times New Roman 12 | 13.80 | 13.95 | 13.80 | 13.95 |
+| Cambria 11 | 12.65 | 12.70 | 12.65 | 12.70 |
+| **Times New Roman 10** | **11.55** | 11.55 | **11.50** | 11.55 |
+
+The last row is a separate defect and nearly cost this one: our printer-independent pitch for
+10 pt Liberation Serif is 0.05 pt short, so on that pair alone both packages come out at 11.55
+and the flag reads as doing nothing. The first fixture written for this was that pair, and it
+said the change was compensating for an unrelated error. It is 12 pt Arial now.
+
+**Reach is one document** — `batch-010/docx/195584360.docx`, the only words-track DOCX that
+states the flag. Its body geometry is now exact against the reference on every line of page 2,
+where it drifted 0.1 pt a line before. It is still 19 pages against 20, so this did not move the
+match count; what is left of it is **0.5 pt lost at each table row**, which accumulates to 2 pt
+a page. Kept on the evidence of the seven-pair sweep rather than on a corpus number.
+
+### What the next agent on this track should take
+
+1. **`batch-010`'s `195584360.docx` is now one defect away**, and the defect is named: entering
+   a table row costs 0.5 pt against the reference, roughly twenty times a page. Its horizontal
+   twin is in the same place — table cell text starts at x = 75.25 in the reference and 70.20 in
+   ours, a flat 5.05 pt, on a document whose `w:tblPr` states `w:tblInd w:w="108"` and which has
+   **no `compatibilityMode` at all**, so `DocxLayoutSource.Tables.cs:218` takes the
+   measure-to-the-text branch and subtracts the padding. The reference plainly did not.
+2. **Our 10 pt Liberation Serif line pitch is 11.50 against LibreOffice's 11.55**, printer
+   independently. One row of the table above; no other size or face measured wrong. Cheap to
+   reproduce with `research/probes/words-r13/probe-grid.py`.
+3. `batch-010`'s `5709.16 ch.40_mgfinal.docx`, 31 pages against 32, untouched again.
+4. Everything the twelfth round listed and this one did not reach: the `mcar` family at 0/5,
+   `WritingFieldKind.PageNumber` (still no consumer, and still a feature rather than a wiring
+   change), the footer half of the title-page rule, and `batch-006`'s row-split document.

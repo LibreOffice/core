@@ -57,6 +57,18 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>What <c>w:beforeAutospacing</c> and <c>w:afterAutospacing</c> stand for here.</summary>
     private readonly Length _autoSpacing;
+
+    /// <summary>
+    /// The device grid every font metric is rounded onto, or null for printer-independent layout.
+    /// </summary>
+    /// <remarks>
+    /// Set by <c>w:usePrinterMetrics</c>, which writerfilter turns into
+    /// <c>PrinterIndependentLayout::DISABLED</c> at
+    /// <c>sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:10173</c> — the same state
+    /// <c>WW8Dop::fUsePrinterMetrics</c> puts a DOC into, and the same 300 dpi grid
+    /// <see cref="Ww8.DocReader"/> already passes.
+    /// </remarks>
+    private readonly MetricGrid? _metrics;
     private readonly DrawingTheme? _theme;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -96,9 +108,11 @@ public sealed partial class DocxLayoutSource
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
         _compatibilityMode = CompatibilityMode(settings);
-        _autoSpacing = WordCompatibility.Read(settings).DoNotUseHtmlParagraphAutoSpacing
+        WordCompatibility compatibility = WordCompatibility.Read(settings);
+        _autoSpacing = compatibility.DoNotUseHtmlParagraphAutoSpacing
             ? WordParagraphFormats.WordAutoSpacing
             : WordParagraphFormats.HtmlAutoSpacing;
+        _metrics = compatibility.UsesPrinterMetrics ? MetricGrid.Printer : null;
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
@@ -502,6 +516,7 @@ public sealed partial class DocxLayoutSource
             // #i3952#: a tab or a run of spaces does not raise a line's height in a Word document, and a
             // DOCX imports with the setting on. See PageParagraph.BlanksAreTransparentToHeight.
             BlanksAreTransparentToHeight = true,
+            Metrics = _metrics,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(
