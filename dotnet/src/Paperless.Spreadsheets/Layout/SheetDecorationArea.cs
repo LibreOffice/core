@@ -33,6 +33,18 @@ namespace Paperless.Spreadsheets.Layout;
 /// same answer Calc arrives at and reaches it without materialising a million rows.
 /// </para>
 /// <para>
+/// <strong>The scan is asked per column and starts per column.</strong>
+/// <c>ScColumn::GetLastVisibleAttr</c> passes that column's <em>own</em> <c>GetLastDataPos()</c>,
+/// "0 if none" (<c>sc/inc/column.hxx:892-897</c>), so a column holding no data is scanned from
+/// the top of the sheet rather than from wherever the sheet's data ends. Starting every column
+/// at the sheet's last data row instead loses the columns whose only formatting is above it —
+/// measured on <c>Computer and Software Services_50 State Comparison.xlsx</c>, whose columns I
+/// to O carry a fill on all 129 rows and no data at all: the sheet's data stops at row 42, the
+/// fill below it is one run of 112 equal rows and stops the scan, and the one run short enough
+/// to be taken is the header row above the data. The print area therefore ended at column H and
+/// Calc's reaches O, which is a whole third column band — 24 pages against 26.
+/// </para>
+/// <para>
 /// Measured on <c>e-pass-contact-details-template.xlsx</c>, a form whose only values are its nine
 /// column headings and whose row 14 is a ruled box across two of them: the print area stopped at
 /// row 1, so the box was never placed on a page and never drawn, and the second page differed from
@@ -52,7 +64,16 @@ internal static class SheetDecorationArea
     /// </summary>
     /// <param name="used">The block of cells the sheet holds, which may be invalid.</param>
     /// <param name="formatting">The sheet's fills and borders.</param>
-    public static SheetRange Extend(SheetRange used, SheetFormatting formatting)
+    /// <param name="lastDataRowByColumn">
+    /// The last row holding data in each column that holds any, as
+    /// <see cref="SheetLayout.LastDataRowByColumn"/> supplies it. Null falls back to the sheet's
+    /// own last data row for every column, which is the narrower answer and the one this scan
+    /// gave before the per-column start was implemented.
+    /// </param>
+    public static SheetRange Extend(
+        SheetRange used,
+        SheetFormatting formatting,
+        IReadOnlyDictionary<int, int>? lastDataRowByColumn = null)
     {
         ArgumentNullException.ThrowIfNull(formatting);
         if (formatting.IsEmpty) return used;
@@ -62,9 +83,22 @@ internal static class SheetDecorationArea
         int lastData = used.IsValid ? used.LastRow : -1;
 
         Dictionary<int, SortedList<int, SheetCellDecoration>> columns = [];
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole = [];
+        Dictionary<int, int> columnStart = [];
         foreach ((int row, int column, SheetCellDecoration format) in formatting.Cells)
         {
-            if (row <= lastData) continue;
+            if (!columnStart.TryGetValue(column, out int start))
+                columnStart[column] = start = StartOf(column, lastData, lastDataRowByColumn);
+
+            // The whole column, unfiltered, for the column-run comparison below: Calc's
+            // `IsVisibleAttrEqual` asks about rows 0 to MaxRow and not about the scan's window.
+            if (!whole.TryGetValue(column, out SortedList<int, SheetCellDecoration>? all))
+                whole[column] = all = [];
+            all[row] = format;
+
+            // Calc processes the attribute run *containing* the column's last data row, so the
+            // row itself is inside the scan and only the rows above it are out of it.
+            if (row < start) continue;
 
             if (!columns.TryGetValue(column, out SortedList<int, SheetCellDecoration>? rows))
                 columns[column] = rows = [];
@@ -83,7 +117,7 @@ internal static class SheetDecorationArea
 
         foreach ((int column, SortedList<int, SheetCellDecoration> rows) in columns)
         {
-            if (LastVisible(rows, lastData) is not { } reached) continue;
+            if (LastVisible(rows, columnStart[column]) is not { } reached) continue;
 
             // Calc widens the block to the column only when that column's own scan found
             // something inside the run limit — `bFound` gates both `nMaxX` and `nMaxY`
@@ -94,7 +128,10 @@ internal static class SheetDecorationArea
 
         if (LastVisible(wholeRows, lastData) is { } byRow && byRow > lastRow) lastRow = byRow;
 
-        if (lastRow <= lastData && lastColumn <= (used.IsValid ? used.LastColumn : -1)) return used;
+        int lastDataColumn = used.IsValid ? used.LastColumn : -1;
+        lastColumn = StopAtEqualColumns(lastColumn, lastDataColumn, whole, columns, columnStart);
+
+        if (lastRow <= lastData && lastColumn <= lastDataColumn) return used;
 
         return used.IsValid
             ? used with
@@ -103,6 +140,118 @@ internal static class SheetDecorationArea
                 LastColumn = Math.Max(used.LastColumn, lastColumn),
             }
             : new SheetRange(0, 0, Math.Max(lastColumn, 0), Math.Max(lastRow, 0));
+    }
+
+    /// <summary>
+    /// How many equally-formatted columns behind the data end the sideways scan.
+    /// </summary>
+    /// <remarks><c>SC_COLUMNS_STOP</c>, <c>sc/source/core/data/table1.cxx:655</c>.</remarks>
+    public const int EqualColumnsStop = 30;
+
+    /// <summary>
+    /// Cuts the block back before the first run of equally-formatted columns behind the data.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The sideways twin of <see cref="VisibleAttributeStop"/> and needed for the same reason.
+    /// A ruled grid does not stop where the data does, so the attribute pass can widen a sheet
+    /// by a hundred columns of identical empty ruling; Calc walks right from the last data
+    /// column grouping columns that are <em>visually equal over every row</em>, and the first
+    /// group of <see cref="EqualColumnsStop"/> or more ends the block before it
+    /// (<c>table1.cxx:737-757</c>). It then walks back over any column whose own scan found
+    /// nothing, so the block ends on a column that actually paints something.
+    /// </para>
+    /// <para>
+    /// The run past the last formatted column is unbounded and equal to itself, which is what
+    /// stops the walk on an ordinary sheet — so on those this changes nothing, and only a sheet
+    /// with thirty or more identically ruled empty columns feels it. Measured on
+    /// <c>environment-edb-docs-edb-emissions-databank.xls</c>, whose <c>ICAO databank</c> sheet
+    /// holds data to column 104 and formatting to column 228: without this the block keeps all
+    /// 124 of them, which is nine extra column bands and nine extra pages.
+    /// </para>
+    /// <para>
+    /// The cut is sideways only. <c>nMaxY</c> was set by the pass that found those columns and
+    /// Calc does not undo it, so a row a dropped column reached stays inside the block.
+    /// </para>
+    /// </remarks>
+    private static int StopAtEqualColumns(
+        int lastColumn,
+        int lastDataColumn,
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole,
+        Dictionary<int, SortedList<int, SheetCellDecoration>> columns,
+        Dictionary<int, int> columnStart)
+    {
+        if (lastColumn <= lastDataColumn) return lastColumn;
+
+        for (int start = lastDataColumn + 1; start <= lastColumn;)
+        {
+            int end = start;
+            while (end < lastColumn && SameColumn(whole, start, end + 1)) end++;
+
+            if (end + 1 - start < EqualColumnsStop)
+            {
+                start = end + 1;
+                continue;
+            }
+
+            int cut = start - 1;
+            while (cut > lastDataColumn
+                   && (!columns.TryGetValue(cut, out SortedList<int, SheetCellDecoration>? rows)
+                       || LastVisible(rows, columnStart[cut]) is null))
+            {
+                cut--;
+            }
+
+            return cut;
+        }
+
+        // The columns past the last formatted one are equal to one another for ever, so a walk
+        // that reaches the end has found a run without end and stops there.
+        return lastColumn;
+    }
+
+    /// <summary>Whether two columns paint the same thing on every row.</summary>
+    /// <remarks><c>ScAttrArray::IsVisibleEqual</c> over rows 0 to <c>MaxRow</c>.</remarks>
+    private static bool SameColumn(
+        Dictionary<int, SortedList<int, SheetCellDecoration>> whole, int left, int right)
+    {
+        whole.TryGetValue(left, out SortedList<int, SheetCellDecoration>? a);
+        whole.TryGetValue(right, out SortedList<int, SheetCellDecoration>? b);
+
+        if (a is null || b is null) return a is null && b is null;
+        if (a.Count != b.Count) return false;
+
+        for (int at = 0; at < a.Count; at++)
+        {
+            if (a.Keys[at] != b.Keys[at] || a.Values[at] != b.Values[at]) return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// The row one column's attribute scan is measured from — Calc's <c>nLastData</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScColumn::GetLastVisibleAttr</c> passes that column's own <c>GetLastDataPos()</c>,
+    /// documented as "always including notes, <strong>0 if none</strong>"
+    /// (<c>sc/inc/column.hxx:892-897</c>). So a column holding no data is measured from row zero
+    /// and not from the sheet's last data row, which is what lets an empty but filled column to
+    /// the right of the data keep the sheet's print area — the run above the sheet's data is
+    /// what the scan reads, and it never reached it before.
+    /// </para>
+    /// <para>
+    /// Without a per-column map the sheet's own last data row stands in for every column, which
+    /// is the narrower answer: every scan then starts lower down and finds less.
+    /// </para>
+    /// </remarks>
+    private static int StartOf(
+        int column, int sheetLastData, IReadOnlyDictionary<int, int>? lastDataRowByColumn)
+    {
+        if (lastDataRowByColumn is null) return sheetLastData;
+
+        return lastDataRowByColumn.TryGetValue(column, out int last) ? last : 0;
     }
 
     /// <summary>
@@ -152,7 +301,14 @@ internal static class SheetDecorationArea
                 end++;
             }
 
-            if (rows.Keys[end] + 1 - start >= VisibleAttributeStop) return found;
+            // Calc measures a run from the row after the last data row, not from where the run
+            // itself begins: `if (nAttrStartRow <= nLastData) nAttrStartRow = nLastData + 1`
+            // (attarray.cxx:1961-1962). Only the first run can start that high up, and for a
+            // run that is nothing but the last data row the sum is zero — which is how a column
+            // whose formatting begins on the row Calc calls its last data row is kept at all.
+            if (rows.Keys[end] + 1 - Math.Max(start, lastData + 1) >= VisibleAttributeStop)
+                return found;
+
             if (!rows.Values[end].IsNone) found = rows.Keys[end];
 
             at = end + 1;

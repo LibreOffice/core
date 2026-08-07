@@ -200,7 +200,8 @@ internal static class SheetOptimalRowHeights
     {
         if (grid.RowHeightsAreManual) return grid;
 
-        SheetRange range = SheetDecorationArea.Extend(sheet.UsedRange, sheet.Formatting);
+        SheetRange range = SheetDecorationArea.Extend(
+            sheet.UsedRange, sheet.Formatting, sheet.LastDataRowByColumn);
         if (!range.IsValid) return grid;
 
         int lastRow = range.LastRow;
