@@ -21,11 +21,13 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <memory>
 
 #include <string.h>
+#include <string_view>
 
 #include <o3tl/safeint.hxx>
 #include <o3tl/untaint.hxx>
@@ -820,9 +822,38 @@ void SvStream::DetectEncoding(size_t maxBytes)
     if (!U_SUCCESS(uerr))
         return;
 
-    const UCharsetMatch* match = ucsdet_detect(ucd, &uerr);
+    int32_t matchCount = 0;
+    const UCharsetMatch **matches = ucsdet_detectAll(ucd, &matchCount, &uerr);
     if (!U_SUCCESS(uerr))
         return;
+
+    static constexpr std::array<std::string_view, 5> aSkipCharsets = {
+    "UTF-16BE",
+    "UTF-16LE",
+    "Shift_JIS",
+    "GB18030",
+    "Big5"
+    };
+    SAL_INFO("tools.stream", "The first character set of the following list will be used or the function will return");
+
+    // by default, let's use the first character set detected
+    const UCharsetMatch* match = matches[0];
+    constexpr int CONFIDENCE_MIN_SKIP_CHARSETS = 10;
+    for (int i=0; i < matchCount; i++)
+    {
+        const char* pName = ucsdet_getName(matches[i], &uerr);
+        int confidence = ucsdet_getConfidence(matches[i], &uerr);
+        SAL_INFO("tools.stream",
+                "\tcharacter set name=" << pName
+                << " has a confidence of " << confidence);
+        if (confidence == CONFIDENCE_MIN_SKIP_CHARSETS &&
+             std::find(aSkipCharsets.begin(), aSkipCharsets.end(), pName) != aSkipCharsets.end())
+        {
+            continue;
+        }
+        match = matches[i];
+        break;
+    }
 
     const char* pEncodingName = ucsdet_getName(match, &uerr);
     if (!U_SUCCESS(uerr) || !pEncodingName)
