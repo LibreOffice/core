@@ -4190,9 +4190,26 @@ signed #5  -> unsigned #2     48.41 / 74.66   Reporting_responsibilities_matrix.
 `Reporting_responsibilities_matrix.pptx` is the one to note. Round fourteen looked at it, called
 it "a thin uniform difference, not repeated furniture", and left it fifth. Unsigned it is
 **second on the whole track**, 74.66 over 268 pages — which says the thinness is a lot of
-cancelling rather than a little difference, and that it is worth a second look after all.
-`Snowbirds_High_Show.pptx` is the same shape in miniature: 13.92 signed, 19.18 unsigned, and
-**zero major pages**, so neither figure the track has ever steered by points at it.
+cancelling rather than a little difference. `Snowbirds_High_Show.pptx` is the same shape in
+miniature: 13.92 signed, 19.18 unsigned, and **zero major pages**, so neither figure the track
+has ever steered by points at it.
+
+#### And the "not repeated furniture" half is refuted by the tool's own output
+
+All six of `Reporting_responsibilities_matrix.pptx`'s major pages carry the **same two regions
+at byte-identical extents**, which is exactly what repeated furniture looks like:
+
+```
+top-right: marks displaced or reshaped        (1.32% of page, x 0.72-0.98, y 0.02-0.11)   6 of 6
+top-left:  a solid area drawn differently     (0.95% of page, x 0.01-0.08, y 0.01-0.15)   6 of 6
+bottom-centre: a fill or background shading we draw and the reference does not            3 of 6
+```
+
+The master's `Rectangle 2` — the title bar, `off 1102784,188566 ext 10877549,792162` on a
+12192000 × 6858000 slide — covers the top-right region's whole extent, so that one is inside the
+title. The top-left region is outside every master shape. Neither was named before because the
+tool prints region detail for major pages only and the earlier reading grouped signatures across
+the document rather than comparing extents.
 
 ### The defect: `EE_CHAR_FONTHEIGHT` is read from hundredths of a millimetre
 
