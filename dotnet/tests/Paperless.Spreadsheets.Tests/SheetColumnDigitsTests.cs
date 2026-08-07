@@ -147,15 +147,27 @@ public sealed class SheetColumnDigitsTests
                   .ShouldBe(twips);
     }
 
-    [Fact]
-    public void ADigitWidthIsTruncatedRatherThanRounded()
+    /// <summary>
+    /// A digit width is neither truncated nor rounded, and the two faces that say so straddle
+    /// the carry from opposite sides.
+    /// </summary>
+    /// <remarks>
+    /// Carlito is 1038/2048 of an em, so eleven point is 111.50 twips exactly and twelve point
+    /// 121.64 — LibreOffice writes 111 and 121, so rounding is wrong, and Carlito is the default
+    /// of 65 of the 171 corpus spreadsheets. DejaVu Sans is 1303/2048, so eleven point is 139.97
+    /// and twelve point 152.70 — LibreOffice writes 140 and 153, so truncating is wrong too. All
+    /// four figures were read out of the <c>style:column-width</c> LibreOffice 24.2.7.2 wrote for
+    /// a one-column probe workbook.
+    /// </remarks>
+    [Theory]
+    [InlineData("Carlito", 11, 111)]
+    [InlineData("Carlito", 12, 121)]
+    [InlineData("DejaVu Sans", 11, 140)]
+    [InlineData("DejaVu Sans", 12, 153)]
+    public void ADigitWidthIsNeitherTruncatedNorRounded(string family, double points, int twips)
     {
-        // Carlito — what Calibri resolves to, and what Excel's own default font therefore
-        // measures as here — is 1038/2048 of an em, so eleven point is 111.50 twips exactly.
-        // LibreOffice writes 111, not 112, and it is the default of 65 of the 171 corpus
-        // spreadsheets, so rounding would put every column of a third of the corpus 0.9% wide.
-        SheetFonts.DigitWidthTwips(new SheetDefaultFont("Carlito", Length.FromPoints(11)))
-                  .ShouldBe(111);
+        SheetFonts.DigitWidthTwips(new SheetDefaultFont(family, Length.FromPoints(points)))
+                  .ShouldBe(twips);
     }
 
     [Fact]
