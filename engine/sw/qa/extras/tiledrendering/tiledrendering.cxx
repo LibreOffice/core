@@ -42,6 +42,7 @@
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
@@ -1344,6 +1345,20 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
     }
 }
 
+// Helper function to send a theme command with a named theme to the current view
+static void dispatchThemeCommand(SwDocShell* pDocShell, const OUString& rCommand,
+                                 const OUString& rThemeName)
+{
+    SwView* pView = pDocShell->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        {
+            { "NewTheme", cpo::uno::Any(rThemeName) },
+        }
+    );
+    comphelper::dispatchCommand(rCommand, xFrame, aPropertyValues);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
 {
     addDarkLightThemes(COL_BLACK, COL_WHITE);
@@ -1411,6 +1426,24 @@ static Color getTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int
     BitmapScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
     return aActualColor;
+}
+
+// Helper function to count the pixels of a tile that are light, so that text painted in a light
+// variant on a dark document background is counted and the background itself is not
+static int countLightPixels(Bitmap aBitmap)
+{
+    const Size aSize = aBitmap.GetSizePixel();
+    BitmapScopedReadAccess pAccess(aBitmap);
+    int nCount = 0;
+    for (tools::Long y = 0; y < aSize.Height(); ++y)
+    {
+        for (tools::Long x = 0; x < aSize.Width(); ++x)
+        {
+            if (!Color(pAccess->GetPixel(y, x)).IsDark())
+                ++nCount;
+        }
+    }
+    return nCount;
 }
 
 // Test that changing the theme in one view doesn't change it in the other view
@@ -1637,6 +1670,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("ffffff"_ostr, aView.m_aDocColor);
+}
+
+// Text with a dark color of its own is painted in a light variant once the document background is
+// inverted, also when the color scheme of the view stays light
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertedBackgroundLightensText)
+{
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    dispatchThemeCommand(getSwDocShell(), u".uno:ChangeTheme"_ustr, u"Light"_ustr);
+
+    // An automatic color is resolved against the background and would stay readable on its own, so
+    // the text needs a color of its own to show the mapping.
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"Lorem ipsum dolor sit amet"_ustr);
+    pWrtShell->SelAll();
+    pWrtShell->SetAttrItem(SvxColorItem(COL_BLACK, RES_CHRATR_COLOR));
+    // Leave the text unselected, a selection is painted with colors of its own.
+    pWrtShell->EndOfSection();
+    Scheduler::ProcessEventsToIdle();
+
+    SfxItemSet aSet(getSwDocShell()->GetDoc()->GetAttrPool(),
+                    svl::Items<RES_CHRATR_COLOR, RES_CHRATR_COLOR>);
+    pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 0, 1);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aSet.Get(RES_CHRATR_COLOR).GetValue());
+
+    // The document background is inverted on its own, the color scheme of the view stays light.
+    dispatchThemeCommand(getSwDocShell(), u".uno:InvertBackground"_ustr, u"Dark"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+
+    // Without the fix the text kept its own black on the dark background, so the tile had no light
+    // pixel at all.
+    CPPUNIT_ASSERT(countLightPixels(getTile(pXTextDocument)) > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)

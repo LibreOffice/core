@@ -2443,7 +2443,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     nNewColor = COL_BLACK;
             }
         }
-        else if (svtools::ColorConfig::IsDarkMode())
+        // The document background of the view being painted decides whether dark text is mapped to
+        // a light variant, so a dark and a light view of the same document each get their own
+        // answer.
+        else if (pVSh && pVSh->GetViewOptions()->GetDocColor().IsDark())
         {
             std::optional<Color> oColor;
             if (GetFont())
