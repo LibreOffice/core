@@ -4318,3 +4318,15 @@ not have:
 So the deck is an autofit-search residue, and the twips arithmetic above is the best-placed
 candidate for it rather than anything about line spacing as such.
 
+### `…Aercap.ppt`'s fourth face is one text show on one page
+
+Round fourteen left this as "the one document this round moved *away* on the font check,
+unexplained". It is smaller than it sounds. We embed DejaVu Sans twice, OpenSymbol and
+**Liberation Serif**; the reference embeds DejaVu Sans, DejaVu Sans Bold and OpenSymbol. So the
+overshoot is not an extra symbol face at all — it is a *serif text* face the reference never
+resolves, and it is drawn **once, on page 6, at 14 pt, in a single show operation**.
+
+The deck names four faces: Arial, Times, Verdana and Wingdings. The reference resolves none of
+them to a serif, which makes `Times` — the bare name, not `Times New Roman` — the candidate to
+check first. One run, one page, and the whole of the round-fourteen regression.
+
