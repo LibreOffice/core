@@ -213,4 +213,58 @@ public class DrawingTableStyleTests
         box.Cells[2].Top.ShouldBeNull();
         box.Cells[3].Top.ShouldNotBeNull();
     }
+
+    /// <summary>
+    /// A cell's own <c>a:noFill</c> empties it, where an absent element takes the style's.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The two had been read as the same thing, and the difference is the largest single figure
+    /// on the slides track. <c>tablecell.cxx:550</c> builds the style part's fill and then lays
+    /// the cell's own over it with <c>assignUsed</c>, which copies <c>moFillType</c> whenever the
+    /// cell stated one — so <c>a:noFill</c> is a decision on a cell exactly as it is on a shape.
+    /// </para>
+    /// <para>
+    /// Measured on <c>slides/batch-012/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx</c>, whose
+    /// layout carries a seventeen-column year ruler under <c>Medium Style 2 - Accent 1</c> with
+    /// <c>a:noFill</c> on every cell: 368.41 unaccounted ink over 77 major pages to 225.33 over
+    /// 66, against the same reference PDF. Eight corpus decks state it, 215 cells between them.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ACellsOwnNoFillEmptiesItWhereAnAbsentElementTakesTheStyles()
+    {
+        XElement table = XElement.Parse(
+            $"""
+             <a:tbl xmlns:a="{A}">
+               <a:tblPr firstRow="1" bandRow="1"><a:tableStyleId>{Guid}</a:tableStyleId></a:tblPr>
+               <a:tblGrid><a:gridCol w="914400"/><a:gridCol w="914400"/></a:tblGrid>
+               <a:tr h="360000">
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody>
+                   <a:tcPr><a:lnL><a:solidFill><a:srgbClr val="112233"/></a:solidFill></a:lnL>
+                     <a:noFill/></a:tcPr></a:tc>
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody><a:tcPr/></a:tc>
+               </a:tr>
+               <a:tr h="360000">
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody>
+                   <a:tcPr><a:noFill/></a:tcPr></a:tc>
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody><a:tcPr/></a:tc>
+               </a:tr>
+             </a:tbl>
+             """);
+
+        DrawingTableBox box = DrawingTableGeometry.Read(
+            table, DrawingTheme.Read(Theme()), Style(), matrix: null);
+
+        // The header row: stated nothing gets the style's accent, stated a:noFill gets nothing —
+        // and the noFill cell keeps the border it also states, so this is not "the tcPr was
+        // ignored wholesale".
+        box.Cells[0].Fill.ShouldBeNull();
+        box.Cells[0].Left.ShouldNotBeNull();
+        box.Cells[1].Fill.ShouldBe(Paint.Solid(Accent));
+
+        // And in the body, where the style's fill is the banding rather than the header.
+        box.Cells[2].Fill.ShouldBeNull();
+        box.Cells[3].Fill.ShouldBe(Paint.Solid(Band1));
+    }
 }
