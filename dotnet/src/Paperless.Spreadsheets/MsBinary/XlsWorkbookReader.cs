@@ -1053,6 +1053,14 @@ internal sealed class XlsWorkbookReader
 
             if (BiffRecords.IsBof(id))
             {
+                // Except when it is the chart the OBJ just before it declared, which is read
+                // rather than skipped — see ReadEmbeddedChart.
+                if (depth == 0 && _drawings.ExpectsChartSubstream && IsChartSubstream())
+                {
+                    ReadEmbeddedChart();
+                    continue;
+                }
+
                 depth++;
                 continue;
             }
@@ -1151,6 +1159,66 @@ internal sealed class XlsWorkbookReader
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// Whether the <c>BOF</c> the stream is positioned at opens a chart substream.
+    /// </summary>
+    /// <remarks>
+    /// The record's second field is <c>dt</c>, the substream type — <c>EXC_BOF_CHART</c> is
+    /// <c>0x0020</c>. BIFF2's <c>BOF</c> has no such field at all, and its records are two bytes
+    /// shorter, so a short record answers no rather than reading past its end.
+    /// </remarks>
+    private bool IsChartSubstream()
+    {
+        if (_stream.RecordLeft < 4) return false;
+
+        _stream.Skip(2);
+        return _stream.ReadUInt16() == BiffRecords.SubstreamChart;
+    }
+
+    /// <summary>
+    /// Reads a chart embedded in a worksheet, positioned at its substream's <c>BOF</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The substream is <em>not</em> read the way a chart sheet's is
+    /// (<see cref="ReadChartRecords"/>), and the difference is the point. A chart sheet's
+    /// substream carries the sheet's own page setup and the drawing objects laid over the chart,
+    /// so both are routed onwards; an embedded chart's carries a page setup that belongs to the
+    /// chart's own notional page and drawing objects that belong inside the chart's rectangle.
+    /// Routing either of those into the worksheet overwrites the worksheet's margins with the
+    /// chart's and anchors the chart's decorations against the worksheet's grid. So only the chart
+    /// records are taken and everything else in the substream is stepped over.
+    /// </para>
+    /// <para>
+    /// The plot lands on the <c>OBJ</c> that opened the substream, which
+    /// <see cref="XlsDrawingCollector.AttachChart"/> takes as the last one read. That is the join
+    /// Calc makes too — <c>XclImpChartObj</c> owns the chart it read from immediately after its own
+    /// record — and it needs no identifier because a chart substream can only follow its object.
+    /// </para>
+    /// </remarks>
+    private void ReadEmbeddedChart()
+    {
+        XlsChartBuilder chart = new();
+        int depth = 0;
+
+        while (_stream.MoveNext())
+        {
+            ushort id = _stream.RecordId;
+
+            if (BiffRecords.IsBof(id)) { depth++; continue; }
+            if (id == BiffRecords.Eof)
+            {
+                if (depth == 0) break;
+                depth--;
+                continue;
+            }
+
+            if (depth == 0 && BiffChartRecords.IsChartRecord(id)) chart.Read(id, _stream);
+        }
+
+        _drawings.AttachChart(chart.Build());
     }
 
     /// <summary>Joins the sheet's <c>NOTE</c> records to the comment objects they name.</summary>
