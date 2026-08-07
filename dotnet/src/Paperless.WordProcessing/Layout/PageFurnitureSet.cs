@@ -96,10 +96,11 @@ public sealed class PageFurnitureSet
         Length? offsetFromTop,
         bool collapsesSpacing)
     {
-        PageFurnitureSlot slot = ChosenSlot(
+        PageFurnitureSlot? chosen = ChosenSlot(
             slots, pageNumber, isFirstPageOfSection,
             section.HasDifferentFirstPage, section.HasDifferentEvenPages);
 
+        if (chosen is not { } slot) return null;
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
         if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
@@ -113,22 +114,37 @@ public sealed class PageFurnitureSet
     /// Which slot a page takes, as a slot rather than as its contents.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The same rules <see cref="PageFurnitureSlots"/> states, asked in terms of the slot so that the
     /// answer can be cached against it. Asking for the contents and caching against those would key the
     /// cache on a list that two slots could share.
+    /// </para>
+    /// <para>
+    /// Null means <em>no furniture</em>, which is not the same as "fall back to the default one". A
+    /// section that says its first page is different and supplies nothing for it draws nothing there:
+    /// "different" is the whole of what the flag asserts, and Writer keeps a separate first-page page
+    /// descriptor whose empty header is empty rather than inherited. Falling through to the default slot
+    /// puts the running head on a title page, which is both visible and a line's worth of room the page
+    /// should have had. Measured on <c>final-technical-report-template.docx</c>, whose first section names
+    /// a default header and a <c>w:titlePg</c> and no <c>w:type="first"</c> reference at all: LibreOffice's
+    /// page one carries no running head and ours carried the default one.
+    /// </para>
+    /// <para>
+    /// Inheritance is already settled before this is asked — <c>DocxReader.Paginated</c> carries each slot
+    /// across sections per ECMA-376 §17.10.1 — so a First slot missing here is one no earlier section
+    /// supplied either.
+    /// </para>
     /// </remarks>
-    private static PageFurnitureSlot ChosenSlot(
+    private static PageFurnitureSlot? ChosenSlot(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         int pageNumber,
         bool isFirstPageOfSection,
         bool hasDifferentFirstPage,
         bool hasDifferentEvenPages)
     {
-        if (isFirstPageOfSection
-            && hasDifferentFirstPage
-            && slots.ContainsKey(PageFurnitureSlot.First))
+        if (isFirstPageOfSection && hasDifferentFirstPage)
         {
-            return PageFurnitureSlot.First;
+            return slots.ContainsKey(PageFurnitureSlot.First) ? PageFurnitureSlot.First : null;
         }
 
         if (hasDifferentEvenPages
