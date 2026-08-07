@@ -954,19 +954,36 @@ public static partial class SlideTextLayout
     /// Applies the fit's spacing scale to a line, which moves its baseline as well as its box.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// EditEngine's <c>SvxInterLineSpaceRule::Off</c> branch — the one a paragraph that states no
     /// line spacing takes — turns the scale into a proportional spacing and applies it to both:
     /// the height is multiplied and the ascent is <em>capped</em> at the text height times the
     /// same factor, never raised (<c>editeng/source/editeng/impedit3.cxx:1584-1600</c>). Capping
     /// rather than assigning is what keeps a line whose ascent was already short where it was.
+    /// </para>
+    /// <para>
+    /// <strong>In hundredths of a millimetre, like every other line height here.</strong> The
+    /// branch is <c>fround(pLine-&gt;GetHeight() * fSpacingFactor)</c> and <c>SetHeight</c> takes a
+    /// <c>sal_uInt16</c> of the outliner's map unit, which for a draw object is 1/100 mm — so the
+    /// reference cannot hold a line height finer than that whatever the arithmetic produces.
+    /// Scaling in EMU instead leaves fractions of a unit the reference has nowhere to put, and
+    /// they accumulate down the block: this is the same defect as the one
+    /// <see cref="Proportioned"/> documents, in the branch that takes no stated proportion.
+    /// </para>
+    /// <para>
+    /// The paragraph that *does* state one never reaches here — its caller takes the <c>Prop</c>
+    /// branch instead, because the two are alternatives in EditEngine and composing them would
+    /// apply this scale twice.
+    /// </para>
     /// </remarks>
     private static PlacedLine Spaced(PlacedLine line, Scaling scaling)
     {
         if (scaling.Spacing is <= 0 or >= 1.0) return line;
 
-        Length ascent = Length.FromEmu(
-            (long)Math.Round(line.TextHeight.Emu * scaling.Spacing));
-        Length height = Length.FromEmu((long)Math.Round(line.Height.Emu * scaling.Spacing));
+        Length ascent = Length.FromMm100(
+            (long)Math.Floor((line.TextHeight.Mm100 * scaling.Spacing) + 0.5));
+        Length height = Length.FromMm100(
+            (long)Math.Floor((line.Height.Mm100 * scaling.Spacing) + 0.5));
 
         return line with
         {
