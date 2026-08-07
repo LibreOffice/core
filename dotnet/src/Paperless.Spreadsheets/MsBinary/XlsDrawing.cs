@@ -100,6 +100,7 @@ internal sealed class XlsDrawingCollector(
 
         ushort type = ushort.MaxValue;
         ushort identifier = 0;
+        bool printable = true;
         while (stream.RecordLeft >= 4)
         {
             ushort id = stream.ReadUInt16();
@@ -115,7 +116,12 @@ internal sealed class XlsDrawingCollector(
                 // record names its comment by (`XclImpNote`, xicontent.cxx). Reading it is what
                 // lets a note's text be joined to the cell it hangs off.
                 identifier = stream.ReadUInt16();
-                stream.Skip(left - 4);
+
+                // The third is the flag word, whose `fPrint` bit decides whether a form control
+                // reaches the printed page at all — see `IsFormControl`. Read for every object,
+                // as Calc reads it, and acted on for the control types alone.
+                printable = (stream.ReadUInt16() & ObjectPrintable) != 0;
+                stream.Skip(left - 6);
             }
             else
             {
@@ -123,7 +129,7 @@ internal sealed class XlsDrawingCollector(
             }
         }
 
-        _objects.Add(new ObjectEntry(type, _dff.Count, identifier));
+        _objects.Add(new ObjectEntry(type, _dff.Count, identifier, IsPrintable: printable));
     }
 
     /// <summary>
@@ -256,6 +262,13 @@ internal sealed class XlsDrawingCollector(
             // (`sc/source/filter/excel/xiescher.cxx:1852-1883`). The caption exists only when the
             // NOTE record marks the comment visible, which is the case this drops with it.
             if (entry.Type == NoteObject) continue;
+
+            // A form control the file marks unprintable is on the screen and not on the paper.
+            // Calc writes `ftCmo`'s `fPrint` to the control model's `Printable` property and the
+            // printer honours it, so a button's caption is drawn in the application and absent
+            // from the reference PDF — measured on `PC1000.xls`, whose two visible buttons put
+            // exactly nine words on each of eight otherwise-matching pages.
+            if (!entry.IsPrintable && IsFormControl(entry.Type)) continue;
 
             if (ClientAnchor(buffer, shape) is not { } anchor) continue;
             if (place(anchor) is not { } placed) continue;
@@ -503,7 +516,8 @@ internal sealed class XlsDrawingCollector(
         ushort Id = 0,
         string? Text = null,
         int Horizontal = 0,
-        int Vertical = 0);
+        int Vertical = 0,
+        bool IsPrintable = true);
 
     /// <summary>The <c>ftCmo</c> subrecord identifier, <c>EXC_ID_OBJCMO</c>.</summary>
     private const ushort ObjectCommon = 0x0015;
@@ -513,6 +527,38 @@ internal sealed class XlsDrawingCollector(
     /// </summary>
     /// <remarks><c>EXC_OBJTYPE_NOTE</c>, <c>sc/source/filter/inc/xlescher.hxx:69</c>.</remarks>
     private const ushort NoteObject = 25;
+
+    /// <summary>
+    /// <c>ftCmo</c>'s <em>printable</em> flag, <c>EXC_OBJCMO_PRINTABLE</c>.
+    /// </summary>
+    /// <remarks><c>sc/source/filter/inc/xlescher.hxx:228</c>.</remarks>
+    private const ushort ObjectPrintable = 0x0010;
+
+    /// <summary>
+    /// True when an <c>ftCmo</c> object type is one of Excel's form controls.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Exactly the eleven types Calc's factory turns into an <c>XclImpTbxObjBase</c> — the class
+    /// that also carries <c>XclImpControlHelper</c> — which is button, check box, option button,
+    /// edit box, label, dialog, spin control, scroll bar, list box, group box and drop-down
+    /// (<c>XclImpDrawObjBase::ReadObj8</c>, <c>sc/source/filter/excel/xiescher.cxx:280-292</c>,
+    /// against the hierarchy at <c>sc/source/filter/inc/xiescher.hxx:503-776</c>).
+    /// </para>
+    /// <para>
+    /// The set matters because the <em>printable</em> flag is only acted on for these. Calc reads
+    /// it for every object, but the only place it reaches the drawing is
+    /// <c>XclImpControlHelper::ProcessControl</c>, which writes it to the control model's
+    /// <c>Printable</c> property (<c>xiescher.cxx:1998</c>); for a plain shape
+    /// <c>DoPreProcessSdrObj</c> merely traces that the object is not printable
+    /// (<c>xiescher.cxx:843-845</c>) and draws it anyway. Applying the flag to every object would
+    /// therefore drop shapes the reference prints — measured on <c>PC1000.xls</c>, whose yellow
+    /// instruction rectangle and its picture both carry the flag clear and both appear in the
+    /// reference rendering, beside six buttons that do not.
+    /// </para>
+    /// </remarks>
+    /// <param name="type">The <c>ftCmo</c> object type.</param>
+    private static bool IsFormControl(ushort type) => type is 7 or (>= 11 and <= 20);
 
     private const int HorizontalCentre = 2;
     private const int HorizontalRight = 3;
