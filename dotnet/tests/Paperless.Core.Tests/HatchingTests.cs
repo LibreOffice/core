@@ -32,12 +32,15 @@ public class HatchingTests
         Length.Zero, Length.Zero, Length.FromMm100(1000), Length.FromMm100(1000));
 
     /// <summary>Where the horizontal family's five lines sit, in 1/100 mm.</summary>
-    private static readonly long[] Expected = [100, 300, 500, 700, 900];
+    private static readonly long[] Expected = [200, 400, 600, 800, 1000];
 
     [Fact]
-    public void AOneWayHatchIsSpacedByTheStatedDistance()
+    public void AOneWayHatchIsSpacedByTheStatedDistanceFromTheLeadingEdge()
     {
-        // Ten millimetres hatched every two, centred: five lines at 1, 3, 5, 7 and 9 mm.
+        // Ten millimetres hatched every two: five lines, the first one whole distance in from
+        // the top edge and the last on the bottom edge. Not centred — GeoTexSvxHatch emits
+        // `a x distance` for a from 1 to fround(H/distance + 0.5) - 1, measured from the edge,
+        // and the difference from a centred family is up to half a step on every line.
         (DocPoint From, DocPoint To)[] lines =
             [.. Hatching.Lines(Box, Hatch(HatchKind.OneWay, 200, 0))];
 
@@ -132,8 +135,8 @@ public class HatchingTests
             [.. Hatching.Lines(
                 Box, Hatch(HatchKind.OneWay, 200, 0) with { Distance = Length.FromEmu(1) })];
 
-        lines.Length.ShouldBe(2001);
-        lines[0].From.Y.ShouldBe(Length.Zero);
+        lines.Length.ShouldBe(2000);
+        lines[0].From.Y.ShouldBe(Length.FromEmu(180));
         lines[^1].From.Y.ShouldBe(Length.FromMm100(1000));
     }
 

@@ -29,10 +29,10 @@ public static class Hatching
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Each segment spans the box's whole diagonal extent so the caller can clip rather than
-    /// intersect, and the families are centred on the box: LibreOffice grows the texture range
-    /// to the rotated box's bounding size and offsets it by half the growth
-    /// (<c>drawinglayer/source/texture/texture.cxx:826-839</c>), which centres it the same way.
+    /// Each segment spans the box's whole extent along the lines so the caller can clip rather
+    /// than intersect, and the family is placed exactly where <c>GeoTexSvxHatch</c> places it
+    /// rather than merely at the right spacing — see <see cref="Family"/> for why the phase is
+    /// worth reproducing and what it costs to get wrong.
     /// </para>
     /// <para>
     /// Returns nothing for an empty box or a non-positive distance, rather than looping for
@@ -66,19 +66,39 @@ public static class Hatching
         }
     }
 
-    /// <summary>
-    /// The most lines one family draws to either side of the centre.
-    /// </summary>
+    /// <summary>The most lines one family draws across the box it fills.</summary>
     /// <remarks>
-    /// A hatch finer than this over the box it fills is a solid fill in the line's colour, and
-    /// drawing it line by line would cost millions of segments to say so. The distance is
-    /// widened to fit instead of the count being truncated, so the family still covers the
-    /// whole box rather than a stripe through its middle. Nothing in the corpus comes near it:
-    /// the finest preset in <c>hatchmap.hxx</c> is 0.25 mm, which is 500 lines across a slide.
+    /// A hatch finer than this is a solid fill in the line's colour, and drawing it line by line
+    /// would cost millions of segments to say so. The distance is widened to fit instead of the
+    /// count being truncated, so the family still covers the whole box rather than a stripe
+    /// through its middle. Nothing in the corpus comes near it: the finest preset in
+    /// <c>hatchmap.hxx</c> is 0.25 mm, which is 500 lines across a slide. LibreOffice's own
+    /// guard is the same shape and sits at 10000 (<c>texture.cxx:905</c>), on the branch where
+    /// the output range differs from the definition range.
     /// </remarks>
     private const int MaxLinesEachWay = 1000;
 
     /// <summary>One family of parallel lines at an angle, covering a box.</summary>
+    /// <remarks>
+    /// <para>
+    /// <b>The phase is <c>GeoTexSvxHatch</c>'s and not the obvious one.</b> Centring the family
+    /// on the box gives the right count and the right spacing and puts every line up to half a
+    /// step away from where LibreOffice puts it — which is invisible at full size and not
+    /// invisible to a comparison that renders both at 512 pixels, where a hatch is near its
+    /// sampling limit and a phase difference reads as a quarter of the page being redrawn.
+    /// Measured on <c>BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx</c> page 3, whose
+    /// hatched column matches the reference line for line — 49 crossings to its 49-50 on every
+    /// scanned row — and still scored 3.28 of unaccounted ink centred against 0.00 in phase.
+    /// </para>
+    /// <para>
+    /// The construction is <c>drawinglayer/source/texture/texture.cxx:820-860</c>: the box is
+    /// grown to the size its rotation needs, keeping its centre; the number of steps is
+    /// <c>fround(H / distance + 0.5)</c>; and a line is emitted at <c>a × distance</c> from the
+    /// grown box's leading edge for <c>a</c> from 1 to steps − 1. So the first line sits one
+    /// whole distance in from the edge, the last one short of the far edge, and the family is
+    /// symmetric only when the box happens to be a whole number of steps across.
+    /// </para>
+    /// </remarks>
     private static IEnumerable<(DocPoint From, DocPoint To)> Family(
         DocRect bounds, Length distance, double angle)
     {
@@ -94,23 +114,25 @@ public static class Hatching
         double centreX = bounds.Left.Emu + (width / 2);
         double centreY = bounds.Top.Emu + (height / 2);
 
-        // How far the box reaches along the normal. The segment length is the box's diagonal,
-        // which bounds every chord from every offset — the caller clips, so an overlong
-        // segment costs nothing and a short one leaves a corner unhatched.
-        double reach = ((Math.Abs(nx) * width) + (Math.Abs(ny) * height)) / 2;
-        double half = Math.Sqrt((width * width) + (height * height)) / 2;
+        // The box's extent along each of the hatch's own axes: across the lines, which is what
+        // the family has to span, and along them, which is how long a segment has to be. Both
+        // are the box projected onto that axis, and the second bounds every chord because a
+        // centred box projects entirely into it.
+        double across = (Math.Abs(nx) * width) + (Math.Abs(ny) * height);
+        double along = ((Math.Abs(dx) * width) + (Math.Abs(dy) * height)) / 2;
 
-        double step = Math.Max(distance.Emu, reach / MaxLinesEachWay);
-        int count = (int)Math.Floor(reach / step);
+        double step = Math.Max(distance.Emu, across / (2 * MaxLinesEachWay));
+        int steps = (int)Math.Floor((across / step) + 1);
 
-        for (int i = -count; i <= count; i++)
+        for (int a = 1; a < steps; a++)
         {
-            double px = centreX + (nx * step * i);
-            double py = centreY + (ny * step * i);
+            double offset = (a * step) - (across / 2);
+            double px = centreX + (nx * offset);
+            double py = centreY + (ny * offset);
 
             yield return (
-                new DocPoint(Length.FromEmu((long)(px - (dx * half))), Length.FromEmu((long)(py - (dy * half)))),
-                new DocPoint(Length.FromEmu((long)(px + (dx * half))), Length.FromEmu((long)(py + (dy * half)))));
+                new DocPoint(Length.FromEmu((long)(px - (dx * along))), Length.FromEmu((long)(py - (dy * along)))),
+                new DocPoint(Length.FromEmu((long)(px + (dx * along))), Length.FromEmu((long)(py + (dy * along)))));
         }
     }
 }
