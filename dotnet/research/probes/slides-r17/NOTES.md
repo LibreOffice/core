@@ -135,7 +135,10 @@ dimanche* — and we break each of them into a narrow column. Our page 16 conten
 **`Tm=0`**, so nothing on it is rotated; the labels are horizontal on both sides and only ours
 wrap.
 
-The axis states `<a:bodyPr rot="-60000000"/>`, a thousand degrees, and
+The axis states `<a:bodyPr rot="-60000000"/>`, a thousand degrees, and it turned out **not** to be
+the cause — the clamp it exercises is already implemented. Recording the refutation because the
+attribute is exactly the kind of thing a later round would blame:
+
 `ObjectFormatter::convertTextRotation` discards anything outside ±5400000 —
 `oox/source/drawingml/chart/objectformatter.cxx:1087-1091`, **byte-identical in 24.2.7.2** — so
 the rotation reads as zero and line breaking is allowed on both sides. `DrawingChartPlot.AxisTextOf`
@@ -143,3 +146,27 @@ already implements that clamp correctly. The disagreement is therefore in **how 
 axis gives each category slot** in `Paperless.Core/Charts`, which is a shared layer and was left
 alone this round. Removing pages 5, 6 and 16 leaves 2106 against 2108.
 
+
+## What the next round should take, in order
+
+1. **The 537 pages of size disagreement**, ranked above. `size-census.py` names a page and a
+   number on each side, which is what makes them tractable one at a time; the ink column
+   cannot. Start with `2015-Civil-Rights-Website-training.ppt` page 21, where the box height
+   is already pinned to a 16 mm100 window and the arithmetic on both candidates is written out
+   in this file.
+
+2. **Quantise the shape's text area the same way the em now is.** LibreOffice's oox import
+   converts a shape's `a:ext` from EMU to 1/100 mm on the way in, so the width the reference
+   breaks lines against is a whole number of units and ours carries the file's full EMU
+   precision. It is the same defect one order of magnitude smaller — up to half a unit on a
+   width of tens of thousands, against the ~0.3 of a unit the em was out by — so it is worth
+   doing and worth doing *after* the em, not with it, because they would not be separable.
+
+3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`. It is the whole of
+   that document's remaining word-gate failure once its two raster pages are set aside, and it
+   is a shared layer, so it needs the words and sheets sweeps as well.
+
+4. **`TODO.raster-ceiling.md`'s 25% threshold is excluding pages of its own class.** Two pages
+   of `8_P-Pavese` sit at +24.4% and +23% and one of them carries the same 692x240 raster as a
+   page that is on the list. Either lower the threshold or say in the file that it is a
+   deliberate under-count.
