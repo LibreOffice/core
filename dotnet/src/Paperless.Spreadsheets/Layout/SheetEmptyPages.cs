@@ -70,8 +70,24 @@ internal static class SheetEmptyPages
     }
 
     private static bool IsBlank(SheetLayout sheet, SheetPagePlacement placement)
+        => IsPrintEmpty(sheet, placement.Cells);
+
+    /// <summary>
+    /// Calc's <c>ScDocument::IsPrintEmpty</c> over an arbitrary block of the sheet.
+    /// </summary>
+    /// <remarks>
+    /// Separated from <see cref="IsBlank"/> because the zoom search needs the same question asked
+    /// of a whole <em>row band</em> rather than of one page. <c>PrintPageRanges::calculate</c>
+    /// increments <c>m_nPagesY</c> only for a band this returns false for
+    /// (<c>sc/source/ui/view/printfun.cxx:3176, :3220</c>), so the page count the fit-to-page
+    /// search bisects on already excludes empty bands — see
+    /// <see cref="SheetPagination"/>'s <c>CountedRowBands</c>.
+    /// </remarks>
+    /// <param name="sheet">The sheet the block belongs to.</param>
+    /// <param name="block">The block of cells to test.</param>
+    public static bool IsPrintEmpty(SheetLayout sheet, SheetRange block)
     {
-        SheetRange block = placement.Cells;
+        ArgumentNullException.ThrowIfNull(sheet);
 
         // The repeated bands are deliberately *not* consulted, though they print on this page and
         // reading them as content is the obvious thing to do. Calc asks `IsPrintEmpty` for the

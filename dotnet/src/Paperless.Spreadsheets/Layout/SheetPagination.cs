@@ -75,9 +75,16 @@ public static class SheetPagination
     /// <param name="used">
     /// The block of cells the sheet actually holds, used when it declares no print range.
     /// </param>
+    /// <param name="isPrintEmpty">
+    /// Calc's <c>IsPrintEmpty</c> over a block, or <see langword="null"/> when the caller cannot
+    /// answer it. The zoom search needs it because the page count it bisects on counts only the
+    /// row bands that are <em>not</em> empty; with no way to ask, every band is counted, which is
+    /// what this class did before the question could be reached.
+    /// </param>
     /// <returns>The pages, in the order the sheet's page order prints them.</returns>
     public static IReadOnlyList<SheetPagePlacement> Paginate(
-        SheetPrintSetup setup, SheetGrid grid, SheetRange used)
+        SheetPrintSetup setup, SheetGrid grid, SheetRange used,
+        Func<SheetRange, bool>? isPrintEmpty = null)
     {
         ArgumentNullException.ThrowIfNull(setup);
         ArgumentNullException.ThrowIfNull(grid);
@@ -95,7 +102,7 @@ public static class SheetPagination
             SheetRange area = Limit(areas[index], used);
             if (!area.IsValid) continue;
 
-            pages.AddRange(PaginateArea(setup, grid, area, index));
+            pages.AddRange(PaginateArea(setup, grid, area, index, isPrintEmpty));
         }
 
         return pages;
@@ -126,10 +133,11 @@ public static class SheetPagination
     }
 
     private static List<SheetPagePlacement> PaginateArea(
-        SheetPrintSetup setup, SheetGrid grid, SheetRange area, int areaIndex)
+        SheetPrintSetup setup, SheetGrid grid, SheetRange area, int areaIndex,
+        Func<SheetRange, bool>? isPrintEmpty)
     {
         (int zoom, List<int> columnEnds, List<(int First, int Last)> rowBands) =
-            CalcZoom(setup, grid, area);
+            CalcZoom(setup, grid, area, isPrintEmpty);
 
         List<SheetPagePlacement> pages = [];
         if (columnEnds.Count == 0 || rowBands.Count == 0) return pages;
@@ -196,7 +204,8 @@ public static class SheetPagination
     /// about seven repaginations.
     /// </remarks>
     private static (int Zoom, List<int> ColumnEnds, List<(int, int)> RowBands) CalcZoom(
-        SheetPrintSetup setup, SheetGrid grid, SheetRange area)
+        SheetPrintSetup setup, SheetGrid grid, SheetRange area,
+        Func<SheetRange, bool>? isPrintEmpty)
     {
         int zoom;
 
@@ -257,7 +266,35 @@ public static class SheetPagination
         (int Columns, int Rows) Count(int candidate)
         {
             (List<int> ends, List<(int, int)> bands) = Split(setup, grid, area, candidate);
-            return (ends.Count, bands.Count);
+            return (ends.Count, CountedRowBands(bands));
+        }
+
+        // Calc's `m_nPagesY`, which is *not* the number of row bands the geometry produces.
+        // `PrintPageRanges::calculate` increments it only for a band `IsPrintEmpty` says false
+        // for (`printfun.cxx:3176` for the bands the break iterator ends, `:3220` for the last
+        // one), so a band of trailing empty rows never reaches the count the zoom search — and
+        // the tdf#103516 nudge in particular — compares.
+        //
+        // Measured on `Company_Seniority_Date_Calculator.xlsx`, whose `Bulletin Clarification`
+        // sheet states a print area of `A1:Y49` over a sheet whose last `<row>` is 48. At the
+        // fitting zoom of 80 the rows split 2 bands with data in both; at the nudged 78 they
+        // split rows 1-48 and the empty row 49, which Calc counts as **one** page and we counted
+        // as two — so the nudge saw an unchanged count, was abandoned, and the sheet printed at
+        // 80 where Calc prints it at 78, spilling a thirteenth page holding one row.
+        int CountedRowBands(List<(int First, int Last)> bands)
+        {
+            if (isPrintEmpty is null) return bands.Count;
+
+            int counted = 0;
+            foreach ((int first, int last) in bands)
+            {
+                // The whole width of the print range, not the page's column band: Calc passes
+                // `getStartColumn()`/`getEndColumn()` (`printfun.cxx:3174`).
+                if (!isPrintEmpty(new SheetRange(area.FirstColumn, first, area.LastColumn, last)))
+                    counted++;
+            }
+
+            return counted;
         }
 
         // The bisection itself, kept apart from what it is bisecting on because the two
