@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Documents;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
@@ -226,6 +227,127 @@ public class SlideCharacterStyleTests
 
         runs[0].Tracking.ShouldBe(Length.FromPoints(-0.2));
         runs[1].Tracking.ShouldBe(Length.Zero);
+    }
+
+    /// <summary>
+    /// The shape's own <c>a:fontRef</c> is consulted by the <em>rendering</em> chain, in its
+    /// place: after everything the body states and before everything the shape inherits.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The colour resolved for extraction and the colour drawn on the page came from two
+    /// different walks, and only the first of them could see a <c>p:style</c>: the rendering path
+    /// is built from the placeholder chain, and a shape's own font reference is the one rung of
+    /// that chain with no element inside the text body at all. So a shape stating
+    /// <c>a:fontRef</c> extracted with that colour and drew in whatever the master gave it.
+    /// </para>
+    /// <para>
+    /// Both halves of the ordering are asserted, because either extreme is right on a shape that
+    /// states only one thing. The first case has a <c>fontRef</c> over a master style and takes
+    /// the <c>fontRef</c>; the second has a body <c>a:lstStyle</c> as well and takes the body.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ALaidOutRunTakesTheShapesFontReferenceOverWhatItInherits()
+    {
+        XElement master = Drawing(
+            "<a:lvl1pPr><a:defRPr><a:solidFill><a:srgbClr val=\"FF00FF\"/></a:solidFill>"
+            + "</a:defRPr></a:lvl1pPr>");
+
+        DrawingCharacterStyle shapeStyle = DrawingCharacterStyle.FromShapeStyle(
+            Drawing("<p:style><a:fontRef idx=\"minor\"><a:schemeClr val=\"accent1\"/></a:fontRef></p:style>"),
+            Theme());
+
+        XElement plain = Drawing(
+            "<p:txBody><a:bodyPr/><a:p><a:r><a:rPr lang=\"en-GB\"/><a:t>One</a:t></a:r></a:p></p:txBody>");
+
+        PptxTextBody.Read(
+                plain, Theme(), inherited: _ => [master], shapeTextStyle: shapeStyle)
+            .Paragraphs[0].Runs[0].Colour.ShouldBe(Colour.FromRgb(0x4F81BD));
+
+        // The body's own list style is nearer than the shape's style, so it wins.
+        XElement stated = Drawing(
+            "<p:txBody><a:bodyPr/><a:lstStyle><a:lvl1pPr><a:defRPr>"
+            + "<a:solidFill><a:srgbClr val=\"00B050\"/></a:solidFill></a:defRPr></a:lvl1pPr></a:lstStyle>"
+            + "<a:p><a:r><a:rPr lang=\"en-GB\"/><a:t>Two</a:t></a:r></a:p></p:txBody>");
+
+        PptxTextBody.Read(
+                stated, Theme(), inherited: _ => [master], shapeTextStyle: shapeStyle)
+            .Paragraphs[0].Runs[0].Colour.ShouldBe(Colour.FromRgb(0x00B050));
+    }
+
+    /// <summary>
+    /// A paragraph whose <c>a:pPr</c> carries no <c>a:defRPr</c> does not move the boundary.
+    /// </summary>
+    /// <remarks>
+    /// The split between "inside the body" and "inherited" is counted over the <em>surviving</em>
+    /// <c>a:defRPr</c> elements rather than over the sources, and this is the case that tells the
+    /// two apart: a bare <c>&lt;a:pPr lvl="0"/&gt;</c> is a source with nothing in it, and
+    /// counting sources would push the shape style one place too far down and let the master's
+    /// colour through. It is also the common shape — PowerPoint writes a paragraph's level and
+    /// its spacing there and its run properties on the runs.
+    /// </remarks>
+    [Fact]
+    public void AParagraphStatingNoDefaultRunPropertiesLeavesTheShapeStyleWhereItIs()
+    {
+        XElement master = Drawing(
+            "<a:lvl1pPr><a:defRPr><a:solidFill><a:srgbClr val=\"FF00FF\"/></a:solidFill>"
+            + "</a:defRPr></a:lvl1pPr>");
+
+        DrawingCharacterStyle shapeStyle = DrawingCharacterStyle.FromShapeStyle(
+            Drawing("<p:style><a:fontRef idx=\"minor\"><a:schemeClr val=\"accent1\"/></a:fontRef></p:style>"),
+            Theme());
+
+        XElement body = Drawing(
+            "<p:txBody><a:bodyPr/><a:p><a:pPr lvl=\"0\"><a:spcBef><a:spcPts val=\"900\"/></a:spcBef>"
+            + "</a:pPr><a:r><a:rPr lang=\"en-GB\"/><a:t>One</a:t></a:r></a:p></p:txBody>");
+
+        PptxTextBody.Read(body, Theme(), inherited: _ => [master], shapeTextStyle: shapeStyle)
+            .Paragraphs[0].Runs[0].Colour.ShouldBe(Colour.FromRgb(0x4F81BD));
+    }
+
+    /// <summary>
+    /// The same chain, end to end through the reader, on a deck LibreOffice agrees about.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The unit tests above prove the ordering inside <c>PptxTextBody</c>; this one proves the
+    /// wiring, which is where the defect actually was — <c>PptxSlideLayout.BodyOf</c> passed the
+    /// placeholder chain and the inherited body properties and not the shape's own style.
+    /// </para>
+    /// <para>
+    /// Expectations are LibreOffice 24.2.7.2's own flat-ODF export of
+    /// <c>deck-text-style.pptx</c>: <c>#4f81bd</c>, <c>#00b050</c>, <c>#9bbb59</c>,
+    /// <c>#ff7f00</c> and <c>#953735</c> for its first five boxes, against a master
+    /// <c>otherStyle</c> stating <c>FF00FF</c> at every level — so any box coming back magenta is
+    /// the shape style being missed.
+    /// </para>
+    /// <para>
+    /// Case five is the one that also exercises the transform chain: <c>accent2</c> with
+    /// <c>lumMod val="75000"</c> over <c>C0504D</c> is <c>#953735</c>, not <c>C0504D</c>.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ADecksShapeStylesReachTheDrawnColours()
+    {
+        using IDocument document = new PresentationReader().Read(
+            DocumentSource.FromFile(Corpus.Require("deck-text-style.pptx")));
+
+        LaidOutSlide slide = ((SlidePages)((IPaginatedDocument)document).Layout()).Slides[0];
+
+        Dictionary<string, Colour> drawn = [];
+        foreach (PlacedGlyphRun run in slide.Shapes
+                     .Where(shape => shape.Text is not null)
+                     .SelectMany(shape => shape.Text!.Runs))
+        {
+            drawn[run.Run.Text.Trim()] = run.Colour;
+        }
+
+        drawn["Case one"].ShouldBe(Colour.FromRgb(0x4F81BD));    // a:fontRef accent1
+        drawn["Case two"].ShouldBe(Colour.FromRgb(0x00B050));    // the body's own a:lstStyle
+        drawn["Case three"].ShouldBe(Colour.FromRgb(0x9BBB59));  // a:fontRef accent3
+        drawn["Case four"].ShouldBe(Colour.FromRgb(0xFF7F00));   // the run's own a:solidFill
+        drawn["Case five"].ShouldBe(Colour.FromRgb(0x953735));   // accent2 through lumMod 75%
     }
 
     /// <summary>

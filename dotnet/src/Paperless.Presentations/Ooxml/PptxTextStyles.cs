@@ -165,6 +165,31 @@ internal sealed class PptxTextStyles
     /// layouts style their placeholders, which is most PowerPoint-authored decks.
     /// </para>
     /// </remarks>
+    /// <remarks>
+    /// <para>
+    /// Public because <em>rendering needs it too</em>, and for a while did not have it. The
+    /// extraction path takes it inside <see cref="For"/>'s options; the rendering path builds its
+    /// text body from <see cref="LevelPropertiesFor"/> and <see cref="BodyPropertiesFor"/>, and
+    /// neither of those carries a rung that has no element in the text body. So a shape whose own
+    /// <c>a:fontRef</c> names a colour extracted with that colour and drew in whatever the master
+    /// gave it — the "resolved for extraction, taken literally by rendering" shape, which this
+    /// project has now shipped three times.
+    /// </para>
+    /// <para>
+    /// The symptom on <c>Sector_Skills_Insights…pptx</c>: body placeholders stating
+    /// <c>&lt;a:fontRef idx="minor"&gt;&lt;a:schemeClr val="lt1"/&gt;</c> over a master
+    /// <c>bodyStyle</c> stating <c>tx1</c>, so eleven of its twenty-four pages drew black body
+    /// text on a dark teal panel. LibreOffice's own flat-ODF export of it resolves those runs to
+    /// <c>fo:color="#ffffff"</c>.
+    /// </para>
+    /// </remarks>
+    /// <param name="shape">The slide's shape.</param>
+    public DrawingCharacterStyle? ShapeTextStyleFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+        return ShapeTextStyle(shape);
+    }
+
     private DrawingCharacterStyle? ShapeTextStyle(XElement shape)
     {
         if (Ppt.Child(shape, "style") is not { } style) return null;
