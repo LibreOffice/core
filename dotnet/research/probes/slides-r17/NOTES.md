@@ -67,6 +67,45 @@ compares is taken at that size. We drew exactly 20 pt: **0.06% narrower on every
 deck.** That is the class of error that decides a 0.14% near-tie, and it is fixed in
 `SlideAutofit.Quantised`.
 
+## The size census, whole track — and what it says the residue actually is
+
+`size-census.py` run over the baseline sweep (killed at 129 of 163 documents to give the
+post-fix sweep its CPU back; the raw output is `base-size-census.txt` and
+`census-summary.py` reads it):
+
+```
+pages differing on the dominant /Tf size   1642
+  by <= 1%  — the 1/100 mm grid            1043
+  by  > 1%                                  599
+     of those, both sides drawing text      537  over 101 documents
+```
+
+Two-thirds of the page-level size disagreements on this track are the quantisation the fix
+above removes. **The other 537 are a size disagreement of more than one per cent on a page
+where both renderings draw a comparable amount of text** — so not the raster ceiling, where
+the reference's dominant size carries one or two show operators against our dozens (the
+filter is `ref >= 0.5 x ours`).
+
+That is a sharper account of the track's residue than the image diff can give, because
+*"marks displaced or reshaped"* is what a font-size disagreement looks like at 512 pixels
+and the hint cannot separate it from an indent or a line break. And the ranking lines up
+with the ink ranking rather than cutting across it — of the ten worst documents here, five
+are in the top twelve by `|ink|%`:
+
+```
+42  NAS-Infrastructure-Roadmaps-v16.0.pptx     (278.57 |ink|%, first)
+29  2014BSA_Sunday_Killion.pptx
+29  2015-Civil-Rights-Website-training.ppt     ( 33.52, eighth)
+22  ITE106-Chapter 4.ppt                       ( 36.13, seventh)
+18  171128IPAP.pptx                            ( 50.89, sixth)
+17  FAA_Form_337.ppt
+14  Intersil_Italy_CAN_Bus_Transceiver_….pptx
+12  Reporting_responsibilities_matrix.pptx     ( 74.67, second)
+```
+
+**This is the instrument the next round should take, not more pixels.** It names a page and a
+number on both sides, which is what the ink column cannot do.
+
 ## Batches 008, 010 and 012: the word gate is at its ceiling on all three
 
 Every remaining word-gate failure in the three batches this round was pointed at is a document
