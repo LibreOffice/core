@@ -394,6 +394,148 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The twenty-first sweep: Excel's row heights are read on a 0.75 pt grid
+
+Swept whole at `09a35cdae` before anything was changed, 171 documents, two workers, no path
+twice and no `ref-failed`: **142 of 171, total absolute page error 106, 149 exact page counts**,
+batches 001 to 009 at 89/89 with page error 0. That reproduces round twenty's closing figures to
+the digit, so nothing has drifted under the scoreboard.
+
+After the change, at the same commit plus it: **144 of 171, page error 99, 151 exact**, and the
+gate is unchanged at 89/89.
+
+### The rule
+
+LibreOffice's OOXML filter rounds a row height **down** to a multiple of 0.75 pt in two places:
+
+| site | citation |
+|---|---|
+| `sheetFormatPr/@defaultRowHeight` | `sc/source/filter/oox/worksheetfragment.cxx:681-684` |
+| every `row/@ht` | `sc/source/filter/oox/sheetdatacontext.cxx:316-319` |
+
+Both are `fHeight -= fmod(fHeight, 0.75)` and both are gated on `getFilter().isMSODocument()`,
+which is one test and no more: `docProps/app.xml`'s `<Application>` begins with "Microsoft",
+ignoring case (`oox/source/core/xmlfilterbase.cxx:241-245`, reached through
+`XDocumentProperties::getGenerator`, which `oox/source/docprop/docprophandler.cxx:501` fills from
+that element). **So the same bytes in the same sheet are read as two different heights depending
+on what the package says wrote them**, and `IsOffice2007`'s extra `AppVersion` condition is a
+different question that must not be folded into this one.
+
+The rounding is the XML filter's and not the format's. BIFF12 states a row height in whole twips
+and its own `importRow` and `importSheetFormatPr` apply nothing
+(`sheetdatacontext.cxx:412-440`, `worksheetfragment.cxx:790-808`), so XLSB is deliberately left
+alone.
+
+### Re-derived rather than inherited
+
+The rule arrived as a killed agent's unswept commit, so it was measured again from scratch: two
+packages differing in `docProps/app.xml` and in **no other part** — asserted by comparing every
+part of the two zips — round-tripped through the installed `soffice` to flat ODF.
+
+| stated | Microsoft Excel | Wibble Sheets |
+|---|---|---|
+| 14.4 | `0.198in` (14.25) | `0.2in` (14.4) |
+| 15.0 | `0.2083in` (15.0) | `0.2083in` (15.0) |
+| 18.6 | `0.25in` (18.0) | `0.2583in` (18.6) |
+| 29.4 | `0.4063in` (29.25) | `0.4083in` (29.4) |
+| 30.0 | `0.4165in` (30.0) | `0.4165in` (30.0) |
+| 22.9 | `0.3126in` (22.5) | `0.3181in` (22.9) |
+| 12.4 | `0.1665in` (12.0) | `0.172in` (12.4) |
+
+15.0 and 30.0 are already multiples of 0.75 and agree on both sides. That is what makes the pair
+a measurement of a *rounding* rather than of a difference between two packages, and it is why the
+corpus fixtures carry a 30 pt row as a control.
+
+**One claim in the inherited commit does not survive.** It said the subtraction has to be written
+as `h - h % 0.75` because `floor(h / 0.75) * 0.75` "is free to land a unit in the last place
+below" and would give 584 twips against 585 on a 29.4 pt row. The two agree on 29.4 and on every
+other height Excel can write — checked over each hundredth of a point and each twip up to the
+409.5 pt ceiling, 49142 values, zero disagreements. A test had been written to defend that claim
+and it could not fail; it is replaced rather than kept.
+
+### Reach: nine documents, against the 56 a grep predicts
+
+56 of the corpus's 109 SpreadsheetML workbooks are written by a Microsoft application *and* state
+at least one height the rule moves. **Nine are documents whose rendering actually changes**, which
+is the sixfold overstatement this project's skill warns about, measured again:
+
+| document | before | after |
+|---|---|---|
+| `NAARMO_Mexico_RVSM_Approvals.xlsx` | 17/16 | **16/16**, and 6792/6792 words |
+| `EASA_PRODUCT_LIST_-_ALL.xlsx` | 270/264 | **264/264** |
+| `Capability_List_…_unsorted.xlsx` | +6 pages | +3 pages |
+| `ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` | −18 pages | **−21 pages** |
+| four more | — | one or two words each |
+
+`NAARMO` is the lead round twenty left open and it closes exactly as that round predicted: it had
+been passing on two errors cancelling until the header band was fixed, its drawn row pitch was
+then measured at 14.40 pt against the reference's 14.23, and 14.4 snaps to **14.25**.
+
+`ODs-February-2022` is the honest cost. It already under-paginated, and shorter rows under-
+paginate further; page error and exact page counts both improve over the same change, so it
+stands.
+
+### The next lead: a chart on an `.xls` worksheet is dropped, and its pages with it
+
+`Template Pilot Logbook JAR-FCL V3.0.xls` renders **35 pages against 38** and 1279 words against
+1610. Its sheets `GraphHDV` and `Real TT` hold **no cells at all** — LibreOffice's own flat-ODF
+export of them is one `draw:frame` carrying a `draw:object` chart and nothing else — and the
+reference prints two pages for the first and one for the second, worth 333 words of axis labels
+and legend. We print none.
+
+The mechanism is one line. `XlsDrawing.Build` drops any Escher shape that carries neither a
+picture nor `Txo` text:
+
+```csharp
+SheetPicture picture = PictureOf(shape);
+if (picture.IsEmpty && entry.Text is not { Length: > 0 }) continue;
+```
+
+An embedded chart's `OBJ` is `ftCmo` type 5 and carries neither, so it never reaches
+`sheet.Drawings`; `SheetDrawingArea` then cannot widen `PrintedRange`, the range stays invalid,
+`SheetPagination` returns no placements, and `SheetEmptyPages.Occupied`'s "never all of them"
+floor never fires because there was nothing to floor. Calc has the object on its draw page, so
+`ScDocument::GetPrintArea` takes the maximum of the cells' extent and the drawing layer's
+(`documen2.cxx:649-658`) and finds a print area where we find none.
+
+The chart records themselves are skipped rather than missing: `ReadSheetRecords` counts `BOF`
+depth and `continue`s over everything inside the embedded chart's substream
+(`XlsWorkbookReader.cs`, "A chart or a drawing embedded in a sheet opens its own BOF/EOF pair").
+`ReadChartRecords` and `XlsChartBuilder` already exist for chart *sheets* and produce a
+`SheetDrawing { IsChart = true, Chart = plot }` that `SheetPageGraphics` paints, so the work is
+to run that machinery at depth 1 and join the n-th chart substream to the n-th chart-typed `OBJ`
+— both sequences being the sheet's own order.
+
+**Reach, counted from the files rather than grepped for**: a census of every `ftCmo` type across
+the track's 62 `.xls` finds 13 chart objects in **4 workbooks**, and the wider census is worth
+keeping since nobody had taken it —
+
+```
+dropdown 200 records / 14 documents      text      48 / 9       chart 13 / 4
+picture  130 / 8                         note      47 / 9       rect  13 / 3
+button    60 / 2                         line      41 / 1       group 16 / 2
+```
+
+Two of the four would gain: `Template Pilot Logbook JAR-FCL V3.0.xls` (−3) and
+`EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls` (−2, nine chart objects). The third is
+`orbus_togaf_tool_csq.xls`, whose −42 is the fabricated `DPCache` sheet and not this. **The
+fourth, `TOGAF9-Tool-ConfReqts-CSQ.xls`, matches today** — so this change can cost a match as
+well as win two, and it must be swept rather than reasoned about.
+
+### Where the rest of batches 010–012 stands
+
+- `FAA-2019-0995-0002_attachment_2.xlsx` (32/33) is a wrap difference, not a pitch one. On the
+  "Accessory List" sheet the reference's repeating row group is **28.70 pt** and ours is
+  **14.93 pt** — it breaks each row's text onto two lines where we fit one — so the residue is
+  the width the text is measured at rather than the height reserved for it. That is the same
+  device model the ninth sweep fitted and the same live caveat.
+- `Keywords_Mapping_Graphs_and_Charts.xlsx` is 46/46 pages and 4695 words against 4808, and the
+  shortfall is spread evenly over pages 19 to 40 at about five words a page. Every one of those
+  pages is a chart, so this is chart *labels* rather than pagination — an XLSX chart, so it is a
+  different defect from the `.xls` one above.
+- `Application_Compliance_Checklist_5_Apr_2021.xlsx` is unchanged and still deliberately unfixed;
+  see below.
+
 ## The twentieth sweep: a header's band is measured, not stated
 
 Swept whole at `b7950ffd5` before anything was changed, 171 documents, two workers, no path

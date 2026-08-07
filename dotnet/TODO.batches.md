@@ -5387,6 +5387,100 @@ break on a document that is already near one.
 3. **The 0.35 pt line-gap placement**, above.
 4. `A1. EASA Form 2.docx`, which is the largest single failure left in `batch-013`.
 
+## Sheets, round twenty-one: Excel's row heights are read on a 0.75 pt grid — swept whole at `09a35cdae`
+
+Whole track before and after, 171 documents each time, two workers, 171 rows with no duplicate
+path and no `ref-failed` in either.
+
+| | baseline `09a35cdae` | after |
+|---|---|---|
+| matches | 142 / 171 | **144 / 171** |
+| total absolute page error | 106 | **99** |
+| exactly-correct page counts | 149 | **151** |
+| `sheets/batch-001`–`009`, the gate | 89/89, page error 0 | **89/89, page error 0** |
+| `sheets/batch-010` | 6/10 | 6/10 |
+| `sheets/batch-011` | 5/10 | **6/10** |
+| `sheets/batch-012` | 8/10 | 8/10 |
+| `sheets/batch-017` | 5/10 | **6/10** |
+
+**The baseline reproduces round twenty's closing figures to the digit** — 142, 106, 149 — which is
+the first round on this track where the inherited numbers needed no correction at all. Per batch
+at the baseline, for whoever needs it next: 001–008 10/10, 009 9/9, 010 6/10, 011 5/10, 012 8/10,
+013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 5/10, 018 3/4.
+
+### The change
+
+LibreOffice's OOXML filter rounds a row height **down** to a multiple of 0.75 pt —
+`fHeight -= fmod(fHeight, 0.75)` — on `sheetFormatPr/@defaultRowHeight`
+(`worksheetfragment.cxx:681`) and on every `row/@ht` (`sheetdatacontext.cxx:316`). Both are gated
+on `isMSODocument()`, which is `docProps/app.xml`'s `<Application>` beginning with "Microsoft" and
+nothing else (`xmlfilterbase.cxx:241-245`). BIFF12 states heights in whole twips and applies
+neither, so XLSB is deliberately untouched.
+
+The rule arrived as a killed agent's unswept commit and was re-derived rather than trusted: two
+packages differing in `docProps/app.xml` and in **no other part**, round-tripped through the
+installed `soffice`, come back with 18.6 pt read as 18.0 against 18.6, 29.4 as 29.25 against 29.4,
+and a sheet default of 14.4 as 14.25 against 14.4 — while 15.0 and 30.0, already on the grid,
+agree on both sides.
+
+### One inherited claim did not survive, and it had a green test defending it
+
+The commit argued that the subtraction must be spelled `h - h % 0.75` rather than
+`floor(h / 0.75) * 0.75`, because the second "is free to land a unit in the last place below" and
+would turn 585 twips into 584. It does not, on that value or on any other: checked over every
+height Excel can write — each hundredth of a point and each twip to the 409.5 pt ceiling, 49142
+values — the two never disagree. The test written for it therefore could not fail, and was
+replaced by one that does.
+
+Five faithful wrong implementations were built and run: no rounding at all (3 of 5 tests fail),
+rounding without the generator gate (2), the floor-divide above (**0**), rounding only `row/@ht`
+(2), and rounding only the sheet default (2).
+
+### Reach, and the one document it costs
+
+56 of the 109 corpus SpreadsheetML workbooks state a height the rule would move; **nine** are
+documents whose rendering changes. `NAARMO_Mexico_RVSM_Approvals.xlsx` goes 17/16 → **16/16** and
+`EASA_PRODUCT_LIST_-_ALL.xlsx` 270/264 → **264/264**; `Capability_List_…_unsorted.xlsx` improves
++6 → +3 pages without matching.
+
+`ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` is worse, −18 → −21 pages. That is the
+mechanism working rather than failing: it already under-paginates and shorter rows under-paginate
+further. Both continuous measures improve over the same change, so it stands.
+
+NAARMO is exactly the lead round twenty exposed and predicted. It had been passing on two errors
+cancelling; once the header band was fixed its drawn row pitch was measured at 14.40 pt against
+the reference's 14.23, and the stated 14.4 snaps to **14.25**.
+
+**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot be
+affected and were not swept.
+
+### Tests
+
+Per project, run separately, each redirected to a file. **0 failed and 0 skipped in every one.**
+
+Core 243, Containers 109, Text 237, Vector 291, Rendering 104, Markup 259, OpenDocument 125,
+WordProcessing 608, Spreadsheets **442** (was 437 — one new file of five, replacing nothing),
+Presentations 517, Fidelity 542.
+
+### What the next round should take, in order
+
+1. **An embedded chart on an `.xls` worksheet is dropped, and its pages with it.**
+   `XlsDrawing.Build` keeps only shapes carrying a picture or `Txo` text, and a chart `OBJ`
+   (`ftCmo` type 5) carries neither — so it never widens `PrintedRange` and a sheet whose only
+   content is a chart prints **nothing**. `Template Pilot Logbook JAR-FCL V3.0.xls` is 35/38 and
+   1279/1610 words entirely for this reason, and `EHEST-Pre-departure-checklist…xls` is 22/24 with
+   nine chart objects. A census of every `ftCmo` type across the track's 62 `.xls` is in
+   `src/Paperless.Spreadsheets/TODO.md`; 13 chart objects live in 4 workbooks, and **one of the
+   four matches today**, so this can cost a match as well as win two and must be swept.
+2. **`FAA-2019-0995-0002_attachment_2.xlsx`** (32/33) is a *wrap* difference, not a pitch one: the
+   reference's repeating row group on its "Accessory List" sheet is 28.70 pt against our 14.93,
+   because it breaks each row onto two lines where we fit one. The residue is the width the text
+   is measured at, which is the ninth sweep's device model and its standing caveat.
+3. **The three under-paginating documents with no furniture**, unchanged from round twenty and
+   untouched by this one — the band rule cannot reach them and neither can this.
+4. `Application_Compliance_Checklist_5_Apr_2021.xlsx` remains diagnosed and deliberately unfixed
+   at a measured reach of 1 of 109.
+
 ## Sheets, round twenty: a header's band is measured, not stated — swept whole at `b7950ffd5`
 
 Whole track before and after, 171 documents each time, two workers, no duplicate path and no
