@@ -159,6 +159,10 @@ internal static class SheetTextLayout
                 foreach ((GlyphRun run, Colour? colour) in
                          line.Run.At(new DocPoint(line.X, line.Baseline)))
                 {
+                    // An empty paragraph's line carries a segment for its metrics and no glyphs;
+                    // it has taken its height already and there is nothing to draw or underline.
+                    if (run.Glyphs.Count == 0) continue;
+
                     sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
                 }
 
@@ -956,18 +960,49 @@ internal static class SheetTextLayout
             // no glyph", and a cell whose lines carry it would both measure the character's
             // advance into a centred line's width and put it in the PDF's text layer.
             int start = box.Line.Start;
-            int end = Math.Min(box.Line.End, text.Length);
+            int full = Math.Min(box.Line.End, text.Length);
+            int end = full;
             while (end > start && IsHardBreak(text[end - 1])) end--;
 
-            // Unless that leaves nothing: a break on its own is an empty line, and an empty line
-            // still takes a line's height. Shaping the break keeps it, since a run's height comes
-            // from the face rather than from its glyphs.
-            if (end == start) end = Math.Min(box.Line.End, text.Length);
+            // A break on its own is an empty paragraph, and an empty paragraph is still a line
+            // with a height. It is shaped from the break — a run's ascent and descent come from
+            // its face and size rather than from its glyphs — and then emptied, so that the line
+            // occupies its pitch without putting a .notdef box on the page or a U+000A in the
+            // text layer.
+            if (end == start)
+            {
+                if (shape(start, full, percent) is { } blank) lines.Add(Blank(blank));
+                continue;
+            }
 
             if (shape(start, end, percent) is { } shaped) lines.Add(shaped);
         }
 
         return lines.Count == 0 ? [whole] : lines;
+    }
+
+    /// <summary>
+    /// The same line with nothing on it: one segment, kept for its metrics, holding no glyphs.
+    /// </summary>
+    /// <remarks>
+    /// The first segment only. A line's height is the tallest thing on it and there is nothing on
+    /// this one, so the face and size the paragraph would have been set in is the whole of what
+    /// an empty paragraph contributes.
+    /// </remarks>
+    private static SheetTextRun Blank(SheetTextRun run)
+    {
+        SheetTextSegment first = run.Segments[0];
+
+        return new SheetTextRun(
+            [first with
+            {
+                Glyphs = [],
+                Clusters = [],
+                Text = string.Empty,
+                Offset = Length.Zero,
+                Width = Length.Zero,
+            }],
+            Length.Zero);
     }
 
     /// <summary>Whether a cell's text holds a break that starts a line whatever the width is.</summary>
