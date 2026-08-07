@@ -66,7 +66,7 @@ public static partial class SlideTextLayout
         ArgumentNullException.ThrowIfNull(body);
         ArgumentNullException.ThrowIfNull(fonts);
 
-        DocRect area = textRectangle.Deflate(body.Insets);
+        DocRect area = OnGrid(textRectangle).Deflate(OnGrid(body.Insets));
         List<PlacedGlyphRun> placed = [];
         if (body.Paragraphs.Count == 0) return placed;
 
@@ -115,6 +115,62 @@ public static partial class SlideTextLayout
 
         return placed;
     }
+
+    /// <summary>
+    /// A text rectangle on the grid the draw layer can actually hold it on.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The companion of <see cref="Quantised(Length)"/>, which put the em on that grid, and the
+    /// other half of the same defect: <strong>a shape's rectangle is an integer number of
+    /// hundredths of a millimetre in the reference and carried the file's full EMU precision
+    /// here.</strong> oox builds a shape's matrix in EMUs and scales it into hundredths of a
+    /// millimetre at the end (<c>oox/source/drawingml/shape.cxx</c>:1226-1230, 24.2.7.2), and
+    /// <c>SvxShape</c> then hands the result to <c>SdrObject::SetSnapRect</c>, whose
+    /// <c>tools::Rectangle</c> holds four <c>sal_Int32</c> in the model's map unit. A
+    /// <c>SdrTextObj</c>'s text rectangle is that rectangle less four
+    /// <c>SdrMetricItem</c> text distances, which are integers of the same unit.
+    /// </para>
+    /// <para>
+    /// <strong>Both edges are rounded, not the extent</strong>, which is why this cannot be
+    /// written as a rounding of the width and height: the reference's height is
+    /// <c>round(bottom) − round(top)</c>, so a box of a given extent is one unit taller or
+    /// shorter depending on <em>where on the slide it sits</em>. Rounding the extent alone
+    /// reproduces neither.
+    /// </para>
+    /// <para>
+    /// The absolute error this removes is at most half a unit an edge — 0.014 pt, an order of
+    /// magnitude below the em fix. What makes it worth having anyway is that the shrink-to-fit
+    /// search is a <em>threshold</em> comparison rather than a proportional one: the answer is
+    /// decided by whether the measured text clears <c>available</c>, and round seventeen pinned
+    /// one such decision to a window 16 units wide. A quantity that is only ever one or two units
+    /// out still lands on the wrong side of a boundary that close.
+    /// </para>
+    /// <para>
+    /// Applied in <see cref="Place"/> and deliberately not in <see cref="Height"/>, whose caller
+    /// is a table's row sizing and hands over a width it has already computed from column edges
+    /// rather than a rectangle. Quantising a width on its own is not this rule — the rule is
+    /// about two edges — and a table's own grid is a separate measurement.
+    /// </para>
+    /// </remarks>
+    private static DocRect OnGrid(DocRect rectangle)
+    {
+        long left = rectangle.Left.Mm100;
+        long top = rectangle.Top.Mm100;
+
+        return new DocRect(
+            Length.FromMm100(left),
+            Length.FromMm100(top),
+            Length.FromMm100(rectangle.Right.Mm100 - left),
+            Length.FromMm100(rectangle.Bottom.Mm100 - top));
+    }
+
+    /// <summary>The four text distances, each an integer of the model's own unit.</summary>
+    private static Margins OnGrid(Margins insets) => new(
+        Length.FromMm100(insets.Left.Mm100),
+        Length.FromMm100(insets.Top.Mm100),
+        Length.FromMm100(insets.Right.Mm100),
+        Length.FromMm100(insets.Bottom.Mm100));
 
     /// <summary>
     /// How tall a body's text is once broken to a width, insets excluded.

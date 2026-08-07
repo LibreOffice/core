@@ -99,7 +99,38 @@ public static class DrawingFill
             FillRect = RelativeRect(Drawing.Child(stretch, "fillRect"), whenAbsent: 0),
             Opacity = Percentage(Drawing.Attribute(Drawing.Child(blip, "alphaModFix"), "amt")) ?? 1,
             Duotone = Duotone(Drawing.Child(blip, "duotone")),
+            Brightness = WholePercent(Drawing.Child(blip, "lum"), "bright"),
+            Contrast = WholePercent(Drawing.Child(blip, "lum"), "contrast"),
         };
+    }
+
+    /// <summary>
+    /// An <c>ST_FixedPercentage</c> as a whole number of per cent, clamped to ±100.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A whole number rather than a fraction because the reference decides on one:
+    /// <c>getLimitedValue&lt;sal_Int16&gt;(value / PER_PERCENT, -100, 100)</c>
+    /// (<c>oox/source/drawingml/fillproperties.cxx</c>:799-800, 24.2.7.2), and the branch that
+    /// recognises PowerPoint's washout tests that integer for exactly 70 and −70. Rounding a
+    /// fraction back to per cent in floating point would put 0.7 on either side of 70 depending
+    /// on how the literal parsed, and the whole recolouring turns on which.
+    /// </para>
+    /// </remarks>
+    private static int WholePercent(XElement? element, string name)
+    {
+        string? value = Drawing.Attribute(element, name);
+        if (string.IsNullOrEmpty(value)) return 0;
+
+        if (value[^1] != '%'
+            && long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long raw))
+        {
+            return (int)Math.Clamp(raw / (long)(MaxPercent / 100), -100, 100);
+        }
+
+        return Percentage(value) is { } fraction
+            ? (int)Math.Clamp(Math.Truncate(fraction * 100), -100, 100)
+            : 0;
     }
 
     /// <summary>
@@ -351,6 +382,17 @@ public sealed record DrawingBlipFill
     /// pixel becomes.
     /// </remarks>
     public (DrawingColour Dark, DrawingColour Light)? Duotone { get; init; }
+
+    /// <summary><c>a:blip/a:lum/@bright</c> as a whole number of per cent; 0 when absent.</summary>
+    public int Brightness { get; init; }
+
+    /// <summary><c>a:blip/a:lum/@contrast</c> as a whole number of per cent; 0 when absent.</summary>
+    /// <remarks>
+    /// The pair is PowerPoint's picture recolour and the two halves are never independent —
+    /// see <see cref="Paperless.Core.Graphics.LuminanceRecolour"/>, which holds the three
+    /// different arithmetics they select between.
+    /// </remarks>
+    public int Contrast { get; init; }
 }
 
 /// <summary>
