@@ -138,8 +138,7 @@ public static class DrawingTableGeometry
                     IsCovered = covered,
                     Margins = MarginsOf(properties),
                     Anchor = Drawing.Attribute(properties, "anchor"),
-                    Fill = FillOf(properties, theme)
-                           ?? (themed.Fill is { } inherited ? Paint.Solid(inherited) : null),
+                    Fill = FillOf(properties, theme, themed.Fill),
                     TextBody = Drawing.Child(cell, "txBody"),
                     Left = Side(properties, "lnL", themed.Left, position == 0, themed, theme),
                     Right = Side(properties, "lnR", themed.Right, position >= lastColumn, themed, theme),
@@ -204,18 +203,35 @@ public static class DrawingTableGeometry
         Length.FromEmu(Emu(properties, "marB", 45720)));
 
     /// <summary>
-    /// A cell's own background, or null when its <c>a:tcPr</c> states none.
+    /// A cell's background: its own <c>a:tcPr</c>, then the table style's.
     /// </summary>
     /// <remarks>
+    /// <para>
+    /// <b><c>a:noFill</c> is a decision and beats the style, exactly as it does on a shape.</b>
+    /// <c>tablecell.cxx:550</c> builds the style part's fill first and then
+    /// <c>aFillProperties.assignUsed( maFillProperties )</c> lays the cell's own over it, and
+    /// <c>assignUsed</c> copies <c>moFillType</c> whenever the cell stated one — so a cell
+    /// stating <c>a:noFill</c> under a banded style is empty rather than banded.
+    /// </para>
+    /// <para>
+    /// Reading an absent element and a stated <c>a:noFill</c> as the same thing is what made
+    /// <c>slides/batch-012/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx</c> the largest single
+    /// figure on the slides track. Its layout carries a seventeen-column year ruler whose cells
+    /// each state <c>a:noFill</c> under <c>Medium Style 2 - Accent 1</c>, so every one of its
+    /// 137 pages was ruled in the theme's green where the reference leaves it clear.
+    /// </para>
+    /// <para>
     /// A solid colour or a pattern. The other three DrawingML fills are not read here because a
-    /// cell cannot be given one: <c>oox/source/drawingml/table/tablecell.cxx</c> pushes the
-    /// cell's fill properties through the same <c>FillProperties::pushToPropMap</c> a shape
-    /// uses, so a gradient or a picture in a cell is legal and drawn — but no corpus deck states
-    /// one and a table cell is not a shape, so the two remaining kinds are left for a document
-    /// that needs them.
+    /// cell cannot be given one: <c>tablecell.cxx</c> pushes the cell's fill properties through
+    /// the same <c>FillProperties::pushToPropMap</c> a shape uses, so a gradient or a picture in
+    /// a cell is legal and drawn — but no corpus deck states one and a table cell is not a shape,
+    /// so the two remaining kinds are left for a document that needs them.
+    /// </para>
     /// </remarks>
-    private static Paint? FillOf(XElement? properties, DrawingTheme? theme)
+    private static Paint? FillOf(XElement? properties, DrawingTheme? theme, Colour? themed)
     {
+        if (Drawing.Child(properties, "noFill") is not null) return null;
+
         if (Drawing.Child(properties, "solidFill") is { } solid)
         {
             foreach (XElement child in solid.Elements())
@@ -224,7 +240,8 @@ public static class DrawingTableGeometry
             }
         }
 
-        return DrawingHatch.Read(Drawing.Child(properties, "pattFill"), theme);
+        return DrawingHatch.Read(Drawing.Child(properties, "pattFill"), theme)
+               ?? (themed is { } inherited ? Paint.Solid(inherited) : null);
     }
 
     /// <summary>
