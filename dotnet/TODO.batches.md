@@ -1175,6 +1175,78 @@ defined names, still not reached" is what this looks like on paper, on 36 of its
 So the sheets track's image residue is **not** the slides track's shape: it is one unimplemented
 feature and a long tail of reflow, rather than missing fills.
 
+## Sheets: a hard break inside a cell is a line — swept whole at `1aefcdfdb`
+
+Whole track swept twice, 171 documents each time, before anything was changed and after the fix.
+The baseline reproduced the brief to the digit, which is the tell that both the base and the
+instrument are right; the worktree had to be fast-forwarded 325 commits first, the fourth agent
+in a row to find that.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 129 | **134** |
+| documents with an exactly correct page count | 143 | 143 |
+| total absolute page error | 116 | 116 |
+| **total absolute word error** | 107 780 | **44 496** |
+| `batch-001`–`006` | 60/60 | **60/60** |
+| `batch-007` | 8/10 | **9/10** |
+| `batch-008` | 8/10 | **9/10** |
+
+`batch-007` and `batch-008` are one document short each and both of those are page-count
+failures; `005`, `014` and `018` each gained one.
+
+### The handover's headline lead named the wrong layer, and counting settled it in one command
+
+The record said a hard break was being lost in the BIFF reader, on the strength of LibreOffice's
+`.ods` of `CSA_CCM_v1.2.xls` holding "1403 multi-paragraph cells" against zero newlines in our
+extraction. Counted on those same two exports: the `.ods` holds **578** multi-paragraph
+`table:table-cell` elements out of 1505 cells and our own XHTML extraction of it holds **578**
+`<br/>`. The reader keeps every break, `<p>ME 2.1<br />ME 2.2<br />PO 9.5<br />PO 9.6</p>` is line
+158 of it, and 1403 is not a count of anything in that file.
+
+That is render-comparison's rule 7 — extraction right, rendering wrong, so the defect is in a
+value only rendering resolves. `SheetTextLayout.Wrap` shaped the cell's whole text and returned it
+as one line whenever that fitted the column, so a break reached the line breaker only when the
+concatenation happened to overrun. `LineCount` beside it split on the break first, which is why
+the row heights were already right and no page count moved.
+
+### The `· artefact` mark cost this track three matches by excusing them
+
+Three of the four documents marked `· artefact` — the sink writing a long run as several `Tj`
+capped at 28 glyphs — were this defect instead, and the fix moved all three without touching the
+sink:
+
+| | before | after | reference |
+|---|---|---|---|
+| `Praktikastellen_…xls` (005) | 2019 | **1828** | 1828 |
+| `FY2021-AIP-grants.xlsx` (014) | 161 982 | **156 679** | 156 662 |
+| `STC_WebList.xlsx` (018) | 1 354 164 | **1 297 910** | 1 293 910 |
+
+The token-length histogram that identified them **reproduces exactly** — our text layer really
+does have a ceiling the reference's does not. It was reading a symptom: a concatenated cell is
+broken mid-token by the wrap, and mid-token fragments are also what an operator-granularity split
+produces. Two agents ran that histogram and neither asked whether the long token should have been
+there at all.
+
+So the artefact is still real and now costs this track **nothing**, and the lesson is the general
+one this file keeps recording: **a measurement is evidence and the sentence after it is a
+hypothesis.** Compare the two renderings' *lines* before believing a token-length histogram.
+
+### The next lead, cited but not yet measured
+
+`Computer and Software Services_50 State Comparison.xlsx` (008) is 24 pages against 26, words
+2816 against 2819, and the reference's two extra pages hold nothing but their footer's page
+number. The sheet is `pageOrder="downThenOver"` over two row bands, so those two are a third
+*column* band: LibreOffice's print area reaches column O and ours stops at H, and columns I to O
+carry 129 rows of visibly-filled cells with no data at all.
+
+`SheetDecorationArea.Extend` starts its attribute scan below the **sheet's** last data row, 42
+here, and then applies `SC_VISATTR_STOP`. Calc asks per column — `ScColumn::GetLastVisibleAttr`
+(`sc/inc/column.hxx:892-897`) passes that column's own `GetLastDataPos()`, "0 if none", into
+`ScAttrArray::GetLastVisibleAttr` (`attarray.cxx:1922`) — so for a column holding no data the scan
+starts at the top of the sheet and the run arithmetic is a different sum. Whether that is enough
+to keep these columns is **not measured**; the module TODO says what is missing from it.
+
 ## Sheets batch-006: a paragraph is not one size, and a note is not on its cell — swept at `5ec407cf3`
 
 Whole track swept twice, 171 documents each time, before anything was changed and after both
@@ -1934,6 +2006,21 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
+Measured whole-track at `1aefcdfdb`, twice, 171 documents each time. The baseline reproduced the
+brief's three headline figures to the digit — **129 of 171, page error 116, 143 exact** — and after
+the fifteenth round's one fix: **134 of 171, page error 116, 143 exact, total word error 107 780 →
+44 496.** Five documents went to `match`, none left it, and **no page count moved anywhere on the
+track**, which is what says the diagnosis was right: `LineCount` had always split on the in-cell
+break, so the row heights were already correct and only the drawing was not. `dragon-175066A.xlsx`
+went from failing pages *and* words to failing pages alone at 8143 against 8142.
+
+Fourteen documents' word error rose, twelve of them by five or fewer. The two that are not:
+`CIS_Debian_Linux_8_Benchmark_v1.0.0.xls` 1227 short became 1316 short, still a `words` failure,
+and `afn-afn-20250801-fy25-jan25-mar25.xlsx` 407 over became 449 over on 73 542, still a match.
+
+The paragraph below and the `· artefact` marks it explains are superseded — see "Sheets: a hard
+break inside a cell is a line" further down for what those four documents actually were.
+
 Measured whole-track at `5ec407cf3`, twice, 171 documents each time: **127 of 171** before, page
 error **117**, **142** exact page counts, and **129 of 171, page error 116, 143 exact** after the
 fourteenth round's two fixes. **Exactly five rows changed and none in the wrong direction** — two
@@ -1969,20 +2056,25 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ · artefact ×1 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | ✅ |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | **8/10** |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | **8/10** |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | **9/10** |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | **9/10** |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
 | `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 8/10 |
 | `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | **7/10** · artefact ×1 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | **8/10** |
 | `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
 | `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
 | `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 4/10 |
-| `batch-018` | 4 | 19384–48127 | xlsx:4 | **2/4** · artefact ×1 |
+| `batch-018` | 4 | 19384–48127 | xlsx:4 | **3/4** |
+
+**The `· artefact` marks are gone from this track and were never earned.** All four documents
+carrying one were failing on an in-cell hard break the drawing dropped, not on the sink's `Tj`
+granularity; the fifteenth round's entry below has the numbers. Nothing about the sink changed
+and all four now match.
 
 #### The image residue, re-measured on the fixed instrument
 
