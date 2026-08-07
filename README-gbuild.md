@@ -44,6 +44,10 @@ gbuild and re-added per program:  `librt` (Poco `SharedMemory`'s `shm_open`/`shm
 before 2.34) on `coolwsd` and the `coolforkit` variants; and `libcap` (forkit/kit capability calls)
 on the `coolforkit` variants, forwarded as `ONLINE.CAP_LIBS`, empty unless `configure` found it.
 
+* The AVX2 flags for `StaticLibrary_simd` are forwarded the same way, as `ONLINE.SIMD_CFLAGS`.
+`configure` leaves them empty on the architectures whose compiler has no AVX2, where passing
+`-mavx2` is an error rather than a no-op.
+
 # TODO
 
 * Switch the remaining parts of the top-level `Makefile.am` (i.e., `coolwsd-inproc` which in gbuild

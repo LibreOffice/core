@@ -19,10 +19,13 @@ $(eval $(call gb_StaticLibrary_set_include,simd, \
     $$(INCLUDE) \
 ))
 
-# The delta code is hand-vectorised for AVX2:
+# The delta code is hand-vectorised for AVX2, so it is compiled with -mavx2
+# -O3.  configure puts that into SIMD_CFLAGS, forwarded here as
+# ONLINE.SIMD_CFLAGS, and leaves it empty where the compiler has no AVX2 (the
+# arm64 and ppc64 builds, where -mavx2 is not even a valid option); config.h
+# then has ENABLE_SIMD 0 and the file compiles to nothing.
 $(eval $(call gb_StaticLibrary_add_cflags,simd, \
-    -mavx2 \
-    -O3 \
+    $(ONLINE.SIMD_CFLAGS) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,simd, \
