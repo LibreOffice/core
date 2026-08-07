@@ -33,7 +33,7 @@ static std::set<std::string> parseCommaSeparatedList(const std::string& list)
     return result;
 }
 
-static void convert(COKit* office, const std::string& input, std::set<std::string> outputFormats)
+static void convert(COKit* office, const std::string& input, std::set<std::string> const & outputFormats)
 {
 #ifdef _WIN32
     const std::string stem = Util::wide_string_to_string(std::filesystem::path(input).stem().native());
