@@ -4252,7 +4252,20 @@ not for the reference is unexplained**, and a minimal probe does not reproduce i
 
 - **`review-welsh-government-communications-mister-peter-mandelson.docx`**, 16 pages against 14.
   A long table; ours fits fewer rows per page than the reference from page 5 on (145–188 words a
-  page against 187–227). Not diagnosed further.
+  page against 187–227). **It is not the table's geometry and it is not a shrink-to-fit.** The
+  document is set entirely in `Aptos Narrow` (99 runs) and `Aptos` (10), neither installed, and the
+  table is *wider than its text area* — `w:tblW` 9493 twips against 9026 of column — which both
+  renderers honour: the ink spans 461.4 pt in the reference and 463.3 in ours, and every column
+  header sits within 0.15 pt of its counterpart on page 5.
+
+  What differs is the width of individual strings inside those identical columns, **in both
+  directions**: `DFM-00829-09` is 88.55 pt in the reference and 94.16 in ours (+6.3%), while `N116`
+  on the same row is 35.05 against 32.69 (−6.7%). Both PDFs embed DejaVu Sans *and* Liberation
+  Sans; the two sides assign them to different runs. So this is a **font-substitution** question
+  about a family neither has, not a layout one — a plausible mechanism is VCL parsing the width
+  token out of `Aptos Narrow` and searching for a condensed face where `fc-match "Aptos Narrow"`
+  simply answers DejaVu Sans, but that is inferred and **not verified**. Whoever takes it should
+  expect to change `Paperless.Text/Fonts`, which is shared, and sweep the other tracks.
 - **`slcc-architecture-uu-architecture.docx`**, 3 pages against 4, words exact at 1221. The
   reference spills onto a fourth page carrying nothing but its page number; we fit everything in
   three. A small height, not a wrong one.
