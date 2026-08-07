@@ -76,6 +76,14 @@ public sealed class PageFurnitureSet
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
     /// <param name="collapsesSpacing">As <see cref="Header"/>'s.</param>
+    /// <remarks>
+    /// The title-page suppression <see cref="Header"/> applies is deliberately <em>not</em> applied here.
+    /// It is measured for headers in both directions and the footer evidence contradicts itself: the
+    /// reference's first page of <c>final-technical-report-template.docx</c> has no footer, and its first
+    /// page of <c>Agile_Arc_SysDes.docx</c> — the same shape of section, a default header and footer with
+    /// <c>w:titlePg</c> and nothing named for a first page — has one. Suppressing both cost that document
+    /// eight words and bought nothing, so the half that is established is the half that is applied.
+    /// </remarks>
     public PlacedFlow? Footer(
         WritingSection section,
         PageGeometry geometry,
@@ -84,7 +92,7 @@ public sealed class PageFurnitureSet
         bool collapsesSpacing = false)
         => Resolve(
             _footers, _laidOutFooters, section, geometry.FooterArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: geometry.FooterOffset, collapsesSpacing);
+            offsetFromTop: geometry.FooterOffset, collapsesSpacing, mayBeSuppressed: false);
 
     /// <summary>
     /// True when something — a header or a footer — was named for a first page.
@@ -106,11 +114,13 @@ public sealed class PageFurnitureSet
         int pageNumber,
         bool isFirstPageOfSection,
         Length? offsetFromTop,
-        bool collapsesSpacing)
+        bool collapsesSpacing,
+        bool mayBeSuppressed = true)
     {
         PageFurnitureSlot? chosen = ChosenSlot(
             slots, pageNumber, isFirstPageOfSection,
-            section.HasDifferentFirstPage, section.HasDifferentEvenPages, HasFirstPageFurniture);
+            section.HasDifferentFirstPage, section.HasDifferentEvenPages,
+            hasFirstPageFurniture: HasFirstPageFurniture || !mayBeSuppressed);
 
         if (chosen is not { } slot) return null;
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
