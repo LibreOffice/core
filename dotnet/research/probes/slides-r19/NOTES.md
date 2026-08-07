@@ -264,3 +264,32 @@ separate — and the reason to read both.
 changed on any of the 163 documents in either sweep and no batch moved, so the word gate stands
 where round eighteen left it: 001–007, 011, 013 and 015 full, 008 9/10, 009 9/10, 010 8/10,
 012 8/10, 014 7/10, 016 8/10, 017 4/5.
+
+## The size census, before and after: byte-identical
+
+`size-census-2.py` over both whole sweeps.
+
+| | baseline | after both fixes |
+|---|---|---|
+| pages compared | 4199 | 4199 |
+| dominant size agrees | 3519 | 3519 |
+| ≤1% — the mm100 grid | 25 | 25 |
+| same sizes cut up differently | 133 | 133 |
+| the reference draws far less — raster ceiling | 62 | 62 |
+| off the mm100 grid — metafile text | 135 | 135 |
+| **none of those explains it** | **325** over 96 docs | **325** over 96 docs |
+
+**The two files are identical byte for byte**, worst-documents list and commonest-pairs table
+included: `2015-Civil-Rights` 22, `ITE106-Chapter 4` 16, `RESPA_-_Section_8_Webinar` 10,
+`2014BSA_Sunday_Killion` 9; `ours 18.99 ref 20.01` twelve times, `24.01/22.99` eleven, and so on.
+
+Two things follow, and the first also re-verifies the harness.
+
+**Round eighteen's split reproduces exactly**, on a re-run of the same tool over a
+independently-produced sweep: 4199, 3519, 25, 133, 62, 135, 325 over 96 documents.
+
+**And neither fix moved one page's dominant size, anywhere on the track.** The page-21 check said
+the box does not decide the one-point band on that deck; the census says it decides nothing about
+size on any deck. That is as complete a refutation as this instrument can give, and it is why the
+next round should go at the *measured text height* rather than at any further quantisation: the
+em, the box and the search have each now been eliminated by measurement rather than by argument.

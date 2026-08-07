@@ -5760,6 +5760,26 @@ recolouring was dropped on **every** picture — a decoded one never reaches tha
 is a picture that decodes perfectly and draws untouched, which looks exactly like the feature not
 being implemented. Found by rendering a deck, not by reading the code.
 
+### The size census, before and after: byte-identical
+
+| | baseline | after both |
+|---|---|---|
+| pages compared | 4199 | 4199 |
+| dominant size agrees | 3519 | 3519 |
+| ≤1% — the mm100 grid | 25 | 25 |
+| same sizes cut up differently | 133 | 133 |
+| the reference draws far less — raster ceiling | 62 | 62 |
+| off the mm100 grid — metafile text | 135 | 135 |
+| **none of those explains it** | **325** over 96 docs | **325** over 96 docs |
+
+`size-census-2.py` over both whole sweeps, and **the two outputs are identical byte for byte** —
+worst-documents list and commonest-pairs table included. Round eighteen's split therefore
+reproduces exactly on an independently-produced sweep, and **neither fix moved one page's dominant
+size anywhere on the track.** The page-21 check said the box does not decide the one-point band on
+that deck; this says it decides nothing about size on any deck. The em, the box and the search have
+each now been eliminated by measurement rather than by argument, which is what makes the measured
+text height the next thing to go at.
+
 ### The regression guards, and the tests
 
 Per project on the final tree, each run redirected to its own file: Core 243, Text 237,
@@ -5792,8 +5812,9 @@ claim the `a:duotone` work rested on.
 ### What the next round should take, in order
 
 1. **The measured text height, which is now what is left of the one-point band.** The em and the
-   box are both on the reference's grid and the search was compared statement by statement at
-   24.2.7.2 in round seventeen, so `Measure`'s output is the remaining term. Start by settling the
+   box are both on the reference's grid, the search was compared statement by statement at
+   24.2.7.2 in round seventeen, and this round's census is byte-identical before and after — so
+   `Measure`'s output is the remaining term, by elimination and not by argument. Start by settling the
    caveat above — measure `PptSlideLayout`'s group scale on `2015-Civil-Rights` against
    LibreOffice's flat-ODF export of the same deck, which states the box in mm100 outright and needs
    no inference.
