@@ -12,6 +12,7 @@
 #include <cstring>
 #include <deque>
 #include <filesystem>
+#include <fstream>
 #include <map>
 #include <regex>
 #include <string>
@@ -21,6 +22,8 @@
 
 #include <Windows.h>
 #include <appmodel.h>
+#include <ole2.h>
+#include <shellapi.h>
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <shobjidl.h>
@@ -90,6 +93,10 @@ struct WindowData
     HWND hWnd;
     HWND hConsoleWnd = 0;
     HWND hParentWnd = 0;
+    // The transparent window raised over the web view for the duration of a drag from the desktop,
+    // and the drop target registered for it. Both are created when the first such drag arrives.
+    HWND hOverlayWnd = 0;
+    IDropTarget* dropTarget = nullptr;
     int numMonitors = 0;
     RECT originalRect;
     LONG originalStyle;
@@ -147,6 +154,9 @@ static std::thread coolwsdThread;
 
 // The main window class name.
 static const wchar_t windowClass[] = L"CODA";
+
+// The class name of the transparent window that catches drops over the web view.
+static const wchar_t overlayWindowClass[] = L"CODADropOverlayWindow";
 
 // The hidden file open dialog and clipboard owner window class name.
 static const wchar_t hiddenOwnerWindowClass[] = L"CODAHiddenOwnerWindow";
@@ -1223,6 +1233,327 @@ static void arrangePresentationWindows(WindowData& data)
     }
 }
 
+// The MIME type that Windows has registered for the extension of the given file name, or an empty
+// string when the extension is unknown. This is the same registry entry that the shell and the
+// WebView2 read, so a file dropped on the app gets the same MIME type that the web content would
+// have seen for it.
+static std::string mimeTypeForFileName(const std::string& filename)
+{
+    const auto lastPeriod = filename.find_last_of('.');
+    if (lastPeriod == std::string::npos)
+        return "";
+
+    const std::wstring extension = Util::string_to_wide_string(filename.substr(lastPeriod));
+
+    wchar_t mimeType[200];
+    DWORD numChars = sizeof(mimeType) / sizeof(mimeType[0]);
+    if (AssocQueryStringW(ASSOCF_NONE, ASSOCSTR_CONTENTTYPE, extension.c_str(), nullptr, mimeType,
+                          &numChars) != S_OK)
+        return "";
+
+    return Util::wide_string_to_string(std::wstring(mimeType));
+}
+
+// True for the files that go into a document instead of being opened as a document of their own.
+// Images and media are what the document can hold, and what the browser side already knows how to
+// insert.
+static bool isInsertableIntoDocument(const std::string& mimeType)
+{
+    return mimeType.starts_with("image/") || mimeType.starts_with("audio/") ||
+        mimeType.starts_with("video/");
+}
+
+// Hand a dropped image or media file to the JS, so that it ends up in the document the same way as
+// a file dropped straight onto the document view used to. The bytes travel as base64 in a posted
+// web message, because the bridge to the JavaScript carries strings only. The drop point travels
+// with them, in physical pixels relative to the window client area, so that the insert can happen
+// where the user aimed.
+static void insertDroppedFile(HWND hWnd, const std::string& path, const std::string& mimeType,
+                              const POINT& point)
+{
+    const std::string filename = Poco::Path(path).getFileName();
+
+    std::ifstream stream;
+    FileUtil::openFileToIFStream(path, stream, std::ios_base::in | std::ios_base::binary);
+    if (!stream.is_open())
+    {
+        LOG_ERR("Cannot open dropped file [" << path << "]");
+        return;
+    }
+
+    const std::vector<char> contents((std::istreambuf_iterator<char>(stream)),
+                                     std::istreambuf_iterator<char>());
+    if (contents.empty())
+        return;
+
+    // The whole file becomes one base64 string, and its length has to fit in the DWORD that
+    // CryptBinaryToStringA counts characters in.
+    constexpr size_t maxSize = 256 * 1024 * 1024;
+    if (contents.size() > maxSize)
+    {
+        LOG_ERR("Dropped file [" << filename << "] is too large to insert, " << contents.size()
+                                 << " bytes");
+        return;
+    }
+
+    // Four base64 characters for every three bytes, rounded up, and room for the terminating NUL
+    // character.
+    DWORD base64Length = static_cast<DWORD>((contents.size() + 2) / 3 * 4 + 8);
+    std::vector<char> base64(base64Length);
+    if (!CryptBinaryToStringA((BYTE*)contents.data(), static_cast<DWORD>(contents.size()),
+                              CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, base64.data(),
+                              &base64Length))
+    {
+        const auto error = GetLastError();
+        LOG_ERR("CryptBinaryToStringA failed: " << error);
+        return;
+    }
+
+    Poco::JSON::Object::Ptr message = new Poco::JSON::Object();
+    message->set("command", "insertdroppedfile");
+    message->set("name", filename);
+    message->set("mimetype", mimeType);
+    message->set("data", std::string(base64.data()));
+    message->set("x", point.x);
+    message->set("y", point.y);
+    std::ostringstream oss;
+    message->stringify(oss);
+
+    PostMessageW(hWnd, CODA_WM_POSTWEBMESSAGE, (WPARAM)_strdup(oss.str().c_str()), 0);
+}
+
+static void hideDropOverlay(WindowData& data);
+
+// The timer that watches for a drag that goes away without the overlay hearing about it.
+static const int TIMER_ID_DROP_OVERLAY = 1;
+
+// Deal with the files in a drop, whether it arrived as a WM_DROPFILES message or through the drop
+// target of the overlay window. An image or media file goes into the document, everything else
+// becomes one more document to open: the first one opens right away, the rest follow one by one as
+// each preceding document finishes loading. The drop point is in client coordinates, and negative
+// when the drop happened outside the client area, on the window frame, in which case the file goes
+// in at the cursor.
+static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
+{
+    // The starter backstage window, the welcome slideshow and the presenter console show no
+    // document to insert into, so everything dropped on them opens as a document.
+    const WindowData& data = windowData[hWnd];
+    const bool canInsert = data.mode == DocumentMode::EDIT && !data.isConsole;
+
+    bool anyDocumentToOpen = false;
+    const UINT numFiles = DragQueryFileW(drop, 0xFFFFFFFF, NULL, 0);
+    for (UINT i = 0; i < numFiles; i++)
+    {
+        // The length returned does not count the terminating NUL character, so the buffer needs
+        // one more.
+        const UINT length = DragQueryFileW(drop, i, NULL, 0);
+        if (length == 0)
+            continue;
+
+        std::wstring droppedPath(length + 1, L'\0');
+        if (DragQueryFileW(drop, i, droppedPath.data(), length + 1) == 0)
+            continue;
+        droppedPath.resize(length);
+
+        auto path = Poco::Path(Util::wide_string_to_string(droppedPath));
+        const std::string mimeType = mimeTypeForFileName(path.getFileName());
+
+        if (canInsert && isInsertableIntoDocument(mimeType))
+        {
+            insertDroppedFile(hWnd, path.toString(), mimeType, dropPoint);
+            continue;
+        }
+
+        filenamesAndUrisToOpen.push_back({ path.getFileName(), pathToURI(path) });
+        anyDocumentToOpen = true;
+    }
+
+    if (anyDocumentToOpen)
+        load_next_document();
+}
+
+// The drop target of the overlay window. Windows looks for a drop target by hit-testing the window
+// under the pointer, so this one gets the drops that would otherwise go to the web view.
+class FileDropTarget final : public IDropTarget
+{
+public:
+    FileDropTarget(HWND hWnd)
+        : m_hWnd(hWnd)
+    {
+    }
+
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** object) override
+    {
+        if (riid == IID_IUnknown || riid == IID_IDropTarget)
+        {
+            *object = static_cast<IDropTarget*>(this);
+            AddRef();
+            return S_OK;
+        }
+        *object = nullptr;
+        return E_NOINTERFACE;
+    }
+
+    ULONG STDMETHODCALLTYPE AddRef() override { return InterlockedIncrement(&m_referenceCount); }
+
+    ULONG STDMETHODCALLTYPE Release() override
+    {
+        const LONG count = InterlockedDecrement(&m_referenceCount);
+        if (count == 0)
+            delete this;
+        return count;
+    }
+
+    HRESULT STDMETHODCALLTYPE DragEnter(IDataObject* dataObject, DWORD, POINTL,
+                                        DWORD* effect) override
+    {
+        m_hasFiles = holdsFileList(dataObject);
+        *effect = m_hasFiles ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+        return S_OK;
+    }
+
+    HRESULT STDMETHODCALLTYPE DragOver(DWORD, POINTL, DWORD* effect) override
+    {
+        *effect = m_hasFiles ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+        return S_OK;
+    }
+
+    HRESULT STDMETHODCALLTYPE DragLeave() override
+    {
+        hideDropOverlay(windowData[m_hWnd]);
+        return S_OK;
+    }
+
+    HRESULT STDMETHODCALLTYPE Drop(IDataObject* dataObject, DWORD, POINTL point,
+                                   DWORD* effect) override
+    {
+        *effect = DROPEFFECT_NONE;
+        hideDropOverlay(windowData[m_hWnd]);
+
+        FORMATETC format = { CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+        STGMEDIUM medium;
+        if (dataObject->GetData(&format, &medium) != S_OK)
+            return S_OK;
+
+        // The drop point comes in screen coordinates, and the overlay covers the client area of the
+        // document window, so the client coordinates of the window are what the document sees.
+        POINT clientPoint = { point.x, point.y };
+        ScreenToClient(m_hWnd, &clientPoint);
+
+        handleDroppedFiles(m_hWnd, static_cast<HDROP>(medium.hGlobal), clientPoint);
+        ReleaseStgMedium(&medium);
+
+        *effect = DROPEFFECT_COPY;
+        return S_OK;
+    }
+
+private:
+    static bool holdsFileList(IDataObject* dataObject)
+    {
+        FORMATETC format = { CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+        return dataObject && dataObject->QueryGetData(&format) == S_OK;
+    }
+
+    HWND m_hWnd;
+    LONG m_referenceCount = 1;
+    bool m_hasFiles = false;
+};
+
+// The web view covers the whole client area and takes any drop there itself, so a file dropped on
+// the document view never reaches the app. Raising this transparent window over the web view for as
+// long as the drag lasts is what brings the drop to the app, with the paths of the dropped files.
+// The web view reports the arriving drag, as it still sees the drag events until the overlay covers
+// it.
+static void showDropOverlay(WindowData& data)
+{
+    // Where the client area of the document window is on the screen. The overlay is a window of its
+    // own rather than a child window, because only a top-level window can be made transparent with
+    // a layer, and it is owned by the document window, which keeps it above that window and takes
+    // it away when the document window goes.
+    RECT bounds;
+    GetClientRect(data.hWnd, &bounds);
+    POINT topLeft = { bounds.left, bounds.top };
+    ClientToScreen(data.hWnd, &topLeft);
+
+    if (!data.hOverlayWnd)
+    {
+        data.hOverlayWnd = CreateWindowExW(WS_EX_LAYERED | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE,
+                                           overlayWindowClass, L"", WS_POPUP, topLeft.x, topLeft.y,
+                                           bounds.right, bounds.bottom, data.hWnd, NULL,
+                                           appInstance, NULL);
+        if (!data.hOverlayWnd)
+        {
+            const auto error = GetLastError();
+            LOG_ERR("CreateWindowExW() for the drop overlay failed: " << error
+                                                                      << ", owner window "
+                                                                      << data.hWnd << ", size "
+                                                                      << bounds.right << "x"
+                                                                      << bounds.bottom);
+            return;
+        }
+
+        // Just short of fully transparent. The window has to be visible to be hit-tested as a drop
+        // target, but the document has to stay readable under it.
+        if (!SetLayeredWindowAttributes(data.hOverlayWnd, 0, 1, LWA_ALPHA))
+        {
+            const auto error = GetLastError();
+            LOG_ERR("SetLayeredWindowAttributes() for the drop overlay failed: " << error);
+        }
+
+        data.dropTarget = new FileDropTarget(data.hWnd);
+        const HRESULT hr = RegisterDragDrop(data.hOverlayWnd, data.dropTarget);
+        if (hr != S_OK)
+        {
+            LOG_ERR("RegisterDragDrop() failed: " << hr);
+            data.dropTarget->Release();
+            data.dropTarget = nullptr;
+            DestroyWindow(data.hOverlayWnd);
+            data.hOverlayWnd = 0;
+            return;
+        }
+    }
+
+    SetWindowPos(data.hOverlayWnd, HWND_TOP, topLeft.x, topLeft.y, bounds.right, bounds.bottom,
+                 SWP_SHOWWINDOW | SWP_NOACTIVATE);
+
+    SetTimer(data.hWnd, TIMER_ID_DROP_OVERLAY, 500, NULL);
+}
+
+static void hideDropOverlay(WindowData& data)
+{
+    if (!data.hOverlayWnd)
+        return;
+
+    KillTimer(data.hWnd, TIMER_ID_DROP_OVERLAY);
+    ShowWindow(data.hOverlayWnd, SW_HIDE);
+}
+
+// A drag that ends on the overlay takes the overlay away with it, and so does one that leaves it.
+// A drag can also pass over the web view and be gone again before the overlay is up, and then
+// nothing else would ever take it away, and it would sit in front of the document and swallow the
+// input meant for it. A drag holds a mouse button down, so the button coming up says the drag is
+// over, whether the overlay saw any of it or not.
+static void checkDropOverlayStillNeeded(WindowData& data)
+{
+    const bool buttonIsDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) ||
+        (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
+
+    if (!buttonIsDown)
+        hideDropOverlay(data);
+}
+
+static void destroyDropOverlay(WindowData& data)
+{
+    if (!data.hOverlayWnd)
+        return;
+
+    RevokeDragDrop(data.hOverlayWnd);
+    data.dropTarget->Release();
+    data.dropTarget = nullptr;
+    DestroyWindow(data.hOverlayWnd);
+    data.hOverlayWnd = 0;
+}
+
 // Identifier for the Ctrl+Shift+I hotkey that opens the WebView2 developer
 // tools. The range 0x0000 to 0xBFFF is reserved for application hotkeys.
 static const int HOTKEY_ID_DEVTOOLS = 0x00DA;
@@ -1268,6 +1599,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     {
         case WM_CREATE:
             {
+                // Accept files dragged from Explorer onto the window, which arrive as WM_DROPFILES.
+                DragAcceptFiles(hWnd, TRUE);
+
                 // Contrary to documentation, when you use CW_USEDEFAULT for the x and y parameters
                 // in the CreateWindowW() call, Windows will occasionally place the window so that
                 // it is partially obscured by the taskbar. Workaround for that.
@@ -1476,6 +1810,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
 
         case WM_DESTROY:
+            destroyDropOverlay(windowData[hWnd]);
             if (windowData[hWnd].app2js.joinable())
                 windowData[hWnd].app2js.join();
             if (DocumentData::count() == 0)
@@ -1537,6 +1872,28 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 openCOOLWindow(nextDocument, DocumentMode::EDIT);
             }
             break;
+
+        case WM_TIMER:
+            if (wParam == TIMER_ID_DROP_OVERLAY)
+                checkDropOverlayStillNeeded(windowData[hWnd]);
+            else
+                return DefWindowProc(hWnd, message, wParam, lParam);
+            break;
+
+        case WM_DROPFILES:
+        {
+            // This is a drop on the window frame. A drop on the document view goes to the drop
+            // target of the overlay window instead.
+            HDROP drop = (HDROP)wParam;
+
+            POINT dropPoint;
+            if (!DragQueryPoint(drop, &dropPoint))
+                dropPoint = { -1, -1 };
+
+            handleDroppedFiles(hWnd, drop, dropPoint);
+            DragFinish(drop);
+            break;
+        }
 
         case WM_ACTIVATE:
             // Hold the developer-tools hotkey only while this window is the
@@ -2905,6 +3262,13 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         {
             do_welcome_handling_things(data);
         }
+        else if (s == L"FILEDRAGENTER")
+        {
+            // A drag carrying files has arrived over the web view. Take the drop away from the web
+            // view, so that the app gets to see what was dropped. Repeats while the drag is still
+            // in the part of the window the web view has, and stop once the overlay is up.
+            showDropOverlay(data);
+        }
         else if (s == L"BYE")
         {
             do_bye_handling_things(data);
@@ -3351,6 +3715,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
     if (!SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE)))
         fatal("CoInitializeEx() failed");
 
+    // Drag and drop needs the OLE libraries on top of COM. The drop target that DragAcceptFiles()
+    // installs to turn a drop into a WM_DROPFILES message is registered through RegisterDragDrop(),
+    // which works only once OLE has been initialized. The apartment stays as CoInitializeEx() set it
+    // up above.
+    if (!SUCCEEDED(OleInitialize(NULL)))
+        fatal("OleInitialize() failed");
+
     primaryMonitor = MonitorFromPoint({ 0, 0 }, MONITOR_DEFAULTTOPRIMARY);
 
     UINT32 length = 0;
@@ -3504,6 +3875,21 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
             return 1;
         }
    }
+
+    {
+        // The class of the transparent window that catches drops over the web view. It shows
+        // nothing of its own, so it needs no window procedure or icon.
+        WNDCLASSEXW wcex = { sizeof(WNDCLASSEXW) };
+
+        wcex.lpfnWndProc = DefWindowProcW;
+        wcex.hInstance = hInstance;
+        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        wcex.lpszClassName = overlayWindowClass;
+
+        if (!RegisterClassExW(&wcex))
+            fatal("RegisterClassExW() for the drop overlay window failed");
+    }
 
     // Open the first document here, then open the rest one by one once the previous has loaded.
     if (mode == DocumentMode::STARTER)

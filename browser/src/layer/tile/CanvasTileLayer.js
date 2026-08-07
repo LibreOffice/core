@@ -3404,19 +3404,44 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		e.preventDefault();
 	},
 
+	// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
+	_moveCursorToDropPoint: function (intern) {
+		const mousePos = this._internToTwips(intern);
+		const count = 1;
+		const buttons = 1;
+		const modifier = this._map.keyboard.modifier;
+		this._postMouseEvent('buttondown', mousePos.x, mousePos.y, count, buttons, modifier);
+		this._postMouseEvent('buttonup', mousePos.x, mousePos.y, count, buttons, modifier);
+	},
+
+	// Insert a file that the app received as a drag and drop from the desktop, at the point where it
+	// was dropped. The bytes arrive base64-encoded, as the bridge from the app carries strings only,
+	// and the point arrives in physical pixels relative to the app window. The web view covers the
+	// whole client area of that window, so dividing by the device pixel ratio gives the position in
+	// the page. A negative point means the file was dropped on the window frame rather than on the
+	// document, and the file then goes in where the cursor already is.
+	insertDroppedFile: function (name, mimetype, base64Data, x, y) {
+		if (!this._map._clip)
+			return;
+
+		if (x >= 0 && y >= 0) {
+			const scale = window.devicePixelRatio || 1;
+			const containerRect = this._map._container.getBoundingClientRect();
+			const containerPoint = new cool.Point(
+				x / scale - containerRect.left, y / scale - containerRect.top);
+			this._moveCursorToDropPoint(
+				this._map.layerPointToIntern(this._map.containerPointToLayerPoint(containerPoint)));
+		}
+
+		const bytes = Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0));
+		this._map._clip._asyncReadPasteFile(new File([bytes], name, { type: mimetype }));
+	},
+
 	_onDrop: function (e) {
 		if (this._isSlideDrag(e.originalEvent))
 			return;
 
-		// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
-		var intern = e.intern;
-		var docLayer = this._map._docLayer;
-		var mousePos = docLayer._internToTwips(intern);
-		var count = 1;
-		var buttons = 1;
-		var modifier = this._map.keyboard.modifier;
-		this._postMouseEvent('buttondown', mousePos.x, mousePos.y, count, buttons, modifier);
-		this._postMouseEvent('buttonup', mousePos.x, mousePos.y, count, buttons, modifier);
+		this._moveCursorToDropPoint(e.intern);
 
 		e = e.originalEvent;
 		e.preventDefault();

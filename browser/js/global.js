@@ -601,6 +601,32 @@ class WindowsAppInitializer extends MobileAppInitializer {
 			};
 		})();
 
+		// A file dragged in from the desktop is handled by the app, which needs the path
+		// of the file, something the web side never gets to see. Report the arriving
+		// drag, and the app takes the drop from there. Reporting it again as the drag
+		// moves on costs nothing and covers the case of the first event being missed.
+		const reportFileDrag = (event) => {
+			if (event.dataTransfer &&
+			    Array.prototype.includes.call(event.dataTransfer.types, 'Files'))
+				window.postMobileMessage('FILEDRAGENTER');
+		};
+		window.addEventListener('dragenter', reportFileDrag, true);
+		window.addEventListener('dragover', reportFileDrag, true);
+
+		// The native side also posts messages of its own, rather than replies to a
+		// postMobileCall(). Those carry a command name instead of a call id. A file
+		// dragged from the desktop onto the document arrives this way: the app decides
+		// from the file name whether the file opens as a document of its own or goes
+		// into the current document, and only the second kind gets posted here.
+		window.chrome.webview.addEventListener('message', (event) => {
+			const data = event.data;
+			if (!data || data.command !== 'insertdroppedfile')
+				return;
+			const docLayer = window.app.map ? window.app.map._docLayer : null;
+			if (docLayer)
+				docLayer.insertDroppedFile(data.name, data.mimetype, data.data, data.x, data.y);
+		});
+
 		// FIXME: No registration of separate handlers in Windows WebView2, so just log
 		// errors and debug messages? Maybe instead send a JSON object with separate name
 		// and body? But then we would have to parse that JSON object from the string in C#
