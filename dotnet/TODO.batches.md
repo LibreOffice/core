@@ -72,6 +72,7 @@ placeholders, and one undiagnosed measurement difference.
 | `WIP` | an agent is working it now |
 | `✅` | full parity, **and** every earlier batch in the track re-proved after the last change |
 | `· ceiling` | the residue is measured to be the word gate's ceiling, not a defect — closing it would need the output made worse. Switch instruments rather than chase the number |
+| `· artefact` | the miss is the PDF sink writing a long run as several `Tj` with a `Td` between them, capped at 28 glyphs, where LibreOffice writes one `TJ` array — so poppler reads a word boundary at every reposition. The page is drawn correctly; only the text layer splits. Confirmed by a token-length histogram, not assumed. Do not count it against the track |
 
 Record measured numbers, never expected ones. A number here that was not produced by
 `batch-check.sh` is worse than a blank.
@@ -1174,6 +1175,101 @@ defined names, still not reached" is what this looks like on paper, on 36 of its
 So the sheets track's image residue is **not** the slides track's shape: it is one unimplemented
 feature and a long tail of reflow, rather than missing fills.
 
+## Sheets batch-006: a paragraph is not one size, and a note is not on its cell — swept at `5ec407cf3`
+
+Whole track swept twice, 171 documents each time, before anything was changed and after both
+fixes. **`batch-006` is 10/10** and the gate `001`–`005` holds at 49/50, the miss being the `Tj`
+artefact on `Praktikastellen_…xls` that the brief names.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 127 | **129** |
+| documents with an exactly correct page count | 142 | **143** |
+| total absolute page error | 117 | **116** |
+| `batch-006` | 8/10 | **10/10** |
+| every other batch | — | unchanged |
+
+**Exactly five rows changed and none in the wrong direction.** Two went to `match`;
+`Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx` went from 1530 words to 1505 of 1504 and stayed a
+match; `RMP 2011-2014 and Inventory.xls` gained the two note pages the reference draws and stayed
+a `pages` failure at the same page error of one; and `FAA-2019-0995-0002_attachment_2.xlsx` moved
+because the *reference's* word count moved by one between the two sweeps.
+
+### The baseline is five below the brief, and two of the five are the artefact
+
+The brief said 132/171 with page error 119 and 141 exact, measured at `6b6d54d37` plus its fix. At
+`5ec407cf3` the two continuous quantities reproduce within two — **117 and 142** — and the match
+count is **127**. Ten of the fourteen per-batch figures reproduce exactly; 007, 008, 014 and 018
+are each one lower, and every one of the four extra failures is a word-gate verdict on a
+page-exact document.
+
+**Two of the four are the `Tj`-splitting artefact and are not regressions**, measured with a
+token-length histogram of both text layers rather than assumed — the signature is a hard ceiling
+on our side that the reference does not have:
+
+| | ours | reference | tokens over 28 characters |
+|---|---|---|---|
+| `Praktikastellen_…xls` (005) | max 33 | max 55 | 1 against 19 |
+| `FY2021-AIP-grants.xlsx` (014) | max 37 | max 49 | 15 against 92 |
+| `STC_WebList.xlsx` (018) | max 89 | max 107 | 734 against 1348 |
+
+So that artefact costs this track **three** matches, not one. The other two —
+`CSA_CCM_v1.2.xls` (007) and `SLSA_Directory_031423.xlsx` (008) — are something else: the first
+over-counts by 1227 with the same 36-character maximum on both sides, and the second is 187 words
+*short*, which splitting cannot cause.
+
+### An unsized DrawingML run is twelve point, and the paragraph around it keeps its own
+
+`SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx` was page-exact and 31 words short. Its
+methodology box has two paragraphs that end with a run stating no `sz`, and two bugs met on that
+one character: the default for such a run was 18 pt where LibreOffice gives 12, and the paragraph
+took the largest size any run stated, so one stray space re-measured 440 characters of body text.
+
+**Measured against the binary rather than derived**, because both candidates are in the file: a
+probe with three text boxes, round-tripped through the flat-ODS export, comes back with 12 pt for
+both of its unsized runs, 11 pt for a body followed by an unsized space, and 18 pt for every
+shape's *default paragraph style* and no run. 519 words to **548 of 550**, and the probe's three
+boxes now break where LibreOffice's own PDF breaks them.
+
+Eleven documents on the track have shape text with runs at all; all eleven were rendered before
+and after and **two moved**, the second being
+`Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx` at 1530 → 1505 of 1504. No page count moved.
+
+### A sheet's notes are printed on pages of their own
+
+`Hazard Analysis Template.xls` was 2 pages against 3 with 460 words against 682, and the missing
+page is a list of its cell comments — Excel's "Comments: at end of sheet", which the previous
+round diagnosed and left as a feature. It is `ScPrintFunc::DoNotes` (`printfun.cxx:1930-2001`) and
+short enough to port whole; the order is **column-major**, which the reference shows plainly
+(D1, F2, H2, J2, L1, N2, P2, R2).
+
+Reading it needed a join neither record holds: BIFF8's `NOTE` carries the cell and *names* an
+object, and the characters are in that object's `TXO`. `ftCmo`'s identifier was being skipped.
+
+**Two of the 171 documents ask for this**, and both are now right where they can be:
+`Hazard Analysis Template.xls` is exact at 3 pages and 682 words, and `RMP 2011-2014 and
+Inventory.xls` draws both of the reference's note pages with the same marks in the same order.
+
+One instrument note, because this track leans on the trick: **LibreOffice's flat-ODS export drops
+cell annotations entirely** — zero `office:annotation` in the `.fods` of a workbook whose notes
+plainly print, twenty-four in the `.ods` of the same file. Use `--convert-to ods` for anything
+about notes.
+
+### The lead worth taking next: a hard break inside a cell never reaches us
+
+`CSA_CCM_v1.2.xls` is page-exact and 1227 words over, spread evenly across all thirteen pages. The
+reference puts `ME 2.1`, `ME 2.2`, `PO 9.5` and `PO 9.6` on four lines of one cell; we draw them
+concatenated, and the resulting long string is then broken **mid-token** by the wrap, which is
+where the extra tokens come from.
+
+LibreOffice's own `.ods` conversion of that workbook writes the cell as one `table:table-cell`
+holding **four `<text:p>` elements**, and holds **1403 multi-paragraph cells** in all; our
+extraction of it yields **zero** strings containing a newline. So the break is lost in the BIFF
+reader. `SheetTextLayout.Wrap` would drop it anyway — it returns a single line whenever the whole
+text fits the column, while `LineCount` beside it splits on `\n` first, so the reserved row height
+and the drawn lines are computed by two rules that disagree. The module TODO has the detail and
+the warning about estimating its reach by grepping.
+
 ## Sheets batches 006–010: a merge has two axes, and a shape has a face — swept at `7049756d9`
 
 Whole track swept at `7049756d9` before anything was changed and again after each fix, 171
@@ -1838,6 +1934,21 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
+Measured whole-track at `5ec407cf3`, twice, 171 documents each time: **127 of 171** before, page
+error **117**, **142** exact page counts, and **129 of 171, page error 116, 143 exact** after the
+fourteenth round's two fixes. **Exactly five rows changed and none in the wrong direction** — two
+documents went to `match`, one went from 1530 words to 1505 of 1504, `RMP 2011-2014 and
+Inventory.xls` gained the two note pages the reference draws and keeps its own one-page shortfall,
+and one row moved because the *reference's* word count moved by one.
+
+The baseline is five matches below the brief's 132 while its two continuous quantities reproduce
+within two of 119 and 141. Ten of the fourteen per-batch figures reproduce exactly; 007, 008, 014
+and 018 are each one lower, every one of the four a word-gate verdict on a page-exact document.
+**Two of the four are the `Tj`-splitting artefact**, measured with a token-length histogram —
+`FY2021-AIP-grants.xlsx` has 15 tokens over 28 characters against the reference's 92, and
+`STC_WebList.xlsx` 734 against 1348, the same signature as `Praktikastellen_…xls`. So that artefact
+costs this track three matches rather than one, and none of the three is a regression.
+
 Measured whole-track at `6b6d54d37`: **125 of 171**, page error **192**, **134** exact page
 counts — the twelfth round's figures to the digit. After the thirteenth round's device fix, at the
 same commit plus it: **132 of 171, page error 119, 141 exact.** Thirteen documents improved and
@@ -1858,20 +1969,20 @@ row-height overshoot in miniature and worth probing, was exactly that and now ma
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
-| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 8/10 |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 9/10 |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 9/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ · artefact ×1 |
+| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | ✅ |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | **8/10** |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | **8/10** |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
 | `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 8/10 |
 | `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 8/10 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | **7/10** · artefact ×1 |
 | `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
 | `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
 | `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 4/10 |
-| `batch-018` | 4 | 19384–48127 | xlsx:4 | 3/4 |
+| `batch-018` | 4 | 19384–48127 | xlsx:4 | **2/4** · artefact ×1 |
 
 #### The image residue, re-measured on the fixed instrument
 

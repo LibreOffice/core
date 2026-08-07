@@ -332,8 +332,41 @@ text layers — the signature is a hard ceiling on our side that the reference d
 Those three are `words`-only failures on page-exact documents and are the same defect. The other
 two word-gate failures in the four batches that came in below the brief are **not** this:
 `CSA_CCM_v1.2.xls` (007) over-counts by 1227 with the same 36-character maximum on both sides, and
-`SLSA_Directory_031423.xlsx` (008) is 187 words *short*, which splitting cannot cause. Both are
-undiagnosed.
+`SLSA_Directory_031423.xlsx` (008) is 187 words *short*, which splitting cannot cause.
+
+### The next lead: a hard break inside a cell never reaches us
+
+**`CSA_CCM_v1.2.xls` (007) is 13 pages against 13 and 17079 words against 15852**, and the excess
+is spread evenly — every page is 50 to 110 words over, with one at 254. It is not a page-count
+problem and it is not the `Tj` artefact.
+
+What the two renderings draw is the difference. The reference puts `ME 2.1`, `ME 2.2`, `PO 9.5`
+and `PO 9.6` on four lines of one cell; we draw `ME 2.1ME 2.2PO 9.5` as one string, which then
+overruns its column and is broken **mid-token** by the layouter — `NIST SP800-5` / `3 R3 CA-2`,
+`Clause 5` / `.1 g`, `L.1, L.2, L.7` / `, L.9, L.11`. That is where the extra tokens come from: a
+dropped break makes one long string, and the wrap of a long string that has no spaces in it makes
+several short ones.
+
+**The file really does hold the breaks.** LibreOffice's own `.ods` conversion of this workbook
+writes that cell as a single `table:table-cell` holding **four `<text:p>` elements**, and it holds
+**1403 multi-paragraph cells** in all. Our extraction of the same workbook yields **zero** strings
+containing a newline — checked on `ECA Sinters.xls` too, also zero — so the break is lost in the
+BIFF reader rather than in the layout.
+
+Two things to hold onto before starting:
+
+- **`SheetTextLayout.Wrap` would drop them anyway**, even once the reader keeps them. Its first
+  line shapes the whole text and returns a single line when it fits the column
+  (`if (available <= Length.Zero || whole.Width <= available) return [whole]`), so a cell whose
+  hard-broken text is *narrower* than its column is drawn on one line whatever its breaks say.
+  `LineCount`, right beside it, splits on `\n` before wrapping — so the row height and the drawn
+  lines are computed by two rules that disagree. Fix both or the symptom only moves.
+- **Estimate the reach by rendering, not by grepping.** A byte scan of the `.xls` shared-string
+  tables for `0a 00` flags 53 of the track's 171 documents, but a compressed BIFF8 string stores
+  one byte per character, so that pattern is a false positive there and the figure is an upper
+  bound. No corpus `.xlsx` writes `&#10;` at all, so the SpreadsheetML side of this is unmeasured
+  and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
+  carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
 ## What the ninth sheets sweep found: a row is measured on a device Calc never draws with
 
