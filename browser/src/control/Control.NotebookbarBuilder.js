@@ -667,7 +667,11 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		$(control.button).unbind('click');
 		$(control.label).unbind('click');
 		$(control.container).click(function () {
-			builder.map.sendUnoCommand(data.command + '?CreateDirectly:bool=true');
+			if (data.command === '.uno:VerticalText')
+				builder.map.sendUnoCommand(data.command,
+					{ KeyModifier: { type: 'short', value: app.UNOModifier.CTRL } });
+			else
+				builder.map.sendUnoCommand(data.command + '?CreateDirectly:bool=true');
 		});
 		builder._preventDocumentLosingFocusOnClick(control.container);
 	},
