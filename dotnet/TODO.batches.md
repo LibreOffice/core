@@ -2142,6 +2142,14 @@ feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the refe
 do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
 border grid.
 
+## Sheets, round seventeen (in progress): baseline at `196774051`
+
+Whole track swept before anything was changed, 171 documents, two workers. **The brief reproduced
+to the digit** — 136 of 171, total absolute page error 113, 145 documents with an exactly correct
+page count, `batch-001`–`008` at 80/80, and every per-batch figure as handed over: 009 6/9,
+010 5/10, 011 6/10, 012 8/10, 013 7/10, 014 8/10, 015 5/9, 016 4/9, 017 4/10, 018 3/4. 171 rows,
+no path twice, no `ref-failed`.
+
 ## Sheets, round sixteen: the attribute scan is asked per column, and it stops twice
 
 Baseline swept whole at `22ed440e0`, 171 documents, and it reproduced the brief exactly —
