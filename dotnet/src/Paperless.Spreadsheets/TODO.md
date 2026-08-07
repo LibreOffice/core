@@ -394,6 +394,95 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The sixteenth sweep: the attribute scan is asked per column, and it stops twice
+
+Swept whole at `22ed440e0` before anything was changed, 171 documents: **134 of 171, page error
+116, 143 exact page counts** — the brief's three headline figures to the digit, and batches 001 to
+006 at full parity. `batch-007` and `batch-008` were each 9/10 and their single misses were the
+two documents the handover named.
+
+### An empty column's scan starts at its own last data row, not at the sheet's
+
+`SheetDecorationArea.Extend` started every column's attribute scan at the *sheet's* last data row.
+Calc asks the question per column and answers it per column: `ScColumn::GetLastVisibleAttr` passes
+that column's own `GetLastDataPos()`, documented "always including notes, **0 if none**"
+(`sc/inc/column.hxx:892-897`), into `ScAttrArray::GetLastVisibleAttr`.
+
+Measured on `Computer and Software Services_50 State Comparison.xlsx`. Columns I to O carry a
+solid fill on all 129 rows and hold no data; the sheet's data stops at row 42. Below row 42 the
+fill is one run of 112 visually equal rows, which is past `SC_VISATTR_STOP` and ends the scan with
+nothing found — so the old start reached nothing at all. The run Calc actually takes is the
+**header row above the data**: `nAttrStartRow` is clamped to `nLastData + 1` (`attarray.cxx:1961`)
+and a run that is nothing but row 1 therefore measures **zero** rows, which is inside the limit.
+The print area stopped at column H and Calc's reaches O, a whole third column band.
+**26 pages now against 26, 2818 words against 2819.**
+
+Three details of the port are load-bearing and each was checked by breaking it:
+
+- the start is the column's own last data row, and a column with no data uses Calc's **0**, not
+  "no data at all" — one row apart, and worth a column of print area;
+- the row at the start is *inside* the scan, because Calc processes the run containing
+  `nLastData` rather than the run after it;
+- a run's length is measured from `nLastData + 1` however far above that the run begins.
+
+### The same change cost nine pages elsewhere, and the sideways stop is why
+
+The whole track was swept again and **exactly four rows moved**. Two were the reference's own word
+count drifting — `PBN Matrix NAAs (V01).xlsx` 5554 → 5557 and `SIL_TDB648.xlsx` 7679 → 7678, both
+in the LibreOffice column. The other two were the target above, and
+`environment-edb-docs-edb-emissions-databank.xls` going **195 pages to 204**, out of `match`.
+
+Probed rather than guessed: its `ICAO databank` sheet holds data to column 104 and per-cell
+formatting to column 228, and the printed range came back `0..228` where it had been `0..104`.
+124 empty ruled columns that the old start had never been able to reach.
+
+Calc drops them by `SC_COLUMNS_STOP` = 30 (`table1.cxx:655`, `737-757`), the sideways twin of
+`SC_VISATTR_STOP` and previously not implemented at all. Walking right from the last data column
+it groups columns that are visually equal **over every row**, and the first group of thirty or
+more ends the block before it; it then walks back over any column whose own scan found nothing.
+The cut is sideways only — `nMaxY` keeps what the dropped columns reached. On an ordinary sheet
+the run past the last formatted column is unbounded and equal to itself, so the walk stops exactly
+where it did before and nothing changes; that is why this had never been needed.
+
+The document is back to 195 pages and 65593 words.
+
+### `dragon-175066A.xlsx` is one twip of digit width, and the twip is already recorded
+
+The other named lead, **14 pages against 13 with the words exact**. Measured rather than inferred,
+off both PDFs with `pdftotext -bbox`:
+
+| | reference | ours |
+| --- | --- | --- |
+| column B's left edge | 80.528 pt | 81.153 pt |
+| column C's left edge | 357.0 pt | 363.1 pt |
+| column B's drawn width | 276.47 pt | 281.95 pt |
+
+Column B is `10.3783in` = 747.24 pt in LibreOffice's own flat-ODF export of the file, so the
+scales are **0.3700 and 0.3773** — LibreOffice prints at zoom **37** and we print at **38**. The
+sheet is `<pageSetUpPr fitToPage="1"/>` with `fitToWidth` 1 and `fitToHeight` 0, and `CalcZoom`
+bisects on **integer** percentages, so the exact fit ratio only has to cross a whole percent for
+the answer to move by 2.7%.
+
+It crosses it because our columns are 0.7% narrower. The workbook's default font is 宋体 at 11 pt,
+which fontconfig resolves to DejaVu Sans on this machine — LibreOffice's too, since its export
+gives exactly 140.0 twips per character unit for all three columns. Our own exact metric is
+**139.9701**, and `SheetFonts.DigitWidthTwips` truncates it to 139.
+
+That truncation is not a bug found here; it is the rule that section already documents, chosen
+because Carlito 11 pt measures 111.50 and LibreOffice writes 111, and Carlito is the default of 65
+of the 171 corpus spreadsheets. What is new is **what the twip costs**: forcing 140 for this
+workbook alone renders it at **13 pages and 8143 words against 8142**, which is a match. A one-twip
+column error is normally invisible; on a fit-to-width sheet the integer zoom amplifies it into a
+whole page.
+
+The experiment that would settle it is specified and not run: take the nine measured faces in
+`DigitWidthTwips`'s remarks, note that *every one of them* is satisfied by truncating unless the
+fraction exceeds a threshold between 0.64 and 0.70 — Carlito 12 pt is 121.64 → 121 and DejaVu
+Sans 12 pt is 152.70 → 153 — and then sweep the whole track with that rule before believing it.
+**A threshold fitted to nine points, two of which are the only ones that discriminate, is a fudge
+until a sweep says otherwise**, and the reach is every spreadsheet in the corpus rather than the
+thirteen the record attributes to DejaVu.
+
 ## The fifteenth sweep: the break was in the drawing, and it was worth five documents
 
 Swept whole at `1aefcdfdb`, 171 documents, before and after. The baseline reproduced the brief's
