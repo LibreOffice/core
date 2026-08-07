@@ -166,6 +166,16 @@ public sealed record PageParagraph : PageBlock
     public ShapingOptions Shaping { get; init; }
 
     /// <summary>
+    /// The distance put between the paragraph's characters where its runs say nothing else.
+    /// </summary>
+    /// <remarks>
+    /// The paragraph mark's own tracking, which is what a paragraph set end to end in one tracked style
+    /// carries — and which nothing else would supply, because such a paragraph is uniform by every test
+    /// <see cref="Runs"/> makes and reaches <see cref="Measure"/> with no runs at all.
+    /// </remarks>
+    public Length Tracking { get; init; }
+
+    /// <summary>
     /// The paragraph's runs, when its formatting is not uniform.
     /// </summary>
     /// <remarks>
@@ -372,7 +382,7 @@ public sealed record PageParagraph : PageBlock
 
         if (runs.Count == 0)
         {
-            runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
+            runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping, Tracking: Tracking));
         }
 
         return MeasuredParagraph.Measure(
@@ -582,6 +592,13 @@ public sealed record PageNote
 /// <c>style:text-line-through-style</c>. The doubled forms are folded onto the single one, which is
 /// what the extraction side does with the same four properties.
 /// </param>
+/// <param name="Tracking">
+/// A fixed distance put between the run's characters, zero for none — the <c>w:spacing</c> of a
+/// <c>w:rPr</c>, <c>sprmCDxaSpace</c>, <c>\expndtw</c> and <c>fo:letter-spacing</c>. Unlike the two rules
+/// above it <em>does</em> change a measurement, so a run carrying it must survive the uniform-paragraph
+/// shortcut or the paragraph is measured without it. See <see cref="FormattedRun.Tracking"/> for how the
+/// distance is charged.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -595,7 +612,8 @@ public readonly record struct PageRun(
     Length MetricEmSize = default,
     Colour Highlight = default,
     bool IsUnderlined = false,
-    bool IsStruckThrough = false)
+    bool IsStruckThrough = false,
+    Length Tracking = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -618,7 +636,8 @@ public readonly record struct PageRun(
     public bool IsHighlighted => Highlight.A != 0;
 
     /// <summary>The measurement half of this run.</summary>
-    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping, MetricEmSize);
+    public FormattedRun ToFormattedRun()
+        => new(Start, Length, Face, EmSize, Shaping, MetricEmSize, Tracking);
 }
 
 /// <summary>

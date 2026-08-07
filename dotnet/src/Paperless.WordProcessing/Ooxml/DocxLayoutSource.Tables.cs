@@ -329,7 +329,7 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "trPr");
         List<PendingCell> cells = [];
-        int column = 0;
+        int column = SkippedBefore(properties);
 
         foreach (XElement child in Cells(element, 0))
         {
@@ -364,6 +364,38 @@ public sealed partial class DocxLayoutSource
             // LibreOffice reads the same element the same way — "row can't break across pages if
             // nIntValue == 1" (`dmapper/TablePropertiesHandler.cxx`).
             CanSplit: !Word.IsOn(Word.Child(properties, "cantSplit")));
+    }
+
+    /// <summary>
+    /// How many grid columns a row leaves empty before its first cell — <c>w:gridBefore</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A row need not start at the grid's first column. <c>w:gridBefore</c> says how many it skips, and
+    /// like <c>w:gridSpan</c> there is <em>no placeholder cell</em> for the columns skipped — so a reader
+    /// that starts every row at column zero puts the row's first cell in the wrong column and gives it the
+    /// wrong width, and every cell after it too. On a title block whose narrow first column is skipped by
+    /// the rows that carry the title, that means the title is measured against a column a fifth of its
+    /// width and wraps to one word a line, which is enough to push the block onto a page of its own.
+    /// </para>
+    /// <para>
+    /// LibreOffice reaches the same layout by *materialising* the skipped columns:
+    /// <c>TableManager::endRow</c> (<c>sw/source/writerfilter/dmapper/TableManager.cxx</c>:667–702) adds
+    /// <c>w:gridBefore</c> borderless empty cells to the front of the row. An absent cell and a borderless
+    /// empty one draw the same nothing, so shifting the column index is the same answer with no cell to
+    /// lay out.
+    /// </para>
+    /// <para>
+    /// <c>w:wBefore</c> is deliberately not read. It is the width of the skipped span and is advisory in
+    /// exactly the way <c>w:tcW</c> is — the grid decides, and a document whose <c>w:wBefore</c> disagrees
+    /// with the columns it covers would otherwise put one row's cells at a different edge from the rest.
+    /// <c>w:gridAfter</c> needs nothing at all: a row simply stops early, which it already does.
+    /// </para>
+    /// </remarks>
+    private static int SkippedBefore(XElement? rowProperties)
+    {
+        int before = Number(Word.Child(rowProperties, "gridBefore")) ?? 0;
+        return Math.Clamp(before, 0, PageTable.MaxColumns);
     }
 
     /// <summary>
