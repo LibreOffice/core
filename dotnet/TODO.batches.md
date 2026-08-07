@@ -2881,3 +2881,43 @@ sweep of all three tracks, which is more than this round had left after the `a:f
 The probe to write first: one `.pptx` with two text boxes differing only in a trailing
 `<a:br/>`, rendered through `soffice`, to confirm the extra line is a line break's own rule
 rather than something in the binary reader.
+
+### The `a:fontRef` fix, swept whole: 1635.50 -> 1583.80
+
+Baseline swept at `5ec407cf3`, 163 documents, two workers, then again with the shape-style
+change and the same reference PDFs. The baseline reproduced round eleven's figures — **152/163,
+ink 1635.50 against the recorded 1635.52, 538 major pages, every page count exact, 0
+`ref-failed`** — which is the tell that the base and the instrument are both right.
+
+| | baseline | after |
+|---|---|---|
+| slides matching the word gate | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 |
+| total unaccounted ink | 1635.50 | **1583.80** |
+| pages the image tool calls major | 538 | **502** |
+| documents whose ink moved | — | **21: 14 down, 7 up by 5.42 between them** |
+
+```
+ 37.89 ->  8.92   Sector_Skills_Insights…pptx                      major 11 ->  4
+ 11.10 ->  2.14   Course Selection 2025-26 Current Grade 09.pptx    major  4 ->  0
+ 12.88 ->  9.07   Intersil_Italy_CAN_Bus_Transceiver…pptx          major  4 ->  3
+  4.18 ->  0.37   Ensemble-pour-l-amelioration…AIRBUS.pptx         major  3 ->  0
+ 16.43 -> 13.03   southern-classic-kennesaw-state-university.pptx   major 13 ->  7
+  6.34 ->  3.50   FAAAIandtheArtandScienceofV&Vfinal.pptx          major 10 ->  0
+ 16.09 -> 20.27   16 - UTM - (NASA).pptx                           major  3 ->  4
+```
+
+**Exactly one of the 163 rows moved a column**, and not one page count, word count or verdict:
+`16 - UTM - (NASA).pptx` now embeds 12 faces against the reference's 11. It is the deck with 62
+`a:fontRef` shapes and it was already failing on `words,unembedded`; the extra face is the
+typeface half of the reference reaching a run that previously fell through to the master's
+`+mn-lt`. That deck is also the whole of the rise. Worth a look and not chased here.
+
+**A note left for whoever does look.** `Shape::createAndInsert` puts the `maPhClr` assignment
+*inside* `if (pFontRef->mnThemedIdx != 0)` (`oox/source/drawingml/shape.cxx:2242-2252`), so on
+the checked-out source a `fontRef idx="none"` contributes neither the face nor the colour. Our
+`DrawingCharacterStyle.FromShapeStyle` reads the two independently and
+`AFontReferenceWithNoThemedIndexStillCarriesItsColour` asserts it, citing the same lines for the
+opposite reading. That predates this round and is **not measured against the running binary** —
+the tree here is a development branch and the reference is 24.2.7.2. No corpus deck states
+`idx="none"` with a colour, so nothing here turns on it.
