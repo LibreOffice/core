@@ -239,6 +239,33 @@ public sealed class DocxPictures
         return _file.Theme?.Fonts?.MinorLatin ?? "Calibri";
     }
 
+    /// <summary>
+    /// The picture a VML shape names, or nothing when it names none.
+    /// </summary>
+    /// <remarks>
+    /// A VML shape points at its bytes with <c>v:imagedata/@r:id</c> rather than with an <c>a:blip</c>,
+    /// so <see cref="Read"/> — which looks for the blip — finds nothing in a <c>w:pict</c> at all. Both
+    /// spellings of the attribute are accepted because Word writes <c>r:id</c> and its own OLE
+    /// replacement images have been seen with <c>o:relid</c>; the relationship is resolved in the same
+    /// <see cref="Scope"/>, which is what makes a picture in a header work.
+    /// </remarks>
+    /// <param name="shape">The <c>v:shape</c> or its container.</param>
+    public FramePicture ReadVml(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        XElement? data = shape
+            .DescendantsAndSelf()
+            .FirstOrDefault(element => element.Name.LocalName == "imagedata");
+
+        if (data is null) return FramePicture.None;
+
+        string? id = data.Attribute(XName.Get("id", OoxmlNamespaces.Relationships))?.Value
+                     ?? data.Attribute(XName.Get("relid", OoxmlNamespaces.VmlOffice))?.Value;
+
+        return id is null ? FramePicture.None : Embedded(id);
+    }
+
     /// <summary>The picture a relationship id names, or nothing when it names none that can be drawn.</summary>
     private FramePicture Embedded(string relationshipId)
     {

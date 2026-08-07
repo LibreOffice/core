@@ -85,6 +85,12 @@ internal static class DocxFrames
     {
         ArgumentNullException.ThrowIfNull(drawing);
 
+        // The legacy spellings, which state their size as a CSS declaration rather than as an extent.
+        if (drawing.Name.LocalName is "pict" or "object")
+        {
+            return DocxVmlFrames.Read(drawing, anchorOffset, pictures) is { } vml ? [vml] : [];
+        }
+
         XElement? anchor = Child(drawing, "anchor");
         XElement? inline = anchor is null ? Child(drawing, "inline") : null;
         XElement? placed = anchor ?? inline;

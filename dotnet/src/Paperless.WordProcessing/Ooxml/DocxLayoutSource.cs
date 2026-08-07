@@ -1013,7 +1013,16 @@ public sealed partial class DocxLayoutSource
                         Emit(AnchorCharacter.ToString());
                         break;
 
-                    case "commentReference" or "pict" or "object":
+                    // The legacy picture and the embedded object, both of them a VML shape that is set
+                    // in the text like a very large character. Read as a frame rather than as a bare
+                    // anchor: the size is what a line's height and so a page's break depend on, and a
+                    // 73.8 pt logo counted as nothing costs a page in a document that repeats it.
+                    case "pict" or "object":
+                        _frames.Add(new FrameAnchor(_builder.Length, child));
+                        Emit(AnchorCharacter.ToString());
+                        break;
+
+                    case "commentReference":
                         Emit(AnchorCharacter.ToString());
                         break;
 
