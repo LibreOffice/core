@@ -47,6 +47,11 @@ class PermissionViewMode extends JSDialogComponent {
 				'updatepermission',
 				this.updateReadonlyIndicator.bind(this),
 			);
+
+			if (!this.map._docLoaded)
+				this.map.on('docloaded', this.updateReadonlyIndicator, this);
+
+			// may be not ready now and will apply update in above callback
 			this.updateReadonlyIndicator();
 		}
 	}
@@ -197,6 +202,8 @@ class PermissionViewMode extends JSDialogComponent {
 	}
 
 	updateReadonlyIndicator(): void {
+		if (!this.map._docLoaded) return;
+
 		// Safety check for map methods which might be missing in some contexts
 		const isEditMode = this.map.isEditMode ? this.map.isEditMode() : false;
 		const shouldStartReadOnly = this.map._shouldStartReadOnly
