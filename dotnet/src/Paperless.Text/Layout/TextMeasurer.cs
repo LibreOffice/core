@@ -372,8 +372,38 @@ public sealed class LineFiller
             nextOpportunity = probe;
         }
 
+        // A break on the very last character opens a line the loop above never enters, because it
+        // leaves lineStart == text.Length. That line is empty and it is still a line: LibreOffice
+        // makes a paragraph ending in one exactly as tall as the same paragraph followed by an
+        // empty one. Measured on slide-trailing-break.pptx, four boxes differing only in where the
+        // break sits — a trailing a:br and an explicit empty paragraph both put the next
+        // paragraph's baseline 48.02 pt down, against 24.01 for no break at all.
+        //
+        // Only a *line* separator, never a paragraph one. The readers do not agree on which
+        // character to use for a manual break, and two of the characters EndsLine accepts —
+        // '\r' and '\n' — are also what a reader may leave on the end of a paragraph's text to
+        // mean the paragraph ends there. Adding a line for those would lengthen every paragraph in
+        // the corpus, so the set here is the strict subset that can only be a break inside one.
+        if (lines.Count > 0 && IsLineSeparator(text[^1]))
+        {
+            lines.Add(new TextLine(
+                text.Length, text.Length, text.Length, Length.Zero, EndsParagraph: true));
+        }
+
         return lines;
     }
+
+    /// <summary>
+    /// True for a character that can only be a manual line break, never the end of a paragraph.
+    /// </summary>
+    /// <remarks>
+    /// A strict subset of <see cref="EndsLine"/>. OOXML's <c>a:br</c> and <c>w:br</c> and
+    /// ODF's <c>text:line-break</c> all arrive as U+2028, and a binary PowerPoint's is U+000B; the
+    /// three the subset drops — <c>'\r'</c>, <c>'\n'</c> and U+2029 — are the ones a reader might
+    /// be using to mark the end of the paragraph itself.
+    /// </remarks>
+    private static bool IsLineSeparator(char character)
+        => character is '\u2028' or '\u000B' or '\u000C' or '\u0085';
 
     /// <summary>
     /// Where to cut a word that does not fit the line it starts, or null to leave it alone.
