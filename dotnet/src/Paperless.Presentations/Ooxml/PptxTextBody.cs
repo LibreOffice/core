@@ -431,8 +431,12 @@ internal static class PptxTextBody
             string? character = Drawing.Attribute(bullet, "char");
             if (string.IsNullOrEmpty(character)) return null;
 
-            return Marked(
-                OutlineNumbers.NormaliseBullet(FirstCodePoint(character)), chain, theme);
+            // The Private Use Area collapse belongs to `Marked`, which is the only place that
+            // knows whether the face has a recode table. Doing it here destroyed the slot before
+            // the table could be reached: a bullet stated as `char="&#xF0D8;"` — which is a
+            // quarter of the corpus's symbol bullets — became U+2022 and was then re-symbolised
+            // into slot 0x22, so every one of them drew the *same* wrong glyph.
+            return Marked(FirstCodePoint(character), chain, theme);
         }
 
         counting[slot] = false;
@@ -479,14 +483,14 @@ internal static class PptxTextBody
 
         // A recodeable face keeps its Private Use Area slot: SlideTextLayout turns it into the
         // OpenSymbol glyph holding the same picture, which needs the slot and the face together.
-        // A symbol face with no table still collapses to U+2022, as every symbol bullet did before.
+        // Everything else is collapsed to U+2022 here, which is what the whole of this method's
+        // input used to arrive already collapsed to.
         string? typeface = Drawing.Attribute(font, "typeface");
+        bool recodeable = symbolFont && SymbolFontRecode.IsRecodeable(typeface);
         string symbolised = symbolFont ? Symbolised(text) : text;
 
         return new SlideMarker(
-                symbolFont && !SymbolFontRecode.IsRecodeable(typeface)
-                    ? OutlineNumbers.NormaliseBullet(symbolised)
-                    : symbolised,
+                recodeable ? symbolised : OutlineNumbers.NormaliseBullet(symbolised),
 
                 // The face is kept even for a symbol bullet: LibreOffice sets both PROP_BulletFont
                 // and PROP_BulletFontName from it and lets the substitution find OpenSymbol
