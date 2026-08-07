@@ -18,6 +18,17 @@ Regenerate with:
 
 Machine-readable copy: `dotnet/raster-ceiling-pages.tsv`.
 
+## The threshold is a bar, and pages sit just under it
+
+`8_P-Pavese`'s **page 6 carries the same 692×240 raster as its page 5** and is absent from the
+table below only because +44 words on 180 is 24.4% against the 25% bar. That is a property of
+my threshold, not of the document.
+
+So the list under-counts, and by an unknown amount. Treat a document with one flagged page as
+likely to have neighbours just under the bar, and re-measure rather than assuming the table is
+exhaustive. Raising the bar is not the fix — it would start excusing real defects, which this
+file has already done once.
+
 ## How a page earns its flag
 
 Three conditions, on a document whose page count already agrees:

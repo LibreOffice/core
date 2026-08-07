@@ -292,12 +292,27 @@ A brief that works contains all of:
    and label which is which. Note the last row: an explanation can be wrong in the direction of
    *inverting* the fix — that agent's predecessor thought a rotation needed removing, and what
    was actually missing was a second rotation to add.
-4. **Known-good test counts, per project, with the instruction to compare counts.** A
+4. **Do not put per-batch figures in the brief at all.** Three rounds running, mine were a
+   round stale — the agent that closed a batch also updated the scoreboard, and the brief was
+   written from what the *previous* round reported. Every time, the agent measured its own
+   baseline, found the numbers wrong, and had to spend part of its report saying so.
+
+   The whole class disappears if the brief says **"measure your own baseline first and report
+   it; treat any figure here as a hypothesis"** and names only the *shape* of the work — which
+   batch is weakest, what the open leads are, what has been refuted. Numbers in a brief are
+   worth having only when the agent cannot cheaply produce them, and on this corpus it always
+   can. Where a figure is genuinely load-bearing, give it a commit to reproduce it at.
+
+   The same applies to whole-track headlines: one brief carried a per-batch table from round
+   sixteen beside a track total from round eighteen, which is worse than either alone because
+   the two disagree and neither is labelled.
+
+5. **Known-good test counts, per project, with the instruction to compare counts.** A
    truncated run prints `Passed! - Failed: 0` while silently dropping the tests it never
    reached. Measured: 470 passed on one run and 353 on the next, both green, nothing
    changed between them. The colour means nothing; only the count does.
-5. **No special-casing.** A fix that helps exactly one document in the corpus is not a fix.
-6. **Commit, do not push.** The parent session merges and re-verifies.
+6. **No special-casing.** A fix that helps exactly one document in the corpus is not a fix.
+7. **Commit, do not push.** The parent session merges and re-verifies.
 
 Ask for honesty about what is unproven. An overstated claim costs more than an admitted gap,
 because the next worker builds on it.
