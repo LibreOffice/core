@@ -16,6 +16,16 @@
     <style:style style:name="T1" style:family="text">
       <style:text-properties fo:font-weight="bold"/>
     </style:style>
+    <text:list-style style:name="L1">
+      <text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."/>
+    </text:list-style>
+    <text:list-style style:name="L2">
+      <text:list-level-style-number text:level="1" style:num-format="i" style:num-suffix="."/>
+    </text:list-style>
+    <text:list-style style:name="L3">
+      <text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."/>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="-"/>
+    </text:list-style>
   </office:automatic-styles>
   <office:body>
     <office:presentation>
@@ -41,6 +51,32 @@
                 </text:list-item>
                 <text:list-item>
                   <text:p>Second bullet item</text:p>
+                </text:list-item>
+              </text:list>
+              <text:list text:style-name="L1">
+                <text:list-item>
+                  <text:p>First numbered item</text:p>
+                </text:list-item>
+                <text:list-item>
+                  <text:p>Second numbered item</text:p>
+                </text:list-item>
+              </text:list>
+              <text:list text:style-name="L2">
+                <text:list-item>
+                  <text:p>Roman item</text:p>
+                </text:list-item>
+              </text:list>
+              <text:p>Closing plain paragraph</text:p>
+              <text:list text:style-name="L3">
+                <text:list-item>
+                  <text:list>
+                    <text:list-item>
+                      <text:p>Nested bullet item</text:p>
+                    </text:list-item>
+                  </text:list>
+                </text:list-item>
+                <text:list-item>
+                  <text:p>Outer numbered item</text:p>
                 </text:list-item>
               </text:list>
             </draw:text-box>

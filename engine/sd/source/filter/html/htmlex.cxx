@@ -35,6 +35,7 @@
 #include <utility>
 #include <svx/svditer.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/numitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <svtools/htmlout.hxx>
 #include <editeng/editeng.hxx>
@@ -293,6 +294,49 @@ void lclAppendStyle(OUStringBuffer& aBuffer, std::u16string_view aTag, std::u16s
         aBuffer.append(OUString::Concat("<") + aTag + ">");
     else
         aBuffer.append(OUString::Concat("<") + aTag + " style=\"" + aStyle + "\">");
+}
+
+// The HTML list markup matching a numbering format: the list element, ul or ol, and the value of
+// the type attribute of an ol. An empty type stands for the default decimal numbering.
+struct ListTag
+{
+    std::u16string_view aElement;
+    std::u16string_view aType;
+
+    bool operator==(const ListTag&) const = default;
+};
+
+// Returns the HTML list markup that matches the numbering format of a list paragraph. A format
+// that counts the items makes an ol, with the type attribute carrying the roman or alphabetic
+// counting. A format that draws a character or an image in front of every item makes a ul, as
+// does a format with no visible marker.
+ListTag lclGetListTag(const SdrOutliner* pOutliner, sal_Int32 nPara, sal_Int16 nDepth)
+{
+    const SvxNumRule& rRule = pOutliner->GetParaAttribs(nPara).Get(EE_PARA_NUMBULLET).GetNumRule();
+    const SvxNumberFormat* pFormat = rRule.GetLevelCount() > nDepth ? rRule.Get(nDepth) : nullptr;
+    if (!pFormat)
+        return { u"ul", u"" };
+
+    switch (pFormat->GetNumberingType() & ~LINK_TOKEN)
+    {
+        case SVX_NUM_CHAR_SPECIAL:
+        case SVX_NUM_BITMAP:
+        case SVX_NUM_NUMBER_NONE:
+        case SVX_NUM_PAGEDESC:
+            return { u"ul", u"" };
+        case SVX_NUM_ROMAN_UPPER:
+            return { u"ol", u"I" };
+        case SVX_NUM_ROMAN_LOWER:
+            return { u"ol", u"i" };
+        case SVX_NUM_CHARS_UPPER_LETTER:
+        case SVX_NUM_CHARS_UPPER_LETTER_N:
+            return { u"ol", u"A" };
+        case SVX_NUM_CHARS_LOWER_LETTER:
+        case SVX_NUM_CHARS_LOWER_LETTER_N:
+            return { u"ol", u"a" };
+        default:
+            return { u"ol", u"" };
+    }
 }
 
 // Depending on the attributes of the specified set and the specified
@@ -620,8 +664,16 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
 
     sal_Int32 nCount = pOutliner->GetParagraphCount();
 
+    std::vector<ListTag> aOpenLists;
 
-    sal_Int16 nCurrentDepth = -1;
+    auto closeListsDownTo = [&aStr, &aOpenLists](size_t nLevel)
+    {
+        while (aOpenLists.size() > nLevel)
+        {
+            aStr.append(OUString::Concat("</") + aOpenLists.back().aElement + ">\r\n");
+            aOpenLists.pop_back();
+        }
+    };
 
     for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
     {
@@ -629,7 +681,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
         if(pParagraph == nullptr)
             continue;
 
-        const sal_Int16 nDepth = static_cast<sal_uInt16>(pOutliner->GetDepth(nIndex));
+        const sal_Int16 nDepth = pOutliner->GetDepth(nIndex);
         OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex);
 
         if (aParaText.isEmpty())
@@ -637,6 +689,8 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
 
         if (nDepth < 0)
         {
+            closeListsDownTo(0);
+
             OUString aTag = bHeadLine ? u"h2"_ustr : u"p"_ustr;
             lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
 
@@ -645,26 +699,34 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
         }
         else
         {
-            while(nCurrentDepth < nDepth)
+            const ListTag aListTag = lclGetListTag(pOutliner, nIndex, nDepth);
+            const size_t nLevel = static_cast<size_t>(nDepth) + 1;
+
+            closeListsDownTo(nLevel);
+            // A change of list kind or numbering type at the same depth closes the element, so
+            // that a new one of the right kind opens below.
+            if (aOpenLists.size() == nLevel && aOpenLists.back() != aListTag)
+                closeListsDownTo(nLevel - 1);
+            // Each level opens with the markup of its own outline depth, so a wrapper level the
+            // paragraph skipped over still gets the element its numbering format asks for.
+            while (aOpenLists.size() < nLevel)
             {
-                aStr.append("<ul>\r\n");
-                nCurrentDepth++;
+                const ListTag aLevelTag = lclGetListTag(pOutliner, nIndex,
+                                                        static_cast<sal_Int16>(aOpenLists.size()));
+                if (aLevelTag.aType.empty())
+                    aStr.append(OUString::Concat("<") + aLevelTag.aElement + ">\r\n");
+                else
+                    aStr.append(OUString::Concat("<") + aLevelTag.aElement + " type=\""
+                                + aLevelTag.aType + "\">\r\n");
+                aOpenLists.push_back(aLevelTag);
             }
-            while(nCurrentDepth > nDepth)
-            {
-                aStr.append("</ul>\r\n");
-                nCurrentDepth--;
-            }
+
             lclAppendStyle(aStr, u"li", getParagraphStyle(pOutliner, nIndex));
             aStr.append(aParaText);
             aStr.append("</li>\r\n");
         }
     }
-    while(nCurrentDepth >= 0)
-    {
-        aStr.append("</ul>\r\n");
-        nCurrentDepth--;
-    }
+    closeListsDownTo(0);
     pOutliner->Clear();
 }
 

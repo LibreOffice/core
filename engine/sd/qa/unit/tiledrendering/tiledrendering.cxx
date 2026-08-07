@@ -3132,7 +3132,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesParagraphs)
     const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
     CPPUNIT_ASSERT_EQUAL(std::string("First notes paragraph\nSecond notes paragraph\n"
                                      "Plain and bold words\n"
-                                     "First bullet item\nSecond bullet item"),
+                                     "First bullet item\nSecond bullet item\n"
+                                     "First numbered item\nSecond numbered item\n"
+                                     "Roman item\nClosing plain paragraph\n"
+                                     "Nested bullet item\nOuter numbered item"),
                          rChild.get_child("notes").get_value<std::string>());
 }
 
@@ -3162,10 +3165,52 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesHtml)
     // A bold run inside a paragraph comes out as a bold element.
     CPPUNIT_ASSERT(aNotesHtml.find("<b>bold</b>") != std::string::npos);
 
-    // The two list items come out as list items inside a list element.
+    // The two bullet items come out as list items inside an unnumbered list element.
     CPPUNIT_ASSERT(aNotesHtml.find("<ul>") != std::string::npos);
     CPPUNIT_ASSERT(aNotesHtml.find("<li>First bullet item</li>") != std::string::npos);
     CPPUNIT_ASSERT(aNotesHtml.find("<li>Second bullet item</li>") != std::string::npos);
+
+    // The two numbered items come out as list items inside a numbered list element.
+    CPPUNIT_ASSERT(aNotesHtml.find("<ol>") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<li>First numbered item</li>") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<li>Second numbered item</li>") != std::string::npos);
+
+    // A roman numbering comes out as the type attribute of the numbered list element.
+    CPPUNIT_ASSERT(aNotesHtml.find("<ol type=\"i\">") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<li>Roman item</li>") != std::string::npos);
+
+    // The bullet list closes before the decimal list opens, the decimal list closes before the
+    // roman list opens, and the roman list closes before the paragraph that follows it, so every
+    // list holds only the items of its own numbering.
+    size_t nBulletListEnd = aNotesHtml.find("</ul>");
+    size_t nDecimalListStart = aNotesHtml.find("<ol>");
+    size_t nDecimalListEnd = aNotesHtml.find("</ol>");
+    size_t nRomanListStart = aNotesHtml.find("<ol type=\"i\">");
+    size_t nRomanListEnd = aNotesHtml.find("</ol>", nRomanListStart);
+    size_t nClosingParagraph = aNotesHtml.find("<p>Closing plain paragraph</p>");
+    CPPUNIT_ASSERT(nBulletListEnd != std::string::npos);
+    CPPUNIT_ASSERT(nClosingParagraph != std::string::npos);
+    CPPUNIT_ASSERT(nBulletListEnd < nDecimalListStart);
+    CPPUNIT_ASSERT(nDecimalListEnd < nRomanListStart);
+    CPPUNIT_ASSERT(nRomanListEnd < nClosingParagraph);
+
+    // A list that starts one level deeper than any open list opens one element per level, each
+    // taking the numbering format of its own level: a numbered outer element around a bullet
+    // inner element. The outer item that follows lands in that same numbered element, after the
+    // inner list has closed.
+    size_t nOuterListStart = aNotesHtml.find("<ol>", nClosingParagraph);
+    size_t nInnerListStart = aNotesHtml.find("<ul>", nClosingParagraph);
+    size_t nNestedItem = aNotesHtml.find("<li>Nested bullet item</li>");
+    size_t nInnerListEnd = aNotesHtml.find("</ul>", nNestedItem);
+    size_t nOuterItem = aNotesHtml.find("<li>Outer numbered item</li>");
+    size_t nOuterListEnd = aNotesHtml.find("</ol>", nOuterItem);
+    CPPUNIT_ASSERT(nOuterListStart != std::string::npos);
+    CPPUNIT_ASSERT(nOuterListEnd != std::string::npos);
+    CPPUNIT_ASSERT(nOuterListStart < nInnerListStart);
+    CPPUNIT_ASSERT(nInnerListStart < nNestedItem);
+    CPPUNIT_ASSERT(nNestedItem < nInnerListEnd);
+    CPPUNIT_ASSERT(nInnerListEnd < nOuterItem);
+    CPPUNIT_ASSERT(nOuterItem < nOuterListEnd);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)

@@ -1519,9 +1519,10 @@ class PresenterConsole {
 	}
 
 	// Reduces a notes fragment to the structural markup the console renders: paragraphs, line
-	// breaks, lists and character formatting. Every attribute and every other element is dropped,
-	// so the console keeps control of the fonts and the colours of the notes pane. The text of a
-	// dropped element stays. Returns an empty string when there is nothing to render.
+	// breaks, lists and character formatting. Every attribute except the list type and every
+	// other element is dropped, so the console keeps control of the fonts and the colours of the
+	// notes pane. The text of a dropped element stays. Returns an empty string when there is
+	// nothing to render.
 	_sanitizeNotes(html) {
 		if (!html || !DOMPurify.isSupported) return '';
 
@@ -1544,7 +1545,8 @@ class PresenterConsole {
 				'sub',
 				'sup',
 			],
-			ALLOWED_ATTR: [],
+			// The type of an ol carries the roman or alphabetic numbering of a list.
+			ALLOWED_ATTR: ['type'],
 			ALLOW_DATA_ATTR: false,
 			ALLOW_ARIA_ATTR: false,
 		});
