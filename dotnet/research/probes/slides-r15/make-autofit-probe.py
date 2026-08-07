@@ -52,9 +52,13 @@ def paragraph(text, size, spacing):
             f'<a:r><a:rPr lang="en-GB" sz="{size}"/><a:t>{text}</a:t></a:r></a:p>')
 
 
-def slide(heights_pt, width_pt, size, spacing, paras, autofit=True):
+def slide(heights_pt, width_pt, size, spacing, paras, autofit=True, lead=0):
     """One measured box per slide, with a one-word spacer above it."""
     body = ''.join(paragraph(WORDS, size, spacing) for _ in range(paras))
+    if lead:
+        # A one-word leading paragraph at a different size, to ask whether the search's
+        # candidate grid follows the body's *first* character height or its largest.
+        body = paragraph('lead', lead, spacing) + body
     parts = [shape(2, 'Spacer', 200000, 100000, 2000000, 400000,
                    paragraph('spacer', 1200, 100), autofit=False),
              shape(3, 'Fit', 200000, 700000,
@@ -63,7 +67,7 @@ def slide(heights_pt, width_pt, size, spacing, paras, autofit=True):
 
 
 def build(template, out, size, spacing, heights, width, paras,
-          sizes=None, autofit=True):
+          sizes=None, autofit=True, lead=0):
     shutil.copyfile(template, out)
     z = zipfile.ZipFile(template)
     names = z.namelist()
@@ -101,7 +105,7 @@ def build(template, out, size, spacing, heights, width, paras,
         for i, h in enumerate(heights):
             sz = sizes[i] if sizes else size
             w.writestr(f'ppt/slides/slide{i + 1}.xml',
-                       slide(h, width, sz, spacing, paras, autofit))
+                       slide(h, width, sz, spacing, paras, autofit, lead))
             w.writestr(f'ppt/slides/_rels/slide{i + 1}.xml.rels', layout_rel)
 
 
@@ -116,6 +120,8 @@ if __name__ == '__main__':
     ap.add_argument('--from-height', type=float, default=40.0)
     ap.add_argument('--to-height', type=float, default=200.0)
     ap.add_argument('--step', type=float, default=5.0)
+    ap.add_argument('--lead-size', type=int, default=0,
+                    help='hundredths of a point for a one-word leading paragraph')
     ap.add_argument('--reverse', action='store_true', help='emit the heights largest first')
     ap.add_argument('--sizes', help='comma-separated pt sizes; one unshrunk slide each')
     a = ap.parse_args()
@@ -142,6 +148,6 @@ if __name__ == '__main__':
             # sits in the deck, the fit is being seeded by the previous shape's answer
             # through the shared draw outliner rather than solved from scratch.
             hs.reverse()
-        build(a.template, a.out, a.size, a.spacing, hs, a.width, a.paras)
+        build(a.template, a.out, a.size, a.spacing, hs, a.width, a.paras, lead=a.lead_size)
         print(f'{a.out}: {len(hs)} slides, heights {hs[0]}..{hs[-1]} pt, '
               f'spacing {a.spacing}%, size {a.size / 100}pt, {a.paras} paragraphs')

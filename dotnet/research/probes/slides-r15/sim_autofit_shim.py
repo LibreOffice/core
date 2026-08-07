@@ -136,38 +136,3 @@ def run(name, grid, verbose=False):
     return agree, len(ref)
 
 
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--grid', type=float, action='append')
-    ap.add_argument('--probe', default=None)
-    ap.add_argument('--trace', type=int)
-    a = ap.parse_args()
-
-    if a.trace:
-        name = a.probe or '20pt'
-        base, first, step, ref = PROBES[name]
-        h_pt = first + step * (a.trace - 1)
-        box = fround(h_pt * 12700 / 360) + 1
-        for g in (a.grid or [12.0]):
-            f, s, fit, trace = solve(box, base, g)
-            print(f'grid {g}: box {h_pt} pt -> '
-                  f'{round(scaled_size_mm100(base, f) / MM100_PER_PT)}pt at {s:.0f}%')
-            for t in trace:
-                print('   scale %8.4f  size %2dpt  spacing %5.1f  fit %.4f' % t)
-        raise SystemExit(0)
-
-    grids = ({f'{g}': g for g in a.grid} if a.grid else GRIDS)
-    print(f'{"grid":48s} {"pt":>10}  ' + '  '.join(f'{n:>10}' for n in PROBES))
-    for label, g in grids.items():
-        cells = []
-        for n in PROBES:
-            ok, total = run(n, g)
-            cells.append(f'{ok:5d}/{total:<4d}')
-        print(f'{label:48s} {g:10.5f}  ' + '  '.join(cells))
-    print()
-    for label, g in grids.items():
-        for n in PROBES:
-            ok, total = run(n, g)
-            if ok != total:
-                print(f'{label} on {n}:')
-                run(n, g, verbose=True)
