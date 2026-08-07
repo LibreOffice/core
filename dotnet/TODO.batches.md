@@ -2007,8 +2007,14 @@ each one or two better than recorded.
 
 ### `slides` — 163 documents, 17 batches
 
-Every row below re-proved by a whole-track sweep at `adcbeb2de`: **152 of 163**, the same
-eleven failures as at `7049756d9`, all 163 page counts exact.
+Every row below re-proved by a whole-track sweep at `b7950ffd5` **and again after round
+eighteen's fix**: **151 of 163** both times, all 163 page counts exact, 0 `ref-failed`.
+
+**Three rows below were stale and are corrected here.** The header said 152 of 163 and marked
+`batch-009` and `batch-016` green; rounds seventeen and eighteen both measure 151, with 009 at
+9/10 and 016 at 8/10. Round seventeen recorded the correct split in prose and did not carry it
+into this table, which is how a scoreboard rots — the prose is read once and the table is read
+every round.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
@@ -2020,7 +2026,7 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 | `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | ✅ |
 | `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | ✅ |
 | `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 · ceiling |
-| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | ✅ |
+| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | **9/10** · `NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, 537 words against 586 — page-exact and the only slides failure that *under*-draws |
 | `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 · ceiling |
 | `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
@@ -5465,3 +5471,164 @@ invariant Calc keeps and the test is rewritten to the measured value rather than
    *height*; `SheetPageDecoration` still draws every band at one size in one face. Splitting a
    band into sized, faced runs closes both the missing Carlito embedding and the `&1` code that
    puts the reference's `#` on its own baseline.
+## Slides, round eighteen: the rung a plain text box actually lands on
+
+Swept whole twice at `b7950ffd5`, 163 documents each time, both against checksummed CLI snapshots
+of this worktree, with the snapshot verified to move a document known to move before the run
+started. 163 rows, no path twice, 0 `ref-failed`, both times.
+
+| | baseline `b7950ffd5` | after |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1406.70 | **1360.08** |
+| unsigned `\|ink\|%` | 1752.00 | **1680.10** |
+| major pages | 462 | **438** |
+
+**The baseline reproduced all four of round seventeen's post-fix figures to the digit**, and its
+per-batch split with them. No batch moved: 001–007, 011, 013 and 015 full, 008 9/10, 009 9/10,
+010 8/10, 012 8/10, 014 7/10, 016 8/10, 017 4/5.
+
+27 documents moved, all `.pptx`. On `|ink|%`: **25 better, 2 worse, 136 unchanged — 72.26 won
+against 0.36 lost.** The two against are `NAS-Infrastructure-Roadmaps-HSI.pptx` (3.28 → 3.50) and
+`Sean Monogue.pptx` (1.54 → 1.68). Five documents moved on the parity row and no verdict changed;
+`3492.pptx` lands on the reference's word count exactly and `Wildlife for REDAC September 11.pptx`
+goes from 9 embedded faces to the reference's 11.
+
+### The fix: `p:otherStyle` is not on the chain, and the old fixture could not show it
+
+`PptxTextStyles.Chain` fell back to the master's `p:otherStyle` for any shape naming no
+placeholder style. The reference reaches `getOtherTextStyle()` only through
+
+```cpp
+bool isOther = !getTextBody() && sServiceName != "com.sun.star.drawing.GroupShape";
+```
+
+`oox/source/ppt/pptshape.cxx`:424-429 — fetched at tag **`libreoffice-24.2.7.2`**, the release
+that made the reference PDFs, and byte-identical to this checkout's 27.2-alpha. **A shape that
+has text cannot satisfy it**, so a plain text box — and equally a `sldNum`, `ftr`, `dt` or `hdr`
+placeholder, which name no style either — takes `getDefaultTextStyle()`: the presentation's
+`p:defaultTextStyle` (`presentationfragmenthandler.cxx`:115 builds it and hands it to every
+`SlidePersist`). `src/Paperless.Presentations/Ooxml/PptxTextStyles.cs`:220 is the fork.
+
+**The mechanism had been correctly cited for two rounds and recorded as a deliberate divergence.**
+`src/Paperless.Presentations/TODO.md` had the *other* route to it — `SlidePersist::createXShapes`
+looping `for (int i = 0; i < 4; i++)` over a switch whose `case 4` is the style `p:otherStyle`
+parses into, so the loop stops one short — beside the note that "Paperless does apply it … which
+is what the file says and what PowerPoint shows".
+
+What was missing was a document that could tell the readings apart. `deck-text-style.pptx` cannot:
+its `otherStyle` states 18 pt and LibreOffice's own fallback for a slide run is *also* 18 pt, so
+both readings predict the same number, and the reference duly draws its seven boxes at exactly
+18.0000. **`tests/corpus/features/slide-other-style.pptx` was authored to separate them** — 12 pt
+and 10 pt magenta in `otherStyle` against 24 pt green and 32 pt blue in `p:defaultTextStyle`, two
+plain text boxes at those two levels stating neither size nor colour, so 12 pt magenta,
+24 pt green and 18 pt black are three distinguishable answers. The reference draws
+`0 0.5019607843 0 rg … 24.009 Tf` and `0 0 1 rg … 32.003 Tf`; we drew 11.99 and 10.01 magenta.
+Size and colour move together, which is what says the rung is wrong rather than one property of it.
+
+The lead that found it was round seventeen's census: thirteen pages of `171128IPAP.pptx` at
+**exactly −25.00%**, ours 13.50 against 18.00 — that deck's `otherStyle` `sz="1350"` against its
+`defaultTextStyle` `sz="1800"`. The deck goes `|ink|%` **50.58 → 17.40**, major pages 18 → 6, and
+leaves the census's worst-documents list outright.
+
+`research/probes/slides-r18/count-otherstyle.py`: 110 of the track's 112 pptx-family decks state a
+`p:otherStyle`, 110 state a `p:defaultTextStyle`, and **33 state the two at different level-one
+sizes**. That is an upper bound, not an estimate — the rung only decides a run that states no size
+anywhere nearer. Measured reach is the 27 documents whose rendering moved.
+
+### The size census cut two ways it had not been cut
+
+**Round seventeen's em fix did exactly what it predicted.** Its census covered 129 of 163
+documents and found 1642 differing pages, 1043 of them the ≤1% quantisation band. Re-run whole on
+this round's baseline — a *larger* sample, 163 documents — the total is **711 and the ≤1% band is
+25**. The class is gone.
+
+The 686 that remain over 1% are not one body of work, and two probes in
+`research/probes/slides-r18/` say so.
+
+**`census-split.py` — a reference size off the 1/100 mm grid is metafile text.** Every size the
+reference resolved through the shape model is `n × 72/2540`, because that is what an
+`SvxFontHeightItem` holds for a draw object. **135 of the 686 are off it**, over 45 documents, and
+it re-ranks the census: `NAS-Infrastructure-Roadmaps-v16.0`, first at 42 pages, is 26 metafile
+against 16 model; `2014BSA_Sunday_Killion`, second at 29, is 18 against 11, its reference drawing
+**208 operators at 11.400 pt** on page 6 against our 45 at 14.980.
+
+**`size-census-2.py` — the dominant size is decided by an operator count, and the two writers
+split lines differently.** `ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt` page 3
+is reported as *ours 20.010 x7 against ref 10.010 x8, +99.90%*, the largest single ratio class in
+the run, and every size on the page agrees:
+
+```
+ours  [(31.02, 2), (28.01, 1), (20.01, 7), (15.99, 3), (10.01, 5)]
+ref   [           (28.01, 1), (20.01, 7), (15.99, 3), (10.01, 8)]
+```
+
+The reference splits the slide-number footer into four portions at x = 635.6, 639.1, 645.8 and
+649.3 where we write one at 638.7. Fifteen of that deck's census pages collapse to five, and five
+decks of the family carry the class.
+
+| | baseline | after |
+|---|---|---|
+| pages compared | 4199 | 4199 |
+| dominant size agrees | 3488 | **3519** |
+| ≤1% — the mm100 grid | 25 | 25 |
+| same sizes cut up differently | 128 | 133 |
+| the reference draws far less — raster ceiling | 65 | 62 |
+| off the mm100 grid — metafile text | 135 | 135 |
+| **none of those explains it** | **358** over 99 docs | **325** over 96 docs |
+
+So the track's size residue is **325 pages, not 537** — and it is startlingly homogeneous.
+Thirteen of the twenty commonest (ours, ref) pairs are **one point apart**: 18.99↔20.01,
+24.01↔22.99, 27.01↔28.01, 17.01↔18.00, 20.01↔18.99, 15.00↔15.99, 18.00↔18.99, 25.99↔25.00,
+22.00↔22.99, about 92 pages between them. That is the autofit search landing one grid step away,
+which round seventeen pinned on `2015-Civil-Rights-Website-training.ppt` page 21 to a **16 mm100
+window — 0.45 pt, 0.14% of the block** — and attributed to the *heights measured* rather than to
+the search.
+
+### The regression guards, and the tests
+
+Nothing outside `Paperless.Presentations/Ooxml` was touched — `PptxTextStyles` serves no other
+family — so the words and sheets tracks are not owed a sweep, and every one of the 27 documents
+that moved is a `.pptx`.
+
+Per project on the final tree, each run redirected to its own file: Core 243, Text 237,
+Containers 109, Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608,
+Spreadsheets 432, Presentations 517, Fidelity 542. **Zero failed and zero skipped throughout.**
+
+Three assertions, each verified by putting the fallback back and watching it fail:
+`AMastersOtherStyleReachesNothingThatHasText`,
+`APlainTextBoxTakesThePresentationsDefaultTextStyle` (both fidelity, against the reference's own
+PDF) and `APlainTextBoxEndsAtTheDefaultTextStyleRatherThanTheMastersOtherStyle` (a unit test, so
+the wiring is covered on a machine with no LibreOffice). The first of those replaces a test that
+asserted the divergence — `Rgb(Resolved(path)[5]).ShouldBe(0xFF00FFu)` — and would otherwise have
+locked the defect in.
+
+**One test as first written could not fail.** `APlainTextBoxTakesThePresentationsDefaultTextStyle`
+began by asserting only what `Drawn()` returns, which is LibreOffice's PDF — a test of the
+reference, passing whatever Paperless does. It now asserts our resolved size and colour as
+literals and compares the reference against those.
+
+### What the next round should take, in order
+
+1. **The 325-page size residue, and specifically its one-point class.** 92 of the 325 are the
+   autofit search settling one grid step from the reference, and round seventeen already pinned
+   the box on `2015-Civil-Rights-Website-training.ppt` page 21 to a 16 mm100 window with the
+   arithmetic on both candidates written out. **The search itself is not the defect** — it was
+   compared statement by statement against `autoFitTextForCompatibility` at 24.2.7.2 and is
+   identical including ties — so this is a *height measurement*, worth about a third of a point
+   over nineteen lines. `ITE106-Chapter 4.ppt` (16 pages, and 36.14 `|ink|%`, sixth on the track)
+   is the same class on a `.ppt` and shrinks consistently *further* than the reference.
+2. **Quantise the shape's text area the way the em now is.** Still open and still worth doing:
+   `PptxSlideLayout.cs`:1663 returns `a:off`/`a:ext` in EMU "needing no conversion", where oox
+   passes both through `GetCoordinate` — `o3tl::convert(emu, mm100)`, which is `(n + 180) / 360`
+   (`oox/source/drawingml/drawingmltypes.cxx`:43) — so the width the reference breaks lines
+   against is a whole number of hundredths of a millimetre and ours carries the file's full EMU
+   precision. Bounded at half a unit, 0.014 pt, on a width of tens of thousands: an order of
+   magnitude below the em, so expect it to move few documents and do it on its own sweep.
+3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`. Unchanged from round
+   seventeen: a shared layer, so it owes the words and sheets sweeps.
+4. **`TODO.raster-ceiling.md`'s 25% threshold**, unchanged from round seventeen.
+
+**Do not spend a round on the census's top line.** Its raw ranking counts metafile text and
+operator-granularity artefacts as size disagreements, and on the two documents it ranked first and
+second those are more than half the signal. Run `size-census-2.py`, not `size-census.py`.

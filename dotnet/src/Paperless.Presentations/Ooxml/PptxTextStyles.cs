@@ -8,11 +8,35 @@ namespace Paperless.Presentations.Ooxml;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is the chain the TODO calls the most common cause of wrong-looking slides:
+/// This is the chain the TODO calls the most common cause of wrong-looking slides, and it
+/// forks at the last rung on whether the shape is a placeholder that names a style:
 /// </para>
 /// <code>
-/// shape → layout placeholder → master placeholder → master p:txStyles → p:defaultTextStyle
+/// title, body, subtitle → layout placeholder → master placeholder → master p:titleStyle/p:bodyStyle
+/// everything else       →                                        → p:defaultTextStyle
 /// </code>
+/// <para>
+/// <strong>The master's <c>p:otherStyle</c> is on neither branch, and that is not an
+/// oversight.</strong> <c>PPTShape::createAndInsert</c> reaches it only through
+/// <c>isOther</c>, which is <c>!getTextBody() &amp;&amp; sServiceName != "…GroupShape"</c>
+/// (<c>oox/source/ppt/pptshape.cxx:424-429</c>, byte-identical at tag
+/// <c>libreoffice-24.2.7.2</c>) — so a shape that <em>has</em> text can never arrive there, and
+/// what it gets instead is <c>getDefaultTextStyle()</c>, the presentation's
+/// <c>p:defaultTextStyle</c> (<c>presentationfragmenthandler.cxx:115</c> builds it and passes it
+/// into every <c>SlidePersist</c>). A second route reaches the same answer:
+/// <c>SlidePersist::createXShapes</c> pushes the master text styles into Impress's style
+/// families with <c>for (int i = 0; i &lt; 4; i++)</c> over a switch whose <c>case 4</c> is the
+/// style <c>p:otherStyle</c> parses into (<c>slidepersist.cxx:315</c>), so the loop stops one
+/// short and the style is read, stored and never used.
+/// </para>
+/// <para>
+/// Measured rather than only cited, because <c>deck-text-style.pptx</c> cannot separate the
+/// readings — its <c>otherStyle</c> states 18 pt and LibreOffice's own fallback for a slide run
+/// is also 18 pt. <c>slide-other-style.pptx</c> states 12 pt magenta there against 24 pt green
+/// in <c>p:defaultTextStyle</c>, and the reference draws <c>0 0.5019607843 0 rg … 24.009 Tf</c>:
+/// the presentation's style, in both size and colour. We drew 11.99 magenta until this fork
+/// existed.
+/// </para>
 /// <para>
 /// resolved <em>per text level</em>, because <c>a:lstStyle</c> is a nine-entry array and a
 /// paragraph at level 2 inherits from every source's level-2 entry, not from the first source
@@ -204,11 +228,6 @@ internal sealed class PptxTextStyles
         foreach (XElement source in FromPlaceholder(direct, level)) yield return source;
         foreach (XElement source in FromPlaceholder(inherited, level)) yield return source;
 
-        // A shape that is not a placeholder falls to the master's otherStyle, which is what the
-        // "other" in its name means: everything that is not a title and not an outline.
-        XElement? masterStyle = Ppt.Child(Ppt.Child(_master, "txStyles"), textStyle ?? "otherStyle");
-        if (DrawingTextBody.LevelProperties(masterStyle, level) is { } fromMaster) yield return fromMaster;
-
         // A placeholder's chain ends at the master's own style for its kind. p:defaultTextStyle
         // is reached only by a shape that found none — PPTShape::createAndInsert picks the
         // title, body or notes style by placeholder subtype and consults
@@ -217,8 +236,20 @@ internal sealed class PptxTextStyles
         // is not a harmless extra rung: a deck converted from .ppt states
         // <a:buChar char="•"/> at every level of p:defaultTextStyle, so every title on every
         // slide acquires a bullet the reference does not draw.
-        if (textStyle is not null) yield break;
+        if (textStyle is not null)
+        {
+            XElement? masterStyle = Ppt.Child(Ppt.Child(_master, "txStyles"), textStyle);
+            if (DrawingTextBody.LevelProperties(masterStyle, level) is { } fromMaster)
+                yield return fromMaster;
 
+            yield break;
+        }
+
+        // Everything else — a shape that is not a placeholder at all, and the sldNum, ftr, dt
+        // and hdr placeholders, which name no style either — lands on p:defaultTextStyle and
+        // *not* on the master's p:otherStyle. See <see cref="PptxTextStyles"/> for why: the
+        // reference reaches otherStyle only for a shape with no text body, so nothing that has
+        // text can arrive there.
         if (DrawingTextBody.LevelProperties(_defaultTextStyle, level) is { } fromDefault)
             yield return fromDefault;
     }

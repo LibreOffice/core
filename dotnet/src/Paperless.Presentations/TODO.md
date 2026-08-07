@@ -177,10 +177,20 @@ resolved **per text level** for list styles (`lvlXpPr`).
       with `for (int i = 0; i < 4; i++)` over a switch whose `case 4` *is* the standard style that
       `p:otherStyle` parses into (`oox/source/ppt/slidepersist.cxx`:315). The loop stops one short,
       so the style is read, stored and never used; `case 5`, the subtitle style, is unreachable for
-      the same reason. Paperless does apply it — the deck's sixth shape resolves to the magenta the
-      master states where LibreOffice draws black — and that divergence is not new: the same
-      fallback has always decided the bullet of every non-placeholder shape. It had simply never
-      been measured, and it now is.
+      the same reason. Paperless did apply it — the deck's sixth shape resolved to the magenta the
+      master states where LibreOffice draws black — and that divergence was recorded here as
+      deliberate, on the grounds that the file says magenta and PowerPoint shows it.
+      **Round eighteen retired that: it was a defect, and `deck-text-style.pptx` could not show
+      it.** A second citation settles what a plain text box gets *instead* —
+      `PPTShape::createAndInsert` reaches `getOtherTextStyle()` only under
+      `isOther = !getTextBody() && sServiceName != "…GroupShape"`
+      (`oox/source/ppt/pptshape.cxx`:424-429, byte-identical at tag `libreoffice-24.2.7.2`), so a
+      shape carrying text cannot arrive there and takes `getDefaultTextStyle()`, the
+      presentation's `p:defaultTextStyle`. The old fixture cannot separate the readings because
+      its `otherStyle` states 18 pt and LibreOffice's own fallback is also 18 pt;
+      `slide-other-style.pptx` states 12 pt magenta against 24 pt green and the reference draws
+      `0 0.5019607843 0 rg … 24.009 Tf`. **The lesson is the fixture, not the citation** — the
+      mechanism had been cited correctly for two rounds beside a document that could not test it.
 - [ ] Theme default shape/line/text properties (`a:objectDefaults`)
 - [ ] Background inheritance, including `showMasterSp`
 

@@ -371,4 +371,57 @@ public class SlideCharacterStyleTests
         fonts.MinorAsian.ShouldBeNull();
         fonts.MajorComplex.ShouldBeNull();
     }
+
+    /// <summary>
+    /// A shape that is not a placeholder ends its chain at <c>p:defaultTextStyle</c>, and the
+    /// master's <c>p:otherStyle</c> is not a rung of it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The reference reaches <c>getOtherTextStyle()</c> only under
+    /// <c>isOther = !getTextBody() &amp;&amp; sServiceName != "…GroupShape"</c>
+    /// (<c>oox/source/ppt/pptshape.cxx</c>:424-429, byte-identical at tag
+    /// <c>libreoffice-24.2.7.2</c>), so nothing carrying text can arrive there.
+    /// </para>
+    /// <para>
+    /// <c>slide-other-style.pptx</c> is authored to separate the readings, because the older
+    /// <c>deck-text-style.pptx</c> cannot: its <c>otherStyle</c> states 18 pt and Impress's own
+    /// fallback is also 18 pt. This one states <c>sz="1200"</c> magenta at level one and
+    /// <c>sz="1000"</c> magenta at level two against <c>sz="2400"</c> green and
+    /// <c>sz="3200"</c> blue in <c>p:defaultTextStyle</c>, and holds one plain text box at each
+    /// level. LibreOffice draws 24.009 green and 32.003 blue — asserted against its own PDF in
+    /// <c>SlideTextStyleComparisonTests</c>; asserted here through the reader and the layout, so
+    /// the wiring is covered on a machine with no LibreOffice installed.
+    /// </para>
+    /// <para>
+    /// Both levels, because a chain can be right at level one and still merge whole list styles
+    /// rather than per-level entries.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void APlainTextBoxEndsAtTheDefaultTextStyleRatherThanTheMastersOtherStyle()
+    {
+        using IDocument document = new PresentationReader().Read(
+            DocumentSource.FromFile(Corpus.Require("slide-other-style.pptx")));
+
+        LaidOutSlide slide = ((SlidePages)((IPaginatedDocument)document).Layout()).Slides[0];
+
+        Dictionary<string, PlacedGlyphRun> drawn = [];
+        foreach (PlacedGlyphRun run in slide.Shapes
+                     .Where(shape => shape.Text is not null)
+                     .SelectMany(shape => shape.Text!.Runs))
+        {
+            drawn[run.Run.Text.Trim()] = run;
+        }
+
+        drawn.Count.ShouldBe(2);
+
+        // 24 pt on the draw layer's 1/100 mm grid is 847 units; the master's otherStyle would
+        // give 12 pt magenta and no source at all would give 18 pt black.
+        drawn["Level one unsized"].Colour.ShouldBe(Colour.FromRgb(0x008000));
+        drawn["Level one unsized"].Run.FontSize.Points.ShouldBe(24.0, tolerance: 0.02);
+
+        drawn["Level two unsized"].Colour.ShouldBe(Colour.FromRgb(0x0000FF));
+        drawn["Level two unsized"].Run.FontSize.Points.ShouldBe(32.0, tolerance: 0.02);
+    }
 }
