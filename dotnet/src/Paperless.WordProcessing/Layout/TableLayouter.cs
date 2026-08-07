@@ -99,7 +99,9 @@ public static class TableLayouter
             }
 
             // A border takes space, and a row owns *half* of each of the two grid lines it sits between — the
-            // line runs through the border's centre, so the other half belongs to the neighbour.
+            // line runs through the border's centre, so the other half belongs to the neighbour. The two
+            // outermost halves, which have no neighbour, are added to the last row once the rectangles are
+            // built; see there.
             heights[row] += BorderHeight(table.Rows[row]);
 
             // The declared height, which is a floor unless the row says it is exact — in which case it is the
@@ -157,9 +159,27 @@ public static class TableLayouter
             {
                 Cell = cell.Cell,
                 Area = area,
-                Content = Positioned(cell, area),
+                Content = Positioned(
+                    cell,
+                    area,
+                    BorderHeight(table.Rows[cell.Row]) / 2,
+                    BorderHeight(table.Rows[cell.LastRow]) / 2),
                 Row = cell.Row,
             });
+        }
+
+        // The two half grid lines the rectangles do not cover: the one above the first row, which is why
+        // `tops` starts half a border down, and the one below the last. Writer charges a cell for its
+        // whole border and neighbouring rows share the line between them, so a table of n rows is n+1
+        // borders tall rather than n — measured on a three-row fixture at 0, 1 and 2 pt, where each of the
+        // three cases came out exactly one border taller than this engine made it. Charged to the last row
+        // rather than split between the first and the last, because the paginator reconstructs a
+        // continuation page's offset by adding up the heights it has already placed, and an allowance in
+        // `heights[0]` that no rectangle carries would move every later row up by half a border.
+        if (rows > 0)
+        {
+            heights[rows - 1] +=
+                BorderHeight(table.Rows[0]) / 2 + BorderHeight(table.Rows[rows - 1]) / 2;
         }
 
         return (placed, heights);
@@ -479,16 +499,31 @@ public static class TableLayouter
     /// A cell's text moved from the origin into its own rectangle, and aligned inside it.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The lines themselves do not move: they are positioned relative to the flow's area, so shifting the
     /// area takes them with it. What does change is the vertical alignment, which is only decidable now —
     /// it depends on the row's final height, and the row's height depended on this cell.
+    /// </para>
+    /// <para>
+    /// A border is not only a line, it is a band the text may not enter: Writer insets a cell's content by
+    /// the whole border width on top of the padding, so a 1 pt border moves the first line down 1 pt and
+    /// everything after the table down 2. The rectangle here starts half a grid line above the content —
+    /// the line is drawn through its middle — so what the content owes is the other half at each end.
+    /// Measured against LibreOffice on a one-column fixture at 0, 1 and 2 pt borders, where the step was
+    /// exactly half the border and did not depend on the number of rows.
+    /// </para>
     /// </remarks>
-    private static PlacedFlow? Positioned(Measured cell, DocRect area)
+    /// <param name="cell">The measured cell.</param>
+    /// <param name="area">Its rectangle.</param>
+    /// <param name="bandAbove">Half the grid line above the cell's first row.</param>
+    /// <param name="bandBelow">Half the grid line below the cell's last row.</param>
+    private static PlacedFlow? Positioned(
+        Measured cell, DocRect area, Length bandAbove, Length bandBelow)
     {
         if (cell.Content is null) return null;
 
         CellPadding padding = cell.Cell.Padding;
-        Length height = area.Height - padding.Vertical;
+        Length height = area.Height - padding.Vertical - bandAbove - bandBelow;
         Length spare = height - cell.TextHeight;
 
         Length offset = spare <= Length.Zero
@@ -502,7 +537,7 @@ public static class TableLayouter
 
         DocRect placed = new(
             area.X + padding.Left,
-            area.Y + padding.Top + offset,
+            area.Y + bandAbove + padding.Top + offset,
             area.Width - padding.Horizontal,
             height > Length.Zero ? height : Length.Zero);
 

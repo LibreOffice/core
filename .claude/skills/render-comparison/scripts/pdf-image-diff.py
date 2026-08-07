@@ -369,7 +369,7 @@ def main(argv: list[str]) -> int:
 
         bad = 0
         trimmed = 0
-        print("page\tdiff%\tink%\tregions\tverdict")
+        print("page\tdiff%\tink%\t|ink|%\tregions\tverdict")
         for i, (op, rp) in enumerate(zip(ours_pages, ref_pages), start=1):
             ow, oh, orgb = read_ppm(op)
             rw, rh, rrgb = read_ppm(rp)
@@ -413,11 +413,28 @@ def main(argv: list[str]) -> int:
             write_png(outdir / "diff" / f"page-{i:03d}.png", ow, oh,
                       annotate(orgb, rrgb, ow, oh, found))
 
-            # Ink the two sides do not account for between them, over the whole page. A
-            # reflow moves ink and leaves this near nought; a missing fill does not.
-            page_ink = sum(r["luma_gap"] * (r["x1"] - r["x0"] + 1) * (r["y1"] - r["y0"] + 1)
-                           for r in found)
-            page_ink = abs(page_ink) / (count * 255)
+            # Two ink figures, because one number cannot do both jobs.
+            #
+            # `ink%` is the *signed* sum: a region where we draw more cancels one where we draw
+            # less. That is deliberate and is what makes it ignore reflow — moving ink from one
+            # place to another nets to nought, while a missing fill does not. It is the right
+            # verdict metric.
+            #
+            # But a signed sum is the wrong thing to *drive work down*, and that had to be
+            # learned: a round that recoded symbol-font bullets made 24 documents embed the
+            # reference's exact face count, moved a bullet's drawn width from 6.30 pt to 13.73
+            # against the reference's 13.72 with zero differing pixels in the band, lowered raw
+            # pixel difference on every document examined — and raised `ink%` by 0.91, because
+            # it had been filling a deficit that was cancelling a surplus elsewhere. A metric
+            # where a real improvement reads as a regression will send the next agent backwards.
+            #
+            # `|ink|%` sums the same regions unsigned. It cannot tell reflow from loss, so it is
+            # no good as a verdict — but it never rewards leaving a defect in place, so it is
+            # the column to rank by and to compare across a round.
+            areas = [(r["luma_gap"], (r["x1"] - r["x0"] + 1) * (r["y1"] - r["y0"] + 1))
+                     for r in found]
+            page_ink = abs(sum(gap * area for gap, area in areas)) / (count * 255)
+            page_ink_abs = sum(abs(gap) * area for gap, area in areas) / (count * 255)
 
             heavy = [r for r in found
                      if abs(r["luma_gap"]) > INK_GAP and r["pixels"] / count > MAJOR_REGION]
@@ -428,7 +445,8 @@ def main(argv: list[str]) -> int:
                 continue
 
             verdict = "MAJOR" if major else ("shifted" if raw_diff > 0.02 else "ok")
-            print(f"{i}\t{raw_diff * 100:.2f}\t{page_ink * 100:.2f}\t{len(found)}\t{verdict}")
+            print(f"{i}\t{raw_diff * 100:.2f}\t{page_ink * 100:.2f}"
+                  f"\t{page_ink_abs * 100:.2f}\t{len(found)}\t{verdict}")
             # Ink-imbalanced regions first: they are the ones that mean something is
             # missing rather than moved.
             for r in (sorted(found, key=lambda r: -abs(r["luma_gap"]) * r["pixels"])[:6]

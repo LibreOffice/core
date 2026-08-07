@@ -55,6 +55,23 @@ Per batch at `52f45c51b`: 001–005 10/10, 006 9/10, 007 9/10, 008 10/10, 009 10
 011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 5/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10,
 020 3/10, 021 0/2.
 
+### Words 001–019 re-measured at `22ed440e0`, and three of those figures were wrong
+
+The line above is carried from `52f45c51b`. Swept again at `22ed440e0` before any change,
+batches 001–019 give **143 of 188, total absolute page error 87**, and three per-batch numbers
+do not reproduce: **007 is 10/10** rather than 9/10, **015 is 4/10** rather than 5/10, and
+**010 is 7/9** as stated. `018 4/10` and `019 3/10` are right here and were quoted as 3 and 4
+in the round's brief, which is the same error one step further on.
+
+That matters more than the arithmetic. Two of them looked exactly like a regression from the
+table-border fix below — a batch that "fell" from 5 to 4 and one that "fell" from 4 to 3 —
+and both were the inherited number being wrong. **Re-measure the baseline of any batch a
+change appears to have broken before believing it broke.** The whole cost here was two short
+sweeps.
+
+Per batch at `22ed440e0`: 001–005 10/10, 006 9/10, 007 10/10, 008 10/10, 009 10/10, 010 7/9,
+011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 4/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10.
+
 ## Level one: the image check
 
 `batch-001` on all three tracks passes the word gate — **29 of 29 documents**. Twenty-seven
@@ -4048,3 +4065,102 @@ page 4.27. The next instrument for it is the extraction comparison, not more pix
 5. **The word gate's 11 failures are unchanged and all still attributed** — 8 rasterisation
    ceiling, `mc:Choice Requires="a14"`, the linked-OLE ceiling, and `Sylva`. Nothing there is
    winnable without making the output worse.
+## Words, round fourteen — `batch-010`, and a border that is a band
+
+Baseline and result are both whole-track sweeps of batches 001–019, the second at
+`491d95c37`:
+
+| | baseline `22ed440e0` | after |
+|---|---|---|
+| full match | 143 / 188 | **144 / 188** |
+| total absolute page error | 87 | **86** |
+| exactly correct page count | 150 | **151** |
+| total absolute word error | 4666 | **4654** |
+
+`batch-010` is **7/9 → 8/9**, page error 2 → 1. Batches 001–009 are unchanged at 89/90, the
+one miss being the known `batch-006` trap. **No other batch moved by a single document**, which
+is worth stating because two of them appeared to and did not — see the baseline note near the
+top of this file.
+
+### A cell's border is a band its text may not enter
+
+`TableLayouter` put every grid line exactly where LibreOffice puts it and still set every cell's
+text half a border too high, which no comparison of the strokes could ever see. Writer insets a
+cell's content by the whole border width on top of the padding — `SwBorderAttrs::CalcTop` asks
+`SvxBoxItem::CalcLineSpace`, which adds the line's width to the distance
+(`editeng/source/items/frmitems.cxx`:3717–3746) — and two rows share the band between them, so a
+table of *n* rows stands *n+1* borders tall rather than *n*.
+
+Measured on a one-column fixture at borders of 0, 1 and 2 pt and at one and three rows. With a
+1 pt border LibreOffice's three rows sit at 84.99, 97.54 and 110.09 against 83.99, 95.54 and
+107.09 unbordered, and the paragraph after the table at 122.64 against 118.64: one border of
+inset at the top, four borders of height over three rows, and the same at 2 pt. `single` and
+`dotted` behave identically, so the style is not in it.
+
+`195584360.docx` went from 19 pages against 20 to an exact match on both pages and words
+(7952/7952). It carries about fourteen bordered tables to the page and each was 1 pt short.
+
+**The lever this exposes is small per table and there are a lot of tables.** The change is one
+line of geometry and half a line of accounting; the rest of the commit is the fixture and the
+reasoning.
+
+### Three measurements on `195584360.docx` that the record should keep
+
+All three by controlled variation on the document itself, LibreOffice against LibreOffice:
+
+- **`w:usePrinterMetrics` is a horizontal effect too.** With the flag LibreOffice's advances run
+  0.6% wider than ours over a 500 pt line; delete the flag and they agree to 0.3 pt. Our
+  `MetricGrid` quantises only the *vertical* metrics (`LineSpacing.cs`:61). But LibreOffice
+  still paginates the document at 20 pages with the flag removed, so this is **not** what cost
+  the page — and exactly one DOCX in the whole words track states the setting, so it is not
+  worth a shared-layer change on its own evidence.
+- **A paragraph's `w:pBdr` takes height.** An empty paragraph carrying
+  `bottom single sz=4 space=1` costs LibreOffice 1.50 pt we do not spend — the line's width plus
+  `w:space`. There are 26 of them in that document. Unfixed.
+- **The page-number field.** Every page of our render of that document says `Page 10`; this is
+  the known `WritingFieldKind.PageNumber` gap, not a new one.
+
+### `w:pict` and `w:object` take room, and the size they state is not the size to take
+
+An inline VML shape — the legacy picture, and every embedded OLE object — reaches
+`DocxLayoutSource.cs`:1016 as a bare anchor character and contributes no height at all. That it
+*should* contribute is settled: deleting the `w:object` from `5709.16 ch.40_mgfinal.docx` moves
+LibreOffice's own page one up by exactly **60 pt**, and reading the shape's stated size brought
+our page one from 72 pt short of the reference to 1.65 pt.
+
+The implementation was written, tested nine ways, swept, and **reverted**, because the stated
+size is the wrong number:
+
+| | border only | border + VML |
+|---|---|---|
+| match | 144 / 188 | 143 / 188 |
+| page error | 86 | 87 |
+| word error | 4654 | 4850 |
+
+Four documents moved, one changed state and downwards: `eTAR_External_Web_tool_Tip_Sheet_mh.docx`
+went 4/4 to 5/4 on a single `Excel.Sheet.12` object whose `v:shape` says 76.2 × 49.2 pt and
+whose `DrawAspect="Icon"` means LibreOffice draws it smaller. `5709.16`'s own object says
+73.8 pt and LibreOffice spends 60 — one line less, exactly.
+
+So the next attempt starts from `DrawAspect` and from `oox/source/vml/vmlshape.cxx`'s handling
+of `o:OLEObject`, not from the `style` attribute; and it should probably take only a `w:pict`
+carrying a `v:imagedata` and leave `w:object` alone. Reach if it works: **20 documents in the
+words track carry an inline VML shape**, and 33 more carry only floating ones, which must stay
+out of the text.
+
+### `batch-010`'s remaining document, characterised
+
+`5709.16 ch.40_mgfinal.docx` is 31 pages against 32. With the border fix its page one agrees
+with the reference to 2.65 pt once the OLE object is read, and every page after page 2 shows a
+*constant* offset — no drift accumulates within a page. What remains is on page 2:
+
+- **11.4 pt at the top**, before `Table of Contents`. That page's header is `header2.xml`,
+  which is a three-row table with 3 pt `w:tblBorders` followed by one empty `FSMHeader`
+  paragraph, and our reserved header height is 11.4 pt under LibreOffice's. The two candidates
+  are the trailing empty paragraph and the table's outer border band; they were not separated.
+- **About four lines** the reference declines to place at the bottom of its page 2 while
+  filling its page 3 to 700 pt. Not explained.
+
+The header/footer fields also differ — we print the `FILENAME` field's cached result
+(`FSH_5709.16_40_DD_1_0`) where LibreOffice recomputes it to the file's name, and `Page 21 of 33`
+where it says `Page 2 of 32`. Neither changes the page count.
