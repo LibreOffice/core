@@ -12,6 +12,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
@@ -26,6 +27,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/unoapi.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -2413,6 +2416,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf166401_textGivenToAPicturePlaceh
     assertXPath(pSlide, aPlaceholder, 1);
     assertXPathContent(pSlide, aPlaceholder + "/p:txBody/a:p/a:r/a:t",
                        u"Given to a picture placeholder");
+}
+
+// A presentation written under a dark appearance keeps automatic text readable: the saved colour
+// is decided by the page background, not by the colour the application paints behind the page.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAutomaticTextColorFollowsPageBackground)
+{
+    // The view takes the document background colour when it is created, so the dark appearance
+    // has to be in place before the document is loaded.
+    const AppearanceMode eOldMode = MiscSettings::GetAppColorMode();
+    MiscSettings::SetAppColorMode(AppearanceMode::DARK);
+    comphelper::ScopeGuard aResetMode([eOldMode] { MiscSettings::SetAppColorMode(eOldMode); });
+
+    createSdImpressDoc("odp/automatic-text-color.fodp");
+    save(TestFilter::PPTX);
+
+    // The page carries no fill of its own, so its background is light and the text stays black.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+                "val", u"000000");
+
+    // Text that takes its colour from the master stays readable as well: the default run
+    // properties the master carries hold no white text colour.
+    xmlDocUniquePtr pXmlMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlMaster, "//a:defRPr/a:solidFill/a:srgbClr[@val='FFFFFF']", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

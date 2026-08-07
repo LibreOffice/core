@@ -314,7 +314,12 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
         if ( !mXPagePropSet.is() )
             break;
 
-        if (GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr ) )
+        // An automatic text colour becomes a concrete colour in the saved file, so it follows the
+        // background the page itself carries. A page with no fill of its own counts as light here.
+        if (SdPage* pSdPage = SdPage::getImplementation(mXDrawPage))
+            mbIsBackgroundDark
+                = pSdPage->GetPageBackgroundColor(nullptr, /*bScreenDisplay*/ false).IsDark();
+        else if (GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr ) )
             aAny >>= mbIsBackgroundDark;
 
         mXShapes = mXDrawPage;
