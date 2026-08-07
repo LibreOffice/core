@@ -471,11 +471,18 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                     bContinue = true;
                 }
             }
-            // Will the attribute become valid?
+            // Will the attribute become/stay valid?
             else if(  CmpAttr( *pItem, *pTmpItem ) )
             {
-                m_pFindArr[ nWhch - m_nArrStart ] = aTmp;
-                ++m_nFound;
+                pCmp = &m_pFindArr[nWhch - m_nArrStart];
+                if (!pCmp->nWhich)
+                {
+                    *pCmp = aTmp;
+                    m_nFound++;
+                }
+                else if (pCmp->nEnd < aTmp.nEnd) // extend?
+                    pCmp->nEnd = aTmp.nEnd;
+
                 bContinue = true;
             }
 
