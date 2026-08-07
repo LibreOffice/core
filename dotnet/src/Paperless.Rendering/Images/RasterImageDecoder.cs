@@ -135,7 +135,15 @@ public static class RasterImageDecoder
               {
                   EncodedBytes = image.EncodedBytes,
                   EncodedMediaType = image.EncodedMediaType,
+
+                  // Every pending recolouring has to be carried across the decode by hand,
+                  // because `decoded` is a fresh image built from the bytes and knows nothing
+                  // the reader attached. Forgetting one is silent: the picture draws, correctly
+                  // decoded and entirely unrecoloured, on exactly the pictures that needed a
+                  // codec — which is all of them, since a decoded image never reaches this
+                  // branch at all.
                   Duotone = image.Duotone,
+                  Luminance = image.Luminance,
               });
     }
 
@@ -158,21 +166,98 @@ public static class RasterImageDecoder
     /// </remarks>
     private static RasterImage Recoloured(RasterImage image)
     {
-        if (image.Duotone is not { } duotone || !image.IsDecoded) return image;
+        if (!image.IsDecoded) return image;
+
+        bool duotoned = image.Duotone is not null;
+        bool adjusted = image.Luminance is { IsIdentity: false };
+        if (!duotoned && !adjusted) return image;
 
         ReadOnlySpan<byte> source = image.Pixels.Span;
         byte[] pixels = new byte[source.Length];
         source.CopyTo(pixels);
 
-        for (int i = 0; i + 3 < pixels.Length; i += 4)
+        if (image.Duotone is { } duotone)
         {
-            int luminance = Luminance(pixels[i], pixels[i + 1], pixels[i + 2]);
-            pixels[i] = Mix(luminance, duotone.Dark.R, duotone.Light.R);
-            pixels[i + 1] = Mix(luminance, duotone.Dark.G, duotone.Light.G);
-            pixels[i + 2] = Mix(luminance, duotone.Dark.B, duotone.Light.B);
+            for (int i = 0; i + 3 < pixels.Length; i += 4)
+            {
+                int luminance = Luminance(pixels[i], pixels[i + 1], pixels[i + 2]);
+                pixels[i] = Mix(luminance, duotone.Dark.R, duotone.Light.R);
+                pixels[i + 1] = Mix(luminance, duotone.Dark.G, duotone.Light.G);
+                pixels[i + 2] = Mix(luminance, duotone.Dark.B, duotone.Light.B);
+            }
         }
 
-        return image with { Pixels = pixels, EncodedBytes = default, Duotone = null };
+        // After the duotone, which is the order pushToPropMap builds the graphic in.
+        if (adjusted)
+        {
+            byte[] map = ChannelMap(image.Luminance!.Value);
+            for (int i = 0; i + 3 < pixels.Length; i += 4)
+            {
+                pixels[i] = map[pixels[i]];
+                pixels[i + 1] = map[pixels[i + 1]];
+                pixels[i + 2] = map[pixels[i + 2]];
+            }
+        }
+
+        return image with
+        {
+            Pixels = pixels,
+            EncodedBytes = default,
+            Duotone = null,
+            Luminance = null,
+        };
+    }
+
+    /// <summary>
+    /// The 256-entry channel map a <see cref="LuminanceRecolour"/> asks for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A lookup table rather than per-pixel arithmetic because that is what the reference
+    /// builds — <c>Bitmap::Adjust</c> fills <c>cMapR</c>, <c>cMapG</c> and <c>cMapB</c> over
+    /// 0..255 and then indexes them — so the rounding happens once per level and not once per
+    /// pixel, and a channel that saturates saturates identically.
+    /// </para>
+    /// <para>
+    /// The three cases and their citations are in <see cref="LuminanceRecolour"/>. The two
+    /// arithmetics differ only in where the brightness is spent: the <c>msoBrightness</c>
+    /// branch of <c>Bitmap::Adjust</c> (<c>vcl/source/bitmap/bitmap.cxx</c>:1694-1698, 24.2.7.2)
+    /// puts half of it either side of the contrast, and
+    /// <c>BColorModifier_RGBLuminanceContrast</c> puts all of it after
+    /// (<c>basegfx/source/color/bcolormodifier.cxx</c>:387-407). Both compute the same slope.
+    /// </para>
+    /// </remarks>
+    private static byte[] ChannelMap(LuminanceRecolour recolour)
+    {
+        // The washout pair is not applied as stated: it selects ColorMode_WATERMARK, whose own
+        // fixed offsets are +50 luminance and -70 contrast.
+        bool washout = recolour.IsWashout;
+        int brightness = washout ? 50 : recolour.Brightness;
+        int contrast = washout ? -70 : recolour.Contrast;
+
+        double slope = contrast >= 0
+            ? 128.0 / (128.0 - (1.27 * Math.Clamp(contrast, 0, 100)))
+            : (128.0 + (1.27 * Math.Clamp(contrast, -100, 0))) / 128.0;
+
+        // MSO's own formula is used only where the reference bakes the bitmap: both stated and
+        // neither of them the washout. Everything else goes through the colour modifier, whose
+        // offset carries the contrast's own compensation term.
+        bool mso = !washout && recolour.Brightness != 0 && recolour.Contrast != 0;
+        double offset = mso
+            ? Math.Clamp(brightness, -100, 100) * 2.55
+            : (Math.Clamp(brightness, -100, 100) * 2.55) + 128.0 - (slope * 128.0);
+
+        byte[] map = new byte[256];
+        for (int level = 0; level < map.Length; level++)
+        {
+            double value = mso
+                ? (((level + (offset / 2)) - 128) * slope) + 128 + (offset / 2)
+                : (level * slope) + offset;
+
+            map[level] = (byte)Math.Clamp(Math.Floor(value + 0.5), 0, 255);
+        }
+
+        return map;
     }
 
     /// <summary>

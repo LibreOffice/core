@@ -1325,11 +1325,40 @@ internal sealed partial class PptxSlideLayout
     private static RasterImage Duotoned(
         RasterImage image, DrawingBlipFill blip, DrawingTheme? theme)
     {
+        image = Adjusted(image, blip);
+
         if (blip.Duotone is not { } pair) return image;
         if (pair.Dark.Resolve(theme, placeholder: null) is not { } dark) return image;
         if (pair.Light.Resolve(theme, placeholder: null) is not { } light) return image;
 
         return image with { Duotone = new DuotoneRecolour(dark, light) };
+    }
+
+    /// <summary>
+    /// The picture with its <c>a:lum</c> attached — PowerPoint's picture recolour.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Attached rather than applied, for the reason <see cref="Duotoned"/> gives. What the pair
+    /// means is <see cref="LuminanceRecolour"/>'s subject and is not a matter of reading it:
+    /// <c>bright="70000" contrast="-70000"</c> — the "Washout" a picture placed behind text gets
+    /// from PowerPoint's own gallery — is mapped by the reference to a different pair entirely.
+    /// </para>
+    /// <para>
+    /// <c>N2_E_Maestroni_Swarm_COP.pptx</c>'s title slide is the corpus instance that found it:
+    /// a full-bleed photograph of a satellite, washed almost white by the reference and drawn at
+    /// full strength by us, worth <strong>63.62 of unaccounted ink on that one page</strong>
+    /// against the deck's 66.29 over thirty. 15 of the slides track's 112 pptx-family decks
+    /// state a blip <c>a:lum</c>, of which twelve blips are that exact pair, one is 20 and 20,
+    /// and the rest state it empty and mean nothing by it
+    /// (<c>research/probes/slides-r19/count-bliplum.py</c>).
+    /// </para>
+    /// </remarks>
+    private static RasterImage Adjusted(RasterImage image, DrawingBlipFill blip)
+    {
+        LuminanceRecolour recolour = new(blip.Brightness, blip.Contrast);
+
+        return recolour.IsIdentity ? image : image with { Luminance = recolour };
     }
 
     /// <summary>
