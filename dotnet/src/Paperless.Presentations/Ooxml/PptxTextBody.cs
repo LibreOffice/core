@@ -813,10 +813,27 @@ internal static class PptxTextBody
     }
 
     /// <summary>A <c>a:lnSpc</c>, as a percentage of the line height or as an exact height.</summary>
+    /// <remarks>
+    /// <para>
+    /// <c>a:spcPct</c> states thousandths of a per cent, and the reference keeps only the
+    /// <strong>whole per cent</strong>: <c>TextSpacing::toLineSpacing</c> is
+    /// <c>static_cast&lt;sal_Int16&gt;(nValue / 1000)</c> in integer arithmetic
+    /// (<c>oox/inc/drawingml/textspacing.hxx:52</c>), and EditEngine then holds a
+    /// <c>sal_uInt16</c> percentage throughout. So a file stating <c>131579</c> is laid out at
+    /// 131 per cent, not 131.579, and the truncation belongs here at import rather than in the
+    /// layout that consumes it.
+    /// </para>
+    /// <para>
+    /// Narrow reach, and stated as such: across the whole slides track only <strong>39
+    /// occurrences over seven values</strong> are not already a whole per cent
+    /// (<c>research/probes/slides-r16/lnspc-scan.py</c>). It is here because it is what the
+    /// reference holds, not because it moves the corpus.
+    /// </para>
+    /// </remarks>
     private static LineSpacingRule LineSpacing(XElement? spacing)
     {
         if (Drawing.Number(Drawing.Child(spacing, "spcPct"), "val") is { } percent && percent > 0)
-            return LineSpacingRule.Multiple(percent / 100000.0);
+            return LineSpacingRule.Multiple(Math.Truncate(percent / 1000.0) / 100.0);
 
         if (Drawing.Number(Drawing.Child(spacing, "spcPts"), "val") is { } points && points > 0)
             return LineSpacingRule.Exactly(Length.FromEmu(points * Length.EmuPerPoint / 100));

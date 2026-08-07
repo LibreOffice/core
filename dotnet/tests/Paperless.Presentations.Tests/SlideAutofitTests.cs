@@ -232,11 +232,26 @@ public class SlideAutofitTests
     /// from a blanket shift. See <c>SlideAutofit.GridFontHeightPoints</c>.
     /// </para>
     /// <para>
-    /// The pitch is allowed a twentieth of a point because it is not the quantity under test and
-    /// we do not yet compute it in the reference's unit: <c>SlideTextLayout.Spacing</c> puts a
-    /// proportional line height through whole twips, where EditEngine works in hundredths of a
-    /// millimetre, which costs up to a fortieth of a point a line. The em size is asserted exactly.
+    /// <strong>The pitch is asserted to a thousandth of a point, which is the precision the
+    /// reference values are recorded to, and it is a second independent assertion rather than a
+    /// loose one.</strong> It used to be allowed a twentieth of a point, because a proportional
+    /// line height went through whole twips and then took the fit's spacing scale in a separate
+    /// rounding. Both are now one rounding of the product in hundredths of a millimetre — see
+    /// <c>SlideTextLayout.Proportioned</c> — and the residual error across the six cases is at
+    /// most 0.00094 pt.
     /// </para>
+    /// <para>
+    /// So this tolerance is what distinguishes the three candidate arithmetics, and it was
+    /// verified by putting each back:
+    /// </para>
+    /// <list type="bullet">
+    /// <item><description>whole twips, as shipped before: worst case 0.032 pt out (135 pt box),
+    /// none of the six inside a thousandth.</description></item>
+    /// <item><description>hundredths of a millimetre but rounding the two factors separately:
+    /// worst case 0.017 pt (175 pt box), one of the six inside a thousandth — and *worse* than
+    /// whole twips on two of them.</description></item>
+    /// <item><description>one rounding of the product: all six inside a thousandth.</description></item>
+    /// </list>
     /// </remarks>
     [Theory]
     [InlineData(90, 459, 10.006)]
@@ -256,7 +271,7 @@ public class SlideAutofitTests
         placed.ShouldNotBeEmpty();
 
         placed[0].Run.FontSize.Mm100.ShouldBe(expectedMm100);
-        Pitch(placed).Points.ShouldBe(expectedPitchPoints, tolerance: 0.05);
+        Pitch(placed).Points.ShouldBe(expectedPitchPoints, tolerance: 0.001);
     }
 
     /// <summary>The smallest gap between two distinct baselines, which is one line's height.</summary>

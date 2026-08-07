@@ -4633,3 +4633,215 @@ The deck names four faces: Arial, Times, Verdana and Wingdings. The reference re
 them to a serif, which makes `Times` — the bare name, not `Times New Roman` — the candidate to
 check first. One run, one page, and the whole of the round-fourteen regression.
 
+
+## Slides, round sixteen: the round-fifteen work was not merged, and the sweep it "never ran" exists
+
+Two corrections to the record before any measurement, both found by checking rather than by
+being told.
+
+**The autofit grid fix was not on the track branch.** The brief for this round said round
+fifteen's fix "is merged and is on your base". It was not: `0264f7f86` and the five commits
+around it were reachable only from `worktree-agent-a3b51381a3030c1ce`, and
+`claude/paperless-odf-phase-1-rnyzcu` at `54729fdc7` did not contain them
+(`git branch -a --contains 0264f7f86` names exactly one branch). This worktree was
+additionally **402 commits behind** that branch — the sixth agent in a row to open on a stale
+base, and the first for which fast-forwarding was not sufficient, because the work being built
+on had never reached the branch at all. Both were repaired before anything was measured:
+fast-forward to `54729fdc7`, then merge the six round-fifteen commits, keeping *both* sides of
+the one `TODO.batches.md` conflict (the words round-fifteen section and the slides one were
+appended at the same anchor).
+
+**A post-fix whole-track sweep does exist**, contrary to "its whole-track sweep never ran":
+`scratchpad/sl15-grid/` holds a complete 163-row `rows.tsv` and `ink.tsv`, written at 11:41
+against a fix committed at 11:16, and its ink column differs from the pre-fix `sl15-base/`
+on dozens of documents rather than being a copy. Its TSVs are preserved at
+`scratchpad/slides-r16-keep/`.
+
+**It still does not describe this tree, and that is the point worth keeping.** It was measured
+18 commits back, and those 18 commits include `d3bf1c445` — a `Paperless.Text` change to how a
+font substitution chain is resolved, which is a shared layer below every slide. A sweep of the
+slides track taken before it is not a baseline for a tree that has it. The round's own baseline
+is measured fresh, and the r15 numbers are kept only to compare against.
+
+### The round-sixteen baseline, and the number the autofit fix actually moved
+
+Whole track, `scratchpad/sl16-base`, 163 rows, no duplicate paths, 0 `ref-failed`:
+
+| | round fifteen's baseline | **round sixteen's** |
+|---|---|---|
+| word gate | 152 / 163 | **151 / 163** |
+| signed `ink%` | 1409.81 | **1402.67** |
+| unsigned `\|ink\|%` | 1759.63 | **1751.40** |
+| major pages | 466 | **466** |
+
+**The three-way split says the base is right and the harness is right.** The predecessor's
+pre-fix sweep, its post-fix sweep and this one differ in exactly the places they should:
+
+| | word gate | `ink%` | major |
+|---|---|---|---|
+| `r15base` — no autofit fix, no shared-layer commits | 152 | 1409.81 | 466 |
+| `r15grid` — autofit fix only | 151 | 1402.46 | 466 |
+| `sl16-base` — autofit fix + 18 commits | 151 | 1402.67 | 466 |
+
+`r15grid → sl16-base` moves **one document by 0.21** and nothing else. So the eighteen
+commits between the two — including `d3bf1c445`, the `Paperless.Text` font-substitution
+change that was the reason to re-measure at all — are worth 0.21 of ink on the whole slides
+track. Re-measuring was still right; it is the only thing that could have said so.
+
+**The autofit grid fix is therefore worth −7.35 of signed ink over 31 documents, no change in
+major pages, and one document on the word gate.** The predecessor never got to state this,
+and it is smaller than the probe result suggested — 31 documents move, 20 of them for the
+better, and the eleven that move the other way take back a third of the gain.
+
+#### The one document it cost, and it is a real regression rather than a gate artefact
+
+`NWD-GLA-Community-Outreach-Day-Oct-2025.pptx` went `match → words`, **596/586 words to
+537/586**, with its page count untouched at 13/13. The sign is what makes it worth naming: it
+was over-drawing by 1.7% and inside tolerance, and it is now *under*-drawing by 8.4%. A fix
+that makes the search settle on a larger font can only lose text by overflowing something, so
+this is the autofit fix's own consequence and not the gate's ceiling. Open.
+
+### The fold swept: right on the fixture, flat on the track, and one deck holds the whole delta
+
+Whole track with the folded rounding, reference PDFs reused from the baseline run and verified
+identical row for row on every reference-side column (`probes/slides-r16/ref-check.py`, 163
+documents, 0 mismatches):
+
+| | baseline | fold |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1402.67 | 1404.07 |
+| unsigned `\|ink\|%` | 1751.40 | 1753.40 |
+| major pages | 466 | **465** |
+
+**102 documents moved: 55 better, 43 worse, 65 unchanged.** 6.63 of `|ink|%` won and 8.63
+lost. That is a change that is doing something real and roughly cancelling — except that the
+cancelling is not even:
+
+```
++2.14   31.38 -> 33.52   major +1   2015-Civil-Rights-Website-training.ppt
++1.36  277.21 -> 278.57  major  0   NAS-Infrastructure-Roadmaps-v16.0.pptx
+-1.21   65.04 -> 63.83   major  0   Thailand17.ppt
+-1.00   11.43 -> 10.43   major -1   berlin.ppt
+```
+
+**Without `2015-Civil-Rights-Website-training.ppt` the net is −0.14.** One deck — the brief's
+headline lead — carries more than the whole loss, and it is the one document the round was
+pointed at. The fix is exact on the controlled fixture (6/6 against the reference's own PDF,
+worst case 0.00094 pt, against 0.032 for the arithmetic it replaces) and the track is flat
+without that deck, so this is not a wrong fix; it is a fix that has uncovered something on one
+document. That deck is the next thing to look at, not the change.
+
+### `2015-Civil-Rights-Website-training.ppt`: a near-tie in the search, not a line-height error
+
+The brief named this deck's line pitch as the round's best lead — ours 36.14 pt against the
+reference's 41.73/37.64, "text 5.5% larger", "it is that deck's whole 25.10 of ink". The
+measurement reproduces and **the explanation is the wrong way round**: the pitch is not a
+line-height error at all, and the fold that fixes the line height makes this deck worse.
+
+Page 21, read straight out of both content streams with `probes/slides-r15/pdfops.py`:
+
+| | reference | ours |
+|---|---|---|
+| body em | 18.992 pt (670 mm100) | 20.013 pt (706 mm100) |
+| baseline pitch | 18.227 pt (643 mm100) | 17.291 pt (610 mm100) |
+| lines on the page | 18 | 19 |
+| **block height** | **328.1 pt** | **328.5 pt** |
+
+The deck states 20 pt and 80% line spacing. The reference shrank the *font* to 19 pt and kept
+the spacing; we keep the font at 20 and shrink the *spacing* to nine-tenths. Our pitch is
+exactly `fround(fround(706 × 1.2) × 0.8 × 0.9)` = 610 and the reference's is
+`fround(fround(670 × 1.2) × 0.8)` = 643, so **both sides' arithmetic is the same arithmetic**
+— the fold is not in question here. What differs is which candidate the search keeps.
+
+**And the two candidates are 0.4 pt apart on a 328 pt block — 0.12%.** `Solve` keeps the
+tightest fit at or above one seen anywhere in the search, so a tenth of a per cent decides
+between "20 pt at nine-tenths" and "19 pt at full", and the fold moved the line height by
+enough to tip it. That is why this deck holds the round's whole `|ink|%` loss while the other
+162 net to −0.14.
+
+So the open question on this deck is **the search's preference between a font reduction and a
+spacing reduction when both fit**, and it is not the line height. Two things make that the
+right next probe rather than a guess:
+
+- The same shape was recorded on page 39 last round — reference `(0.85, 1.00)`, ours
+  `(0.90, 0.90)`. Two pages, same disagreement: the reference takes the smaller font at full
+  spacing, we take the larger font at reduced spacing.
+- It is **not** that the reference refuses to reduce spacing. `slide-autofit-grid.pptx`'s six
+  cases have the reference choosing 0.8 and 0.9 spacings, and the predecessor's 33-box probes
+  record the binary picking `(90.000, 80)` and `(94.960, 90)`. So the rule is an ordering, not
+  a prohibition, and naming it needs a probe that puts two nearly-tied candidates in front of
+  the binary deliberately.
+
+### One correction to the track's parity record
+
+The brief states "batches 001–013 and 015 at full parity". Measured on both this round's
+baseline and the predecessor's, that is not the case: **batch-008 is 9/10, batch-010 8/10 and
+batch-012 8/10**, and were so before anything moved this round. The batches actually at full
+parity are **001–007, 011, 013 and 015** — ten of seventeen — plus 009 until the round-fifteen
+autofit fix cost it a document.
+
+### The document round fifteen cost, diagnosed: the grid's floor is six times finer
+
+`NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, `match → words`, 596/586 words to 537/586 at an
+unchanged 13/13 pages. **The pages still match**: total `|ink|%` is 0.67 over thirteen pages and
+**zero of them are major**. What is missing is text drawn so small the reference's own rendering
+shows it as a column of one-pixel dashes — 26 words on page 6 and 32 on page 12, which
+`pdftotext` reads and a human cannot.
+
+This deck already has a commit of its own — `068b0eb44`, "Stop the PDF sink writing text at an
+em of nothing" — for a shape where autofit concludes that *no* positive scale fits, because each
+of sixteen paragraphs carries an absolute 12 pt top margin that does not shrink with the font.
+The guard is right and the reference agrees with it on the page it was written for.
+
+The round-fifteen grid fix moved two more shapes across that threshold, and the arithmetic is
+exact. The search floors each candidate to a tenth of a point *of the grid height*, so the
+smallest non-zero scale it can reach is `0.1 / grid`:
+
+| grid | smallest reachable font scale |
+|---|---|
+| a round 12 pt, as shipped before | 0.1 / 12 = **0.00833** |
+| the body's own 60 pt height, as shipped now | 0.1 / 60 = **0.00167** |
+
+**Six times smaller**, so runs that used to round to a representable em now round to zero and the
+sink correctly declines to write them. The grid fix is not wrong and the guard is not wrong; what
+is missing is a floor on the search itself, and the reference plainly has one because it draws
+those marks. Naming what that floor is, is the work — it is not a change to either piece.
+
+### Round sixteen, final: neutral on the track, better on major pages, one deck against it
+
+Both changes swept whole, reference PDFs reused and verified identical row for row each time:
+
+| | baseline | fold | + `Off` branch |
+|---|---|---|---|
+| word gate | 151 / 163 | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1402.67 | 1404.07 | **1403.48** |
+| unsigned `\|ink\|%` | 1751.40 | 1753.40 | **1752.86** |
+| major pages | 466 | 465 | **464** |
+
+**Read it per document rather than as a total.** 56 better, 44 worse, 63 unchanged; 7.10 of
+`|ink|%` won and 8.56 lost. `2015-Civil-Rights-Website-training.ppt` alone is +2.14 of that
+loss, so **without it the round is −0.68**, and major pages are down 2 with the word gate
+holding on every batch and not one verdict changing anywhere.
+
+So the honest summary is: the change is right where it can be checked against the reference
+directly, neutral-to-better on 162 documents, and it loses on the 163rd by tipping a near-tie
+in a search whose preference rule is a separate, now-named defect. `|ink|%` says +1.46 and
+that number should be reported as it stands; it is one document's worth of a different bug.
+
+**Reverting is one commit** if the total is preferred to the parts — but it would restore the
+whole-twip line height, which is 0 of 6 against the reference on the fixture where the folded
+arithmetic is 6 of 6.
+
+### What the next round should take, in order
+
+1. **The search's preference between a font reduction and a spacing reduction.** Named and
+   measured above on two pages of one deck, and it is what the brief's headline lead actually
+   is. Needs a probe deck built to tie two candidates deliberately — the existing probes sweep
+   box heights, which produces ties only by accident.
+2. **A floor on the search**, which is what cost round fifteen its document. The reference draws
+   marks at a scale we round to nothing; `0.1 / grid` is our smallest reachable scale and the
+   grid is now six times larger than it was.
+3. `Reporting_responsibilities_matrix.pptx` — still second on the unsigned ranking at 74.66 over
+   268 pages, with two regions repeating at byte-identical extents on all six of its major
+   pages. Untouched this round.
