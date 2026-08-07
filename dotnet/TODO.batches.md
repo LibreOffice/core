@@ -55,6 +55,23 @@ Per batch at `52f45c51b`: 001–005 10/10, 006 9/10, 007 9/10, 008 10/10, 009 10
 011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 5/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10,
 020 3/10, 021 0/2.
 
+### Words 001–019 re-measured at `22ed440e0`, and three of those figures were wrong
+
+The line above is carried from `52f45c51b`. Swept again at `22ed440e0` before any change,
+batches 001–019 give **143 of 188, total absolute page error 87**, and three per-batch numbers
+do not reproduce: **007 is 10/10** rather than 9/10, **015 is 4/10** rather than 5/10, and
+**010 is 7/9** as stated. `018 4/10` and `019 3/10` are right here and were quoted as 3 and 4
+in the round's brief, which is the same error one step further on.
+
+That matters more than the arithmetic. Two of them looked exactly like a regression from the
+table-border fix below — a batch that "fell" from 5 to 4 and one that "fell" from 4 to 3 —
+and both were the inherited number being wrong. **Re-measure the baseline of any batch a
+change appears to have broken before believing it broke.** The whole cost here was two short
+sweeps.
+
+Per batch at `22ed440e0`: 001–005 10/10, 006 9/10, 007 10/10, 008 10/10, 009 10/10, 010 7/9,
+011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 4/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10.
+
 ## Level one: the image check
 
 `batch-001` on all three tracks passes the word gate — **29 of 29 documents**. Twenty-seven
