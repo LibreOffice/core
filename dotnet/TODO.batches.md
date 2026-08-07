@@ -1984,19 +1984,19 @@ track total is **146 of 200** by addition and has not been re-swept whole since.
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
 | `batch-005` | 10 | 124–141 | doc:5 docx:5 | ✅ |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
-| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 9/10 |
-| `batch-008` | 10 | 186–204 | doc:4 docx:6 | ✅ |
+| `batch-007` | 10 | 160–185 | doc:4 docx:6 | ✅ |
+| `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
 | `batch-009` | 10 | 208–226 | doc:5 docx:5 | ✅ |
-| `batch-010` | 9 | 228–260 | doc:2 docx:8 | 7/9 |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 8/10 |
+| `batch-010` | 9 | 228–260 | doc:2 docx:8 | 8/9 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 9/10 |
 | `batch-012` | 10 | 306–333 | doc:4 docx:6 | 8/10 |
 | `batch-013` | 9 | 338–370 | docx:10 | 5/9 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 3/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 5/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 4/10 |
 | `batch-016` | 10 | 473–537 | doc:5 docx:5 | 7/10 |
 | `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
-| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 4/10 |
+| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 3/10 |
 | `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 3/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
@@ -4164,3 +4164,130 @@ with the reference to 2.65 pt once the OLE object is read, and every page after 
 The header/footer fields also differ — we print the `FILENAME` field's cached result
 (`FSH_5709.16_40_DD_1_0`) where LibreOffice recomputes it to the file's name, and `Page 21 of 33`
 where it says `Page 2 of 32`. Neither changes the page count.
+
+## Words, round fifteen — `batch-011`, a row that starts late, and a distance between letters
+
+Baseline and result are whole-track sweeps of batches 001–019. The baseline at `196774051`
+reproduced round fourteen's figures **to the digit** — 144/188, page error 86, exact page count
+151, word error 4654 — which is the tell that the base and the harness are both right.
+
+| | baseline `196774051` | `w:gridBefore` | + character `w:spacing` |
+|---|---|---|---|
+| full match | 144 / 188 | 144 / 188 | **144 / 188** |
+| total absolute page error | 86 | **85** | **85** |
+| exactly correct page count | 151 | **152** | **152** |
+| total absolute word error | 4654 | 4659 | 4815 |
+
+`batch-011` is **8/10 → 9/10**, its page error 3 → 2 and its word error 73 → 46. `batch-012` is
+unchanged at 8/10. One document went the other way and it is stated in full below: `batch-008`
+is **10/10 → 9/10** on a word count, with its pagination untouched. Every other batch held.
+
+**Read the two columns separately.** The first change is neutral-or-better on every metric. The
+second wins a document, loses a document, moves no page anywhere, and costs 156 of word error —
+all of it *over*-counting on documents whose geometry it demonstrably improved.
+
+### A row need not start at the grid's first column
+
+`w:gridBefore` says how many grid columns a row skips before its first cell, and DOCX writes no
+placeholder for them — exactly as it writes none for the columns a `w:gridSpan` swallows.
+`DocxLayoutSource.Tables.cs`:332 started every row at column zero, so a skipping row's first cell
+took the *first* column's width and every cell after it was shifted and mismeasured.
+
+LibreOffice reaches the right layout by materialising the skipped columns as borderless empty
+cells (`TableManager::endRow`, `sw/source/writerfilter/dmapper/TableManager.cxx`:667–702). An
+absent cell draws the same nothing, so shifting the column index is the same answer with nothing
+to lay out. `w:wBefore` is deliberately not read: it is the skipped span's width and is advisory
+in the way `w:tcW` is.
+
+`FG-AI4NDM-TR-skeleton_template.docx`'s ITU cover is a table whose title rows skip a narrow first
+column. Measured against that column, the 36 pt `ITU-T` wrapped to `ITU` / `-T` and
+`TELECOMMUNICATION` to seven characters a line, and the block grew onto a page of its own: 6 pages
+against 5. The fixture `tests/corpus/features/table-grid-before.docx` renders
+character-for-character identically to LibreOffice 24.2.7.2.
+
+### A character `w:spacing` is a distance between letters
+
+The `w:spacing` of a `w:rPr` is tracking — `SvxKerningItem`/`CharKerning`, a constant added
+between characters — and shares nothing but its name with the `w:spacing` of a `w:pPr`.
+`DomainMapper.cxx`:2468–2480 converts the twips straight to `PROP_CHAR_CHAR_KERNING`.
+
+Nothing read it. **`FormattedRun.Tracking` in `Paperless.Text` was built for exactly this** and
+its own doc comment names `w:spacing` as the word-processing spelling of it; only the
+presentations reader ever populated it. Wired through `WordTextStyle`, `PageRun`,
+`PageParagraph` (for the uniform-paragraph shortcut, which tracking must survive because it is a
+width), `PageDrawing.Build` and `PageDrawing.WidthBetween`.
+
+**Reach, measured rather than grepped.** 58 of the words track's 134 DOCX declare a character
+`w:spacing`; **twelve documents' output changed**, which is the ratio this file keeps recording.
+Of the twelve, one became an exact match, one stopped being one, three moved a little closer and
+seven a little further away — every one of the seven by *gaining* tokens.
+
+### The document it cost, and why it was kept anyway
+
+`batch-008/docx/FAA-2017-0628-0002_attachment_1.docx` went 639 words against 639 to **669 against
+639**, its 4 pages unchanged. The surplus is one line of its cover text box, `PADM 533: Policy
+Formation – Dr. Marcia Godwin`, which `pdftotext` now returns one letter at a time.
+
+The geometry says the change is right, by controlled variation on the document itself:
+
+| | `PADM`, LibreOffice | ours |
+|---|---|---|
+| `w:spacing` deleted | 41.150 → 67.560 = **26.41 pt** | — |
+| `w:spacing="60"` as shipped | 41.150 → 76.550 = **35.40 pt** | 33.850 → 69.276 = **35.43 pt** |
+
+The reference applies the tracking; before this change we were 9 pt short on four letters. Across
+the whole line ours is 338.6 pt against 341.3 — within one tracking unit. The letter gaps are
+3.00 pt on both sides and the word gaps 8.26.
+
+**So it is a tokenisation difference, not a layout one — and it is not a general property of our
+sink.** A probe of one 10 pt Carlito-bold line rendered by our own CLI keeps `PADM` whole up to
+70 twips and splits at 80; LibreOffice's own output of the same document keeps it whole at 60 and
+splits at 80. The two thresholds are the same to within one probe step. Also checked and ruled
+out: both content streams are one `TJ` array with one glyph per string and a `-300` between each,
+both draw the space as a glyph mapped to U+0020, neither sets `Tc`, `Tz` or `Tw`, and rounding our
+fractional `/Widths` to integers changes nothing. **Why the real document splits at 60 for us and
+not for the reference is unexplained**, and a minimal probe does not reproduce it.
+
+### `batch-011` and `batch-012`, what is left
+
+- **`review-welsh-government-communications-mister-peter-mandelson.docx`**, 16 pages against 14.
+  A long table; ours fits fewer rows per page than the reference from page 5 on (145–188 words a
+  page against 187–227). Not diagnosed further.
+- **`slcc-architecture-uu-architecture.docx`**, 3 pages against 4, words exact at 1221. The
+  reference spills onto a fourth page carrying nothing but its page number; we fit everything in
+  three. A small height, not a wrong one.
+- **`手机免提系统TSB.doc`**, 2/2 pages, 36 words against 40 — and the word count is hiding the real
+  defect, which is large. **We draw no CJK glyphs at all.** The page carries its Latin text, its
+  digits and its rules, and every Chinese character is absent; the text layer emits one repeated
+  character per paragraph, which is why `wc -w` barely notices.
+
+### Glyph fallback is implemented and wired to nothing
+
+That last document is a fifth instance of the pattern this project keeps finding. The machinery
+is all there — `IGlyphFallbackResolver`, `SystemFontResolver.FallbackFor`,
+`GlyphFallbackFamilies` ported verbatim from `ImplInitGenericGlyphFallback`, and
+`FontItemiser` which cuts a run at every character the face cannot show and re-shapes it in one
+that can. It is reached through `ItemisationOptions.GlyphFallback`, and
+
+```sh
+grep -rn "GlyphFallback = " --include=*.cs src/ tools/ tests/     # prints nothing
+```
+
+**Nothing in the solution ever sets it.** `PageContent.Itemisation` (`PageContent.cs`:252) builds
+an `ItemisationOptions` only to carry a base direction, and passes null the rest of the time.
+
+The machine has CJK faces installed — `fc-list :lang=zh` finds WenQuanYi Zen Hei and Unifont — and
+LibreOffice uses one of them. We resolve `SimSun` through fontconfig to DejaVu Serif, which has no
+CJK coverage, and then draw nothing.
+
+Two things to know before taking it. The drawing path does **not** itemise by font: `PageDrawing`
+itemises only for bidi reordering (`Pieces`, `PageDrawing.cs`:1089) and shapes each `PageRun` with
+its own face, so a fallback applied in measurement alone would put the widths and the glyphs on
+different faces. And it is a shared layer by consequence if not by file — it changes line breaks
+on any document with a character its stated face cannot show — so it needs the other tracks swept.
+
+### Still open from earlier rounds, untouched this round
+
+`batch-010`'s `5709.16 ch.40_mgfinal.docx` (31 against 32, the 11.4 pt header and the four lines);
+the paragraph `w:pBdr` height, whose 23 declaring documents are almost all in batches 013–020; the
+VML `DrawAspect` work; and `batch-006`'s row-split trap, which remains a trap.
