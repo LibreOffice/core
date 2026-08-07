@@ -354,13 +354,14 @@ public sealed record PageParagraph : PageBlock
 
         foreach (PageRun run in Runs)
         {
-            LineMetrics metrics = LineSpacing.Resolve(run.Face, Metrics);
+            LineMetrics metrics = LineSpacing.Resolve(
+                run.Face, Metrics, WriterLineBox.LeadingAboveText);
             Length size = run.MetricEmSize > Length.Zero ? run.MetricEmSize : run.EmSize;
             height = Length.Max(height, Length.FromTwips(metrics.ScaledLineHeight(size).Twips));
             ascent = Length.Max(ascent, Length.FromTwips(metrics.ScaledAscent(size).Twips));
         }
 
-        LineMetrics own = LineSpacing.Resolve(Face, Metrics);
+        LineMetrics own = LineSpacing.Resolve(Face, Metrics, WriterLineBox.LeadingAboveText);
         return (
             Length.Max(height, Length.FromTwips(own.ScaledLineHeight(EmSize).Twips)),
             Length.Max(ascent, Length.FromTwips(own.ScaledAscent(EmSize).Twips)));
@@ -387,7 +388,7 @@ public sealed record PageParagraph : PageBlock
 
         return MeasuredParagraph.Measure(
             Text, runs, shaper: null, Itemisation, MeasurementObjects(), Metrics,
-            BlanksAreTransparentToHeight);
+            BlanksAreTransparentToHeight, WriterLineBox.LeadingAboveText);
     }
 
     /// <summary>

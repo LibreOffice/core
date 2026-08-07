@@ -24,8 +24,8 @@ namespace Paperless.Text.Tests;
 /// </remarks>
 public class MetricGridTests
 {
-    private static LineMetrics LiberationSans(MetricGrid? grid = null)
-        => new(1854, 434, 67, LineMetricSource.HorizontalHeader, 2048, grid);
+    private static LineMetrics LiberationSans(MetricGrid? grid = null, bool leadingAbove = false)
+        => new(1854, 434, 67, LineMetricSource.HorizontalHeader, 2048, grid, leadingAbove);
 
     private static LineMetrics LiberationSerif(MetricGrid? grid = null)
         => new(1825, 443, 87, LineMetricSource.HorizontalHeader, 2048, grid);
@@ -64,8 +64,10 @@ public class MetricGridTests
     {
         // SwFntObj::GetFontAscent adds the external leading to the ascent everywhere but macOS, so a
         // gridded ascent exceeds the bare ascent by exactly the gap and the descent is unchanged.
+        // Only a Writer document reaches the grid at all — it is what `fUsePrinterMetrics` asks for —
+        // so this case is stated the way Writer asks for it.
         Length em = Length.FromPoints(11);
-        LineMetrics gridded = LiberationSans(MetricGrid.Printer);
+        LineMetrics gridded = LiberationSans(MetricGrid.Printer, leadingAbove: true);
 
         Length ascent = gridded.ScaledAscent(em);
         Length descent = gridded.ScaledDescent(em);
@@ -73,6 +75,68 @@ public class MetricGridTests
         (ascent + descent).ShouldBe(gridded.ScaledLineHeight(em));
         ascent.Twips.ShouldBe(212);
         descent.Twips.ShouldBe(48);
+    }
+
+    [Fact]
+    public void TheLeadingSitsAboveTheTextWithoutAGridToo()
+    {
+        // The gridless path is the usual one — only a document laid out against a printer passes a
+        // grid — and it used to charge the line gap to neither the ascent nor the descent. The gap was
+        // still inside the line height, so the pitch *within* a paragraph was right and only the first
+        // line of each page was wrong, which is what let it survive: it cancels everywhere except
+        // against the top margin.
+        //
+        // Read out of LibreOffice's own PDF content stream: Liberation Sans at 11 pt inside a 72 pt top
+        // margin puts Writer's first baseline at 82.3008 pt, so the ascent is 206 twips and not 199.
+        // 1854 + 67 over 2048 at 11 pt is 206.35 twips; 1854 alone is 199.15.
+        Length em = Length.FromPoints(11);
+        LineMetrics writer = LiberationSans(leadingAbove: true);
+
+        Length ascent = writer.ScaledAscent(em);
+        Length descent = writer.ScaledDescent(em);
+
+        ascent.Twips.ShouldBe(206);
+        descent.Twips.ShouldBe(47);
+        (ascent + descent).ShouldBe(writer.ScaledLineHeight(em));
+    }
+
+    [Fact]
+    public void AnEngineThatDoesNotAddTheLeadingLeavesTheLineShortOfItsHeight()
+    {
+        // The other half, and the reason this is a flag rather than a rule: EditEngine — which is what
+        // Impress, Calc and Writer's own drawing objects format through — adds the external leading
+        // only when `IsAddExtLeading()`, and that is false unless something turns it on
+        // (editeng/source/editeng/impedit3.cxx:3133-3135, impedit2.cxx:118, svdmodel.cxx:161). Its
+        // line box is `nMaxAscent + nMaxDescent` with no gap in it, so ascent + descent is *shorter*
+        // than the face's line height by exactly the gap, and that is correct rather than a defect.
+        //
+        // Measured: LibreOffice Impress puts two 18 pt Liberation Sans baselines in a table cell
+        // 20.154 pt apart, which is ascent-plus-descent; the gap would make it 20.698.
+        Length em = Length.FromPoints(11);
+        LineMetrics editEngine = LiberationSans();
+
+        Length ascent = editEngine.ScaledAscent(em);
+        Length descent = editEngine.ScaledDescent(em);
+
+        ascent.Twips.ShouldBe(199);
+        descent.Twips.ShouldBe(47);
+        (ascent + descent).ShouldBeLessThan(editEngine.ScaledLineHeight(em));
+    }
+
+    [Fact]
+    public void AFaceStatingNoLineGapIsUnaffectedByWhereTheLeadingSits()
+    {
+        // Carlito's hhea gap is zero, which is why the placement error was invisible on every OOXML
+        // document that resolves its fonts through the theme — and nearly all of this corpus does. A
+        // face with no gap must come out identical either way, so this pins that the difference is a
+        // *placement* and not an addition.
+        Length em = Length.FromPoints(11);
+        LineMetrics carlito = new(1950, 550, 0, LineMetricSource.HorizontalHeader, 2048);
+
+        carlito.ScaledAscent(em)
+            .ShouldBe((carlito with { LeadingAboveText = true }).ScaledAscent(em));
+        (carlito.ScaledAscent(em) + carlito.ScaledDescent(em))
+            .ShouldBe(carlito.ScaledLineHeight(em));
     }
 
     [Fact]

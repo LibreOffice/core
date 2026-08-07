@@ -250,6 +250,10 @@ public sealed class MeasuredParagraph
     /// for; see <see cref="HeightOf"/>. False — the default — measures every run on the line, which is
     /// what ODF and RTF want.
     /// </param>
+    /// <param name="leadingAboveText">
+    /// Whether each run's external leading is charged to its ascent. True only for Writer's own text;
+    /// see <see cref="LineMetrics.ScaledAscent"/>.
+    /// </param>
     public static MeasuredParagraph Measure(
         string text,
         IReadOnlyList<FormattedRun> runs,
@@ -257,7 +261,8 @@ public sealed class MeasuredParagraph
         ItemisationOptions? itemisation = null,
         IReadOnlyList<InlineObject>? objects = null,
         MetricGrid? grid = null,
-        bool blanksAreTransparentToHeight = false)
+        bool blanksAreTransparentToHeight = false,
+        bool leadingAboveText = false)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(runs);
@@ -287,7 +292,8 @@ public sealed class MeasuredParagraph
                 ShapedText shaped = engine.Shape(
                     part.Face, text.AsSpan(part.Start, part.Length), part.Shaping);
 
-                measured.Add(new MeasuredRun(part, shaped, LineSpacing.Resolve(part.Face, grid)));
+                measured.Add(new MeasuredRun(
+                    part, shaped, LineSpacing.Resolve(part.Face, grid, leadingAboveText)));
 
                 // Each sub-run's own prefix widths, scaled from its own grid into EMUs and added to
                 // the running total. Summing in design units instead would add numbers from two

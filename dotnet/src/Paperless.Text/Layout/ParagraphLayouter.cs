@@ -135,12 +135,21 @@ public sealed class ParagraphLayouter
     /// The device grid the face's vertical metrics are rounded through, or null to scale them exactly.
     /// See <see cref="MetricGrid"/>.
     /// </param>
-    public ParagraphLayouter(OpenTypeFace face, ILineBreaker? breaker = null, MetricGrid? grid = null)
+    /// <param name="leadingAboveText">
+    /// Whether the face's external leading is charged to the ascent. True only for Writer's own text;
+    /// see <see cref="LineMetrics.ScaledAscent"/>. Defaulting it false keeps the two engines that do
+    /// not add it — Impress's and Calc's, both EditEngine — right without having to say so.
+    /// </param>
+    public ParagraphLayouter(
+        OpenTypeFace face,
+        ILineBreaker? breaker = null,
+        MetricGrid? grid = null,
+        bool leadingAboveText = false)
     {
         ArgumentNullException.ThrowIfNull(face);
         _measurer = new TextMeasurer(face);
         _filler = new LineFiller(_measurer, breaker);
-        _metrics = LineSpacing.Resolve(face, grid);
+        _metrics = LineSpacing.Resolve(face, grid, leadingAboveText);
     }
 
     /// <summary>The line metrics the face resolved to, and which set they came from.</summary>

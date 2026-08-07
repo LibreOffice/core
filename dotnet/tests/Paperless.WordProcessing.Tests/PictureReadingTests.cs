@@ -281,8 +281,23 @@ public sealed class PictureReadingTests
         (withPicture.Baseline - withPicture.Top).Points.ShouldBeGreaterThanOrEqualTo(
             inline.Frame.Size.Height.Points, "the ascent grew to the picture's height");
 
+        // And LibreOffice's second line starts one line box below the first's top. Re-derived from its
+        // own PDF of each of the three spellings, all of which put the two baselines at 85.0508 and
+        // 98.8508 pt on a text area starting at 2 cm:
+        //
+        //   line 1's ascent is the picture's centimetre        85.0508 − 56.6929 = 28.358
+        //   line 2's ascent is Liberation Serif's, plus the
+        //   face's hhea line gap, which Writer charges to the
+        //   ascent — (1825 + 87)/2048 × 12 pt                            = 11.203
+        //   so line 1's box is                       98.8508 − 11.203 − 56.6929 = 30.955
+        //
+        // and independently of the margin, 13.80 pt of baseline pitch minus 11.203 plus 28.347 is
+        // 30.944. The 31.46 this asserted before is that same arithmetic with the line gap left below
+        // the text instead of above it — it charged the gap to line 1's descent, which moved no
+        // baseline in this document because the two errors cancel between the lines, and put the box
+        // boundary half a point low. See `WriterLineBox.LeadingAboveText`.
         (without.Top - withPicture.Top).Points.ShouldBe(
-            31.46, 0.1, "and LibreOffice's second line starts 31.46 pt below the first's");
+            30.95, 0.1, "and LibreOffice's second line starts 30.95 pt below the first's");
     }
 
     /// <summary>

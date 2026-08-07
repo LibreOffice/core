@@ -135,7 +135,8 @@ public static class FlowLayouter
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[i];
-            ParagraphLayouter layouter = new(paragraph.Face, breaker: null, paragraph.Metrics);
+            ParagraphLayouter layouter = new(
+                paragraph.Face, breaker: null, paragraph.Metrics, WriterLineBox.LeadingAboveText);
             ParagraphFormat? previous = i > 0 && blocks[i - 1] is PageParagraph before
                 ? before.Format
                 : null;
