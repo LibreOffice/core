@@ -1381,9 +1381,9 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (pInStream)
                 {
                     pInStream->SetStreamEncoding( aOptions.GetCharSet() );
-                    // tdf#169591 in case of RTL_TEXTENCODING_UCS2, we need to know endianess too.
+                    // tdf#169591 in case of RTL_TEXTENCODING_UCS2, we need to know endianness too.
                     // For this, we'll have to call a second time DetectEncoding.
-                    // An alternative would be to save the endianess in ScFilterOptionsObj::aFilterOptions
+                    // An alternative would be to save the endianness in ScFilterOptionsObj::aFilterOptions
                     // but does it worth it?
                     if (pInStream->GetStreamEncoding() == RTL_TEXTENCODING_UCS2)
                     {
