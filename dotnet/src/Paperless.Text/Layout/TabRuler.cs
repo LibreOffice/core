@@ -81,13 +81,20 @@ public static class TabRuler
     /// stops, which differs by the first-line indent — and a hanging one puts the edge <em>before</em> the
     /// stops' own origin, which is the case <see cref="ParagraphFormat.NextTabStop"/> treats specially.
     /// </param>
+    /// <param name="rightEdge">
+    /// Where the line's right boundary is, in the same coordinates as the stops, or null to let a stop
+    /// stand wherever it was declared. See <see cref="Place"/>: a right, centred or decimal stop past this
+    /// is honoured <em>at</em> it instead, which is the difference between a table-of-contents entry on
+    /// one line and the same entry broken across four.
+    /// </param>
     public static List<TabbedSegment> Segments(
         string text,
         int start,
         int end,
         ParagraphFormat format,
         Func<int, int, Length> widthBetween,
-        bool isFirstLine = true)
+        bool isFirstLine = true,
+        Length? rightEdge = null)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(format);
@@ -113,7 +120,7 @@ public static class TabRuler
 
             Length width = widthBetween(at, stretchEnd);
             Length left = pending is { } stop
-                ? Place(stop, pen, width, text, at, stretchEnd, widthBetween)
+                ? Place(stop, pen, width, text, at, stretchEnd, widthBetween, rightEdge)
                 : pen;
 
             // `pen` is still where the tab began, so the blank it advanced across is [pen, left). A
@@ -142,16 +149,18 @@ public static class TabRuler
     /// <param name="format">The paragraph's stops and default interval.</param>
     /// <param name="widthBetween">Measures a range of the text, tabs excluded.</param>
     /// <param name="isFirstLine">As <see cref="Segments"/>'s.</param>
+    /// <param name="rightEdge">As <see cref="Segments"/>'s.</param>
     public static Length WidthOf(
         string text,
         int start,
         int end,
         ParagraphFormat format,
         Func<int, int, Length> widthBetween,
-        bool isFirstLine = true)
+        bool isFirstLine = true,
+        Length? rightEdge = null)
     {
         List<TabbedSegment> segments =
-            Segments(text, start, end, format, widthBetween, isFirstLine);
+            Segments(text, start, end, format, widthBetween, isFirstLine, rightEdge);
 
         return segments.Count == 0 ? Length.Zero : segments[^1].Right;
     }
@@ -177,6 +186,19 @@ public static class TabRuler
     /// decimal stop its separator — which is why this needs the stretch's width and, for the decimal case,
     /// its text. A stop already behind the pen cannot be honoured at all, so the text simply continues.
     /// </remarks>
+    /// <remarks>
+    /// A right, centred or decimal stop declared past the line's right boundary is honoured <em>at</em>
+    /// the boundary instead. Writer says so in one line and says why in the comment above it —
+    /// <em>"If the tab position is larger than the right margin, it gets scaled down by default"</em>,
+    /// <c>SwTabPortion::PostFormat</c>, <c>sw/source/core/text/txttab.cxx</c>:503, where
+    /// <c>nRight = std::min(GetTabPos(), rInf.Width())</c> unless the document asked for
+    /// <c>TabOverMargin</c>. Leaving it out is not a small difference: a table-of-contents style whose
+    /// dotted right stop sits at the page's text width, on a paragraph that also carries a right indent,
+    /// has its stop a few hundred twips past the line's own edge, and every entry then breaks into a line
+    /// for its number, a line for its title, a line of leader dots and a line for its page.
+    /// A <em>left</em> stop past the boundary is deliberately not clamped: Writer breaks the line there
+    /// instead (<c>PreFormat</c>, same file, sets <c>bFull</c>), which is what happens here already.
+    /// </remarks>
     private static Length Place(
         TabStop stop,
         Length pen,
@@ -184,15 +206,20 @@ public static class TabRuler
         string text,
         int start,
         int end,
-        Func<int, int, Length> widthBetween)
+        Func<int, int, Length> widthBetween,
+        Length? rightEdge = null)
     {
+        Length position = rightEdge is { } edge && stop.Position > edge && stop.Alignment != TabAlignment.Left
+            ? edge
+            : stop.Position;
+
         Length left = stop.Alignment switch
         {
-            TabAlignment.Right => stop.Position - width,
-            TabAlignment.Centre => stop.Position - (width / 2.0),
+            TabAlignment.Right => position - width,
+            TabAlignment.Centre => position - (width / 2.0),
             TabAlignment.DecimalSeparator =>
-                stop.Position - widthBetween(start, SeparatorIn(text, start, end)),
-            _ => stop.Position,
+                position - widthBetween(start, SeparatorIn(text, start, end)),
+            _ => position,
         };
 
         return left < pen ? pen : left;
