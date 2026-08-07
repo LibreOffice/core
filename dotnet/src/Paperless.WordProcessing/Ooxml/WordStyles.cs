@@ -149,10 +149,20 @@ public sealed class WordStyle
     public bool IsDefault { get; }
 
     /// <summary>The style's <c>w:pPr</c>, or null.</summary>
-    public XElement? ParagraphProperties { get; }
+    public XElement? ParagraphProperties { get; private set; }
 
     /// <summary>The style's <c>w:rPr</c>, or null.</summary>
     public XElement? RunProperties { get; }
+
+    /// <summary>
+    /// Replaces the style's <c>w:pPr</c> with an equivalent that states one more attribute, for
+    /// <see cref="WordStyles.CompleteOneSidedSpacing"/>.
+    /// </summary>
+    /// <remarks>
+    /// A detached copy rather than an edit in place: the element belongs to the loaded part, and
+    /// several readers walk that tree for their own purposes.
+    /// </remarks>
+    internal void ReplaceParagraphProperties(XElement replacement) => ParagraphProperties = replacement;
 }
 
 /// <summary>
@@ -224,6 +234,8 @@ public sealed class WordStyles
             DefaultParagraphProperties = Word.Child(Word.Child(docDefaults, "pPrDefault"), "pPr");
         }
 
+        List<WordStyle> declared = [];
+
         foreach (XElement element in Word.Children(root, "style"))
         {
             WordStyle style = new(element);
@@ -237,6 +249,84 @@ public sealed class WordStyles
 
             _styles[(style.Type, style.StyleId)] = style;
             if (style.IsDefault) _defaults[style.Type] = style.StyleId;
+            if (style.Type == WordStyleType.Paragraph) declared.Add(style);
+        }
+
+        CompleteOneSidedSpacing(declared);
+    }
+
+    /// <summary>
+    /// Gives a paragraph style that states one of <c>w:spacing/@w:before</c> and
+    /// <c>@w:after</c> a value for the other, when its parent has not been read yet.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice keeps a paragraph's two vertical margins in <em>one</em> item,
+    /// <c>SvxULSpaceItem</c>, while writerfilter sets them through two separate UNO properties.
+    /// Setting one is therefore a read-modify-write of the pair: the importer takes whatever the
+    /// style resolves to at that moment, replaces the half the file states, and writes both back
+    /// as <em>direct</em> values. So the unstated half stops being inherited and freezes at
+    /// whatever the parent chain happened to hold — and styles are applied in the order
+    /// <c>styles.xml</c> declares them, so "at that moment" means <em>before</em> a parent
+    /// declared further down has had its own definition applied. What the parent still holds
+    /// there is Writer's pool default for the built-in style its <c>w:name</c> maps onto.
+    /// </para>
+    /// <para>
+    /// Measured on LibreOffice 24.2.7.2 rather than inferred, with the parent stating
+    /// <c>w:before="480"</c> as a control: a child stating only <c>w:after</c> and based on a
+    /// <c>heading 2</c> declared <em>after</em> it gets 12 pt above and never sees the 480; the
+    /// same file with the parent declared <em>first</em> gets the 480. A custom parent gives
+    /// zero, which is a suppression rather than a no-op for exactly the same reason.
+    /// </para>
+    /// <para>
+    /// This is what puts a 12 pt space above every <c>Heading1</c> of
+    /// <c>final-technical-report-template.docx</c>, whose style states only <c>w:after="240"</c>
+    /// and is based on its own <c>Heading2</c> — five headings' worth of page, and the sixth page
+    /// the reference has and we did not.
+    /// </para>
+    /// </remarks>
+    /// <param name="declared">The paragraph styles of one <c>w:styles</c>, in declaration order.</param>
+    private static void CompleteOneSidedSpacing(List<WordStyle> declared)
+    {
+        Dictionary<string, int> position = new(StringComparer.Ordinal);
+        Dictionary<string, WordStyle> byId = new(StringComparer.Ordinal);
+        for (int i = 0; i < declared.Count; i++)
+        {
+            position.TryAdd(declared[i].StyleId, i);
+            byId.TryAdd(declared[i].StyleId, declared[i]);
+        }
+
+        for (int i = 0; i < declared.Count; i++)
+        {
+            WordStyle style = declared[i];
+            if (style.BasedOn is not { Length: > 0 } parentId) continue;
+            if (Word.Child(style.ParagraphProperties, "spacing") is not { } spacing) continue;
+
+            bool before = Word.Attribute(spacing, "before") is not null
+                          || Word.Attribute(spacing, "beforeAutospacing") is not null;
+            bool after = Word.Attribute(spacing, "after") is not null
+                         || Word.Attribute(spacing, "afterAutospacing") is not null;
+            if (before == after) continue;
+
+            // A parent already read is an ordinary inheritance and needs nothing done to it: the
+            // read-modify-write picks up the same value the layering would.
+            if (position.TryGetValue(parentId, out int parentAt) && parentAt < i) continue;
+
+            // An undeclared parent is a different case again — writerfilter never rewrites the
+            // parent link at all, so the style keeps Writer's own parent for *its* built-in name.
+            // Not handled here; no corpus document takes that path.
+            if (!byId.TryGetValue(parentId, out WordStyle? parent)) continue;
+
+            (int above, int below) = WriterPoolSpacing.For(parent.Name);
+
+            XElement replacementSpacing = new(spacing);
+            replacementSpacing.SetAttributeValue(
+                Word.Name(before ? "after" : "before"),
+                (before ? below : above).ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            XElement replacement = new(style.ParagraphProperties!);
+            replacement.Element(Word.Name("spacing"))?.ReplaceWith(replacementSpacing);
+            style.ReplaceParagraphProperties(replacement);
         }
     }
 
