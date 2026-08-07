@@ -3005,3 +3005,109 @@ fd=$(grep -c '^TOTAL' "$log" 2>/dev/null || echo 0)
 branch runs too and `fd` is the two-line string `"0\n0"` — which is not equal to `"0"`, so
 every test on it is true. The failure is silent and looks exactly like success. Use `grep -q`
 and set a flag, and never take a count where a verdict will do.
+
+## Slides, round twelve measured: 1635.50 -> 1567.96 unaccounted ink, 538 -> 478 major pages
+
+Whole track swept three times at 163 documents each — a baseline at `5ec407cf3`, the
+`a:fontRef` fix alone, and all three changes — rendering **our** side each time and reusing the
+baseline's reference PDFs. Nothing this round touches `soffice`, and every sweep's reference
+column is the base sweep's file by construction.
+
+| | baseline | `a:fontRef` | + trailing break | + `.ppt` U+2028 |
+|---|---|---|---|---|
+| matching the word gate | 152/163 | 152/163 | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 | 163/163 | **163/163** |
+| documents the reference could not render | 0 | 0 | 0 | **0** |
+| total unaccounted ink | 1635.50 | 1583.80 | 1581.45 | **1567.96** |
+| pages the image tool calls major | 538 | 502 | 501 | **478** |
+| documents whose ink moved | — | 21 | 23 more | **49 in all** |
+
+The baseline reproduced round eleven's published figures — 152/163, **1635.50** against the
+recorded 1635.52, **538** major pages, every page count exact — which is the tell that the base
+and the instrument are both right.
+
+```
+ 37.89 ->  8.44   Sector_Skills_Insights…pptx                     major 11 ->  3
+ 31.84 -> 22.94   2015-Civil-Rights-Website-training.ppt          major 28 ->  9
+ 16.43 -> 13.03   southern-classic-kennesaw-state-university.pptx major 13 ->  7
+ 12.88 -> 10.62   Intersil_Italy_CAN_Bus_Transceiver…pptx         major  4 ->  5
+ 11.10 ->  2.18   Course Selection 2025-26 Current Grade 09.pptx  major  4 ->  0
+  6.34 ->  3.50   FAAAIandtheArtandScienceofV&Vfinal.pptx         major 10 ->  0
+  5.13 ->  2.19   Inducement-to-Insurance-Business.ppt            major  2 ->  0
+  4.18 ->  0.37   Ensemble-pour-l-amelioration…AIRBUS.pptx        major  3 ->  0
+ 16.09 -> 20.54   16 - UTM - (NASA).pptx                          major  3 ->  5
+```
+
+Of the 49 that moved, **35 fell and 14 rose by 6.03 between them**; `16 - UTM - (NASA).pptx`
+is 4.45 of that 6.03 and is discussed above.
+
+**Six of the 163 rows moved a column and none changed verdict or page count.** Four are word
+counts inside the 2% band. One is `16 - UTM`'s font count. The sixth is the round's clearest
+result: `2015-Civil-Rights-Website-training.ppt` goes **6156/6145 to 6145/6145, an exact
+match**, because the vertical tabs it ends every bullet with had been drawn as `\n` and are now
+U+2028.
+
+### Per batch, and batch-014
+
+001 9/9 · 002–004 10/10 · 005 9/9 · 006 10/10 · 007 10/10 · **008 9/10** · 009 10/10 ·
+**010 8/10** · 011 10/10 · **012 8/10** · 013 10/10 · **014 7/10** · 015 10/10 · **016 8/10** ·
+**017 4/5**. Identical to the baseline in every batch.
+
+Batch-014's three failures are `Thailand17.ppt` and `N2_E_Maestroni_Swarm_COP.pptx` — both on
+`TODO.raster-ceiling.md` — and `WiGr_2021W_1_…pptx`, the `mc:Choice Requires="a14"` deck whose
+`mc:Fallback` is a picture of its own text. **There is no third, winnable failure there.** The
+brief for this round said "batch-014's two non-ceiling failures"; there is one non-ceiling
+failure and matching it means drawing a picture instead of text, which this file already says
+not to do. Recorded so the next brief does not send anyone after it again.
+
+### The regression guards
+
+Two of the four changed files are below the presentation family — `Paperless.Text/Layout`
+(the trailing-break rule) — so the other two tracks were swept.
+
+| | |
+|---|---|
+| `slides/batch-001`–`017`, whole track | **152/163**, every page count exact, 0 `ref-failed` |
+| `words/batch-001`–`005` | **50/50** |
+| `sheets/batch-001`–`005` | **49/50** |
+
+**The sheets failure is not this round's, and it is checked rather than assumed.**
+`sheets/batch-005/xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls` reads 34/34 pages
+and **2019/1828 words**, which is exactly the document the `render-comparison` skill describes
+under "a word count can fault output that is geometrically perfect": the whole excess is
+`http://www.` extracting as its own token 48 times, because our PDF sink caps a show operator
+at 28 glyphs where LibreOffice writes one `TJ` array. Rendered with the *base* CLI snapshot and
+the final one, it comes back **34 pages and 2019 words both times** — identical, so the change
+did not cause it. The 50/50 in the record predates that defect.
+
+Per project on the final tree, each run redirected to its own file, 0 skipped everywhere:
+Core 238, Text **196** (was 185), Containers 109, Rendering 104, Markup 259, OpenDocument 125,
+WordProcessing 542, Spreadsheets 401, Presentations **488** (was 485), Vector 291, Fidelity 538.
+The two that moved are the fourteen tests added and nothing else.
+
+Two fixtures, each verified by putting its bug back: `slide-trailing-break.pptx` and
+`trailing-line-break.fodt`. `deck-text-style.pptx` already existed and needed no change — its
+five styled boxes are exactly the `a:fontRef` ordering cases.
+
+### What the next agent on this track should take
+
+```
+368.41  77 of 137 major  NAS-Infrastructure-Roadmaps-v16.0.pptx   (linked Excel OLE, known)
+ 66.12   1 of  30        N2_E_Maestroni_Swarm_COP.pptx            (the Gantt)
+ 56.67  10 of  41        Wildlife for REDAC September 11.pptx     (circle gradient, do not)
+ 49.65  18 of  54        Thailand17.ppt
+ 48.41   6 of 268        Reporting_responsibilities_matrix.pptx   (467 fontRefs, moved 0.00)
+ 45.11  18 of  40        171128IPAP.pptx                          (a:pattFill — see above)
+ 28.28  13 of  94        8.16_AOD_FINAL_Provider_Training…ppt     (p59 alone is 16.05: text path)
+ 26.67   6 of  10        Demick_JetBlue.pptx                      (chart label density)
+ 25.95  12 of  47        ITE106-Chapter 4.ppt                     (unlooked at)
+ 25.03  10 of  52        ghgp-supply-chain-initiative…pptx
+ 23.99  10 of  24        Framing Europe.ppt                       (bullet glyphs — see above)
+ 22.94   9 of  94        2015-Civil-Rights-Website-training.ppt   (residue: bullet glyphs)
+ 21.34   5 of  11        NAS-Infrastructure-Roadmaps-Weather.pptx (unlooked at)
+ 20.54   5 of  37        16 - UTM - (NASA).pptx                   (rose this round)
+```
+
+`a:pattFill` is the best-bounded of these — five presets, 65 fills, 7 decks, three of them in
+this list. `ITE106-Chapter 4.ppt` and `NAS-Infrastructure-Roadmaps-Weather.pptx` have never
+been looked at.
