@@ -226,9 +226,21 @@ Three things follow, and the fourth is the one that actually costs rounds:
   with it. A round that reports a fix's mechanism and reach while stating plainly that the
   scoreboard did not move is a good round; one that quotes the reach and lets the reader assume
   the score followed is how a track's recorded position drifts away from its real one.
-- **Measure reach by rendering, never by censusing.** The census is the ceiling, not the reach,
-  and it has overstated by two-fold (56 of 134 DOCX declare a `w:pBdr`; 28 documents actually
-  changed) and by an order of magnitude elsewhere. Quote it as a ceiling and label it as one.
+- **Measure reach by rendering, never by censusing.** The census is usually the ceiling, not the
+  reach, and it has overstated by two-fold (56 of 134 DOCX declare a `w:pBdr`; 28 documents
+  actually changed), by six-fold (54 of 66 `.doc` carry the border sprms; 9 draw a new rule,
+  because Word writes `sprmPBrcTop` with a nil `BRC` constantly), and by an order of magnitude
+  elsewhere. Quote it as a ceiling and label it as one.
+
+  **But a census is only a ceiling for the formats it can actually read, and it has understated
+  too.** A `textRotation` search through `xl/styles.xml` found four documents; **eleven**
+  changed when rendered, and **eight of those are `.xls`**, which states rotation in an `XF`
+  record no zip-level census can see. A census over an OOXML part is blind to the binary half of
+  a track outright — which on words is 66 of 200 documents and on sheets 61 of 171.
+
+  So the sentence to write is not "the census says N" but "**the census says N over the
+  formats it can read, which is M of the track**". The failure that costs a round is not
+  over-stating or under-stating; it is quoting a number without saying what it counted over.
 - **When the gate goes quiet, go down the instrument list, not sideways.** The two font findings
   were invisible until somebody ran an operator diff over documents that *already passed* —
   which nothing had ever done, and which found two thirds of them differing.
@@ -862,6 +874,17 @@ conflicted file is easy to miss:
 
 The same shape catches other inverted guards: any `check && commit` where the check reports a
 *count* rather than a verdict is backwards.
+
+### `pkill` on `dotnet test` orphans the runner that was doing the work
+
+Killing a `dotnet test` leaves its `vstest.console` child alive. The orphan keeps its share of
+the machine, so the replacement run competes with it and looks hung — which invites killing
+*that* one too, and the loop compounds. Kill the process tree, or wait for the run rather than
+racing it. Both of this round's "test host wedged" episodes were this.
+
+The same shape shows up outside tests: an `soffice` has twice now wedged **past its own
+`timeout`**, once 44 minutes past a 240-second limit, and returned `ref-failed` for a document
+that converts fine when re-run alone. Splice the row rather than repeating the sweep.
 
 ### `--no-build` after reintroducing a defect measures the defect
 
