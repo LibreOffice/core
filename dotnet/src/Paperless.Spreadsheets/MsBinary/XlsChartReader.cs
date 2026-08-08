@@ -429,10 +429,17 @@ internal sealed class XlsChartBuilder
     /// <remarks>
     /// The record is a bare index into the workbook's <c>FONT</c> buffer and nothing else
     /// (<c>XclImpChFont::ReadChFont</c>, <c>xichart.cxx:941</c>); which text it dresses is
-    /// decided entirely by where it sits. Only a <c>CHTEXT</c> opened directly under
-    /// <c>CHCHART</c> by a <c>CHDEFAULTTEXT</c> is one of the chart's defaults, so the stack has
-    /// to say so — the same <c>CHFONT</c> under a legend or an axis is that object's own font and
-    /// not a default for anything.
+    /// decided entirely by where it sits. Only a <c>CHTEXT</c> opened by a <c>CHDEFAULTTEXT</c> is
+    /// one of the chart's defaults, so the stack has to say so — the same <c>CHFONT</c> under a
+    /// legend or an axis is that object's own font and not a default for anything.
+    /// <para>
+    /// <strong>The innermost check is what carries that, and nothing else does.</strong> Clearing
+    /// the open identifier when the <c>CHTEXT</c> group closes looks like a second guard and is
+    /// dead code: reaching a <c>CHFONT</c> with a <c>CHTEXT</c> innermost means that
+    /// <c>CHTEXT</c>'s own header record assigned the identifier on the way in, so there is no
+    /// path on which a stale one can be read. It was written, found to fail no case under
+    /// mutation, and removed rather than left as an untested comfort.
+    /// </para>
     /// </remarks>
     private void ReadFont(ushort index)
     {
@@ -477,8 +484,6 @@ internal sealed class XlsChartBuilder
     private void Close(ushort container)
     {
         if (container != BiffChartRecords.Text) return;
-
-        _openDefaultText = NoDefaultText;
 
         // A title with no text is the placeholder Excel writes for every object that could carry
         // one; only a linked, non-empty block names anything.
