@@ -9,16 +9,10 @@
 
 #pragma once
 
-#include <stddef.h>
-#include <assert.h>
-
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
 #include <ostream>
-
-// the API needs C99's bool
-# ifndef _WIN32
-#  include <stdbool.h>
-# endif
-# include <stdint.h>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
