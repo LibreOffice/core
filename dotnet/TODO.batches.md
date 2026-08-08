@@ -6139,6 +6139,88 @@ claim the `a:duotone` work rested on.
    under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
    not the fix. Round seventeen's action item is done; it should come off the list.
 
+## Sheets, round twenty-four: a BIFF chart's series were never resolved — swept whole at `73934b1b5`
+
+**The track verdict does not move again: 144/171, total absolute page error 94, 153 exact page
+counts**, identical before and after, no document changing verdict in either direction. Total
+absolute word error 43903 → 43694. Both sweeps 171 rows with no duplicate path, each against a
+checksummed copy of the CLI. The baseline reproduces round twenty-three's figures to the digit,
+per batch as well as in total — 001–009 all pass, 010 6/10, 011 6/10, 012 8/10, 013 8/10,
+014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
+
+### The chart series, built at last
+
+A BIFF series names its values through a `CHSOURCELINK` whose payload is a formula token array.
+Nothing read them, so **every chart in a `.xls` plotted the empty default scale of 0…12**. Now
+decoded: `XlsChartFormula` reads the single reference token a chart link consists of,
+`XlsExternSheets` reads `SUPBOOK` and `EXTERNSHEET` — the only way an `ixti` becomes a sheet — and
+the workbook reader pre-scans the whole stream for the rectangles any chart names, then reads
+those sheets once before the content pass.
+
+**The two-pass shape is the finding, not an implementation detail.** A chart is built the moment
+its substream ends, and its substream is embedded in the sheet its *picture* sits on, not the
+sheet holding the numbers. The first version resolved at the point of use: `EHEST` worked and the
+logbook produced no series at all, because `EHEST`'s chart happens to sit on the sheet it plots.
+
+The logbook now plots 0…1400 and 0…1200 against the reference's 0…1400 and 0…1200, with its three
+series carrying the names the reference's legend shows; `EHEST` plots 0…90 against 0…90.
+
+Second, smaller: `XclImpChLabelRange::Convert` turns `CHLABELRANGE`'s label frequency into
+`TextOverlap` and `TextBreak`, with the reason beside it — *do not overlap text unless all labels
+are visible* — and the default frequency is 1. So a BIFF category axis draws **every** label
+whatever they collide with, and none of `ChartAxisLabels`' thinning applies. `ChartPlot`
+already carried `CategoryAxisText`, so this is confined to `Paperless.Spreadsheets`.
+**Nothing in `Paperless.Core` was touched.**
+
+**Reach, measured by rendering all 171 with both CLIs and comparing the PDFs with their timestamps
+masked: 4 of 171 change what is drawn**, all four `.xls` carrying charts; 167 identical. A fifth
+document flagged by that comparison is a false positive — an `xlsx` no BIFF change can reach,
+byte-identical when both CLIs are run under the same conditions. **Our PDF writer is not
+reproducible across sweep runs**, which puts a false-positive floor under any byte-level reach
+measure; worth knowing before the next one uses it.
+
+### The chart-label font gap is not a special case — the census
+
+Round twenty-three measured `ChartLabel`'s missing font family as reaching **one** sheets document
+and asked for the other two tracks to be censused before anyone sized it. Censused by opening all
+534 corpus documents: **words 1 of 200, slides 15 of 163, sheets 1 of 171** carry a `chart*.xml`
+part. Nine of the fifteen slide decks carry more than one; one carries twenty-one. So it is a
+shared defect that is merely rare on sheets, and the figure is a floor as well as a ceiling — the
+102 binary `.ppt`/`.xls`/`.doc` documents are not counted, and `EHEST` is an `.xls` with no chart
+part whose labels the reference plainly sets in Carlito.
+
+It is also load-bearing here, which the one-document figure hid. `EHEST`'s residue is now −26
+words on each of eight chart pages: the reference draws its 51 category labels at a 8.28 pt pitch
+and `pdftotext` reads 51 tokens, we draw the same 51 at 7.30 pt and it reads one. **Our plot area
+is 365 pt wide against the reference's 414**, and the difference is the legend beside it — two
+entries in Carlito against three in Liberation Sans.
+
+Not fixed this round, deliberately: it means widening a `Paperless.Core` type and the
+`IChartTextMeasurer` interface while two other agents are in that library, and it owes a
+whole-track sweep on all three tracks.
+
+### Two of batch 010's four are now diagnosed rather than open
+
+`Template Pilot Logbook JAR-FCL V3.0.xls` **cannot pass the word gate**, for two measured reasons
+and neither is the chart data. Its category axis is a *date* axis in the reference — 615 category
+cells of which 17 hold anything, and 30 evenly spaced ticks running from 30/12/1899 to about 2111,
+a linear scale over date serials rather than one label per category. And of the 264 text records
+on the reference's page 16, **251 hold exactly one glyph**: LibreOffice writes rotated text one
+`Tj` per glyph, so 30 labels of eight characters score about 240 words where drawing them as
+strings scores 30. The document is 1342 against 1610 and the reachable figure is about 1409.
+
+`INDEX_Digital_Transformation_Toolkits.xls`: the 63-against-207 figure reproduces and is a count
+of images **drawn**, not of records in the file. Pages 1–13 agree exactly, images included and in
+the same positions; the divergence starts on page 14, where ours holds 10 images and the
+reference's 21. The reference prints the same picture block twice — alone over its pages 13–18 and
+again under the text on 19–24 — and so do we, over two pages each instead of six. **A shape walk
+that stopped after 25 shapes would not place the first 15 exactly and then thin the sixteenth
+onwards**, so that reading does not survive its own measurement; what the figures fit is a printed
+range that does not extend far enough down to cover the drawings anchored below it, which is
+`SheetDrawingArea`'s question rather than the Escher reader's.
+
+Probe data, both sweeps, the census and the page tables are in `dotnet/probes/sheets-r24/`.
+
 ## Sheets, round twenty-three: the em is quantised through the device, not after it — swept whole at `9c5bef08c`
 
 **The track verdict does not move, and that is the honest headline.** Swept whole before anything

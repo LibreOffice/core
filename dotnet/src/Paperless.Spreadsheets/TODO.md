@@ -687,6 +687,15 @@ both axis titles and then a value axis scaled from an empty series, 0 to 12 wher
 reads 0 to 180. **That is the next piece of this**, and it is worth 305 words on the Logbook and
 557 on EHEST.
 
+**Done in round twenty-four.** `CHSOURCELINK` is decoded, `SUPBOOK`/`EXTERNSHEET` resolve the
+`ixti`, and the workbook pre-scans for the rectangles its charts name and reads those sheets before
+the content pass — because a chart is built when its substream ends and the cells it plots are on
+a later sheet. The two documents plot 0…1400/0…1200 and 0…90, matching the reference exactly.
+Neither passes the word gate yet, and the reasons are now measured rather than guessed: see
+`dotnet/probes/sheets-r24/README.md`. What is still not read from a chart substream is the series
+colours (`CHLINEFORMAT`, `CHAREAFORMAT`), the label font (`CHFONT`, which needs `ChartLabel` to
+carry a family at all), and a date axis (`CHDATERANGE`).
+
 `TOGAF9-Tool-ConfReqts-CSQ.xls` was the risk and is worth recording: it matched before the change
 and carries a chart object, so it could have been the cost. It moved by 14 words out of 24 141 and
 stayed a match.
