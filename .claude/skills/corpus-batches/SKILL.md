@@ -428,6 +428,20 @@ The parent session's job at salvage time is to check each killed agent's branch 
 (`git log --oneline HEAD..worktree-agent-*`), merge and re-verify what is there, and stash the
 rest as patches before removing the worktrees — which also frees the disk the next round needs.
 
+**Do not merge a salvage into the branch yourself — hand the branch on and make its successor
+re-derive it.** A restart killed an agent whose two commits looked complete: clean worktree, a
+fix and its probe, the message written as a finding rather than as a `wip:`. Its successor
+cherry-picked them, reproduced every measurement *to the digit*, and then found the commit left
+`Paperless.Core.Tests` at **246 of 247** — an existing test asserted exactly the structure the
+fix stopped producing. **A salvaged commit has not been through the gate**, however finished it
+reads, and "the tree is clean" says only that nothing was left unstaged.
+
+The same round shows why re-deriving pays beyond catching that: the salvage's own numbers were
+right and *incomplete*. It fixed one of two cancelling errors, so applied alone it made three of
+seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59 with it, → **1.27**
+with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
+improve would have shipped half a fix and called it done.
+
 ### A green test that proves nothing is worse than no test
 
 Ask agents to verify each new test by **reintroducing the bug and watching it fail**. One
@@ -560,6 +574,25 @@ Two costs, and the second is the worse one: the agent worked without material it
 have, and its report contained a confident, wrong statement of fact that a reader could have
 acted on. **Write every path outside the repo in full**, and if a brief hands over an artefact,
 say how to check it is the right one.
+
+### A relative scratch path lands inside the repository
+
+The rule above says to give absolute paths for anything outside the repository, and it was
+written after a *brief* used a relative path that an agent resolved against its worktree. The
+mirror image happens too and is worse: an agent writing to `scratchpad/<name>` puts it in the
+repository working tree. Measured: **406 MB inside the repo root** while the round was still
+running.
+
+Untracked is not safe. The parent's merge routine resolves the scoreboard conflict with
+`git add -A`, which would have committed the whole directory; the only reason it did not is that
+that particular merge fast-forwarded and never reached the line. It also spends the repository's
+filesystem allowance rather than the scratch area's, and three agents plus rendered PDFs have
+taken this container to 95% before.
+
+So: **absolute paths in both directions**, and as a backstop add `scratchpad/` to
+`.git/info/exclude` — it is shared across worktrees, so one entry covers every agent, and it
+does not modify a tracked file. Treat the exclude as a guard rather than the fix; a sweep whose
+TSVs record the old location after a move is worse than one that fails outright.
 
 ### Name scratch directories after the agent, not after the sweep
 
