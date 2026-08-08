@@ -42,3 +42,11 @@ reference's 6.803 pt is 240 hundredths, and 240 is *not* reachable by quantising
 1/100 mm grid in either order. It is `round(round(238.5 * 720/2540) * 2540/540) * 0.75`
 = `round(68 * 4.7037) * 0.75` = `320 * 0.75`. The em never sits on the 1/100 mm grid at all
 under a zoom; the *unscaled* logical value does.
+
+## Verifying the tests by reintroducing the bug
+
+`SheetFontSizeDeviceTests` has 24 cases. Replacing the body of
+`SnapFontSize(Length, double)` with the pre-fix `SnapFontSize(value) * scale` fails **11** of
+them — every `OddPointSizesUnderAZoom` and every `FractionalSizesAreQuantisedWithoutAZoom`.
+The other 13 (`Unscaled`, `EvenPointSizesAreUnmovedByTheRoundTrip`) pass under the mutation and
+are kept as **drift guards**: they are what says the common case did not move.
