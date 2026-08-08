@@ -808,6 +808,21 @@ conflicted file is easy to miss:
 The same shape catches other inverted guards: any `check && commit` where the check reports a
 *count* rather than a verdict is backwards.
 
+### `--no-build` after reintroducing a defect measures the defect
+
+The skill asks you to verify every new test by putting its bug back and watching it fail. That
+cycle leaves a binary containing the bug, and the per-project loop below runs with `--no-build`
+— so **the next full test run measures the defective tree while the source is clean.** Measured:
+a round's first full run reported `Core Failed: 2` on a tree with nothing wrong with it.
+
+The failure looks exactly like a real regression introduced by the round's own change, which is
+the expensive part: the natural next move is to start bisecting a fix that is fine. Rebuild
+after the defect comes back out, before the run that produces the numbers you will report.
+
+The same shape catches anyone who edits a script while it is running — a sweep's summary died
+mid-run that way in the same round, and its data had to be recomputed from the per-document
+files. Neither is subtle once seen; both cost an hour when they are not.
+
 ### Capture the whole test output, not just the count
 
 The per-project loop this skill recommends is usually written to extract the summary line:

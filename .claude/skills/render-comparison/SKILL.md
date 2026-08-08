@@ -377,15 +377,24 @@ So a region only counts when **one side has substantially more ink in it than th
 #### An aggregate `|ink|%` can never be smaller than the signed `ink%` beside it
 
 `page_ink` is printed as `abs(sum(...))`, so summing the unsigned column cannot come out below
-the signed one. That makes a free correctness check on any table built from these numbers, and
-it is worth running, because a round's `ink.tsv` shipped a derived column violating it: the
-column totalled 1264.88 where recomputing the same sum gives 1692.88, off by **exactly one per
-major page per document** — a count summed into a percentage. Nothing depended on it, and the
-next agent caught it only because the invariant is cheap to check.
+the signed one. That is a free correctness check on any table built from these numbers, and this
+is the episode that shows why to run it.
 
-Check it on aggregates you produce *and* on aggregates you inherit. An inherited number with a
-plausible magnitude and no invariant behind it is the easiest thing in this project to carry
-forward unexamined.
+**The defect:** a sweep script's `awk` matched the tool's own trailing summary line —
+`N pages, M with major differences` — and added one per major page into the signed column. Not a
+formula error; a parser eating a line it was never meant to see. Any script that pipes this
+tool's output through a line filter is exposed, so the fix belongs there.
+
+**The part worth learning is what happened next.** Round twenty *reported* a signed total of
+1264.88. Round twenty-one recomputed from the same script, got 1692.88, and reported its
+predecessor's figure as wrong — a correction I then relayed into this file. Round twenty-two
+checked the invariant and inverted it back: 1692.88 exceeds that round's `|ink|%` of 1583.00,
+which is impossible, and 1692.88 − 1264.88 = 428 is exactly the round's major-page count. **The
+original number was right; the correction carried the contamination.**
+
+So check the invariant on aggregates you produce, on aggregates you inherit, and — especially —
+on corrections to either. A correction carries more authority than the figure it replaces, so it
+gets examined less, which is exactly backwards: it has had one fewer pair of eyes on it.
 
 It writes `cmp/ours/page-NNN.png`, `cmp/ref/page-NNN.png`, and `cmp/diff/page-NNN.png` — the
 reference faded to grey with each differing region boxed in red, which is the artefact to
