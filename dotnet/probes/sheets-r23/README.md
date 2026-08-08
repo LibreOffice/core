@@ -50,3 +50,34 @@ under a zoom; the *unscaled* logical value does.
 them — every `OddPointSizesUnderAZoom` and every `FractionalSizesAreQuantisedWithoutAZoom`.
 The other 13 (`Unscaled`, `EvenPointSizesAreUnmovedByTheRoundTrip`) pass under the mutation and
 are kept as **drift guards**: they are what says the common case did not move.
+
+## Batch 010 triage — it is a chart batch
+
+The four failures at `9c5bef08c`, each rendered by both renderers and diffed page by page:
+
+| document | pages | words | what is actually wrong |
+|---|---|---|---|
+| `Keywords_Mapping_Graphs_and_Charts.xlsx` | 46/46 | 4695/4808 | an OOXML chart. The reference draws its labels in **Carlito**, we draw them in **Liberation Sans** — the theme's `minorFont` is Calibri and no chart label carries a family at all |
+| `EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls` | 24/24 | 7825/8382 | `.xls` charts. Ours plot an axis of 0…12 where the reference plots 0…90 — the default scale of a plot with no series |
+| `Template Pilot Logbook JAR-FCL V3.0.xls` | 38/38 | 1305/1610 | the same, on pages 16–18: 0…12 against 0…1400 |
+| `INDEX_Digital_Transformation_Toolkits.xls` | 20/24 | 1982/1982 | the previous round's open item, not re-derived here |
+
+So three of the four are the `.xls`/OOXML chart work, and the deficits are localised to the
+pages carrying a chart rather than spread over the batch. **Batch 010 cannot be closed without
+it**, which is worth saying plainly: the round that takes it should budget for the chart series
+rather than expect to find a layout bug.
+
+### The chart-label font gap, and why it is not this round's fix
+
+`ChartLabel` (`Paperless.Core/Charts/ChartLayout.cs`) carries `Text`, `At`, `Anchor`, `Size`,
+`Colour`, `Rotation`, `Stretch` — **and no family**. `SheetChart.Text` therefore calls
+`SheetBandText.Shape(text, size)` with no family and gets `SheetBandText.DefaultFamily`,
+"Liberation Sans", for every chart label in every workbook. `SlideChart` and `FrameChart` sit on
+the same record, so this is one gap across all three families, and closing it means widening a
+`Paperless.Core` type plus the measurer that sizes the labels.
+
+**Measured reach on this track: one document.** Of the 171 sheets documents exactly one is a
+zip container holding an `xl/charts/chart*.xml` part, and its theme minor face is Calibri. That
+is a reach of one, which is a special case by this project's own rule, so it is recorded rather
+than fixed. The reach on the slides and words tracks is not measured here and is likely larger —
+whoever picks it up should measure it there before sizing the work.
