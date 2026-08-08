@@ -295,6 +295,15 @@ again in corpus form: a fix aimed at batch *n* routinely breaks batch *n−4* in
 looks nothing like the change, and advancing on the first condition alone is how a corpus
 rots from the front.
 
+**Set `SOURCE_DATE_EPOCH` when comparing two renderings byte for byte.** Reach is measured by
+rendering a track twice and diffing, and a document that prints the date — a spreadsheet header
+holding `&D` or `&T` — draws different ink on a different day. Measured on the sheets track:
+rendering all 171 twice in succession is byte-identical once `/CreationDate` is masked, and
+rendering them a day apart moves **17 of 171**. `paperless render` honours the
+reproducible-builds convention (seconds since the Unix epoch, read as UTC) in both the PDF's
+`/CreationDate` and the header fields, so with it set two runs are byte-equal with nothing masked
+at all. Leave it unset for ordinary rendering; a printout's date is meant to be today's.
+
 **`TODO.raster-ceiling.md` lists 37 pages the word gate cannot win.** LibreOffice rasterises
 an embedded object on those, so its PDF holds a picture where ours holds real searchable text —
 ours is the better output and `wc -w` scores it as failure. An embedded metafile is the

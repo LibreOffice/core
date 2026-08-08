@@ -86,6 +86,9 @@ internal sealed class XlsWorkbookReader
     private XlsSheetPrintState _page = new();
     private XlsDrawingCollector _drawings = new([]);
 
+    /// <summary>True while the record walk is inside a drawing block; see InDrawingBlock.</summary>
+    private bool _inDrawingBlock;
+
     /// <summary>The sheet's <c>NOTE</c> records, joined to their objects once it is read.</summary>
     private readonly List<(int Column, int Row, ushort Object)> _notes = [];
     private readonly List<byte> _drawingGroup = [];
@@ -270,6 +273,7 @@ internal sealed class XlsWorkbookReader
             };
             _sheetDecoration = new XlsSheetDecoration();
             _drawings = new XlsDrawingCollector(_diagnostics, Blips);
+            _inDrawingBlock = false;
             _rowFormats.Clear();
             _columnFormats.Clear();
             _richCells.Clear();
@@ -930,6 +934,7 @@ internal sealed class XlsWorkbookReader
         };
         _sheetDecoration = new XlsSheetDecoration();
         _drawings = new XlsDrawingCollector(_diagnostics, Blips);
+        _inDrawingBlock = false;
         XlsChartBuilder chart = new();
 
         if (!StartSubstream(sheet))
@@ -1070,9 +1075,15 @@ internal sealed class XlsWorkbookReader
 
             if (depth > 0) continue;
 
+            _inDrawingBlock = InDrawingBlock(id, _inDrawingBlock);
+
             switch (id)
             {
                 case BiffRecords.MsoDrawing or BiffRecords.MsoDrawingSelection:
+                    _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
+                    break;
+
+                case BiffRecords.Continue when _inDrawingBlock:
                     _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
                     break;
 
@@ -1091,6 +1102,38 @@ internal sealed class XlsWorkbookReader
             }
         }
     }
+
+    /// <summary>
+    /// Whether the record just reached is inside a sheet's drawing block.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This exists to decide what a bare <c>CONTINUE</c> record means. Excel writes a sheet's
+    /// Escher stream as a run of <c>MSODRAWING</c> records, one shape each, with that shape's
+    /// <c>OBJ</c> after it — until the stream passes the 8224-byte record ceiling, at which
+    /// point the remaining shapes arrive as <c>CONTINUE</c> records in exactly the same
+    /// interleaving. So the <c>CONTINUE</c> after an <c>OBJ</c> continues the *drawing*, not
+    /// the object, and reading it as the object's continuation loses every shape past the
+    /// ceiling. Measured on <c>INDEX_Digital_Transformation_Toolkits.xls</c>, whose one
+    /// picture sheet holds 25 <c>MSODRAWING</c> records totalling 8034 bytes, 70 further
+    /// <c>CONTINUE</c> records and 95 <c>OBJ</c>s: 25 of its 95 pictures were drawn.
+    /// </para>
+    /// <para>
+    /// LibreOffice reaches the same answer structurally rather than with a flag:
+    /// <c>XclImpDrawing::ReadMsoDrawing</c> (<c>sc/source/filter/excel/xiescher.cxx:4021</c>)
+    /// turns its stream's own continuation handling off with <c>ResetRecord(false)</c> and
+    /// then loops over exactly <c>MSODRAWING</c>, <c>MSODRAWINGSEL</c>, <c>CONTINUE</c>,
+    /// <c>OBJ</c> and <c>TXO</c>, stopping at the first record that is none of them. The set
+    /// below is that loop's set, and a block opens only on a drawing record so a
+    /// <c>CONTINUE</c> reached anywhere else still belongs to whatever preceded it.
+    /// </para>
+    /// </remarks>
+    private static bool InDrawingBlock(ushort id, bool inside) => id switch
+    {
+        BiffRecords.MsoDrawing or BiffRecords.MsoDrawingSelection => true,
+        BiffRecords.Obj or BiffRecords.Txo or BiffRecords.Continue => inside,
+        _ => false,
+    };
 
     /// <summary>Reads one sheet substream into a section.</summary>
     private ContentSection ReadSheet(SheetEntry sheet, int index)
@@ -1111,6 +1154,7 @@ internal sealed class XlsWorkbookReader
         };
         _sheetDecoration = new XlsSheetDecoration();
         _drawings = new XlsDrawingCollector(_diagnostics, Blips);
+        _inDrawingBlock = false;
         _rowFormats.Clear();
         _columnFormats.Clear();
         _richCells.Clear();
@@ -1243,6 +1287,8 @@ internal sealed class XlsWorkbookReader
 
             if (depth > 0) continue;
 
+            _inDrawingBlock = InDrawingBlock(id, _inDrawingBlock);
+
             switch (id)
             {
                 case BiffRecords.Blank or BiffRecords.Blank2:
@@ -1304,6 +1350,12 @@ internal sealed class XlsWorkbookReader
                 // XlsDrawingCollector. Kept in the sheet loop rather than skipped, because a
                 // text box is the only content on a sheet that no walk of the cells can find.
                 case BiffRecords.MsoDrawing or BiffRecords.MsoDrawingSelection:
+                    _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
+                    break;
+
+                // A bare CONTINUE inside the drawing block is more Escher, not a continuation
+                // of the OBJ before it. See InDrawingBlock.
+                case BiffRecords.Continue when _inDrawingBlock:
                     _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
                     break;
 

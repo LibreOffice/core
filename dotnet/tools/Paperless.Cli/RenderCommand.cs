@@ -91,7 +91,8 @@ internal static class RenderCommand
         {
             string file = Path.Combine(directory, stem + ".pdf");
             using FileStream output = File.Create(file);
-            new PdfRenderer(new PdfRenderOptions()).Render(chosen, output);
+            new PdfRenderer(new PdfRenderOptions { CreationDate = PinnedDate() })
+                .Render(chosen, output);
 
             if (!options.Quiet) Console.WriteLine($"{file}: {chosen.Count} page(s)");
             return Program.ExitSuccess;
@@ -118,6 +119,37 @@ internal static class RenderCommand
         }
 
         return Program.ExitSuccess;
+    }
+
+    /// <summary>
+    /// The creation date a PDF should carry, or null to use the clock.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>SOURCE_DATE_EPOCH</c>, the reproducible-builds convention: seconds since the Unix
+    /// epoch, UTC. Setting it makes two renderings of one document byte-equal, which is what
+    /// the corpus workflow needs — reach is measured by rendering a track twice and diffing,
+    /// and a timestamp that moves between the runs puts a false-positive floor under every
+    /// such measurement. The layout side honours the same variable for the <c>&amp;D</c> and
+    /// <c>&amp;T</c> header fields, so pinning it pins the whole file rather than half of it.
+    /// </para>
+    /// <para>
+    /// Read as UTC, as the convention defines it and as <c>SheetPrintInstant</c> does, so that
+    /// the pinned output does not depend on the machine's time zone. Unset — the ordinary case —
+    /// leaves <c>PdfRenderOptions.CreationDate</c> null and the writer stamps the current time,
+    /// which is what a PDF is supposed to carry.
+    /// </para>
+    /// </remarks>
+    private static DateTimeOffset? PinnedDate()
+    {
+        string? raw = Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH");
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+
+        return long.TryParse(raw.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                             out long seconds)
+               && seconds >= 0 && seconds <= 253402300799L
+            ? DateTimeOffset.FromUnixTimeSeconds(seconds)
+            : null;
     }
 
     /// <summary>The pages a range names, in page order and without repeats.</summary>

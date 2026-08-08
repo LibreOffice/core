@@ -77,6 +77,18 @@ public sealed class SheetPage : IPage
     /// </remarks>
     public int PageCount { get; internal set; } = 1;
 
+    /// <summary>
+    /// The instant the printout dates itself at, which is what <c>&amp;D</c> and <c>&amp;T</c>
+    /// print.
+    /// </summary>
+    /// <remarks>
+    /// A property of the job like <see cref="PageCount"/>, and stamped on for the same reason:
+    /// every page of one printout prints the same instant, so reading the clock in each page's
+    /// header context would let a slow render disagree with itself. <c>ScHeaderFieldData</c>
+    /// holds one <c>Date</c> and one <c>Time</c> for the whole job.
+    /// </remarks>
+    public DateTime Printed { get; internal set; } = SheetPrintInstant.Now();
+
     /// <inheritdoc/>
     public void Draw(IDrawingSink sink)
     {
@@ -100,6 +112,7 @@ public sealed class SheetPage : IPage
         SheetName = Sheet.Name,
         FileName = Sheet.FileName,
         FilePath = Sheet.FileName,
+        Printed = Printed,
     };
 }
 
@@ -140,7 +153,12 @@ public sealed class SpreadsheetPages : IPageSequence
 
         // The total is only knowable once every sheet has been paginated, and a header holding
         // "&N" needs it, so it is stamped on afterwards rather than threaded through the loop.
-        foreach (SheetPage page in _pages) page.PageCount = _pages.Count;
+        DateTime printed = SheetPrintInstant.Now();
+        foreach (SheetPage page in _pages)
+        {
+            page.PageCount = _pages.Count;
+            page.Printed = printed;
+        }
     }
 
     /// <summary>The sheets the pages were laid out from, printed or not.</summary>
