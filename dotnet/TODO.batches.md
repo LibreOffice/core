@@ -7601,6 +7601,23 @@ this one understated it nearly threefold.
 The ODF reader *clamped* a rotation angle instead of folding it, so 270° became +90 and 315° became
 +90 as well. No sheets-track document is ODF with a turned cell; without the fix six of the probe's
 thirty-six sheets could not be read at all.
+
+### The chart-label font, picked up where the slides round left it
+
+The slides round wired `SlideChart` to `ChartPlot.TextFamily` and left `SheetChart`'s measurer
+unwired with a remark saying the change belonged to whichever round sweeps the sheets track. It is
+now wired on both the measuring and the drawing path, because a label measured in one face and drawn
+in another is centred on the wrong width.
+
+**Measured on the merged tree before the wiring, `batch-010` is still 7/10 with the same three
+failures** — so the slides merge on its own did not move this track's gate, against the prediction
+that it might. With the wiring, `Keywords_Mapping_Graphs_and_Charts.xlsx` embeds exactly the
+reference's two faces where it embedded Liberation Sans beside them; its word count moves 4650 to
+4647 against a reference 4808, so the residue there is not the face.
+
+**The remaining half is BIFF and is named rather than guessed at.** `XlsChartReader` sets no family
+at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference embeds
+two. That work is in `Paperless.Spreadsheets` and so belongs to this track.
 ## Slides round twenty-three: the legend, inherited unmeasured and kept on its own numbers
 
 A container restart killed the previous slides agent mid-round; its two commits — a probe and a

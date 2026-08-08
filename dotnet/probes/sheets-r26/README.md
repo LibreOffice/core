@@ -161,11 +161,30 @@ over three major pages to 4.89 over two**, and `Keywords_Mapping` and `cy06_prim
 move — their changes are below what 512 pixels on the long edge can resolve, and `Keywords_Mapping`'s
 eleven major pages are its chart pages, which are the font gap and not this.
 
+## The chart-label font, picked up where the slides round left it
+
+The slides round added `ChartPlot.TextFamily` and wired `SlideChart`, and left `SheetChart`'s
+measurer unwired with a remark saying so: turning it on changes the layout of every workbook
+carrying a chart, so it wanted the round that sweeps the sheets track. That is this round.
+
+**Measured on the merged tree before the wiring**, `batch-010` is still 7/10 and its three failures
+are the same three — so the slides merge on its own did *not* move this track's gate, which is worth
+recording against the prediction that it might.
+
+With the wiring, `Keywords_Mapping_Graphs_and_Charts.xlsx` embeds **exactly the reference's two
+faces**, `Carlito-Bold` and `Carlito-Regular`, where it embedded Liberation Sans beside them before.
+Its word count moves 4650 → 4647 against a reference 4808, so the residue there is not the face.
+
+**The other half is a BIFF chart and is named rather than guessed at.** `XlsChartReader` sets no
+family at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference
+embeds two, and its 26-words-per-page chart residue is unchanged at 8018 against 8382. That is the
+next piece of this work and it is in `Paperless.Spreadsheets`, so it belongs to this track.
+
 ## Tests
 
 `SheetRotatedRowHeightTests`, 36 cases covering 216 row heights. `SheetRotatedTextPlacementTests`,
-9 cases. Every one of the eleven reintroduced bugs fails at least one case, and there are no drift
-guards in either file:
+9 cases. `SheetChartFaceTests`, 2. Every one of the twelve reintroduced bugs fails at least one
+case; the only drift guard in the three files is labelled as one:
 
 | mutation | cases that fail |
 |---|---|
@@ -180,6 +199,13 @@ guards in either file:
 | one anchor for both signs of the angle | 4 |
 | the along-line offset dropped | 4 |
 | a turned cell wrapped at the column width | 5 |
+| a chart's stated family not reaching the measurer or the glyphs | 1 |
+
+`SheetChartFaceTests`' second case is the drift guard, and the fixture is why it is needed at all: a
+chart stating **Arial** could not have discriminated, because Arial resolves to Liberation Sans,
+which is exactly the default the unwired consumer used. The discriminating fixture states Caladea,
+a serif that resolves to itself, and the Arial workbook is kept beside it to say the common case did
+not move.
 
 Note the sixth row: clamping instead of folding fails only the six 315° sheets and **not** the six
 270° ones, because clamping 270 to +90 happens to give the same six row heights a correct −90 does.
