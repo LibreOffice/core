@@ -696,6 +696,11 @@ public readonly record struct PageRun(
 /// How much of the gap above this line is the paragraph's <em>own</em> upper spacing, as collapsing and
 /// the top-of-frame rule left it. Zero on every line but a paragraph's first.
 /// </param>
+/// <param name="Columns">
+/// How many columns the rectangle <see cref="Column"/> indexes was divided into, and
+/// <paramref name="ColumnGap"/> the gap between them.
+/// </param>
+/// <param name="ColumnGap"><inheritdoc cref="Columns" path="/summary"/></param>
 /// <remarks>
 /// <see cref="UpperSpace"/> is carried because a frame anchored to the paragraph is positioned from a
 /// point above the line: Writer's <c>SwAnchoredObjectPosition::GetTopForObjPos</c>
@@ -704,6 +709,14 @@ public readonly record struct PageRun(
 /// lower space and line spacing — so the paragraph's own space-before is <em>not</em> in the origin. That
 /// difference is not recoverable from <see cref="Top"/> alone, because collapsing, contextual spacing and
 /// the top-of-page rule each change how much of the gap the paragraph contributed.
+///
+/// <para>
+/// <see cref="Columns"/> is carried for a reason the single-column case hides: one page can hold sections
+/// of different column counts. A continuous section break in the middle of a page opens a two-column
+/// stretch and the next one closes it, so a page can be one column at the top, two in the middle and one
+/// again below — and the page as a whole then has no single answer. Reading the count off the page put
+/// the *last* section's answer on every line of it, which drew a full-width paragraph into half a column.
+/// </para>
 /// </remarks>
 public readonly record struct PlacedLine(
     int ParagraphIndex,
@@ -711,7 +724,9 @@ public readonly record struct PlacedLine(
     LineBox Box,
     Length Top,
     int Column = 0,
-    Length UpperSpace = default)
+    Length UpperSpace = default,
+    int Columns = 1,
+    Length ColumnGap = default)
 {
     /// <summary>Where a frame anchored to this line's paragraph measures its offset from.</summary>
     /// <remarks>
@@ -825,7 +840,7 @@ public sealed record LaidOutPage
     /// <remarks>
     /// The whole text area, columns and the gaps between them included. A line's own coordinates are
     /// relative to <em>its column's</em> rectangle rather than to this — see
-    /// <see cref="ColumnArea"/> — which for the single-column case are the same thing.
+    /// <see cref="ColumnArea(int)"/> — which for the single-column case are the same thing.
     /// </remarks>
     public required DocRect BodyArea { get; init; }
 
@@ -840,7 +855,7 @@ public sealed record LaidOutPage
     /// </summary>
     /// <remarks>
     /// Carried on the page rather than looked up from the section for the same reason
-    /// <see cref="ColumnArea"/> is: a renderer is handed a page, and a page that had to consult the
+    /// <see cref="ColumnArea(int)"/> is: a renderer is handed a page, and a page that had to consult the
     /// section could disagree with the one that laid the lines out.
     /// </remarks>
     public bool IsRightToLeft { get; init; }
@@ -869,6 +884,31 @@ public sealed record LaidOutPage
 
         return new DocRect(
             BodyArea.X + ((width + ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);
+    }
+
+    /// <summary>
+    /// The rectangle one line's own coordinates are relative to.
+    /// </summary>
+    /// <remarks>
+    /// A line's own column count rather than the page's, because a page can hold sections that disagree
+    /// about it — see <see cref="PlacedLine.Columns"/>. Falls back to the page's for a line that states
+    /// nothing, which is every line laid out before the field existed and every line of a flow.
+    /// </remarks>
+    /// <param name="line">The line whose rectangle is wanted.</param>
+    public DocRect ColumnArea(PlacedLine line)
+    {
+        if (line.Columns <= 1 && ColumnCount > 1) return ColumnArea(line.Column);
+        if (line.Columns <= 1) return BodyArea;
+
+        int at = Math.Clamp(line.Column, 0, line.Columns - 1);
+        Length gaps = line.ColumnGap * (line.Columns - 1);
+        Length width = BodyArea.Width - gaps;
+        width = width > Length.Zero ? width / line.Columns : BodyArea.Width;
+
+        if (IsRightToLeft) at = line.Columns - 1 - at;
+
+        return new DocRect(
+            BodyArea.X + ((width + line.ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);
     }
 
     /// <summary>The lines on the page, in order.</summary>

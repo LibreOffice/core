@@ -34,6 +34,16 @@ internal static class DocxPageGeometry
     /// </remarks>
     private const long MaxDimensionTwips = 22 * 1440;
 
+    /// <summary>What a <c>w:cols</c> with no <c>w:space</c> means by it: 1.25 cm.</summary>
+    /// <remarks>
+    /// <c>SectionPropertyMap</c> initialises <c>m_nColumnDistance( 1249 )</c> — hundredths of a
+    /// millimetre, so 12.49 mm — and only overwrites it where the attribute is present. Every
+    /// multi-column section in the sample corpus's DOCX states the attribute, so this is a correctness
+    /// fallback rather than a measured reach; the same figure is load-bearing on the WW8 side, where
+    /// sections routinely omit it.
+    /// </remarks>
+    private static readonly Length DefaultColumnGap = Length.FromTwips(708);
+
     /// <summary>Reads a <c>w:sectPr</c>, filling in from the document's settings and the defaults.</summary>
     /// <param name="sectionProperties">The <c>w:sectPr</c> element, or null for a document with none.</param>
     /// <param name="settings">The document's <c>w:settings</c> root, or null when it has none.</param>
@@ -108,7 +118,11 @@ internal static class DocxPageGeometry
             HeaderHeight = Gap(headerDistance, top),
             FooterHeight = Gap(footerDistance, bottom),
             Columns = ColumnCount(columns),
-            ColumnGap = Twips(columns, "space") ?? Length.Zero,
+            // 1.25 cm when the element says nothing, which is what `SectionPropertyMap`'s
+            // `m_nColumnDistance( 1249 )` (hundredths of a millimetre) means and what the WW8 reader's
+            // `sprmSDxaColumns` fallback of 708 twips says in the other unit. Zero would be a gutter of
+            // nothing *and* a column 8% too wide, since the width is the measure less the gaps.
+            ColumnGap = Twips(columns, "space") ?? DefaultColumnGap,
             IsLandscape = landscape,
 
             // w:sectPr/w:bidi, which is a different statement from a paragraph's w:bidi and does a

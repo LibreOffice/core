@@ -83,18 +83,18 @@ public static class PageDrawing
     private static void DrawBody(
         LaidOutPage page, IReadOnlyList<PageBlock> blocks, IDrawingSink sink)
     {
-        if (page.ColumnCount <= 1)
+        if (page.ColumnCount <= 1 && page.Lines.All(line => line.Columns <= 1))
         {
             DrawLines(page.BodyArea, page.Lines, blocks, sink);
             return;
         }
 
-        for (int column = 0; column < page.ColumnCount; column++)
+        // Grouped by the *line's* own band rather than by the page's column index, because one page can
+        // carry sections that disagree about how many columns there are — see `PlacedLine.Columns`.
+        foreach (IGrouping<(int Columns, int Column), PlacedLine> band in
+                 page.Lines.GroupBy(line => (line.Columns, line.Column)))
         {
-            DocRect area = page.ColumnArea(column);
-            int at = column;
-
-            DrawLines(area, [.. page.Lines.Where(line => line.Column == at)], blocks, sink);
+            DrawLines(page.ColumnArea(band.First()), [.. band], blocks, sink);
         }
     }
 
@@ -715,7 +715,7 @@ public static class PageDrawing
         LaidOutPage page, PlacedLine line, PageParagraph paragraph)
     {
         ArgumentNullException.ThrowIfNull(page);
-        return RunsIn(page.ColumnArea(line.Column), line, paragraph);
+        return RunsIn(page.ColumnArea(line), line, paragraph);
     }
 
     /// <summary>The glyph runs one line draws, relative to whichever area it belongs to.</summary>

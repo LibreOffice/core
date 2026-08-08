@@ -153,6 +153,8 @@ public sealed partial class Ww8DocumentReader
             List<Model.WritingSection> sections = Ww8SectionTable.Read(
                 SectionDescriptors, _wordDocument);
 
+            Model.SectionColumnBalance.Apply(sections, DocumentProperties.NoColumnBalance);
+
             return sections.Count > 0 ? sections : [new Model.WritingSection()];
         }
     }
