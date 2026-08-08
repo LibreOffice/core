@@ -303,6 +303,16 @@ public sealed record PageParagraph : PageBlock
     public IReadOnlyList<PageFrame> Frames { get; init; } = [];
 
     /// <summary>
+    /// The spans of this paragraph's text that a field computed, for the two fields pagination decides.
+    /// </summary>
+    /// <remarks>
+    /// Empty for almost every paragraph, and for every paragraph of a document with no page-number field
+    /// anywhere. What the reader put here is the producer's cached result and where it sits; see
+    /// <see cref="PageFields"/> for why that is not what gets drawn.
+    /// </remarks>
+    public IReadOnlyList<PageFieldSpan> Fields { get; init; } = [];
+
+    /// <summary>
     /// The as-character frames among <see cref="Frames"/>: room <em>on</em> a line rather than beside it.
     /// </summary>
     /// <remarks>

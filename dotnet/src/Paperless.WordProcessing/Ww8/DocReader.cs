@@ -439,6 +439,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 // (`ww8par.cxx`:2041). See PageParagraph.BlanksAreTransparentToHeight.
                 BlanksAreTransparentToHeight = true,
                 Runs = runs,
+                Fields = paragraph.Fields ?? [],
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames, paragraph.TextFrames, WidthFor(paragraph)),
             });

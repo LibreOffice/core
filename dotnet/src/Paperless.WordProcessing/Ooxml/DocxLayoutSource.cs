@@ -527,6 +527,7 @@ public sealed partial class DocxLayoutSource
                 Language: text.Language, DisableKerning: !text.AutoKerning),
             Tracking = text.Tracking,
             Runs = runs,
+            Fields = walker.Fields,
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames),
             Source = element,
@@ -898,6 +899,45 @@ public sealed partial class DocxLayoutSource
 
         private bool _inInstruction;
 
+        /// <summary>The fields whose begin has been seen and whose end has not, innermost last.</summary>
+        /// <remarks>
+        /// A stack because fields nest and Word writes them nested — a hyperlink around a cross-reference
+        /// is two, and a <c>PAGE</c> inside a <c>SEQ</c> is another. Only the fields this walk can
+        /// substitute are recorded when they close.
+        /// </remarks>
+        private readonly Stack<OpenField> _fields = new();
+
+        /// <summary>The page-sensitive fields this paragraph carries, with the spans their results own.</summary>
+        internal List<PageFieldSpan> Fields { get; } = [];
+
+        /// <summary>A field between its begin and its end.</summary>
+        private sealed class OpenField
+        {
+            /// <summary>The instruction, accumulated across however many <c>w:instrText</c> carry it.</summary>
+            /// <remarks>
+            /// Word splits an instruction across runs freely — <c>PAGE  \* MERGE</c> and <c>FORMAT</c> in
+            /// two <c>w:instrText</c> is ordinary — so a reader looking at one element at a time sees a
+            /// name that is not the field's.
+            /// </remarks>
+            internal StringBuilder Instruction { get; } = new();
+
+            /// <summary>Where the result began, or −1 for a field with no separator and so no result.</summary>
+            internal int ResultAt { get; set; } = -1;
+        }
+
+        /// <summary>
+        /// Records a field that has just ended, when it is one whose value pagination decides.
+        /// </summary>
+        private void CloseField(OpenField field)
+        {
+            if (field.ResultAt < 0) return;
+
+            if (FieldInstructions.PageFieldOf(field.Instruction.ToString()) is not { } page) return;
+
+            Fields.Add(new PageFieldSpan(
+                field.ResultAt, _builder.Length - field.ResultAt, page.Kind, page.Format));
+        }
+
         /// <summary>The paragraph's text, as laid out.</summary>
         internal string Text => _builder.ToString();
 
@@ -938,16 +978,49 @@ public sealed partial class DocxLayoutSource
             {
                 switch (child.Name.LocalName)
                 {
-                    case "del" or "delText" or "instrText":
-                        // Deleted text and field instructions are in the file and not on the page.
+                    case "del" or "delText":
+                        // Deleted text is in the file and not on the page.
+                        break;
+
+                    case "instrText":
+                        // Not drawn — but it is the only statement of what the field computes, so it is
+                        // accumulated for the innermost open field rather than merely skipped.
+                        if (_fields.Count > 0) _fields.Peek().Instruction.Append(child.Value);
                         break;
 
                     case "fldChar":
                         // "separate" ends the instruction and starts the result; "end" closes the field.
                         string? type = Word.Attribute(child, "fldCharType");
-                        if (type == "begin") _inInstruction = true;
-                        else if (type is "separate" or "end") _inInstruction = false;
+                        switch (type)
+                        {
+                            case "begin":
+                                _inInstruction = true;
+                                if (_fields.Count < MaxDepth) _fields.Push(new OpenField());
+                                break;
+
+                            case "separate":
+                                _inInstruction = false;
+                                if (_fields.Count > 0) _fields.Peek().ResultAt = _builder.Length;
+                                break;
+
+                            case "end":
+                                _inInstruction = false;
+                                if (_fields.Count > 0) CloseField(_fields.Pop());
+                                break;
+                        }
+
                         break;
+
+                    // The compact form: the instruction is an attribute and the result is the children.
+                    // Word writes it for a field with no nested state, which a page number often is.
+                    case "fldSimple":
+                    {
+                        OpenField simple = new() { ResultAt = _builder.Length };
+                        simple.Instruction.Append(Word.Attribute(child, "instr") ?? "");
+                        Append(child, depth + 1);
+                        CloseField(simple);
+                        break;
+                    }
 
                     case "t" when !_inInstruction:
                         Emit(child.Value);

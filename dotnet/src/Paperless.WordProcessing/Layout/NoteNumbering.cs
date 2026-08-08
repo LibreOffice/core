@@ -159,11 +159,24 @@ public readonly record struct NoteNumbering(NoteNumberFormat Format, int StartAt
     /// because the sequences have no zeroth term and a file can say anything.
     /// </remarks>
     /// <param name="index">How many notes of this class came before, counted from zero.</param>
-    public string Citation(int index)
-    {
-        int value = Math.Max(1, StartAt + Math.Max(0, index));
+    public string Citation(int index) => Render(Format, Math.Max(1, StartAt + Math.Max(0, index)));
 
-        return Format switch
+    /// <summary>
+    /// A value written in one of these sequences.
+    /// </summary>
+    /// <remarks>
+    /// Public and static because the sequences are not a note's: a page number is written in the same five
+    /// (<c>w:pgNumType/@w:fmt</c>, <c>sprmSNfcPgn</c>, <c>style:num-format</c>), and duplicating the
+    /// switch is how the two would drift apart. A value below one is clamped, since none of the sequences
+    /// has a zeroth term.
+    /// </remarks>
+    /// <param name="format">The sequence to write it in.</param>
+    /// <param name="value">The value, counted from one.</param>
+    public static string Render(NoteNumberFormat format, int value)
+    {
+        value = Math.Max(1, value);
+
+        return format switch
         {
             NoteNumberFormat.LowerRoman => OutlineNumbers.Roman(value, upperCase: false),
             NoteNumberFormat.UpperRoman => OutlineNumbers.Roman(value, upperCase: true),

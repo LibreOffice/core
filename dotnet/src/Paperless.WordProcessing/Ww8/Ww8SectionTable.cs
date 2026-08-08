@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
+using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Model;
 
 namespace Paperless.WordProcessing.Ww8;
@@ -259,6 +260,7 @@ internal static class Ww8SectionTable
         bool titlePage = false;
         int? restartAt = null;
         bool restartsNumbering = false;
+        NoteNumberFormat pageNumberFormat = NoteNumberFormat.Arabic;
 
         foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
         {
@@ -332,6 +334,21 @@ internal static class Ww8SectionTable
                     restartAt = sprm.DoubleWord;
                     break;
 
+                case Sprms.PageNumberFormat:
+                    // sep.nfcPgn: 0 arabic, 1 I II III, 2 i ii iii, 3 A B C, 4 a b c. LibreOffice's
+                    // own table (`wwSectionManager::SetNumberingType`, ww8par6.cxx:841) is exactly this,
+                    // and it clamps anything above 4 to arabic rather than rejecting the section.
+                    pageNumberFormat = sprm.Byte switch
+                    {
+                        1 => NoteNumberFormat.UpperRoman,
+                        2 => NoteNumberFormat.LowerRoman,
+                        3 => NoteNumberFormat.UpperLetter,
+                        4 => NoteNumberFormat.LowerLetter,
+                        _ => NoteNumberFormat.Arabic,
+                    };
+
+                    break;
+
                 default:
                     break;
             }
@@ -363,6 +380,7 @@ internal static class Ww8SectionTable
             // a stale start value from an earlier edit is common, and honouring it renumbers pages
             // that Word numbers continuously.
             RestartPageNumberAt = restartsNumbering ? restartAt ?? 1 : null,
+            PageNumberFormat = pageNumberFormat,
             HasDifferentFirstPage = titlePage,
         };
     }
@@ -410,6 +428,9 @@ internal static class Ww8SectionTable
         internal const ushort ColumnCount = 0x500B;
         internal const ushort ColumnGap = 0x900C;
         internal const ushort RestartsPageNumbering = 0x3011;
+
+        /// <summary><c>sprmSNfcPgn</c>, the sequence the section's page numbers are written in.</summary>
+        internal const ushort PageNumberFormat = 0x300E;
         internal const ushort HeaderDistance = 0xB017;
         internal const ushort FooterDistance = 0xB018;
         internal const ushort PageNumberStart97 = 0x501C;

@@ -18,16 +18,21 @@ namespace Paperless.WordProcessing.Layout;
 /// <para>
 /// Laid out per <em>slot</em> and cached, not per page. Most pages of a document share one header, and
 /// shaping its text again for each would be the largest single cost in paginating a long document for an
-/// answer that cannot change. What does change per page — a page number in a header — is a field, and
-/// resolving fields is a later pass than this.
+/// answer that cannot change.
+/// </para>
+/// <para>
+/// The exception is a running head carrying a page number, which is a different running head on every
+/// page: it is resolved by <see cref="PageFields"/> before it is laid out, and cached against the number
+/// as well as the slot. Resolving it afterwards is not open to us — the number is text of a different
+/// width from the cached one, so it has to take part in the line breaking rather than be painted over it.
 /// </para>
 /// </remarks>
 public sealed class PageFurnitureSet
 {
     private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> _headers;
     private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> _footers;
-    private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutHeaders = [];
-    private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutFooters = [];
+    private readonly Dictionary<(PageFurnitureSlot Slot, int PageNumber), PlacedFlow?> _laidOutHeaders = [];
+    private readonly Dictionary<(PageFurnitureSlot Slot, int PageNumber), PlacedFlow?> _laidOutFooters = [];
 
     /// <summary>Creates a set from the blocks each slot holds.</summary>
     /// <param name="headers">The headers, by slot; a slot with no entry has no header.</param>
@@ -117,7 +122,7 @@ public sealed class PageFurnitureSet
 
     private PlacedFlow? Resolve(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
-        Dictionary<PageFurnitureSlot, PlacedFlow?> cache,
+        Dictionary<(PageFurnitureSlot Slot, int PageNumber), PlacedFlow?> cache,
         WritingSection section,
         DocRect area,
         int pageNumber,
@@ -134,13 +139,21 @@ public sealed class PageFurnitureSet
 
         if (chosen is not { } slot) return null;
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
-        if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
+
+        // A running head carrying a page number is a different running head on every page, so the cache
+        // has to be keyed on the number as well as on the slot. Everything else is the same on every page
+        // and is keyed on the slot alone — which is the case that matters, because re-shaping one header
+        // per page is the largest single cost in paginating a long document.
+        bool varies = PageFields.CarriesPageNumber(blocks);
+        var key = (slot, varies ? pageNumber : 0);
+        if (cache.TryGetValue(key, out PlacedFlow? cached)) return cached;
 
         PlacedFlow? placed = FlowLayouter.LayOut(
-            blocks, area, offsetFromTop,
+            varies ? PageFields.Resolve(blocks, pageNumber, section.PageNumberFormat) : blocks,
+            area, offsetFromTop,
             collapsesSpacing: collapsesSpacing,
             addsCellLineSpacing: addsCellLineSpacing);
-        cache[slot] = placed;
+        cache[key] = placed;
         return placed;
     }
 

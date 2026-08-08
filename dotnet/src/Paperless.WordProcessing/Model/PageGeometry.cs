@@ -452,6 +452,26 @@ public sealed record WritingSection
     /// </remarks>
     public int? RestartPageNumberAt { get; init; }
 
+    /// <summary>
+    /// The sequence the section's page numbers are written in: <c>w:pgNumType/@w:fmt</c>,
+    /// <c>sprmSNfcPgn</c>, ODF's <c>style:num-format</c> on the page layout.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// On the section rather than on the field, because that is where all four formats state it and
+    /// because a running head is inherited across sections while its numbering is not: a document whose
+    /// front matter is <c>lowerRoman</c> and whose body is <c>decimal</c> states one header once and
+    /// changes the format at the section break. 21 of this corpus's 134 DOCX declare a
+    /// <c>lowerRoman</c> section.
+    /// </para>
+    /// <para>
+    /// Typed as <see cref="Layout.NoteNumberFormat"/> because a page number and a note citation are
+    /// written in the same five sequences under four different attribute names, and two enums naming one
+    /// set is how the two spellings drift apart.
+    /// </para>
+    /// </remarks>
+    public Layout.NoteNumberFormat PageNumberFormat { get; init; } = Layout.NoteNumberFormat.Arabic;
+
     /// <summary>True when the section's first page uses the <c>First</c> furniture slot.</summary>
     public bool HasDifferentFirstPage { get; init; }
 
