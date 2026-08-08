@@ -6194,3 +6194,17 @@ Fidelity 545.
 Round twenty-one recorded Text 237, Rendering 104, Presentations 517 and Fidelity 542 at an
 earlier commit than this round's base, so those deltas are other agents' work merged since and
 not mine. Mine is the +4 in Rendering.
+
+### Verified on the merged branch at `9c5bef08c`
+
+The figures above are the agent's, measured in its worktree. Re-run here after the merge, which
+is the only number that describes what is on the branch: **every project green at its expected
+count, 0 failed and 0 skipped in all eleven** — Core 243, Containers 109, Text 240, Vector 291,
+Rendering 119, Markup 259, OpenDocument 125, WordProcessing 608, Spreadsheets 446,
+Presentations 520, Fidelity 545. Zero build warnings. The merge itself was clean — no conflicts,
+which is unusual on this branch and worth attributing rather than assuming: the round's only
+source change was three files nobody else was in.
+
+`dotnet/probes/sheets-r22/` holds the round's TSVs, including `ops-survey-001-009.tsv` — the
+first operator-level survey of *passing* documents. Read its `README.md` before re-sweeping
+anything on this track.
