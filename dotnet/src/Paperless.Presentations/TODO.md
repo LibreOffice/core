@@ -2041,6 +2041,52 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
 
 ### Small differences that are measured and not yet closed
 
+- [ ] **An OOXML chart's automatic text is 18 pt bold for the main title and 10 pt bold for an
+      axis title; we draw 13 pt and 9 pt with no weight at all.** `ChartPlot.TitleSize`'s 13 pt
+      default cites `chart2/source/model/main/Title.cxx`, which is the chart2 *model* default and
+      so the right answer for an ODF chart — but an OOXML chart never reaches it. The import
+      applies `objectformatter.cxx`'s auto-text table first
+      (`oox/source/drawingml/chart/objectformatter.cxx`:415-434, `TextFormatter::TextFormatter`
+      setting `moHeight` and `moBold` from it): the chart title is `1800` and **bold**, an axis
+      title `1000` and **bold**, and everything else — axis labels, legend entries, data labels —
+      `1000` and not bold.
+
+      Measured on page 4 of `slides/batch-017/pptx/Demick_JetBlue.pptx`, whose `chart1.xml`
+      states no `sz` and no `b` anywhere, so the whole page is the defaults:
+
+      | | ours | reference |
+      |---|---|---|
+      | chart title `RPM, ASM, and Load Factor` | 13.01 pt, regular | 17.89 pt, **bold** |
+      | axis titles, three of them | 9.01 pt, regular | 9.89 pt, **bold** |
+
+      That is where the deck's `DejaVuSerif-Bold` comes from — the reference embeds it, we embed
+      nothing bold, and the bold records appear on pages 4-8, which are exactly its five chart
+      slides. It is not the axis *labels*, which the table above says are correctly not bold; an
+      earlier reading of this as "`ChartLabel` carries no weight" is right about the model and
+      names the wrong text.
+
+      The common factor of **0.9889** between the two columns is a third, separate and much
+      smaller error: the chart's own text scale, from the OLE object's stored visual area against
+      the size of the frame it sits in. 18 × 0.9889 = 17.80 and 10 × 0.9889 = 9.89.
+
+      Ceiling on the reach, not the reach — 10 of the 61 chart parts in the slides corpus have a
+      main title stating no `sz`, and 21 of 38 axis titles state none. Measure it by rendering.
+
+      The size half is two defaults in `DrawingChartPlot` and can be done alone. The weight half
+      needs a flag on `ChartLabel` **and** all three consumers — `SlideChart`, `SheetChart` and
+      `FrameChart` — so it cannot be done from inside the slides track without leaving a chart in
+      a workbook drawing the model's new field as nothing.
+
+- [ ] **A legend's row height is not linear in its font size, and a plain line height is.**
+      Left after round twenty-three's legend work, which is right at 10 pt and drifts at the
+      ends. Measured from the probe decks' border height, key position and row pitch together:
+      the reference's row height is **7.55, 11.28 and 16.50 pt** at a 7, 10 and 14 pt legend
+      font — 1.079, 1.128 and 1.181 times the font — where a line height is a constant multiple
+      and gives 7.95, 11.35 and 15.89. So the pitch lands within 0.09 pt at 10 pt and 0.44 and
+      0.65 pt out at 7 and 14. A quantisation somewhere in the reference device is the obvious
+      suspect and it has not been chased; the probe that would separate the candidates is a
+      sweep of legend font sizes one point apart, looking for the step.
+
 - [ ] **A chart's category-axis labels: we draw *fewer* than the reference, not more.** Recorded
       the other way round for two rounds — "the reference draws none of those labels and we draw
       every one" — and the rendered pages say the opposite. On page 4 of
