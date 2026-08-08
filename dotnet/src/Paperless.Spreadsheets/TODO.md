@@ -394,6 +394,153 @@ Two things to hold onto before starting:
   and may not be affected. `ZenithAviation_AuctionList.xls` matches exactly at 6626 words while
   carrying the same byte pattern 158 times, which is the warning: the pattern is not the defect.
 
+## The twenty-second sweep: the bold that was never missing, and the size nobody had looked at
+
+Swept whole at `9cffaa02a` before anything was changed, 171 documents, two workers, 171 rows,
+no path twice and no `ref-failed`: **144 of 171, total absolute page error 94, 153 exact page
+counts**, batches 001–009 at **89/89**. That reproduces round twenty-one's closing figures to
+the digit in all four numbers, so nothing has drifted under the scoreboard.
+
+**Nothing this round moved a corpus verdict**, and the two findings are worth having anyway.
+
+### `Praktikastellen_…xls` does draw bold. The brief said it does not, and the brief was wrong
+
+This is the eighth entry in the project's standing pattern — *the measurement reproduces
+exactly, the sentence attached to it inverts* — and it is the first time the pattern has caught
+`pdf-ops.py` itself.
+
+Everything the brief measured is real. The workbook passes every gate (34 pages against 34,
+1828 words against 1828, two faces, both embedded); `pdf-ops.py diff` reports 0 records
+one-sided and, document-wide, **81** text records differing as `face Carlito vs Carlito-Bold` at
+identical positions with identical glyph counts; and `pdffonts` shows ours embedding `Carlito`
+twice against the reference's `Carlito-Bold` and `Carlito-Regular`.
+
+The conclusion drawn from it — "we do not draw bold on that workbook at all" — is refuted by
+four separate observations, and the first is decisive on its own:
+
+| observation | result |
+|---|---|
+| the embedded font programs' own `name` tables | our two subsets are family `Carlito` subfamily **`Bold`** and subfamily `Regular` |
+| the descriptors' `StemV` | **140** and 80 — the bold stem and the regular one |
+| `/Widths`, ours against the reference's | our first subset matches `Carlito-Bold` on 68.7% of shared codes and `Carlito-Regular` on **1.5%**; the crossed pairing is 0.0% |
+| `pdf-image-diff`, and then the page itself | 34 pages, **0 major**, `ink%` 0.00 throughout; page 1 renders bold by eye, down to the trailing regular `e` |
+
+Bold glyphs carry visibly more ink, so a document that drew none of them could not come back at
+`ink%` 0.00 on every page. **The correct bold program was always being selected, subset and
+embedded.** Only the announced name was wrong.
+
+**The fix is one expression, and it is not in this library.**
+`PdfFontCatalogue.BaseName` took `/BaseFont` from the face's *family* name; `/BaseFont` names a
+face (PDF 1.7 §9.6.2.1), so it now takes the PostScript name from the `name` table's ID 6,
+falling back to the full name with spaces stripped and only then to the family name a face whose
+file could not be read is left with. `OpenTypeFace` gained `PostScriptName` and `FullName` to
+serve it.
+
+Reach, measured by rendering all 171 documents before and after rather than by grepping for
+bold:
+
+| | before | after |
+|---|---|---|
+| documents whose font-name set changed | — | **156 of 171** |
+| font-name set equal to the reference's | 11 | **131 of 171** |
+| matches, page error, exact counts | 144 / 94 / 153 | **144 / 94 / 153** |
+
+So it moves almost the whole track's font metadata into agreement with LibreOffice's own font
+list and **moves no page, no word and no verdict** — which is the correct result, because
+`batch-check.sh` decides on page count, word count and the count of *unembedded* fonts, and a
+`/BaseFont` name reaches none of the three. On `Praktikastellen_…xls` the operator diff goes
+from 626 differing text records to **296** and face differences from 81 to **0**; the residue is
+294 `shows N vs M`, the known `Tj`-granularity artefact.
+
+> **The general lesson, since this cost a round's opening.** `pdf-ops.py` reports the
+> `/BaseFont` name, which is what the producer *called* the face — not what it embedded. When it
+> says two renderers used different faces, read the embedded programs' `name` tables before
+> believing it. The tool is right that something differs and wrong about what.
+
+### The first operator-level survey of the documents that already pass
+
+Nobody had ever run `pdf-ops.py diff` over the *passing* documents, which is where a defect the
+gate cannot see has to live. Run on all **89** matching documents of batches 001–009, text
+records only, against the fixed binary so the `/BaseFont` false positive could not swamp it:
+
+```
+only in ours          15189 records
+only in the reference 16044
+drawn differently     41154
+   size                27603     <- the finding
+   shows-only (Tj granularity, known, benign)   7457
+   face                  281
+clean (nothing one-sided, every difference granularity):  23 of 89
+```
+
+**Two thirds of the documents the gate calls finished have operator-level differences**, and the
+largest class is one nobody has named.
+
+#### The size difference is systematic, real, and unexplained
+
+Every affected document is a sheet printed at a **zoom**, and on each the ratio is one constant
+repeated across every record — 34 of the 89 carry it and the other 55 show none:
+
+| document | records | ours vs reference |
+|---|---|---|
+| `june_2025_published.xlsx` | 6686 | — |
+| `airports_6.xlsx` | 6326 | 6.76 vs 6.80 |
+| `commander-authorisation-…-2025.xlsx` | 2997 | 10.78 vs 10.81 |
+| `flying-log-passenger-23rd-september-2014.xls` | 2509 | — |
+| `SectorAdvisoryGroupandStrategyBoards.xls` | 1058 | 5.36 vs 5.39 |
+| `Chicago.List.2025.xlsx` | 664 | 7.37 vs 7.41 |
+
+Read off the content streams rather than off the tool, which is the check the bold finding
+earned: ours writes `/F1 6.7606 Tf` and the reference `/F1 6.803 Tf`. Both are numbers really in
+the files.
+
+**What is measured**: LibreOffice's own export of `airports_6.xlsx` states
+`style:scale-to="75%"` and a 9 pt body font, and 6.803 pt is exactly **240 hundredths of a
+millimetre**, a round number in the draw layer's unit.
+
+**What is not, and must not be asserted**: the mechanism. The naive product 9 × 0.75 = **6.75**
+is what *neither* side writes — ours sits 0.16% above it and the reference 0.79% above it — so
+this is not "they round and we do not", and any account that starts from 6.75 owes an
+explanation of both departures. The 1/100 mm observation explains the reference's number and
+says nothing yet about ours.
+
+**It does not explain the under-pagination cluster, and that is checked rather than assumed.**
+The sign matched — a font 0.63% small shortens every advance, so wraps come later and a row and
+then a page can be lost — but the three open under-paginating documents state no zoom at all:
+
+| document | | |
+|---|---|---|
+| `sectors-defense-and-aerospace.xlsx` | 225/227 | no `scale=`, no `fitToPage` |
+| `flightstandards-doc-Cross-reference-table_version02.xlsx` | 461/464 | no `scale=`, no `fitToPage` |
+| `tk-syllabus-comparison-document-v5.xlsx` | 852/855 | no `scale=`, no `fitToPage` |
+
+against `airports_6.xlsx`, which carries the defect and states `scale="75"`. There is no zoom
+for the rounding to happen in, so **the rule cannot reach any of the three** and their two or
+three pages keep the cause this file already gives them.
+
+### `INDEX_Digital_Transformation_Toolkits.xls` (batch-010, 20/24): measured, not diagnosed
+
+Word counts are **identical at 1982**, so no text is lost and the whole difference is pagination
+and drawings. Page starts align either side of the gap: our 1–12 equal the reference's 1–12, our
+13–14 and its 13–18 carry images and no text at all, and our 15–20 equal its 19–24 word for
+word.
+
+| | ours | reference |
+|---|---|---|
+| image records drawn | **63** | **207** |
+| `draw:frame` in LibreOffice's flat-ODF export | — | **107** (1 on each of twelve sheets, **95** on "DX Project Sample") |
+
+The shortfall has the shape of a prefix, twice: our page 13 draws 15 images and so does the
+reference's, our page 14 draws 10 where its draws 21, then we draw none — and the same
+full-page-then-partial-then-nothing pattern repeats at our 15/16 against its 19/20. That looks
+like a truncated shape walk rather than a pagination cut, and it is **not proven**; no
+measurement here separates the two.
+
+Note **207 drawn against 107 read**: the reference draws some drawings more than once, which no
+hypothesis above accounts for. Do not build on "we drop drawings" until that is explained — one
+sheet printed in two column bands would make both counts consistent and make the missing images
+a consequence rather than a cause.
+
 ## The twenty-first sweep: Excel's row heights are read on a 0.75 pt grid
 
 Swept whole at `09a35cdae` before anything was changed, 171 documents, two workers, no path

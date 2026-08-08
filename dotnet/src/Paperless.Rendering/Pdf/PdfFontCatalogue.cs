@@ -258,7 +258,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
 
         widths.Append(']');
 
-        string baseName = BaseName(subset.Face.Reference);
+        string baseName = BaseName(subset.Face);
         string name = $"{subset.Tag}+{baseName}";
 
         int toUnicode = writer.Reserve();
@@ -411,17 +411,48 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
             : null;
 
     /// <summary>
-    /// A PDF name for the family, with everything a name token cannot hold removed.
+    /// A PDF name for the <em>face</em>, with everything a name token cannot hold removed.
     /// </summary>
-    private static string BaseName(FontReference reference)
+    /// <remarks>
+    /// <para>
+    /// <c>/BaseFont</c> names a face, not a family (PDF 1.7 §9.6.2.1, and §9.6.4 for the subset
+    /// prefix), so it takes the font's PostScript name — <c>Carlito-Bold</c> — in preference to
+    /// its family name. Using the family instead announced a document's regular and bold faces
+    /// under one name: measured on
+    /// <c>sheets/batch-005/…/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls</c>, ours
+    /// embedded <c>Carlito</c> twice where LibreOffice's export embeds <c>Carlito-Bold</c> and
+    /// <c>Carlito-Regular</c>.
+    /// </para>
+    /// <para>
+    /// <b>Nothing about the glyphs was ever wrong</b>, and that is worth stating because the
+    /// symptom reads exactly like a font-resolution bug and was twice diagnosed as one. The
+    /// correct bold program is selected, subset and embedded — the two subsets in that file
+    /// differ in their <c>name</c> tables, their <c>StemV</c> and their advance widths — so the
+    /// pages are identical to the reference's and no pixel or word gate can see this. Only the
+    /// announced name was wrong.
+    /// </para>
+    /// <para>
+    /// The fallback chain ends at the family name, which is all a face whose file could not be
+    /// read has: such a face is named and not embedded, and a name is still owed.
+    /// </para>
+    /// </remarks>
+    private static string BaseName(Face face)
     {
+        // Full name second because it is the same face under a space-separated spelling
+        // ("Carlito Bold"); stripping the spaces is what a PostScript name already is.
+        string? preferred = Trimmed(face.OpenType?.PostScriptName)
+            ?? Trimmed(face.OpenType?.FullName)
+            ?? Trimmed(face.Reference.FamilyName);
+
         StringBuilder name = new();
-        foreach (char c in reference.FamilyName)
+        foreach (char c in preferred ?? string.Empty)
         {
             if (c is (>= 'A' and <= 'Z') or (>= 'a' and <= 'z') or (>= '0' and <= '9') or '-') name.Append(c);
         }
 
         return name.Length > 0 ? name.ToString() : "Unnamed";
+
+        static string? Trimmed(string? value) => string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>

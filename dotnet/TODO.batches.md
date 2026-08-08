@@ -6138,3 +6138,59 @@ claim the `a:duotone` work rested on.
    that file's own "The threshold is a bar, and pages sit just under it" section states the
    under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
    not the fix. Round seventeen's action item is done; it should come off the list.
+
+## Sheets, round twenty-two: the bold that was never missing — swept whole at `9cffaa02a`
+
+**Nothing moved, and that is the honest headline.** Swept whole before anything was changed and
+again after: **144/171, total absolute page error 94, 153 exact page counts, batches 001–009 at
+89/89** — the same four numbers either side, every per-batch figure identical, no document
+changing verdict. The baseline also reproduces round twenty-one's closing figures to the digit,
+so nothing has drifted under the scoreboard.
+
+Per batch, unchanged before and after: 001–008 10/10, 009 9/9, 010 6/10, 011 6/10, 012 8/10,
+013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
+
+### The brief's headline was wrong, and the measurement behind it was right
+
+The brief said `Praktikastellen_…xls` — 34 pages against 34, 1828 words against 1828 — draws no
+bold at all. Every figure it quoted reproduces exactly. The conclusion inverts: **we draw bold
+correctly and always did.** Our two subsets are Carlito Bold and Carlito Regular by their own
+`name` tables, `StemV` 140 against 80, and our bold subset's `/Widths` match the reference's
+`Carlito-Bold` on 68.7% of shared codes against 1.5% for `Carlito-Regular`. `pdf-image-diff`
+gives 34 pages, 0 major, `ink%` 0.00 throughout, and page 1 draws bold by eye.
+
+The defect was one expression in the **shared PDF writer**: `PdfFontCatalogue.BaseName` took
+`/BaseFont` from the face's family name rather than its PostScript name. Fixed in
+`Paperless.Rendering`, so **this touches all three families** and the merge should expect it.
+
+Reach, measured by rendering all 171 sheets documents before and after: **156 of 171** changed
+their font-name set, and documents whose font-name set equals the reference's went **11 → 131**.
+Zero verdicts moved, because `batch-check.sh` decides on pages, words and *unembedded* fonts and
+a name reaches none of them.
+
+Cross-track spot check on the same binary, since the change is below all three families:
+`words/batch-001–003` and `slides/batch-001–003` — see the round's commits for the figures.
+
+### What the round is actually worth: the first look at the passing documents
+
+`pdf-ops.py diff` over all **89** matching documents of batches 001–009, which nothing had ever
+done. Two thirds of them differ at operator level. The largest class is **drawn font size —
+27 603 records over 34 of the 89** — one constant ratio per document, on sheets printed at a
+zoom, and visible in the content streams (`/F1 6.7606 Tf` against `/F1 6.803 Tf`).
+
+**The mechanism is not established and must not be guessed at**: `airports_6.xlsx` states
+`scale-to="75%"` and a 9 pt font, and 6.75 pt is what *neither* side writes. The tempting
+consequence — that a 0.63% short advance explains the under-pagination cluster — is **refuted**:
+all three of those documents state no zoom at all.
+
+### Tests
+
+Per project, run separately, each redirected to a file. **0 failed and 0 skipped in every one.**
+
+Core 243, Containers 109, Text 240, Vector 291, Rendering **119** (115 plus this round's four),
+Markup 259, OpenDocument 125, WordProcessing 608, Spreadsheets 446, Presentations 520,
+Fidelity 545.
+
+Round twenty-one recorded Text 237, Rendering 104, Presentations 517 and Fidelity 542 at an
+earlier commit than this round's base, so those deltas are other agents' work merged since and
+not mine. Mine is the +4 in Rendering.
