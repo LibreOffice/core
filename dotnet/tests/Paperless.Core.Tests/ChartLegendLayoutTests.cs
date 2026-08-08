@@ -59,17 +59,31 @@ public class ChartLegendLayoutTests
         => ChartLayout.Place(plot, frame ?? Frame, new Ruler());
 
     /// <summary>
-    /// The room a right-hand legend takes is padding, key, gap and the name's text
-    /// <em>shape</em> — not the bare name.
+    /// The room a right-hand legend takes is padding, key, gap and the name's <em>plain
+    /// text</em> — the one piece of chart text that is not measured as a text shape.
     /// </summary>
     /// <remarks>
-    /// <c>2 × max(1 mm, 0.33 em) + 0.6 em + max(1 mm, 0.22 em) + (text + 2 × 0.18 em)</c>, plus
+    /// <para>
+    /// <c>2 × max(1 mm, 0.33 em) + 0.6 em + max(1 mm, 0.22 em) + text</c>, plus
     /// <c>lcl_getLegendLeftRightMargin</c>'s flat 210 between the legend and the diagram. The
-    /// estimate this replaced — a key of 0.7 line heights and a gap of 0.4, with no padding and
-    /// no insets — is 6.7 pt narrower on this chart, all of it taken out of the plot area.
+    /// estimate this replaced — a key of 0.7 line heights and a gap of 0.4, with no padding at
+    /// all — is 6.7 pt narrower on this chart, all of it taken out of the plot area.
+    /// </para>
+    /// <para>
+    /// <strong>And no <c>2 × 0.18 em</c> inset, which this test used to assert.</strong>
+    /// <c>lcl_createTextShapes</c> calls the plain-<c>OUString</c> overload of
+    /// <c>ShapeFactory::createText</c> (<c>ShapeFactory.cxx:2042</c>), which sets no text
+    /// distances; the overload that sets them (<c>:2168</c>) is reached only from
+    /// <c>VTitle</c>. Measured on <c>research/probes/slides-r23</c>'s seven decks rather than
+    /// taken from that source, because the source is a development branch and the installed
+    /// binary made the references: the distance from a key's right edge to its name's pen is
+    /// <strong>2.83, 2.83 and 3.07 pt at a 7, 10 and 14 pt legend font</strong>, which is
+    /// <c>max(1 mm, 0.22 × font)</c> three times over with nothing added. Adding the inset
+    /// would put it at 4.10, 4.64 and 5.60 — and 4.64 is what we drew.
+    /// </para>
     /// </remarks>
     [Fact]
-    public void ARightHandLegendReservesItsPaddingItsKeyAndTheNamesTextShape()
+    public void ARightHandLegendReservesItsPaddingItsKeyAndTheNamesPlainText()
     {
         ChartPlot plot = Bars("North");
         Length font = plot.LabelSize;
@@ -77,7 +91,7 @@ public class ChartLegendLayoutTests
         Length padding = Larger(Millimetre, font * 0.33);
         Length keyGap = Larger(Millimetre, font * 0.22);
         Length key = font * 0.6;
-        Length name = (font * (0.5 * "North".Length)) + (font * (0.18 * 2));
+        Length name = font * (0.5 * "North".Length);
 
         Length expected = (padding * 2.0) + key + keyGap + name + Length.FromMm100(210);
 
@@ -89,6 +103,47 @@ public class ChartLegendLayoutTests
         DocRect without = Place(plot with { Legend = ChartLegendPosition.None }).PlotArea;
 
         Near(without.Right - area.Right, expected);
+    }
+
+    /// <summary>
+    /// Two entries are drawn one row height <em>and one row gap</em> apart, which is exactly
+    /// what the height reserved for the box is a sum of.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>lcl_placeLegendEntries</c> reserves <c>2 × paddingY + rows × rowHeight +
+    /// (rows − 1) × offsetY</c> and then steps by <c>rowHeight + offsetY</c>. Stepping by the
+    /// height alone — which is what we did — leaves the reservation and the placement
+    /// disagreeing by one gap per row, so the entries crowd into the top of a box sized for
+    /// them spaced out. On a two-entry legend that is the difference between the box being
+    /// centred on the frame and its content being.
+    /// </para>
+    /// <para>
+    /// The probe decks put the reference's pitch at <strong>10.34, 14.09 and 19.33 pt</strong>
+    /// for a 7, 10 and 14 pt legend font. At 10 pt we drew 17.35 — a line height plus
+    /// <c>0.60 × font</c> of text-shape inset and no gap — and now draw 14.18.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void LegendRowsAreSteppedByTheRowHeightAndTheRowGap()
+    {
+        ChartPlot plot = Bars("North", "South");
+        Length font = plot.LabelSize;
+
+        ChartDrawing drawing = Place(plot);
+
+        List<ChartBox> keys =
+            [.. drawing.Boxes.Where(box => box.Bounds.X > drawing.DiagramArea.Right)];
+
+        keys.Count.ShouldBe(2);
+
+        // The ruler's line is 1.15 em and the gap is max(1 mm, 0.20 em); a bare 1.15 em would
+        // be the stepping bug and 1.15 em + 0.60 em the inset one, so the three are distinct.
+        Length first = keys[0].Bounds.Y;
+        Length second = keys[1].Bounds.Y;
+        Length pitch = first > second ? first - second : second - first;
+
+        Near(pitch, (font * 1.15) + Larger(Millimetre, font * 0.20));
     }
 
     /// <summary>
