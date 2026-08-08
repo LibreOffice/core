@@ -33,30 +33,32 @@ namespace Paperless.Fidelity.Tests;
 /// <para>
 /// <strong>The face assertion alone would be a metadata test</strong>, and a face that is merely
 /// named right moves no ink — the round-nineteen <c>/BaseFont</c> finding is exactly that shape.
-/// So the pen positions are asserted too: the category labels along the bottom of the chart are
-/// where the face's advance widths land them, and Liberation Mono puts them 5 pt from where
-/// Liberation Sans does. Ours is asserted against literals first and the reference compared
-/// against the same ones, so this tests Paperless rather than whatever the two of us agree on.
+/// So the third case measures <em>one digit's advance</em>, taken as the gap between the pen of
+/// the value axis' three-digit labels and the pen of its two-digit ones. They are right-aligned
+/// on the same edge, so that gap is one digit and nothing else: 6.01 pt in ten-point Liberation
+/// Mono against 5.55 in Liberation Sans.
+/// </para>
+/// <para>
+/// <strong>Two more obvious quantities were measured first and both are the wrong thing to
+/// assert.</strong> An absolute pen position carries the composition as well as the face: the
+/// value axis' labels land 0.36 pt from the reference with this change and 0.96 pt without —
+/// better — while the legend lands 2.49 pt out with it and 1.39 pt out without, because the
+/// composition has a legend-reservation error of its own that the wrong face was partly
+/// cancelling. And a word's ink width carries the two writers' show splitting: the reference
+/// positions each digit of "100" separately, so poppler ends its box at the last glyph's ink and
+/// reports 17.25 where our single show reports the full 18.03 advance. Neither difference is
+/// about the face. The gap between two of the axis' own labels is.
 /// </para>
 /// </remarks>
 public sealed partial class SlideChartFaceComparisonTests : IDisposable
 {
-    /// <summary>A tenth of a point: finer than the 5 pt the face moves these labels by.</summary>
-    private const double TolerancePoints = 0.1;
-
-    /// <summary>
-    /// The x of the four category labels along the bottom of the chart, in points, as read out of
-    /// LibreOffice 24.2.7.2's own PDF of <c>chart-face-theme-minor.pptx</c>.
-    /// </summary>
+    /// <summary>One digit's advance in ten-point Liberation Mono, in points.</summary>
     /// <remarks>
-    /// Their spacing is the plot area's, which the value-axis labels' width reserves, so these
-    /// four numbers carry both halves of the claim: the face the labels are measured in and the
-    /// rectangle that measurement produced.
+    /// 0.6009 em at the 10.01 pt the labels are drawn at. Liberation Sans' digit is 0.5560 em, or
+    /// 5.55 pt, so the two faces are 0.46 pt apart here — five times the tolerance below, and a
+    /// quantity neither renderer's plot rectangle can move.
     /// </remarks>
-    private static readonly double[] CategoryLabelX = [164.26, 287.99, 411.74, 535.47];
-
-    /// <summary>The y those four sit on, which separates them from every other run on the page.</summary>
-    private const double CategoryLabelY = 101.54;
+    private const double MonospacedDigitAdvance = 6.01;
 
     private readonly LibreOfficeRunner _libreOffice = new();
     private readonly string _workDirectory =
@@ -107,32 +109,54 @@ public sealed partial class SlideChartFaceComparisonTests : IDisposable
     /// The face is what the labels are <em>measured</em> in, not only what they are named in.
     /// </summary>
     [Fact]
-    public void TheThemesFaceDecidesWhereTheCategoryLabelsLand()
+    public void TheThemesFaceDecidesTheValueLabelsAdvances()
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
 
         const string deck = "chart-face-theme-minor.pptx";
 
-        List<double> ours = CategoryLabels(PdfTextRuns.Read(Ours(deck)));
-        List<double> theirs = CategoryLabels(
+        double ours = DigitAdvance(PdfTextRuns.Read(Ours(deck)));
+        double theirs = DigitAdvance(
             PdfTextRuns.Read(_libreOffice.ConvertToPdf(Corpus.Require(deck), _workDirectory)));
 
-        Assert.SkipWhen(theirs.Count == 0, "no text runs came back from the reference");
-
-        ours.Count.ShouldBe(CategoryLabelX.Length, "category labels in our rendering");
-        theirs.Count.ShouldBe(CategoryLabelX.Length, "category labels in the reference");
-
-        for (int at = 0; at < CategoryLabelX.Length; at++)
-        {
-            ours[at].ShouldBe(CategoryLabelX[at], TolerancePoints, $"our category label {at}");
-            theirs[at].ShouldBe(CategoryLabelX[at], TolerancePoints, $"the reference's label {at}");
-        }
+        // Ours against the literal first, so this tests Paperless rather than an agreement.
+        ours.ShouldBe(MonospacedDigitAdvance, 0.1, "our digit advance");
+        theirs.ShouldBe(MonospacedDigitAdvance, 0.1, "the reference's digit advance");
     }
 
-    private static List<double> CategoryLabels(List<PdfTextRun> runs)
-        => [.. runs.Where(r => r.PageIndex == 0 && Math.Abs(r.Y - CategoryLabelY) < 1.0)
-                   .Select(r => r.X)
-                   .Order()];
+    /// <summary>
+    /// One digit's advance: the gap between the pens of the value axis' three- and two-digit
+    /// labels, which share a right edge.
+    /// </summary>
+    /// <remarks>
+    /// Each group is the <em>commonest</em> pen among the runs of that glyph count rather than
+    /// the only one, and is required to hold at least three of them — the axis draws five
+    /// three-digit labels and four two-digit ones. Requiring a single pen instead failed on our
+    /// own output, because a rotated axis title contributes runs whose <c>Td</c> is in its own
+    /// rotated space and lands in the same band; taking the mode is what makes the measurement
+    /// about the labels rather than about everything to the left of the plot area.
+    /// </remarks>
+    private static double DigitAdvance(List<PdfTextRun> runs)
+    {
+        List<PdfTextRun> axis = [.. runs.Where(r => r.PageIndex == 0 && r.X < 150.0)];
+
+        return CommonestPen(axis, glyphs: 2) - CommonestPen(axis, glyphs: 3);
+    }
+
+    /// <summary>The pen shared by most of the runs holding <paramref name="glyphs"/> glyphs.</summary>
+    private static double CommonestPen(List<PdfTextRun> runs, int glyphs)
+    {
+        IGrouping<double, PdfTextRun> flush = runs
+            .Where(r => r.GlyphCount == glyphs)
+            .GroupBy(r => Math.Round(r.X, 2))
+            .MaxBy(group => group.Count())
+            ?? throw new InvalidOperationException($"no {glyphs}-glyph runs left of the plot area");
+
+        flush.Count().ShouldBeGreaterThanOrEqualTo(
+            3, $"value-axis labels flush at x = {flush.Key}");
+
+        return flush.Key;
+    }
 
     /// <summary>Every <c>/BaseFont</c> in the file, subset prefix stripped.</summary>
     private static List<string> Faces(string pdfPath)
