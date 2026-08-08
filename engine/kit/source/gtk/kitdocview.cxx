@@ -834,9 +834,9 @@ setPart(KitDocumentView* pDocView, const std::string& rString)
     // and reports parts by their index in document order.
     {
         std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
-        priv->m_nPartId = priv->m_pDocument->pClass->getPartIndex(
-            priv->m_pDocument, std::stoi(rString),
-            priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
+        priv->m_nPartId = priv->m_pDocument->getPartIndex(
+            std::stoi(rString),
+            priv->m_pDocument->getEditMode());
     }
     g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, priv->m_nPartId);
 }
@@ -2408,9 +2408,9 @@ setPartInThread(gpointer data)
     // The widget names parts by their index in document order, while the
     // document boundary names parts of a presentation or drawing document by
     // their stable page unique ids.
-    const unsigned long long nPartNumber = priv->m_pDocument->pClass->getPartUniqueId(
-        priv->m_pDocument, nPart,
-        priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
+    const unsigned long long nPartNumber = priv->m_pDocument->getPartUniqueId(
+        nPart,
+        priv->m_pDocument->getEditMode());
     if (nPartNumber != 0 && nPartNumber <= o3tl::make_unsigned(std::numeric_limits<int>::max()))
         nPart = static_cast<int>(nPartNumber);
 
