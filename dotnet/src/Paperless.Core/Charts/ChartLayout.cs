@@ -2682,7 +2682,13 @@ public static partial class ChartLayout
                 if (at >= named.Count) break;
 
                 (string name, Colour? fill, Colour? outline, Length width) = named[at];
-                Length rowY = originY + box.PaddingY + (box.RowHeight * row);
+
+                // A row is its own height and then the gap, which is exactly what the height
+                // reserved for the whole box is a sum of. Stepping by the height alone left the
+                // reservation and the placement disagreeing by one gap per row — the entries
+                // crowded into the top of a box sized for them spaced out, which on a two-entry
+                // legend is the difference between the box being centred and its content being.
+                Length rowY = originY + box.PaddingY + ((box.RowHeight + box.RowGap) * row);
 
                 boxes.Add(new ChartBox(
                     Rectangle(
@@ -2694,17 +2700,19 @@ public static partial class ChartLayout
                     outline,
                     width));
 
+                // No TextShapeInsetX: a legend entry's name is the one chart text that is not
+                // drawn in a shape carrying one. See Legend.
                 labels.Add(new ChartLabel(
                     name,
                     new DocPoint(
-                        columnX + box.Key.Width + box.KeyGap + (plot.LabelSize * TextShapeInsetX),
+                        columnX + box.Key.Width + box.KeyGap,
                         rowY + (box.RowHeight / 2)),
                     ChartLabelAnchor.LeftMiddle,
                     plot.LabelSize,
                     AxisColour));
 
-                Length shape = Shape(measurer, name, plot.LabelSize).Width;
-                if (shape > widest) widest = shape;
+                Length text = MeasureLines(measurer, name, plot.LabelSize).Width;
+                if (text > widest) widest = text;
             }
 
             columnX += box.Key.Width + box.KeyGap + widest
@@ -2788,7 +2796,8 @@ public static partial class ChartLayout
     /// <param name="KeyGap">The gap between a symbol and the name beside it.</param>
     /// <param name="PaddingX">The margin inside the legend's left and right edges.</param>
     /// <param name="PaddingY">The margin inside its top and bottom edges.</param>
-    /// <param name="RowHeight">One entry's height, insets included.</param>
+    /// <param name="RowHeight">One entry's own height.</param>
+    /// <param name="RowGap">The space between one row and the next.</param>
     private readonly record struct LegendBox(
         Length Width,
         Length Height,
@@ -2798,7 +2807,8 @@ public static partial class ChartLayout
         Length KeyGap,
         Length PaddingX,
         Length PaddingY,
-        Length RowHeight);
+        Length RowHeight,
+        Length RowGap);
 
     /// <summary>
     /// How much room the legend takes, ported from <c>lcl_placeLegendEntries</c>.
@@ -2809,8 +2819,24 @@ public static partial class ChartLayout
     /// the legend's own font height with a one-millimetre floor — padding <c>0.33</c>, the gap
     /// between columns <c>0.66</c>, the gap between a key and its name <c>0.22</c>, and the key
     /// itself <c>0.6</c> square — all under the comment "#i109336# Improve auto positioning in
-    /// chart". The name's width is the text <em>shape's</em>, so it carries
-    /// <see cref="TextShapeInsetX"/> twice like every other chart text.
+    /// chart".
+    /// </para>
+    /// <para>
+    /// <strong>An entry's name is measured as the plain text, not as a chart text shape.</strong>
+    /// It is the one piece of chart text that carries neither <see cref="TextShapeInsetX"/> nor
+    /// <see cref="TextShapeInsetY"/>: <c>lcl_createTextShapes</c> calls the <c>OUString</c>
+    /// overload of <c>ShapeFactory::createText</c> (<c>ShapeFactory.cxx:2042</c>), which sets no
+    /// text distances at all, while the overload that sets them (<c>:2168</c>) takes a size, a
+    /// position and an <c>XFormattedString</c> and is reached only from <c>VTitle</c>.
+    /// </para>
+    /// <para>
+    /// Measured on <c>research/probes/slides-r23</c>'s decks rather than taken from the source,
+    /// because the source is a development branch and the binary made the references. The gap
+    /// between a key's right edge and the name's pen is <strong>2.83, 2.83 and 3.07 pt at a 7, 10
+    /// and 14 pt legend font</strong> — <c>max(1 mm, 0.22 × font)</c> exactly, three times over,
+    /// with no <c>0.18 × font</c> added anywhere. Adding the inset would put it at 4.10, 4.64 and
+    /// 5.60. The row pitch says the same vertically: 10.34, 14.09 and 19.33 pt, which is a plain
+    /// line height plus one <c>0.20</c> offset and not a line height plus <c>0.60 × font</c>.
     /// </para>
     /// <para>
     /// <strong>This is the largest single term in the plot rectangle, and it is not the label
@@ -2861,10 +2887,10 @@ public static partial class ChartLayout
 
         foreach ((string name, _, _, _) in named)
         {
-            DocSize shape = Shape(measurer, name, font);
-            widths.Add(shape.Width);
-            if (shape.Width > widest) widest = shape.Width;
-            if (shape.Height > tallest) tallest = shape.Height;
+            DocSize text = MeasureLines(measurer, name, font);
+            widths.Add(text.Width);
+            if (text.Width > widest) widest = text.Width;
+            if (text.Height > tallest) tallest = text.Height;
         }
 
         Length entryWidth = offsetX + keyWidth + keyGap + widest;
@@ -2920,7 +2946,8 @@ public static partial class ChartLayout
             keyGap,
             paddingX,
             paddingY,
-            tallest);
+            tallest,
+            offsetY);
     }
 
     /// <summary>
