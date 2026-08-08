@@ -224,14 +224,41 @@ rounds each shipped a throwaway script doing part of it — `pdfops.py`, `sl14-c
 `compare-fit.py`, `read-autofit.py`, `sl14-pagediff.py`, `fold-check.py`, `affcmp.py` — and the
 forensics, not the fixing, is where those rounds went.
 
-### What it found on its first real run
+### What it found on its first real run, and how the first reading of it was wrong
 
 A workbook that **passes every existing check** — 34 pages against 34, 1828 words against 1828,
 two fonts and both embedded. The diff reports 0 records one-sided and 13 drawn differently, every
 one of them `face Carlito vs Carlito-Bold`, with identical glyph counts and positions.
 `pdffonts` confirms it: ours embeds `Carlito` twice, the reference embeds `Carlito-Bold` and
-`Carlito-Regular`. **We do not draw bold on that document at all**, and nothing in the gate could
-see it.
+`Carlito-Regular`. Nothing in the gate could see any of that, which is the point of the tool.
+
+The sentence written next to it — *"we do not draw bold on that document at all"* — was wrong,
+and it is worth keeping the wrong version above so the shape of the error stays visible. The
+same signature then turned up on a **words** DOCX in an early batch, which already refutes
+"a defect in the BIFF font path". Extracting the embedded font programs out of our own PDF and
+reading their TrueType `name` tables settled it:
+
+```
+BaseFont AAAAAA+LiberationSans   ->  name6 'LiberationSans-Bold', name4 'Liberation Sans Bold'
+BaseFont BAAAAA+LiberationSans   ->  name6 'LiberationSans',      name4 'Liberation Sans'
+```
+
+**We embed the right bold program and draw the right bold glyphs.** Our PDF writer was naming
+`/BaseFont` from the font's *family* name instead of its *PostScript* name, so a bold face was
+announced under the regular family's name. A real defect, and a metadata one: it reaches every
+document we render in any non-regular face and moves **zero pixels** on any raster comparison.
+
+Two lessons, both cheap to state and expensive to learn again:
+
+- **A face-name difference is a claim about the PDF's metadata, not about its ink.** Confirm
+  which by reading the embedded program's `name` table before sizing the fix. `pdffonts` reports
+  the same `/BaseFont` string the diff does, so it corroborates nothing.
+- **The instrument's first finding is the one most likely to be mis-read**, because there is no
+  prior run to calibrate against. Budget a decisive check for it.
+
+Fixing the writer rather than adding a tolerance to `pdf-ops.py` is deliberate: the false
+positive then disappears at its source instead of being suppressed everywhere it might also be
+telling the truth.
 
 ### Two design points worth knowing before you trust it
 
@@ -247,6 +274,64 @@ Text is decoded by joining `pdftotext -bbox` on position rather than by reading 
 ToUnicode CMap here — poppler already has that decoder, and reimplementing it is a large surface
 to get quietly wrong. A record therefore always carries a glyph count, which never lies, and
 carries words when poppler could read them.
+
+## Attributing a mark to the source that made it: `trace-text.py`
+
+`pdf-ops.py` says a record moved and quotes the text it holds. On a real document that word
+appears thirty times, so the quote identifies nothing, and the next step is reading markup and
+guessing which paragraph it was.
+
+```sh
+S=.claude/skills/render-comparison/scripts
+$S/trace-text.py rewrite in.docx /abs/scratch/in.tok.docx --map /abs/scratch/map.tsv
+$S/pdf-ops.py diff ours.pdf ref.pdf | $S/trace-text.py resolve /abs/scratch/map.tsv
+$S/trace-text.py locate /abs/scratch/map.tsv 4XXXXXXXXXX
+```
+
+`rewrite` replaces every ASCII word in a zip-container document with a token unique across the
+whole file. `resolve` reads a diff on stdin and annotates each line with the part, element,
+ordinal and the original sentence that produced it:
+
+```
+text p1 (70.85, 747.10) 9.00pt AAAAAA+LiberationSans  1 glyphs in 1 show(s) "3 4XXXXXXXXXX"
+    ↳ 4XXXXXXXXXX  word/document.xml  t[3].0  'Information'  ‹Information›
+```
+
+Supported: `docx`/`pptx`/`xlsx` and their variants, and ODF. **Binary `.doc`/`.xls`/`.ppt`
+cannot be rewritten**, and converting one first would change the layout under study, which
+defeats the purpose — use a sibling document in the same shape, or skip it.
+
+### What it preserves, and the one thing it does not
+
+- **Word count exactly.** Only maximal runs of `[A-Za-z0-9]` are replaced; whitespace,
+  punctuation and every non-ASCII script are left alone. The word-count gate therefore reads the
+  same number on the rewritten file, and a count that *changes* is a real finding rather than an
+  artefact. Measured on a two-page DOCX: 368 words and 2 pages before and after, through both
+  renderers.
+- **Character count wherever the counter fits.** A token is base-36 of its index padded to the
+  original length with `X`, which is outside the base-36 alphabet and so cannot collide with an
+  encoded digit. The run prints how many tokens came out *longer* than the word they replaced —
+  that is exactly the population whose line breaking may have shifted.
+- **Not width.** Equal character count is not equal advance. A rewritten document does not lay
+  out identically to its original and **must never be used as a fidelity reference**. It is an
+  instrument for attribution: run it on a document you already know differs, to find out which
+  source run owns the difference.
+
+Field codes are skipped by name — `w:instrText`, `w:fldSimple`, `c:f`, the ODF `text:page-number`
+family. Rewriting one produces a document that still opens and renders something entirely
+different, which is the worst failure mode a diagnostic can have.
+
+### Why the resolver reads only the quoted part of a line
+
+A short word mints a short token, and a short token is indistinguishable from an ordinary number.
+The first version resolved `p1`, `17 glyphs` and the x-coordinate `342.78` against whichever
+words held indices 1, 17 and 34, burying every real hit. So: when a line carries quoted text —
+as every `pdf-ops.py` record does — only the quoted part is searched; when it does not, only
+*padded* tokens count, because a padded token contains an `X` and cannot be a number.
+
+One property to expect rather than debug: a record's quoted text comes from the positional
+`pdftotext` join, so it can overrun into neighbouring words and `resolve` will name them too.
+The first token listed is the one at the record's own position.
 
 ## Comparing whole documents as images
 

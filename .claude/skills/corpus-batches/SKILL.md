@@ -130,12 +130,20 @@ every round, and each now has a permanent answer rather than a throwaway script:
 | which documents are wrong | `batch-check.sh` — page count, words, embedding |
 | which *pages* of one document | `pdf-image-diff.py`, ranked by `\|ink\|%` |
 | which *element* on that page | **`pdf-ops.py diff`** — typed records, named differences |
-| what did each renderer resolve a face to | `pdf-ops.py dump`, and `pdffonts` to confirm |
+| which *source run* made that element | **`trace-text.py rewrite`**, then `resolve` the diff |
+| what did each renderer resolve a face to | `pdf-ops.py dump`, then the embedded program's `name` table |
 
 **Go down that list, not sideways.** The commonest waste is reaching a page and then reading its
 content stream by hand; `pdf-ops.py` was written because seven consecutive rounds did exactly
 that, each with its own script. On its first real run it found a workbook passing the whole gate
-— 34 pages against 34, 1828 words against 1828 — that never draws bold at all.
+— 34 pages against 34, 1828 words against 1828 — whose text records all report the wrong face.
+
+Note the last row and what it does **not** say. `pdffonts` reports the same `/BaseFont` string
+`pdf-ops.py` does, so running it corroborates nothing; the decisive read is the TrueType `name`
+table inside the embedded program. Doing that on the workbook above showed we embed the correct
+bold face and merely *name* it wrong — a metadata defect reaching every document in any
+non-regular face and moving zero pixels anywhere. The first reading, "we never draw bold", was
+wrong in the most expensive available direction: it implied a corpus-wide rendering fix.
 
 ### The fourth check, once the first three pass
 
@@ -304,6 +312,13 @@ A brief that works contains all of:
    | "the residue is the box drawn once per column band" | exactly | the page-edge clip, cutting the block mid-word |
    | "row pitch 5.8% out" | exactly, on thirty probe rows | three separate 96 dpi pixel quantisations, not one ratio |
    | "the shape's `rot` should not reach its text" | the symptom, yes | `dsp:txXfrm/@rot`, a *second* angle that adds to it |
+   | "this workbook never draws bold — a defect in the BIFF font path" | exactly, and on a DOCX too | the bold face **is** drawn; our PDF names `/BaseFont` from the family instead of the PostScript name |
+
+   The last row is mine, written in a brief in this session, and it is the cheapest possible
+   demonstration of the rule: the measurement held on a second document in a different family,
+   which felt like corroboration and was actually the refutation — a BIFF-specific cause cannot
+   reach a DOCX. **A finding reproducing somewhere the stated cause cannot reach is evidence
+   against the cause, not for it.**
 
    A measurement is evidence; the sentence after it is a hypothesis. Briefs should carry both
    and label which is which. Note the last row: an explanation can be wrong in the direction of
