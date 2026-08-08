@@ -196,7 +196,14 @@ public static class SlideChart
 
             transform = AffineTransform.Concat(
                 AffineTransform.Concat(
-                    AffineTransform.Rotation(label.Rotation),
+                    // Negated: `ChartLabel.Rotation` is anticlockwise, which is how both formats
+                    // state one and how chart2's own shapes carry it, and the drawing space here has
+                    // y growing downwards — so a positive angle handed straight to `Rotation` turns
+                    // the text the other way. Measured: a two-word value axis title comes out reading
+                    // top-to-bottom against the reference's bottom-to-top, and 45 degree category
+                    // labels descend to the right against the reference's ascending. The box does not
+                    // move, being symmetric about the same centre for either sign.
+                    AffineTransform.Rotation(-label.Rotation),
                     AffineTransform.Translation(label.At.X.Emu, label.At.Y.Emu)),
                 placement);
         }

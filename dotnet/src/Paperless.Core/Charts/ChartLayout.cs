@@ -2767,6 +2767,29 @@ public static partial class ChartLayout
                 Math.PI / 2,
                 IsBold: plot.IsAxisTitleBold));
         }
+
+        // The secondary value axis' title, against the frame's right edge and turned the same
+        // quarter turn — `SECONDARY_Y_AXIS_TITLE` is created with `TitleAlignment::ALIGN_RIGHT`
+        // on a chart that is not vertical (`ChartView.cxx:2081-2082`), which positions it at
+        // `rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance`
+        // (`:1152-1153`). `PlotAreaOf` has taken its band off the right edge since the secondary
+        // axis was implemented and nothing ever drew into it, so the plot area was narrowed by a
+        // title that is not on the page — the failure that looks like nothing being wrong.
+        if (plot.SecondaryValueAxisTitle is { Length: > 0 } second && plot.SecondaryAxisVisible)
+        {
+            Length height =
+                measurer.Measure(second, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
+            labels.Add(new ChartLabel(
+                second,
+                new DocPoint(
+                    frame.Right - (frame.Width * PageMargin) - height / 2,
+                    area.Y + area.Height / 2),
+                ChartLabelAnchor.Centre,
+                plot.AxisTitleSize,
+                AxisColour,
+                Math.PI / 2,
+                IsBold: plot.IsAxisTitleBold));
+        }
     }
 
     /// <summary>
