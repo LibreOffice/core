@@ -93,3 +93,23 @@ of it.** BIFF records are laid out inside 512-byte OLE sectors, so a raw search 
 record that straddles a boundary, and an embedded object may sit in its own storage entirely.
 No track-wide chart count is offered here for that reason; the four batch-010 figures above come
 from rendering the documents and reading the pages.
+
+## The whole-track sweep, before and after the font-size fix
+
+Both sweeps: 171 rows, no duplicate path, zero `ref-failed`, each against its own snapshot of the
+CLI so a rebuild could not disturb a running sweep.
+
+| | matches | abs page error | exact page counts | abs word error |
+|---|---|---|---|---|
+| `base-whole-track.tsv` (`9c5bef08c`) | 144/171 | 94 | 153 | 43961 |
+| `after-fontsize-whole-track.tsv` | 144/171 | 94 | 153 | 43903 |
+
+**The verdict does not move, and that is the honest headline.** Thirteen documents' extracted
+word counts change, none across a verdict boundary in either direction; the largest single move is
+`Special-Procedures_2025-07-10.xls`, whose count goes from 82 words over the reference to 3 under
+it. `CSJU List of Recipients of funds 2013-2020.xlsx` now matches the reference's word count
+exactly and still fails on pages. Per batch the two sweeps are identical: 001–009 all pass, then
+010 6/10, 011 6/10, 012 8/10, 013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
+
+The change is confined to `Paperless.Spreadsheets`, whose `SheetDeviceUnits` is `internal`, so no
+cross-track sweep is owed: nothing outside the spreadsheet layout can reach it.
