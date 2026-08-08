@@ -250,3 +250,109 @@ internal static class TestCffFace
         return null;
     }
 }
+
+/// <summary>
+/// The regular and bold faces of one installed family, as a pair.
+/// </summary>
+/// <remarks>
+/// <para>
+/// A pair rather than a single bold face, because the defect this exists to catch is about
+/// telling two faces apart. A document setting a heading bold and its body regular resolves
+/// two <see cref="FontReference"/>s that share a family name and differ in weight; they must
+/// reach the PDF as two distinguishable fonts.
+/// </para>
+/// <para>
+/// It insists the two really are different font programs — same family, different PostScript
+/// name — and skips otherwise. A machine carrying only one weight of every family would
+/// otherwise pass these tests without exercising anything, which is the failure mode a test
+/// about a distinction cannot afford.
+/// </para>
+/// </remarks>
+internal static class TestFacePair
+{
+    private static readonly Lazy<(FaceAndReference Regular, FaceAndReference Bold)?> Resolved = new(Resolve);
+
+    /// <summary>A resolved reference and the face behind it.</summary>
+    internal readonly record struct FaceAndReference(FontReference Reference, OpenTypeFace Face);
+
+    /// <summary>True when a family with two distinct weights was found on this machine.</summary>
+    public static bool IsAvailable => Resolved.Value is not null;
+
+    /// <summary>The regular face; only valid when <see cref="IsAvailable"/>.</summary>
+    public static FaceAndReference Regular => Resolved.Value!.Value.Regular;
+
+    /// <summary>The bold face; only valid when <see cref="IsAvailable"/>.</summary>
+    public static FaceAndReference Bold => Resolved.Value!.Value.Bold;
+
+    /// <summary>A glyph run in one of the pair's faces.</summary>
+    /// <param name="which">The face to draw in.</param>
+    /// <param name="text">What to draw.</param>
+    /// <param name="origin">Where the baseline starts.</param>
+    /// <param name="size">The em size.</param>
+    public static GlyphRun Run(FaceAndReference which, string text, DocPoint origin, Length size)
+    {
+        ShapedText shaped = TextShaper.Default.Shape(which.Face, text);
+
+        List<PositionedGlyph> glyphs = [];
+        List<int> clusters = [];
+        Length pen = Length.Zero;
+
+        foreach (ShapedGlyph glyph in shaped.Glyphs)
+        {
+            Length advance = shaped.Scale(glyph.Advance, size);
+            glyphs.Add(new PositionedGlyph(
+                glyph.GlyphId,
+                new DocPoint(pen + shaped.Scale(glyph.OffsetX, size), -shaped.Scale(glyph.OffsetY, size)),
+                advance));
+            clusters.Add(glyph.Cluster);
+            pen += advance;
+        }
+
+        return new GlyphRun
+        {
+            Font = which.Reference,
+            FontSize = size,
+            Origin = origin,
+            Glyphs = glyphs,
+            Text = text,
+            ClusterMap = clusters,
+        };
+    }
+
+    private static (FaceAndReference, FaceAndReference)? Resolve()
+    {
+        try
+        {
+            SystemFontResolver resolver = SystemFontResolver.Build();
+
+            // Carlito first: it is the face the corpus defect was measured on, and the one
+            // check-env.sh guarantees is installed for any OOXML comparison to mean anything.
+            foreach (string family in (string[])
+                     ["Carlito", "Liberation Serif", "Liberation Sans", "DejaVu Serif", "DejaVu Sans"])
+            {
+                FontReference regular = resolver.Resolve(new FontRequest(family));
+                FontReference bold = resolver.Resolve(new FontRequest(family, Weight: 700));
+                if (regular.FaceKey.Length == 0 || bold.FaceKey.Length == 0) continue;
+                if (string.Equals(regular.FaceKey, bold.FaceKey, StringComparison.Ordinal)) continue;
+
+                OpenTypeFace regularFace = resolver.LoadOpenType(regular);
+                OpenTypeFace boldFace = resolver.LoadOpenType(bold);
+
+                // The pair is only useful if the family name really does fail to separate them,
+                // which is the whole premise of the test.
+                if (!string.Equals(regularFace.FamilyName, boldFace.FamilyName, StringComparison.Ordinal)) continue;
+                if (regularFace.PostScriptName is not { Length: > 0 } a) continue;
+                if (boldFace.PostScriptName is not { Length: > 0 } b) continue;
+                if (string.Equals(a, b, StringComparison.Ordinal)) continue;
+
+                return (new FaceAndReference(regular, regularFace), new FaceAndReference(bold, boldFace));
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // No readable face: the tests that need one skip rather than assert about a substitute.
+        }
+
+        return null;
+    }
+}

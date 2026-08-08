@@ -276,6 +276,23 @@ public sealed class OpenTypeFace
         ?? NameTable.Read(File, NameTable.SubfamilyId);
 
     /// <summary>
+    /// The PostScript name, which names the <em>face</em> rather than the family — so
+    /// <c>Carlito-Bold</c> where <see cref="FamilyName"/> says only <c>Carlito</c>.
+    /// </summary>
+    /// <remarks>
+    /// This is the name a PDF's <c>/BaseFont</c> is supposed to carry, and the distinction is
+    /// not cosmetic: a document using a family's regular and bold faces produces two font
+    /// programs, and naming both after the family announces them under one name. Nothing about
+    /// the glyphs changes, but every consumer reading the file's font list — <c>pdffonts</c>,
+    /// and any operator-level comparison against LibreOffice's own export — sees one face
+    /// where there are two.
+    /// </remarks>
+    public string? PostScriptName => NameTable.Read(File, NameTable.PostScriptNameId);
+
+    /// <summary>The full name, such as "Carlito Bold"; the fallback when there is no PostScript name.</summary>
+    public string? FullName => NameTable.Read(File, NameTable.FullNameId);
+
+    /// <summary>
     /// The weight on the OpenType 1-1000 scale, from <c>OS/2</c> or from the header's bold bit.
     /// </summary>
     public int Weight => Os2?.Weight is > 0 and <= 1000 ? Os2.Value.Weight : Head.IsBold ? 700 : 400;
