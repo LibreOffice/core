@@ -2447,6 +2447,59 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf171708)
                 u"Content after the table.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFloatTableOverFooterObject)
+{
+    // A floating table split over three pages, and a footer picture reaching up into the body of
+    // every page.
+    createSwDoc("floattable-footer-object.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(4, countXPathNodes(pXmlDoc, "//page"));
+
+    // All three parts of the fly are dumped below the master anchor, on page 1.
+    const sal_Int32 nFlyBottom
+        = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/infos/bounds", "bottom").toInt32();
+    const sal_Int32 nFlyTop
+        = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/infos/bounds", "top").toInt32();
+    const sal_Int32 nPictureTop
+        = getXPath(pXmlDoc, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
+    const sal_Int32 nBodyTop = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "top").toInt32();
+
+    // Without the fix, the fly stayed at the top of the body and ran over the picture: it was
+    // 1725..7235 against a picture at 6059.
+    CPPUNIT_ASSERT_LESS(nPictureTop, nFlyBottom);
+    // It clears the picture by reaching into the top margin area, as Word does, rather than by
+    // giving up a row.
+    CPPUNIT_ASSERT_LESS(nBodyTop, nFlyTop);
+    CPPUNIT_ASSERT_EQUAL(5, countXPathNodes(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/tab/row"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFloatTableOverFooterObjectNoFit)
+{
+    // Same as testFloatTableOverFooterObject, but the picture reaches so far up that clearing it
+    // would take the fly off the page.
+    createSwDoc("floattable-footer-object-nofit.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(4, countXPathNodes(pXmlDoc, "//page"));
+
+    const sal_Int32 nFlyTop
+        = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/infos/bounds", "top").toInt32();
+    const sal_Int32 nFlyBottom
+        = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/infos/bounds", "bottom").toInt32();
+    const sal_Int32 nPictureTop
+        = getXPath(pXmlDoc, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
+    const sal_Int32 nBodyTop = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "top").toInt32();
+
+    // There is nowhere to shift to, so the fly keeps its place and the overlap, rather than
+    // dropping a row or climbing off the page. Word does the same.
+    CPPUNIT_ASSERT_GREATEREQUAL(nBodyTop, nFlyTop);
+    CPPUNIT_ASSERT_GREATER(nPictureTop, nFlyBottom);
+    CPPUNIT_ASSERT_EQUAL(5, countXPathNodes(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/tab/row"));
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
