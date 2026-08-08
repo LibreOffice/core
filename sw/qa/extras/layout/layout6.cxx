@@ -2372,6 +2372,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf168873ParagraphReflow)
                 u"Wiederaufnahme der Kameraproduktion nach dem Zweiten Weltkrieg");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf171708)
+{
+    // A floating table filling three pages, followed by a paragraph that has no room left on the
+    // table's last page.
+    createSwDoc("tdf171708.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix, the paragraph was dropped: the document ended on the third page.
+    CPPUNIT_ASSERT_EQUAL(4, countXPathNodes(pXmlDoc, "//page"));
+    assertXPath(pXmlDoc, "//page[4]/body/txt/SwParaPortion/SwLineLayout", "portion",
+                u"Content after the table.");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
