@@ -335,6 +335,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             if (block.Table is { } table && Grid(fonts, table) is { } grid) blocks.Add(grid);
         }
 
+        // Every flow a DOC has passes through here — the body, each header and footer, each note, each
+        // text frame, and each cell by way of `Grid` — so one call covers all of them, and a cell's run
+        // of bordered paragraphs is joined without seeing the paragraphs on either side of its table.
+        ParagraphBorderJoin.Apply(blocks);
+
         return blocks;
     }
 
@@ -423,6 +428,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
                 Label = Label(paragraph, face, font),
+                Borders = paragraph.Borders,
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(

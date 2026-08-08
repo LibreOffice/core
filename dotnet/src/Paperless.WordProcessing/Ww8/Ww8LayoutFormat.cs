@@ -140,6 +140,69 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>True when the space between two paragraphs of the same style is suppressed.</summary>
     public bool? HasContextualSpacing { get; init; }
 
+    /// <summary>The rule across the top of the paragraph, or null where nothing stated one.</summary>
+    /// <remarks>
+    /// Null and a nil <c>BRC</c> are different answers, which is why a border is nullable here as well as
+    /// carrying its own <see cref="Ww8Border.Nil"/> code: null lets the layer below speak, and a nil
+    /// stops the search and draws nothing. See <see cref="ToParagraphBorders"/>.
+    /// </remarks>
+    public Ww8Border? BorderTop { get; init; }
+
+    /// <inheritdoc cref="BorderTop"/>
+    public Ww8Border? BorderLeft { get; init; }
+
+    /// <inheritdoc cref="BorderTop"/>
+    public Ww8Border? BorderBottom { get; init; }
+
+    /// <inheritdoc cref="BorderTop"/>
+    public Ww8Border? BorderRight { get; init; }
+
+    /// <summary>
+    /// The rule between this paragraph and an identically bordered neighbour, or null where none.
+    /// </summary>
+    /// <remarks>
+    /// <c>sprmPBrcBetween</c>, which is the same statement as OOXML's <c>w:between</c> and is only ever
+    /// drawn where two paragraphs join into one box.
+    /// </remarks>
+    public Ww8Border? BorderBetween { get; init; }
+
+    /// <summary>
+    /// The five borders as the layout engine's own set, or null when the paragraph has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The projection is a rename and a unit conversion and nothing more, because the two formats state
+    /// the same two quantities: a <c>BRC</c>'s <c>dptLineWidth</c> is eighths of a point exactly as
+    /// <c>w:sz</c> is, and its <c>dptSpace</c> is whole points exactly as <c>w:space</c> is. So the
+    /// vertical allowance a DOC's border takes is the same <c>width + distance</c> that was measured off
+    /// LibreOffice's PDFs for DOCX, and the paginator and the drawing need no branch on the format.
+    /// </para>
+    /// <para>
+    /// A set every one of whose sides is a stated <em>no border</em> still comes back non-null and then
+    /// falls out as <see cref="Layout.ParagraphBorderSet.IsEmpty"/> — the sides are only zero-width, not
+    /// absent, so the emptiness test rather than this method is what discards them.
+    /// </para>
+    /// </remarks>
+    public Layout.ParagraphBorderSet? ToParagraphBorders()
+    {
+        if (BorderTop is null && BorderLeft is null && BorderBottom is null
+            && BorderRight is null && BorderBetween is null)
+        {
+            return null;
+        }
+
+        Layout.ParagraphBorderSet set = new()
+        {
+            Top = BorderTop?.ResolvedParagraphSide,
+            Left = BorderLeft?.ResolvedParagraphSide,
+            Bottom = BorderBottom?.ResolvedParagraphSide,
+            Right = BorderRight?.ResolvedParagraphSide,
+            Between = BorderBetween?.ResolvedParagraphSide,
+        };
+
+        return set.IsEmpty ? null : set;
+    }
+
     /// <summary>
     /// The paragraph style's <c>istd</c>, for the "same style" half of contextual spacing.
     /// </summary>

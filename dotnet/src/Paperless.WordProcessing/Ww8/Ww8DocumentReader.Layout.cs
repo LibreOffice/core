@@ -139,6 +139,17 @@ public sealed partial class Ww8DocumentReader
         /// moved back out of the fly (<c>sw/source/filter/ww8/ww8par6.cxx:2674</c>).
         /// </remarks>
         public IReadOnlyList<Ww8LayoutTextFrame>? TextFrames { get; init; }
+
+        /// <summary>
+        /// The rules round the paragraph, or null when nothing in its style chain states one.
+        /// </summary>
+        /// <remarks>
+        /// Already in the layout engine's own type rather than as five <c>BRC</c>s, because the
+        /// translation needs nothing this reader lacks — see
+        /// <see cref="Ww8LayoutFormat.ToParagraphBorders"/> — and because the joining pass that follows
+        /// compares two paragraphs' sets and has to compare them in one form.
+        /// </remarks>
+        public Layout.ParagraphBorderSet? Borders { get; init; }
     }
 
     /// <summary>
@@ -971,6 +982,7 @@ public sealed partial class Ww8DocumentReader
             HasAutoSpaceAfter = layout.HasAutoSpaceAfter ?? false,
             ListRule = paragraph.ListNumber,
             AutoKerning = character.AutoKerning ?? false,
+            Borders = layout.ToParagraphBorders(),
 
             // Not for a paragraph in a table: Word applies a frame to a whole row or to nothing, and
             // LibreOffice declines the test outright unless the paragraph is the first in the first cell
@@ -1527,10 +1539,32 @@ public sealed partial class Ww8DocumentReader
             ? Ww8LayoutFormat.HtmlAutoSpacingTwips
             : Ww8LayoutFormat.WordAutoSpacingTwips;
 
+        // Which of the five paragraph border sides this grpprl has already stated in its WW9 form, so
+        // that the WW8 form beside it cannot overwrite an RGB colour with a palette index.
+        int ninetySides = 0;
+
         foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
         {
             switch (sprm.Identifier)
             {
+                case LayoutSprms.BorderTop or LayoutSprms.BorderLeft or LayoutSprms.BorderBottom
+                    or LayoutSprms.BorderRight or LayoutSprms.BorderBetween:
+                {
+                    int side = sprm.Identifier - LayoutSprms.BorderTop;
+                    ninetySides |= 1 << side;
+                    format = WithParagraphBorder(format, side, sprm.Operand.Span, isVersion9: true);
+                    break;
+                }
+
+                case LayoutSprms.BorderTop80 or LayoutSprms.BorderLeft80 or LayoutSprms.BorderBottom80
+                    or LayoutSprms.BorderRight80 or LayoutSprms.BorderBetween80:
+                {
+                    int side = sprm.Identifier - LayoutSprms.BorderTop80;
+                    if ((ninetySides & (1 << side)) != 0) break;
+                    format = WithParagraphBorder(format, side, sprm.Operand.Span, isVersion9: false);
+                    break;
+                }
+
                 // Which of the two sprms stated it travels with the value, because the two disagree
                 // about what nought and two mean in a right-to-left paragraph — see
                 // Ww8LayoutFormat.IsJustificationAbsolute.
@@ -1742,6 +1776,41 @@ public sealed partial class Ww8DocumentReader
     }
 
     /// <summary>
+    /// Sets one of the five paragraph border sides from the <c>BRC</c> a sprm carries.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A sprm that is present always assigns, even when its <c>BRC</c> states nothing at all. That is the
+    /// whole of <c>##826##</c> in <c>SwWW8ImplReader::SetBorder</c>: a style may set a border and the
+    /// paragraph then remove it, and the removal is written as exactly this — the sprm present, its code
+    /// nought or nil. Skipping it because the structure "said nothing" leaves the style's rule drawn on a
+    /// paragraph that asked for none, and reserves room for it as well.
+    /// </para>
+    /// <para>
+    /// The sides are WW8's own order — top, left, bottom, right, between — which is the order the sprm
+    /// ids run in and lets the identifier's offset select the field.
+    /// </para>
+    /// </remarks>
+    /// <param name="format">The format so far.</param>
+    /// <param name="side">Nought to four: top, left, bottom, right, between.</param>
+    /// <param name="operand">The sprm's operand, which begins with the <c>BRC</c>.</param>
+    /// <param name="isVersion9">True for the newer <c>BRC</c>, whose colour is RGB.</param>
+    private static Ww8LayoutFormat WithParagraphBorder(
+        Ww8LayoutFormat format, int side, ReadOnlySpan<byte> operand, bool isVersion9)
+    {
+        Ww8Border border = ReadBorder(operand, isVersion9) ?? new Ww8Border(Ww8Border.Nil, 0, null);
+
+        return side switch
+        {
+            0 => format with { BorderTop = border },
+            1 => format with { BorderLeft = border },
+            2 => format with { BorderBottom = border },
+            3 => format with { BorderRight = border },
+            _ => format with { BorderBetween = border },
+        };
+    }
+
+    /// <summary>
     /// Whether a <c>kul</c> names a line that is actually drawn.
     /// </summary>
     /// <remarks>
@@ -1778,6 +1847,54 @@ public sealed partial class Ww8DocumentReader
         internal const ushort Justification = 0x2461;
         internal const ushort ContextualSpacing = 0x246D;
         internal const ushort RightToLeft = 0x2441;
+
+        /// <summary>
+        /// The five paragraph borders in their WW8 form, whose operand is a four-byte <c>BRC80</c>.
+        /// </summary>
+        /// <remarks>
+        /// Consecutive on purpose — <c>sprmids.hxx</c> assigns 0x24 to 0x28 to top, left, bottom, right
+        /// and between, and 0x29 to the bar, which is the revision rule down the margin and is not a
+        /// border of the paragraph's box. <c>SwWW8ImplReader::Read_Border</c> reads the first five and
+        /// leaves the bar to <c>Read_Bar</c>, which is why only five appear here.
+        /// </remarks>
+        internal const ushort BorderTop80 = 0x6424;
+
+        /// <inheritdoc cref="BorderTop80"/>
+        internal const ushort BorderLeft80 = 0x6425;
+
+        /// <inheritdoc cref="BorderTop80"/>
+        internal const ushort BorderBottom80 = 0x6426;
+
+        /// <inheritdoc cref="BorderTop80"/>
+        internal const ushort BorderRight80 = 0x6427;
+
+        /// <inheritdoc cref="BorderTop80"/>
+        internal const ushort BorderBetween80 = 0x6428;
+
+        /// <summary>
+        /// The same five in their WW9 form, whose operand is a variable-length <c>BRC</c> carrying RGB.
+        /// </summary>
+        /// <remarks>
+        /// A document written by any recent producer states both forms, and the newer wins wherever it
+        /// says anything — the same rule the cell borders follow, and the same reason: reading only the
+        /// older form names a colour by its index in Word's seventeen-entry palette, so <c>#CCCCCC</c>
+        /// comes back as <c>#C0C0C0</c>. Order inside one grpprl is <em>not</em> relied on: the newer
+        /// form is remembered as it is read and the older one then declines to overwrite it, so a
+        /// producer writing them the other way round still gets its RGB colour.
+        /// </remarks>
+        internal const ushort BorderTop = 0xC64E;
+
+        /// <inheritdoc cref="BorderTop"/>
+        internal const ushort BorderLeft = 0xC64F;
+
+        /// <inheritdoc cref="BorderTop"/>
+        internal const ushort BorderBottom = 0xC650;
+
+        /// <inheritdoc cref="BorderTop"/>
+        internal const ushort BorderRight = 0xC651;
+
+        /// <inheritdoc cref="BorderTop"/>
+        internal const ushort BorderBetween = 0xC652;
 
         internal const ushort Bold = 0x0835;
         internal const ushort Italic = 0x0836;

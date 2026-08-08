@@ -147,3 +147,68 @@ public sealed record ParagraphBorderSet
                 set with { Top = null, Between = null, JoinsAbove = true });
     }
 }
+
+/// <summary>
+/// Merges each run of identically bordered consecutive paragraphs into one box.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Word and Writer both draw two adjacent paragraphs carrying the same border set as a single box: no
+/// rule between them, and neither the lower one's top allowance nor the upper one's bottom allowance is
+/// spent. Measured — two such paragraphs sit one plain line pitch apart, 12.65 pt, where two separately
+/// boxed ones would be 6.50 pt further.
+/// </para>
+/// <para>
+/// Done as a pass over the finished blocks rather than in the paginator because the join changes the
+/// picture <em>and</em> the height, and the two have to agree: a border drawn where no room was reserved
+/// lands on the text below it.
+/// </para>
+/// <para>
+/// Here rather than in either reader because nothing in it is format-specific — <c>w:pBdr</c>,
+/// <c>sprmPBrcTop</c> and <c>fo:border-top</c> all arrive as a
+/// <see cref="ParagraphBorderSet"/> and the run is found by comparing those.
+/// </para>
+/// </remarks>
+public static class ParagraphBorderJoin
+{
+    /// <summary>Rewrites a flow's blocks so that each run of alike-bordered paragraphs is one box.</summary>
+    /// <remarks>
+    /// A table between two bordered paragraphs breaks the run, which is what the type test does — only a
+    /// <see cref="PageParagraph"/> can join, and anything else resets.
+    /// </remarks>
+    /// <param name="blocks">The blocks of one flow, in order. Rewritten in place.</param>
+    public static void Apply(List<PageBlock> blocks)
+    {
+        ArgumentNullException.ThrowIfNull(blocks);
+
+        // The join is decided from what the reader stated, never from what an earlier step of this walk
+        // has already rewritten: the second paragraph of a run of three has had its top removed by the
+        // time the third is examined, and comparing that against the third's untouched set would find
+        // them different and break the run in the middle.
+        ParagraphBorderSet?[] stated =
+            [.. blocks.Select(block => (block as PageParagraph)?.Borders)];
+
+        for (int i = 0; i + 1 < blocks.Count; i++)
+        {
+            if (stated[i] is not { } borders || !borders.JoinsWith(stated[i + 1])) continue;
+            if (blocks[i] is not PageParagraph upper || blocks[i + 1] is not PageParagraph lower) continue;
+
+            (ParagraphBorderSet above, ParagraphBorderSet below) = ParagraphBorderSet.Join(borders);
+
+            // Only the sides the join settles are taken from the pair, so a paragraph in the middle of a
+            // run keeps the top the previous step already removed.
+            blocks[i] = upper with
+            {
+                Borders = (upper.Borders ?? borders) with { Bottom = above.Bottom, Between = null },
+            };
+
+            blocks[i + 1] = lower with
+            {
+                Borders = (lower.Borders ?? borders) with
+                {
+                    Top = below.Top, Between = null, JoinsAbove = true,
+                },
+            };
+        }
+    }
+}
