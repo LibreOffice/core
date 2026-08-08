@@ -81,3 +81,15 @@ zip container holding an `xl/charts/chart*.xml` part, and its theme minor face i
 is a reach of one, which is a special case by this project's own rule, so it is recorded rather
 than fixed. The reach on the slides and words tracks is not measured here and is likely larger —
 whoever picks it up should measure it there before sizing the work.
+
+### A byte-level chart census that does not work — do not repeat it
+
+Counting `xl/charts/chart*.xml` members works for OOXML and is where the "one document in 171"
+figure above comes from. The BIFF equivalent — searching the raw file for a chart substream
+`BOF` (`09 08 10 00 .. 20 00`) — **reports zero for
+`EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls`, a document whose reference rendering
+plainly draws a chart on six of its pages and whose own rendering draws the empty-scale version
+of it.** BIFF records are laid out inside 512-byte OLE sectors, so a raw search misses any
+record that straddles a boundary, and an embedded object may sit in its own storage entirely.
+No track-wide chart count is offered here for that reason; the four batch-010 figures above come
+from rendering the documents and reading the pages.
