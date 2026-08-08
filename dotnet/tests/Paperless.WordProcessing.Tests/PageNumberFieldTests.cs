@@ -284,6 +284,42 @@ public sealed class PageNumberFieldTests
         pages[0].Footer.ShouldBeSameAs(pages[1].Footer);
     }
 
+    /// <summary>
+    /// The measuring pass resolves the page number and leaves the count where the producer left it.
+    /// </summary>
+    /// <remarks>
+    /// The case the guard exists for, and one the coarser tests cannot reach: a footer holding *both*
+    /// fields is resolved on the first pass because its number varies, and dropping the guard would then
+    /// render the unknown total as <c>0</c>. The finished document is corrected by the second pass either
+    /// way — what a nought costs is the *measuring* pass, which would break the head's lines at the wrong
+    /// width and so could hand the second pass a wrong total to print.
+    /// </remarks>
+    [Fact]
+    public void TheMeasuringPassLeavesTheCountAtItsCachedValue()
+    {
+        PageParagraph paragraph = new()
+        {
+            Text = "Page 7 of 12",
+            Face = Face,
+            EmSize = Length.FromPoints(11),
+            Fields =
+            [
+                new PageFieldSpan(5, 1, PageFieldKind.PageNumber),
+                new PageFieldSpan(10, 2, PageFieldKind.PageCount),
+            ],
+        };
+
+        PageParagraph measuring =
+            (PageParagraph)PageFields.Resolve([paragraph], 3, NoteNumberFormat.Arabic)[0];
+
+        measuring.Text.ShouldBe("Page 3 of 12");
+
+        PageParagraph settled =
+            (PageParagraph)PageFields.Resolve([paragraph], 3, NoteNumberFormat.Arabic, 9)[0];
+
+        settled.Text.ShouldBe("Page 3 of 9");
+    }
+
     /// <summary>A page number inside a table cell in the running head is resolved too.</summary>
     /// <remarks>
     /// A header laid out as a table is the ordinary way a Word document puts a logo beside a page number,
