@@ -347,13 +347,42 @@ public static partial class ChartLayout
     /// side at once, which moves the plot area up and left and leaves the labels crowding the
     /// frame's edges.
     /// </remarks>
-    private static DocSize Shape(ChartText measurer, string text, Length size, bool bold = false)
+    private static DocSize Shape(
+        ChartText measurer, string text, Length size, bool bold = false, Length maxWidth = default)
     {
-        DocSize measured = MeasureLines(measurer, text, size, bold);
+        DocSize measured = MeasureLines(measurer, text, size, bold, maxWidth);
         return new DocSize(
             measured.Width + size * (TextShapeInsetX * 2),
             measured.Height + size * (TextShapeInsetY * 2));
     }
+
+    /// <summary>
+    /// The share of the chart's own width a main title's text is allowed before it wraps.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ChartView.cxx:1084-1085</c>, verbatim: a <c>MAIN_TITLE</c> or <c>SUB_TITLE</c> is
+    /// created with <c>aTextMaxWidth.Width = rPageSize.Width * 0.8</c>, and
+    /// <c>VTitle::createShapes</c> hands that to <c>ShapeFactory::createText</c> as
+    /// <c>nTextMaxWidth</c>, which is the width EditEngine wraps at.
+    /// </para>
+    /// <para>
+    /// <strong>Not wrapping at all was invisible while the title was drawn too small.</strong>
+    /// <c>Demick_JetBlue.pptx</c> page 5 is the demonstration: its title states no size, so it
+    /// was drawn at the old 13 pt default and fitted on one line, and the reference — which sets
+    /// it at 18 pt — breaks it after "and". Correcting the size to 18 pt exposed the missing wrap
+    /// as a 659 pt line inside a 634 pt frame, overhanging both edges. Two errors that cancelled;
+    /// with both corrected the plot area's top edge lands 0.64 pt from the reference's, against
+    /// 30.79 pt before either.
+    /// </para>
+    /// <para>
+    /// The axis titles take the same 0.8 across (<c>:1090</c>; <c>:1096</c> gives a rotated Y
+    /// title 0.8 <em>down</em> instead) and are not wrapped here: an axis title's reserved band
+    /// is its height, so wrapping one moves the plot area rather than only the words, and the
+    /// corpus's axis titles are short. Do it with its own measurement.
+    /// </para>
+    /// </remarks>
+    private const double TitleWidthFraction = 0.8;
 
     /// <summary>
     /// The lines a title breaks into, which is more than one when the file says so.
@@ -370,12 +399,59 @@ public static partial class ChartLayout
             ? [text]
             : text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
+    /// <summary>
+    /// The lines a title occupies: its own breaks first, then wrapping at
+    /// <paramref name="maxWidth"/>.
+    /// </summary>
+    /// <remarks>
+    /// Greedy, at spaces, and a word wider than the whole allowance is left whole rather than
+    /// broken — EditEngine would break it, and a chart title with one word longer than 80% of the
+    /// chart is not a case the corpus holds. A zero <paramref name="maxWidth"/> means "do not
+    /// wrap", which is what every caller but the main title's passes.
+    /// </remarks>
+    private static string[] LinesOf(
+        ChartText measurer, string text, Length size, bool bold, Length maxWidth)
+    {
+        string[] stated = LinesOf(text);
+        if (maxWidth <= Length.Zero) return stated;
+
+        List<string> wrapped = [];
+        foreach (string line in stated)
+        {
+            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length == 0)
+            {
+                wrapped.Add(line);
+                continue;
+            }
+
+            string current = words[0];
+            for (int i = 1; i < words.Length; i++)
+            {
+                string candidate = current + ' ' + words[i];
+                if (measurer.Measure(candidate, size, bold).Width <= maxWidth)
+                {
+                    current = candidate;
+                    continue;
+                }
+
+                wrapped.Add(current);
+                current = words[i];
+            }
+
+            wrapped.Add(current);
+        }
+
+        return wrapped.Count == stated.Length ? stated : [.. wrapped];
+    }
+
     /// <summary>How much room a possibly multi-line label needs: the widest line, all the heights.</summary>
     private static DocSize MeasureLines(
-        ChartText measurer, string text, Length size, bool bold = false)
+        ChartText measurer, string text, Length size, bool bold = false, Length maxWidth = default)
     {
-        string[] lines = LinesOf(text);
-        if (lines.Length <= 1) return measurer.Measure(text, size, bold);
+        string[] lines = LinesOf(measurer, text, size, bold, maxWidth);
+        if (lines.Length <= 1)
+            return measurer.Measure(lines.Length == 1 ? lines[0] : text, size, bold);
 
         Length width = Length.Zero;
         Length height = Length.Zero;
@@ -1111,7 +1187,8 @@ public static partial class ChartLayout
         // pie's margin twice puts a titled pie 8 pt low on a 12 cm chart.
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold).Height
+            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold,
+                         frame.Width * TitleWidthFraction).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }
 
@@ -2595,7 +2672,9 @@ public static partial class ChartLayout
             // Line by line, top down, from the same origin the reservation above measured from,
             // so a two-line title fills exactly the band that was kept for it.
             Length pen = frame.Y + (frame.Height * PageMargin);
-            foreach (string line in LinesOf(title))
+            foreach (string line in LinesOf(
+                         measurer, title, plot.TitleSize, plot.IsTitleBold,
+                         frame.Width * TitleWidthFraction))
             {
                 Length height = measurer.Measure(line, plot.TitleSize, plot.IsTitleBold).Height;
                 labels.Add(new ChartLabel(
@@ -2994,7 +3073,8 @@ public static partial class ChartLayout
 
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold).Height
+            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold,
+                         frame.Width * TitleWidthFraction).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }
 

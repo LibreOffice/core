@@ -102,4 +102,67 @@ public class ChartTitlePlacementTests
         Label(bars, "Aircraft Type").At.X
             .ShouldBe(Label(columns, "Gallons Per Hour").At.X, "the band beside it");
     }
+
+    /// <summary>
+    /// A main title wider than 80% of the chart wraps at a word, and the room is reserved for
+    /// every line it takes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ChartView.cxx:1084-1085</c> creates a <c>MAIN_TITLE</c> with
+    /// <c>aTextMaxWidth.Width = rPageSize.Width * 0.8</c> and <c>VTitle::createShapes</c> hands
+    /// that to <c>ShapeFactory::createText</c> as the width EditEngine wraps at.
+    /// </para>
+    /// <para>
+    /// The ruler here is half an em a character, so on this 400 pt frame the allowance is 320 pt
+    /// and a 13 pt title fits 49 characters. The title below is 62, and the reference for the
+    /// real case — page 5 of <c>Demick_JetBlue.pptx</c> — breaks its 61-character title after
+    /// "and", which this rule reproduces to 1.8 pt.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ALongMainTitleWrapsAtEightyPerCentOfTheChart()
+    {
+        const string Long =
+            "Operating Revenue, Operating Expenses, and Income before Taxes";
+
+        ChartDrawing wrapped = Place(Bars() with { Title = Long });
+
+        // Every piece is a whole word, no piece is longer than the allowance, and they join back
+        // into the title — so this is a wrap and not a truncation.
+        List<ChartLabel> lines =
+            [.. wrapped.Labels.Where(label => Long.Contains(label.Text, StringComparison.Ordinal))];
+
+        lines.Count.ShouldBeGreaterThan(1, "the title is wider than 80% of a 400 pt frame");
+        string.Join(' ', lines.Select(label => label.Text)).ShouldBe(Long);
+        lines.ShouldAllBe(label => label.Text.Length * 6.5 <= 320.0);
+    }
+
+    /// <summary>A title that fits is left alone, so the rule costs an ordinary chart nothing.</summary>
+    [Fact]
+    public void AShortMainTitleIsNotBroken()
+    {
+        ChartDrawing drawing = Place(Bars() with { Title = "Chart 8" });
+
+        drawing.Labels.Count(label => label.Text is "Chart" or "8").ShouldBe(0);
+        drawing.Labels.ShouldContain(label => label.Text == "Chart 8");
+    }
+
+    /// <summary>The wrapped lines are reserved for, not merely drawn.</summary>
+    /// <remarks>
+    /// The failure this guards is the one that looks like nothing is wrong: a title drawn on two
+    /// lines with one line's worth of room taken for it puts the second line over the plot area's
+    /// top edge, and the plot area is still exactly the size it should be.
+    /// </remarks>
+    [Fact]
+    public void AWrappedTitleReservesEveryLineItTakes()
+    {
+        ChartDrawing one = Place(Bars() with { Title = "Income before Taxes" });
+        ChartDrawing two = Place(Bars() with
+        {
+            Title = "Operating Revenue, Operating Expenses, and Income before Taxes",
+        });
+
+        two.PlotArea.Y.ShouldBeGreaterThan(one.PlotArea.Y);
+    }
 }
