@@ -69,6 +69,38 @@ public sealed class DocSectionDefaultsTests
     }
 
     /// <summary>
+    /// A section that says nothing about its column gap is asking for 1.25 cm, not for none.
+    /// </summary>
+    /// <remarks>
+    /// <c>ReadUSprm(pSep, pIds[4], 708)</c> (<c>ww8par6.cxx</c>:987), commented "default distance
+    /// 1.25 cm". It is the column <em>width</em> that makes this matter: the width is the measure less
+    /// the gaps, so a zero gap widens every column of a two-column section by half the gap. Measured on
+    /// <c>batch-016/150_5300_13_chg8.doc</c>, whose columns came out 252 pt against LibreOffice's 234.3
+    /// — and whose own flat-ODF export states <c>fo:column-gap="0.4917in"</c>, which is 708 twips.
+    /// </remarks>
+    [Fact]
+    public void ASectionStatingNoColumnGapTakesAnInchAndAQuarterCentimetre()
+    {
+        // sprmSCcolumns, 0x500B, with ccolM1 = 1: two columns and no gap stated.
+        byte[] twoColumns = [.. TopMarginOnly.Span, 0x0B, 0x50, 0x01, 0x00];
+        WritingSection section = Ww8SectionTable.ReadProperties(twoColumns);
+
+        section.Page.Columns.ShouldBe(2);
+        section.Page.ColumnGap.ShouldBe(Length.FromTwips(708));
+    }
+
+    /// <summary>A stated column gap still wins.</summary>
+    [Fact]
+    public void AStatedColumnGapBeatsTheDefault()
+    {
+        // sprmSCcolumns then sprmSDxaColumns, 0x900C, at 360 twips.
+        byte[] stated = [.. TopMarginOnly.Span, 0x0B, 0x50, 0x01, 0x00, 0x0C, 0x90, 0x68, 0x01];
+        WritingSection section = Ww8SectionTable.ReadProperties(stated);
+
+        section.Page.ColumnGap.ShouldBe(Length.FromTwips(360));
+    }
+
+    /// <summary>
     /// <c>sprmSDyaTop</c> at Word's own inch, and nothing else.
     /// </summary>
     /// <remarks>

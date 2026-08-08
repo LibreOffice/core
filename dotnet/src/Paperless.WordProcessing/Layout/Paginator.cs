@@ -331,6 +331,21 @@ public sealed class Paginator
 
         List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
 
+        // `NUMPAGES` is the one field whose value the layout itself decides, so it takes a second pass:
+        // the first tells us how many pages there are, the furniture is told, and the document is filled
+        // again with the head that now prints the right total. Guarded on the field being present at all,
+        // so the overwhelming majority of documents pay one scan of their running heads and nothing else.
+        //
+        // Not iterated to a fixed point. The total is drawn at a different width from the producer's
+        // cached one, so in principle it could re-break a header line, change the head's height and move
+        // a page break — and then the total would be wrong again. Writer damps the same circularity
+        // rather than chasing it, and a running head tall enough for a two-character difference to change
+        // its line count is not a shape this corpus contains.
+        if (TellFurnitureTheTotal(withFrames, pages.Count))
+        {
+            pages = Fill(blocks, withFrames, startingNumber);
+        }
+
         // A per-page note restart, which is the one numbering rule that cannot be settled before the pages
         // exist — and Writer damps it rather than iterating, so this renumbers over the finished pages, lays
         // them out once more and stops. See `NoteRenumbering` for the citations and for why stopping is the
@@ -401,6 +416,31 @@ public sealed class Paginator
     /// reason — a frame can chase its anchor indefinitely.
     /// </remarks>
     private const int MaxFramePasses = 4;
+
+    /// <summary>
+    /// Hands every section's furniture the document's page count, and says whether any of it wanted one.
+    /// </summary>
+    /// <remarks>
+    /// Every section is told, not only the ones that ask, because a set that already holds the right total
+    /// ignores the assignment — and a set told a *different* total discards its laid-out cache, which is
+    /// what makes the second pass draw the new number rather than the cached flow.
+    /// </remarks>
+    /// <param name="sections">The sections, with their furniture.</param>
+    /// <param name="total">How many pages the measuring pass produced.</param>
+    private static bool TellFurnitureTheTotal(List<PaginatedSection> sections, int total)
+    {
+        bool any = false;
+
+        foreach (PaginatedSection section in sections)
+        {
+            if (section.Furniture is not { } furniture || !furniture.CarriesPageCount) continue;
+
+            furniture.TotalPages = total;
+            any = true;
+        }
+
+        return any;
+    }
 
     /// <summary>The pagination loop itself, with whatever frames the current pass believes in.</summary>
     private List<LaidOutPage> Fill(
