@@ -203,6 +203,51 @@ Once a page differs, narrow it down before theorising:
    read and never used is often blocked on something real rather than merely forgotten, so
    budget for the feature rather than expecting a wiring change.
 
+## Naming the element that differs: `pdf-ops.py`
+
+The image diff finds the *pages* worth looking at. This finds **what is on them**.
+
+```sh
+.claude/skills/render-comparison/scripts/pdf-ops.py dump ours.pdf --page 6
+.claude/skills/render-comparison/scripts/pdf-ops.py diff ours.pdf ref.pdf --page 6
+.claude/skills/render-comparison/scripts/pdf-ops.py diff ours.pdf ref.pdf --only fill
+```
+
+It walks the content stream and emits typed, positioned records — text shows with position,
+effective size, face, glyph count and how many operators carry them; fills and strokes with
+bounding box and colour; images with box and name. `diff` pairs them by nearest neighbour and
+reports three lists: **only in ours**, **only in the reference**, and **drawn by both,
+differently**.
+
+**Build this into the loop instead of reading content streams by hand.** Seven consecutive
+rounds each shipped a throwaway script doing part of it — `pdfops.py`, `sl14-compare.py`,
+`compare-fit.py`, `read-autofit.py`, `sl14-pagediff.py`, `fold-check.py`, `affcmp.py` — and the
+forensics, not the fixing, is where those rounds went.
+
+### What it found on its first real run
+
+A workbook that **passes every existing check** — 34 pages against 34, 1828 words against 1828,
+two fonts and both embedded. The diff reports 0 records one-sided and 13 drawn differently, every
+one of them `face Carlito vs Carlito-Bold`, with identical glyph counts and positions.
+`pdffonts` confirms it: ours embeds `Carlito` twice, the reference embeds `Carlito-Bold` and
+`Carlito-Regular`. **We do not draw bold on that document at all**, and nothing in the gate could
+see it.
+
+### Two design points worth knowing before you trust it
+
+- **Matching is nearest-neighbour inside three points, not an exact key.** The first version
+  keyed on position rounded to a tenth of a point and matched *nothing*: the two renderers put
+  their page origin about a point apart (51.39 against 52.38), so every record reported as
+  one-sided. If you see that shape, the window is too tight, not the document too different.
+- **Subset prefixes are stripped.** `AAAAAA+Carlito` and `BAAAAA+Carlito` are the same face and
+  the prefix is assigned per file; `Carlito` against `Carlito-Bold` is what remains, and that is
+  a finding.
+
+Text is decoded by joining `pdftotext -bbox` on position rather than by reading the subset's
+ToUnicode CMap here — poppler already has that decoder, and reimplementing it is a large surface
+to get quietly wrong. A record therefore always carries a glyph count, which never lies, and
+carries words when poppler could read them.
+
 ## Comparing whole documents as images
 
 `pdf-image-diff.py` renders two PDFs to PNG, diffs them page by page, groups the differing

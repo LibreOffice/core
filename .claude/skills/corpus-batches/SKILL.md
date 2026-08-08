@@ -120,6 +120,23 @@ and that band separates "the same text" from "text is missing" on this corpus.
 it is correct. Where the ink actually lands is the fidelity suite's job — it compares PDF
 operators directly. Use `render-comparison` to diagnose *why* two renderings differ.
 
+### The order of instruments, and what each is for
+
+Progress slows when a round is spent on forensics rather than fixing. Four questions come up
+every round, and each now has a permanent answer rather than a throwaway script:
+
+| Question | Instrument |
+|---|---|
+| which documents are wrong | `batch-check.sh` — page count, words, embedding |
+| which *pages* of one document | `pdf-image-diff.py`, ranked by `\|ink\|%` |
+| which *element* on that page | **`pdf-ops.py diff`** — typed records, named differences |
+| what did each renderer resolve a face to | `pdf-ops.py dump`, and `pdffonts` to confirm |
+
+**Go down that list, not sideways.** The commonest waste is reaching a page and then reading its
+content stream by hand; `pdf-ops.py` was written because seven consecutive rounds did exactly
+that, each with its own script. On its first real run it found a workbook passing the whole gate
+— 34 pages against 34, 1828 words against 1828 — that never draws bold at all.
+
 ### The fourth check, once the first three pass
 
 When a document's page count and word count both agree, the gate has nothing left to say
