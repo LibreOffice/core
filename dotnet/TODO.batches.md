@@ -6987,3 +6987,42 @@ is not vacuous. No single plausible defect makes it fail.
    path already applies `DetermineBorderProperties`'s triple/wave adjustment because the table
    borders needed it, so the two readers now disagree slightly on the same markup. Not measured;
    no document was found on this track where it decides anything.
+
+## Words round twenty-three merged at `be5df60ac`, and its trade re-checked independently
+
+Ten projects green at expected counts, WordProcessing **619 → 647**, zero build warnings.
+
+**This round's headline fix lowers the parity gate on purpose and it was kept.** A DOC section
+stating no header distance means half an inch, not zero — `Ww8SectionTable` read a missing
+`sprmSDyaHdrTop`/`Bottom` as 0 where Word's default is 720 twips, so every DOC accepting the
+default had its header pinned to the paper edge and its band 36 pt too tall.
+
+| | before | after |
+|---|---:|---:|
+| major pages (155 common documents) | 408 | **360** |
+| summed `\|ink\|%` | 806.94 | **798.02** |
+| parity gate | 156 | **155** |
+| absolute page error | 93 | **98** |
+
+**Re-measured here at the merge rather than taken from the round's report**, because a fix that
+lowers the gate is the one case where the parent should not take a figure on trust. Every number
+reproduced: `150_5335_5a.doc` 47 → **15** major pages, `316r_a_e.doc` 14 → **2**,
+`96-3-clement-data.doc` 6 → **0**, and the two regressions at 21/18 and 79/76 pages.
+
+The lost match is the skill's "fixes that cancel" running backwards. `150_5300_13_chg8.doc` was
+18/18 **by accident**: 15 of its 18 pages were already major and its page 1 is missing the
+reference's entire departmental title block. Correcting the header exposed the second error
+rather than causing it. That title block is the next round's first job, and it is the same
+producer as `chg10`, `chg12` and `150_5335_5a` — four documents at the head of the track's
+remaining ink, plausibly one cause.
+
+### The brief was refuted on its central premise
+
+It named "`w:pBdr` for `.doc`/`.rtf`/`.odt`" as the largest ready lever. The track holds **66
+`.doc`, 134 `.docx`, and zero `.rtf` and zero `.odt`** — two of the three readers have no
+document on this corpus, so nothing built into them is measurable by rendering here. The `.doc`
+half was built and moved 9 documents and 0.73% of the ink.
+
+**Check that the corpus contains the thing before planning a round around it.** A census over
+the sprm ids says 54 of 66 `.doc` carry them and 9 draw a new rule — overstating by six times,
+because Word writes `sprmPBrcTop` with a nil `BRC` constantly.
