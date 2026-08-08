@@ -754,9 +754,12 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
                             SwPaM& rPam )
 {
     sal_Int32 nEndPos;
+    // SetNewSet: initialize the SwAttrCheckArr, find format props that cover the entire paragraph
     rCmpArr.SetNewSet( rTextNd, rPam );
+
     if( !rTextNd.HasHints() )
     {
+        // done: only entire paragraph properties exist
         if( !rCmpArr.Found() )
             return false;
         nEndPos = rCmpArr.GetNdEnd();
@@ -771,18 +774,32 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
     // if everything is already there then check with which it will be ended
     if( rCmpArr.Found() )
     {
+        // entire paragraph matches criteria. Do any character hints break the match?
         for( ; nPos < rHtArr.Count(); ++nPos )
         {
             pAttr = rHtArr.Get( nPos );
             if( !rCmpArr.SetAttrFwd( *pAttr ) )
             {
+                // yes - the match has been broken.
+
                 if( rCmpArr.GetNdStt() < pAttr->GetStart() )
                 {
-                    // found end
+                    // a fragment of matching text was found before the broken match
                     auto nTmpStart = pAttr->GetStart();
                     lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(),
                                 &nTmpStart, true );
                     return true;
+                }
+                else
+                {
+                    // move past the non-matching hint and restart the search
+                    nEndPos = pAttr->GetAnyEnd();
+                    if (nEndPos < rCmpArr.GetNdEnd() && pAttr->GetStart() < nEndPos)
+                    {
+                        rPam.Normalize(/*PointFirst=*/true);
+                        lcl_SetAttrPam(rPam, rCmpArr.GetNdEnd(), &nEndPos, /*bSaveMark=*/true);
+                        return lcl_SearchForward(rTextNd, rCmpArr, rPam);
+                    }
                 }
                 // continue search
                 break;
