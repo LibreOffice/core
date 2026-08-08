@@ -826,7 +826,7 @@ public static partial class ChartLayout
                 labels);
         }
 
-        AddTitles(plot, frame, area, measurer, labels);
+        AddTitles(plot, frame, area, DiagramAreaOf(plot, frame, measurer), measurer, labels);
         AddLegend(plot, frame, area, measurer, boxes, labels);
 
         return new ChartDrawing(
@@ -2704,6 +2704,7 @@ public static partial class ChartLayout
         ChartPlot plot,
         DocRect frame,
         DocRect area,
+        DocRect diagram,
         ChartText measurer,
         List<ChartLabel> labels)
     {
@@ -2739,13 +2740,19 @@ public static partial class ChartLayout
 
         if (below is { Length: > 0 } under)
         {
+            // Against the band `DiagramAreaOf` kept for it, and not against the frame's own
+            // bottom edge. `lcl_createTitle` places an `ALIGN_BOTTOM` title at
+            // `rRemainingSpace.Y + rRemainingSpace.Height - h/2 - nYDistance`
+            // (`ChartView.cxx:1147-1149`), and by then the *legend* has already been taken out of
+            // that rectangle — `lcl_createLegend` runs at `:1966` and the axis titles at `:2054`.
+            // Measuring from the frame instead put the title exactly where a bottom legend is:
+            // on a probe with one, ours came out 30.3 pt below the reference's and did not move
+            // at all when the legend was added.
             Length height =
-                measurer.Measure(under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
+                Shape(measurer, under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
             labels.Add(new ChartLabel(
                 under,
-                new DocPoint(
-                    area.X + area.Width / 2,
-                    frame.Bottom - (frame.Height * PageMargin) - height / 2),
+                new DocPoint(area.X + area.Width / 2, diagram.Bottom + height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
                 AxisColour,
