@@ -6647,3 +6647,140 @@ diff over documents that **already passed**, which nothing had done before this 
 
 The track verdicts are therefore unchanged and that is not a stalled round: words 156/200,
 slides 151/163, sheets 144/171.
+## Slides, round twenty-one: the autofit line height is on the device's grid — swept whole at `6bf169518`
+
+Baseline measured before anything moved, and **for the first time on this track a predecessor's
+headline reproduced without correction**: 151/163 on the word gate, `|ink|%` **1583.00**, **428**
+major pages, all three exactly the briefed figures. Our renderings came from a checksummed
+snapshot of the worktree's own CLI; the reference PDFs were the kept set from round twenty,
+verified first against a fresh `soffice` 24.2.7.2 on two documents (page counts and `pdftotext`
+md5 identical both times).
+
+### The brief's first lead was real, and far larger than the note it came in
+
+The note said a box the search leaves alone "draws a line pitch of 848 units at 20 pt where
+`round(706 × 1.2)` is 847, and 421 at 10 pt where `round(353 × 1.2)` is 424", called it "a small
+residue at particular sizes", and could not explain it. **The measurement reproduces exactly and
+the sentence beside it is wrong in the usual direction** — it is not two sizes and it is not a
+residue.
+
+`research/probes/slides-r21/make-pitch-probe.py` puts the same three paragraphs twice on each
+slide — once in an `a:noAutofit` box and once in an `a:normAutofit` box far too tall to shrink —
+behind a sacrificial warm-up shape. One slide per size, so the only difference between the two
+columns is the autofit flag. Over 53 sizes from 6 to 58 pt:
+
+| | agrees with `fround(em × 1.2)` |
+|---|---|
+| plain box | **53 of 53** |
+| autofitted box | **19 of 53** |
+
+Never more than three hundredths of a millimetre away, and wrong in **both** directions — which
+is what said rounding rather than a missing multiplier.
+
+### The mechanism, and why only the unscaled case shows it
+
+`ImpEditEngine::SeekCursor` takes a different branch whenever `maStatus.DoStretch()`, which
+`SdrTextObj::ImpSetupDrawOutlinerForPaint` sets for `IsFitToSize() || IsAutoFit()` and for
+nothing else. That branch pushes the font at the device, reads the size back out of the device's
+own metric, and puts *that* on the font — `rFont.SetPhysFont(*pDev); Size
+aRealSz(aMetric.GetFontSize()); … rFont.SetFontSize(aRealSz)`
+(`editeng/source/editeng/impedit3.cxx`:2985-3062, 24.2.7). During formatting the device is the
+reference device, so the 1.2 rule is applied to the item height rounded to whole device pixels
+and back.
+
+Fitting that round trip over 30 to 4000 dpi reproduces all 53 rows at **600 dpi and at no other
+resolution**. Eight further fractional sizes — four with the two columns disagreeing — come back
+8 of 8; Carlito reproduces Liberation Sans row for row on eleven sizes, which is what
+"font-independent" line spacing should do.
+
+When `fFontY != 1.0` the same branch immediately puts the height through `roundToNearestPt`
+twice, rounding to a whole point and discarding the device grid. So the existing
+`Scaling.Scaled` is already faithful for every shrunken body, and this reaches only the case
+where the search settles on scale 1 — which is the reference's own condition, not a
+simplification of it.
+
+**Do not read an em off a reference PDF's `/Tf`.** There is a *second*, unrelated round trip at
+paint time through the PDF export device at 720 dpi, and it applies to plain and autofitted
+shapes alike: a 13.33 pt run is held as 471 units, measured at 470 and drawn as **473**. Three
+numbers for one size is why this term looked like noise from the content stream alone.
+
+### And a second quantisation, found by the same probe
+
+`SlideTextLayout.Spacing`'s own note said it was "a pass-through for single spacing rather than a
+call to `LineSpacingRule.Apply`", and the code called `Apply` — whose first line is
+`naturalHeight.Twips`, so it quantised before its `_ => natural` arm handed the value back. Only
+a line height that is a whole multiple of 3.6 pt survived it. An 8 pt line was drawn at 338.67
+units against the reference's 338, a 10 pt line at 423.33 against 424, a 28 pt line at 1185.2
+against 1186.
+
+Ours against the reference on the probe, both columns, 53 sizes each:
+
+| | before | after |
+|---|---|---|
+| plain | 39 of 53 | **53 of 53** |
+| autofitted | 15 of 53 | **53 of 53** |
+
+The predecessor's own two decks move the same way, scored on the chosen size *and* the drawn
+pitch together: `spacing-probe` 10/12 → **12/12**, `spacing-small` 0/12 → **11/12**.
+
+### The corpus does not care, and that is the finding
+
+Whole track swept before and after, 163 documents each:
+
+| | before | after |
+|---|---:|---:|
+| word gate | 151/163 | 151/163 |
+| per-batch match counts | — | **identical, all seventeen** |
+| `\|ink\|%` | 1583.00 | **1582.40** |
+| major pages | 428 | **430** |
+
+**No document changed verdict, in either direction.** 52 documents improved by 5.31 between
+them, 35 worsened by 4.71, 76 did not move: a net −0.60 on 1583, which is 0.04 per cent.
+
+That is a correct fix with an unmeasurable corpus effect, and it is worth saying plainly rather
+than dressing up. Two readings are consistent with it and this round cannot separate them: the
+term is genuinely small — one to three hundredths of a millimetre on a line — so it only decides
+a page when the search is at a near-tie; or its wins and losses are both real and roughly
+balanced because a near-tie is equally likely to fall either way. The one visible regression
+supports the second: `berlin.ppt` is +1.37, and **all of it is page 10** (0.18 → 1.62) with the
+other twenty-eight pages moving by at most 0.03. One block, one step, one page.
+
+The three decks the brief named all improved — `2015-Civil-Rights-Website-training.ppt`
+31.05 → 30.42, `ITE106-Chapter 4.ppt` 37.67 → 37.44, `gfopportunitiesforlinkagespres_2010_en.ppt`
+9.98 → 10.08 is the exception and is +0.10.
+
+### Tests
+
+Two assertions, each verified by reintroducing its defect and watching it fail:
+
+- `SlideAutofitTests.AnAutofittedBodyMeasuresItsLinesOnTheDevicesGrid` (unit, five cases) —
+  plain and autofitted pitch per size, every expectation read out of the reference PDF.
+  **12 pt is a control that passes under either reading**, since 423 units come back 423 through
+  the 600 dpi grid; the other four bite in both directions. Without the device grid four of five
+  fail and the control passes; without the twip fix the three plain expectations fail.
+- `SlideAutofitDeviceGridComparisonTests` (fidelity) — the same ten pitches on the authored
+  `slide-autofit-device-grid.pptx`, ours asserted as literals first and LibreOffice compared
+  against those, at a hundredth of a point.
+
+Per project on the final tree, each run redirected to its own file: Core 243, Text 240,
+Containers 109, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 619,
+Spreadsheets 446, Fidelity **547** (546 plus this round's one), Presentations **528** (523 plus
+this round's five). Zero failed, zero skipped. Only `Paperless.Presentations/Layout` was touched, and only through
+`SlideTextLayout.Place`/`Measure`, so the words and sheets tracks are not owed a sweep.
+
+### Open items this round did close, and one it did not
+
+**Closed on reach: the `.ppt` picture recolour.** Carried as "unmeasured" for three rounds.
+Counted by walking every Escher record in each file's `PowerPoint Document` and `Pictures`
+streams: of **51** corpus `.ppt`, **4** carry `DFF_Prop_pictureContrast` (264) or
+`DFF_Prop_pictureBrightness` (265), and one of those four states only the defaults — contrast
+65536, brightness 0 — on all twenty of its shapes. So the feature is **three documents and four
+shapes**, and does not deserve a round.
+
+**Not re-run: the size census.** The machine was carrying two other agents' sweeps at a load
+average above 20 and the census was starved to a standstill after forty minutes; it was killed
+so the whole-track sweep could finish. The "pages neither class explains" figure is therefore
+still round twenty's 304 over 91 documents, and is *not* a measurement of this commit.
+
+**Still unmeasured, unchanged from the brief:** `PptSlideLayout.cs`:1244's group scale against
+LibreOffice's, and `Demick_JetBlue.pptx`'s charts in the shared `Paperless.Core/Charts`.

@@ -181,6 +181,60 @@ public static partial class SlideTextLayout
     /// <summary>Hundredths of a millimetre in a point, which is where the fit's rounding happens.</summary>
     private const double Mm100PerPoint = 2540.0 / 72.0;
 
+    /// <summary>The draw layer's reference device resolution, which is what quantises an em.</summary>
+    private const double ReferenceDeviceDpi = 600.0;
+
+    /// <summary>
+    /// The em an autofitted body's lines are measured at: the reference device's realisation of
+    /// the character height, which is a whole number of its pixels.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An autofitted shape does not measure its lines at the size it states, and a plain
+    /// one does.</strong> <c>ImpEditEngine::SeekCursor</c> takes a different branch whenever
+    /// <c>maStatus.DoStretch()</c> — which <c>SdrTextObj::ImpSetupDrawOutlinerForPaint</c> sets for
+    /// <c>IsFitToSize() || IsAutoFit()</c> and for nothing else. That branch pushes the font at the
+    /// device, <em>reads the size back out of the device's own metric</em> and puts it on the font:
+    /// <c>rFont.SetPhysFont(*pDev); Size aRealSz(aMetric.GetFontSize()); … rFont.SetFontSize(aRealSz)</c>
+    /// (<c>editeng/source/editeng/impedit3.cxx</c>:2985-3062, 24.2.7). During formatting <c>pDev</c>
+    /// is the reference device, so the height the line spacing is computed from is the item height
+    /// rounded to whole device pixels and back.
+    /// </para>
+    /// <para>
+    /// Measured rather than inferred, on <c>research/probes/slides-r21/make-pitch-probe.py</c> —
+    /// one slide per size, the same three paragraphs in an <c>a:noAutofit</c> box and in an
+    /// <c>a:normAutofit</c> box far too tall to shrink. Over 53 sizes from 6 to 58 pt the plain box
+    /// is <c>fround(em × 1.2)</c> every time and the autofitted box differs on <strong>34 of the
+    /// 53</strong>, by −3, −1, +1 or +3 hundredths of a millimetre and never more. Fitting a pixel
+    /// round trip over 30 to 4000 dpi reproduces all 53 at <strong>600 dpi and at no other
+    /// resolution</strong>; eight further fractional sizes, four of them with the two boxes
+    /// disagreeing, come back 8 of 8; and Carlito reproduces Liberation Sans row for row, which is
+    /// what "font-independent" line spacing should do.
+    /// </para>
+    /// <para>
+    /// <strong>It reaches only the unscaled case, and that is the reference's own condition rather
+    /// than a simplification.</strong> When <c>fFontY != 1.0</c> the same branch immediately puts
+    /// the height through <c>roundToNearestPt</c> twice (<c>impedit3.cxx</c>:3007-3012), which
+    /// rounds to a whole point and discards the device grid entirely — so <see cref="Scaling.Scaled"/>
+    /// is already faithful for every shrunken body and must not be touched.
+    /// </para>
+    /// <para>
+    /// <strong>Do not read the em off a reference PDF's <c>/Tf</c>.</strong> There is a second,
+    /// unrelated round trip at paint time through the PDF export device at 720 dpi, and it applies
+    /// to plain and autofitted shapes alike: a 13.33 pt run is held as 471 units, measured at 470
+    /// and drawn as <strong>473</strong>. Three different numbers for one size is what makes this
+    /// term look like noise from the content stream alone.
+    /// </para>
+    /// </remarks>
+    private static Length DeviceRealised(Length em)
+    {
+        if (em.Mm100 <= 0) return em;
+
+        double pixels = Rounded(em.Mm100 * ReferenceDeviceDpi / 2540.0);
+
+        return Length.FromMm100((long)Rounded(pixels * 2540.0 / ReferenceDeviceDpi));
+    }
+
     /// <summary>
     /// <c>basegfx::fround</c>: half away from zero, which is not what <c>Math.Round</c> does.
     /// </summary>
