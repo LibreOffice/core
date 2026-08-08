@@ -453,6 +453,7 @@ public static class PageDrawing
         IDrawingSink sink)
     {
         DrawParagraphShading(area, lines, blocks, sink);
+        DrawParagraphBorders(area, lines, blocks, sink);
 
         foreach (PlacedLine line in lines)
         {
@@ -576,6 +577,102 @@ public static class PageDrawing
 
         Flush();
         Emit();
+    }
+
+    /// <summary>
+    /// Draws the rules round each bordered paragraph, after its shading and before its text.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Per paragraph rather than per run of joined paragraphs, because the reader has already resolved the
+    /// join — the lower of two identically bordered paragraphs carries no top border and the upper none at
+    /// the bottom, so their left and right rules meet as two abutting segments and the box reads as one.
+    /// That is what LibreOffice's own PDF holds: a two-paragraph box emits its verticals as
+    /// <c>691.45-707.30</c> and <c>675.55-691.45</c> rather than as one stroke.
+    /// </para>
+    /// <para>
+    /// The geometry is measured rather than assumed, and two parts of it are counter-intuitive. The rule
+    /// sits at the <em>outer</em> edge with <c>w:space</c> between it and the text, so a rule's near edge
+    /// is a distance from the text and its far edge is the frame; and the vertical rules sit
+    /// <em>outside</em> the print area, which means a bordered paragraph can draw into the page margin and
+    /// its lines break exactly where an unbordered one's would.
+    /// </para>
+    /// </remarks>
+    private static void DrawParagraphBorders(
+        DocRect area,
+        IReadOnlyList<PlacedLine> lines,
+        IReadOnlyList<PageBlock> blocks,
+        IDrawingSink sink)
+    {
+        int index = -1;
+        Length top = Length.Zero;
+        Length bottom = Length.Zero;
+
+        // Where the box the paragraph above opened stopped, and which paragraph that was. A joined
+        // paragraph starts its own box there rather than at its own text, so the side rules run across
+        // whatever `w:spacing` stands between the two — which is what LibreOffice draws and what a box
+        // per paragraph gets visibly wrong on a spaced list.
+        int joined = -2;
+        Length joinedAt = Length.Zero;
+
+        void Flush()
+        {
+            if (index < 0 || blocks[index] is not PageParagraph paragraph) return;
+            if (paragraph.Borders is not { Draws: true } borders) return;
+
+            DocRect text = ShadeArea(area, paragraph, top, bottom);
+
+            Length left = text.X - (borders.Left?.Allowance ?? Length.Zero);
+            Length right = text.Right + (borders.Right?.Allowance ?? Length.Zero);
+            Length above = borders.JoinsAbove && joined == index - 1 && joinedAt < text.Y
+                ? joinedAt
+                : text.Y - borders.Above;
+            Length below = text.Bottom + borders.Below;
+
+            joined = index;
+            joinedAt = below;
+
+            if (borders.Top is { Draws: true } rule)
+            {
+                Fill(
+                    new DocRect(left, text.Y - rule.Space - rule.Width, right - left, rule.Width),
+                    rule.Colour, sink);
+            }
+
+            if (borders.Bottom is { Draws: true } under)
+            {
+                Fill(
+                    new DocRect(left, text.Bottom + under.Space, right - left, under.Width),
+                    under.Colour, sink);
+            }
+
+            if (borders.Left is { Draws: true } start)
+            {
+                Fill(new DocRect(left, above, start.Width, below - above), start.Colour, sink);
+            }
+
+            if (borders.Right is { Draws: true } end)
+            {
+                Fill(
+                    new DocRect(right - end.Width, above, end.Width, below - above), end.Colour, sink);
+            }
+        }
+
+        foreach (PlacedLine line in lines)
+        {
+            if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
+
+            if (line.ParagraphIndex != index)
+            {
+                Flush();
+                index = line.ParagraphIndex;
+                top = line.Top;
+            }
+
+            bottom = line.Top + line.Box.Height;
+        }
+
+        Flush();
     }
 
     /// <summary>The rectangle a paragraph's shading fills, in the coordinates of the area holding it.</summary>
