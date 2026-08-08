@@ -2077,6 +2077,15 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       `FrameChart` — so it cannot be done from inside the slides track without leaving a chart in
       a workbook drawing the model's new field as nothing.
 
+      **And the weight half is larger than the defaults.** A *stated* `b="1"` on chart text is
+      not read either — `DrawingChartPlot` has a `SizeOf` and no weight anywhere — and that is
+      **36 of the 61 chart parts across 7 documents**, against 10 relying on the title default.
+      Seen directly on page 35 of `171128IPAP.pptx`, whose `chart4.xml` states
+      `<a:defRPr sz="900" b="1"/>` on both axes: the reference draws those labels 8.99 pt
+      Carlito-**Bold** and we draw 9.01 pt Carlito-Regular. So a legend, an axis label and a data
+      label can each be bold when the file says so, and only the *default* is title-only — which
+      is why the model needs a weight rather than the reader needing two more constants.
+
 - [ ] **A legend's row height is not linear in its font size, and a plain line height is.**
       Left after round twenty-three's legend work, which is right at 10 pt and drifts at the
       ends. Measured from the probe decks' border height, key position and row pitch together:
