@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-07-04 23:01+0000\n"
-"Last-Translator: Rizal Muttaqin <riz_17_oke@yahoo.co.id>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/id/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-08-09 01:51+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -869,14 +869,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Unggah extension dalam format .zip; isinya (manifest.json, ...) akan "
+"diekstrak di server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Unggah Extension"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Pengaturan hanya tersedia bagi pengguna yang telah masuk."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -1041,7 +1043,7 @@ msgstr "mis."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Biarkan kosong jika server Anda tidak memerlukannya"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1102,7 +1104,7 @@ msgstr "Ambil model untuk dipilih"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Kuota API terlampaui — periksa paket dan detail penagihan Anda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1442,7 +1444,7 @@ msgstr "Versi Saat Ini"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n lainnya"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1551,7 +1553,7 @@ msgstr "alamat sel"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Kotak Nama"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
@@ -1559,7 +1561,7 @@ msgstr "Buat teks berikut lebih ringkas"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Buat lebih ringkas"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
@@ -1567,7 +1569,7 @@ msgstr "Rangkum poin-poin utama teks ini"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Ringkas teks ini"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
@@ -1575,7 +1577,7 @@ msgstr "Kembangkan dan tambahkan lebih banyak detail pada teks ini"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Perluas teks ini"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1583,7 +1585,7 @@ msgstr "Perbaiki kesalahan tata bahasa, ejaan, dan tanda baca"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Perbaiki tata bahasa & ejaan"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
@@ -1611,7 +1613,7 @@ msgstr "Kasual"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Terbaik"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1620,7 +1622,7 @@ msgstr "Baik"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Buruk"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
@@ -1901,7 +1903,7 @@ msgstr "Tampilkan lebih banyak"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Pilihan template desain dibatalkan."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
@@ -1920,6 +1922,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Waktu permintaan habis. Anda dapat meningkatkan batas waktu permintaan di "
+"bagian AI pada pengaturan."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -2021,23 +2025,23 @@ msgstr "Gagal mengurai konten seleksi"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Pilih desain untuk deck Anda, atau lanjutkan tanpa desain:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "Tanpa template"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Lanjutkan tanpa template desain"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Template desain: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Melanjutkan tanpa template desain."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
@@ -2511,104 +2515,104 @@ msgstr "Maklumat Properti Lebih Lanjut"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Buka dokumen dari komputer atau lokasi cloud."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Buka File dari Komputer"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Tambah Cloud +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Edit akun"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Tambah akun baru"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL Server"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Masukkan URL server"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Nama tampilan"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Masukkan nama tampilan"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Nama yang ditampilkan dalam daftar cloud Anda (maks. 40 karakter)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Simpan perubahan"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Tambah Akun"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Hapus akun"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Memutuskan koneksi dari cloud ini"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Akun baru berhasil ditambahkan"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Kini Anda dapat mengakses file dari cloud ini."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Buka File"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Hapus akun ini?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Anda akan terputus dari akun cloud ini."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Letakkan file untuk membukanya"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Tampilan seluler ini belum sepenuhnya dapat diakses."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Pernyataan aksesibilitas"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3849,11 +3853,11 @@ msgstr "Hasil"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maksimalkan ke kisi"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Cari dan Ganti"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4052,7 +4056,7 @@ msgstr "Animasi"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Perubahan belum disimpan. Simpan"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4092,7 +4096,7 @@ msgstr "Gambar (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Perubahan belum disimpan."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -5082,7 +5086,7 @@ msgstr "Salin Lembar..."
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, terlindungi"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5145,6 +5149,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Embedded script menggunakan legacy com.sun.star UNO API, yang mungkin "
+"dihapus pada rilis mendatang."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
@@ -5434,64 +5440,67 @@ msgstr "Masukkan nama berkas"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Bagaimana Anda ingin mengedit?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Pengguna lain sedang melihat dokumen ini. Pilih cara Anda ingin melanjutkan:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Edit secara lokal"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Perubahan akan disinkronkan saat Anda menyimpan"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Pengeditan kolaboratif"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Edit bersama secara real-time"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Tetap melihat salinan lokal"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Lanjutkan dengan versi Anda"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Bergabung dalam pengeditan kolaboratif"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Menunggu perubahan disimpan..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Pengguna lain sedang mengedit dokumen ini. Pilih cara Anda ingin melanjutkan:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "mulai mengedit"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 mulai mengedit"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Orang lain sedang mengedit dokumen ini. Pilih cara Anda ingin melanjutkan:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5640,7 +5649,7 @@ msgstr "Mengganti nama..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Tidak dapat membagikan"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6199,11 +6208,11 @@ msgstr "Fungsi Sel Tabel"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Ukuran shape yang dipilih"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Ukuran Shape"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6433,10 +6442,10 @@ msgid "Server is shutting down"
 msgstr "Peladen sedang akan dimatikan"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
-msgstr "AI belum diatur. Buka Berkas > Pilihan > Tilikan untuk menyiapkannya."
+msgstr ""
+"AI belum dikonfigurasi. Buka File > Opsi > AI Assistant untuk mengaturnya."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6802,7 +6811,7 @@ msgstr "Untuk menempel di luar {productname}, silakan klik dulu tombol 'unduh'"
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Penyalinan dari dokumen telah dinonaktifkan oleh administrator Anda"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -6956,7 +6965,7 @@ msgstr "Presentasi Dalam Jendela: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Presentasi dibuka di jendela lain"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -7025,7 +7034,7 @@ msgstr "Dialog Selamat Datang"
 
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Pengaturan disimpan. Tambahkan API key untuk menggunakan AI assistant."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7124,11 +7133,11 @@ msgstr "Perkecil"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Pratinjau slide saat ini"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Pratinjau slide berikutnya"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7136,11 +7145,11 @@ msgstr "Salindia Pratilik {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Anda akan meninggalkan presentasi."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "Tautan tidak valid."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7306,11 +7315,11 @@ msgstr "Ide Kuning"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Selamat datang di Spreadsheet"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Selamat datang di Presentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
