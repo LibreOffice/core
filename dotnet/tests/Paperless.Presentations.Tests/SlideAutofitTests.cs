@@ -439,6 +439,66 @@ public class SlideAutofitTests
         };
     }
 
+    /// <summary>
+    /// An autofitted body measures its lines at the reference device's realisation of the em; a
+    /// plain one measures them at the em.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Every expected value is read out of a reference PDF —
+    /// <c>research/probes/slides-r21/make-pitch-probe.py</c>, one slide per size, the same three
+    /// paragraphs in an <c>a:noAutofit</c> box and in an <c>a:normAutofit</c> box far too tall to
+    /// shrink, so the fit settles on scale 1 in every case. Over the probe's 53 sizes the plain
+    /// column is <c>fround(em × 1.2)</c> every time and the autofitted column differs on 34.
+    /// </para>
+    /// <para>
+    /// <strong>12 pt is the control and it passes either way</strong>: 423 units through the
+    /// 600 dpi grid comes back 423, so its two columns agree and no reading of this method can
+    /// make it fail. The other four bite in both directions — the autofitted line is longer at 8
+    /// and 20 pt and shorter at 10 and 28 — which is what rules out a missing multiplier.
+    /// </para>
+    /// <para>
+    /// The <c>plain</c> column also covers the twip round trip <c>SlideTextLayout.Spacing</c> used
+    /// to take: 8, 10 and 28 pt are three of the sizes it moved, to 338.67, 423.33 and 1185.2.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData(8, 338, 341)]
+    [InlineData(10, 424, 421)]
+    [InlineData(12, 508, 508)]
+    [InlineData(20, 847, 848)]
+    [InlineData(28, 1186, 1183)]
+    public void AnAutofittedBodyMeasuresItsLinesOnTheDevicesGrid(
+        double points, long plainMm100, long autofittedMm100)
+    {
+        SlideTextBody plain = Body(points, lines: 4) with
+        {
+            AutoFit = false, FontIndependentLineSpacing = true,
+        };
+        SlideTextBody autofitted = Body(points, lines: 4) with
+        {
+            AutoFit = true, FontIndependentLineSpacing = true,
+        };
+
+        // Tall enough that the search cannot want to shrink either of them.
+        const double boxHeightPoints = 400;
+
+        Pitch(Placed(plain, boxHeightPoints)).Mm100.ShouldBe(plainMm100, $"a plain {points} pt line");
+        Pitch(Placed(autofitted, boxHeightPoints)).Mm100
+            .ShouldBe(autofittedMm100, $"an autofitted {points} pt line");
+    }
+
+    /// <summary>The glyph runs a body lays out in a box of the given height.</summary>
+    private static List<PlacedGlyphRun> Placed(SlideTextBody body, double boxHeightPoints)
+    {
+        DocRect area = new(
+            Length.Zero, Length.Zero, Width, Length.FromPoints(boxHeightPoints));
+
+        List<PlacedGlyphRun> placed = SlideTextLayout.Place(body, area, new SlideFonts());
+        placed.ShouldNotBeEmpty();
+        return placed;
+    }
+
     /// <summary>Where the first glyph run's baseline lands.</summary>
     private static Length Baseline(SlideTextBody body, double boxHeightPoints)
     {

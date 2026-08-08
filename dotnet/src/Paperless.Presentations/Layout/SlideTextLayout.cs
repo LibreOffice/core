@@ -697,6 +697,10 @@ public static partial class SlideTextLayout
 
             Length em = LargestSize(runs, styles, box.Line.Start, box.Line.VisibleEnd);
 
+            // An autofitted body that is not being scaled measures its lines at the *device's*
+            // realisation of the em rather than at the em. See DeviceRealised.
+            if (body.AutoFit && scaling.Font is <= 0 or 1.0) em = DeviceRealised(em);
+
             // The rule itself: one em of ascent, 1.2 em of box, then whatever the paragraph's own
             // spacing does to it. A paragraph stating 150% gets 1.5 x 1.2 em, which is what
             // EditEngine's proportional spacing applies to the height it just computed.
@@ -943,8 +947,43 @@ public static partial class SlideTextLayout
     /// (<c>oox/inc/drawingml/textspacing.hxx:52</c>), which is where we do it too.
     /// </para>
     /// </remarks>
+    /// <remarks>
+    /// <para>
+    /// <strong>The paragraph above described this method and the code did the opposite.</strong>
+    /// A rule that changes nothing — single spacing, or a proportion of exactly one hundred per
+    /// cent — went to <see cref="LineSpacingRule.Apply"/>, whose <em>first</em> line is
+    /// <c>naturalHeight.Twips</c>, so it round-trips through whole twips before its
+    /// <c>_ =&gt; natural</c> arm hands the value back. That is a quantisation on every
+    /// single-spaced slide line in the corpus, and it survives only line heights that are a whole
+    /// multiple of 3.6 pt.
+    /// </para>
+    /// <para>
+    /// Measured on <c>research/probes/slides-r21/make-pitch-probe.py</c>, whose plain boxes are
+    /// <c>fround(em × 1.2)</c> on all 53 reference sizes: through the twip trip an 8 pt line is
+    /// drawn at 338.67 units against the reference's 338, a 10 pt line at 423.33 against 424, and
+    /// a 28 pt line at 1185.2 against 1186. Under a unit it is invisible in a page image and it is
+    /// not invisible to the fit search, which decides between two candidates on one hundredth of a
+    /// millimetre — see the paragraph above about 1144 against 1143.
+    /// </para>
+    /// </remarks>
     private static Length Spacing(LineSpacingRule rule, Length natural)
-        => Proportion(rule) is { } proportion ? Proportioned(natural, proportion) : rule.Apply(natural);
+        => Proportion(rule) is { } proportion ? Proportioned(natural, proportion)
+            : Neutral(rule) ? natural
+            : rule.Apply(natural);
+
+    /// <summary>Whether a rule leaves a natural line height alone.</summary>
+    /// <remarks>
+    /// Exactly the rules <see cref="LineSpacingRule.Apply"/> would return the natural height for,
+    /// so this changes the unit the answer is held in and never the answer itself. The three modes
+    /// that state an absolute height keep going through <c>Apply</c>, because a stated height is a
+    /// length the file gives rather than one the line derives.
+    /// </remarks>
+    private static bool Neutral(LineSpacingRule rule) => rule.Mode switch
+    {
+        LineSpacingMode.AtLeast or LineSpacingMode.Exact or LineSpacingMode.Leading => false,
+        LineSpacingMode.Proportional => rule.Proportion is <= 0 or 1.0,
+        _ => true,
+    };
 
     /// <summary>
     /// The proportion a paragraph states, or <c>null</c> when it states none that changes anything.
