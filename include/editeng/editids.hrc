@@ -194,6 +194,8 @@ class SvxOpticalSizingItem;
 #define SID_ATTR_CHAR_FONT_VARIATIONS                   TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 82 )
 #define SID_ATTR_CHAR_CJK_FONT_VARIATIONS               TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 83 )
 #define SID_ATTR_CHAR_CTL_FONT_VARIATIONS               TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 84 )
+// Status only, the box applies the style through SID_ATTR_CHAR_FONT/WEIGHT/POSTURE
+#define SID_ATTR_CHAR_FONT_STYLE                        TypedWhichId<SvxFontItem>( SID_EDIT_START + 85 )
 
 
 #if 95 > (SID_EDIT_END-SID_EDIT_START)
