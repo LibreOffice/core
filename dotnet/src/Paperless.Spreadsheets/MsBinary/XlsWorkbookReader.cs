@@ -948,7 +948,7 @@ internal sealed class XlsWorkbookReader
 
         ReadChartRecords(chart);
 
-        ChartPlot? plot = chart.Build(_chartData, _externSheets, index);
+        ChartPlot? plot = chart.Build(_chartData, _externSheets, index, _cellFormats);
         SheetPrintSetup setup = _page.ToSetup();
         DocRect frame = ChartSheetFrame(setup);
 
@@ -1439,7 +1439,7 @@ internal sealed class XlsWorkbookReader
             if (depth == 0 && BiffChartRecords.IsChartRecord(id)) chart.Read(id, _stream);
         }
 
-        _drawings.AttachChart(chart.Build(_chartData, _externSheets, _sheetIndex));
+        _drawings.AttachChart(chart.Build(_chartData, _externSheets, _sheetIndex, _cellFormats));
     }
 
     /// <summary>Joins the sheet's <c>NOTE</c> records to the comment objects they name.</summary>

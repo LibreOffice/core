@@ -1,0 +1,16 @@
+=== baseline (clean tree)
+clean                                                      Failed:     0, Passed:    12
+1. CHAREAFORMAT never read                                 Failed:     6, Passed:     6
+2. CHLINEFORMAT never read                                 Failed:     1, Passed:    11
+3. CHESCHERFORMAT never read                               Failed:     2, Passed:    10
+4. the Escher format does not supersede                    Failed:     1, Passed:    11
+5. the fFilled boolean ignored                             Failed:     1, Passed:    11
+6. an MSO scheme word read as a literal                    Failed:     1, Passed:    11
+7. the AUTO flag ignored                                   Failed:     1, Passed:    11
+8. EXC_PATT_NONE filled anyway                             Failed:     1, Passed:    11
+9. any frame taken as the background or wall               Failed:     1, Passed:    11
+10. the axes-set frame taken as the chart background       BUILD FAILED: /home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs(622,13): error CS0162: Unreachable code detected [/home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/Paperless.Spreadsheets/Paperless.Spreadsheets.csproj]
+11. one fill for every series                              Failed:     1, Passed:    11
+12. a series fill filed as the chart background            Failed:     2, Passed:    10
+=== rebuilding clean
+Build succeeded.

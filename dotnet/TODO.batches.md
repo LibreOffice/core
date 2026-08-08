@@ -8174,3 +8174,62 @@ came back out.
    our furniture dictionary reads an absent slot as "fall back to Default" and cannot say it.
    Not implemented, not measured, and it needs a slot value meaning "nothing" rather than a
    missing key.
+## Round twenty-seven — sheets: a BIFF chart's font and its fills
+
+Base `e4b9cf255`, verified. Probe data, censuses and the mutation runs in
+`dotnet/probes/sheets-r27/`.
+
+| sheets, 171 documents | base `e4b9cf255` | after |
+|---|---:|---:|
+| word gate | 145 | **146** |
+| abs page error | 90 | 91 |
+| exact page counts | 154 | 154 |
+| abs word error | 43203 | **42848** |
+
+`sheets/batch-010` goes **7/10 → 8/10**: `EHEST-Pre-departure-checklist…xls` matches at
+8373/8382 words against 8018 before, and its embedded-font count goes 4/6 to 5/6. Every other
+batch holds its count; 001–009 are still 89/89.
+
+**The page error moving 90 → 91 is the reference, not us.** The one row is
+`ans_mappings_of_eccairs_terms.xlsx`, whose own column is 192 pages and 28195 words in both
+sweeps while the reference's is 191/28183 and then 190/28181. Both reach runs report it
+byte-identical across every CLI in the round.
+
+### Two reader gaps, both named by a real record parse rather than a byte search
+
+- **`CHFONT` was never read**, so a chart stating Calibri was measured and drawn in Liberation
+  Sans. Reach measured by rendering: **2 of 171**, and they are exactly the two the census
+  predicted. A record-level census of all 61 OLE2 workbooks finds **6 holding a chart substream**,
+  every one stating a single family throughout — and **four of the six state Arial, which resolves
+  to Liberation Sans and so cannot move**.
+- **The BIFF chart path drew no fills at all** — 0 operators against the reference's 7 on `EHEST`
+  page 8, where the OOXML path emits 20 against 21 on a comparable page. `CHAREAFORMAT`,
+  `CHLINEFORMAT` and the `CHESCHERFORMAT` that overrides them are now read. Reach: **4 of 171**
+  against a census ceiling of 6; the two that did not move hold their charts on sheets the printout
+  never reaches, and neither renderer draws a fill anywhere in either.
+
+**Reading only the palette would have looked right.** All nine of `EHEST`'s charts state their
+three filled series at palette indices 24, 10 and 13 — `#9999FF`, `#FF0000`, `#FFFF00` — and the
+reference draws `#6699FF`, `#FF0000`, `#FFFF00`: two agree by palette and the first is the Escher
+override, as is the `#F8F8F8` plot wall. `XclImpChFrameBase::ConvertAreaBase` states the precedence
+outright in a comment.
+
+### A `mv` that restores a backup also restores its modification time
+
+The seam check — sweep snapshot against the tree — reported three documents differing, which reads
+as a stale snapshot and was the opposite. The reference settles it: on `TOGAF9` page 21 it fills
+`(52.84, 318.36)-(613.70, 567.38)`, the snapshot matches and the tree did not.
+
+The mutation cycle is the cause, one step past the trap already recorded here. Restoring a patched
+file with `mv backup source` **keeps the backup's older mtime**, so MSBuild sees a source older than
+the assembly and skips the rebuild — and a plain `dotnet build` then prints success over a binary
+that still contains the defect. The recorded trap is that `--no-build` measures the defect; add that
+`dotnet build` does too, and `touch` the file before the run whose numbers you will report.
+
+### Left alone, and said so
+
+Automatic chart colours (the census finds **zero** automatic areas on the track and six automatic
+lines, all in the one document the brief says not to chase); `CHDATERANGE`; and a chart's text
+*weight* — the reference embeds Carlito-Bold on `EHEST` for an 18 pt chart title and `ChartPlot`
+carries a family and no weight, which is a `Paperless.Core/Charts` widening reaching all three
+consumers rather than this track's alone.

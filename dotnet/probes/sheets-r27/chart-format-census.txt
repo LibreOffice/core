@@ -1,0 +1,57 @@
+2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls
+   CHAREAFORMAT auto=0 stated=8   CHLINEFORMAT auto=0 stated=11
+     line  stated x3    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x3    in CHCHART/CHTEXT/CHFRAME
+     area  stated x3    in CHCHART/CHTEXT/CHFRAME
+     line  stated x2    in CHCHART/CHAXESSET/CHTEXT/CHFRAME
+     area  stated x2    in CHCHART/CHAXESSET/CHTEXT/CHFRAME
+     line  stated x1    in CHCHART/CHFRAME
+     area  stated x1    in CHCHART/CHFRAME
+     line  stated x1    in CHCHART/CHSERIES/CHDATAFORMAT
+2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls
+   CHAREAFORMAT auto=0 stated=7   CHLINEFORMAT auto=0 stated=10
+     line  stated x3    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x2    in CHCHART/CHAXESSET/CHTEXT/CHFRAME
+     area  stated x2    in CHCHART/CHAXESSET/CHTEXT/CHFRAME
+     line  stated x2    in CHCHART/CHTEXT/CHFRAME
+     area  stated x2    in CHCHART/CHTEXT/CHFRAME
+     line  stated x1    in CHCHART/CHFRAME
+     area  stated x1    in CHCHART/CHFRAME
+     line  stated x1    in CHCHART/CHSERIES/CHDATAFORMAT
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls
+   CHAREAFORMAT auto=0 stated=72   CHLINEFORMAT auto=0 stated=99
+     line  stated x45   in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x45   in CHCHART/CHSERIES/CHDATAFORMAT
+     line  stated x27   in CHCHART/CHAXESSET/CHAXIS
+     line  stated x9    in CHCHART/CHFRAME
+     area  stated x9    in CHCHART/CHFRAME
+     line  stated x9    in CHCHART/CHAXESSET/CHFRAME
+     area  stated x9    in CHCHART/CHAXESSET/CHFRAME
+     line  stated x9    in CHCHART/CHAXESSET/CHTYPEGROUP/CHLEGEND/CHFRAME
+TOGAF9-Tool-ConfReqts-CSQ.xls
+   CHAREAFORMAT auto=0 stated=8   CHLINEFORMAT auto=0 stated=11
+     line  stated x5    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x2    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x1    in CHCHART/CHFRAME
+     area  stated x1    in CHCHART/CHFRAME
+     line  stated x1    in CHCHART/CHAXESSET/CHTYPEGROUP/CHLEGEND/CHFRAME
+     area  stated x1    in CHCHART/CHAXESSET/CHTYPEGROUP/CHLEGEND/CHFRAME
+Template Pilot Logbook JAR-FCL V3.0.xls
+   CHAREAFORMAT auto=0 stated=6   CHLINEFORMAT auto=6 stated=2
+     line  auto   x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     line  auto   x2    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x2    in CHCHART/CHAXESSET/CHFRAME
+     area  stated x2    in CHCHART/CHAXESSET/CHFRAME
+orbus_togaf_tool_csq.xls
+   CHAREAFORMAT auto=0 stated=13   CHLINEFORMAT auto=0 stated=16
+     line  stated x5    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x5    in CHCHART/CHTEXT/CHFRAME
+     area  stated x5    in CHCHART/CHTEXT/CHFRAME
+     line  stated x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x4    in CHCHART/CHSERIES/CHDATAFORMAT
+     area  stated x2    in CHCHART/CHAXESSET/CHAXIS
+     line  stated x1    in CHCHART/CHFRAME
+     area  stated x1    in CHCHART/CHFRAME
