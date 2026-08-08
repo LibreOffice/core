@@ -7473,6 +7473,218 @@ the one the skill already gives.
    reserve three** — both unchanged, both needing an authored probe rather than a corpus sweep, and
    both correctly left alone this round.
 
+## Words, round twenty-seven, at `d7fd6cf13` — balanced columns, the gap that was never there, and `NUMPAGES`
+
+### The baseline reproduced the brief exactly
+
+Whole-track sweep against a checksummed CLI snapshot: **155/200**, absolute page error **98**,
+165 documents with an exactly correct page count, absolute word error **6840**. The image
+sweep over the 155 matching documents gives **1603 pages, 362 major, summed `|ink|%` 797.48**
+against a signed 618.51 — the invariant `|ink|% ≥ |ink%|` holds. Every figure the brief carried
+reproduced. Per batch: 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9,
+011 9/10, 012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10, 019 4/10,
+020 3/10, 021 0/2.
+
+### The brief's first item had a second half nobody had looked at
+
+`sprmSDxaColumns` — the gap between a WW8 section's columns — **defaults to 708 twips, and we
+defaulted it to zero.** `ReadUSprm(pSep, pIds[4], 708)` (`ww8par6.cxx`:987), commented "default
+distance 1.25 cm"; the DOCX side says the same figure as `m_nColumnDistance( 1249 )` hundredths
+of a millimetre (`PropertyMap.cxx`:424). The decisive check was asking LibreOffice rather than
+reading either: its flat-ODF export of `150_5300_13_chg8.doc` states
+`fo:column-gap="0.4917in"`, which is 708 twips to the digit.
+
+It is not the gutter that matters. A column's *width* is the measure less the gaps, divided by
+the count, so a zero gap made that document's columns **252 pt where the reference's are 234.3**
+— 8% too wide, so every line of every two-column section broke late. With the default read, our
+columns measure 234.30.
+
+**The brief's sentence "our column *width* is right, so `sprmSCcolumns` is read correctly" is
+therefore wrong**, and it is the same shape of error the skill warns about: the count was read
+correctly and the width was not, and only the width is visible in the output.
+
+### Balanced columns
+
+`WritingSection.BalancesColumns`, decided by a pass over the finished section list because the
+answer is a property of the *next* section: both LibreOffice Word importers say so in the same
+shape — `if (aNext == aEnd || !aNext->IsContinuous()) pRet->SetFormatAttr(SwFormatNoBalancedColumns(true))`
+(`ww8par.cxx`:4576), and `pPrevSection->DontBalanceTextColumns()` reached from the page-break
+branch of `SectionPropertyMap::CloseSectionGroup` (`dmapper/PropertyMap.cxx`:1919) with the
+last-section case in `ApplyColumnProperties`. Both are switched off wholesale by
+`fNoColumnBalance` / `w:compat/w:noColumnBalance`, which the DOP reader did not read.
+
+The paginator gains a **column band** — a top and a bottom belonging to the section rather than
+to the page — and **bisects the band's height**, which is the quantity
+`SwLayoutFrame::FormatWidthCols` searches for iteratively ("nMaximum … is then maintained as the
+minimum height on which the content fit into the columns", `wsfrm.cxx`:3912). Bisection is open
+to us and not to Writer because our fill is a pure function of the band it is given.
+
+Two things the mechanism needed that reading the C++ does not tell you:
+
+- **The band must count the last paragraph's space-after.** The fitting rules count line boxes,
+  and space-after is added to the running height *after* the last fitting test, so a band chosen
+  from the lines alone ends a paragraph gap too high and lifts everything below the section.
+  Measured at exactly **10 pt** on `chg8`: what follows the balanced box sat 21.40 pt above the
+  reference before and 12.94 pt after, against a page-wide offset of 11.40 pt.
+- **A `PlacedLine` has to carry its own column count.** One page holds a single-column opening,
+  a two-column stretch and a single-column close, and the page is *written* when the last of
+  them is current — so reading the count off the page drew the full-width paragraphs into half a
+  column. This was invisible before, because a section that fills only column one never exercises
+  a second column area.
+
+The distribution now matches the reference exactly on the document the brief named: seven lines
+in column one at x 72.00 against 72.10, six in column two at x 341.70 against 341.80, the same
+paragraph gap in the same place.
+
+### `NUMPAGES`
+
+One extra fill. The document is laid out once to learn its page count, every furniture set that
+carries the field is told (which discards its laid-out cache), and it is laid out again. Not
+iterated to a fixed point, for the reason Writer damps the same circularity. A page *count* is
+the same on every page, so it deliberately does **not** reach the running head's cache key — only
+a page *number* does.
+
+### Reach, measured by rendering
+
+The two sweeps' PDFs byte-compared with `SOURCE_DATE_EPOCH` pinned, which is the only figure
+worth quoting:
+
+| change | ceiling (census) | reach (rendered) |
+|---|---:|---:|
+| column gap + balancing | 6 `.doc` + 4 `.docx` | **7 documents — 3 `.doc`, 4 `.docx`** |
+| `NUMPAGES` | 42 documents mention it | **22 documents — 21 `.docx`, 1 `.doc`** |
+| both | — | **29 of 200** |
+
+Note the gate sweep alone under-counts even that: `mde087077~283.docx` has identical page and
+word columns before and after and its rendering changed, which only the byte comparison and the
+image diff can see.
+
+### What the scoreboard did, said first and plainly
+
+| | before | columns | + `NUMPAGES` |
+|---|---:|---:|---:|
+| parity gate | 155 | 155 | **155** |
+| abs page error | 98 | 101 | **101** |
+| exactly-correct page count | 165 | 165 | **165** |
+| abs word error | 6840 | 7198 | **7198** |
+| major pages (155 common docs) | 362 | 361 | **361** |
+| summed `\|ink\|%` | 797.48 | 792.77 | **792.78** |
+
+**The gate did not move, and two of its continuous metrics moved against us.** All of the page
+error and all of the word error is on two documents: `150_5300_13_chg8.doc` (21 → 23 pages
+against 18) and `150_5300_13_chg10.doc` (79 → 80 against 76).
+
+The word figure is the gate's blind spot rather than a regression, and this is measured rather
+than argued. `wc -w` compares two *sums*, so over-drawing cancels under-drawing. Counting the
+token multiset against the reference's instead — over-draw plus under-draw — the three documents
+go:
+
+| document | before | after |
+|---|---:|---:|
+| `150_5300_13_chg10.doc` | 3565 (over 2030, under 1535) | **2438 (over 1657, under 781)** |
+| `150_5300_13_chg8.doc` | 1120 (over 513, under 607) | **693 (over 384, under 309)** |
+| `150_5300_13_chg12.doc` | 518 (over 305, under 213) | 614 (over 334, under 280) |
+
+`chg10`'s under-draw halves. The gross word count rose because we now draw 754 more of the words
+the reference draws while drawing 373 fewer that it does not, and the two do not cancel evenly.
+
+The image metric agrees and is the honest headline for the columns work: **`|ink|%` 797.48 →
+792.77 and major pages 362 → 361**, over three documents — `JEMIT_Template.docx` 9.50 → 2.15 with
+4 major pages down to 1, `mde087077~283.docx` 4.91 → 5.13, `chg12` 70.29 → 72.71 with 2 more
+major pages.
+
+**`NUMPAGES` moves the image metric by 0.01 across five documents and no verdict anywhere**, which
+is what a two- or three-character substitution should do and is stated here rather than left for a
+reader to infer from a table that does not change.
+
+### Why the page count on those two documents is still wrong, and what is left on them
+
+Not the balancing. Three separate things remain on `chg8`, each visible in LibreOffice's own
+flat-ODF export of it:
+
+- **Unequal columns.** Two of its sections state `style:column style:rel-width="4680*"` and
+  `"5112*"` — `sep.fEvenlySpaced = 0` with per-column widths in `rgdxaColumnWidthSpacing`.
+  `PageGeometry` models equal columns only, and this is a model change rather than a reader one.
+- **A blank page 2** we emit and the reference does not, worth exactly one of the three pages.
+- **The 14.15 pt offset**, below.
+
+### The 14.15 pt offset: the brief's hypothesis is right and its mechanism is not
+
+The brief guessed "our DOC reader treats an empty header story as *this section has no header*",
+and that is what the code does. The mechanism is more specific and worth writing down before
+anyone implements it, because implementing the brief's version would be wrong:
+
+For Word 97 and later, **`grpfIhdt` is not read from a sprm at all**. `wwSectionManager::SetSegmentToPageDesc`
+synthesises it as `WW8_HEADER_ODD | WW8_FOOTER_ODD | WW8_HEADER_FIRST | WW8_FOOTER_FIRST`
+(plus the even pair when `fFacingPages`), and clears a bit only when that story's length is
+**zero** *and* the previous section did not have it either (`ww8par6.cxx`:1222-1258). A story
+holding just a paragraph mark has length 1, so the bit stays set — and `Read_HdFt` then finds
+`nLen < 2`, does not read the text, and still turns the header on
+(`SwFormatHeader(true)`), which creates a header of one empty paragraph.
+
+So the displacement is **not** universal: `SetPageULSpaceItems` gives that header a *minimum*
+height of `dyaTop − dyaHdrTop` with dynamic spacing, which is the same rule `PushedDownBy`
+already implements. It bites only where a document reserves no header band at all —
+`chg8` has `dyaTop == dyaHdrTop == 720`, so the empty header's own line height lands on the body
+in full. That is a narrow case, it is worth a round of its own, and it needs the reach measured
+before it lands: turning it on unconditionally gives *every* Word 97 DOC an empty header line.
+
+The second half of the brief's item — that the offset "changes to 11.40 pt at the first body
+paragraph" — reproduces, and the 2.75 pt difference between the two is a separate, unexplained
+quantity in the title block's table.
+
+### Verified by putting nineteen defects back
+
+Each applied alone, built, and the tests watched.
+
+| defect put back | caught by |
+|---|---|
+| WW8 column gap defaults to zero | `ASectionStatingNoColumnGapTakesAnInchAndAQuarterCentimetre` |
+| DOCX column gap defaults to zero | `AColumnsElementWithNoSpaceTakesAnInchAndAQuarterCentimetre` |
+| nothing is ever marked as balancing | `AStretchClosedByAContinuousBreakBalances` |
+| the next section's break is ignored | `AStretchClosedByAPageBreakDoesNot` |
+| the last section is marked too | `TheLastSectionNeverBalances` and two `BidiColumnTests` |
+| `noColumnBalance` is ignored | `TheDocumentsOwnFlagSuppressesEverything` |
+| the same-sheet test is ignored | `AContinuousBreakOntoDifferentPaperDoesNotCount` |
+| single-column sections are marked | `ASingleColumnSectionIsNotMarked` |
+| the paginator never begins a search | four of `BalancedColumnTests` |
+| a column restarts at the page top | `TheSecondColumnStartsBesideTheFirst`, `TheColumnsAreWithinOneLineOfEachOther` |
+| the search accepts its first trial | six of `BalancedColumnTests` |
+| the band ignores the trailing space | `TheBoxCountsTheLastParagraphsSpaceAfter` |
+| the box ends where its content does | `TheBoxCountsTheLastParagraphsSpaceAfter`, `WhatFollowsStartsBelowTheWholeBox` |
+| a line does not record its columns | `EachLineCarriesItsOwnColumnCount`, `TheColumnsAreDrawnSideBySide` |
+| no second pass for a page count | `APageCountFieldPrintsTheDocumentsOwnTotal` and one more |
+| the total does not discard the cache | the same two |
+| a page count prints the page number | the same two |
+| a page count varies per page | `AHeadHoldingOnlyACountIsSharedAcrossPages`, `APageCountFieldIsLeftAlone` |
+| a page count resolved without a total | **nothing — and it is a real defect** |
+
+The last row is the one that matters. `PageFields.Resolve`'s outer guard returns early when the
+total is unknown *and* nothing else needs resolving, so the only test exercising the inner guard
+never reached it. But a footer holding **both** fields — "Page 1 of 12", the ordinary shape — is
+resolved on the measuring pass because its *number* varies, and without the guard the unknown
+total renders as `0`: a head measured at the wrong width, which can hand the second pass a
+different page count to print. It is not an equivalent formulation, unlike the two the previous
+round found. `TheMeasuringPassLeavesTheCountAtItsCachedValue` is the detector, written after the
+fact, and it fails with the guard removed.
+
+### Test counts
+
+Core 247, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+**WordProcessing 683** (660 + 23 new), Spreadsheets 498, Presentations 528, Fidelity 550,
+0 skipped throughout — every project on its known-good count, with the tree rebuilt after the
+last defect came back out.
+
+### What the next round should take
+
+1. **Unequal columns** — `fEvenlySpaced = 0` / `w:cols w:equalWidth="0"`, which needs
+   `PageGeometry` to hold per-column widths rather than a count and a gap. It is on the two
+   documents that hold the whole of this round's adverse page error.
+2. **The blank page** `chg8` emits between its title page and its first chapter.
+3. **The empty-header rule above**, with its reach measured before it lands.
+4. **`PAGE` in body text** and **RTF field spans** remain where the last round left them, and
+   `w:val="double"` still needs an authored probe.
+
 ## Sheets round twenty-five and words round twenty-six, merged at `f61af6b79`
 
 **The first gate movement in three rounds, and it came from a record-stream bug.** A bare
