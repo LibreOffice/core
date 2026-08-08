@@ -253,6 +253,50 @@ internal static class SheetText
     public static Length Measure(string text, SheetFace? face, Length size)
         => Shape(text, face, size)?.Width ?? Length.Zero;
 
+    /// <summary>
+    /// How wide a string is on a device that can only advance by whole pixels.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>OutputDevice::GetTextWidth</c> returns the sum of the layout's glyph advances, and a
+    /// glyph's advance on a raster device is a whole number of pixels. So the width of a string is
+    /// the <em>sum of the rounded advances</em> and not the rounded sum, and the two differ by more
+    /// than a pixel as soon as the string is long: at twelve point on a 96 dpi device a
+    /// seventy-two character run measures 516 pixels one way and 523 the other, which is 1.4%.
+    /// </para>
+    /// <para>
+    /// Fitted against LibreOffice 24.2.7.2's own row heights for turned cells — six string lengths
+    /// at ten, eleven and twelve point, read out of its flat-ODF round trip of
+    /// <c>sheet-row-height-rotated.fods</c>. <strong>All eighteen are reproduced exactly by this
+    /// and fourteen by rounding the total</strong>, which is what says the rounding is per glyph.
+    /// </para>
+    /// <para>
+    /// Only <see cref="SheetOptimalRowHeights"/> wants this: it is the one place a length measured
+    /// on Calc's measuring device has to come back as that device's own integer. Drawing measures
+    /// on the page, where nothing is quantised.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="face">The face; null measures as nothing.</param>
+    /// <param name="size">The em size, already snapped to the device's own pixel grid.</param>
+    /// <param name="twipsPerPixel">The device's pixel, in twips.</param>
+    public static long MeasurePixels(string text, SheetFace? face, Length size, int twipsPerPixel)
+    {
+        if (twipsPerPixel <= 0 || Shape(text, face, size) is not { } run) return 0;
+
+        long pixels = 0;
+        foreach (SheetTextSegment segment in run.Segments)
+        {
+            foreach (PositionedGlyph glyph in segment.Glyphs)
+            {
+                pixels += (long)Math.Round(
+                    glyph.Advance.Twips / (double)twipsPerPixel, MidpointRounding.AwayFromZero);
+            }
+        }
+
+        return pixels;
+    }
+
     /// <summary>The face a sheet's cells fall back to, resolved once.</summary>
     public static SheetFace? DefaultFace => SheetFonts.For(SheetCellFormat.Default);
 }
