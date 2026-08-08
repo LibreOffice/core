@@ -8011,3 +8011,129 @@ count unchanged at 10.
   parts over 7 documents, the larger half of the weight work. The design is decided and
   recorded in `Paperless.Presentations/TODO.md`: a stamping pass beside `InFamily`, not twenty
   more arguments.
+
+## Round twenty-nine: slides — the band under the plot area, and the text that was turned the wrong way
+
+Baseline measured first at `281685d90` and it reproduces the brief **exactly**: `MATCH 151/163`,
+`ink%` 1271.64, `|ink|%` 1592.18, 427 major pages, 4199 census pages with **303 unexplained over
+91 documents**.
+
+The brief asked for the plot area's bottom edge and predicted the metric would turn. **The
+prediction is untested, because the term that dominates that edge was not fixed.** What was
+fixed is four smaller things found on the way to it, and the honest headline is that they move
+`|ink|%` by half a point and move no verdict at all.
+
+### What the probes settled about the bottom band
+
+`chart-face-theme-minor.pptx` states its plot area's own fill, so the rectangle under study is a
+filled box in both renderings and can be read off the PDF rather than inferred. Eleven variants
+of it, one element of the bottom stack at a time
+(`research/probes/slides-r29/make-band-probe.py`), our band against the reference's:
+
+| probe | before | after |
+|---|---:|---:|
+| labels off (`tickLblPos="none"`) | 12.79 | **0.03** |
+| upright labels, legend, both axis titles | −0.17 … 0.43 | unchanged |
+| 26 categories, labels rotated 45° | 7.94 | **7.94** |
+
+**LibreOffice's own answer is readable without inferring anything**, and this is the instrument
+the next round should start from: `chart:coordinate-region` in its `odp` export carries the
+computed plot rectangle *excluding axes*
+(`SchXMLExportHelper_Impl::exportCoordinateRegion`, `xmloff/source/chart/SchXMLExport.cxx:2274`),
+and on `Demick_JetBlue.pptx` it agrees with the drawn gridlines to 2 pt on all five charts.
+
+### Four fixes
+
+- **`c:tickLblPos val="none"` was unread.** It is not `c:delete`: the importer maps it to
+  chart2's `DisplayLabels` (`axisconverter.cxx:221`), which hides the labels and leaves the axis
+  line and its ticks. We drew the labels and reserved a line for them. ODF states the same
+  property as `chart:display-label`.
+- **The bottom edge gives up half a value label.** The bottommost value label is centred on the
+  plot area's bottom-left corner exactly as the topmost is on its top-left, and it shares the
+  strip with the category band rather than stacking under it — what LibreOffice reserves is the
+  bounding box of everything its axes drew (`VDiagram::adjustInnerSize`), not a sum of parts.
+  With the category labels off the reference's edge sits 5.65 pt below the plot against half a
+  label's 5.67; adding the two instead puts it 4.25 pt low.
+- **Every rotated piece of chart text was turned clockwise where LibreOffice turns it
+  anticlockwise.** `ChartLabel.Rotation` is anticlockwise — both formats state it that way and
+  chart2 carries it that way — and the drawing space has y growing downwards, so handing the
+  angle straight to `AffineTransform.Rotation` reverses it. A probe whose axis title reads
+  `Alpha Omega` came out top-to-bottom against the reference's bottom-to-top; `Demick_JetBlue`'s
+  45° category labels descended to the right against the reference's ascending. Fixed at all
+  three consumers, because the sign is wrong where the model meets the drawing space.
+- **A secondary value axis' title had room reserved and was never drawn**, and **the category
+  axis' title was drawn on top of a bottom legend.** The second is `lcl_createTitle` placing an
+  `ALIGN_BOTTOM` title inside `rRemainingSpace` (`ChartView.cxx:1147-1149`) after the legend has
+  come out of it (`:1966` against `:2054`); measuring from the frame instead put ours 30.30 pt
+  below the reference's with a legend and 8.13 pt below without, and it now sits 6.5 pt above in
+  both. **That 6.5 pt residual is unexplained and open** — the same with and without a legend,
+  within 0.35 pt of the chart's two per cent bottom margin, which does not survive reading
+  `createShapes2D:941-944`.
+
+### The numbers, said plainly
+
+| slides, 163 documents | base `281685d90` | +tick labels | +the other three | +all four |
+|---|---:|---:|---:|---:|
+| word gate | 151 | 151 | 151 | 151 |
+| `ink%` | 1271.64 | 1271.64 | 1270.91 | **1268.44** |
+| `\|ink\|%` | 1592.18 | 1592.17 | 1591.65 | **1589.24** |
+| major pages | 427 | 427 | 427 | 427 |
+| census, unexplained | 303 over 91 | 303 over 91 | 303 over 91 | 303 over 91 |
+
+Verdicts changed: **0**. Every batch holds its count.
+
+**Reach measured by rendering.** The tick-label read alone changed **one** of 163 documents —
+and not one of the three the census names. Seven chart parts over three decks state
+`tickLblPos="none"` and in *every one* the axis is also `c:delete val="1"`, or is a second `b`
+axis the reader does not pair; the one document that moved,
+`southern-classic-kennesaw-state-university-final.pptx`, moved on the half-value-label rule
+instead, its charts deleting the category axis outright. **The distinction is real and the
+corpus does not exercise it.** The other three fixes took the changed set to 8 of 163, and the fourth
+kept it at the same 8. Over those eight, net `|ink|%`:
+
+| document | base | +3 | +4 |
+|---|---:|---:|---:|
+| `Demick_JetBlue.pptx` | 39.24 | 38.99 | **36.55** |
+| `171128IPAP.pptx` | 16.29 | 15.95 | 15.95 |
+| `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` | 17.25 | 17.23 | 17.21 |
+| the other five | | | +0.13 between them |
+| **net** | | −0.53 | **−2.94** |
+
+No major-page count moved on any of them and no verdict changed. **`Demick_JetBlue` alone is
+−2.69 of the −2.94**, and it is the deck round twenty-four's work made worse by +10.31 — so the
+band under its plot area is where its remaining error is, exactly as that round predicted, and
+two thirds of that deck's regression is now back.
+
+### Cross-track
+
+The rotation sign, the secondary title and the bottom title all live below the family libraries
+and reach `SheetChart` and `FrameChart` — unlike a weight, which those two document in code that
+they drop. Rendered at both commits with `SOURCE_DATE_EPOCH` set and byte-compared over all 371
+words and sheets documents: **5 changed** — four `.xls`/`.xlsx` and one DOCX, which is every
+document either track holds with a chart on it. Against `soffice`'s own PDF of each, `|ink|%`
+moves +0.03, +0.02, +0.37, −0.22 and 0.00, **net +0.20**, with every major-page count unchanged
+and no verdict moved. The +0.37 is `Template Pilot Logbook JAR-FCL V3.0.xls`, which the first
+three fixes did not touch at all and which the bottom title's placement moves — 0.37 of 26.99 on
+a document already failing by a wide margin. Recorded rather than reverted: the placement is
+verbatim from `lcl_createTitle` and its own probe error went 30.30 → 6.53.
+
+### A trap walked into with the skill open
+
+The verification cycle puts each defect back and the `git checkout --` that takes it out again
+**discards the file rather than the patch**, so an uncommitted fix in that file goes with it.
+That is written down in `corpus-batches` and it still cost a commit here: the bottom-title
+change was wiped and its commit carries only the test. It was caught by the per-project run at
+the end — `Paperless.Core.Tests` 263 of 264 on a tree whose source read as finished — which is
+the argument for running that even when nothing looks wrong.
+
+### What the next round should take, in order
+
+1. **`PlotAreaOf` should be `VDiagram::adjustInnerSize`, not a reservation per edge.**
+   LibreOffice lays the diagram out at full size, measures the bounding box of what the axes
+   drew, and shrinks the inner rectangle by the overflow — twice, with a floor of a third of the
+   available rectangle. The residue on `Demick_JetBlue`'s five chart pages is 12.73, 38.72, 4.88,
+   12.73 and 4.87 pt of bottom edge, and the split is exactly rotated against upright labels.
+2. **A stated weight on axis labels, legend or data labels** — 36 of 61 chart parts over 7
+   documents, unchanged from last round, design still recorded in
+   `Paperless.Presentations/TODO.md`.
+3. **The legend row pitch's rate**, still the open half of the 96 dpi grid.
