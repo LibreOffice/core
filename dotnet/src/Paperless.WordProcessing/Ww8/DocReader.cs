@@ -266,38 +266,62 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         Fill(headers, stated.Headers);
         Fill(footers, stated.Footers);
 
+        bool titlePage = Sections[section].HasDifferentFirstPage;
+
         Complete(headers);
         Complete(footers);
 
         PageFurnitureSet set = new(headers, footers);
         return set.IsEmpty ? null : set;
 
-        // "Cannot have left without right", as `Read_HdFt` labels it (#i17196#, ww8par.cxx:2528): every
-        // slot the section turns on gives the *master* page a running head, and the master's is the one
-        // the Default slot holds. So a section stating an even-page header alone still has one on its odd
-        // pages — an empty one, which draws nothing and occupies the band.
-        //
-        // Only when the Default slot is otherwise unfilled: a slot inherited from an earlier section is
-        // what LibreOffice's own CopyPageDescHdFt puts there, so an inherited head wins over a blank.
-        //
-        // The even slot is deliberately not completed the same way. `Read_HdFt` gives the *left* page a
-        // head only on the even iteration itself, so a facing-pages section with no even story has no
-        // head on its even pages at all — which is not the same as an empty one, and cannot be said with
-        // this dictionary, whose absent slot means "fall back to Default".
+        // The two rules `Read_HdFt` applies to every slot it turns on (ww8par.cxx:2519-2545), which
+        // between them decide what the master page and the title page carry when only one page kind has
+        // a story of its own.
         void Complete(Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into)
         {
-            if (into.ContainsKey(Model.PageFurnitureSlot.Default)) return;
-
-            bool enabled =
-                (_reader.DocumentProperties.HasFacingPages
+            // Which of this kind's slots the section has turned on, after inheritance. The even slot
+            // counts only under `fFacingPages` and the first only under a title page, because those are
+            // the conditions the synthesised `grpfIhdt` carries their bits under.
+            bool enabled = into.ContainsKey(Model.PageFurnitureSlot.Default)
+                || (_reader.DocumentProperties.HasFacingPages
                     && into.ContainsKey(Model.PageFurnitureSlot.Even))
-                || (Sections[section].HasDifferentFirstPage
-                    && into.ContainsKey(Model.PageFurnitureSlot.First));
+                || (titlePage && into.ContainsKey(Model.PageFurnitureSlot.First));
 
             if (!enabled) return;
 
-            into[Model.PageFurnitureSlot.Default] =
-                BlocksOf(fonts, _reader.BlankFurniture(section), widths);
+            // "Cannot have left without right", as `Read_HdFt` labels it (#i17196#): every slot the
+            // section turns on gives the *master* page one too, and the master's is what the Default
+            // slot holds. So a section stating an even-page header alone still has one on its odd pages
+            // — an empty one, which draws nothing and occupies the band.
+            //
+            // Only where Default is otherwise unfilled: a slot inherited from an earlier section is what
+            // LibreOffice's own CopyPageDescHdFt puts there, and an inherited head beats a blank.
+            //
+            // The even slot is deliberately not completed the same way. `Read_HdFt` gives the *left*
+            // page one only on the even iteration itself, so a facing-pages section with no even story
+            // has none on its even pages — which this dictionary cannot say, an absent slot meaning
+            // "fall back to Default".
+            if (!into.ContainsKey(Model.PageFurnitureSlot.Default))
+            {
+                into[Model.PageFurnitureSlot.Default] =
+                    BlocksOf(fonts, _reader.BlankFurniture(section), widths);
+            }
+
+            // And a title page never borrows the master's. `Read_HdFt` fills the first-page format from
+            // the first-page story or not at all — only the `bUseFirst` iteration puts text in one — so
+            // a section with a title page and no first-page story of this kind gets a blank one.
+            //
+            // Measured against LibreOffice's own flat-ODF export of the `title-page-no-head.doc`
+            // fixture: `<style:header-first><text:p/></style:header-first>` beside a populated
+            // `<style:header>`. The corpus case is `150_5300_13_chg12.doc`, whose first section states a
+            // first-page footer and no first-page header — LibreOffice's page one carries no running
+            // head, and falling back to the master's put "9/29/06 AC 150/5300-13 CHG 10" across the top
+            // of its title page.
+            if (titlePage && !into.ContainsKey(Model.PageFurnitureSlot.First))
+            {
+                into[Model.PageFurnitureSlot.First] =
+                    BlocksOf(fonts, _reader.BlankFurniture(section), widths);
+            }
         }
 
         void Fill(
