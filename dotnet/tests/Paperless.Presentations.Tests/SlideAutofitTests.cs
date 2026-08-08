@@ -326,6 +326,64 @@ public class SlideAutofitTests
         Pitch(placed).Points.ShouldBe(expectedPitchPoints, tolerance: 0.001);
     }
 
+    /// <summary>
+    /// The fit's spacing scale reaches a paragraph's own space, not only its lines.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The wiring of <c>SlideTextLayout.ScaledSpace</c>, so a machine with no LibreOffice still
+    /// covers it. What the scale <em>should</em> be is measured against the reference's own PDF
+    /// in <c>SlideAutofitParagraphSpaceComparisonTests</c>.
+    /// </para>
+    /// <para>
+    /// The body is <see cref="AWrappingBodyLandsOnTheReferencesSizeAndSpacing"/>'s — three
+    /// wrapping paragraphs at 20 pt stating 80 per cent line spacing — with a 12 pt space above
+    /// each. <strong>The three box heights are one per spacing scale the search can settle on</strong>,
+    /// which is what makes this able to fail: at 175 pt it keeps full spacing and the space is
+    /// untouched, at 220 pt it takes nine-tenths and at 200 pt four-fifths. A box at full spacing
+    /// alone would pass under either reading.
+    /// </para>
+    /// <para>
+    /// 12 pt is 423.33 hundredths of a millimetre; unscaled it reaches the page as 424 and the two
+    /// scaled values are round(423 x 0.9) = 381 and round(423 x 0.8) = 338, because the scale is
+    /// applied to the whole unit the draw layer holds. The
+    /// gap between the last line of one paragraph and the first of the next is one line plus that
+    /// space, so subtracting the pitch leaves the space alone.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData(175, 424)]
+    [InlineData(220, 381)]
+    [InlineData(200, 338)]
+    public void TheFitsSpacingScaleReachesAParagraphsOwnSpace(
+        double boxHeightPoints, long expectedSpaceMm100)
+    {
+        SlideTextBody body = Wrapping(20, paragraphs: 3, proportion: 0.8) with { };
+        body = body with
+        {
+            Paragraphs = [.. body.Paragraphs.Select(
+                p => p with { SpaceBefore = Length.FromPoints(12) })],
+        };
+
+        DocRect area = new(
+            Length.Zero, Length.Zero, Length.FromPoints(360), Length.FromPoints(boxHeightPoints));
+
+        List<PlacedGlyphRun> placed = SlideTextLayout.Place(body, area, new SlideFonts());
+        placed.ShouldNotBeEmpty();
+
+        List<long> baselines = [.. placed.Select(p => p.Run.Origin.Y.Mm100).Distinct().Order()];
+        baselines.Count.ShouldBeGreaterThan(3);
+
+        long pitch = Pitch(placed).Mm100;
+        long widest = 0;
+        for (int i = 1; i < baselines.Count; i++)
+        {
+            widest = Math.Max(widest, baselines[i] - baselines[i - 1]);
+        }
+
+        (widest - pitch).ShouldBe(expectedSpaceMm100, $"the space above a paragraph in a {boxHeightPoints} pt box");
+    }
+
     /// <summary>The smallest gap between two distinct baselines, which is one line's height.</summary>
     /// <remarks>
     /// The smallest rather than the first, because a paragraph boundary carries the paragraph's
