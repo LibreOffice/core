@@ -112,12 +112,13 @@ public sealed partial class SlideChartFaceComparisonTests : IDisposable
     public void TheThemesFaceDecidesTheValueLabelsAdvances()
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+        Assert.SkipUnless(PdfWords.IsAvailable, "pdftotext is not installed");
 
         const string deck = "chart-face-theme-minor.pptx";
 
-        double ours = DigitAdvance(PdfTextRuns.Read(Ours(deck)));
+        double ours = DigitAdvance(PdfWords.Read(Ours(deck)));
         double theirs = DigitAdvance(
-            PdfTextRuns.Read(_libreOffice.ConvertToPdf(Corpus.Require(deck), _workDirectory)));
+            PdfWords.Read(_libreOffice.ConvertToPdf(Corpus.Require(deck), _workDirectory)));
 
         // Ours against the literal first, so this tests Paperless rather than an agreement.
         ours.ShouldBe(MonospacedDigitAdvance, 0.1, "our digit advance");
@@ -125,37 +126,29 @@ public sealed partial class SlideChartFaceComparisonTests : IDisposable
     }
 
     /// <summary>
-    /// One digit's advance: the gap between the pens of the value axis' three- and two-digit
-    /// labels, which share a right edge.
+    /// One digit's advance: the gap between the pens of the value axis' <c>100</c> and <c>80</c>
+    /// labels, which are right-aligned on the same edge.
     /// </summary>
     /// <remarks>
-    /// Each group is the <em>commonest</em> pen among the runs of that glyph count rather than
-    /// the only one, and is required to hold at least three of them — the axis draws five
-    /// three-digit labels and four two-digit ones. Requiring a single pen instead failed on our
-    /// own output, because a rotated axis title contributes runs whose <c>Td</c> is in its own
-    /// rotated space and lands in the same band; taking the mode is what makes the measurement
-    /// about the labels rather than about everything to the left of the plot area.
+    /// <para>
+    /// Both are found by their text, because a glyph count cannot be compared across the two
+    /// writers: <c>PdfTextRuns</c> counts hexadecimal show strings and LibreOffice writes literal
+    /// ones, so every reference run reports zero glyphs. A word's own left edge is poppler's
+    /// reading of the pen at the start of that word, which is the same quantity on both sides.
+    /// </para>
+    /// <para>
+    /// Measured: 6.009 for ours and 6.010 for the reference against 5.556 for the fixed face this
+    /// replaces, so the tolerance below separates them by four times over.
+    /// </para>
     /// </remarks>
-    private static double DigitAdvance(List<PdfTextRun> runs)
+    private static double DigitAdvance(List<PdfWord> words)
+        => Pen(words, "80") - Pen(words, "100");
+
+    private static double Pen(List<PdfWord> words, string label)
     {
-        List<PdfTextRun> axis = [.. runs.Where(r => r.PageIndex == 0 && r.X < 150.0)];
-
-        return CommonestPen(axis, glyphs: 2) - CommonestPen(axis, glyphs: 3);
-    }
-
-    /// <summary>The pen shared by most of the runs holding <paramref name="glyphs"/> glyphs.</summary>
-    private static double CommonestPen(List<PdfTextRun> runs, int glyphs)
-    {
-        IGrouping<double, PdfTextRun> flush = runs
-            .Where(r => r.GlyphCount == glyphs)
-            .GroupBy(r => Math.Round(r.X, 2))
-            .MaxBy(group => group.Count())
-            ?? throw new InvalidOperationException($"no {glyphs}-glyph runs left of the plot area");
-
-        flush.Count().ShouldBeGreaterThanOrEqualTo(
-            3, $"value-axis labels flush at x = {flush.Key}");
-
-        return flush.Key;
+        List<PdfWord> found = [.. words.Where(w => w.PageIndex == 0 && w.Text == label)];
+        found.Count.ShouldBe(1, $"one label reading {label} on the first slide");
+        return found[0].Left;
     }
 
     /// <summary>Every <c>/BaseFont</c> in the file, subset prefix stripped.</summary>

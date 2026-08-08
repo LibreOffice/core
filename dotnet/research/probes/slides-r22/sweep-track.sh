@@ -76,7 +76,17 @@ one() {
     if [ -f "$o" ] && [ -f "$r" ] && [ "$op" = "$rp" ]; then
       python3 "$DIFF" "$o" "$r" --outdir "$OUT/cmp/$id" 2>/dev/null \
         | awk -v p="${f#"$ROOT"/}" -v n="$op" -v vv="$v" '
-            /^[0-9]/ { ink += $3; aink += $4; if ($6 == "MAJOR") maj++ }
+            # A *page* row only: a page number, then two numbers. The looser /^[0-9]/ that
+            # this replaces also matched the summary line the tool ends with — "10 pages, 3
+            # with major differences" — whose third field is the major-page count. So the
+            # signed ink% of every document came out inflated by exactly one per major page.
+            # That is the defect round twenty reported in its own ink.tsv, still in the script
+            # three rounds later, and it survives because the *unsigned* column is unaffected:
+            # the fourth field there is "with", which is not a number and adds nothing. Which
+            # is also why the aggregate invariant below did not catch it.
+            $1 ~ /^[0-9]+$/ && $2 ~ /^[0-9.]+$/ && $3 ~ /^-?[0-9.]+$/ {
+                ink += $3; aink += $4; if ($6 == "MAJOR") maj++
+            }
             END { printf "%s\t%s\t%.2f\t%.2f\t%d\t%s\n", p, n, ink, aink, maj, vv }' >> "$OUT/ink.tsv"
       rm -rf "$OUT/cmp/$id"
     fi
@@ -111,7 +121,15 @@ awk -F'\t' '{s+=$3; a+=$4; m+=$5} END{printf "INK %.2f  |INK| %.2f  MAJOR PAGES 
 # |ink|% is a sum of absolute values and ink% is the signed sum of the same terms, so the
 # first can never be the smaller. Round twenty's ink.tsv violated this and the aggregate was
 # read for a round before anyone checked.
-awk -F'\t' '{s+=$3; a+=$4} END{if (a + 0.005 < (s<0?-s:s)) { print "AGGREGATE INVARIANT VIOLATED: |ink| " a " < |ink%| of " s; exit 1 }}' "$OUT/ink.tsv" \
-  || echo "  ^ discard this sweep" >&2
+# Per document as well as in aggregate. The aggregate alone is far too forgiving: the
+# per-page inflation above put 9.68 against 7.26 on one document while the track totals
+# still satisfied it, because most documents have signed and unsigned columns far apart.
+awk -F'\t' '
+  { s += $3; a += $4 }
+  ($4 + 0.005 < ($3 < 0 ? -$3 : $3)) { print "INVARIANT VIOLATED on " $1 ": |ink| " $4 " < |ink%| " $3; bad++ }
+  END {
+    if (a + 0.005 < (s < 0 ? -s : s)) { print "INVARIANT VIOLATED in aggregate: |ink| " a " < |ink%| " s; bad++ }
+    if (bad) exit 1
+  }' "$OUT/ink.tsv" || echo "  ^ discard this sweep" >&2
 
 python3 "$(dirname "$(readlink -f "$0")")/size-census-fold.py" "$OUT/census.tsv" 
