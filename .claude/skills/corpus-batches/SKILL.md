@@ -897,6 +897,18 @@ The failure looks exactly like a real regression introduced by the round's own c
 the expensive part: the natural next move is to start bisecting a fix that is fine. Rebuild
 after the defect comes back out, before the run that produces the numbers you will report.
 
+Two more ways the same cycle destroys work, both measured:
+
+- **`git checkout -- <file>` to undo a reintroduced defect wipes any *uncommitted* fix in that
+  file too.** It does not undo the patch; it discards the file. An agent lost a working fix this
+  way. **Commit before reintroducing, not after** — then the undo is `git checkout` against a
+  commit that holds the real work.
+- **`git add -A` while the patch is applied commits the defect.** Stage explicit paths.
+
+The through-line is that the reintroduction cycle deliberately puts the tree in a state that
+looks like a mistake, and every routine gesture for cleaning up a mistake is then wrong. Commit
+first and the cycle has nothing to lose.
+
 The same shape catches anyone who edits a script while it is running — a sweep's summary died
 mid-run that way in the same round, and its data had to be recomputed from the per-document
 files. Neither is subtle once seen; both cost an hour when they are not.
