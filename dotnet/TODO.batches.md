@@ -7647,17 +7647,28 @@ constant.
 
 | slides, 163 documents | base `7b3704e59` | + auto-text | + wrap |
 |---|---:|---:|---:|
-| word gate | 151 | 151 | WRAP_MATCH |
-| `ink%` | 1263.67 | 1267.60 | WRAP_INK |
-| `\|ink\|%` | 1583.49 | 1588.12 | WRAP_AINK |
-| major pages | 428 | **427** | WRAP_MAJOR |
-| census, unexplained | 304 over 91 | **303** over 91 | WRAP_CENSUS |
+| word gate | 151 | 151 | 151 |
+| `ink%` | 1263.67 | 1267.60 | 1271.64 |
+| `\|ink\|%` | 1583.49 | 1588.12 | 1592.18 |
+| major pages | 428 | **427** | **427** |
+| census, unexplained | 304 over 91 | **303** over 91 | **303** over 91 |
 
 Verdicts changed: **0**. Every batch holds its count.
 
-**Reach measured by rendering: 157 of 163 byte-identical, 6 changed**, all six chart decks.
-Five of the six net −1.56 of `|ink|%`; the whole of the aggregate regression is
-`Demick_JetBlue.pptx` at +6.19, and the table above says why — its titles stopped fitting.
+**Reach measured by rendering: 156 of 163 byte-identical, 7 changed**, all seven chart decks
+— six from the auto-text table and a seventh, `bitesize-writing-a-report.pptx`, from the wrap.
+Six of the seven net −**1.62** of `|ink|%`. The whole of the aggregate regression is
+`Demick_JetBlue.pptx` at **+10.31**, and it is the deck the table above measures: its five
+charts' titles stopped fitting on one line at the correct size, and the wrap that then places
+them correctly costs another 4.12 because the *bottom* of its plot area is still 38.72 pt out.
+
+**So the aggregate went the wrong way while the thing being fixed became right**, on one
+document out of 163, and I am keeping both changes. The auto-text values are LibreOffice's own,
+read out of its `odp` export rather than fitted; the wrap's 0.8 is verbatim from
+`ChartView.cxx` and puts our break within 1.8 pt of the reference's. `|ink|%` is a page-share
+metric: shortening our plot area from 170.5 pt to 149.4 pt against the reference's 187.4
+displaces more ink than leaving its top edge 21.8 pt wrong did, because the error that decides
+its *height* is at the other end and neither change touches it.
 
 **What is left on that deck is the band under the plot, not the band above it.** With both
 changes in, the plot area's *bottom* edge on the same five pages is 12.73, 38.72, 4.88, 12.73
