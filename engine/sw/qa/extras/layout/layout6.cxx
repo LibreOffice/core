@@ -31,6 +31,7 @@
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <bodyfrm.hxx>
+#include <tabfrm.hxx>
 #include <sortedobjs.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
@@ -1531,6 +1532,66 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf156724)
     assertXPath(pXmlDoc, "/root/page[2]/ftncont", 1);
     assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 1);
     assertXPath(pXmlDoc, "/root/page", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16066_addRowsUnderOmittedHeading)
+{
+    // Rows added to a table whose heading is left off the page its first row needs.
+    createSwDoc("Cool16066_addRowsUnderOmittedHeading.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
+
+    // Without the fix this crashed on the first insertion, dereferencing the null
+    // GetFirstNonHeadlineRow() of a follow that holds nothing but its repeated heading.
+    for (int i = 0; i < 25; ++i)
+    {
+        pWrtShell->EndOfSection(false);
+        dispatchCommand(mxComponent, u".uno:InsertRowsAfter"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // The rows are there, spread over the pages they need.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_GREATEREQUAL(3, countXPathNodes(pXmlDoc, "//page"));
+    CPPUNIT_ASSERT_GREATEREQUAL(25, countXPathNodes(pXmlDoc, "//body/tab/row"));
+
+    // Without the fix the row insertion pasted a fresh heading into every follow, and one was
+    // left holding nothing but that repeat, taking a page of its own.
+    int nLoneHeadings = 0;
+    for (const SwFrame* pPage = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
+         pPage; pPage = pPage->GetNext())
+        for (const SwFrame* pBody = static_cast<const SwLayoutFrame*>(pPage)->Lower(); pBody;
+             pBody = pBody->GetNext())
+            if (pBody->IsBodyFrame())
+                for (const SwFrame* pFr = static_cast<const SwLayoutFrame*>(pBody)->Lower(); pFr;
+                     pFr = pFr->GetNext())
+                    if (pFr->IsTabFrame() && static_cast<const SwTabFrame*>(pFr)->IsFollow()
+                        && !static_cast<const SwTabFrame*>(pFr)->GetFirstNonHeadlineRow())
+                        ++nLoneHeadings;
+    CPPUNIT_ASSERT_EQUAL(0, nLoneHeadings);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16066_headlineAndUnsplittableRow)
+{
+    // A table with a repeated headline, whose second row may not break across pages, and is
+    // taller than what a page has left once the headline is repeated on it.
+    createSwDoc("Cool16066_headlineAndUnsplittableRow.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Without the fix the row was kept under the headline, reaching past the bottom of the page
+    // and hiding everything below it: the table ended at 18974, the body at 15987.
+    const sal_Int32 nBodyBottom
+        = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "bottom").toInt32();
+    const sal_Int32 nTableBottom
+        = getXPath(pXmlDoc, "//page[1]/body/tab/infos/bounds", "bottom").toInt32();
+    CPPUNIT_ASSERT_LESSEQUAL(nBodyBottom, nTableBottom);
+
+    // The row gets the next page to itself, whole, with the headline left off it.
+    assertXPath(pXmlDoc, "//page", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]//SwLineLayout[@portion='Repeated headline']", 1);
+    assertXPath(pXmlDoc, "//page[2]//SwLineLayout[@portion='Repeated headline']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)

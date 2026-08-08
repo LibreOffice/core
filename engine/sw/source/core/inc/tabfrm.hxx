@@ -229,6 +229,9 @@ public:
     bool IsInHeadline( const SwFrame& rFrame ) const;
     SwRowFrame* GetFirstNonHeadlineRow() const;
 
+    /// Whether rRow could still be shown whole on a page carrying the repeated headlines
+    bool RowFitsUnderHeadline(const SwRowFrame& rRow) const;
+
     bool IsLayoutSplitAllowed() const;
 
     // #i29550#
