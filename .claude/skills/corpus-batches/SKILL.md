@@ -520,6 +520,24 @@ Check headroom before starting a sweep: a whole-corpus run writes two PDFs per d
 several agents' worth of these accumulate quickly. The disposable part is the rendered PDFs
 (`<outdir>/ours`, `<outdir>/ref`, `<outdir>/prof*`); the TSV is what you keep.
 
+#### But do not delete them until everything that reads them has run
+
+"Rendered PDFs are disposable, TSVs are what you keep" is right and it is not the whole rule,
+because some analyses need the *material* rather than the numbers. A round lost its size census
+exactly this way: the census was killed part-way to let the whole-track sweep finish under
+load 23, and by the time it could be restarted the sweep's `ours/` directories — 163 PDFs a
+side — had been cleaned up. The numbers survived; the thing the census reads did not. The
+figure it would have produced stayed a round stale, and the scoreboard had to say so.
+
+Two habits close it, and the first is better:
+
+- **Run per-page analyses inside the sweep's own comparison pass**, while both renderings are
+  on disk anyway, rather than as a second pass afterwards. That is a sequencing change, not a
+  new tool.
+- If an analysis must run afterwards, **keep the renderings until it has**, and say in the
+  commit that they are being kept and why — otherwise the next disk-pressure cleanup takes them
+  and looks entirely reasonable doing it.
+
 ### A sweep and a build cannot share a tree
 
 `batch-check.sh` invokes the CLI once per document over tens of minutes. Rebuild that tree

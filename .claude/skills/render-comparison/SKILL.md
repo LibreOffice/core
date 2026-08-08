@@ -374,6 +374,19 @@ So a region only counts when **one side has substantially more ink in it than th
 
 `shifted` means the same ink in a different place — real, usually a font or spacing difference, and the extraction comparison is a better instrument for it than more pixels.
 
+#### An aggregate `|ink|%` can never be smaller than the signed `ink%` beside it
+
+`page_ink` is printed as `abs(sum(...))`, so summing the unsigned column cannot come out below
+the signed one. That makes a free correctness check on any table built from these numbers, and
+it is worth running, because a round's `ink.tsv` shipped a derived column violating it: the
+column totalled 1264.88 where recomputing the same sum gives 1692.88, off by **exactly one per
+major page per document** — a count summed into a percentage. Nothing depended on it, and the
+next agent caught it only because the invariant is cheap to check.
+
+Check it on aggregates you produce *and* on aggregates you inherit. An inherited number with a
+plausible magnitude and no invariant behind it is the easiest thing in this project to carry
+forward unexamined.
+
 It writes `cmp/ours/page-NNN.png`, `cmp/ref/page-NNN.png`, and `cmp/diff/page-NNN.png` — the
 reference faded to grey with each differing region boxed in red, which is the artefact to
 look at when the text report is ambiguous. Exit status is 0 when no page differs majorly, 1
