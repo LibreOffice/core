@@ -13,8 +13,15 @@ tree's before the run started.
 | `reproducibility-back-to-back.tsv` | every document rendered twice in succession, same binary |
 | `reproducibility-pinned.tsv` | every document rendered twice under two time zones, `SOURCE_DATE_EPOCH` set, **no masking at all** |
 | `clock-dependence.tsv` | the same two time zones with the variable unset and timestamps masked |
+| `sweep-binary-equals-final-tree.tsv` | the after-sweep's CLI against the final tree's, unpinned |
 
-All six: 171 rows, no duplicate path.
+All seven: 171 rows, no duplicate path.
+
+The last one closes a seam that would otherwise be left open. The after-sweep ran against a
+snapshot taken before the pinned instant was changed from local time to UTC, so the binary it
+measured is not bit-for-bit the committed tree. The two differ only on a branch taken when
+`SOURCE_DATE_EPOCH` is set, and no sweep sets it — **171 of 171 byte-identical**, so the sweep's
+verdicts describe the tree that is committed.
 
 ## The baseline, and it reproduces exactly
 
