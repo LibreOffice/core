@@ -494,8 +494,39 @@ public sealed partial record ChartPlot
     /// <summary>The size the axis titles are set at; LibreOffice's default is 9 pt.</summary>
     public Length AxisTitleSize { get; init; } = Length.FromPoints(9);
 
-    /// <summary>The size the axis labels and legend entries are set at; the default is 10 pt.</summary>
+    /// <summary>The size the axis labels are set at; the default is 10 pt.</summary>
     public Length LabelSize { get; init; } = Length.FromPoints(10);
+
+    /// <summary>
+    /// The size a legend entry's name is set at, when the legend states one of its own.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Every length in the legend is a fraction of this and not of
+    /// <see cref="LabelSize"/>.</strong> <c>lcl_placeLegendEntries</c> takes its font height from
+    /// the legend's own character properties (<c>VLegend.cxx:263-320</c>) and derives the padding
+    /// <c>0.33</c>, the column gap <c>0.66</c>, the key gap <c>0.22</c>, the row gap <c>0.20</c>
+    /// and the key's <c>0.6</c> square from it — so a legend set larger than the axis labels is
+    /// wider, taller, and pushes the plot rectangle's right edge in by the difference.
+    /// </para>
+    /// <para>
+    /// Measured on <c>research/probes/slides-r23</c>'s decks, which vary only the legend's own
+    /// <c>sz</c>: the reference's key is <strong>4.20, 5.98 and 8.39 pt</strong> and its row pitch
+    /// <strong>10.34, 14.09 and 19.33 pt</strong> at a 7, 10 and 14 pt legend font, while ours was
+    /// 6.00 and 14.18 at all three — the axis label size, which the probe never changes. 22 of the
+    /// 61 chart parts in the slides corpus state a legend font size, at 9, 11, 12, 14, 15, 16, 18
+    /// and 22 pt.
+    /// </para>
+    /// <para>
+    /// Null rather than a 10 pt default so that a reader which does not set it keeps whatever it
+    /// set <see cref="LabelSize"/> to, exactly as before this existed. Only the readers that were
+    /// taught to look for it change behaviour.
+    /// </para>
+    /// </remarks>
+    public Length? LegendSize { get; init; }
+
+    /// <summary>The size a legend entry's name is set at, falling back to the axis labels'.</summary>
+    public Length LegendFont => LegendSize ?? LabelSize;
 
     /// <summary>
     /// The family the chart's own text is set in, or null when the file states none.

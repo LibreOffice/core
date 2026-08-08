@@ -185,6 +185,11 @@ public static class DrawingChartPlot
             TitleSize = SizeOf(Child(chart, "title")) ?? Length.FromPoints(13),
             AxisTitleSize = AxisTitleSizeOf(plotArea) ?? Length.FromPoints(9),
             LabelSize = AxisLabelSizeOf(plotArea) ?? Length.FromPoints(10),
+
+            // The legend's own c:txPr, not the axes' — every length in the legend is a fraction
+            // of it. Read from the legend element directly rather than through its descendants,
+            // because a c:legendEntry carries a c:txPr of its own and precedes the legend's.
+            LegendSize = SizeOf(Child(Child(chart, "legend"), "txPr")),
             TextFamily = FamilyOf(chartSpace, theme),
             // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
             // its own — the frame is the space — which is what keeps it out of the stretch an

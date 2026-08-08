@@ -2708,15 +2708,15 @@ public static partial class ChartLayout
                         columnX + box.Key.Width + box.KeyGap,
                         rowY + (box.RowHeight / 2)),
                     ChartLabelAnchor.LeftMiddle,
-                    plot.LabelSize,
+                    plot.LegendFont,
                     AxisColour));
 
-                Length text = MeasureLines(measurer, name, plot.LabelSize).Width;
+                Length text = MeasureLines(measurer, name, plot.LegendFont).Width;
                 if (text > widest) widest = text;
             }
 
             columnX += box.Key.Width + box.KeyGap + widest
-                       + Larger(Millimetre, plot.LabelSize * 0.66);
+                       + Larger(Millimetre, plot.LegendFont * 0.66);
         }
     }
 
@@ -2871,7 +2871,7 @@ public static partial class ChartLayout
         List<(string Name, Colour? Fill, Colour? Line, Length Width)> named = Entries(plot);
         if (named.Count == 0) return default;
 
-        Length font = plot.LabelSize;
+        Length font = plot.LegendFont;
         Length paddingX = Larger(Millimetre, font * 0.33);
         Length offsetX = Larger(Millimetre, font * 0.66);
         Length paddingY = Larger(Millimetre, font * 0.20);

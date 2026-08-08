@@ -214,6 +214,10 @@ public static class OdfChartPlot
                 ?? Length.FromPoints(9),
             LabelSize = styles.FontSize(Attribute(valueAxis, OdfNamespaces.Chart, "style-name"))
                 ?? Length.FromPoints(10),
+
+            // The legend's own style, not the value axis'. See ChartPlot.LegendSize.
+            LegendSize = styles.FontSize(Attribute(
+                Child(chart, OdfNamespaces.Chart, "legend"), OdfNamespaces.Chart, "style-name")),
             PlotArea = Region(plotArea),
             Space = SpaceOf(chart),
 
