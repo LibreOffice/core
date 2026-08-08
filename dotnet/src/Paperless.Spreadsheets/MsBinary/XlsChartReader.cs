@@ -22,6 +22,7 @@ internal static class BiffChartRecords
     public const ushort Scatter = 0x101B;
     public const ushort Axis = 0x101D;
     public const ushort ValueRange = 0x101F;
+    public const ushort LabelRange = 0x1020;
     public const ushort AxisLine = 0x1021;
     public const ushort Text = 0x1025;
     public const ushort ObjectLink = 0x1027;
@@ -92,6 +93,7 @@ internal sealed class XlsChartBuilder
     private ChartBarDirection _direction = ChartBarDirection.Column;
     private bool _stacked;
     private ChartScaleRequest _valueScale;
+    private ChartAxisText _categoryText = DefaultCategoryText;
     private bool _hasType;
     private bool _hasLegend;
 
@@ -191,6 +193,10 @@ internal sealed class XlsChartBuilder
                 ReadValueRange(stream);
                 break;
 
+            case BiffChartRecords.LabelRange when _axis == AxisX:
+                ReadLabelRange(stream);
+                break;
+
             case BiffChartRecords.Legend:
                 _hasLegend = true;
                 break;
@@ -285,6 +291,7 @@ internal sealed class XlsChartBuilder
             Categories = categories,
             Series = series,
             ValueScale = _valueScale,
+            CategoryAxisText = _categoryText,
             ValueGrid = _valueGrid ? GridColour : null,
             CategoryGrid = _categoryGrid ? GridColour : null,
             Legend = _hasLegend ? ChartLegendPosition.Right : ChartLegendPosition.None,
@@ -423,6 +430,38 @@ internal sealed class XlsChartBuilder
     }
 
     /// <summary>
+    /// Reads <c>CHLABELRANGE</c>, whose label frequency decides how the category labels are set.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>XclImpChLabelRange::Convert</c> (<c>sc/source/filter/excel/xichart.cxx:3039-3047</c>)
+    /// turns one field into three properties and a comment that says why: <em>do not overlap text
+    /// unless all labels are visible</em>, and the same for line breaking. So a chart that labels
+    /// every category — which is the default and is what every chart in the corpus states — draws
+    /// all of them, overlapping, and none of the thinning, rotating or staggering in
+    /// <see cref="ChartAxisLabels"/> happens at all.
+    /// </para>
+    /// <para>
+    /// <strong>This is worth 25 words a page on a checklist with eight chart pages</strong>, and
+    /// it is invisible to anything but a drawn comparison: the labels our layout dropped were
+    /// dropped because they collide, which is the correct answer to a question BIFF does not ask.
+    /// The frequency itself is not honoured, by either renderer — the C++ carries
+    /// <c>//TODO #i58731# show n-th category</c> beside this and thins by collision instead.
+    /// </para>
+    /// </remarks>
+    private void ReadLabelRange(BiffRecordReader stream)
+    {
+        stream.Skip(2);
+        bool everyLabel = stream.ReadUInt16() == 1;
+
+        _categoryText = new ChartAxisText(
+            Rotation: 0.0,
+            OverlapAllowed: everyLabel,
+            LineBreakAllowed: everyLabel,
+            Stagger: ChartLabelStagger.SideBySide);
+    }
+
+    /// <summary>
     /// Which axis a major gridline belongs to.
     /// </summary>
     /// <remarks>
@@ -488,6 +527,20 @@ internal sealed class XlsChartBuilder
     private const int LinkTitle = 1;
     private const int LinkValueAxis = 2;
     private const int LinkCategoryAxis = 3;
+
+    /// <summary>
+    /// What a category axis states when it carries no <c>CHLABELRANGE</c> at all.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclChLabelRange</c>'s own constructor (<c>sc/source/filter/excel/xlchart.cxx:268-274</c>)
+    /// sets <c>mnLabelFreq</c> to 1, so an axis that says nothing labels every category and
+    /// therefore allows overlap — the same answer as an axis that states the default.
+    /// </remarks>
+    private static readonly ChartAxisText DefaultCategoryText = new(
+        Rotation: 0.0,
+        OverlapAllowed: true,
+        LineBreakAllowed: true,
+        Stagger: ChartLabelStagger.SideBySide);
 
     private const int AxisX = 0;
     private const int AxisY = 1;
