@@ -125,3 +125,16 @@ everywhere:
 
 Every count is the briefed known-good except Spreadsheets, which is 446 + the 24 new
 `SheetFontSizeDeviceTests` cases.
+
+## Reach, measured by rendering rather than estimated
+
+All 171 sheets documents rendered by both CLIs — the `9c5bef08c` snapshot and the fixed one —
+and their `Tf` operands compared position by position. All 171 rendered on both sides.
+
+- **48 of 171 documents** draw at least one glyph run at a different size.
+- **269 361 text records** change, of 417 931 in those 48 documents.
+- 123 documents are byte-identical in their drawn sizes.
+
+Every one of those 48 keeps the verdict it had. That is the shape of this class: it is a
+fidelity defect the page-count/word-count gate is structurally blind to, and quoting the 48 as
+"progress" would be quoting a number the scoreboard cannot see.
