@@ -156,6 +156,31 @@ public sealed record PageParagraph : PageBlock
     /// </remarks>
     public Colour? Shading { get; init; }
 
+    /// <summary>
+    /// The rules drawn round the paragraph, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Unlike <see cref="Shading"/> this is not only a painting attribute: a top or bottom border keeps a
+    /// measured distance from the text, so it lengthens the paragraph and can decide a page break. The
+    /// left and right rules draw without measuring — LibreOffice grows the box outward past the page
+    /// margin rather than narrowing the text — so only <see cref="BorderAbove"/> and
+    /// <see cref="BorderBelow"/> reach the paginator.
+    /// </para>
+    /// <para>
+    /// Already joined by the reader where two consecutive paragraphs are bordered alike, because the join
+    /// changes both the picture and the height and the two must agree: see
+    /// <see cref="ParagraphBorderSet.Join"/>.
+    /// </para>
+    /// </remarks>
+    public ParagraphBorderSet? Borders { get; init; }
+
+    /// <summary>The room the paragraph's top border takes above its first line.</summary>
+    public Length BorderAbove => Borders?.Above ?? Length.Zero;
+
+    /// <summary>The room the paragraph's bottom border takes below its last line.</summary>
+    public Length BorderBelow => Borders?.Below ?? Length.Zero;
+
     /// <summary>The em size the text is set at.</summary>
     public Length EmSize { get; init; } = Length.FromPoints(12);
 

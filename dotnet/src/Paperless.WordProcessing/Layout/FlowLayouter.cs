@@ -170,7 +170,9 @@ public static class FlowLayouter
                         ? Length.Max(Length.Zero, layout.SpaceBefore - after)
                         : layout.SpaceBefore;
 
-            top += above + leading;
+            // The top border's room, outside the collapse: a rule's distance from its own text is not
+            // spacing between two paragraphs, and nothing above can pay for it.
+            top += above + leading + paragraph.BorderAbove;
 
             for (int line = 0; line < layout.Lines.Count; line++)
             {
@@ -196,7 +198,7 @@ public static class FlowLayouter
                 if (!box.SharesLineWithNext) top += box.Height;
             }
 
-            top += layout.SpaceAfter;
+            top += layout.SpaceAfter + paragraph.BorderBelow;
             leading = ParagraphLeading.Below(layout);
             previousSpaceAfter = layout.SpaceAfter;
         }

@@ -832,7 +832,11 @@ public sealed class Paginator
                 continue;
             }
 
-            used += layout.SpaceAfter;
+            // The bottom border's own room, kept out of `SpaceAfter` because it is not spacing: it does
+            // not collapse against the next paragraph's space-before and it is not dropped at the top of
+            // a page. Measured on twelve probes: a bordered paragraph's gap to the one below is its
+            // space-after *plus* w:sz/8 + w:space.
+            used += layout.SpaceAfter + paragraph.BorderBelow;
             paragraphIndex++;
             lineIndex = 0;
 
@@ -841,7 +845,7 @@ public sealed class Paginator
             if (paragraph.Format.KeepWithNext
                 && paragraphIndex < blocks.Count
                 && laid[paragraphIndex].Paragraph is { } next
-                && !FirstLineFits(next, used, bodyHeight))
+                && !FirstLineFits(next, (PageParagraph)blocks[paragraphIndex], used, bodyHeight))
             {
                 MoveTrailingGroupToNextPage(
                     blocks, placed, out List<PlacedLine> moved, out int movedFrom);
@@ -1067,9 +1071,11 @@ public sealed class Paginator
         return fitted;
     }
 
-    private static bool FirstLineFits(LaidOutParagraph layout, Length used, Length available)
+    private static bool FirstLineFits(
+        LaidOutParagraph layout, PageParagraph paragraph, Length used, Length available)
         => layout.Lines.Count == 0
-           || used + layout.SpaceBefore + layout.Lines[0].WithoutSpaceAbove().Height <= available;
+           || used + layout.SpaceBefore + paragraph.BorderAbove
+              + layout.Lines[0].WithoutSpaceAbove().Height <= available;
 
     /// <summary>
     /// The space above a paragraph, once collapsing and the top-of-page rule have applied.
@@ -1127,6 +1133,13 @@ public sealed class Paginator
         out Length own)
     {
         Length total = Gap(blocks, laid, index, atTopOfPage, keepsSpacingAtTop, out Length leading);
+
+        // The top border's room, outside every rule above it. It does not collapse against the paragraph
+        // above's space-after, because it is a distance from a rule to the text rather than spacing
+        // between two paragraphs; and it is not dropped at the top of a page, because the rule is drawn
+        // there and the text cannot sit on it.
+        if (blocks[index] is PageParagraph bordered) total += bordered.BorderAbove;
+
         own = total - leading;
         return total;
     }

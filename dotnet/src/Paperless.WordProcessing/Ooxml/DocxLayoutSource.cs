@@ -212,6 +212,7 @@ public sealed partial class DocxLayoutSource
 
         List<PageBlock> blocks = [];
         Walk(body, blocks, depth: 0);
+        JoinParagraphBorders(blocks);
         return blocks;
     }
 
@@ -231,6 +232,7 @@ public sealed partial class DocxLayoutSource
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
         SuppressAutoSpacingInCell(blocks);
+        JoinParagraphBorders(blocks);
         return blocks;
     }
 
@@ -306,6 +308,7 @@ public sealed partial class DocxLayoutSource
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
+        JoinParagraphBorders(blocks);
         return blocks;
     }
 
@@ -508,6 +511,7 @@ public sealed partial class DocxLayoutSource
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
             Shading = ShadeColour(WordParagraphFormats.ShadingOf(_styles, properties)),
+            Borders = ParagraphBorders(properties),
             Format = breaksPage || walker.BreaksPageHere
                 ? format with { StartsNewPage = true }
                 : format,
@@ -641,6 +645,7 @@ public sealed partial class DocxLayoutSource
         // Nought when the part marks no place for its number, which is what a note whose first paragraph
         // holds no `w:footnoteRef` is: the citation was never emitted and there is nothing to rewrite.
         citationOffset = Math.Max(0, _noteCitationOffset);
+        JoinParagraphBorders(blocks);
         return blocks;
     }
 
