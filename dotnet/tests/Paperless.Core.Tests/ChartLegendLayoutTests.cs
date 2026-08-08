@@ -106,6 +106,46 @@ public class ChartLegendLayoutTests
     }
 
     /// <summary>
+    /// A legend that states a font of its own is sized by <em>that</em> font, not by the axis
+    /// labels'.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Every term in <c>lcl_placeLegendEntries</c> is a fraction of the legend's own character
+    /// height (<c>VLegend.cxx:263-320</c>) — the key, both gaps, the padding and the name alike.
+    /// Measured on the probe decks, the reference's key is 5.98 pt at a 10 pt legend and 8.39 at
+    /// a 14 pt one, which is 0.6 em twice over, where ours was 6.00 at both. 22 of the 61 chart
+    /// parts in the slides corpus state a legend size, none of them 10 pt.
+    /// </para>
+    /// <para>
+    /// Asserted against the whole formula at 14 pt rather than as a ratio against the 10 pt
+    /// case, because the <c>max(1 mm, …)</c> floors mean the reservation is deliberately
+    /// <em>not</em> proportional: at 10 pt the key gap is the millimetre and at 14 pt it is
+    /// <c>0.22 em</c>, so the two reservations stand at 1.42 rather than 1.4.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ALegendStatingItsOwnFontIsSizedByIt()
+    {
+        ChartPlot plot = Bars("North");
+        Length font = Length.FromPoints(14);
+        ChartPlot larger = plot with { LegendSize = font };
+
+        // The axis labels stay at ten, so nothing here can be reading them.
+        larger.LabelSize.ShouldBe(Length.FromPoints(10));
+
+        Length padding = Larger(Millimetre, font * 0.33);
+        Length keyGap = Larger(Millimetre, font * 0.22);
+        Length key = font * 0.6;
+        Length name = font * (0.5 * "North".Length);
+
+        Length expected = (padding * 2.0) + key + keyGap + name + Length.FromMm100(210);
+
+        DocRect bare = Place(plot with { Legend = ChartLegendPosition.None }).PlotArea;
+        Near(bare.Right - Place(larger).PlotArea.Right, expected);
+    }
+
+    /// <summary>
     /// Two entries are drawn one row height <em>and one row gap</em> apart, which is exactly
     /// what the height reserved for the box is a sum of.
     /// </summary>
