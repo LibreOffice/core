@@ -303,11 +303,20 @@ defeats the purpose — use a sibling document in the same shape, or skip it.
 
 ### What it preserves, and the one thing it does not
 
-- **Word count exactly.** Only maximal runs of `[A-Za-z0-9]` are replaced; whitespace,
-  punctuation and every non-ASCII script are left alone. The word-count gate therefore reads the
-  same number on the rewritten file, and a count that *changes* is a real finding rather than an
-  artefact. Measured on a two-page DOCX: 368 words and 2 pages before and after, through both
-  renderers.
+- **The document's word count exactly.** Only maximal runs of `[A-Za-z0-9]` are replaced;
+  whitespace, punctuation and every non-ASCII script are left alone. Measured with
+  `paperless extract`, which reads the model rather than the page: 1142 words against 1142 on a
+  twelve-slide deck, 604 against 604 on a workbook.
+
+  **The `pdftotext` count can still drift a little, and that is not the document changing.**
+  Extraction from a PDF re-infers word boundaries from geometry, and a token's glyphs have
+  different advances from the word they replaced, so a gap that read as intra-word in the
+  original can read as a space in the rewrite. Measured: exact on a DOCX (368/368) and on an
+  XLSX (604/604), and +13 on 1142 — about 1% — on a deck full of small text frames.
+
+  This does **not** weaken the comparison you actually run, because both renderers are given the
+  same tokenised file and the drift applies to both. What it rules out is comparing a rewritten
+  file's word count against the *original's*.
 - **Character count wherever the counter fits.** A token is base-36 of its index padded to the
   original length with `X`, which is outside the base-36 alphabet and so cannot collide with an
   encoded digit. The run prints how many tokens came out *longer* than the word they replaced —

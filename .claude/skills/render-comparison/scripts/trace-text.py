@@ -20,10 +20,15 @@ original surrounding sentence.
 Two properties matter and are worth stating because they are what make the output
 comparable to the original document's:
 
-* **Word count is preserved exactly.** Only maximal runs of ``[A-Za-z0-9]`` are
-  replaced; whitespace, punctuation and every non-ASCII script are left alone. So the
-  word-count gate reads the same number on the rewritten file as on the original, and a
-  count that changes is a real finding rather than an artefact of the rewrite.
+* **The document's word count is preserved exactly.** Only maximal runs of
+  ``[A-Za-z0-9]`` are replaced; whitespace, punctuation and every non-ASCII script are
+  left alone — verified with ``paperless extract``, which reads the model rather than the
+  page, at 1142 words against 1142 on a deck and 604 against 604 on a workbook. A
+  ``pdftotext`` count can still drift about a percent, because extraction from a PDF
+  re-infers word boundaries from geometry and a token's advances are not the replaced
+  word's. That drift applies equally to both renderers of the same rewritten file, so it
+  leaves the comparison you are actually running intact; it only rules out comparing a
+  rewritten file's word count against the original's.
 * **Character count is preserved wherever it can be.** A token is base-36 of its index
   padded to the original length with ``X``, which is outside the base-36 alphabet and so
   cannot collide with an encoded digit. Words too short to hold the counter get a longer
