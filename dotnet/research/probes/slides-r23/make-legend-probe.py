@@ -33,7 +33,10 @@ import sys
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SOURCE = '/home/user/libreoffice-core/.claude/worktrees/slides-r23/dotnet/tests/corpus/features/chart-face-theme-minor.pptx'
+# Derived from this file's own location rather than hardcoded: the original named a worktree
+# that no longer exists, so the probe could not be re-run by whoever inherited it.
+SOURCE = os.path.normpath(os.path.join(
+    HERE, '..', '..', '..', 'tests', 'corpus', 'features', 'chart-face-theme-minor.pptx'))
 
 # (name length, legend font in hundredths of a point)
 VARIANTS = [(2, 1000), (5, 1000), (10, 1000), (16, 1000),
