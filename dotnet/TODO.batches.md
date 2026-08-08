@@ -6784,3 +6784,28 @@ still round twenty's 304 over 91 documents, and is *not* a measurement of this c
 
 **Still unmeasured, unchanged from the brief:** `PptSlideLayout.cs`:1244's group scale against
 LibreOffice's, and `Demick_JetBlue.pptx`'s charts in the shared `Paperless.Core/Charts`.
+
+## Second merge of the round, verified at `4448c2a3f`
+
+Sheets round twenty-four (`.xls` chart sources) and slides round twenty-one (the two autofit
+quantisations) landed on top of the previous merge. Verified on the branch, every project green,
+**0 failed and 0 skipped in all eleven**, zero build warnings:
+
+Core 243, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing 619, Spreadsheets **483**, Presentations **528**, Fidelity **547**.
+
+Track verdicts are unchanged — words 156/200, slides 151/163, sheets 144/171 — and by now that
+is the expected outcome rather than a surprise. Six fixes have landed across the three tracks in
+this round and **not one has moved a verdict**; see the skill's "a real fix that moves no
+verdict". Every one was measured by rendering the whole track before and after.
+
+### Two things this merge changed about how the next round should measure
+
+- **Our PDF writer is not byte-reproducible** across two runs of the same binary on the same
+  input, with timestamps already masked. Byte-level comparison of two renderings is how the last
+  three rounds measured reach, so there is an unknown floor under all of those numbers until
+  this is fixed. It is the sheets track's first job next round.
+- **An aggregate `|ink|%` cannot be smaller than the signed `ink%` beside it.** Round twenty's
+  `ink.tsv` carried a derived column that violated it — off by exactly one per major page per
+  document, a count summed into a percentage. Nothing depended on it. Check the invariant on
+  inherited aggregates, not only produced ones.
