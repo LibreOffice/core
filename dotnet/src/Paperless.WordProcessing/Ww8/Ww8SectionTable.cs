@@ -219,6 +219,29 @@ internal static class Ww8SectionTable
         _ => SectionBreak.NextPage,
     };
 
+    /// <summary>
+    /// Where a header sits when the section states no <c>sprmSDyaHdrTop</c>: half an inch down.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Half an inch, not nothing. WW8's <c>SEP</c> is a structure with defaults rather than a set of
+    /// statements, and Word writes a sprm only where the section differs from them — so a document that
+    /// never mentions the header distance is asking for 720 twips, and reading the silence as zero puts
+    /// every header 36 pt above where it belongs and every footer 36 pt below.
+    /// </para>
+    /// <para>
+    /// The same 720 appears twice in LibreOffice's own reader: in <c>WW8_SEP</c>'s constructor
+    /// (<c>ww8scan.cxx</c>, <c>dyaHdrTop(720), dyaHdrBottom(720)</c>) and again as the fallback passed to
+    /// <c>ReadUSprm</c> when the section table is walked (<c>ww8par6.cxx:1183</c>).
+    /// </para>
+    /// <para>
+    /// It reaches the body as well as the furniture, because <see cref="PageGeometry.HeaderHeight"/> is
+    /// the gap between this and the top margin: a wrong distance makes the header's band the wrong height
+    /// too, so a header of more than one line overflows into the text rather than pushing it down.
+    /// </para>
+    /// </remarks>
+    private static readonly Length DefaultHeaderDistance = Length.FromTwips(720);
+
     private static WritingSection ReadProperties(ReadOnlyMemory<byte> grpprl)
     {
         PageGeometry page = PageGeometry.Default;
@@ -227,8 +250,8 @@ internal static class Ww8SectionTable
 
         SectionBreak sectionBreak = SectionBreak.NextPage;
         Length gutter = Length.Zero;
-        Length headerDistance = Length.Zero;
-        Length footerDistance = Length.Zero;
+        Length headerDistance = DefaultHeaderDistance;
+        Length footerDistance = DefaultHeaderDistance;
         Length columnGap = Length.Zero;
         int columns = 1;
         bool landscape = false;
