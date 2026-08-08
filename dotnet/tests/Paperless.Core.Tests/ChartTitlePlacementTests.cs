@@ -204,4 +204,33 @@ public class ChartTitlePlacementTests
         title.At.Y.Points.ShouldBe(
             (drawing.PlotArea.Y + drawing.PlotArea.Height / 2).Points, 0.001);
     }
+
+    /// <summary>The category axis' title sits above a bottom legend, not on top of it.</summary>
+    /// <remarks>
+    /// <c>lcl_createTitle</c> places an <c>ALIGN_BOTTOM</c> title inside <c>rRemainingSpace</c>
+    /// (<c>ChartView.cxx:1147-1149</c>), and the legend has already been taken out of that
+    /// rectangle by then — <c>lcl_createLegend</c> runs at <c>:1966</c> and the axis titles at
+    /// <c>:2054</c>. Measuring from the frame's own bottom edge instead puts the title exactly
+    /// where a bottom legend is: on a probe with one, ours came out 30.3 pt below the
+    /// reference's and did not move at all when the legend was added.
+    /// </remarks>
+    [Fact]
+    public void TheCategoryAxisTitleClearsABottomLegend()
+    {
+        ChartPlot plot = Bars();
+
+        ChartLabel without = Place(plot).Labels.Single(label => label.Text == "Aircraft Type");
+        ChartLabel with = Place(plot with { Legend = ChartLegendPosition.Bottom })
+            .Labels.Single(label => label.Text == "Aircraft Type");
+
+        with.At.Y.ShouldBeLessThan(without.At.Y);
+
+        // And it is the legend's own band it moved by, not some other quantity: the plot area's
+        // bottom edge moved by exactly the same amount.
+        Length title = without.At.Y - with.At.Y;
+        Length edge = Place(plot).PlotArea.Bottom
+                      - Place(plot with { Legend = ChartLegendPosition.Bottom }).PlotArea.Bottom;
+
+        title.Points.ShouldBe(edge.Points, 0.001);
+    }
 }
