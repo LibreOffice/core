@@ -6578,9 +6578,10 @@ Two assertions, each verified by reintroducing its defect and watching it fail:
   `slide-autofit-device-grid.pptx`, ours asserted as literals first and LibreOffice compared
   against those, at a hundredth of a point.
 
-Per project: Core 243, Text 240, Containers 109, Vector 291, Rendering 119, Markup 259,
-OpenDocument 125, WordProcessing 619, Spreadsheets 446, Fidelity 546, Presentations **528**.
-Zero failed, zero skipped. Only `Paperless.Presentations/Layout` was touched, and only through
+Per project on the final tree, each run redirected to its own file: Core 243, Text 240,
+Containers 109, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 619,
+Spreadsheets 446, Fidelity **547** (546 plus this round's one), Presentations **528** (523 plus
+this round's five). Zero failed, zero skipped. Only `Paperless.Presentations/Layout` was touched, and only through
 `SlideTextLayout.Place`/`Measure`, so the words and sheets tracks are not owed a sweep.
 
 ### Open items this round did close, and one it did not
