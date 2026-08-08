@@ -518,28 +518,36 @@ against `airports_6.xlsx`, which carries the defect and states `scale="75"`. The
 for the rounding to happen in, so **the rule cannot reach any of the three** and their two or
 three pages keep the cause this file already gives them.
 
-### `INDEX_Digital_Transformation_Toolkits.xls` (batch-010, 20/24): measured, not diagnosed
+### `INDEX_Digital_Transformation_Toolkits.xls` — closed: a bare `CONTINUE` is Escher
 
-Word counts are **identical at 1982**, so no text is lost and the whole difference is pagination
-and drawings. Page starts align either side of the gap: our 1–12 equal the reference's 1–12, our
-13–14 and its 13–18 carry images and no text at all, and our 15–20 equal its 19–24 word for
-word.
+**Fixed in round twenty-five; the document now renders 24 pages against 24 and matches.** Kept
+here because the wrong reading survived three rounds and the shape of the error is worth having.
 
-| | ours | reference |
-|---|---|---|
-| image records drawn | **63** | **207** |
-| `draw:frame` in LibreOffice's flat-ODF export | — | **107** (1 on each of twelve sheets, **95** on "DX Project Sample") |
+The measurements were always right. Word counts identical at 1982, page starts aligned either
+side of the gap, 63 images drawn against 207, and the shortfall shaped like a prefix — our page
+13 drawing the reference's 15 images exactly, our page 14 drawing 10 where its draws 21, then
+nothing. Two rounds called that a truncated shape walk; round twenty-four called it *not* a
+truncated walk, on the grounds that a walk stopping at 25 would not place the first fifteen
+exactly and then thin, and proposed `SheetDrawingArea` instead.
 
-The shortfall has the shape of a prefix, twice: our page 13 draws 15 images and so does the
-reference's, our page 14 draws 10 where its draws 21, then we draw none — and the same
-full-page-then-partial-then-nothing pattern repeats at our 15/16 against its 19/20. That looks
-like a truncated shape walk rather than a pagination cut, and it is **not proven**; no
-measurement here separates the two.
+A truncation at 25 does exactly that. The first 25 shapes are placed exactly, and the reference's
+pages that hold only shapes 26 onwards do not exist for us at all — which is the four missing
+pages. So the first reading was right about the symptom and neither reading had the mechanism,
+which is in the record stream rather than in the drawing layer:
 
-Note **207 drawn against 107 read**: the reference draws some drawings more than once, which no
-hypothesis above accounts for. Do not build on "we drop drawings" until that is explained — one
-sheet printed in two column bands would make both counts consistent and make the missing images
-a consequence rather than a cause.
+```
+sheet 12:  MSODRAWING x25, 8034 bytes    CONTINUE x70    OBJ x95
+```
+
+Excel writes one `MSODRAWING` per shape with that shape's `OBJ` after it, and stops writing
+`MSODRAWING` once the sheet's Escher stream passes the 8224-byte record ceiling — writing the rest
+as `CONTINUE` in the same interleaving. `BiffRecordReader` absorbed each into the `OBJ` before it.
+See `InDrawingBlock` in `XlsWorkbookReader` and `XclImpDrawing::ReadMsoDrawing`
+(`sc/source/filter/excel/xiescher.cxx:4021`), which switches its own continuation handling off for
+the whole block and reaches the same answer without a flag.
+
+**207 drawn against 107 read is explained by the same file**: the reference prints the block of
+pictures twice, once alone and once under the text, and 95 shapes plus one per sheet is the 107.
 
 ## The twenty-first sweep: Excel's row heights are read on a 0.75 pt grid
 
@@ -1536,7 +1544,7 @@ line taking the horizontal path, where Calc *shortens* the string — dropping c
 clip it instead, which keeps every glyph in the text layer. That is the same defect in the other
 axis and would explain an over-count with the row heights agreeing.
 
-### `INDEX_Digital_Transformation_Toolkits.xls`: six pages of pictures we never draw
+### `INDEX_Digital_Transformation_Toolkits.xls`: six pages of pictures we never draw *(closed — see above)*
 
 18 pages against 24 with the words matching **exactly** (1982 against 1982), which reads as six
 blank pages the reference keeps and is not. The last sheet's two columns are 0.2374 in and
@@ -1556,6 +1564,12 @@ anchored at `svg:x="0in"`, so their rectangles begin exactly on the band's left 
 `TouchedByADrawing` compares a drawing's bounds against the block's with `>=`/`<=` on both sides.
 Whether every icon on those four pages is inside the *printed* range at all is the thing to measure
 next — `HasAnyDraw` walks the whole drawing page rather than the objects anchored in the range.
+
+**Closed in round twenty-five, and the empty-page question above was the wrong one.** The four
+pages were not an empty-page rule and not a column-band question: 70 of the sheet's 95 shapes were
+never read at all, because Excel wrote them as `CONTINUE` records once the Escher stream passed
+8224 bytes and `BiffRecordReader` joined each to the `OBJ` before it. All 95 now reach the page and
+the document matches at 24 pages. See the closed section earlier in this file.
 
 ### `TK-Syllabus-Comparison-Document-v2.xlsx`: rows 10.4% too tall, lines exactly right
 
