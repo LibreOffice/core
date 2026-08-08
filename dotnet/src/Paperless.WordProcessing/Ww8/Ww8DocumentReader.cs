@@ -155,6 +155,17 @@ public sealed partial class Ww8DocumentReader
 
             Model.SectionColumnBalance.Apply(sections, DocumentProperties.NoColumnBalance);
 
+            // "Different odd and even pages" is stated once for the whole document rather than per
+            // section — see Ww8DocumentProperties.HasFacingPages — so it is applied here rather than in
+            // the section reader, which sees only one descriptor at a time.
+            if (DocumentProperties.HasFacingPages)
+            {
+                for (int i = 0; i < sections.Count; i++)
+                {
+                    sections[i] = sections[i] with { HasDifferentEvenPages = true };
+                }
+            }
+
             return sections.Count > 0 ? sections : [new Model.WritingSection()];
         }
     }

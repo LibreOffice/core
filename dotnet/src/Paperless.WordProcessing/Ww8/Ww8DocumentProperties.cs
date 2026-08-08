@@ -97,6 +97,28 @@ public readonly record struct Ww8DocumentProperties
     /// </remarks>
     public bool NoColumnBalance { get; init; }
 
+    /// <summary>
+    /// True when the document distinguishes even pages from odd ones — Word's "different odd and even".
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>fFacingPages</c>, the lowest bit of the <c>Dop</c>'s very first word
+    /// (<c>a16Bit &amp; 0x0001</c>, <c>ww8scan.cxx</c>:7643). It is a <em>document</em> flag rather than a
+    /// section one, which is why it lives here and reaches every section at once.
+    /// </para>
+    /// <para>
+    /// It decides two things together, and reading it for only one of them is what makes a document look
+    /// nearly right. It is the condition on which the even header and footer stories are read at all —
+    /// <c>wwSectionManager::SetSegmentToPageDesc</c> adds <c>WW8_HEADER_EVEN | WW8_FOOTER_EVEN</c> to the
+    /// synthesised <c>grpfIhdt</c> only under it (<c>ww8par6.cxx</c>:1234) — and it is the condition under
+    /// which the left page stops sharing the right page's running head, since
+    /// <c>wwSectionManager::SetUseOn</c> adds <c>UseOnPage::HeaderShare | FooterShare</c> exactly when it is
+    /// <em>clear</em> (<c>ww8par.cxx</c>:4319). So a document without it has one head for every page
+    /// whatever its even stories hold, and a document with it has two.
+    /// </para>
+    /// </remarks>
+    public bool HasFacingPages { get; init; }
+
     /// <summary>How the document's footnotes are numbered.</summary>
     /// <remarks>
     /// The DOP states the two classes in three different places: <c>nFootnote</c> and <c>nEdn</c> hold the
@@ -114,6 +136,16 @@ public readonly record struct Ww8DocumentProperties
     public static Ww8DocumentProperties Parse(ReadOnlySpan<byte> dop)
     {
         Ww8DocumentProperties properties = Default;
+
+        // The very first word, whose lowest bit is fFacingPages. Every Dop that exists at all is long
+        // enough for it, so the guard is against a truncated one rather than against an old one.
+        if (dop.Length >= 2)
+        {
+            properties = properties with
+            {
+                HasFacingPages = (BinaryPrimitives.ReadUInt16LittleEndian(dop) & 0x0001) != 0,
+            };
+        }
 
         if (dop.Length >= TabIntervalOffset + 2)
         {

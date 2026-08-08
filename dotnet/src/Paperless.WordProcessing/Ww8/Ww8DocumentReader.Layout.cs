@@ -362,10 +362,20 @@ public sealed partial class Ww8DocumentReader
     /// not match the order the other formats use, so it is spelled out in <see cref="FurnitureSlots"/>.
     /// </para>
     /// <para>
-    /// Word writes all six whether the section uses them or not, so most hold nothing but a paragraph
-    /// mark; an empty story therefore means "this section has no such header" rather than "it has an empty
-    /// one", and filling the slot with the empty paragraph would draw a blank line on every page and push
-    /// nothing anywhere. Emptiness is the only thing distinguishing the two.
+    /// A slot the section does not use has a story of <em>no length at all</em>, and that is the only thing
+    /// distinguishing it from a slot holding one blank line. LibreOffice draws the line in the same place
+    /// and states it twice: <c>wwSectionManager::SetSegmentToPageDesc</c> clears the slot's bit out of the
+    /// synthesised <c>grpfIhdt</c> only when the story's length is zero (<c>ww8par6.cxx</c>:1247), and
+    /// <c>Read_HdFt</c> reads the text only when the length is two or more (<c>ww8par.cxx</c>:2500) —
+    /// leaving a story of one paragraph mark as a header that exists and holds one empty paragraph.
+    /// </para>
+    /// <para>
+    /// So an empty paragraph read out of a story that exists is a blank line to lay out, not a placeholder
+    /// to drop, and dropping it is not free: the header still occupies its band, and where a section
+    /// reserves none — <c>dyaTop == dyaHdrTop</c> — that band is what pushes the body down. Measured across
+    /// the 66 DOC files of the sample corpus, <em>no</em> story has a length of one, so the case that
+    /// motivated dropping them does not arise; fourteen documents have a story of length two, which is one
+    /// empty paragraph and its mark.
     /// </para>
     /// <para>
     /// Six stories per section, so the section's own six start six further along for each section before
@@ -395,17 +405,6 @@ public sealed partial class Ww8DocumentReader
             // is a two-cell table, and stacking its cells as loose paragraphs would give the header a height
             // no table has and push the body text down by the difference on every page.
             List<Ww8LayoutBlock> blocks = ReadLayoutBlocks(stories[story], keepTrailingEmpty: false);
-
-            // Word writes all six stories whether the section uses them or not, so an empty paragraph is a
-            // placeholder rather than a blank line — but only when there is nothing else in the story.
-            //
-            // "Nothing else" has to include the shapes anchored in it. A running head that is one logo and
-            // no words is an ordinary thing, and its paragraph reads back with no text at all: the U+0001
-            // that stood for the picture is consumed by the frame it made (see CollectFrame), so testing
-            // the text alone throws the whole header away and leaves the body starting at the top margin.
-            blocks.RemoveAll(
-                block => block.Paragraph is { Text.Length: 0, Frames: null or { Count: 0 } }
-                    && block.Table is null);
 
             if (blocks.Count == 0) continue;
 
