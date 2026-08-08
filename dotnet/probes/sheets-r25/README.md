@@ -123,6 +123,38 @@ touched at all**, and neither was `Paperless.Core`. `BiffRecordReader` lives in
 `Paperless.Spreadsheets.MsBinary` and is not shared with the DOC or PPT readers, so the drawing
 change cannot reach the other two tracks either.
 
+## `batch-010`'s remaining three, characterised
+
+7/10 after this round, and the three that remain are all behind work this brief put elsewhere.
+
+- **`Template Pilot Logbook JAR-FCL V3.0.xls`** — 1342 against 1610 words, reachable about 1409
+  against a 1578 threshold. Round twenty-four measured this and it stands: a date category axis we
+  do not have, and a reference word count inflated by rotated text written one `Tj` per glyph.
+  **Do not try to pass the gate on this document.**
+- **`EHEST-Pre-departure-checklist…xls`** — 24/24 pages, −26 words on each of eight chart pages,
+  and the plot area 365 pt wide against 414 because the legend beside it is set in the wrong face.
+- **`Keywords_Mapping_Graphs_and_Charts.xlsx`** — 46/46 pages, 4695 against 4808 words, and this
+  round's measurement puts it in the same class. Pages 19–40 are each 2–13 words short and pages
+  43–44 are 15 and 30 words long. The operator diff on page 38 shows every chart record as
+  `9.00pt LiberationSans` against the reference's `8.99pt Carlito-Regular`, and `pdffonts` agrees:
+  we embed Carlito-Bold, Carlito-Regular **and Liberation Sans**, the reference only the two
+  Carlitos. The third face is `ChartLabel`'s hardcoded one.
+
+So **two of this track's documents are held by the chart-label font**, not the one the round
+twenty-three census reported — that census counted zip containers holding a `chart*.xml` part and
+said so, and `EHEST` is the binary case it could not see. The work itself is unchanged: it widens
+a `Paperless.Core` type and `IChartTextMeasurer`, and it was the slides track's this round.
+
+### One new lead, measured and not fixed
+
+`Keywords_Mapping`'s pages 43–44 are a *different* defect and the cleaner one. Its rotated column
+headers wrap, and **we draw every line of a wrapped rotated cell at the same origin**: four
+records at exactly `(363.49, 262.53)` with 4, 2, 6 and 5 glyphs, four more at exactly
+`(394.39, 262.53)`. The reference steps each line — `(394.38, 761.89)`, `(394.38, 731.90)`,
+`(394.38, 716.91)` — so the offset that should separate them is being applied on the unrotated
+axis or not at all. That is an observation, not a diagnosis; the line offset is the thing to
+follow.
+
 ## Tests
 
 `XlsDrawingContinuationTests`, 2 cases. Synthetic BIFF8 because the case needs more shapes on one
