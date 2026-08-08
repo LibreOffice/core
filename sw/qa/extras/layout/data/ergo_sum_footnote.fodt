@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="SmallPage">
+      <style:page-layout-properties fo:page-width="12cm" fo:page-height="5cm" fo:margin-top="0.5cm" fo:margin-bottom="0.5cm" fo:margin-left="0.5cm" fo:margin-right="0.5cm"/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:styles>
+    <!-- We MUST enable continuation-notice-backward to trigger ErgoSum! -->
+    <text:notes-configuration text:note-class="footnote" text:continuation-notice-forward="forward" text:continuation-notice-backward="backward"/>
+  </office:styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="SmallPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <!-- We add lots of lines to the footnote to guarantee it overflows to page 2 -->
+      <text:p>Main text<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p>Line 1</text:p><text:p>Line 2</text:p><text:p>Line 3</text:p><text:p>Line 4</text:p><text:p>Line 5</text:p><text:p>Line 6</text:p><text:p>Line 7</text:p><text:p>Line 8</text:p></text:note-body></text:note></text:p>
+    </office:text>
+  </office:body>
+</office:document>

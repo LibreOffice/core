@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="ShortPage">
+      <style:page-layout-properties fo:page-width="10cm" fo:page-height="4cm" fo:margin-top="0.5cm" fo:margin-bottom="0.5cm" fo:margin-left="0.5cm" fo:margin-right="0.5cm"/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:styles>
+    <!-- This natively tells LibreOffice to use the Quo Vadis text during the first layout pass! -->
+    <text:notes-configuration text:note-class="footnote" text:continuation-notice-forward=" (Continued)"/>
+  </office:styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="ShortPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p>Here is the footnote.<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p>Line 1 of footnote.</text:p><text:p>Line 2 of footnote.</text:p><text:p>Line 3 of footnote.</text:p><text:p>Line 4 of footnote.</text:p><text:p>Line 5 of footnote.</text:p><text:p>Line 6 of footnote.</text:p></text:note-body></text:note></text:p>
+    </office:text>
+  </office:body>
+</office:document>

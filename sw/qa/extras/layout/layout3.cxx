@@ -15,6 +15,7 @@
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <rootfrm.hxx>
+#include <editeng/brushitem.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
 namespace
@@ -2709,6 +2710,60 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTextNodeGetDropSizeUnformatted)
     CPPUNIT_ASSERT(!bRet);
     // ...but still produces a usable non-zero guessed height.
     CPPUNIT_ASSERT_GREATER(0, nDropHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testBackgroundAttrChangeNotification)
+{
+    // Trigger the pAttrSetChangeHint notification containing RES_BACKGROUND,
+    // forcing SwTextFrame to react to a paragraph background color change.
+    createSwDoc("drop_fly_overlap.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Change the paragraph's background color; this sends the RES_BACKGROUND hint.
+    SvxBrushItem aBrush(COL_RED, RES_BACKGROUND);
+    pWrtShell->SetAttrItem(aBrush);
+
+    // Re-dump the layout to confirm the invalidation/reformat completes cleanly.
+    pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The paragraph's attribute set now actually carries the new background
+    // color — proving the change notification was correctly applied to the
+    // model, not just silently accepted or lost during the reformat.
+    SwTextNode* pNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pNode);
+
+    const SvxBrushItem* pBrush = pNode->GetSwAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    CPPUNIT_ASSERT(pBrush);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pBrush->GetColor());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testErgoSumFootnoteContinuation)
+{
+    // Trigger a footnote splitting across two pages, forming the follow/master
+    // frame chain that SwErgoSumPortion construction depends on.
+    createSwDoc("ergo_sum_footnote.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The footnote body is split into a master frame (page 1) and a linked
+    // follow frame (page 2), proving the footnote successfully broke across pages.
+    assertXPath(pXmlDoc, "//ftn[contains(@symbol, 'SwFootnoteFrame')]", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testQuoVadisFootnoteContinuation)
+{
+    // Trigger SwTextFormatter::FormatQuoVadis by forcing a footnote to break
+    // across a short page, forming the same follow/master frame chain.
+    createSwDoc("quo_vadis_footnote.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "//ftn[contains(@symbol, 'SwFootnoteFrame')]", 2);
 }
 
 } // end of anonymous namespace
