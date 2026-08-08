@@ -7615,6 +7615,11 @@ that it might. With the wiring, `Keywords_Mapping_Graphs_and_Charts.xlsx` embeds
 reference's two faces where it embedded Liberation Sans beside them; its word count moves 4650 to
 4647 against a reference 4808, so the residue there is not the face.
 
+Reach measured by rendering, both sides with the instant pinned: **1 of 171 documents**, and the
+whole-track sweep is 145/171 with page error 90 and 154 exact — the baseline's numbers and its
+per-batch line. Two rows of that sweep came back `ref-failed` under load and were re-run alone and
+spliced; one of them is `ECA Sinters.xls`, the same document round twenty-five had to splice.
+
 **The remaining half is BIFF and is named rather than guessed at.** `XlsChartReader` sets no family
 at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference embeds
 two. That work is in `Paperless.Spreadsheets` and so belongs to this track.

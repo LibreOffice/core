@@ -9,12 +9,16 @@ were diffed against the tree's before each run started, and the `measuring …` 
 | `base-whole-track.tsv` | whole-track sweep at `d7fd6cf13`, before any change |
 | `after-rowheight-whole-track.tsv` | the same after the row-height change alone |
 | `after-drawing-whole-track.tsv` | the same after the drawing change on top |
+| `after-chartface-whole-track.tsv` | the same again after the slides merge and the chart-face wiring |
 | `mkrot.py` | writes the flat-ODS row-height probe |
 | `rot-probe-reference.fods` | LibreOffice's own round trip of it — the row heights this is fitted to |
 | `mkdraw.py` | writes the flat-ODS drawing probe |
 | `mutate.sh`, `mutate-draw.sh` | the reintroduced bugs each test was verified against |
 
-All three sweeps: 171 rows, no duplicate path, zero `ref-failed`.
+All four sweeps: 171 rows, no duplicate path, zero `ref-failed`. Two rows of the last one came back
+`ref-failed` and were re-run alone and spliced — `ECA Sinters.xls`, which is the same document round
+twenty-five had to splice, and `fy2010-aip-grants.xls`. Both match on their own, so this is the
+wedged-converter trap for the second round running and not a change in what we draw.
 
 ## The baseline reproduces the brief, and reproduces r25 row for row
 
@@ -175,6 +179,13 @@ With the wiring, `Keywords_Mapping_Graphs_and_Charts.xlsx` embeds **exactly the 
 faces**, `Carlito-Bold` and `Carlito-Regular`, where it embedded Liberation Sans beside them before.
 Its word count moves 4650 → 4647 against a reference 4808, so the residue there is not the face.
 
+**Its reach, measured by rendering, is one document and it moves nothing either.** All 171 rendered
+by the merged CLI and by the wired one, both with `SOURCE_DATE_EPOCH` pinned so nothing but the
+change can contribute: **1 of 171 differs**, and it is `Keywords_Mapping`. The whole-track sweep is
+145/171, page error 90, 154 exact — the baseline's numbers and the baseline's per-batch line. Three
+rows' word counts move and none crosses a verdict; `Keywords_Mapping`'s embedded-font count goes
+3 against the reference's 2 to **2 against 2**.
+
 **The other half is a BIFF chart and is named rather than guessed at.** `XlsChartReader` sets no
 family at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference
 embeds two, and its 26-words-per-page chart residue is unchanged at 8018 against 8382. That is the
@@ -217,6 +228,12 @@ Every project run individually, whole output captured, **0 skipped** everywhere:
 
 | Core | Containers | Text | Vector | Rendering | Markup | OpenDocument | WordProcessing | Spreadsheets | Presentations | Fidelity |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 247 | 109 | 240 | 291 | 119 | 259 | 125 | 660 | **543** | 528 | 550 |
+| 249 | 109 | 240 | 291 | 119 | 259 | 125 | 660 | **545** | 529 | 550 |
 
-Every count is the briefed known-good except Spreadsheets, which is 498 plus this round's 45.
+Every count is the briefed known-good except Spreadsheets, which is 498 plus this round's 47, and
+Presentations, which the slides merge took from 528 to 529. Core is 249 on the merged tree against
+the briefed 247, for the same reason.
+
+One process trap worth passing on: `pkill` on a `dotnet test` leaves its `vstest.console` orphaned
+and still running, and the orphan then competes with the replacement run for the same tree. Kill the
+`vstest.console` process too, or the second run looks hung.
