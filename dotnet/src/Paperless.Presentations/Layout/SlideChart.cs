@@ -151,7 +151,7 @@ public static class SlideChart
     {
         if (label.Text.Length == 0) return null;
 
-        DocSize measured = new Measurer(fonts).Measure(label.Text, label.Size);
+        DocSize measured = new Measurer(fonts).Measure(label.Text, label.Size, label.Family);
         if (measured.Width <= Length.Zero) return null;
 
         // A non-square stretch leaves a residual horizontal factor the em cannot carry. The text
@@ -176,7 +176,7 @@ public static class SlideChart
             _ => new DocPoint(label.At.X - effective / 2, label.At.Y - box.Height / 2),
         };
 
-        SlideTextBody body = Measurer.Body(label.Text, label.Size, label.Colour);
+        SlideTextBody body = Measurer.Body(label.Text, label.Size, label.Colour, label.Family);
 
         AffineTransform transform = stretch == 1.0
             ? placement
@@ -216,27 +216,40 @@ public static class SlideChart
     /// there are few of them, so measuring each twice — once to reserve room, once to place it —
     /// costs nothing worth caching.
     /// </remarks>
-    /// <summary>The face a chart's own text is set in, which is not the deck's.</summary>
+    /// <summary>The face a chart's own text falls back to when the file names none.</summary>
     /// <remarks>
-    /// A chart is not a slide shape and does not inherit the slide's typeface: chart2 gives its
-    /// text <c>DefaultFontType::LATIN_SPREADSHEET</c>, which resolves to Liberation Sans on this
-    /// machine, and <c>pdffonts</c> on LibreOffice's own PDF of a chart deck reports exactly that.
-    /// Leaving the run's face null substitutes the generic serif instead — which is not merely a
-    /// different-looking label, because the axis labels' <em>width</em> is what reserves the plot
-    /// area. Measured on <c>chart-bar-deck.odp</c>: the plot's left edge is 1.29 pt short in the
-    /// serif and 0.44 pt long in Liberation Sans, so the wrong face was 1.73 pt of an error that
-    /// three separate attempts hunted for in the label geometry.
+    /// <para>
+    /// A chart is not a slide shape and does not inherit the slide's typeface: with no theme to
+    /// consult, chart2 gives its text <c>DefaultFontType::LATIN_SPREADSHEET</c>, which resolves to
+    /// Liberation Sans on this machine. Leaving the run's face null substitutes the generic serif
+    /// instead — which is not merely a different-looking label, because the axis labels'
+    /// <em>width</em> is what reserves the plot area. Measured on <c>chart-bar-deck.odp</c>: the
+    /// plot's left edge is 1.29 pt short in the serif and 0.44 pt long in Liberation Sans, so the
+    /// wrong face was 1.73 pt of an error that three separate attempts hunted for in the label
+    /// geometry.
+    /// </para>
+    /// <para>
+    /// <strong>It was a constant for four rounds and that was wrong on every deck whose theme is
+    /// not Arial.</strong> The evidence for the constant was <c>pdffonts</c> on LibreOffice's own
+    /// PDF of <c>chart-bar-deck.pptx</c> reporting Liberation Sans — and that deck's chart states
+    /// <c>&lt;a:latin typeface="Arial"/&gt;</c> eleven times, which fontconfig substitutes with
+    /// Liberation Sans. The measurement was right and what it was evidence for was not. Two
+    /// corpus decks separate the readings: <c>Demick_JetBlue.pptx</c>'s theme minor face is
+    /// Constantia and the reference draws its chart in <em>DejaVu Serif</em>;
+    /// <c>bitesize-writing-a-report.pptx</c>'s is Calibri and the reference draws its chart in
+    /// Carlito. Neither is Liberation Sans and the first is not even a sans.
+    /// </para>
     /// </remarks>
     private const string ChartFace = "Liberation Sans";
 
     private sealed class Measurer(SlideFonts fonts) : IChartTextMeasurer
     {
-        public DocSize Measure(string text, Length size)
+        public DocSize Measure(string text, Length size, string? family)
         {
             ArgumentNullException.ThrowIfNull(text);
             if (text.Length == 0) return new DocSize(Length.Zero, Length.Zero);
 
-            SlideTextBody body = Body(text, size, Colour.Black);
+            SlideTextBody body = Body(text, size, Colour.Black, family);
             Length height = SlideTextLayout.Height(body, Length.Zero, fonts);
 
             // The width is summed from the glyphs the layout produced rather than estimated,
@@ -268,7 +281,8 @@ public static class SlideChart
         /// 13 pt title — small individually, and the two accumulate into the top and bottom
         /// insets that place the whole plot area.
         /// </remarks>
-        internal static SlideTextBody Body(string text, Length size, Colour colour) => new()
+        internal static SlideTextBody Body(string text, Length size, Colour colour, string? family)
+            => new()
         {
             Insets = new Margins(Length.Zero, Length.Zero, Length.Zero, Length.Zero),
             Wraps = false,
@@ -278,7 +292,16 @@ public static class SlideChart
             [
                 new SlideParagraph(
                     text,
-                    [new SlideTextRun(0, text.Length, ChartFace, size, 400, false, colour)],
+                    [
+                        new SlideTextRun(
+                            0,
+                            text.Length,
+                            string.IsNullOrWhiteSpace(family) ? ChartFace : family.Trim(),
+                            size,
+                            400,
+                            false,
+                            colour),
+                    ],
                     TextAlignment.Start),
             ],
         };
