@@ -223,20 +223,20 @@ void SwXTextPortion::GetPropertyValue(
         SwUnoCursor *pUnoCursor,
         std::unique_ptr<SfxItemSet> &pSet )
 {
-    static constexpr OUStringLiteral TEXT = u"Text";
-    static constexpr OUStringLiteral TEXTFIELD = u"TextField";
-    static constexpr OUStringLiteral FRAME = u"Frame";
-    static constexpr OUStringLiteral FOOTNOTE = u"Footnote";
-    static constexpr OUStringLiteral REDLINE = u"Redline";
-    static constexpr OUStringLiteral RUBY = u"Ruby";
-    static constexpr OUStringLiteral SOFTPAGEBREAK = u"SoftPageBreak";
-    static constexpr OUStringLiteral TEXTFIELDSTART = u"TextFieldStart";
-    static constexpr OUStringLiteral TEXTFIELDSEPARATOR = u"TextFieldSeparator";
-    static constexpr OUStringLiteral TEXTFIELDEND = u"TextFieldEnd";
-    static constexpr OUStringLiteral TEXTFIELDSTARTEND = u"TextFieldStartEnd";
-    static constexpr OUStringLiteral ANNOTATION = u"Annotation";
-    static constexpr OUStringLiteral ANNOTATIONEND = u"AnnotationEnd";
-    static constexpr OUStringLiteral LINEBREAK = u"LineBreak";
+    static constexpr OUString TEXT = u"Text"_ustr;
+    static constexpr OUString TEXTFIELD = u"TextField"_ustr;
+    static constexpr OUString FRAME = u"Frame"_ustr;
+    static constexpr OUString FOOTNOTE = u"Footnote"_ustr;
+    static constexpr OUString REDLINE = u"Redline"_ustr;
+    static constexpr OUString RUBY = u"Ruby"_ustr;
+    static constexpr OUString SOFTPAGEBREAK = u"SoftPageBreak"_ustr;
+    static constexpr OUString TEXTFIELDSTART = u"TextFieldStart"_ustr;
+    static constexpr OUString TEXTFIELDSEPARATOR = u"TextFieldSeparator"_ustr;
+    static constexpr OUString TEXTFIELDEND = u"TextFieldEnd"_ustr;
+    static constexpr OUString TEXTFIELDSTARTEND = u"TextFieldStartEnd"_ustr;
+    static constexpr OUString ANNOTATION = u"Annotation"_ustr;
+    static constexpr OUString ANNOTATIONEND = u"AnnotationEnd"_ustr;
+    static constexpr OUString LINEBREAK = u"LineBreak"_ustr;
 
     OSL_ENSURE( pUnoCursor, "UNO cursor missing" );
     if (!pUnoCursor)
