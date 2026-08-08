@@ -242,7 +242,7 @@ internal static class Ww8SectionTable
     /// </remarks>
     private static readonly Length DefaultHeaderDistance = Length.FromTwips(720);
 
-    private static WritingSection ReadProperties(ReadOnlyMemory<byte> grpprl)
+    internal static WritingSection ReadProperties(ReadOnlyMemory<byte> grpprl)
     {
         PageGeometry page = PageGeometry.Default;
         PageMargins margins = PageMargins.Default;
