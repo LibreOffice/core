@@ -7554,11 +7554,11 @@ Its three failures are exactly the three predicted: `EHEST-Pre-departure-checkli
 `nRotate` is only read when the orientation came back `Standard` — so the quarter turns take a
 branch with no wrap, no `SC_ROT_BREAK_FACTOR` cap and no sheet minimum, because `bStdAllowed` gates
 the last two on that same test. A single letter in a 10 pt cell asks for **149 twips at 90° and 257
-at 45°**. 216 of 216 probe rows now come back LibreOffice's own, against 138 before.
+at 45°**. 216 of 216 probe rows now come back LibreOffice's own.
 
 **A glyph advances by whole device pixels**, so a string's width is the sum of its rounded advances
 and not the rounded sum. Fourteen of the eighteen distinct probe widths agree either way and the
-four twelve-point ones differ by 1.4%; that distinction is what took the fit from 138 to 216.
+four twelve-point ones differ by 1.4%. Restoring the rounded total fails 18 of the 36 test cases.
 
 **Its lines are a block, laid out unturned from an anchor and then turned about it.** Every line was
 drawn at one point — four records at exactly `(363.49, 262.53)` on `Keywords_Mapping` page 43 — and

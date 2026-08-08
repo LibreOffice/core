@@ -58,8 +58,8 @@ each caught by its own reintroduced bug:
   90° reaches 7358.
 - **A glyph advances by whole device pixels**, so a string's width is the sum of its rounded
   advances and not the rounded sum. Fourteen of the eighteen distinct widths agree under either
-  reading; the four twelve-point ones differ by up to 1.4%, which is what settles it. This is what
-  took the fit from 138/216 to 216/216.
+  reading; the four twelve-point ones differ by up to 1.4%, which is what settles it. Restoring the
+  rounded total fails 18 of the 36 test cases, so it is load-bearing on half the fixture.
 
 The sheet's minimum moved inside `AttributeHeight`, which is where `lcl_GetAttribHeight` has it
 (`column2.cxx:889`). Every row that had a floor still has one; the quarter-turned rows, correctly,
@@ -144,6 +144,12 @@ into six lines scored six `pdftotext` tokens and now scores one, while the refer
 line written a glyph at a time and poppler still finds two or three words in it. The ink is closer
 and the token count is further, which is the word gate measuring operator granularity rather than
 text.
+
+The pixel instrument agrees where it can see anything at all. `pdf-image-diff.py` over three of the
+eleven, against the reference: `programs contact list as of 07-01-10.xls` goes from **6.25 `|ink|%`
+over three major pages to 4.89 over two**, and `Keywords_Mapping` and `cy06_primary_np_comm` do not
+move — their changes are below what 512 pixels on the long edge can resolve, and `Keywords_Mapping`'s
+eleven major pages are its chart pages, which are the font gap and not this.
 
 ## Tests
 
