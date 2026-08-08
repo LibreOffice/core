@@ -1,9 +1,6 @@
-using System.Buffers.Binary;
 using Paperless.Core.Charts;
-using Paperless.Core.Diagnostics;
-using Paperless.Spreadsheets.Layout;
-using Paperless.Spreadsheets.MsBinary;
 using Shouldly;
+using static Paperless.Spreadsheets.Tests.BiffChartFixture;
 
 namespace Paperless.Spreadsheets.Tests;
 
@@ -152,40 +149,9 @@ public sealed class XlsChartFontTests
     }
 
     // Font indices into the buffer this workbook writes. Index 4 does not exist.
-    private const ushort AppFont = 0;
     private const ushort Caladea = 1;
     private const ushort Carlito = 2;
     private const ushort DejaVu = 5;
-
-    /// <summary>The five <c>FONT</c> records every fixture here writes, in order.</summary>
-    /// <remarks>
-    /// Record zero is the workbook's app font and is Liberation Sans, so a chart that names
-    /// nothing and a chart whose family failed to be read look the same from the page — which is
-    /// why every discriminating case above names one of the other two instead.
-    /// </remarks>
-    private static readonly string[] Fonts =
-        ["Liberation Sans", "Caladea", "Carlito", "Liberation Serif", "DejaVu Sans"];
-
-    private static ChartPlot Chart(byte[] substream)
-    {
-        List<byte> globals = [.. Record(Bof, [0x00, 0x06, 0x05, 0x00, 0, 0, 0, 0])];
-        foreach (string name in Fonts) globals.AddRange(FontRecord(name));
-
-        // BOUNDSHEET states where the sheet's BOF is, so the record has to be built once
-        // everything before it is sized — including itself.
-        byte[] boundSheet = BoundSheetRecord(0);
-        globals.AddRange(BoundSheetRecord(globals.Count + boundSheet.Length + 4));
-        globals.AddRange(Record(Eof, []));
-        globals.AddRange(substream);
-
-        List<Diagnostic> diagnostics = [];
-        XlsWorkbookReader reader = new([.. globals], diagnostics);
-        reader.Read();
-
-        reader.Layouts.Count.ShouldBe(1);
-        SheetDrawing drawing = reader.Layouts[0].Drawings.Items.Single(item => item.Chart is not null);
-        return drawing.Chart!;
-    }
 
     /// <summary>
     /// Writes a chart substream stating the fonts asked for, and nothing else that matters.
@@ -213,17 +179,12 @@ public sealed class XlsChartFontTests
         if (emptyGlobalDefault)
         {
             body.AddRange(Record(ChDefaultText, Word(GlobalDefaultText)));
-            body.AddRange(Record(ChText, new byte[32]));
-            body.AddRange(Record(ChBegin, []));
-            body.AddRange(Record(ChEnd, []));
+            body.AddRange(Group(ChText, new byte[32]));
         }
 
         if (axisFont is { } onAxis)
         {
-            body.AddRange(Record(ChAxis, new byte[18]));
-            body.AddRange(Record(ChBegin, []));
-            body.AddRange(Record(ChFont, Word(onAxis)));
-            body.AddRange(Record(ChEnd, []));
+            body.AddRange(Group(ChAxis, new byte[18], Record(ChFont, Word(onAxis))));
         }
 
         if (strandedGlobalFont is { } stranded)
@@ -236,22 +197,7 @@ public sealed class XlsChartFontTests
         if (globalFont is { } global) body.AddRange(DefaultText(global, GlobalDefaultText));
         if (axesSetFont is { } axesSet) body.AddRange(DefaultText(axesSet, AxesSetDefaultText));
 
-        List<byte> chart =
-        [
-            // CHCHART: the frame rectangle, in 1/65536 pt. Only its presence matters here.
-            .. Record(ChChart, new byte[16]),
-            .. Record(ChBegin, []),
-            .. body,
-            .. Record(ChEnd, []),
-        ];
-
-        return
-        [
-            // A chart substream's BOF states type 0x0020.
-            .. Record(Bof, [0x00, 0x06, 0x20, 0x00, 0, 0, 0, 0]),
-            .. chart,
-            .. Record(Eof, []),
-        ];
+        return BiffChartFixture.Substream(body);
     }
 
     /// <summary>A <c>CHTEXT</c> group carrying one <c>CHFONT</c>, optionally headed by an id.</summary>
@@ -260,75 +206,7 @@ public sealed class XlsChartFontTests
         List<byte> written = [];
         if (id is { } which) written.AddRange(Record(ChDefaultText, Word(which)));
 
-        written.AddRange(Record(ChText, new byte[32]));
-        written.AddRange(Record(ChBegin, []));
-        written.AddRange(Record(ChFont, Word(font)));
-        written.AddRange(Record(ChEnd, []));
+        written.AddRange(Group(ChText, new byte[32], Record(ChFont, Word(font))));
         return [.. written];
     }
-
-    /// <summary>A BIFF8 <c>FONT</c> record naming one family at ten point.</summary>
-    private static byte[] FontRecord(string name)
-    {
-        List<byte> body =
-        [
-            .. Word(200),        // height, in twentieths of a point
-            .. Word(0),          // flags
-            .. Word(0x7FFF),     // colour: automatic
-            .. Word(400),        // weight
-            .. Word(0),          // escapement
-            0,                   // underline
-            0, 0, 0,             // family, character set, reserved
-            (byte)name.Length,
-            0,                   // eight-bit characters
-            .. name.Select(character => (byte)character),
-        ];
-
-        return Record(Font, [.. body]);
-    }
-
-    /// <summary>A <c>BOUNDSHEET</c> naming a chart sheet at one offset.</summary>
-    private static byte[] BoundSheetRecord(int offset)
-    {
-        byte[] body = new byte[4 + 2 + 2 + 5];
-        BinaryPrimitives.WriteInt32LittleEndian(body, offset);
-        body[5] = 0x02;   // the high byte of the flags: a chart sheet
-        body[6] = 5;      // cch
-        body[7] = 0;      // compressed
-        "Chart"u8.CopyTo(body.AsSpan(8));
-        return Record(BoundSheet, body);
-    }
-
-    private static byte[] Word(ushort value)
-    {
-        byte[] written = new byte[2];
-        BinaryPrimitives.WriteUInt16LittleEndian(written, value);
-        return written;
-    }
-
-    private static byte[] Record(ushort id, byte[] payload)
-    {
-        byte[] record = new byte[4 + payload.Length];
-        BinaryPrimitives.WriteUInt16LittleEndian(record, id);
-        BinaryPrimitives.WriteUInt16LittleEndian(record.AsSpan(2), (ushort)payload.Length);
-        payload.CopyTo(record.AsSpan(4));
-        return record;
-    }
-
-    private const ushort Bof = 0x0809;
-    private const ushort Eof = 0x000A;
-    private const ushort BoundSheet = 0x0085;
-    private const ushort Font = 0x0031;
-
-    private const ushort ChChart = 0x1002;
-    private const ushort ChLegend = 0x1015;
-    private const ushort ChAxis = 0x101D;
-    private const ushort ChDefaultText = 0x1024;
-    private const ushort ChText = 0x1025;
-    private const ushort ChFont = 0x1026;
-    private const ushort ChBegin = 0x1033;
-    private const ushort ChEnd = 0x1034;
-
-    private const ushort GlobalDefaultText = 2;
-    private const ushort AxesSetDefaultText = 3;
 }
