@@ -52,7 +52,7 @@ public class ChartAxisLabelTests
         (string?[] texts, Length[] centres) = Axis(4, 120.0);
 
         ChartAxisLabelLayout layout = ChartAxisLabels.Resolve(
-            texts, centres, new ChartAxisText(), Size, new Ruler());
+            texts, centres, new ChartAxisText(), Size, new ChartText(new Ruler(), null));
 
         layout.Rotation.ShouldBe(0.0);
         layout.Rhythm.ShouldBe(1);
@@ -75,7 +75,7 @@ public class ChartAxisLabelTests
         (string?[] texts, Length[] centres) = Axis(16, 36.0);
 
         ChartAxisLabelLayout layout = ChartAxisLabels.Resolve(
-            texts, centres, new ChartAxisText(), Size, new Ruler());
+            texts, centres, new ChartAxisText(), Size, new ChartText(new Ruler(), null));
 
         layout.Rotation.ShouldBe(Math.PI / 4.0, 1e-12);
         layout.Rhythm.ShouldBe(1);
@@ -95,7 +95,7 @@ public class ChartAxisLabelTests
         (string?[] texts, Length[] centres) = Axis(16, 36.0);
 
         ChartAxisLabelLayout layout = ChartAxisLabels.Resolve(
-            texts, centres, new ChartAxisText(OverlapAllowed: true), Size, new Ruler());
+            texts, centres, new ChartAxisText(OverlapAllowed: true), Size, new ChartText(new Ruler(), null));
 
         layout.Rotation.ShouldBe(0.0);
         layout.Rhythm.ShouldBe(1);
@@ -126,7 +126,7 @@ public class ChartAxisLabelTests
         // Ten characters at half an em is 50 pt in a 30 pt slot: one word, no way to break it.
         (string?[] unbreakable, Length[] centres) = Axis(8, 30.0);
 
-        ChartAxisLabels.Resolve(unbreakable, centres, wrapping, Size, new Ruler())
+        ChartAxisLabels.Resolve(unbreakable, centres, wrapping, Size, new ChartText(new Ruler(), null))
             .Rotation.ShouldBe(Math.PI / 4.0, 1e-12);
 
         // The same width split into two words, each of which fits: wrapping stays on, so the
@@ -134,7 +134,7 @@ public class ChartAxisLabelTests
         string?[] breakable = [.. unbreakable.Select(_ => "Sep tem")];
 
         ChartAxisLabelLayout thinned =
-            ChartAxisLabels.Resolve(breakable, centres, wrapping, Size, new Ruler());
+            ChartAxisLabels.Resolve(breakable, centres, wrapping, Size, new ChartText(new Ruler(), null));
 
         thinned.Rotation.ShouldBe(0.0);
         thinned.Rhythm.ShouldBeGreaterThan(1);
