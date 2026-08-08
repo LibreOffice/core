@@ -301,7 +301,7 @@ internal static class SheetTextLayout
         // differently. See SheetDeviceUnits: a font height rounds and a margin truncates, which is
         // what puts a ten-point cell's text at 10.0063 pt and its left edge 0.9921 pt inside the
         // column rather than a whole point.
-        Length size = SheetDeviceUnits.SnapFontSize(format.FontSize) * scale;
+        Length size = SheetDeviceUnits.SnapFontSize(format.FontSize, scale);
         Length margin = SheetDeviceUnits.Snap(CellMargin) * scale;
 
         // The indent counts only when the cell states left or right alignment outright. Calc reads

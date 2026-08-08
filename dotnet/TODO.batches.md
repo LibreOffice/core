@@ -6139,6 +6139,69 @@ claim the `a:duotone` work rested on.
    under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
    not the fix. Round seventeen's action item is done; it should come off the list.
 
+## Sheets, round twenty-three: the em is quantised through the device, not after it — swept whole at `9c5bef08c`
+
+**The track verdict does not move, and that is the honest headline.** Swept whole before anything
+was changed and again after the one fix: **144/171, total absolute page error 94, 153 exact page
+counts, batches 001–009 at 89/89** — identical either side, every per-batch figure identical, no
+document changing verdict in either direction. Total absolute word error goes 43961 → 43903.
+Both sweeps: 171 rows, no duplicate path, zero `ref-failed`, each against its own snapshot of the
+CLI. The baseline reproduces round twenty-two's four closing numbers to the digit.
+
+Per batch, unchanged before and after: 001–008 10/10, 009 9/9, 010 6/10, 011 6/10, 012 8/10,
+013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
+
+### The drawn font size, finally named
+
+Round twenty-two found that a third of the *passing* documents draw their text at a constant
+ratio off the reference's size — ours `6.7606`, the reference `6.803`, on a sheet printed at 75%
+— and declined to assert a cause. The brief that followed proposed the slides track's 1/100 mm
+grid quantisation, with a mechanism and a precedent. **That proposal is wrong, and wrong in the
+direction the grid is already right**: our number *is* the em on the 1/100 mm grid, snapped and
+then multiplied by the scale, and no rounding of 9 pt to a hundredth in either order reaches the
+reference's 240.
+
+What the reference does, fitted on eight authored probe sheets — sixteen sizes at each of seven
+print scales, plus two sweeps in 0.05 pt steps, **178 of 178 observations reproduced exactly**:
+
+```
+h    = round(twips * 127 / 72)          # 1/100 mm — the snap we already had
+p    = round(h * scale * 720 / 2540)    # whole device pixels, PDF reference device at 720 dpi
+L    = round(p * 2540 / (720 * scale))  # back to whole logical units, through the *scaled* map mode
+size = L * scale
+```
+
+The 720 dpi is measured, not assumed: at 100% the emitted sizes step in units of 2540/720 and
+nothing else. Two consequences worth separating. At 100% the round trip is the identity for every
+whole point size from 6 to 48, which is the whole of why this hid until a zoomed sheet — it is
+*not* the identity in general, 8.25 pt going out at 289 hundredths rather than 291. And under a
+zoom it is the identity for even whole point sizes and not for odd ones, 9 pt and 11 pt being the
+two a spreadsheet uses most, which is why the first sighting looked like a per-document constant.
+
+Rendering the probes with both renderers: **194 of 194 emitted sizes agree after, against 117 of
+194 before**, measured by building the pre-fix CLI and rendering them rather than by modelling it.
+
+**Reach, measured by rendering all 171 documents with both CLIs: 48 of them change at least one
+drawn size, 269 361 text records in total.** None changes verdict, and none was ever going to:
+`batch-check.sh` measures pages, words and embedding, and this class moves none of the three.
+A fix that is real and moves no verdict is still worth having; reporting it as progress is not.
+
+Probe data, both sweeps and the arithmetic are in `dotnet/probes/sheets-r23/`.
+
+### Batch 010 is a chart batch, and cannot be closed without the chart work
+
+All four failures rendered by both renderers and diffed page by page. Two `.xls` charts plot an
+axis of 0…12 — the default scale of a plot with no series — where the reference plots 0…90 and
+0…1400; one `xlsx` chart draws every label in Liberation Sans where the reference uses the
+theme's Carlito; the fourth is round twenty-two's open `INDEX_Digital_Transformation_Toolkits.xls`,
+not re-derived. The deficits are confined to the pages carrying a chart.
+
+`ChartLabel` in `Paperless.Core/Charts` carries no font family at all, so `SheetChart`,
+`SlideChart` and `FrameChart` all draw chart text in one hardcoded default. **Reach on this track
+is one document** — exactly one of the 171 is a container holding an `xl/charts/chart*.xml` part —
+so it is recorded rather than fixed here; the reach on the other two tracks is unmeasured and
+likely larger.
+
 ## Sheets, round twenty-two: the bold that was never missing — swept whole at `9cffaa02a`
 
 **Nothing moved, and that is the honest headline.** Swept whole before anything was changed and
