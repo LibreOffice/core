@@ -269,6 +269,20 @@ telling the truth.
 - **Subset prefixes are stripped.** `AAAAAA+Carlito` and `BAAAAA+Carlito` are the same face and
   the prefix is assigned per file; `Carlito` against `Carlito-Bold` is what remains, and that is
   a finding.
+- **A displaced element appears in *both* one-sided lists, and reading only one of them says
+  "missing".** The match window is three points. Move something further than that and its two
+  records find no partner, so it is reported once under *only in ours* and once under *only in
+  the reference* — which is exactly what a genuinely absent element looks like from one side.
+
+  This is not hypothetical: a brief of mine claimed a document's page 1 was "missing the
+  reference's entire departmental title block", diagnosed from the reference-only half of a
+  diff. We draw all of it, 14.15 pt too high. The round that inherited the claim had to spend
+  part of itself disproving it, and the real defect on that page — a two-column section filling
+  only its first column — is a different bug entirely.
+
+  **Read both one-sided lists together and look for the same content in each** before concluding
+  anything is absent. A pair that appears in both, with the same glyph count and text and
+  different positions, is one displaced element and its offset is the measurement you want.
 
 Text is decoded by joining `pdftotext -bbox` on position rather than by reading the subset's
 ToUnicode CMap here — poppler already has that decoder, and reimplementing it is a large surface

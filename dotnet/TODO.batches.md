@@ -7472,3 +7472,65 @@ the one the skill already gives.
 4. **`w:pBdr` for `.rtf` and `.odt`**, and **`w:val="double"` reserving one width where it should
    reserve three** — both unchanged, both needing an authored probe rather than a corpus sweep, and
    both correctly left alone this round.
+
+## Sheets round twenty-five and words round twenty-six, merged at `f61af6b79`
+
+**The first gate movement in three rounds, and it came from a record-stream bug.** A bare
+`CONTINUE` inside a BIFF drawing block is Escher, not the preceding `OBJ`'s payload: Excel stops
+writing `MSODRAWING` once a sheet's Escher stream passes the 8224-byte ceiling and writes the
+rest as `CONTINUE`, still one per `OBJ`. We absorbed each into the preceding `OBJ` and lost every
+shape past the ceiling.
+
+| sheets | base | after |
+|---|---:|---:|
+| matches | 144/171 | **145/171** |
+| absolute page error | 94 | **90** |
+| exact page counts | 153 | **154** |
+| batch-010 | 6/10 | **7/10** |
+
+Reach: **1 of 171 documents changes what is drawn**, the other 170 byte-identical; the condition
+censuses at 18 of the track's 61 OLE2 workbooks, so 18 is the ceiling and 1 is the reach.
+Verified here at the merge — `INDEX_Digital_Transformation_Toolkits.xls` now renders **24 pages
+against 24**, having been 20/24 for four rounds.
+
+### Our PDF writer was never the nondeterminism — the clock was
+
+The brief said the writer was not byte-reproducible. Both halves were wrong, and the round has
+the measurements: all 171 rendered **twice in succession** with timestamps masked are **171 same,
+0 different**. Rendered under two time zones a day apart they are **17 different** — those
+documents print the date, via `SheetHeaderContext.Printed` defaulting to `DateTime.Now` and read
+afresh in *every page's* header context, which `&D`/`&T` then print.
+
+So the floor under three rounds of byte-level reach figures was **17 in 171 and calendar-shaped**,
+not a writer defect. The instant is now taken once per printout, honours `SOURCE_DATE_EPOCH` read
+as UTC, and is passed to `/CreationDate`; with it set, two runs under different zones are
+byte-equal **with nothing masked at all**.
+
+### `PAGE` in a running head now prints the page's own number
+
+`WritingFieldKind` was produced by all four readers and consumed by nothing, so a document
+printed its producer's cached number on every page. Substitution happens before `FlowLayouter`,
+because the number has a different advance and must take part in line breaking; the sequence
+comes from `w:pgNumType/@w:fmt` and `sprmSNfcPgn`, neither previously read.
+
+**Reach measured by rendering: 104 of 200 documents changed, 80 DOCX and 24 DOC, 3548 pages.**
+The DOCX census said 86 — overstating for DOCX and blind to DOC entirely. The gate did not move
+and could not have: a footer number is three glyphs.
+
+### Three of my brief's claims were refuted, one of them by its own instrument
+
+- **The missing title block does not exist.** That page is not missing its title block; we draw
+  all of it, 14.15 pt too high. The diagnosis came from reading only the *reference-only* half of
+  a `pdf-ops.py` diff whose 3 pt window the displacement exceeded — so the block appears in
+  **both** one-sided lists. Now recorded in the render-comparison skill as a tool trap.
+- **The page-numbering restart defect does not exist.** With `PAGE` computed, that document's
+  page 9 says 3 and page 5 says iii, both matching. A cached string cannot tell you what page a
+  renderer thinks it is on.
+- **"One cause across four documents" fails.** The real defect on that page is a continuous
+  two-column section we fill one column of; censused off the WW8 section table it is 6 `.doc`
+  plus 4 `.docx`, and the document I named as a sibling is not among them.
+
+One earlier refutation was itself refuted: round twenty-four read a table showing pages 1–13
+agreeing exactly and divergence from page 14 as evidence *against* a truncated shape walk. **A
+walk truncated at 25 does place the first fifteen exactly and then thin** — that is what a prefix
+looks like. Correct measurement, inverted reading, and the truncation was real.
