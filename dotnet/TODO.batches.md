@@ -7303,3 +7303,172 @@ hook that already existed for this.
 shared with the DOC or PPT readers, so neither the words nor the slides track is owed a sweep.
 
 Probe data, six whole-track TSVs and the record dumps behind them: `dotnet/probes/sheets-r25/`.
+## Words round twenty-six, at `be5df60ac` — `PAGE` in a running head
+
+### The baseline reproduced the round before it to the byte
+
+`base/rows.tsv` differs from round twenty-three's own pre-fix sweep on exactly the two documents
+that round's header fix moved, and nowhere else. The image sweep's TSV is **byte-identical** to
+round twenty-three's `img-hdr.tsv` — same md5 — which gives major **360** and summed `|ink|%`
+**798.02** over 155 documents, and the gate gives **155/200** with total absolute page error
+**98**. Every figure the brief carried reproduced.
+
+### The brief's first item is wrong, and the way it went wrong is worth keeping
+
+The record said `150_5300_13_chg8.doc` "page 1 is missing the reference's entire departmental
+title block", drawn in DejaVu Sans at y 701.95–663.55, and that we "draw nothing there". **We
+draw all of it.** Our page 1 has the same four DejaVu Sans records and the same two 37 pt
+"Advisory"/"Circular" records the reference has, 14.15 pt higher up the page — and looking at the
+two page images settles it in one glance.
+
+The mechanism of the mistake is a documented property of the instrument: `pdf-ops.py diff` pairs
+records by nearest neighbour **within three points**, so a block displaced by 14.15 pt appears in
+*both* one-sided lists. Reading only the "only in the reference" half turns a displacement into a
+disappearance. The skill already says the window is three points; what this adds is that the
+symptom of exceeding it is *duplication across the two lists*, and the cheap check is to grep the
+"only in ours" list for the same text before concluding anything is missing.
+
+What page 1 is really missing is its **second column**. The reference lays paragraphs 1 and 2 out
+in two balanced columns — column one x 72.1–306.4, column two x 341.8–576.2 — and we lay the same
+text down column one alone. Our column *width* is right, so `sprmSCcolumns` is read correctly;
+what is absent is that a multi-column *text section* shorter than a page has its columns balanced
+(`SwLayoutFrame::FormatWidthCols`, `wsfrm.cxx`:3955, binary-searches the section height between
+`nMinimum` and `nMaximum` unless `SwFormatNoBalancedColumns` is set). Ceiling, censused properly
+off the WW8 section table rather than by a byte scan and labelled as a ceiling: **6 of 66 `.doc`
+and 4 of 134 `.docx`** declare a section with more than one column, eight of them continuous.
+`150_5335_5a.doc` is **not** one of them, so "a single cause across four documents" does not hold
+for columns either.
+
+### `PAGE` in a running head printed the producer's cached number
+
+The brief's second item, and much the largest thing on the track. `WritingFieldKind` was produced
+by all four readers and consumed by nothing — the "read but never used" class the
+`render-comparison` skill lists. Measured before the change: `batch-010/195584360.docx` printed
+"Page 10" on **all twenty** of its pages where LibreOffice printed 1 to 20, and
+`batch-019/150_5335_5a.doc` printed 13 on its page 9.
+
+`PageFields` now substitutes the field's value into the running head's blocks *before*
+`FlowLayouter` sees them, and `PageFurnitureSet` keys its laid-out cache on the page number only
+for a head that carries one. Substituting after layout is not open to us: the number is text of a
+different width from the cached one, so it has to take part in the line breaking rather than be
+painted over it. The sequence comes from the section — `w:pgNumType/@w:fmt` and `sprmSNfcPgn`,
+neither previously read, 21 of the 134 DOCX declaring `lowerRoman` — with a field's own `\*`
+picture switch overriding it.
+
+**The second half of the brief's second item is refuted.** It said the section's numbering restart
+was wrong as well as the cache, because our page 9 of `150_5335_5a.doc` said 13 against the
+reference's 3. With the field computed, that page says **3** and its page 5 says **iii**, both
+matching. There was never a restart defect: a renderer printing a cached string tells you nothing
+about what page it thinks it is on, and the inference drawn from it was unfalsifiable.
+
+### Measured reach, and what the gate did
+
+Reach measured by rendering, never by censusing: comparing the `pdftotext` of all 200 documents
+between the two sweeps, **104 of 200 documents changed — 80 DOCX and 24 DOC — across 3548 pages.**
+The DOCX census (86 of the 111 zip-container documents that have furniture at all carry a `PAGE`
+field in it) was an over-estimate for DOCX and blind to the DOC half; the rendered figure is the
+one to quote.
+
+| | before | after |
+|---|---:|---:|
+| parity gate | 155 | 155 |
+| abs page error | 98 | 98 |
+| abs word error | 6885 | **6840** |
+| major pages (155 common docs) | 360 | **362** |
+| summed `\|ink\|%` | 798.02 | **797.48** |
+
+**Say the honest thing first: the gate did not move, and it could not have.** A footer's page
+number is two or three glyphs; it changes no page count and, on all but one document, no word
+count. This is the skill's "a real fix that moves no verdict" case, and the evidence that it is
+real is the reach measurement and the per-document text, not the scoreboard.
+
+The two extra major pages are an **instrument artefact and not a regression**, and this is
+measured rather than assumed. Both are on `easa-regulations-update-20.docx`. Running
+`pdf-image-diff.py` for the same reference against each sweep's rendering gives *identical*
+`|ink|%` on all 22 pages to two decimals — page 18 is 0.29 either way and page 21 is 0.29 either
+way — while their verdicts flip from `shifted` to `MAJOR`. And the footers on those pages went
+from "Page | 2" on every page to "Page | 5", "Page | 7", "Page | 15", "Page | 19", each now equal
+to the reference's. **A verdict can move while the number it is supposedly derived from does
+not**; quote the ink column, not the verdict count, when a change is this small.
+
+### What is not done, and is not pretending to be
+
+- **`NUMPAGES`.** The spans are recorded and deliberately not substituted: the total is not known
+  while the running head is being laid out. A second pass would do it and is not written.
+- **`PAGE` in body text.** Left at its cached value. Resolving it is circular in a way a running
+  head's is not — the page a paragraph lands on depends on the height of the paragraphs before it —
+  and every `PAGE` field in this corpus's zip-container documents is in a header or a footer.
+- **RTF.** `RtfDocumentReader` records fields for extraction and its layout path does not carry the
+  spans, so an RTF footer still prints the cached number. No corpus document on this track is RTF;
+  this is a real gap in the library rather than unfinished corpus work, and it is one file's worth.
+- **The WW8 half has no unit test.** A synthetic `.doc` cannot be built here, so the DOC path rests
+  on the corpus measurement — 24 documents changed — and on `150_5335_5a.doc` matching page for
+  page. Said plainly rather than papered over.
+
+### Verified by putting the defects back
+
+Twelve layout defects and six reader defects, each reintroduced and the test run watched:
+
+| defect put back | caught by |
+|---|---|
+| draw the cached result (the original bug) | `EveryPageGetsItsOwnNumber` and four others |
+| cache the head against the slot alone | `EveryPageGetsItsOwnNumber` and three others |
+| always resolve against page one | `EveryPageGetsItsOwnNumber` and three others |
+| ignore the section's sequence | `TheSectionsSequenceIsHonoured` |
+| ignore the field's own picture switch | `AFieldsOwnPictureWins` |
+| leave the runs after the span where they were | `RunsAroundTheFieldKeepTheirText` |
+| drop every run the span touches | `RunsAroundTheFieldKeepTheirText` |
+| splice from the span's start rather than its end | seven of the ten |
+| trust a span that runs past the text | `AnOutOfRangeSpanIsIgnored` |
+| do not recurse into a table in the head | `ANumberInsideAHeaderTableIsResolved` |
+| substitute a `NUMPAGES` span too | `APageCountFieldIsLeftAlone` |
+| apply several spans forwards, not from the end back | `TwoFieldsInOneParagraphBothResolve` |
+| DOCX walker records no span | `ADocxFooterFieldIsRecordedAndResolved` |
+| DOCX instruction taken from one `w:instrText` only | `ADocxFooterFieldIsRecordedAndResolved` |
+| ODF `page-number` treated as ordinary markup | `AnOdfFooterFieldIsRecordedAndResolved` |
+| ODF walker records no span | `AnOdfFooterFieldIsRecordedAndResolved` |
+| a `MERGEFORMAT` switch read as the number picture | `ADocxFooterFieldIsRecordedAndResolved` |
+| result start taken at the field's begin, not its separator | **nothing — and it is not a defect** |
+
+The last row is the useful one. Nothing can be emitted between a DOCX field's `begin` and its
+`separate`: `w:instrText` is accumulated rather than drawn, and `w:t`, `w:tab` and `w:br` are all
+guarded by `!_inInstruction`. So the two offsets are provably equal and the "defect" is an
+equivalent formulation. A first attempt at the twelfth layout defect had the same shape —
+`Kind == PageCount` against `Kind != PageNumber` over a two-member enum — and was replaced rather
+than reported as an uncaught defect.
+
+`ARunningHeadWithNoFieldIsStillLaidOutOnce` is a **control rather than a detector** and is
+labelled so in the file: no defect above breaks it, because "the cache is keyed on the slot alone
+when nothing varies" is what every wrong version also does. It is kept because a regression that
+keyed *every* running head on its page number would be invisible to all the others.
+
+### A process trap this round walked into
+
+`git add -A` was run while the defect-reintroduction script had its first patch applied, and the
+commit captured the defect — `Fields = []` in `DocxLayoutSource`, which *is* "the reader records
+no span". It survived one commit and was caught by `git diff` afterwards. A script that patches,
+tests and reverts leaves the tree transiently wrong, and a whole-tree stage during that window is
+indistinguishable from committing working code. **Stage explicit paths, or do not commit while
+such a script is running.** The sweep was unaffected, because it measured a checksummed CLI
+snapshot taken before the script started — which is the second argument for snapshotting, beside
+the one the skill already gives.
+
+### What the next round should take, in order
+
+1. **Balanced columns for a continuous multi-column section.** Localised, mechanised in
+   `SwLayoutFrame::FormatWidthCols`, and the reason `150_5300_13_chg8.doc` is 21 pages against 18.
+   Ceiling ten documents, three of them (`chg8`, `chg10`, `chg12`) at the top of the remaining ink.
+   The Paginator already models columns and fills them in order; what is missing is the binary
+   search over the section's height when the section is shorter than the frame.
+2. **`chg8` page 1 is 14.15 pt too high, uniformly.** Measured, not explained: every record from
+   the FAA seal down to "Initiated by:" is 14.15 pt above the reference's, and the offset then
+   changes to 11.40 pt at the first body paragraph. The header push-down rule is already
+   implemented and tested (`HeaderOverflowTests`), so this is *not* simply that; LibreOffice's flat
+   export of the document gives the section a header holding one empty paragraph, and our DOC
+   reader treats an empty header story as "this section has no header". That is a hypothesis with
+   a measurement attached, not a diagnosis.
+3. **`NUMPAGES`**, which is now one pass away: the spans are recorded and the paginator knows the
+   total by the time it returns.
+4. **`w:pBdr` for `.rtf` and `.odt`**, and **`w:val="double"` reserving one width where it should
+   reserve three** — both unchanged, both needing an authored probe rather than a corpus sweep, and
+   both correctly left alone this round.

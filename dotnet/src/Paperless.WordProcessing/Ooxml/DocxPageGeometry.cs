@@ -46,6 +46,12 @@ internal static class DocxPageGeometry
             Page = page,
             RestartPageNumberAt = RestartAt(sectionProperties),
 
+            // w:pgNumType/@w:fmt, the sequence the section's PAGE fields are written in. 21 of this
+            // corpus's DOCX name lowerRoman for their front matter and decimal for the body.
+            PageNumberFormat = Layout.NoteNumbering.Parse(
+                    Word.Attribute(Word.Child(sectionProperties, "pgNumType"), "fmt"))
+                ?? Layout.NoteNumberFormat.Arabic,
+
             // w:titlePg is per-section; even-and-odd is per-document. Mixing the two up is easy and
             // shows up as a first-page header appearing on every page or on none.
             HasDifferentFirstPage = Word.IsOn(Word.Child(sectionProperties, "titlePg")),

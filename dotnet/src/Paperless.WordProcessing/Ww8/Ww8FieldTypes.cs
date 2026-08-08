@@ -48,6 +48,21 @@ public sealed class Ww8FieldTypes
     /// </remarks>
     public const int FileName = 29;
 
+    /// <summary>The <c>PAGE</c> field, whose cached result is right on one page and wrong on the rest.</summary>
+    /// <remarks>
+    /// 33, <c>Read_F_CurPage</c>'s slot in <c>aWW8FieldTab</c> (<c>ww8par5.cxx</c>:878). The same table's
+    /// neighbourhood is why the number matters rather than the instruction: <c>ww8par5.cxx</c>:964 special-
+    /// cases it by id — "do not recurse into nested page fields".
+    /// </remarks>
+    public const int CurrentPage = 33;
+
+    /// <summary>The <c>NUMPAGES</c> field: how many pages the document has.</summary>
+    /// <remarks>
+    /// 26, the first of the three <c>Read_F_Num</c> slots (26 <c>NUMPAGES</c>, 27 <c>NUMWORDS</c>,
+    /// 28 <c>NUMCHARS</c>).
+    /// </remarks>
+    public const int PageCount = 26;
+
     /// <summary>A field's beginning, as <c>FLD.ch</c> states it.</summary>
     private const byte BeginMarker = 19;
 

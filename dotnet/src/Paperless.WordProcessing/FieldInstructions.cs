@@ -82,6 +82,83 @@ public static class FieldInstructions
     }
 
     /// <summary>
+    /// The page-sensitive field an instruction names, and the sequence it asks the value be written in.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Null for every field whose cached result is worth keeping, which is all but two of them. A
+    /// <c>PAGE</c> and a <c>NUMPAGES</c> are the pair whose cached result is a statement about the
+    /// document the producer had rather than the one being laid out, so they are the pair a paginating
+    /// renderer has to recompute; <c>SECTIONPAGES</c> is folded onto the count because we do not track
+    /// per-section totals and the whole-document total is nearer than a stale number.
+    /// </para>
+    /// <para>
+    /// The general number-picture switch is <c>\*</c> followed by a format name. Word's names for the
+    /// five sequences are not the ones <c>w:numFmt</c> uses — it spells them <c>Arabic</c>,
+    /// <c>roman</c>, <c>ROMAN</c>, <c>alphabetic</c> and <c>ALPHABETIC</c>, with case deciding two of
+    /// them — so they are mapped here rather than through <see cref="Layout.NoteNumbering.Parse"/>.
+    /// Null means the field asked for nothing and the section's own format decides, which is what all
+    /// but a handful of real fields do: across this corpus's DOCX the only switches written beside a
+    /// <c>PAGE</c> are <c>\* MERGEFORMAT</c>, <c>\* CHARFORMAT</c> and <c>\* Arabic</c>.
+    /// </para>
+    /// </remarks>
+    /// <param name="instruction">The instruction, verbatim.</param>
+    public static (Layout.PageFieldKind Kind, Layout.NoteNumberFormat? Format)? PageFieldOf(
+        string? instruction)
+    {
+        Layout.PageFieldKind? kind = Name(instruction)?.ToUpperInvariant() switch
+        {
+            "PAGE" => Layout.PageFieldKind.PageNumber,
+            "NUMPAGES" or "SECTIONPAGES" => Layout.PageFieldKind.PageCount,
+            _ => null,
+        };
+
+        return kind is { } named ? (named, NumberPicture(instruction)) : null;
+    }
+
+    /// <summary>
+    /// The sequence a <c>\*</c> switch names, or null when the instruction carries none this models.
+    /// </summary>
+    private static Layout.NoteNumberFormat? NumberPicture(string? instruction)
+    {
+        if (instruction is null) return null;
+
+        ReadOnlySpan<char> text = instruction.AsSpan();
+
+        for (int at = text.IndexOf('\\'); at >= 0 && at + 1 < text.Length;)
+        {
+            if (text[at + 1] == '*')
+            {
+                ReadOnlySpan<char> rest = text[(at + 2)..].TrimStart();
+                int end = rest.IndexOfAny(' ', '\t', '\n');
+                ReadOnlySpan<char> name = end < 0 ? rest : rest[..end];
+
+                // Case decides two of the five, so this is deliberately ordinal.
+                switch (name.ToString())
+                {
+                    case "roman": return Layout.NoteNumberFormat.LowerRoman;
+                    case "ROMAN": return Layout.NoteNumberFormat.UpperRoman;
+                    case "alphabetic": return Layout.NoteNumberFormat.LowerLetter;
+                    case "ALPHABETIC": return Layout.NoteNumberFormat.UpperLetter;
+                    default:
+                        if (name.Equals("Arabic", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return Layout.NoteNumberFormat.Arabic;
+                        }
+
+                        break;
+                }
+            }
+
+            int next = text[(at + 1)..].IndexOf('\\');
+            if (next < 0) break;
+            at += 1 + next;
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// What a field instruction computes, as far as the shared vocabulary names it.
     /// </summary>
     /// <remarks>

@@ -102,6 +102,16 @@ public sealed partial class Ww8DocumentReader
         /// <inheritdoc cref="HasAutoSpaceBefore"/>
         public bool HasAutoSpaceAfter { get; init; }
 
+        /// <summary>
+        /// Where a <c>PAGE</c> or <c>NUMPAGES</c> field's cached result sits in <see cref="Text"/>.
+        /// </summary>
+        /// <remarks>
+        /// The cached result is left in the text rather than removed, because it is the right string for
+        /// every consumer but the paginator — and the paginator is the only one that can compute a better
+        /// one. See <see cref="Layout.PageFields"/>.
+        /// </remarks>
+        public IReadOnlyList<Layout.PageFieldSpan>? Fields { get; init; }
+
         /// <summary>The list this paragraph belongs to, or zero when it belongs to none.</summary>
         /// <remarks>
         /// The <c>ilfo</c>, which is what LibreOffice compares between neighbours to decide whether an
@@ -480,6 +490,14 @@ public sealed partial class Ww8DocumentReader
         (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
         Stack<int> openFields = new();
 
+        // Where each open field's cached result began, as an offset into the paragraph being built, or
+        // −1 for a field whose separator has not been seen — and for one whose result began in an
+        // earlier paragraph, which `Close` resets. A field result that crosses a paragraph mark is left
+        // to its cached value: no page-number field does, and a span into a cleared builder would splice
+        // the wrong characters.
+        Stack<int> fieldResults = new();
+        List<Layout.PageFieldSpan> pageFields = [];
+
         // How many enclosing fields had their result replaced by a computed one, and which they were.
         // A count for the same reason `instruction` is one — fields nest, and the result of an outer
         // field can contain a whole inner field whose characters are equally not to be drawn — with the
@@ -586,6 +604,7 @@ public sealed partial class Ww8DocumentReader
                     instruction++;
                     openFields.Push(fieldTypes.At(position - fieldBase) ?? 0);
                     replacedFields.Push(false);
+                    fieldResults.Push(-1);
                     continue;
 
                 case Special.FieldSeparator:
@@ -593,6 +612,12 @@ public sealed partial class Ww8DocumentReader
                     // The instruction ends and the cached result begins. A field with no separator has
                     // no result, and its instruction stays hidden until its end.
                     if (instruction > 0) instruction--;
+
+                    if (fieldResults.Count > 0)
+                    {
+                        fieldResults.Pop();
+                        fieldResults.Push(current.Length);
+                    }
 
                     // The one point at which a computed field can be written: the instruction has been
                     // read, so the field's type is known, and the result it is replacing starts here.
@@ -613,10 +638,36 @@ public sealed partial class Ww8DocumentReader
                 }
 
                 case Special.FieldEnd:
+                {
                     if (instruction > 0) instruction--;
-                    if (openFields.Count > 0) openFields.Pop();
+                    int closed = openFields.Count > 0 ? openFields.Pop() : 0;
+                    int resultAt = fieldResults.Count > 0 ? fieldResults.Pop() : -1;
+
+                    // The field's *type* names it here, not its instruction: WW8 puts the type in the
+                    // PlcFld beside the marker, which is read already, and the instruction is hidden
+                    // text this walk deliberately drops. So a `\*` picture switch on a DOC page number
+                    // is not seen and the section's own `sprmSNfcPgn` decides the sequence — which is
+                    // where Word states it and what LibreOffice's importer reads
+                    // (`wwSectionManager::SetNumberingType`, ww8par6.cxx:838).
+                    if (resultAt >= 0 && resultAt <= current.Length && computed == 0)
+                    {
+                        Layout.PageFieldKind? kind = closed switch
+                        {
+                            Ww8FieldTypes.CurrentPage => Layout.PageFieldKind.PageNumber,
+                            Ww8FieldTypes.PageCount => Layout.PageFieldKind.PageCount,
+                            _ => null,
+                        };
+
+                        if (kind is { } named)
+                        {
+                            pageFields.Add(
+                                new Layout.PageFieldSpan(resultAt, current.Length - resultAt, named));
+                        }
+                    }
+
                     if (replacedFields.Count > 0 && replacedFields.Pop() && computed > 0) computed--;
                     continue;
+                }
 
                 case Special.AutoNumberedReference:
                 {
@@ -736,6 +787,7 @@ public sealed partial class Ww8DocumentReader
                 {
                     Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
                     Frames = _pendingFrames.Count == 0 ? null : [.. _pendingFrames],
+                    Fields = pageFields.Count == 0 ? null : [.. pageFields],
                 };
 
             // The U+000C above this paragraph was a hard page break rather than a section boundary, so
@@ -758,6 +810,17 @@ public sealed partial class Ww8DocumentReader
 
             current.Clear();
             positions.Clear();
+            pageFields.Clear();
+
+            // A field still open across the paragraph mark loses its result start with the builder it
+            // pointed into; its cached result stays, which is what it was before this existed.
+            if (fieldResults.Count > 0)
+            {
+                int depth = fieldResults.Count;
+                fieldResults.Clear();
+                for (int open = 0; open < depth; open++) fieldResults.Push(-1);
+            }
+
             _pendingNotes.Clear();
             _pendingFrames.Clear();
             emitted++;
