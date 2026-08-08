@@ -7747,6 +7747,94 @@ agreeing exactly and divergence from page 14 as evidence *against* a truncated s
 walk truncated at 25 does place the first fifteen exactly and then thin** — that is what a prefix
 looks like. Correct measurement, inverted reading, and the truncation was real.
 
+## Round twenty-six — sheets: a turned cell, measured twice and moving no verdict
+
+Base `d7fd6cf13`. The baseline sweep reproduces round twenty-five's committed after-sweep **row
+for row on all 171** — 145/171, absolute page error 90, 154 exact page counts, zero `ref-failed`.
+
+### Batch 010 is bounded by the slides track's work, and the round said so early
+
+Its three failures are exactly the three predicted: `EHEST-Pre-departure-checklist…xls` and
+`Keywords_Mapping_Graphs_and_Charts.xlsx` behind `ChartLabel`'s font, and
+`Template Pilot Logbook JAR-FCL V3.0.xls` unreachable by the word gate. Nothing in
+`Paperless.Spreadsheets` can move them, so the round went to the open lead instead.
+
+### A turned cell, in both halves
+
+**Its row is its text's width, and a quarter turn is not a rotation.**
+`ScPatternAttr::GetCellOrientation` reads exactly 9000 and 27000 as `BottomUp` and `TopBottom`, and
+`nRotate` is only read when the orientation came back `Standard` — so the quarter turns take a
+branch with no wrap, no `SC_ROT_BREAK_FACTOR` cap and no sheet minimum, because `bStdAllowed` gates
+the last two on that same test. A single letter in a 10 pt cell asks for **149 twips at 90° and 257
+at 45°**. 216 of 216 probe rows now come back LibreOffice's own.
+
+**A glyph advances by whole device pixels**, so a string's width is the sum of its rounded advances
+and not the rounded sum. Fourteen of the eighteen distinct probe widths agree either way and the
+four twelve-point ones differ by 1.4%. Restoring the rounded total fails 18 of the 36 test cases.
+
+**Its lines are a block, laid out unturned from an anchor and then turned about it.** Every line was
+drawn at one point — four records at exactly `(363.49, 262.53)` on `Keywords_Mapping` page 43 — and
+every single-line turned cell sat an ascent from the reference. Round twenty-five's *reference* half
+of that measurement was mispaired: the `(394.38, 761.89 / 731.90 / 716.91)` it quoted as the
+reference stepping those lines is the ordinary data column, which we draw at the same place. The
+reference's rotated heads are its `Carlito-Bold` records at six other x values, and it does not wrap
+that cell at all. Seven of eight probe positions now
+land within 0.15 pt; the eighth is recorded as a 2.55 pt shortfall, exactly the trailing space
+EditEngine leaves out of the width it aligns by.
+
+An obliquely turned cell is left exactly as it was. `DrawRotated` centres its block across the
+column and lifts its anchor by the block's height times the cosine, which is a different rule again,
+and nothing in the corpus is turned by anything but a quarter to fit it against.
+
+| sheets | base | after |
+|---|---:|---:|
+| matches | 145/171 | 145/171 |
+| absolute page error | 90 | 90 |
+| exact page counts | 154 | 154 |
+| absolute word error | 43694 | **43198** |
+
+**No verdict moves and no page count moves, and that is the headline.** Reach measured by
+rendering: **11 of 171 documents change what is drawn**, each confirmed with `SOURCE_DATE_EPOCH`
+pinned so the clock cannot contribute. Nine documents' word counts change, four towards the
+reference and five away — a heading that used to wrap into six lines scored six `pdftotext` tokens
+and now scores one, while the reference draws it as one line a glyph at a time and poppler still
+finds two or three words in it. The ink is closer and the token count is further.
+
+### A census that under-counted, which is the less familiar direction
+
+Counting `textRotation` in `xl/styles.xml` found **four** documents on this track. Eight of the
+eleven that actually changed are `.xls`, which states its rotation in an `XF` record no zip census
+can see. **A census that cannot read one of the corpus's two containers is a ceiling on the half it
+can read and nothing at all on the other** — the usual failure is a census overstating reach, and
+this one understated it nearly threefold.
+
+### Also fixed, with nil corpus reach and said so
+
+The ODF reader *clamped* a rotation angle instead of folding it, so 270° became +90 and 315° became
++90 as well. No sheets-track document is ODF with a turned cell; without the fix six of the probe's
+thirty-six sheets could not be read at all.
+
+### The chart-label font, picked up where the slides round left it
+
+The slides round wired `SlideChart` to `ChartPlot.TextFamily` and left `SheetChart`'s measurer
+unwired with a remark saying the change belonged to whichever round sweeps the sheets track. It is
+now wired on both the measuring and the drawing path, because a label measured in one face and drawn
+in another is centred on the wrong width.
+
+**Measured on the merged tree before the wiring, `batch-010` is still 7/10 with the same three
+failures** — so the slides merge on its own did not move this track's gate, against the prediction
+that it might. With the wiring, `Keywords_Mapping_Graphs_and_Charts.xlsx` embeds exactly the
+reference's two faces where it embedded Liberation Sans beside them; its word count moves 4650 to
+4647 against a reference 4808, so the residue there is not the face.
+
+Reach measured by rendering, both sides with the instant pinned: **1 of 171 documents**, and the
+whole-track sweep is 145/171 with page error 90 and 154 exact — the baseline's numbers and its
+per-batch line. Two rows of that sweep came back `ref-failed` under load and were re-run alone and
+spliced; one of them is `ECA Sinters.xls`, the same document round twenty-five had to splice.
+
+**The remaining half is BIFF and is named rather than guessed at.** `XlsChartReader` sets no family
+at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference embeds
+two. That work is in `Paperless.Spreadsheets` and so belongs to this track.
 ## Slides round twenty-three: the legend, inherited unmeasured and kept on its own numbers
 
 A container restart killed the previous slides agent mid-round; its two commits — a probe and a

@@ -476,14 +476,40 @@ internal static class OdsCellFormats
             _ => SheetVerticalAlignment.Standard,
         };
 
-        /// <summary>ODF states the angle anticlockwise in degrees, which is Calc's own sense.</summary>
+        /// <summary>
+        /// ODF states the angle anticlockwise in degrees, which is Calc's own sense.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Calc's <c>ATTR_ROTATE_VALUE</c> runs over the whole turn — its own writer emits 27000 for
+        /// what its dialog calls −90 — so a stated angle has to be folded into the half turn
+        /// <see cref="SheetCellFormat.RotationDegrees"/> keeps before it is clamped. Clamping
+        /// straight away is what the first version did, and it turned 270° into +90 and 315° into
+        /// +90 as well: a cell whose text should read top-to-bottom read bottom-to-top instead, and
+        /// a 45° heading leant the wrong way. Measured on a flat-ODS probe of six angles, three
+        /// sizes and six string lengths, that mistake also put every 315° row on the wrong height —
+        /// LibreOffice measures it as 45° and this measured it as a quarter turn.
+        /// </para>
+        /// <para>
+        /// Beyond a quarter turn the fold still clamps, because the model has nowhere to put an
+        /// upside-down cell; nothing in the corpus states one.
+        /// </para>
+        /// </remarks>
         private static int Rotation(string? value)
-            => value is not null
-               && double.TryParse(
-                   value.Replace("deg", string.Empty, StringComparison.OrdinalIgnoreCase),
-                   NumberStyles.Float, CultureInfo.InvariantCulture, out double degrees)
-                ? Math.Clamp((int)Math.Round(degrees), -90, 90)
-                : 0;
+        {
+            if (value is null
+                || !double.TryParse(
+                    value.Replace("deg", string.Empty, StringComparison.OrdinalIgnoreCase),
+                    NumberStyles.Float, CultureInfo.InvariantCulture, out double degrees))
+            {
+                return 0;
+            }
+
+            int folded = ((int)Math.Round(degrees) % 360 + 360) % 360;
+            if (folded > 180) folded -= 360;
+
+            return Math.Clamp(folded, -90, 90);
+        }
 
         private string? FontFaceFamily(string? name)
             => name is not null && styles.FontFaces.TryGetValue(name, out OdfFontFace? face)

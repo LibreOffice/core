@@ -374,7 +374,21 @@ internal static class SheetTextLayout
         // .xls — whose columns LibreOffice's BIFF import makes a shade narrower — nine.
         if (format.IsRotated) area = area.Unclipped();
 
-        Length available = cell.Box.Width - totalMargin;
+        // A quarter-turned cell that wraps breaks against the room its lines have *after* the
+        // turn, which is measured down the cell rather than across it: `calcPaperSize` gives a
+        // vertically oriented cell a paper whose width is the align rectangle's *height*
+        // (`output2.cxx:2691`). Breaking at the column width instead put several lines on a
+        // heading LibreOffice draws as one — measured on
+        // `Keywords_Mapping_Graphs_and_Charts.xlsx` page 43, where the reference writes its 28
+        // glyphs at one x and we wrote six lines of them.
+        //
+        // An *obliquely* turned cell has its own paper — `nOutHeight/|sin|`, then narrowed over
+        // five steps until the turned block fits the cell (`:4977`, `:5033-5062`) — and is left
+        // alone here. Nothing in the corpus turns a cell by anything but a quarter, so there is
+        // nothing to measure the second formula against.
+        Length available = IsQuarterTurned(format) && breaks
+            ? cell.Box.Height - (2 * margin)
+            : cell.Box.Width - totalMargin;
 
         // Between the output area and the shrink, which is where Calc does it
         // (output2.cxx:1853): the fill is measured against the cell's own column and not
@@ -1101,9 +1115,15 @@ internal static class SheetTextLayout
     /// character per line, centred.
     /// </para>
     /// <para>
-    /// What is <em>not</em> reproduced is the rotated cell's effect on its row's height, and the
-    /// clipping of rotated text against its neighbours. Both need the rotated bounding box fed
-    /// back into the row, which is a change to pagination rather than to drawing.
+    /// A quarter turn is not an angle at all as far as Calc is concerned: it draws those through
+    /// <c>DrawEditBottomTop</c> and <c>DrawEditTopBottom</c>, whose anchor, whose paper and whose
+    /// alignment are all worked out differently. See <see cref="IsQuarterTurned"/>, which is what
+    /// splits the two paths below.
+    /// </para>
+    /// <para>
+    /// What is <em>not</em> reproduced is the clipping of rotated text against its neighbours,
+    /// which needs the rotated bounding box fed back into the row. The rotated cell's effect on its
+    /// row's <em>height</em> is now reproduced — see <see cref="SheetOptimalRowHeights"/>.
     /// </para>
     /// </remarks>
     private static void DrawRotated(
@@ -1120,17 +1140,54 @@ internal static class SheetTextLayout
         }
 
         Length margin = CellMargin * context.Scale;
-        DocPoint pivot = new(cell.Box.X + margin, cell.Box.Y + cell.Box.Height - margin);
+        bool quarter = IsQuarterTurned(cell.Format);
+
+        // Anticlockwise the block runs up and to the right of the cell's bottom-left corner;
+        // clockwise it runs down and to the left, so it hangs from a point its own cross-extent to
+        // the right of the top-left. Calc says exactly that as `aLogicStart.AdjustY(aPSize.Width())`
+        // in `DrawEditBottomTop` (`output2.cxx:3654`) against `aLogicStart.AdjustX(nEngineWidth)` in
+        // `DrawEditTopBottom` (`:3902`).
+        DocPoint anchor = quarter && cell.Format.RotationDegrees < 0
+            ? new DocPoint(cell.Box.X + margin + Stack(placement), cell.Box.Y + margin)
+            : new DocPoint(cell.Box.X + margin, cell.Box.Y + cell.Box.Height - margin);
+
+        Length inner = cell.Box.Height - (2 * margin);
 
         sink.Save();
         try
         {
-            sink.Transform(About(pivot, -cell.Format.RotationDegrees * Math.PI / 180.0));
+            sink.Transform(About(anchor, -cell.Format.RotationDegrees * Math.PI / 180.0));
 
+            // The block is laid out unturned with its top-left corner on the anchor and the whole
+            // of it is then turned about that corner — which is what `DrawText_ToPosition` does
+            // with an EditEngine and an orientation. So a line's own place inside the block is an
+            // offset from the anchor taken *before* the turn: an ascent down for the first line, a
+            // line height further for each after it, and along the line whatever the cell's
+            // vertical justification asked for. Drawing every line on the anchor instead put six
+            // lines of a wrapped heading on one origin and every single-line turned cell one
+            // ascent — 10.48 pt at eleven point — from where the reference puts it.
+            //
+            // An obliquely turned cell keeps the corner it had and takes no offset, because
+            // neither is `DrawEditBottomTop`'s: `DrawRotated` centres its block across the column
+            // and lifts the anchor by the block's own height times the cosine (`:5290-5330`), and
+            // nothing in the corpus is turned by anything but a quarter to measure that against.
+            Length down = Length.Zero;
             foreach (PlacedLine line in placement.Lines)
             {
-                foreach ((GlyphRun run, Colour? colour) in line.Run.At(pivot))
+                DocPoint origin = quarter
+                    ? new DocPoint(
+                        anchor.X + AlongOffset(cell.Format, inner, line.Run.Width),
+                        anchor.Y + down + line.Run.Ascent)
+                    : anchor;
+
+                foreach ((GlyphRun run, Colour? colour) in line.Run.At(origin))
+                {
+                    if (run.Glyphs.Count == 0) continue;
+
                     sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
+                }
+
+                down += line.Run.LineHeight;
             }
         }
         finally
@@ -1138,6 +1195,56 @@ internal static class SheetTextLayout
             sink.Restore();
         }
     }
+
+    /// <summary>How tall the block of lines is across the direction they read in.</summary>
+    private static Length Stack(Placement placement)
+    {
+        Length stack = Length.Zero;
+        foreach (PlacedLine line in placement.Lines) stack += line.Run.LineHeight;
+        return stack;
+    }
+
+    /// <summary>
+    /// Where one line sits along its own direction, which after a quarter turn is up or down the
+    /// page.
+    /// </summary>
+    /// <remarks>
+    /// A quarter-turned cell's <em>vertical</em> justification becomes the EditEngine's paragraph
+    /// adjust — <c>setAlignmentToEngine</c> (<c>output2.cxx:2777-2800</c>) — and the two
+    /// orientations map it opposite ways, because their lines read in opposite directions. Bottom
+    /// is the default and is the whole of the corpus: it leaves an anticlockwise cell's text on the
+    /// anchor and pushes a clockwise cell's to the far end of its line, which is what makes both of
+    /// them finish at the cell's bottom. Measured on the probe: a 53-glyph clockwise line the
+    /// reference ends 5 pt above the cell's bottom edge, and starting it at the anchor instead put
+    /// it 87 pt low.
+    /// </remarks>
+    private static Length AlongOffset(SheetCellFormat format, Length inner, Length width)
+    {
+        Length gap = inner - width;
+        bool clockwise = format.RotationDegrees < 0;
+
+        return format.Vertical switch
+        {
+            SheetVerticalAlignment.Centre => gap / 2,
+            SheetVerticalAlignment.Top => clockwise ? Length.Zero : gap,
+            SheetVerticalAlignment.Bottom or SheetVerticalAlignment.Standard =>
+                clockwise ? gap : Length.Zero,
+            _ => Length.Zero,
+        };
+    }
+
+    /// <summary>
+    /// Whether the cell's <em>orientation</em> — rather than its angle — is not Calc's standard.
+    /// </summary>
+    /// <remarks>
+    /// <c>ScPatternAttr::GetCellOrientation</c> (<c>patattr.cxx:529-547</c>) reads exactly 9000 and
+    /// exactly 27000 as <c>BottomUp</c> and <c>TopBottom</c>, which Calc draws through
+    /// <c>DrawEditBottomTop</c> and <c>DrawEditTopBottom</c>; every other angle stays
+    /// <c>Standard</c> and reaches <c>DrawRotated</c> instead, whose paper and whose anchor are
+    /// worked out differently.
+    /// </remarks>
+    private static bool IsQuarterTurned(SheetCellFormat format)
+        => !format.IsStacked && Math.Abs(format.RotationDegrees) == 90;
 
     /// <summary>A rotation about a point rather than about the page's origin.</summary>
     private static AffineTransform About(DocPoint pivot, double radians)

@@ -50,12 +50,22 @@ namespace Paperless.Spreadsheets.Layout;
 /// Paperless does, measured off its own PDF — and only the row it reserved for it disagrees.
 /// </para>
 /// <para>
-/// What is still not reproduced is a turned or stacked cell, whose size is its text's *width* put
-/// through an angle. A row holding one takes the larger of the arithmetic answer and the
-/// height its file already states. That fallback is not a fudge — the arithmetic answer really is
-/// a lower bound in Calc too, because <c>bStdAllowed</c> stays true for such a cell and its
-/// attribute height is written into the array before any measurement is compared against it — and
-/// it means a row this cannot measure is never shorter than the writer made it.
+/// A <em>turned</em> cell is measured by <see cref="RotatedHeight"/>, whose branch of
+/// <c>GetNeededSize</c> wraps nothing: the whole string is measured on one line and its width is
+/// put through the angle. What is still not reproduced is a <em>stacked</em> cell, and a turned one
+/// Calc would have handed to an EditEngine instead — a rich cell, or one holding a hard break. A
+/// row holding either takes the larger of the arithmetic answer and the height its file already
+/// states. That fallback is not a fudge — the arithmetic answer really is a lower bound in Calc
+/// too, because <c>bStdAllowed</c> stays true for an obliquely turned cell and its attribute height
+/// is written into the array before any measurement is compared against it — and it means a row
+/// this cannot measure is never shorter than the writer made it.
+/// </para>
+/// <para>
+/// <strong>A quarter turn is the exception to that lower bound and to the sheet's minimum alike.</strong>
+/// <c>bStdAllowed</c> is the cell's <em>orientation</em> being <c>Standard</c>
+/// (<c>column2.cxx:925</c>), which exactly 90° and exactly 270° are not, so such a row gets neither
+/// the arithmetic height nor the floor <c>lcl_GetAttribHeight</c> carries. See
+/// <see cref="IsQuarterTurned"/>.
 /// </para>
 /// <para>
 /// Measured on <c>National-Reports.xlsx</c>, whose 117 rows state <c>ht</c> and none states
@@ -210,17 +220,17 @@ internal static class SheetOptimalRowHeights
         if (lastRow < 0 || lastColumn < firstColumn) return grid;
 
         SheetCellFormats formats = sheet.Formats;
+        int minimum = (int)grid.OptimalMinimumRowHeight.Twips;
 
         // The columns a cell states nothing about resolve to the column's format, then to the
         // sheet's. Neither depends on the row, so both are folded once rather than per row.
-        int baseline = AttributeHeight(formats.SheetDefault);
+        int baseline = AttributeHeight(formats.SheetDefault, minimum);
         foreach (SheetCellFormat column in formats.ColumnDefaults(firstColumn, lastColumn))
-            baseline = Math.Max(baseline, AttributeHeight(column));
+            baseline = Math.Max(baseline, AttributeHeight(column, minimum));
 
-        Dictionary<int, RowState> rows = CollectRows(sheet, formats, range, grid.Columns);
+        Dictionary<int, RowState> rows = CollectRows(sheet, formats, range, grid.Columns, minimum);
 
         SheetAxis axis = grid.Rows;
-        int minimum = (int)grid.OptimalMinimumRowHeight.Twips;
         Dictionary<int, int> changes = [];
         int index = 0;
 
@@ -231,10 +241,10 @@ internal static class SheetOptimalRowHeights
             // (`sc/source/core/data/table1.cxx:221-226`).
             if (!axis.IsOptimalSize(index)) { index++; continue; }
 
-            int height = Optimal(rows, index, baseline, minimum, axis);
+            int height = Optimal(rows, index, baseline, axis);
             int last = index;
             while (last + 1 <= lastRow && axis.IsOptimalSize(last + 1)
-                   && Optimal(rows, last + 1, baseline, minimum, axis) == height)
+                   && Optimal(rows, last + 1, baseline, axis) == height)
             {
                 last++;
             }
@@ -302,9 +312,20 @@ internal static class SheetOptimalRowHeights
         return SheetAxis.FromOrdered(axis.DefaultSize, runs);
     }
 
-    /// <summary>The height one row asks for, in twips.</summary>
+    /// <summary>
+    /// The height one row asks for, in twips.
+    /// </summary>
+    /// <remarks>
+    /// The sheet's minimum is <em>not</em> applied here, and that is deliberate rather than an
+    /// omission. Calc applies it inside <c>lcl_GetAttribHeight</c> (<c>column2.cxx:889-890</c>) —
+    /// which is to say only along the arithmetic path, and only for a pattern whose orientation is
+    /// standard. So a row holding nothing but quarter-turned cells has no floor at all, and
+    /// LibreOffice really does write 149 twips for a single letter in a 10 pt cell turned through
+    /// ninety degrees. Every other row still meets the floor because
+    /// <see cref="AttributeHeight(SheetCellFormat, int)"/> now carries it.
+    /// </remarks>
     private static int Optimal(
-        Dictionary<int, RowState> rows, int row, int baseline, int minimum, SheetAxis axis)
+        Dictionary<int, RowState> rows, int row, int baseline, SheetAxis axis)
     {
         int height = baseline;
         bool unmeasurable = false;
@@ -321,7 +342,7 @@ internal static class SheetOptimalRowHeights
         // writer made it.
         if (unmeasurable) height = Math.Max(height, (int)axis.SizeAt(row).Twips);
 
-        return Math.Max(height, minimum);
+        return height;
     }
 
     /// <summary>What one row's own cells and row format contribute.</summary>
@@ -339,17 +360,25 @@ internal static class SheetOptimalRowHeights
         int Attribute, bool CoversEveryColumn, int Measured, bool Unmeasurable);
 
     private static Dictionary<int, RowState> CollectRows(
-        SheetLayout sheet, SheetCellFormats formats, SheetRange range, SheetAxis columns)
+        SheetLayout sheet, SheetCellFormats formats, SheetRange range, SheetAxis columns,
+        int minimum)
     {
         Dictionary<int, RowState> rows = [];
         Dictionary<int, int> stated = [];
 
+        // `bStdAllowed` (`column2.cxx:925`) is the cell's *orientation* being Standard, not its
+        // angle being zero — so a cell turned by anything other than a quarter turn still writes
+        // its arithmetic height into the array as a lower bound, and one turned by exactly ninety
+        // degrees, or stacked, writes nothing at all. Measured: a single letter in a 10 pt cell
+        // asks for 257 twips at 45° and 149 at 90°.
         void Contribute(int row, SheetCellFormat format)
         {
             rows.TryGetValue(row, out RowState state);
             rows[row] = state with
             {
-                Attribute = Math.Max(state.Attribute, format.IsStacked ? 0 : AttributeHeight(format)),
+                Attribute = Math.Max(
+                    state.Attribute,
+                    IsQuarterTurned(format) ? 0 : AttributeHeight(format, minimum)),
             };
         }
 
@@ -408,33 +437,126 @@ internal static class SheetOptimalRowHeights
                      || text.AsSpan().IndexOfAny('\n', '\r') >= 0)
                     && !sheet.HoldsField(cell.Row, cell.Column);
 
-                // A turned or stacked cell takes a path through `GetNeededSize` this does not
-                // reproduce: its size is the text's *width* turned through an angle.
-                bool opaque = format.IsStacked || format.RotationDegrees != 0;
+                IReadOnlyList<SheetTextPortion>? portions =
+                    sheet.RichText.At(cell.Row, cell.Column, text);
 
-                if (!breaks && !opaque) continue;
+                // A turned cell's size is its text's *width* put through the angle, which
+                // `RotatedHeight` reproduces — but only along Calc's direct-output path, which is
+                // the one a plain single-paragraph string takes. Anything Calc would have handed to
+                // an EditEngine instead — a stacked cell, a rich one, one holding a hard break —
+                // is measured through a different branch again and stays unmeasurable here.
+                bool turned = format.RotationDegrees != 0 && !format.IsStacked;
+                bool direct = turned
+                              && portions is not ({ Count: > 0 })
+                              && text.AsSpan().IndexOfAny('\n', '\r') < 0;
+                bool opaque = (format.IsStacked || turned) && !direct;
+
+                if (!breaks && !turned && !opaque) continue;
 
                 rows.TryGetValue(cell.Row, out RowState state);
 
                 int measured = opaque
                     ? 0
-                    : WrappedHeight(
-                        cell,
-                        format,
-                        text,
-                        sheet.RichText.At(cell.Row, cell.Column, text),
-                        columns,
-                        sheet.MergedRanges);
+                    : direct
+                        ? RotatedHeight(format, text, breaks)
+                        : WrappedHeight(cell, format, text, portions, columns, sheet.MergedRanges);
 
                 rows[cell.Row] = state with
                 {
                     Measured = Math.Max(state.Measured, measured),
-                    Unmeasurable = state.Unmeasurable || opaque || (breaks && measured == 0),
+                    Unmeasurable = state.Unmeasurable || opaque
+                                   || ((breaks || direct) && measured == 0),
                 };
             }
         }
 
         return rows;
+    }
+
+    /// <summary>
+    /// Whether the cell's <em>orientation</em> — rather than its angle — is not Calc's standard.
+    /// </summary>
+    /// <remarks>
+    /// <c>ScPatternAttr::GetCellOrientation</c> (<c>patattr.cxx:529-547</c>) reads exactly 9000 and
+    /// exactly 27000 as <c>BottomUp</c> and <c>TopBottom</c>; every other angle stays
+    /// <c>Standard</c> and is carried as a rotation instead. The distinction decides two separate
+    /// things below, so it is named once.
+    /// </remarks>
+    private static bool IsQuarterTurned(SheetCellFormat format)
+        => format.IsStacked || Math.Abs(format.RotationDegrees) == 90;
+
+    /// <summary>
+    /// How many times its own font height a turned cell that wraps is allowed to be.
+    /// </summary>
+    /// <remarks><c>SC_ROT_BREAK_FACTOR</c>, <c>sc/source/core/data/column2.cxx:74</c>.</remarks>
+    private const int RotatedBreakFactor = 6;
+
+    /// <summary>
+    /// The height a turned cell asks for, in twips, or zero when its face cannot be resolved.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The direct-output branch of <c>ScColumn::GetNeededSize</c>
+    /// (<c>column2.cxx:311-370</c>), which is where a plain string in a turned cell is measured.
+    /// <strong>Nothing is wrapped here</strong>: the whole string is measured on one line and its
+    /// width is put through the angle, so a turned cell's row grows without bound with its text.
+    /// The wrap flag reaches the answer only as the cap below.
+    /// </para>
+    /// <para>
+    /// <strong>Ninety degrees is not a rotation at all, and that is the finding that decides this
+    /// method's shape.</strong> <c>ScPatternAttr::GetCellOrientation</c>
+    /// (<c>sc/source/core/data/patattr.cxx:529-547</c>) turns exactly 9000 and exactly 27000 into
+    /// <c>SvxCellOrientation::BottomUp</c> and <c>TopBottom</c>, and <c>nRotate</c> is then read
+    /// only when the orientation came back <c>Standard</c> (<c>column2.cxx:231-238</c>). So the
+    /// quarter turns take the orientation branch — height is the text's width, full stop — and
+    /// every other angle takes the rotation branch, where the cap applies. Measured on the probe:
+    /// a wrapping cell at 45° stops at 1373 twips for eleven point however long its text is, and
+    /// the same cell at 90° reaches 7358.
+    /// </para>
+    /// <para>
+    /// The quantisation is the same 96 dpi virtual device <see cref="WrappedHeight"/> measures
+    /// against: the em is set in whole pixels, the string's width comes back in whole pixels, and
+    /// the margins truncate to one pixel each.
+    /// </para>
+    /// </remarks>
+    /// <param name="format">The cell's format, for its face, size and angle.</param>
+    /// <param name="text">Its text, measured on one line.</param>
+    /// <param name="breaks">Whether the cell wraps, which is what arms the cap.</param>
+    private static int RotatedHeight(SheetCellFormat format, string text, bool breaks)
+    {
+        if (SheetFonts.For(format) is not { } face) return 0;
+        if (face.Metrics.UnitsPerEm <= 0) return 0;
+
+        Length size = format.FontSize;
+        if (size <= Length.Zero) return 0;
+
+        MetricGrid grid = new(ScreenDpi);
+        long width = SheetText.MeasurePixels(text, face, grid.ToEmSize(size), TwipsPerPixel);
+        if (width <= 0) return 0;
+
+        long pixels;
+        if (IsQuarterTurned(format))
+        {
+            // The orientation branch (`column2.cxx:311-316`): width and height are swapped and
+            // neither the angle nor the wrap flag is consulted again.
+            pixels = width;
+        }
+        else
+        {
+            double radians = format.RotationDegrees * Math.PI / 180.0;
+            double cosine = Math.Abs(Math.Cos(radians));
+            double sine = Math.Abs(Math.Sin(radians));
+
+            pixels = (long)((LinePixels(face, size, grid) * cosine) + (width * sine));
+
+            if (breaks)
+            {
+                long em = grid.ToEmSize(size).Twips / TwipsPerPixel;
+                pixels = Math.Min(pixels, em * RotatedBreakFactor);
+            }
+        }
+
+        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixels)) / PixelsPerTwip);
     }
 
     /// <summary>
@@ -619,11 +741,11 @@ internal static class SheetOptimalRowHeights
     /// fraction away before the margins are added — 240 twips becomes 283 rather than 283.2, and a
     /// 12 pt row lands on 300 twips exactly.
     /// </remarks>
-    private static int AttributeHeight(SheetCellFormat format)
+    private static int AttributeHeight(SheetCellFormat format, int minimum)
     {
         int height = (int)(format.FontSize.Twips * FontHeightFactor);
         height += VerticalMarginTwips;
         if (height > StandardRowHeightDifference) height -= StandardRowHeightDifference;
-        return height;
+        return Math.Max(height, minimum);
     }
 }

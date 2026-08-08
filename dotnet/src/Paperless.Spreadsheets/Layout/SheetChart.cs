@@ -119,10 +119,10 @@ internal static class SheetChart
     private static void Text(IDrawingSink sink, ChartLabel label)
     {
         if (label.Text.Length == 0) return;
-        if (SheetBandText.Shape(label.Text, label.Size) is not { } run) return;
+        if (SheetBandText.Shape(label.Text, label.Size, label.Family) is not { } run) return;
 
-        Length line = SheetBandText.ChartLineHeightAt(label.Size);
-        Length ascent = SheetBandText.AscentAt(label.Size);
+        Length line = SheetBandText.ChartLineHeightAt(label.Size, label.Family);
+        Length ascent = SheetBandText.AscentAt(label.Size, label.Family);
 
         if (label.Rotation != 0.0)
         {
@@ -192,24 +192,31 @@ internal static class SheetChart
         public static Measurer Instance { get; } = new();
 
         /// <summary>
-        /// <paramref name="family"/> is deliberately not honoured yet.
+        /// Measures in the face the chart states, falling back to the sheet's own default.
         /// </summary>
         /// <remarks>
-        /// <strong>The model now carries the face a chart states and this consumer still ignores
-        /// it.</strong> <see cref="ChartPlot.TextFamily"/> was added on the slides track, where it
-        /// was measured; a sheet's chart reaches the same reader, so wiring it here would change
-        /// every workbook's chart layout on a sweep nobody has run. The one-line change is
-        /// <c>SheetBandText.Shape(text, size)</c> taking the family, and it belongs to whichever
-        /// round sweeps the sheets track — not to the round that happened to be in this file.
+        /// <para>
+        /// <see cref="ChartPlot.TextFamily"/> was added on the slides track, which measured it
+        /// there and left this consumer unwired on purpose: turning it on changes every workbook's
+        /// chart layout, so it wanted the round that sweeps the sheets track. That is this round,
+        /// and the sweep is in <c>probes/sheets-r26</c>.
+        /// </para>
+        /// <para>
+        /// Measuring and drawing must take the same family or the two come apart — a label
+        /// measured in Liberation Sans and drawn in Carlito is centred on the wrong width. So the
+        /// family goes through <see cref="SheetBandText"/>'s family-taking overloads on both
+        /// paths, and a chart that names nothing still resolves to
+        /// <c>SheetBandText</c>'s default.
+        /// </para>
         /// </remarks>
         public DocSize Measure(string text, Length size, string? family)
         {
             ArgumentNullException.ThrowIfNull(text);
 
-            Length height = SheetBandText.ChartLineHeightAt(size);
+            Length height = SheetBandText.ChartLineHeightAt(size, family);
             return text.Length == 0
                 ? new DocSize(Length.Zero, height)
-                : new DocSize(SheetBandText.Shape(text, size)?.Width ?? Length.Zero, height);
+                : new DocSize(SheetBandText.Shape(text, size, family)?.Width ?? Length.Zero, height);
         }
     }
 }
