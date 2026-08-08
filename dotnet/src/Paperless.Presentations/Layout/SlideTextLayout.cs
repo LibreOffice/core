@@ -739,8 +739,47 @@ public static partial class SlideTextLayout
 
         return new Block(
             paragraph, measured, styles, lines,
-            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling, format);
+            total + ScaledSpace(paragraph.SpaceBefore, scaling)
+                  + ScaledSpace(paragraph.SpaceAfter, scaling),
+            scaling, format);
     }
+
+    /// <summary>
+    /// A paragraph's own space above or below, after the fit's line-spacing scale.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The fit's spacing scale reaches a paragraph's space, not only its lines.</strong>
+    /// EditEngine puts every <c>SvxULSpaceItem</c> through <c>scaleYSpacingValue</c>
+    /// (<c>editeng/source/editeng/impedit2.cxx</c>, <c>ImpEditEngine::CalcHeight</c>), and that
+    /// helper is a no-op only when <c>maStatus.DoStretch()</c> is clear or the scale is one
+    /// (<c>impedit.hxx</c>:797-801). <c>DoStretch()</c> is <em>set</em> on exactly this path:
+    /// <c>SdrTextObj::ImpSetupDrawOutlinerForPaint</c> turns
+    /// <c>EEControlBits::STRETCHING</c> on whenever <c>IsFitToSize() || IsAutoFit()</c>
+    /// (<c>svx/source/svdraw/svdotext.cxx</c>:1177-1183) and only then calls
+    /// <c>setupAutoFitText</c>. So an autofitted shape always satisfies the guard, and the
+    /// scale applies.
+    /// </para>
+    /// <para>
+    /// Measured rather than argued, on <c>research/probes/slides-r20/make-spacing-probe.py</c>:
+    /// twelve autofit boxes of one text at twelve box heights, each holding four paragraphs of
+    /// two lines with the second forced by a hard break, so the line count cannot move with the
+    /// font size. The reference disagreed with us on three of the twelve — <em>every one of them
+    /// a box where we kept a larger font at nine- or eight-tenths spacing and it took a smaller
+    /// font at full spacing</em> — and scaling the paragraph space is what turns all three round.
+    /// The other nine land on full spacing, where this is a no-op by construction.
+    /// </para>
+    /// <para>
+    /// The predecessor of this note recorded the opposite, citing the same guard: that
+    /// <c>scaleYSpacingValue</c> "returns its argument unchanged unless <c>DoStretch()</c> is
+    /// set". The citation is right and the inference from it is backwards — under autofit the
+    /// flag is set.
+    /// </para>
+    /// </remarks>
+    private static Length ScaledSpace(Length space, Scaling scaling)
+        => scaling.Spacing is <= 0 or 1.0 || space.Emu == 0
+            ? space
+            : Length.FromMm100((long)Rounded(space.Mm100 * scaling.Spacing));
 
     /// <summary>
     /// The tallest ascent and the tallest ascent-plus-descent among the runs a line touches.
@@ -1347,24 +1386,17 @@ public static partial class SlideTextLayout
         Scaling Scaling,
         ParagraphFormat Format)
     {
-        /// <summary>The space above the paragraph.</summary>
+        /// <summary>The space above the paragraph, after the fit's spacing scale.</summary>
         /// <remarks>
-        /// <strong>Not touched by the fit's spacing scale, which reaches only the lines.</strong>
-        /// The reference does put a paragraph's own space through <c>scaleYSpacingValue</c>
-        /// (<c>ImpEditEngine::CalcHeight</c>, <c>editeng/source/editeng/impedit2.cxx:4406,4412</c>
-        /// in 24.2) — but that helper returns its argument unchanged unless
-        /// <c>maStatus.DoStretch()</c> is set (<c>impedit.hxx:748-754</c>), whereas the line
-        /// heights are scaled by <c>mfSpacingScaleY</c> directly and unconditionally
-        /// (<c>impedit3.cxx:1493-1528</c>). Scaling the paragraph space as well was measured
-        /// wrong: it shrank the sixth slide of
-        /// <c>slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt</c> a step below
-        /// the reference, where leaving it alone reproduces the reference's text width to
-        /// 0.2 per cent.
+        /// See <see cref="ScaledSpace"/> for why the scale reaches this and for the probe that
+        /// settled it. Kept here as well as in <see cref="Height"/> because the two must agree:
+        /// the height a fit is chosen by and the height the block is then stacked at are the same
+        /// quantity, and letting them differ moves every anchored block by the difference.
         /// </remarks>
-        public Length SpaceBefore => Paragraph.SpaceBefore;
+        public Length SpaceBefore => ScaledSpace(Paragraph.SpaceBefore, Scaling);
 
-        /// <summary>The space below the paragraph, likewise unscaled.</summary>
-        public Length SpaceAfter => Paragraph.SpaceAfter;
+        /// <summary>The space below the paragraph, scaled the same way.</summary>
+        public Length SpaceAfter => ScaledSpace(Paragraph.SpaceAfter, Scaling);
 
         /// <summary>The colour covering a character, or black when no run does.</summary>
         /// <remarks>
