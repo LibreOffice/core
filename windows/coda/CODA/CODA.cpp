@@ -3080,7 +3080,7 @@ static void clipboardProviderAdvertise(const char** pMimeTypes)
     CloseClipboard();
 }
 
-static int clipboardProviderOwns()
+static bool clipboardProviderOwns()
 {
     return weOwnTheClipboard;
 }
@@ -3132,15 +3132,15 @@ static char** clipboardProviderGetMimeTypes()
     return result;
 }
 
-static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
+static bool clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
 {
     auto formats = clipboard_formats_for_MIME_type(pMimeType);
 
     if (formats.size() == 0)
-        return 0;
+        return false;
 
     if (!try_open_clipboard(NULL))
-        return 0;
+        return false;
 
     for (const auto& format : formats)
     {
@@ -3163,7 +3163,7 @@ static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size
 
             CloseClipboard();
 
-            return 1;
+            return true;
         }
 
         handle = GetClipboardData(format);
@@ -3186,11 +3186,11 @@ static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size
         GlobalUnlock(handle);
         CloseClipboard();
 
-        return 1;
+        return true;
     }
 
     CloseClipboard();
-    return 0;
+    return false;
 }
 
 

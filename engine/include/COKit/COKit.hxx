@@ -49,12 +49,13 @@ struct COKitClipboardProvider
     void (*advertiseToPlatform)(const char** pMimeTypes);
 
     /**
-     * Return 1 if the platform clipboard still holds the content the app last
-     * advertised, 0 if some other source now owns it. When it still holds ours,
-     * the engine pastes from its own in-memory copy (full fidelity); when it
-     * does not, the engine reads the platform through the calls below.
+     * Return true if the platform clipboard still holds the content the app
+     * last advertised, false if some other source now owns it. When it still
+     * holds ours, the engine pastes from its own in-memory copy (full
+     * fidelity); when it does not, the engine reads the platform through the
+     * calls below.
      */
-    int (*ownsClipboard)(void);
+    bool (*ownsClipboard)(void);
 
     /**
      * Paste: return a nullptr-terminated, malloc'd array of malloc'd mime-type
@@ -65,10 +66,10 @@ struct COKitClipboardProvider
 
     /**
      * Paste: fetch the bytes for one mime type. On success set *pOutData to a
-     * malloc'd buffer and *pOutSize to its length and return 1; on failure
-     * return 0. The engine frees *pOutData.
+     * malloc'd buffer and *pOutSize to its length and return true; on failure
+     * return false. The engine frees *pOutData.
      */
-    int (*getDataForMimeType)(const char* pMimeType, char** pOutData, size_t* pOutSize);
+    bool (*getDataForMimeType)(const char* pMimeType, char** pOutData, size_t* pOutSize);
 };
 
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the
@@ -1528,8 +1529,9 @@ struct COKit
      * Same syntax as on command line is permissible (ie. the macro:// URI forms)
      *
      * @param pURL macro url to run
+     * @returns true when the macro ran.
      */
-    virtual int runMacro(const char* pURL) = 0;
+    virtual bool runMacro(const char* pURL) = 0;
 
     /**
      * Exports the document and signs its content.
@@ -1647,9 +1649,9 @@ struct COKit
      * Joins all threads if possible to get down to a single process
      * which can be forked from safely.
      *
-     * @returns non-zero for successful join, 0 for failure.
+     * @returns true when the join succeeded.
      */
-    virtual int joinThreads() = 0;
+    virtual bool joinThreads() = 0;
 
     /**
      * Starts all threads that are necessary to continue working
@@ -1742,9 +1744,9 @@ struct COKit
      * re-entry (via vcl::kit::pushExpectedReentry).  The host poll loop should suppress its
      * non-async-dialog warning while this is true.
      *
-     * @return non-zero if a re-entry is expected.
+     * @return true if a re-entry is expected.
      */
-    virtual int isExpectedReentry() = 0;
+    virtual bool isExpectedReentry() = 0;
 
     /**
      * Returns and clears the process-wide "legacy UNO API use" flag set by the engine's UNO bridges
@@ -1777,9 +1779,9 @@ struct COKit
      * because the shared clipboard is process-global. The distinct name marks
      * that it reads one global clipboard, not a per-view one.
      */
-    virtual int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                   char      ***pOutStreams) = 0;
+    virtual bool getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                    char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                    char      ***pOutStreams) = 0;
 };
 
 struct COKitDocument
@@ -2232,9 +2234,9 @@ struct COKitDocument
      *
      * @returns: true on success, false on error.
      */
-    virtual int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                             char      ***pOutMimeTypes, size_t     **pOutSizes,
-                             char      ***pOutStreams) = 0;
+    virtual bool getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                              char      ***pOutMimeTypes, size_t     **pOutSizes,
+                              char      ***pOutStreams) = 0;
 
     /**
      * Populates the clipboard for this view with multiple types of content.
@@ -2246,8 +2248,8 @@ struct COKitDocument
      *
      * @return if the supplied data was populated successfully.
      */
-    virtual int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
-                             const size_t  *pInSizes, const char   **pInStreams) = 0;
+    virtual bool setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                              const size_t  *pInSizes, const char   **pInStreams) = 0;
 
     /**
      * Gets the type of the selected content.

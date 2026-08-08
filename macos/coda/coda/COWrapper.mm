@@ -231,9 +231,9 @@ static void clipboardProviderAdvertise(const char** pMimeTypes)
     }
 }
 
-static int clipboardProviderOwns()
+static bool clipboardProviderOwns()
 {
-    return [COWrapper pasteboardOwnedByUs] ? 1 : 0;
+    return [COWrapper pasteboardOwnedByUs];
 }
 
 static char** clipboardProviderGetMimeTypes()
@@ -243,14 +243,12 @@ static char** clipboardProviderGetMimeTypes()
     }
 }
 
-static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
+static bool clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
 {
     @autoreleasepool {
         return [COWrapper copyPasteboardData:[NSString stringWithUTF8String:pMimeType]
                                          out:pOutData
-                                        size:pOutSize]
-                   ? 1
-                   : 0;
+                                        size:pOutSize];
     }
 }
 

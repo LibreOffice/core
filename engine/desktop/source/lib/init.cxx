@@ -1237,17 +1237,17 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
                                                       const char* pMimeType,
                                                       char** pText,
                                                       char** pUsedMimeType);
-static int doc_getClipboard (COKitDocument* pThis,
-                             const char **pMimeTypes,
-                             size_t      *pOutCount,
-                             char      ***pOutMimeTypes,
-                             size_t     **pOutSizes,
-                             char      ***pOutStreams);
-static int doc_setClipboard (COKitDocument* pThis,
-                             const size_t   nInCount,
-                             const char   **pInMimeTypes,
-                             const size_t  *pInSizes,
-                             const char   **pInStreams);
+static bool doc_getClipboard (COKitDocument* pThis,
+                              const char **pMimeTypes,
+                              size_t      *pOutCount,
+                              char      ***pOutMimeTypes,
+                              size_t     **pOutSizes,
+                              char      ***pOutStreams);
+static bool doc_setClipboard (COKitDocument* pThis,
+                              const size_t   nInCount,
+                              const char   **pInMimeTypes,
+                              const size_t  *pInSizes,
+                              const char   **pInStreams);
 static void doc_transferClipboardFromView(COKitDocument* pThis, int nSourceViewId);
 static bool doc_paste(COKitDocument* pThis,
                       const char* pMimeType,
@@ -1771,15 +1771,15 @@ void LibLODocument_Impl::resizeWindow(unsigned nWindowId, const int width, const
     doc_resizeWindow(this, nWindowId, width, height);
 }
 
-int LibLODocument_Impl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                     char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                     char      ***pOutStreams)
+bool LibLODocument_Impl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                      char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                      char      ***pOutStreams)
 {
     return doc_getClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
 }
 
-int LibLODocument_Impl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
-                                     const size_t  *pInSizes, const char   **pInStreams)
+bool LibLODocument_Impl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                                      const size_t  *pInSizes, const char   **pInStreams)
 {
     return doc_setClipboard(this, nInCount, pInMimeTypes, pInSizes, pInStreams);
 }
@@ -3182,7 +3182,7 @@ static void                    lo_setDocumentPassword(COKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
 static char*                   lo_getVersionInfo(COKit* pThis);
-static int                     lo_runMacro      (COKit* pThis, const char* pURL);
+static bool                    lo_runMacro      (COKit* pThis, const char* pURL);
 
 static bool lo_signDocument(COKit* pThis,
                                    const char* pUrl,
@@ -3203,7 +3203,7 @@ lo_startURP(COKit* pThis, void* pReceiveURPFromLOContext, void* pSendURPToLOCont
 
 static void lo_stopURP(COKit* pThis, void* pSendURPToLOContext);
 
-static int lo_joinThreads(COKit* pThis);
+static bool lo_joinThreads(COKit* pThis);
 
 static void lo_startThreads(COKit* pThis);
 
@@ -3239,8 +3239,8 @@ static int lo_getDocsCount(COKit* pThis);
 
 static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvider* pProvider);
 
-static int lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t* pOutCount,
-                                 char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
+static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t* pOutCount,
+                                  char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
 
 static void lo_executeScript(
     char const * script, char ** result, char ** error,
@@ -3248,7 +3248,7 @@ static void lo_executeScript(
     bool * usedLegacyUnoApi);
 static void lo_deliverProxyResult(char const * callId, char const * jsonValue);
 static void lo_cancelProxyCalls();
-static int lo_isExpectedReentry();
+static bool lo_isExpectedReentry();
 static bool lo_takeLegacyUnoApiUseFlag();
 
 LibCO_Impl::LibCO_Impl()
@@ -3299,7 +3299,7 @@ char* LibCO_Impl::getVersionInfo()
     return lo_getVersionInfo(this);
 }
 
-int LibCO_Impl::runMacro(const char* pURL)
+bool LibCO_Impl::runMacro(const char* pURL)
 {
     return lo_runMacro(this, pURL);
 }
@@ -3358,7 +3358,7 @@ void LibCO_Impl::stopURP(void* pSendURPToLOContext)
     lo_stopURP(this, pSendURPToLOContext);
 }
 
-int LibCO_Impl::joinThreads()
+bool LibCO_Impl::joinThreads()
 {
     return lo_joinThreads(this);
 }
@@ -3410,7 +3410,7 @@ void LibCO_Impl::cancelProxyCalls()
     lo_cancelProxyCalls();
 }
 
-int LibCO_Impl::isExpectedReentry()
+bool LibCO_Impl::isExpectedReentry()
 {
     return lo_isExpectedReentry();
 }
@@ -3430,9 +3430,9 @@ void LibCO_Impl::installClipboardProvider(const COKitClipboardProvider* pProvide
     lo_installClipboardProvider(this, pProvider);
 }
 
-int LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                   char      ***pOutStreams)
+bool LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                    char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                    char      ***pOutStreams)
 {
     return lo_getGlobalClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
                                  pOutStreams);
@@ -3838,7 +3838,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
     return nullptr;
 }
 
-static int lo_runMacro(COKit* pThis, const char *pURL)
+static bool lo_runMacro(COKit* pThis, const char *pURL)
 {
     comphelper::ProfileZone aZone("lo_runMacro");
 
@@ -3852,14 +3852,14 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"Macro to run was not provided."_ustr;
         SAL_INFO("kit", "Macro URL is empty");
-        return 0;
+        return false;
     }
 
     if (!sURL.startsWith("macro://"))
     {
         pLib->maLastExceptionMsg = u"This doesn't look like macro URL"_ustr;
         SAL_INFO("kit", "Macro URL is invalid");
-        return 0;
+        return false;
     }
 
     pLib->maLastExceptionMsg.clear();
@@ -3868,7 +3868,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
         SAL_INFO("kit", "ComponentContext is not available");
-        return 0;
+        return false;
     }
 
     util::URL aURL;
@@ -3885,13 +3885,13 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
         SAL_INFO("kit", "ComponentLoader is not available");
-        return 0;
+        return false;
     }
 
     xFactory = xContext->getServiceManager();
 
     if (!xFactory)
-        return 0;
+        return false;
 
     uno::Reference<frame::XDispatchProvider> xDP;
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
@@ -3902,7 +3902,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"Macro loader is not available"_ustr;
         SAL_INFO("kit", "Macro loader is not available");
-        return 0;
+        return false;
     }
 
     uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
@@ -3919,10 +3919,10 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
         pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
         SAL_INFO("kit", "Macro execution terminated with error code " << nErrCode);
 
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 static bool lo_signDocument(COKit* /*pThis*/,
@@ -4084,7 +4084,7 @@ enum class JoinThreads
 
 }
 
-static int joinThreads(JoinThreads eCategory);
+static bool joinThreads(JoinThreads eCategory);
 
 static void flushBufferedVOCs()
 {
@@ -4301,13 +4301,13 @@ static void lo_stopURP(COKit* /* pThis */,
     static_cast<FunctionBasedURPConnection*>(pFunctionBasedURPConnection)->close();
 }
 
-static int joinThreads(JoinThreads eCategory)
+static bool joinThreads(JoinThreads eCategory)
 {
     DBG_TESTNOTSOLARMUTEX();
 
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
     if (!pool.joinThreadsIfIdle())
-        return 0;
+        return false;
 
     // Grammar checker thread
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
@@ -4315,7 +4315,7 @@ static int joinThreads(JoinThreads eCategory)
 
     auto joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(xLangSrv.get());
     if (joinable && !joinable->joinThreads())
-        return 0;
+        return false;
 
     if (eCategory == JoinThreads::ALL)
     {
@@ -4323,13 +4323,13 @@ static int joinThreads(JoinThreads eCategory)
             u"com.sun.star.ucb.WebDAVManager"_ustr, xContext);
         joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(ucpWebdav.get());
         if (joinable && !joinable->joinThreads())
-            return 0;
+            return false;
 
         auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.task.StatusIndicatorFactory"_ustr, xContext);
         joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(progressThread.get());
         if (joinable && !joinable->joinThreads())
-            return 0;
+            return false;
     }
 
     // Ensure configmgr's write thread is down
@@ -4343,10 +4343,10 @@ static int joinThreads(JoinThreads eCategory)
     if (eCategory == JoinThreads::ALL)
         salhelper::Timer::joinThread();
 
-    return 1;
+    return true;
 }
 
-static int lo_joinThreads(COKit* /* pThis */)
+static bool lo_joinThreads(COKit* /* pThis */)
 {
     return joinThreads(JoinThreads::ALL);
 }
@@ -7233,12 +7233,12 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, cons
 // caller holds the solar mutex and has already zeroed the out parameters. The
 // clipboard is whichever getClipboardForCurView returns: the per-view one on
 // the collaborative server, or the single shared one in the desktop app.
-// Returns 1 on success, 0 when there is nothing on the clipboard.
-static int fetchClipboardContents(const char **pMimeTypes,
-                                  size_t      *pOutCount,
-                                  char      ***pOutMimeTypes,
-                                  size_t     **pOutSizes,
-                                  char      ***pOutStreams)
+// Returns true on success, false when there is nothing on the clipboard.
+static bool fetchClipboardContents(const char **pMimeTypes,
+                                   size_t      *pOutCount,
+                                   char      ***pOutMimeTypes,
+                                   size_t     **pOutSizes,
+                                   char      ***pOutStreams)
 {
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
 
@@ -7247,7 +7247,7 @@ static int fetchClipboardContents(const char **pMimeTypes,
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No clipboard content available"_ustr);
-        return 0;
+        return false;
     }
 
     std::vector<OString> aMimeTypes;
@@ -7257,7 +7257,7 @@ static int fetchClipboardContents(const char **pMimeTypes,
         if (!flavors.getLength())
         {
             SetLastExceptionMsg(u"Flavourless selection"_ustr);
-            return 0;
+            return false;
         }
         for (const auto &it : flavors)
             aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
@@ -7296,15 +7296,15 @@ static int fetchClipboardContents(const char **pMimeTypes,
         }
     }
 
-    return 1;
+    return true;
 }
 
-static int doc_getClipboard(COKitDocument* pThis,
-                            const char **pMimeTypes,
-                            size_t      *pOutCount,
-                            char      ***pOutMimeTypes,
-                            size_t     **pOutSizes,
-                            char      ***pOutStreams)
+static bool doc_getClipboard(COKitDocument* pThis,
+                             const char **pMimeTypes,
+                             size_t      *pOutCount,
+                             char      ***pOutMimeTypes,
+                             size_t     **pOutSizes,
+                             char      ***pOutStreams)
 {
     comphelper::ProfileZone aZone("doc_getClipboard");
 
@@ -7325,7 +7325,7 @@ static int doc_getClipboard(COKitDocument* pThis,
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return 0;
+        return false;
     }
 
     return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
@@ -7335,12 +7335,12 @@ static int doc_getClipboard(COKitDocument* pThis,
 // needs no document, because the shared clipboard is process-global. The
 // per-document doc_getClipboard stays for the collaborative server, where the
 // clipboard is per view.
-static int lo_getGlobalClipboard(COKit* /*pThis*/,
-                                 const char **pMimeTypes,
-                                 size_t      *pOutCount,
-                                 char      ***pOutMimeTypes,
-                                 size_t     **pOutSizes,
-                                 char      ***pOutStreams)
+static bool lo_getGlobalClipboard(COKit* /*pThis*/,
+                                  const char **pMimeTypes,
+                                  size_t      *pOutCount,
+                                  char      ***pOutMimeTypes,
+                                  size_t     **pOutSizes,
+                                  char      ***pOutStreams)
 {
     comphelper::ProfileZone aZone("lo_getGlobalClipboard");
 
@@ -7360,11 +7360,11 @@ static int lo_getGlobalClipboard(COKit* /*pThis*/,
     return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
 }
 
-static int doc_setClipboard(COKitDocument* pThis,
-                            const size_t   nInCount,
-                            const char   **pInMimeTypes,
-                            const size_t  *pInSizes,
-                            const char   **pInStreams)
+static bool doc_setClipboard(COKitDocument* pThis,
+                             const size_t   nInCount,
+                             const char   **pInMimeTypes,
+                             const size_t  *pInSizes,
+                             const char   **pInStreams)
 {
     comphelper::ProfileZone aZone("doc_setClipboard");
 
@@ -7375,7 +7375,7 @@ static int doc_setClipboard(COKitDocument* pThis,
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return 0;
+        return false;
     }
 
     uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
@@ -7388,10 +7388,10 @@ static int doc_setClipboard(COKitDocument* pThis,
     if (!pDoc->isMimeTypeSupported())
     {
         SetLastExceptionMsg(u"Document doesn't support this mime type"_ustr);
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 // Office-level: install one process-global provider and switch the kit to a
@@ -9086,9 +9086,9 @@ static void lo_cancelProxyCalls()
 #endif
 }
 
-static int lo_isExpectedReentry()
+static bool lo_isExpectedReentry()
 {
-    return vcl::kit::isExpectedReentry() ? 1 : 0;
+    return vcl::kit::isExpectedReentry();
 }
 
 static bool lo_takeLegacyUnoApiUseFlag()

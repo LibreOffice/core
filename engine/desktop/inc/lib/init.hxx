@@ -368,11 +368,11 @@ namespace desktop {
         void selectPart(int nPart, int nSelect) override;
         void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
         void resizeWindow(unsigned nWindowId, const int width, const int height) override;
-        int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                         char      ***pOutMimeTypes, size_t     **pOutSizes,
-                         char      ***pOutStreams) override;
-        int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
-                         const size_t  *pInSizes, const char   **pInStreams) override;
+        bool getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                          char      ***pOutMimeTypes, size_t     **pOutSizes,
+                          char      ***pOutStreams) override;
+        bool setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                          const size_t  *pInSizes, const char   **pInStreams) override;
         COKitSelectionType getSelectionType() override;
         void removeTextContext(unsigned nWindowId, int nBefore, int nAfter) override;
         void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) override;
@@ -442,7 +442,7 @@ namespace desktop {
         void setOptionalFeatures(COKitOptionalFeatures features) override;
         void setDocumentPassword(char const* pURL, char const* pPassword) override;
         char* getVersionInfo() override;
-        int runMacro(const char* pURL) override;
+        bool runMacro(const char* pURL) override;
         bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
                           const int nCertificateBinarySize, const unsigned char* pPrivateKeyBinary,
                           const int nPrivateKeyBinarySize) override;
@@ -458,7 +458,7 @@ namespace desktop {
             int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
             int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) override;
         void stopURP(void* pSendURPToLOContext) override;
-        int joinThreads() override;
+        bool joinThreads() override;
         void startThreads() override;
         void setForkedChild(bool bIsChild) override;
         char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) override;
@@ -470,14 +470,14 @@ namespace desktop {
                            void * proxyCallbackData, bool * usedLegacyUnoApi) override;
         void deliverProxyResult(char const * callId, char const * jsonValue) override;
         void cancelProxyCalls() override;
-        int isExpectedReentry() override;
+        bool isExpectedReentry() override;
         bool takeLegacyUnoApiUseFlag() override;
         void
         registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) override;
         void installClipboardProvider(const COKitClipboardProvider* pProvider) override;
-        int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                               char      ***pOutMimeTypes, size_t     **pOutSizes,
-                               char      ***pOutStreams) override;
+        bool getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                char      ***pOutStreams) override;
     };
 
     /// Helper function to extract the value from parameters delimited by

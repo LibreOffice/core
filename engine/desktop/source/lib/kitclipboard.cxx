@@ -268,8 +268,7 @@ Reference<css::datatransfer::XTransferable> KitClipboard::getContents()
     // in-memory transferable for full fidelity.
     if (m_oProvider && m_oProvider->getMimeTypes && m_oProvider->getDataForMimeType)
     {
-        const bool bOurs = m_oProvider->ownsClipboard
-                           && m_oProvider->ownsClipboard() != 0;
+        const bool bOurs = m_oProvider->ownsClipboard && m_oProvider->ownsClipboard();
         if (!bOurs)
             return new KitProviderTransferable(*m_oProvider);
     }
@@ -520,14 +519,13 @@ cpo::uno::Any KitProviderTransferable::getTransferData(const datatransfer::DataF
 
     char* pData = nullptr;
     size_t nSize = 0;
-    const int nOk
-        = m_aProvider.getDataForMimeType(aWireMime.getStr(), &pData, &nSize);
+    const bool bOk = m_aProvider.getDataForMimeType(aWireMime.getStr(), &pData, &nSize);
 
     if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
         KitHelper::setView(nSavedView);
 
     cpo::uno::Any aRet;
-    if (nOk && pData)
+    if (bOk && pData)
     {
         if (bText)
             aRet <<= OUString(pData, nSize, RTL_TEXTENCODING_UTF8);
