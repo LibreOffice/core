@@ -151,7 +151,8 @@ public static class SlideChart
     {
         if (label.Text.Length == 0) return null;
 
-        DocSize measured = new Measurer(fonts).Measure(label.Text, label.Size, label.Family);
+        DocSize measured =
+            new Measurer(fonts).Measure(label.Text, label.Size, label.Family, label.IsBold);
         if (measured.Width <= Length.Zero) return null;
 
         // A non-square stretch leaves a residual horizontal factor the em cannot carry. The text
@@ -176,7 +177,8 @@ public static class SlideChart
             _ => new DocPoint(label.At.X - effective / 2, label.At.Y - box.Height / 2),
         };
 
-        SlideTextBody body = Measurer.Body(label.Text, label.Size, label.Colour, label.Family);
+        SlideTextBody body =
+            Measurer.Body(label.Text, label.Size, label.Colour, label.Family, label.IsBold);
 
         AffineTransform transform = stretch == 1.0
             ? placement
@@ -244,12 +246,12 @@ public static class SlideChart
 
     private sealed class Measurer(SlideFonts fonts) : IChartTextMeasurer
     {
-        public DocSize Measure(string text, Length size, string? family)
+        public DocSize Measure(string text, Length size, string? family, bool bold)
         {
             ArgumentNullException.ThrowIfNull(text);
             if (text.Length == 0) return new DocSize(Length.Zero, Length.Zero);
 
-            SlideTextBody body = Body(text, size, Colour.Black, family);
+            SlideTextBody body = Body(text, size, Colour.Black, family, bold);
             Length height = SlideTextLayout.Height(body, Length.Zero, fonts);
 
             // The width is summed from the glyphs the layout produced rather than estimated,
@@ -281,7 +283,8 @@ public static class SlideChart
         /// 13 pt title — small individually, and the two accumulate into the top and bottom
         /// insets that place the whole plot area.
         /// </remarks>
-        internal static SlideTextBody Body(string text, Length size, Colour colour, string? family)
+        internal static SlideTextBody Body(
+            string text, Length size, Colour colour, string? family, bool bold = false)
             => new()
         {
             Insets = new Margins(Length.Zero, Length.Zero, Length.Zero, Length.Zero),
@@ -298,7 +301,7 @@ public static class SlideChart
                             text.Length,
                             string.IsNullOrWhiteSpace(family) ? ChartFace : family.Trim(),
                             size,
-                            400,
+                            bold ? 700 : 400,
                             false,
                             colour),
                     ],

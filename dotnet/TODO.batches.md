@@ -7903,3 +7903,111 @@ face fix cost 2.52 of `|ink|%`; this returns 1.43.
   36 of 61 chart parts over 7 documents. Both recorded in `Paperless.Presentations/TODO.md`
   with the measurements; neither implemented, because the weight needs `ChartLabel` plus all
   three consumers and two of those are other tracks' files.
+
+## Round twenty-four: slides — the OOXML chart auto-text table, and the wrap it uncovered
+
+Baseline measured first and it reproduces the brief **exactly**: `MATCH 151/163`, `ink%`
+1263.67, `|ink|%` 1583.49, 428 major pages, 4199 census pages with 304 unexplained over 91
+documents, at `7b3704e59`.
+
+**Two changes, and the second exists because the first uncovered it.**
+
+An OOXML chart never reaches `chart2`'s model defaults — the import applies
+`objectformatter.cxx`'s auto-text table first (`:415-434`, `TextFormatter` `:906-929`). A chart
+title is **18 pt bold**, an axis title **10 pt bold**, everything else 10 pt regular, and
+`mnRelFontSize` scales the first by 120% when the chart space states a size of its own. We drew
+13 pt and 9 pt with no weight at all, citing `Title.cxx` — which is the right answer for an ODF
+chart and the wrong one for every OOXML chart there is.
+
+Settled against LibreOffice's own model and not only against its ink: `Demick_JetBlue.pptx`
+states no `sz` and no `b` anywhere in its five chart parts, and `--convert-to odp` writes its
+title as `fo:font-size="18pt" fo:font-weight="bold"`, its axis titles `10pt`/`bold`, and its
+axes and legend `10pt` with no weight.
+
+Correcting the size then exposed a second error it had been cancelling: **we never wrapped a
+chart title at all.** `ChartView.cxx:1084-1085` gives a main title
+`aTextMaxWidth.Width = rPageSize.Width * 0.8`. At 13 pt the corpus's titles fitted on one line;
+at the correct 18 pt one of them is 659 pt inside a 634 pt frame.
+
+The plot area's top edge is what a title's band decides, so it isolates both changes. Signed
+error against the reference on the five chart pages of that deck:
+
+| page | 4 | 5 | 6 | 7 | 8 | mean abs |
+|---|---:|---:|---:|---:|---:|---:|
+| base | 10.08 | 30.79 | 10.09 | 31.73 | 31.73 | 22.88 |
+| + auto-text | 1.08 | 21.79 | 1.09 | 22.73 | 22.73 | 13.88 |
+| + wrap | 1.08 | **0.64** | 1.09 | **1.58** | **1.58** | **1.19** |
+
+Neither alone gets below 13.88, which is the same shape as round twenty-three's legend pair.
+The two wrapped lines start at x 130.02 and 261.12 against the reference's 130.77 and 259.36 —
+the break lands in the same place, which is what makes 0.8 the rule rather than a fitted
+constant.
+
+### The trade, with both numbers
+
+| slides, 163 documents | base `7b3704e59` | + auto-text | + wrap |
+|---|---:|---:|---:|
+| word gate | 151 | 151 | 151 |
+| `ink%` | 1263.67 | 1267.60 | 1271.64 |
+| `\|ink\|%` | 1583.49 | 1588.12 | 1592.18 |
+| major pages | 428 | **427** | **427** |
+| census, unexplained | 304 over 91 | **303** over 91 | **303** over 91 |
+
+Verdicts changed: **0**. Every batch holds its count.
+
+**Reach measured by rendering: 156 of 163 byte-identical, 7 changed**, all seven chart decks
+— six from the auto-text table and a seventh, `bitesize-writing-a-report.pptx`, from the wrap.
+Six of the seven net −**1.62** of `|ink|%`. The whole of the aggregate regression is
+`Demick_JetBlue.pptx` at **+10.31**, and it is the deck the table above measures: its five
+charts' titles stopped fitting on one line at the correct size, and the wrap that then places
+them correctly costs another 4.12 because the *bottom* of its plot area is still 38.72 pt out.
+
+**So the aggregate went the wrong way while the thing being fixed became right**, on one
+document out of 163, and I am keeping both changes. The auto-text values are LibreOffice's own,
+read out of its `odp` export rather than fitted; the wrap's 0.8 is verbatim from
+`ChartView.cxx` and puts our break within 1.8 pt of the reference's. `|ink|%` is a page-share
+metric: shortening our plot area from 170.5 pt to 149.4 pt against the reference's 187.4
+displaces more ink than leaving its top edge 21.8 pt wrong did, because the error that decides
+its *height* is at the other end and neither change touches it.
+
+**What is left on that deck is the band under the plot, not the band above it.** With both
+changes in, the plot area's *bottom* edge on the same five pages is 12.73, 38.72, 4.88, 12.73
+and 4.87 pt too high, and neither change touches it. The category labels, the category axis'
+title and a bottom legend over-reserve; that is the next measurement, and until it is made the
+`|ink|%` on this document is not evidence about the title band.
+
+### Cross-track
+
+The **weight** cannot reach the other tracks: `SheetChart` and `FrameChart` take the argument
+and drop it, in code, with a comment, exactly as they did for `ChartPlot.TextFamily`. The
+**sizes** and the **wrap** can, because every consumer honours them, so this round owes those
+tracks a measurement. Eight documents outside slides hold a chart — one DOCX, one XLSX, and six
+`.xls` with a BIFF chart substream. Rendered at both commits with `SOURCE_DATE_EPOCH` set and
+byte-compared: **six identical, two changed**, and against `soffice`'s own PDF of the two that
+moved the DOCX is 0.00 `|ink|%` either way and the XLSX goes 23.49 → 23.50 with its major-page
+count unchanged at 10.
+
+### Two questions answered, one refuted, two opened
+
+- **The legend row pitch is on a 96 dpi grid.** Round twenty-three measured the row height at
+  three font sizes, found it was not a constant multiple of the font, and named the probe. Run
+  at eleven sizes a point apart: subtract exactly 1 mm and every pitch from 6 to 14 pt is a
+  whole multiple of **0.75 pt** to within 0.028, with steps of 1.013, 2.013, 2.000, 0.987,
+  2.000, 0.987, 1.013 and 2.987 pixels. The 1 mm is the floor the padding
+  (`max(1 mm, 0.33 × font)`) and the key gap (`max(1 mm, 0.22 × font)`) already have. Still
+  open: the rate feeding the grid — Liberation Mono's 1.1328 em predicts six of the nine — and
+  a second regime above 14 pt.
+- **The chart text residual is neither an offset nor a factor**, and round twenty-three's
+  explanation of it is refuted twice over. 10 × 0.9889 = 9.889 and the reference draws 9.889;
+  18 × 0.9889 = 17.80 and it draws 17.89 — one pair fits. Restating one title at six sizes
+  gives 6.987, 9.889, 13.889, 17.890, 29.807, 39.808, whose deltas and ratios both vary. And
+  the stated mechanism, "the OLE's stored visual area against the frame", cannot be it: the
+  deck's frames are `cx="8046720" cy="4206240"` — 22352 × 11684 in 1/100 mm — and LibreOffice's
+  own `odp` writes the chart as `svg:width="22.352cm" svg:height="11.684cm"`. Equal to the unit.
+- **A secondary value axis' title has room reserved for it and is never drawn** — found while
+  reading the title code. `PlotAreaOf` takes its height off the right edge and `AddTitles` adds
+  only two titles. Nine chart parts over six documents across all three tracks.
+- **A stated weight on axis labels, legend or data labels is still unread** — 36 of 61 chart
+  parts over 7 documents, the larger half of the weight work. The design is decided and
+  recorded in `Paperless.Presentations/TODO.md`: a stamping pass beside `InFamily`, not twenty
+  more arguments.

@@ -192,7 +192,8 @@ internal static class SheetChart
         public static Measurer Instance { get; } = new();
 
         /// <summary>
-        /// Measures in the face the chart states, falling back to the sheet's own default.
+        /// Measures in the face the chart states; <paramref name="bold"/> is deliberately not
+        /// honoured yet.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -208,8 +209,18 @@ internal static class SheetChart
         /// paths, and a chart that names nothing still resolves to
         /// <c>SheetBandText</c>'s default.
         /// </para>
+        /// <para>
+        /// <strong><paramref name="bold"/> arrived the same way and is still ignored, one round
+        /// behind the family.</strong> <see cref="ChartPlot.IsTitleBold"/> was added on the slides
+        /// track, where an OOXML chart's title and axis titles were measured bold against
+        /// LibreOffice's own model; the reader a workbook's chart reaches is the same one, so it
+        /// now hands a weight to this measurer and to <see cref="SheetChart"/>'s drawing, and both
+        /// drop it. Honouring it needs <c>SheetBandText</c> to hold a bold face beside its regular
+        /// one, and it would move every workbook whose chart has a title — measured against
+        /// nothing. That belongs to a round that sweeps this track, exactly as the family did.
+        /// </para>
         /// </remarks>
-        public DocSize Measure(string text, Length size, string? family)
+        public DocSize Measure(string text, Length size, string? family, bool bold)
         {
             ArgumentNullException.ThrowIfNull(text);
 

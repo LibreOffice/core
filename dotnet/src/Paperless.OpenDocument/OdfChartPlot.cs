@@ -212,6 +212,16 @@ public static class OdfChartPlot
             AxisTitleSize = styles.FontSize(
                 Attribute(Child(categoryAxis, OdfNamespaces.Chart, "title"), OdfNamespaces.Chart, "style-name"))
                 ?? Length.FromPoints(9),
+
+            // ODF states the weight on the title's own style and LibreOffice writes it on every
+            // title it exports, so an unstated weight means regular here — unlike OOXML, whose
+            // import makes both titles bold before the file is consulted. See ChartPlot.IsTitleBold.
+            IsTitleBold = styles.IsBold(
+                Attribute(Child(chart, OdfNamespaces.Chart, "title"), OdfNamespaces.Chart, "style-name"))
+                ?? false,
+            IsAxisTitleBold = styles.IsBold(
+                Attribute(Child(categoryAxis, OdfNamespaces.Chart, "title"), OdfNamespaces.Chart, "style-name"))
+                ?? false,
             LabelSize = styles.FontSize(Attribute(valueAxis, OdfNamespaces.Chart, "style-name"))
                 ?? Length.FromPoints(10),
 

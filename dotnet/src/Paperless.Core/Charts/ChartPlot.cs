@@ -494,6 +494,28 @@ public sealed partial record ChartPlot
     /// <summary>The size the axis titles are set at; LibreOffice's default is 9 pt.</summary>
     public Length AxisTitleSize { get; init; } = Length.FromPoints(9);
 
+    /// <summary>Whether the main title is drawn in the family's bold face.</summary>
+    /// <remarks>
+    /// <para>
+    /// False here because this is the <c>chart2</c> model's answer, which is what an ODF chart
+    /// gets: an ODF chart states its weight in the title's own <c>style:style</c> and states it
+    /// on every title LibreOffice itself writes, so a reader that finds nothing has found a
+    /// document that means regular.
+    /// </para>
+    /// <para>
+    /// <strong>An OOXML chart never reaches this default</strong> — its import applies
+    /// <c>objectformatter.cxx</c>'s auto-text table first, which makes a chart title bold and an
+    /// axis title bold before any of the file's own properties are read. That is why
+    /// <c>DrawingChartPlot</c> sets both of these true when the part states nothing, and why the
+    /// two readers disagree about the default rather than sharing one.
+    /// </para>
+    /// </remarks>
+    public bool IsTitleBold { get; init; }
+
+    /// <summary>Whether the axis titles are drawn in the family's bold face.</summary>
+    /// <remarks>See <see cref="IsTitleBold"/>; the same table decides both.</remarks>
+    public bool IsAxisTitleBold { get; init; }
+
     /// <summary>The size the axis labels are set at; the default is 10 pt.</summary>
     public Length LabelSize { get; init; } = Length.FromPoints(10);
 

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Numbers;
@@ -153,6 +154,31 @@ public sealed class OdfChartStyles
     public Length? FontSize(string? name)
         => OdfValue.ParseLength(
             Attribute(Properties(name, "text-properties"), OdfNamespaces.FoCompatible, "font-size"));
+
+    /// <summary>
+    /// Whether a style states a bold weight, or null when it states no weight at all.
+    /// </summary>
+    /// <remarks>
+    /// <c>fo:font-weight</c> is a CSS weight — <c>normal</c>, <c>bold</c>, or one of the hundreds
+    /// — and ODF's own bold threshold is the CSS one, so anything from 600 up is bold. Null
+    /// rather than false when unstated because a caller may have a non-regular default to fall
+    /// back to; a chart's ODF styles state the weight on every title LibreOffice writes, so on a
+    /// document that came from LibreOffice the null case does not arise.
+    /// </remarks>
+    /// <param name="name">The style's name.</param>
+    public bool? IsBold(string? name)
+    {
+        string? weight = Attribute(
+            Properties(name, "text-properties"), OdfNamespaces.FoCompatible, "font-weight");
+
+        if (weight is not { Length: > 0 }) return null;
+        if (weight == "bold") return true;
+        if (weight == "normal") return false;
+
+        return int.TryParse(weight, NumberStyles.Integer, CultureInfo.InvariantCulture, out int n)
+            ? n >= 600
+            : null;
+    }
 
     /// <summary>
     /// The number format a style names through <c>style:data-style-name</c>, or null.

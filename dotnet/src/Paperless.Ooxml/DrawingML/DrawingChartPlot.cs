@@ -182,9 +182,16 @@ public static class DrawingChartPlot
             PlotBackground = FillOf(Child(plotArea, "spPr"), theme),
             ValueGrid = GridOf(axes.Value, theme),
             CategoryGrid = GridOf(axes.Category, theme) ?? GridOf(axes.Domain, theme),
-            TitleSize = SizeOf(Child(chart, "title")) ?? Length.FromPoints(13),
-            AxisTitleSize = AxisTitleSizeOf(plotArea) ?? Length.FromPoints(9),
-            LabelSize = AxisLabelSizeOf(plotArea) ?? Length.FromPoints(10),
+            // The three automatic-text sizes and weights, which are *not* chart2's model
+            // defaults — see AutoText below for why an OOXML chart never reaches those.
+            TitleSize = SizeOf(Child(chart, "title"))
+                        ?? AutoText(chartSpace, 18.0, 120),
+            AxisTitleSize = AxisTitleSizeOf(plotArea)
+                            ?? AutoText(chartSpace, 10.0, 100),
+            IsTitleBold = BoldOf(Child(chart, "title")) ?? true,
+            IsAxisTitleBold = AxisTitleBoldOf(plotArea) ?? true,
+            LabelSize = AxisLabelSizeOf(plotArea)
+                        ?? AutoText(chartSpace, 10.0, 100),
 
             // The legend's own c:txPr, not the axes' — every length in the legend is a fraction
             // of it. Read from the legend element directly rather than through its descendants,
@@ -1198,6 +1205,87 @@ public static class DrawingChartPlot
         }
 
         return theme?.Fonts?.MinorLatin;
+    }
+
+    /// <summary>
+    /// The size a chart part's automatic text takes when the part itself states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An OOXML chart never reaches <c>chart2</c>'s model defaults.</strong> The import
+    /// applies its own auto-text table before any of them
+    /// (<c>oox/source/drawingml/chart/objectformatter.cxx</c>:415-434, applied by
+    /// <c>TextFormatter::TextFormatter</c>:906-929): a chart title is <c>1800</c> and bold, an
+    /// axis title <c>1000</c> and bold, and everything else — axis labels, legend entries, data
+    /// labels — <c>1000</c> and not bold. Citing <c>chart2/source/model/main/Title.cxx</c>'s 13 pt
+    /// here was right for an ODF chart and wrong for every OOXML one.
+    /// </para>
+    /// <para>
+    /// <paramref name="relative"/> is <c>mnRelFontSize</c>, and it bites only when the
+    /// <em>chart space</em> states a size of its own: <c>TextFormatter</c> keeps the absolute
+    /// default until the global <c>c:txPr</c> supplies a height, and then takes that height times
+    /// the percentage instead (<c>:926-928</c>). So a chart whose <c>c:txPr</c> says 1400 gets a
+    /// 16.8 pt title, not an 18 pt one. Six of the slides corpus's 61 chart parts state it.
+    /// </para>
+    /// <para>
+    /// Measured against LibreOffice's own model rather than only against its ink:
+    /// <c>Demick_JetBlue.pptx</c>, whose five chart parts state no <c>sz</c> and no <c>b</c>
+    /// anywhere, round-trips through <c>--convert-to odp</c> with the chart title carrying
+    /// <c>fo:font-size="18pt" fo:font-weight="bold"</c>, its two axis titles
+    /// <c>10pt</c>/<c>bold</c>, and its axes and legend <c>10pt</c> with no weight at all.
+    /// </para>
+    /// </remarks>
+    /// <param name="chartSpace">The <c>c:chartSpace</c>, whose direct <c>c:txPr</c> is the global one.</param>
+    /// <param name="points">The table's absolute default, in points.</param>
+    /// <param name="relative">The table's percentage of the global size.</param>
+    private static Length AutoText(XElement chartSpace, double points, int relative)
+        => SizeOf(Child(chartSpace, "txPr")) is { } global
+            ? global * (relative / 100.0)
+            : Length.FromPoints(points);
+
+    /// <summary>
+    /// Whether a titled element's text states a weight, and which — <c>@b</c> on the first
+    /// <c>a:defRPr</c> or <c>a:rPr</c> under it, in document order.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than false when nothing states one, because "stated regular" and "stated
+    /// nothing" are different answers here: the auto-text table makes an unstated chart title
+    /// bold, so collapsing the two would draw <c>b="0"</c> bold. Five of the corpus's chart parts
+    /// state <c>b="0"</c> on a title and three state <c>b="1"</c>.
+    /// </remarks>
+    private static bool? BoldOf(XElement? element)
+    {
+        if (element is null) return null;
+
+        foreach (XElement properties in element.Descendants())
+        {
+            if (properties.Name.NamespaceName != OoxmlNamespaces.DrawingML) continue;
+            if (properties.Name.LocalName is not ("defRPr" or "rPr")) continue;
+            if (properties.Attribute("b")?.Value is not { Length: > 0 } stated) continue;
+
+            return stated is "1" or "true";
+        }
+
+        return null;
+    }
+
+    /// <summary>The weight the axis <em>titles</em> state, from the first axis that states one.</summary>
+    /// <remarks>
+    /// One answer for every axis title, which is the same simplification
+    /// <see cref="AxisTitleSizeOf"/> already makes and for the same reason: the model carries one
+    /// axis-title size and one axis-title weight. Of the corpus's 38 axis titles, 13 state a
+    /// weight and no document states both values on different axes of one chart.
+    /// </remarks>
+    private static bool? AxisTitleBoldOf(XElement plotArea)
+    {
+        foreach (XElement axis in plotArea.Elements())
+        {
+            if (axis.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
+            if (!axis.Name.LocalName.EndsWith("Ax", StringComparison.Ordinal)) continue;
+            if (BoldOf(Child(axis, "title")) is { } bold) return bold;
+        }
+
+        return null;
     }
 
     private static Length? AxisTitleSizeOf(XElement plotArea)

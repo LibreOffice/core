@@ -27,15 +27,22 @@ namespace Paperless.Core.Tests;
 /// </remarks>
 public class ChartTextFamilyTests
 {
-    /// <summary>A measurer that records the family it was asked for and answers by character.</summary>
+    /// <summary>
+    /// A measurer that records the family and the weight it was asked for, and answers by
+    /// character — a bold line a tenth wider, so a caller that drops the weight is visible in the
+    /// geometry as well as in <see cref="Weights"/>.
+    /// </summary>
     private sealed class Ruler : IChartTextMeasurer
     {
         public List<string?> Families { get; } = [];
 
-        public DocSize Measure(string text, Length size, string? family)
+        public List<bool> Weights { get; } = [];
+
+        public DocSize Measure(string text, Length size, string? family, bool bold)
         {
             Families.Add(family);
-            return new DocSize(size * (0.5 * text.Length), size * 1.15);
+            Weights.Add(bold);
+            return new DocSize(size * (0.5 * text.Length) * (bold ? 1.1 : 1.0), size * 1.15);
         }
     }
 

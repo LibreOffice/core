@@ -2041,60 +2041,100 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
 
 ### Small differences that are measured and not yet closed
 
-- [ ] **An OOXML chart's automatic text is 18 pt bold for the main title and 10 pt bold for an
-      axis title; we draw 13 pt and 9 pt with no weight at all.** `ChartPlot.TitleSize`'s 13 pt
-      default cites `chart2/source/model/main/Title.cxx`, which is the chart2 *model* default and
+- [x] **An OOXML chart's automatic text is 18 pt bold for the main title and 10 pt bold for an
+      axis title; we drew 13 pt and 9 pt with no weight at all.** `ChartPlot.TitleSize`'s 13 pt
+      default cited `chart2/source/model/main/Title.cxx`, which is the chart2 *model* default and
       so the right answer for an ODF chart — but an OOXML chart never reaches it. The import
       applies `objectformatter.cxx`'s auto-text table first
       (`oox/source/drawingml/chart/objectformatter.cxx`:415-434, `TextFormatter::TextFormatter`
-      setting `moHeight` and `moBold` from it): the chart title is `1800` and **bold**, an axis
-      title `1000` and **bold**, and everything else — axis labels, legend entries, data labels —
-      `1000` and not bold.
+      :906-929 setting `moHeight` and `moBold` from it): the chart title is `1800` and **bold**,
+      an axis title `1000` and **bold**, and everything else — axis labels, legend entries, data
+      labels — `1000` and not bold. `mnRelFontSize` — 120% for the title, 100% for the rest —
+      bites only when the chart space's own `c:txPr` states a height, which six of the corpus's
+      61 chart parts do; without it the absolute default is simply wrong for those six.
 
-      Measured on page 4 of `slides/batch-017/pptx/Demick_JetBlue.pptx`, whose `chart1.xml`
-      states no `sz` and no `b` anywhere, so the whole page is the defaults:
+      **Settled against LibreOffice's own model, not only against its ink.**
+      `slides/batch-017/pptx/Demick_JetBlue.pptx` states no `sz` and no `b` anywhere in any of
+      its five chart parts, and `soffice --convert-to odp` writes its chart title as
+      `fo:font-size="18pt" fo:font-weight="bold"`, its two axis titles as `10pt`/`bold`, and its
+      axes and its legend as `10pt` with no weight at all. That is the table, read back out of
+      the importer rather than inferred from a rendering.
 
-      | | ours | reference |
-      |---|---|---|
-      | chart title `RPM, ASM, and Load Factor` | 13.01 pt, regular | 17.89 pt, **bold** |
-      | axis titles, three of them | 9.01 pt, regular | 9.89 pt, **bold** |
+      Closed by `DrawingChartPlot`'s `AutoText`, `BoldOf` and `AxisTitleBoldOf`, by
+      `ChartPlot.IsTitleBold`/`IsAxisTitleBold`, and by `ChartLabel.IsBold` reaching all three
+      consumers. `SheetChart` and `FrameChart` take the weight and document in code that they
+      drop it, the shape `ChartPlot.TextFamily` set — so neither the sheets nor the words track
+      moves. Swept reach on the slides track: see the scoreboard.
 
-      That is where the deck's `DejaVuSerif-Bold` comes from — the reference embeds it, we embed
-      nothing bold, and the bold records appear on pages 4-8, which are exactly its five chart
-      slides. It is not the axis *labels*, which the table above says are correctly not bold; an
-      earlier reading of this as "`ChartLabel` carries no weight" is right about the model and
-      names the wrong text.
+- [ ] **A *stated* weight on a chart's axis labels, legend or data labels is still unread.**
+      This is the larger half of the weight work and it is untouched. Round twenty-four read
+      `@b` on the two titles only, because the auto-text table's *default* is title-only; a file
+      that states `b="1"` on `c:valAx/c:txPr` states it about the labels, and **36 of the 61
+      chart parts across 7 documents state one somewhere**. Seen directly on page 35 of
+      `171128IPAP.pptx`, whose `chart4.xml` states `<a:defRPr sz="900" b="1"/>` on both axes: the
+      reference draws those labels 8.99 pt Carlito-**Bold** and we draw 9.01 pt Carlito-Regular.
 
-      The common factor of **0.9889** between the two columns is a third, separate and much
-      smaller error: the chart's own text scale, from the OLE object's stored visual area against
-      the size of the frame it sits in. 18 × 0.9889 = 17.80 and 10 × 0.9889 = 9.89.
+      The design is decided and the work is not: `ChartPlot` needs `IsLabelBold` and
+      `IsLegendBold` beside `LabelSize` and `LegendSize`, and the twenty-odd `new ChartLabel`
+      sites that pass `plot.LabelSize` need the weight too. **Do it with a stamping pass, not
+      twenty arguments** — `ChartLabel.IsBold` becomes `bool?`, the title and legend sites set it
+      explicitly, and a pass beside `InFamily` fills the nulls, which is exactly how `Family` is
+      already threaded and for the reason recorded there. The one thing that pass gets wrong is a
+      *data* label, whose weight is its series' `c:dLbls/c:txPr` rather than the axis'; decide
+      whether to carry a third field or accept the approximation before starting.
 
-      Ceiling on the reach, not the reach — 10 of the 61 chart parts in the slides corpus have a
-      main title stating no `sz`, and 21 of 38 axis titles state none. Measure it by rendering.
+- [ ] **The chart text residual is neither a constant offset nor a constant factor**, and round
+      twenty-three's reading of it as "the chart's own text scale, from the OLE object's stored
+      visual area against the size of the frame it sits in" is refuted on both halves.
 
-      The size half is two defaults in `DrawingChartPlot` and can be done alone. The weight half
-      needs a flag on `ChartLabel` **and** all three consumers — `SlideChart`, `SheetChart` and
-      `FrameChart` — so it cannot be done from inside the slides track without leaving a chart in
-      a workbook drawing the model's new field as nothing.
+      The factor first: 10 × 0.9889 = 9.889 and the reference draws 9.889, but 18 × 0.9889 =
+      17.80 and it draws 17.89. One pair fits. Restating the same deck's title at six sizes and
+      asking `soffice` what it draws (`research/probes/slides-r24/make-title-size-probe.py`):
 
-      **And the weight half is larger than the defaults.** A *stated* `b="1"` on chart text is
-      not read either — `DrawingChartPlot` has a `SizeOf` and no weight anywhere — and that is
-      **36 of the 61 chart parts across 7 documents**, against 10 relying on the title default.
-      Seen directly on page 35 of `171128IPAP.pptx`, whose `chart4.xml` states
-      `<a:defRPr sz="900" b="1"/>` on both axes: the reference draws those labels 8.99 pt
-      Carlito-**Bold** and we draw 9.01 pt Carlito-Regular. So a legend, an axis label and a data
-      label can each be bold when the file says so, and only the *default* is title-only — which
-      is why the model needs a weight rather than the reader needing two more constants.
+      | stated | 7 | 10 | 14 | 18 | 30 | 40 |
+      |---|---|---|---|---|---|---|
+      | drawn | 6.987 | 9.889 | 13.889 | 17.890 | 29.807 | 39.808 |
+      | ratio | 0.9981 | 0.9889 | 0.9921 | 0.9939 | 0.9936 | 0.9952 |
 
-- [ ] **A legend's row height is not linear in its font size, and a plain line height is.**
-      Left after round twenty-three's legend work, which is right at 10 pt and drifts at the
-      ends. Measured from the probe decks' border height, key position and row pitch together:
-      the reference's row height is **7.55, 11.28 and 16.50 pt** at a 7, 10 and 14 pt legend
-      font — 1.079, 1.128 and 1.181 times the font — where a line height is a constant multiple
-      and gives 7.95, 11.35 and 15.89. So the pitch lands within 0.09 pt at 10 pt and 0.44 and
-      0.65 pt out at 7 and 14. A quantisation somewhere in the reference device is the obvious
-      suspect and it has not been chased; the probe that would separate the candidates is a
-      sweep of legend font sizes one point apart, looking for the step.
+      The mechanism next: that deck's chart frames state `a:ext cx="8046720" cy="4206240"` —
+      exactly 22352 × 11684 in 1/100 mm — and LibreOffice's own `odp` of it writes
+      `chart:chart svg:width="22.352cm" svg:height="11.684cm"`. The visual area and the frame are
+      equal to the unit, so there is no visual-area-to-frame scale to be the cause of anything.
+
+      It is not confined to the title: the axes and the legend draw 9.889 pt in every variant
+      while the slide's own text draws exactly 18 and 28.006 on the same page, so it is chart
+      text specifically and it is worth 0.3–1.1%. Our own side quantises a font height to the
+      whole 1/100 mm and the reference plainly does too for a *slide* — 28 pt is 987.78 and both
+      draw 28.006 — so the residual is something the chart's own device does on top of that.
+      Unchased beyond bounding it.
+
+- [ ] **A legend's row height is quantised to a 96 dpi pixel and the term beside it is exactly
+      one millimetre.** Round twenty-three found the row height was not a constant multiple of
+      the font — 7.55, 11.28 and 16.50 pt at 7, 10 and 14 — named a quantisation as the suspect
+      and named the probe that would separate the candidates. Round twenty-four ran it
+      (`research/probes/slides-r24/make-legend-step-probe.py`, eleven decks a point apart) and
+      the suspect is right:
+
+      | legend font | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
+      |---|---|---|---|---|---|---|---|---|---|
+      | row pitch | 9.58 | 10.34 | 11.85 | 13.35 | 14.09 | 15.59 | 16.33 | 17.09 | 19.33 |
+      | less 1 mm | 6.745 | 7.505 | 9.015 | 10.515 | 11.255 | 12.755 | 13.495 | 14.255 | 16.495 |
+      | ÷ 0.75 pt | 9.01 | 10.02 | 12.04 | 14.04 | 15.02 | 17.02 | 18.01 | 19.02 | 22.01 |
+
+      Every one is a whole number of 0.75 pt — **one pixel at 96 dpi** — to within 0.028 pt, and
+      the eight steps between consecutive sizes are 1.013, 2.013, 2.000, 0.987, 2.000, 0.987,
+      1.013 and 2.987 pixels. The 1 mm subtracted is not fitted: it is the same floor the
+      padding and the key gap already have — `pad` is `max(1 mm, 0.33 × font)` and reads 2.84 at
+      6, 7 and 8 pt before following the font, and the key gap is `max(1 mm, 0.22 × font)` and
+      reads 2.83 up to 13 pt then 3.07, 3.29 and 3.52 at 14, 15 and 16. Three quantities, one
+      floor — and the floor is *not* quantised while the row height is.
+
+      Two things are left. The rate feeding the grid is not settled: Liberation Mono's 1.1328 em
+      line height predicts six of the nine pixel counts and misses at 7, 13 and 14, so "a line
+      height, quantised" is close and unproven. And 15 and 16 pt leave the regime entirely —
+      0.168 and 0.368 pt off the grid, with the pitch barely growing (20.24, 20.44) while the
+      border's height flattens too — which is a second effect and should not be fitted with the
+      first.
 
 - [ ] **A chart's category-axis labels: we draw *fewer* than the reference, not more.** Recorded
       the other way round for two rounds — "the reference draws none of those labels and we draw
@@ -2111,6 +2151,23 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       right and we draw neither, and our legend collides with the category-axis title
       (`RPMYear ASM LF + ( 3rd Quarter)` on one line). Judge this one on the image, never on
       `wc -w`.
+- [ ] **A secondary value axis' title has room reserved for it and is never drawn.**
+      `ChartLayout.PlotAreaOf` takes `Shape(measurer, second, plot.AxisTitleSize).Height` off the
+      right edge for `plot.SecondaryValueAxisTitle`, and `AddTitles` adds a label for the
+      category axis' title and the primary value axis' and stops. So the plot area is narrowed by
+      a title that is not there — the one failure shape that looks like nothing is wrong, because
+      the picture is still the right size.
+
+      Reach, censused over all three tracks: **9 chart parts over 6 documents** declare two
+      `c:valAx` and a `c:title` on both — five slides decks (`171128IPAP`,
+      `8_P-Pavese_AIRBUS-ATB-journee-CRATB`, `Demick_JetBlue`,
+      `FAAAIandtheArtandScienceofV&Vfinal`, `RPA P4 - Advanced Material`), one words DOCX, and no
+      workbook. Seen on page 4 of `Demick_JetBlue.pptx`: the reference draws three rotated axis
+      titles and we draw two, both sides turning them a quarter turn anticlockwise.
+
+      It is four lines mirroring the `beside` branch about the frame's right edge — and it draws
+      a *new* label, which `SheetChart` and `FrameChart` do not ignore, so unlike a weight it
+      owes the other two tracks a sweep.
 - [ ] **An ODF fill's `draw:opacity` is not read at all**, so a shape LibreOffice draws at 30%
       comes out fully opaque. Found while building `slide-drop-shadow.odp`: the same shape that
       carries `<a:alpha val="30000"/>` in the `pptx` carries `draw:opacity="30%"` on its
