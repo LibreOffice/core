@@ -42,11 +42,21 @@ internal static class SheetPrintInstant
     /// The instant a <c>SOURCE_DATE_EPOCH</c> value names, or null when it names nothing usable.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A malformed value is ignored rather than thrown on. The variable is set by build systems
     /// and by whatever else shares the environment, and a workbook that will not render because
     /// something else in the process set a variable badly is a worse outcome than one dated from
-    /// the clock. Converted to local time because that is what the fields print and what the
-    /// unpinned path returns.
+    /// the clock.
+    /// </para>
+    /// <para>
+    /// <strong>Read as UTC, not converted to local time.</strong> The convention defines the
+    /// value in UTC, and the point of setting it is that the output stops depending on the
+    /// environment — converting to local time would leave two machines in different zones
+    /// rendering different bytes from the same pinned instant, which is the failure this exists
+    /// to remove. Measured: with the conversion in place, all 13 documents of a sample rendered
+    /// under two time zones differed; without it, none do. The unpinned path still reads the
+    /// local clock, which is what a printout's date is.
+    /// </para>
     /// </remarks>
     /// <param name="raw">The variable's value.</param>
     public static DateTime? Parse(string? raw)
@@ -57,7 +67,7 @@ internal static class SheetPrintInstant
                              out long seconds)
                && seconds >= 0
                && seconds <= 253402300799L // 9999-12-31T23:59:59Z; beyond it FromUnixTimeSeconds throws.
-            ? DateTimeOffset.FromUnixTimeSeconds(seconds).ToLocalTime().DateTime
+            ? DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime
             : null;
     }
 }

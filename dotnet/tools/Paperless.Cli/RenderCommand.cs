@@ -134,8 +134,10 @@ internal static class RenderCommand
     /// <c>&amp;T</c> header fields, so pinning it pins the whole file rather than half of it.
     /// </para>
     /// <para>
-    /// Unset — the ordinary case — leaves <c>PdfRenderOptions.CreationDate</c> null and the
-    /// writer stamps the current time, which is what a PDF is supposed to carry.
+    /// Read as UTC, as the convention defines it and as <c>SheetPrintInstant</c> does, so that
+    /// the pinned output does not depend on the machine's time zone. Unset — the ordinary case —
+    /// leaves <c>PdfRenderOptions.CreationDate</c> null and the writer stamps the current time,
+    /// which is what a PDF is supposed to carry.
     /// </para>
     /// </remarks>
     private static DateTimeOffset? PinnedDate()
@@ -146,7 +148,7 @@ internal static class RenderCommand
         return long.TryParse(raw.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture,
                              out long seconds)
                && seconds >= 0 && seconds <= 253402300799L
-            ? DateTimeOffset.FromUnixTimeSeconds(seconds).ToLocalTime()
+            ? DateTimeOffset.FromUnixTimeSeconds(seconds)
             : null;
     }
 

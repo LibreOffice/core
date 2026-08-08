@@ -16,6 +16,11 @@ namespace Paperless.Spreadsheets.Tests;
 /// </remarks>
 public sealed class SheetPrintInstantTests
 {
+    /// <summary>
+    /// A zone in which local time is not UTC, so a conversion to local time cannot pass unnoticed.
+    /// </summary>
+    private const string OffsetZone = "Pacific/Kiritimati";
+
     [Theory]
     [InlineData("1700000000")]
     [InlineData("  1700000000  ")]
@@ -23,8 +28,7 @@ public sealed class SheetPrintInstantTests
     public void AnEpochIsReadAsTheInstantItNames(string raw)
         => SheetPrintInstant.Parse(raw)
             .ShouldBe(DateTimeOffset.FromUnixTimeSeconds(long.Parse(raw.Trim(),
-                          System.Globalization.CultureInfo.InvariantCulture))
-                      .ToLocalTime().DateTime);
+                          System.Globalization.CultureInfo.InvariantCulture)).UtcDateTime);
 
     [Theory]
     [InlineData(null)]
@@ -41,11 +45,12 @@ public sealed class SheetPrintInstantTests
     public void EveryPageOfOnePrintoutCarriesTheSameInstant()
     {
         using EpochVariable pinned = new("1700000000");
+        using TimeZone zone = new(OffsetZone);
 
         SpreadsheetPages pages = ThreePages();
         pages.Count.ShouldBeGreaterThan(1);
 
-        DateTime expected = DateTimeOffset.FromUnixTimeSeconds(1700000000).ToLocalTime().DateTime;
+        DateTime expected = DateTimeOffset.FromUnixTimeSeconds(1700000000).UtcDateTime;
         pages.Pages.ShouldAllBe(page => page.Printed == expected);
     }
 
@@ -88,6 +93,24 @@ public sealed class SheetPrintInstantTests
         table.Children.Add(row);
 
         return new SheetLayout { Name = name, Cells = table };
+    }
+
+    /// <summary>Sets <c>TZ</c> for the length of a test, so a local-time conversion shows up.</summary>
+    private sealed class TimeZone : IDisposable
+    {
+        private readonly string? _previous = Environment.GetEnvironmentVariable("TZ");
+
+        public TimeZone(string? value)
+        {
+            Environment.SetEnvironmentVariable("TZ", value);
+            TimeZoneInfo.ClearCachedData();
+        }
+
+        public void Dispose()
+        {
+            Environment.SetEnvironmentVariable("TZ", _previous);
+            TimeZoneInfo.ClearCachedData();
+        }
     }
 
     /// <summary>Sets <c>SOURCE_DATE_EPOCH</c> for the length of a test and puts it back.</summary>
