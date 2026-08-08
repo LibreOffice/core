@@ -415,6 +415,67 @@ public sealed partial class Ww8DocumentReader
         return new Ww8LayoutFurniture(headers, footers);
     }
 
+    /// <summary>
+    /// One blank running head or foot: a single empty paragraph in the document's default style.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// What <c>Read_HdFt</c> leaves behind when it turns a slot on and has no text to put in it —
+    /// <c>SwFormatHeader(true)</c> creates the frame whether or not the story was read
+    /// (<c>ww8par.cxx</c>:2540), so a section that states a header for one page kind alone still gets an
+    /// empty one for the others. It draws nothing and it is not nothing: it occupies the header band, and
+    /// a section that reserves no band pushes its body down by the whole of it.
+    /// </para>
+    /// <para>
+    /// The default paragraph style rather than Word's <c>header</c> style, and the difference does not
+    /// reach the page. LibreOffice puts the paragraph in <c>Header</c>, whose definition in its own
+    /// flat-ODF export of both corpus documents that need this is <em>Standard plus two tab stops</em> —
+    /// and a tab stop cannot change the height of a line with nothing on it, which is the only quantity an
+    /// empty running head contributes. Matching by style would mean matching a built-in style identifier
+    /// this stylesheet reader does not carry, for a difference of nought.
+    /// </para>
+    /// </remarks>
+    /// <param name="section">The section the paragraph belongs to, for the section-indexed lookups.</param>
+    public List<Ww8LayoutBlock> BlankFurniture(int section)
+    {
+        Ww8LayoutFormat layout = default;
+        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveChain(DefaultStyleIndex))
+        {
+            layout = ApplyLayoutSprms(layout, inherited);
+        }
+
+        Ww8LayoutFormat character = default;
+        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveCharacterChain(DefaultStyleIndex))
+        {
+            character = ApplyLayoutSprms(character, inherited);
+        }
+
+        Length size = SizeOf(character);
+
+        Text.Layout.ParagraphFormat format = layout.ToParagraphFormat(size) with
+        {
+            DefaultTabInterval = DocumentProperties.DefaultTabInterval,
+            TabsRelativeToIndent = false,
+            ClampsTabsAtLineEdge = true,
+        };
+
+        Ww8LayoutParagraph paragraph = new(
+            Math.Max(0, section),
+            string.Empty,
+            format,
+            character.FontIndex is { } index ? Fonts.Name(index) : null,
+            size,
+            character.IsBold == true ? 700 : 400,
+            character.IsItalic == true,
+            LanguageOf(character),
+            IsInTable: false);
+
+        return [new Ww8LayoutBlock(paragraph)];
+    }
+
+    /// <summary>The stylesheet index of the default paragraph style, which WW8 fixes at nought.</summary>
+    private const int DefaultStyleIndex = 0;
+
     /// <summary>How many stories precede the first section's furniture in the header subdocument.</summary>
     private const int SeparatorStories = 6;
 

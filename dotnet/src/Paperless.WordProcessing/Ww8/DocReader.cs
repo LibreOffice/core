@@ -266,8 +266,39 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         Fill(headers, stated.Headers);
         Fill(footers, stated.Footers);
 
+        Complete(headers);
+        Complete(footers);
+
         PageFurnitureSet set = new(headers, footers);
         return set.IsEmpty ? null : set;
+
+        // "Cannot have left without right", as `Read_HdFt` labels it (#i17196#, ww8par.cxx:2528): every
+        // slot the section turns on gives the *master* page a running head, and the master's is the one
+        // the Default slot holds. So a section stating an even-page header alone still has one on its odd
+        // pages — an empty one, which draws nothing and occupies the band.
+        //
+        // Only when the Default slot is otherwise unfilled: a slot inherited from an earlier section is
+        // what LibreOffice's own CopyPageDescHdFt puts there, so an inherited head wins over a blank.
+        //
+        // The even slot is deliberately not completed the same way. `Read_HdFt` gives the *left* page a
+        // head only on the even iteration itself, so a facing-pages section with no even story has no
+        // head on its even pages at all — which is not the same as an empty one, and cannot be said with
+        // this dictionary, whose absent slot means "fall back to Default".
+        void Complete(Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into)
+        {
+            if (into.ContainsKey(Model.PageFurnitureSlot.Default)) return;
+
+            bool enabled =
+                (_reader.DocumentProperties.HasFacingPages
+                    && into.ContainsKey(Model.PageFurnitureSlot.Even))
+                || (Sections[section].HasDifferentFirstPage
+                    && into.ContainsKey(Model.PageFurnitureSlot.First));
+
+            if (!enabled) return;
+
+            into[Model.PageFurnitureSlot.Default] =
+                BlocksOf(fonts, _reader.BlankFurniture(section), widths);
+        }
 
         void Fill(
             Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
