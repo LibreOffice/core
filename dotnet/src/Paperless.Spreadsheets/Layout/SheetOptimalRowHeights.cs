@@ -50,12 +50,22 @@ namespace Paperless.Spreadsheets.Layout;
 /// Paperless does, measured off its own PDF — and only the row it reserved for it disagrees.
 /// </para>
 /// <para>
-/// What is still not reproduced is a turned or stacked cell, whose size is its text's *width* put
-/// through an angle. A row holding one takes the larger of the arithmetic answer and the
-/// height its file already states. That fallback is not a fudge — the arithmetic answer really is
-/// a lower bound in Calc too, because <c>bStdAllowed</c> stays true for such a cell and its
-/// attribute height is written into the array before any measurement is compared against it — and
-/// it means a row this cannot measure is never shorter than the writer made it.
+/// A <em>turned</em> cell is measured by <see cref="RotatedHeight"/>, whose branch of
+/// <c>GetNeededSize</c> wraps nothing: the whole string is measured on one line and its width is
+/// put through the angle. What is still not reproduced is a <em>stacked</em> cell, and a turned one
+/// Calc would have handed to an EditEngine instead — a rich cell, or one holding a hard break. A
+/// row holding either takes the larger of the arithmetic answer and the height its file already
+/// states. That fallback is not a fudge — the arithmetic answer really is a lower bound in Calc
+/// too, because <c>bStdAllowed</c> stays true for an obliquely turned cell and its attribute height
+/// is written into the array before any measurement is compared against it — and it means a row
+/// this cannot measure is never shorter than the writer made it.
+/// </para>
+/// <para>
+/// <strong>A quarter turn is the exception to that lower bound and to the sheet's minimum alike.</strong>
+/// <c>bStdAllowed</c> is the cell's <em>orientation</em> being <c>Standard</c>
+/// (<c>column2.cxx:925</c>), which exactly 90° and exactly 270° are not, so such a row gets neither
+/// the arithmetic height nor the floor <c>lcl_GetAttribHeight</c> carries. See
+/// <see cref="IsQuarterTurned"/>.
 /// </para>
 /// <para>
 /// Measured on <c>National-Reports.xlsx</c>, whose 117 rows state <c>ht</c> and none states

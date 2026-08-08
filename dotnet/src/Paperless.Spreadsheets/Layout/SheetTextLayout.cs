@@ -1115,9 +1115,15 @@ internal static class SheetTextLayout
     /// character per line, centred.
     /// </para>
     /// <para>
-    /// What is <em>not</em> reproduced is the rotated cell's effect on its row's height, and the
-    /// clipping of rotated text against its neighbours. Both need the rotated bounding box fed
-    /// back into the row, which is a change to pagination rather than to drawing.
+    /// A quarter turn is not an angle at all as far as Calc is concerned: it draws those through
+    /// <c>DrawEditBottomTop</c> and <c>DrawEditTopBottom</c>, whose anchor, whose paper and whose
+    /// alignment are all worked out differently. See <see cref="IsQuarterTurned"/>, which is what
+    /// splits the two paths below.
+    /// </para>
+    /// <para>
+    /// What is <em>not</em> reproduced is the clipping of rotated text against its neighbours,
+    /// which needs the rotated bounding box fed back into the row. The rotated cell's effect on its
+    /// row's <em>height</em> is now reproduced — see <see cref="SheetOptimalRowHeights"/>.
     /// </para>
     /// </remarks>
     private static void DrawRotated(
