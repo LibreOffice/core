@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2023-11-02 21:30+0000\n"
-"Last-Translator: DPE <danpe_jobo@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-09 01:51+0000\n"
+"Last-Translator: Someone That Is A Christian <helgen77@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"collabora-online/ui/nb_NO/>\n"
-"Language: \n"
+"collabora-online/collabora-ui/nb_NO/>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -56,24 +56,23 @@ msgstr "Logg inn"
 #: src/control/Control.ServerAuditDialog.ts:314
 #: src/control/Control.ServerAuditDialog.ts:315
 msgid "Server audit"
-msgstr ""
+msgstr "Serverrevisjon"
 
 #: admin/admin.strings.js:23 src/control/Control.ServerAuditDialog.ts:333
-#, fuzzy
 msgid "Status"
 msgstr "Status:"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detaljer"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
-msgstr ""
+msgstr "Ingen problemer funnet"
 
 #: admin/admin.strings.js:26
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "Dashbord"
 
 #: admin/admin.strings.js:27
 msgid "Users online"
@@ -132,7 +131,7 @@ msgstr "Tid gått"
 
 #: admin/admin.strings.js:40
 msgid "Idle time"
-msgstr "Innaktiv tid"
+msgstr "Inaktiv tid"
 
 #: admin/admin.strings.js:41
 msgid "Modified"
@@ -203,7 +202,7 @@ msgstr "Tidsintervall for CPU statistikk (u ms)"
 
 #: admin/admin.strings.js:54 admin/src/AdminSocketOverview.js:100
 msgid "Kill session."
-msgstr "Drep økt."
+msgstr "Terminer økt."
 
 #: admin/admin.strings.js:55
 msgid "Maximum Document process virtual memory (in MB) - reduce only"
@@ -282,7 +281,7 @@ msgstr "Versjonsinfo"
 
 #: admin/admin.strings.js:71
 msgid "License"
-msgstr ""
+msgstr "Lisens"
 
 #: admin/admin.strings.js:72 src/control/Control.BackstageView.ts:194
 #: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:665
@@ -295,19 +294,19 @@ msgstr "Om"
 
 #: admin/src/AdminClusterOverview.js:105
 msgid "CPU History"
-msgstr ""
+msgstr "CPU-historikk"
 
 #: admin/src/AdminClusterOverview.js:116
 msgid "Memory History"
-msgstr ""
+msgstr "Minnehistorikk"
 
 #: admin/src/AdminClusterOverview.js:356
 msgid "Memory"
-msgstr ""
+msgstr "Minne"
 
 #: admin/src/AdminClusterOverview.js:540
 msgid "Please wait kubernetes cluster is scaling..."
-msgstr ""
+msgstr "Vent litt, kubernetes-klyngen skalerer..."
 
 #: admin/src/AdminClusterOverview.js:550 admin/src/AdminSocketOverview.js:421
 msgid "Failed to set jwt authentication cookie over insecure connection"
@@ -386,7 +385,7 @@ msgstr "Sendt"
 
 #: admin/src/AdminSocketAnalytics.js:265
 msgid "Connections"
-msgstr ""
+msgstr "Tilkoblinger"
 
 #: admin/src/AdminSocketBase.js:62
 msgid "Server has been shut down; please reload the page."
@@ -407,13 +406,14 @@ msgstr "Er du sikker på at du vil avslutte denne økten?"
 #: admin/src/AdminSocketServerAudit.js:35
 #: src/control/Control.ServerAuditDialog.ts:58
 msgid "Your WOPI server is not secure: SSL verification failed"
-msgstr ""
+msgstr "WOPI-serveren din er ikke sikker: SSL-verifisering mislyktes"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
 msgid ""
 "Documents are not effectively contained: missing capabilities or namespaces."
 msgstr ""
+"Dokumentene er ikke effektivt inneholdt: manglende funksjoner eller navnerom."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -421,6 +421,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"BPF-filtrering av potensielt risikable systemkall (seccomp) er ikke "
+"aktivert; en sikkerhetsrisiko."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -428,32 +430,38 @@ msgid ""
 "Your server is configured with insufficient hardware resources, which may "
 "lead to poor performance."
 msgstr ""
+"Serveren din er konfigurert med utilstrekkelige maskinvareressurser, noe som "
+"kan føre til dårlig ytelse."
 
 #: admin/src/AdminSocketServerAudit.js:54
 #: src/control/Control.ServerAuditDialog.ts:109
+#, fuzzy
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
-msgstr ""
+msgstr "Treg Kit-jail-oppsett med kopiering, kan ikke bindes og monteres."
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Fast kit jail bind-montering er ikke konfigurert"
 
 #: admin/src/AdminSocketServerAudit.js:59
 msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Noen klienter koblet seg til med det gamle WebSocket URL-skjemaet, som er "
+"planlagt fjernet. Sjekk at proxy-tjeneren din sender det kompakte skjemaet "
+"gjennom."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3782
 #: src/control/Control.AIChatSidebar.ts:3108 src/map/handler/Map.WOPI.js:878
 msgid "Error"
-msgstr ""
+msgstr "Feil"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Lær mer"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -461,61 +469,62 @@ msgstr "Er du sikker på at du vil slå av tjeneren?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:339
 msgid "Shared Config URL is missing in initial variables."
-msgstr ""
+msgstr "Delt konfigurasjons-URL mangler i startvariablene."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:343
 msgid "Access token is missing in initial variables."
-msgstr ""
+msgstr "Tilgangstoken mangler i de første variablene."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
 msgstr ""
+"Noe gikk galt under henting av innstillingsfilen. Prøv å oppdatere siden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:596
 msgid "Signature Certificate"
-msgstr ""
+msgstr "Signatursertifikat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:597
 msgid "Signature Key"
-msgstr ""
+msgstr "Signaturnøkkel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:598
 msgid "Signature CA"
-msgstr ""
+msgstr "Signatur CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:599
 #: admin/src/integrator/AdminIntegratorSettings.ts:603
 msgid "Provider"
-msgstr ""
+msgstr "Leverandør"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:600
 #: admin/src/integrator/AdminIntegratorSettings.ts:604
 msgid "API Key"
-msgstr ""
+msgstr "API-nøkkel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:601
 #: admin/src/integrator/AdminIntegratorSettings.ts:606
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:602
 #: admin/src/integrator/AdminIntegratorSettings.ts:605
 msgid "Base URL"
-msgstr ""
+msgstr "Basis-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:607
 msgid "Image Size"
-msgstr ""
+msgstr "Bildestørrelse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:608
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Forespurt tidsavbrudd (sekunder)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:611
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Skjermleser i dokumentet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:612
 #: src/control/Control.Menubar.ts:183 src/control/Control.Menubar.ts:524
@@ -527,22 +536,21 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:738
 #: src/control/Control.NotebookbarWriter.js:1829
 msgid "Dark Mode"
-msgstr ""
+msgstr "Mørk modus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:613
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Smart zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:614
 msgid "Default Zoom"
-msgstr ""
+msgstr "Standard zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Compact layout"
-msgstr ""
+msgstr "Kompakt visning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
-#, fuzzy
 msgid "Show status bar"
 msgstr "Vis statusfelt"
 
@@ -553,84 +561,84 @@ msgstr "Vis linjal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Vis formateringsmerker"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 #: src/control/Control.NotebookbarWriter.js:2313
 #: src/control/Control.NotebookbarWriter.js:2329
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
-#, fuzzy
 msgid "Show Comments"
-msgstr "Ingen kommentarer"
+msgstr "Vis kommentarer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:620
 msgid "Accessibility Checker"
-msgstr ""
+msgstr "Tingjengelighetskontroll"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:621
 #: src/control/Control.NavigatorPanel.ts:336
 msgid "Navigator"
-msgstr ""
+msgstr "Navigatør"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:622
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Vis sidefelt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:623
 msgid "Custom Animation"
-msgstr ""
+msgstr "Tilpasset animasjon"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:626
 msgid "Style List"
-msgstr ""
+msgstr "Stilliste"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:629
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
-msgstr ""
+msgstr "Rutenett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:630
 #: src/control/Control.BackstageView.ts:157
 msgid "Print"
-msgstr ""
+msgstr "Skriv ut"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:631
 #: src/control/Control.BackstageView.ts:646
 #: src/control/backstage/CloudDialogs.tsx:319
 msgid "Other"
-msgstr ""
+msgstr "Andre"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:632
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
-msgstr ""
+msgstr "Vis rutenett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:633
 msgid "Snap to grid"
-msgstr ""
+msgstr "Fest til rutenett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:634
 #: admin/src/integrator/AdminIntegratorSettings.ts:640
 msgid "Size to grid"
-msgstr ""
+msgstr "Størrelse til rutenett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:635
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Synkroniser akser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:636
 msgid "Snap grid"
-msgstr ""
+msgstr "Lås til rutenett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:637
 msgid "Empty Pages"
-msgstr ""
+msgstr "Tomme sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:638
+#, fuzzy
 msgid "Force Breaks"
-msgstr ""
+msgstr "Tving sideskift"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:639
 #: src/control/Control.Menubar.ts:870 src/control/Control.TopToolbar.js:144
@@ -640,51 +648,51 @@ msgstr "Alle ark"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:641
 msgid "Content"
-msgstr ""
+msgstr "Innhold"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Display"
-msgstr ""
+msgstr "Visning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Vis grenser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 #: src/control/Control.BackstageView.ts:824
 msgid "Drawing"
-msgstr ""
+msgstr "Tegning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:645
 #: src/control/Control.NotebookbarDraw.js:1245
 #: src/control/Control.NotebookbarDraw.js:1526
 #: src/control/Control.NotebookbarWriter.js:1235
 msgid "Page"
-msgstr ""
+msgstr "Side"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 msgid "Fit to page"
-msgstr ""
+msgstr "Tilpass til side"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 msgid "Tile pages"
-msgstr ""
+msgstr "Flislegg sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:648
 msgid "Booklet"
-msgstr ""
+msgstr "Hefte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:649
 msgid "Booklet front"
-msgstr ""
+msgstr "Forside hefte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:650
 msgid "Booklet back"
-msgstr ""
+msgstr "Bakside hefte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:651
 msgid "Page name"
-msgstr ""
+msgstr "Side navn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:652
 #: src/control/Control.NotebookbarCalc.js:817
@@ -700,11 +708,11 @@ msgstr "Tid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:654
 msgid "Hidden pages"
-msgstr ""
+msgstr "Skjulte sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:655
 msgid "From printer setup"
-msgstr ""
+msgstr "Fra skriveroppsett"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:656
 #: src/control/Control.BackstageView.ts:823 templates/templates.js:80
@@ -726,116 +734,122 @@ msgstr "Start Presentatsjon"
 #: admin/src/integrator/AdminIntegratorSettings.ts:657
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:34
 msgid "Notes"
-msgstr ""
+msgstr "Notater"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:658
 msgid "Handouts"
-msgstr ""
+msgstr "Utdelingsark"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:659
 #: src/control/Control.NavigatorPanel.ts:231
 #: src/control/Control.TopToolbar.js:506
+#, fuzzy
 msgid "Outline"
-msgstr ""
+msgstr "Disposisjon"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:660
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Horisontalt utdelingsark"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:661
 msgid "Images"
-msgstr ""
+msgstr "Bilder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:662
-#, fuzzy
 msgid "Tables"
 msgstr "Tabell"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:663
 msgid "Controls"
-msgstr ""
+msgstr "Kontroller"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:664
 msgid "Background"
-msgstr ""
+msgstr "Bakgrunn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:665
 msgid "Print Black"
-msgstr ""
+msgstr "Skriv ut svart"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:666
 msgid "Hidden text"
-msgstr ""
+msgstr "Skjult tekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:667
 msgid "Placeholders"
-msgstr ""
+msgstr "Plassholdere"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:668
 msgid "Left pages"
-msgstr ""
+msgstr "Venstre sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:669
 msgid "Right pages"
-msgstr ""
+msgstr "Høyre sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:670
 msgid "Brochure"
-msgstr ""
+msgstr "Brosjyre"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:671
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Brosjyre høyre til venstre"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:902
 msgid "Invalid JSON file"
-msgstr ""
+msgstr "Ugyldig JSON-fil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:906
 msgid "Error reading file"
-msgstr ""
+msgstr "Feil ved lesing av fil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:918
 msgid "Autotext"
-msgstr ""
+msgstr "Autotekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:920
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
+"Last opp gjenbrukbare tekststykker (.bau). For å sette inn teksten i "
+"dokumentet, skriv inn snarveien for en autotekstoppføring og trykk F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:926
 msgid "Upload Autotext"
-msgstr ""
+msgstr "Last opp autotekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:932
 msgid "Custom dictionaries"
-msgstr ""
+msgstr "Tilpassede ordbøker"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:934
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
 msgstr ""
+"Legg til eller rediger ord i en stavekontrollordbok. Ord i ordboken din "
+"(.dic) vil være tilgjengelige for stavekontroll."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:940
 msgid "Upload Wordbook"
-msgstr ""
+msgstr "Last opp ordbok"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:946
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumenttemaer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:948
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Last opp egendefinerte dokumenttemaer (.theme). Disse definerer "
+"fargepaletter som er tilgjengelige under Format > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:954
 msgid "Upload Theme"
-msgstr ""
+msgstr "Last opp tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:960
 #: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:652
@@ -845,77 +859,83 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:109
 msgid "Extensions"
-msgstr ""
+msgstr "Utvidelser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:962
 msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Last opp en pakket utvidelse som en .zip; innholdet (manifest.json, ...) "
+"pakkes ut på serveren."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Last opp utvidelse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Innstillingene er bare tilgjengelige for påloggede brukere."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
-msgstr ""
+msgstr "Noe gikk galt. Prøv å oppdatere siden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1255
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
-msgstr ""
+msgstr "Noe gikk galt under henting av ordboken. Prøv å oppdatere siden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1269
 #: admin/src/integrator/AdminIntegratorSettings.ts:3266
 msgid "Interface Settings"
-msgstr ""
+msgstr "Grensesnittinnstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1271
 msgid "Set default interface preferences."
-msgstr ""
+msgstr "Angi standard grensesnittinnstillinger."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1348
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Når den er på, tilpasser Writer dokumentet til visningsbredden når den "
+"åpnes. Når den er av, åpnes dokumentet med standard zoomnivå som er angitt "
+"nedenfor."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1459
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Ingen innstillinger tilgjengelig for {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1471
 msgid "Select a tab to browser settings."
-msgstr ""
+msgstr "Velg en fane for å åpne nettleserinnstillingene."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1488
 #: admin/src/integrator/Xcu.ts:409
 msgid "Reset to default Document settings"
-msgstr ""
+msgstr "Tilbakestill til standard dokumentinnstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1492
 #: admin/src/integrator/Xcu.ts:423
 msgid "Are you sure you want to reset Document settings?"
-msgstr ""
+msgstr "Er du sikker på at du vil tilbakestille dokumentinnstillingene?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1509
 #: admin/src/integrator/Xcu.ts:438
 msgid "Save Document settings"
-msgstr ""
+msgstr "Lagre dokumentinnstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1812
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
+"(Advarsel: Tilgjengelighet for server må være aktivert for å endre status)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1909
 msgid "Notebookbar view"
-msgstr ""
+msgstr "Notatblokklinje-visning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1916
 #: src/control/Control.NotebookbarCalc.js:1620
@@ -923,11 +943,11 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:640
 #: src/control/Control.NotebookbarWriter.js:1747
 msgid "Compact view"
-msgstr ""
+msgstr "Kompakt visning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2026
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr ""
+msgstr "Noe gikk galt under opplasting av filen. Prøv på nytt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2102
 #: src/canvas/sections/CommentSection.ts:1560
@@ -945,7 +965,7 @@ msgstr "Slett"
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
-msgstr ""
+msgstr "Noe gikk galt under sletting av filen. Prøv å oppdatere siden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2128
 #: src/control/Control.BackstageView.ts:840
@@ -953,33 +973,38 @@ msgid "Edit"
 msgstr "Rediger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2146
+#, fuzzy
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"For å bruke Zotero, oppgi API-nøkkelen din her. Du kan opprette API-nøkkelen "
+"din i "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2155
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "API-innstillinger for Zotero-konto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2180
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero-innstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2212
 #: admin/src/integrator/AdminIntegratorSettings.ts:3393
 msgid "Document Signing"
-msgstr ""
+msgstr "Dokumentsignering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2216
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"For å bruke dokumentsignering, angi signeringssertifikatet, nøkkelen og CA-"
+"kjeden din her."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2237
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Innstillinger for dokumentsignering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2275
 #: admin/src/integrator/AdminIntegratorSettings.ts:2292
@@ -994,26 +1019,28 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:1818
 #: src/control/Control.NotebookbarWriter.js:1819
 msgid "AI Assistant"
-msgstr ""
+msgstr "AI-assistent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2279
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Konfigurer legitimasjon og modell for AI-leverandører. Modeller hentes "
+"automatisk når legitimasjon endres."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2380
 msgid "Text Generation"
-msgstr ""
+msgstr "Tekstgenerering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2430
 #: admin/src/integrator/AdminIntegratorSettings.ts:2556
 msgid "e.g."
-msgstr ""
+msgstr "f.eks."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "La stå tomt hvis serveren din ikke krever en"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1021,138 +1048,143 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"For dokumenthandlinger (inspeksjon og redigering), velg en modell med "
+"innebygd funksjons-/verktøykall, for eksempel gpt-4o, llama3.1 eller "
+"qwen2.5. Modeller uten den (f.eks. base llama3, gemma) kan fortsatt chatte, "
+"men kan ikke bruke dokumentverktøy."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2498
 msgid "Image Generation"
-msgstr ""
+msgstr "Bildegenerering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2503
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Samme som Tekst AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "La stå tomt for å bruke Tekst AI-nøkkel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2878
 #: admin/src/integrator/AdminIntegratorSettings.ts:2996
 msgid "Fetching models..."
-msgstr ""
+msgstr "Henter modeller ..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2925
 #: admin/src/integrator/AdminIntegratorSettings.ts:2940
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: admin/src/integrator/AdminIntegratorSettings.ts:3052
 msgid "No models found"
-msgstr ""
+msgstr "Ingen modeller funnet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2950
 #: admin/src/integrator/AdminIntegratorSettings.ts:3062
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modeller hentet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2956
 #: admin/src/integrator/AdminIntegratorSettings.ts:3068
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Kunne ikke hente modeller"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2966
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Ugyldig leverandørkonfigurasjon"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3103
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Ingen (deaktiver bildegenerering)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3120
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Hent modeller for å velge"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "API-kvoten er overskredet – sjekk planen og faktureringsdetaljene dine"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Kunne ikke hente modeller (HTTP {0}). Sjekk leverandørens URL og API-nøkkel."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3293
 #: admin/src/integrator/Xcu.ts:345
 msgid "Document Settings"
-msgstr ""
+msgstr "Dokumentinnstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3435
 msgid "Upload Xcu"
-msgstr ""
+msgstr "Last opp Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3596
 msgid "Enter {0}"
-msgstr ""
+msgstr "Skriv inn {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3654
 msgid "Reset"
-msgstr ""
+msgstr "Tilbakestill"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3655
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Tilbakestill til standard {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3659
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Er du sikker på at du vil tilbakestille {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3675
 msgid "Save {0}"
-msgstr ""
+msgstr "Lagre {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
-msgstr ""
+msgstr "Standardordbok"
 
 #: admin/src/integrator/WordBook.ts:118
 msgid "Words are ignored by the spell checker"
-msgstr ""
+msgstr "Ord ignoreres av stavekontrollen"
 
 #: admin/src/integrator/WordBook.ts:122
 msgid "Dictionary of exceptions"
-msgstr ""
+msgstr "Ordbok over unntak"
 
 #: admin/src/integrator/WordBook.ts:123
 msgid "Exception words are underlined while checking spelling"
-msgstr ""
+msgstr "Unntaksord er understreket ved stavekontroll"
 
 #: admin/src/integrator/WordBook.ts:132
 msgid "Loading Wordbook..."
-msgstr ""
+msgstr "Laster inn ordbok ..."
 
 #: admin/src/integrator/WordBook.ts:333
 msgid "Type to add a word"
-msgstr ""
+msgstr "Skriv for å legge til et ord"
 
 #: admin/src/integrator/WordBook.ts:338
 #: src/control/Notebookbar.ImpressAnimationTab.ts:67
 msgid "Add"
-msgstr ""
+msgstr "Legg til"
 
 #: admin/src/integrator/WordBook.ts:466
 msgid "Invalid dictionary format. Please check the file."
-msgstr ""
+msgstr "Ugyldig ordboksformat. Vennligst sjekk filen."
 
 #: admin/src/integrator/WordBook.ts:486
 msgid "Something went wrong while uploading dictionary file"
-msgstr ""
+msgstr "Noe gikk galt under opplasting av ordbokfilen"
 
 #: admin/src/integrator/Xcu.ts:167 admin/src/integrator/Xcu.ts:179
 msgid "Something went wrong while loading Document settings."
-msgstr ""
+msgstr "Noe gikk galt under lasting av dokumentinnstillinger."
 
 #: admin/src/integrator/Xcu.ts:349
 msgid "Adjust how office documents behave."
-msgstr ""
+msgstr "Endre hvordan kontordokumenter fungerer."
 
 #: admin/src/integrator/Xcu.ts:396
 msgid "Select a tab to view settings."
-msgstr ""
+msgstr "Velg en fane for å vise innstillinger."
 
 #: admin/src/Util.js:26
 msgid "kB"
@@ -1207,71 +1239,75 @@ msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
 msgstr ""
+"Systemet justerer ressursene for øyeblikket. Vent litt mens vi prøver "
+"forespørselen din på nytt ..."
 
 #: js/global.js:1917
 msgid "The document is being migrated to a new server. Retrying shortly..."
-msgstr ""
+msgstr "Dokumentet blir migrert til en ny server. Prøver på nytt snart ..."
 
 #: js/global.js:1919
 msgid "Failed to get RouteToken from controller"
-msgstr ""
+msgstr "Klarte ikke å hente RouteToken fra kontrolleren"
 
 #: src/app/Debug.ts:163
 msgid "Debug Tools"
-msgstr ""
+msgstr "Feilsøkingsverktøy"
 
 #: src/app/Debug.ts:168
 msgid "Ctrl+Shift+Alt+D to exit"
-msgstr ""
+msgstr "Ctrl+Shift+Alt+D for å avslutte"
 
 #: src/app/Debug.ts:1615
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
-msgstr ""
+msgstr "Hendelseshåndteringen har blitt forsinket i uventet lang tid: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} nettsted, åpnes i ny fane"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
-msgstr ""
+msgstr "filtypeikon"
 
 #: src/app/TableStylesService.ts:103
 msgid "Light"
-msgstr ""
+msgstr "Lys"
 
 #: src/app/TableStylesService.ts:105
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 #: src/app/TableStylesService.ts:107
 msgid "Dark"
-msgstr ""
+msgstr "Mørk"
 
 #: src/app/TableStylesService.ts:109
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Tilpasset"
 
 #: src/app/TableStylesService.ts:248 src/app/TableStylesService.ts:260
 #: src/app/TableStylesService.ts:263
 msgid "Table Styles"
-msgstr ""
+msgstr "Tabellstiler"
 
 #: src/canvas/sections/CommentListSection.ts:1967
 #: src/canvas/sections/CommentListSection.ts:1980
 msgid "Comments Updated"
-msgstr ""
+msgstr "Kommentarer oppdatert"
 
 #: src/canvas/sections/CommentListSection.ts:1968
 msgid "Another user has removed this comment."
-msgstr ""
+msgstr "En annen bruker har fjernet denne kommentaren."
 
 #: src/canvas/sections/CommentListSection.ts:1981
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr ""
+"En annen bruker har oppdatert kommentaren. Vil du overskrive disse "
+"endringene?"
 
 #: src/canvas/sections/CommentListSection.ts:1982 src/control/Styles.js:39
 #: src/app/Socket.ts:1710
@@ -1280,15 +1316,15 @@ msgstr "Overskriv"
 
 #: src/canvas/sections/CommentListSection.ts:1983
 msgid "Update"
-msgstr ""
+msgstr "Oppdater"
 
 #: src/canvas/sections/CommentSection.ts:45
 msgid "Edit comment"
-msgstr ""
+msgstr "Rediger kommentar"
 
 #: src/canvas/sections/CommentSection.ts:46
 msgid "Reply comment"
-msgstr ""
+msgstr "Svar på kommentar"
 
 #: src/canvas/sections/CommentSection.ts:47
 msgid "Open menu"
@@ -1303,7 +1339,7 @@ msgstr "Svar"
 
 #: src/canvas/sections/CommentSection.ts:497
 msgid "Press Ctrl + Enter to post"
-msgstr ""
+msgstr "Trykk Ctrl + Enter for å publisere"
 
 #: src/canvas/sections/CommentSection.ts:571
 #: src/canvas/sections/CommentSection.ts:572
@@ -1347,7 +1383,7 @@ msgstr "Fjern tråd"
 
 #: src/canvas/sections/CommentSection.ts:1264
 msgid "Resolve"
-msgstr "Løs"
+msgstr "Fullfør"
 
 #: src/canvas/sections/CommentSection.ts:1264
 msgid "Unresolve"
@@ -1359,23 +1395,23 @@ msgstr "Opphev løst status for tråd"
 
 #: src/canvas/sections/CommentSection.ts:1271
 msgid "Resolve Thread"
-msgstr "Løs tråd"
+msgstr "Lukk tråd"
 
 #: src/canvas/sections/CommentSection.ts:1277
 msgid "Promote to top comment"
-msgstr ""
+msgstr "Flytt til toppkommentar"
 
 #: src/canvas/sections/CommentSection.ts:1282
 msgid "Show on the side"
-msgstr ""
+msgstr "Vis på siden"
 
 #: src/canvas/sections/CommentSection.ts:1282
 msgid "Open in full view"
-msgstr ""
+msgstr "Åpne i full visning"
 
 #: src/canvas/sections/CommentSection.ts:1289
 msgid "Show in navigator"
-msgstr ""
+msgstr "Vis i navigatør"
 
 #: src/canvas/sections/CommentSection.ts:1559
 #: src/canvas/sections/CommentSection.ts:1564
@@ -1386,83 +1422,83 @@ msgstr "Lagre"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Sist redigert av %1 den %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:199
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Opprinnelig versjon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:203
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Gjeldende versjon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:210
 msgid "Initial Version"
-msgstr ""
+msgstr "Første versjon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:214
 msgid "Current Version"
-msgstr ""
+msgstr "Nåværende versjon"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n mer"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
-msgstr ""
+msgstr "Dokumentet inneholder medier som ikke støttes"
 
 #: src/canvas/sections/URLPopUpSection.ts:87
 msgid "Copy link location"
-msgstr ""
+msgstr "Kopier lenkeplassering"
 
 #: src/canvas/sections/URLPopUpSection.ts:101
 msgid "Edit link"
-msgstr ""
+msgstr "Rediger lenke"
 
 #: src/canvas/sections/URLPopUpSection.ts:116
 msgid "Remove link"
-msgstr ""
+msgstr "Fjern lenken"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Åpne"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Hjelp med denne feilen"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Inspiser med funksjonsveiviser"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Rediger i formellinjen"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Hjelp med å fikse denne feilen med AI"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Overskrift"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Bunntekst"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
-msgstr ""
+msgstr "Et formelområde ble ikke utvidet til å inkludere de innsatte cellene."
 
 #: src/control/CalcNotifications.ts:65
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
-msgstr ""
+msgstr "Slettingen skapte #REF!-feil i andre formler. Angre for å gjenopprette."
 
 #: src/control/CalcNotifications.ts:66
 msgid "Find First"
-msgstr ""
+msgstr "Finn først"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
