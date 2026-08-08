@@ -602,6 +602,7 @@ public sealed partial class OdtLayoutSource
                 Language: text.Language, DisableKerning: !text.AutoKerning),
             BlanksAreTransparentToHeight = _blanksAreTransparentToHeight,
             Runs = runs,
+            Fields = walker.Fields,
             Notes = notes,
             Frames = frames,
             Source = element,
@@ -987,6 +988,9 @@ public sealed partial class OdtLayoutSource
         /// <summary>The notes anchored in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
 
+        /// <summary>The page-sensitive fields this paragraph carries, with the spans their results own.</summary>
+        internal List<PageFieldSpan> Fields { get; } = [];
+
         /// <summary>The floating frames anchored in the paragraph, with the offsets they sit at.</summary>
         internal List<FrameAnchor> Frames => _frames;
 
@@ -1126,6 +1130,33 @@ public sealed partial class OdtLayoutSource
                     {
                         _footnote++;
                         FootnotesSeen++;
+                    }
+
+                    break;
+                }
+
+                // The two fields whose cached value describes the document the producer had rather than
+                // the one being laid out. ODF states them as typed elements holding their own last
+                // result, so the walk emits that result and records where it landed; PageFields replaces
+                // it once the page is known. `text:select-page` picks a neighbouring page and is not
+                // modelled — that field keeps its cached value rather than being given this page's.
+                case "page-number" or "page-count":
+                {
+                    int at = _builder.Length;
+                    Append(child, depth + 1);
+
+                    bool previousOrNext =
+                        child.Attribute(XName.Get("select-page", OdfNamespaces.Text))?.Value
+                            is "previous" or "next";
+
+                    if (!previousOrNext)
+                    {
+                        Fields.Add(new PageFieldSpan(
+                            at,
+                            _builder.Length - at,
+                            child.Name.LocalName == "page-number"
+                                ? PageFieldKind.PageNumber
+                                : PageFieldKind.PageCount));
                     }
 
                     break;

@@ -527,7 +527,7 @@ public sealed partial class DocxLayoutSource
                 Language: text.Language, DisableKerning: !text.AutoKerning),
             Tracking = text.Tracking,
             Runs = runs,
-            Fields = walker.Fields,
+            Fields = [],
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames),
             Source = element,

@@ -119,6 +119,11 @@ internal static class OdfPageGeometry
             // own master, reached through the first paragraph's style. So the separate slots are
             // populated only when the master itself names them, which is how a "left page" master
             // distinguishes even pages.
+            // style:num-format on the page layout, which ODF states by example — "1", "i", "I", "a", "A".
+            PageNumberFormat = Layout.NoteNumbering.Parse(
+                    properties?.Get(OdfNamespaces.Style, "num-format"))
+                ?? Layout.NoteNumberFormat.Arabic,
+
             HasDifferentFirstPage = master?.FirstHeader is not null || master?.FirstFooter is not null,
             HasDifferentEvenPages = master?.LeftHeader is not null || master?.LeftFooter is not null,
         };
