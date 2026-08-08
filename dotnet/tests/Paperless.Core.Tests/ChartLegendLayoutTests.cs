@@ -32,7 +32,7 @@ public class ChartLegendLayoutTests
     /// <summary>Half an em per character, 1.15 em a line — Liberation Sans to three places.</summary>
     private sealed class Ruler : IChartTextMeasurer
     {
-        public DocSize Measure(string text, Length size)
+        public DocSize Measure(string text, Length size, string? family)
             => new(size * (0.5 * text.Length), size * 1.15);
     }
 
