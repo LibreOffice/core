@@ -23,10 +23,10 @@ namespace Paperless.Spreadsheets.Layout;
 /// the ordinary case and reads the wall clock.
 /// </para>
 /// <para>
-/// Read once and cached. The variable is a property of the run rather than of a document, and a
-/// job that took a second to render would otherwise be free to disagree with itself about what
-/// "now" means, which is the defect this type also fixes: the instant used to be read afresh in
-/// every page's header context.
+/// Not cached in a static, deliberately. The cost is one environment lookup per printout, and a
+/// process that renders two documents either side of the variable changing should honour the
+/// change — caching would also make the behaviour untestable without controlling which test
+/// touched the type first.
 /// </para>
 /// </remarks>
 internal static class SheetPrintInstant
@@ -34,13 +34,12 @@ internal static class SheetPrintInstant
     /// <summary>The environment variable that pins the instant.</summary>
     public const string EpochVariable = "SOURCE_DATE_EPOCH";
 
-    private static readonly DateTime? Pinned = ReadPinned();
-
     /// <summary>The instant a printout should date itself at.</summary>
-    public static DateTime Now() => Pinned ?? DateTime.Now;
+    public static DateTime Now()
+        => Parse(Environment.GetEnvironmentVariable(EpochVariable)) ?? DateTime.Now;
 
     /// <summary>
-    /// The instant <c>SOURCE_DATE_EPOCH</c> names, or null when it names nothing usable.
+    /// The instant a <c>SOURCE_DATE_EPOCH</c> value names, or null when it names nothing usable.
     /// </summary>
     /// <remarks>
     /// A malformed value is ignored rather than thrown on. The variable is set by build systems
@@ -49,9 +48,9 @@ internal static class SheetPrintInstant
     /// the clock. Converted to local time because that is what the fields print and what the
     /// unpinned path returns.
     /// </remarks>
-    private static DateTime? ReadPinned()
+    /// <param name="raw">The variable's value.</param>
+    public static DateTime? Parse(string? raw)
     {
-        string? raw = Environment.GetEnvironmentVariable(EpochVariable);
         if (string.IsNullOrWhiteSpace(raw)) return null;
 
         return long.TryParse(raw.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture,
