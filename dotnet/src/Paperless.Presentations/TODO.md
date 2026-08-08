@@ -2108,15 +2108,33 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       draw 28.006 — so the residual is something the chart's own device does on top of that.
       Unchased beyond bounding it.
 
-- [ ] **A legend's row height is not linear in its font size, and a plain line height is.**
-      Left after round twenty-three's legend work, which is right at 10 pt and drifts at the
-      ends. Measured from the probe decks' border height, key position and row pitch together:
-      the reference's row height is **7.55, 11.28 and 16.50 pt** at a 7, 10 and 14 pt legend
-      font — 1.079, 1.128 and 1.181 times the font — where a line height is a constant multiple
-      and gives 7.95, 11.35 and 15.89. So the pitch lands within 0.09 pt at 10 pt and 0.44 and
-      0.65 pt out at 7 and 14. A quantisation somewhere in the reference device is the obvious
-      suspect and it has not been chased; the probe that would separate the candidates is a
-      sweep of legend font sizes one point apart, looking for the step.
+- [ ] **A legend's row height is quantised to a 96 dpi pixel and the term beside it is exactly
+      one millimetre.** Round twenty-three found the row height was not a constant multiple of
+      the font — 7.55, 11.28 and 16.50 pt at 7, 10 and 14 — named a quantisation as the suspect
+      and named the probe that would separate the candidates. Round twenty-four ran it
+      (`research/probes/slides-r24/make-legend-step-probe.py`, eleven decks a point apart) and
+      the suspect is right:
+
+      | legend font | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
+      |---|---|---|---|---|---|---|---|---|---|
+      | row pitch | 9.58 | 10.34 | 11.85 | 13.35 | 14.09 | 15.59 | 16.33 | 17.09 | 19.33 |
+      | less 1 mm | 6.745 | 7.505 | 9.015 | 10.515 | 11.255 | 12.755 | 13.495 | 14.255 | 16.495 |
+      | ÷ 0.75 pt | 9.01 | 10.02 | 12.04 | 14.04 | 15.02 | 17.02 | 18.01 | 19.02 | 22.01 |
+
+      Every one is a whole number of 0.75 pt — **one pixel at 96 dpi** — to within 0.028 pt, and
+      the eight steps between consecutive sizes are 1.013, 2.013, 2.000, 0.987, 2.000, 0.987,
+      1.013 and 2.987 pixels. The 1 mm subtracted is not fitted: it is the same floor the
+      padding and the key gap already have — `pad` is `max(1 mm, 0.33 × font)` and reads 2.84 at
+      6, 7 and 8 pt before following the font, and the key gap is `max(1 mm, 0.22 × font)` and
+      reads 2.83 up to 13 pt then 3.07, 3.29 and 3.52 at 14, 15 and 16. Three quantities, one
+      floor — and the floor is *not* quantised while the row height is.
+
+      Two things are left. The rate feeding the grid is not settled: Liberation Mono's 1.1328 em
+      line height predicts six of the nine pixel counts and misses at 7, 13 and 14, so "a line
+      height, quantised" is close and unproven. And 15 and 16 pt leave the regime entirely —
+      0.168 and 0.368 pt off the grid, with the pitch barely growing (20.24, 20.44) while the
+      border's height flattens too — which is a second effect and should not be fitted with the
+      first.
 
 - [ ] **A chart's category-axis labels: we draw *fewer* than the reference, not more.** Recorded
       the other way round for two rounds — "the reference draws none of those labels and we draw
