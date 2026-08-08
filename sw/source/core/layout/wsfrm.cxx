@@ -1329,8 +1329,9 @@ void SwContentFrame::Cut()
         return;
     }
 
-    if (pMasterTab
-        && !pMasterTab->GetFollow()->GetFirstNonHeadlineRow()->ContainsContent())
+    if (const SwRowFrame* pFollowRow
+        = pMasterTab ? pMasterTab->GetFollow()->GetFirstNonHeadlineRow() : nullptr;
+        pFollowRow && !pFollowRow->ContainsContent())
     {   // only do this if there's no content in other cells of the row!
         pMasterTab->InvalidatePos_();
         pMasterTab->SetRemoveFollowFlowLinePending(true);

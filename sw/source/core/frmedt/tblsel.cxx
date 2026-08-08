@@ -1885,7 +1885,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                 SwRowFrame* pRowFrame = pTable->GetFirstNonHeadlineRow();
                 //tdf#159027: follow returns a frame without height if
                 // merged cells are involved
-                if (pRowFrame->getFrameArea().IsEmpty())
+                if (pRowFrame && pRowFrame->getFrameArea().IsEmpty())
                     pRowFrame = static_cast<SwRowFrame*>(pRowFrame->GetNext());
                 pRow = pRowFrame;
             }
@@ -2312,7 +2312,10 @@ static void lcl_UpdateRepeatedHeadlines( SwTabFrame& rTabFrame, bool bCalcLowers
     // Insert fresh set of headlines:
     pLower = static_cast<SwRowFrame*>(rTabFrame.Lower());
     SwTable& rTable = *rTabFrame.GetTable();
-    const sal_uInt16 nRepeat = rTable.GetRowsToRepeat();
+    // Do not repeat a headline that the follow's own first row could not fit under: it would
+    // only be pushed on again, leaving the repeat stranded on a page of its own
+    const sal_uInt16 nRepeat
+        = (pLower && !rTabFrame.RowFitsUnderHeadline(*pLower)) ? 0 : rTable.GetRowsToRepeat();
     for ( sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx )
     {
         SwRowFrame* pHeadline = new SwRowFrame( *rTable.GetTabLines()[ nIdx ], &rTabFrame );
