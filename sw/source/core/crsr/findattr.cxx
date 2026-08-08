@@ -890,7 +890,17 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
                     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );
                     return true;
                 }
-
+                else
+                {
+                    // move before the non-matching hint and restart the search
+                    nEndPos = pAttr->GetStart();
+                    if (nEndPos > rCmpArr.GetNdStt() && pAttr->GetAnyEnd() > nEndPos)
+                    {
+                        rPam.Normalize(/*PointFirst=*/false);
+                        lcl_SetAttrPam(rPam, rCmpArr.GetNdStt(), &nEndPos, /*bSaveMark=*/false);
+                        return lcl_SearchBackward(rTextNd, rCmpArr, rPam);
+                    }
+                }
                 // continue search
                 break;
             }
