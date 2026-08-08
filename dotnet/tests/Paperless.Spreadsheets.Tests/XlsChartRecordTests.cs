@@ -56,7 +56,7 @@ public sealed class XlsChartRecordTests
         public Stream Titled(string text, ushort target)
             => Record(0x1025, new byte[26]).Begin().Text(text).Link(target).End();
 
-        public ChartPlot? Read()
+        public ChartPlot? Read(XlsChartData? data = null, XlsExternSheets? sheets = null)
         {
             XlsChartBuilder builder = new();
             List<Diagnostic> diagnostics = [];
@@ -64,7 +64,19 @@ public sealed class XlsChartRecordTests
 
             while (stream.MoveNext()) builder.Read(stream.RecordId, stream);
 
-            return builder.Build();
+            return builder.Build(data, sheets, ownSheet: 0);
+        }
+
+        /// <summary>The rectangles this chart's series name, before any is resolved.</summary>
+        public List<XlsChartRange> Ranges()
+        {
+            XlsChartBuilder builder = new();
+            List<Diagnostic> diagnostics = [];
+            BiffRecordReader stream = new([.. _bytes], diagnostics);
+
+            while (stream.MoveNext()) builder.Read(stream.RecordId, stream);
+
+            return [.. builder.Ranges()];
         }
     }
 

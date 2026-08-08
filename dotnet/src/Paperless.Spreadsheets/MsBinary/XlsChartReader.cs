@@ -59,15 +59,17 @@ internal static class BiffChartRecords
 /// laid out and painted by the same engine the SpreadsheetML and ODF charts already go through.
 /// </para>
 /// <para>
-/// <strong>The series data is deliberately not resolved, and the reference agrees.</strong> A BIFF
-/// series names its values through a <c>CHSOURCELINK</c> whose payload is a formula token array,
-/// and only a link of type <c>EXC_CHSRCLINK_WORKSHEET</c> carries one
+/// <strong>The series data is resolved through the workbook, not through the substream.</strong>
+/// A BIFF series names its values through a <c>CHSOURCELINK</c> whose payload is a formula token
+/// array, and only a link of type <c>EXC_CHSRCLINK_WORKSHEET</c> carries one
 /// (<c>XclImpChSourceLink::ReadChSourceLink</c>, <c>xichart.cxx</c>); a link stating
 /// <c>DIRECTLY</c> or <c>DEFAULT</c> names nothing, and LibreOffice produces a series with an
-/// empty range for it and draws no marks. Reading the <c>LABEL</c>/<c>NUMBER</c> records that
-/// trail the chart substream instead — which do hold the numbers — would draw bars the reference
-/// does not. Resolving a worksheet link needs the formula engine and is recorded in the module's
-/// TODO.
+/// empty range for it and draws no marks. The rectangle that link names is decoded here and the
+/// cells behind it are handed in by <see cref="XlsChartData"/>, which the workbook reader fills
+/// as it reads its sheets — because the cells a chart plots are routinely on a sheet the chart
+/// itself is not embedded in, and may not have been read when the chart is met. Reading the
+/// <c>LABEL</c>/<c>NUMBER</c> records that trail the chart substream instead would be reading
+/// the wrong thing: those are the sheet's own cells, not the series'.
 /// </para>
 /// </remarks>
 internal sealed class XlsChartBuilder
@@ -92,6 +94,9 @@ internal sealed class XlsChartBuilder
     private ChartScaleRequest _valueScale;
     private bool _hasType;
     private bool _hasLegend;
+
+    private readonly List<SeriesLinks> _series = [];
+    private bool _expectSeriesName;
 
     /// <summary>The chart's own size, as <c>CHCHART</c> states it.</summary>
     /// <remarks>
@@ -129,6 +134,11 @@ internal sealed class XlsChartBuilder
         // substream also carries sit outside the tree entirely.
         if (BiffChartRecords.IsChartRecord(id)) _header = id;
 
+        // "The next record" is one record only: the flag is spent whether or not a CHSTRING
+        // is what turned up.
+        bool expectName = _expectSeriesName;
+        _expectSeriesName = false;
+
         switch (id)
         {
             case BiffChartRecords.Chart:
@@ -140,6 +150,23 @@ internal sealed class XlsChartBuilder
             case BiffChartRecords.Text:
                 _pendingText = null;
                 _pendingLink = -1;
+                break;
+
+            case BiffChartRecords.Series:
+                _series.Add(new SeriesLinks());
+                break;
+
+            case BiffChartRecords.SourceLink when InnermostIs(BiffChartRecords.Series):
+                ReadSourceLink(stream);
+                break;
+
+            case BiffChartRecords.String when expectName && InnermostIs(BiffChartRecords.Series):
+                // A series whose name is typed rather than linked writes it as a CHSTRING
+                // immediately after the title link, which is what ReadChSourceLink reaches
+                // forward for (xichart.cxx:763-769). Read flat, that is "the next record".
+                _expectSeriesName = false;
+                stream.Skip(2);
+                if (_series.Count > 0) _series[^1].Name = stream.ReadString(eightBitLength: true);
                 break;
 
             case BiffChartRecords.String when Inside(BiffChartRecords.Text):
@@ -213,9 +240,39 @@ internal sealed class XlsChartBuilder
     /// gridlines and every title it carries, and so does this. Returning null for one would
     /// lose the page it prints on.
     /// </remarks>
-    public ChartPlot? Build()
+    /// <summary>Every rectangle this chart's series name, for the workbook to gather.</summary>
+    /// <remarks>
+    /// Reported before the values are wanted rather than asked for when they are, because the
+    /// sheet holding them may be read after the sheet the chart is embedded in — see
+    /// <see cref="XlsChartData"/>.
+    /// </remarks>
+    public IEnumerable<XlsChartRange> Ranges()
+    {
+        foreach (SeriesLinks series in _series)
+        {
+            if (series.Values is { } values) yield return values;
+            if (series.Categories is { } categories) yield return categories;
+            if (series.Title is { } title) yield return title;
+        }
+    }
+
+    /// <summary>
+    /// The chart, or null when the substream held none.
+    /// </summary>
+    /// <param name="data">
+    /// The cells the workbook gathered for this chart's links, or null when nothing gathered
+    /// them — in which case the chart is built with no series, exactly as before this existed.
+    /// </param>
+    /// <param name="sheets">Resolves a token's <c>ixti</c> to a sheet index.</param>
+    /// <param name="ownSheet">
+    /// Which sheet the chart itself sits on, which is what a reference with no sheet part means.
+    /// </param>
+    public ChartPlot? Build(XlsChartData? data, XlsExternSheets? sheets, int ownSheet)
     {
         if (!HasChart) return null;
+
+        (IReadOnlyList<string?> categories, IReadOnlyList<ChartSeries> series) =
+            BuildSeries(data, sheets, ownSheet);
 
         return new ChartPlot
         {
@@ -225,14 +282,109 @@ internal sealed class XlsChartBuilder
             Kind = _kind,
             Direction = _direction,
             IsStacked = _stacked,
-            Categories = [],
-            Series = [],
+            Categories = categories,
+            Series = series,
             ValueScale = _valueScale,
             ValueGrid = _valueGrid ? GridColour : null,
             CategoryGrid = _categoryGrid ? GridColour : null,
             Legend = _hasLegend ? ChartLegendPosition.Right : ChartLegendPosition.None,
         };
     }
+
+    /// <summary>
+    /// Reads one <c>CHSOURCELINK</c>: which part of a series it feeds, and from where.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclImpChSourceLink::ReadChSourceLink</c> (<c>xichart.cxx:744-770</c>). Only a link of
+    /// type <c>EXC_CHSRCLINK_WORKSHEET</c> carries a formula at all; <c>DEFAULT</c> and
+    /// <c>DIRECTLY</c> name nothing and are what a series writes for the parts it has no source
+    /// for, which is why almost every chart in the corpus holds four of these and two are empty.
+    /// </remarks>
+    private void ReadSourceLink(BiffRecordReader stream)
+    {
+        if (_series.Count == 0) return;
+
+        int destination = stream.ReadByte();
+        int link = stream.ReadByte();
+        stream.Skip(4);
+
+        // A title link is followed by the literal string when there is one, whatever its link
+        // type says — an unlinked series name is exactly the DIRECTLY case.
+        if (destination == SourceTitle) _expectSeriesName = true;
+
+        if (link != SourceLinkWorksheet) return;
+
+        int length = stream.ReadUInt16();
+        if (XlsChartFormula.Read(stream, length, stream.Version) is not { } range) return;
+
+        SeriesLinks series = _series[^1];
+        switch (destination)
+        {
+            case SourceValues: series.Values = range; break;
+            case SourceCategories: series.Categories = range; break;
+            case SourceTitle: series.Title = range; break;
+            default: break;
+        }
+    }
+
+    /// <summary>Turns the series' links into series, with whatever cells were gathered.</summary>
+    /// <remarks>
+    /// <para>
+    /// A series with no resolvable value link is dropped rather than drawn empty. That is what
+    /// LibreOffice shows for one — a legend entry and no marks — and an empty series here would
+    /// additionally drag the value axis to the 0…12 default scale that a chart with no numbers
+    /// at all gets, which is the whole defect this reads the links to remove.
+    /// </para>
+    /// <para>
+    /// The categories come from the first series that names any. BIFF writes the same category
+    /// link on every series of a chart, and Calc likewise takes the first
+    /// (<c>XclImpChTypeGroup::CreateDataSeries</c> hands the group's categories to the
+    /// diagram once).
+    /// </para>
+    /// </remarks>
+    private (IReadOnlyList<string?> Categories, IReadOnlyList<ChartSeries> Series) BuildSeries(
+        XlsChartData? data, XlsExternSheets? sheets, int ownSheet)
+    {
+        if (data is null || _series.Count == 0) return ([], []);
+
+        List<string?> categories = [];
+        List<ChartSeries> built = [];
+
+        foreach (SeriesLinks series in _series)
+        {
+            if (series.Values is not { } values || Resolve(values, sheets, ownSheet) is not { } valueSheet)
+            {
+                continue;
+            }
+
+            List<double?> numbers = data.Numbers(valueSheet, values);
+            if (numbers.TrueForAll(number => number is null)) continue;
+
+            if (categories.Count == 0
+                && series.Categories is { } labels
+                && Resolve(labels, sheets, ownSheet) is { } labelSheet)
+            {
+                categories.AddRange(data.Texts(labelSheet, labels));
+            }
+
+            string? name = series.Name;
+            if (name is null
+                && series.Title is { } title
+                && Resolve(title, sheets, ownSheet) is { } titleSheet)
+            {
+                name = data.TextOf(titleSheet, title.FirstRow, title.FirstColumn);
+            }
+
+            built.Add(new ChartSeries(name is { Length: > 0 } ? name : null, numbers));
+        }
+
+        // Categories are indexed by point, so a shorter list than the longest series leaves the
+        // tail of that series unlabelled rather than mislabelled.
+        return (categories, built);
+    }
+
+    private static int? Resolve(XlsChartRange range, XlsExternSheets? sheets, int ownSheet)
+        => range.Ixti < 0 ? ownSheet : sheets?.SheetOf(range.Ixti);
 
     private void Close(ushort container)
     {
@@ -295,9 +447,43 @@ internal sealed class XlsChartBuilder
 
     private bool Inside(ushort container) => _open.Contains(container);
 
+    /// <summary>
+    /// Whether the innermost open container is this one.
+    /// </summary>
+    /// <remarks>
+    /// <c>CHSOURCELINK</c> appears under <c>CHSERIES</c> and under <c>CHTEXT</c>, meaning
+    /// entirely different things, and a <c>CHTEXT</c> sits <em>inside</em> the series it labels.
+    /// So membership is not enough here where it is for a title: only the innermost container
+    /// separates a series' value link from a data label's text link.
+    /// </remarks>
+    private bool InnermostIs(ushort container) => _open.Count > 0 && _open.Peek() == container;
+
+    /// <summary>The rectangles one series names, before any of them is resolved.</summary>
+    private sealed class SeriesLinks
+    {
+        public XlsChartRange? Values { get; set; }
+
+        public XlsChartRange? Categories { get; set; }
+
+        public XlsChartRange? Title { get; set; }
+
+        /// <summary>The name written literally, when the series states one that way.</summary>
+        public string? Name { get; set; }
+    }
+
     /// <summary>A length stated in 1/65536 of a point, which is how a chart states its frame.</summary>
     private static Length FixedPoints(BiffRecordReader stream)
         => Length.FromPoints(stream.ReadInt32() / 65536.0);
+
+    /// <summary>Which part of a series a <c>CHSOURCELINK</c> feeds — <c>EXC_CHSRCLINK_*</c>.</summary>
+    private const int SourceTitle = 0;
+
+    private const int SourceValues = 1;
+
+    private const int SourceCategories = 2;
+
+    /// <summary>The only link type that carries a formula.</summary>
+    private const int SourceLinkWorksheet = 2;
 
     private const int LinkTitle = 1;
     private const int LinkValueAxis = 2;
