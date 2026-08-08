@@ -553,6 +553,24 @@ git merge --ff-only <briefed-commit>       # if not, fast-forward before measuri
 The tell that it worked: your own baseline sweep should reproduce the briefed numbers
 exactly. If it does not, stop — either the base is wrong or the measurement is.
 
+### The reference is not perfectly stable either
+
+The whole method rests on `soffice` being the fixed point, and it very nearly is — but not
+exactly. A one-page movement in the sheets track's absolute page error was traced to the
+*reference*: the same workbook came back 191 pages on one sweep and 190 on the next, while our
+own output was byte-identical across both runs and 192 either time.
+
+So before attributing a small movement to a change, **check which side moved.** The check is
+cheap and decisive: byte-compare our two renderings first. If ours are identical, the delta is
+not ours, whatever the scoreboard column says. This is the mirror of the reproducibility work —
+we pinned our own clock and found 17 documents printing the date, and the same discipline has to
+be applied to the reference rather than assumed away.
+
+Two related cautions from the same rounds: an `soffice` has three times now **wedged past its own
+`timeout`** and returned `ref-failed` for a document that converts fine when re-run alone, and a
+figure quoted from one round's report was **four off that round's own committed probe data**.
+Re-derive a headline from the TSV rather than from the prose whenever it is load-bearing.
+
 ### A full disk looks exactly like a rendering regression
 
 When `/tmp` fills, `soffice` converts nothing and `batch-check.sh` reports the documents as
@@ -904,6 +922,11 @@ Two more ways the same cycle destroys work, both measured:
   way. **Commit before reintroducing, not after** — then the undo is `git checkout` against a
   commit that holds the real work.
 - **`git add -A` while the patch is applied commits the defect.** Stage explicit paths.
+- **`mv backup original` keeps the backup's *older* mtime, so MSBuild skips the rebuild.** A
+  plain `dotnet build` then prints success over a binary that still holds the defect — so it is
+  not only `--no-build` that lies here. An agent's seam check reported three documents differing
+  and read like a stale snapshot; the reference settled it the other way round, and the snapshot
+  had been right while the tree was wrong. Use `cp`, or `touch` the file after restoring it.
 
 The through-line is that the reintroduction cycle deliberately puts the tree in a state that
 looks like a mistake, and every routine gesture for cleaning up a mistake is then wrong. Commit
