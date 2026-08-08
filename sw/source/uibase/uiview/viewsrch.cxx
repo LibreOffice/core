@@ -557,6 +557,9 @@ bool SwView::SearchAndWrap(bool bApi)
                     else
                         m_pWrtShell->StartOfSection();
                 }
+                else
+                    pCursor->GetPoint()->SetContent(
+                        s_pSrchItem->GetBackward() ? pCursor->GetPointContentNode()->Len() : 0);
             }
         }
     }
