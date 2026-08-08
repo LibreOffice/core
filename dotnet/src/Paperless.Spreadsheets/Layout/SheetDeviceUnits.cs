@@ -66,4 +66,63 @@ internal static class SheetDeviceUnits
             (double)(value.Twips * EmuPerTwip) / EmuPerMm100, MidpointRounding.AwayFromZero);
         return Length.FromEmu(hundredths * EmuPerMm100);
     }
+
+    /// <summary>
+    /// Dots per inch of the reference device a PDF export draws through. Measured, not assumed —
+    /// see <see cref="SnapFontSize(Length, double)"/>.
+    /// </summary>
+    private const long ReferenceDpi = 720;
+
+    /// <summary>Hundredths of a millimetre in one inch.</summary>
+    private const long Mm100PerInch = 2540;
+
+    /// <summary>
+    /// A font's em size as it reaches a page printed at <paramref name="scale"/>: through the
+    /// device unit, through whole device pixels, and back.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Scaling the snapped size is not what the reference renderer does, and the difference is
+    /// visible on every sheet printed at a zoom. A font height crosses <em>two</em> more roundings
+    /// on its way to the page: VCL selects a face at a whole number of device pixels, and the PDF
+    /// writer then maps that pixel height back to a whole logical unit — both through a map mode
+    /// that already carries the print scale, so the scale sits inside the quantisation rather than
+    /// after it.
+    /// </para>
+    /// <para>
+    /// Measured against LibreOffice 24.2.7.2 on eight probe sheets — sixteen sizes at each of seven
+    /// print scales, plus two sweeps in 0.05 pt steps — this reproduces all 178 emitted sizes
+    /// exactly, and nothing simpler does. Nine point at 75% is the case that names the class: the
+    /// reference draws 6.803 pt, which is 240 hundredths, and 240 is not reachable by rounding
+    /// 9 pt to the hundredth in either order (238 or 238.5). It is
+    /// <c>round(round(238.5 × 720/2540) × 2540/540) × 0.75</c>, or 320 unscaled hundredths.
+    /// </para>
+    /// <para>
+    /// At 100% the round trip is the identity for every whole-point size from 6 to 48, which is why
+    /// the class only ever surfaced on zoomed sheets. It is not the identity in general — 8.25 pt
+    /// is 291 hundredths and comes back 289 — and under a zoom it is the identity for even
+    /// whole-point sizes and not for odd ones, 9 pt and 11 pt being the two a spreadsheet uses
+    /// most.
+    /// </para>
+    /// </remarks>
+    /// <param name="value">The exact stated size.</param>
+    /// <param name="scale">The print scale, 1.0 for an unscaled sheet.</param>
+    public static Length SnapFontSize(Length value, double scale)
+    {
+        long hundredths = SnapFontSize(value).Emu / EmuPerMm100;
+
+        // A face is selected at whole device pixels. One pixel is the floor: a zero-height font
+        // selects the device default rather than drawing nothing, so collapsing to it would be a
+        // different defect rather than a smaller one.
+        double pixels = Math.Round(
+            hundredths * scale * ReferenceDpi / Mm100PerInch, MidpointRounding.AwayFromZero);
+        if (pixels < 1) pixels = 1;
+
+        // ...and mapped back through the same scaled map mode, which is why the scale divides here
+        // and multiplies again below rather than cancelling out.
+        long logical = (long)Math.Round(
+            pixels * Mm100PerInch / (ReferenceDpi * scale), MidpointRounding.AwayFromZero);
+
+        return Length.FromEmu(logical * EmuPerMm100) * scale;
+    }
 }

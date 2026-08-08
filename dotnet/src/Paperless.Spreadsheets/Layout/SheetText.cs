@@ -213,7 +213,7 @@ internal static class SheetText
     /// </remarks>
     public static Length SizeOf(Length stated, double scale, long percent)
     {
-        Length scaled = SheetDeviceUnits.SnapFontSize(stated) * scale;
+        Length scaled = SheetDeviceUnits.SnapFontSize(stated, scale);
 
         return percent == 100
             ? scaled
