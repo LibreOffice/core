@@ -165,4 +165,43 @@ public class ChartTitlePlacementTests
 
         two.PlotArea.Y.ShouldBeGreaterThan(one.PlotArea.Y);
     }
+
+    /// <summary>A secondary value axis' title is drawn, in the band already reserved for it.</summary>
+    /// <remarks>
+    /// <c>PlotAreaOf</c> has taken the band off the right edge since the secondary axis was
+    /// implemented and <c>AddTitles</c> added two titles, so the plot area was narrowed by a title
+    /// that is not on the page — the same "looks like nothing is wrong" shape as the two above.
+    /// <c>SECONDARY_Y_AXIS_TITLE</c> is <c>ALIGN_RIGHT</c> on a chart that is not vertical
+    /// (<c>ChartView.cxx:2081-2082</c>), so it sits against the frame's far edge and turns the same
+    /// quarter turn as the primary one.
+    /// </remarks>
+    [Fact]
+    public void ASecondaryValueAxisTitleIsDrawnAgainstTheFarEdge()
+    {
+        ChartPlot plot = Bars() with
+        {
+            SecondaryValueScale = new ChartScaleRequest(),
+            SecondaryValueAxisTitle = "Load Factor",
+            Series =
+            [
+                new ChartSeries("North", [120.0, 95.0, 143.0, 168.0], Colour.FromRgb(0x99CCFF)),
+                new ChartSeries("Rate", [0.4, 0.5, 0.6, 0.7], Colour.FromRgb(0x993300))
+                {
+                    AxisIndex = 1,
+                },
+            ],
+        };
+
+        ChartDrawing drawing = Place(plot);
+
+        ChartLabel title = drawing.Labels.Single(label => label.Text == "Load Factor");
+
+        title.Rotation.ShouldBe(Math.PI / 2, 0.0001);
+        title.At.X.ShouldBeGreaterThan(drawing.PlotArea.Right);
+        title.At.X.ShouldBeLessThan(Frame.Right);
+
+        // Centred on the plot area's own height, exactly as the primary axis' title is.
+        title.At.Y.Points.ShouldBe(
+            (drawing.PlotArea.Y + drawing.PlotArea.Height / 2).Points, 0.001);
+    }
 }

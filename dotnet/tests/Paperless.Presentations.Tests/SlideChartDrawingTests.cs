@@ -235,4 +235,38 @@ public class SlideChartDrawingTests
         // stacked as paragraphs. It now draws the same eight bars its packaged twin does.
         Bars(Slide("chart-bar-deck.fodp")).Count.ShouldBe(8);
     }
+
+    /// <summary>The value axis' title is turned anticlockwise, so it reads bottom to top.</summary>
+    /// <remarks>
+    /// <c>ChartLabel.Rotation</c> is anticlockwise and slide coordinates grow downwards, so the
+    /// transform that carries it must negate. Handing the angle straight to
+    /// <c>AffineTransform.Rotation</c> turns every rotated piece of chart text the other way —
+    /// measured on a probe whose axis title reads <c>Alpha Omega</c>, which came out top to
+    /// bottom against LibreOffice's bottom to top, and on <c>Demick_JetBlue.pptx</c>, whose 45
+    /// degree category labels descended to the right against the reference's ascending.
+    /// </remarks>
+    [Fact]
+    public void TheValueAxisTitleIsTurnedAnticlockwise()
+    {
+        LaidOutSlide slide = Slide("features/chart-bar-deck.pptx");
+
+        List<AffineTransform> turned =
+            [.. slide.Shapes
+                .Select(shape => shape.Text)
+                .Where(text => text is { IsUpright: false })
+                .Select(text => text!.Transform)
+                // A non-identity transform is not necessarily a turned one: an autofit chart
+                // label carries a horizontal stretch, whose B is exactly zero.
+                .Where(transform => Math.Abs(transform.B) > 0.001)];
+
+        turned.ShouldNotBeEmpty();
+
+        // The text's own advance direction is +x. Under a quarter turn anticlockwise in a
+        // y-down space it must come out pointing at -y, which is up the page.
+        foreach (AffineTransform transform in turned)
+        {
+            (transform.A * transform.A + transform.B * transform.B).ShouldBe(1.0, 0.001);
+            transform.B.ShouldBeLessThan(0.0);
+        }
+    }
 }
