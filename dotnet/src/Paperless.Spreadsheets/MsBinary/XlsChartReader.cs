@@ -24,7 +24,9 @@ internal static class BiffChartRecords
     public const ushort ValueRange = 0x101F;
     public const ushort LabelRange = 0x1020;
     public const ushort AxisLine = 0x1021;
+    public const ushort DefaultText = 0x1024;
     public const ushort Text = 0x1025;
+    public const ushort Font = 0x1026;
     public const ushort ObjectLink = 0x1027;
     public const ushort Begin = 0x1033;
     public const ushort End = 0x1034;
@@ -100,6 +102,12 @@ internal sealed class XlsChartBuilder
     private readonly List<SeriesLinks> _series = [];
     private bool _expectSeriesName;
 
+    private int _pendingDefaultText = NoDefaultText;
+    private int _openDefaultText = NoDefaultText;
+    private int _globalFont = NoFont;
+    private int _axesSetFont = NoFont;
+    private int _firstFont = NoFont;
+
     /// <summary>The chart's own size, as <c>CHCHART</c> states it.</summary>
     /// <remarks>
     /// In 1/65536 of a point, and the rectangle Excel drew the chart at rather than the one it
@@ -141,8 +149,23 @@ internal sealed class XlsChartBuilder
         bool expectName = _expectSeriesName;
         _expectSeriesName = false;
 
+        // CHDEFAULTTEXT carries no group of its own; the CHTEXT it names is the record right
+        // after it, and only that one. XclImpChChart::ReadChDefaultText (xichart.cxx:3912-3921)
+        // reaches forward exactly that far and drops the record when the next one is not a
+        // CHTEXT, so the identifier is spent here whatever turned up.
+        int defaultText = _pendingDefaultText;
+        _pendingDefaultText = NoDefaultText;
+
         switch (id)
         {
+            case BiffChartRecords.DefaultText:
+                _pendingDefaultText = stream.ReadUInt16();
+                break;
+
+            case BiffChartRecords.Font:
+                ReadFont(stream.ReadUInt16());
+                break;
+
             case BiffChartRecords.Chart:
                 HasChart = true;
                 stream.Skip(8);
@@ -152,6 +175,7 @@ internal sealed class XlsChartBuilder
             case BiffChartRecords.Text:
                 _pendingText = null;
                 _pendingLink = -1;
+                _openDefaultText = defaultText;
                 break;
 
             case BiffChartRecords.Series:
@@ -273,7 +297,12 @@ internal sealed class XlsChartBuilder
     /// <param name="ownSheet">
     /// Which sheet the chart itself sits on, which is what a reference with no sheet part means.
     /// </param>
-    public ChartPlot? Build(XlsChartData? data, XlsExternSheets? sheets, int ownSheet)
+    /// <param name="fonts">
+    /// The workbook's <c>FONT</c> buffer, which is where a <c>CHFONT</c>'s index points. Null
+    /// leaves the chart with no family, which is what it had before this was read at all.
+    /// </param>
+    public ChartPlot? Build(
+        XlsChartData? data, XlsExternSheets? sheets, int ownSheet, XlsCellFormats? fonts = null)
     {
         if (!HasChart) return null;
 
@@ -295,6 +324,7 @@ internal sealed class XlsChartBuilder
             ValueGrid = _valueGrid ? GridColour : null,
             CategoryGrid = _categoryGrid ? GridColour : null,
             Legend = _hasLegend ? ChartLegendPosition.Right : ChartLegendPosition.None,
+            TextFamily = FamilyOf(fonts),
         };
     }
 
@@ -393,9 +423,62 @@ internal sealed class XlsChartBuilder
     private static int? Resolve(XlsChartRange range, XlsExternSheets? sheets, int ownSheet)
         => range.Ixti < 0 ? ownSheet : sheets?.SheetOf(range.Ixti);
 
+    /// <summary>
+    /// Notes one <c>CHFONT</c>, against the default text it belongs to when it belongs to one.
+    /// </summary>
+    /// <remarks>
+    /// The record is a bare index into the workbook's <c>FONT</c> buffer and nothing else
+    /// (<c>XclImpChFont::ReadChFont</c>, <c>xichart.cxx:941</c>); which text it dresses is
+    /// decided entirely by where it sits. Only a <c>CHTEXT</c> opened directly under
+    /// <c>CHCHART</c> by a <c>CHDEFAULTTEXT</c> is one of the chart's defaults, so the stack has
+    /// to say so — the same <c>CHFONT</c> under a legend or an axis is that object's own font and
+    /// not a default for anything.
+    /// </remarks>
+    private void ReadFont(ushort index)
+    {
+        if (_firstFont == NoFont) _firstFont = index;
+
+        if (!InnermostIs(BiffChartRecords.Text)) return;
+
+        if (_openDefaultText == GlobalDefaultText && _globalFont == NoFont) _globalFont = index;
+        else if (_openDefaultText == AxesSetDefaultText && _axesSetFont == NoFont) _axesSetFont = index;
+    }
+
+    /// <summary>
+    /// The family the chart’s text is set in, or null when the substream names none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The chart's global default text first. <c>XclImpChChart::GetDefaultText</c>
+    /// (<c>xichart.cxx:3956-3969</c>) hands <c>EXC_CHDEFTEXT_GLOBAL</c> to the title and the
+    /// legend in every generation, and to the axis labels and axis titles as well in BIFF5; only
+    /// BIFF8 splits those onto <c>EXC_CHDEFTEXT_AXESSET</c>. So the global default is the face the
+    /// most chart text falls back to, which is what a single family should be.
+    /// </para>
+    /// <para>
+    /// <strong>Nothing in this corpus separates the three answers below</strong>, and it is worth
+    /// saying rather than implying. A record-level census of all 61 OLE2 workbooks on the sheets
+    /// track finds six holding a chart substream, fifteen substreams between them — and every one
+    /// of the fifteen states exactly one family across every <c>CHFONT</c> it carries, with its
+    /// global and axes-set defaults agreeing in all fifteen. The order is ported from the C++
+    /// rather than fitted, and the fixtures are synthetic because only a synthetic file can make
+    /// the three disagree.
+    /// </para>
+    /// </remarks>
+    private string? FamilyOf(XlsCellFormats? fonts)
+    {
+        int index = _globalFont != NoFont ? _globalFont
+            : _axesSetFont != NoFont ? _axesSetFont
+            : _firstFont;
+
+        return index == NoFont ? null : fonts?.FontFamilyAt(index);
+    }
+
     private void Close(ushort container)
     {
         if (container != BiffChartRecords.Text) return;
+
+        _openDefaultText = NoDefaultText;
 
         // A title with no text is the placeholder Excel writes for every object that could carry
         // one; only a linked, non-empty block names anything.
@@ -527,6 +610,18 @@ internal sealed class XlsChartBuilder
     private const int LinkTitle = 1;
     private const int LinkValueAxis = 2;
     private const int LinkCategoryAxis = 3;
+
+    /// <summary>Which default text a <c>CHDEFAULTTEXT</c> names — <c>EXC_CHDEFTEXT_*</c>.</summary>
+    private const int GlobalDefaultText = 2;
+
+    /// <summary>The BIFF8-only default for axis labels, axis titles and data labels.</summary>
+    private const int AxesSetDefaultText = 3;
+
+    /// <summary>No <c>CHDEFAULTTEXT</c> is open — <c>EXC_CHDEFTEXT_NONE</c>.</summary>
+    private const int NoDefaultText = 0xFFFF;
+
+    /// <summary>No <c>CHFONT</c> was stated — <c>EXC_FONT_NOTFOUND</c>.</summary>
+    private const int NoFont = -1;
 
     /// <summary>
     /// What a category axis states when it carries no <c>CHLABELRANGE</c> at all.

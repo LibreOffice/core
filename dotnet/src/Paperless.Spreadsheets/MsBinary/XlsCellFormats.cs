@@ -93,6 +93,23 @@ internal sealed class XlsCellFormats
             _fonts[0].IsItalic)
         : null;
 
+    /// <summary>
+    /// The family one <c>FONT</c> index names, or null when it names none.
+    /// </summary>
+    /// <remarks>
+    /// A chart substream states its text's face as a bare index into this same buffer — that is
+    /// all a <c>CHFONT</c> record holds (<c>XclImpChFont::ReadChFont</c>,
+    /// <c>sc/source/filter/excel/xichart.cxx:941</c>) — so the chart reader has to come back
+    /// here to turn it into a name. Null both for an index the workbook never wrote and for a
+    /// <c>FONT</c> whose name is empty, because neither states a family and the caller's
+    /// fallback is the right answer for both.
+    /// </remarks>
+    /// <param name="index">The <c>FONT</c> index, as the file states it — the hole at four included.</param>
+    public string? FontFamilyAt(int index)
+        => index >= 0 && index < _fonts.Count && _fonts[index].Name.Length > 0
+            ? _fonts[index].Name
+            : null;
+
     /// <summary>Replaces the palette from index eight upwards, which is what <c>PALETTE</c> sets.</summary>
     /// <param name="colours">The colours the record listed, in order.</param>
     public void SetPalette(IReadOnlyList<Colour> colours)
