@@ -192,17 +192,29 @@ internal static class SheetChart
         public static Measurer Instance { get; } = new();
 
         /// <summary>
-        /// <paramref name="family"/> is deliberately not honoured yet.
+        /// <paramref name="family"/> and <paramref name="bold"/> are deliberately not honoured yet.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// <strong>The model now carries the face a chart states and this consumer still ignores
         /// it.</strong> <see cref="ChartPlot.TextFamily"/> was added on the slides track, where it
         /// was measured; a sheet's chart reaches the same reader, so wiring it here would change
         /// every workbook's chart layout on a sweep nobody has run. The one-line change is
         /// <c>SheetBandText.Shape(text, size)</c> taking the family, and it belongs to whichever
         /// round sweeps the sheets track — not to the round that happened to be in this file.
+        /// </para>
+        /// <para>
+        /// <strong><paramref name="bold"/> arrived the same way and is ignored for the same
+        /// reason.</strong> <see cref="ChartPlot.IsTitleBold"/> was added on the slides track,
+        /// where an OOXML chart's title and axis titles were measured bold against LibreOffice's
+        /// own model; the reader a workbook's chart reaches is the same one, so it now hands a
+        /// weight to this measurer and to <see cref="SheetChart"/>'s drawing, and both drop it.
+        /// Honouring it needs <c>SheetBandText</c> to hold a bold face beside its regular one,
+        /// and it would move every workbook whose chart has a title — measured against nothing.
+        /// That belongs to a round that sweeps the sheets track.
+        /// </para>
         /// </remarks>
-        public DocSize Measure(string text, Length size, string? family)
+        public DocSize Measure(string text, Length size, string? family, bool bold)
         {
             ArgumentNullException.ThrowIfNull(text);
 

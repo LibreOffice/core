@@ -54,6 +54,15 @@ public enum ChartLabelAnchor
 /// LibreOffice's chart import does: all three of its automatic text entries name the theme's
 /// <em>minor</em> font (<c>oox/source/drawingml/chart/objectformatter.cxx</c>:415-434).
 /// </param>
+/// <param name="IsBold">
+/// Whether it is drawn in the family's bold face. Only the main title and the axis titles ever
+/// are: the same auto-text table that names the minor font sets <c>mbBold</c> on
+/// <c>spChartTitleTexts</c> and <c>spAxisTitleTexts</c> and leaves it clear on
+/// <c>spOtherTexts</c>, which is the axis labels, the legend and the data labels
+/// (<c>objectformatter.cxx</c>:415-434). Carried per label rather than on the drawing for the
+/// same reason <paramref name="Family"/> is — the two titles differ from everything else around
+/// them, so a per-drawing flag could not express it.
+/// </param>
 /// <remarks>
 /// <strong><paramref name="Stretch"/> exists because a glyph run carries one em and a
 /// non-square stretch has two.</strong> An embedded chart is composed at its own size and scaled
@@ -72,7 +81,8 @@ public readonly record struct ChartLabel(
     Colour Colour,
     double Rotation = 0.0,
     double Stretch = 1.0,
-    string? Family = null);
+    string? Family = null,
+    bool IsBold = false);
 
 /// <summary>One filled rectangle — a bar, a legend key, the plot area's wall.</summary>
 /// <param name="Bounds">Where it goes.</param>
@@ -166,7 +176,14 @@ public interface IChartTextMeasurer
     /// default is wanted. See <see cref="ChartPlot.TextFamily"/> for why a chart carries one at
     /// all and why a hardcoded face is not a substitute for it.
     /// </param>
-    DocSize Measure(string text, Length size, string? family);
+    /// <param name="bold">
+    /// Whether the text is set in the family's bold face. It is passed to the <em>measurement</em>
+    /// and not only to the drawing because a bold face is wider, and a chart's titles are placed
+    /// by their measured width: the main title is centred on the frame and an axis title on the
+    /// plot area, so measuring a bold title as regular offsets it by half the difference. See
+    /// <see cref="ChartLabel.IsBold"/> for which text is ever bold.
+    /// </param>
+    DocSize Measure(string text, Length size, string? family, bool bold);
 }
 
 /// <summary>
@@ -190,7 +207,9 @@ public readonly record struct ChartText(IChartTextMeasurer Measurer, string? Fam
     /// <summary>The advance width and line height of a single line, in the bound family.</summary>
     /// <param name="text">The characters.</param>
     /// <param name="size">The em size.</param>
-    public DocSize Measure(string text, Length size) => Measurer.Measure(text, size, Family);
+    /// <param name="bold">Whether it is set bold; only a chart's titles ever are.</param>
+    public DocSize Measure(string text, Length size, bool bold = false)
+        => Measurer.Measure(text, size, Family, bold);
 }
 
 /// <summary>
@@ -328,9 +347,9 @@ public static partial class ChartLayout
     /// side at once, which moves the plot area up and left and leaves the labels crowding the
     /// frame's edges.
     /// </remarks>
-    private static DocSize Shape(ChartText measurer, string text, Length size)
+    private static DocSize Shape(ChartText measurer, string text, Length size, bool bold = false)
     {
-        DocSize measured = MeasureLines(measurer, text, size);
+        DocSize measured = MeasureLines(measurer, text, size, bold);
         return new DocSize(
             measured.Width + size * (TextShapeInsetX * 2),
             measured.Height + size * (TextShapeInsetY * 2));
@@ -352,16 +371,17 @@ public static partial class ChartLayout
             : text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
     /// <summary>How much room a possibly multi-line label needs: the widest line, all the heights.</summary>
-    private static DocSize MeasureLines(ChartText measurer, string text, Length size)
+    private static DocSize MeasureLines(
+        ChartText measurer, string text, Length size, bool bold = false)
     {
         string[] lines = LinesOf(text);
-        if (lines.Length <= 1) return measurer.Measure(text, size);
+        if (lines.Length <= 1) return measurer.Measure(text, size, bold);
 
         Length width = Length.Zero;
         Length height = Length.Zero;
         foreach (string line in lines)
         {
-            DocSize measured = measurer.Measure(line, size);
+            DocSize measured = measurer.Measure(line, size, bold);
             width = Length.Max(width, measured.Width);
             height += measured.Height;
         }
@@ -1091,7 +1111,7 @@ public static partial class ChartLayout
         // pie's margin twice puts a titled pie 8 pt low on a 12 cm chart.
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize).Height
+            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }
 
@@ -1122,12 +1142,15 @@ public static partial class ChartLayout
             string? below = columns ? plot.CategoryAxisTitle : plot.ValueAxisTitle;
 
             if (below is { Length: > 0 } under)
-                bottom -= Shape(measurer, under, plot.AxisTitleSize).Height + CategoryTitleGap;
+                bottom -= Shape(measurer, under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height
+                          + CategoryTitleGap;
             if (beside is { Length: > 0 } side)
-                left += Shape(measurer, side, plot.AxisTitleSize).Height + ValueTitleGap;
+                left += Shape(measurer, side, plot.AxisTitleSize, plot.IsAxisTitleBold).Height
+                        + ValueTitleGap;
 
             if (plot.SecondaryValueAxisTitle is { Length: > 0 } second && plot.SecondaryAxisVisible)
-                right -= Shape(measurer, second, plot.AxisTitleSize).Height + ValueTitleGap;
+                right -= Shape(measurer, second, plot.AxisTitleSize, plot.IsAxisTitleBold).Height
+                         + ValueTitleGap;
         }
 
         return right <= left || bottom <= top
@@ -2574,13 +2597,14 @@ public static partial class ChartLayout
             Length pen = frame.Y + (frame.Height * PageMargin);
             foreach (string line in LinesOf(title))
             {
-                Length height = measurer.Measure(line, plot.TitleSize).Height;
+                Length height = measurer.Measure(line, plot.TitleSize, plot.IsTitleBold).Height;
                 labels.Add(new ChartLabel(
                     line,
                     new DocPoint(frame.X + frame.Width / 2, pen + height / 2),
                     ChartLabelAnchor.Centre,
                     plot.TitleSize,
-                    AxisColour));
+                    AxisColour,
+                    IsBold: plot.IsTitleBold));
                 pen += height;
             }
         }
@@ -2596,7 +2620,8 @@ public static partial class ChartLayout
 
         if (below is { Length: > 0 } under)
         {
-            Length height = measurer.Measure(under, plot.AxisTitleSize).Height;
+            Length height =
+                measurer.Measure(under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
             labels.Add(new ChartLabel(
                 under,
                 new DocPoint(
@@ -2604,12 +2629,14 @@ public static partial class ChartLayout
                     frame.Bottom - (frame.Height * PageMargin) - height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
-                AxisColour));
+                AxisColour,
+                IsBold: plot.IsAxisTitleBold));
         }
 
         if (beside is { Length: > 0 } side)
         {
-            Length height = measurer.Measure(side, plot.AxisTitleSize).Height;
+            Length height =
+                measurer.Measure(side, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
             labels.Add(new ChartLabel(
                 side,
                 new DocPoint(
@@ -2618,7 +2645,8 @@ public static partial class ChartLayout
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
                 AxisColour,
-                Math.PI / 2));
+                Math.PI / 2,
+                IsBold: plot.IsAxisTitleBold));
         }
     }
 
@@ -2966,7 +2994,7 @@ public static partial class ChartLayout
 
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize).Height
+            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }
 
