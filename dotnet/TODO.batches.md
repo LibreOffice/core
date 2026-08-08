@@ -6784,3 +6784,65 @@ still round twenty's 304 over 91 documents, and is *not* a measurement of this c
 
 **Still unmeasured, unchanged from the brief:** `PptSlideLayout.cs`:1244's group scale against
 LibreOffice's, and `Demick_JetBlue.pptx`'s charts in the shared `Paperless.Core/Charts`.
+
+---
+
+## Round twenty-five — `sheets`, base `4448c2a3f`
+
+Two things, and the second is the one worth the space.
+
+### One reader change, and it closes `batch-010`'s page-count failure
+
+| | baseline `4448c2a3f` | + the drawing-block `CONTINUE` |
+|---|---|---|
+| matches | 144 / 171 | **145 / 171** |
+| total absolute page error | 94 | **90** |
+| exactly-correct page counts | 153 | **154** |
+| absolute word error | 43694 | 43694 |
+| `sheets/batch-001`–`009`, the gate | 89/89, page error 0 | **89/89, page error 0** |
+| `sheets/batch-010` | 6/10 | **7/10** |
+| every other batch | — | **unchanged** |
+
+The baseline reproduces round twenty-four's closing figures to the digit, per batch as well as in
+total. Per batch: 001–008 10/10, 009 9/9, 010 6/10 → **7/10**, 011 6/10, 012 8/10, 013 8/10,
+014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
+
+**Excel stops writing `MSODRAWING` records once a sheet's Escher stream passes the 8224-byte
+record ceiling and writes the rest as `CONTINUE`**, still one per `OBJ`. `BiffRecordReader` joined
+each of those to the `OBJ` before it, so every shape past the ceiling was read as an object's
+payload and lost. On `INDEX_Digital_Transformation_Toolkits.xls` that is 25 `MSODRAWING` records
+totalling 8034 bytes, 70 `CONTINUE`s and 95 `OBJ`s: 25 of 95 pictures drawn, 20 pages against 24.
+It now renders 24 and matches.
+
+**The brief's `SheetDrawingArea` hypothesis is refuted, and so is the reading it replaced.** Round
+twenty-four's own table — pages 1–13 exact, page 14 ten images against 21 — is what a walk
+truncated at 25 shapes produces, not what refutes one. The truncation is real; its mechanism is
+the record stream, not the shape walk and not the printed range.
+
+Reach measured by rendering: **1 of 171 documents changes what is drawn.** A census of the same
+condition — a `CONTINUE` inside a drawing block — finds it in **18** of the track's 61 OLE2
+workbooks. Ceiling 18, reach 1.
+
+### Our PDF writer is reproducible; 17 of 171 documents draw the clock
+
+The brief carried this as a defect in `Paperless.Rendering`. **It is not, on both counts.**
+
+| measurement | result |
+|---|---|
+| all 171 rendered twice in succession, timestamps masked | **171 same, 0 different** |
+| all 171 rendered under two time zones a day apart, timestamps masked | **17 different** |
+| the same two zones with `SOURCE_DATE_EPOCH` set, **nothing masked** | **171 same, 0 different** |
+
+`SheetHeaderContext.Printed` defaulted to `DateTime.Now` and was read afresh in every page's
+header context; `&D` and `&T` print it. That is correct behaviour and it is also a 17-in-171
+false-positive floor under every byte-level reach measure this project has taken. The instant is
+now taken once per printout and stamped onto the pages beside `PageCount`, and
+`SheetPrintInstant` honours `SOURCE_DATE_EPOCH` — as UTC, so the pinned output does not depend on
+the machine's zone. `RenderCommand` passes the same value to `PdfRenderOptions.CreationDate`, a
+hook that already existed for this.
+
+**`Paperless.Rendering` was not touched, and neither was `Paperless.Core`.** The change is
+`Paperless.Spreadsheets` plus one private method in `Paperless.Cli`, and `BiffRecordReader` is not
+shared with the DOC or PPT readers, so neither the words nor the slides track is owed a sweep.
+
+Probe data, six whole-track TSVs and the record dumps behind them: `dotnet/probes/sheets-r25/`.
