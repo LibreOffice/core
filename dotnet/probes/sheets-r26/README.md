@@ -87,6 +87,16 @@ Every line of a turned cell was drawn at one point — the cell's bottom-left co
 `Keywords_Mapping_Graphs_and_Charts.xlsx` page 43: four records at exactly `(363.49, 262.53)`, and
 every rotated column head 10.48 pt left of where the reference puts it.
 
+**Round twenty-five's half of that measurement was mispaired, and the correction is worth having
+even though the conclusion stands.** It reported the reference as stepping those lines at
+`(394.38, 761.89 / 731.90 / 716.91)`. Those three records are the reference's ordinary
+regular-weight data column, which *we also draw* at `(394.38, 761.86 / 731.86 / 716.87)`; the
+reference's rotated heads are the `Carlito-Bold` records at x = 340.70, 373.98, 404.87, 447.65,
+487.28 and 513.41, each cell written one `Tj` per glyph up the page. So the reference does not step
+a wrapped rotated cell's lines at all on that page — **it does not wrap the cell**, which is the
+third finding below and a different defect from the one the pairing suggested. The 10.48 pt is the
+constant offset between the two sets of head positions and it reproduces on all six columns.
+
 Calc hands the whole EditEngine block to `DrawText_ToPosition` with an orientation
 (`output2.cxx:3707`, `:3947`), so the lines are laid out unturned from an anchor and the *block* is
 turned about it. `mkdraw.py` writes a probe that states every row height and turns the header and

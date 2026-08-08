@@ -7562,7 +7562,11 @@ four twelve-point ones differ by 1.4%. Restoring the rounded total fails 18 of t
 
 **Its lines are a block, laid out unturned from an anchor and then turned about it.** Every line was
 drawn at one point — four records at exactly `(363.49, 262.53)` on `Keywords_Mapping` page 43 — and
-every single-line turned cell sat an ascent from the reference. Seven of eight probe positions now
+every single-line turned cell sat an ascent from the reference. Round twenty-five's *reference* half
+of that measurement was mispaired: the `(394.38, 761.89 / 731.90 / 716.91)` it quoted as the
+reference stepping those lines is the ordinary data column, which we draw at the same place. The
+reference's rotated heads are its `Carlito-Bold` records at six other x values, and it does not wrap
+that cell at all. Seven of eight probe positions now
 land within 0.15 pt; the eighth is recorded as a 2.55 pt shortfall, exactly the trailing space
 EditEngine leaves out of the width it aligns by.
 
