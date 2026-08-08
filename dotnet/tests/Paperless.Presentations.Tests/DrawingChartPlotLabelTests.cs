@@ -142,6 +142,52 @@ public class DrawingChartPlotLabelTests
         general.ValueFormat.ShouldBeNull();
     }
 
+    /// <summary>
+    /// <c>c:tickLblPos val="none"</c> hides the labels and leaves the axis.
+    /// </summary>
+    /// <remarks>
+    /// One line in <c>AxisConverter::convertFromModel</c> —
+    /// <c>setProperty(PROP_DisplayLabels, mnTickLabelPos != XML_none)</c>
+    /// (<c>axisconverter.cxx:221</c>) — and a different property from <c>c:delete</c>, which is
+    /// what makes the two separable at all. Measured on a probe: LibreOffice stops drawing the
+    /// four category names and goes on drawing the axis line and its five ticks.
+    /// </remarks>
+    [Fact]
+    public void TickLabelPositionNoneHidesTheLabelsAndKeepsTheAxis()
+    {
+        ChartPlot plot = Read(Bar(axes:
+            """
+            <c:catAx><c:axId val="1"/><c:tickLblPos val="none"/></c:catAx>
+            <c:valAx><c:axId val="2"/><c:tickLblPos val="nextTo"/></c:valAx>
+            """));
+
+        plot.CategoryLabelsVisible.ShouldBeFalse();
+        plot.CategoryAxisVisible.ShouldBeTrue();
+        plot.ValueLabelsVisible.ShouldBeTrue();
+    }
+
+    /// <summary>An axis that states no <c>c:tickLblPos</c> draws its labels.</summary>
+    /// <remarks>
+    /// Only <c>none</c> hides them: <c>high</c> and <c>low</c> move where they sit and an absent
+    /// element is <c>nextTo</c>. Reading the element's presence rather than its value would take
+    /// the labels off every chart that states nothing, which is most of them.
+    /// </remarks>
+    [Fact]
+    public void AnAxisStatingNoTickLabelPositionKeepsItsLabels()
+    {
+        ChartPlot silent = Read(Bar(axes:
+            """<c:catAx><c:axId val="1"/></c:catAx><c:valAx><c:axId val="2"/></c:valAx>"""));
+
+        ChartPlot high = Read(Bar(axes:
+            """
+            <c:catAx><c:axId val="1"/><c:tickLblPos val="high"/></c:catAx>
+            <c:valAx><c:axId val="2"/></c:valAx>
+            """));
+
+        silent.CategoryLabelsVisible.ShouldBeTrue();
+        high.CategoryLabelsVisible.ShouldBeTrue();
+    }
+
     /// <summary>A deleted axis is recorded as hidden.</summary>
     [Fact]
     public void ADeletedAxisIsNotVisible()
