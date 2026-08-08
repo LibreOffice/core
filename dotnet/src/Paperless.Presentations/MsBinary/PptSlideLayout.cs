@@ -1229,13 +1229,22 @@ internal sealed class PptSlideLayout
         DocRect rectangle = SlidePresetGeometry.TextRectangle(preset, local.Size, Guides(adjustment));
 
         // Upright means "axis-aligned and not mirrored", not "the identity". A group scales its
-        // children, and on this format's commonest group — a client anchor one master unit wider
-        // than the union of its children's — the factor is 1.00025, which is neither one nor a
-        // rotation. Treating that as rotated puts the shape's text into the shape's own coordinate
-        // space behind a matrix, where it is correct on the page and unreadable to every tool that
-        // compares a pen position against a reference renderer's. Mapping the rectangle instead is
-        // also what LibreOffice does: a group scale resizes the shape and the text is laid out
-        // again inside it at its own size, rather than being stretched.
+        // children, so the factor is often neither one nor a rotation. Treating that as rotated
+        // puts the shape's text into the shape's own coordinate space behind a matrix, where it is
+        // correct on the page and unreadable to every tool that compares a pen position against a
+        // reference renderer's. Mapping the rectangle instead is also what LibreOffice does: a
+        // group scale resizes the shape and the text is laid out again inside it at its own size,
+        // rather than being stretched.
+        //
+        // Both halves of that are now measured rather than read —
+        // research/probes/slides-r23/group-scale-census.sh instruments this line and folds every
+        // .ppt in the corpus. Of 7514 text shapes taking this branch, 7364 have an exactly unit
+        // placement and 150 do not, across 11 of 51 documents, at factors from 0.00063 to 1.385.
+        // The claim this comment used to make — that the commonest group's factor is 1.00025 —
+        // is false: the whole band under 0.1% is empty, so the branch is load-bearing rather than
+        // a rounding guard. And the reading it defends holds on hofman.ppt, whose 34 scaled
+        // shapes carry A = 1.1163 and D = 1.0315: the reference draws 24.01, 28.01, 32.00 and
+        // 43.99 pt there and so do we, where a scale reaching the font would give 26.8 to 49.1.
         bool upright = placement is { B: 0, C: 0, A: > 0, D: > 0 };
         DocRect area = upright
             ? new DocRect(
