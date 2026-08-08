@@ -113,3 +113,15 @@ exactly and still fails on pages. Per batch the two sweeps are identical: 001–
 
 The change is confined to `Paperless.Spreadsheets`, whose `SheetDeviceUnits` is `internal`, so no
 cross-track sweep is owed: nothing outside the spreadsheet layout can reach it.
+
+## Test counts
+
+All eleven projects run individually on the fixed tree, whole output captured, **0 skipped**
+everywhere:
+
+| Core | Containers | Text | Vector | Rendering | Markup | OpenDocument | WordProcessing | Spreadsheets | Presentations | Fidelity |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 243 | 109 | 240 | 291 | 119 | 259 | 125 | 608 | **470** | 520 | 545 |
+
+Every count is the briefed known-good except Spreadsheets, which is 446 + the 24 new
+`SheetFontSizeDeviceTests` cases.
