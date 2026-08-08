@@ -309,6 +309,28 @@ So an over-count is not automatically extra text, and a document that matches is
 automatically right. When a word delta has no plausible textual explanation, check what the
 two renderers are drawing rather than what they are saying.
 
+#### The token multiset separates the two errors that `wc -w` adds together
+
+`wc -w` compares two **sums**, so a change that draws much more of the missing text while
+trimming rather less of the spurious text moves the number *the wrong way* while moving the
+document much closer. Comparing the token multisets instead splits it:
+
+```python
+under = sum((ref_counter - ours_counter).values())   # text the reference draws and we do not
+over  = sum((ours_counter - ref_counter).values())   # text we draw and it does not
+```
+
+Measured on the document a round's balanced-column work made "worse", and re-verified here at
+the merge: total mismatch **3565 → 2438**, of which **under-draw 1535 → 781**. The gate reads a
+regression; the page now holds half the text it was missing. A second document on the same
+change went 1120 → 693 the same way.
+
+**Report both halves whenever a change moves the word gate adversely.** It costs one small
+script, it is decisive, and without it the honest choice is between shipping a fix that looks
+like a regression and reverting one that is not. It is also the cheapest way to tell this case
+apart from the raster ceiling, where the surplus is *ours* and legitimate — there, over-draw
+dominates and under-draw is near nought.
+
 ## Priority
 
 `words` and `slides` first; `sheets` last. A spreadsheet's value is in its cells rather
