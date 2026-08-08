@@ -128,7 +128,13 @@ public sealed class SheetHeaderContext
     public string Title { get; init; } = string.Empty;
 
     /// <summary>When the printout was made.</summary>
-    public DateTime Printed { get; init; } = DateTime.Now;
+    /// <remarks>
+    /// One instant for the whole job, not one per page: <c>&amp;T</c> on a fifty-page workbook
+    /// prints the time the printout started on every page of it, which is what
+    /// <c>ScHeaderFieldData</c> holds and what reading the clock in each page's constructor
+    /// would not give. See <see cref="SheetPrintInstant"/> for where the value comes from.
+    /// </remarks>
+    public DateTime Printed { get; init; } = SheetPrintInstant.Now();
 
     /// <summary>The text one field expands to.</summary>
     /// <param name="field">The field.</param>
