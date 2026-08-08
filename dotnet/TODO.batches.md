@@ -6138,3 +6138,133 @@ claim the `a:duotone` work rested on.
    that file's own "The threshold is a bar, and pages sit just under it" section states the
    under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
    not the fix. Round seventeen's action item is done; it should come off the list.
+
+## Slides, round twenty: the fit's spacing scale reaches a paragraph's own space
+
+Swept whole twice at `9cffaa02a` — a baseline and the one fix — 163 documents each, both against
+checksummed CLI snapshots of this worktree, the second reusing the first's reference PDFs because
+nothing this round touches `soffice`. 163 rows, no path twice, 0 `ref-failed`, both times.
+
+| | baseline `9cffaa02a` | after |
+|---|---|---|
+| word gate | 151 / 163 | **151 / 163** |
+| signed `ink%` | 1283.60 | **1264.88** |
+| unsigned `\|ink\|%` | 1603.08 | **1583.00** |
+| major pages | 430 | **428** |
+| census: pages neither class explains | 325 over 96 docs | **304 over 91 docs** |
+
+**Whole round: `|ink|%` 1603.08 → 1583.00 — 20.08, or 1.25 per cent of the track's residue — with
+the word gate flat and no verdict changed on any of the 163 documents.** 57 documents moved on
+`|ink|%`: **36 better (−26.17), 21 worse (+6.09)**. Only four parity rows moved at all, each by one
+word, which is a token boundary rather than text.
+
+The baseline reproduced round nineteen's post-fix figures: 151/163 and 430 major pages exactly, and
+1283.60 / 1603.08 against its 1283.56 / 1603.00 — 0.005 per cent, not attributed to a document. Its
+per-batch split reproduces too: 001–007, 011, 013 and 015 full, 008 9/10, 009 9/10, 010 8/10,
+012 8/10, 014 7/10, 016 8/10, 017 4/5. **`size-census-2.py` over the baseline is identical to round
+nineteen's line for line** — 4199 pages, 3519 agreeing, 25/133/62/135 and 325 over 96 documents — a
+third independent confirmation of the same tree.
+
+### The brief's named next step was already in the tree
+
+The dispatch brief's headline lead was *"the shape's em size is now quantised to the draw layer's
+1/100 mm grid, but the shape's text area is not — quantise the text rectangle the same way"*. That
+is round nineteen's own fix and it is merged: `SlideTextLayout.Place` opens with
+`OnGrid(textRectangle).Deflate(OnGrid(body.Insets))` at `1217f3a4c`, which `9cffaa02a` descends
+from. Checked before anything was measured.
+
+### What was left, and the guard whose reading was inverted
+
+Round nineteen's elimination — em on the grid, box on the grid, search compared statement by
+statement — leaves the *measured height*. One term of that height is a paragraph's own space, and
+the tree said in as many words that the fit's spacing scale does not reach it:
+
+> The reference does put a paragraph's own space through `scaleYSpacingValue` … but that helper
+> returns its argument unchanged unless `maStatus.DoStretch()` is set.
+
+The citation is right and the inference from it is backwards. `SdrTextObj::ImpSetupDrawOutlinerForPaint`
+turns `EEControlBits::STRETCHING` **on** whenever `IsFitToSize() || IsAutoFit()` and only then calls
+`setupAutoFitText` (`svx/source/svdraw/svdotext.cxx`:1177-1183), so an autofitted shape always
+satisfies the guard. The same flag is what lets the *font* scale apply at all
+(`impedit3.cxx`:3005-3012 is inside `if (maStatus.DoStretch())`), so a reading on which the guard is
+clear would leave the whole search inert.
+
+### The probe, because the corpus cannot separate the two readings
+
+`research/probes/slides-r20/make-spacing-probe.py` builds a deck of autofit boxes holding one text
+at a sweep of box heights: four paragraphs of two lines each, the second line forced by an `a:br` so
+the line count cannot move with the font size, all four insets zero, a 12 pt `a:spcBef` on every
+paragraph, and a throwaway shape first on each slide so nothing under test measures LibreOffice's
+shared-outliner state leak.
+
+Twelve boxes at a 20 pt base: **the reference disagreed with us on three, and every one of the three
+is a box where we kept a larger font at nine- or eight-tenths spacing and it took a smaller font at
+full spacing** — 15.00 against 11.99, and 18.99 against 17.01 twice. That is the one-step class the
+last four rounds have been chasing, reproduced in twelve boxes of authored markup. Scaling the
+paragraph space turns all three round, and the other nine are at full spacing where the change is a
+no-op by construction. A second probe at a 10 pt base is 11 of 12 before and 11 of 12 after, trading
+one boundary box for another.
+
+The pinned page of rounds seventeen to nineteen closes with it:
+`2015-Civil-Rights-Website-training.ppt` page 21 was **ours 20.01 against ref 18.99** in every
+previous round and is now 18.99 at the reference's own baseline, 347.81. The deck goes
+`|ink|%` 33.34 → 31.05 and drops from 22 census pages to 17.
+
+### The predecessor's counter-example reproduces and its conclusion does not
+
+The note that recorded this as "measured wrong" named
+`slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt` slide 6 as shrinking a step below
+the reference. **It does** — its 27.01 pt block becomes 25.99. What the note left out is that the
+*same page's* 22.99 pt block was being drawn at nine-tenths line spacing where the reference draws it
+at full: pitch 24.86 pt against the reference's 27.58, and 27.60 after the change. Two errors were
+cancelling on that page, and the document's `|ink|%` is 9.98 before and after.
+
+So the residue on that page is now a pure height disagreement at full spacing on both sides, which
+is a cleaner thing to chase than what was there before. `ITE106-Chapter 4.ppt` moves the same way
+(36.14 → 37.67) and is the deck round eighteen recorded as shrinking *further* than the reference —
+the opposite sign of the same remaining term.
+
+### The regression guards, and the tests
+
+Per project on the final tree, each run redirected to its own file: Core 243, Text 240,
+Containers 109, Vector 291, Rendering 115, Markup 259, OpenDocument 125, WordProcessing 608,
+Spreadsheets 446, Presentations **523**, Fidelity **546**. **Zero failed and zero skipped
+throughout.** The two that moved are this round's own tests.
+
+**Nothing outside `Paperless.Presentations/Layout/SlideTextLayout.cs` was touched** — one new
+private method and the two properties that use it — so the words and sheets tracks cannot be
+affected and are not owed a sweep. That is checkable rather than asserted: the file is reached only
+through `SlideTextLayout.Place`/`Measure`, which no other family calls.
+
+Two assertions, **each verified by putting the defect back and watching it fail**:
+
+- `TheFitsSpacingScaleReachesAParagraphsOwnSpace` (fidelity) — the three discriminating boxes of
+  `tests/corpus/features/slide-autofit-paragraph-space.pptx`, our sizes asserted as literals first
+  and the reference's compared against those. With the defect back it fails on the 150 pt box.
+- `TheFitsSpacingScaleReachesAParagraphsOwnSpace` (unit, three cases) — one box per spacing scale
+  the search can settle on, so the σ = 1 case is a control that passes either way and the σ = 0.9
+  and σ = 0.8 cases both fail with the defect back. That is what makes it able to fail; a box at
+  full spacing alone could not.
+
+### What the next round should take, in order
+
+1. **The remaining height term, now visible from both sides.** The one-step class is 304 census
+   pages rather than 325, and it is no longer confounded with the spacing scale: on
+   `gfopportunities` page 6 and on `ITE106-Chapter 4.ppt` both renderers now use full spacing and
+   still disagree by one step, so what is left is the height a block measures at a given size.
+   Two leads worth separating first, neither chased here:
+   - The probe shows a **1–3 unit disagreement in the line height of a box the search leaves
+     alone**: at 20 pt the reference draws a pitch of 848 hundredths of a millimetre where
+     `round(706 × 1.2)` is 847, and at 10 pt it draws **421** where `round(353 × 1.2)` is 424.
+     Neither is a spacing scale — 421/424 is 0.993 — and neither is explained. Nine other sizes in
+     the same probe reproduce `round(em × 1.2)` exactly, so this is a small residue at particular
+     sizes rather than a wrong rule.
+   - `PptSlideLayout.cs`:1240-1245 scales a grouped shape's rectangle by
+     `Math.Round(width.Emu * placement.A)` before `Place` sees it, and that group scale has still
+     not been measured against LibreOffice's. Round nineteen flagged it and did not do it.
+2. **`Demick_JetBlue.pptx`'s charts**, 26.70 `|ink|%` over 6 major pages of 10 — unchanged from
+   round nineteen, still the densest unexplained document, still in `Paperless.Core/Charts` and so
+   still owing the words and sheets sweeps.
+3. **The `.ppt` twin of the picture recolour** (`DFF_Prop_pictureBrightness`/`pictureContrast`),
+   unchanged from round nineteen and **still unmeasured for reach**: I did not count how many
+   corpus `.ppt` carry either property either.
