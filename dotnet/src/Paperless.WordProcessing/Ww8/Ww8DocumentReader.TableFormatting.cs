@@ -45,7 +45,7 @@ public sealed partial class Ww8DocumentReader
     /// there is no border. A <c>brcType</c> of zero means "nothing said here", and falls through to
     /// whatever the table's own defaults say; a <em>nil</em> BRC means "no border", and does not.
     /// </returns>
-    private static Ww8Border? ReadBorder(ReadOnlySpan<byte> bytes, bool isVersion9)
+    internal static Ww8Border? ReadBorder(ReadOnlySpan<byte> bytes, bool isVersion9)
     {
         if (isVersion9)
         {

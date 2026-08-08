@@ -1545,26 +1545,18 @@ public sealed partial class Ww8DocumentReader
 
         foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
         {
+            if (ParagraphBorderSprm(sprm.Identifier) is { } border)
+            {
+                if (border.IsVersion9) ninetySides |= 1 << border.Side;
+                else if ((ninetySides & (1 << border.Side)) != 0) continue;
+
+                format = WithParagraphBorder(
+                    format, border.Side, sprm.Operand.Span, border.IsVersion9);
+                continue;
+            }
+
             switch (sprm.Identifier)
             {
-                case LayoutSprms.BorderTop or LayoutSprms.BorderLeft or LayoutSprms.BorderBottom
-                    or LayoutSprms.BorderRight or LayoutSprms.BorderBetween:
-                {
-                    int side = sprm.Identifier - LayoutSprms.BorderTop;
-                    ninetySides |= 1 << side;
-                    format = WithParagraphBorder(format, side, sprm.Operand.Span, isVersion9: true);
-                    break;
-                }
-
-                case LayoutSprms.BorderTop80 or LayoutSprms.BorderLeft80 or LayoutSprms.BorderBottom80
-                    or LayoutSprms.BorderRight80 or LayoutSprms.BorderBetween80:
-                {
-                    int side = sprm.Identifier - LayoutSprms.BorderTop80;
-                    if ((ninetySides & (1 << side)) != 0) break;
-                    format = WithParagraphBorder(format, side, sprm.Operand.Span, isVersion9: false);
-                    break;
-                }
-
                 // Which of the two sprms stated it travels with the value, because the two disagree
                 // about what nought and two mean in a right-to-left paragraph — see
                 // Ww8LayoutFormat.IsJustificationAbsolute.
@@ -1776,6 +1768,31 @@ public sealed partial class Ww8DocumentReader
     }
 
     /// <summary>
+    /// Which paragraph border a sprm sets, and in which of the two forms, or null when it sets none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Both runs of ids are contiguous and in WW8's own side order, so the offset from the first is the
+    /// side. The ranges deliberately stop one short of <c>sprmPBrcBar</c>: the bar is a revision rule down
+    /// the margin rather than a side of the paragraph's box, and <c>SwWW8ImplReader::Read_Border</c>
+    /// likewise reads five and leaves the sixth to <c>Read_Bar</c>.
+    /// </para>
+    /// <para>
+    /// Answering both questions at once is what lets the caller apply the newer form's precedence without
+    /// depending on the order a producer wrote the two in.
+    /// </para>
+    /// </remarks>
+    /// <param name="identifier">The sprm's id.</param>
+    internal static (int Side, bool IsVersion9)? ParagraphBorderSprm(ushort identifier) => identifier switch
+    {
+        >= LayoutSprms.BorderTop and <= LayoutSprms.BorderBetween
+            => (identifier - LayoutSprms.BorderTop, true),
+        >= LayoutSprms.BorderTop80 and <= LayoutSprms.BorderBetween80
+            => (identifier - LayoutSprms.BorderTop80, false),
+        _ => null,
+    };
+
+    /// <summary>
     /// Sets one of the five paragraph border sides from the <c>BRC</c> a sprm carries.
     /// </summary>
     /// <remarks>
@@ -1795,7 +1812,7 @@ public sealed partial class Ww8DocumentReader
     /// <param name="side">Nought to four: top, left, bottom, right, between.</param>
     /// <param name="operand">The sprm's operand, which begins with the <c>BRC</c>.</param>
     /// <param name="isVersion9">True for the newer <c>BRC</c>, whose colour is RGB.</param>
-    private static Ww8LayoutFormat WithParagraphBorder(
+    internal static Ww8LayoutFormat WithParagraphBorder(
         Ww8LayoutFormat format, int side, ReadOnlySpan<byte> operand, bool isVersion9)
     {
         Ww8Border border = ReadBorder(operand, isVersion9) ?? new Ww8Border(Ww8Border.Nil, 0, null);
