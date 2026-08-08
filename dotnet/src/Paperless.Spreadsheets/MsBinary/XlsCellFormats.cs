@@ -199,6 +199,20 @@ internal sealed class XlsCellFormats
         => index >= 0 && index < _palette.Count ? _palette[index] : Colour.Black;
 
     /// <summary>
+    /// The colour one palette index names, or null when the index names none.
+    /// </summary>
+    /// <remarks>
+    /// A chart's <c>CHLINEFORMAT</c> and <c>CHAREAFORMAT</c> state their colours as palette
+    /// indices in BIFF8 and as literal RGB in BIFF5, and both go through the same buffer a cell's
+    /// does (<c>XclImpChLineFormat::ReadChLineFormat</c>, <c>xichart.cxx:453-465</c>). Null rather
+    /// than black for an index outside the palette, because a chart with an unreadable colour
+    /// should fall back to whatever its layout would have chosen and not to a black bar.
+    /// </remarks>
+    /// <param name="index">The palette index.</param>
+    public Colour? PaletteColour(int index)
+        => index >= 0 && index < _palette.Count ? _palette[index] : null;
+
+    /// <summary>
     /// The alignment fields of a BIFF5 <c>XF</c>.
     /// </summary>
     /// <param name="alignment">The two-byte alignment field.</param>
