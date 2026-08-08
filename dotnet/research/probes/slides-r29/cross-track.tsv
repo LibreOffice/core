@@ -1,0 +1,17 @@
+Reach on the words and sheets tracks, measured by rendering all 371 of their documents at
+281685d90 and at ea29d2d11 with SOURCE_DATE_EPOCH set and byte-comparing. Five changed. The
+|ink|% figures are against soffice's own PDF of the same document.
+
+document                                                    base    +3 fixes   all 4
+sheets/batch-002/xls/2012-GA-Survey-Chapter-5-Tables…       0.56      0.64      0.59
+sheets/batch-002/xls/2012-GA-Survey-Chapter-6-Tables…       0.56      0.58      0.58
+sheets/batch-010/xls/Template Pilot Logbook JAR-FCL V3.0   26.62     26.62     26.99
+sheets/batch-010/xlsx/Keywords_Mapping_Graphs_and_Charts   22.87     22.65     22.65
+words/batch-020/docx/ABCD-FE-01-00 Flight Envelope…         0.00      0.00      0.00
+                                                    net   -----     -0.12     +0.20
+
+Major-page counts are unchanged on all five (0, 0, 5, 10, 0) and no verdict moves. The whole of
+the +0.20 is the Pilot Logbook, which the first three fixes did not touch at all and which the
+bottom axis title's placement moves by +0.37 — the one document where this round's most
+sourced change reads adversely on the metric, and it is 0.37 of 26.99 on a document that was
+already failing by a wide margin.

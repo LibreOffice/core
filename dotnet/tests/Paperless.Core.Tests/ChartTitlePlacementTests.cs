@@ -165,4 +165,72 @@ public class ChartTitlePlacementTests
 
         two.PlotArea.Y.ShouldBeGreaterThan(one.PlotArea.Y);
     }
+
+    /// <summary>A secondary value axis' title is drawn, in the band already reserved for it.</summary>
+    /// <remarks>
+    /// <c>PlotAreaOf</c> has taken the band off the right edge since the secondary axis was
+    /// implemented and <c>AddTitles</c> added two titles, so the plot area was narrowed by a title
+    /// that is not on the page — the same "looks like nothing is wrong" shape as the two above.
+    /// <c>SECONDARY_Y_AXIS_TITLE</c> is <c>ALIGN_RIGHT</c> on a chart that is not vertical
+    /// (<c>ChartView.cxx:2081-2082</c>), so it sits against the frame's far edge and turns the same
+    /// quarter turn as the primary one.
+    /// </remarks>
+    [Fact]
+    public void ASecondaryValueAxisTitleIsDrawnAgainstTheFarEdge()
+    {
+        ChartPlot plot = Bars() with
+        {
+            SecondaryValueScale = new ChartScaleRequest(),
+            SecondaryValueAxisTitle = "Load Factor",
+            Series =
+            [
+                new ChartSeries("North", [120.0, 95.0, 143.0, 168.0], Colour.FromRgb(0x99CCFF)),
+                new ChartSeries("Rate", [0.4, 0.5, 0.6, 0.7], Colour.FromRgb(0x993300))
+                {
+                    AxisIndex = 1,
+                },
+            ],
+        };
+
+        ChartDrawing drawing = Place(plot);
+
+        ChartLabel title = drawing.Labels.Single(label => label.Text == "Load Factor");
+
+        title.Rotation.ShouldBe(Math.PI / 2, 0.0001);
+        title.At.X.ShouldBeGreaterThan(drawing.PlotArea.Right);
+        title.At.X.ShouldBeLessThan(Frame.Right);
+
+        // Centred on the plot area's own height, exactly as the primary axis' title is.
+        title.At.Y.Points.ShouldBe(
+            (drawing.PlotArea.Y + drawing.PlotArea.Height / 2).Points, 0.001);
+    }
+
+    /// <summary>The category axis' title sits above a bottom legend, not on top of it.</summary>
+    /// <remarks>
+    /// <c>lcl_createTitle</c> places an <c>ALIGN_BOTTOM</c> title inside <c>rRemainingSpace</c>
+    /// (<c>ChartView.cxx:1147-1149</c>), and the legend has already been taken out of that
+    /// rectangle by then — <c>lcl_createLegend</c> runs at <c>:1966</c> and the axis titles at
+    /// <c>:2054</c>. Measuring from the frame's own bottom edge instead puts the title exactly
+    /// where a bottom legend is: on a probe with one, ours came out 30.3 pt below the
+    /// reference's and did not move at all when the legend was added.
+    /// </remarks>
+    [Fact]
+    public void TheCategoryAxisTitleClearsABottomLegend()
+    {
+        ChartPlot plot = Bars();
+
+        ChartLabel without = Place(plot).Labels.Single(label => label.Text == "Aircraft Type");
+        ChartLabel with = Place(plot with { Legend = ChartLegendPosition.Bottom })
+            .Labels.Single(label => label.Text == "Aircraft Type");
+
+        with.At.Y.ShouldBeLessThan(without.At.Y);
+
+        // And it is the legend's own band it moved by, not some other quantity: the plot area's
+        // bottom edge moved by exactly the same amount.
+        Length title = without.At.Y - with.At.Y;
+        Length edge = Place(plot).PlotArea.Bottom
+                      - Place(plot with { Legend = ChartLegendPosition.Bottom }).PlotArea.Bottom;
+
+        title.Points.ShouldBe(edge.Points, 0.001);
+    }
 }

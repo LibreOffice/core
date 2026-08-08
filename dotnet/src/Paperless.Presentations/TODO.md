@@ -2151,23 +2151,72 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       right and we draw neither, and our legend collides with the category-axis title
       (`RPMYear ASM LF + ( 3rd Quarter)` on one line). Judge this one on the image, never on
       `wc -w`.
-- [ ] **A secondary value axis' title has room reserved for it and is never drawn.**
-      `ChartLayout.PlotAreaOf` takes `Shape(measurer, second, plot.AxisTitleSize).Height` off the
-      right edge for `plot.SecondaryValueAxisTitle`, and `AddTitles` adds a label for the
-      category axis' title and the primary value axis' and stops. So the plot area is narrowed by
-      a title that is not there — the one failure shape that looks like nothing is wrong, because
-      the picture is still the right size.
+- [x] **A secondary value axis' title has room reserved for it and is never drawn.**
+      `ChartLayout.PlotAreaOf` took `Shape(measurer, second, plot.AxisTitleSize).Height` off the
+      right edge for `plot.SecondaryValueAxisTitle` and `AddTitles` added two titles and stopped,
+      so the plot area was narrowed by a title that is not there — the one failure shape that
+      looks like nothing is wrong, because the picture is still the right size.
 
-      Reach, censused over all three tracks: **9 chart parts over 6 documents** declare two
-      `c:valAx` and a `c:title` on both — five slides decks (`171128IPAP`,
-      `8_P-Pavese_AIRBUS-ATB-journee-CRATB`, `Demick_JetBlue`,
-      `FAAAIandtheArtandScienceofV&Vfinal`, `RPA P4 - Advanced Material`), one words DOCX, and no
-      workbook. Seen on page 4 of `Demick_JetBlue.pptx`: the reference draws three rotated axis
-      titles and we draw two, both sides turning them a quarter turn anticlockwise.
+      Censused over all three tracks at **9 chart parts over 6 documents** declaring two
+      `c:valAx` and a `c:title` on both. Closed in round twenty-nine: `SECONDARY_Y_AXIS_TITLE` is
+      `TitleAlignment::ALIGN_RIGHT` on a chart that is not vertical (`ChartView.cxx:2081-2082`)
+      and is positioned at `X + Width - titleWidth/2 - nXDistance` (`:1152-1153`), so it goes
+      against the frame's right edge and turns the same quarter turn. On `Demick_JetBlue.pptx`
+      page 4 we now draw `Load Factor (%)` 3.7 pt right of where the reference draws it.
 
-      It is four lines mirroring the `beside` branch about the frame's right edge — and it draws
-      a *new* label, which `SheetChart` and `FrameChart` do not ignore, so unlike a weight it
-      owes the other two tracks a sweep.
+- [x] **Every rotated piece of chart text was turned clockwise where LibreOffice turns it
+      anticlockwise.** Found in round twenty-nine while reading the title code — the same reading
+      that produced the item above, and much the larger of the two. `ChartLabel.Rotation` is
+      anticlockwise, which is how both formats state one and how chart2's own shapes carry it,
+      and the drawing space has y growing downwards; handing the angle straight to
+      `AffineTransform.Rotation` reverses it. Measured two ways: a probe whose value axis title
+      reads `Alpha Omega` came out top-to-bottom against the reference's bottom-to-top, and
+      `Demick_JetBlue.pptx`'s 45° category labels descended to the right against the reference's
+      ascending. Fixed at all three consumers — `SlideChart`, `SheetChart`, `FrameChart` — because
+      the sign is wrong where the model's convention meets the drawing space's, not in the model.
+      The box does not move, being symmetric about the same centre for either sign, so this is ink
+      and not layout.
+
+- [x] **A chart's category axis title was drawn on top of a bottom legend.** `AddTitles` measured
+      from the frame's own bottom edge, but `lcl_createTitle` places an `ALIGN_BOTTOM` title
+      inside `rRemainingSpace` (`ChartView.cxx:1147-1149`), and the legend has already come out of
+      that rectangle by then (`lcl_createLegend` at `:1966`, the axis titles at `:2054`). On the
+      band probes our title's top went from 30.30 pt below the reference's to 6.53 pt above with a
+      bottom legend, and from 8.13 below to 6.47 above without one. **The 6.5 pt residual is
+      unexplained and open**: it is the same with and without a legend, within 0.35 pt of the
+      chart's own two per cent bottom margin — which is the obvious suspect and does not survive
+      reading `createShapes2D:941-944`, since the margin is plainly applied there and the *plot
+      area's* bottom band on the same probes matches the reference to 0.17 pt with it included.
+
+- [x] **`c:tickLblPos val="none"` was unread**, so an axis whose labels the file switches off drew
+      them and reserved a line for them. It is not `c:delete`: the importer maps it to chart2's
+      `DisplayLabels` (`axisconverter.cxx:221`), which suppresses the labels and leaves the axis
+      line and its ticks. ODF states the same property as `chart:display-label`. On a probe the
+      reference stops drawing `Q1 Q2 Q3 Q4` and its plot area's bottom edge drops 12.70 pt,
+      keeping the 4.25 pt tick.
+
+      **Swept reach on the slides track: zero of 163.** Seven chart parts over three decks state
+      it and in every one of them the axis is *also* `c:delete val="1"`, or is a second `b` axis
+      the reader does not pair. The distinction is real and the corpus does not exercise it; the
+      fix is worth having and moved nothing, and this is the honest headline for it.
+
+- [ ] **The plot area's bottom edge is right to about 5 pt on an upright axis and up to 39 pt out
+      on a rotated one**, and the remaining error is `VDiagram::adjustInnerSize`. LibreOffice does
+      not predict what the axis labels will take: it lays the diagram out at full size, measures
+      the bounding box of everything the axes drew, and shrinks the inner rectangle by the
+      *overflow* (`chart2/source/view/diagram/VDiagram.cxx:653-700`), twice, with a floor of a
+      third of the available rectangle. We compute a reservation per edge instead.
+
+      Where that shows: on `Demick_JetBlue.pptx`'s five chart pages the bottom edge is 12.73,
+      38.72, 4.88, 12.73 and 4.87 pt too high, and the two 4.87s are the pages with upright
+      labels while the others are rotated. The 26-category band probe puts the rotated excess at
+      7.94 pt on its own. LibreOffice's *own* answer is readable without inferring anything —
+      `chart:coordinate-region` in its `odp` export carries the computed plot rectangle excluding
+      axes (`SchXMLExport.cxx:2274`), and it agrees with its drawn gridlines to 2 pt — so the next
+      round has a model-level instrument for this and does not need to read ink.
+
+      Read it as: reproducing the feedback loop is the fix, and it is a rewrite of `PlotAreaOf`
+      rather than another term.
 - [ ] **An ODF fill's `draw:opacity` is not read at all**, so a shape LibreOffice draws at 30%
       comes out fully opaque. Found while building `slide-drop-shadow.odp`: the same shape that
       carries `<a:alpha val="30000"/>` in the `pptx` carries `draw:opacity="30%"` on its

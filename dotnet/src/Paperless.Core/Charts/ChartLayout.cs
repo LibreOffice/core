@@ -680,7 +680,7 @@ public static partial class ChartLayout
         // depth, and a third pass has never changed it on the corpus.
         ChartAxisLabelLayout? arranged = null;
 
-        if (plot.HasAxes && columns && plot.CategoryAxisVisible
+        if (plot.HasAxes && columns && plot.CategoryAxisVisible && plot.CategoryLabelsVisible
             && domain is null && plot.DataTable is null)
         {
             arranged = ArrangeCategories(plot, area, categories, measurer);
@@ -826,7 +826,7 @@ public static partial class ChartLayout
                 labels);
         }
 
-        AddTitles(plot, frame, area, measurer, labels);
+        AddTitles(plot, frame, area, DiagramAreaOf(plot, frame, measurer), measurer, labels);
         AddLegend(plot, frame, area, measurer, boxes, labels);
 
         return new ChartDrawing(
@@ -1314,7 +1314,14 @@ public static partial class ChartLayout
         // line tall. Both sit a tick length plus a label spacing away from the axis.
         // A deleted axis reserves nothing, which is the whole of what makes the plot area grow
         // into the room its labels would have taken.
-        Length valueLabel = plot.ValueAxisVisible
+        // Labels are a property of their own: a *deleted* axis draws no line, no ticks and no
+        // labels, and one whose tick labels are turned off keeps the first two. So the two flags
+        // multiply — the tick's length is reserved for a visible axis whatever its labels do, and
+        // the label's own depth only when it is drawn.
+        bool valueLabels = plot.ValueAxisVisible && plot.ValueLabelsVisible;
+        bool categoryLabels = plot.CategoryAxisVisible && plot.CategoryLabelsVisible;
+
+        Length valueLabel = valueLabels
             ? WidestValueLabel(scale, plot.ValueFormat, plot.LabelSize, measurer)
             : Length.Zero;
 
@@ -1323,15 +1330,19 @@ public static partial class ChartLayout
         // A scatter chart's horizontal axis is numeric, so what sits under it is the widest of its
         // own ticks rather than the widest category name — and the last of them overhangs the
         // right edge by half its width exactly as a horizontal value axis' does.
-        Length categoryLabel = !plot.CategoryAxisVisible
+        Length categoryLabel = !categoryLabels
             ? Length.Zero
             : domain is { } across
                 ? WidestValueLabel(across, plot.DomainFormat, plot.LabelSize, measurer)
                 : WidestCategoryLabel(plot, categories, measurer);
 
-        Length valueSpace = plot.ValueAxisVisible ? TickLength + LabelSpacing : Length.Zero;
-        Length categorySpace = plot.CategoryAxisVisible ? TickLength + LabelSpacing : Length.Zero;
-        Length valueHeight = plot.ValueAxisVisible ? labelHeight : Length.Zero;
+        Length valueSpace = plot.ValueAxisVisible
+            ? TickLength + (valueLabels ? LabelSpacing : Length.Zero)
+            : Length.Zero;
+        Length categorySpace = plot.CategoryAxisVisible
+            ? TickLength + (categoryLabels ? LabelSpacing : Length.Zero)
+            : Length.Zero;
+        Length valueHeight = valueLabels ? labelHeight : Length.Zero;
 
         // Upright labels reserve one line of *text*, which is what every measurement in this file
         // was fitted against and what the six corpus charts still agree with. Rotated, thinned or
@@ -1340,7 +1351,7 @@ public static partial class ChartLayout
         // on an axis of long names turned 45°.
         Length categoryHeight = plot.DataTable is not null
             ? DataTableHeight(plot, measurer)
-            : !plot.CategoryAxisVisible
+            : !categoryLabels
                 ? Length.Zero
                 : arranged is { } layout && !IsPlain(layout)
                     ? layout.Reserved
@@ -1349,16 +1360,28 @@ public static partial class ChartLayout
         if (columns)
         {
             left += valueLabel + valueSpace;
-            bottom -= categoryHeight + categorySpace;
+
+            // The bottommost value label is centred on the plot area's bottom-left corner and
+            // hangs half of itself below it, exactly as the topmost one hangs above. Whichever of
+            // that and the category band is the deeper is what the bottom edge gives up: they
+            // occupy the same strip, and LibreOffice reserves the *bounding box* of everything
+            // its axes drew rather than a sum of their parts (`VDiagram::adjustInnerSize`,
+            // `chart2/source/view/diagram/VDiagram.cxx:661-669`, shrinks the inner rectangle by
+            // how far the drawn labels overflow the available one). Measured on a probe whose
+            // category labels are turned off: the reference's bottom edge sits 5.65 pt below the
+            // plot against half a label's 5.67, and adding the two instead puts it 4.25 pt low.
+            bottom -= Length.Max(categoryHeight + categorySpace, valueHeight / 2);
 
             // A secondary value axis is drawn on the far side of the plot area and reserves its
             // own labels there, which is the whole of what makes room for it. Its *title* was
             // taken off in DiagramAreaOf, with the other three.
             if (secondary is { } second && plot.SecondaryAxisVisible)
             {
-                right -= WidestValueLabel(
-                             second, plot.SecondaryValueFormat, plot.LabelSize, measurer)
-                         + TickLength + LabelSpacing;
+                right -= plot.SecondaryLabelsVisible
+                    ? WidestValueLabel(
+                          second, plot.SecondaryValueFormat, plot.LabelSize, measurer)
+                      + TickLength + LabelSpacing
+                    : TickLength;
             }
 
             // On an unshifted axis the first and the last label are centred on the plot area's own
@@ -1419,8 +1442,11 @@ public static partial class ChartLayout
         int outward = secondary ? 1 : -1;
 
         // A deleted axis keeps its gridlines and loses everything else, so the line, the ticks and
-        // the labels are all gated and the grid inside the loop is not.
+        // the labels are all gated and the grid inside the loop is not. Turning the *labels* off
+        // is a second, weaker statement — c:tickLblPos="none" — which keeps the line and ticks.
         bool visible = secondary ? plot.SecondaryAxisVisible : plot.ValueAxisVisible;
+        bool labelled = visible
+                        && (secondary ? plot.SecondaryLabelsVisible : plot.ValueLabelsVisible);
 
         if (visible)
         {
@@ -1454,6 +1480,8 @@ public static partial class ChartLayout
                     new DocPoint(axisX, y),
                     AxisColour));
 
+                if (!labelled) continue;
+
                 labels.Add(new ChartLabel(
                     ChartDataLabel.Write(tick, format),
                     new DocPoint(axisX + (TickLength + LabelSpacing) * outward, y),
@@ -1477,6 +1505,8 @@ public static partial class ChartLayout
                     new DocPoint(x, axisY),
                     new DocPoint(x, axisY - TickLength * outward),
                     AxisColour));
+
+                if (!labelled) continue;
 
                 labels.Add(new ChartLabel(
                     ChartDataLabel.Write(tick, format),
@@ -1538,6 +1568,9 @@ public static partial class ChartLayout
 
                 lines.Add(new ChartLine(
                     new DocPoint(x, area.Bottom), new DocPoint(x, area.Bottom + TickLength), AxisColour));
+
+                if (!plot.CategoryLabelsVisible) continue;
+
                 labels.Add(new ChartLabel(
                     text,
                     new DocPoint(x, area.Bottom + TickLength + LabelSpacing),
@@ -1552,6 +1585,9 @@ public static partial class ChartLayout
 
                 lines.Add(new ChartLine(
                     new DocPoint(area.Left - TickLength, y), new DocPoint(area.Left, y), AxisColour));
+
+                if (!plot.CategoryLabelsVisible) continue;
+
                 labels.Add(new ChartLabel(
                     text,
                     new DocPoint(area.Left - TickLength - LabelSpacing, y),
@@ -1647,7 +1683,11 @@ public static partial class ChartLayout
         // A data table's header row *is* the category labels, so the axis draws none of its own —
         // VAxisProperties.cxx:336-343 turns DisplayLabels off outright. Drawing both is what puts
         // every category name on the page twice.
-        if (!plot.CategoryAxisVisible || plot.DataTable is not null) return;
+        if (!plot.CategoryAxisVisible || !plot.CategoryLabelsVisible
+            || plot.DataTable is not null)
+        {
+            return;
+        }
 
         ChartAxisLabelLayout layout =
             arranged ?? new ChartAxisLabelLayout(0.0, 1, false, Length.Zero);
@@ -2664,6 +2704,7 @@ public static partial class ChartLayout
         ChartPlot plot,
         DocRect frame,
         DocRect area,
+        DocRect diagram,
         ChartText measurer,
         List<ChartLabel> labels)
     {
@@ -2699,13 +2740,19 @@ public static partial class ChartLayout
 
         if (below is { Length: > 0 } under)
         {
+            // Against the band `DiagramAreaOf` kept for it, and not against the frame's own
+            // bottom edge. `lcl_createTitle` places an `ALIGN_BOTTOM` title at
+            // `rRemainingSpace.Y + rRemainingSpace.Height - h/2 - nYDistance`
+            // (`ChartView.cxx:1147-1149`), and by then the *legend* has already been taken out of
+            // that rectangle — `lcl_createLegend` runs at `:1966` and the axis titles at `:2054`.
+            // Measuring from the frame instead put the title exactly where a bottom legend is:
+            // on a probe with one, ours came out 30.3 pt below the reference's and did not move
+            // at all when the legend was added.
             Length height =
-                measurer.Measure(under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
+                Shape(measurer, under, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
             labels.Add(new ChartLabel(
                 under,
-                new DocPoint(
-                    area.X + area.Width / 2,
-                    frame.Bottom - (frame.Height * PageMargin) - height / 2),
+                new DocPoint(area.X + area.Width / 2, diagram.Bottom + height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
                 AxisColour,
@@ -2720,6 +2767,29 @@ public static partial class ChartLayout
                 side,
                 new DocPoint(
                     frame.X + (frame.Width * PageMargin) + height / 2,
+                    area.Y + area.Height / 2),
+                ChartLabelAnchor.Centre,
+                plot.AxisTitleSize,
+                AxisColour,
+                Math.PI / 2,
+                IsBold: plot.IsAxisTitleBold));
+        }
+
+        // The secondary value axis' title, against the frame's right edge and turned the same
+        // quarter turn — `SECONDARY_Y_AXIS_TITLE` is created with `TitleAlignment::ALIGN_RIGHT`
+        // on a chart that is not vertical (`ChartView.cxx:2081-2082`), which positions it at
+        // `rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance`
+        // (`:1152-1153`). `PlotAreaOf` has taken its band off the right edge since the secondary
+        // axis was implemented and nothing ever drew into it, so the plot area was narrowed by a
+        // title that is not on the page — the failure that looks like nothing being wrong.
+        if (plot.SecondaryValueAxisTitle is { Length: > 0 } second && plot.SecondaryAxisVisible)
+        {
+            Length height =
+                measurer.Measure(second, plot.AxisTitleSize, plot.IsAxisTitleBold).Height;
+            labels.Add(new ChartLabel(
+                second,
+                new DocPoint(
+                    frame.Right - (frame.Width * PageMargin) - height / 2,
                     area.Y + area.Height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,

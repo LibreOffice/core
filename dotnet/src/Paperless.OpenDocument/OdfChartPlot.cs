@@ -200,6 +200,12 @@ public static class OdfChartPlot
             // its scale and its grid survive a round trip, and drawn as nothing.
             ValueAxisVisible = Visible(valueAxis, styles),
             CategoryAxisVisible = Visible(categoryAxis, styles),
+
+            // chart:display-label="false" is ODF's c:tickLblPos="none" — the same
+            // DisplayLabels property, mapped at xmloff/source/chart/PropertyMaps.cxx:163. It
+            // hides the labels and leaves the axis line and its ticks alone.
+            ValueLabelsVisible = Labelled(valueAxis, styles),
+            CategoryLabelsVisible = Labelled(categoryAxis, styles),
             Legend = LegendOf(Child(chart, OdfNamespaces.Chart, "legend")),
             Background = styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name")),
             PlotBackground = styles.Fill(
@@ -339,6 +345,12 @@ public static class OdfChartPlot
     private static bool Visible(XElement? axis, OdfChartStyles styles)
         => axis is null
            || styles.Flag(Attribute(axis, OdfNamespaces.Chart, "style-name"), "visible") != false;
+
+    /// <summary>Whether an axis draws its tick labels — <c>chart:display-label</c>.</summary>
+    private static bool Labelled(XElement? axis, OdfChartStyles styles)
+        => axis is null
+           || styles.Flag(Attribute(axis, OdfNamespaces.Chart, "style-name"), "display-label")
+              != false;
 
     /// <summary>
     /// What a series' style says its data labels show, or null for none.
