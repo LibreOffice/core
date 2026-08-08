@@ -6138,3 +6138,129 @@ claim the `a:duotone` work rested on.
    that file's own "The threshold is a bar, and pages sit just under it" section states the
    under-count, names `8_P-Pavese` page 6 at 24.4% as the instance, and says why raising the bar is
    not the fix. Round seventeen's action item is done; it should come off the list.
+
+## Words, round twenty-two: `w:pBdr` — swept whole at `9cffaa02a`
+
+Baseline and two fixes, each swept over all 200 documents with this worktree's own CLI (the
+`measuring …` line named it every time), 200 rows, no duplicate path, **0 `ref-failed`** in any
+of the three.
+
+### The baseline, and three inherited figures that do not reproduce
+
+| | at `9cffaa02a` |
+|---|---:|
+| full match | **155 / 200** |
+| exactly correct page count | 165 |
+| total absolute page error | 95 |
+| total absolute word error | 6971 (3768 we draw and it does not, 3203 we miss) |
+
+Per batch: 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9, 011 9/10,
+012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 8/10, 017 6/10, 018 6/10, 019 3/10, 020 3/10,
+021 0/2.
+
+Two of those differ from what was recorded at `22ed440e0` — `008` is 9/10 against 10/10 and
+`013` is 6/9 against 5/9 — and neither is a change of anyone's; they are the baseline. And the
+**format split has stopped being near-equal**: `doc` 56/66 (15% fail) against `docx` 99/134
+(26% fail), where earlier rounds recorded 42% and 43%. The argument for splitting agents by
+symptom rather than by reader was that near-equality; it no longer holds, and the residue is
+now weighted towards the OOXML side.
+
+### The fourth check, run over the whole track for the first time
+
+`pdf-image-diff.py` over all 155 documents that pass the word gate, on the PDF pairs the sweep
+had already produced. Nothing was unmeasurable — 0 page-count refusals, 0 page-size refusals.
+
+**155 documents, 1562 pages, 562 major, summed |ink|% 1023.92.** Per batch (documents / pages
+/ major): 001 10/20/1, 002 10/30/1, 003 10/46/12, 004 10/33/7, 005 10/58/22, 006 9/43/9,
+007 10/55/14, 008 9/44/8, 009 10/47/20, 010 8/92/26, 011 9/58/17, 012 9/96/25, 013 6/53/23,
+014 4/60/29, 015 5/50/13, 016 8/71/32, 017 6/128/34, 018 6/153/26, 019 3/90/58, 020 3/335/185.
+
+**015–020 hold 827 of the 1562 pages and 348 of the 562 major ones**, and none of it had ever
+been looked at. One document — `batch-020/docx/FAA 2025-26 Holdover Tables.docx` — was **every
+one of its 154 pages major** while passing page count and word count exactly.
+
+### `w:pBdr`, which was not implemented at all
+
+`pdf-ops.py diff` named it on that document in one run: on every page, two full-width strokes
+present only in the reference, at y=753.25 and y=37.45 — the `Header` style's bottom rule and
+the `Footer` style's top rule, each 1.5% of the page and each on its own enough to make a page
+major.
+
+Everything about the property was measured off LibreOffice's own PDFs on 26 probes before any
+code was written, and all of it held to the digit afterwards:
+
+- a side's vertical allowance is **`w:sz/8 + w:space`**, `w:space` in *points* — the one place
+  in WordprocessingML that unit appears on a border;
+- it **adds to** `w:spacing` and does not collapse against it, which is why it is carried as
+  `PageParagraph.BorderAbove`/`BorderBelow` rather than folded into `ParagraphFormat`. Folded
+  in, it would vanish on every document whose `CollapsesSpacing` is on, which is most of them;
+- the rule sits at the frame edge with the space between it and the *text*;
+- **left and right borders do not narrow the text** — the box grows outward, past the page
+  margin — so nothing reflows horizontally and only top and bottom reach the paginator;
+- `w:pBdr` is inherited **side by side** down the style chain, and a stated `w:val="none"`
+  beats the layer below and takes no room;
+- two consecutive paragraphs bordered alike are **one box**, and a `w:between` draws in that
+  gap at `width + 2 × space`.
+
+| | baseline | + `w:pBdr` | + the joined box |
+|---|---:|---:|---:|
+| full match | 155/200 | **156** | 156 |
+| exactly correct page count | 165 | **166** | 166 |
+| total absolute page error | 95 | **93** | 93 |
+| total absolute word error | 6971 | **6898** | 6898 |
+| major pages (155 in common) | 562 | **367** | 367 |
+| summed \|ink\|% (155 in common) | 1023.92 | **830.13** | 830.13 |
+
+**Major pages −35%, unaccounted ink −18.9%, and no batch fell.** 28 documents moved on ink;
+the head of the list is `FAA 2025-26 Holdover Tables.docx` at **154 major pages → 10**, then
+`SPA-11_mcar_part-11_v2.9.docx` 26 → 4 and `SPA-06_mcar_part-6_and_IS_v2.9.docx` 10 → 9 with
+its ink halved.
+
+**Measured reach: 28 of 200 documents whose rendering changed.** The census — 56 of 134 DOCX
+declare a `w:pBdr` — is the *ceiling*, not the reach, and reporting it as the reach would have
+overstated by two-fold.
+
+### The one document that got worse is not a regression, and the check that showed it
+
+`batch-017/docx/Sample_SQMS_Program.docx` went 2 major pages → 3. Its page 46 draws four
+0.65 pt rules at the paragraph's print width, under four lines of underscores, that the
+reference does not draw — and **the baseline render draws all four too**, 1.5 pt higher. The
+border allowance moved them, and the page crossed the major threshold; no new ink was
+introduced. Named and unfixed: it is not a paragraph border, and it is the next thing to look
+at on that document.
+
+Finding it did turn up a real defect, though, which is the third column above: two joined
+paragraphs keep whatever `w:spacing` stands between them and LibreOffice runs the box's side
+rules across it, where ours stopped at each paragraph's own text and left a hole at every
+boundary — nineteen of them down that one page. Fixed, and **the fix is invisible to every
+instrument in the gate**: the whole-track sweep after it is byte-identical to the one before
+across all 200 rows, and the image diff moves not one document, because a 0.5 pt wide hole
+6 pt tall is a third of a pixel at 512 px on the long edge. It rests on the operator-level
+comparison against the reference's own strokes and on nothing else. Worth stating plainly:
+**a correct fix with no metric to show for it is the expected case once the borders are drawn
+at all.**
+
+### Still open on this track, in the order I would take them
+
+1. **`w:pBdr` for `.doc`, `.rtf` and `.odt`.** The model, the layout and the drawing are
+   format-agnostic; only the DOCX reader is wired. `sprmPBrcTop`'s family, `\brdrt` and
+   `fo:border-*` all build the same `ParagraphBorderSet`, and 66 of the track's 200 documents
+   are binary `.doc`.
+2. **The remaining 367 major pages**, ranked by \|ink\|% — the head is still
+   `FAA 2025-26 Holdover Tables.docx` (41.83), `150_5300_13_chg12.doc` (69.07),
+   `150_5300_13_chg8.doc` (55.62) and `150_5335_5a.doc` (50.29). The three `.doc` files in that
+   list are all from one producer and none has been looked at.
+3. **`PAGE` in a header or footer still prints the producer's cached result.** Confirmed live
+   on the Holdover Tables document: the reference prints "3 of 87" on page 3 and we print
+   "6 of 87" on every page. It is a feature rather than a wiring change — a header flow is laid
+   out once and reused, and the number's width differs per page.
+4. **`w:tblStylePr` conditional formatting is not worth a round.** Round twenty-one listed it
+   first, as "the rest of the same 46 documents". Censused over every part that can hold a
+   `w:tbl` and over each used style's `w:basedOn` closure: 54 words documents name a
+   `w:tblStyle` at all and **7** reach a style carrying any `w:tblStylePr`, one of which states
+   `w:tblLook w:val="0000"` so no band applies to it either.
+5. The largest single word-gate failures left, none of them on `TODO.raster-ceiling.md`:
+   `UG.CAO.00006 … User Guide` (+670 words, 30/29 pages), `xx_SETIS_PWS_template_10.19.22.docx`
+   (−541, page-exact), `150_5300_13_chg10.doc` (+488), `CRIF - Spécification technique` (−426,
+   33/29). The five `TE.CAO`/`UG.CAO` documents are one producer's family and split both ways
+   on sign, which is the shape of a single cause.
