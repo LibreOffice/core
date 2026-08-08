@@ -90,7 +90,6 @@ public sealed class TitlePageFurnitureTests
     /// </remarks>
     [Theory]
     [InlineData("title-page-header.docx")]
-    [InlineData("title-page-header.doc")]
     [InlineData("title-page-header.rtf")]
     public void TheCorpusFixtureLeavesItsTitlePageBare(string name)
     {
@@ -103,6 +102,48 @@ public sealed class TitlePageFurnitureTests
 
         pages.Pages[0].Header.ShouldBeNull($"{name}: the title page states no header of its own");
         pages.Pages[1].Header.ShouldNotBeNull($"{name}: every later page keeps the running head");
+    }
+
+    /// <summary>
+    /// The <c>.doc</c> of the same document says it differently, and the difference is real: its
+    /// first-page header story exists and holds one empty paragraph.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The three formats above name no first-page part at all, so there is nothing on that page.
+    /// A DOC states the same intention by writing a story of length two — one empty paragraph and its
+    /// mark — which <c>Read_HdFt</c> reads (<c>2 &lt;= nLen</c>) into a header that exists and is blank.
+    /// LibreOffice 24.2.7.2's own flat-ODF export of this fixture is the decisive reading:
+    /// <c>&lt;style:header-first&gt;&lt;text:p text:style-name="Standard"/&gt;&lt;/style:header-first&gt;</c>
+    /// beside a populated <c>&lt;style:header&gt;</c>.
+    /// </para>
+    /// <para>
+    /// So the page still looks bare and the model no longer says "no header": it says "a header with
+    /// nothing in it", which is what pushes a body down on a section that reserves no header band.
+    /// Here the band is exactly one line — <c>dyaTop</c> 70.85 pt against <c>dyaHdrTop</c> 56.70 —
+    /// so nothing moves, and asserting that is the point of the second half.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void TheDocFixtureGivesItsTitlePageAnEmptyHeaderInstead()
+    {
+        using IDocument document = new WordProcessingReader()
+            .Read(DocumentSource.FromFile(Corpus.Require("title-page-header.doc")));
+
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+        pages.Pages.Count.ShouldBeGreaterThan(1, "the fixture runs past its first page");
+
+        PlacedFlow? first = pages.Pages[0].Header;
+        first.ShouldNotBeNull("the first-page story exists, so the header does");
+        first!.Blocks.Count.ShouldBe(1, "and holds the one empty paragraph the story does");
+        ((PageParagraph)first.Blocks[0]).Text.ShouldBeEmpty();
+
+        HeaderText(pages.Pages[1]).ShouldBe("Running head on every page but the first");
+
+        // The blank head fits the band the section reserves, so the body starts where it would with no
+        // header at all — which is what makes this a model change and not a rendering one.
+        pages.Pages[0].BodyArea.Y.ShouldBe(pages.Pages[1].BodyArea.Y);
     }
 
     private static List<LaidOutPage> Paginate(bool hasTitlePage, bool withFirstSlot)

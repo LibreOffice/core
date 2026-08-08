@@ -362,10 +362,20 @@ public sealed partial class Ww8DocumentReader
     /// not match the order the other formats use, so it is spelled out in <see cref="FurnitureSlots"/>.
     /// </para>
     /// <para>
-    /// Word writes all six whether the section uses them or not, so most hold nothing but a paragraph
-    /// mark; an empty story therefore means "this section has no such header" rather than "it has an empty
-    /// one", and filling the slot with the empty paragraph would draw a blank line on every page and push
-    /// nothing anywhere. Emptiness is the only thing distinguishing the two.
+    /// A slot the section does not use has a story of <em>no length at all</em>, and that is the only thing
+    /// distinguishing it from a slot holding one blank line. LibreOffice draws the line in the same place
+    /// and states it twice: <c>wwSectionManager::SetSegmentToPageDesc</c> clears the slot's bit out of the
+    /// synthesised <c>grpfIhdt</c> only when the story's length is zero (<c>ww8par6.cxx</c>:1247), and
+    /// <c>Read_HdFt</c> reads the text only when the length is two or more (<c>ww8par.cxx</c>:2500) —
+    /// leaving a story of one paragraph mark as a header that exists and holds one empty paragraph.
+    /// </para>
+    /// <para>
+    /// So an empty paragraph read out of a story that exists is a blank line to lay out, not a placeholder
+    /// to drop, and dropping it is not free: the header still occupies its band, and where a section
+    /// reserves none — <c>dyaTop == dyaHdrTop</c> — that band is what pushes the body down. Measured across
+    /// the 66 DOC files of the sample corpus, <em>no</em> story has a length of one, so the case that
+    /// motivated dropping them does not arise; fourteen documents have a story of length two, which is one
+    /// empty paragraph and its mark.
     /// </para>
     /// <para>
     /// Six stories per section, so the section's own six start six further along for each section before
@@ -396,17 +406,6 @@ public sealed partial class Ww8DocumentReader
             // no table has and push the body text down by the difference on every page.
             List<Ww8LayoutBlock> blocks = ReadLayoutBlocks(stories[story], keepTrailingEmpty: false);
 
-            // Word writes all six stories whether the section uses them or not, so an empty paragraph is a
-            // placeholder rather than a blank line — but only when there is nothing else in the story.
-            //
-            // "Nothing else" has to include the shapes anchored in it. A running head that is one logo and
-            // no words is an ordinary thing, and its paragraph reads back with no text at all: the U+0001
-            // that stood for the picture is consumed by the frame it made (see CollectFrame), so testing
-            // the text alone throws the whole header away and leaves the body starting at the top margin.
-            blocks.RemoveAll(
-                block => block.Paragraph is { Text.Length: 0, Frames: null or { Count: 0 } }
-                    && block.Table is null);
-
             if (blocks.Count == 0) continue;
 
             (bool isHeader, Model.PageFurnitureSlot which) = FurnitureSlots[slot];
@@ -415,6 +414,67 @@ public sealed partial class Ww8DocumentReader
 
         return new Ww8LayoutFurniture(headers, footers);
     }
+
+    /// <summary>
+    /// One blank running head or foot: a single empty paragraph in the document's default style.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// What <c>Read_HdFt</c> leaves behind when it turns a slot on and has no text to put in it —
+    /// <c>SwFormatHeader(true)</c> creates the frame whether or not the story was read
+    /// (<c>ww8par.cxx</c>:2540), so a section that states a header for one page kind alone still gets an
+    /// empty one for the others. It draws nothing and it is not nothing: it occupies the header band, and
+    /// a section that reserves no band pushes its body down by the whole of it.
+    /// </para>
+    /// <para>
+    /// The default paragraph style rather than Word's <c>header</c> style, and the difference does not
+    /// reach the page. LibreOffice puts the paragraph in <c>Header</c>, whose definition in its own
+    /// flat-ODF export of both corpus documents that need this is <em>Standard plus two tab stops</em> —
+    /// and a tab stop cannot change the height of a line with nothing on it, which is the only quantity an
+    /// empty running head contributes. Matching by style would mean matching a built-in style identifier
+    /// this stylesheet reader does not carry, for a difference of nought.
+    /// </para>
+    /// </remarks>
+    /// <param name="section">The section the paragraph belongs to, for the section-indexed lookups.</param>
+    public List<Ww8LayoutBlock> BlankFurniture(int section)
+    {
+        Ww8LayoutFormat layout = default;
+        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveChain(DefaultStyleIndex))
+        {
+            layout = ApplyLayoutSprms(layout, inherited);
+        }
+
+        Ww8LayoutFormat character = default;
+        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveCharacterChain(DefaultStyleIndex))
+        {
+            character = ApplyLayoutSprms(character, inherited);
+        }
+
+        Length size = SizeOf(character);
+
+        Text.Layout.ParagraphFormat format = layout.ToParagraphFormat(size) with
+        {
+            DefaultTabInterval = DocumentProperties.DefaultTabInterval,
+            TabsRelativeToIndent = false,
+            ClampsTabsAtLineEdge = true,
+        };
+
+        Ww8LayoutParagraph paragraph = new(
+            Math.Max(0, section),
+            string.Empty,
+            format,
+            character.FontIndex is { } index ? Fonts.Name(index) : null,
+            size,
+            character.IsBold == true ? 700 : 400,
+            character.IsItalic == true,
+            LanguageOf(character),
+            IsInTable: false);
+
+        return [new Ww8LayoutBlock(paragraph)];
+    }
+
+    /// <summary>The stylesheet index of the default paragraph style, which WW8 fixes at nought.</summary>
+    private const int DefaultStyleIndex = 0;
 
     /// <summary>How many stories precede the first section's furniture in the header subdocument.</summary>
     private const int SeparatorStories = 6;

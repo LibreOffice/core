@@ -1115,15 +1115,38 @@ public sealed class Paginator
             // holds every line can still be shorter than the content, because the last paragraph's
             // space-after is added to the running height after the last fitting test rather than before.
             Length reach = (used > balanceReach ? used : balanceReach) - state.Top;
+            Length band = columnBottom - columnTop;
 
-            if (reach > columnBottom - columnTop)
+            if (reach > band)
             {
-                state.TooShort(columnBottom - columnTop);
+                // Every line of the section went into the columns and the content still reaches past the
+                // band it was given. When that band is the tallest there is — the section's whole
+                // remaining height, which is what `High` holds until some trial fits — there is nothing
+                // shorter to try and nothing taller to be had, so the overhang is kept and the search
+                // ends.
+                //
+                // Without this the search cannot end at all, and it is not a slow path but a hung one:
+                // `TooShort` has no `Settled` to set, so once it has raised `Low` to `High` it hands back
+                // the same candidate for ever, and the fill is restored to the section's first block each
+                // time round. No page is emitted while that happens, so `MaxPages` never bites. Measured
+                // on `150_5300_13_chg10.doc`, which reaches this state at its twenty-fifth page as soon as
+                // anything shortens the body — a running head, for instance — and then never returns.
+                if (!state.Fitted && band >= state.High)
+                {
+                    used = state.Top + band;
+                    column = 0;
+                    balance = null;
+                    columnTop = Length.Zero;
+                    columnBottom = bodyHeight;
+                    return;
+                }
+
+                state.TooShort(band);
                 RestoreBalanceStart();
                 return;
             }
 
-            state.Fits(columnBottom - columnTop);
+            state.Fits(band);
 
             if (state.Settled)
             {

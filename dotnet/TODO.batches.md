@@ -8011,3 +8011,166 @@ count unchanged at 10.
   parts over 7 documents, the larger half of the weight work. The design is decided and
   recorded in `Paperless.Presentations/TODO.md`: a stamping pass beside `InFamily`, not twenty
   more arguments.
+## Words, round twenty-eight, at `9ef9b16fa` — the running heads a DOC does not write down
+
+### The baseline reproduced the brief to the digit
+
+Whole-track sweep against a checksummed CLI snapshot: **155/200, absolute page error 101,
+165 exactly-correct page counts, absolute word error 7198**, and every per-batch figure the
+brief carried. 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9, 011 9/10,
+012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10, 019 4/10, 020 3/10,
+021 0/2.
+
+### The brief's first item does not exist, and the mechanism next to it does
+
+The brief asked for the reach of a Word 97 header story **holding one paragraph mark** to be
+measured before anything was written. Measured, over the header PLC of all 66 `.doc` files in
+the track: **no story anywhere has a length of one.** Every story is of length nought or of
+length two and up. So the case the brief describes — `grpfIhdt` keeping a bit that `Read_HdFt`
+then declines to read — never arises on this corpus, and the fix it asked for would have moved
+nothing at all.
+
+What *is* there, at the same place, is three separate defects. The census that refuted the
+first found all three, and the decisive reading for each was LibreOffice's own flat-ODF export
+rather than its source:
+
+- **`fFacingPages` was never read.** The `Dop`'s lowest bit (`ww8scan.cxx`:7643) decides two
+  things: whether the even header and footer stories go into the synthesised `grpfIhdt`
+  (`ww8par6.cxx`:1234), and whether the left page stops sharing the right page's head
+  (`SetUseOn` adds `HeaderShare` exactly when the flag is *clear*, `ww8par.cxx`:4319). Nothing
+  read it, so every DOC section had `HasDifferentEvenPages` false and its even stories, though
+  read, could never reach a sheet. **Eight of the track's 66 `.doc` set it and all eight carry
+  even stories.**
+- **A story that exists and holds only empty paragraphs was dropped.** The comment defending
+  that said "Word writes all six stories whether the section uses them or not, so most hold
+  nothing but a paragraph mark"; the census says a slot the section does not use has a story of
+  **no length at all**. Fourteen documents in the track hold a story of length two, which is one
+  empty paragraph and its mark, and `A_320.doc` holds six of them in its first section.
+- **"Cannot have left without right"** (`#i17196#`, `Read_HdFt`): every slot a section turns on
+  sets the header on the *master* page format as well as on its own, so a section stating an
+  even-page head alone still has an empty one on its odd pages — and a title page never borrows
+  the master's, getting a blank of its own instead. `150_5300_13_chg8.doc` is the first case and
+  `150_5300_13_chg12.doc` the second.
+
+An empty running head draws nothing and is not nothing: it occupies the header band, and where
+a section reserves none — `dyaTop == dyaHdrTop`, which is most sections of these documents — the
+whole of it lands on the body. That is the brief's "14.15 pt offset", and `chg8`'s page one goes
+from **709 one-sided `pdf-ops.py` records to 19**.
+
+### A latent hang in round twenty-seven's balanced columns, found by exposing it
+
+`150_5300_13_chg10.doc` rendered in ten seconds at the baseline and, with a running head
+shortening its body, did not return at all — killed after six minutes and forty seconds, where
+`batch-check.sh` recorded it as `ours-failed` and nothing said why. `dotnet-stack` put the
+thread inside `Paginator.Fill` itself.
+
+The bisection has two verdicts and only one of them can stop. `Fits` settles once the bounds
+meet; **`TooShort` has nothing to settle**, because "too short" is never an answer on its own.
+So a trial at the tallest band there is — the section's whole remaining height — that still
+comes out too short hands back the same candidate for ever, restoring the fill to the section's
+first block each time round. No page is emitted while that happens, so `MaxPages` never bites.
+It is reachable whenever the last paragraph's space-after exceeds what is left of the body, and
+it was reachable before this round: nothing about the running-head work created it.
+
+### What the scoreboard did, said plainly
+
+| | before | after |
+|---|---:|---:|
+| parity gate | 155 | **154** |
+| absolute page error | 101 | **81** |
+| exactly-correct page count | 165 | **164** |
+| absolute word error | 7198 | **7075** |
+| summed `\|ink\|%`, 154 common documents, 1570 pages | 720.07 | **692.83** |
+| major pages, same 1570 | 343 | **333** |
+
+**The gate lost a document and everything continuous improved.** The invariant holds on both
+sides: 720.07 ≥ 548.14 signed, 692.83 ≥ 535.15.
+
+The one lost match is `150_5300_13_chg12.doc`, 33 pages against 33 and now 34 — and its text is
+materially closer, which the token multiset says and `wc -w` cannot:
+
+| document | before | after |
+|---|---|---|
+| `150_5300_13_chg12.doc` | 614 (over 334, under 280) | **501 (over 305, under 196)** |
+| `A_320.doc` | 263 (over 31, under 232) | **109 (over 31, under 78)** |
+| `150_5300_13_chg8.doc` | 693 (over 384, under 309) | **679 (over 382, under 297)** |
+| `150_5300_13_chg10.doc` | 2438 (over 1657, under 781) | 2439 (over 1670, under 769) |
+| `762.doc` | 37 (over 9, under 28) | 54 (over 27, under 27) |
+
+`chg12`'s under-draw falls by 30% and `A_320`'s by two thirds. The three `150_5300_13_*`
+figures reproduce round twenty-seven's own to the digit, which is the corroboration that the
+instrument agrees with itself across rounds.
+
+The page-count movement is where the round is won: **`A_320.doc` 119 → 141 against 150** (its
+first section states six stories of length two and reserves no header band, so every page of it
+was a running head and a running foot too tall), `762.doc` 21 → 22 against 23, `chg8` 23 → 22
+against 18, against `chg10` 80 → 83 and `chg12` 33 → 34 the other way. `762.doc` also reaches
+the reference's word count **exactly**, 4142 against 4142, as does `FMRBullletinB-28.doc`.
+
+### Reach, measured by rendering
+
+Both sweeps' PDFs byte-compared with `SOURCE_DATE_EPOCH` pinned: **34 of 200 documents changed,
+all of them `.doc`** — half of the track's 66. The gate sees 16 of those 34 and the image diff
+is what accounts for the rest. Reference PDFs are *not* byte-comparable between runs, because
+`soffice` stamps its own `/CreationDate` and honours nothing; their page and word columns are
+identical row for row across the two sweeps, which is the check that says the reference held
+still.
+
+### Verified by putting five defects back
+
+| defect put back | caught by |
+|---|---|
+| `fFacingPages` never read | `AnEvenHeaderIsDrawnOnEvenPagesOnly(".doc")` |
+| a story's empty paragraphs dropped | `ABlankRunningHeadStillTakesItsLine` |
+| no `#i17196#` completion at all | `AnEvenOnlyHeaderStillGivesTheOddPagesABlankOne`, `ATitlePageWithNoHeadOfItsOwnDrawsNoRunningHead` |
+| a title page borrows the master's head | `ATitlePageWithNoHeadOfItsOwnDrawsNoRunningHead` |
+| the balance search retries the same band | `ASectionOverhangingEveryBandStillEndsTheSearch` (its thirty-second timeout) |
+
+The middle two were caught by **nothing** on the first attempt, and the reason is worth
+recording because it decides how the fixtures had to be made: **no exporter writes a header
+story of length nought.** LibreOffice's own DOC filter writes one paragraph mark for a slot it
+does not use — length two, which reads as a blank head by the ordinary route — so on any
+document `soffice` can produce, the two rules are indistinguishable. Only Word writes an empty
+story, which is what `chg8` and `chg12` do.
+
+So `blank-odd-head.doc` and `title-page-no-head.doc` are hand-edited: their `PlcfHdd` has one
+story's length struck to nought, the CP going to the story before it. Both then round-trip
+through `soffice` to a flat ODF that states the expected answer —
+`<style:header><text:p text:style-name="Header"/></style:header>` beside a populated
+`<style:header-left>` for the first, and `<style:header-first><text:p/></style:header-first>`
+beside a populated `<style:header>` for the second — and that export is what the tests assert
+against. `facing-pages-even-header.doc`/`.docx` and `blank-running-head.doc`/`.docx` are
+ordinary `soffice` conversions and need no such note.
+
+One existing assertion changed rather than being deleted: `TheCorpusFixtureLeavesItsTitlePageBare`
+covered `title-page-header.doc`, whose first-page header story is length two. LibreOffice writes
+`<style:header-first><text:p/></style:header-first>` for it, so the header exists and is blank;
+the old assertion described our model rather than the reference's. Its replacement asserts the
+header exists, draws nothing, and moves the body nowhere — the band there is 14.15 pt against a
+13.80 pt line, so nothing does move, which is what makes it a model change and not a rendering
+one.
+
+### Test counts
+
+Core 249, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+**WordProcessing 690** (683 + 8 new − 1 replaced), Spreadsheets 498, Presentations 529,
+Fidelity 550, 0 skipped throughout, with the tree rebuilt after the last reintroduced defect
+came back out.
+
+### What the next round should take
+
+1. **`150_5300_13_chg12.doc`'s extra page**, which is the round's one lost match and the only
+   adverse gate movement. Its page one now matches the reference; its page **two** carries the
+   even running head where the reference draws none, and the reference's page two prints `i`
+   in its footer where ours prints `31` — so the divergence is a section boundary or a page-number
+   restart rather than the furniture, and it should be diagnosed as one.
+2. **Unequal column widths**, untouched this round and still the model gap the brief named:
+   `chg8` states `style:column style:rel-width="4680*"` and `"5112*"`, which `PageGeometry`
+   cannot hold. Note the census: **zero DOCX in the track declare `w:cols w:equalWidth="0"`**,
+   so this is a `.doc` shape only and its ceiling is small.
+3. **The blank page `chg8` emits** between its title page and its first chapter.
+4. **The even page with no even story.** `Read_HdFt` gives the left page a head only on the even
+   iteration itself, so a facing-pages section with no even story has **none** on its even pages;
+   our furniture dictionary reads an absent slot as "fall back to Default" and cannot say it.
+   Not implemented, not measured, and it needs a slot value meaning "nothing" rather than a
+   missing key.

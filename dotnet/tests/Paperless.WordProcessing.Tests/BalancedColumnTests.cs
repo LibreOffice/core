@@ -138,6 +138,45 @@ public sealed class BalancedColumnTests
         (after.Top - deepestBottom).ShouldBeGreaterThanOrEqualTo(Length.FromPoints(11.9));
     }
 
+    /// <summary>
+    /// A section whose trailing space cannot fit in <em>any</em> band still ends the search.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The bisection has two verdicts and only one of them can stop: <c>Fits</c> settles once the bounds
+    /// meet, and <c>TooShort</c> has nothing to settle, because "too short" is never an answer on its own.
+    /// So a trial at the tallest band there is — the section's whole remaining height — that still comes
+    /// out too short hands back the same candidate for ever, restoring the fill to the section's first
+    /// block each time round. It is a hang rather than a slow path, and nothing above the paginator can
+    /// see it: no page is emitted, so <c>MaxPages</c> never bites.
+    /// </para>
+    /// <para>
+    /// Reachable whenever the last paragraph's space-after exceeds what is left of the body, which is why
+    /// it stayed latent — <c>150_5300_13_chg10.doc</c> paginated in ten seconds until a running head
+    /// shortened its body, and then never finished at all.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public async Task ASectionOverhangingEveryBandStillEndsTheSearch()
+    {
+        Task<List<LaidOutPage>> run = Task.Run(
+            () => Paginate(balances: true, spaceAfter: Length.FromPoints(1000)));
+
+        Task first = await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken));
+
+        first.ShouldBeSameAs(
+            run, "the search has to end even when no band holds the section's trailing space");
+
+        LaidOutPage page = (await run)[0];
+
+        // And it ends by keeping the trial's placement rather than by dropping the section. Which column
+        // the lines land in is deliberately not asserted: no trial ever fitted, so there is no balanced
+        // placement to keep, and filling in order is what an unbalanced section does anyway.
+        page.Lines.Count(line =>
+                line.ParagraphIndex >= SectionStart && line.ParagraphIndex < SectionEnd)
+            .ShouldBe(SectionLines);
+    }
+
     /// <summary>A line records the columns it was placed in, not the ones the page ends up with.</summary>
     /// <remarks>
     /// One page holds all three sections here, and the page is written when the last of them is current.
