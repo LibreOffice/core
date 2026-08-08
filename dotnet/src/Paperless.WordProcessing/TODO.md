@@ -105,6 +105,20 @@ indexes or resolvable style chains.
       where 33 is PAGE, 37 PAGEREF and 31 and 32 DATE and TIME — says the same thing as the instruction
       sitting beside it in the same character stream, and one mapping shared by three formats cannot
       disagree with itself the way two mappings could.
+- [x] **The two fields a paginating renderer must recompute**, in `Layout/PageFields.cs`. The item
+      above is right that a *reader* keeps the cached result; it is wrong as a description of what
+      reaches the page. `PAGE` and `NUMPAGES` are the pair whose cache describes the document the
+      producer had rather than the one being laid out, and until this existed a nine-page footer
+      printed the same number nine times — measured on `batch-010/195584360.docx`, which printed
+      "Page 10" on all twenty of its pages. The readers record where the cached result *sits*
+      (`PageParagraph.Fields`) and `PageFurnitureSet` substitutes before `FlowLayouter` sees the
+      blocks, because the new number has a different advance and has to take part in line breaking.
+      The sequence is the section's — `w:pgNumType/@w:fmt`, `sprmSNfcPgn`, `style:num-format` — with
+      a DOCX field's own `\*` picture switch overriding it. Measured reach: 104 of the 200 corpus
+      word documents changed. **Three things are deliberately not done**: `NUMPAGES` (the total is
+      not known while the running head is laid out), `PAGE` in body text (circular — the page a
+      paragraph lands on depends on the paragraphs before it), and RTF, whose layout path does not
+      carry the spans.
 - [x] **Bookmarks as ranges**, from all four formats, over the model's own node-plus-offset positions.
       Each format pairs the two halves by something different and only two by the name: DOCX by `w:id`,
       ODF and RTF by the name, WW8 by an index one table holds into the other. **`PlcfBkf` and `PlcfBkl`
