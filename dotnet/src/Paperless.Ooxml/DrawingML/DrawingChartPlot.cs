@@ -177,6 +177,9 @@ public static class DrawingChartPlot
             ValueAxisVisible = Shown(axes.Value),
             SecondaryAxisVisible = Shown(axes.Secondary),
             CategoryAxisVisible = Shown(axes.Domain ?? axes.Category),
+            ValueLabelsVisible = Labelled(axes.Value),
+            SecondaryLabelsVisible = Labelled(axes.Secondary),
+            CategoryLabelsVisible = Labelled(axes.Domain ?? axes.Category),
             Legend = LegendOf(Child(chart, "legend")),
             Background = FillOf(Child(chartSpace, "spPr"), theme),
             PlotBackground = FillOf(Child(plotArea, "spPr"), theme),
@@ -362,6 +365,21 @@ public static class DrawingChartPlot
     /// </remarks>
     private static bool Shown(XElement? axis)
         => axis is null || Number(Child(axis, "delete")) is not 1.0;
+
+    /// <summary>
+    /// Whether an axis draws its tick labels — <c>c:tickLblPos val="none"</c> says it does not.
+    /// </summary>
+    /// <remarks>
+    /// One line in <c>AxisConverter::convertFromModel</c>:
+    /// <c>aAxisProp.setProperty(PROP_DisplayLabels, mrModel.mnTickLabelPos != XML_none)</c>
+    /// (<c>oox/source/drawingml/chart/axisconverter.cxx:221</c>). Every other value —
+    /// <c>nextTo</c>, <c>high</c>, <c>low</c>, and an absent element — leaves the labels on and
+    /// only moves where they sit, which this does not model. It is deliberately *not* folded into
+    /// <see cref="Shown"/>: the axis line and its ticks survive, and the plot area gives up the
+    /// tick's length either way. See <c>ChartPlot.ValueLabelsVisible</c>.
+    /// </remarks>
+    private static bool Labelled(XElement? axis)
+        => !string.Equals(Value(Child(axis, "tickLblPos")), "none", StringComparison.Ordinal);
 
     private static NumberFormatCode? FormatOf(XElement? axis)
     {

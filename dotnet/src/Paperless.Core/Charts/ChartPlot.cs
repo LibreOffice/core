@@ -309,6 +309,35 @@ public sealed partial record ChartPlot
     /// <summary>Whether the secondary value axis is drawn.</summary>
     public bool SecondaryAxisVisible { get; init; } = true;
 
+    /// <summary>Whether the value axis' tick labels are drawn.</summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Hiding the labels is not deleting the axis, and the two reserve different
+    /// amounts.</strong> <c>c:tickLblPos val="none"</c> maps to chart2's <c>DisplayLabels</c>
+    /// (<c>oox/source/drawingml/chart/axisconverter.cxx:221</c>,
+    /// <c>aAxisProp.setProperty(PROP_DisplayLabels, mrModel.mnTickLabelPos != XML_none)</c>),
+    /// which <c>VAxisProperties</c> reads at <c>:307</c> and which suppresses the labels alone —
+    /// the axis line and its tick marks are still drawn. <see cref="ValueAxisVisible"/> is
+    /// <c>c:delete</c> and removes all three.
+    /// </para>
+    /// <para>
+    /// Measured on a probe over <c>chart-face-theme-minor.pptx</c> with
+    /// <c>tickLblPos="none"</c> on its category axis: the reference stops drawing
+    /// <c>Q1 Q2 Q3 Q4</c> and its plot area's bottom edge drops 12.70 pt, keeping the 4.25 pt
+    /// tick. Reading only <c>c:delete</c> both drew four labels the reference does not and held
+    /// the plot area 12.79 pt short.
+    /// </para>
+    /// </remarks>
+    public bool ValueLabelsVisible { get; init; } = true;
+
+    /// <summary>Whether the category axis' tick labels are drawn.</summary>
+    /// <remarks><c>c:catAx/c:tickLblPos</c>; see <see cref="ValueLabelsVisible"/>.</remarks>
+    public bool CategoryLabelsVisible { get; init; } = true;
+
+    /// <summary>Whether the secondary value axis' tick labels are drawn.</summary>
+    /// <remarks><c>c:valAx/c:tickLblPos</c>; see <see cref="ValueLabelsVisible"/>.</remarks>
+    public bool SecondaryLabelsVisible { get; init; } = true;
+
     /// <summary>Whether the chart has a pair of axes at all.</summary>
     /// <remarks>
     /// A pie has neither, so it gets no axis lines, no ticks, no gridlines and — the part that
