@@ -4606,7 +4606,12 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
     {
         SwRect aFrameAreaRect(getFrameArea());
 
-        if (IsRightToLeft())
+        if (IsVertical())
+        {
+            aFrameAreaRect.AddTop(-375);
+            aFrameAreaRect.Bottom(aFrameAreaRect.Top() + 300);
+        }
+        else if (IsRightToLeft())
         {
             aFrameAreaRect.AddRight(75);
             aFrameAreaRect.Left(aFrameAreaRect.Right() + 300);

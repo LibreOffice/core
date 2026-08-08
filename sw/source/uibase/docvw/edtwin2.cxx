@@ -208,7 +208,12 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
             do
             {
                 aFrameAreaRect = pContentFrame->getFrameArea();
-                if (pContentFrame->IsRightToLeft())
+                if (pContentFrame->IsVertical())
+                {
+                    aFrameAreaRect.AddTop(-375);
+                    aFrameAreaRect.Bottom(aFrameAreaRect.Top() + 300);
+                }
+                else if (pContentFrame->IsRightToLeft())
                 {
                     aFrameAreaRect.AddRight(375);
                     aFrameAreaRect.Left(aFrameAreaRect.Right() - 300);
