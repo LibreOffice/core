@@ -6525,3 +6525,43 @@ Two assertions, **each verified by putting the defect back and watching it fail*
 3. **The `.ppt` twin of the picture recolour** (`DFF_Prop_pictureBrightness`/`pictureContrast`),
    unchanged from round nineteen and **still unmeasured for reach**: I did not count how many
    corpus `.ppt` carry either property either.
+
+## Three tracks merged and verified together at `73934b1b5`
+
+Words round twenty-two, slides round twenty and sheets rounds twenty-two and twenty-three all
+landed on the branch in sequence. The figures in each round's own section are the agent's,
+measured in its worktree; these are the branch's.
+
+Every project green at its expected count, **0 failed and 0 skipped in all eleven**, zero build
+warnings, verified after each merge rather than once at the end:
+
+| | before the round | now |
+|---|---:|---:|
+| Core | 243 | 243 |
+| Containers | 109 | 109 |
+| Text | 240 | 240 |
+| Vector | 291 | 291 |
+| Rendering | 115 | **119** |
+| Markup | 259 | 259 |
+| OpenDocument | 125 | 125 |
+| WordProcessing | 608 | **619** |
+| Spreadsheets | 446 | **470** |
+| Presentations | 520 | **523** |
+| Fidelity | 545 | **546** |
+
+Two of the three merges conflicted, both only in this file and both because two rounds appended
+their sections to the end of it. Resolved by keeping both sides — which is the standing rule on
+this branch and worth restating, because the tempting resolution is to pick the newer section
+and it silently drops a round's record.
+
+### What the round says about the gate
+
+Four fixes landed across the three tracks. **Every one of them is real, measured by rendering,
+and moved the scoreboard by zero or one document** — see the skill's "a real fix that moves no
+verdict". `batch-check.sh` decides on page count, word count and *unembedded* fonts; a face
+name, a sub-pixel stroke, a 0.4% font size and a spacing scale reach none of those. Three of the
+four were found only by instruments below the gate, and two of those only by running an operator
+diff over documents that **already passed**, which nothing had done before this round.
+
+The track verdicts are therefore unchanged and that is not a stalled round: words 156/200,
+slides 151/163, sheets 144/171.

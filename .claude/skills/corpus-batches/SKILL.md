@@ -202,6 +202,41 @@ magnitude, the gate is measuring a difference in rendering strategy rather than 
 Further progress there needs a pixel metric, not a word count. Say so and switch instruments
 rather than driving the number down by making the output worse.
 
+#### The other ceiling: a real fix that moves no verdict
+
+The section above is about the gate scoring good output as failure. This one is about the gate
+not scoring at all — and it arrived on all three tracks in the same round, which is what makes
+it a property of the project rather than a run of bad luck:
+
+| Round | The fix | Measured reach | Verdicts moved |
+|---|---|---|---:|
+| sheets | `/BaseFont` named the family, not the face | 156 of 171 documents changed; font-name set matching the reference went 11 → 131 | **0** |
+| sheets | drawn font size, fitted through the reference device | 48 of 171 documents changed a drawn size; probe agreement 117/194 → 194/194 | **0** |
+| words | a border box joined across two paragraphs | sweep byte-identical across all 200 rows; image diff moves nothing | **0** |
+| slides | the fit's spacing scale reaching a paragraph's space | `\|ink\|%` 1603.08 → 1583.00; unexplained pages 325 → 304 | **0** |
+
+Every one of those is real, measured and worth having. Three are invisible to `batch-check.sh`
+by construction — it decides on page count, word count and *unembedded* fonts, and a face name,
+a sub-pixel stroke and a 0.4% font size reach none of them. The fourth is visible only to the
+census.
+
+Three things follow, and the fourth is the one that actually costs rounds:
+
+- **"Nothing moved" is the honest headline, and burying it is the failure.** All four agents led
+  with it. A round that reports a fix's mechanism and reach while stating plainly that the
+  scoreboard did not move is a good round; one that quotes the reach and lets the reader assume
+  the score followed is how a track's recorded position drifts away from its real one.
+- **Measure reach by rendering, never by censusing.** The census is the ceiling, not the reach,
+  and it has overstated by two-fold (56 of 134 DOCX declare a `w:pBdr`; 28 documents actually
+  changed) and by an order of magnitude elsewhere. Quote it as a ceiling and label it as one.
+- **When the gate goes quiet, go down the instrument list, not sideways.** The two font findings
+  were invisible until somebody ran an operator diff over documents that *already passed* —
+  which nothing had ever done, and which found two thirds of them differing.
+- **A fix that no instrument can see needs saying so in those words.** The joined border box
+  rests entirely on comparing operators against the reference's own strokes, because a
+  0.5 pt × 6 pt hole is a third of a pixel at 512 px. That is a legitimate justification and it
+  must not quietly become the normal standard of evidence.
+
 #### Flag those pages instead of rediscovering them
 
 `scripts/raster-ceiling-pages.py` builds the list, and the flagged pages live in
