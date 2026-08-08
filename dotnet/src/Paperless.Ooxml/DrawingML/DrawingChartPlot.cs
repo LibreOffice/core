@@ -185,6 +185,7 @@ public static class DrawingChartPlot
             TitleSize = SizeOf(Child(chart, "title")) ?? Length.FromPoints(13),
             AxisTitleSize = AxisTitleSizeOf(plotArea) ?? Length.FromPoints(9),
             LabelSize = AxisLabelSizeOf(plotArea) ?? Length.FromPoints(10),
+            TextFamily = FamilyOf(chartSpace, theme),
             // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
             // its own — the frame is the space — which is what keeps it out of the stretch an
             // ODF chart goes through.
@@ -1148,6 +1149,50 @@ public static class DrawingChartPlot
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// The family a chart part's text is set in, or null when neither the part nor the theme
+    /// names one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The first <em>literal</em> <c>a:latin/@typeface</c> anywhere in the part, then the theme's
+    /// minor Latin face. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
+    /// <em>reference</em> to the theme rather than a name, so taking it as one asks the resolver
+    /// for a family no system has and every label is measured in a fallback.
+    /// </para>
+    /// <para>
+    /// <strong>Falling back to the theme's minor face is not a guess.</strong> All three of the
+    /// automatic text entries LibreOffice's chart import carries — chart titles, axis titles, and
+    /// everything else — name <c>XML_minor</c>
+    /// (<c>oox/source/drawingml/chart/objectformatter.cxx</c>:415-434), and the <c>c:txPr</c> most
+    /// decks write states <c>+mn-lt</c>, which resolves to the same face. Measured on the slides
+    /// corpus: of the fifteen decks holding chart parts, ten state <c>+mn-lt</c> and four state
+    /// nothing at all, so the theme is what decides fourteen of them.
+    /// </para>
+    /// <para>
+    /// This is the same rule <c>DocxPictures.LabelFamily</c> already applies on the words track,
+    /// deliberately: it is one reader serving three families, and two nearly-identical rules in
+    /// two places is how they come apart. Only the final fallback differs — that one ends in
+    /// <c>"Calibri"</c> and this ends in null, because which face "nothing stated" means is the
+    /// consumer's question and a slide, a sheet and a text frame answer it through different
+    /// caches. See <see cref="ChartPlot.TextFamily"/>.
+    /// </para>
+    /// </remarks>
+    private static string? FamilyOf(XElement chartSpace, DrawingTheme? theme)
+    {
+        foreach (XElement latin in chartSpace.Descendants(
+                     XName.Get("latin", OoxmlNamespaces.DrawingML)))
+        {
+            string? typeface = latin.Attribute("typeface")?.Value;
+            if (string.IsNullOrWhiteSpace(typeface)) continue;
+            if (typeface[0] == '+') continue;
+
+            return typeface;
+        }
+
+        return theme?.Fonts?.MinorLatin;
     }
 
     private static Length? AxisTitleSizeOf(XElement plotArea)

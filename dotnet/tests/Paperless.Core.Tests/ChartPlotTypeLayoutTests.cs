@@ -30,7 +30,7 @@ public class ChartPlotTypeLayoutTests
     /// <summary>A measurer with no fonts: half an em per character, 1.15 em a line.</summary>
     private sealed class Ruler : IChartTextMeasurer
     {
-        public DocSize Measure(string text, Length size)
+        public DocSize Measure(string text, Length size, string? family)
             => new(size * (0.5 * text.Length), size * 1.15);
     }
 

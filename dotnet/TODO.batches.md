@@ -7026,3 +7026,219 @@ half was built and moved 9 documents and 0.73% of the ink.
 **Check that the corpus contains the thing before planning a round around it.** A census over
 the sprm ids says 54 of 66 `.doc` carry them and 9 draw a new rule — overstating by six times,
 because Word writes `sprmPBrcTop` with a nil `BRC` constantly.
+## Slides, round twenty-two: a chart's text is the theme's face, and the corpus metric gets worse
+
+Swept whole twice at `4448c2a3f` — a baseline and the one change — 163 documents each, both
+against checksummed CLI snapshots of this worktree, both reusing round twenty's kept reference
+PDFs. 163 rows, no path twice, **0 `ref-failed` and 0 `ours-failed`**, both times. The kept
+references were verified first against a fresh `soffice` 24.2.7.2 on two documents: page counts
+and `pdftotext` md5 identical both times.
+
+| | baseline `4448c2a3f` | after |
+|---|---:|---:|
+| word gate | 151 / 163 | **151 / 163** |
+| `\|ink\|%` | 1582.40 | **1584.92** |
+| major pages | 430 | **430** |
+| census: pages neither class explains | 303 over 91 docs | **304 over 91 docs** |
+| documents whose `\|ink\|%` moved | — | **9**, all of them chart decks |
+
+**The baseline reproduced the brief to the digit for the second round running** — 151/163,
+`|ink|%` 1582.40 and 430 major pages are round twenty-one's post-fix figures exactly.
+
+### The headline is that the fix is right and the number went the wrong way
+
+`|ink|%` **1582.40 → 1584.92**, a regression of 2.52. Nine documents moved: **five better
+(−1.37) and four worse (+3.89)**, and `Demick_JetBlue.pptx` alone is +2.40 of that. No document
+changed verdict in either direction and the per-batch counts are identical across all seventeen
+batches.
+
+The change is kept anyway, and the reason is the skill's own rule about fixes that cancel rather
+than a preference. The mechanism is settled by an authored probe and by the reference's own
+embedded fonts; what the corpus now shows is a *second* error that the first was partly hiding.
+Reverting would restore the number and the two errors.
+
+### `ChartLabel` carried no font family, so every chart drew its text in one hardcoded face
+
+`SlideChart` set every chart label in Liberation Sans, and had done for four rounds. The evidence
+for the constant was `pdffonts` on LibreOffice's own PDF of `chart-bar-deck.pptx` reporting
+Liberation Sans — and **that deck's chart states `<a:latin typeface="Arial"/>` eleven times**,
+which fontconfig substitutes with Liberation Sans. The measurement was right and what it was
+taken as evidence for was not, which is this project's most reliable regularity.
+
+Two corpus decks separate the readings, and neither could have been found by looking at sheets:
+
+- `Demick_JetBlue.pptx`'s theme minor Latin face is **Constantia**, which fontconfig substitutes
+  with **DejaVu Serif** — and the reference draws its chart text in DejaVu Serif at 9.89 pt.
+- `bitesize-writing-a-report.pptx`'s is **Calibri** → **Carlito**, and the reference draws its
+  chart text in Carlito.
+
+Neither is Liberation Sans and the first is not even a sans.
+
+### The probe, because two corpus documents are still only two documents
+
+`research/probes/slides-r22/make-chart-face-probe.py` builds `chart-bar-deck.pptx` three times
+with one thing moved: the theme's minor Latin face set to **Liberation Mono** in all three, and
+the chart part stating no `a:latin` at all, `+mn-lt`, or a literal `Liberation Serif`.
+LibreOffice embeds **LiberationMono, LiberationMono, LiberationSerif**.
+
+That is the pattern only *"the theme's minor face, with a stated `a:latin` overriding it"*
+predicts. A fixed face gives three identical answers; reading only a stated face leaves the first
+two on a fallback. It also matches what LibreOffice's own chart import does: all three of its
+automatic text entries name `XML_minor`
+(`oox/source/drawingml/chart/objectformatter.cxx`:415-434).
+
+### What changed, and it is in `Paperless.Core`
+
+**Flagged loudly, because it is the shared library.** `ChartPlot.TextFamily`,
+`ChartLabel.Family`, `IChartTextMeasurer.Measure` taking a family, and a `ChartText` value that
+binds one family to a measurer once at `ChartLayout.Place` so that the face a label is measured
+in and the face it is drawn in cannot come apart. `DrawingChartPlot.FamilyOf` applies the rule
+the **words track already ships** in `DocxPictures.LabelFamily`: the first literal `a:latin`
+anywhere in the part, then the theme's minor Latin face.
+
+**Only the slides consumer acts on it.** `SheetChart` and `FrameChart` take the argument and
+document in the code that they deliberately ignore it — wiring either changes a track this round
+does not sweep. That is checkable rather than asserted: their whole diff is a signature and a
+comment, and neither reads `ChartLabel.Family`.
+
+### Reach, measured by rendering rather than censused
+
+The 163-document sweep moved **nine** documents and **every one of them is one of the fifteen
+pptx decks carrying a `ppt/charts/chartN.xml`**. Nothing else moved by 0.01. The other six chart
+decks did not move either: three state a literal `Arial`, which already resolved to Liberation
+Sans, and the rest state no family and have no theme minor to fall back to. `.ppt` draws no
+charts at all and the ODP reader still supplies no family, so both are unaffected by
+construction.
+
+| | `\|ink\|%` before | after |
+|---|---:|---:|
+| `Demick_JetBlue.pptx` | 26.49 | **28.89** |
+| `1_Country-Updates_DRC_English.pptx` | 1.15 | **2.31** |
+| `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` | 16.88 | 17.07 |
+| `flying-by-numbers-presentation.pptx` | 12.78 | 12.92 |
+| `Intersil_Italy_CAN_Bus_Transceiver…pptx` | 15.17 | 15.12 |
+| `bitesize-writing-a-report.pptx` | 3.05 | 2.94 |
+| `N2_E_Maestroni_Swarm_COP.pptx` | 3.71 | 3.48 |
+| `171128IPAP.pptx` | 17.27 | **16.87** |
+| `southern-classic-kennesaw…pptx` | 21.93 | **21.35** |
+
+**`Demick_JetBlue.pptx` is reached, and this is what reaching it looks like.** The brief named it
+as the densest unexplained document. Its embedded font set goes from
+`{LiberationSans, Carlito, OpenSymbol}` to `{DejaVuSerif, Carlito, OpenSymbol}`, against the
+reference's `{DejaVuSerif, Carlito, OpenSymbol, DejaVuSerif-Bold}` — the face is now the
+reference's own — and its `|ink|%` gets worse by 2.40, all of it on page 4 (5.26 → 8.73) while
+page 5 improves (4.72 → 3.21). The operator diff on page 4 goes from 36 one-sided records to 33.
+
+### The second error, which the probe localises and this round does not fix
+
+On the authored probe the value axis' labels land **0.36 pt** from the reference with this change
+and **0.96 pt** without it — better — while the legend lands **2.49 pt** out with it and
+**1.39 pt** out without. The composition reserves the legend's width wrongly, and measuring the
+legend in a face too narrow was cancelling part of it. That is the next thing to chase on charts,
+and it is now visible from both sides because the face is no longer confounding it.
+
+### The census was run inside the sweep, which is the sequencing the last round asked for
+
+Round twenty-one lost its census to running it *after* the whole-track sweep: it was starved
+under load, killed so the sweep could finish, and then could not be resumed because the sweep's
+PDFs had been freed. `size-census-doc.py` is `size-census-2.py`'s per-document half, importing
+its `classify()` rather than copying it, and `sweep-track.sh` calls it beside the image diff.
+It finished with the sweep.
+
+**303 pages neither class explains, over 91 documents, measured at `4448c2a3f`** — against round
+twenty's 304 over 91 for an older tree. The other classes: 4199 pages compared, 3541 agreeing, 24
+grid, 138 granularity, 61 ceiling, 132 metafile. After the change: 304 over 91, one page having
+moved from `granularity` to `REAL`.
+
+### The sweep's signed `ink%` was inflated by one per major page, and still is upstream
+
+The brief carries this as round twenty's defect and describes it exactly — *"a count summed into
+a percentage"*, *"differing by exactly one per major page per document"*. **It is still in
+`slides-r21/sweep-track.sh`**, and it was in the baseline measured this morning.
+
+The awk matched page rows with `/^[0-9]/`, which also matches the line `pdf-image-diff.py` ends
+with — `10 pages, 3 with major differences` — whose third field is the major-page count. The
+unsigned column is untouched, because its fourth field on that line is `with`, which adds
+nothing. Measured here: raw 1692.50 against 430 major pages gives a true 1262.50, and **74 of the
+146 documents swept at the time violated the `|ink|% ≥ |ink%|` invariant individually** while the
+track totals still satisfied it — which is why an aggregate-only check does not catch it.
+
+**One correction to the brief.** It states the third column *"totalled 1264.88 where the same sum
+recomputes to 1692.88"*, which names the wrong number as the correct one: 1692.88 would violate
+the invariant against that round's `|ink|%` of 1583.00, and 1692.88 − 1264.88 is 428, that round's
+major-page count exactly. The reported 1264.88 was right and the file was wrong.
+
+### Refuted: the autofit device grid does not reach advance widths
+
+The brief's third open item — `SeekCursor` sets the *whole* font from the device metric, so
+advance widths at format time are taken at the realised size too, and only line height and ascent
+were changed last round.
+
+Two measurements, and the effect is not there.
+
+- **Drawn widths.** On `slide-autofit-device-grid.pptx` every word in the autofitted column is
+  the same width to four decimal places as the same word in the plain column, at all five sizes —
+  *including* the four where the line pitch differs. Expected, since at paint time both go through
+  the PDF export device; it means only a line boundary can answer the question.
+- **Line breaking.** `research/probes/slides-r22/make-break-boundary-probe.py` steps a box width
+  across a wrap boundary with the same phrase in a plain box and in an autofitted box too tall to
+  shrink. At 20 pt, where the branch is demonstrably active (pitch 847 plain against 848 fitted),
+  **both wrap between 349.65 and 349.70 pt** — the same 0.05 pt step. The predicted shift is
+  0.206% of 350 pt, or 0.72 pt: fourteen steps of this probe, and absent.
+
+No code change. The item is closed rather than carried.
+
+### Tests
+
+Two new files, and **every assertion was verified by putting its defect back**:
+
+- `SlideChartFaceComparisonTests` (fidelity, three cases) on two authored decks,
+  `chart-face-theme-minor.pptx` and `chart-face-stated.pptx`. With the consumer ignoring the
+  family again — the four-round defect itself — **all three fail**.
+- `ChartTextFamilyTests` (unit, four cases). Binding `ChartText` to null instead of the plot's
+  family fails **one**, the measurer case; stopping `InFamily` stamping the labels fails **two**,
+  the two label cases, and leaves the measurer case passing — which is what makes them separate
+  claims. The unstated-family case passes under all three and is **labelled a control**.
+
+The third fidelity case took three attempts and the two rejected quantities are worth keeping:
+
+- **An absolute pen position carries the composition as well as the face**, and pinning it would
+  have pinned the cancellation described above.
+- **A word's ink width carries the two writers' show splitting.** The reference positions each
+  digit of `100` separately, so poppler ends its box at the last glyph's ink and reports 17.25
+  where our single show reports the full 18.03 advance.
+
+What is asserted instead is **one digit's advance**, the gap between the pens of the axis' `100`
+and `80` labels, which share a right edge: 6.009 for ours, 6.010 for the reference, and 5.556 for
+the fixed face this replaces.
+
+Per project on the final tree, each run redirected to its own file: Core **247**, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 619,
+Spreadsheets 483, Presentations 528, Fidelity **550**. Zero failed, zero skipped.
+
+### Two process traps, both hit this round
+
+- **Editing a script while it is running corrupts it.** Bash re-reads a script from a byte
+  offset, so the baseline sweep's trailing summary died with `line 111: o: unbound variable` after
+  the `ink%` fix was applied to it mid-run. Nothing was lost — the totals are recomputed from the
+  per-document files — and the after-sweep ran from a frozen copy.
+- **`--no-build` after a defect-reintroduction cycle measures the defect.** The first full test
+  run reported `Core Failed: 2` on a clean working tree, because the binaries were still the ones
+  built with the stamping defect. Rebuild before the run that counts, and read the failing test
+  names rather than the count alone — the two names were exactly the two the defect was meant to
+  break, which is what identified it in a minute rather than an hour.
+
+### What the next round should take, in order
+
+1. **The legend reservation, now separable.** The probe measures it at 2.49 pt on a chart whose
+   axis labels are within 0.36 pt, so the two halves of the composition can be attributed
+   separately for the first time. `Demick_JetBlue.pptx` page 4 is the corpus instance.
+2. **Wire the family into `SheetChart` and `FrameChart`.** The model carries it; both consumers
+   ignore it and say so in the code. Each is a one-line change plus its own track's sweep, and
+   the sheets agent's own measurement — a legend of three entries in one face against two in
+   another accounting for a document's whole residual word deficit — says it is worth a round
+   there.
+3. **`PptSlideLayout.cs`:1244's group scale**, unmeasured for four rounds now. Read and not
+   probed.
+4. **Bold chart text.** The reference embeds `DejaVuSerif-Bold` on `Demick_JetBlue.pptx` and we
+   embed no bold face at all; `ChartLabel` carries no weight either. Unmeasured for reach.

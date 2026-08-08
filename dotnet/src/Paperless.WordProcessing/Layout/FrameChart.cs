@@ -213,8 +213,17 @@ internal sealed class ChartFace : IChartTextMeasurer
     public Length LineHeightAt(Length size)
         => _metrics is { } metrics ? metrics.ScaledLineHeight(size) : size * 1.15;
 
-    /// <inheritdoc/>
-    public DocSize Measure(string text, Length size)
+    /// <summary>
+    /// <paramref name="family"/> is ignored because this instance is already bound to one.
+    /// </summary>
+    /// <remarks>
+    /// The words track resolves the chart's family in its own reader and hands it to
+    /// <see cref="ChartFace.For"/>, so a <see cref="ChartFace"/> <em>is</em> a family and the
+    /// argument would only be a second, later opportunity to disagree with it. When that reader's
+    /// rule and <c>DrawingChartPlot.FamilyOf</c>'s are shown to be the same rule — they are the
+    /// same rule today, in two places — this can take the argument and the duplicate can go.
+    /// </remarks>
+    public DocSize Measure(string text, Length size, string? family)
     {
         ArgumentNullException.ThrowIfNull(text);
 

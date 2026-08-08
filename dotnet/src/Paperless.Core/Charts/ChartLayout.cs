@@ -45,6 +45,15 @@ public enum ChartLabelAnchor
 /// <param name="Stretch">
 /// An extra horizontal scale applied to the glyphs, 1 for text drawn at its natural width.
 /// </param>
+/// <param name="Family">
+/// The family the text is set in, or null when the chart states none and the consumer's own
+/// default is wanted. Carried per label rather than only on the drawing because a consumer
+/// draws label by label, and because the element-level overrides OOXML allows —
+/// <c>c:title/c:txPr</c> against <c>c:valAx/c:txPr</c> — have somewhere to go when a later
+/// round reads them. Today every label of one chart takes the same family, which is what
+/// LibreOffice's chart import does: all three of its automatic text entries name the theme's
+/// <em>minor</em> font (<c>oox/source/drawingml/chart/objectformatter.cxx</c>:415-434).
+/// </param>
 /// <remarks>
 /// <strong><paramref name="Stretch"/> exists because a glyph run carries one em and a
 /// non-square stretch has two.</strong> An embedded chart is composed at its own size and scaled
@@ -62,7 +71,8 @@ public readonly record struct ChartLabel(
     Length Size,
     Colour Colour,
     double Rotation = 0.0,
-    double Stretch = 1.0);
+    double Stretch = 1.0,
+    string? Family = null);
 
 /// <summary>One filled rectangle — a bar, a legend key, the plot area's wall.</summary>
 /// <param name="Bounds">Where it goes.</param>
@@ -151,7 +161,36 @@ public interface IChartTextMeasurer
     /// <summary>The advance width and line height of a single line of text.</summary>
     /// <param name="text">The characters.</param>
     /// <param name="size">The em size.</param>
-    DocSize Measure(string text, Length size);
+    /// <param name="family">
+    /// The family the text is set in, or null when the chart states none and the consumer's own
+    /// default is wanted. See <see cref="ChartPlot.TextFamily"/> for why a chart carries one at
+    /// all and why a hardcoded face is not a substitute for it.
+    /// </param>
+    DocSize Measure(string text, Length size, string? family);
+}
+
+/// <summary>
+/// A measurer bound to the family one chart's text is set in.
+/// </summary>
+/// <remarks>
+/// <strong>Bound once, at the composition's entry point, rather than threaded.</strong> The
+/// family is a property of the chart and not of any one measurement, so passing it beside every
+/// size through twenty private signatures would be twenty chances to pass the wrong one — and
+/// the family that is easy to reach at a call site deep in the legend code is whichever one
+/// happens to be in scope. Binding it in <see cref="ChartLayout.Place"/> makes "every label of
+/// one chart is measured in one face" true by construction instead of by inspection, and it is
+/// where a later round that reads OOXML's per-element <c>c:txPr</c> overrides would rebind.
+/// </remarks>
+/// <param name="Measurer">The consumer's own measurer.</param>
+/// <param name="Family">
+/// The family to measure in, or null for the consumer's own default.
+/// </param>
+public readonly record struct ChartText(IChartTextMeasurer Measurer, string? Family)
+{
+    /// <summary>The advance width and line height of a single line, in the bound family.</summary>
+    /// <param name="text">The characters.</param>
+    /// <param name="size">The em size.</param>
+    public DocSize Measure(string text, Length size) => Measurer.Measure(text, size, Family);
 }
 
 /// <summary>
@@ -289,7 +328,7 @@ public static partial class ChartLayout
     /// side at once, which moves the plot area up and left and leaves the labels crowding the
     /// frame's edges.
     /// </remarks>
-    private static DocSize Shape(IChartTextMeasurer measurer, string text, Length size)
+    private static DocSize Shape(ChartText measurer, string text, Length size)
     {
         DocSize measured = MeasureLines(measurer, text, size);
         return new DocSize(
@@ -313,7 +352,7 @@ public static partial class ChartLayout
             : text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
     /// <summary>How much room a possibly multi-line label needs: the widest line, all the heights.</summary>
-    private static DocSize MeasureLines(IChartTextMeasurer measurer, string text, Length size)
+    private static DocSize MeasureLines(ChartText measurer, string text, Length size)
     {
         string[] lines = LinesOf(text);
         if (lines.Length <= 1) return measurer.Measure(text, size);
@@ -342,6 +381,11 @@ public static partial class ChartLayout
         if (frame.Width <= Length.Zero || frame.Height <= Length.Zero)
             return new ChartDrawing(DocRect.Empty, [], [], [], []);
 
+        // The family the chart's own text is set in is bound to the measurer here and to every
+        // label the composition produces — one place, so the face a label is measured in and the
+        // face it is drawn in cannot come apart. See ChartPlot.TextFamily.
+        ChartText text = new(measurer, plot.TextFamily);
+
         // A chart with a coordinate space of its own is composed at its own size and the whole
         // picture is then stretched into the frame. See Stretch.
         if (plot.Space is not { } space
@@ -349,11 +393,31 @@ public static partial class ChartLayout
             || space.Height <= Length.Zero
             || (space.Width == frame.Width && space.Height == frame.Height))
         {
-            return Compose(plot, frame, measurer);
+            return InFamily(Compose(plot, frame, text), plot.TextFamily);
         }
 
         DocRect own = new(Length.Zero, Length.Zero, space.Width, space.Height);
-        return Stretch(Compose(plot, own, measurer), own, frame);
+        return InFamily(Stretch(Compose(plot, own, text), own, frame), plot.TextFamily);
+    }
+
+    /// <summary>Stamps the chart's family onto every label the composition produced.</summary>
+    /// <remarks>
+    /// One pass at the end rather than an argument at twenty-two construction sites, for the
+    /// reason <see cref="ChartText"/> gives: the invariant wanted is "every label of one chart
+    /// carries one family", and a stamping pass states it where twenty-two arguments would only
+    /// happen to satisfy it. A label that already names a family keeps it, so a later round
+    /// reading OOXML's per-element <c>c:txPr</c> overrides sets them at their own site and this
+    /// fills in the rest.
+    /// </remarks>
+    private static ChartDrawing InFamily(ChartDrawing drawing, string? family)
+    {
+        if (family is null || drawing.Labels.Count == 0) return drawing;
+
+        List<ChartLabel> labels = new(drawing.Labels.Count);
+        foreach (ChartLabel label in drawing.Labels)
+            labels.Add(label.Family is null ? label with { Family = family } : label);
+
+        return drawing with { Labels = labels };
     }
 
     /// <summary>
@@ -466,7 +530,7 @@ public static partial class ChartLayout
     ];
 
     /// <summary>Composes a chart in the coordinates it is measured in.</summary>
-    private static ChartDrawing Compose(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    private static ChartDrawing Compose(ChartPlot plot, DocRect frame, ChartText measurer)
     {
         List<ChartBox> boxes = [];
         List<ChartLine> lines = [];
@@ -936,7 +1000,7 @@ public static partial class ChartLayout
         DocRect area,
         bool columns,
         ChartScaleResult scale,
-        IChartTextMeasurer measurer)
+        ChartText measurer)
     {
         // A stated interval is honoured whatever fits; only the automatic one is re-derived.
         if (plot.ValueScale.MajorUnit is { } stated && stated > 0.0)
@@ -1007,7 +1071,7 @@ public static partial class ChartLayout
     /// proportional margin.
     /// </para>
     /// </remarks>
-    private static DocRect DiagramAreaOf(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    private static DocRect DiagramAreaOf(ChartPlot plot, DocRect frame, ChartText measurer)
     {
         Length marginX = plot.Kind is ChartPlotKind.Pie or ChartPlotKind.OfPie && !plot.Rings
             ? PieMargin
@@ -1088,7 +1152,7 @@ public static partial class ChartLayout
         ChartScaleResult? secondary,
         ChartScaleResult? domain,
         int categories,
-        IChartTextMeasurer measurer,
+        ChartText measurer,
         ChartAxisLabelLayout? arranged)
     {
         // Absolute, in the chart's own coordinates — ODF's chart:coordinate-region, which is
@@ -1415,7 +1479,7 @@ public static partial class ChartLayout
         int categories,
         bool columns,
         ChartAxisLabelLayout? arranged,
-        IChartTextMeasurer measurer,
+        ChartText measurer,
         List<ChartLine> lines,
         List<ChartLabel> labels)
     {
@@ -1563,7 +1627,7 @@ public static partial class ChartLayout
     /// with the identical two constants (<c>DataTableView.cxx:171-180</c>) — so a row is exactly
     /// one <see cref="Shape"/> tall and nothing new needs measuring.
     /// </remarks>
-    private static Length DataTableHeight(ChartPlot plot, IChartTextMeasurer measurer)
+    private static Length DataTableHeight(ChartPlot plot, ChartText measurer)
         => Shape(measurer, "0", plot.LabelSize).Height * (plot.Series.Count + 1);
 
     /// <summary>
@@ -1589,7 +1653,7 @@ public static partial class ChartLayout
         DocRect area,
         int categories,
         bool columns,
-        IChartTextMeasurer measurer,
+        ChartText measurer,
         List<ChartLine> lines,
         List<ChartLabel> labels)
     {
@@ -1720,7 +1784,7 @@ public static partial class ChartLayout
     /// How the category labels come out on the axis the plot rectangle gives them.
     /// </summary>
     private static ChartAxisLabelLayout ArrangeCategories(
-        ChartPlot plot, DocRect area, int categories, IChartTextMeasurer measurer)
+        ChartPlot plot, DocRect area, int categories, ChartText measurer)
     {
         string?[] texts = new string?[categories];
         Length[] centres = new Length[categories];
@@ -2500,7 +2564,7 @@ public static partial class ChartLayout
         ChartPlot plot,
         DocRect frame,
         DocRect area,
-        IChartTextMeasurer measurer,
+        ChartText measurer,
         List<ChartLabel> labels)
     {
         if (plot.Title is { Length: > 0 } title)
@@ -2573,7 +2637,7 @@ public static partial class ChartLayout
         ChartPlot plot,
         DocRect frame,
         DocRect area,
-        IChartTextMeasurer measurer,
+        ChartText measurer,
         List<ChartBox> boxes,
         List<ChartLabel> labels)
     {
@@ -2774,7 +2838,7 @@ public static partial class ChartLayout
     /// it as one column put the plot rectangle's right edge 120 pt out.
     /// </para>
     /// </remarks>
-    private static LegendBox Legend(ChartPlot plot, DocRect available, IChartTextMeasurer measurer)
+    private static LegendBox Legend(ChartPlot plot, DocRect available, ChartText measurer)
     {
         if (plot.Legend == ChartLegendPosition.None) return default;
 
@@ -2869,7 +2933,7 @@ public static partial class ChartLayout
     /// its entries into. It decides only how many rows fit before a second column starts, so it
     /// changes nothing on a legend of a handful of entries and everything on one of fourteen.
     /// </remarks>
-    private static DocRect LegendSpace(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    private static DocRect LegendSpace(ChartPlot plot, DocRect frame, ChartText measurer)
     {
         Length top = frame.Y;
 
@@ -2916,7 +2980,7 @@ public static partial class ChartLayout
         ChartScaleResult scale,
         NumberFormatCode? format,
         Length size,
-        IChartTextMeasurer measurer)
+        ChartText measurer)
     {
         Length widest = Length.Zero;
         foreach (double tick in scale.MajorTicks())
@@ -2930,7 +2994,7 @@ public static partial class ChartLayout
 
     /// <summary>The width of the widest category label.</summary>
     private static Length WidestCategoryLabel(
-        ChartPlot plot, int categories, IChartTextMeasurer measurer)
+        ChartPlot plot, int categories, ChartText measurer)
     {
         Length widest = Length.Zero;
         for (int at = 0; at < categories && at < plot.Categories.Count; at++)
@@ -2974,7 +3038,7 @@ public static partial class ChartLayout
         ChartPlot plot,
         ChartScaleResult? domain,
         int categories,
-        IChartTextMeasurer measurer)
+        ChartText measurer)
     {
         if (!plot.CategoryAxisVisible || plot.ShiftedCategories || categories <= 0)
             return (Length.Zero, Length.Zero);

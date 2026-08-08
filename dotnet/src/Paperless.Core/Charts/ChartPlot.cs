@@ -497,6 +497,36 @@ public sealed partial record ChartPlot
     /// <summary>The size the axis labels and legend entries are set at; the default is 10 pt.</summary>
     public Length LabelSize { get; init; } = Length.FromPoints(10);
 
+    /// <summary>
+    /// The family the chart's own text is set in, or null when the file states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A chart does not inherit the face of the shape or cell it sits in, and it is not
+    /// one fixed face either.</strong> Every automatic text entry in LibreOffice's OOXML chart
+    /// import names the theme's <em>minor</em> font — chart titles, axis titles and everything
+    /// else alike (<c>oox/source/drawingml/chart/objectformatter.cxx</c>:415-434) — and a
+    /// <c>c:txPr</c> stating <c>&lt;a:latin typeface="+mn-lt"/&gt;</c>, which is what most decks
+    /// write, resolves to exactly the same face. So the chart's face is the theme's body face,
+    /// with a stated <c>a:latin</c> overriding it.
+    /// </para>
+    /// <para>
+    /// <strong>It is read because it decides layout, not appearance.</strong> The widest axis
+    /// label reserves the plot area's left edge and the legend's widest entry reserves its
+    /// right, so a chart measured in the wrong face has its plot rectangle in the wrong place
+    /// and every mark inside it follows. Measured on the corpus: the two decks that pinned this
+    /// have theme minor faces of Constantia and Calibri, whose reference renderings draw chart
+    /// text in DejaVu Serif and Carlito respectively — neither of them the Liberation Sans a
+    /// hardcoded default assumed, and the first of them a serif.
+    /// </para>
+    /// <para>
+    /// Null rather than a default here on purpose: which face "no family stated" resolves to is
+    /// the consumer's question, and a slide, a sheet and a text frame answer it through
+    /// different caches. See <see cref="IChartTextMeasurer.Measure"/>.
+    /// </para>
+    /// </remarks>
+    public string? TextFamily { get; init; }
+
     /// <summary>The plot area's fill — DrawingML's wall — or null.</summary>
     public Colour? PlotBackground { get; init; }
 

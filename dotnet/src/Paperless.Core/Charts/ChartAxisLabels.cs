@@ -142,11 +142,10 @@ public static class ChartAxisLabels
         IReadOnlyList<Length> centres,
         ChartAxisText stated,
         Length size,
-        IChartTextMeasurer measurer)
+        ChartText measurer)
     {
         ArgumentNullException.ThrowIfNull(texts);
         ArgumentNullException.ThrowIfNull(centres);
-        ArgumentNullException.ThrowIfNull(measurer);
 
         double rotation = stated.Rotation;
         bool lineBreak = stated.LineBreakAllowed;
@@ -242,7 +241,7 @@ public static class ChartAxisLabels
         Length spacing,
         bool staggered,
         Length size,
-        IChartTextMeasurer measurer)
+        ChartText measurer)
     {
         if (spacing <= Length.Zero) return false;
 
@@ -382,7 +381,7 @@ public static class ChartAxisLabels
     private const double TextShapeInsetY = 0.30;
 
     /// <summary>The shape a piece of chart text is drawn in, insets included.</summary>
-    private static DocSize Shape(IChartTextMeasurer measurer, string text, Length size)
+    private static DocSize Shape(ChartText measurer, string text, Length size)
     {
         DocSize measured = measurer.Measure(text, size);
         return new DocSize(

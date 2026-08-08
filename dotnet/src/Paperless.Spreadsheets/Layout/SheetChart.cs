@@ -191,7 +191,18 @@ internal static class SheetChart
     {
         public static Measurer Instance { get; } = new();
 
-        public DocSize Measure(string text, Length size)
+        /// <summary>
+        /// <paramref name="family"/> is deliberately not honoured yet.
+        /// </summary>
+        /// <remarks>
+        /// <strong>The model now carries the face a chart states and this consumer still ignores
+        /// it.</strong> <see cref="ChartPlot.TextFamily"/> was added on the slides track, where it
+        /// was measured; a sheet's chart reaches the same reader, so wiring it here would change
+        /// every workbook's chart layout on a sweep nobody has run. The one-line change is
+        /// <c>SheetBandText.Shape(text, size)</c> taking the family, and it belongs to whichever
+        /// round sweeps the sheets track — not to the round that happened to be in this file.
+        /// </remarks>
+        public DocSize Measure(string text, Length size, string? family)
         {
             ArgumentNullException.ThrowIfNull(text);
 
