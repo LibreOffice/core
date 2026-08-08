@@ -235,6 +235,91 @@ public sealed class PageNumberFieldTests
         resolved.Text.ShouldBe("of 12");
     }
 
+    /// <summary>A <c>NUMPAGES</c> field prints the number of pages the document turned out to have.</summary>
+    /// <remarks>
+    /// The second half of the same defect, and the one the previous round recorded as unfinished: the
+    /// total is not known while the running head is being laid out, so the document is filled once to
+    /// learn it and filled again to print it.
+    /// </remarks>
+    [Fact]
+    public void APageCountFieldPrintsTheDocumentsOwnTotal()
+    {
+        List<LaidOutPage> pages = Paginate(Footer("of 12", field: (3, 2), kind: PageFieldKind.PageCount));
+
+        pages.Count.ShouldBe(3);
+        foreach (LaidOutPage page in pages) FooterText(page).ShouldBe("of 3");
+    }
+
+    /// <summary>A footer holding both fields resolves both, each to its own value.</summary>
+    /// <remarks>
+    /// The ordinary shape — "Page 1 of 3" — and the one that catches a resolver that substitutes the
+    /// same value into every span it finds.
+    /// </remarks>
+    [Fact]
+    public void ANumberAndACountInOneFooterBothResolve()
+    {
+        List<LaidOutPage> pages = Paginate(
+            Footer(
+                "Page 7 of 12",
+                field: (5, 1),
+                second: (10, 2),
+                secondKind: PageFieldKind.PageCount));
+
+        FooterText(pages[0]).ShouldBe("Page 1 of 3");
+        FooterText(pages[2]).ShouldBe("Page 3 of 3");
+    }
+
+    /// <summary>A head holding only a page count is still laid out once, not once per page.</summary>
+    /// <remarks>
+    /// A page count is the same on every page, so it must not reach the layout cache's key. Keying on it
+    /// would re-shape the running head once per page of every document that carries one, for an answer
+    /// that cannot change — and this asserts the *sharing* rather than the timing, because a shared flow
+    /// is the observable consequence of a shared cache entry.
+    /// </remarks>
+    [Fact]
+    public void AHeadHoldingOnlyACountIsSharedAcrossPages()
+    {
+        List<LaidOutPage> pages = Paginate(Footer("of 12", field: (3, 2), kind: PageFieldKind.PageCount));
+
+        pages[0].Footer.ShouldBeSameAs(pages[1].Footer);
+    }
+
+    /// <summary>
+    /// The measuring pass resolves the page number and leaves the count where the producer left it.
+    /// </summary>
+    /// <remarks>
+    /// The case the guard exists for, and one the coarser tests cannot reach: a footer holding *both*
+    /// fields is resolved on the first pass because its number varies, and dropping the guard would then
+    /// render the unknown total as <c>0</c>. The finished document is corrected by the second pass either
+    /// way — what a nought costs is the *measuring* pass, which would break the head's lines at the wrong
+    /// width and so could hand the second pass a wrong total to print.
+    /// </remarks>
+    [Fact]
+    public void TheMeasuringPassLeavesTheCountAtItsCachedValue()
+    {
+        PageParagraph paragraph = new()
+        {
+            Text = "Page 7 of 12",
+            Face = Face,
+            EmSize = Length.FromPoints(11),
+            Fields =
+            [
+                new PageFieldSpan(5, 1, PageFieldKind.PageNumber),
+                new PageFieldSpan(10, 2, PageFieldKind.PageCount),
+            ],
+        };
+
+        PageParagraph measuring =
+            (PageParagraph)PageFields.Resolve([paragraph], 3, NoteNumberFormat.Arabic)[0];
+
+        measuring.Text.ShouldBe("Page 3 of 12");
+
+        PageParagraph settled =
+            (PageParagraph)PageFields.Resolve([paragraph], 3, NoteNumberFormat.Arabic, 9)[0];
+
+        settled.Text.ShouldBe("Page 3 of 9");
+    }
+
     /// <summary>A page number inside a table cell in the running head is resolved too.</summary>
     /// <remarks>
     /// A header laid out as a table is the ordinary way a Word document puts a logo beside a page number,
@@ -284,8 +369,16 @@ public sealed class PageNumberFieldTests
     /// <param name="text">The text, with the producer's cached result already in it.</param>
     /// <param name="field">Where that cached result sits, or null for a footer with no field.</param>
     /// <param name="format">The field's own picture switch, or null to take the section's.</param>
+    /// <param name="kind">What the first field computes.</param>
+    /// <param name="second">A second field's span, for a footer holding both a number and a count.</param>
+    /// <param name="secondKind">What that second field computes.</param>
     private static IReadOnlyList<PageBlock> Footer(
-        string text, (int Start, int Length)? field = null, NoteNumberFormat? format = null)
+        string text,
+        (int Start, int Length)? field = null,
+        NoteNumberFormat? format = null,
+        PageFieldKind kind = PageFieldKind.PageNumber,
+        (int Start, int Length)? second = null,
+        PageFieldKind secondKind = PageFieldKind.PageCount)
     {
         List<PageRun> runs = [];
         if (field is { } span)
@@ -313,7 +406,12 @@ public sealed class PageNumberFieldTests
                 EmSize = Length.FromPoints(11),
                 Runs = runs,
                 Fields = field is { } at
-                    ? [new PageFieldSpan(at.Start, at.Length, PageFieldKind.PageNumber, format)]
+                    ? second is { } also
+                        ? [
+                            new PageFieldSpan(at.Start, at.Length, kind, format),
+                            new PageFieldSpan(also.Start, also.Length, secondKind, format),
+                        ]
+                        : [new PageFieldSpan(at.Start, at.Length, kind, format)]
                     : [],
             },
         ];

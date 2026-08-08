@@ -243,6 +243,25 @@ internal static class Ww8SectionTable
     /// </remarks>
     private static readonly Length DefaultHeaderDistance = Length.FromTwips(720);
 
+    /// <summary>
+    /// What a section that never states <c>sprmSDxaColumns</c> means by it: 1.25 cm.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Not zero. <c>WW8_SEP</c>'s own constructor and the fallback passed to <c>ReadUSprm</c> when the
+    /// section table is walked both say 708 twips — <c>aNewSection.maSep.dxaColumns = ReadUSprm(pSep,
+    /// pIds[4], 708)</c> (<c>ww8par6.cxx</c>:987), commented "default distance 1.25 cm". The same figure
+    /// reaches DOCX through <c>SectionPropertyMap</c>'s <c>m_nColumnDistance(1249)</c>, 12.49 mm.
+    /// </para>
+    /// <para>
+    /// It is not only the gutter between columns that a zero gets wrong: the column *width* is the text
+    /// width less the gaps, divided by the count, so a two-column section on a 504 pt measure comes out
+    /// 252 pt wide instead of 234 pt — 8% too wide, so every line of it breaks late and the section is
+    /// short of the lines the reference gives it.
+    /// </para>
+    /// </remarks>
+    private static readonly Length DefaultColumnGap = Length.FromTwips(708);
+
     internal static WritingSection ReadProperties(ReadOnlyMemory<byte> grpprl)
     {
         PageGeometry page = PageGeometry.Default;
@@ -253,7 +272,7 @@ internal static class Ww8SectionTable
         Length gutter = Length.Zero;
         Length headerDistance = DefaultHeaderDistance;
         Length footerDistance = DefaultHeaderDistance;
-        Length columnGap = Length.Zero;
+        Length columnGap = DefaultColumnGap;
         int columns = 1;
         bool landscape = false;
         bool rightToLeft = false;

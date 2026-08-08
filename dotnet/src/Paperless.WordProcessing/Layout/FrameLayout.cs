@@ -186,7 +186,7 @@ internal sealed class FrameResolution
                 placements[line.ParagraphIndex] = new Placement(
                     index,
                     page,
-                    page.ColumnArea(line.Column),
+                    page.ColumnArea(line),
                     page.BodyArea.Y + line.Top,
                     page.BodyArea.Y + line.ParagraphTop);
             }
@@ -329,7 +329,7 @@ internal sealed class FrameResolution
                 if (own[line.ParagraphIndex] is not PageParagraph paragraph) continue;
                 if (paragraph.Frames.Count == 0) continue;
 
-                HangInline(paragraph, index, page.ColumnArea(line.Column), line);
+                HangInline(paragraph, index, page.ColumnArea(line), line);
             }
         }
 

@@ -84,6 +84,19 @@ public readonly record struct Ww8DocumentProperties
     /// </remarks>
     public bool UsesPrinterMetrics { get; init; }
 
+    /// <summary>
+    /// True when the document switches column balancing off for every section at once.
+    /// </summary>
+    /// <remarks>
+    /// <c>fNoColumnBalance</c>, bit 5 of the first compatibility word — <c>fNoColumnBalance = (a32Bit &amp;
+    /// 0x00000020) &gt;&gt; 5</c> (<c>ww8scan.cxx</c>:7896). The WW8 importer reads it before it looks at
+    /// anything else about a section's columns: <c>if (mrReader.m_xWDop-&gt;fNoColumnBalance)
+    /// pRet-&gt;SetFormatAttr(SwFormatNoBalancedColumns(true))</c> (<c>ww8par.cxx</c>:4569). Word's own
+    /// dialogue calls it "don't balance columns for continuous section starts", which is exactly the case
+    /// it governs.
+    /// </remarks>
+    public bool NoColumnBalance { get; init; }
+
     /// <summary>How the document's footnotes are numbered.</summary>
     /// <remarks>
     /// The DOP states the two classes in three different places: <c>nFootnote</c> and <c>nEdn</c> hold the
@@ -186,7 +199,11 @@ public readonly record struct Ww8DocumentProperties
         if (dop.Length >= CompatibilityOptionsOffset + 4)
         {
             uint options = BinaryPrimitives.ReadUInt32LittleEndian(dop[CompatibilityOptionsOffset..]);
-            properties = properties with { UsesPrinterMetrics = (options & 0x80000000) != 0 };
+            properties = properties with
+            {
+                UsesPrinterMetrics = (options & 0x80000000) != 0,
+                NoColumnBalance = (options & 0x00000020) != 0,
+            };
         }
 
         if (dop.Length >= CompatibilityOptions2Offset + 4)

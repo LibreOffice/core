@@ -103,6 +103,14 @@ public static class DocxReader
         ];
 
         if (sections.Count == 0) sections.Add(DocxPageGeometry.Read(null, file.Settings));
+
+        // Under `w:compat`, not directly under `w:settings` — `SettingsTable` reads it as
+        // `LN_CT_Compat_noColumnBalance` (`dmapper/SettingsTable.cxx`:418). Looking for it one level too
+        // high finds nothing and silently balances a document that asked not to be.
+        SectionColumnBalance.Apply(
+            sections,
+            Word.IsOn(Word.Child(Word.Child(file.Settings, "compat"), "noColumnBalance")));
+
         return sections;
     }
 

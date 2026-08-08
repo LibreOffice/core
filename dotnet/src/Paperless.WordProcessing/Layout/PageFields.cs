@@ -22,9 +22,9 @@ public enum PageFieldKind
     /// How many pages the document has: <c>NUMPAGES</c>, <c>text:page-count</c>.
     /// </summary>
     /// <remarks>
-    /// Recorded but not yet substituted — the total is not known until pagination has finished, and the
-    /// running head is laid out while it is still going. Carrying the span costs nothing and is what a
-    /// later pass needs.
+    /// The total is not known while the running head is being laid out, so it takes a second pass: the
+    /// document is filled once to learn how many pages it has, the furniture is told, and it is filled
+    /// again. That is one extra pass over documents that carry the field and none over those that do not.
     /// </remarks>
     PageCount,
 }
@@ -104,13 +104,23 @@ public static class PageFields
     /// <param name="blocks">The blocks to resolve, usually one running head's.</param>
     /// <param name="pageNumber">The number this page prints.</param>
     /// <param name="format">The sequence the section writes its page numbers in.</param>
+    /// <param name="totalPages">
+    /// How many pages the document has, or nought when that is not yet known — the first pass of a
+    /// two-pass layout. A <c>NUMPAGES</c> field is left at its cached result while it is nought, which is
+    /// what the pass that is only measuring the document wants.
+    /// </param>
     public static IReadOnlyList<PageBlock> Resolve(
-        IReadOnlyList<PageBlock> blocks, int pageNumber, NoteNumberFormat format)
+        IReadOnlyList<PageBlock> blocks, int pageNumber, NoteNumberFormat format, int totalPages = 0)
     {
-        if (!CarriesPageNumber(blocks)) return blocks;
+        if (!CarriesPageNumber(blocks) && !(totalPages > 0 && CarriesPageCount(blocks))) return blocks;
 
         List<PageBlock> resolved = new(blocks.Count);
-        foreach (PageBlock block in blocks) resolved.Add(ResolveBlock(block, pageNumber, format));
+
+        foreach (PageBlock block in blocks)
+        {
+            resolved.Add(ResolveBlock(block, pageNumber, format, totalPages));
+        }
+
         return resolved;
     }
 
@@ -124,6 +134,22 @@ public static class PageFields
     /// </remarks>
     /// <param name="blocks">The blocks to examine.</param>
     public static bool CarriesPageNumber(IReadOnlyList<PageBlock>? blocks)
+        => Carries(blocks, PageFieldKind.PageNumber);
+
+    /// <summary>
+    /// True when these blocks carry a <c>NUMPAGES</c> field.
+    /// </summary>
+    /// <remarks>
+    /// Kept apart from <see cref="CarriesPageNumber"/> because the two answer different questions, and
+    /// conflating them costs a re-shaping of the running head on every page of every document: a head
+    /// holding only a page <em>count</em> is the same on every page, so it is still cached against its
+    /// slot alone. What a page count needs is a second pass, not a per-page one.
+    /// </remarks>
+    /// <param name="blocks">The blocks to examine.</param>
+    public static bool CarriesPageCount(IReadOnlyList<PageBlock>? blocks)
+        => Carries(blocks, PageFieldKind.PageCount);
+
+    private static bool Carries(IReadOnlyList<PageBlock>? blocks, PageFieldKind kind)
     {
         if (blocks is null) return false;
 
@@ -134,7 +160,7 @@ public static class PageFields
                 case PageParagraph paragraph:
                     foreach (PageFieldSpan field in paragraph.Fields)
                     {
-                        if (field.Kind == PageFieldKind.PageNumber) return true;
+                        if (field.Kind == kind) return true;
                     }
 
                     break;
@@ -144,7 +170,7 @@ public static class PageFields
                     {
                         foreach (PageTableCell cell in row.Cells)
                         {
-                            if (CarriesPageNumber(cell.Blocks)) return true;
+                            if (Carries(cell.Blocks, kind)) return true;
                         }
                     }
 
@@ -155,15 +181,17 @@ public static class PageFields
         return false;
     }
 
-    private static PageBlock ResolveBlock(PageBlock block, int pageNumber, NoteNumberFormat format)
+    private static PageBlock ResolveBlock(
+        PageBlock block, int pageNumber, NoteNumberFormat format, int totalPages)
         => block switch
         {
-            PageParagraph paragraph => ResolveParagraph(paragraph, pageNumber, format),
-            PageTable table => ResolveTable(table, pageNumber, format),
+            PageParagraph paragraph => ResolveParagraph(paragraph, pageNumber, format, totalPages),
+            PageTable table => ResolveTable(table, pageNumber, format, totalPages),
             _ => block,
         };
 
-    private static PageTable ResolveTable(PageTable table, int pageNumber, NoteNumberFormat format)
+    private static PageTable ResolveTable(
+        PageTable table, int pageNumber, NoteNumberFormat format, int totalPages)
     {
         List<PageTableRow> rows = new(table.Rows.Count);
         foreach (PageTableRow row in table.Rows)
@@ -171,9 +199,7 @@ public static class PageFields
             List<PageTableCell> cells = new(row.Cells.Count);
             foreach (PageTableCell cell in row.Cells)
             {
-                cells.Add(CarriesPageNumber(cell.Blocks)
-                    ? cell with { Blocks = Resolve(cell.Blocks, pageNumber, format) }
-                    : cell);
+                cells.Add(cell with { Blocks = Resolve(cell.Blocks, pageNumber, format, totalPages) });
             }
 
             rows.Add(row with { Cells = cells });
@@ -191,12 +217,12 @@ public static class PageFields
     /// the same arithmetic done once per span rather than not at all.
     /// </remarks>
     private static PageParagraph ResolveParagraph(
-        PageParagraph paragraph, int pageNumber, NoteNumberFormat format)
+        PageParagraph paragraph, int pageNumber, NoteNumberFormat format, int totalPages)
     {
         List<PageFieldSpan> spans = [];
         foreach (PageFieldSpan field in paragraph.Fields)
         {
-            if (field.Kind != PageFieldKind.PageNumber) continue;
+            if (field.Kind == PageFieldKind.PageCount && totalPages <= 0) continue;
             if (field.Start < 0 || field.End > paragraph.Text.Length || field.Length < 0) continue;
             spans.Add(field);
         }
@@ -208,11 +234,17 @@ public static class PageFields
         for (int at = spans.Count - 1; at >= 0; at--)
         {
             PageFieldSpan span = spans[at];
+            int value = span.Kind == PageFieldKind.PageCount ? totalPages : pageNumber;
+
             result = Splice(
                 result, span.Start, span.Length,
-                NoteNumbering.Render(span.Format ?? format, pageNumber));
+                NoteNumbering.Render(span.Format ?? format, value));
         }
 
+        // Every span is dropped, including a page count this pass could not resolve. That is safe because
+        // resolution never consumes its input: the furniture set keeps the section's own blocks and
+        // resolves a fresh copy for each page, so the pass that learns the total starts from the spans
+        // again rather than from what the measuring pass left.
         return result with { Fields = [] };
     }
 

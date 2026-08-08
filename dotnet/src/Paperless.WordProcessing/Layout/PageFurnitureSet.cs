@@ -48,6 +48,52 @@ public sealed class PageFurnitureSet
     /// <summary>True when the set holds nothing, so a page needs no furniture at all.</summary>
     public bool IsEmpty => _headers.Count == 0 && _footers.Count == 0;
 
+    /// <summary>True when any of this set's furniture carries a <c>NUMPAGES</c> field.</summary>
+    /// <remarks>
+    /// Asked by the paginator to decide whether the document needs the second pass at all — a page count
+    /// costs one extra fill of the whole document, and almost no document carries one.
+    /// </remarks>
+    public bool CarriesPageCount
+    {
+        get
+        {
+            foreach (IReadOnlyList<PageBlock> blocks in _headers.Values)
+            {
+                if (PageFields.CarriesPageCount(blocks)) return true;
+            }
+
+            foreach (IReadOnlyList<PageBlock> blocks in _footers.Values)
+            {
+                if (PageFields.CarriesPageCount(blocks)) return true;
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// How many pages the document turned out to have, or nought while that is not yet known.
+    /// </summary>
+    /// <remarks>
+    /// Set between the two passes of a layout that has to resolve a <c>NUMPAGES</c> field. Assigning it
+    /// discards the laid-out cache, because every flow in it was laid out against the old answer — and a
+    /// stale cache here is exactly the defect this whole file exists to undo, one step further along.
+    /// </remarks>
+    public int TotalPages
+    {
+        get => _totalPages;
+        set
+        {
+            if (_totalPages == value) return;
+
+            _totalPages = value;
+            _laidOutHeaders.Clear();
+            _laidOutFooters.Clear();
+        }
+    }
+
+    private int _totalPages;
+
     /// <summary>The header a page takes, laid out, or null when it has none.</summary>
     /// <param name="section">The section, for its slot rules.</param>
     /// <param name="geometry">The page's geometry, for the header's area.</param>
@@ -148,8 +194,15 @@ public sealed class PageFurnitureSet
         var key = (slot, varies ? pageNumber : 0);
         if (cache.TryGetValue(key, out PlacedFlow? cached)) return cached;
 
+        // A page *count* does not vary from page to page, so it does not reach the cache key — but it does
+        // have to be substituted once the total is known, which is why the resolve is asked for whenever
+        // either kind is present rather than only when the head varies.
+        bool resolves = varies || (_totalPages > 0 && PageFields.CarriesPageCount(blocks));
+
         PlacedFlow? placed = FlowLayouter.LayOut(
-            varies ? PageFields.Resolve(blocks, pageNumber, section.PageNumberFormat) : blocks,
+            resolves
+                ? PageFields.Resolve(blocks, pageNumber, section.PageNumberFormat, _totalPages)
+                : blocks,
             area, offsetFromTop,
             collapsesSpacing: collapsesSpacing,
             addsCellLineSpacing: addsCellLineSpacing);
