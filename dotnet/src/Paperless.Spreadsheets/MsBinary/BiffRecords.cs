@@ -76,6 +76,12 @@ public static class BiffRecords
 
     /// <summary>A hyperlink over a range of cells, BIFF8 only.</summary>
     public const ushort HLink = 0x01B8;
+
+    /// <summary>The workbooks a 3D reference can name; <c>0x0401</c> means this one.</summary>
+    public const ushort SupBook = 0x01AE;
+
+    /// <summary>The table a formula's <c>ixti</c> indexes into.</summary>
+    public const ushort ExternSheet = 0x0017;
     public const ushort Window2 = 0x023E;
 
     // Cells.

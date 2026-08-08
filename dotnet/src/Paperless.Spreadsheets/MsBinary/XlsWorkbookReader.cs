@@ -54,6 +54,15 @@ internal sealed class XlsWorkbookReader
     private readonly List<SheetEntry> _sheets = [];
     private readonly List<XfRecord> _formats = [];
     private readonly XlsCellFormats _cellFormats = new();
+    private readonly XlsExternSheets _externSheets = new();
+
+    // The cells this workbook's charts plot, gathered while its sheets are read; null until the
+    // pre-scan has found at least one chart naming one. See XlsChartData for why it exists.
+    private XlsChartData? _chartData;
+
+    // Which sheet is being read, so that a chart embedded in it can say what "this sheet" means
+    // and so that a gathered cell knows which sheet it came from.
+    private int _sheetIndex = -1;
 
     // The formatting runs of the shared strings that have any, by their index in the table. A
     // dictionary rather than a parallel list because almost no string is rich, and because the
@@ -121,6 +130,9 @@ internal sealed class XlsWorkbookReader
         ReadGlobals();
         if (IsEncrypted) return sections;
 
+        PrescanChartSources();
+        GatherChartValues();
+
         int index = 0;
         foreach (SheetEntry sheet in _sheets)
         {
@@ -135,6 +147,151 @@ internal sealed class XlsWorkbookReader
         }
 
         return sections;
+    }
+
+    /// <summary>
+    /// Finds every cell any chart in the workbook plots, before a single sheet is read.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Why a separate pass rather than reading the cells when the chart is met.</strong>
+    /// A chart substream is embedded in the sheet its picture is drawn on, and the cells it
+    /// plots are on whichever sheet the author put the numbers — in this corpus, always a
+    /// different one, and in both cases a later one. Resolving at the point of use would
+    /// therefore resolve against a workbook not yet read. Deferring the chart's construction
+    /// instead would mean rewriting a sheet's drawings after they had been built, which is a far
+    /// larger change for the same answer.
+    /// </para>
+    /// <para>
+    /// The scan walks the record headers and reads the payload of chart records only, so it
+    /// costs a hop per record over the whole stream and nothing else. It leaves the stream
+    /// wherever it ends; every sheet read seeks absolutely (<see cref="StartSubstream"/>), so
+    /// there is no position to restore.
+    /// </para>
+    /// </remarks>
+    private void PrescanChartSources()
+    {
+        // Which sheet each substream is, by the offset BOUNDSHEET gave it. A chart's own sheet
+        // is what a reference with no sheet part means, and it is the only thing the scan needs
+        // position for.
+        Dictionary<int, int> sheetAt = [];
+        for (int at = 0; at < _sheets.Count; at++) sheetAt.TryAdd(_sheets[at].Offset, at);
+
+        XlsChartData data = new();
+        XlsChartBuilder? chart = null;
+        int chartDepth = -1;
+        int depth = 0;
+        int ownSheet = -1;
+
+        if (!_stream.MoveNext(0)) return;
+
+        do
+        {
+            ushort id = _stream.RecordId;
+
+            if (BiffRecords.IsBof(id))
+            {
+                if (sheetAt.TryGetValue(_stream.RecordPosition, out int sheet)) ownSheet = sheet;
+
+                depth++;
+                if (chart is null && IsChartSubstream())
+                {
+                    chart = new XlsChartBuilder();
+                    chartDepth = depth;
+                }
+
+                continue;
+            }
+
+            if (id == BiffRecords.Eof)
+            {
+                if (chart is not null && depth == chartDepth)
+                {
+                    Gather(data, chart, ownSheet);
+                    chart = null;
+                    chartDepth = -1;
+                }
+
+                depth--;
+                continue;
+            }
+
+            if (chart is not null && depth == chartDepth && BiffChartRecords.IsChartRecord(id))
+            {
+                chart.Read(id, _stream);
+            }
+        }
+        while (_stream.MoveNext());
+
+        if (chart is not null) Gather(data, chart, ownSheet);
+        if (!data.IsEmpty) _chartData = data;
+    }
+
+    /// <summary>
+    /// Reads the sheets a chart plots, ahead of the pass that produces the workbook's content,
+    /// so that the values are there when the chart asks for them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Why the data is fetched before the chart rather than after.</strong> A chart is
+    /// built the moment its substream ends, and its substream is embedded in the sheet its
+    /// picture sits on — which in this corpus is never the sheet holding the numbers, and is
+    /// always an earlier one. Both of the alternatives are worse than reading a sheet twice: a
+    /// decoder of its own for the cell records would be a second copy of the eleven record
+    /// layouts <see cref="ReadSheetRecords"/> already handles, and deferring the chart's
+    /// construction would mean rebuilding a sheet's drawings after the sheet had been finished.
+    /// </para>
+    /// <para>
+    /// The pass costs one extra read of the referenced sheets, and only for a workbook that
+    /// holds a chart naming cells at all. Everything the read produces is thrown away except
+    /// what the sheet builder offers <see cref="XlsChartData"/> — including the diagnostics,
+    /// which the real read of the same sheet will raise again and which would otherwise appear
+    /// twice.
+    /// </para>
+    /// </remarks>
+    private void GatherChartValues()
+    {
+        if (_chartData is not { } data) return;
+
+        int diagnostics = _diagnostics.Count;
+
+        foreach (int index in data.Sheets())
+        {
+            if (index < 0 || index >= _sheets.Count) continue;
+
+            SheetEntry sheet = _sheets[index];
+            if (sheet.Kind != SheetKind.Worksheet) continue;
+
+            _sheetIndex = index;
+            _page = new XlsSheetPrintState
+            {
+                DefaultFont = _cellFormats.DefaultFont,
+                RowHeightsAreManual = _stream.Version == BiffVersion.Biff8,
+            };
+            _sheetDecoration = new XlsSheetDecoration();
+            _drawings = new XlsDrawingCollector(_diagnostics, Blips);
+            _rowFormats.Clear();
+            _columnFormats.Clear();
+            _richCells.Clear();
+            _notes.Clear();
+
+            if (StartSubstream(sheet)) ReadSheetRecords(new SheetBuilder(this, sheet.Name));
+        }
+
+        if (_diagnostics.Count > diagnostics)
+        {
+            _diagnostics.RemoveRange(diagnostics, _diagnostics.Count - diagnostics);
+        }
+    }
+
+    /// <summary>Notes the rectangles one chart names, against the sheets they resolve to.</summary>
+    private void Gather(XlsChartData data, XlsChartBuilder chart, int ownSheet)
+    {
+        foreach (XlsChartRange range in chart.Ranges())
+        {
+            int? sheet = range.Ixti < 0 ? ownSheet : _externSheets.SheetOf(range.Ixti);
+            if (sheet is { } resolved && resolved >= 0) data.Want(resolved, range);
+        }
     }
 
     /// <summary>
@@ -201,6 +358,16 @@ internal sealed class XlsWorkbookReader
 
                 case BiffPageRecords.Name:
                     ReadName();
+                    break;
+
+                // The two tables a 3D reference resolves through. Read here because a chart's
+                // series names its sheet as an index into them and nothing else can.
+                case BiffRecords.SupBook:
+                    _externSheets.ReadSupBook(_stream);
+                    break;
+
+                case BiffRecords.ExternSheet:
+                    _externSheets.ReadExternSheet(_stream);
                     break;
 
                 default:
@@ -748,6 +915,7 @@ internal sealed class XlsWorkbookReader
     /// </remarks>
     private List<ContentSection> ReadChartSheet(SheetEntry sheet, int index)
     {
+        _sheetIndex = index;
         _page = new XlsSheetPrintState
         {
             DefaultFont = _cellFormats.DefaultFont,
@@ -775,7 +943,7 @@ internal sealed class XlsWorkbookReader
 
         ReadChartRecords(chart);
 
-        ChartPlot? plot = chart.Build();
+        ChartPlot? plot = chart.Build(_chartData, _externSheets, index);
         SheetPrintSetup setup = _page.ToSetup();
         DocRect frame = ChartSheetFrame(setup);
 
@@ -927,6 +1095,7 @@ internal sealed class XlsWorkbookReader
     /// <summary>Reads one sheet substream into a section.</summary>
     private ContentSection ReadSheet(SheetEntry sheet, int index)
     {
+        _sheetIndex = index;
         SheetBuilder builder = new(this, sheet.Name);
         _page = new XlsSheetPrintState
         {
@@ -1218,7 +1387,7 @@ internal sealed class XlsWorkbookReader
             if (depth == 0 && BiffChartRecords.IsChartRecord(id)) chart.Read(id, _stream);
         }
 
-        _drawings.AttachChart(chart.Build());
+        _drawings.AttachChart(chart.Build(_chartData, _externSheets, _sheetIndex));
     }
 
     /// <summary>Joins the sheet's <c>NOTE</c> records to the comment objects they name.</summary>
@@ -1962,6 +2131,16 @@ internal sealed class XlsWorkbookReader
         {
             if (row < 0 || column < 0 || column > 16383 || row > 1048575) return;
 
+            // Offered before the cell limit below, because a chart's fifty points must survive a
+            // sheet that overruns it: the limit is about what a content tree materialises, and a
+            // series is neither large nor optional.
+            if (owner._chartData is { } chartData
+                && chartData.Wants(owner._sheetIndex, row, column))
+            {
+                chartData.Offer(
+                    owner._sheetIndex, row, column, cell.Number, cell.DisplayedText(owner));
+            }
+
             if (_cellCount >= MaxCellsPerSheet)
             {
                 if (_reportedLimit) return;
@@ -2179,7 +2358,7 @@ internal sealed class XlsWorkbookReader
             }
 
             /// <summary>The text the authoring application displayed for this cell.</summary>
-            private string DisplayedText(XlsWorkbookReader owner)
+            public string DisplayedText(XlsWorkbookReader owner)
             {
                 if (Error is { } error) return BiffErrors.Text(error);
 
