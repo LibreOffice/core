@@ -67,6 +67,7 @@
 	position: static;
 	width: auto;
 	flex: 0 0 auto;
+	font-family: var(--cool-font);
 	font-size: var(--default-font-size);
 	color: var(--color-text-light);
 }
