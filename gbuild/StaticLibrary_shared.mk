@@ -48,6 +48,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/FileUtil \
     common/FileUtil-unix \
     common/JailUtil \
+    common/Landlock \
     common/Log-common \
     common/Log-poco \
     common/MobileApp \

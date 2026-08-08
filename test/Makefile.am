@@ -95,6 +95,7 @@ all_la_unit_tests = \
 	unit-calc.la \
 	unit-rendering-options.la \
 	unit-prefork.la \
+	unit-landlock.la \
 	unit-any-input.la \
 	unit-save.la \
 	unit-wopi-saveas.la \
@@ -341,6 +342,7 @@ unit_socket_failure_la_SOURCES = UnitSocketFailure.cpp
 unit_socket_failure_la_LIBADD = $(CPPUNIT_LIBS)
 unit_prefork_la_SOURCES = UnitPrefork.cpp
 unit_prefork_la_LIBADD = $(CPPUNIT_LIBS)
+unit_landlock_la_SOURCES = UnitLandlock.cpp
 # unit_tilecache_la_SOURCES = UnitTileCache.cpp
 # unit_tilecache_la_LIBADD = $(CPPUNIT_LIBS)
 unit_oauth_la_SOURCES = UnitOAuth.cpp

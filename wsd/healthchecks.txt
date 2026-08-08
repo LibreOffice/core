@@ -10,7 +10,6 @@ reason - which goes to the log instead.
 ENDPOINTS
 
     Why do they end in 'z' - yes, well ... fashion and Google's example.
-
     /livez   - liveness: is the process healthy at all? A failure means a
                restart is the right remedy.
 

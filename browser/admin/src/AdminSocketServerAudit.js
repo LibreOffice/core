@@ -37,7 +37,7 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 		},
 		contained: {
 			uncontained: _(
-				'Documents are not effectively contained: missing capabilities or namespaces.',
+				'Documents are not effectively contained: missing capabilities, namespaces and landlock.',
 			),
 		},
 		seccomp: {

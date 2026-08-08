@@ -42,6 +42,7 @@
 
 #if !MOBILEAPP
 #include <common/JailUtil.hpp>
+#include <common/Landlock.hpp>
 #include <common/Seccomp.hpp>
 #include <common/SigUtil.hpp>
 #include <common/Syscall.hpp>
@@ -3758,10 +3759,10 @@ void lokit_main(
     // So we insure it lives until std::_Exit is called.
     std::shared_ptr<COKit> coKit;
     ChildSession::NoCapsForKit = noCapabilities;
-#endif // MOBILEAPP
 
     // Setup the OSL sandbox
-    std::string allowedPaths;
+    std::vector<Landlock::Permission> allowedPaths;
+#endif // MOBILEAPP
 
     try
     {
@@ -3777,6 +3778,7 @@ void lokit_main(
         fdCounter.reset(new Util::FDCounter());
 #endif
 
+        bool hasLandlock = false;
         bool usingMountNamespace = false;
         std::chrono::milliseconds jailSetupTime(0);
 
@@ -3792,7 +3794,7 @@ void lokit_main(
 #else
             instdir_path = '/' + std::string(JailUtil::LO_JAIL_SUBPATH) + "/Contents/Frameworks";
 #endif
-            allowedPaths += ":r:/" + JailUtil::LO_JAIL_SUBPATH;
+            allowedPaths.emplace_back("/" + JailUtil::LO_JAIL_SUBPATH, Landlock::Access::ReadOnly);
 
             Poco::Path jailLOInstallation(jailPath, JailUtil::LO_JAIL_SUBPATH);
             jailLOInstallation.makeDirectory();
@@ -4112,7 +4114,7 @@ void lokit_main(
 
             // Setup /tmp and set TMPDIR.
             FileUtil::setSysTempDirectoryPath("/tmp");
-            allowedPaths += ":w:/tmp";
+            allowedPaths.emplace_back("/tmp", Landlock::Access::ReadWriteDir);
 
             copyCertificateDatabaseToTmp(jailPath);
 
@@ -4174,7 +4176,6 @@ void lokit_main(
         }
         else // noCapabilities set
         {
-            LOG_WRN("Security warning: running without chroot jails is insecure.");
             LOG_INF("Using template ["
                     << loTemplate << "] as install subpath directly, without chroot jail setup.");
             userdir_url = "file://" + jailPathStr + "tmp/user";
@@ -4183,12 +4184,15 @@ void lokit_main(
 #else
             instdir_path = '/' + loTemplate + "/Contents/Frameworks";
 #endif
-            allowedPaths += ":r:" + loTemplate;
+            allowedPaths.emplace_back(loTemplate, Landlock::Access::ReadOnlyDir);
             JailRoot = jailPathStr;
 
             const std::string tmpPath = jailPathStr + "tmp";
+            // The landlock rules attach to the directory nodes themselves, so
+            // the paths have to exist before the lock-down below.
+            Poco::File(tmpPath + "/user").createDirectories();
             FileUtil::setSysTempDirectoryPath(tmpPath);
-            allowedPaths += ":w:" + tmpPath;
+            allowedPaths.emplace_back(tmpPath, Landlock::Access::ReadWriteDir);
             LOG_DBG("Using tmpdir [" << tmpPath << "]");
 
             // used by LO Migration::migrateSettingsIfNecessary() in startup code as config dir
@@ -4198,11 +4202,25 @@ void lokit_main(
             ::setenv("KIT_WORKDIR", ("file://" + tmpPath).c_str(), 1);
 
             // Setup the OSL sandbox
-            allowedPaths += ":r:" + pathFromFileURL(userdir_url);
-            ::setenv("SAL_ALLOWED_PATHS", allowedPaths.c_str(), 1);
+            allowedPaths.emplace_back(pathFromFileURL(userdir_url),
+                                      Landlock::Access::ReadOnlyDir);
+
+            if (Landlock::lock(allowedPaths))
+            {
+                LOG_INF("Landlock jail successfully created.");
+                hasLandlock = true;
+            }
+            else
+            {
+                LOG_WRN("Security warning: running without chroot jails is insecure.");
+            }
+
+            Landlock::setAllowedPaths(allowedPaths);
 
 #if ENABLE_DEBUG
-            ::setenv("SAL_ABORT_ON_FORBIDDEN", "1", 1);
+            // Need to be able to test eg. landlock
+            if (!(UnitBase::isUnitTesting() && hasLandlock))
+                ::setenv("SAL_ABORT_ON_FORBIDDEN", "1", 1);
 #endif
         }
 
@@ -4392,7 +4410,7 @@ void lokit_main(
                                  : (JailUtil::isBindMountingEnabled() ? "ok" : "slow")));
         // Are we using a container - either chroot or namespace ?
         pathAndQuery.append(std::string("&adms_contained=") +
-                            (ChildSession::NoCapsForKit ? "uncontained" : "ok"));
+                            ((ChildSession::NoCapsForKit && !hasLandlock) ? "uncontained" : "ok"));
         // How slow was the jail setup ?
         pathAndQuery.append(std::string("&adms_info_setup_ms=") +
                             std::to_string(jailSetupTime.count()));

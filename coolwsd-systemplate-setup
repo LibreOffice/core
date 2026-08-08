@@ -102,6 +102,7 @@ do
     ln -f `${REALPATH} /etc/$file` $CHROOT/etc/$file 2> /dev/null || (${CP} --dereference --preserve=all /etc/$file $CHROOT/etc/$file && touch $CHROOT/etc/copied) || echo "$0: Failed to link or copy /etc/$file"
 done
 
+# FIXME: this is not necessary ...
 # Link dev/random and dev/urandom to ../tmp/dev/.
 # The jail then creates the random device nodes in its /tmp/dev/.
 mkdir -p $CHROOT/dev
