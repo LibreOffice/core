@@ -83,6 +83,19 @@ public sealed record ParagraphBorderSet
     /// </remarks>
     public ParagraphBorder? Between { get; init; }
 
+    /// <summary>
+    /// True when this paragraph continues the box the paragraph above it opened.
+    /// </summary>
+    /// <remarks>
+    /// Only the drawing needs it, and only to close a gap: two joined paragraphs still keep whatever
+    /// <c>w:spacing</c> stands between them, and LibreOffice runs the box's side rules across that space
+    /// rather than stopping at each paragraph's own text. Measured on
+    /// <c>batch-017/docx/Sample_SQMS_Program.docx</c> page 46, where the reference's left rule is
+    /// continuous from 568.25 to 607.85 and ours broke at every 6 pt gap — which cost that page its only
+    /// regression in the whole sweep.
+    /// </remarks>
+    public bool JoinsAbove { get; init; }
+
     /// <summary>True when no side draws and none takes room.</summary>
     public bool IsEmpty
         => Left is null && Right is null && Top is null && Bottom is null && Between is null;
@@ -131,6 +144,6 @@ public sealed record ParagraphBorderSet
             : null;
 
         return (set with { Bottom = between, Between = null },
-                set with { Top = null, Between = null });
+                set with { Top = null, Between = null, JoinsAbove = true });
     }
 }

@@ -608,6 +608,13 @@ public static class PageDrawing
         Length top = Length.Zero;
         Length bottom = Length.Zero;
 
+        // Where the box the paragraph above opened stopped, and which paragraph that was. A joined
+        // paragraph starts its own box there rather than at its own text, so the side rules run across
+        // whatever `w:spacing` stands between the two — which is what LibreOffice draws and what a box
+        // per paragraph gets visibly wrong on a spaced list.
+        int joined = -2;
+        Length joinedAt = Length.Zero;
+
         void Flush()
         {
             if (index < 0 || blocks[index] is not PageParagraph paragraph) return;
@@ -617,8 +624,13 @@ public static class PageDrawing
 
             Length left = text.X - (borders.Left?.Allowance ?? Length.Zero);
             Length right = text.Right + (borders.Right?.Allowance ?? Length.Zero);
-            Length above = text.Y - borders.Above;
+            Length above = borders.JoinsAbove && joined == index - 1 && joinedAt < text.Y
+                ? joinedAt
+                : text.Y - borders.Above;
             Length below = text.Bottom + borders.Below;
+
+            joined = index;
+            joinedAt = below;
 
             if (borders.Top is { Draws: true } rule)
             {

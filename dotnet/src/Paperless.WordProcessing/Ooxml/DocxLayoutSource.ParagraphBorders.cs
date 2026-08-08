@@ -159,7 +159,10 @@ public sealed partial class DocxLayoutSource
 
             blocks[i + 1] = lower with
             {
-                Borders = (lower.Borders ?? borders) with { Top = below.Top, Between = null },
+                Borders = (lower.Borders ?? borders) with
+                {
+                    Top = below.Top, Between = null, JoinsAbove = true,
+                },
             };
         }
     }
