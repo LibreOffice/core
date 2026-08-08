@@ -2344,7 +2344,13 @@ static NSString* getCurrentSelection()
         if( ! [self sendSingleCharacter:pEvent] )
         {
             /* prevent recursion */
-            if( mpLastEvent != mpLastSuperEvent && [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
+            // tdf#172927 don't rely on pointer comparison for equality
+            // It appears that mpLastEvent gets set to a copy of the same
+            // NSEvent somewhere in -[NSApp sendSuperEvent:] causing the
+            // pointers to not be equal when they really are the same.
+            // So prevent infinite recursion by performing a deeper
+            // comparison check with -[NSEvent isEqual:].
+            if( ! [mpLastEvent isEqual: mpLastSuperEvent] && [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
             {
                 id pLastSuperEvent = mpLastSuperEvent;
                 mpLastSuperEvent = mpLastEvent;
