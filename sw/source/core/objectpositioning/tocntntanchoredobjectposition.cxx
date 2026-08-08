@@ -669,6 +669,15 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             const SwTwips nTopOfAnch = GetTopForObjPos( *pAnchorFrameForVertPos, aRectFnSet.FnRect(), aRectFnSet.IsVert() );
             if( nRelPosY <= 0 )
             {
+                // MSO-formatted documents: a no-wrap object cannot share a line with its anchor
+                // paragraph, and a footer keeps that paragraph at the page's footer distance, so
+                // it has nowhere to be pushed. Pull the object up until it clears the paragraph
+                // instead of covering it. Without the compatibility flag: the position given for
+                // the object is the one to honour, even where it covers the text.
+                const SwTwips nObjHeight = aRectFnSet.GetHeight(aObjBoundRect);
+                if (bMSOLayout && pFooter && bNoSurround && nRelPosY + nObjHeight > 0)
+                    nRelPosY = -nObjHeight;
+
                 // Allow negative position, but keep it
                 // inside environment layout frame.
                 const SwLayoutFrame& rVertEnvironLayFrame =

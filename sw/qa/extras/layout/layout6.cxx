@@ -2500,6 +2500,47 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFloatTableOverFooterObjectNoFit)
     CPPUNIT_ASSERT_EQUAL(5, countXPathNodes(pXmlDoc, "//page[1]/body/txt/anchored/fly[1]/tab/row"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFooterNoWrapObject)
+{
+    // A footer whose fly is anchored to the footer paragraph, wraps top and bottom, and is
+    // offset up by less than its own height.
+    createSwDoc("footer-nowrap-object.docx");
+
+    // Whether the fly ends above the footer text instead of covering it.
+    auto isFlyAboveText = [this]() {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        CPPUNIT_ASSERT(pXmlDoc);
+        const sal_Int32 nTextTop
+            = getXPath(pXmlDoc, "//page[1]/footer/txt/infos/bounds", "top").toInt32();
+        const sal_Int32 nFlyBottom
+            = getXPath(pXmlDoc, "//page[1]/footer/txt/anchored/fly/infos/bounds", "bottom")
+                  .toInt32();
+        return nFlyBottom <= nTextTop;
+    };
+    auto isMSOLayout = [this]() {
+        const IDocumentSettingAccess& rIDSA = getSwDoc()->getIDocumentSettingAccess();
+        return rIDSA.get(DocumentSettingId::TAB_OVER_SPACING)
+               || rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
+    };
+
+    // Without the fix the fly kept its offset and covered the paragraph: it ended at 7828, the text
+    // at 7679.
+    CPPUNIT_ASSERT(isMSOLayout());
+    CPPUNIT_ASSERT(isFlyAboveText());
+
+    // Both survive a round trip through ODF.
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(isMSOLayout());
+    CPPUNIT_ASSERT(isFlyAboveText());
+
+    // Without the flags the position given for the fly is honoured, even where it covers the text.
+    getSwDoc()->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_SPACING, false);
+    getSwDoc()->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, false);
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(!isMSOLayout());
+    CPPUNIT_ASSERT(!isFlyAboveText());
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
