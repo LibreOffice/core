@@ -6809,3 +6809,181 @@ verdict". Every one was measured by rendering the whole track before and after.
   `ink.tsv` carried a derived column that violated it — off by exactly one per major page per
   document, a count summed into a percentage. Nothing depended on it. Check the invariant on
   inherited aggregates, not only produced ones.
+
+## Words, round twenty-three: the DOC readers — swept whole at `5913f489e`
+
+Baseline and two fixes, each swept over all 200 documents with this worktree's own CLI (the
+`measuring …` line named it every run), 200 rows, no duplicate path, **0 `ref-failed`**.
+
+### The baseline reproduced the round before it exactly
+
+| | at `5913f489e` |
+|---|---:|
+| full match | **156 / 200** |
+| exactly correct page count | 166 |
+| total absolute page error | 93 |
+| image: documents / pages / major / summed \|ink\|% | 156 / 1621 / 425 / 868.15 |
+
+`doc` 56/66 (15% fail), `docx` 100/134 (25% fail) — the format split the round before recorded,
+reproduced.
+
+**The round-twenty-two headline is right and the way it is usually quoted is not.** Its
+"562 major pages down to 367" is the comparison over the **155 documents measurable at both
+ends**, not over the whole set. The same fix made a 59-page document match for the first time,
+so it entered the image sweep carrying 58 major pages and 38.02 ink — and the whole-set after
+figure is 425 major and 868.15, which is what this round's baseline reproduces to the digit.
+Both numbers are correct and they answer different questions. When a fix changes *which*
+documents the image sweep can see, only the common-set comparison is apples to apples; say
+which one a figure is.
+
+### What the brief expected, and what the track actually holds
+
+The round was briefed to carry `w:pBdr` into "the other three readers" — `.doc`, `.rtf` and
+`.odt` — on the grounds that the layout and drawing halves are format-agnostic and already
+built. They are. But the words track holds **66 `.doc`, 134 `.docx`, and no `.rtf` and no
+`.odt` at all**, so two of the three readers have no document here and nothing built into them
+could have been measured by rendering it. Only the WW8 reader was worth the round.
+
+### `sprmPBrcTop` and its four neighbours
+
+Reads as `w:pBdr` does, because the two formats state the same two quantities in the same two
+units: a `BRC`'s `dptLineWidth` is eighths of a point exactly as `w:sz` is, and its `dptSpace`
+is whole points exactly as `w:space` is (`WW8_BRCVer9::DetermineBorderProperties` multiplies it
+by twenty). Both forms of the sprm are read, the WW9 form winning over the WW8 one regardless of
+the order a producer wrote them in; the two revision-bar sprms are excluded, as
+`SwWW8ImplReader::Read_Border` excludes them. A sprm carrying a nil or zero-typed `BRC` is a
+border *removed*, not a border unstated — `##826##` in `SetBorder`.
+
+The joining pass moved out of `DocxLayoutSource` into `Layout/ParagraphBorders.cs`, where both
+readers run one copy of it.
+
+| | before | after |
+|---|---:|---:|
+| full match | 156 | 156 |
+| abs page error | 93 | 93 |
+| major pages (156 docs) | 425 | 423 |
+| summed \|ink\|% | 868.15 | 861.81 |
+
+**Not one of the 200 rows changed.** Reach, measured by rendering: 8 documents moved in the
+image sweep and 9 of the 66 `.doc` gained or lost a fill record — the ninth fails the gate, so
+the image sweep cannot see it.
+
+That is much smaller than the same property was worth on DOCX, and the three reasons are worth
+keeping:
+
+- A raw scan for the ten sprm ids hits **54 of the 66** `.doc`. Nine draw a rule that was not
+  drawn before. The census overstates by six times, in the usual direction — Word writes
+  `sprmPBrcTop` with a nil `BRC` constantly, and a stated *no border* is most of what those 54
+  files carry.
+- A paragraph rule is half a point thick, which is a third of a pixel at 512 px on the long
+  edge. **`pdf-image-diff.py` is close to blind to this class**; the operator diff is what sees
+  it. Six of the eight documents the image sweep did move, moved by under a point of ink.
+- The one document that got worse is the round-twenty-two lesson again.
+  `150_5300_13_chg12.doc` page 27 gains seven right-edge rules at x 565.60–566.10 and the
+  reference draws exactly seven at x 565.80 — one for one, matching segment lengths, 55.6 pt
+  higher up the page. The rules are right; the page was already displaced, and drawing them made
+  a pre-existing error visible to a metric that could not see it before.
+
+Positively, on `150_5300_13_chg10.doc` page 1 the two new rules land at (72.00, 625.85) and
+(72.00, 595.42) where the reference strokes are at (72.00, 625.80) and (72.00, 595.45), with
+the same x extents to 0.05 pt.
+
+### A DOC section states no header distance because it means half an inch
+
+Found by ranking the remaining major pages by ink. The top three are one producer's — the brief
+called that the best-value unexamined thing on the track, and it was, but the cause is not
+paragraph borders.
+
+On `150_5335_5a.doc` page 9 our header sat at y 780.80 against the reference's 744.80, and our
+footer at 2.60 against 38.60. Thirty-six points, both ways, on every page — while the body
+agreed to within 0.15 pt, which is what says furniture rather than reflow.
+
+WW8's `SEP` is a structure with defaults, not a list of statements: Word writes a sprm only
+where a section departs from them. `Ww8SectionTable` read a missing `sprmSDyaHdrTop` as zero,
+so every DOC that accepts Word's own default had its header pinned to the paper edge.
+LibreOffice states the default twice — `WW8_SEP`'s constructor (`ww8scan.cxx`,
+`dyaHdrTop(720), dyaHdrBottom(720)`) and the fallback to `ReadUSprm` (`ww8par6.cxx`:1183).
+
+It reaches the body too: `PageGeometry.HeaderHeight` is the gap between the distance and the top
+margin, so a zero distance also made the header's band 36 pt too tall on every such document.
+
+| | before | after |
+|---|---:|---:|
+| full match | 156 | **155** |
+| abs page error | 93 | **98** |
+| major pages (155 common docs) | 408 | **360** |
+| summed \|ink\|% | 806.94 | **798.02** |
+
+`150_5335_5a.doc` goes 47 major pages to 15 without changing its 63-page count;
+`96-3-clement-data.doc` goes 6 to 0; `316r_a_e.doc` goes 14 to 2.
+
+**It costs a match, and it is still right.** `150_5300_13_chg8.doc` goes 18/18 to 21/18 and
+`150_5300_13_chg10.doc` 77/76 to 79/76 — both the same producer, both gaining pages because the
+header band is now the right size and the body no longer has 36 pt of head-room it was never
+entitled to. chg8's 18/18 was accidental: 15 of its 18 pages were already major, and its page 1
+is missing the reference's whole departmental title block. Nothing else in the track moved.
+
+Report both numbers rather than the flattering one. The binary gate went down by one and the
+continuous page-error figure went up by five, while the metric the fix is actually about went
+down by 48 major pages — the reverse shape of the "fixes that cancel" case in the skill, and the
+same rule applies: do not revert a change that is right on its own evidence.
+
+### Round total, base `5913f489e` to `HEAD`
+
+| | base | final |
+|---|---:|---:|
+| full match | 156 | 155 |
+| abs page error | 93 | 98 |
+| major pages (155 common docs) | 410 | **360** |
+| summed \|ink\|% | 812.53 | **798.02** |
+
+Ten documents moved across the round, nine of them better.
+
+### Verified by putting the defects back
+
+Eight for the borders, four for the section defaults, each applied to the source, the library
+rebuilt, the tests run, the source restored.
+
+| defect | caught by |
+|---|---|
+| `dptSpace` read as twips | 5 border tests |
+| `fShadow`/`fFrame` bits left in `dptSpace` | `TheShadowAndFrameFlags…` |
+| a nil or zero-typed `BRC` read as silence | `ABorderRemovedIsStated…` |
+| the id range run one too far, taking the bar | `ARevisionBarIsNot…(0xC653)` |
+| the side offset one out | 5 × `EachBorderSprmNamesItsSide…` |
+| the joining loop never entered | one DOC test and two DOCX tests |
+| the join stops comparing the left rule | `TwoParagraphsBorderedDifferently…` |
+| either emptiness guard removed alone | **nothing** |
+| both header distances default to nothing | all 3 section tests |
+| the default treated as a floor | `AStatedDistanceBeatsTheDefault` |
+| only the header defaults, not the footer | 2 section tests |
+| the band measured from the page edge | `TheHeaderBandIsWhatTheTopMargin…` |
+
+`AParagraphWithNoBorderSprmsHasNoSet` is a **control rather than a detector**, and the label is
+kept deliberately. `ToParagraphBorders` guards emptiness twice, so removing either guard alone
+changes nothing observable; removing both together does break the test, which is what proves it
+is not vacuous. No single plausible defect makes it fail.
+
+### What is open, in the order this round would take them
+
+1. **The remaining 360 major pages.** The top of the list is still one producer —
+   `150_5300_13_chg12.doc` (70.29), `150_5300_13_chg8.doc`, `150_5335_5a.doc` — and the header
+   fix has now taken the third of them from 47 major pages to 15. The next thing on chg8 is
+   visible in one dump: **page 1 is missing the reference's entire departmental title block**
+   ("U.S. Department of Transportation / Federal Aviation Administration", drawn in DejaVu Sans
+   at y 701.95–663.55). We draw nothing there and start at "1. PURPOSE". That is a dropped
+   frame or table, it is the reason chg8's page count was only accidentally right, and it is
+   worth a round on its own.
+2. **`PAGE` in a header or footer prints the producer's cached number.** Still true, and this
+   round found a second half of it: on `150_5335_5a.doc` page 9 our footer says **13** where the
+   reference says **3**, so the defect is not only the cached width but the section's page
+   numbering restart as well.
+3. **`w:pBdr` for `.rtf` and `.odt`.** Both readers still build nothing into the model. Neither
+   has a single document on this track, so the work cannot be justified or measured here — it
+   needs an authored probe compared against LibreOffice, not a corpus sweep. Say so rather than
+   letting it read as unfinished corpus work.
+4. **A `w:val="double"` border reserves one width, not three.** `ConvertBorderWidthFromWord`
+   triples a double rule's width and doubles a thick one, and neither reader applies it. The DOC
+   path already applies `DetermineBorderProperties`'s triple/wave adjustment because the table
+   borders needed it, so the two readers now disagree slightly on the same markup. Not measured;
+   no document was found on this track where it decides anything.

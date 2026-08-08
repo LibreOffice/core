@@ -45,7 +45,7 @@ public sealed partial class Ww8DocumentReader
     /// there is no border. A <c>brcType</c> of zero means "nothing said here", and falls through to
     /// whatever the table's own defaults say; a <em>nil</em> BRC means "no border", and does not.
     /// </returns>
-    private static Ww8Border? ReadBorder(ReadOnlySpan<byte> bytes, bool isVersion9)
+    internal static Ww8Border? ReadBorder(ReadOnlySpan<byte> bytes, bool isVersion9)
     {
         if (isVersion9)
         {
@@ -59,7 +59,10 @@ public sealed partial class Ww8DocumentReader
 
             return bytes[5] == Ww8Border.Unset
                 ? null
-                : new Ww8Border(bytes[5], bytes[4], ColourOf(bytes[..4]));
+                : new Ww8Border(bytes[5], bytes[4], ColourOf(bytes[..4]))
+                {
+                    SpacePoints = BinaryPrimitives.ReadUInt16LittleEndian(bytes[6..]) & DptSpaceMask,
+                };
         }
 
         if (bytes.Length < Brc80Size) return null;
@@ -67,8 +70,20 @@ public sealed partial class Ww8DocumentReader
 
         return bytes[1] == Ww8Border.Unset
             ? null
-            : new Ww8Border(bytes[1], bytes[0], IcoPalette[bytes[2] < IcoPalette.Length ? bytes[2] : 0]);
+            : new Ww8Border(bytes[1], bytes[0], IcoPalette[bytes[2] < IcoPalette.Length ? bytes[2] : 0])
+            {
+                SpacePoints = bytes[3] & DptSpaceMask,
+            };
     }
+
+    /// <summary>
+    /// The bits of a <c>BRC</c>'s last field that hold <c>dptSpace</c>.
+    /// </summary>
+    /// <remarks>
+    /// Five, so the distance saturates at 31 points; the bits above it are <c>fShadow</c>, <c>fFrame</c>
+    /// and padding. It sits in the fourth byte of a <c>BRC80</c> and in the last word of a <c>BRC</c>.
+    /// </remarks>
+    private const int DptSpaceMask = 0x1F;
 
     /// <summary>
     /// Reads one <c>sprmTSetBrc</c> or <c>sprmTSetBrc80</c>: a range of cells, a set of sides, and a BRC.
@@ -264,6 +279,23 @@ public readonly record struct Ww8Border(int Kind, int EighthPoints, Colour? Colo
     public const int Nil = 0xFF;
 
     /// <summary>
+    /// The <c>dptSpace</c>: how far the rule keeps from what it borders, in <em>points</em>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Points, not twips and not eighths — <c>WW8_BRCVer9::DetermineBorderProperties</c> converts it by
+    /// multiplying by twenty, and nothing else in a <c>BRC</c> is stated in whole points. It is the same
+    /// quantity, in the same unit, as OOXML's <c>w:space</c>, which is what makes one
+    /// <see cref="Layout.ParagraphBorderSet"/> serve both readers.
+    /// </para>
+    /// <para>
+    /// A table cell ignores it — a cell's inner distance comes from its own padding sprms — so it is read
+    /// for the paragraph borders and carried on every <c>BRC</c> only because there is one decoder.
+    /// </para>
+    /// </remarks>
+    public int SpacePoints { get; init; }
+
+    /// <summary>
     /// How much space the border takes, which is not simply its stated width.
     /// </summary>
     /// <remarks>
@@ -300,6 +332,21 @@ public readonly record struct Ww8Border(int Kind, int EighthPoints, Colour? Colo
     /// use BLACK".
     /// </remarks>
     public Layout.TableBorder Resolved => new(Width, Colour ?? Core.Graphics.Colour.Black);
+
+    /// <summary>
+    /// The border as one side of a paragraph's box: the rule, and the distance it keeps from the text.
+    /// </summary>
+    /// <remarks>
+    /// A <see cref="Nil"/> or <see cref="Unset"/> code becomes a side of zero width and zero distance,
+    /// which is a stated <em>no border</em> rather than the absence of a statement — the same distinction
+    /// <c>w:val="none"</c> carries in a <c>w:pBdr</c>, and the reason a paragraph can switch off the rule
+    /// its style would have given it.
+    /// </remarks>
+    public Layout.ParagraphBorder ResolvedParagraphSide
+        => Kind is Unset or Nil
+            ? new Layout.ParagraphBorder(Length.Zero, Length.Zero, Core.Graphics.Colour.Black)
+            : new Layout.ParagraphBorder(
+                Width, Length.FromPoints(SpacePoints), Colour ?? Core.Graphics.Colour.Black);
 }
 
 /// <summary>The four <c>BRC</c>s a cell states, each null where it states nothing.</summary>
