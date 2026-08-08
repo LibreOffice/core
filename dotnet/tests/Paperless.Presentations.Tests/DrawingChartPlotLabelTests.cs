@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using Paperless.Core.Charts;
+using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Shouldly;
 
@@ -244,5 +245,39 @@ public class DrawingChartPlotLabelTests
 
         plot.Series[0].HasLine.ShouldBeFalse();
         plot.Series[0].Marker.ShouldBe(ChartMarker.Square);
+    }
+
+    /// <summary>
+    /// A legend's own <c>c:txPr</c> is the size the legend is laid out at, and a
+    /// <c>c:legendEntry</c>'s is not.
+    /// </summary>
+    /// <remarks>
+    /// Every length in <c>lcl_placeLegendEntries</c> is a fraction of the legend's character
+    /// height, and nothing read one: the layout used the <em>axis</em> label size, so a legend
+    /// set at 14 pt was drawn with a 10 pt legend's key, gaps and row pitch. 22 of the 61 chart
+    /// parts in the slides corpus state one, at 9, 11, 12, 14, 15, 16, 18 and 22 pt.
+    ///
+    /// The second half matters because <c>c:legendEntry</c> precedes <c>c:txPr</c> in the
+    /// schema's order, so a reader that searches the legend's descendants for the first
+    /// <c>a:defRPr</c> finds the entry's override and sizes the whole legend by it.
+    /// </remarks>
+    [Fact]
+    public void ALegendsOwnTextPropertiesGiveItsSize()
+    {
+        string legend = """
+            <c:legend>
+              <c:legendPos val="r"/>
+              <c:legendEntry><c:idx val="0"/>
+                <c:txPr><a:bodyPr/><a:p><a:pPr><a:defRPr sz="2400"/></a:pPr></a:p></c:txPr>
+              </c:legendEntry>
+              <c:txPr><a:bodyPr/><a:p><a:pPr><a:defRPr sz="1400"/></a:pPr></a:p></c:txPr>
+            </c:legend>
+            """;
+
+        Read(Bar() + legend).LegendSize.ShouldBe(Length.FromPoints(14));
+
+        // And a legend that states none leaves it unset, so the layout keeps using the axis
+        // labels' size exactly as it did before this was read at all.
+        Read(Bar() + "<c:legend><c:legendPos val=\"r\"/></c:legend>").LegendSize.ShouldBeNull();
     }
 }

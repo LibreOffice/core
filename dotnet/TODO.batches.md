@@ -7601,3 +7601,71 @@ this one understated it nearly threefold.
 The ODF reader *clamped* a rotation angle instead of folding it, so 270° became +90 and 315° became
 +90 as well. No sheets-track document is ODF with a turned cell; without the fix six of the probe's
 thirty-six sheets could not be read at all.
+## Slides round twenty-three: the legend, inherited unmeasured and kept on its own numbers
+
+A container restart killed the previous slides agent mid-round; its two commits — a probe and a
+legend fix — arrived as an unverified prior attempt. Both were re-derived before being kept, and
+the fix as it stood **could not have passed the round's own gate**: it left
+`Paperless.Core.Tests` at 246/247, because `ChartLegendLayoutTests` asserted exactly the text
+shape the fix stopped measuring.
+
+| slides, 163 documents | base `d7fd6cf13` | after |
+|---|---:|---:|
+| word gate | 151 | 151 |
+| `ink%` | 1265.33 | 1263.67 |
+| `\|ink\|%` | 1584.92 | **1583.49** |
+| major pages | 430 | **428** |
+| census, unexplained pages | 304 over 91 docs | 304 over 91 docs |
+
+Verdicts changed: **0**. Every batch holds its count.
+
+**The measurement survived and half the explanation did not.** The salvage's numbers reproduce
+to the digit — legend name pen 625.07 → 626.85 against 627.56, row pitch 17.35 → 14.18 against
+14.09 — and its claim, that a legend entry's name is the one chart text carrying no
+`TextShapeInset`, is confirmed by a probe varying the *font size*: the key-to-pen gap is 2.83,
+2.83 and 3.07 pt at 7, 10 and 14 pt, which is `max(1 mm, 0.22 × font)` three times over with no
+free parameter, where the inset-bearing reading fits none of the three.
+
+What the same probe showed is that **the legend was not being sized by its own font at all.**
+Every length in `lcl_placeLegendEntries` is a fraction of the legend's character height, and
+both chart readers only ever looked for the *axis label* size. Ours was 6.00 pt of key and
+14.18 pt of pitch at all three font sizes; the reference is 4.20/5.98/8.39 and
+10.34/14.09/19.33.
+
+That matters for how the salvage is judged, because the two errors were **cancelling**. Signed
+error on the plot rectangle's right edge over the seven probe decks:
+
+| deck | base | salvage alone | both |
+|---|---:|---:|---:|
+| 5 names, 7 pt | −16.03 | −12.43 | −0.69 |
+| 5 names, 10 pt | −4.33 | −0.73 | −0.73 |
+| 5 names, 14 pt | +14.41 | **+18.01** | +0.73 |
+| 10 names, 14 pt | +27.13 | **+30.73** | +1.46 |
+| mean absolute, all seven | 11.14 | 9.59 | **1.27** |
+
+The salvage alone makes the 14 pt decks *worse*, by exactly the inset it removes. Kept only
+because the other half went in beside it.
+
+**Reach measured by rendering: 9 of 163 documents changed, 154 byte-identical** — and those 9
+are every deck in the track with a legend on a chart. 15 have chart parts; the 6 with no legend
+did not move.
+
+**The regression it was meant to close is 60% closed, not closed.** Round twenty-two's chart
+face fix cost 2.52 of `|ink|%`; this returns 1.43.
+
+### Two items off the list, one refuted number
+
+- **`PptSlideLayout.cs`'s group-scale branch**, read and never probed for five rounds. Now
+  instrumented and censused over all 51 corpus `.ppt`: of 7514 text shapes taking the upright
+  branch, **7364 have an exactly unit placement and 150 do not**, across 11 documents, at factors
+  from 0.00063 to 1.385. The comment's stated premise — "the commonest group's factor is
+  1.00025" — is **false**: the whole band under 0.1% is empty. The reading it defends is right,
+  settled on `hofman.ppt`, whose 34 scaled shapes carry A = 1.1163 and D = 1.0315 and whose
+  reference draws the same 24.01, 28.01, 32.00 and 43.99 pt we do. No code change; item closed.
+- **The bold chart text lead named the wrong text.** It is the chart *title* (18 pt bold) and
+  the *axis titles* (10 pt bold), which an OOXML chart takes from `objectformatter.cxx`'s
+  auto-text table and never from chart2's model defaults we cite; the axis *labels* the lead
+  implied are correctly not bold by default. Separately, a stated `b="1"` is not read at all —
+  36 of 61 chart parts over 7 documents. Both recorded in `Paperless.Presentations/TODO.md`
+  with the measurements; neither implemented, because the weight needs `ChartLabel` plus all
+  three consumers and two of those are other tracks' files.
