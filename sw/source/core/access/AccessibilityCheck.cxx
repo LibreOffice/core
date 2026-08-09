@@ -1030,7 +1030,7 @@ public:
                     }
 
                     if (!SfxPoolItem::areSame(static_cast<const SvxWeightItem*>(pItem), pStyleItem))
-                        sFormattingType = "Weight";
+                        sFormattingType = u"Weight"_ustr;
                 }
                 break;
 
@@ -1061,7 +1061,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxPostureItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Posture";
+                        sFormattingType = u"Posture"_ustr;
                     }
                 }
                 break;
@@ -1088,7 +1088,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_SHADOWED),
                                               pStyleItem))
                     {
-                        sFormattingType = "Shadowed";
+                        sFormattingType = u"Shadowed"_ustr;
                     }
                 }
                 break;
@@ -1114,7 +1114,7 @@ public:
 
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_COLOR),
                                               pStyleItem))
-                        sFormattingType = "Font Color";
+                        sFormattingType = u"Font Color"_ustr;
                 }
                 break;
 
@@ -1146,7 +1146,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_FONTSIZE),
                                               pStyleItem))
                     {
-                        sFormattingType = "Font Size";
+                        sFormattingType = u"Font Size"_ustr;
                     }
                 }
                 break;
@@ -1177,7 +1177,7 @@ public:
                     }
 
                     if (!SfxPoolItem::areSame(static_cast<const SvxFontItem*>(pItem), pStyleItem))
-                        sFormattingType = "Font";
+                        sFormattingType = u"Font"_ustr;
                 }
                 break;
 
@@ -1203,7 +1203,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_EMPHASIS_MARK),
                                               pStyleItem))
                     {
-                        sFormattingType = "Emphasis Mark";
+                        sFormattingType = u"Emphasis Mark"_ustr;
                     }
                 }
                 break;
@@ -1230,7 +1230,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_UNDERLINE),
                                               pStyleItem))
                     {
-                        sFormattingType = "Underline";
+                        sFormattingType = u"Underline"_ustr;
                     }
                 }
                 break;
@@ -1257,7 +1257,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_OVERLINE),
                                               pStyleItem))
                     {
-                        sFormattingType = "Overline";
+                        sFormattingType = u"Overline"_ustr;
                     }
                 }
                 break;
@@ -1284,7 +1284,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_CROSSEDOUT),
                                               pStyleItem))
                     {
-                        sFormattingType = "Strikethrough";
+                        sFormattingType = u"Strikethrough"_ustr;
                     }
                 }
                 break;
@@ -1311,7 +1311,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_RELIEF),
                                               pStyleItem))
                     {
-                        sFormattingType = "Relief";
+                        sFormattingType = u"Relief"_ustr;
                     }
                 }
                 break;
@@ -1338,7 +1338,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_CONTOUR),
                                               pStyleItem))
                     {
-                        sFormattingType = "Outline";
+                        sFormattingType = u"Outline"_ustr;
                     }
                 }
                 break;
@@ -1365,7 +1365,7 @@ public:
                     if (!SfxPoolItem::areSame(&pItem->StaticWhichCast(RES_CHRATR_NOHYPHEN),
                                               pStyleItem))
                     {
-                        sFormattingType = "No Hyphenation";
+                        sFormattingType = u"No Hyphenation"_ustr;
                     }
                 }
                 break;
