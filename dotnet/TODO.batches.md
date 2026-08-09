@@ -9991,3 +9991,12 @@ The dispatch brief said of `first-divergence.py` **"Never run on sheets"** and, 
 sentence, *"Running it here is cheap and may reorder this brief; if it does, follow the
 measurement and say so."* The two cannot both be followed. The prohibition was honoured and the
 instrument was not run on this track; whoever writes the next brief should say which was meant.
+
+### One review item refuted by measurement
+
+The brief asked whether `T0A0D0000090006XLSE.xls`'s *"minor text sizing causes different wrapping
+in some cells"* shares a root with the row-height cluster, before treating it as separate. It does
+not: its only sheet's 360 rows agree with LibreOffice's own `style:row-height` **exactly, 0 of
+360**, before and after this round. Whatever wraps differently there never reaches the reserved
+height, which puts it on the drawing side — consistent with the document being page-exact
+(162/162) while over-drawing 2098 words.

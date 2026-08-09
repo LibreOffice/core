@@ -165,6 +165,15 @@ Both halves were verified by reintroduction, through `verify-test.sh`:
 | `while` back in `ContentTableCell.AppendText` | Core 2 of 284, Spreadsheets 2 of 605 |
 | `\|\| text holds a break` back in `SheetOptimalRowHeights` | Spreadsheets 2 of 605 |
 
+## One of the brief's review items, refuted by measurement
+
+The brief asked whether `T0A0D0000090006XLSE.xls`'s *"minor text sizing causes different wrapping
+in some cells"* is the same root as the row-height cluster, before treating it as separate. It is
+not: `rowdiff.py` compares its only sheet against LibreOffice's own `style:row-height` and
+**0 of 360 rows differ**. Whatever is wrapping differently there does not reach the reserved
+height, which puts it on the drawing side — consistent with the document being page-exact
+(162/162) while over-drawing 2098 words.
+
 ## Left open, and labelled
 
 - **The 3.4 twips on the fixture's row 1.** Calc keeps a multi-line string as an `EditTextObject`
