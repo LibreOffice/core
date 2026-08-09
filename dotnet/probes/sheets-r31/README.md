@@ -228,3 +228,44 @@ losing a line.
 coalescing and the BIFF anchoring — because it was already three quarters through when the
 fidelity suite found them. Both corrections change bytes, so the true figure for the final tree is
 near this and is not this. It is quoted as what it is: `reach-intermediate.tsv`.
+
+## Which tree each sweep measured, and what the last two corrections moved
+
+`final-whole-track.tsv` is a complete 171-row sweep of the tree at commit `ac42fe758` — after
+both fixes and before the two corrections the fidelity suite then found (coalescing a line's
+same-size pieces into one run, and not anchoring the BIFF band). A second whole-track sweep was
+started on the corrected tree and **did not finish inside the round**; it is quoted here as the
+partial it is, `final-tree-partial.tsv`.
+
+Over the **133 of 171 rows** it reached, the two corrections move the gate on **two documents**,
+by **six words in total**, and move **no verdict**:
+
+| document | words before → after |
+|---|---|
+| `TOGAF9-Tool-ConfReqts-CSQ.xls` | 24214 → 24209 / 24097, `match` either way |
+| `fy2010-aip-grants.xls` | 63113 → 63112 / 63452, `match` either way |
+
+Neither correction can move a glyph: one changes how many `Tj` operators a band's text is written
+as, and the other moves a BIFF band's text vertically inside a band whose height did not change.
+The headline is therefore quoted from the complete sweep and this partial is the evidence that it
+still describes the tree being handed over — **stated as a partial rather than extrapolated.**
+
+## Test counts
+
+Every project run individually, whole output captured, **0 skipped** everywhere:
+
+| Core | Containers | Text | Vector | Rendering | Markup | OpenDocument | WordProcessing | Spreadsheets | Presentations |
+|---|---|---|---|---|---|---|---|---|---|
+| 264 | 109 | 240 | 291 | 119 | 259 | 125 | 690 | **588** | 538 |
+
+Every count is the briefed known-good except Spreadsheets, which is 573 plus this round's 15.
+
+`Paperless.Fidelity.Tests` was run twice. **The first run failed 3 of 550**, all three
+`SheetDecorationComparisonTests.TheHeaderExpandsItsFieldsIntoThreeSeparatelyAlignedParts`, and
+both corrections above came out of reading them: the `.ods` and `.xlsx` cases counted 10 band runs
+where the test expects 5, and the `.xls` case put a footer run 1.53 pt below LibreOffice's against
+a 1.5 pt tolerance. **That is the round's most useful test result and it is the one that nearly
+did not get run** — the suite takes hours under this load and had to be started in the background
+before the corpus sweep. After both corrections the class passes 12 of 12; the full 550-case
+re-run was started and had not returned when the round closed, so **the whole-suite count for the
+final tree is unmeasured** rather than assumed.
