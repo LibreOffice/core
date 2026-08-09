@@ -1208,6 +1208,11 @@ internal sealed class XlsWorkbookReader
         // column and row it names, so a drawing cannot be placed until their sizes are known.
         SheetGrid grid = _page.ToGrid();
 
+        // Before the layout is built, because the transfer reads the range's own cells and the
+        // decoration path will only ever ask about its origin afterwards.
+        SheetFormatting formatting = _sheetDecoration.Resolve(_decoration);
+        XlsMergedBorders.Apply(formatting, builder.StatedMerges);
+
         _layouts.Add(new SheetLayout
         {
             Name = sheet.Name,
@@ -1218,7 +1223,7 @@ internal sealed class XlsWorkbookReader
             Cells = table,
             StatedMerges = builder.StatedMerges,
             HyperlinkRanges = builder.HyperlinkRanges,
-            Formatting = _sheetDecoration.Resolve(_decoration),
+            Formatting = formatting,
             Formats = BuildFormats(builder),
             RichText = BuildRichText(),
             Drawings = _drawings.IsEmpty
