@@ -8417,3 +8417,121 @@ OpenDocument 125, WordProcessing 690, Spreadsheets **573** (566 plus this round'
 Presentations 538, Fidelity 550. The fidelity suite took an hour and three quarters to return at a
 load average around 20 and was written down as unrun before it did — kept as a note in the probe
 README, because a fidelity count taken under that load is the one that can be silently truncated.
+## Words, round thirty, at `946b3defc` — a running head that reaches past a continuous section
+
+### The baseline reproduced the brief to the digit
+
+Whole-track sweep against a checksummed CLI snapshot, `SOURCE_DATE_EPOCH` pinned:
+**154/200, absolute page error 81, 164 exactly-correct page counts, absolute word error
+7075.** 200 rows, no path twice.
+
+### `Read_HdFt` inherits from the previous section's *page descriptor*, and a continuous section has none
+
+`Read_HdFt` copies an empty header story from `pPrevious->mpPage` — the immediately preceding
+segment's page descriptor (`ww8par.cxx`:2567, `SetSwFormatPageDesc` at 4381). A continuous
+section never gets one: `InsertSegments` turns it into a Writer *text* section instead
+(`ww8par.cxx`:4422). So the `else if (pPrev)` arm never runs, and the slot keeps the empty
+format `SwFormatHeader(true)` left there a few lines above. **The running head stops** rather
+than reaching back past the continuous section to the last section that had a page of its own.
+
+We carried one dictionary of slots forward across every section unconditionally, so a head set
+in section 0 reached every later section that stated no story of its own. On
+`150_5300_13_chg12.doc` that put `9/29/06 AC 150/5300-13 CHG 10` across the top of thirteen
+pages LibreOffice leaves bare, and the wrong even head on several more.
+
+Three pieces, all from the same reading:
+
+- The six `grpfIhdt` bits are now synthesised as `InsertSegments` does — odd and first always,
+  even under `fFacingPages`, and a bit whose story is empty survives only where the *previous*
+  section had it on (`ww8par6.cxx`:1237-1258). `Complete`'s "which slots did this section turn
+  on" now reads those bits instead of guessing from what landed in the dictionary.
+- A slot is copied only out of the immediately preceding section's page descriptor.
+- `if (bUseLeft) pPD->GetLeft().SetFormatAttr(...)` runs whether or not the story could be read,
+  so an even slot whose bit is on and whose story is empty and uninheritable is a **blank** —
+  not, as this dictionary had it, an absent slot falling back to the master's head.
+
+The first attempt short-circuited *every* continuous section to the set in force, and that is
+one case too many: `HasOwnHeaderFooter` (`ww8par.cxx`:4528) makes `InsertSegments` build a
+descriptor for a continuous section that states a not-first slot of its own.
+`PK_FlugzeugeStricken.doc` — second section continuous, 55-character odd header, 39-character
+odd footer — went **7/7 match to 8/7, +90 words**, and was the whole of that sweep's cost. A
+continuous section now computes its own furniture whenever it has any; either way it does not
+become a copy source for the section after it, because the descriptor is thrown away again
+unless the section holds a hard page break (`#i40766#`).
+
+### Measured, and the census matched the reach exactly for once
+
+Reach by byte-comparing 200 renderings before and against after, clock pinned: **4 of 200
+differ**, and they are precisely the four the census predicted. The census — over the header
+PLC and section descriptors of all 66 `.doc`; the other 134 are DOCX, where a section names its
+headers explicitly and the case cannot arise — said the slot-blanking case reaches
+`150_5300_13_chg8`, `absrc-pac-01-info-note-en`, `150_5300_13_chg10` and `150_5300_13_chg12`.
+This is the first census on this track that has not over-stated; do not read it as the rule.
+
+| | before | after | reference |
+|---|---:|---:|---:|
+| `150_5300_13_chg8.doc` | 22 pages, 8652 words | **21**, **8584** | 18, 8557 |
+| `150_5300_13_chg12.doc` | 34, 12864 | 34, **12769** | 33, 12750 |
+| `150_5300_13_chg10.doc` | 83, 24367 | 83, **24184** | 76, 23456 |
+| `absrc-pac-01-info-note-en.doc` | 6, 1325 | 6, **1320** | 7, 1322 |
+
+Whole track: **154/200 match (unchanged), absolute page error 81 → 80, 164 exact page counts
+(unchanged), absolute word error 7075 → 6728.** Nothing else on the track moved a byte.
+
+Both halves of the word move, over those four documents: **over-draw 2380 → 2063, under-draw
+1282 → 1316.** That is the signature of a running head we should never have drawn going away —
+the small rise in under-draw is reflow, not lost text.
+
+Per batch at the end: 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9,
+011 9/10, 012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10, 019 4/10,
+020 2/10, 021 0/2.
+
+Per-project tests, all matching the known-good counts with 0 skipped: Core 264, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 690,
+Spreadsheets 566, Presentations 538, Fidelity 550.
+
+### `chg12`'s extra page is an odd-page break meeting a page-number restart
+
+Diagnosed, **not fixed and not measured beyond this document.** Our page 8 now holds nothing but
+a running head; the reference has no such page. It is the filler our paginator emits before
+section 8, which is a **one-character section** (CP 20746 to 20747, a lone paragraph mark) with
+`bkc == 4`, an odd-page break, and a page-number restart at 19.
+
+`SwFrame::InsertNewPage` (`pagechg.cxx`:1581-1612) decides the side the new page *wants* from
+the restart value when the section carries one — `bWishedRightPage = sw::IsRightPageByNumber(*pRoot, *oNumOffset)`
+— and only otherwise from the physical alternation. Our filler loop tests the parity of the
+**old** section's numbering: `pageNumber = geometry.RestartPageNumberAt ?? pageNumber` runs
+*after* the loop, not before it (`Paginator.cs`:731-766). Two pages of `chg12` are of this shape
+and one of them is the whole of its +1.
+
+I did not settle the arithmetic — reconstructing it from `IsRightPageByNumber`'s comparison
+against the layout's *first* virtual page number predicts a filler where the reference has none,
+so either that first number is not 1 or a second rule is in play. Anyone taking this should
+measure before writing, and should expect the change to reach DOCX `w:type="oddPage"` as well.
+
+### Refuted
+
+- **`chg8` does not emit a blank page.** The brief's third item: all 21 of its pages carry body
+  text at `946b3defc` and after. Whatever motivated that entry is gone or was never `chg8`.
+- **"The even page with no even story" is a three-document ceiling.** Measured over the header
+  PLC of all 66 `.doc`: the case where the even bit is *off* while a header is on reaches
+  **5 sections of 3 documents** — `150_5335_5a`, `chg10`, `chg12` — and the first of those three
+  already matches. Our dictionary still cannot say "this page has no header at all"; the near
+  case, where the bit is *on* and the story is empty, is now a blank and is fixed. Weigh the
+  remainder against that ceiling before building the sentinel it needs.
+- **Unequal column widths were not touched**, and the brief's own census — zero DOCX declaring
+  `w:cols w:equalWidth="0"` — stands as the reason.
+
+### No unit test, and why
+
+The behaviour needs a `.doc` whose later section states an *empty* header story while an earlier
+one states a real head, with a continuous section between them. LibreOffice's own DOC export
+writes a resolved head into every section it emits, so no fixture generated through it can carry
+the case, and none in the tree does. The claim rests on the corpus measurement above and on
+LibreOffice's flat-ODF export of `chg12`, whose `Convert 1`, `Convert 3` and `Convert 5` master
+pages carry an **empty** `style:header` beside a populated `style:header-left` — exactly what
+the rule predicts and the opposite of what we drew.
+
+`probes/ww8-header-stories.py` is committed: it reads the FIB, `PlcfHdd`, the piece table and
+`PlcfSed` straight out of a `.doc` and prints each section's six story lengths, their text, the
+synthesised `grpfIhdt` and the break kind. Every census in this entry came from it.
