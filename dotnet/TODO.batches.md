@@ -10113,3 +10113,106 @@ height, which puts it on the drawing side — consistent with the document being
 Test counts on the final tree, run project by project: Core **284** (278 before), Containers 109,
 Text 255, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 706,
 Spreadsheets **605** (598 before), Presentations 545, Fidelity 550, **0 skipped** throughout.
+## Words round 35: the sweep's classifier was wrong three ways
+
+The round's most valuable result is that the instrument, not the renderer, produced a third of
+the previous table. Three separate faults, each found by checking a claim rather than reading
+the column:
+
+**1. `shows N vs M` is our PDF writer's batching and moves no mark.** Settled by reading both
+content streams on three documents. Every such note pairs records agreeing on face, size,
+position and glyph count, and the direction is not even consistent — ours emits *fewer* shows
+than LibreOffice on `review-welsh-government…docx` and `1228841571067…doc` and *more* on
+`template---tpr…docx`. The sheets track had already recorded it as "the known `Tj` artefact";
+the slides track reached the same conclusion independently, with `shows` dominant on 104 of its
+163 documents. `first-divergence.py` no longer counts it. `pdf-ops.py` still prints it, because
+operator granularity genuinely decides where poppler puts a word boundary.
+
+**2. A stroke's bounding box was being counted as a font size.** `pdf-ops.py` spells two
+findings `size`: `size 14.00 vs 14.82` is type and `size 9.6x0.0 vs 0.5x0.0` is a rule's box.
+One template matched both. On `150-5370-10H.docx` — 712 pages against 721 and classified `size`
+— *every* note on the first divergent page is a box and none is a font size, and the two real
+`face DejaVuSans vs DejaVuSans-Bold` notes were outvoted by 236 of them. Each kind now has its
+own pattern and `box` is its own column. **The font-size cluster is 2 documents, not 9.**
+
+**3. A page the image diff refuses to compare was read as agreement.** `pdf-image-diff.py`
+prints `page size differs: 363x512 vs 512x363` and three dashes; the row filter wanted six
+fields, so the walk skipped it. On `1_tpr_template__from_fy14_.docx` it reported the divergence
+starting at page 5 — our page 3 is portrait where the reference's is landscape, because we emit
+an extra page before a section break that changes orientation, and pages 3, 4 and 8 were all
+invisible. The +1080 glyphs the operator diff then found on page 5 were that fault's cascade.
+
+### The corrected table, and the split that matters
+
+| Dominant difference | before | corrected | `.doc` (12) | `.docx` (34) |
+|---|---:|---:|---:|---:|
+| glyph count | 19 | **27** | 8 | 19 |
+| rule or fill geometry (`box`) | — | **9** | **0** | **9** |
+| an element only one side draws | 4 | 5 | **4** | 1 |
+| effective font size | 9 | **2** | 0 | 2 |
+| face | — | 2 | 0 | 2 |
+| page orientation | — | 1 | 0 | 1 |
+| show count | 14 | *not counted* | | |
+
+**Rule and fill geometry is entirely an OOXML phenomenon — 9 of 34 DOCX and 0 of 66 DOC that
+reach the sweep.** An element only one side draws is the reverse: 4 of 12 `.doc` against 1 of
+34 `.docx`. The glyph cluster is the only one both readers share (67% and 56%), which says it
+is a layout property rather than a reader's.
+
+Also worth stating as a negative: **the words track has no document that fails the gate while
+every page agrees.** The slides track has 26 of 163. Every one of our 46 has a materially
+divergent page, and 28 of them diverge on page 1.
+
+### The glyph cluster is real, and it is a break difference
+
+The new `gdelta` column carries the worst absolute glyph-count difference on the page, which
+separates the two stories the cluster could be telling. Of the 27 documents it dominates:
+**21 have a worst delta of 20 glyphs or more**, one is 4–19, and five are 1–3. Those five are
+the shape of LibreOffice's trailing line-end space — it ends every justified line with its own
+`BT … Td /F 12 Tf <space> Tj ET`, ours does not — and the other 21 are lines holding dozens of
+characters more or fewer. That is text broken in a different place, not text sized differently.
+
+Measured across the first divergent pages, ours draws **fewer** glyphs on 16 documents (1525
+short in total) and **more** on 12 (2465 excess). The largest of each: `1257259179492…doc` at
+−430 and `1_tpr_template__from_fy14_.docx` at +1080 — and the second of those is the
+orientation cascade above, so read a large over-draw as a page-alignment question first.
+
+The new `blank_ref` column counts the trailing spaces: **287 of 2648 reference-only records
+across the swept pages, 11%,** and 20 of 37 on one page. They were being read as missing marks.
+
+## Words round 35: glyph fallback was written twice and never connected
+
+`FontItemiser` splits a run at the characters its face has no glyph for. `SystemFontResolver`
+answers "what face has this character". `ItemisationOptions.GlyphFallback`, the property
+joining them, **was assigned nowhere in the tree** — not by a reader, not by the layout, not by
+a tool, not by a test. Every word-processing document was laid out with no coverage check.
+
+The symptom is worse than a wrong face: an uncovered character shapes to `.notdef` and draws
+that face's missing-glyph box *at that face's `.notdef` advance*, so the text is invisible and
+the line breaks in the wrong place. On `手机免提系统TSB.doc` every Chinese character was a box;
+LibreOffice draws all of them from WenQuanYi Zen Hei. Now wired at both the measuring and the
+drawing pass — the two reach the split by different routes, and fixing one alone gives a page
+whose glyphs are right and whose advances are not.
+
+Three things this round measured that the next one should not re-derive:
+
+- **A tab is in no font's `cmap`.** Liberation Sans maps U+0020 and not U+0009, U+000A or
+  U+000D. Wiring fallback in without excluding characters nothing draws turned
+  `johnson_hall_service_log.pdf.docx` — a one-page form holding 36 tabs — into two pages, while
+  leaving every glyph on page one in exactly its old position. LibreOffice never asks, because
+  it falls back *after* shaping, by which time a tab is a tab portion. Control and format
+  categories are now excluded.
+- **A face is enough to measure and not enough to embed.** The PDF writer loads a program
+  through the reference's face key, and a fallback face named only by its family reaches it with
+  no program. `IGlyphFallbackResolver.ReferenceFor` answers by reverse lookup over the faces the
+  resolver has already loaded. Routing the *unnamed* faces through it too — a list label, a tab
+  leader, a paragraph with no runs — turned
+  `Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx` from
+  `unembedded` into a match.
+- **Our per-character fallback splits one Chinese paragraph across three faces where LibreOffice
+  uses one.** The tie-break, when nothing on LibreOffice's generic list is installed, is
+  alphabetical by family name: IPAGothic takes what it covers, Unifont the rest, WenQuanYi Zen
+  Hei what neither has. It is deterministic and it has no basis. Unifont is CFF, which the PDF
+  writer documents as unembeddable, so `手机免提系统TSB.doc` now also fails `unembedded` — the
+  words track reaching a limitation the slides track had already recorded. **Unmeasured:**
+  whether any ordering rule that is not fontconfig gets closer to LibreOffice's single face.

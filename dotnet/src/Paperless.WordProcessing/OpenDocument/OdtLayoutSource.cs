@@ -601,6 +601,7 @@ public sealed partial class OdtLayoutSource
             Shaping = new ShapingOptions(
                 Language: text.Language, DisableKerning: !text.AutoKerning),
             BlanksAreTransparentToHeight = _blanksAreTransparentToHeight,
+            Fallback = _fonts,
             Runs = runs,
             Fields = walker.Fields,
             Notes = notes,

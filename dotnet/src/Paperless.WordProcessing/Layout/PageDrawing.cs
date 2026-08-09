@@ -763,7 +763,7 @@ public static class PageDrawing
                         shapedLabel,
                         label.Text,
                         label.EmSize,
-                        label.Font ?? Reference(label.Face),
+                        label.Font ?? Reference(paragraph, label.Face),
                         new DocPoint(lineLeft - paragraph.LabelAdvance, baseline),
                         Length.Zero),
                     label.Colour.A == 0 ? Colour.Black : label.Colour));
@@ -821,7 +821,7 @@ public static class PageDrawing
                     shaped,
                     text,
                     run.EmSize,
-                    run.Font ?? Reference(run.Face),
+                    run.Font ?? Reference(paragraph, run.Face),
                     new DocPoint(pen, baseline - run.Rise),
                     spaceAdd,
                     run.Tracking);
@@ -1009,7 +1009,7 @@ public static class PageDrawing
                 shaped,
                 fill,
                 at.EmSize,
-                at.Font ?? Reference(at.Face),
+                at.Font ?? Reference(paragraph, at.Face),
                 new DocPoint(lineLeft + segment.GapLeft, baseline - at.Rise),
                 Length.Zero),
             at.EffectiveColour);
@@ -1095,19 +1095,21 @@ public static class PageDrawing
     {
         if (!paragraph.HasRuns)
         {
-            return AroundObjects(
+            return ByFace(
                 paragraph,
-                [
-                    new PageRun(
-                        start,
-                        end - start,
-                        paragraph.Face,
-                        paragraph.EmSize,
-                        paragraph.Font,
-                        paragraph.Colour,
-                        paragraph.Shaping,
-                        Tracking: paragraph.Tracking),
-                ]);
+                AroundObjects(
+                    paragraph,
+                    [
+                        new PageRun(
+                            start,
+                            end - start,
+                            paragraph.Face,
+                            paragraph.EmSize,
+                            paragraph.Font,
+                            paragraph.Colour,
+                            paragraph.Shaping,
+                            Tracking: paragraph.Tracking),
+                    ]));
         }
 
         List<PageRun> clipped = [];
@@ -1120,7 +1122,64 @@ public static class PageDrawing
             clipped.Add(run with { Start = from, Length = to - from });
         }
 
-        return AroundObjects(paragraph, clipped);
+        return ByFace(paragraph, AroundObjects(paragraph, clipped));
+    }
+
+    /// <summary>
+    /// The runs cut again wherever the run's own face has no glyph, as the measurement cut them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The same <see cref="FontItemiser.Split"/> <see cref="MeasuredParagraph"/> runs, and it has to be
+    /// the same one for the same reason the object cut does: the line's break was decided against the
+    /// fallback face's advances, so drawing the stretch in the primary face would put the glyphs at
+    /// widths the layout never measured — on top of drawing the wrong glyphs.
+    /// </para>
+    /// <para>
+    /// A paragraph whose faces cover all of its text comes back through here untouched. The itemiser
+    /// returns one non-fallback piece per run in that case, which is checked for explicitly rather
+    /// than rebuilt: a run split at a boundary it does not need loses its shaping context and
+    /// measures very slightly wide, which is enough to move a line break.
+    /// </para>
+    /// <para>
+    /// A fallback piece drops the run's <see cref="PageRun.Font"/>, because that reference names the
+    /// face the reader resolved and this piece is drawn in a different one. The caller derives a
+    /// reference from the face itself when there is none, which is what puts the right font program
+    /// in the PDF.
+    /// </para>
+    /// </remarks>
+    private static List<PageRun> ByFace(PageParagraph paragraph, List<PageRun> runs)
+    {
+        if (paragraph.Fallback is not { } fallback) return runs;
+
+        List<PageRun> split = [];
+
+        foreach (PageRun run in runs)
+        {
+            List<FaceRun> faces = FontItemiser.Split(
+                paragraph.Text, run.Start, run.Length, run.Face, fallback);
+
+            if (faces.Count == 1 && !faces[0].IsFallback)
+            {
+                split.Add(run);
+                continue;
+            }
+
+            foreach (FaceRun face in faces)
+            {
+                split.Add(face.IsFallback
+                    ? run with
+                    {
+                        Start = face.Start,
+                        Length = face.Length,
+                        Face = face.Face,
+                        Font = fallback.ReferenceFor(face.Face),
+                    }
+                    : run with { Start = face.Start, Length = face.Length });
+            }
+        }
+
+        return split;
     }
 
     /// <summary>
@@ -1406,6 +1465,21 @@ public static class PageDrawing
     /// reference. Naming the face's own family is enough for a backend to group runs by font, and it
     /// records no substitution because none was made.
     /// </remarks>
+    /// <summary>
+    /// A reference for a face the run did not name, preferring one that can be embedded.
+    /// </summary>
+    /// <remarks>
+    /// A reader stores a <see cref="PageRun.Font"/> for the runs it resolved and leaves it null for
+    /// the faces the layout supplied — a list label, a tab leader, a paragraph with no runs. The
+    /// name-only reference below is enough to draw with and not enough to embed, because a PDF
+    /// writer loads the font program through the face key: measured on
+    /// <c>Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx</c>, which
+    /// announces <c>DejaVuSans</c> unembedded beside four faces it embeds, and fails the corpus
+    /// gate for it. The resolver that loaded the face can still name the file it came from.
+    /// </remarks>
+    private static FontReference Reference(PageParagraph paragraph, Text.Fonts.OpenTypeFace face)
+        => paragraph.Fallback?.ReferenceFor(face) ?? Reference(face);
+
     private static FontReference Reference(Text.Fonts.OpenTypeFace face) => new()
     {
         FamilyName = face.FamilyName ?? string.Empty,

@@ -358,6 +358,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(
                     Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning),
+                Fallback = fonts.Fallback,
                 Runs = runs,
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames),
