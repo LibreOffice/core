@@ -563,6 +563,46 @@ public class EmfDrawingTests
     }
 
     [Fact]
+    public void ARecordWhoseWholeStringIsATabDrawsNothing()
+    {
+        // A picture has no paragraph and no tab stops, so a tab in a text record can only ever be a
+        // glyph — and no text face has one, so it falls through glyph fallback to whatever last-resort
+        // face covers the C0 range and draws its hex box. LibreOffice never gets there: a GDI record
+        // reaches ImplLayoutArgs::AddRun, which splits every run at each control character.
+        //
+        // Measured on `16 - UTM - (NASA).pptx`, whose slide 29 is one EMF holding 62 of exactly this
+        // record and whose PDF carried a twelfth, unembedded face because of them.
+        Recorder recorder = Draw(Page()
+            .Font(1, "Liberation Sans", -400)
+            .Select(1)
+            .Text(3 * Mm, 10 * Mm, "\t"));
+
+        recorder.GlyphRuns.ShouldBeEmpty();
+        recorder.Runs.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void ATabInsideAStringIsNotDrawnAndStillSpendsItsAdvance()
+    {
+        // Cut, not deleted. The DX array is per character in the record's own order, so the producer's
+        // advance for the tab still separates what is either side of it — dropping the entry as well as
+        // the glyph would pull the rest of the string left by one stated advance.
+        int[] wide = [400, 400, 400];
+
+        Recorder recorder = Draw(Page()
+            .Font(1, "Liberation Sans", -300)
+            .Select(1)
+            .Text(0, 10 * Mm, "A\tB", advances: wide));
+
+        recorder.GlyphRuns.Sum(r => r.Glyphs.Count).ShouldBe(2);
+        recorder.Runs.Select(r => r.Text).ShouldBe(["A", "B"]);
+
+        // "A" at the reference point; "B" two stated advances further on, not one.
+        recorder.Runs[0].Origin.X.Millimetres.ShouldBe(0.0, 0.05);
+        recorder.Runs[1].Origin.X.Millimetres.ShouldBe(8.0, 0.05);
+    }
+
+    [Fact]
     public void GlyphIndicesBypassCharacterMappingAndStillExtract()
     {
         // ETO_GLYPH_INDEX text has already been shaped by the producer, so the indices go into

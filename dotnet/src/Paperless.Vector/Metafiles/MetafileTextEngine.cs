@@ -209,7 +209,11 @@ public sealed class MetafileTextEngine
             List<PositionedGlyph> glyphs = new(segment.Shaped.Glyphs.Count);
             List<int> clusters = new(segment.Shaped.Glyphs.Count);
 
-            IReadOnlyList<Length>? slice = Slice(advances, segment.Start, segment.Length);
+            // The slice covers the control characters cut out after the stretch as well, so their
+            // stated advances are charged to its last glyph rather than lost. `Place` already
+            // charges every array entry from the last glyph's cluster to the end of the slice.
+            IReadOnlyList<Length>? slice =
+                Slice(advances, segment.Start, segment.Length + segment.Trailing);
 
             Length width = slice is not null
                 ? Place(segment.Shaped, font, slice, glyphs, clusters)
@@ -266,18 +270,46 @@ public sealed class MetafileTextEngine
     }
 
     /// <summary>One stretch of a record's text with a single direction, script and face.</summary>
+    /// <param name="Start">Its first character, as an index into the record's text.</param>
+    /// <param name="Length">How many characters it covers.</param>
+    /// <param name="Trailing">
+    /// How many control characters were cut out immediately after this stretch. Their DX entries
+    /// belong to it, so that what follows still starts where the producer put it.
+    /// </param>
+    /// <param name="IsRightToLeft">True when the stretch is drawn right to left.</param>
+    /// <param name="Shaped">Its glyphs.</param>
+    /// <param name="Reference">The face they were shaped with.</param>
     private readonly record struct Segment(
-        int Start, int Length, bool IsRightToLeft, ShapedText Shaped, FontReference Reference);
+        int Start, int Length, int Trailing, bool IsRightToLeft, ShapedText Shaped, FontReference Reference);
 
     /// <summary>
     /// Cuts a record's string into the stretches a shaper can take, in the order they are drawn.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The segments come back in <em>visual</em> order, so a caller can lay them left to right
     /// with a running pen. Inside a right-to-left item the coverage split has to be reversed as
     /// well: <c>FontItemiser</c> answers in logical order, and an Arabic phrase whose digits fall
     /// to one face and whose letters fall to another would otherwise be drawn with the two halves
     /// swapped — which looks like a shaping bug and is a sequencing one.
+    /// </para>
+    /// <para>
+    /// <b>Every C0 control character is cut out first, the tab included.</b> That is
+    /// <c>ImplLayoutArgs::AddRun</c> splitting on <c>IsControlChar</c>, which is what a GDI text
+    /// record meets in LibreOffice because <c>MtfTools::DrawText</c> plays it through
+    /// <c>OutputDevice::DrawTextArray</c>. The tab survives
+    /// <see cref="ShapingControls.IsRemovedBeforeShaping"/> so that a paragraph can resolve it against
+    /// its own stops; a picture has no stops, so here it can only be a glyph, and no text face has
+    /// one. See <see cref="ShapingControls.IsControlCharacter"/> for what that cost.
+    /// </para>
+    /// <para>
+    /// <b>A cut character still spends its entry in the DX array.</b> The array is per character in
+    /// the record's logical order and a producer that wrote an advance for its tab meant the next
+    /// character to start after it, so the stretch before a run of control characters is widened by
+    /// their advances rather than losing them — <see cref="Segment.Trailing"/>. Control characters
+    /// before the string's first glyph are the one case that cannot be expressed, because a run is
+    /// placed at its first glyph and has nowhere to state a leading blank; no corpus document has one.
+    /// </para>
     /// </remarks>
     private List<Segment> Segments(string text, MetafileFont font, ResolvedFace face, bool rightToLeft)
     {
@@ -288,7 +320,16 @@ public sealed class MetafileTextEngine
 
         foreach (TextItem item in items)
         {
-            List<FaceRun> faces = FontItemiser.Split(text, item.Start, item.Length, face.Face, _resolver);
+            List<FaceRun> faces = [];
+            Dictionary<int, int> trailing = [];
+
+            foreach ((int start, int length, int cut) in Uncontrolled(text, item.Start, item.Length))
+            {
+                List<FaceRun> piece = FontItemiser.Split(text, start, length, face.Face, _resolver);
+                if (piece.Count > 0 && cut > 0) trailing[piece[^1].Start] = cut;
+                faces.AddRange(piece);
+            }
+
             if (item.IsRightToLeft) faces.Reverse();
 
             foreach (FaceRun run in faces)
@@ -313,11 +354,45 @@ public sealed class MetafileTextEngine
                 if (shaped.Glyphs.Count == 0) continue;
 
                 segments.Add(new Segment(
-                    run.Start, run.Length, item.IsRightToLeft, shaped, drawn.Reference));
+                    run.Start,
+                    run.Length,
+                    trailing.GetValueOrDefault(run.Start),
+                    item.IsRightToLeft,
+                    shaped,
+                    drawn.Reference));
             }
         }
 
         return segments;
+    }
+
+    /// <summary>
+    /// The stretches of a range that hold no control character, in logical order, each with the
+    /// number of control characters cut out immediately after it.
+    /// </summary>
+    /// <param name="text">The record's text.</param>
+    /// <param name="start">The range's first character.</param>
+    /// <param name="length">How many characters it covers.</param>
+    private static List<(int Start, int Length, int Cut)> Uncontrolled(
+        ReadOnlySpan<char> text, int start, int length)
+    {
+        List<(int, int, int)> pieces = [];
+        int end = start + length;
+        int at = start;
+
+        while (at < end)
+        {
+            int content = at;
+            while (content < end && !ShapingControls.IsControlCharacter(text[content])) content++;
+
+            int cut = content;
+            while (cut < end && ShapingControls.IsControlCharacter(text[cut])) cut++;
+
+            if (content > at) pieces.Add((at, content - at, cut - content));
+            at = cut;
+        }
+
+        return pieces;
     }
 
     /// <summary>The slice of a DX array a segment's own characters index, or null when there is none.</summary>

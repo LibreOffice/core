@@ -151,11 +151,62 @@ public class DrawingTableStyleTests
     }
 
     [Fact]
-    public void AStyleTheDeckDoesNotCarryResolvesToNothingRatherThanToTheDefault()
+    public void AStyleTheDeckDoesNotCarryAndNobodyBuiltInResolvesToNothing()
     {
-        // A table naming a style the package has not got has no style, not the wrong one.
+        // A table naming a style neither the package nor PowerPoint has got has no style, not the
+        // wrong one. The id below is not one of the seventy-four built-ins.
         DrawingTableStyle.Read(Styles(), "{00000000-0000-0000-0000-000000000000}").ShouldBeNull();
-        DrawingTableStyle.Read(tableStyles: null, Guid).ShouldBeNull();
+        DrawingTableStyle.Read(tableStyles: null, "{00000000-0000-0000-0000-000000000000}")
+            .ShouldBeNull();
+    }
+
+    [Fact]
+    public void ABuiltInStyleResolvesEvenWhenThePackageDefinesNothingAtAll()
+    {
+        // PowerPoint never writes its built-in styles out, so "not in the package" and "not a
+        // style" are different answers. Guid here is Medium Style 2 - Accent 1.
+        DrawingTableStyle built = DrawingTableStyle.Read(tableStyles: null, Guid).ShouldNotBeNull();
+
+        // wholeTbl is accent1 at tint 20000 and band1H at 40000, through DrawingML's
+        // gamma-corrected tint — accent1 4F81BD comes out as these two, and band2H is defined
+        // nowhere so the alternate row keeps wholeTbl's.
+        //
+        // The gamma matters and is the easy thing to get wrong: tinting 4F81BD in plain sRGB
+        // gives #DCE6F1 and #B8CCE4, which are PowerPoint's published values for this style and
+        // are not what the reference draws.
+        built.Resolve(HeaderAndBands, 1, 3, 1, 2, DrawingTheme.Read(Theme()), null)
+            .Fill.ShouldBe(Colour.FromRgb(0xD0D8E7));
+        built.Resolve(HeaderAndBands, 2, 3, 1, 2, DrawingTheme.Read(Theme()), null)
+            .Fill.ShouldBe(Colour.FromRgb(0xE9ECF3));
+
+        // The header takes the accent itself, with white text on it.
+        DrawingTableCellStyle header =
+            built.Resolve(HeaderAndBands, 0, 3, 1, 2, DrawingTheme.Read(Theme()), null);
+
+        header.Fill.ShouldBe(Accent);
+        header.TextColour.ShouldBe(Light);
+    }
+
+    [Fact]
+    public void ThePackagesOwnDefinitionBeatsTheBuiltInOfTheSameId()
+    {
+        // The built-in table is a fallback for an id nothing defines, never an override. A deck
+        // that ships its own version of a built-in id — which this corpus does — must get its own.
+        XElement styles = XElement.Parse(
+            $"""
+             <a:tblStyleLst xmlns:a="{A}">
+               <a:tblStyle styleId="{Guid}" styleName="mine">
+                 <a:wholeTbl>
+                   <a:tcStyle><a:fill><a:solidFill><a:srgbClr val="123456"/></a:solidFill></a:fill></a:tcStyle>
+                 </a:wholeTbl>
+               </a:tblStyle>
+             </a:tblStyleLst>
+             """);
+
+        DrawingTableStyle style = DrawingTableStyle.Read(styles, Guid).ShouldNotBeNull();
+
+        style.Resolve(HeaderAndBands, 1, 3, 1, 2, DrawingTheme.Read(Theme()), null)
+            .Fill.ShouldBe(Colour.FromRgb(0x123456));
     }
 
     [Fact]

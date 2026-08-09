@@ -152,32 +152,52 @@ public sealed class DrawingTableStyle
     /// A style id that resolves to nothing likewise yields null rather than the default, because
     /// a table naming a style the package does not carry has no style, not the wrong one.
     /// </para>
+    /// <para>
+    /// <strong>"Not in the package" is not the same as "not a style".</strong> PowerPoint's
+    /// seventy-four built-in table styles are named by id and never written out, so a table can
+    /// point at one that is nowhere in the file and still have a full appearance — see
+    /// <see cref="DrawingPredefinedTableStyles"/>, which is consulted when the list has no match
+    /// and which is why this no longer gives up when there is no <c>tableStyles.xml</c> at all.
+    /// Ten of the slides track's decks name thirty such tables between them.
+    /// </para>
     /// </remarks>
     /// <param name="tableStyles">The <c>a:tblStyleLst</c> root, or null.</param>
     /// <param name="styleId">The table's <c>a:tblPr/a:tableStyleId</c>, or null.</param>
     public static DrawingTableStyle? Read(XElement? tableStyles, string? styleId)
     {
-        if (tableStyles is null) return null;
         if (string.IsNullOrEmpty(styleId)) return null;
 
         string wanted = styleId;
 
-        foreach (XElement style in Drawing.Children(tableStyles, "tblStyle"))
+        if (tableStyles is not null)
         {
-            if (!string.Equals(style.Attribute("styleId")?.Value, wanted, StringComparison.Ordinal))
-                continue;
-
-            DrawingTableStyle read = new();
-            foreach (XElement part in style.Elements())
+            foreach (XElement style in Drawing.Children(tableStyles, "tblStyle"))
             {
-                if (part.Name.NamespaceName == OoxmlNamespaces.DrawingML)
-                    read._parts[part.Name.LocalName] = part;
-            }
+                if (!string.Equals(style.Attribute("styleId")?.Value, wanted, StringComparison.Ordinal))
+                    continue;
 
-            return read._parts.Count == 0 ? null : read;
+                return Of(style);
+            }
         }
 
-        return null;
+        // Not in the package. PowerPoint's seventy-four built-in styles are named by id and never
+        // written out, so a table can perfectly well point at one that is nowhere in the file.
+        return Of(DrawingPredefinedTableStyles.Create(wanted));
+    }
+
+    /// <summary>Indexes an <c>a:tblStyle</c>'s parts by name, or answers null when it has none.</summary>
+    private static DrawingTableStyle? Of(XElement? style)
+    {
+        if (style is null) return null;
+
+        DrawingTableStyle read = new();
+        foreach (XElement part in style.Elements())
+        {
+            if (part.Name.NamespaceName == OoxmlNamespaces.DrawingML)
+                read._parts[part.Name.LocalName] = part;
+        }
+
+        return read._parts.Count == 0 ? null : read;
     }
 
     /// <summary>
