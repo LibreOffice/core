@@ -9037,3 +9037,69 @@ charging half the border (the horizontal twin of what the row heights already do
 line) and charging it only where the cell's own box actually declares a line, since
 `SvxBoxItem::CalcLineSpace(side, /*bEvenIfNoLine*/ true)` returns the distance alone when there is
 no line on that side.
+## Round thirty-two — sheets: a workbook's shown cell comments
+
+Base `12cf74f08`, checked before measuring. The baseline sweep reproduced the brief to the digit:
+**148/171, absolute page error 86, 155 exact page counts, absolute word error 33174**, and the
+per-batch line as well. 171 rows, no duplicate path, no `ref-failed`.
+
+Full working, citations and the mutation table are in `probes/sheets-r32/README.md`.
+
+**A cell comment the file marks visible is an object on the sheet and we drew none of them.**
+Calc keeps a shown comment's caption on `SC_LAYER_INTERN` and prints it with the rest of that
+layer (`printfun.cxx:1713`); a hidden one goes to `SC_LAYER_HIDDEN`, which is neither printed nor
+counted when the print area is widened. Four decisions, each measured against LibreOffice's own
+export rather than derived: visibility is the VML shape's **CSS**, not the `<x:Visible/>` element
+beside it (Excel writes both on a hidden shape, and five of nine shapes on this workbook do);
+the rectangle comes from `x:Anchor` and only from the CSS when there is none (the two disagree by
+inches here); the anchor's offsets are **screen pixels at 96 per inch**; and a caption is placed
+against the **commented cell**, not against the cell its anchor names — which is what puts it on
+every page of a sheet that repeats a print title, and is worth +445 words rather than +220.
+
+**The geometry was reproduced in a script before any C# was written**, against LibreOffice's own
+flat-ODF export of the corpus workbook and of an authored fixture: all eight `svg:x/y/width/height`
+values agree to within two hundredths of a millimetre. One check refuted a wrong first reading —
+three captions came out 0.244 in short, which looked like the caption's auto-grow height and was
+the *row heights*, because Calc freezes a caption's size at import and the optimal-height pass
+then shrank three rows by exactly that much.
+
+**For once the census covers the whole track and agrees with the measurement.** 110 of the 171
+documents open as a zip and 61 as an OLE2 workbook stream — 110 + 61 is 171 — and of those, one
+XLSX carries a note shape marked `visibility:visible` and **no** BIFF `NOTE` record anywhere
+carries `fShow`. So the binary half is empty rather than unknown, and the `.xls` reader is
+deliberately left as it was. Ten documents carry a VML part at all, which is the structural
+precondition for the new path to do anything; rendering all ten with both CLIs under a pinned
+clock, **one differs and nine are byte-identical**.
+
+Whole track on the final tree, 171 rows with no duplicate path and no `ref-failed`:
+**149/171 matches, absolute page error 86, 155 exact page counts, absolute word error 32729** —
+from 148, 86, 155 and 33174. Per batch: 001–009 89/89, 010 8/10, **011 7/10**, 012 8/10,
+013 8/10, 014 9/10, 015 6/9, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
+
+**Exactly one row of 171 changes**, and it is the one the round was aimed at:
+`Application_Compliance_Checklist_5_Apr_2021.xlsx` goes 17235 words to **17680 against 17718** and
+from `words` to `match`. That is the whole of the track's word-error movement, and no page count
+moves anywhere. The narrowness is the honest headline — the census and the byte reach both said
+one document before the sweep ran, and the sweep found one.
+
+New fixture `tests/corpus/features/sheet-cell-comment-shown.xlsx`, authored to separate the
+decisions: a shown comment whose CSS position disagrees with its anchor by 500 pt, one carrying
+`<x:Visible/>` and `visibility:hidden` together, and one reaching four columns past the last cell.
+Five cases in `SheetShownCommentTests`, every asserted coordinate LibreOffice 24.2.7.2's own.
+Five reintroduced defects, all five detected — `probes/sheets-r32/mutate.sh`. `m1`'s first version
+**failed to build** rather than failing a test, which `verify-test.sh` correctly refuses to call a
+detection; rewritten as a relationship-name change it detects four of the five cases.
+
+**Batches 011 and 016 were triaged and not fixed**, and the triage is the useful part. Five of
+their six remaining failures are *one quantity with both signs*: how many columns fit in a column
+band. `SIL_TDB648.xlsx` and `RMP 2011-2014 and Inventory.xls` take one column fewer per band than
+LibreOffice and print an extra page; `tk-syllabus-comparison-document-v5.xlsx` takes one more and
+prints three fewer. That is the shape the skill says is the same code with the same bug, and it
+says the lead is the predicate deciding whether the next column still fits the printable width,
+not six separate documents. The largest single residue in the whole track outside them is
+`EASA-IFP-145Scope(WEB)_…xlsx` (018), which loses exactly **2350** words to one column boundary:
+the reference draws `EASA.UK.1` and the next cell as two tokens and we draw them touching.
+
+Per-project tests, all matching the known-good counts with 0 skipped: Core 275, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
+Spreadsheets **593** (588 plus this round's 5), Presentations 542, Fidelity **550**.
