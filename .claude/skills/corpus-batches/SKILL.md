@@ -476,6 +476,36 @@ seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59
 with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
 improve would have shipped half a fix and called it done.
 
+### An authored probe must state its styles, or it measures a different document
+
+Authoring a probe is now the standard move when the corpus cannot separate two hypotheses, and
+it has decided most of the last dozen rounds. It has one failure mode that produces confident
+nonsense: **a hand-built DOCX with no `word/styles.xml` lays out in the application's fallback
+face, not the one a real document gets.** Measured — two probes came out in Liberation Serif
+10 pt where the corpus documents they were being compared against are Carlito 11 pt, so the
+comparison meant nothing at all.
+
+The tell is that nothing looks wrong. The file opens, renders, and gives plausible numbers.
+
+So when a probe measures a **length** — a height, a width, an advance, a line pitch — state the
+style explicitly and check the reference's own PDF reports the face you meant, with `pdffonts`
+or `pdf-ops.py dump`. Probes that measure a **count** (pages, fields, how many times something
+is drawn) are unaffected, which is why the same round's page-count probes stayed valid while
+its height probes did not. Say which kind yours is.
+
+### LibreOffice's PDF export drops empty pages, so a page it lays out may not be in the file
+
+`SwPrintUIOptions::IsPrintEmptyPages` reads `IsSkipEmptyPages`, whose default is **true** for a
+PDF export (`printdata.cxx`:391-399). An empty page — the filler an odd-page section break
+inserts, for instance — is laid out, **takes a page number**, and then is not written.
+
+This is worth knowing before diagnosing any page-count difference, because it breaks the natural
+assumption that the reference's PDF is a faithful list of the pages the reference's layout
+produced. A round spent its predecessor's whole diagnosis on the theory that our filler was
+being *predicted* wrongly; the filler was predicted exactly right and simply should not have
+been drawn. The page numbering downstream still counts it, so "delete the page" and "do not
+predict the page" give different answers and only one of them matches.
+
 ### Use `verify-test.sh` rather than doing the cycle by hand
 
 ```sh
