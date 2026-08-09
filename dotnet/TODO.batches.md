@@ -8535,3 +8535,147 @@ the rule predicts and the opposite of what we drew.
 `probes/ww8-header-stories.py` is committed: it reads the FIB, `PlcfHdd`, the piece table and
 `PlcfSed` straight out of a `.doc` and prints each section's six story lengths, their text, the
 synthesised `grpfIhdt` and the break kind. Every census in this entry came from it.
+
+## Words, round thirty-one, at `150a3dac1` — the blank an odd-page break leaves is never drawn
+
+### The baseline reproduced the brief to the digit, and every batch figure with it
+
+Whole-track sweep against a checksummed CLI snapshot, `SOURCE_DATE_EPOCH` pinned:
+**154/200, absolute page error 80, 164 exactly-correct page counts, absolute word error
+6728.** 200 rows, no path twice. All twenty-one per-batch figures reproduce the scoreboard.
+
+### PDF export drops the page an odd- or even-page break inserts
+
+The predecessor left this "diagnosed and explicitly unmeasured", with a caution that
+reconstructing `IsRightPageByNumber`'s arithmetic predicts a filler where the reference has
+none. **That caution was the finding.** The filler is not predicted wrongly — it is predicted
+correctly and then *not exported*.
+
+Writer states an odd- or even-page break as a page style whose `UseOn` names one side only
+(`ww8par.cxx`:4470-4479 for `sprmSBkc` 3 and 4, `PropertyMap.cxx`:1568 for
+`w:type="oddPage"`), so `SwFrame::InsertPage` takes `rDoc.GetEmptyPageFormat()` when the side
+the style wants and the side the alternation would give disagree (`pagechg.cxx`:1613-1616).
+An *automatically inserted* empty page is then skipped by PDF export:
+`SwPrintUIOptions::IsPrintEmptyPages` reads `IsSkipEmptyPages` for an export and its default
+is true (`printdata.cxx`:391-399). The blank is laid out, takes a page number, and is not in
+the file. We were drawing it.
+
+**And the side is physical, not the printed number.** The style leaves one of
+`GetRightFormat`/`GetLeftFormat` null, so `InsertPage`'s format-availability flip overrides
+the `SetNumOffset` reading three lines above it, and `OnRightPage()` is `GetPhyPageNum() % 2`
+(`frame.hxx`:757). Our loop tested `pageNumber`, which a section restart moves.
+
+Measured on the installed 24.2 rather than read off the source, with a probe generator now
+committed at `probes/odd-page-break-probes.py`. Each probe's paragraphs print their own
+`PAGE` field, which is what makes an undrawn page visible at all:
+
+| Probe | LibreOffice's PDF |
+|---|---|
+| two sections, second `w:type="oddPage"` | **2 pages**, second reads **3** |
+| the same with page one numbered 2 | **2 pages**, second reads **4** |
+| three sections, last `oddPage` | 3 pages, reading 1, 3, 4 |
+
+The second row is the one that separates the two rules: the next *number* is three and already
+odd while the next *physical* page is the second and even, and LibreOffice still leaves a blank.
+
+### A page-number restart picks a side too, by the same machinery
+
+Falling out of the same reading and measured the same way. When a section restarts its
+numbering and states no odd/even break, `InsertPage` takes the wished side from the restart
+value through `sw::IsRightPageByNumber` (`pagechg.cxx`:1590-1596), which asks only whether the
+restart's parity agrees with the **first page of the layout's own number**
+(`frmtool.cxx`:3146-3153) — and inserts the same undrawn blank when that disagrees with the
+alternation. Three probes differing only in the restart value, each a three-section document
+whose last section breaks to an odd page:
+
+| Restart on the middle section | the three `PAGE` fields | pages exported |
+|---|---|---:|
+| none | 1, 2, 3 | 3 |
+| 19 | 1, 19, **21** | 3 |
+| 20 | 1, 20, 21 | 3 |
+
+The 21 in the middle row is two skipped blanks — one putting an odd restart on an odd sheet,
+one for the odd-page break that then lands on an even one.
+
+### Measured, and both censuses over-stated
+
+Reach by byte-comparing 200 renderings, clock pinned, at each step:
+
+| Change | census ceiling | documents whose rendering changed |
+|---|---:|---:|
+| the blank is not drawn, and the side is physical | 6 | **3** |
+| a restart picks a side | 50 | **1** |
+| a column break that stayed one has no side | 0 | **0** |
+
+The first census is over the section descriptors of all 66 `.doc` (5 carry `sprmSBkc` 3 or 4)
+and the `w:sectPr` of all 134 DOCX (**one** declares `w:type="oddPage"`, none `evenPage`) — so
+it covers the whole track, and it over-stated two-fold. The second is over `sprmSFPgnRestart`
+in the same 66 (13) and `w:pgNumType/@w:start` in the same 134 (37), and it over-stated
+**fifty-fold**. Last round's exact census remains the exception it was labelled as.
+
+The third change is a no-op and is recorded as one: no `.doc` section in the track carries
+`sprmSBkc` 1 together with `sprmSFPgnRestart`, no DOCX `sectPr` declares `w:type="nextColumn"`,
+and rendering all 200 with and without it is byte-identical.
+
+| | before | after | reference |
+|---|---:|---:|---:|
+| `150_5300_13_chg8.doc` | 21 pages, 8584 words | **20**, **8577** | 18, 8557 |
+| `150_5300_13_chg10.doc` | 83, 24184 | **80**, **24162** | 76, 23456 |
+| `150_5300_13_chg12.doc` | 34, 12769 | **32**, **12764** | 33, 12750 |
+
+Whole track: **154/200 match (unchanged), absolute page error 80 → 76, 164 exact page counts
+(unchanged), absolute word error 6728 → 6694.** Nothing else on the track moved a byte, no
+document changed verdict, and no batch figure moved. **The scoreboard did not move**, and that
+is the headline: three documents came closer and none of them came close enough to flip.
+
+Both halves of the word move over the three changed documents: **over-draw 2055 → 2031,
+under-draw 1323 → 1333.** That is a running head on a page that should not exist going away,
+at ten tokens of reflow.
+
+Per batch, before and after alike: 001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10,
+010 8/9, 011 9/10, 012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10,
+019 4/10, 020 2/10, 021 0/2.
+
+Per-project tests, all matching the known-good counts with 0 skipped, except WordProcessing
+which is 690 + the six new: Core 264, Containers 109, Text 240, Vector 291, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing **696**, Spreadsheets 573, Presentations 538.
+
+### The tests exist this time, and both halves were watched failing
+
+`OddPageBreakFillerTests` — three facts about the odd-page blank and a three-case theory about
+the restart. Verified through `verify-test.sh` by putting each half of the defect back:
+reading `pageNumber` instead of the physical page fails
+`TheSideIsThePhysicalPagesNotThePrintedNumbers` alone; drawing the blank instead of skipping it
+fails all three. The case is testable here where last round's was not, because a DOCX states
+`w:type="oddPage"` in markup a fixture can carry.
+
+### A lead for whoever takes batch 006: a table row we split and the reference moves whole
+
+`f445896eb008d14c1746fc37d412dc22.docx` is the batch's only failure, **15 pages against 16 with
+the words exactly equal at 5575**. It is one 30-row table, every row carrying a `w:trHeight`
+and none carrying `w:cantSplit`.
+
+Measured on page 3, where the two first diverge. Both pages begin on the same line, and the
+line pitch is **13.15 pt on both sides** — this is not a metric error. The reference's row
+rules on that page sit at y 769.64, 737.64, 431.84 and 206.64, and the table **stops** at
+206.64 with about 122 pt of body left below it; ours sit at 770.00, 743.05, 437.00, 211.75 and
+84.90, so we start the next row in that 122 pt and split it at the page edge. The row the
+reference moves whole is row 3, whose declared `w:trHeight` is 2921 twips — **146 pt, more than
+the 122 pt left** — which is the obvious next hypothesis and is **not yet tested**.
+
+Two cautions for whoever tests it. Our page top is 5.1–5.7 pt below the reference's on that
+page, which is a separate small thing and not the 122. And **a hand-built DOCX with no
+`word/styles.xml` is useless for this question**: two probes I built that way laid out in
+Liberation Serif 10 pt here against Carlito 11 pt there, which is a probe artefact and made
+their row-splitting comparison meaningless. The page-count and `PAGE`-field probes above are
+unaffected — one short paragraph per page cannot change a page count — but any probe measuring
+a height needs a styles part.
+
+### Still open, unchanged and still unmeasured
+
+- **`chg12` is now 32 against 33 rather than 34 against 33.** The sign flipped and the absolute
+  error did not. Its remaining defect is an *under*-pagination in the pages 9-10 region, where
+  the reference splits content across two pages that we fit on one — a different bug from the
+  one this round closed, and the filler was masking it.
+- **The even page with no even story** — the three-document ceiling from last round, untouched.
+- **Unequal column widths** — untouched; zero DOCX declare `w:cols w:equalWidth="0"`.
