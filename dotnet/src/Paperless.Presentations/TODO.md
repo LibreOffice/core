@@ -2041,6 +2041,31 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
 
 ### Small differences that are measured and not yet closed
 
+- [ ] **The largest unexplained group on the track is not a chart at all: it is a `.ppt` outline
+      placeholder we do not shrink and the reference does.** Written down as a *measurement with
+      no diagnosis attached*, because it was found while choosing what to work and nothing has
+      instrumented our own autofit against it.
+
+      The size census leaves **303 pages over 91 documents** whose dominant text size differs
+      with no explanation, and its worst two documents are
+      `slides/batch-015/ppt/2015-Civil-Rights-Website-training.ppt` at 17 pages and
+      `slides/batch-006/ppt/ITE106-Chapter 4.ppt` at 16. On page 2 of the first, the reference
+      draws the body's five bullets at **31.01 pt with an 18.59 pt OpenSymbol bullet** and we draw
+      **32.00 and 19.20** — the stated size, unshrunk. Both sides put the bullet at 0.60 of the
+      text, so it is one scale of 0.9691 applied to the whole body and not two separate sizes.
+      The consequence is a wrap: one paragraph fits on a line for the reference and breaks into
+      27 + 4 glyphs for us, and the four bullets after it then sit at 287/179/103/33 against the
+      reference's even 278/195/112/37.
+
+      The census's commonest `(ours, ref)` pairs are the same shape and go **both ways** — 13
+      pages at 18.99 against 20.01 and 10 at 18.00 against 18.99, but also 9 at 24.01 against
+      22.99 and 5 at 20.01 against 18.99 — so "we never shrink" is already refuted and the honest
+      statement is that our autofit lands on a different answer, sometimes above and sometimes
+      below. `PptSlideLayout.Autofits` decides *whether* to shrink and `SlideAutofit` decides by
+      how much; which of the two is wrong here is unmeasured, and the first move is to print our
+      own scale for that shape beside the reference's 0.9691 rather than to theorise about
+      either.
+
 - [x] **An OOXML chart's automatic text is 18 pt bold for the main title and 10 pt bold for an
       axis title; we drew 13 pt and 9 pt with no weight at all.** `ChartPlot.TitleSize`'s 13 pt
       default cited `chart2/source/model/main/Title.cxx`, which is the chart2 *model* default and
