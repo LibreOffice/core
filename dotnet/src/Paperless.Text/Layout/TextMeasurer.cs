@@ -347,11 +347,46 @@ public sealed class LineFiller
                     : Length.Zero;
             }
 
+            // A break directly after a solidus is not taken when a blank stands close behind it:
+            // the whole path is pulled onto the next line instead. See <see cref="GluedAcrossSolidus"/>.
+            int chopEnd = chosen;
+            bool forceChop = false;
+
+            if (chosen > lineStart && chosen < text.Length && text[chosen - 1] == '/')
+            {
+                int glued = GluedAcrossSolidus(text, chosen);
+
+                if (glued > lineStart)
+                {
+                    chosen = glued;
+                    chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
+                    chosenWidth = Measure(
+                        text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0,
+                        limit);
+                    chosenAllowance = shrinks
+                        ? JustificationShrink.AllowanceFor(
+                            text, lineStart, chosenVisibleEnd, widthBetween)
+                        : Length.Zero;
+                    chopEnd = chosen;
+                    probe = nextOpportunity;
+                }
+                else if (glued < chosen)
+                {
+                    // The blank is the line's own start, so gluing would leave an empty line.
+                    // EditEngine gives up on the break iterator and cuts at the fitting limit —
+                    // "No separator in line => Chop!" — which packs the path across the line
+                    // rather than starting a new one for it.
+                    forceChop = true;
+                    chopEnd = text.Length;
+                }
+            }
+
             // Nothing between this line's start and its first break opportunity fits. The word is
             // chopped rather than left hanging over the margin — see the remarks on this class.
-            if (chosenWidth > limit + chosenAllowance
-                && Chop(text, lineStart, chosen, limit, widthBetween, tabs, lines.Count == 0)
-                       is { } cut)
+            if ((forceChop || chosenWidth > limit + chosenAllowance)
+                && Chop(text, lineStart, chopEnd, limit, widthBetween, tabs, lines.Count == 0)
+                       is { } cut
+                && cut > lineStart)
             {
                 chosen = cut;
                 chosenVisibleEnd = cut;
@@ -404,6 +439,68 @@ public sealed class LineFiller
     /// </remarks>
     private static bool IsLineSeparator(char character)
         => character is '\u2028' or '\u000B' or '\u000C' or '\u0085';
+
+    /// <summary>
+    /// How far back a path may be pulled when the chosen break sits directly after a solidus.
+    /// </summary>
+    /// <remarks><see cref="GluedAcrossSolidus"/>; <c>nOverlyLong</c>, and the comment beside it
+    /// calls the figure arbitrary.</remarks>
+    private const int SolidusGlueReach = 66;
+
+    /// <summary>
+    /// Where a break directly after <c>/</c> is moved back to, or the position itself when it stays.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// UAX #14 classes U+002F SOLIDUS as <c>SY</c>, symbols allowing a break after, and LibreOffice
+    /// then takes that back for paths and URIs — <c>BreakIterator_Unicode::getLineBreak</c>,
+    /// <c>i18npool/source/breakiterator/breakiterator_unicode.cxx:541-560</c>, i#17155. Having
+    /// picked a break, it asks whether the character before it is a solidus, and if so looks
+    /// <em>backwards</em> for whitespace and moves the break to just after it — pulling the whole
+    /// path onto the next line rather than splitting it at a separator. The search gives up after
+    /// <see cref="SolidusGlueReach"/> characters, so a long path is still split at a solidus.
+    /// </para>
+    /// <para>
+    /// This is not a break-opportunity rule and cannot be written as one, which is why it lives
+    /// here rather than in <see cref="LineBreaker"/>: it jumps <em>past</em> any other opportunity
+    /// standing between the blank and the solidus, so removing the solidus from the opportunity set
+    /// would break at the intervening hyphen instead.
+    /// </para>
+    /// <para>
+    /// Measured on twelve probe cells at one column width, read out of LibreOffice's own PDF.
+    /// <c>CAT.IDE.A.170/CAT.IDE.H.170</c> alone in a cell breaks after its solidus, because nothing
+    /// stands behind it; the same string after <c>AMC1 </c> does not break there at all and is cut
+    /// mid-number at the fitting limit, because the glue would land on the line's own start. Both
+    /// halves are visible on one document — <c>tk-syllabus-comparison-document-v5.xlsx</c>, whose
+    /// rows disagreed with LibreOffice's own <c>style:row-height</c> in both directions.
+    /// </para>
+    /// <para>
+    /// One narrower case of the same rule is <strong>not</strong> reproduced: when the solidus break
+    /// falls exactly on the last character that fits, LibreOffice refuses it outright and takes the
+    /// previous opportunity (<c>breakiterator_unicode.cxx:494-496</c>). Deciding that needs the
+    /// fitting limit measured to the character, where the two renderers agree only to within a
+    /// rounding, so reproducing it would turn a rounding difference into a whole line.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The paragraph's text.</param>
+    /// <param name="chosen">The break position, whose preceding character is a solidus.</param>
+    private static int GluedAcrossSolidus(string text, int chosen)
+    {
+        int floor = Math.Max(0, chosen - SolidusGlueReach);
+        for (int index = chosen - 2; index >= floor; index--)
+        {
+            if (IsBreakingWhitespace(text[index])) return index + 1;
+        }
+
+        return chosen;
+    }
+
+    /// <summary>
+    /// ICU's <c>u_isWhitespace</c>: a space that also separates lines, so never a no-break one.
+    /// </summary>
+    private static bool IsBreakingWhitespace(char character)
+        => character is not ('\u00A0' or '\u2007' or '\u202F')
+           && (char.IsWhiteSpace(character) || character is >= '\u001C' and <= '\u001F');
 
     /// <summary>
     /// Where to cut a word that does not fit the line it starts, or null to leave it alone.
