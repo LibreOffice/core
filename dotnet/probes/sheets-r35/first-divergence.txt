@@ -1,0 +1,128 @@
+### sheets/batch-010/xls/Template Pilot Logbook JAR-FCL V3.0.xls
+pages          38 ours / 38 reference
+compared       38 common pages
+first diverge  page 1  (|ink| 0.35%)
+dominant       size
+               size 45, shows 4
+one-sided      593 ours, 2 reference
+page text      LOGBOOK JAR-FCL 1.080 - Laurent ALAPHILIPPE 1 2 3 4 DATE DEPARTURE ARRIVAL AIRCRAFT (dd/mm
+### sheets/batch-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+pages          46 ours / 46 reference
+compared       46 common pages
+first diverge  page 19  (|ink| 1.94%)
+dominant       glyphs
+               size 1, face 2, glyphs 14, shows 1
+one-sided      92 ours, 499 reference
+page text      Enterprise Arc 90 80 70 60 50 40 30 20 21 10 0 10 9 8 8 Human Factors 25 12 11 10 10 6 5 5
+### sheets/batch-011/xls/T0A0D0000090006XLSE.xls
+pages          162 ours / 162 reference
+compared       162 common pages
+first diverge  page 3  (|ink| 0.38%)
+dominant       shows
+               size 17, glyphs 1, shows 42
+one-sided      86 ours, 3 reference
+page text      G.841 (1998-10) G.SHR-1 Types and characteristics of SDH network protection architectures 
+### sheets/batch-012/xlsx/FAA-2019-0995-0002_attachment_2.xlsx
+pages          32 ours / 33 reference
+compared       32 common pages
+first diverge  page 3  (|ink| 0.62%)
+dominant       size
+               size 106, glyphs 2, shows 2
+one-sided      187 ours, 696 reference
+page text      Module/Build Group Configuration List ENGINE MODEL/SN: P770 173 CUSTOMER: IAE LLC / IGO LE
+### sheets/batch-013/xlsx/CSJU List of Recipients of funds 2013-2020.xlsx
+pages          97 ours / 96 reference
+compared       95 common pages
+first diverge  page 2  (|ink| 0.63%)
+dominant       size
+               size 162, width 76, glyphs 75
+one-sided      1321 ours, 341 reference
+page text      DESIGN MANUFACTORING SPA DEUTSCHES ZENTRUM FUR LUFT - UND RAUMFAHRT EV DEUTSCHES ZENTRUM F
+### sheets/batch-013/xlsx/FY2018_Q4_UAS_Sightings.xlsx
+pages          304 ours / 302 reference
+compared       302 common pages
+first diverge  page 7  (|ink| 0.77%)
+dominant       one-sided
+               
+one-sided      15 ours, 18 reference
+page text      7/3/2018 MASSACHUSETTS BOSTON 7/3/2018 MASSACHUSETTS BOSTON 7/3/2018 MASSACHUSETTS BOSTON 
+### sheets/batch-014/xls/aircraft_analysis_2016-04-27.xls
+pages          44 ours / 46 reference
+compared       44 common pages
+first diverge  page 1  (|ink| 0.40%)
+dominant       one-sided
+               
+one-sided      0 ours, 2 reference
+page text      AIRCRAFT CATEGORIES (BY POPULARITY) Category Airliner General Aviation Military Helicopter
+### sheets/batch-015/xls/grants-2005.xls
+pages          219 ours / 220 reference
+compared       219 common pages
+first diverge  page 40  (|ink| 6.57%)
+dominant       size
+               size 3
+one-sided      103 ours, 2 reference
+page text      ed by FY dmts to Prior Yr Grants) Airport Adak Nome Aniak Bethel Bethel Chevak Hoonah Kodi
+### sheets/batch-015/xlsx/ans_mappings_of_eccairs_terms.xlsx
+pages          190 ours / 191 reference
+compared       190 common pages
+first diverge  page 1  (|ink| 0.72%)
+dominant       size
+               size 102, width 100, face 99
+one-sided      31 ours, 29 reference
+page text      EccairsEventId 2020500 2020500 2020500 2020500 2020500 2020500 2020500 2020500 2020500 202
+### sheets/batch-015/xlsx/seihon_zassi_kikou_20221215.xlsx
+pages          83 ours / 84 reference
+compared       83 common pages
+first diverge  page 3  (|ink| 0.54%)
+dominant       shows
+               size 1, width 1, face 3, glyphs 1, shows 152
+one-sided      7 ours, 10 reference
+page text      大気海洋研究所気候システム研究系図書室 製本済み雑誌一覧 ※図書室にはタイトル順で配架してあります ISSN Vol. No. year 整理No. Atmospheric Env
+### sheets/batch-016/xls/7-memento-2015-transports-aeriens-b.xls
+pages          190 ours / 191 reference
+compared       190 common pages
+first diverge  page 2  (|ink| 2.30%)
+dominant       size
+               size 16
+one-sided      114 ours, 44 reference
+page text      7.1.1. LES ENTREPRISES DU SECTEUR DES TRANSPORTS AÉRIENS HORS SPATIAU Source : Nombre tota
+### sheets/batch-016/xlsx/SIL_TDB648.xlsx
+pages          89 ours / 88 reference
+compared       84 common pages
+first diverge  page 1  (|ink| 2.70%)
+dominant       shows
+               shows 1
+one-sided      3 ours, 3 reference
+page text      General Info Database 648 is based on information as of cycle 2509. Click on the individua
+### sheets/batch-017/xls/CIS_Debian_Linux_8_Benchmark_v1.0.0.xls
+pages          109 ours / 109 reference
+compared       109 common pages
+first diverge  page 10  (|ink| 0.77%)
+dominant       size
+               size 77, glyphs 55, shows 58
+one-sided      363 ours, 93 reference
+page text      Run the following command Verify that to enable there isthe a /tmp /tmppartition mount ser
+### sheets/batch-017/xls/orbus_togaf_tool_csq.xls
+pages          33 ours / 75 reference
+compared       33 common pages
+first diverge  page 1  (|ink| 2.91%)
+dominant       size
+               size 4, shows 3
+one-sided      66 ours, 1 reference
+page text      The Open Group Architecture Tool Certification: TOGAF® Tools Conformance Important Note: T
+### sheets/batch-017/xlsx/EASA-IFP-WEBLISTNOODATA-ListsofForeignapprovals(WEB)_NewChart_2022-08-05-03-31-32.xlsx
+pages          19 ours / 19 reference
+compared       19 common pages
+first diverge  none — every common page agrees
+### sheets/batch-017/xlsx/ODs-February-2022-Airbus-Commercial-Aircraft.xlsx
+pages          154 ours / 175 reference
+compared       11 common pages
+first diverge  page 89  (|ink| 7.12%)
+dominant       size
+               size 4
+one-sided      2830 ours, 168 reference
+page text      Orders, Deliveries, Operators - Governments, Executive and Private Jets Summary to 28th Fe
+### sheets/batch-018/xlsx/EASA-IFP-145Scope(WEB)_ALL_ValidF145SOA_2022-12-16-04-31-58_0.xlsx
+pages          114 ours / 114 reference
+compared       114 common pages
+first diverge  none — every common page agrees
