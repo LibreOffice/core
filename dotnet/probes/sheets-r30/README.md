@@ -168,14 +168,14 @@ Every project run individually, whole output captured, **0 skipped** everywhere:
 
 | Core | Containers | Text | Vector | Rendering | Markup | OpenDocument | WordProcessing | Spreadsheets | Presentations | Fidelity |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 264 | 109 | 240 | 291 | 119 | 259 | 125 | 690 | **573** | 538 | *see below* |
+| 264 | 109 | 240 | 291 | 119 | 259 | 125 | 690 | **573** | 538 | 550 |
 
-Ten of the eleven are the briefed known-good; Spreadsheets is 566 plus this round's 7.
+Every count is the briefed known-good except Spreadsheets, which is 566 plus this round's 7.
 
-**`Paperless.Fidelity.Tests` did not return within the round and its count is therefore not
-recorded.** It was started on the final tree and was still running after an hour and a quarter with
-the machine's load average between 15 and 22 — three agents, four cores — which is the regime this
-project's own notes say produces a truncated run that prints `Failed: 0`. Waiting for a number that
-could not be trusted is worse than saying it is missing, so: **the fidelity suite is unrun on this
-branch and must be run before the merge is trusted.** Nothing in the change is outside
-`Paperless.Spreadsheets`, and that project's own 573 include the seven new cases.
+`Paperless.Fidelity.Tests` took an hour and three quarters to return, at a load average between 15
+and 22 with three agents on four cores. It was written down as unrun rather than waited on, and then
+it finished: 550 of 550, none skipped. The note is left here because the reasoning that produced it
+stands — **a fidelity count taken under that load is exactly the one this project's own notes say
+can be silently truncated**, so the number is only worth having because it is the discovered count
+and matches the expected one. Had it come back at 353 the correct reading would have been "the run
+was truncated", not "the suite regressed".

@@ -8411,8 +8411,9 @@ for BIFF8, so no `.xls` row height is ever recomputed and the margin cannot reac
 pagination turns on. Two of the eight reintroduced defects were **not** detected by any test and the
 probe README says which and why.
 
-**One gap to close before this is merged:** `Paperless.Fidelity.Tests` was started on the final
-tree and had not returned after an hour and a quarter at a load average around 20, so its count is
-not recorded. Every other project was run individually and matched its known-good exactly
-(Spreadsheets 566 → 573 with the round's seven cases). Run the fidelity suite before trusting the
-merge.
+**Every test project was run individually on the final tree and matches its known-good count,
+with zero skipped**: Core 264, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259,
+OpenDocument 125, WordProcessing 690, Spreadsheets **573** (566 plus this round's seven),
+Presentations 538, Fidelity 550. The fidelity suite took an hour and three quarters to return at a
+load average around 20 and was written down as unrun before it did — kept as a note in the probe
+README, because a fidelity count taken under that load is the one that can be silently truncated.
