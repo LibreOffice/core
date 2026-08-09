@@ -10008,3 +10008,98 @@ them. Anyone picking this up should split by ratio band before theorising.
   `MSO_SPT` and `.pptx` by `a:prstGeom`, with per-document counts.
 - `probes/mso-shape-type-presets.json` — the 203-entry `MSO_SPT` → DrawingML preset table the
   fix was generated from, so it can be regenerated rather than re-transcribed.
+
+## Round twenty-two — slides: ranking the ink with both ceilings out, and the built-in table styles
+
+Baseline verified at `2ced17655` against the 163 reference PDFs round twenty kept: **151 of 163,
+`|ink|%` 1233.03, 415 major pages.** Every figure the brief carried reproduced exactly.
+
+### First: the ranking, because every later round's priorities are read off it
+
+The brief's standing instruction, and the thing no round had done — subtract the pages where our
+output is the better one *before* ranking. Written up in `TODO.raster-ceiling.md` with the scripts
+to reproduce it from any sweep's own output; the headline is
+
+| | ink | pages | major |
+|---|---:|---:|---:|
+| the track, as swept | 1233.03 | 4199 | 415 |
+| at one of the two ceilings | 201.27 | 63 | 38 |
+| **residual — what a fix can still win** | **1031.76** | 4136 | 377 |
+
+Two ceilings, and only one is visible to `pdfimages`: the rasterisation signature that file already
+carries, applied per page (27 pages, 40.74), and the `mc:AlternateContent` one censused from the
+packages (38 slides over 10 documents, 165.46, 28 major pages).
+
+**`NAS-Infrastructure-Roadmaps-v16.0.pptx` is worth a fifth of its headline.** It has been quoted at
+224.77, 18% of the track; 152.14 of that is its 24 `Requires="v"` slides and **72.63 is not**,
+reproducing round fourteen's 152.12/73.21 from a different instrument. Two documents nobody has
+opened rank above it on the residual: `Wildlife for REDAC September 11.pptx` at 54.78 and
+`Reporting_responsibilities_matrix.pptx` at 54.27. `Demick_JetBlue.pptx` moves the other way,
+36.40 → 16.19, so the automatic-series-colour work it motivates is worth less than it looked.
+
+### The AIRBUS table review was ours, and both halves of the reasoning that dismissed it are wrong
+
+Last round recorded `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` as "probably a review made against
+PowerPoint rather than the reference", on the grounds that its `a:tblPr` names no
+`a:tableStyleId` and that its worst page reads as the same marks in a different colour. Settled
+against the reference PDF, as asked:
+
+- Its `a:tblPr` **does** name one — `{21E4AEA4-…}`, and two more ids appear elsewhere in the deck.
+- On page 14 the reference draws **30 fills at `#FBECE7` and 25 at `#F8D7CD`** and we draw
+  **none of either**. Not a colour difference; an absence.
+
+The id is not in `ppt/tableStyles.xml` because it is one of PowerPoint's seventy-four built-in
+styles, which the application never writes out. `{21E4AEA4-…}` is Medium Style 2 - Accent 2, whose
+`wholeTbl` is the accent at `a:tint` 20000 and whose `band1H` is it at 40000; the deck's accent2 is
+`ED7D31`, and those two tints through DrawingML's **gamma-corrected** tint are exactly `#FBECE7`
+and `#F8D7CD`. Ported from `oox/source/drawingml/table/predefined-table-styles.cxx` as `a:tblStyle`
+markup fed to the existing reader.
+
+Census over the track: **ten decks, thirty tables, eight distinct ids**, and the ten carry
+**151.19 of the 1031.76 residual ink — 15%**. Outside slides the change is unreachable: **no
+document in words or sheets names an `a:tableStyleId` at all**, and DrawingML tables do not exist
+in the binary formats, so that census is exact rather than a zip-level approximation.
+
+### The Unifont verdict is tab characters in an EMF, and it is fixed
+
+`16 - UTM - (NASA).pptx`'s slide 29 is a single EMF holding **62 `EMR_EXTTEXTOUTW` records whose
+whole string is one tab**. `ShapingControls` keeps the tab out of its removal list so a paragraph
+can resolve it against its own stops — but a picture has no stops, no ruler and no paragraph, so
+there the tab could only ever be a glyph, and no text face has one. Each fell through glyph
+fallback to GNU Unifont, which *does* draw the C0 range as a hex box.
+
+LibreOffice never gets there: a GDI text record reaches `ImplLayoutArgs::AddRun`, which splits
+every run at each control character before shaping. `MetafileTextEngine` now does the same and
+charges a cut character's DX entry to the stretch before it. Our font set on that document is now
+the reference's **eleven exactly, all embedded**, and the track's only `unembedded` verdict is
+gone. The document still fails on words, so **no verdict moved on this fix alone**.
+
+Census over all 534 documents, inflating binary streams so `.ppt`/`.doc`/`.xls` are included:
+**one document in the corpus has a control character in a metafile text record.**
+
+### Refuted: "26 documents have no divergent page and fail the gate"
+
+Recomputed at this baseline: **37 documents have every page under 0.35 `|ink|%` — and 36 of them
+already `match`.** The class the brief named has exactly **one** member,
+`NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, and it is now explained. Its whole 49-word deficit
+is on pages 6 and 12, where the reference draws a subtitle placeholder at **0.99 pt** — a
+330 × 90.7 pt frame holding 88 pt text under `<a:normAutofit fontScale="25000"
+lnSpcReduction="20000"/>` — and we emit **no text record for that shape at all**. Invisible to the
+image diff because a 1 pt block is not ink; the reason the gate and the pixels disagree.
+Diagnosed, not fixed.
+
+### The kept reference set is stable, checked by accident and worth recording
+
+A mis-edited script pointed the second sweep at a reference directory that does not exist, so it
+re-rendered the references with `soffice` before the mistake was caught. That gives the check the
+last three rounds' method has been resting on without evidence: **146 references re-rendered today
+match round twenty's kept set exactly** — same page count and same word count on every one, none
+differing. Re-running with the kept set is sound.
+
+### Not done, and why
+
+- **`first-divergence.py`'s `shows` column.** The words agent owns the fix and it has not landed at
+  `2ced17655`+; `probes/slides-divergence.tsv` is unchanged and should be regenerated once it does.
+- **The `.ppt` size cluster.** Not advanced. The instrument for the band split is written
+  (`probes/slides-r22/size-bands.py`) and was not run — it needs the whole track's operator diffs
+  and the round's sweeps had the machine.
