@@ -28,6 +28,23 @@ public interface IGlyphFallbackResolver
     /// <param name="weight">The weight to match, on the OpenType 1-1000 scale.</param>
     /// <param name="isItalic">Whether an italic face is wanted.</param>
     OpenTypeFace? FallbackFor(int codePoint, int weight = 400, bool isItalic = false);
+
+    /// <summary>
+    /// The reference naming a face this resolver returned, or null when it did not return it.
+    /// </summary>
+    /// <remarks>
+    /// A face on its own is enough to <em>measure</em> and to <em>shape</em>, and not enough to
+    /// <em>embed</em>: a PDF writer loads the font program through the reference's face key, so a
+    /// fallback face named only by its family reaches the writer with no program behind it and is
+    /// announced in the file without being embedded. Measured on <c>手机免提系统TSB.doc</c>, whose
+    /// three fallback faces all came out <c>emb no</c> — which the corpus gate scores as a failure,
+    /// correctly, because a reader without those fonts installed sees nothing.
+    /// <para>
+    /// Defaulted to null so an implementation that only answers coverage questions stays valid; the
+    /// caller then falls back to naming the face, which is what it did before this existed.
+    /// </para>
+    /// </remarks>
+    Core.Graphics.FontReference? ReferenceFor(OpenTypeFace face) => null;
 }
 
 /// <summary>One mid-run fallback: a stretch the run's own face could not show.</summary>

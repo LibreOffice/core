@@ -1173,7 +1173,7 @@ public static class PageDrawing
                         Start = face.Start,
                         Length = face.Length,
                         Face = face.Face,
-                        Font = null,
+                        Font = fallback.ReferenceFor(face.Face),
                     }
                     : run with { Start = face.Start, Length = face.Length });
             }
