@@ -206,6 +206,11 @@ public static class DrawingChartPlot
             // because a c:legendEntry carries a c:txPr of its own and precedes the legend's.
             LegendSize = SizeOf(Child(Child(chart, "legend"), "txPr")),
             IsLegendBold = BoldOf(Child(Child(chart, "legend"), "txPr")),
+
+            // A series' c:dLbls/c:txPr, which is where a data label states its own size — not on
+            // an axis. 20 of the corpus's 61 chart parts state one that differs from the axes'.
+            DataLabelSize = DataLabelSizeOf(plotArea),
+            IsDataLabelBold = DataLabelBoldOf(plotArea),
             TextFamily = FamilyOf(chartSpace, theme),
             // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
             // its own — the frame is the space — which is what keeps it out of the stretch an
@@ -1193,10 +1198,27 @@ public static class DrawingChartPlot
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The first <em>literal</em> <c>a:latin/@typeface</c> anywhere in the part, then the theme's
-    /// minor Latin face. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
+    /// The <c>c:chartSpace</c>'s own <c>c:txPr</c> first — the part's <em>global</em> statement,
+    /// which is the same element <see cref="AutoText"/> reads a global size from — then the first
+    /// <em>literal</em> <c>a:latin/@typeface</c> anywhere in the part, then the theme's minor
+    /// Latin face. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
     /// <em>reference</em> to the theme rather than a name, so taking it as one asks the resolver
     /// for a family no system has and every label is measured in a fallback.
+    /// </para>
+    /// <para>
+    /// <strong>Document order is not a precedence rule, and reading it as one cost a whole
+    /// deck.</strong> <c>c:chart</c> precedes <c>c:txPr</c> under <c>c:chartSpace</c>, so a part
+    /// whose <em>title</em> names a face and whose chart space names another had every axis
+    /// label, legend entry and data label drawn in the title's. Measured on page 38 of
+    /// <c>171128IPAP.pptx</c>, whose <c>chart7.xml</c> states <c>Arial</c> on
+    /// <c>c:title/c:txPr</c> and <c>Calibri</c> on <c>c:chartSpace/c:txPr</c>: the reference draws
+    /// 31 records in Carlito-Bold and 2 in LiberationSans — its title, in Arial — and we drew 34
+    /// in LiberationSans-Bold. Two of the corpus's 61 chart parts state two faces this way.
+    /// </para>
+    /// <para>
+    /// The title's own face is still lost, because the model carries one family: what this
+    /// changes is which of the two the whole chart takes, and the chart-wide one is right for
+    /// every element but the title.
     /// </para>
     /// <para>
     /// <strong>Falling back to the theme's minor face is not a guess.</strong> All three of the
@@ -1217,8 +1239,16 @@ public static class DrawingChartPlot
     /// </para>
     /// </remarks>
     private static string? FamilyOf(XElement chartSpace, DrawingTheme? theme)
+        => LiteralFamily(Child(chartSpace, "txPr"))
+           ?? LiteralFamily(chartSpace)
+           ?? theme?.Fonts?.MinorLatin;
+
+    /// <summary>The first literal <c>a:latin/@typeface</c> under an element, or null.</summary>
+    private static string? LiteralFamily(XElement? element)
     {
-        foreach (XElement latin in chartSpace.Descendants(
+        if (element is null) return null;
+
+        foreach (XElement latin in element.Descendants(
                      XName.Get("latin", OoxmlNamespaces.DrawingML)))
         {
             string? typeface = latin.Attribute("typeface")?.Value;
@@ -1228,7 +1258,7 @@ public static class DrawingChartPlot
             return typeface;
         }
 
-        return theme?.Fonts?.MinorLatin;
+        return null;
     }
 
     /// <summary>
@@ -1343,6 +1373,51 @@ public static class DrawingChartPlot
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// The size a series' <em>data</em> labels state, from the first series that states one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>c:dLbls</c> hangs off the series (and, for a whole type group, off the group), and its
+    /// own <c>c:txPr</c> is a different statement from the axes'. Read from the <c>c:dLbls</c>
+    /// element's direct <c>c:txPr</c> child rather than from its descendants, because a
+    /// <c>c:dLbl</c> for one point carries a <c>c:txPr</c> of its own and precedes it — the same
+    /// trap the legend's reader documents.
+    /// </para>
+    /// <para>
+    /// One answer for every series, which is the simplification the model already makes for the
+    /// axes and the axis titles. Of the corpus's 61 chart parts, 18 state a data-label size and
+    /// none states two different ones across its own series.
+    /// </para>
+    /// </remarks>
+    private static Length? DataLabelSizeOf(XElement plotArea)
+        => DataLabelProperties(plotArea).Select(SizeOf).FirstOrDefault(size => size is not null);
+
+    /// <summary>The weight a series' data labels state, from the first series that states one.</summary>
+    /// <remarks>
+    /// Read beside the size because it comes from the same element, and separate from
+    /// <see cref="AxisLabelBoldOf"/> because an unstated data-label weight must keep falling back
+    /// to the axis labels' — see <c>ChartPlot.IsDataLabelBold</c>.
+    /// </remarks>
+    private static bool? DataLabelBoldOf(XElement plotArea)
+        => DataLabelProperties(plotArea).Select(BoldOf).FirstOrDefault(bold => bold is not null);
+
+    /// <summary>Every <c>c:dLbls/c:txPr</c> in the plot area, series before type group.</summary>
+    private static IEnumerable<XElement> DataLabelProperties(XElement plotArea)
+    {
+        foreach (XElement group in plotArea.Elements())
+        {
+            if (group.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
+
+            foreach (XElement series in Children(group, "ser"))
+            {
+                if (Child(Child(series, "dLbls"), "txPr") is { } stated) yield return stated;
+            }
+
+            if (Child(Child(group, "dLbls"), "txPr") is { } shared) yield return shared;
+        }
     }
 
     private static Length? AxisLabelSizeOf(XElement plotArea)

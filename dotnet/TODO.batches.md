@@ -9103,3 +9103,137 @@ the reference draws `EASA.UK.1` and the next cell as two tokens and we draw them
 Per-project tests, all matching the known-good counts with 0 skipped: Core 275, Containers 109,
 Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
 Spreadsheets **593** (588 plus this round's 5), Presentations 542, Fidelity **550**.
+
+## After the thirty-first round: slides — the per-element chart size, and the column nobody was reading
+
+Base `b8a8125ec`, verified before measuring. The baseline sweep reproduced the brief **to the
+digit** — 151/163, `ink%` 1270.05, `|ink|%` 1591.86, 427 major pages, census 303 unexplained over
+91 documents — so the position the track was recorded at is the position it was in.
+
+Both sweeps are 163 rows with no path repeated, run against a snapshot of the CLI so a rebuild
+mid-sweep cannot split it, with `SOURCE_DATE_EPOCH` pinned so the two are byte-comparable.
+
+### The numbers, said plainly
+
+| slides, 163 documents | base `b8a8125ec` | + per-element size and face |
+|---|---:|---:|
+| word gate | 151 | 151 |
+| `ink%` | 1270.05 | **1269.52** |
+| `\|ink\|%` | 1591.86 | **1591.43** |
+| major pages | 427 | **428** |
+| census, unexplained | 303 over 91 | 303 over 91 |
+
+Verdicts changed: **0**. Reach measured by rendering: **6 of 163 changed**, 157 byte-identical,
+0 missing — and for once that is *exactly* the census's ceiling rather than a fraction of it.
+
+### What changed
+
+**A data label states its size where an axis does not, and `ChartPlot` had one field for both.**
+`DataLabelSize` and `IsDataLabelBold` are read from a series' `c:dLbls/c:txPr` — from the
+element's direct `c:txPr` child, because a `c:dLbl` for one point precedes it in `CT_DLbls`'
+order and a descendant search sizes every label by one point's override. Both are nullable for
+the reason `LegendSize` is: the ODF and PPT readers set neither, so their charts keep reading
+`LabelSize` and neither of the other two tracks can move.
+
+**A chart's face is its chart space's statement, not whichever element states one first.**
+`FamilyOf` walked the whole part in document order, and `c:chart` precedes `c:txPr` under
+`c:chartSpace` — so a part whose *title* names Arial and whose chart space names Calibri had
+every axis label, legend entry and data label drawn in Arial.
+
+### Both were verified by glyph count, not by the pixel metric
+
+This is the useful half of the round, because the pixel metric is nearly silent and the glyph
+counts are decisive. On `southern-classic` page 12 the reference draws **119 glyphs at 18.00 pt**;
+we drew 84 before and draw **119** after — exactly, on the page whose two size groups had been
+laid down *swapped*. On page 11 the reference draws 22 glyphs at its larger size and we moved
+exactly 22 glyphs out of the 14.00 pt group into it.
+
+### Where the metric went, and where the rest of it is
+
+`171128IPAP` **−0.46 `|ink|%`**, which is the 0.41 the last round localised as its page-38 family
+and named as separate from the size work — it was, and it is closed. `3495` −0.29. Against that,
+`southern-classic` **+0.25 and one more major page**, on the document the size fix was derived
+from, and that is worth stating plainly rather than netting off.
+
+**The second error is localised and it is not a size at all.** The reference draws
+`southern-classic` page 11's category labels with `/F1 13.589 Tf` under a text matrix whose
+horizontal scale is `1.030454`, so the glyphs are 14.003 pt *wide* and 13.589 pt *tall*. Its
+16 pt data labels are the same: `15.486 Tf`, the same `1.030454`. Our own labels are 15.99 pt in
+both directions — the width is within 0.03 pt of the reference's and the height is 3.3% over. So
+what is left on that page is entirely an **anisotropic** difference, and a taller glyph puts more
+ink into a mismatch than a shorter one did, which is the whole of the +0.25.
+
+### The instrument that was missing: `pdf-ops.py` reports `a × Tf`, not `Tf`
+
+A PDF show carries a font height in `Tf` and an independent horizontal scale in the text matrix.
+`pdf-ops.py` reports their product as "the size", so a stretched run reads there as a run at some
+other size — and every round that has chased the "chart text residual" has been reading one
+number where there are two. `research/probes/slides-r31/text-stretch-census.py` reads both.
+
+Over the 163 kept reference PDFs, **7078 text shows are written in the `Tm`+`Tf` form it reads
+and 4881 of them carry a horizontal scale more than 0.002 from unity, across 21 documents.** Most
+of those are `.ppt` metafile text and are already attributed by the size census's own
+`metafile text` bucket, but three PPTX decks with charts are not: `Demick_JetBlue` (142 of 142
+shows, a uniform `a = 1.002932`), `southern-classic` and `171128IPAP`.
+
+`Demick_JetBlue` is the deck round twenty-three's residual table was measured on, and reading the
+second column changes what that table says. Its drawn heights against the stated sizes are
+6.987/7, 9.889/10, 13.889/14, 17.890/18, 29.807/30, 39.808/40 — **absolute** shortfalls of 0.013,
+0.111, 0.111, 0.110, 0.193, 0.192. Piecewise constant in three bands, not a factor and not one
+offset. Adding the horizontal scale does not make it uniform either: the width-equivalents are
+9.918 and 17.942 against 10 and 18, ratios 0.9918 and 0.9968.
+
+So the residual has **two** components, they are independently measured here for the first time,
+and neither is fitted. `ChartLabel.Stretch` and `ChartLayout.Stretch` already model exactly this
+shape — a chart composed at its own size, the em following the vertical factor and the residual
+`sx/sy` carried onto the label — but the path never fires for an OOXML chart, because
+`ChartPlot.Space` is null for one by construction. Whatever gives an OOXML chart a natural size
+different from its frame is the thing to find; it is not the OLE replacement metafile, whose
+`VCLMTF` preferred size is the frame's to the unit on all four charts of `southern-classic`
+page 11, and it is not the visual area, which LibreOffice's own `odp` writes equal to the frame.
+
+### Still refuted, still worth not re-deriving
+
+The chart's font sizes in the model are **not** where this residual lives: `soffice --convert-to
+odp` writes `southern-classic`'s four page-11 charts with `fo:font-size` of exactly `10pt`,
+`14pt` and `16pt`. The model is right and the device is what moves.
+
+### Cross-track
+
+`DrawingChartPlot` is shared by all three families, so the reach claim needed measuring rather
+than reasoning about: an `.xlsx` or `.docx` chart with a `c:dLbls/c:txPr` would move too.
+**Rendered at both CLIs with `SOURCE_DATE_EPOCH` pinned and byte-compared over all 371 words and
+sheets documents: 0 changed.** No chart in either track states a data-label size, a data-label
+weight, or two faces.
+
+`SheetChart.Sized` was also given the two nullable sizes it was silently dropping through the
+print zoom — `LegendSize` as well as the new `DataLabelSize`, since it had never scaled the
+legend's either. That is a correctness fix reaching no corpus sheet, and the sweep above is why
+that can be said rather than assumed: the comment beside it already recorded that every corpus
+workbook is at 100%.
+
+### Test counts
+
+Core 275, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing 696, Spreadsheets 573, Presentations **544**, Fidelity 550. **0 skipped.**
+Presentations was 542 at `b8a8125ec`; the two new tests are the data label's own size and weight
+against a single point's `c:dLbl` override, and the face precedence.
+
+Two mutations put back through `verify-test.sh`, both detected: the data-label reader searching
+`c:dLbls`' descendants instead of its own `c:txPr`, and the face precedence swapped back.
+
+### What the next round should take, in order
+
+1. **The anisotropic stretch**, with the two-component characterisation above and the warning
+   that the model sizes are already right. The prize is not one deck: it is the 21 documents the
+   stretch census names, and the `metafile text` bucket's 130 pages are the same phenomenon
+   through a different door.
+2. **The per-*axis* size**, still collapsed. `171128IPAP`'s `chart8.xml` states 11 pt on its
+   category axis and 10 on its value axis, and `chart6.xml` 12 and 11. Census: 2 of 61 chart
+   parts, 1 document — much the smaller half of what `LabelSize` was hiding, and now the only
+   half left.
+3. **The chart title's own face.** The model still carries one family, so `171128IPAP` page 38's
+   two Arial title records are drawn in Calibri; that is 2 records where it was 44.
+4. **The rotated category label's reserved depth**, unchanged from the last round's brief: 7.94 pt
+   too deep at 10 pt, flat in the label's width, 0.685 per point against our `sin 45°`, and the
+   obvious formula refuted. Fit it properly or leave it.

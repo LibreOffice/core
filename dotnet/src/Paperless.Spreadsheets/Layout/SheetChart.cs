@@ -91,6 +91,11 @@ internal static class SheetChart
                 TitleSize = plot.TitleSize * scale,
                 AxisTitleSize = plot.AxisTitleSize * scale,
                 LabelSize = plot.LabelSize * scale,
+                // The two sizes that are null when the file states none: scaling them has to
+                // preserve the null, or a chart that stated neither would come out of the zoom
+                // with both pinned to the axis labels' unzoomed size.
+                LegendSize = plot.LegendSize is { } legend ? legend * scale : null,
+                DataLabelSize = plot.DataLabelSize is { } data ? data * scale : null,
             };
 
     /// <summary>

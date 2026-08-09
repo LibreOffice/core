@@ -739,8 +739,9 @@ public static partial class ChartLayout
                         text,
                         new DocPoint(left + (right - left) / 2, top + height / 2),
                         ChartLabelAnchor.Centre,
-                        plot.LabelSize,
-                        AxisColour));
+                        plot.DataLabelFont,
+                        AxisColour,
+                        IsBold: plot.IsDataLabelBold));
                 }
 
                 top += height;
@@ -796,7 +797,8 @@ public static partial class ChartLayout
                 centre.X + radius * (reach * Math.Cos(middle)),
                 centre.Y - radius * (reach * Math.Sin(middle))),
             ChartLabelAnchor.Centre,
-            plot.LabelSize,
-            AxisColour));
+            plot.DataLabelFont,
+            AxisColour,
+            IsBold: plot.IsDataLabelBold));
     }
 }

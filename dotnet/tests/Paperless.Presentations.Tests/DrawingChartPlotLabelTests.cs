@@ -326,4 +326,83 @@ public class DrawingChartPlotLabelTests
         // labels' size exactly as it did before this was read at all.
         Read(Bar() + "<c:legend><c:legendPos val=\"r\"/></c:legend>").LegendSize.ShouldBeNull();
     }
+
+    /// <summary>
+    /// A series' own <c>c:dLbls/c:txPr</c> is the size its data labels are drawn at, and a
+    /// single point's <c>c:dLbl</c> override is not.
+    /// </summary>
+    /// <remarks>
+    /// The same shape as the legend's, and it was collapsed the same way: <c>LabelSize</c> was
+    /// the axes' answer and the data labels took it too, so a chart stating 14 pt on its
+    /// category axis and 16 pt on its series drew both at 14. Measured on page 11 of
+    /// <c>southern-classic-kennesaw-state-university-final.pptx</c>, whose <c>chart15.xml</c>
+    /// states exactly that pair and whose reference draws 12 records at the larger size.
+    ///
+    /// <c>c:dLbl</c> precedes <c>c:txPr</c> in <c>CT_DLbls</c>' order, so searching the
+    /// <c>c:dLbls</c> element's descendants for the first <c>a:defRPr</c> finds one point's
+    /// override and sizes every label by it.
+    /// </remarks>
+    [Fact]
+    public void ASeriesOwnTextPropertiesGiveItsDataLabelSize()
+    {
+        string labels = """
+            <c:dLbls>
+              <c:dLbl><c:idx val="0"/>
+                <c:txPr><a:bodyPr/><a:p><a:pPr><a:defRPr sz="2400" b="0"/></a:pPr></a:p></c:txPr>
+              </c:dLbl>
+              <c:txPr><a:bodyPr/><a:p><a:pPr><a:defRPr sz="1600" b="1"/></a:pPr></a:p></c:txPr>
+            </c:dLbls>
+            """;
+
+        ChartPlot stated = Read(Bar(labels));
+        stated.DataLabelSize.ShouldBe(Length.FromPoints(16));
+        stated.DataLabelFont.ShouldBe(Length.FromPoints(16));
+        stated.IsDataLabelBold.ShouldBe(true);
+
+        // A chart that states none leaves both unset, so a data label keeps taking the axis
+        // labels' size and weight exactly as it did before either was read.
+        ChartPlot silent = Read(Bar("<c:dLbls/>"));
+        silent.DataLabelSize.ShouldBeNull();
+        silent.IsDataLabelBold.ShouldBeNull();
+        silent.DataLabelFont.ShouldBe(silent.LabelSize);
+    }
+
+    /// <summary>
+    /// The chart space's own <c>c:txPr</c> names the face, not whichever element states one
+    /// first.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:chart</c> precedes <c>c:txPr</c> under <c>c:chartSpace</c>, so a part whose title
+    /// names Arial and whose chart space names Calibri had every axis label, legend entry and
+    /// data label measured and drawn in Arial. <c>171128IPAP.pptx</c>'s <c>chart7.xml</c> is
+    /// exactly that file, and on page 38 the reference draws 44 of its 46 records in Carlito.
+    /// </remarks>
+    [Fact]
+    public void TheChartSpacesOwnTextPropertiesNameTheFace()
+    {
+        string title = """
+            <c:title><c:txPr><a:bodyPr/><a:p><a:pPr>
+              <a:defRPr><a:latin typeface="Arial"/></a:defRPr>
+            </a:pPr></a:p></c:txPr></c:title>
+            """;
+        string global = """
+            <c:txPr><a:bodyPr/><a:p><a:pPr>
+              <a:defRPr><a:latin typeface="Calibri"/></a:defRPr>
+            </a:pPr></a:p></c:txPr>
+            """;
+
+        XElement space = XElement.Parse(
+            $"<c:chartSpace xmlns:c=\"{C}\" xmlns:a=\"{A}\">"
+            + $"<c:chart>{title}{Bar()}</c:chart>{global}</c:chartSpace>");
+
+        DrawingChartPlot.Read(space)!.TextFamily.ShouldBe("Calibri");
+
+        // With no global statement the first literal face anywhere is still the answer, which
+        // is what every part that names one face relies on.
+        XElement only = XElement.Parse(
+            $"<c:chartSpace xmlns:c=\"{C}\" xmlns:a=\"{A}\">"
+            + $"<c:chart>{title}{Bar()}</c:chart></c:chartSpace>");
+
+        DrawingChartPlot.Read(only)!.TextFamily.ShouldBe("Arial");
+    }
 }
