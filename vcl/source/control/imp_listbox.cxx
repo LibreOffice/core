@@ -2900,6 +2900,7 @@ void ImplListBoxFloatingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
 
 void ImplListBoxFloatingWindow::Resize()
 {
+    mpImplLB->SetSizePixel(GetOutputSizePixel());
     mpImplLB->GetMainWindow()->ImplClearLayoutData();
     FloatingWindow::Resize();
 }
