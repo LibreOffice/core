@@ -1594,6 +1594,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16066_headlineAndUnsplittableRow)
     assertXPath(pXmlDoc, "//page[2]//SwLineLayout[@portion='Repeated headline']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16067_footnoteSpaceFreedBySplit)
+{
+    // The last of the four rows carries a footnote. The space kept for that footnote on the third
+    // page is what the third row gets measured against, and the footnote then leaves the page with
+    // the row that anchors it.
+    createSwDoc("Cool16067_footnoteSpaceFreedBySplit.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 4);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 1);
+    // Without the fix the third row stayed pushed off the third page, which kept a single 3 cm row
+    // and 5 cm of empty space, and the last two rows shared the fourth page.
+    assertXPath(pXmlDoc, "//page[3]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "//page[4]/body/tab/row", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
 {
     createSwDoc("hidden-para-follow-frame.fodt");

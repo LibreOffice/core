@@ -2338,6 +2338,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     bool bMovedFwd  = false;
     // gets set to true when the Frame is split
     bool bSplit = false;
+    // the bottom that the split measured the rows against
+    SwTwips nSplitDeadLine = 0;
+    // as long as bRetryRegainedSpace is true, the rows the split rejected may be measured once
+    // more, against the space that has appeared under that bottom since
+    bool bRetryRegainedSpace = true;
     const bool bFootnotesInDoc = !GetFormat()->GetDoc().GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
@@ -2705,6 +2710,17 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // the table to be split! Only skip this if condition once.
         if( nDistanceToUpperPrtBottom >= 0 && !bLastRowHasToMoveToFollow )
         {
+            // The rows that went to the follow took their footnotes along, so the page has grown
+            // back since the split measured them: measure them against it as it is now
+            if (bSplit && bRetryRegainedSpace
+                && aRectFnSet.YDiff(aRectFnSet.GetPrtBottom(*GetUpper()), nSplitDeadLine) > 0)
+            {
+                // only once: a row taken back can bring its own footnote with it, shrinking the
+                // page again, and this would keep splitting and joining the same row
+                bRetryRegainedSpace = false;
+                bSplit = false;
+            }
+
             // If there is space left in the upper printing area, join as for trial
             // at least one further row of an existing follow.
             if ( !bSplit && GetFollow() )
@@ -3129,6 +3145,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     aNotify.SetLowersComplete( false );
                     bSplit = true;
+                    nSplitDeadLine = nDeadLine;
 
                     // An existing follow flow line has to be removed.
                     if ( HasFollowFlowLine() )
