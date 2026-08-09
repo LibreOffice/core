@@ -10113,3 +10113,115 @@ height, which puts it on the drawing side — consistent with the document being
 Test counts on the final tree, run project by project: Core **284** (278 before), Containers 109,
 Text 255, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 706,
 Spreadsheets **605** (598 before), Presentations 545, Fidelity 550, **0 skipped** throughout.
+
+## Round thirty-five — sheets: LibreOffice does not break a path after its solidus
+
+Base `5add4e1e7`, checked with `git log --oneline -1` before anything was measured. The baseline
+sweep reproduced **all four** of the brief's figures to the digit — 153/171, absolute page error
+77, 159 exact page counts, absolute word error 32630 — which had not happened before on this
+track. 171 rows, no duplicate path, no `ref-failed`, no `ours-failed`.
+
+Full working, citations, the probe tables and the cross-track measurement are in
+`probes/sheets-r35/README.md`.
+
+**Result: 153/171 → 154/171, page error 77 → 74, exact page counts 159 → 160, word error
+32630 → 27428.** One verdict moved and it moved the right way —
+`tk-syllabus-comparison-document-v5.xlsx` 852/855 `pages` → **855/855 `match`**, closing the last
+named piece of the row-height cluster. Every earlier batch is where it was; 016 gained one.
+
+### The brief's cause (c) reproduced exactly and was neither a rounding nor a threshold
+
+The brief handed over "a ±1 line difference in the 96 dpi measurement, erring in both directions
+on a single document, which on this project has meant a rounding or a threshold three times
+running". The measurement is right — 19 of `tk-syllabus`'s 6520 rows differ from LibreOffice's own
+`style:row-height`, 17 of them one line short and 2 one line long — and the explanation attached
+to it is wrong, which is this project's most reliable regularity holding for the eleventh time.
+
+It is **LibreOffice's own line-break rule for paths**, i#17155. UAX #14 classes U+002F SOLIDUS as
+`SY` and allows a break after it. `BreakIterator_Unicode::getLineBreak`
+(`i18npool/source/breakiterator/breakiterator_unicode.cxx:541-560`), having chosen a break, asks
+whether the character before it is a solidus, and if so scans **backwards up to 66 characters**
+for whitespace and moves the break to just after it — pulling the whole path onto the next line
+rather than splitting it at a separator. When that lands on the line's own start, EditEngine
+throws the break iterator's answer away and cuts at the fitting limit instead: "No separator in
+line => Chop!", `editeng/source/editeng/impedit3.cxx:2236-2247`.
+
+**One rule, both directions.** Glued, a line ends earlier than UAX #14 would end it and the cell
+grows a line; chopped, it ends *later* — mid-number, past the solidus — and the cell loses one.
+
+The brief's warning that the reference PDF cannot arbitrate a reserved height was taken seriously
+and it is what shaped the method: a prefix probe against LibreOffice's own `style:row-height`
+narrowed the divergence to a fifteen-character window first, and only then was ink read, on a
+twelve-cell probe, to answer the much narrower question of *where* the break goes. Those twelve
+cells separate the rule from every alternative — `AMC1 CAT.IDE.A.170/CAT.IDE.H.170; CA` and
+`CAT.IDE.A.170/CAT.IDE.H.170; CA` are the same characters after the blank and LibreOffice breaks
+them differently.
+
+Rows disagreeing with LibreOffice's own `style:row-height`: the 276-row prefix probe **137 → 0**,
+`tk-syllabus` **19 of 6520 → 1**.
+
+### It is a shared-layer change, and it was measured on the other two tracks
+
+The rule lives in `TextMeasurer`'s fill loop rather than in `LineBreaker`, because the glue jumps
+*past* any other opportunity standing between the blank and the solidus — so deleting the solidus
+from the opportunity set would break at an intervening hyphen instead. Writer reaches the same
+i18n call (`sw/source/core/text/guess.cxx:736`), so the change reaches all three families.
+
+Byte reach, rendering every track twice with the clock pinned: **sheets 52 of 171, words 71 of
+200, slides 54 of 163.** The 125 words and slides documents were then rendered with both CLIs and
+scored against one reference conversion each:
+
+| | changed | match | page error | exact pages | word error |
+|---|---:|---|---|---|---|
+| words | 71 | 46 → 46 | 57 → 57 | 49 → 49 | 5419 → **5244** |
+| slides | 54 | 50 → 50 | 0 → 0 | 54 → 54 | 4760 → **4725** |
+
+**Not one verdict and not one page count moved on either track**, and the word error fell on both.
+
+### The prediction was low, on every track
+
+`probes/sheets-r35/PREDICTION.md` was committed while the sweep was still running: 10–25 sheets
+documents and 1–3 verdicts, 3–15 documents on each of words and slides. Measured: **52, 71 and
+54**, and one verdict. The verdict half was right and the reach half was low by two to five times
+— the rule fires wherever a line break happens to land on a solidus, which is far commoner than
+"documents holding a path" suggested.
+
+### `first-divergence.py`, run on this track for the first time
+
+Over the seventeen documents the final sweep still fails, against the sweep's own PDFs rather
+than by re-rendering. Ranking only the kinds that can move ink — the brief is right that `shows`
+is operator granularity — the dominant kind is **`size` on nine of the seventeen**, including both
+whole-track page-error outliers (`orbus_togaf_tool_csq.xls` 33/75,
+`ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` 154/175). That is a lead, not a diagnosis: on
+a document whose pagination is already wrong, an operator diff compares different content in the
+same place.
+
+The cleaner reading is on `7-memento-2015-transports-aeriens-b.xls`, which is 190/191 pages. Its
+page 2 census: **51 `#0066CC` strokes in the reference against 6 of ours plus 32 `#003366`**; 69
+white fills of ours against 12; a `#FF99CC` fill drawn three times by the reference and never by
+us. `#0066CC` is palette index 30 and `#003366` is index 56, and the workbook's own custom
+`PALETTE` record holds the **default** value for every entry involved — so the palette is not the
+difference and the index we resolve is. Three BIFF cell-format defects, none of them line
+breaking, all measured, none chased here.
+
+### What is left on the cluster, named
+
+- **`seihon_zassi_kikou_20221215.xlsx` is a CJK substitution.** With rows 0–4000 already exact,
+  extending `rowdiff.py` to the sheet's full 5159 finds 121 rows differing, **all of them −268.8
+  twips** — one line of eighteen device pixels. The cells name `游ゴシック`, which is not installed;
+  `fc-match` answers `DejaVu Sans`, which has no CJK coverage, so a 29-character Japanese title
+  LibreOffice breaks onto two lines stays on one for us. `tk-syllabus`'s single remaining row has
+  the same signature.
+- **The 3.4 twips on a non-wrapping multi-line row** is confirmed as a real rule and not
+  implemented. `ScColumn::GetOptimalHeight` sets `bStdAllowed = false` for a row holding an edit
+  cell (`column2.cxx:960-968`), so such a row gets **neither** the arithmetic height **nor** the
+  sheet's optimal minimum — only what `GetNeededSize` measures. It is per column, so a row loses
+  its floor only when every column in it does, which is why the corpus reach is unknown and the
+  authored fixture shows it cleanly.
+- **ODF's disagreement is not nearly free** and was not done. Making `ScXMLImport`'s several
+  `text:p` an edit cell regardless of wrap needs a flag the model does not carry threaded from the
+  reader to the height computation; the track holds no `.ods`, so it would be library correctness
+  with zero corpus reach at a real plumbing cost.
+- **`sectors-defense-and-aerospace.xlsx`'s missing shading is 2 of 227 pages**, and on both of
+  them the band the reference shades and we do not sits directly above a band we shade and it does
+  not. That is a row displaced inside the page, not a fill never drawn.
