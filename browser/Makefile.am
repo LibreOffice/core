@@ -1466,6 +1466,7 @@ else
 EXCLUDES = \
         --exclude='src' \
         --exclude='debug.html' \
+        --exclude='documents.html' \
         --exclude='framed.doc.html' \
         --exclude='framed.html' \
         --exclude='load.doc.html' \

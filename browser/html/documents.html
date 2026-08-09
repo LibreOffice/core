@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Collabora Online ! - open a document</title>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+        --page-background: #ffffff;
+        --text: #202124;
+        --muted-text: #5f6368;
+        --border: #d8dadc;
+        --hover: #f1f3f4;
+        --accent: #0b87e7;
+        --accent-soft: #e3f0fc;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --page-background: #1c1c1c;
+          --text: #e8eaed;
+          --muted-text: #9aa0a6;
+          --border: #3c4043;
+          --hover: #2a2a2a;
+          --accent: #62b0f0;
+          --accent-soft: #16394f;
+        }
+      }
+
+      body {
+        margin: 0 auto;
+        padding: 2rem 1.5rem 3rem;
+        max-width: 52rem;
+        background: var(--page-background);
+        color: var(--text);
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 0.25rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 2rem 0 0.5rem;
+      }
+
+      p.hint {
+        margin: 0;
+        color: var(--muted-text);
+        font-size: 0.875rem;
+      }
+
+      ul.links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+
+      ul.links li + li {
+        border-top: 1px solid var(--border);
+      }
+
+      ul.links a {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul.links a:hover,
+      ul.links a:focus {
+        background: var(--hover);
+      }
+
+      .name {
+        font-weight: 500;
+      }
+
+      .detail {
+        color: var(--muted-text);
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      table.documents {
+        width: 100%;
+        margin: 0.5rem 0 0;
+        border-collapse: collapse;
+      }
+
+      table.documents th {
+        padding: 0 0.75rem 0.375rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted-text);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-align: left;
+      }
+
+      table.documents th.size,
+      table.documents th.toggles {
+        text-align: right;
+      }
+
+      table.documents td {
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      table.documents tr:hover td {
+        background: var(--hover);
+      }
+
+      table.documents a {
+        color: inherit;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      table.documents a:hover,
+      table.documents a:focus {
+        text-decoration: underline;
+      }
+
+      .kind {
+        color: var(--muted-text);
+        font-size: 0.8125rem;
+        white-space: nowrap;
+      }
+
+      .size {
+        color: var(--muted-text);
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .toggles {
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.75rem;
+      }
+
+      /* A label styled as a button stands in for the file input, which stays reachable
+         by keyboard. */
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      button,
+      .button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 0.25rem;
+        background: var(--hover);
+        color: var(--text);
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+
+      button:hover,
+      .button:hover {
+        border-color: var(--accent);
+      }
+
+      /* The label stands in for the input, so it carries the focus ring as well. */
+      #upload:focus-visible + .button {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .toggles button {
+        padding: 0.125rem 0.5rem;
+        margin-left: 0.375rem;
+        font-size: 0.75rem;
+      }
+
+      button[aria-pressed='true'] {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      #message {
+        margin-top: 1rem;
+        color: var(--muted-text);
+        font-size: 0.875rem;
+      }
+
+      #message.error {
+        color: #d93025;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Open a document</h1>
+    <p class="hint">These are served to the editor by this server's own WOPI host, and each one opens in a new tab. The buttons on a row change what that row opens as.</p>
+
+    <div class="heading">
+      <h2>Documents</h2>
+      <button id="refresh" type="button">Refresh</button>
+    </div>
+    <table id="documentsTable" class="documents">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Kind</th>
+          <th class="size">Size</th>
+          <th class="toggles">Open as</th>
+        </tr>
+      </thead>
+      <tbody id="documents"></tbody>
+    </table>
+    <p id="documentsHint" class="hint"></p>
+
+    <div class="actions">
+      <input id="upload" type="file" class="visually-hidden">
+      <label class="button" for="upload" title="Upload a document from this machine and add it to the table. It stays on the server, and saving keeps the changes in that copy.">Add document</label>
+    </div>
+
+    <p id="message"></p>
+
+    <h2>This server</h2>
+    <p class="hint">The admin console and the metrics ask for the user name and the password set in admin_console.</p>
+    <ul id="server" class="links"></ul>
+
+    <script>
+      // The server root, so the page works both at the top level and under a
+      // service root such as /browser-prefix/browser/<hash>/documents.html.
+      const serverRoot = window.location.pathname.replace(/\/browser\/[^/]*\/[^/]*$/, '');
+      const documentsUrl = serverRoot + '/wopi/documents';
+      const messageElement = document.getElementById('message');
+
+      function say(text, isError) {
+        messageElement.textContent = text;
+        messageElement.className = isError ? 'error' : '';
+      }
+
+      function launchUrl(path, options) {
+        // The frame that talks postMessage is a page of its own around the editor.
+        const page = options.postMessage ? 'framed.doc.html' : 'debug.html';
+        let url = page + '?file_path=' + encodeURIComponent(path);
+        if (options.readonly)
+          url += '&permission=readonly';
+        if (options.vector)
+          url += '&vector=true';
+        return url;
+      }
+
+      function describeSize(size) {
+        if (size >= 1024 * 1024)
+          return (size / (1024 * 1024)).toFixed(1) + ' MB';
+        if (size >= 1024)
+          return Math.round(size / 1024) + ' kB';
+        return size + ' bytes';
+      }
+
+      // A button that stays pressed, reporting the state it moved to.
+      function toggleButton(label, description, onChange) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = label;
+        button.setAttribute('aria-pressed', 'false');
+        button.setAttribute('aria-label', description);
+        button.addEventListener('click', function() {
+          const pressed = button.getAttribute('aria-pressed') !== 'true';
+          button.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+          onChange(pressed);
+        });
+        return button;
+      }
+
+      function documentRow(entry, kind) {
+        // Each row carries its own choices, so one document opens read only and the next
+        // for editing.
+        const options = { readonly: false, postMessage: false, vector: false };
+
+        const link = document.createElement('a');
+        link.textContent = entry.name;
+        link.target = '_blank';
+        link.rel = 'noopener';
+
+        function followOptions() {
+          link.href = launchUrl(entry.path, options);
+        }
+        followOptions();
+
+        const name = document.createElement('td');
+        name.appendChild(link);
+
+        const kindCell = document.createElement('td');
+        kindCell.className = 'kind';
+        kindCell.textContent = kind;
+
+        const size = document.createElement('td');
+        size.className = 'size';
+        size.textContent = describeSize(entry.size);
+
+        const toggles = document.createElement('td');
+        toggles.className = 'toggles';
+        toggles.appendChild(toggleButton('read only', 'Open ' + entry.name + ' read only',
+                                         function(pressed) {
+                                           options.readonly = pressed;
+                                           followOptions();
+                                         }));
+        toggles.appendChild(toggleButton('frame', 'Open ' + entry.name + ' in a frame that talks postMessage',
+                                         function(pressed) {
+                                           options.postMessage = pressed;
+                                           followOptions();
+                                         }));
+        toggles.appendChild(toggleButton('vector', 'Open ' + entry.name + ' with vector rendering',
+                                         function(pressed) {
+                                           options.vector = pressed;
+                                           followOptions();
+                                         }));
+
+        const row = document.createElement('tr');
+        row.appendChild(name);
+        row.appendChild(kindCell);
+        row.appendChild(size);
+        row.appendChild(toggles);
+        return row;
+      }
+
+      function listDocuments(documents) {
+        const body = document.getElementById('documents');
+        body.textContent = '';
+
+        for (const entry of documents.samples)
+          body.appendChild(documentRow(entry, 'test document'));
+        for (const entry of documents.uploaded)
+          body.appendChild(documentRow(entry, 'opened earlier'));
+
+        const total = documents.samples.length + documents.uploaded.length;
+        // A table with nothing but its header row reads as broken, so leave it out.
+        document.getElementById('documentsTable').hidden = total === 0;
+        document.getElementById('documentsHint').textContent =
+          documents.samples.length === 0
+            ? 'This server has no test documents. Build them with "make build-samples".'
+            : '';
+      }
+
+      document.getElementById('upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file)
+          return;
+
+        // Clearing the input leaves the same file pickable again after a failed upload.
+        event.target.value = '';
+
+        say('Uploading ' + file.name + ' ...');
+        const form = new FormData();
+        form.append('file', file);
+        fetch(documentsUrl, { method: 'POST', body: form })
+          .then(function(response) {
+            if (!response.ok)
+              throw new Error('the server answered ' + response.status);
+
+            // The document turning up in the table is the answer, so drop the progress line.
+            say('');
+            loadDocuments();
+          })
+          .catch(function(error) { say('Could not upload the document: ' + error.message, true); });
+      });
+
+      const serverPages = [
+        { label: 'Admin console', path: '/browser/dist/admin/admin.html' },
+        { label: 'Metrics', path: '/cool/getMetrics' },
+        { label: 'Capabilities', path: '/hosting/capabilities' },
+        { label: 'Discovery', path: '/hosting/discovery' },
+        { label: 'Alive', path: '/livez?verbose' },
+        { label: 'Ready', path: '/readyz?verbose' },
+      ];
+
+      const serverList = document.getElementById('server');
+      for (const page of serverPages) {
+        const link = document.createElement('a');
+        link.href = serverRoot + page.path;
+        link.target = '_blank';
+        link.rel = 'noopener';
+
+        const label = document.createElement('span');
+        label.className = 'name';
+        label.textContent = page.label;
+        link.appendChild(label);
+
+        const address = document.createElement('span');
+        address.className = 'detail';
+        address.textContent = page.path;
+        link.appendChild(address);
+
+        const item = document.createElement('li');
+        item.appendChild(link);
+        serverList.appendChild(item);
+      }
+
+      function loadDocuments() {
+        fetch(documentsUrl)
+          .then(function(response) {
+            if (!response.ok)
+              throw new Error('the server answered ' + response.status);
+            return response.json();
+          })
+          .then(listDocuments)
+          .catch(function(error) {
+            say('Could not list the documents: ' + error.message +
+                '. This page needs a server built with --enable-debug.', true);
+          });
+      }
+
+      document.getElementById('refresh').addEventListener('click', loadDocuments);
+
+      // Coming back restores the page as it was left, message line included. Drop that
+      // and list again so the page matches the server.
+      window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+          say('');
+          loadDocuments();
+        }
+      });
+
+      loadDocuments();
+    </script>
+  </body>
+</html>

@@ -15,9 +15,12 @@
 #include <wsd/FileServer.hpp>
 #include <wsd/RequestDetails.hpp>
 
+#include <Poco/JSON/Array.h>
+#include <Poco/JSON/Object.h>
 #include <Poco/Util/Application.h>
 #include <Poco/Net/HTMLForm.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/Path.h>
 #include <Poco/URI.h>
 
 #if !defined(ENABLE_DEBUG) || ENABLE_DEBUG == 0
@@ -342,6 +345,118 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         socket->send(httpResponse);
         return;
     }
+}
+
+// The example documents the build generates. The copies carry "-edit" in the name and are the
+// ones that may be modified, so saving one leaves the pristine samples it came from alone.
+constexpr std::string_view SampleDocumentDirectory = DEBUG_ABSSRCDIR "/test/samples";
+
+// Where a document picked from the user's own machine is saved. The system temporary directory
+// outlives a restart, unlike the child root, which every start wipes. The name is fixed, so the
+// documents are easy to find and to delete by hand.
+const std::string& uploadedDocumentDirectory()
+{
+    static const std::string directory = []
+    {
+        const std::string path = FileUtil::getSysTempDirectoryPath() + "/coolwsd-documents";
+        Poco::File(path).createDirectories();
+        return path;
+    }();
+
+    return directory;
+}
+
+// Describes each file in a directory as {name, path, size}. Skipping the names without "-edit"
+// leaves only the editable copies.
+Poco::JSON::Array listDocumentsIn(const std::string& directory, bool onlyEditCopies)
+{
+    std::vector<std::string> names = FileUtil::getDirEntries(directory);
+    std::sort(names.begin(), names.end());
+
+    Poco::JSON::Array documents;
+    for (const std::string& name : names)
+    {
+        if (onlyEditCopies && name.find("-edit") == std::string::npos)
+            continue;
+
+        const std::string path = directory + '/' + name;
+        const FileUtil::Stat stat(path);
+        if (!stat.exists() || !stat.isFile())
+            continue;
+
+        Poco::JSON::Object::Ptr document = new Poco::JSON::Object();
+        document->set("name", name);
+        document->set("path", path);
+        document->set("size", stat.size());
+        documents.add(document);
+    }
+
+    return documents;
+}
+
+// GET answers with the documents this server can open, as {"samples": [...], "uploaded": [...]}.
+// POST takes an upload and answers with its {name, path}. Every path is a local path that this
+// server serves as a document.
+void handleDocumentsRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                            const std::shared_ptr<StreamSocket>& socket)
+{
+    if (request.getMethod() == "GET")
+    {
+        Poco::JSON::Object documents;
+        documents.set("samples", listDocumentsIn(std::string(SampleDocumentDirectory),
+                                                 /*onlyEditCopies=*/true));
+        documents.set("uploaded", listDocumentsIn(uploadedDocumentDirectory(),
+                                                  /*onlyEditCopies=*/false));
+
+        std::ostringstream jsonStream;
+        documents.stringify(jsonStream);
+
+        http::Response httpResponse(http::StatusCode::OK);
+        FileServerRequestHandler::hstsHeaders(httpResponse);
+        // The list changes as documents are uploaded and built, so each request reaches
+        // the server.
+        httpResponse.set("Cache-Control", "no-store");
+        httpResponse.setBody(jsonStream.str(), "application/json; charset=utf-8");
+        socket->send(httpResponse);
+        return;
+    }
+
+    if (request.getMethod() == "POST")
+    {
+        FilePartHandler partHandler;
+        Poco::Net::HTMLForm form(request, message, partHandler);
+
+        // Keep the last component of the name the browser sent, so it names a file
+        // in the upload directory and nowhere else.
+        const std::string name = Poco::Path(partHandler.getFileName()).getFileName();
+        if (name.empty() || partHandler.getFilePath().empty())
+        {
+            LOG_ERR("No document to open was uploaded");
+            http::Response httpResponse(http::StatusCode::BadRequest);
+            socket->send(httpResponse);
+            return;
+        }
+
+        const std::string path = uploadedDocumentDirectory() + '/' + name;
+        FileUtil::copyFileTo(partHandler.getFilePath(), path);
+        LOG_INF("Saved uploaded document [" << name << "] as [" << path << ']');
+
+        Poco::JSON::Object::Ptr document = new Poco::JSON::Object();
+        document->set("name", name);
+        document->set("path", path);
+
+        std::ostringstream jsonStream;
+        document->stringify(jsonStream);
+
+        http::Response httpResponse(http::StatusCode::OK);
+        FileServerRequestHandler::hstsHeaders(httpResponse);
+        httpResponse.setBody(jsonStream.str(), "application/json; charset=utf-8");
+        socket->send(httpResponse);
+        return;
+    }
+
+    http::Response httpResponse(http::StatusCode::MethodNotAllowed);
+    socket->send(httpResponse);
 }
 
 // pair consist of type and path of the item which usually resides test/data folder

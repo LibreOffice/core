@@ -525,6 +525,12 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             return true;
         }
 
+        if (relPath.starts_with("/wopi/documents"))
+        {
+            handleDocumentsRequest(request, message, socket);
+            return true;
+        }
+
         if (relPath.starts_with("/wopi/settings") || relPath.ends_with("/wopi/settings/upload"))
         {
             handleSettingsRequest(request, etagString, message, socket);
