@@ -26,14 +26,15 @@ public class ChartAxisLabelTests
 
     private static readonly Length Size = Length.FromPoints(10);
 
-    private static (string?[] Texts, Length[] Centres) Axis(int count, double spacing)
+    private static (string?[] Texts, Length[] Centres) Axis(
+        int count, double spacing, string label = "September")
     {
         string?[] texts = new string?[count];
         Length[] centres = new Length[count];
 
         for (int at = 0; at < count; at++)
         {
-            texts[at] = "September";
+            texts[at] = label;
             centres[at] = Length.FromPoints(20.0 + (at * spacing));
         }
 
@@ -201,5 +202,51 @@ public class ChartAxisLabelTests
         upright.Labels.ShouldContain(label => label.Text == "Netherlands" && label.Rotation == 0.0);
 
         turned.PlotArea.Bottom.ShouldBeLessThan(upright.PlotArea.Bottom);
+    }
+
+    /// <summary>
+    /// A word exactly as wide as the space between two ticks does not wrap, so the axis is
+    /// thinned rather than turned.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The boundary, and it is measured rather than read: LibreOffice's source reduces the limit
+    /// by 5% and then hands it to a shape whose text area is that width less two horizontal
+    /// insets, and its binary does neither. Three probe boundaries in
+    /// <c>research/probes/slides-r30</c>, each crossed by a different variable, put the limit
+    /// between 0.990 and 1.056 of the tick spacing; the rule this pins replaced one that was
+    /// 0.88 of it at ten point and turned an axis two categories early.
+    /// </para>
+    /// <para>
+    /// Ten labels of ten characters at half an em each are exactly the 50 pt spacing wide, and
+    /// their shapes — 0.36 em wider — are not, so they collide without wrapping. That is the
+    /// state the old rule turned and this one thins.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AWordExactlyAsWideAsTheSpacingDoesNotWrap()
+    {
+        (string?[] texts, Length[] centres) = Axis(10, 50.0, "ABCDEFGHIJ");
+
+        ChartAxisLabelLayout layout = ChartAxisLabels.Resolve(
+            texts, centres, new ChartAxisText(LineBreakAllowed: true), Size,
+            new ChartText(new Ruler(), null));
+
+        layout.Rotation.ShouldBe(0.0);
+        layout.Rhythm.ShouldBeGreaterThan(1);
+    }
+
+    /// <summary>One character more than the spacing wraps, and the axis is turned.</summary>
+    /// <remarks>The other side of the boundary above; without it the test cannot fail.</remarks>
+    [Fact]
+    public void AWordWiderThanTheSpacingWrapsAndTurnsTheAxis()
+    {
+        (string?[] texts, Length[] centres) = Axis(10, 50.0, "ABCDEFGHIJK");
+
+        ChartAxisLabelLayout layout = ChartAxisLabels.Resolve(
+            texts, centres, new ChartAxisText(LineBreakAllowed: true), Size,
+            new ChartText(new Ruler(), null));
+
+        layout.Rotation.ShouldBe(Math.PI / 4.0, 1e-12);
     }
 }
