@@ -476,6 +476,40 @@ seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59
 with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
 improve would have shipped half a fix and called it done.
 
+### A round that ships no code can be one of the better ones
+
+One words round changed nothing in `dotnet/src` and was worth having. In order, it:
+
+1. **Refuted the cause it was handed.** The claim was that `SliceRow` loses a row's minimum
+   height when the row crosses a page. Traced on the failing document, nine rows split and
+   **every one already sums past its floor across its parts** — and LibreOffice charges the floor
+   to the sum too, skipping it for a row `IsInSplit()` and subtracting earlier parts for a
+   follow.
+2. **Found a rule that fit, and made it causal rather than correlational.** Lowering one row's
+   declared height and nothing else makes LibreOffice break the row again, sharply, between 4250
+   and 4300 twips. All ten of the document's split decisions fit "a row breaks only when the room
+   left is at least its floor", and that took the first twelve pages from diverging at page 3 to
+   matching word for word.
+3. **Refuted its own rule.** A committed fixture breaks its floored row at every declared height
+   from 4.8 cm to 8.0 cm with about 100 pt of room — the last being the whole body height.
+   Implemented, the rule failed five tests. Reverted.
+
+Its measured reach had been 12 of 200 renderings with **one verdict moving in the wrong
+direction**, so shipping it would have cost a document and left a false explanation in the tree
+for whoever came next. What it shipped instead: a probe that reproduces both halves in one
+command and lists what is ruled out.
+
+**Ask for this explicitly in a brief.** "Find the cause, and if the rule you find does not survive
+the fixtures, say so and ship the probe" is a legitimate assignment. The failure mode it prevents
+is the expensive one — a plausible rule, a corpus that half-agrees, and three later rounds built
+on top of it.
+
+The same round also swept a *second* lead whole and did not ship it: charging a cell's border
+width against its text width moved **119 of 200 renderings**, the largest reach any words change
+has had, and turned one document into a full match. It was held back because it fails to
+reproduce the wrap it was derived from. **A large reach on an unconfirmed premise is a reason for
+more caution, not less** — it is exactly the change that would be hardest to unpick later.
+
 ### Prototype a ported algorithm in a script until it reproduces the reference's own answer
 
 The largest single move on the sheets track came from porting `convertOutlines` — the rule by
