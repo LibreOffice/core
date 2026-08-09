@@ -763,7 +763,7 @@ public static class PageDrawing
                         shapedLabel,
                         label.Text,
                         label.EmSize,
-                        label.Font ?? Reference(label.Face),
+                        label.Font ?? Reference(paragraph, label.Face),
                         new DocPoint(lineLeft - paragraph.LabelAdvance, baseline),
                         Length.Zero),
                     label.Colour.A == 0 ? Colour.Black : label.Colour));
@@ -821,7 +821,7 @@ public static class PageDrawing
                     shaped,
                     text,
                     run.EmSize,
-                    run.Font ?? Reference(run.Face),
+                    run.Font ?? Reference(paragraph, run.Face),
                     new DocPoint(pen, baseline - run.Rise),
                     spaceAdd,
                     run.Tracking);
@@ -1009,7 +1009,7 @@ public static class PageDrawing
                 shaped,
                 fill,
                 at.EmSize,
-                at.Font ?? Reference(at.Face),
+                at.Font ?? Reference(paragraph, at.Face),
                 new DocPoint(lineLeft + segment.GapLeft, baseline - at.Rise),
                 Length.Zero),
             at.EffectiveColour);
@@ -1465,6 +1465,21 @@ public static class PageDrawing
     /// reference. Naming the face's own family is enough for a backend to group runs by font, and it
     /// records no substitution because none was made.
     /// </remarks>
+    /// <summary>
+    /// A reference for a face the run did not name, preferring one that can be embedded.
+    /// </summary>
+    /// <remarks>
+    /// A reader stores a <see cref="PageRun.Font"/> for the runs it resolved and leaves it null for
+    /// the faces the layout supplied — a list label, a tab leader, a paragraph with no runs. The
+    /// name-only reference below is enough to draw with and not enough to embed, because a PDF
+    /// writer loads the font program through the face key: measured on
+    /// <c>Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx</c>, which
+    /// announces <c>DejaVuSans</c> unembedded beside four faces it embeds, and fails the corpus
+    /// gate for it. The resolver that loaded the face can still name the file it came from.
+    /// </remarks>
+    private static FontReference Reference(PageParagraph paragraph, Text.Fonts.OpenTypeFace face)
+        => paragraph.Fallback?.ReferenceFor(face) ?? Reference(face);
+
     private static FontReference Reference(Text.Fonts.OpenTypeFace face) => new()
     {
         FamilyName = face.FamilyName ?? string.Empty,

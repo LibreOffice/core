@@ -91,7 +91,7 @@ public static class FontItemiser
             bool isFallback = false;
             bool missing = false;
 
-            if (!primary.HasGlyphFor(codePoint))
+            if (!primary.HasGlyphFor(codePoint) && !IsNeverDrawn(codePoint))
             {
                 // A mark the current face can draw stays with the base it is attached to, whatever
                 // the primary face says: the mark is positioned against the base's outline.
@@ -151,4 +151,39 @@ public static class FontItemiser
         runs.Add(new FaceRun(runStart, end - runStart, runFace, runIsFallback));
         return runs;
     }
+
+    /// <summary>
+    /// True for a character no font is expected to have a glyph for, and no layout draws.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A tab is not in any font's <c>cmap</c>.</strong> Liberation Sans maps U+0020 and not
+    /// U+0009, U+000A or U+000D, so a coverage check run over ordinary prose reports every tab and
+    /// every line break as missing — and the search then finds *some* installed face whose cmap does
+    /// map the control range, splits the run there, and measures the two halves without the shaping
+    /// context that joined them. Measured: wiring fallback in without this test turned
+    /// <c>johnson_hall_service_log.pdf.docx</c>, a one-page form holding 36 tabs, into two pages,
+    /// while leaving every glyph on page one in exactly the position it had before. It is the only
+    /// document of the words track's 200 that moved adversely, and it moved for a character that is
+    /// never drawn at all.
+    /// </para>
+    /// <para>
+    /// LibreOffice never asks the question, because it falls back <em>after</em> shaping — by then
+    /// the layout has turned a tab into a tab portion and a break into a line, so neither is in the
+    /// text handed to a shaper. Splitting on the cmap beforehand is a whole pass cheaper and this is
+    /// the one place the two orders disagree.
+    /// </para>
+    /// <para>
+    /// Format characters (Cf) join the control ones: a zero-width joiner or a bidi mark is an
+    /// instruction to the shaper rather than a mark on the page, and a face that lacks it should not
+    /// pull the text around it into a different font.
+    /// </para>
+    /// </remarks>
+    private static bool IsNeverDrawn(int codePoint)
+        => codePoint <= 0x10FFFF
+            && System.Globalization.CharUnicodeInfo.GetUnicodeCategory(codePoint)
+                is System.Globalization.UnicodeCategory.Control
+                or System.Globalization.UnicodeCategory.Format
+                or System.Globalization.UnicodeCategory.LineSeparator
+                or System.Globalization.UnicodeCategory.ParagraphSeparator;
 }

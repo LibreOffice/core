@@ -91,6 +91,28 @@ public sealed class GlyphFallbackWiringTests
             .ShouldContain(glyph => glyph.GlyphId == 0);
 
     /// <summary>
+    /// A tab does not split a run, even though no font has a glyph for one.
+    /// </summary>
+    /// <remarks>
+    /// The sharpest edge of the whole change, and the only adverse movement it made on the words
+    /// track. Liberation Sans's <c>cmap</c> maps U+0020 and not U+0009, U+000A or U+000D, so a
+    /// coverage check over ordinary prose calls every tab missing; the search then finds an
+    /// installed face whose cmap does cover the control range and splits the run around a character
+    /// nothing draws. <c>johnson_hall_service_log.pdf.docx</c> — a one-page form holding 36 tabs —
+    /// became two pages, with every glyph on page one still in exactly its old position.
+    /// </remarks>
+    [Theory]
+    [InlineData("a\tb")]
+    [InlineData("a\nb")]
+    [InlineData("a‍b")]
+    public void ACharacterNothingDrawsLeavesTheRunWhole(string text)
+    {
+        MeasuredParagraph measured = Paragraph(withFallback: true, text).Measure();
+
+        measured.Runs.ShouldAllBe(run => run.Run.Face == LatinFace);
+    }
+
+    /// <summary>
     /// A document read by the DOCX reader arrives at the layout with a resolver on its paragraphs.
     /// </summary>
     /// <remarks>
@@ -170,10 +192,10 @@ public sealed class GlyphFallbackWiringTests
     /// <summary>Latin, Chinese and Latin again, so the split has to happen twice and not once.</summary>
     private const string FixtureText = "ab汉字cd";
 
-    private static PageParagraph Paragraph(bool withFallback)
+    private static PageParagraph Paragraph(bool withFallback, string? text = null)
         => new()
         {
-            Text = FixtureText,
+            Text = text ?? FixtureText,
             Face = LatinFace,
             EmSize = Size,
             Fallback = withFallback ? Fonts : null,
