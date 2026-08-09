@@ -1888,6 +1888,17 @@
           <value>com.sun.star.comp.svx.FontNameToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="FontStyleToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontStyleName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontStyleToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="StyleToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:StyleApply</value>
