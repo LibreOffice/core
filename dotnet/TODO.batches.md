@@ -11344,3 +11344,147 @@ found the reach confined to words, so no parent-side cross-track sweep is owed b
 
 **The track now has no `unembedded` verdict.** `手机免提系统TSB.doc` moved from `words,unembedded`
 to `words` without changing a count.
+
+## Round forty-two — words: the `box` cluster is mostly the instrument, and what was under it
+
+Branch `worktree-words-r42` on `4efef703e`. Baseline reproduced **exactly**: 154/200, absolute page
+error 78, 164 exactly-correct page counts, absolute word error 6427. `probes/words-r42/baseline.tsv`.
+
+### 1. Round 39's whole-track table reproduces cell for cell, and the class it left standing dies
+
+`probes/words-r42/divergence-from-pdfs.py` re-runs `first-divergence.py`'s analysis over the PDFs
+the baseline sweep already rendered — same build, no second render, and no risk of classifying a
+different program from the one that was swept. Every cell of round 39's table comes back: `box` 8
+failing / 5 matching, `glyphs` 29/54, `one-sided` 5/13, `face` 0/5, `size` 3/4, no divergent page
+0/71.
+
+`probes/words-r42/box-note-anatomy.py` then asks the question the round was briefed to ask —
+**could `size WxH vs WxH` be produced by something other than a rule-and-fill defect?** Two things
+produce it, and between them they are two thirds of the class:
+
+- **Rectangle corners.** `pdf-ops.py` anchors a non-text record at `(x0, y1)`, its top-left corner,
+  and the left edge and the top edge of any rectangle share that corner *exactly*. Greedy
+  nearest-neighbour therefore pairs our vertical rule against the reference's horizontal one at
+  every table corner, and the note reports one rule's width against another's height. On
+  `UG.CAO.00133 … Language.docx` page 1: `size 0.0x36.6 vs 486.9x0.0`, `size 0.0x36.6 vs 0.6x0.0`,
+  `size 487.1x0.0 vs 0.0x26.4`.
+- **Flattened curves.** A logo arrives as dozens of hairline segments; two renderers flatten a curve
+  at different sub-point positions, so every segment mismatches its partner.
+
+Over the 44 documents carrying any box note on their first divergent page: **439 notes, 142
+cross-orientation, 146 hairline, 151 same-direction and rule-scale.** Counting only the survivors:
+
+| dominant kind | matching, published | failing, published | matching, cleaned | failing, cleaned |
+|---|---:|---:|---:|---:|
+| `box` | 5 | **8** | **3** | **5** |
+| `glyphs` | 54 | 29 | 54 | 32 |
+| `one-sided` | 13 | 5 | 14 | 5 |
+
+**All three documents the brief names as the heart of the cluster leave it.** `150-5370-10H.docx`
+(711/721) has **236** box notes on page 1 and **not one is a rule**: 90 cross pairs and 146 hairlines,
+every one of them inside a single 12 pt × 12 pt graphic around (84–100, 715–717) that both renderers
+draw. `UG.CAO.00133` and `UG.CAO.00006` have four each, three of them cross pairs.
+
+**The `box` cluster and the "rule-and-fill" cluster are one instrument column read twice** — round
+34's nine over the 46 failures, round 39's eight over all 200. And the pairing that made it look like
+a document property does not hold: `AC-150-5370-10G-updated-201604.docx` is `glyphs`-dominant on
+page 5, not `box`, in round 39's own committed TSV and in this round's re-measurement. **Two
+revisions of one document land in two different classes.**
+
+The user's reading — *"still suffering from the catastrophic impact of getting text rendering sizes
+wrong … might be related to the placement of tables and text"* — is not what these documents
+measure. A font-size difference is `size`, which is 3 of 46 failures and 4 of 154 matches, and the
+geometry class it might have shown up in is mostly the matcher. What the largest `box` document is
+actually wrong about is a missing picture and a cached page number.
+
+### 2. A frame anchored in a furniture table was never placed
+
+`FrameLayout.FlowsOn` yielded the header, the footer and the notes area and then walked
+`page.Tables`. A `PlacedFlow` carries its own `Tables` and those were never walked, so a picture
+anchored in a cell of a **header table** had no rectangle resolved and was drawn nowhere. The
+method's own doc comment already promised "the cells of every table, however deeply the tables
+nest". A running head laid out as a table — a logo in one cell, the title and revision in the next
+— is the ordinary house style in this corpus.
+
+### 3. A page field inside a text box was never resolved, and the head was cached because of it
+
+`PageFields.Carries`/`Resolve` descended into a `PageTable`'s cells and not into a paragraph's
+`Frames`. `Carries` is also what `PageFurnitureSet` asks to decide whether a running head may be
+cached across pages, so a footer whose `PAGE` field sits in a `txbxContent` answered "does not
+vary": it was laid out **once** and every page was given page one's copy.
+
+`UG.CAO.00133 … Language.docx` printed `Page 1 of 18` on all eighteen pages where the reference
+prints 1 to 18. **That is the defect the user reported on this document** — *"Libre office shows
+page 8 and 1. While we show page 1 and 2. next to the header text"*.
+
+### The numbers
+
+| | baseline `4efef703e` | after | predicted |
+|---|---:|---:|---|
+| documents matching | 154 | **154** | 154 |
+| absolute page error | 78 | **78** | 78 |
+| exactly-correct page counts | 164 | **164** | 164 |
+| absolute word error | 6427 | **6512** | 6427 ± a few |
+
+**Zero verdicts moved, said in advance** (`probes/words-r42/prediction.md`, committed at `51c2c473b`
+before anything was rendered post-change).
+
+Reach **37 of 200 renderings**, against a predicted 18–30. **The prediction was low, and for the
+reason the skill names**: the census reads DOCX, and **11 of the 37 are `.doc`**, whose header
+stories live in the WW8 text stream where no zip-level census can look. On the half the census could
+see it was accurate — 26 DOCX changed against a 29-document ceiling.
+
+The word gate reads a regression and the token multiset inverts it. Two running heads that were not
+being drawn at all now are:
+
+| document | | under-draw | over-draw | total |
+|---|---|---:|---:|---:|
+| `A1. EASA Form 2.docx` | before | 275 | 129 | 404 |
+| | after | **29** | 225 | **254** |
+| `B11. TE.CAO.00129  Experience  logbook.docx` | before | 233 | 130 | 363 |
+| | after | **46** | 174 | **220** |
+| `UG.CAO.00133 … Language.docx` | before | 100 | 344 | 444 |
+| | after | **89** | 333 | **422** |
+
+Under-draw falls 608 → 164 across the three and total mismatch 1211 → 896. The residual over-draw is
+the open item below.
+
+Six tests in `FurnitureFrameTests`, each verified with `verify-test.sh`: restoring the
+body-tables-only walk fails two, and restoring the frame-blind `PageFields` fails three (and none of
+the fifteen `PageNumberFieldTests`, which is the control that says the new tests are what caught it).
+
+### Refuted: the header does not stop being inherited at a section break
+
+`UG.CAO.00133` draws its running head on all 18 pages where the reference draws it on 5 — 244 words,
+which is its whole 244-word surplus — and it looks exactly like a link-to-previous rule we have
+wrong. Its sections 1, 2 and 4 each name an *even* and a *first* header and **no default one**, and
+LibreOffice's own flat-ODF export gives all three an empty `<style:header>` while sections 0 and 3
+carry the logo.
+
+`probes/words-r42/header-link-to-previous.py` authors the shapes the corpus cannot separate, and
+**refutes it in one command**. A second section naming nothing, naming only a first header, only an
+even header, both, both *empty* exactly as Word writes the unused slots, and a three-section document
+whose middle section names two empty ones: in **all six**, LibreOffice puts the first section's
+header on every page. `DocxReader.Furniture` already implements that. The cause on that one file is
+something six authored shapes do not reproduce, and it is left open rather than guessed at.
+
+### Still open
+
+- 46 mismatches, unchanged. The `box` cluster is now **5 of 46 against 3 of 154** once the matcher's
+  own artefacts are removed, and the two largest documents in it are not in it.
+- **Why `UG.CAO.00133`, `A1. EASA Form 2.docx` and `B11. TE.CAO.00129` draw a running head on pages
+  the reference leaves bare.** It is now the largest single item on all three, it is not the
+  inheritance rule, and it is the residual over-draw in the table above.
+- `AC-150-5370-10G-updated-201604.docx` 686/697 and `150-5370-10H.docx` 711/721 are both `glyphs` on
+  their first divergent page — a break difference, not geometry. `A_320.doc` 141/150 (printer device)
+  and both reader-split clusters are untouched.
+- The two round-38 leads — the duplicate `sprmCSymbol` slot and `absrc-pac-01-info-note-en.doc`
+  page 1 — are untouched. The second is `one-sided`, which round 39's control says to distrust.
+- `手机免提系统TSB.doc`'s one remaining face difference, `FO.FCTOA.00010` ("missing image" — it is in
+  the furniture-table population this round changed, but it still fails) and
+  `omrIMInterpretiveGuideLine.doc` are unreviewed.
+
+Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing **731** (725 + six `FurnitureFrameTests`),
+Spreadsheets 621, Presentations 576, Fidelity 550 — **0 skipped, 0 warnings**. The change is in
+`Paperless.WordProcessing` only, so no cross-track sweep is owed.
