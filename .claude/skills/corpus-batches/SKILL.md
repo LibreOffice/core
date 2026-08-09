@@ -393,6 +393,22 @@ A brief that works contains all of:
    and label which is which. Note the last row: an explanation can be wrong in the direction of
    *inverting* the fix — that agent's predecessor thought a rotation needed removing, and what
    was actually missing was a second rotation to add.
+### Re-read a brief for sentences that read as instructions
+
+A brief meant to say a tool *had never been run* on a track wrote **"Never run on sheets"**, and
+the next sentence said *"running it here is cheap and may reorder this brief"*. The agent
+honoured the prohibition, did not run it, and said so — correctly, because between a prohibition
+and an invitation the prohibition is the safe reading.
+
+The cost was a whole track's worth of a measurement that had already reframed another one. The
+fix is mechanical: **a statement of fact about a tool's history must not be phrasable as a
+command.** Write "has never been run on this track" rather than "never run on sheets". Before
+dispatching, re-read the brief for any bare imperative that was meant as a description.
+
+The same agent flagged the contradiction rather than silently picking one, which is the
+behaviour to want — ask for it explicitly, because the alternative is a round that quietly did
+the other thing.
+
 4. **Do not put per-batch figures in the brief at all.** Three rounds running, mine were a
    round stale — the agent that closed a batch also updated the scoreboard, and the brief was
    written from what the *previous* round reported. Every time, the agent measured its own
