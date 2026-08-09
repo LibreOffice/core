@@ -291,12 +291,17 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             on &= ~bit;
         }
 
-        // A continuous section becomes a Writer *text* section rather than a page descriptor, so
-        // `SetHdFt` is never called for it and the page descriptor in force stays in force. Its own
-        // stories are not read at all — Word writes a full set into every section descriptor whether or
-        // not the section can use them.
-        bool hasPageDesc = section == 0 || Sections[section].Break != Model.SectionBreak.Continuous;
-        if (!hasPageDesc)
+        // A continuous section becomes a Writer *text* section rather than a page descriptor, so the one
+        // in force stays in force and its own stories are never read — Word writes a full set into every
+        // section descriptor whether or not the section can use them. The exception `InsertSegments`
+        // makes for itself is `HasOwnHeaderFooter`: a continuous section that states a running head of
+        // its own does get a descriptor built, on the not-first slots alone (`ww8par.cxx`:4528).
+        bool continuous = section > 0 && Sections[section].Break == Model.SectionBreak.Continuous;
+        bool ownFurniture =
+            StoryLength(stated, 0) >= 2 || StoryLength(stated, 1) >= 2
+            || StoryLength(stated, 2) >= 2 || StoryLength(stated, 3) >= 2;
+
+        if (continuous && !ownFurniture)
         {
             carry.Enabled = on;
             carry.IsImmediate = false;
@@ -348,7 +353,12 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         carry.Footers = footers;
         carry.Set = result;
         carry.Enabled = on;
-        carry.IsImmediate = true;
+
+        // A continuous section's descriptor is built and then thrown away again unless the section holds
+        // a hard page break to hang it on (`#i40766#`, `ww8par.cxx`:4540-4560) — so the *next* section
+        // still finds `mpPage` null and inherits nothing. Its own pages keep what it built, which is why
+        // it is computed at all.
+        carry.IsImmediate = !continuous;
 
         return result;
 
