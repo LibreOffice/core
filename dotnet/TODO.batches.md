@@ -11681,3 +11681,17 @@ Presentations 576, Fidelity 550 — 0 skipped, 0 warnings.
   leads, `FO.FCTOA.00010`, `omrIMInterpretiveGuideLine.doc`, and
   `AC-150-5370-10G-updated-201604.docx` / `150-5370-10H.docx`, both `glyphs`-or-`hairline` on their
   first divergent page rather than geometry.
+
+### Merge note, words round 43
+
+WordProcessing **734** (731 + `SectionInheritedHeaderTests`), everything else at its known-good
+count, Fidelity 550, 0 skipped, 0 warnings. **No file under `dotnet/src` was touched by the
+document half of this round**, so the scoreboard is unchanged by construction and no track is owed a
+sweep for it.
+
+`pdf-ops.py` and `first-divergence.py` did change, and they are shared by all three tracks. Both
+changes are additive and overridable (`$PDF_OPS`, `$FIRST_DIVERGENCE`), and the published `box`
+column still reproduces against the main checkout's copy. **A `box` count stored before this round is
+the sum of three populations** — same-direction rules, cross-orientation pairs and hairline
+segments — and is not comparable with one measured after it. Any round that quotes a stored `box`
+figure must say which side of `cce1cc314` it was taken on.
