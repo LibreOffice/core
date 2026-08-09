@@ -178,6 +178,12 @@ public:
     OUString                FindStyleForVariations( const OUString& rName,
                                                     const std::vector<vcl::font::Variation>& rVariations,
                                                     const OUString& rPreferred ) const;
+    OUString                GetStyleText( const OUString& rName,
+                                          const OUString& rSubfamily,
+                                          FontWeight eWeight, FontItalic eItalic ) const;
+    void                    SplitStyleText( const OUString& rName, const OUString& rStyle,
+                                            OUString& rSubfamily, FontWeight& rWeight,
+                                            FontItalic& rItalic ) const;
 
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
