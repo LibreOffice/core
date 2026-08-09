@@ -8,6 +8,7 @@ using Paperless.Spreadsheets.Layout;
 string path = args[0];
 string? only = args.Length > 1 && args[1].Length > 0 ? args[1] : null;
 int maxCols = args.Length > 2 ? int.Parse(args[2]) : 80;
+int maxRows = args.Length > 3 ? int.Parse(args[3]) : 400;
 
 using IDocument doc = PaperlessDocument.Open(path);
 var pages = (SpreadsheetPages)((IPaginatedDocument)doc).Layout();
@@ -33,6 +34,12 @@ foreach (SheetLayout sheet in pages.Sheets)
     for (int c = 0; c <= maxCols; c++)
         cw.Add($"{c}:{grid.Columns.PrintedSizeAt(c).Twips}{(grid.Columns.IsHidden(c) ? "H" : "")}");
     Console.WriteLine("  cols " + string.Join(" ", cw));
+
+    List<string> rh = [];
+    int maxRow = Math.Min(maxRows, sheet.UsedRange.LastRow);
+    for (int r = 0; r <= maxRow; r++)
+        rh.Add($"{r}:{grid.Rows.PrintedSizeAt(r).Twips}{(grid.Rows.IsHidden(r) ? "H" : "")}");
+    Console.WriteLine("  rows " + string.Join(" ", rh));
 }
 
 Console.WriteLine($"# {pages.Count} pages");
