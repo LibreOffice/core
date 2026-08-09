@@ -192,6 +192,10 @@ internal static class XlsxPrintSetup
             // the page's own margins, where the ODS twin indents by a further two centimetres.
             Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),
             Footer = footerText is null ? null : SheetHeaderFooter.ParseCodes(footerText),
+
+            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
+            HeaderIsDynamic = true,
+            FooterIsDynamic = true,
             ScaleMode = mode,
             ScalePercentage = percentage,
             FitToPagesWide = wide,
@@ -341,6 +345,7 @@ internal static class XlsxPrintSetup
         Length defaultHeight = statedHeight ?? SheetGrid.StandardRowHeight;
 
         List<SheetDigitRun> columns = [];
+        List<SheetOutlineRun> columnOutline = [];
         foreach (XElement column in Xlsx.Children(Xlsx.Child(worksheet, "cols"), "col"))
         {
             int min = Xlsx.Integer(column, "min") ?? 1;
@@ -351,13 +356,21 @@ internal static class XlsxPrintSetup
             // still needs a run, so that the hidden flag survives.
             SheetDigitWidth width = Digits(Xlsx.Attribute(column, "width")) ?? defaultWidth;
             columns.Add(new SheetDigitRun(min - 1, max - 1, width, Xlsx.Flag(column, "hidden")));
+            SheetOutlineCollapse.Append(
+                columnOutline, min - 1, max - 1,
+                Xlsx.Integer(column, "outlineLevel") ?? 0, Xlsx.Flag(column, "collapsed"));
         }
 
         List<SheetSizeRun> rows = [];
+        List<SheetOutlineRun> rowOutline = [];
         foreach (XElement row in Xlsx.Children(Xlsx.Child(worksheet, "sheetData"), "row"))
         {
             int index = Xlsx.Integer(row, "r") ?? 0;
             if (index <= 0) continue;
+
+            SheetOutlineCollapse.Append(
+                rowOutline, index - 1, index - 1,
+                Xlsx.Integer(row, "outlineLevel") ?? 0, Xlsx.Flag(row, "collapsed"));
 
             bool hidden = Xlsx.Flag(row, "hidden");
             Length? height = RowHeight(Xlsx.Attribute(row, "ht"), isMicrosoftGenerated);
@@ -370,6 +383,13 @@ internal static class XlsxPrintSetup
                 index - 1, index - 1, height ?? defaultHeight, hidden,
                 !Xlsx.Flag(row, "customHeight")));
         }
+
+        // A collapsed outline group hides its detail rows whether or not the part says so, which
+        // is a derivation rather than a reading — see `SheetOutlineCollapse`.
+        rows = SheetOutlineCollapse.Apply(
+            rows, SheetOutlineCollapse.Hidden(rowOutline), defaultHeight);
+        columns = SheetOutlineCollapse.Apply(
+            columns, SheetOutlineCollapse.Hidden(columnOutline), defaultWidth);
 
         SheetColumnDigits digits = new(defaultFont ?? SheetDefaultFont.Calc, defaultWidth, columns);
 

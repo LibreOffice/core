@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using Paperless.Core.Units;
 
 namespace Paperless.Spreadsheets.Layout;
 
@@ -45,15 +46,26 @@ public enum SheetHeaderField
 /// </summary>
 /// <param name="Text">The literal text, or null when this is a field.</param>
 /// <param name="Field">Which field it is, when <paramref name="Text"/> is null.</param>
-public readonly record struct SheetHeaderSegment(string? Text, SheetHeaderField Field = default)
+/// <param name="Size">
+/// The em size the segment states, or null for the sheet's default cell height. SpreadsheetML
+/// and BIFF write it as <c>&amp;14</c> and it persists until the next such code, which is why it
+/// belongs to the segment rather than to the part: <c>&amp;L&amp;8text&amp;R&amp;14more</c> is
+/// two sizes in one band. ODF states it in a text style and reaches the same place.
+/// </param>
+public readonly record struct SheetHeaderSegment(
+    string? Text, SheetHeaderField Field = default, Length? Size = null)
 {
     /// <summary>A run of literal characters.</summary>
     /// <param name="text">The characters.</param>
-    public static SheetHeaderSegment Literal(string text) => new(text);
+    /// <param name="size">The em size it states, or null for the default.</param>
+    public static SheetHeaderSegment Literal(string text, Length? size = null)
+        => new(text, default, size);
 
     /// <summary>A field, resolved when the page it sits on is known.</summary>
     /// <param name="field">Which field.</param>
-    public static SheetHeaderSegment Of(SheetHeaderField field) => new(null, field);
+    /// <param name="size">The em size it states, or null for the default.</param>
+    public static SheetHeaderSegment Of(SheetHeaderField field, Length? size = null)
+        => new(null, field, size);
 
     /// <summary>True when this is a field rather than literal text.</summary>
     public bool IsField => Text is null;
@@ -93,7 +105,91 @@ public sealed record SheetHeaderPart(IReadOnlyList<SheetHeaderSegment> Segments)
 
         return text.ToString();
     }
+
+    /// <summary>
+    /// The part's lines, each a list of pieces with the size each is drawn at.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Every format can write a line break into one part, and all of them print.</strong>
+    /// Calc holds each area as an <c>EditTextObject</c> of several paragraphs and draws the whole
+    /// object (<c>ScPrintFunc::PrintHF</c>, <c>sc/source/ui/view/printfun.cxx:1874-1912</c>);
+    /// only the first line was drawn here until round thirty-one. Measured on
+    /// <c>fm-provider-service-measures.xlsx</c>, whose header states three lines and whose footer
+    /// two: 20944 extractable words against the reference's 21458, the whole difference being
+    /// dropped lines.
+    /// </para>
+    /// <para>
+    /// A field never contains a break, so a line boundary can only fall inside a literal —
+    /// which is what lets this split without resolving the fields first.
+    /// </para>
+    /// </remarks>
+    /// <param name="context">What the fields resolve to on this page.</param>
+    public IReadOnlyList<IReadOnlyList<SheetHeaderPiece>> Lines(SheetHeaderContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        List<IReadOnlyList<SheetHeaderPiece>> lines = [];
+        List<SheetHeaderPiece> current = [];
+
+        foreach (SheetHeaderSegment segment in Segments)
+        {
+            if (segment.Text is null)
+            {
+                current.Add(new SheetHeaderPiece(context.Value(segment.Field), segment.Size));
+                continue;
+            }
+
+            string[] parts = segment.Text.Split('\n');
+            for (int at = 0; at < parts.Length; at++)
+            {
+                if (at > 0)
+                {
+                    lines.Add(current);
+                    current = [];
+                }
+
+                if (parts[at].Length > 0)
+                    current.Add(new SheetHeaderPiece(parts[at], segment.Size));
+            }
+        }
+
+        lines.Add(current);
+
+        // A trailing empty line draws nothing and takes no room; an empty line between two that
+        // do draw is a blank line and keeps its height, which is why only the tail is trimmed.
+        while (lines.Count > 0 && lines[^1].Count == 0) lines.RemoveAt(lines.Count - 1);
+
+        // Neighbouring pieces at one size are one piece. A part is normally a literal, a field
+        // and another literal — "Page ", &P, " of ", &N — and drawing those as four shows splits
+        // the text layer four ways for nothing: a PDF reader infers a word boundary at every
+        // reposition. Only a size change is a reason to start a new run.
+        for (int at = 0; at < lines.Count; at++) lines[at] = Coalesce(lines[at]);
+
+        return lines;
+    }
+
+    private static IReadOnlyList<SheetHeaderPiece> Coalesce(IReadOnlyList<SheetHeaderPiece> line)
+    {
+        if (line.Count < 2) return line;
+
+        List<SheetHeaderPiece> merged = [];
+        foreach (SheetHeaderPiece piece in line)
+        {
+            if (merged.Count > 0 && merged[^1].Size == piece.Size)
+                merged[^1] = merged[^1] with { Text = merged[^1].Text + piece.Text };
+            else
+                merged.Add(piece);
+        }
+
+        return merged;
+    }
 }
+
+/// <summary>One piece of one line of a header part: its text and the size it is drawn at.</summary>
+/// <param name="Text">The text, fields already resolved.</param>
+/// <param name="Size">The em size it states, or null for the sheet default.</param>
+public readonly record struct SheetHeaderPiece(string Text, Length? Size);
 
 /// <summary>What a header's fields stand for on one printed page.</summary>
 /// <remarks>
@@ -211,6 +307,7 @@ public sealed record SheetHeaderFooter(
         List<SheetHeaderSegment> current = centre;
 
         StringBuilder literal = new();
+        Length? size = null;
         int at = 0;
 
         while (at < text.Length)
@@ -228,9 +325,15 @@ public sealed record SheetHeaderFooter(
 
             switch (code)
             {
-                case 'L': Flush(); current = left; break;
-                case 'C': Flush(); current = centre; break;
-                case 'R': Flush(); current = right; break;
+                // A section switch resets the font to the workbook's own default, which is
+                // `ResetFontData` in the BIFF parser (xihelper.cxx:534-542) and
+                // `maFontModel = getDefaultFontModel()` in the OOXML one
+                // (pagesettings.cxx:868-876). Measured on `sheet-outline-collapse.xlsx`, whose
+                // footer is `&L&8… &RFoot right`: LibreOffice draws the right part at the
+                // workbook's ten point and carrying the eight across draws it at eight.
+                case 'L': Flush(); current = left; size = null; break;
+                case 'C': Flush(); current = centre; size = null; break;
+                case 'R': Flush(); current = right; size = null; break;
 
                 case 'P': Field(SheetHeaderField.PageNumber); break;
                 case 'N': Field(SheetHeaderField.PageCount); break;
@@ -266,10 +369,22 @@ public sealed record SheetHeaderFooter(
                     break;
                 }
 
-                // A font size, which is a run of digits rather than a fixed-length code.
+                // A font size in points, a run of digits rather than a fixed-length code. It
+                // holds until the next one — Calc keeps it in the portion's item set and Excel
+                // repeats it after every section switch, so carrying it across `&L`/`&C`/`&R`
+                // agrees with both.
                 case >= '0' and <= '9':
                 {
+                    int from = at - 1;
                     while (at < text.Length && char.IsAsciiDigit(text[at])) at++;
+                    if (double.TryParse(
+                            text.AsSpan(from, at - from), CultureInfo.InvariantCulture,
+                            out double points) && points > 0)
+                    {
+                        Flush();
+                        size = Length.FromPoints(points);
+                    }
+
                     break;
                 }
 
@@ -303,14 +418,14 @@ public sealed record SheetHeaderFooter(
         void Flush()
         {
             if (literal.Length == 0) return;
-            current.Add(SheetHeaderSegment.Literal(literal.ToString()));
+            current.Add(SheetHeaderSegment.Literal(literal.ToString(), size));
             literal.Clear();
         }
 
         void Field(SheetHeaderField field)
         {
             Flush();
-            current.Add(SheetHeaderSegment.Of(field));
+            current.Add(SheetHeaderSegment.Of(field, size));
         }
     }
 }

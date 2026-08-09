@@ -56,8 +56,17 @@ internal static class XlsbPrintSetup
     private const ushort SheetPrFitToPages = 0x0100;
 
     private const ushort ColumnHidden = 0x0001;
+    private const ushort ColumnCollapsed = 0x1000;
     private const ushort RowHidden = 0x1000;
     private const ushort RowCustomHeight = 0x2000;
+    private const ushort RowCollapsed = 0x0800;
+
+    /// <summary>
+    /// The outline level, which both record types state in bits 8 to 10 of their flags —
+    /// <c>extractValue&lt;sal_Int32&gt;(nFlags, 8, 3)</c>, the same expression for a row
+    /// (<c>sheetdatacontext.cxx:431</c>) and for a column (<c>worksheetfragment.cxx:829</c>).
+    /// </summary>
+    private static int OutlineLevel(ushort flags) => (flags >> 8) & 0x7;
 
     /// <summary>Builds a sheet's layout input from its worksheet part.</summary>
     /// <param name="part">The part's bytes, or null when it did not load.</param>
@@ -92,6 +101,8 @@ internal static class XlsbPrintSetup
         Length? statedHeight = null;
         List<SheetDigitRun> columns = [];
         List<SheetSizeRun> rows = [];
+        List<SheetOutlineRun> columnOutline = [];
+        List<SheetOutlineRun> rowOutline = [];
         List<int> columnBreaks = [];
         List<int> rowBreaks = [];
         int breakAxis = 0;
@@ -155,11 +166,14 @@ internal static class XlsbPrintSetup
                     ushort flags = cursor.ReadUInt16();
 
                     if (last < first || first < 0) break;
+                    last = Math.Min(last, SheetAddress.MaxColumn);
                     columns.Add(new SheetDigitRun(
                         first,
-                        Math.Min(last, SheetAddress.MaxColumn),
+                        last,
                         width > 0 ? Digits(width / 256.0) : defaultWidth,
                         (flags & ColumnHidden) != 0));
+                    SheetOutlineCollapse.Append(columnOutline, first, last,
+                        OutlineLevel(flags), (flags & ColumnCollapsed) != 0);
                     break;
                 }
 
@@ -171,7 +185,11 @@ internal static class XlsbPrintSetup
                     ushort flags = cursor.ReadUInt16();
 
                     bool hidden = (flags & RowHidden) != 0;
-                    if (index < 0 || (height <= 0 && !hidden)) break;
+                    if (index < 0) break;
+
+                    SheetOutlineCollapse.Append(rowOutline, index, index,
+                        OutlineLevel(flags), (flags & RowCollapsed) != 0);
+                    if (height <= 0 && !hidden) break;
 
                     rows.Add(new SheetSizeRun(
                         index, index,
@@ -269,6 +287,10 @@ internal static class XlsbPrintSetup
             FooterText = footerText,
             Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),
             Footer = footerText is null ? null : SheetHeaderFooter.ParseCodes(footerText),
+
+            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
+            HeaderIsDynamic = true,
+            FooterIsDynamic = true,
             ScaleMode = fitToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
             ScalePercentage = scale > 0 ? scale : 100,
             FitToPagesWide = fitToPages ? Math.Max(0, fitToWidth) : 0,
@@ -282,6 +304,13 @@ internal static class XlsbPrintSetup
             ManualColumnBreaks = columnBreaks,
             ManualRowBreaks = rowBreaks,
         };
+
+        // A collapsed outline group hides its detail rows whether or not the part says so, which
+        // is a derivation rather than a reading — see `SheetOutlineCollapse`.
+        rows = SheetOutlineCollapse.Apply(
+            rows, SheetOutlineCollapse.Hidden(rowOutline), defaultHeight);
+        columns = SheetOutlineCollapse.Apply(
+            columns, SheetOutlineCollapse.Hidden(columnOutline), defaultWidth);
 
         SheetColumnDigits digits = new(defaultFont ?? SheetDefaultFont.Calc, defaultWidth, columns);
 

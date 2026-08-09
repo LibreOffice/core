@@ -8852,3 +8852,73 @@ legend reader removed, and the wrap limit restored to 0.95 less the insets.
    the obvious formula is refuted.
 3. **The legend row pitch's rate**, still the open half of the 96 dpi grid, and the 6.5 pt
    residual on the bottom axis title, still measured rather than fitted.
+## Round thirty-one — sheets
+
+Base `150a3dac1`, verified before measuring. The baseline sweep reproduced the brief to the
+digit: **147/171, absolute page error 90, 154 exact page counts, absolute word error 42322**, and
+the per-batch line as well. 171 rows, no duplicate path, no `ref-failed`.
+
+Two defects, both ported from LibreOffice and both measured against its own output. Full
+working, citations and the mutation table are in `probes/sheets-r31/README.md`.
+
+**A collapsed outline group hides its detail rows.** SpreadsheetML states an `outlineLevel` per
+row and a `collapsed` flag on the summary row beside the group, and expects the reader to derive
+the rest; Excel normally also writes `hidden="1"` on every detail row, so the derivation is
+invisible on almost everything. `Application_Compliance_Checklist_5_Apr_2021.xlsx` states no
+`hidden` anywhere, and **329 of one sheet's 1033 rows** are hidden by the rule alone — 18 printed
+pages against 14. A Python prototype of `convertOutlines` reproduced LibreOffice's own hidden set
+exactly, 329 of 329, before any C# was written. XLSX and XLSB; **BIFF deliberately not**, because
+a `ROW` record carries `fHidden` itself and the outline array there only records the state.
+
+**The header and footer band was drawn in six wrong ways at once.** Only the first line of each
+part was drawn; the `&n` size code was parsed and discarded; the page's own zoom was not applied;
+the text was centred where Calc anchors it to the edge its margin fixes; the three parts were
+sized independently rather than sharing the tallest one's height; and a section switch did not
+reset the font. Ours now lands within **0.08 pt** of LibreOffice's header top and footer bottom
+on two corpus pages at two different zooms, and within 0.03 pt on the authored fixture.
+
+**The anchoring is measured right on SpreadsheetML and measured wrong on BIFF**, so it is set by
+the OOXML readers only. LibreOffice's own PDFs of the `sheet-decor` fixture triple put the `.xls`
+band 1.5 pt further inside the page than the `.xlsx` band at both edges, with the `.fods`
+agreeing with the `.xls`. 1.5 pt is the gap between a measured line height and the bare point
+size the filters use as their nominal, so the cause is probably in that arithmetic — **not
+settled**, and `XlsPrintSetup` carries the measurement in a comment rather than a guess.
+
+Whole track on the final tree, 171 rows with no duplicate path and no `ref-failed`:
+**148/171 matches, absolute page error 86, 155 exact page counts, absolute word error 33174** —
+from 147, 90, 154 and 42322. Per batch: 001–009 89/89, 010 8/10, 011 6/10, 012 8/10, 013 8/10,
+014 9/10, **015 6/9**, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
+
+Two verdicts moved and one of them is a match. `fm-provider-service-measures.xlsx` goes
+20944/21458 words to 21364 and matches. `Application_Compliance_Checklist_5_Apr_2021.xlsx` goes
+18 pages to **14 against 14** and 26353 words to 17235 against 17718 — the round's biggest single
+movement, and still a `words` failure by 483 against a 354 band. What is left of it is its
+**visible cell comments**, which LibreOffice draws inline and we draw not at all; that also
+extends its print area four columns and is why our fit-to-width zoom is 2.6% larger than
+LibreOffice's on that sheet. Diagnosed, not implemented.
+
+Ten documents moved their word count towards the reference by twenty or more and two away, both
+of them staying on the verdict they had. **Four of the ten are `.xls`** — no census of an OOXML
+part could have found them, because a multi-line footer is stated in a BIFF `FOOTER` record.
+Byte-level reach with the clock pinned: **54 of 171 documents' rendered bytes moved**, 28 `.xls`
+and 26 `.xlsx`, against 12 the gate could see and 2 verdicts.
+
+**Only one page count in the track changed**, and the page-error and exact-count movements are
+entirely that one document. The band's height already came from the two margins through
+`SheetBandHeight`, so drawing the band correctly moves ink and words and not paper; the outline
+rule is what moved paper.
+
+New fixture `tests/corpus/features/sheet-outline-collapse.xlsx`, authored to separate the
+decisions rather than copied from a corpus workbook. Two test classes, 15 cases, every asserted
+coordinate LibreOffice 24.2.7.2's own. Six reintroduced defects, all six detected —
+`probes/sheets-r31/mutate.sh`. One of those mutations came back *undetected* on its first
+version and the mutation was wrong, not the test; that is recorded rather than quietly fixed.
+
+Per-project tests, all matching the known-good counts with 0 skipped: Core 264, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 690,
+Spreadsheets **588** (573 plus this round's 15), Presentations 538, Fidelity 550.
+
+**The fidelity suite is what found the two corrections above**, on a run that failed 3 of 550 —
+and it is the run that nearly did not happen, because it takes hours under three agents' load and
+had to be started in the background before the corpus sweep. The track was then swept twice, and
+between the two sweeps three documents change by seven words in total and no verdict does.
