@@ -55,7 +55,25 @@ INK_THRESHOLD = 0.35
 # third of a track classified by something that moves no mark on any page. `pdf-ops.py` still
 # *prints* it, because operator granularity genuinely matters to the text layer (poppler reads
 # a reposition as a word boundary); it is simply not a difference in the page.
-NOTE_KINDS = ("size", "width", "face", "glyphs")
+#
+# Each kind is matched by its own pattern rather than by one loose template, because `size` is
+# spelled two ways and they are different findings. `size 14.00 vs 14.82` is a font size;
+# `size 9.6x0.0 vs 0.5x0.0` is a stroke's or a fill's bounding box, and a template of
+# `size \S+ vs ` swallowed both. Measured: on `150-5370-10H.docx`, classified `size` and reaching
+# 712 pages against 721, *every* note on the first divergent page is a box and none is a font
+# size — while two real `face DejaVuSans vs DejaVuSans-Bold` notes on the same page were
+# outvoted by them. Rule geometry and type size are now `box` and `size` and cannot borrow each
+# other's count.
+NOTE_PATTERNS = {
+    "size": re.compile(r"\bsize [\d.]+ vs [\d.]+"),
+    "box": re.compile(r"\bsize [\d.]+x[\d.]+ vs "),
+    "width": re.compile(r"\bwidth [\d.]+ vs [\d.]+"),
+    "face": re.compile(r"\bface \S+ vs \S+"),
+    "glyphs": re.compile(r"\bglyphs \d+ vs \d+"),
+    "colour": re.compile(r"\bcolour \S+ vs \S+"),
+}
+
+NOTE_KINDS = tuple(NOTE_PATTERNS)
 
 
 def run(cmd, **kw):
@@ -137,9 +155,9 @@ def classify(ours: Path, ref: Path, page: int):
                 if BLANK_RECORD.match(line.strip()):
                     blank_ref += 1
         else:
-            for k in NOTE_KINDS:
-                if re.search(rf"\b{k} [\d.]+ vs |\b{k} \S+ vs ", line):
-                    counts[k] += 1
+            for kind, pattern in NOTE_PATTERNS.items():
+                if pattern.search(line):
+                    counts[kind] += 1
             m = GLYPH_NOTE.search(line)
             if m:
                 gdelta = max(gdelta, abs(int(m.group(1)) - int(m.group(2))))
