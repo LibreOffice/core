@@ -348,7 +348,7 @@ public sealed class PdfWriterTests
         pdf.Text.ShouldContain("/ColorSpace/DeviceRGB");
     }
 
-    private PdfFile WriteImage(byte[] jpeg)
+    private static PdfFile WriteImage(byte[] jpeg)
     {
         RasterImage image = new()
         {
