@@ -147,4 +147,88 @@ public class MetricGridTests
         degenerate.ToPixels(1854, 2048, Length.FromPoints(11)).ShouldBe(0);
         degenerate.ToLength(100).ShouldBe(Length.Zero);
     }
+
+    // ---------------------------------------------------------------- advance widths
+    //
+    // Every expectation below is a width LibreOffice itself drew, read out of the content stream of
+    // an authored pair that differs in one bit — `dotnet/probes/printer-metric-advance.py`, which
+    // writes one body through LibreOffice's DOC export and then patches WW8Dop's fUsePrinterMetrics
+    // both ways. The rule they pin is
+    //
+    //     floor( N . advance . round(size/72 . 300) / upem ) device pixels, then to twips
+    //
+    // and it is exact on all 96 of the probe's rows. Three alternatives are stated in code below so
+    // that adopting any of them fails here rather than being re-proposed:
+    //
+    //   * scaling exactly, with no device in it at all      — fails ExactScalingIsNotWhatAPrinterMeasures
+    //   * rounding *each glyph's* advance to a whole pixel  — fails RoundingEachGlyphIsNotTheRule
+    //   * rounding the total instead of truncating it       — fails TheTotalIsTruncatedAndNotRounded
+    //
+    // The middle one matters most: it is what GenericSalLayout::LayoutText appears to say
+    // (vcl/source/gdi/CommonSalLayout.cxx:826-831) and it is not what the binary does, because a
+    // mapped device turns subpixel positioning on.
+
+    private const int Upem = 2048;
+
+    // Liberation Serif 'n' 1024, 'i' 569, 'M' 1821; Liberation Sans 'n' 1139, 'M' 1706. Stated, so
+    // the test does not depend on a font file being installed.
+    [Theory]
+    [InlineData(1024, 9.0, 1, 91)]      // Serif 'n': 19.0 px exactly, and still floored
+    [InlineData(1024, 9.0, 64, 5837)]
+    [InlineData(569, 9.0, 1, 48)]       // Serif 'i': 10.5576 px -> 10
+    [InlineData(569, 9.0, 16, 806)]
+    [InlineData(569, 9.0, 64, 3240)]
+    [InlineData(1821, 9.0, 1, 158)]     // Serif 'M'
+    [InlineData(1821, 9.0, 64, 10378)]
+    [InlineData(1139, 9.0, 16, 1622)]   // Sans 'n', the row that separates total from per glyph
+    [InlineData(1139, 9.0, 64, 6490)]
+    [InlineData(1706, 10.0, 1, 163)]    // Sans 'M' at a size whose em rounds up by a third of a pixel
+    [InlineData(1024, 12.0, 64, 7680)]  // 12 pt sets 50 px exactly, so nothing moves
+    public void APrinterMeasuresAnAdvanceOnItsPixelGrid(int advance, double points, int count, long twips)
+        => MetricGrid.Printer
+            .ToAdvance((long)advance * count, Upem, Length.FromPoints(points))
+            .Twips.ShouldBe(twips);
+
+    [Fact]
+    public void ExactScalingIsNotWhatAPrinterMeasures()
+    {
+        // 64 Liberation Serif 'n' at 9 pt: the design units alone give 288 pt, and the device draws
+        // 291.85. The em is 37.5 px and the device can only set 38, so every advance is 1.33% wider.
+        Length em = Length.FromPoints(9);
+        long exact = (long)Math.Round(1024L * 64 * em.Emu / (double)Upem);
+
+        Length.FromEmu(exact).Twips.ShouldBe(5760);
+        MetricGrid.Printer.ToAdvance(1024L * 64, Upem, em).Twips.ShouldBe(5837);
+    }
+
+    [Fact]
+    public void RoundingEachGlyphIsNotTheRule()
+    {
+        // Liberation Sans 'n' at 9 pt is 21.1338 px. Rounding each glyph gives 21 px, so sixteen of
+        // them measure 336 px = 1613 twips; the device measures the sixteen together and truncates
+        // once, 338 px = 1622. Nine twips on one word, and it compounds along a line.
+        Length em = Length.FromPoints(9);
+        long perGlyph = 16 * (long)Math.Round(1139 * 38.0 / Upem);
+
+        MetricGrid.Printer.ToLength(perGlyph).Twips.ShouldBe(1613);
+        MetricGrid.Printer.ToAdvance(1139L * 16, Upem, em).Twips.ShouldBe(1622);
+    }
+
+    [Fact]
+    public void TheTotalIsTruncatedAndNotRounded()
+    {
+        // Sixteen Liberation Serif 'i' at 9 pt come to 168.9219 px. Rounded that is 169 px = 811
+        // twips; LibreOffice draws 806, which is 168.
+        Length em = Length.FromPoints(9);
+
+        MetricGrid.Printer.ToLength((long)Math.Round(569 * 16 * 38.0 / Upem)).Twips.ShouldBe(811);
+        MetricGrid.Printer.ToAdvance(569L * 16, Upem, em).Twips.ShouldBe(806);
+    }
+
+    [Fact]
+    public void AGridOfNoResolutionMeasuresNoAdvanceRatherThanDividingByZero()
+    {
+        new MetricGrid(0).ToAdvance(1024, Upem, Length.FromPoints(11)).ShouldBe(Length.Zero);
+        MetricGrid.Printer.ToAdvance(1024, 0, Length.FromPoints(11)).ShouldBe(Length.Zero);
+    }
 }
