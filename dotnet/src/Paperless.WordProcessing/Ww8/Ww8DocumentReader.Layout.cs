@@ -937,6 +937,7 @@ public sealed partial class Ww8DocumentReader
                 new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor))
                 {
                     Picture = PictureOf(shape),
+                    Members = GroupMembers(shape, anchor),
 
                     // SwWW8ImplReader::IsInlineEscherHack, ww8par.hxx:1737 — the innermost open field
                     // being a SHAPE is the whole of the test, and ww8graf.cxx:2355 then anchors the
@@ -987,6 +988,72 @@ public sealed partial class Ww8DocumentReader
 
     /// <summary>Which text-box stories the walk is already inside, guarding a self-referential index.</summary>
     private readonly HashSet<(bool IsHeader, int Story)> _openStories = [];
+
+    /// <summary>
+    /// The leaf shapes of a group, each with its own text and picture.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word anchors a group with a single <c>FSPA</c> naming the group's shape identifier; the shapes
+    /// underneath it have no entry in the anchor table at all, and each states its rectangle in the
+    /// group's own coordinate space with an <c>msofbtChildAnchor</c>. So a reader that stops at the
+    /// anchor's own shape draws the group's outline — which is often a plain rectangle round a
+    /// masthead — and none of the text boxes and pictures inside it.
+    /// </para>
+    /// <para>
+    /// Flattened rather than nested, which is what the layout engine can place and what the DOCX
+    /// reader already does for a <c>wpg:wgp</c> (<see cref="Ooxml.DocxFrames"/>). A nested group
+    /// contributes its own leaves, composed through both coordinate spaces at build time; the group
+    /// shapes themselves are not members, since an <c>SpgrContainer</c>'s first child is a placeholder
+    /// carrying the coordinate space rather than something to draw.
+    /// </para>
+    /// </remarks>
+    private List<Ww8LayoutFrameMember> GroupMembers(
+        MsBinary.Escher.EscherShape? shape, Ww8ShapeAnchor anchor)
+    {
+        if (shape is not { IsGroup: true }) return [];
+
+        List<Ww8LayoutFrameMember> members = [];
+        Collect(shape, Ww8GroupTransform.Of(shape, anchor.Width, anchor.Height), 0);
+        return members;
+
+        void Collect(MsBinary.Escher.EscherShape group, Ww8GroupTransform transform, int depth)
+        {
+            if (depth > MaxGroupNesting) return;
+
+            foreach (MsBinary.Escher.EscherShape child in group.Children)
+            {
+                if (child.IsDeleted || child.ChildAnchor is not { } within) continue;
+
+                (int x, int y, int width, int height) = transform.Map(within);
+
+                if (child.IsGroup)
+                {
+                    Collect(child, Ww8GroupTransform.Of(child, width, height, x, y), depth + 1);
+                    continue;
+                }
+
+                if (width <= 0 || height <= 0) continue;
+
+                members.Add(
+                    new Ww8LayoutFrameMember(child, ReadShapeText(child, anchor.IsHeaderAnchor))
+                    {
+                        Picture = PictureOf(child),
+                        Left = x,
+                        Top = y,
+                        Width = width,
+                        Height = height,
+                    });
+            }
+        }
+    }
+
+    /// <summary>How deep a group may nest before the walk gives up.</summary>
+    /// <remarks>
+    /// The same bound the DOCX reader uses. Real files nest one group inside another and stop; this is
+    /// against a file that says otherwise, since the walk is the only thing keeping it finite.
+    /// </remarks>
+    private const int MaxGroupNesting = 8;
 
     /// <inheritdoc cref="ReadShapeText"/>
     private List<Ww8LayoutBlock> ReadShapeTextCore(int story, bool isHeader)

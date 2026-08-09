@@ -879,9 +879,25 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             PageFrame? built = Ww8Frames.Build(
                 frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks),
                 frame.IsSetInLine);
-            if (built is not null)
+            if (built is null) continue;
+
+            PageFrame envelope = built with
             {
-                frames.Add(built with { Image = frame.Picture.Raster, Vector = frame.Picture.Vector });
+                Image = frame.Picture.Raster,
+                Vector = frame.Picture.Vector,
+            };
+            frames.Add(envelope);
+
+            // A group is flattened into its envelope and one sibling frame per leaf shape. The
+            // envelope keeps the wrap and is what the text avoids; the members are drawn inside it.
+            foreach (Ww8LayoutFrameMember member in frame.Members)
+            {
+                PageFrame? placed = Ww8Frames.Member(
+                    envelope, member.Shape,
+                    (member.Left, member.Top, member.Width, member.Height),
+                    BlocksOf(fonts, member.Blocks), member.Picture);
+
+                if (placed is not null) frames.Add(placed);
             }
         }
 

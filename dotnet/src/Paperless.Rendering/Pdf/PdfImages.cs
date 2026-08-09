@@ -48,11 +48,25 @@ internal static class PdfImages
             $"/Type/XObject/Subtype/Image/Width {image.Width}/Height {image.Height}"
             + "/ColorSpace/DeviceRGB/BitsPerComponent 8";
 
-        if (options.PassThroughJpeg
+        // The pass-through hands the file's own bytes to DCTDecode, so the colour space it declares
+        // has to be the one the JPEG really carries rather than the one the decoded path produces.
+        // Only greyscale and three-channel colour are passed through; anything else falls through to
+        // be decoded, which is the safe answer for a CMYK JPEG whose inversion depends on an Adobe
+        // marker this writer has no reason to interpret.
+        int components = options.PassThroughJpeg
             && image.EncodedMediaType is "image/jpeg"
-            && !image.EncodedBytes.IsEmpty)
+            && !image.EncodedBytes.IsEmpty
+            ? JpegComponents(image.EncodedBytes.Span)
+            : -1;
+
+        if (components is 1 or 3)
         {
-            writer.SetStream(id, geometry + "/Filter/DCTDecode", image.EncodedBytes.Span, compress: false);
+            string colour = components == 1
+                ? $"/Type/XObject/Subtype/Image/Width {image.Width}/Height {image.Height}"
+                  + "/ColorSpace/DeviceGray/BitsPerComponent 8"
+                : geometry;
+
+            writer.SetStream(id, colour + "/Filter/DCTDecode", image.EncodedBytes.Span, compress: false);
             return name;
         }
 
@@ -93,5 +107,61 @@ internal static class PdfImages
 
         writer.SetStream(id, geometry + mask, rgb, compress: true);
         return name;
+    }
+
+    /// <summary>
+    /// How many colour components a JPEG's frame header states, or -1 when none can be read.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A JPEG passed through to <c>DCTDecode</c> takes its colour space from the PDF, not
+    /// from itself</strong>, so a greyscale JPEG announced as <c>/DeviceRGB</c> is read three samples
+    /// at a time out of a stream that has one — the image comes out repeated across the row and
+    /// squashed down the page, which looks like a decoder fault rather than a metadata one. Measured
+    /// on <c>omrIMInterpretiveGuideLine.doc</c>, whose departmental seal is a 635×638 one-component
+    /// JPEG and drew as three squashed seals.
+    /// </para>
+    /// <para>
+    /// Only the <c>SOF</c> marker is looked for, and only its component count is taken. Every marker
+    /// except the standalone ones carries a two-byte length, so the scan is a walk over segment
+    /// headers; it stops at <c>SOS</c>, since entropy-coded data is not segmented and reading it as
+    /// though it were finds markers that are not there.
+    /// </para>
+    /// </remarks>
+    private static int JpegComponents(ReadOnlySpan<byte> jpeg)
+    {
+        if (jpeg.Length < 4 || jpeg[0] != 0xFF || jpeg[1] != 0xD8) return -1;
+
+        int at = 2;
+        while (at + 3 < jpeg.Length)
+        {
+            if (jpeg[at] != 0xFF) return -1;
+
+            byte marker = jpeg[at + 1];
+
+            // Fill bytes: a marker may be preceded by any number of 0xFF.
+            if (marker == 0xFF) { at++; continue; }
+
+            // The standalone markers, which carry no length: TEM, RSTn, SOI, EOI.
+            if (marker == 0x01 || marker is >= 0xD0 and <= 0xD9) { at += 2; continue; }
+
+            // Start of scan, and past it the entropy-coded data. Nothing after it is a segment.
+            if (marker == 0xDA) return -1;
+
+            int length = (jpeg[at + 2] << 8) | jpeg[at + 3];
+            if (length < 2) return -1;
+
+            // Every SOF except DHT (0xC4), DNL (0xC8) and DAC (0xCC) states the frame's geometry,
+            // and the component count is the ninth byte of the segment.
+            bool isFrame = marker is >= 0xC0 and <= 0xCF and not (0xC4 or 0xC8 or 0xCC);
+            if (isFrame)
+            {
+                return at + 9 < jpeg.Length && length >= 8 ? jpeg[at + 9] : -1;
+            }
+
+            at += 2 + length;
+        }
+
+        return -1;
     }
 }

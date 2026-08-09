@@ -103,7 +103,14 @@ public static class Ww8Frames
             vertical = Ww8ShapeOrigin.Page;
         }
 
-        bool lined = properties.Boolean(EscherPropertyIds.Lined, fallback: true);
+        // A group draws nothing of its own — an SdrObjGroup has no fill and no line, and its first
+        // child carries the coordinate space rather than a shape. Its envelope is here to hold the
+        // wrap and the position its members are placed against, so it must not paint a box: the
+        // rectangle a Word 97 masthead appears to have is a real member of the group, and drawing the
+        // envelope as well puts two strokes on the same four edges.
+        bool isGroup = shape?.IsGroup == true;
+
+        bool lined = !isGroup && properties.Boolean(EscherPropertyIds.Lined, fallback: true);
         Length lineWidth = Length.FromEmu(
             lined ? properties.Value(EscherPropertyIds.LineWidth, DefaultLineWidthEmu) : 0);
 
@@ -165,7 +172,7 @@ public static class Ww8Frames
             // `ImportShape` builds it as a two-point path and never reaches the fill (msdffimp.cxx:4403).
             // The default the other branch takes is opaque white, so reading the bit here would put a
             // solid box over everything the line was drawn across.
-            Fill = !isLine && properties.Boolean(EscherPropertyIds.Filled, fallback: true)
+            Fill = !isGroup && !isLine && properties.Boolean(EscherPropertyIds.Filled, fallback: true)
                 ? Colour(properties.Value(EscherPropertyIds.FillColour, 0x00FFFFFF))
                 : null,
             BorderColour = lined ? Colour(properties.Value(EscherPropertyIds.LineColour)) : null,
@@ -177,6 +184,76 @@ public static class Ww8Frames
             IsImage = blocks.Count == 0,
             Blocks = blocks,
             Name = shape?.Name,
+        };
+    }
+
+    /// <summary>
+    /// Builds the frame one member of a group stands for, placed inside the group's rectangle.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A member has no <c>FSPA</c> of its own — Word writes exactly one for the group — so everything
+    /// about where it sits comes from the envelope, and everything about how it looks comes from its
+    /// own <c>OPT</c> table. The two are combined by starting from the envelope and replacing the
+    /// second half, which is what keeps a member's origin, alignment and offsets identical to the
+    /// group's however the group is positioned.
+    /// </para>
+    /// <para>
+    /// <strong>The envelope keeps the wrap and a member must not have one.</strong> A member that
+    /// punched its own hole in the text would narrow the column once per shape, so a masthead of a
+    /// dozen boxes would push the body text a dozen indents to the right. The same rule the DOCX
+    /// reader states for a <c>wpg:wgp</c> member.
+    /// </para>
+    /// </remarks>
+    /// <param name="envelope">The frame built for the group itself.</param>
+    /// <param name="shape">The member's shape.</param>
+    /// <param name="within">Where it sits inside the group, in twips from the group's top-left.</param>
+    /// <param name="blocks">Its own text, already laid out into blocks.</param>
+    /// <param name="picture">The picture it names, or nothing.</param>
+    public static PageFrame? Member(
+        PageFrame envelope,
+        EscherShape shape,
+        (int X, int Y, int Width, int Height) within,
+        IReadOnlyList<PageBlock> blocks,
+        FramePicture picture)
+    {
+        ArgumentNullException.ThrowIfNull(envelope);
+        ArgumentNullException.ThrowIfNull(shape);
+
+        if (within.Width <= 0 || within.Height <= 0) return null;
+        if (shape.IsDeleted || shape.Properties.Boolean(EscherPropertyIds.Hidden)) return null;
+
+        EscherPropertyTable properties = shape.Properties;
+
+        bool lined = properties.Boolean(EscherPropertyIds.Lined, fallback: true);
+        Length lineWidth = Length.FromEmu(
+            lined ? properties.Value(EscherPropertyIds.LineWidth, DefaultLineWidthEmu) : 0);
+
+        bool isLine = shape.ShapeType is EscherShapeTypes.Line or EscherShapeTypes.StraightConnector;
+
+        return envelope with
+        {
+            Size = new DocSize(Length.FromTwips(within.Width), Length.FromTwips(within.Height)),
+            GroupSize = envelope.Size,
+            GroupOffset = new DocPoint(Length.FromTwips(within.X), Length.FromTwips(within.Y)),
+
+            Wrap = TextWrap.Through,
+            Spacing = default,
+            InlineAscent = null,
+            Padding = TextInsets(properties),
+            Fill = !isLine && properties.Boolean(EscherPropertyIds.Filled, fallback: true)
+                ? Colour(properties.Value(EscherPropertyIds.FillColour, 0x00FFFFFF))
+                : null,
+            BorderColour = lined ? Colour(properties.Value(EscherPropertyIds.LineColour)) : null,
+            BorderWidth = lineWidth,
+            IsLine = isLine,
+            IsLineMirrored = shape.Flags.HasFlag(EscherShapeAttributes.FlipHorizontal)
+                != shape.Flags.HasFlag(EscherShapeAttributes.FlipVertical),
+            IsImage = blocks.Count == 0,
+            Image = picture.Raster,
+            Vector = picture.Vector,
+            Blocks = blocks,
+            Name = shape.Name,
         };
     }
 

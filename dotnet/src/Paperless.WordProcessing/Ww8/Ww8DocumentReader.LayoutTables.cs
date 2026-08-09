@@ -559,6 +559,40 @@ public sealed record Ww8LayoutFrame(
 
     /// <summary>The picture the shape's <c>pib</c> names, or nothing when it names none.</summary>
     public FramePicture Picture { get; init; }
+
+    /// <summary>
+    /// The leaf shapes inside <see cref="Shape"/> when it is a group, empty when it is not.
+    /// </summary>
+    /// <remarks>
+    /// A Word 97 letterhead is one <c>FSPA</c> naming a group and a dozen shapes underneath it with no
+    /// anchor of their own, so a reader that builds one frame per anchor draws the group's outline and
+    /// none of its contents. Held here rather than resolved on the spot for the same reason the
+    /// shape's own text is: a member's text is blocks whose faces this reader cannot resolve.
+    /// </remarks>
+    public IReadOnlyList<Ww8LayoutFrameMember> Members { get; init; } = [];
+}
+
+/// <summary>One leaf shape of a group, with the text and picture it carries.</summary>
+/// <param name="Shape">The Escher shape, whose <c>ChildAnchor</c> places it in the group's space.</param>
+/// <param name="Blocks">Its own text, empty for a picture or an empty box.</param>
+public sealed record Ww8LayoutFrameMember(
+    MsBinary.Escher.EscherShape Shape,
+    IReadOnlyList<Ww8LayoutBlock> Blocks)
+{
+    /// <summary>The picture the member's <c>pib</c> names, or nothing when it names none.</summary>
+    public FramePicture Picture { get; init; }
+
+    /// <summary>Its left edge in twips, from the group's own left edge.</summary>
+    public int Left { get; init; }
+
+    /// <summary>Its top edge in twips, from the group's own top edge.</summary>
+    public int Top { get; init; }
+
+    /// <summary>How wide it is, in twips.</summary>
+    public int Width { get; init; }
+
+    /// <summary>How tall it is, in twips.</summary>
+    public int Height { get; init; }
 }
 
 /// <summary>A DOC table as layout sees it: the column grid in twips, and cells holding paragraphs.</summary>
