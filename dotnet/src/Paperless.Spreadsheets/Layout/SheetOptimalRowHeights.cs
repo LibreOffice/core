@@ -420,9 +420,6 @@ internal static class SheetOptimalRowHeights
 
                 SheetCellFormat format = formats.At(cell.Row, cell.Column);
 
-                IReadOnlyList<SheetTextPortion>? portions =
-                    sheet.RichText.At(cell.Row, cell.Column, text);
-
                 // The same wrap decision the drawing path makes, so that a row is measured exactly
                 // when its text will be broken — including Calc's rule that a plain number never
                 // breaks however the cell is formatted.
@@ -455,6 +452,9 @@ internal static class SheetOptimalRowHeights
                 bool breaks =
                     SheetTextLayout.Breaks(format, cell.Value is not null and not string)
                     && !sheet.HoldsField(cell.Row, cell.Column);
+
+                IReadOnlyList<SheetTextPortion>? portions =
+                    sheet.RichText.At(cell.Row, cell.Column, text);
 
                 // A turned cell's size is its text's *width* put through the angle, which
                 // `RotatedHeight` reproduces — but only along Calc's direct-output path, which is
