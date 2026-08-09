@@ -47,6 +47,7 @@
 #include <com/sun/star/frame/XModel3.hpp>
 
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <type_traits>
 #include <vector>
@@ -937,15 +938,15 @@ namespace
 {
     void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData const * const pOtherData)
     {
-        sal_uLong i = 0;
-        sal_uLong j = 0;
-        sal_uLong i_end = pData->GetLineCount();
-        sal_uLong preceding = ULONG_MAX;
-        sal_uLong other_preceding = ULONG_MAX;
+        size_t i = 0;
+        size_t j = 0;
+        size_t i_end = pData->GetLineCount();
+        size_t preceding = SIZE_MAX;
+        size_t other_preceding = SIZE_MAX;
 
         while (true)
         {
-            sal_uLong start, other_start;
+            size_t start, other_start;
 
             /* Scan forwards to find beginning of another run of changes.
                Also keep track of the corresponding point in the other file.  */
