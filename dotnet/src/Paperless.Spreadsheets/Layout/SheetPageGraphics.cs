@@ -50,6 +50,16 @@ namespace Paperless.Spreadsheets.Layout;
 /// </remarks>
 internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
 {
+    /// <summary>
+    /// The width a shape's outline is stroked at when the file states a hairline.
+    /// </summary>
+    /// <remarks>
+    /// A comment caption's border is <c>svg:stroke-width="0in"</c> in LibreOffice's own export,
+    /// which is a hairline rather than an absent line — the same convention the page furniture
+    /// already draws its rules at.
+    /// </remarks>
+    private static readonly Length HairlineWidth = Length.FromPoints(0.1);
+
     /// <summary>Paints the sheet's drawings that belong to this page.</summary>
     /// <param name="sink">Receives the drawing commands.</param>
     /// <param name="columns">The columns on the page, with their positions.</param>
@@ -78,7 +88,7 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
             if (!drawing.IsPrintable) continue;
 
             if (drawing.Image is null && drawing.Vector is null && drawing.Chart is null
-                && drawing.Text is null)
+                && drawing.Text is null && drawing.Fill is null && drawing.Stroke is null)
             {
                 continue;
             }
@@ -86,6 +96,19 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
             if (!ReachesTheBlock(box, columns, rows)) continue;
+
+            // The box before anything inside it. A shape carrying a fill paints it under its own
+            // text rather than instead of it, and under the cells' text rather than over it: the
+            // internal layer is drawn after the strings, so a shown comment covers what it sits on
+            // (`PrintDrawingLayer(SC_LAYER_INTERN)`, printfun.cxx:1713).
+            if (drawing.Fill is { } fill)
+                sink.FillPath(GraphicsPath.Rectangle(box), Paint.Solid(fill));
+            if (drawing.Stroke is { } outline)
+            {
+                sink.StrokePath(
+                    GraphicsPath.Rectangle(box),
+                    new Stroke(Paint.Solid(outline), HairlineWidth));
+            }
 
             // The vector before the raster, since a shape carrying both means the DrawingML `svgBlip`
             // case where the raster is the fallback. `VectorImage.Draw` maps the picture's own frame
@@ -171,11 +194,20 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
                 SheetDeviceUnits.Snap(drawing.Extent.Height) * scale);
         }
 
-        if (ColumnX(drawing.From.Column, columns) is not { } columnX) return null;
-        if (RowY(drawing.From.Row, rows) is not { } rowY) return null;
+        // A shown comment's caption hangs off the cell it belongs to rather than off the cell its
+        // VML anchor names, so it is looked up there — see `SheetDrawing.NoteCell`.
+        int fromColumn = drawing.NoteCell?.Column ?? drawing.From.Column;
+        int fromRow = drawing.NoteCell?.Row ?? drawing.From.Row;
 
-        Length x = columnX + (SheetDeviceUnits.Snap(drawing.From.ColumnOffset) * scale);
-        Length y = rowY + (SheetDeviceUnits.Snap(drawing.From.RowOffset) * scale);
+        if (ColumnX(fromColumn, columns) is not { } columnX) return null;
+        if (RowY(fromRow, rows) is not { } rowY) return null;
+
+        Length x = columnX
+                   + (Delta(fromColumn, drawing.From.Column, drawing.From.ColumnOffset,
+                            sheet.Grid.Columns) * scale);
+        Length y = rowY
+                   + (Delta(fromRow, drawing.From.Row, drawing.From.RowOffset,
+                            sheet.Grid.Rows) * scale);
 
         if (drawing.Anchor == SheetAnchorKind.OneCell)
         {
@@ -305,6 +337,43 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
     /// per column so that the far edge lands on the same device unit the column's own gridline
     /// does.
     /// </remarks>
+    /// <summary>
+    /// How far a drawing's own start sits from the cell it is placed against.
+    /// </summary>
+    /// <remarks>
+    /// Zero plus the offset for every drawing but a comment caption, where the two cells differ and
+    /// the distance between them has to be walked. Snapped per index, as <see cref="Edge"/> is and
+    /// for the same reason: the placed columns and rows accumulate snapped sizes, so a distance
+    /// summed any other way lands between two of them.
+    /// </remarks>
+    /// <param name="cell">The cell the drawing is placed against.</param>
+    /// <param name="from">The cell its anchor names.</param>
+    /// <param name="fromOffset">How far into that cell the anchor starts.</param>
+    /// <param name="axis">The columns or the rows.</param>
+    private static Length Delta(int cell, int from, Length fromOffset, SheetAxis axis)
+    {
+        Length offset = SheetDeviceUnits.Snap(fromOffset);
+        if (cell == from) return offset;
+
+        // A caption is anchored within a few cells of its own; anything further is a file saying
+        // something this cannot mean, and walking a million rows to honour it would cost more than
+        // the drawing is worth.
+        const int Reach = 1024;
+        if (Math.Abs((long)from - cell) > Reach) return offset;
+
+        Length total = Length.Zero;
+        if (from > cell)
+        {
+            for (int at = cell; at < from; at++)
+                total += SheetDeviceUnits.Snap(axis.PrintedSizeAt(at));
+            return total + offset;
+        }
+
+        for (int at = from; at < cell; at++)
+            total += SheetDeviceUnits.Snap(axis.PrintedSizeAt(at));
+        return offset - total;
+    }
+
     private static Length Edge(
         int from, Length fromOffset, int to, Length toOffset, SheetAxis axis)
     {

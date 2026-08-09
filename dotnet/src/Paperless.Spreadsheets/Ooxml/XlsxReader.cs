@@ -110,6 +110,16 @@ public static class XlsxReader
                 (SheetCellFormats formats, SheetRichText rich) =
                     XlsxSheetFormats.Read(worksheet, cellFormats, file);
 
+                // A shown cell comment is an object on the internal layer, which Calc prints
+                // after the front layer (`printfun.cxx:1704-1713`), so the captions go last and
+                // cover whatever they overlap.
+                SheetDrawings drawings = XlsxDrawings.Read(
+                    file.Package, entry.PartName, theme, themeFonts);
+                List<SheetDrawing> captions =
+                    XlsxNoteCaptions.Read(file.Package, entry.PartName);
+                if (captions.Count > 0)
+                    drawings = new SheetDrawings([.. drawings.Items, .. captions]);
+
                 layouts.Add(new SheetLayout
                 {
                     Name = entry.Name,
@@ -123,8 +133,7 @@ public static class XlsxReader
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,
-                    Drawings = XlsxDrawings.Read(
-                        file.Package, entry.PartName, theme, themeFonts),
+                    Drawings = drawings,
                     Notes = setup.PrintsNotes ? reader.ReadNotes(entry) : SheetNotes.Empty,
                     FileName = source.FileName ?? string.Empty,
                 });
