@@ -476,6 +476,37 @@ seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59
 with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
 improve would have shipped half a fix and called it done.
 
+### Use `verify-test.sh` rather than doing the cycle by hand
+
+```sh
+.claude/skills/corpus-batches/scripts/verify-test.sh <project> '<mutation command>' [filter]
+
+.claude/skills/corpus-batches/scripts/verify-test.sh Paperless.Core \
+    "sed -i 's/TitleWidthFraction = 0.8/TitleWidthFraction = 9.9/' dotnet/src/…/ChartLayout.cs"
+```
+
+It **refuses to start unless `dotnet/` is clean**, which is the whole point: the restore step
+discards the working tree, so with a clean start it cannot destroy anything. It then builds
+explicitly on both legs, runs the project, **names the tests that failed**, restores, and rebuilds.
+
+Exit status is the finding: `0` the mutation was detected, `1` nothing caught it, `2` it refused
+to run or the mutated tree would not compile — because a mutation that fails to build is not a
+detection.
+
+The script exists because the prose warnings below were **not enough**. Every one of these was
+measured, and the last one happened to an agent with this skill open in front of it:
+
+- `git checkout -- <file>` discards the file, not the patch, taking any *uncommitted* real work
+  in it. Two agents lost a working fix this way; the second had already read the warning.
+- `git add -A` while the patch is applied commits the defect.
+- `--no-build` afterwards measures the defect — a clean tree once reported `Core Failed: 2`.
+- `mv backup original` restores an *older* mtime, so MSBuild skips the rebuild and even a plain
+  `dotnet build` reports success over a binary that still holds the defect.
+
+The cycle deliberately puts the tree in a state that looks like a mistake, and every ordinary
+gesture for cleaning up a mistake is then wrong. That is a bad thing to defend with a warning
+and a good thing to defend with a precondition.
+
 ### A green test that proves nothing is worse than no test
 
 Ask agents to verify each new test by **reintroducing the bug and watching it fail**. One
