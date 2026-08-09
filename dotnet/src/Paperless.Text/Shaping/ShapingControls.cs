@@ -49,7 +49,7 @@ public static class ShapingControls
         or '\uFEFF' or '\uFFFE' or '\uFFFF';
 
     /// <summary>
-    /// True for a character LibreOffice's <c>IsControlChar</c> is true for \u2014 the tab included.
+    /// True for a character LibreOffice's <c>IsControlChar</c> is true for — the tab included.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -64,13 +64,13 @@ public static class ShapingControls
     /// <para>
     /// Measured on <c>16 - UTM - (NASA).pptx</c>, whose slide 29 is a single EMF holding <b>62
     /// <c>EMR_EXTTEXTOUTW</c> records whose whole string is one tab</b>. Kept, each one misses in every
-    /// installed text face, falls through glyph fallback to GNU Unifont \u2014 which does draw the C0 range,
-    /// as a hex box \u2014 and put a twelfth face in our PDF against the reference's eleven, unembedded.
+    /// installed text face, falls through glyph fallback to GNU Unifont — which does draw the C0 range,
+    /// as a hex box — and put a twelfth face in our PDF against the reference's eleven, unembedded.
     /// That was the slides track's only <c>unembedded</c> verdict.
     /// </para>
     /// </remarks>
     public static bool IsControlCharacter(char character)
-        => character == '	' || IsRemovedBeforeShaping(character);
+        => character == '\u0009' || IsRemovedBeforeShaping(character);
 
     /// <summary>
     /// Where the next character a shaper may be given is, at or after a position.
