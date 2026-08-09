@@ -11488,3 +11488,16 @@ Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, R
 Markup 259, OpenDocument 125, WordProcessing **731** (725 + six `FurnitureFrameTests`),
 Spreadsheets 621, Presentations 576, Fidelity 550 — **0 skipped, 0 warnings**. The change is in
 `Paperless.WordProcessing` only, so no cross-track sweep is owed.
+
+### Merge note, words round 42
+
+Counts on the merged tree: WordProcessing **731** (725 + `FurnitureFrameTests`), everything else at
+its known-good count, Fidelity 550, 0 skipped, 0 warnings. The change is confined to
+`Paperless.WordProcessing`, so no cross-track sweep is owed.
+
+**The word error rose, 6427 → 6512, and the round is still an improvement.** Two running heads that
+were previously not drawn at all are now drawn, and `wc -w` charges for every token of them on every
+page. The token multiset says the opposite of the scalar: over the three documents that moved,
+under-draw falls **608 → 164** and total mismatch **1211 → 896**. Recorded here because the scalar is
+the number the scoreboard carries, and a future round reading only the scoreboard would read this as
+a regression.
