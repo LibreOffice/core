@@ -1,0 +1,31 @@
+path	pages	page	verdict	lines_ours	lines_ref	matched	text_only_ours	text_only_ref	rewrapped	n_x0	n_x1	n_dy	worst_x0	worst_x1	worst_dy	median_dy	rule_only_ours	rule_only_ref
+words/batch-001/doc/LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.doc	1/1	1	rule	37	37	37	0	0	0	0	0	0	0.51	0.52	0.15	-0.20	4	4
+words/batch-001/doc/GLACIERBG.ETT.doc	1/1	1	text	34	34	33	1	1	0	0	0	0	-0.12	0.56	0.00	0.00	0	0
+words/batch-001/doc/FAA-2013-0422-0009_attachment_1.doc	7/7	2	linebreak	35	35	33	0	0	2	0	0	0	-0.10	0.38	0.00	0.00	0	0
+words/batch-001/doc/foca_form_1.doc	3/3	1	text	41	42	37	4	5	0	2	23	14	-3.23	5.34	-11.93	-0.38	0	0
+words/batch-001/docx/CMTA_Airport_Transportation.docx	1/1	1	pitch	24	24	24	0	0	0	0	0	12	-0.13	0.32	-1.15	1.15	0	0
+words/batch-001/doc/advert-for-draft-decision-airbus-epr-bm3965ia-v006.doc	2/2	1	text	44	44	43	1	1	0	0	0	0	-0.10	0.99	0.19	-0.00	0	0
+words/batch-001/docx/Sample_PAO-PSO_91-113_Letter.docx	1/1	1	rule	34	34	34	0	0	0	0	0	0	-0.12	0.38	-0.00	-0.05	1	1
+words/batch-001/docx/Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION.docx	1/1	1	text	28	28	25	3	3	0	0	0	0	-0.17	0.39	-0.00	-0.15	0	0
+words/batch-001/docx/Pre-Application_Letter_of_Intent_Example.docx	1/1	1	advance	36	36	36	0	0	0	0	1	0	-0.10	-2.53	0.10	0.00	0	0
+words/batch-002/doc/Bull01-06-Reserve Training Standards.doc	6/6	1	text	28	28	26	2	2	0	0	0	0	-0.13	0.34	0.00	0.00	0	0
+words/batch-002/doc/FMRBullletinB-28.doc	2/2	1	rule	41	41	41	0	0	0	0	0	0	-0.15	0.34	0.00	0.00	6	6
+words/batch-001/docx/private-hire-operators-licensed.docx	2/2	1	rule	148	148	148	0	0	0	0	0	0	-0.17	-0.11	-0.03	-0.03	1	4
+words/batch-002/docx/AUWG min 4-3-24 final.docx	2/2	1	advance	45	45	45	0	0	0	0	11	0	-0.17	1.36	0.05	-0.10	0	0
+words/batch-002/docx/CSCRS_Technical-Report-Documentation-Page-with-instructions.docx	2/2	1	linebreak	68	68	54	0	0	14	1	1	19	1.27	1.78	10.50	-0.68	0	0
+words/batch-002/doc/prison-population-bulletin-june.doc	4/4			0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+words/batch-002/docx/Interview-mit-Manfred1-Müller.docx	2/2	1	text	39	38	38	1	0	0	0	0	0	-0.10	0.39	0.00	-0.05	0	0
+words/batch-002/docx/easa-form-1.docx	5/5	1	text	40	41	37	3	4	0	0	0	0	-0.18	0.43	0.99	-0.94	0	0
+words/batch-002/docx/FAA-High-Level-Org-Chart.docx	3/3	1	text	38	38	13	25	25	0	0	0	1	-0.10	0.37	-1.20	-0.05	0	0
+words/batch-002/docx/s33song-beverlyactproductionofdocuments.docx	2/2	1	rule	35	35	35	0	0	0	0	0	0	-0.11	0.36	-0.00	-0.05	2	1
+words/batch-002/docx/lk03_17.docx	2/2			0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+words/batch-003/doc/10795.doc	4/4	1	text	49	48	38	11	10	0	1	6	21	7.15	12.21	-14.55	13.80	0	0
+words/batch-003/doc/DEP2008-1900.doc	4/4	1	text	48	41	33	15	8	0	0	0	8	-0.12	0.86	2.15	0.35	0	0
+words/batch-003/doc/96-3-clement-data.doc	7/7	1	pitch	30	30	30	0	0	0	0	0	6	0.34	0.82	10.35	-10.35	0	0
+words/batch-003/doc/II.1.2_Hypoxia.doc	13/13	2	rule	42	42	42	0	0	0	0	0	0	-0.10	0.34	0.00	0.00	2	2
+words/batch-003/doc/Temp16.doc	2/2	1	linebreak	44	44	38	0	0	6	2	11	2	-1.50	3.38	-6.26	-0.19	0	0
+words/batch-003/docx/191216_Lesefassung_Nachtflugregelung.docx	3/3	1	pitch	52	52	52	0	0	0	0	0	46	-0.13	0.24	5.50	6.60	0	0
+words/batch-003/docx/2015-April-SWIM_Users_Forum-Q&A.docx	5/5	1	linebreak	51	51	49	0	0	2	0	0	0	-0.10	0.19	-0.25	0.00	0	0
+words/batch-003/docx/Technical_Issue_Report_Form.docx	2/2	1	advance	71	71	71	0	0	0	67	67	26	-3.20	-3.21	-1.40	-0.10	0	0
+words/batch-003/docx/DRX-Ascend System Course Description.docx	2/2	1	text	47	47	35	12	12	0	0	0	1	-0.14	0.28	-3.50	3.50	0	0
+words/batch-003/docx/mde087077~283.docx	4/4	1	text	44	43	43	1	0	0	1	2	18	269.90	269.95	-67.25	-15.25	0	0

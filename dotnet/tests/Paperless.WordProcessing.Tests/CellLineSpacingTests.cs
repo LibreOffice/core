@@ -110,6 +110,8 @@ public sealed class CellLineSpacingTests
               <Default Extension="xml" ContentType="application/xml"/>
               <Override PartName="/word/document.xml"
                         ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+              <Override PartName="/word/styles.xml"
+                        ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
             </Types>
             """;
 
@@ -121,16 +123,41 @@ public sealed class CellLineSpacingTests
             </Relationships>
             """;
 
-        // Twelve points, stated on the run and on the paragraph mark, because the allowance is a function
-        // of the paragraph's own font size rather than of its measured line height.
+        const string DocumentRelationships = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+              <Relationship Id="rId1" Target="styles.xml"
+                            Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"/>
+            </Relationships>
+            """;
+
+        // Twelve points, stated in the document defaults, because `SwBorderAttrs::CalcLineSpacing_`
+        // reads `RES_CHRATR_FONTSIZE` off the *paragraph's* attribute set — not off a run and not off
+        // the paragraph mark, neither of which reaches that set. The fixture used to state it on the
+        // run and on the mark and carry no styles part at all, which made it a twelve-point paragraph
+        // only by accident: LibreOffice's own default for a styles-less document is twelve points and
+        // this reader's is ten, so the two sides agreed on the number for different reasons and the
+        // expectations below would have been measuring the default rather than the rule.
+        const string Styles = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+              <w:docDefaults>
+                <w:rPrDefault>
+                  <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="24"/></w:rPr>
+                </w:rPrDefault>
+              </w:docDefaults>
+              <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+                <w:name w:val="Normal"/>
+              </w:style>
+            </w:styles>
+            """;
+
         string cell = string.Concat(Enumerable.Range(1, paragraphs).Select(index => $"""
             <w:p>
               <w:pPr>
                 <w:spacing w:after="0" w:line="{line}" w:lineRule="auto"/>
-                <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="24"/></w:rPr>
               </w:pPr>
               <w:r>
-                <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="24"/></w:rPr>
                 <w:t>Row {index}</w:t>
               </w:r>
             </w:p>
@@ -153,6 +180,8 @@ public sealed class CellLineSpacingTests
         {
             Write(archive, "[Content_Types].xml", ContentTypes);
             Write(archive, "_rels/.rels", RootRelationships);
+            Write(archive, "word/_rels/document.xml.rels", DocumentRelationships);
+            Write(archive, "word/styles.xml", Styles);
             Write(archive, "word/document.xml", document);
         }
 

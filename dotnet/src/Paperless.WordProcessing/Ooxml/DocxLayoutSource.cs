@@ -465,8 +465,27 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "pPr");
 
-        WordTextStyle text = WordParagraphFormats.ResolveText(_styles, properties, _theme);
-        OpenTypeFace? face = Face(text);
+        // Two character styles, because `w:pPr/w:rPr` is the *paragraph mark's* formatting and not
+        // the paragraph's. ECMA-376 names it "Run Properties for the Paragraph Mark", Word applies
+        // it to the pilcrow, and LibreOffice agrees: its flat-ODF export puts it on
+        // `loext:marker-style-name` and leaves the text in the paragraph style. Measured on an
+        // authored probe against LibreOffice 24.2.7.2 — a bold style whose mark says
+        // `<w:b w:val="0"/>` still draws its text in Liberation Sans Bold, and an unstyled
+        // paragraph whose mark says `<w:b/><w:sz w:val="48"/>` still draws 10 pt upright.
+        //
+        // `mark` is not dead weight: an empty paragraph has nothing *but* its mark, and its height
+        // is the mark's. Same probe: the mark alone carrying `w:sz w:val="72"` gives the empty
+        // paragraph 36 pt of height in the reference.
+        WordTextStyle mark = WordParagraphFormats.ResolveText(_styles, properties, _theme);
+        WordTextStyle body = WordParagraphFormats.ResolveRun(_styles, properties, null, _theme);
+
+        // Both are resolved, not only the one this paragraph draws its text in, because `Face` is
+        // also what fills `_references` — and a `FontReference` is the only thing a PDF can turn
+        // back into an *embedded* font program. Resolving just the body's face left the list label,
+        // which takes the mark's style, with no reference to be embedded through: nine documents
+        // went from `match` to `unembedded` on the corpus sweep with the layout otherwise identical.
+        OpenTypeFace? face = Face(body);
+        OpenTypeFace? markFace = Face(mark);
         if (face is null) return null;
 
         // Taken before the walk and put back after it, because the walk can set a *new* one. What is
@@ -496,12 +515,20 @@ public sealed partial class DocxLayoutSource
 
         // After the walk, because reading a note body or a text box re-enters this method and a list
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.
-        (PageLabel? label, format) = ListFormatting(properties, format, text, face);
+        //
+        // The mark's style rather than the body's, because a list label takes the formatting of the
+        // paragraph mark — which is what `w:pPr/w:rPr` is for, and the one place it is visible.
+        (PageLabel? label, format) = ListFormatting(properties, format, mark, markFace ?? face);
 
         // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
         // preserves are the ones the notes and frames below were recorded against.
-        List<PageRun> runs = RunsOf(walker.Ranges, properties, text, face);
+        List<PageRun> runs = RunsOf(walker.Ranges, properties, body, face);
         string mapped = CaseMapping.Apply(walker.Text, runs);
+
+        // A paragraph with nothing in it is its mark, so that is what sizes it; one with text is
+        // sized by the text, and its mark formats a pilcrow nobody draws.
+        WordTextStyle text = walker.Text.Length == 0 ? mark : body;
+        if (walker.Text.Length == 0) face = markFace ?? face;
 
         PageParagraph read = new()
         {

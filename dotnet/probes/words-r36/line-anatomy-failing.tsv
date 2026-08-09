@@ -1,0 +1,47 @@
+path	pages	page	verdict	lines_ours	lines_ref	matched	text_only_ours	text_only_ref	rewrapped	n_x0	n_x1	n_dy	worst_x0	worst_x1	worst_dy	median_dy	rule_only_ours	rule_only_ref
+words/batch-006/docx/f445896eb008d14c1746fc37d412dc22.docx	15/16	1	rule	67	67	67	0	0	0	0	0	0	-0.10	0.32	-0.15	-0.05	1	1
+words/batch-008/docx/FAA-2017-0628-0002_attachment_1.docx	4/4	1	linebreak	10	11	8	0	0	3	3	3	6	-7.30	-9.97	-72.00	0.00	0	0
+words/batch-010/docx/5709.16 ch.40_mgfinal.docx	31/32	1	text	30	30	28	2	2	0	1	2	6	-16.63	16.88	31.20	-60.05	0	0
+words/batch-011/docx/review-welsh-government-communications-mister-peter-mandelson.docx	16/14	1	text	40	39	35	5	4	0	0	3	21	-0.10	-43.70	-2.85	2.85	0	0
+words/batch-012/doc/手机免提系统TSB.doc	2/2	1	text	48	44	23	25	21	0	4	7	22	-44.86	-44.82	-106.14	-6.66	0	0
+words/batch-013/docx/AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx	2/2	1	text	41	39	38	3	1	0	4	2	19	10.91	-1.31	-25.80	19.35	0	0
+words/batch-013/docx/A1. EASA Form 2.docx	9/7	1	text	66	61	54	12	7	0	1	3	8	1.60	1.83	1.31	-1.06	0	0
+words/batch-013/docx/template---tpr-technical-progress-report-with-guidance.docx	7/8	2	text	35	26	24	11	2	0	0	0	9	-0.10	0.44	-42.05	-0.05	0	0
+words/batch-014/doc/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc	13/12	1	text	19	22	19	0	3	0	1	1	9	-210.05	-210.05	75.40	0.05	0	0
+words/batch-014/doc/1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc	10/9	1	text	10	15	10	0	5	0	1	1	4	-210.05	-210.05	-100.40	100.20	0	0
+words/batch-014/doc/omrIMInterpretiveGuideLine.doc	2/2	1	text	26	37	26	0	11	0	0	0	5	-0.50	-0.27	11.30	2.05	0	0
+words/batch-014/docx/FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx	15/16	1	text	58	51	42	16	9	0	7	7	5	-11.59	-11.52	-2.72	2.67	0	0
+words/batch-014/docx/UG.CAO.00133 Foreign Part 145 approvals - Language.docx	18/18	1	advance	33	33	33	0	0	0	28	28	17	-7.35	-7.34	69.90	20.00	0	0
+words/batch-015/doc/A320SimNotes.doc	40/42	1	text	23	20	20	3	0	0	0	0	4	-0.14	0.19	32.25	-32.25	0	0
+words/batch-014/docx/xx_SETIS_PWS_template_10.19.22.docx	15/15	1	text	41	86	40	1	46	0	0	0	0	-0.14	0.35	0.10	-0.10	0	0
+words/batch-015/docx/1_tpr_template__from_fy14_.docx	9/8	1	text	46	45	43	3	2	0	1	1	5	-464.65	-464.65	-13.75	-0.05	0	0
+words/batch-015/docx/approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.docx	6/6	1	text	18	18	17	1	1	0	4	4	6	10.84	10.20	-1.40	-0.00	0	0
+words/batch-015/doc/info-bulletin-601.doc	5/6	1	pitch	28	28	28	0	0	0	0	0	19	-0.11	0.42	27.55	-27.60	0	0
+words/batch-016/doc/150_5300_13_chg8.doc	20/18	1	linebreak	67	65	63	0	0	4	0	11	22	-0.10	-1.59	1.54	-1.39	0	0
+words/batch-015/docx/B11. TE.CAO.00129  Experience  logbook.docx	7/6	1	text	20	26	13	7	13	0	0	0	5	-0.10	0.32	3.00	-1.75	0	0
+words/batch-016/doc/absrc-pac-01-info-note-en.doc	6/7	1	text	47	24	15	32	9	0	6	6	11	251.90	253.13	-628.74	-33.21	0	0
+words/batch-016/docx/TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx	15/15	1	text	23	23	20	3	3	0	3	3	9	-7.35	-7.34	3.30	-1.45	0	0
+words/batch-017/doc/762.doc	22/23	1	rule	13	13	13	0	0	0	0	0	0	-0.15	0.22	-0.05	-0.05	0	6
+words/batch-017/docx/May 25 bulletin focus on carers in the workplace.docx	5/4	1	text	7	8	7	0	1	0	0	0	0	-0.10	0.21	0.15	37.20	0	0
+words/batch-017/docx/AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx	12/15	1	text	45	46	40	5	6	0	0	11	10	-0.11	7.08	-12.15	-0.30	0	0
+words/batch-017/docx/UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx	30/29	1	text	33	32	30	3	2	0	26	25	15	-7.30	-7.10	69.90	19.90	0	0
+words/batch-018/doc/A_320.doc	141/150	1	advance	11	11	11	0	0	0	0	1	5	-0.86	1.60	10.00	-20.00	0	0
+words/batch-018/docx/DOA_Template_Form_Type_Certification_Programme.docx	21/20	1	text	47	48	35	12	13	0	20	20	23	-7.80	-8.02	49.42	-9.12	0	0
+words/batch-018/docx/FRE-03_mcar_part-3_and_IS_v2.9.docx	77/76	1	rule	6	6	6	0	0	0	0	0	0	-0.14	-0.11	0.00	0.00	2	4
+words/batch-018/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx	34/35	1	advance	7	7	7	0	0	0	1	1	0	1.20	1.64	0.00	9.65	0	0
+words/batch-019/docx/02_mcar_part-2_and_IS_v2.10.docx	315/312	1	rule	5	5	5	0	0	0	0	0	0	-0.14	0.09	0.10	0.00	2	4
+words/batch-019/docx/33004.docx	48/47	1	text	2	5	2	0	3	0	1	1	0	2.83	2.87	-0.50	0.00	0	0
+words/batch-019/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx	33/27	1	advance	10	10	10	0	0	0	1	1	0	-5.49	-5.28	-0.05	-0.00	0	0
+words/batch-019/docx/24-25_FAA_Holdover_Tables.docx	142/141	1	text	24	19	14	10	5	0	0	0	2	-0.13	0.38	96.30	-96.30	0	0
+words/batch-019/docx/report-template.docx	19/20	1	rule	22	22	22	0	0	0	0	0	0	-0.14	0.26	0.00	0.00	45	16
+words/batch-019/docx/SPA-02_mcar_part-2_and_IS_v2.9.docx	267/266	1	rule	5	5	5	0	0	0	0	0	0	-0.13	0.11	0.10	0.00	2	4
+words/batch-020/doc/150_5300_13_chg12.doc	32/33	1	text	98	90	63	35	27	0	1	2	25	26.90	26.37	18.74	4.74	0	0
+words/batch-020/docx/ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx	12/12	1	text	31	29	29	2	0	0	7	7	27	-11.45	-11.37	9.32	-0.10	0	0
+words/batch-020/doc/150_5300_13_chg10.doc	80/76	1	text	135	113	94	41	19	0	11	15	56	-269.80	-270.67	173.25	47.84	0	0
+words/batch-020/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	14/15	1	text	31	29	29	2	0	0	7	7	27	-11.45	-11.37	9.32	-0.10	0	0
+words/batch-020/docx/EHEST-SMS-Safety-Management-Manual-V2.docx	80/82	1	text	3	3	2	1	1	0	0	0	1	-0.20	-0.06	-5.18	0.48	0	0
+words/batch-020/docx/150-5370-10H.docx	712/721	1	text	44	42	39	5	3	0	0	4	5	-0.10	-18.83	34.60	-33.10	0	0
+words/batch-021/docx/ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx	29/29	1	text	34	29	29	5	0	0	7	7	25	-11.45	-11.37	13.79	-0.05	0	0
+words/batch-020/docx/OM template for non-complex NCC operators_August 2016.docx	164/165	1	text	10	8	8	2	0	0	0	1	4	0.24	-2.57	-10.05	10.00	0	0
+words/batch-020/docx/AC-150-5370-10G-updated-201604.docx	687/697	1	text	46	43	41	5	2	0	12	12	0	5.35	5.51	0.47	1.77	0	0
+words/batch-021/docx/docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx	43/44	1	text	35	35	34	1	1	0	30	29	9	-1.40	-1.34	-11.32	8.45	0	0
