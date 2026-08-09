@@ -2181,9 +2181,12 @@ if test "$host_os" != "emscripten"; then
     # PocoXML archive references expat and we must link it explicitly (after
     # PocoXML for static-link ordering).  It goes in the global LIBS rather than
     # POCO_LIBS so the whole-archive hosts, which pull in all of PocoXML, get it
-    # too.  PocoFoundation bundles pcre2/zlib, so those need nothing extra here.
+    # too.  Likewise PocoFoundation is built with --with-system-zlib, so its
+    # archive references the system zlib (DeflatingStream's deflate/zError) and
+    # needs -lz after it, added the same way; PocoFoundation bundles pcre2, so
+    # that needs nothing extra here.
     AS_IF([test -n "$POCOLIB"],
-          [LIBS="$LIBS -lexpat"])
+          [LIBS="$LIBS -lexpat $ZLIB_LIBS"])
     # The whole-archive hosts also force-include PocoFoundation's SharedMemory, whose POSIX
     # shm_open/shm_unlink live in librt before glibc 2.34 (and in libc since), so link librt on
     # Linux:
