@@ -1,57 +1,69 @@
 #!/usr/bin/env python3
-"""Does LibreOffice quantise a *glyph advance* on the printer's pixel grid?
+"""Does LibreOffice's printer reference device quantise a *glyph advance*, and on what grid?
 
-The words track already knows that a document asking for printer metrics —
-`WW8Dop::fUsePrinterMetrics`, which becomes `!USE_VIRTUAL_DEVICE` in
-`sw/source/filter/ww8/ww8par.cxx`:2008 — has its **vertical** metrics rounded through a
-300 dpi device grid: `MetricGrid` in `Paperless.Text/Fonts/LineSpacing.cs`, fitted against
-LibreOffice's own line pitches on two corpus documents.
+**Yes, but not per glyph.** Measured on 96 authored rows, the printer device's width is
 
-What was never measured is whether the same grid reaches the *horizontal* direction.
-`GenericSalLayout::LayoutText` rounds every glyph advance to whole device pixels unless
-subpixel positioning is on (`vcl/source/gdi/CommonSalLayout.cxx`:826-831), and 1/300 in is
-0.24 pt — the right order for what several printer-metric documents are missing.
+    width = floor( N · advance · px_em / upem )  device pixels,  px_em = round(size/72 · 300)
 
-The corpus cannot answer it: eight of the 200 words documents set the flag and all eight
-are real documents where a hundred other things also differ. So this authors the pair.
+converted to logical units afterwards — exact on **96 of 96 rows**, where rounding each
+glyph's advance separately (the obvious reading of
+`GenericSalLayout::LayoutText`, `vcl/source/gdi/CommonSalLayout.cxx`:826-831) is out by up
+to 6.96 pt. Two quantisations, and the *first* is the one that moves a document: at 9 pt on
+a 300 dpi grid the em is 37.5 px and the device sets 38, so every advance is **1.33 %
+wider** than the size asked for. The truncation is worth at most 0.24 pt on a whole portion
+and pulls the other way.
+
+The control half of the same run confirms the *vertical* rule the track already ships
+(`MetricGrid` in `Paperless.Text/Fonts/LineSpacing.cs`) on eight authored face/size pairs
+with the flag varied — 10.60/11.55/12.75/13.95 pt for Liberation Serif at 9/10/11/12 pt,
+10.35/-/13.00/13.95 for Liberation Sans — which had only ever been fitted against corpus
+documents.
+
+## The switch, and the trap in reaching it
+
+`WW8Dop::fUsePrinterMetrics` — Word's "use printer metrics to lay out document" — becomes
+`!USE_VIRTUAL_DEVICE` in `sw/source/filter/ww8/ww8par.cxx`:2008, and
+`DocumentDeviceManager::getReferenceDevice` then formats against an `SfxPrinter` rather
+than the 8640 dpi virtual device.
+
+Eight of the words track's 200 documents set it and **no** DOCX in the corpus states
+`<w:usePrinterMetrics/>`, so the corpus cannot vary the flag while holding a document
+still. This probe varies it, by writing the body through LibreOffice's own DOC export and
+then patching the Dop.
+
+**The compatibility dword is stored twice and the late copy wins.** `WW8Dop::WW8Dop` reads
+it at 0x54 and then, `if (nRead >= 516)`, reads it again at **0x1fc** and overwrites
+(`ww8scan.cxx`, "500 -> 508, Appear to be repeated here in 2000+"). Patching 0x54 alone
+changes nothing at all: three documents came back byte-identical for byte-identical
+content streams, which reads exactly like "the flag reaches nothing" and is really "the
+patch reached nothing". Patch both.
 
 ## The instrument
 
-Two flat-ODF files identical in every byte except
-
-    <config:config-item config:name="PrinterIndependentLayout" config:type="string">…</config:config-item>
-
-`disabled` is the printer reference device; `high-resolution` is the 8640 dpi virtual one.
-`xmloff/source/core/DocumentSettingsContext.cxx`:493-506 maps the strings, and
-`SwXDocumentSettings` (`sw/source/uibase/uno/SwXDocumentSettings.cxx`:1454-1462) shows it is
-the same `USE_VIRTUAL_DEVICE` the WW8 importer sets from the Dop bit. So this is the DOC
-document's own switch, reachable in a file we can author.
-
-Each body paragraph is `<glyph>×N` followed by a **red** one-character marker in the same
-face and size. A colour change forces its own text show, so the marker's x is the running
-advance of the N glyphs, read straight out of the content stream. Repeating one glyph
-removes kerning from the question entirely.
+Each body paragraph is one glyph repeated N times followed by a **red** one-character
+marker in the same face and size. A colour change forces its own text show, so
 
     width(N) = x(marker) − x(text)
 
-and the three candidate rules are sharply different at N = 64:
+read straight out of the content stream. One repeated glyph keeps kerning out of it. The
+candidate rules are sharply different by N = 64:
 
     exact        N · adv · size / upem
-    per-glyph    N · round(adv · px_em / upem) device pixels, back to length
-    whole-string round(N · adv · px_em / upem) device pixels, back to length
+    exact-em     N · adv · px_em / upem, in points          (em quantised, advance not)
+    per-glyph    N · round(adv · px_em / upem) pixels        (both quantised)
+    whole-string round(N · adv · px_em / upem) pixels
 
-where `px_em = round(size / 72 · dpi)` is the em as an integer-pixel device can set it.
+with `px_em = round(size / 72 · dpi)`.
 
-## The control that has to pass first
+## The controls
 
-If the setting were ignored, every width would agree and the honest reading of that is
-"the file did not switch", not "advances are not quantised". So the run also measures
-**baseline pitch** on both files and checks it against `MetricGrid`'s vertical rule — a
-quantity already known to differ between the two devices. A run whose pitch control does
-not separate is reported as inconclusive and nothing else in it may be believed.
-
-The probe measures a *length*, so it names its face explicitly in the styles and confirms
-with the PDF's own font list that nothing was substituted.
+1. **Baseline pitch** must differ between the two files. It is the quantity already known
+   to be quantised, so if it does not separate, the patch did not take and nothing else in
+   the run is evidence. (This is the control that caught the 0x54 mistake.)
+2. The **virtual** file's advances must be reproduced by the unquantised rule outright,
+   or the reading of the printer table is unsafe.
+3. The probe measures a *length*, so it names its face in the styles and prints the PDF's
+   own font list — an authored file that fell back to another face would measure nothing.
 
     printer-metric-advance.py --outdir /abs/scratch/pm
 """
@@ -62,14 +74,12 @@ import argparse
 import os
 import re
 import shutil
+import struct
 import subprocess
 import sys
-import tempfile
 import zlib
 from dataclasses import dataclass
 
-# Faces, sizes and glyph counts. One repeated glyph per row: no kerning pairs, so the
-# expected width is exactly N advances and every model below is a closed form.
 FACES = [("Liberation Serif", "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf"),
          ("Liberation Sans", "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf")]
 SIZES = [9.0, 10.0, 11.0, 12.0]
@@ -78,6 +88,10 @@ COUNTS = [1, 4, 16, 64]
 
 DPI_CANDIDATES = [300, 600, 720, 1440]
 
+# Both places WW8Dop keeps the compatibility options. The second wins when lcbDop >= 516.
+COMPAT_OFFSETS = (0x54, 0x1FC)
+PRINTER_METRICS_BIT = 0x80000000
+
 FODT = """<?xml version="1.0" encoding="UTF-8"?>
 <office:document
  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
@@ -85,20 +99,14 @@ FODT = """<?xml version="1.0" encoding="UTF-8"?>
  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
- xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
  office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
- <office:settings>
-  <config:config-item-set config:name="ooo:configuration-settings">
-   <config:config-item config:name="PrinterIndependentLayout" config:type="string">{layout}</config:config-item>
-  </config:config-item-set>
- </office:settings>
  <office:font-face-decls>
 {faces}
  </office:font-face-decls>
  <office:automatic-styles>
 {styles}
   <style:page-layout style:name="pm1">
-   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+   <style:page-layout-properties fo:page-width="55cm" fo:page-height="29.7cm"
      fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm"/>
   </style:page-layout>
  </office:automatic-styles>
@@ -123,22 +131,16 @@ class Row:
 
 
 def rows() -> list[Row]:
-    out = []
-    for face, _ in FACES:
-        for size in SIZES:
-            for glyph in GLYPHS:
-                for n in COUNTS:
-                    out.append(Row(face, size, glyph, n))
-    return out
+    return [Row(face, size, glyph, n)
+            for face, _ in FACES for size in SIZES for glyph in GLYPHS for n in COUNTS]
 
 
-def build_fodt(layout: str) -> str:
+def build_fodt() -> str:
     faces = "\n".join(
-        f'  <style:font-face style:name="F{i}" svg:font-family="{name}" style:font-family-generic="roman"/>'
+        f'  <style:font-face style:name="F{i}" svg:font-family="{name}"/>'
         for i, (name, _) in enumerate(FACES))
-
-    styles, body = [], []
     face_index = {name: i for i, (name, _) in enumerate(FACES)}
+    styles, body = [], []
     for j, r in enumerate(rows()):
         fi = face_index[r.face]
         styles.append(
@@ -154,32 +156,44 @@ def build_fodt(layout: str) -> str:
         body.append(
             f'   <text:p text:style-name="P{j}">{r.glyph * r.count}'
             f'<text:span text:style-name="T{j}">|</text:span></text:p>')
+    return FODT.format(faces=faces, styles="\n".join(styles), body="\n".join(body))
 
-    return FODT.format(layout=layout, faces=faces,
-                       styles="\n".join(styles), body="\n".join(body))
+
+# ------------------------------------------------------------------ the Dop patch
+
+def set_printer_metrics(path: str, wanted: bool) -> list[str]:
+    """Set or clear fUsePrinterMetrics in *both* copies of the Dop's compatibility dword."""
+    import olefile
+
+    ole = olefile.OleFileIO(path, write_mode=True)
+    try:
+        fib = ole.openstream("WordDocument").read(0x400)
+        table = "1Table" if struct.unpack_from("<H", fib, 0x0A)[0] & 0x0200 else "0Table"
+        fc_dop, lcb_dop = struct.unpack_from("<ii", fib, 0x192)
+        data = bytearray(ole.openstream(table).read())
+        was = []
+        for off in COMPAT_OFFSETS:
+            if lcb_dop < off + 4:
+                continue
+            at = fc_dop + off
+            value = struct.unpack_from("<I", data, at)[0]
+            was.append(f"0x{off:03x}={value:08x}")
+            struct.pack_into("<I", data, at,
+                             value | PRINTER_METRICS_BIT if wanted
+                             else value & ~PRINTER_METRICS_BIT)
+        ole.write_stream(table, bytes(data))
+        return was
+    finally:
+        ole.close()
 
 
 # ---------------------------------------------------------------- PDF reading
 
-def page_streams(pdf: bytes) -> list[bytes]:
-    """Every uncompressed content stream in the file, in file order."""
-    out = []
-    for m in re.finditer(rb"stream\r?\n", pdf):
-        start = m.end()
-        end = pdf.find(b"endstream", start)
-        if end < 0:
-            continue
-        raw = pdf[start:end]
-        try:
-            out.append(zlib.decompress(raw))
-        except zlib.error:
-            out.append(raw)
-    return out
-
-
 TOKEN = re.compile(rb"([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+Tm"
+                   rb"|([-\d.]+)\s+([-\d.]+)\s+Td"
                    rb"|(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+rg"
-                   rb"|\[(.*?)\]\s*TJ"
+                   rb"|\[(?:[^\]]*)\]\s*TJ"
+                   rb"|<[0-9A-Fa-f]*>\s*Tj"
                    rb"|\((?:[^()\\]|\\.)*\)\s*Tj")
 
 
@@ -191,7 +205,6 @@ class Show:
 
 
 def shows(stream: bytes) -> list[Show]:
-    """Text shows with their text-matrix origin and whether the fill colour is pure red."""
     out: list[Show] = []
     red = False
     x = y = 0.0
@@ -199,22 +212,36 @@ def shows(stream: bytes) -> list[Show]:
         if m.group(1) is not None:
             x, y = float(m.group(5)), float(m.group(6))
         elif m.group(7) is not None:
-            r, g, b = float(m.group(7)), float(m.group(8)), float(m.group(9))
+            x, y = float(m.group(7)), float(m.group(8))
+        elif m.group(9) is not None:
+            r, g, b = float(m.group(9)), float(m.group(10)), float(m.group(11))
             red = r > 0.9 and g < 0.1 and b < 0.1
         else:
             out.append(Show(x, y, red))
     return out
 
 
-def convert(src: str, outdir: str, tag: str) -> str:
-    profile = os.path.join(outdir, f"prof-{tag}")
-    cmd = ["soffice", "--headless", f"-env:UserInstallation=file://{profile}",
-           "--convert-to", "pdf", "--outdir", outdir, src]
-    subprocess.run(cmd, check=False, capture_output=True, timeout=300)
-    pdf = os.path.join(outdir, os.path.splitext(os.path.basename(src))[0] + ".pdf")
-    if not os.path.exists(pdf):
-        sys.exit(f"soffice produced no PDF for {src}")
-    return pdf
+def page_streams(pdf: bytes) -> list[bytes]:
+    out = []
+    for m in re.finditer(rb"stream\r?\n", pdf):
+        start = m.end()
+        end = pdf.find(b"endstream", start)
+        raw = pdf[start:end]
+        try:
+            out.append(zlib.decompress(raw))
+        except zlib.error:
+            out.append(raw)
+    return out
+
+
+def convert(src: str, outdir: str, profile: str, fmt: str = "pdf") -> str:
+    subprocess.run(["soffice", "--headless", f"-env:UserInstallation=file://{profile}",
+                    "--convert-to", fmt, "--outdir", outdir, src],
+                   check=False, capture_output=True, timeout=600)
+    out = os.path.join(outdir, os.path.splitext(os.path.basename(src))[0] + "." + fmt)
+    if not os.path.exists(out):
+        sys.exit(f"soffice produced no {fmt} for {src}")
+    return out
 
 
 # ---------------------------------------------------------------- font metrics
@@ -223,30 +250,36 @@ def advance(path: str, glyph: str) -> tuple[int, int]:
     from fontTools.ttLib import TTFont
     font = TTFont(path, lazy=True)
     upem = font["head"].unitsPerEm
-    name = font.getBestCmap()[ord(glyph)]
-    adv = font["hmtx"][name][0]
+    adv = font["hmtx"][font.getBestCmap()[ord(glyph)]][0]
     font.close()
     return adv, upem
 
 
-def model_exact(adv: int, upem: int, size: float, n: int) -> float:
+def px_em(size: float, dpi: int) -> int:
+    return round(size / 72.0 * dpi)
+
+
+def model_exact(adv, upem, size, n, dpi=None):
     return n * adv * size / upem
 
 
-def model_per_glyph(adv: int, upem: int, size: float, n: int, dpi: int) -> float:
-    px_em = round(size / 72.0 * dpi)
-    return n * round(adv * px_em / upem) * 72.0 / dpi
+def model_exact_em(adv, upem, size, n, dpi):
+    return n * adv * (px_em(size, dpi) * 72.0 / dpi) / upem
 
 
-def model_whole(adv: int, upem: int, size: float, n: int, dpi: int) -> float:
-    px_em = round(size / 72.0 * dpi)
-    return round(n * adv * px_em / upem) * 72.0 / dpi
+def model_per_glyph(adv, upem, size, n, dpi):
+    return n * round(adv * px_em(size, dpi) / upem) * 72.0 / dpi
 
 
-def model_exact_em(adv: int, upem: int, size: float, n: int, dpi: int) -> float:
-    """Exact advances, but at the em size an integer-pixel device can set."""
-    px_em = round(size / 72.0 * dpi)
-    return n * adv * (px_em * 72.0 / dpi) / upem
+def model_whole(adv, upem, size, n, dpi):
+    return round(n * adv * px_em(size, dpi) / upem) * 72.0 / dpi
+
+
+def model_floor(adv, upem, size, n, dpi):
+    """The rule this probe measures: exact advances at an integer-pixel em, the *total*
+    truncated to a whole device pixel, and only then converted to logical units."""
+    import math
+    return math.floor(n * adv * px_em(size, dpi) / upem) * 72.0 / dpi
 
 
 # ---------------------------------------------------------------- main
@@ -255,39 +288,33 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--outdir", required=True, help="absolute scratch directory")
-    ap.add_argument("--keep", action="store_true", help="keep the generated files")
     args = ap.parse_args()
-
     if not os.path.isabs(args.outdir):
         sys.exit("--outdir must be absolute")
     os.makedirs(args.outdir, exist_ok=True)
+    profile = os.path.join(args.outdir, "prof")
 
-    metrics = {}
-    for face, path in FACES:
-        for g in GLYPHS:
-            metrics[(face, g)] = advance(path, g)
+    src = os.path.join(args.outdir, "pm-body.fodt")
+    with open(src, "w", encoding="utf-8") as f:
+        f.write(build_fodt())
+    base_doc = convert(src, args.outdir, profile, "doc")
 
-    measured = {}
-    pitch = {}
-    for tag, layout in (("printer", "disabled"), ("virtual", "high-resolution")):
-        src = os.path.join(args.outdir, f"pm-{tag}.fodt")
-        with open(src, "w", encoding="utf-8") as f:
-            f.write(build_fodt(layout))
-        pdf = convert(src, args.outdir, tag)
+    metrics = {(face, g): advance(path, g) for face, path in FACES for g in GLYPHS}
+    measured: dict[tuple[str, Row], float] = {}
+    pitch: dict[tuple[str, str, float], list[float]] = {}
 
-        fonts = subprocess.run(["pdffonts", pdf], capture_output=True, text=True).stdout
-        print(f"--- {tag} ({layout}) fonts")
-        print(fonts.strip())
+    for tag, wanted in (("printer", True), ("virtual", False)):
+        doc = os.path.join(args.outdir, f"pm-{tag}.doc")
+        shutil.copy(base_doc, doc)
+        was = set_printer_metrics(doc, wanted)
+        print(f"--- {tag}: fUsePrinterMetrics={wanted}, patched {', '.join(was)}")
+        pdf = convert(doc, os.path.join(args.outdir, tag), profile, "pdf")
+        print(subprocess.run(["pdffonts", pdf], capture_output=True, text=True).stdout.strip())
 
-        with open(pdf, "rb") as f:
-            data = f.read()
         allshows = []
-        for st in page_streams(data):
+        for st in page_streams(open(pdf, "rb").read()):
             allshows.extend(shows(st))
-
-        # Pair each black show with the red marker that follows it.
-        pairs = []
-        i = 0
+        pairs, i = [], 0
         while i < len(allshows) - 1:
             if not allshows[i].red and allshows[i + 1].red:
                 pairs.append((allshows[i], allshows[i + 1]))
@@ -300,85 +327,57 @@ def main() -> int:
             return 2
         for r, (a, b) in zip(expect, pairs):
             measured[(tag, r)] = b.x - a.x
-        # Baseline pitch between consecutive rows sharing a face and size.
         for k in range(len(expect) - 1):
-            r0, r1 = expect[k], expect[k + 1]
-            if r0.face == r1.face and r0.size == r1.size:
-                pitch.setdefault((tag, r0.face, r0.size), []).append(
+            if expect[k].face == expect[k + 1].face and expect[k].size == expect[k + 1].size:
+                pitch.setdefault((tag, expect[k].face, expect[k].size), []).append(
                     pairs[k][0].y - pairs[k + 1][0].y)
 
-    # ------------------------------------------------ control: vertical pitch
     print("\n=== control: baseline pitch (the quantity already known to differ)")
     separated = 0
     for face, _ in FACES:
         for size in SIZES:
-            p = min(pitch[("printer", face, size)])
-            v = min(pitch[("virtual", face, size)])
-            flag = "differs" if abs(p - v) > 0.01 else "SAME"
+            # Positive gaps only: a page break puts the next baseline above this one.
+            p = min(x for x in pitch[("printer", face, size)] if x > 0)
+            v = min(x for x in pitch[("virtual", face, size)] if x > 0)
             if abs(p - v) > 0.01:
                 separated += 1
-            print(f"  {face:17s} {size:5.1f}pt  printer {p:8.3f}  virtual {v:8.3f}  {flag}")
+            print(f"  {face:17s} {size:5.1f}pt  printer {p:7.3f}  virtual {v:7.3f}  "
+                  f"{'differs' if abs(p - v) > 0.01 else 'SAME'}")
     if separated == 0:
         print("\n!! the two files did not separate on a quantity known to differ.")
-        print("!! the PrinterIndependentLayout switch did not take; nothing here is evidence.")
+        print("!! the Dop patch did not take; nothing here is evidence.")
         return 1
 
-    # ------------------------------------------------ the measurement
     print("\n=== advance widths, printer device against virtual device")
     print(f"{'face':17s} {'size':>5s} {'g':>2s} {'N':>3s} "
           f"{'printer':>9s} {'virtual':>9s} {'delta':>7s} {'exact':>9s}")
     moved = 0
-    resid = {("exact", 0): 0.0}
-    for name in ["exact"] + [f"per-glyph@{d}" for d in DPI_CANDIDATES] + \
-                [f"whole@{d}" for d in DPI_CANDIDATES] + [f"exact-em@{d}" for d in DPI_CANDIDATES]:
-        resid[name] = []
     for r in rows():
         adv, upem = metrics[(r.face, r.glyph)]
-        p = measured[("printer", r)]
-        v = measured[("virtual", r)]
-        e = model_exact(adv, upem, r.size, r.count)
+        p, v = measured[("printer", r)], measured[("virtual", r)]
         if abs(p - v) > 0.005:
             moved += 1
-        if r.count in (1, 64):
+        if r.count == 64:
             print(f"{r.face:17s} {r.size:5.1f} {r.glyph:>2s} {r.count:3d} "
-                  f"{p:9.3f} {v:9.3f} {p - v:7.3f} {e:9.3f}")
-        resid["exact"].append(p - e)
-        for d in DPI_CANDIDATES:
-            resid[f"per-glyph@{d}"].append(p - model_per_glyph(adv, upem, r.size, r.count, d))
-            resid[f"whole@{d}"].append(p - model_whole(adv, upem, r.size, r.count, d))
-            resid[f"exact-em@{d}"].append(p - model_exact_em(adv, upem, r.size, r.count, d))
-
+                  f"{p:9.3f} {v:9.3f} {p - v:7.3f} {model_exact(adv, upem, r.size, r.count):9.3f}")
     n = len(rows())
     print(f"\n{moved} of {n} rows have a different advance on the two devices")
 
-    print("\n=== which rule reproduces the PRINTER device's advances")
-    print(f"{'model':18s} {'mean|err|pt':>12s} {'max|err|pt':>11s} {'exact rows':>11s}")
-    for name in ["exact"] + [f"exact-em@{d}" for d in DPI_CANDIDATES] + \
-                [f"per-glyph@{d}" for d in DPI_CANDIDATES] + [f"whole@{d}" for d in DPI_CANDIDATES]:
-        errs = [abs(x) for x in resid[name]]
-        hits = sum(1 for x in errs if x < 0.01)
-        print(f"{name:18s} {sum(errs) / len(errs):12.4f} {max(errs):11.4f} {hits:7d}/{n}")
-
-    # And the same table against the virtual device, as a second control: there the
-    # unquantised rule must win outright, or the reading of the printer table is unsafe.
-    print("\n=== control: which rule reproduces the VIRTUAL device's advances")
-    vres = {"exact": []}
+    named = [("exact", model_exact, None)]
     for d in DPI_CANDIDATES:
-        vres[f"per-glyph@{d}"] = []
-    for r in rows():
-        adv, upem = metrics[(r.face, r.glyph)]
-        v = measured[("virtual", r)]
-        vres["exact"].append(v - model_exact(adv, upem, r.size, r.count))
-        for d in DPI_CANDIDATES:
-            vres[f"per-glyph@{d}"].append(v - model_per_glyph(adv, upem, r.size, r.count, d))
-    for name, errs in vres.items():
-        errs = [abs(x) for x in errs]
-        hits = sum(1 for x in errs if x < 0.01)
-        print(f"{name:18s} {sum(errs) / len(errs):12.4f} {max(errs):11.4f} {hits:7d}/{n}")
+        named += [(f"exact-em@{d}", model_exact_em, d),
+                  (f"per-glyph@{d}", model_per_glyph, d),
+                  (f"whole@{d}", model_whole, d),
+                  (f"floor@{d}", model_floor, d)]
 
-    if not args.keep:
-        for tag in ("printer", "virtual"):
-            shutil.rmtree(os.path.join(args.outdir, f"prof-{tag}"), ignore_errors=True)
+    for tag, title in (("printer", "PRINTER"), ("virtual", "VIRTUAL (control)")):
+        print(f"\n=== which rule reproduces the {title} device's advances")
+        print(f"{'model':18s} {'mean|err|pt':>12s} {'max|err|pt':>11s} {'exact rows':>12s}")
+        for name, fn, dpi in named:
+            errs = [abs(measured[(tag, r)] - fn(*metrics[(r.face, r.glyph)], r.size, r.count, dpi))
+                    for r in rows()]
+            print(f"{name:18s} {sum(errs) / len(errs):12.4f} {max(errs):11.4f} "
+                  f"{sum(1 for e in errs if e < 0.026):8d}/{n}")
     return 0
 
 
