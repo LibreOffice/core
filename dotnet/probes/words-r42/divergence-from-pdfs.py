@@ -12,12 +12,19 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
+# Which `first-divergence.py` to run — and with it, which `pdf-ops.py`, since it resolves that one
+# beside itself. The default is the main checkout's, which is what this probe was written against;
+# `$FIRST_DIVERGENCE` points it at a worktree's copy. Round 43 changed the matcher and needs the
+# same corpus classified both ways.
 SPEC = importlib.util.spec_from_file_location(
     "firstdiv",
-    "/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/first-divergence.py")
+    os.environ.get(
+        "FIRST_DIVERGENCE",
+        "/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/first-divergence.py"))
 fd = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(fd)
 
