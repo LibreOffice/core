@@ -32,18 +32,34 @@ public sealed class ListLabelTests
     /// Every format of the two feature documents draws the labels LibreOffice draws.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The labels are the same in all six because the six files are two documents: LibreOffice's own
     /// conversions of one <c>.odt</c> and one <c>.docx</c>. A reader that counted its lists differently
     /// would show up here as one letter or one digit out of step rather than as a missing word.
+    /// </para>
+    /// <para>
+    /// <strong>The first bullet is the one exception, and it is a property of the files rather than of
+    /// the readers.</strong> The Word forms state it as <c>Symbol</c>'s slot <c>0xB7</c> — as
+    /// <c>U+F0B7</c> in <c>numbering.xml</c>, raw in the DOC's <c>LVL</c> — which means nothing outside
+    /// that face, so it is recoded into OpenSymbol's own bullet at <c>U+E12C</c> exactly as
+    /// LibreOffice's <c>ConvertChar::RecodeChar</c> does. The ODF and RTF forms state a real
+    /// <c>U+2022</c>, because LibreOffice's export had already made that substitution when it wrote
+    /// them, so there is nothing left to recode. Verified against LibreOffice's own PDF of
+    /// <c>word-features.docx</c>, which embeds OpenSymbol and draws the same glyph index we do.
+    /// </para>
+    /// <para>
+    /// The nested bullet is <c>U+25E6</c> in a level naming OpenSymbol outright, which is an ordinary
+    /// character in an ordinary face and is not recoded on any of the six.
+    /// </para>
     /// </remarks>
     [Theory]
-    [InlineData("text-features.odt")]
-    [InlineData("text-features-flat.fodt")]
-    [InlineData("word-features.docx")]
-    [InlineData("word-features.dotx")]
-    [InlineData("word-features.doc")]
-    [InlineData("word-features.rtf")]
-    public void TheDocumentsListsAreLabelled(string name)
+    [InlineData("text-features.odt", "•")]
+    [InlineData("text-features-flat.fodt", "•")]
+    [InlineData("word-features.docx", "")]
+    [InlineData("word-features.dotx", "")]
+    [InlineData("word-features.doc", "")]
+    [InlineData("word-features.rtf", "•")]
+    public void TheDocumentsListsAreLabelled(string name, string bullet)
     {
         using IDocument document =
             new WordProcessingReader().Read(DocumentSource.FromFile(Corpus.Require(name)));
@@ -59,7 +75,51 @@ public sealed class ListLabelTests
 
         // Two bullets, a nested bullet, two numbers, two letters and a third number — in that order,
         // and with the continuation paragraph between "2." and "a)" carrying none of its own.
-        labels.ShouldBe(["•", "•", "◦", "1.", "2.", "a)", "b)", "3."]);
+        labels.ShouldBe([bullet, bullet, "◦", "1.", "2.", "a)", "b)", "3."]);
+    }
+
+    /// <summary>
+    /// A recoded bullet is drawn from OpenSymbol, not merely written as one of its code points.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The recode and the face are one decision: <c>U+E12C</c> is a private-use code point that means
+    /// nothing in any other font, so a label carrying it in the paragraph's own face would draw
+    /// <c>.notdef</c> — which is a worse answer than the U+2022 this replaced. Asserting the text alone
+    /// cannot tell the two apart.
+    /// </para>
+    /// <para>
+    /// Reintroducing the bug to check this fails: have <c>DocxLayoutSource.Symbol</c> or
+    /// <c>DocReader.SymbolLabel</c> return null unconditionally. Both bullets then come back as U+2022
+    /// in the item's own Liberation Serif and the face assertion below fails on all three Word forms.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("word-features.docx")]
+    [InlineData("word-features.dotx")]
+    [InlineData("word-features.doc")]
+    public void ARecodedBulletIsSetInTheSubstituteFace(string name)
+    {
+        using IDocument document =
+            new WordProcessingReader().Read(DocumentSource.FromFile(Corpus.Require(name)));
+
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+        List<PageLabel> recoded =
+        [
+            .. pages.Paragraphs
+                .Select(paragraph => paragraph.Label)
+                .OfType<PageLabel>()
+                .Where(label => label.Text == ""),
+        ];
+
+        recoded.Count.ShouldBe(2);
+
+        foreach (PageLabel label in recoded)
+        {
+            SymbolFontRecode.IsSubstituteFamily(label.Font?.FamilyName).ShouldBeTrue(
+                $"a recoded bullet was left in {label.Font?.FamilyName ?? "no face at all"}");
+        }
     }
 
     /// <summary>
