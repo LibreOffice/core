@@ -12,8 +12,16 @@ MAINTAINERCLEANFILES = Makefile.in
 
 export NODE_PATH=$(abs_builddir)/node_modules
 
-# drop the inherited malformed value, there is no session bus to reach here
-unexport DBUS_SESSION_BUS_ADDRESS
+# Point the browser at the session bus of the desktop that started the tests.
+# Where the runtime directory holds no bus socket, as in the headless
+# containers, drop the inherited value instead, because there it is malformed.
+# The leading spaces keep automake from reading these as its own conditionals.
+DBUS_SOCKET := $(XDG_RUNTIME_DIR)/bus
+ ifneq ($(wildcard $(DBUS_SOCKET)),)
+ export DBUS_SESSION_BUS_ADDRESS := unix:path=$(DBUS_SOCKET)
+ else
+ unexport DBUS_SESSION_BUS_ADDRESS
+ endif
 
 V = $(if $(verbose),,@)
 abs_dir = $(if $(filter $(abs_builddir),$(abs_srcdir)),.,$(abs_srcdir))
