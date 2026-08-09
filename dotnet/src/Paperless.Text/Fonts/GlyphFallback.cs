@@ -13,10 +13,12 @@ namespace Paperless.Text.Fonts;
 /// <para>
 /// LibreOffice asks the platform first — fontconfig's <c>FcFontMatch</c> with the missing characters
 /// as a charset, in <c>vcl/unx/generic/fontmanager/fontconfig.cxx</c> — and falls back to a
-/// hard-coded list of families when that fails. Paperless has only the second half, deliberately:
-/// going through fontconfig would add a second source of truth for substitution rather than the
-/// missing one, and the same document would then render differently on two machines with the same
-/// fonts but different fontconfig configurations.
+/// hard-coded list of families when that fails. Paperless takes the second half as its main path,
+/// deliberately: going through fontconfig for substitution would add a second source of truth rather
+/// than the missing one. It reads the platform's configuration for one thing only — the order in
+/// which faces are tried once <em>nothing</em> on that hard-coded list is installed, where there is
+/// no other source of truth to compete with. See <see cref="FontconfigPreferences"/>, which records
+/// the measurement showing that this last step's answer cannot be derived from the font files.
 /// </para>
 /// </remarks>
 public interface IGlyphFallbackResolver
