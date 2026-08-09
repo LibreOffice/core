@@ -209,4 +209,22 @@ one.
 
 ## Byte-level reach
 
-`reach.sh`, both CLIs under `SOURCE_DATE_EPOCH=1700000000`.
+`reach.sh`, both CLIs under `SOURCE_DATE_EPOCH=1700000000`, so the seventeen documents that print
+the date in a header cannot contribute. **All 171 documents, not a partial.**
+
+| | differs | identical |
+|---|---:|---:|
+| `.xls` | **28** | 34 |
+| `.xlsx` | **26** | 83 |
+| all | **54** | 117 |
+
+**54 of 171 documents' rendered bytes moved**, of which 28 are `.xls` — which no census of an
+OOXML part could have predicted, and which is why the reach is reported by rendering. Against
+that, the gate registered a difference on **12** and a verdict on **2**: the band's size, zoom and
+anchoring move ink on every document with a header or footer and words on only the ones that were
+losing a line.
+
+**This run measured `cli-base` against the tree before the last two corrections** — the run-piece
+coalescing and the BIFF anchoring — because it was already three quarters through when the
+fidelity suite found them. Both corrections change bytes, so the true figure for the final tree is
+near this and is not this. It is quoted as what it is: `reach-intermediate.tsv`.
