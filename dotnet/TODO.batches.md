@@ -9163,6 +9163,22 @@ margin line). Five cases in `SheetPinnedBandTests`; five reintroduced defects, a
 `probes/sheets-r33/mutate.sh`. A sixth mutation is recorded there as an **equivalent formulation
 rather than a gap**, which is what `verify-test.sh` reporting it undetected correctly means.
 
+**Whole track on the final tree, 171 rows with no duplicate path: 150/171 matches, absolute page
+error 85, 156 exact page counts, absolute word error 32673** — from 149, 86, 155 and 32729. Per
+batch: 001–009 89/89, 010 8/10, **011 8/10**, 012 8/10, 013 8/10, 014 9/10, 015 6/9, 016 5/9,
+017 6/10, 018 3/4. **No batch fell**, and **exactly one row of 171 changes**:
+`RMP 2011-2014 and Inventory.xls` goes 39 pages to **38 against 38** and from `pages` to `match`.
+The other four documents the change reaches keep the word counts they had at the baseline, which
+is the point — the band height moved on all five and only one of them was paginating wrongly
+because of it.
+
+**Two rows of that sweep came back `ref-failed` and are spliced rather than believed.**
+`fy2011-aip-grants.xls` and `6880ac7361ca1b99a9230811_ST Capability List Rev.16 - Web.xlsx` both
+convert cleanly when re-run alone at one worker — 93/93 and 217/217, both `match`. That is the
+`soffice`-wedging-past-its-own-timeout shape, on a machine at a load average of about 17.
+Believing the raw sweep would have reported 148/171 with two batches falling, from a reference
+converter that had nothing to do with the change.
+
 **The largest residue outside the round is diagnosed and deliberately not shipped.**
 `EASA-IFP-145Scope(WEB)_…xlsx` loses exactly 2350 words, and the brief attributed it to one
 column's width or alignment. It is neither, and it is not in the spreadsheet code: the content
@@ -9177,3 +9193,11 @@ where the two rules disagree. It was not shipped because truncating alone would 
 adjustment and land back where layout put it. Matching the reference means adopting the
 truncation *and* the uncorrected drift it causes, in the shared PDF writer, which is a decision
 for a round that can sweep all three tracks.
+
+Per-project tests, all matching the known-good counts with 0 skipped: Core 275, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
+Spreadsheets **598** (593 plus this round's 5), Presentations 542.
+
+**Every source change is inside `Paperless.Spreadsheets`** — `MsBinary/XlsPrintSetup.cs`,
+`Layout/SheetBandHeight.cs` and `Layout/SheetPageDecoration.cs` — so the words and slides tracks
+cannot be reached by it.

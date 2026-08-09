@@ -10,7 +10,9 @@ rendering the one document whose page count it moves.
 |---|---|
 | `base-whole-track.tsv` | whole-track sweep at `9f44b2943`, before any change |
 | `final-whole-track.tsv` | the same on the final tree |
-| `reach.log` | the byte-level reach, clock pinned, over all 171 documents — the summary rather than the per-row TSV, which was cleaned up with the sweep's PDFs before it was copied |
+| `reach.log` | the byte-level reach of the band-height half, clock pinned, over all 171 documents — the summary rather than the per-row TSV, which was cleaned up with the sweep's PDFs before it was copied |
+| `reach2.log` | the same for the round's two changes together |
+| `splice-rerun.tsv` | the two documents the final sweep returned `ref-failed` for, re-run alone |
 | `interim-band-only.tsv` | the whole-track sweep with the band height fixed and the drawing half not yet — kept because it is what found the second half |
 | `reach.sh` | renders the track with two CLIs and diffs the bytes; unchanged from r31 |
 | `score.py` | turns a `rows.tsv` into matches, page error, exact counts, word error |
@@ -255,3 +257,49 @@ and the page margins are exactly LibreOffice's**, so whatever costs it its extra
 downstream of both. `GridProbe` and `rowbands.py` are the instruments for the next attempt, and
 on `RMP` they took the question from "a different column band" to a named constant in about an
 hour.
+
+## The whole-track result
+
+| | matches | abs page error | exact page counts | abs word error |
+|---|---|---|---|---|
+| `base-whole-track.tsv` | 149/171 | 86 | 155 | 32729 |
+| `interim-band-only.tsv` | 148/171 | 85 | 156 | 32726 |
+| `final-whole-track.tsv` | **150/171** | **85** | **156** | **32673** |
+
+Per batch at the end: 001–009 89/89, 010 8/10, **011 8/10**, 012 8/10, 013 8/10, 014 9/10,
+015 6/9, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
+
+**Exactly one row of 171 changes**, and it is the one the round was aimed at.
+
+| document | before | after |
+|---|---|---|
+| `RMP 2011-2014 and Inventory.xls` | 39/38 pages, 18634/18548 `pages` | **38/38, 18578/18548 `match`** |
+
+The other four documents the change reaches come out with the word counts they had at the
+baseline, which is the point: the band height moved on all five and only one of them was
+paginating wrongly because of it.
+
+**Two rows of the final sweep came back `ref-failed` and are spliced rather than believed.**
+`fy2011-aip-grants.xls` and `6880ac7361ca1b99a9230811_ST Capability List Rev.16 - Web.xlsx` both
+convert cleanly when re-run alone under one worker — 93/93 and 217/217, both `match`
+(`splice-rerun.tsv`) — which is the `soffice`-wedges-past-its-own-timeout shape the skill
+describes, on a machine carrying a load average around 17. Believing the raw sweep would have
+reported 148/171 and two batches falling, from an `soffice` that had nothing to do with this
+round's change.
+
+## Test counts
+
+Every project run individually, whole output captured, **0 skipped** everywhere.
+
+| Core | Containers | Text | Vector | Rendering | Markup | OpenDocument | WordProcessing | Spreadsheets | Presentations |
+|---|---|---|---|---|---|---|---|---|---|
+| 275 | 109 | 240 | 291 | 119 | 259 | 125 | 696 | **598** | 542 |
+
+Every count is the briefed known-good except Spreadsheets, which is 593 plus this round's 5.
+
+## What this round did not touch
+
+Every source change is inside `Paperless.Spreadsheets` — `MsBinary/XlsPrintSetup.cs`,
+`Layout/SheetBandHeight.cs`, `Layout/SheetPageDecoration.cs` — so the words and slides tracks
+cannot be reached by it. The one lead that *would* reach them, the `/Widths` rounding above, is
+diagnosed and deliberately unshipped for exactly that reason.
