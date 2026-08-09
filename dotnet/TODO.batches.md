@@ -8638,7 +8638,8 @@ Per batch, before and after alike: 001–005 10/10, 006 9/10, 007 10/10, 008 9/1
 
 Per-project tests, all matching the known-good counts with 0 skipped, except WordProcessing
 which is 690 + the six new: Core 264, Containers 109, Text 240, Vector 291, Rendering 119,
-Markup 259, OpenDocument 125, WordProcessing **696**, Spreadsheets 573, Presentations 538.
+Markup 259, OpenDocument 125, WordProcessing **696**, Spreadsheets 573, Presentations 538,
+Fidelity 550.
 
 ### The tests exist this time, and both halves were watched failing
 
