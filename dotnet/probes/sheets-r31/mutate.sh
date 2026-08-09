@@ -35,6 +35,6 @@ m5() { perl -0pi -e 's/Length spare = drawn - text;/Length spare = dynamic ? Len
 
 # 6. The size carries across a section switch.
 #    Expect: ASectionSwitchResetsTheSize.
-m6() { perl -0pi -e "s/case 'L': Flush\(\); current = left; size = null; break;/case 'L': Flush(); current = left; break;/" "$L/SheetHeaderFooter.cs"; }
+m6() { perl -0pi -e "s/ size = null; break;/ break;/g" "$L/SheetHeaderFooter.cs"; }
 
 "${1:?usage: mutate.sh m1|m2|m3|m4|m5|m6}"
