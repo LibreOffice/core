@@ -331,24 +331,54 @@ internal sealed class XlsSheetPrintState
     public SheetRange? RepeatRows { get; set; }
 
     /// <summary>
-    /// The height of a header or footer band, floored at Calc's own default.
+    /// The height of a header or footer band, floored at Calc's own default when — and only
+    /// when — the band is dynamic.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The floor is the whole point and it is BIFF-only. The BIFF filter never puts an
-    /// <c>ATTR_PAGE_SIZE</c> on the header's item set: it sets the band <em>dynamic</em> and
-    /// writes only the distance to the body (<c>XclImpPageSettings::Finalize</c>,
-    /// <c>sc/source/filter/excel/xipage.cxx:310-331</c>). So <c>nManHeight</c> — the minimum
-    /// <c>UpdateHFHeight</c> will not go below — stays at whatever a fresh page style has, which
-    /// is 0.5 cm of text plus a 0.25 cm gap (<c>ScStyleSheet::GetItemSet</c>,
-    /// <c>sc/source/core/data/stlsheet.cxx:184</c>). The OOXML filter is different: it writes an
-    /// explicit height, so its band can be shorter than this.
+    /// The floor is BIFF-only and it is <em>conditional</em>, which is the part that took a
+    /// document to find. <c>XclImpPageSettings::Finalize</c> splits on whether the band's text
+    /// fits in the distance the two margins leave (<c>fHeaderDist &lt; 0.0</c>,
+    /// <c>sc/source/filter/excel/xipage.cxx:315-331</c>):
+    /// </para>
+    /// <list type="bullet">
+    /// <item>
+    /// <strong>It fits.</strong> The band is marked dynamic and only the distance to the body is
+    /// written; no <c>ATTR_PAGE_SIZE</c> is put on the item set at all. So <c>nManHeight</c> —
+    /// the minimum <c>UpdateHFHeight</c> will not go below — stays at whatever a fresh page
+    /// style has, which is 0.5 cm of text plus a 0.25 cm gap (<c>ScStyleSheet::GetItemSet</c>,
+    /// <c>sc/source/core/data/stlsheet.cxx:184</c>). Hence the floor.
+    /// </item>
+    /// <item>
+    /// <strong>It does not fit</strong> (#i23296, the band would overlay the sheet). The band is
+    /// marked <em>not</em> dynamic and <c>ATTR_PAGE_SIZE</c> is written explicitly, at exactly
+    /// the distance between the margins. <c>UpdateHFHeight</c> then returns on its first line —
+    /// <c>if (!(rParam.bEnable &amp;&amp; rParam.bDynamic)) return;</c>
+    /// (<c>sc/source/ui/view/printfun.cxx:793</c>) — so it never reaches the
+    /// <c>nManHeight</c> comparison and <strong>no floor applies</strong>. A cramped band prints
+    /// at its stated height however short that is, and the text is cropped.
+    /// </item>
+    /// </list>
+    /// <para>
+    /// The OOXML filter is different again and needs neither branch here: it always writes an
+    /// explicit height equal to the stated band (<c>convertHeaderFooterData</c> adds the body
+    /// distance back on, <c>sc/source/filter/oox/pagesettings.cxx:1030-1040</c>), so its
+    /// <c>nManHeight</c> is the stated band in both cases and <see cref="SheetBandHeight"/>
+    /// alone is the whole rule.
     /// </para>
     /// <para>
-    /// Measured, that is four points a page. <c>sheet-decor-xls.xls</c> states a 1.025 in top
-    /// margin and a 0.7875 in header margin — 17.1 pt between them — and LibreOffice still puts
-    /// the first printed row 21.11 pt below the top margin, because 0.75 cm is 21.26 pt and
-    /// wins.
+    /// The floor when it does apply is four points a page. <c>sheet-decor-xls.xls</c> states a
+    /// 1.025 in top margin and a 0.7875 in header margin — 17.1 pt between them, and a header
+    /// whose text fits inside that — and LibreOffice still puts the first printed row 21.11 pt
+    /// below the top margin, because 0.75 cm is 21.26 pt and wins.
+    /// </para>
+    /// <para>
+    /// Withholding it when it does not apply is worth more. <c>RMP 2011-2014 and Inventory.xls</c>
+    /// gives its footer 0.1225 in against a 10 pt line, so Calc pins the band at 176 twips where
+    /// the floor would make it 425; that 249 twips comes off the body of every page, and it is
+    /// the whole of the workbook's 39 printed pages against LibreOffice's 38. Replaying
+    /// <c>ScTable::UpdatePageBreaks</c> over LibreOffice's own row heights reproduces our
+    /// 22 row bands at the floored page height and its 21 at the pinned one.
     /// </para>
     /// </remarks>
     /// <param name="inches">The distance the two margins leave between them.</param>
@@ -356,15 +386,16 @@ internal sealed class XlsSheetPrintState
     /// The band's own <c>&amp;</c>-code string. The band that prints is not the one the margins
     /// imply — Calc keeps the distance from the text to the body and measures the text again at
     /// print time, so the band grows by however much the real line height exceeds the bare point
-    /// size. <see cref="SheetBandHeight"/> is the port; the floor below still applies on top of
-    /// it, because for BIFF it is <c>nManHeight</c> and this is <c>nHeight</c>.
+    /// size. <see cref="SheetBandHeight"/> is the port, and it also reports which of the two
+    /// branches above the filter took.
     /// </param>
     /// <param name="defaultFont">The workbook's own default cell font, which the band is set in.</param>
     private static Length Band(double inches, string? codes, SheetDefaultFont? defaultFont)
     {
-        Length stated = SheetBandHeight.Printed(
-            codes, Length.FromInches(Math.Max(0, inches)), defaultFont);
-        return Length.Max(stated, DefaultBandHeight);
+        Length printed = SheetBandHeight.Printed(
+            codes, Length.FromInches(Math.Max(0, inches)), defaultFont, out bool isDynamic);
+
+        return isDynamic ? Length.Max(printed, DefaultBandHeight) : printed;
     }
 
     /// <summary>Calc's default header and footer band: 0.5 cm of text and a 0.25 cm gap.</summary>
