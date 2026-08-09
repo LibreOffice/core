@@ -11047,3 +11047,171 @@ passes and is not yours. They now derive `dotnet/` from their own location.
 Test counts on the merged tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
 Markup 259, OpenDocument 125, WordProcessing **725** (723 + `SymbolRunTests`), Spreadsheets 621,
 Presentations 573, Fidelity 550 — **0 skipped**, 0 warnings.
+
+## Round thirty-nine — words: the first-divergence sweep with a control, and the CJK boxes
+
+Branch `worktree-words-r39` on `9b1429040`. Baseline reproduced **exactly**: 154/200 verdicts,
+absolute page error 78, 164 exactly-correct page counts, absolute word error 6427.
+`probes/words-r39-baseline.tsv`.
+
+### 1. `first-divergence.py` over all 200, not over the 46 — because the control is the finding
+
+The brief asked for the sweep clustered by dominant note class. It also asked for the control the
+skill demands, and the cheapest way to have both is to sweep **the whole track** rather than the
+failures: the 154 matching documents are then the control, measured by the same instrument in the
+same run. `probes/words-r39-divergence.tsv`, histogram reproducible with
+`probes/words-r39-divergence-histogram.py`.
+
+| dominant kind on the first divergent page | **matching (154)** | **failing (46)** |
+|---|---:|---:|
+| no materially divergent page at all | **71** | 0 |
+| `glyphs` | **54** | 29 |
+| `one-sided` | **13** | 5 |
+| `box` | 5 | **8** |
+| `face` | **5** | **0** |
+| `size` | 4 | 3 |
+| `width`, `colour` | 2 | 0 |
+| `page size` | 0 | 1 |
+
+| first divergent page | matching | failing |
+|---|---:|---:|
+| none | 71 | 0 |
+| page 1 | 47 | **27** |
+| pages 2–3 | 18 | 12 |
+| page 4 or later | 18 | 7 |
+
+**What separates a failing document from a passing one is whether it has a divergent page at all,
+not what kind it is.** Every one of the 46 failures has one; 83 of the 154 matches (54%) also do,
+and among *those* the kind histogram is close to the failures': `glyphs` is 54 of 83 (65%) on
+matching documents against 29 of 46 (63%) on failing ones.
+
+Three consequences, in decreasing order of how much they should change what the next round does:
+
+- **The `glyphs` cluster is confirmed dead, now on the whole track rather than a 30-document
+  sample.** Round 36 killed it at 22 of 30; here it is dominant on 54 matching documents and is
+  *relatively more common* on documents with nothing wrong. It remains our PDF writer's show
+  batching against LibreOffice's one-show-per-character on printer-metric text. Twenty-nine of the
+  46 failures are classified by it, which is to say two thirds of the failure table is noise.
+- **`one-sided` and `face` die here too, and they had not been controlled before.** `one-sided`
+  fires on 13 matching documents against 5 failing — round 35 read it as "an element only one side
+  draws, 4 of 12 `.doc`" and it is mostly the match window: an element displaced past three points
+  appears in both one-sided lists. `face` fires on **5 matching documents and none at all that
+  fail**, so it cannot be a cluster; it is the round-38 residue of faces named differently.
+- **`box` is the only class enriched on failures**: 8 of 46 against 5 of 154, and conditioned on
+  having a divergent page, 8 of 46 against 5 of 83 — about three times. It is the rule-and-fill
+  geometry cluster, still **entirely OOXML**, and it now has a measured false-positive rate to be
+  read against. The eight: `f445896eb008d14c1746fc37d412dc22.docx`, `5709.16 ch.40_mgfinal.docx`,
+  `UG.CAO.00133 … Language.docx`, `AWR OPS-AOC 044 … .docx`, `UG.CAO.00006 … .docx`,
+  `DOA_Template_Form_Type_Certification_Programme.docx`, `150-5370-10H.docx`,
+  `ABCD-SDE-23-00 … .docx`. That is the largest real cluster the sweep names and it is the next
+  round's work.
+
+Method caveat, stated because it would otherwise be invisible: the tree was rebuilt between rows
+188 and 189 of this sweep. The change made in this round alters **2 of 200 renderings**, measured
+by byte comparison, and both are in batches 006 and 012 — swept before the rebuild — so no row
+here measures two different programs. Do not repeat the manoeuvre without that check.
+
+### 2. `手机免提系统TSB.doc` — the boxes, and what the brief got right and wrong about them
+
+The brief's framing was to check whether the CJK path is a fifth wiring hole before assuming a font
+problem. **It is not a wiring hole**: round 35 connected `FontItemiser` to `SystemFontResolver` at
+both the measuring and the drawing pass, and both halves fire. Nor is "every Asian character is
+missing" literally true any more — every character is *drawn*, and `pdftotext` extracts every
+Chinese sentence from our PDF. What a reader sees is another matter, and on page 1 of two:
+
+| | ours, before | reference |
+|---|---|---|
+| text records in IPAGothic | **167** | 0 |
+| text records in Unifont | **138** | 0 |
+| text records in WenQuanYi Zen Hei | 10 | **54** |
+
+Unifont is CFF, which `PdfFontCatalogue` names and cannot embed by design, so those 138 records
+draw as hex boxes in any reader — which is what the user saw. The word gate's 36 against 40 is
+**not** the missing content: comparing token multisets, every Chinese sentence is present on both
+sides and the four-word deficit is exactly `CAF` twice and `TSB` twice, joined to the preceding
+Chinese run by poppler in our output and separate in the reference.
+
+#### The measurement that decided the design, and killed every alternative
+
+The resolver's tie-break, once nothing on LibreOffice's `ImplInitGenericGlyphFallback` list is
+installed, was **alphabetical by family name** — a rule whose own comment said it had no basis.
+IPAGothic and Unifont both sort before WenQuanYi Zen Hei.
+
+The obvious repair is to invent a basis from the fonts: OS/2 code-page bits, Unicode ranges,
+coverage size. **That is refuted by one command.** With the machine's `/etc/fonts` in force,
+`fc-match "宋体:charset=624b"` answers WenQuanYi Zen Hei; against a minimal configuration naming
+only `/usr/share/fonts` it answers **IPAGothic**, and WenQuanYi Zen Hei comes *last* of the four.
+The difference is `/etc/fonts/conf.d/64-wqy-zenhei.conf` listing the family under
+`<alias><family>sans-serif</family><prefer>`. The reference's choice is a property of the machine's
+fontconfig configuration and of nothing in the font files, so no font-intrinsic rule can reproduce
+it. (OS/2 alone would have got half way and stopped: IPAGothic declares code page 932 only, so it
+loses for Han — and WenQuanYi Zen Hei and Unifont declare the same bits 18 and 20 and cannot be
+separated.)
+
+So `FontconfigPreferences` reads the configuration, narrowly: only `<alias>` elements whose subject
+is a *generic* family and whose body is a `<prefer>` list, in ascending configuration-file order —
+fontconfig's own order, since a `<prefer>` is an `<edit name="family" mode="prepend">` applied at
+the matched family's position. Checkable here: `fc-match sans-serif` answers DejaVu Sans
+(`57-dejavu-sans.conf`) then WenQuanYi Zen Hei (`64-wqy-zenhei.conf`), which is the file-name order.
+
+**Deliberately not LibreOffice's order.** LibreOffice asks fontconfig *before* its own list
+(`PhysicalFontCollection::GetGlyphFallbackFont`, `vcl/source/font/PhysicalFontCollection.cxx`:1040).
+Doing that here would take symbol bullets away from OpenSymbol and undo round 37, so only the tail
+moves. A machine with no fontconfig gets `FontconfigPreferences.None` and the old behaviour exactly.
+
+| | baseline | after | predicted |
+|---|---:|---:|---|
+| documents matching | 154 | **154** | 154 |
+| absolute page error | 78 | **78** | 78 |
+| exactly-correct page counts | 164 | **164** | 164 |
+| absolute word error | 6427 | **6427** | 6427 |
+
+**Zero verdicts moved, said in advance** (`probes/words-r39-prediction.md`, committed before
+anything was rendered post-change). One verdict *changed* without moving: `手机免提系统TSB.doc`
+went `words,unembedded` → `words`, so the words track now has **no `unembedded` verdict at all**.
+Reach **2 of 200** renderings by byte comparison. `P200904290238_0238_51880.doc` matched before and
+still matches, and its font set is now identical to the reference's.
+
+The prediction named **three** documents and two changed; the third is the next item, found before
+the sweep ran. Two tests pin the rejected rule: reinstating the alphabet fails
+`ThePreferredFamilyBeatsTheAlphabet` and `APreferenceForAFamilyThatCannotDrawTheCharacterIsSkipped`,
+verified with `verify-test.sh`.
+
+### 3. Open, cited and deliberately not shipped: MS Gothic resolves to IPAGothic
+
+`AWR OPS-AOC 044 … .docx` has **218 runs** naming `w:ascii="MS Gothic"`. `msgothic`'s chain in
+`officecfg/registry/data/org/openoffice/VCL.xcu`:3601 names `ipagothic`, which is installed, so we
+set that text in a full-width CJK face — space 500/1000 em against DejaVu Sans's 318. The reference
+embeds no IPAGothic at all: `fc-match "MS Gothic"` is DejaVu Sans, and LibreOffice reaches
+fontconfig's answer first — `FindFontFamily` tries the name, then a **twelve-entry** hard-coded
+metric map (`PhysicalFontCollection.cxx`:999), then the fontconfig pre-match hook
+(`:1142`), and only then the `SubstFonts` table. Our `Resolve` puts that table second.
+
+**The general reorder is refuted, not merely deferred.** Of the 304 chains, 36 land on a face that
+is neither DejaVu, Liberation nor Carlito, and **28 of them are symbol families landing on
+OpenSymbol** — the resolution round 37 depends on. LibreOffice keeps those because
+`FcPreMatchSubstitution::FindFontSubstitute` returns false immediately for a symbol-encoded request
+(`vcl/unx/generic/font/fontsubst.cxx`:100-105), so they never reach fontconfig. Reordering without
+that distinction would send Wingdings to DejaVu Sans. The rest of the disagreement is small:
+comparing every uninstalled family the DOCX corpus declares against `fc-match`, the only chains that
+differ are `msgothic`/`mspgothic`/`gothic*` → IPAGothic and `georgia` → Bitstream Charter. Measured
+reach over the rendered corpus: **one document**, which is below this project's bar for a fix.
+
+The same document is in the `box` cluster, so whoever takes that cluster inherits this.
+
+### Still open, unchanged
+
+46 mismatches. The `box` cluster (8, all OOXML) is the largest real one the sweep names, and
+`AC-150-5370-10G-updated-201604.docx` 686/697 with `150-5370-10H.docx` 711/721 — one document in
+two revisions — sit inside it. `A_320.doc` 141/150 (printer device) and both reader-split clusters
+are untouched. `UG.CAO.00133`'s section break is now identified as `box`-dominant on its page 1.
+The two round-38 leads — the duplicate `sprmCSymbol` slot and `absrc-pac-01-info-note-en.doc`
+page 1 — are untouched; the second is `one-sided` on page 1, which this round's control says to
+treat with suspicion.
+
+One new small residue: `手机免提系统TSB.doc` now differs from the reference's font set by exactly
+one face, `LiberationSerif-Bold`, which we draw and it does not.
+
+Test counts on the final tree: Core 284, Containers 109, Text **271** (262 + `FontconfigPreferenceTests`),
+Vector 293, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 725, Spreadsheets 621,
+Presentations 573, Fidelity 550 — 0 skipped, 0 warnings.
