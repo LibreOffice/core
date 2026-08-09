@@ -11835,3 +11835,26 @@ Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, R
 (119 + two JPEG colour-space tests), Markup 259, OpenDocument 125, WordProcessing **746** (734 +
 five `NestedTableFillerTests` + seven `DocShapeGroupTests`), Spreadsheets 621, Presentations 576,
 Fidelity 550 — **0 skipped, 0 warnings**.
+
+### Merge note, words round 44 — and the cross-track sweep it owed
+
+Counts on the merged tree: Rendering **121** (119 + the JPEG colour-space tests), WordProcessing
+**746**, everything else at its known-good count, Fidelity 550, 0 skipped, 0 warnings.
+
+**A verdict moved: words 154 → 155 of 200**, page error 78 → 77, exact pages 164 → 165.
+
+`PdfImages` is in `Paperless.Rendering`, a **shared layer**, so the parent ran the cross-track check
+the routine requires rather than accepting the round's own reasoning that no gate input could move.
+The census names the affected documents exactly — words 5, slides 7, sheets **0** — and all seven
+slides decks were rendered at `7f7c5fbb7` and at the merge, with `SOURCE_DATE_EPOCH` pinned:
+
+    pages   words  unembedded          all seven identical on both sides
+    14/18/18/13/29/12/28   462/1373/816/467/845/617/1148   0 everywhere
+
+All seven renderings changed and **not one gate column did**, which is what a colour-space
+declaration inside an image XObject should do. No slides verdict can move; sheets was not reachable
+at all.
+
+**Byte comparison does not measure reach on this project, even with `SOURCE_DATE_EPOCH` pinned** —
+all 200 words renderings differ on `/CreationDate`, and so do all seven of these. Normalise the date
+out before quoting a reach; round 44's own words figure is 14 of 200 *after* normalising.
