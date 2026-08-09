@@ -405,4 +405,45 @@ public class DrawingChartPlotLabelTests
 
         DrawingChartPlot.Read(only)!.TextFamily.ShouldBe("Arial");
     }
+
+    /// <summary>
+    /// A title naming its own face is carried separately, and only when it names one.
+    /// </summary>
+    /// <remarks>
+    /// The other half of the file above. Once the chart space decides the chart's face the
+    /// title's statement has nowhere to go, and on <c>171128IPAP.pptx</c> page 38 that left
+    /// exactly two records wrong out of forty-six — the title's, which the reference draws in
+    /// Arial while everything around it is Carlito. Census over the corpus's OOXML half: 2 of
+    /// 61 chart parts on slides, and none at all on sheets or words, so no other track moves.
+    /// </remarks>
+    [Fact]
+    public void ATitleNamingItsOwnFaceIsCarriedApartFromTheCharts()
+    {
+        string title = """
+            <c:title><c:txPr><a:bodyPr/><a:p><a:pPr>
+              <a:defRPr><a:latin typeface="Arial"/></a:defRPr>
+            </a:pPr></a:p></c:txPr></c:title>
+            """;
+        string global = """
+            <c:txPr><a:bodyPr/><a:p><a:pPr>
+              <a:defRPr><a:latin typeface="Calibri"/></a:defRPr>
+            </a:pPr></a:p></c:txPr>
+            """;
+
+        ChartPlot both = DrawingChartPlot.Read(XElement.Parse(
+            $"<c:chartSpace xmlns:c=\"{C}\" xmlns:a=\"{A}\">"
+            + $"<c:chart>{title}{Bar()}</c:chart>{global}</c:chartSpace>"))!;
+
+        both.TextFamily.ShouldBe("Calibri");
+        both.TitleFamily.ShouldBe("Arial");
+
+        // A title that says nothing leaves the field null, so the chart's own family reaches it
+        // through the stamping pass exactly as before this existed.
+        ChartPlot quiet = DrawingChartPlot.Read(XElement.Parse(
+            $"<c:chartSpace xmlns:c=\"{C}\" xmlns:a=\"{A}\">"
+            + $"<c:chart>{Bar()}</c:chart>{global}</c:chartSpace>"))!;
+
+        quiet.TextFamily.ShouldBe("Calibri");
+        quiet.TitleFamily.ShouldBeNull();
+    }
 }

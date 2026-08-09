@@ -685,6 +685,29 @@ public sealed partial record ChartPlot
     /// </remarks>
     public string? TextFamily { get; init; }
 
+    /// <summary>
+    /// The face the chart's <em>main title</em> is set in, when it names one of its own, or null
+    /// to take <see cref="TextFamily"/> like everything else.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The one element of a chart that routinely disagrees with its chart space.</strong>
+    /// <see cref="TextFamily"/> is the chart space's statement and reaches every axis label,
+    /// legend entry and data label, which is right: they are all "the chart's text". A title is
+    /// authored separately and OOXML lets it say so — <c>171128IPAP.pptx</c>'s <c>chart7.xml</c>
+    /// states <c>Arial</c> on <c>c:title/c:txPr</c> and <c>Calibri</c> on
+    /// <c>c:chartSpace/c:txPr</c>, and LibreOffice draws its title in Arial and everything else
+    /// in Carlito.
+    /// </para>
+    /// <para>
+    /// Nullable, and null for the ODF and BIFF readers, so neither the sheets nor the words track
+    /// can move on it: those two formats state a chart's faces in one place and there is nothing
+    /// yet measured to say they do otherwise. The same reason
+    /// <see cref="DataLabelSize"/> is nullable.
+    /// </para>
+    /// </remarks>
+    public string? TitleFamily { get; init; }
+
     /// <summary>The plot area's fill — DrawingML's wall — or null.</summary>
     public Colour? PlotBackground { get; init; }
 
