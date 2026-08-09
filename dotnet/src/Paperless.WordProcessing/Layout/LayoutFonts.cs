@@ -39,6 +39,16 @@ public sealed class LayoutFonts
     /// </remarks>
     public MetricGrid? Metrics { get; init; }
 
+    /// <summary>
+    /// Where a paragraph looks for a face when its own has no glyph for a character.
+    /// </summary>
+    /// <remarks>
+    /// The resolver that chose the face in the first place, which is what
+    /// <see cref="IGlyphFallbackResolver"/> asks for: a fallback decided by a second index could name
+    /// a face this one would not have chosen, and the face decides the advance.
+    /// </remarks>
+    public IGlyphFallbackResolver Fallback => _fonts;
+
     /// <summary>The substitutions made so far.</summary>
     /// <remarks>
     /// Worth surfacing rather than swallowing: a substitution that is not metric-compatible changes every

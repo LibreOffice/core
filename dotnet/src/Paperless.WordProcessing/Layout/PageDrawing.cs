@@ -1095,19 +1095,21 @@ public static class PageDrawing
     {
         if (!paragraph.HasRuns)
         {
-            return AroundObjects(
+            return ByFace(
                 paragraph,
-                [
-                    new PageRun(
-                        start,
-                        end - start,
-                        paragraph.Face,
-                        paragraph.EmSize,
-                        paragraph.Font,
-                        paragraph.Colour,
-                        paragraph.Shaping,
-                        Tracking: paragraph.Tracking),
-                ]);
+                AroundObjects(
+                    paragraph,
+                    [
+                        new PageRun(
+                            start,
+                            end - start,
+                            paragraph.Face,
+                            paragraph.EmSize,
+                            paragraph.Font,
+                            paragraph.Colour,
+                            paragraph.Shaping,
+                            Tracking: paragraph.Tracking),
+                    ]));
         }
 
         List<PageRun> clipped = [];
@@ -1120,7 +1122,64 @@ public static class PageDrawing
             clipped.Add(run with { Start = from, Length = to - from });
         }
 
-        return AroundObjects(paragraph, clipped);
+        return ByFace(paragraph, AroundObjects(paragraph, clipped));
+    }
+
+    /// <summary>
+    /// The runs cut again wherever the run's own face has no glyph, as the measurement cut them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The same <see cref="FontItemiser.Split"/> <see cref="MeasuredParagraph"/> runs, and it has to be
+    /// the same one for the same reason the object cut does: the line's break was decided against the
+    /// fallback face's advances, so drawing the stretch in the primary face would put the glyphs at
+    /// widths the layout never measured — on top of drawing the wrong glyphs.
+    /// </para>
+    /// <para>
+    /// A paragraph whose faces cover all of its text comes back through here untouched. The itemiser
+    /// returns one non-fallback piece per run in that case, which is checked for explicitly rather
+    /// than rebuilt: a run split at a boundary it does not need loses its shaping context and
+    /// measures very slightly wide, which is enough to move a line break.
+    /// </para>
+    /// <para>
+    /// A fallback piece drops the run's <see cref="PageRun.Font"/>, because that reference names the
+    /// face the reader resolved and this piece is drawn in a different one. The caller derives a
+    /// reference from the face itself when there is none, which is what puts the right font program
+    /// in the PDF.
+    /// </para>
+    /// </remarks>
+    private static List<PageRun> ByFace(PageParagraph paragraph, List<PageRun> runs)
+    {
+        if (paragraph.Fallback is not { } fallback) return runs;
+
+        List<PageRun> split = [];
+
+        foreach (PageRun run in runs)
+        {
+            List<FaceRun> faces = FontItemiser.Split(
+                paragraph.Text, run.Start, run.Length, run.Face, fallback);
+
+            if (faces.Count == 1 && !faces[0].IsFallback)
+            {
+                split.Add(run);
+                continue;
+            }
+
+            foreach (FaceRun face in faces)
+            {
+                split.Add(face.IsFallback
+                    ? run with
+                    {
+                        Start = face.Start,
+                        Length = face.Length,
+                        Face = face.Face,
+                        Font = null,
+                    }
+                    : run with { Start = face.Start, Length = face.Length });
+            }
+        }
+
+        return split;
     }
 
     /// <summary>

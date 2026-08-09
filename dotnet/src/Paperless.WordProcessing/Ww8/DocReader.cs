@@ -632,6 +632,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Shaping = new Text.Shaping.ShapingOptions(
                     Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning),
                 Metrics = fonts.Metrics,
+                Fallback = fonts.Fallback,
 
                 // #i3952#, which the WW8 importer turns on for every DOC without asking the file
                 // (`ww8par.cxx`:2041). See PageParagraph.BlanksAreTransparentToHeight.

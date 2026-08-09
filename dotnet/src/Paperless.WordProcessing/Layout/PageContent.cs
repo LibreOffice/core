@@ -232,6 +232,26 @@ public sealed record PageParagraph : PageBlock
     public MetricGrid? Metrics { get; init; }
 
     /// <summary>
+    /// Where to look for a face when the paragraph's own has no glyph for a character, or null to not look.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Beside <see cref="Metrics"/> and set by the same readers for the same reason: a header, a table
+    /// cell and a text box all need the same answer and all reach the layouter by different routes.
+    /// </para>
+    /// <para>
+    /// Without it a character the run's face cannot draw is shaped to <c>.notdef</c> and drawn as that
+    /// face's missing-glyph box, at that face's <c>.notdef</c> width — so the text is invisible
+    /// <em>and</em> the line breaks in the wrong place. Measured on <c>手机免提系统TSB.doc</c>, whose
+    /// every Chinese character came out a box while LibreOffice drew all of them from WenQuanYi Zen
+    /// Hei. The mechanism was complete on both sides of this property —
+    /// <see cref="FontItemiser"/> splits the run and <see cref="SystemFontResolver"/> answers the
+    /// query — and nothing in the tree ever connected them.
+    /// </para>
+    /// </remarks>
+    public IGlyphFallbackResolver? Fallback { get; init; }
+
+    /// <summary>
     /// True when a tab or a run of spaces must not make a line taller, which is what Word does.
     /// </summary>
     /// <remarks>
@@ -275,9 +295,16 @@ public sealed record PageParagraph : PageBlock
     /// nothing on the paragraph, which is how it had to be said before.
     /// </remarks>
     internal ItemisationOptions? Itemisation
-        => Format.IsRightToLeft
-            ? new ItemisationOptions { BaseDirection = BidiDirection.RightToLeft }
-            : null;
+        => Fallback is null && !Format.IsRightToLeft
+            ? null
+            : new ItemisationOptions
+            {
+                // BaseDirection rather than Format.IsRightToLeft, because a paragraph that says
+                // right-to-left only on its runs used to reach the same answer through the null
+                // branch's default and has to keep reaching it now the fallback opens this one.
+                BaseDirection = BaseDirection,
+                GlyphFallback = Fallback,
+            };
 
     /// <summary>
     /// The notes anchored in the paragraph's text, in order.

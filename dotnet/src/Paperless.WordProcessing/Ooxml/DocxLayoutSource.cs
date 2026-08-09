@@ -521,6 +521,7 @@ public sealed partial class DocxLayoutSource
             // DOCX imports with the setting on. See PageParagraph.BlanksAreTransparentToHeight.
             BlanksAreTransparentToHeight = true,
             Metrics = _metrics,
+            Fallback = _fonts,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(
