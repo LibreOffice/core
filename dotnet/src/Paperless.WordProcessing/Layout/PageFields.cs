@@ -163,6 +163,18 @@ public static class PageFields
                         if (field.Kind == kind) return true;
                     }
 
+                    // And the frames the paragraph anchors. A running head that puts its page number in a
+                    // *text box* rather than in a paragraph is common enough to be the ordinary case in
+                    // one house style: `UG.CAO.00133 … Language.docx` builds its whole footer out of a
+                    // `wpg` group of text boxes, and the `PAGE` field is inside one of them. Missing them
+                    // here is worse than missing them in the substitution, because this is also what
+                    // decides whether the running head may be cached across pages — so the footer was
+                    // laid out once and every page got page one's copy of it.
+                    foreach (PageFrame frame in paragraph.Frames)
+                    {
+                        if (Carries(frame.Blocks, kind)) return true;
+                    }
+
                     break;
 
                 case PageTable table:
@@ -219,6 +231,28 @@ public static class PageFields
     private static PageParagraph ResolveParagraph(
         PageParagraph paragraph, int pageNumber, NoteNumberFormat format, int totalPages)
     {
+        // The frames first, and separately: a paragraph that anchors a text box holding a page number
+        // usually holds no field of its own — the anchor is a single character standing for the frame —
+        // so a `spans.Count == 0` return would take the whole footer out before its text box was reached.
+        if (paragraph.Frames.Count > 0)
+        {
+            List<PageFrame>? framed = null;
+            for (int at = 0; at < paragraph.Frames.Count; at++)
+            {
+                PageFrame frame = paragraph.Frames[at];
+                if (frame.Blocks.Count == 0) continue;
+
+                IReadOnlyList<PageBlock> resolved =
+                    Resolve(frame.Blocks, pageNumber, format, totalPages);
+                if (ReferenceEquals(resolved, frame.Blocks)) continue;
+
+                framed ??= [.. paragraph.Frames];
+                framed[at] = frame with { Blocks = resolved };
+            }
+
+            if (framed is not null) paragraph = paragraph with { Frames = framed };
+        }
+
         List<PageFieldSpan> spans = [];
         foreach (PageFieldSpan field in paragraph.Fields)
         {

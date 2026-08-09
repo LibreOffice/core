@@ -435,14 +435,35 @@ internal sealed class FrameResolution
     /// </remarks>
     private static IEnumerable<PlacedFlow> FlowsOn(LaidOutPage page)
     {
-        if (page.Header is { } header) yield return header;
-        if (page.Footer is { } footer) yield return footer;
-        if (page.Notes is { } notes) yield return notes;
+        // A running head is very often a *table* — a logo in the first cell and the document's title
+        // and revision in the next — so a flow's own tables have to be walked as well as the body's.
+        // Walking only `page.Tables` reached every body cell and no furniture cell, which loses the
+        // logo of any document that lays its header out that way. Measured on
+        // `UG.CAO.00133 … Language.docx`, whose `word/header1.xml` is one two-column table holding a
+        // 542925 EMU `wp:inline` picture: the reference draws it on page 1 and on the three landscape
+        // pages that use `header6.xml`, and we drew it nowhere.
+        foreach (PlacedFlow furniture in Furniture(page))
+        {
+            yield return furniture;
+
+            foreach (PlacedTable table in furniture.Tables)
+            {
+                foreach (PlacedFlow flow in CellFlows(table, 0)) yield return flow;
+            }
+        }
 
         foreach (PlacedTable table in page.Tables)
         {
             foreach (PlacedFlow flow in CellFlows(table, 0)) yield return flow;
         }
+    }
+
+    /// <summary>The page's furniture flows: the header, the footer and the notes area.</summary>
+    private static IEnumerable<PlacedFlow> Furniture(LaidOutPage page)
+    {
+        if (page.Header is { } header) yield return header;
+        if (page.Footer is { } footer) yield return footer;
+        if (page.Notes is { } notes) yield return notes;
     }
 
     /// <summary>The flows of a table's cells, and of any table inside one of them.</summary>
