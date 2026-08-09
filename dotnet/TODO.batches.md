@@ -10902,3 +10902,29 @@ Markup 259, OpenDocument 125, WordProcessing 723, Spreadsheets 611, Presentation
 before, +3 from `SlideGradientPathTests`), Fidelity 550 — 0 skipped throughout. The change is one
 file in `Paperless.Presentations`, so no shared layer moved and the other two tracks are not owed
 a sweep.
+
+### The divergence table, re-run, and its control
+
+`probes/slides-r39/slides-divergence.tsv` replaces `probes/slides-divergence.tsv`, which predated
+all three of the words track's fixes to `first-divergence.py`. Regenerated from this round's
+after-sweep by `divergence-from-sweep.py`, which runs the shared `analyse()` over a sweep's PDFs
+instead of rendering the track twice more — the reason the tool had been skipped.
+
+Dominant kind, split by whether the document passes the gate:
+
+| dominant | matches (151) | fails (12) |
+|---|---:|---:|
+| `glyphs` | **66 (44%)** | 8 |
+| *(no divergent page)* | 28 | 1 |
+| `size` | **22 (15%)** | **0** |
+| `one-sided` / `box` / `face` | 12 / 10 / 9 | 1 / 1 / 1 |
+| `colour` / `width` | 3 / 1 | 0 / 0 |
+
+**`glyphs` is not a cluster** — 44% on documents with nothing wrong is the words track's `shows`
+refutation reproducing here, so the 74 rows it names are artefact. **`size` is**: it fires on 22
+matching documents and zero failing ones, and a drawn font size differing is a fact about the two
+PDFs rather than an inference from one, so the rate is the reach and the gate is simply blind to
+the class. The `.ppt` bias survives the tool's fixes at **14 of 51 (27%) against 8 of 112 (7%)**,
+smaller than the 37%/15% previously reported and in the direction the fixes predict — `box` is
+now split out of `size` and is dominant on 13 documents of its own. `010605Vul.ppt` and
+`undp_presentation_revised_17_may.ppt` carry the most ink in that group.

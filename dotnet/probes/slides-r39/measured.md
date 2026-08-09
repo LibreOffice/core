@@ -112,14 +112,6 @@ gigabyte freed: 550 passed, 0 failed, 0 skipped.
 Worth stating plainly because the natural reading of 296 failures is that the round broke the
 tree, and the disposition that follows from it is to revert.
 
-## Not run: the corpus divergence table
-
-`first-divergence.py`'s corpus table is stale by three fixes and is worth regenerating.
-`divergence-from-sweep.py` does it from a sweep's own PDFs instead of rendering the track twice
-more, and it got 26 of 163 in before dying on `OSError: [Errno 28] No space left on device`.
-The script is committed and correct; the machine is what was not available. Run it against any
-sweep's `ours` directory and the kept reference set.
-
 ## A note on the sweep that produced these
 
 Twenty-five documents came back `ref-failed` and one comparison came back empty because the
