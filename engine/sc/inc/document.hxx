@@ -664,8 +664,6 @@ private:
     size_t              mnMutationGuardFlags;
 
     bool mbConnectionXml = false;
-    bool mbCustomXml = false;
-    OUString aCustomXmlFragmentPath;
     bool mbXmlMapsXml = false;
     std::string sXmlMapsContent;
 
@@ -675,14 +673,6 @@ public:
 
     void setHasConnectionXml(bool bUse) { mbConnectionXml = bUse; }
     bool hasConnectionXml() { return mbConnectionXml; }
-
-    void setHasCustomXml(bool bUse, const OUString& sCustomXmlPath)
-    {
-        mbCustomXml = bUse;
-        aCustomXmlFragmentPath = sCustomXmlPath;
-    }
-    const OUString & getCustomXmlItems() { return aCustomXmlFragmentPath; }
-    bool hasCustomXml() { return mbCustomXml; }
 
     void setHasXmlMaps(bool bUse, const std::string& sContent)
     {

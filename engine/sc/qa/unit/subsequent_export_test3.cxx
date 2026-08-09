@@ -1035,6 +1035,15 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
     assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
                 u"itemProps1.xml");
 
+    // The customXml relationship must be written exactly once into workbook.xml.rels
+    // (the generic grab-bag path); the retired Calc-specific path used to duplicate it.
+    xmlDocUniquePtr pWbRelsDoc = parseExport(u"xl/_rels/workbook.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pWbRelsDoc);
+    assertXPath(pWbRelsDoc,
+                "/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/"
+                "officeDocument/2006/relationships/customXml']",
+                1);
+
     std::unique_ptr<SvStream> pStream
         = parseExportStream(maTempFile.GetURL(), u"ddp/ddpfile.xen"_ustr);
     CPPUNIT_ASSERT(pStream);

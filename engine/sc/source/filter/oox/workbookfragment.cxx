@@ -410,10 +410,8 @@ void WorkbookFragment::finalizeImport()
         getScDocument().setHasConnectionXml(true);
     }
 
-    // read the customXml substream
-    OUString aCustomXmlFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"customXml" );
-    if (!aCustomXmlFragmentPath.isEmpty())
-        getScDocument().setHasCustomXml(true, aCustomXmlFragmentPath);
+    // customXml parts round-trip generically via the InteropGrabBag
+    // (XmlFilterBase::import/exportCustomFragments); no Calc-specific handling.
 
     // read the xmlMaps substream (from xl/_rels/workbook.xml.rels)
     OUString aXmlMapsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"xmlMaps" );

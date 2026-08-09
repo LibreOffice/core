@@ -1356,17 +1356,10 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         rStrm.PopStream();
     }
 
-    if (rDoc.hasCustomXml())
-    {
-        // export customXml/item1.xml into xl/_rels/workbook.xml.rels
-        OUString sCustomXmlPath = OUString::Concat("../") + rDoc.getCustomXmlItems();
-
-        // FIXME: what if there are customXml/item2.xml, customXml/item3.xml etc?
-        // we need to save all customXml/item*.xml paths into ScDocument from XmlFilterBase::importCustomFragments
-        // then we should get them with rDoc here.
-        rStrm.addRelation(rStrm.GetCurrentStream()->getOutputStream(),
-                          oox::getRelationship(Relationship::CUSTOMXML), sCustomXmlPath);
-    }
+    // customXml parts (and their workbook.xml.rels relationships) are written by
+    // exportCustomFragments() above, from the InteropGrabBag -- covering all items,
+    // not just item1. The former Calc-specific path here duplicated that single
+    // relationship, so it has been retired.
 
     if (rDoc.hasXmlMaps())
     {
