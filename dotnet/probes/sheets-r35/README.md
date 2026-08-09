@@ -203,3 +203,27 @@ Three separate things, all on the BIFF cell-format side and none of them line br
 None of this is what the round set out to fix, and none of it is chased here. It is recorded
 because it is measured, on a document whose pagination is right, which is the cleanest place on
 this track to read a drawing defect.
+
+## Tests
+
+Every project run individually on the final tree, counts compared against the known-good at
+`5add4e1e7`:
+
+Core **284**, Containers **109**, Text **262** (was 255), Vector **291**, Rendering **119**,
+Markup **259**, OpenDocument **125**, WordProcessing **706**, Spreadsheets **605**,
+Presentations **571**, Fidelity **550**, **0 skipped** throughout.
+
+The seven new ones are `SolidusGlueTests`. Both legs of the rule were verified by reintroduction
+through `verify-test.sh`, which refuses to start on a dirty tree:
+
+| mutation | detected by |
+|---|---|
+| the glue's reach set to zero, i.e. plain UAX #14 | Text 3 of 262 |
+| the chop leg disarmed, keeping the solidus break | Text 1 of 262 |
+
+## What proves the sweeps measured the change
+
+The snapshot CLI's `Paperless.Text.dll` hashes differ between the two copies and the newer one
+matches the tree's, and the sweep moved `tk-syllabus-comparison-document-v5.xlsx` from 852 pages
+to 855 — the one document whose page count the change was predicted to move, and the only one it
+did.
