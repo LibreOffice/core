@@ -158,7 +158,22 @@ it cannot make a correct image incorrect. Measured on words: 3 documents gained 
 two DOCX carrying a CMYK JPEG stopped being passed through — `PES-Technical-Report-Template`'s
 cover picture goes from a washed-out ghost to the reference's crisp blue-and-green artwork.
 
-No slides or sheets sweep was run for it. The parent session owes one.
+**The change's ceiling is an exact census this time**, because the component count is a property
+of the image bytes rather than of anything that has to resolve, and it reads a zip container and an
+OLE2 container alike (`jpeg-component-census.py`):
+
+| track | documents carrying a 1- or 4-component JPEG | of |
+|---|---:|---:|
+| words | **5** | 200 |
+| slides | **7** | 163 |
+| sheets | **0** | 171 |
+
+Words is the check on the instrument: it says 5 and **exactly 5 words documents changed for this
+reason** in the sweep — three gaining `/DeviceGray`, two ceasing to be passed through. So the
+slides figure of 7 is a reach and not merely a ceiling, and sheets cannot be touched at all.
+
+No slides sweep was run for it. The parent session owes one; 7 documents is what it should expect
+to move, and none of them can move a page count or a word count.
 
 ## `150_5335_5a.doc`, where the word gate reads a regression
 
