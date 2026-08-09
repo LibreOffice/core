@@ -154,3 +154,52 @@ line break happens to land on one.
   "some empty cells missing their shading" is **2 of 227 pages** by the image diff, and on both of
   them the band the reference shades and we do not sits directly above a band we shade and it does
   not. That is a row displaced within the page, not a fill that was never drawn.
+
+## The residue ranked, with `first-divergence.py` — never run on this track before
+
+Run on the seventeen documents the final sweep still fails, against the sweep's own PDFs rather
+than by re-rendering, so it cost minutes rather than an hour. The brief's caution about the
+`shows` column is right and is why the table below reads the `size` column instead: a show count
+is operator granularity and moves no pixels.
+
+| dominant kind | documents |
+|---|---:|
+| `size` | 9 |
+| `shows` (artefact) | 3 |
+| `one-sided` | 2 |
+| `glyphs` | 1 |
+| none — every common page agrees | 2 |
+
+**`size` is the single largest signature in what is left**, and two of the nine are the
+whole-track outliers by page error (`orbus_togaf_tool_csq.xls` 33/75,
+`ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` 154/175). That is a lead for a following
+round and it is *not* a claim that the sizes are the cause: on a document whose pagination is
+already wrong the operator diff is comparing different content in the same place.
+
+### What the instrument found on a page-exact document, which is a cleaner reading
+
+`7-memento-2015-transports-aeriens-b.xls` is 190/191 pages and its page 2 is 2.30% `|ink|`. The
+operator census of that one page:
+
+| | ours | reference |
+|---|---:|---:|
+| `#0066CC` strokes | 6 | **51** |
+| `#003366` strokes | **32** | 0 |
+| `#FFFFFF` fills | **69** | 12 |
+| `#99CCFF` fills | **32** | 4 |
+| `#FF99CC` fills | 0 | **3** |
+
+Three separate things, all on the BIFF cell-format side and none of them line breaking:
+
+- **A border colour off by a palette entry.** `#0066CC` is palette index 30 and `#003366` is
+  index 56. The workbook carries a custom `PALETTE` record — read out of the file at offset
+  22962, 56 entries — and **both of those entries hold their default values in it**, so the
+  palette is not the difference and the index we resolve is.
+- **We fill every cell white.** 69 white fills against 12 says we emit a background for cells
+  that state none, where Calc draws only the ones with a pattern. It moves no ink on white paper
+  and it is 57 spurious operators on one page.
+- **A fill colour resolved to the wrong entry too**, indices 44 and 45 being adjacent.
+
+None of this is what the round set out to fix, and none of it is chased here. It is recorded
+because it is measured, on a document whose pagination is right, which is the cleanest place on
+this track to read a drawing defect.
