@@ -8359,3 +8359,54 @@ the argument for running that even when nothing looks wrong.
    documents, unchanged from last round, design still recorded in
    `Paperless.Presentations/TODO.md`.
 3. **The legend row pitch's rate**, still the open half of the 96 dpi grid.
+
+## Round thirty — sheets: an `.xls` cell's margin is twice everything else's
+
+Base `946b3defc`, verified before measuring. Probe data, both sweeps and the mutation run in
+`dotnet/probes/sheets-r30/`.
+
+| sheets, 171 documents | base `946b3defc` | after |
+|---|---:|---:|
+| word gate | 146 | **147** |
+| abs page error | 90 | 90 |
+| exact page counts | 154 | 154 |
+| abs word error | 42859 | **42322** |
+
+`sheets/batch-016` goes **4/9 → 5/9**:
+`underlying-holdings-…-state-street-emu-esg-screened-index-equity-fund.xls` matches at 4988/4991
+words against 4743 before. Every other batch holds its count; 001–009 are still 89/89 and no page
+count moves anywhere on the track.
+
+The baseline reproduces the brief in every figure and every per-batch figure except the word error,
+which is 42859 here against a briefed 42848 — one document, `Keywords_Mapping_Graphs_and_Charts.xlsx`,
+whose verdict is unchanged. **`ECA Sinters.xls` converted on the first pass in both sweeps**, after
+three rounds of needing to be spliced.
+
+### `ATTR_MARGIN` is a cell attribute and was a shared constant
+
+`XclImpXF::CreatePattern` ends by putting `SvxMarginItem(40, 40, 40, 40, ATTR_MARGIN)` on **every
+pattern the BIFF filter builds**, under the comment "Excel's cell margins are different from Calc's
+default margins" (`sc/source/filter/excel/xistyle.cxx:1349-1351`). It is unconditional and it is the
+only line in all of `sc/source/filter` that touches the item, so an `.xls` has twice the margin of
+every other format and `Paperless` had one constant for all three readers.
+
+**It had been read as a page-origin offset**, and that reading is written into `pdf-ops.py`'s own
+tolerance comment. A page origin moves every run the same way; a margin moves left-aligned text
+right and right-aligned text left, and the corpus document above does the second. The
+`sheet-cell-text` fixture triple then settles it without the corpus: LibreOffice puts the
+left-aligned A1 at 58.68 pt in the `.xls` and 57.69 in the `.xlsx` and `.fods`.
+
+The same `nTotalMargin` decides how much of a clipped string survives, which is the half that moves
+a word count: a 49-character label in a 49.75 pt column kept `State Stree` here and `State Stre`
+there, on every row of five pages.
+
+### Reach, and why no page moved
+
+The gate registers a difference on **35 of 171 rows**, 34 of them `.xls`. A byte-level reach run was
+stopped after 35 documents under load and its partial is unambiguous: **15 of 15 `.xls` differ and
+20 of 20 `.xlsx` are identical**, so the reach is the track's 62 `.xls` and nothing else.
+
+No page count moves, and that is structural rather than lucky: `RowHeightsAreManual` is set outright
+for BIFF8, so no `.xls` row height is ever recomputed and the margin cannot reach the quantity
+pagination turns on. Two of the eight reintroduced defects were **not** detected by any test and the
+probe README says which and why.

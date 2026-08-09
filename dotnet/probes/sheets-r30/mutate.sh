@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # The reintroduced bugs the cell-margin tests were verified against.
+#
+# Run from the worktree root with a clean dotnet/. The first mutation was run separately
+# from the other seven, because creating this directory made the tree dirty and
+# verify-test.sh correctly refused; mutate.txt beside this file is the two runs joined.
 set -uo pipefail
 V=/home/user/libreoffice-core/.claude/skills/corpus-batches/scripts/verify-test.sh
 run() {

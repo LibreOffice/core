@@ -214,6 +214,103 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## The thirtieth sweep: an `.xls` cell's margin is twice everything else's
+
+Swept whole at `946b3defc` before anything was changed, 171 documents, two workers, 171 rows, no
+path twice and no `ref-failed`: **146 of 171, total absolute page error 90, 154 exact page counts**,
+batches 001–009 at 89/89. That reproduces the brief and round twenty-seven's closing figures in
+every number and in every per-batch figure. The one discrepancy is the word error — 42859 here
+against a briefed 42848 — and it is one document, `Keywords_Mapping_Graphs_and_Charts.xlsx`, which
+reads 4635 against the 4647 round twenty-six recorded; its verdict is `words` under all three
+readings.
+
+**`ECA Sinters.xls` did not need splicing.** Three rounds running it came back `ref-failed` under
+load and had to be re-run alone; it converted on the first pass in both sweeps here.
+
+### The rule
+
+`ATTR_MARGIN` is a **cell attribute**, and `Paperless` had it as one constant shared by all three
+readers. Its pool default really is 20 twips on every side (`SvxMarginItem`'s default constructor,
+`svx/source/items/algitem.cxx:123-132`, installed by `ScDocumentPool` at `docpool.cxx:145`) — and
+`XclImpXF::CreatePattern` ends by overriding it on **every pattern the BIFF filter builds**:
+
+```cpp
+// Excel's cell margins are different from Calc's default margins.
+SvxMarginItem aItem(40, 40, 40, 40, ATTR_MARGIN);
+ScfTools::PutItem(rItemSet, aItem, bSkipPoolDefs);
+                          sc/source/filter/excel/xistyle.cxx:1349-1351
+```
+
+Unconditional, cell XFs and style XFs alike, and **the only line in all of `sc/source/filter` that
+touches the item** — so SpreadsheetML, XLSB and ODF keep the 20 and only an `.xls` gets 40.
+`SheetCellFormat.Margin` now carries it, and the four places Calc reads the item read the cell's own
+value: where the text is placed, how much of a clipped string survives, the width a wrapping cell
+breaks at and the height a row asks for, and how far a long string reaches when it widens the print
+area.
+
+### It had been read as a page-origin offset for several rounds
+
+The difference is in every `.xls` comparison this project has ever made, and it is written down as
+a tolerance in `pdf-ops.py`: *"every show sits about 1 pt apart (51.39 against 52.38, 743.75 against
+742.73) because the two put their page origin in slightly different places"*. Those are
+`underlying-holdings-…-state-street-emu-esg-screened-index-equity-fund.xls`'s own numbers and the
+sentence is wrong.
+
+**A page origin moves every run the same way; a margin moves left-aligned text right and
+right-aligned text left.** On that document's page 6 the reference draws its left-aligned `Fx` 0.99
+pt to the *right* of ours and its right-aligned `31895` 0.96 pt to the *left*, which no origin can
+do and 20 twips a side does exactly. The `sheet-cell-text` fixture triple then settles it without
+the corpus: LibreOffice's own PDFs put the left-aligned `Lft` of A1 at **58.68 pt** in the `.xls`
+and **57.69** in the `.xlsx` and `.fods`, with the baselines the same 0.99 pt apart the other way
+because the cells are bottom-aligned.
+
+### The half that moves a number: how much of a clipped string survives
+
+The same `nTotalMargin` reaches `ScOutputData::GetOutputArea`, so the room a cell has is the column
+less *both* margins — and that room is the numerator of the ratio the shortening bisects on
+(`fVisibleRatio * nTextLen + 1`, `output2.cxx:2216-2227`). Doubling the margins takes about four per
+cent off the ratio, which on a cell near a character boundary is one glyph. On the document above,
+whose 49.75 pt column holds the same 49-character string on every row, we kept `State Stree` and the
+reference keeps `State Stre`, on every row of its first five pages: **4743 extractable words against
+4991, and 4988 now.**
+
+The forensic step worth keeping: the visible-to-total ratio implied by the reference's glyph counts
+is 0.948–0.962 of ours across nine independent cells of one page — a single scalar, which *two*
+hypotheses fit (a 4% wider text measurement or a 4% narrower cell). The sign of the right-aligned
+runs is the observation that separates them, and nothing else on that page does.
+
+### Reach, and what deliberately did not move
+
+The gate registers a difference on **35 of the 171 rows**, 34 of them `.xls`; the one `.xlsx` is
+`PBN Matrix NAAs (V01).xlsx`, whose *reference* count moved by one. A byte-level reach run was
+stopped after 35 documents at a load average above 17 and its partial is unambiguous: **15 of 15
+`.xls` differ byte for byte and 20 of 20 `.xlsx` are identical**, so the reach is the track's 62
+`.xls` and nothing else.
+
+**No page count moves anywhere** — page error 90 and 154 exact on both sides — and that has a
+mechanism rather than being luck. `RowHeightsAreManual` is set outright for BIFF8, so no `.xls` row
+height is ever recomputed and the margin cannot reach the one quantity pagination turns on. Its
+other three consumers move ink and words, not paper.
+
+| | matches | abs page error | exact page counts | abs word error |
+|---|---|---|---|---|
+| base | 146/171 | 90 | 154 | 42859 |
+| after | **147/171** | 90 | 154 | **42322** |
+
+`batch-016` goes 4/9 → **5/9**. Four documents move by twenty words or more and three go towards the
+reference: `underlying-holdings…` 4743 → **4988 of 4991** (the round's match),
+`laufende-nip-vorhaben-hyland.xls` 6514 → **6579 of 6579**, `fy2011-aip-grants.xls` 54933 → 54755 of
+54488, and `fy2010-aip-grants.xls` 63775 → 63113 of 63452 — the last being 323 over before and 339
+under now, which is 16 worse in absolute and still a match.
+
+### One observation left as an observation
+
+`SIL_TDB648.xlsx` (89 pages against 88) draws its "General Info" sheet's long overflowing string in
+full on both of its column bands, where the reference draws the tail cut mid-word on the second —
+`nway Change Information…` against our `Airport Runway Change Information`. That is the page-edge
+clip this file already records as a mechanism elsewhere, and it is *not* where the extra page is:
+aligning the two page sequences by their text puts the surplus much later. Not diagnosed.
+
 ## What the tenth sheets sweep found: a paragraph is not one size, and a note is not on its cell
 
 Swept whole at `5ec407cf3` before anything was changed: **127 of 171**, page error 117, 142 exact

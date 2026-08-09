@@ -1,0 +1,172 @@
+==================================================================
+MUTATION: the BIFF filter's 40 twips reduced to the pool's 20
+verify-test: Paperless.Spreadsheets at c3f8ca30c
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/MsBinary/XlsCellFormats.cs
+verify-test: restoring c3f8ca30c
+
+  Failed!  - Failed:     3, Passed:   570, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.ABiffCellsTextStartsTwoPointsInsideItsColumn
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.AnIndentIsMeasuredOnTopOfTheCellsOwnMargin
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.OnlyTheBiffReaderStatesExcelsMargin(name:
+==================================================================
+MUTATION: the placement reads the constant instead of the cell's margin
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the BIFF reader never states a margin on its formats
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the sheet's fallback format keeps the pool's margin
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the row-height arithmetic pins the margin at Excel's 40
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the wrapped-cell margin pixels pinned at Excel's two
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the wrapping paper's margin pinned at the pool default
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the print-area extension reads the pool default
+verify-test: refusing to run — dotnet/ has uncommitted changes.
+
+?? dotnet/probes/sheets-r30/
+
+Commit first. The restore step discards the working tree, so an uncommitted fix
+in a mutated file would be lost — which has happened twice on this project.
+A wip: commit is enough; squash it later.
+==================================================================
+MUTATION: the placement reads the constant instead of the cell's margin
+verify-test: Paperless.Spreadsheets at 0a8878af2
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs
+verify-test: restoring 0a8878af2
+
+  Failed!  - Failed:     2, Passed:   571, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.ABiffCellsTextStartsTwoPointsInsideItsColumn
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.AnIndentIsMeasuredOnTopOfTheCellsOwnMargin
+==================================================================
+MUTATION: the BIFF reader never states a margin on its formats
+verify-test: Paperless.Spreadsheets at 0a8878af2
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/MsBinary/XlsCellFormats.cs
+verify-test: restoring 0a8878af2
+
+  Failed!  - Failed:     3, Passed:   570, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.ABiffCellsTextStartsTwoPointsInsideItsColumn
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.AnIndentIsMeasuredOnTopOfTheCellsOwnMargin
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.OnlyTheBiffReaderStatesExcelsMargin(name:
+==================================================================
+MUTATION: the sheet's fallback format keeps the pool's margin
+verify-test: Paperless.Spreadsheets at 0a8878af2
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+verify-test: restoring 0a8878af2
+
+  Failed!  - Failed:     1, Passed:   572, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetCellMarginTests.OnlyTheBiffReaderStatesExcelsMargin(name:
+==================================================================
+MUTATION: the row-height arithmetic pins the margin at Excel's 40
+verify-test: restoring 0a8878af2
+
+  Failed!  - Failed:    31, Passed:   542, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetOptimalRowHeightTests.AHintedHeightIsRederivedFromTheFontSize
+    Failed Paperless.Spreadsheets.Tests.SheetRotatedRowHeightTests.RowsAreTheReferenceHeights(sheet:
+    Failed Paperless.Spreadsheets.Tests.SheetRowHeightDeviceTests.ARowIsBrokenAtTheWidthTheMeasuringDeviceHas(sheet:
+    Failed Paperless.Spreadsheets.Tests.SheetRowHeightDeviceTests.TheNarrowerSheetOfEachPairWrapsAndTheWiderOneDoesNot(narrow:
+    Failed Paperless.Spreadsheets.Tests.SheetRowHeightGridTests.AWorkbookNobodyMicrosoftWroteKeepsItsStatedHeights
+    Failed Paperless.Spreadsheets.Tests.SheetRowHeightGridTests.TheSheetDefaultIsSnappedDownAndBecomesTheFloor
+    Failed Paperless.Spreadsheets.Tests.SheetWrappedRowHeightTests.AWrappedRowIsAsTallAsItsLines(row:
+==================================================================
+MUTATION: the wrapped-cell margin pixels pinned at Excel's two
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/Layout/SheetOptimalRowHeights.cs
+verify-test: restoring 0a8878af2
+
+  Failed!  - Failed:    70, Passed:   503, Skipped:     0, Total:   573, Du
+
+  the mutation was DETECTED by:
+    Failed Paperless.Spreadsheets.Tests.SheetRichRowHeightTests.ARichRowIsAsTallAsItsTallestPortionPerLine(row:
+    Failed Paperless.Spreadsheets.Tests.SheetRotatedRowHeightTests.RowsAreTheReferenceHeights(sheet:
+    Failed Paperless.Spreadsheets.Tests.SheetRowHeightDeviceTests.ARowIsBrokenAtTheWidthTheMeasuringDeviceHas(sheet:
+    Failed Paperless.Spreadsheets.Tests.SheetWrappedRowHeightTests.AWrappedRowIsAsTallAsItsLines(row:
+==================================================================
+MUTATION: the wrapping paper's margin pinned at the pool default
+verify-test: Paperless.Spreadsheets at 0a8878af2
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/Layout/SheetOptimalRowHeights.cs
+verify-test: restoring 0a8878af2
+
+  Passed!  - Failed:     0, Passed:   573, Skipped:     0, Total:   573, Du
+
+  the mutation was NOT detected by any test in Paperless.Spreadsheets.
+  Either the test is a drift guard rather than a detector — label it as one and say so —
+  or the mutation is an equivalent formulation rather than a defect. Those are different
+  findings and both are worth reporting; do not report one as the other.
+==================================================================
+MUTATION: the print-area extension reads the pool default
+verify-test: Paperless.Spreadsheets at 0a8878af2
+verify-test: applying mutation
+verify-test: files touched by the mutation:
+   M dotnet/src/Paperless.Spreadsheets/Layout/SheetTextOverflow.cs
+verify-test: restoring 0a8878af2
+
+  Passed!  - Failed:     0, Passed:   573, Skipped:     0, Total:   573, Du
+
+  the mutation was NOT detected by any test in Paperless.Spreadsheets.
+  Either the test is a drift guard rather than a detector — label it as one and say so —
+  or the mutation is an equivalent formulation rather than a defect. Those are different
+  findings and both are worth reporting; do not report one as the other.

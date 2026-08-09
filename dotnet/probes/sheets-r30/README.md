@@ -131,7 +131,36 @@ The last is the honest cost: it was 323 words over and is now 339 under, so its 
 `SheetCellMarginTests`, 7 cases on the `sheet-cell-text` fixture triple. Every asserted coordinate
 is LibreOffice 24.2.7.2's own, read off its PDFs of the three files.
 
-MUTATION_TABLE_PLACEHOLDER
+| mutation | cases that fail |
+|---|---|
+| the BIFF filter's 40 twips reduced to the pool's 20 | 3 |
+| the placement reads the constant instead of the cell's margin | 2 |
+| the BIFF reader never states a margin on its formats | 3 |
+| the sheet's fallback format keeps the pool's margin | 1 |
+| the row-height arithmetic pins the margin at Excel's 40 | 7 |
+| the wrapped-cell margin pixels pinned at Excel's two | 4 |
+| the wrapping paper's margin pinned at the pool default | **0** |
+| the print-area extension reads the pool default | **0** |
+
+The two rows at zero are reported as they came out rather than argued away, and they are not the
+same kind of gap.
+
+**The wrapping paper's margin cannot be discriminated by anything in the tree, and the reason is
+structural.** `RowHeightsAreManual` is set outright for BIFF8, so no `.xls` row height is ever
+recomputed; every document that *does* reach the recomputation is a format whose margin is the
+pool's 20, which is exactly what the mutation pins it to. It is an equivalent formulation on
+everything reachable rather than an untested behaviour — which is also why the two row-height
+mutations above it *are* detected: pinning them at **Excel's** value changes what a `.fods` and an
+`.xlsx` compute, and seven and four existing cases say so. The three sites are kept as a faithful
+read of `lcl_GetAttribHeight` rather than reverted to a constant that would be wrong for the BIFF5
+case the class already models.
+
+**The print-area extension is genuinely reachable and simply not discriminated.** A 2 pt change in
+the width a string needs only matters when it crosses a whole column boundary, and no fixture puts
+a string that close to one. Unmeasured on the corpus: the whole-track sweep ran with the correct
+code and no run was made with the constant, so whether any of the 62 `.xls` documents changes a
+page over it is an open question rather than a settled no.
+
 
 ## Test counts
 
