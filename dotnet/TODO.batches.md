@@ -8772,3 +8772,39 @@ every bordered cell's line breaking in the corpus, so it needs its own sweep.
   guessed, with a reproducible probe and a refuted rule.
 - **`chg12`'s under-pagination near pages 9–10** — inherited, still unmeasured.
 - **The even page with no even story** (3 documents) and **unequal column widths** — untouched.
+
+### The cell's border width, measured and not shipped — the strongest open lead on this track
+
+The candidate above was implemented and swept whole, because a candidate with a C++ citation and a
+plausible size is worth a sweep rather than a paragraph. `TableLayouter` now had
+`inner = width − padding.Horizontal − (Borders.Left.Width + Borders.Right.Width)`, with the content
+rectangle moved right by the left border to match. Against the same reference PDFs, with our own
+renderer verified byte-deterministic under a pinned clock:
+
+| | matches | abs page error | exact page counts | word error | under-draw | over-draw |
+|---|---:|---:|---:|---:|---:|---:|
+| `06bede896` | **154** | 76 | **164** | **6694** | 2783 | 3911 |
+| with the border charged | 153 | **73** | 162 | 6789 | **2611** | 4178 |
+
+**119 of 200 renderings changed** — much the largest reach any words change has had — and the trade
+is real rather than noise. Two documents landed *exactly*: `A_320.doc` **141/150 → 150/150, now a
+full match**, and `info-bulletin-601.doc` 5/6 → 6/6. Three left match, every one by gaining a page:
+`part-147_approval list_20230119.docx` 2 → 3, `Agile_Arc_SysDes.docx` 20 → 21,
+`ESPN-R - MCF - RA - Ed1.docx` 59 → 60. Under-draw fell by 172 words and over-draw rose by 267,
+which is the signature of a narrowing that is right in direction and too large in size.
+
+It was **not** shipped, for one reason that outweighs the page-error gain: it does not do the thing
+it was derived from. On the line it was meant to explain — `students that upholders scholarship
+into the industry.` — the reference wraps `industry.` and we do not, and with the border charged we
+still do not; the line's ink went from 519.7 pt to 520.2, because the text also starts half a border
+further right. So the premise "our cell text area is too wide" is unconfirmed by the one direct
+measurement available, and a 119-document change resting on an unconfirmed premise is not something
+to leave for someone else to inherit as settled.
+
+Whoever picks it up: the `A_320.doc` result is the thing to explain, not the aggregate. Nine pages
+recovered exactly is very hard to get by accident, so *something* narrows Writer's cell text area
+relative to ours and the border width is the right order of magnitude. The obvious next variants are
+charging half the border (the horizontal twin of what the row heights already do with a shared grid
+line) and charging it only where the cell's own box actually declares a line, since
+`SvxBoxItem::CalcLineSpace(side, /*bEvenIfNoLine*/ true)` returns the distance alone when there is
+no line on that side.
