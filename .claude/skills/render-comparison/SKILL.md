@@ -602,6 +602,29 @@ branch.** The answer needed an authored ODF pair differing in exactly one attrib
 width. When a citation and a corpus measurement disagree and neither moves, ask whether the
 corpus can even express the case.
 
+### Run every classifier over the documents that already match
+
+This is the cheapest control in the project and it has now overturned two clusters that rounds
+were being planned around. **Before believing that a signal separates broken documents from
+correct ones, run it on the correct ones.**
+
+A words round was briefed on a "glyph count" cluster of 27 failing documents, 21 with a worst
+delta of 20 or more. Run over 30 documents that **already match**: the same note fires on **26 of
+30**, is dominant on **22 of 30**, and the worst delta is ≥ 20 on **15 of 30**, reaching 97. One
+document matches exactly, its image diff says every page agrees, and it scores **86**. The rate
+was *higher* on the documents with nothing wrong.
+
+The mechanism was one level up from the `shows` artefact retired the round before: a `pdf-ops.py`
+record is one show operator, and LibreOffice writes **one show per character** on printer-metric
+text, so an agreeing line reports `glyphs 34 vs 36; shows 1 vs 35`.
+
+Three clusters have now died this way — `shows`, a stroke's bounding box counted as a font size,
+and this. Each survived because the signal looked strong on failing documents and nobody asked
+what it did on passing ones. **A classifier with no measured false-positive rate is a hypothesis
+about the corpus, not a measurement of it.** Publish the rate beside the cluster: the successor
+instrument on that track was shipped saying "12 of 30 on matching documents — read its rows as
+leads, not as a table", which is the right way to ship something imperfect.
+
 ### An instrument can manufacture a defect out of nothing
 
 Two measurement faults in one round each read as an enormous rendering error:
