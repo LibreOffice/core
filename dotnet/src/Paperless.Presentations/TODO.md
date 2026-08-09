@@ -2168,6 +2168,14 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       11's charts, and LibreOffice's own `odp` writes each `chart:chart`'s `svg:width`/`svg:height`
       equal to its frame's.
 
+      **The `a` is per chart and not per deck**, measured on the one page-11 content stream:
+      Objects 12, 13 and 14 carry `a = 1.000102`, `1.000103` and `1.000103`, and Object 15 carries
+      `1.030454`. One thing distinguishes Object 15 in the file and it is **an untested
+      correlation on a single case**: its frame starts at `x = -17268` EMU, 1.36 pt off the left
+      edge of the slide, and the other three are wholly on it. Two authored decks — one chart on
+      the slide, the same chart overhanging it — would settle that in one `soffice` run, and
+      nothing here has run it.
+
       **The model's sizes are right and it is the device that moves**, which is worth stating
       because it closes the cheapest wrong theory: `soffice --convert-to odp` writes those four
       charts' styles at exactly `10pt`, `14pt` and `16pt`.
