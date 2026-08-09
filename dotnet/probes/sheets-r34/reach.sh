@@ -5,7 +5,7 @@
 # cannot contribute — round twenty-five measured that floor and it is the whole reason the
 # variable is honoured at all.
 set -uo pipefail
-S=/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/sheets-r33
+S=/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/sheets-r34
 A="${1:?usage: reach.sh <cli-a> <cli-b> <outdir>}"
 B="${2:?}"
 OUT="${3:?}"
