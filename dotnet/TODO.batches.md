@@ -9237,3 +9237,155 @@ Two mutations put back through `verify-test.sh`, both detected: the data-label r
 4. **The rotated category label's reserved depth**, unchanged from the last round's brief: 7.94 pt
    too deep at 10 pt, flat in the label's width, 0.685 per point against our `sin 45°`, and the
    obvious formula refuted. Fit it properly or leave it.
+
+## Words, round thirty-three — the border charge is refuted, and the rule underneath it shipped
+
+Baseline re-measured first, on this tree's own CLI at `f1be9c412` against the reference PDFs the
+previous round left on disk, with `SOURCE_DATE_EPOCH` pinned: **154 matches, absolute page error
+76, 164 exact page counts, word error 6694** — under-draw 2783, over-draw 3911 by the per-document
+signed split the last round used. Every figure reproduces the brief to the digit, which is the
+first time on this track that a whole inherited headline has.
+
+### The premise is refuted: a Word table's cell text width does not include its border
+
+The lead was that `SwCellFrame::Format` insets a cell by `SwBorderAttrs::CalcLeft`/`CalcRight`,
+which add the border line width to the margin. The citation is real. **The branch above it is what
+decides**, and it was not read:
+
+```cpp
+// sw/source/core/layout/tabfrm.cxx, SwCellFrame::Format
+if ( pTab->IsCollapsingBorders() && !pLower->IsRowFrame() )
+{
+    nLeftSpace  = rBoxItem.GetDistance( SvxBoxItemLine::LEFT );   // the margin ALONE
+    nRightSpace = rBoxItem.GetDistance( SvxBoxItemLine::RIGHT );
+}
+else
+{
+    nLeftSpace  = pAttrs->CalcLeft( this );                       // margin + border width
+    nRightSpace = pAttrs->CalcRight( this );
+}
+```
+
+`RES_COLLAPSING_BORDERS` is defaulted **true** for every Writer document
+(`uibase/app/docshini.cxx`:300), so the border-charging branch belongs to a Writer-native
+*separating*-border table and a Word table never takes it. Measured on the installed 24.2 rather
+than read off this tree, because the tree has twice been wrong about a constant the binary got
+right:
+
+| fixture | text-area width |
+|---|---:|
+| ODF **collapsing**, 6 pt border, no padding | 453.59 |
+| ODF **collapsing**, 0.02 pt border, no padding | 453.59 |
+| ODF **separating**, 6 pt border, no padding | **441.59** |
+| ODF **separating**, 2 pt border, no padding | 449.59 |
+
+One attribute apart, and it is exactly two border widths. That is the observation that *separates*
+the two explanations, and **no corpus document can provide it** — a Word document cannot be made to
+take the other branch, which is why two rounds of corpus measurement could not settle this and one
+authored pair of files did.
+
+Which branch a Word table takes, at Word's default cell margin: the text-area width is **identical
+at borders of 0, 0.5, 2 and 6 pt** — 442.84 pt in a wide cell, 239.24 in a narrow one, 216.06 in
+the interior cell of a two-cell table, and 442.84 again through the `.doc` reader.
+`dotnet/probes/cell-border-inset.py` reproduces all of it in one command.
+
+### Why `A_320.doc` landed on exactly 150, which was the thing to explain
+
+Two answers, and the second is the one that matters.
+
+Sweeping the charge as *k* × border on that document alone: 141 pages at k=0, 143 at 0.125, 145 at
+0.25, 148 across 0.375–0.875, **150 across 1.0–1.25**, 153 at 1.5, 157 at 2.0. Pages word-for-word
+identical to the reference at the same index: 2, then 49 at k=0.5, **52** at k=1.0 and k=1.25, then
+back to 21 at k=1.5. So the exact landing is not luck — something really does narrow this
+document's lines — but the plateau is 0.25 wide and 49 of the 52 pages are already won at half the
+charge, so the *magnitude* carries almost no information and "it lands exactly" was never evidence
+for the border in particular.
+
+The second answer is decisive. Take the whole document's in-cell text, cluster every word's `xMin`,
+and match each cluster to the reference's nearest:
+
+| | columns matched | median delta | mean abs delta | within 0.3 pt |
+|---|---:|---:|---:|---:|
+| `f1be9c412` | 50 | −0.100 pt | **0.203** | **43 of 50** |
+| with the border charged | 50 | +0.000 pt | 0.518 | 20 of 50 |
+
+**Our cell text already starts where LibreOffice starts it.** The change buys nine pages by moving
+a horizontal position that matched to a fifth of a point out to half a point — on the bordered
+cells only, which is why the median barely moves while the spread doubles. A rule that were right
+would take a systematically offset set *into* alignment; this one takes an aligned subset out.
+
+So A_320's nine missing pages remain open and are **not** horizontal. It is the `fUsePrinterMetrics`
+document — laid out against a 300 dpi grid — and our `MetricGrid` rounds the *vertical* metrics
+only, never a glyph advance. Whether LibreOffice's printer-metric layout quantises advance widths
+too is untested here and is the obvious next thing to measure: a quantum of 1/300 in ≈ 0.24 pt is
+the right order for lines that wrap one word early.
+
+### What shipped: the rule underneath the wrong one
+
+At a cell margin *below* half the border the DOCX width does move — and the drawn border, which
+Writer paints centred on the cell frame edge, proves the table did not move, so it is an inset
+after all. It is neither the margin nor margin + border:
+
+```
+pad_l = max(bll/2, cml)
+pad_r = max(pad_l + blr/2, cml + cmr) - pad_l
+```
+
+`lcl_adjustBorderDistance` in `writerfilter/dmapper/DomainMapperTableHandler.cxx`:318–348, whose
+comment states it as MS Word's own behaviour, and it reproduces exactly across 21 margin/border
+combinations: at a 6 pt border the inset is 3 pt at margins of 0, 1, 2 and 3 pt and then follows the
+margin; at 0.5 pt it is 0.25 pt at a margin of 0 and the margin everywhere above.
+
+It is a **floor, not a charge**, and the difference is the whole of what the last round got wrong: a
+margin that already clears half its border is untouched however thick the border grows, and Word's
+default 108 twips clears every border up to 10.8 pt. It is also an *import* adjustment rather than a
+layout rule — `WW8TabDesc::SetTabBorders` (`filter/ww8/ww8par2.cxx`:3020–3042) sets a `.doc` cell's
+distance with no floor at all, so the 66 `.doc` of the track's 200 are not subject to it and the
+change is in `DocxLayoutSource` alone.
+
+### Its reach, and it moved nothing
+
+**13 of 200 renderings changed** at the byte level. Matches **154**, absolute page error **76**,
+exact page counts **164** — every one unmoved. Word error **6694 → 6696**, all of it over-draw
+(3911 → 3913) with under-draw unchanged at 2783: on two related FAA documents one token
+`(fluid/water)` now wraps mid-token where it did not, because a zero-margin cell narrowed by five
+twips. That is an adverse movement of 0.03% and it is reported rather than buried; the rule is
+LibreOffice's own and the residual disagreement on that line is a fraction of a point of something
+else.
+
+**The census under-stated this time**, which is the opposite of the usual failure and the same
+lesson. A zip census over `w:tblCellMar` found **7 documents of the 134 DOCX**, 171 cells of 78287;
+**13 changed when rendered**, because the census read the table's margins and not `w:tcMar` on a
+cell or a margin inherited from a table style. Quote it as "7 over the 134 the census can read, of
+200" and it is still wrong by nearly a factor of two in the direction nobody checks.
+
+Guarded by ten tests in `CellBorderInsetTests`, and both directions are verified by
+`verify-test.sh`: removing the floor fails 5 of them, and putting the *border charge* back fails 9.
+That second mutation is the point — the rejected rule cannot now be re-proposed without a test
+saying so.
+
+### Per batch at `8fbfc2ec3`, measured
+
+001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9, 011 9/10, 012 9/10, 013 6/9,
+014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10, 019 4/10, 020 2/10, 021 0/2. Whole track
+**154/200**. Identical to the baseline row for row apart from the two word counts above, so every
+earlier batch is re-proved by construction rather than by a second sweep.
+
+Tests: Core 275, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing **706** (696 + the ten new), Spreadsheets 588, Presentations 542, Fidelity 550, 0
+skipped.
+
+### Still open
+
+- **`A_320.doc`'s nine pages are vertical, not horizontal**, and the untested cause named above is
+  printer-metric quantisation of advance widths. Nothing has measured whether LibreOffice's
+  300 dpi grid reaches a glyph advance; `MetricGrid` in this tree reaches only line heights.
+- **Batch 006 stays 9/10**, the row-split gate, refuted rule and all — see `trheight-split-gate.py`.
+- **`chg12`'s under-pagination near pages 9–10**; the even-page-with-no-even-story ceiling (3
+  documents); unequal column widths (`.doc`-only, small). All untouched.
+
+### Retired
+
+Delete the "obvious next variants" of the border charge from anyone's list. Charging **half** the
+border unconditionally is refuted by the collapsing rows above, which do not move at any width;
+charging it **only where a line is declared** is refuted by the same rows, which declare one.

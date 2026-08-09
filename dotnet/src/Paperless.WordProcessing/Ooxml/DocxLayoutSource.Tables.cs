@@ -779,16 +779,65 @@ public sealed partial class DocxLayoutSource
                     bottom ??= horizontal;
                 }
 
+                CellBorders borders = new(
+                    left ?? default, right ?? default, top ?? default, bottom ?? default);
+
                 cells[index] = cell with
                 {
                     Definition = cell.Definition with
                     {
-                        Borders = new CellBorders(
-                            left ?? default, right ?? default, top ?? default, bottom ?? default),
+                        Borders = borders,
+                        Padding = KeptOffTheBorder(cell.Definition.Padding, borders),
                     },
                 };
             }
         }
+    }
+
+    /// <summary>
+    /// Raises a cell's left and right margins so its text cannot sit under its own border.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word's cell border straddles the cell edge, so half of it lies inside the cell — and Word will
+    /// not let the text run under that half however small the margin says. writerfilter reproduces it
+    /// at import, in <c>lcl_adjustBorderDistance</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx</c>:318–348), whose comment
+    /// states the rule as Word's own:
+    /// </para>
+    /// <code>
+    /// pad_l = max(bll/2, cml)
+    /// pad_r = max(pad_l + blr/2, cml + cmr) - pad_l
+    /// </code>
+    /// <para>
+    /// So the right margin is what is left of the wider of "clear of the right border" and "both
+    /// declared margins" once the left one is taken — which is why a document with a thick border, no
+    /// left margin and a 2 mm right margin gets no gap on the right at all.
+    /// </para>
+    /// <para>
+    /// It applies to this reader and not to <see cref="Ww8.Ww8DocumentReader"/>:
+    /// <c>WW8TabDesc::SetTabBorders</c> (<c>sw/source/filter/ww8/ww8par2.cxx</c>:3020–3042) sets a
+    /// <c>.doc</c> cell's distance straight from <c>sprmTCellPadding</c> or the band's half-gap with
+    /// no such floor. It is an import adjustment rather than a layout rule, and the layout charges
+    /// only what it is given: with collapsing borders — which every Word table has —
+    /// <c>SwCellFrame::Format</c> insets by <c>rBoxItem.GetDistance()</c> alone and never by the
+    /// border width. Measured across 21 margin and border combinations by
+    /// <c>dotnet/probes/cell-border-inset.py</c>, which also shows the ODF separating-border table
+    /// that <em>does</em> charge the whole border, so the two cannot be confused again.
+    /// </para>
+    /// <para>
+    /// It reduces to the declared margins whenever each is at least half its border, which is nearly
+    /// always: Word's default margin is 108 twips and half a hairline border is 5.
+    /// </para>
+    /// </remarks>
+    private static CellPadding KeptOffTheBorder(CellPadding padding, CellBorders borders)
+    {
+        Length left = Length.Max(padding.Left, borders.Left.Width / 2);
+        Length right = Length.Max(left + (borders.Right.Width / 2), padding.Left + padding.Right) - left;
+
+        return left == padding.Left && right == padding.Right
+            ? padding
+            : padding with { Left = left, Right = right };
     }
 
     /// <summary>The bottom border stated by the cell a vertical merge ends in, if it states one.</summary>
