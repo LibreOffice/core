@@ -144,6 +144,31 @@ Five cases in `SheetShownCommentTests`, verified by reintroducing each defect th
 turns the unreachable code into an error, and `verify-test.sh` correctly refuses to call that a
 detection. Rewritten as a relationship-name change it detects four of the five.
 
+## The whole-track result
+
+Both sweeps: 171 rows, no duplicate path, **zero `ref-failed`, zero `ours-failed`**.
+
+| | matches | abs page error | exact page counts | abs word error |
+|---|---|---|---|---|
+| `base-whole-track.tsv` | 148/171 | 86 | 155 | 33174 |
+| `final-whole-track.tsv` | **149/171** | 86 | 155 | **32729** |
+
+Per batch at the end: 001–009 89/89, 010 8/10, **011 7/10**, 012 8/10, 013 8/10, 014 9/10,
+015 6/9, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
+
+**Exactly one row of 171 changes, and it is the one the round was aimed at.**
+
+| document | before | after |
+|---|---|---|
+| `Application_Compliance_Checklist_5_Apr_2021.xlsx` | 14/14, 17235/17718 `words` | 14/14, **17680/17718 `match`** |
+
+The word error moves by 445, which is the whole of the track's 33174 → 32729; no page count
+anywhere moves, which is right, because a caption is an object on the sheet and the print area it
+widens was already wide enough to keep this workbook at fourteen pages. That narrowness is the
+honest headline: the census and the byte-level reach agreed on one document before the sweep ran,
+and the sweep found one. The change is worth having because the mechanism is general — any
+workbook with a pinned-open comment — and the corpus happens to hold one instance of it.
+
 ## What batches 011 and 016 are, triaged and not fixed
 
 Both batches' residue is **pagination with the words already right**, and the diagnosis below is
@@ -202,3 +227,6 @@ Every project run individually, whole output captured, **0 skipped** everywhere.
 | 275 | 109 | 240 | 291 | 119 | 259 | 125 | 696 | **593** | 542 |
 
 Every count is the briefed known-good except Spreadsheets, which is 588 plus this round's 5.
+
+`Paperless.Fidelity.Tests` on the final tree: **550 of 550, 0 skipped**, the briefed known-good
+count exactly, in 12 minutes under a load average of about 20.
