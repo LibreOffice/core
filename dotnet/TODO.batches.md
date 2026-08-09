@@ -8410,3 +8410,9 @@ No page count moves, and that is structural rather than lucky: `RowHeightsAreMan
 for BIFF8, so no `.xls` row height is ever recomputed and the margin cannot reach the quantity
 pagination turns on. Two of the eight reintroduced defects were **not** detected by any test and the
 probe README says which and why.
+
+**One gap to close before this is merged:** `Paperless.Fidelity.Tests` was started on the final
+tree and had not returned after an hour and a quarter at a load average around 20, so its count is
+not recorded. Every other project was run individually and matched its known-good exactly
+(Spreadsheets 566 → 573 with the round's seven cases). Run the fidelity suite before trusting the
+merge.
