@@ -525,6 +525,10 @@ public sealed partial class DocxLayoutSource
         List<PageRun> runs = RunsOf(walker.Ranges, properties, body, face);
         string mapped = CaseMapping.Apply(walker.Text, runs);
 
+        // After the case map rather than before it, because both rewrite the same characters and the
+        // case map is the one that splits runs — recoding first would leave the new halves unrecoded.
+        mapped = SymbolRecoding.Apply(mapped, runs, SymbolFace);
+
         // A paragraph with nothing in it is its mark, so that is what sizes it; one with text is
         // sized by the text, and its mark formats a pilcrow nobody draws.
         WordTextStyle text = walker.Text.Length == 0 ? mark : body;
@@ -1249,6 +1253,21 @@ public sealed partial class DocxLayoutSource
         }
 
         return -1;
+    }
+
+    /// <summary>
+    /// One face by family name alone, for <see cref="SymbolRecoding"/>'s own request.
+    /// </summary>
+    /// <remarks>
+    /// Regular and upright, because a symbol face has one weight and one slope and the request is for a
+    /// *picture*: asking OpenSymbol for bold would substitute again and land somewhere else.
+    /// </remarks>
+    private (OpenTypeFace Face, FontReference? Font)? SymbolFace(string family)
+    {
+        WordTextStyle style = new(family, Length.Zero, 400, false, null);
+        return Face(style) is { } resolved
+            ? (resolved, _references.GetValueOrDefault(style.FaceKey))
+            : null;
     }
 
     private OpenTypeFace? Face(WordTextStyle text)

@@ -620,7 +620,15 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
             paragraphs.Add(new PageParagraph
             {
-                Text = CaseMapping.Apply(paragraph.Text, runs),
+                // After the case map rather than before it, because both rewrite the same characters and
+                // the case map is the one that splits runs — recoding first would leave the new halves
+                // unrecoded.
+                Text = SymbolRecoding.Apply(
+                    CaseMapping.Apply(paragraph.Text, runs),
+                    runs,
+                    family => fonts.Face(family, 400, false) is { } resolved
+                        ? (resolved, fonts.Reference(family, 400, false))
+                        : null),
                 Face = face,
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
