@@ -53,7 +53,12 @@ def main() -> int:
             continue
         f = line.split("\t")
         page = f[col["first_page"]]
-        if not page.isdigit():
+        # `analyse` sets these two without running the operator diff at all, and for a reason: on a
+        # page whose two renderings are not the same shape every record is one-sided by
+        # construction, so classifying it would replace the finding with an artefact. Re-running
+        # `classify` over such a row is exactly the mistake the tool exists to avoid, and it cost
+        # this round one row before the guard went in.
+        if not page.isdigit() or f[col["dominant"]] in ("page size", "extra page"):
             out.append(line)
             continue
         pid = ident(f[0])

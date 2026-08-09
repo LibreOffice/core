@@ -31,6 +31,24 @@ count**, decoding the string only when it is a printable literal. That is enough
 question these probes have actually asked, and it never lies. When you need the words, join
 against `pdftotext -bbox`, which has poppler's decoder behind it.
 
+RULES, AND THE TWO THINGS THAT USED TO SPELL THEMSELVES LIKE ONE
+────────────────────────────────────────────────────────────────
+A stroke's anchor is its top-left corner, and the left edge and the top edge of a rectangle share
+that corner *exactly* — so greedy nearest-neighbour used to pair our vertical rule against the
+reference's horizontal one at every table corner and report `size 0.0x36.6 vs 486.9x0.0`, which is
+one rule's width against another's height and a measurement of nothing. Two linear records of
+different orientation are no longer paired at all.
+
+A flattened curve is the other one: a logo arrives as dozens of hairline segments, the two
+renderers flatten it at different sub-point positions, and every segment mismatches its partner.
+Those notes are now spelled **`hairline WxH vs WxH`** rather than `size`, so a reader can tell a
+rule difference from a curve's flattening without reading the geometry back.
+
+Measured over the 44 words documents carrying a box note on their first divergent page: of 439
+notes, 142 were cross-orientation pairs and 146 were hairlines. **A `box` count stored by an
+earlier round is the sum of all three classes**; only the same-orientation rule-scale differences
+are still called `size`.
+
 EFFECTIVE SIZE
 ──────────────
 `Tf` size times the text matrix's vertical scale times the CTM's — so a 1 pt font in a 12x matrix

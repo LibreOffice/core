@@ -150,4 +150,92 @@ rather than re-derived.
 
 ## Task two — the instrument round 42 diagnosed
 
-(measured below)
+### What changed in `pdf-ops.py`
+
+Two additive changes, both in the diff path only; `dump` is untouched.
+
+- **`pairable()`** refuses to pair two *linear* records that run in different directions. A record
+  is linear when its major side is at least `LINEAR_RATIO = 3` times its minor one, so a panel or a
+  shading is exempt and keeps the old behaviour — a 100x99 fill against a 100x101 one must not be
+  split into two one-sided records over two points.
+- **The tie-break.** Two rules meeting at a table corner have *identical* anchors, so the
+  nearest-neighbour distance is exactly equal and whichever was written first won. The tie is now
+  broken by the closer major extent, which can only fire on an exact tie.
+- **`hairline WxH vs WxH`** is a new note name for a box note whose longer side is under 20 pt —
+  a segment of a flattened curve rather than a rule. `first-divergence.py` gains a matching
+  `hairline` class, placed last so that a tie in the dominant count favours a real class.
+
+### The anatomy, over the 43 documents carrying a box note on their first divergent page
+
+| | notes | cross | hairline | rule |
+|---|---:|---:|---:|---:|
+| published matcher | 486 | **142** | **146** | 198 |
+| cleaned matcher | 315 | **9** | 94 | 212 |
+
+Round 42's two headline counts reproduce **to the digit** on a different job list and a different
+build — 142 cross and 146 hairline — which is the corroboration that its anatomy was measuring what
+it said. Its third figure, 151 rule, does not: my list is 43 documents at first-divergent pages that
+moved when round 42's own fix landed, and the published rule count over it is 198.
+
+Three movements, and the middle one is the finding:
+
+- **Cross 142 → 9, and only 2 of the 9 are rule-scale.** Those two are fills of aspect ratio 1.5 and
+  1.4 — a shaded panel and a page-sized white rectangle — where "orientation" is not a property of
+  the thing. The other seven are segments under 15 pt inside one logo, already labelled `hairline`
+  in the note. **No pair of rule-scale linear records is now matched across orientations.**
+- **Rule 198 → 212.** A cross pair is not noise standing in for nothing; it is frequently a *real*
+  same-orientation difference whose true partner was stolen. On `UG.CAO.00133` page 1 the published
+  matcher reports `v 36.6 vs h 486.9`, `v 36.6 vs h 0.6` and `h 487.1 vs v 26.4` — three sentences
+  about nothing — and the cleaned matcher reports three vertical rules, ours 36.6 pt where the
+  reference's are 26.4, 25.5 and 26.4. **The header table's cell edges are about 10 pt taller in our
+  rendering**, which is a coherent measurement the instrument was hiding.
+- **Hairline 146 → 94.** Fifty-two of them were pairings that, once each segment could find its own
+  orientation, agree within the window and produce no note at all.
+
+### The dominant-class table, over all 200
+
+Same `first_page` for every row — only the classification is re-run, by
+`probes/words-r43/reclassify.py`, so nothing here can be an artefact of a second image diff.
+
+| dominant | published match | published fail | cleaned match | cleaned fail |
+|---|---:|---:|---:|---:|
+| `box` | 5 | 9 | **4** | **8** |
+| `hairline` | — | — | 0 | 1 |
+| `glyphs` | 54 | 28 | 55 | 28 |
+| `one-sided` | 13 | 5 | 13 | 5 |
+| `size` | 4 | 3 | 4 | 3 |
+| `face` | 5 | 0 | 5 | 0 |
+| no divergent page | 71 | 0 | 71 | 0 |
+
+**The prediction was wrong and it is worth reading rather than rounding off.** `prediction.md` said
+`box` would land near 5 failing and 3 matching, which is where round 42's post-filtered table put
+it. Measured: **8 failing and 4 matching**. Post-filtering and repairing are not the same operation:
+dropping a cross note assumes there is nothing under it, and the paragraph above shows there
+usually is. Only **two of 200 documents** change dominant class at all — one matching document
+`box → glyphs`, and `150-5370-10H.docx` `box → hairline`, which is precisely the document round 42
+identified as 236 notes of one 12 pt graphic.
+
+### The control: run it over the documents that already match
+
+| | documents | notes | cross | hairline | rule |
+|---|---:|---:|---:|---:|---:|
+| matching, published | 21 | 100 | 28 | 0 | 72 |
+| matching, cleaned | 21 | **74** | **1** | 0 | **73** |
+| failing, published | 22 | 386 | 114 | 146 | 126 |
+| failing, cleaned | 22 | 241 | 8 | 94 | 139 |
+
+**73 same-direction rule-scale notes fire on 21 documents that match the reference exactly.** The
+instrument is repaired and the class it produces is still not a discriminator: `box` is dominant on
+4 matching documents against 8 failing, and its underlying notes are as common on correct output as
+on wrong. Read a `size WxH vs WxH` note as a lead about one rule, never as evidence a document is
+broken — a table rule half a point out is invisible at every raster scale this project measures at,
+and both renderers draw thousands of them.
+
+### What a stored measurement from before this change means afterwards
+
+A `box` count recorded by rounds 34, 39 or 42 is the sum of three populations: same-orientation
+rule differences, hairline segments of flattened curves, and cross-orientation pairs that the
+matcher no longer makes. Only the first is still spelled `size WxH vs WxH`. Round 42's *published*
+column reproduces exactly against the current `pdf-ops.py` in the main checkout, so any number in
+its report can still be re-derived — with `PDF_OPS` pointing there, which
+`box-note-anatomy.py` now takes as an environment variable.

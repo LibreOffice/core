@@ -502,6 +502,15 @@ height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame
 document exercises the dynamic-height path at the same time, and the body's first baseline moves with the
 header's real height.
 
+`inherited-table-header.docx` is a header made only of a table, in a first section, with a second
+section that names an empty `even` and an empty `first` header and no default one — the shape Word writes
+when a user gives a later section no header of its own. It is the fixture for the one place Paperless
+**deliberately differs from LibreOffice 24.2.7.2**, which draws the head on page 1 and leaves page 2 bare:
+its DOCX import means to link the two ("so we just copy the content") and the copy yields nothing when the
+source header has no top-level paragraph. `SectionInheritedHeaderTests` explains the deviation and the
+evidence for it; `dotnet/probes/words-r43/` holds the probes that established it from both ends. Authored by
+`probes/words-r43/make-fixture.py`.
+
 `table-exact-row.*` is `table-grid` with its second row given an *exact* height of 0.8 cm — less than its
 content needs. LibreOffice renders that row 22.70 pt tall rather than growing it to 32.60, so every row below
 it moves up, which is what makes the difference visible in a word-position comparison at all. The row style

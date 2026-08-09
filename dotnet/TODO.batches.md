@@ -11581,3 +11581,103 @@ A measurement trap worth keeping: this document's running head opens with "Europ
 Agency" and so does its **footer**, which prints on every page of both renderings. A probe keyed on
 that phrase reports the head everywhere and closes the question in the wrong direction. The probes
 key on "Approval Date", checked absent from every footer and from `word/document.xml`.
+
+### 3. The matcher was inventing a class, and post-filtering it understated what was underneath
+
+`pdf-ops.py` anchors a non-text record at its top-left corner, and the left edge and the top edge of
+a rectangle share that corner *exactly*, so greedy nearest-neighbour paired our vertical rule
+against the reference's horizontal one at every table corner. Two additive changes, both in the
+`diff` path — `dump` is untouched:
+
+- a linear record (major side ≥ 3× minor) is now paired only with a linear record of the **same
+  orientation**; anything squarer is a panel and keeps the old behaviour;
+- the tie-break, which is where the damage was: two rules meeting at a corner have identical
+  anchors, so the distance was exactly equal and whichever was written first won. It is now the
+  closer major extent, which can only fire on an exact tie;
+- a box note whose longer side is under 20 pt is now spelled **`hairline WxH vs WxH`** rather than
+  `size`, and `first-divergence.py` has a matching class, placed last so a tie favours a real one.
+
+Over the 43 documents carrying a box note on their first divergent page:
+
+| | notes | cross | hairline | rule |
+|---|---:|---:|---:|---:|
+| published matcher | 486 | **142** | **146** | 198 |
+| cleaned matcher | 315 | **9** | 94 | 212 |
+
+**Round 42's two headline counts reproduce to the digit** — 142 cross and 146 hairline — on a
+different job list and a different build. Of the 9 survivors only 2 are rule-scale, and both are
+fills of aspect ratio 1.5 and 1.4 where orientation is not a property of the thing; the other seven
+are sub-15 pt segments inside one logo, already labelled `hairline`.
+
+**Rule notes went *up*, 198 → 212, and that is the finding.** A cross pair is not noise standing in
+for nothing — it is often a real same-orientation difference whose partner was stolen. On
+`UG.CAO.00133` page 1 the published matcher says `v 36.6 vs h 486.9`, `v 36.6 vs h 0.6` and
+`h 487.1 vs v 26.4`, three sentences about nothing; the cleaned matcher says three vertical rules,
+ours 36.6 pt where the reference's are 26.4, 25.5 and 26.4. **The header table's cell edges are
+about 10 pt taller in our rendering** — a coherent measurement the instrument had been hiding, and a
+lead for whoever takes that document next.
+
+| dominant | published match | published fail | cleaned match | cleaned fail |
+|---|---:|---:|---:|---:|
+| `box` | 5 | 9 | **4** | **8** |
+| `hairline` | — | — | 0 | 1 |
+| `glyphs` | 54 | 28 | 55 | 28 |
+| `one-sided` | 13 | 5 | 13 | 5 |
+| `size` | 4 | 3 | 4 | 3 |
+
+**The prediction was wrong, and in the direction that matters.** `probes/words-r43/prediction.md`,
+committed before anything was measured, said `box` would land near 5 failing and 3 matching — the
+brief's target, which is where round 42's *post-filtered* table put it. Repairing the matcher is not
+the same operation as post-filtering it: dropping a cross note assumes nothing is under it. Only
+**two of 200 documents** change dominant class — one matching document `box → glyphs`, and
+`150-5370-10H.docx` `box → hairline`, which is exactly the document round 42 named.
+
+**The control, which is the part to carry forward.** Over documents that already match: published
+100 notes with 28 cross, cleaned **74 notes with 1 cross — and 73 same-direction rule-scale notes on
+21 documents that match the reference exactly.** The instrument is repaired and the class it
+produces is still not a discriminator. Read a `size WxH vs WxH` note as a lead about one rule, never
+as evidence a document is broken.
+
+**What a stored measurement means afterwards.** A `box` count from rounds 34, 39 or 42 is the sum of
+three populations — same-orientation rule differences, hairlines, and cross pairs the matcher no
+longer makes. Only the first is still spelled `size WxH vs WxH`. The published column reproduces
+exactly against the main checkout's `pdf-ops.py`, which `box-note-anatomy.py` now accepts as
+`$PDF_OPS`, and `divergence-from-pdfs.py` as `$FIRST_DIVERGENCE`.
+
+### The numbers
+
+| | baseline `cce1cc314` | after | predicted |
+|---|---:|---:|---|
+| documents matching | 154 | **154** | 154 |
+| absolute page error | 78 | **78** | 78 |
+| exactly-correct page counts | 164 | **164** | 164 |
+| absolute word error | 6512 | **6512** | 6512 |
+| renderings changed | — | **0** | 0 |
+
+Three tests in `SectionInheritedHeaderTests`. Removing the section-to-section header carry from
+`DocxReader.Paginated` fails **two of them and nothing else in the project**, verified with
+`verify-test.sh`; the third asserts that a table header is laid out at all, which is a precondition
+rather than a pinned rule and is not verified by reintroduction.
+
+Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing **734** (731 + three), Spreadsheets 621,
+Presentations 576, Fidelity 550 — 0 skipped, 0 warnings.
+
+### Still open
+
+- **46 mismatches, unchanged.** Nothing under `dotnet/src` was touched.
+- **`UG.CAO.00133`'s header table is ~10 pt taller than the reference's**, newly visible now that
+  the matcher pairs rules correctly: three vertical cell edges at 36.6 pt against 26.4/25.5/26.4.
+  That is a *layout* lead on the same document, independent of the inheritance question.
+- **Whether to reproduce LibreOffice's table-only-header import defect.** Not implemented, pinned by
+  a test, worth one verdict. The decision is recorded rather than assumed.
+- `A1. EASA Form 2.docx` (9/7) and `B11. TE.CAO.00129` (7/6) are **pagination**, not furniture — a
+  reflow that adds two pages and one page respectively. They should be worked as page-count
+  failures, which is not where round 42's table put them.
+- `手机免提系统TSB.doc` fails on **words**, 36 against 40 — an under-draw of four — while embedding
+  one face the reference does not (`LiberationSerif-Bold`). The face is a symptom worth keeping
+  beside the word count rather than a class of its own.
+- Untouched, as handed over: the `.doc` reader-split clusters, `A_320.doc` 141/150, both round-38
+  leads, `FO.FCTOA.00010`, `omrIMInterpretiveGuideLine.doc`, and
+  `AC-150-5370-10G-updated-201604.docx` / `150-5370-10H.docx`, both `glyphs`-or-`hairline` on their
+  first divergent page rather than geometry.
