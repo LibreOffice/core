@@ -548,6 +548,26 @@ public sealed partial record ChartPlot
     /// <summary>The size the axis labels are set at; the default is 10 pt.</summary>
     public Length LabelSize { get; init; } = Length.FromPoints(10);
 
+    /// <summary>Whether the axis labels — and the data labels — are set in the bold face.</summary>
+    /// <remarks>
+    /// <para>
+    /// False by default in both readers, and for once they agree: the OOXML auto-text table
+    /// leaves <c>spOtherTexts</c> regular (<c>objectformatter.cxx</c>:415-434) and chart2's own
+    /// model default is regular too, so a file that states nothing means regular either way. That
+    /// is the difference from <see cref="IsTitleBold"/>, where the two disagree.
+    /// </para>
+    /// <para>
+    /// <strong>It is read because it decides layout, not only appearance.</strong> The widest
+    /// value label reserves the plot rectangle's left edge and the widest category label its
+    /// bottom band, and a bold face is wider — so measuring a bold axis as regular puts the plot
+    /// rectangle in the wrong place and every mark inside it follows. <c>171128IPAP.pptx</c>'s
+    /// <c>chart4.xml</c> states <c>&lt;a:defRPr sz="900" b="1"/&gt;</c> on both axes and the
+    /// reference draws those labels in Carlito-Bold; 36 of the slides corpus's 61 chart parts
+    /// state a weight somewhere.
+    /// </para>
+    /// </remarks>
+    public bool IsLabelBold { get; init; }
+
     /// <summary>
     /// The size a legend entry's name is set at, when the legend states one of its own.
     /// </summary>
@@ -578,6 +598,19 @@ public sealed partial record ChartPlot
 
     /// <summary>The size a legend entry's name is set at, falling back to the axis labels'.</summary>
     public Length LegendFont => LegendSize ?? LabelSize;
+
+    /// <summary>
+    /// Whether a legend entry's name is set bold, when the legend states a weight of its own.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than false for the reason <see cref="LegendSize"/> is: the legend's own
+    /// <c>c:txPr</c> is a separate statement from the axes', and a reader that finds none should
+    /// leave the legend reading whatever the axis labels read rather than force it regular.
+    /// </remarks>
+    public bool? IsLegendBold { get; init; }
+
+    /// <summary>Whether a legend entry is drawn bold, falling back to the axis labels'.</summary>
+    public bool LegendBold => IsLegendBold ?? IsLabelBold;
 
     /// <summary>
     /// The family the chart's own text is set in, or null when the file states none.

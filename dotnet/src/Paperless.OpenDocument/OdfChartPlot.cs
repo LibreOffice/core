@@ -231,8 +231,16 @@ public static class OdfChartPlot
             LabelSize = styles.FontSize(Attribute(valueAxis, OdfNamespaces.Chart, "style-name"))
                 ?? Length.FromPoints(10),
 
+            // The axis' own style states the weight of its labels. Regular when nothing states
+            // one, which is the same answer chart2's model gives and — unlike the titles — the
+            // same answer OOXML's auto-text table gives. See ChartPlot.IsLabelBold.
+            IsLabelBold = styles.IsBold(Attribute(valueAxis, OdfNamespaces.Chart, "style-name"))
+                ?? false,
+
             // The legend's own style, not the value axis'. See ChartPlot.LegendSize.
             LegendSize = styles.FontSize(Attribute(
+                Child(chart, OdfNamespaces.Chart, "legend"), OdfNamespaces.Chart, "style-name")),
+            IsLegendBold = styles.IsBold(Attribute(
                 Child(chart, OdfNamespaces.Chart, "legend"), OdfNamespaces.Chart, "style-name")),
             PlotArea = Region(plotArea),
             Space = SpaceOf(chart),

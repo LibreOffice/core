@@ -137,12 +137,18 @@ public static class ChartAxisLabels
     /// <param name="stated">What the file says about the axis' text.</param>
     /// <param name="size">The label's em size.</param>
     /// <param name="measurer">Measures a line of text.</param>
+    /// <param name="bold">
+    /// Whether the labels are set in the family's bold face. It reaches the arrangement and not
+    /// only the drawing because a bold face is wider, so it decides whether two labels collide —
+    /// and hence whether the axis is rotated at all. See <see cref="ChartPlot.IsLabelBold"/>.
+    /// </param>
     public static ChartAxisLabelLayout Resolve(
         IReadOnlyList<string?> texts,
         IReadOnlyList<Length> centres,
         ChartAxisText stated,
         Length size,
-        ChartText measurer)
+        ChartText measurer,
+        bool bold = false)
     {
         ArgumentNullException.ThrowIfNull(texts);
         ArgumentNullException.ThrowIfNull(centres);
@@ -161,7 +167,7 @@ public static class ChartAxisLabels
         for (int at = 0; at < count; at++)
         {
             boxes[at] = texts[at] is { Length: > 0 } text
-                ? Shape(measurer, text, size)
+                ? Shape(measurer, text, size, bold)
                 : default;
         }
 
@@ -177,7 +183,7 @@ public static class ChartAxisLabels
             // *on*: canAutoAdjustLabelPlacement refuses while it is on, so the wrap is the only
             // route from "labels collide" to "labels are turned 45°".
             if (lineBreak && !stated.OverlapAllowed && rotation == 0.0
-                && Wraps(texts, count, spacing, staggered, size, measurer))
+                && Wraps(texts, count, spacing, staggered, size, measurer, bold))
             {
                 lineBreak = false;
                 continue;
@@ -241,7 +247,8 @@ public static class ChartAxisLabels
         Length spacing,
         bool staggered,
         Length size,
-        ChartText measurer)
+        ChartText measurer,
+        bool bold)
     {
         if (spacing <= Length.Zero) return false;
 
@@ -255,7 +262,7 @@ public static class ChartAxisLabels
             if (texts[at] is not { Length: > 0 } text) continue;
 
             foreach (string word in Words(text))
-                if (measurer.Measure(word, size).Width > limit) return true;
+                if (measurer.Measure(word, size, bold).Width > limit) return true;
         }
 
         return false;
@@ -381,9 +388,9 @@ public static class ChartAxisLabels
     private const double TextShapeInsetY = 0.30;
 
     /// <summary>The shape a piece of chart text is drawn in, insets included.</summary>
-    private static DocSize Shape(ChartText measurer, string text, Length size)
+    private static DocSize Shape(ChartText measurer, string text, Length size, bool bold = false)
     {
-        DocSize measured = measurer.Measure(text, size);
+        DocSize measured = measurer.Measure(text, size, bold);
         return new DocSize(
             measured.Width + size * (TextShapeInsetX * 2),
             measured.Height + size * (TextShapeInsetY * 2));
