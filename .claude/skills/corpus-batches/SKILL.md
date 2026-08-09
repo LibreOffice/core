@@ -930,6 +930,29 @@ across the track went 385 → 357, and documents with an exactly-correct page co
 change that is right on its own evidence because a compensating bug elsewhere made the old
 number look better.
 
+### A shared-layer merge owes a parent-side sweep, not just a green suite
+
+The parent verifies every merge with the test suite. The *corpus* sweep only ever happens inside
+a round, on that round's own base. So when two rounds touch a shared layer in the same merge
+window, **the tree that actually ships is one neither of them swept** — each measured a base that
+predates the other.
+
+A words agent caught this about its own figures and said so rather than letting them stand:
+
+> my figures describe my own branch, not the merged tree … the sheets round measured its
+> cross-track reach as words 0/200, but on *its* base, which predates my merge, so it proves the
+> merge safe in one direction only.
+
+It was right to flag it and the check was cheap. Measured on the merged tree: match, page error
+and exact page counts identical to the words branch, and word error **182 better** than either
+round measured alone — the shared shaper reaching words documents once the other round's recode
+was wired beside it. No regression, and a real interaction that neither sweep could have seen.
+
+So: **when a merge window contains a shared-layer change plus any other round, re-sweep the
+affected tracks on the merged commit.** A green suite proves the code compiles and the unit tests
+hold; it says nothing about 534 documents. And record the result even when it is favourable —
+"the two interact and it helped" is a fact about the layer worth having next time.
+
 ### Merging several agents into one branch
 
 Merge one agent at a time, and **re-verify after each merge, not once at the end**. The
