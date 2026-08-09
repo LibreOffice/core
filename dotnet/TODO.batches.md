@@ -9389,3 +9389,57 @@ skipped.
 Delete the "obvious next variants" of the border charge from anyone's list. Charging **half** the
 border unconditionally is refuted by the collapsing rows above, which do not move at any width;
 charging it **only where a line is declared** is refuted by the same rows, which declare one.
+
+## Slides: a human review of all twelve non-matching documents
+
+The first end-to-end visual review by a person rather than a metric, done from a side-by-side
+proof sheet of the most divergent page of each of the twelve. It is the highest-value input this
+track has had, because **every item below is a defect no gate in the harness can see** — all
+twelve documents already agree on page count, and the word gate is the only thing that flags any
+of them.
+
+### Four are the raster ceiling, and the review found them independently
+
+The reviewer flagged three documents as *"Paperless renders it better, false positive"* and a
+fourth as *"looks exactly the same, check whether the word count is misleading"*. **All four are
+already on `TODO.raster-ceiling.md`.** That list is built from an observable signature — the
+reference draws a raster where we extract materially more words — and a reader with no access to
+it picked out exactly the same four documents by eye. The classification is sound.
+
+| Document | Words ours/ref | Why the gate is wrong about it |
+|---|---:|---|
+| `NAS-Infrastructure-Roadmaps-v16.0.pptx` | 19221/15316 | Every data table is a `p:graphicFrame` in `mc:AlternateContent` wrapping a `p:oleObj`; LibreOffice draws the rasterised replacement, we draw the real table |
+| `WiGr_2021W_1_Angebot-Nachfrage-…pptx` | 2204/1988 | Five pages on the list |
+| `FAAAIandtheArtandScienceofV&Vfinal.pptx` | 1197/1145 | Page 14, 119 words against 91 |
+| `NWD-GLA-Community-Outreach-Day-…pptx` | 537/586 | Page 5 on the list — and note this one is **under**-drawn, so it is not purely ceiling; see below |
+
+`NWD-GLA` is the one to look at again: the reviewer saw no visible difference, and we draw 49
+words *fewer* than the reference rather than more. A raster-ceiling page explains a surplus, not
+a deficit. **Not resolved — measure the token multiset before assuming either way.**
+
+### Eight real defects, in two clusters and four singles
+
+**Custom shape geometry — an arrow is drawn as a rectangle.** Two documents, both `.ppt`:
+`Fundamentals_Module_1_basics.ppt` and `W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt`.
+Blocks joined by arrows come out as plain rectangles. This is preset custom-shape geometry in the
+binary path and it is the largest single visual defect the review found.
+
+**Charts.** Three documents, and this track already has an agent inside `Paperless.Core/Charts`:
+- `Demick_JetBlue.pptx` — no subgrid; the legend's line and colour swatch are missing; series line colours do not match.
+- `N2_E_Maestroni_Swarm_COP.pptx` — the reference draws two rectangles per row and we draw the second only; the missing one appears to carry a semi-transparent gradient.
+- `16 - UTM - (NASA).pptx` — **replacement glyphs in chart text in several places** where the reference shows none. A missing-glyph box is a font or encoding fault, not a layout one.
+
+**Singles:**
+- `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` — table cell backgrounds (orange) and borders not drawn.
+- `Thailand17.ppt` — image scaling does not match; the reference draws the picture taller, so an aspect ratio is being preserved where the reference stretches, or the frame is being read differently.
+- `OnTrac_StarCertificationProgram-3Day.pptx` — the very large background page number draws black where the reference draws grey, and the block is shifted.
+
+### What this says about the instruments
+
+Eight defects, none of which the page gate, the word gate or the font gate can detect: they are
+wrong *colours*, wrong *geometry*, missing *fills* and missing *glyphs* on documents whose page
+and word counts already agree. The image diff can see them and does not name them; the operator
+diff can name them and nobody had looked at these twelve pages with it.
+
+**A periodic human pass over the proof sheet is worth more than another metric.** Schedule one
+per track rather than treating this as a one-off.
