@@ -539,6 +539,28 @@ has had, and turned one document into a full match. It was held back because it 
 reproduce the wrap it was derived from. **A large reach on an unconfirmed premise is a reason for
 more caution, not less** — it is exactly the change that would be hardest to unpick later.
 
+### "Both signs means a rounding" is a good prior and it has now been wrong
+
+A term that errs in both directions has three times turned out to be a rounding or a threshold
+rather than a missing factor, and that reading has been briefed as a heuristic. The fourth time
+it was wrong, and the shape of the miss is worth keeping.
+
+A row-height difference that ran 17 short and 2 long across one workbook was **LibreOffice's own
+line-break rule for paths**. `BreakIterator_Unicode::getLineBreak` (i#17155), having chosen a
+break, asks whether the character before it is a `/` and if so scans **backwards up to 66
+characters** for whitespace, moving the break to just after it. When that lands on the line's own
+start, EditEngine throws the break iterator away and cuts at the fitting limit — *"No separator
+in line ⇒ Chop!"*. **One rule, both directions**: glued, a cell grows a line; chopped, it loses
+one.
+
+No rounding can break the same characters differently depending on what precedes the blank, and
+the probe that settled it was twelve cells where `AMC1 CAT.IDE.A.170/…` and `CAT.IDE.A.170/…`
+are identical after the blank and LibreOffice breaks them differently.
+
+So keep the prior — it is cheap and often right — but state it as a prior. **A content-dependent
+rule produces both signs just as readily as a rounding does**, and the way to tell them apart is
+to find two inputs that differ only in the context the rule reads.
+
 ### Prototype a ported algorithm in a script until it reproduces the reference's own answer
 
 The largest single move on the sheets track came from porting `convertOutlines` — the rule by
