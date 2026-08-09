@@ -8649,27 +8649,40 @@ reading `pageNumber` instead of the physical page fails
 fails all three. The case is testable here where last round's was not, because a DOCX states
 `w:type="oddPage"` in markup a fixture can carry.
 
-### A lead for whoever takes batch 006: a table row we split and the reference moves whole
+### A lead for whoever takes batch 006: a row's declared floor is lost when the row is split
 
 `f445896eb008d14c1746fc37d412dc22.docx` is the batch's only failure, **15 pages against 16 with
 the words exactly equal at 5575**. It is one 30-row table, every row carrying a `w:trHeight`
-and none carrying `w:cantSplit`.
+with no `w:hRule` — so thirty "at least" floors — and none carrying `w:cantSplit`.
 
-Measured on page 3, where the two first diverge. Both pages begin on the same line, and the
-line pitch is **13.15 pt on both sides** — this is not a metric error. The reference's row
-rules on that page sit at y 769.64, 737.64, 431.84 and 206.64, and the table **stops** at
-206.64 with about 122 pt of body left below it; ours sit at 770.00, 743.05, 437.00, 211.75 and
-84.90, so we start the next row in that 122 pt and split it at the page edge. The row the
-reference moves whole is row 3, whose declared `w:trHeight` is 2921 twips — **146 pt, more than
-the 122 pt left** — which is the obvious next hypothesis and is **not yet tested**.
+The cause is those floors, established by mutating the document itself rather than by a probe:
 
-Two cautions for whoever tests it. Our page top is 5.1–5.7 pt below the reference's on that
-page, which is a separate small thing and not the 122. And **a hand-built DOCX with no
-`word/styles.xml` is useless for this question**: two probes I built that way laid out in
-Liberation Serif 10 pt here against Carlito 11 pt there, which is a probe artefact and made
-their row-splitting comparison meaningless. The page-count and `PAGE`-field probes above are
-unaffected — one short paragraph per page cannot change a page count — but any probe measuring
-a height needs a styles part.
+| The document | LibreOffice |
+|---|---:|
+| as found | 16 pages, page 3 holding 338 words |
+| every `w:trHeight` reduced to 80 twips | **15 pages, page 3 holding 439 words** |
+| only the four `w:trHeight="13800"` reduced | 16 pages, unchanged |
+| only row 3's 2921 reduced to 100 | 16 pages, unchanged |
+
+Neutralising all thirty floors reproduces **our** layout almost exactly — 15 pages against our
+15, 439 words on page 3 against our 434 — so the floors are what we are losing, and no single
+one of them is the whole of it. Ours is the layout of a document that states no minimum heights
+at all.
+
+Where it goes: `TableLayouter.LayOut` does apply the floor
+(`Length.Max(heights[row], table.Rows[row].MinHeight)`), and an unsplit row is right on both
+sides. But `TableLayouter.SliceRow` measures a split part purely from its cells' line bottoms
+and never consults `PageTableRow.MinHeight`, so a row whose height comes from its floor rather
+than from its content collapses to its content the moment it crosses a page. This table's rows
+are mostly taller than a page's remainder, so most of them are split.
+
+Two cautions for whoever takes it. Our page top is 5.1-5.7 pt below the reference's on page 3,
+which is a separate small thing and not the 122 pt of row this is about. And **a hand-built
+DOCX with no `word/styles.xml` is useless for measuring a height**: two probes I built that way
+laid out in Liberation Serif 10 pt here against Carlito 11 pt there, a probe artefact that made
+their row-splitting comparison meaningless. Mutating the corpus document is what settled it.
+The page-count and `PAGE`-field probes above are unaffected -- one short paragraph per page
+cannot change a page count -- but anything measuring a height needs a styles part.
 
 ### Still open, unchanged and still unmeasured
 
