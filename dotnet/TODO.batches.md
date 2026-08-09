@@ -8479,6 +8479,15 @@ it is now an item in `Paperless.Presentations/TODO.md`, and it is where 2.26 of 
 the reference resolves Carlito, so the weight is now right in the wrong family; its page 36,
 whose family is right, moved to Carlito-Bold exactly as the reference has it.
 
+### Cross-track
+
+The weight cannot reach the other two tracks by construction — `SheetChart` and `FrameChart`
+measure through an `IChartTextMeasurer` that already took a weight and already documents in code
+that it drops it — but the wrap limit is unconditional and does. Rendered at both commits with
+`SOURCE_DATE_EPOCH` set and byte-compared over all 371 words and sheets documents: **0 changed.**
+Every chart either track holds either has room for its labels or is already far past the
+boundary.
+
 ### Measured and not resolved: the rotated label's depth
 
 With the labels turned, our reserved band is **7.94 pt too deep at 10 pt** and the excess is flat
