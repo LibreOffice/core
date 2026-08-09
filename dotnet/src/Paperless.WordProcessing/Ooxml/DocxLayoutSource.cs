@@ -478,7 +478,14 @@ public sealed partial class DocxLayoutSource
         // paragraph 36 pt of height in the reference.
         WordTextStyle mark = WordParagraphFormats.ResolveText(_styles, properties, _theme);
         WordTextStyle body = WordParagraphFormats.ResolveRun(_styles, properties, null, _theme);
+
+        // Both are resolved, not only the one this paragraph draws its text in, because `Face` is
+        // also what fills `_references` — and a `FontReference` is the only thing a PDF can turn
+        // back into an *embedded* font program. Resolving just the body's face left the list label,
+        // which takes the mark's style, with no reference to be embedded through: nine documents
+        // went from `match` to `unembedded` on the corpus sweep with the layout otherwise identical.
         OpenTypeFace? face = Face(body);
+        OpenTypeFace? markFace = Face(mark);
         if (face is null) return null;
 
         // Taken before the walk and put back after it, because the walk can set a *new* one. What is
@@ -511,7 +518,7 @@ public sealed partial class DocxLayoutSource
         //
         // The mark's style rather than the body's, because a list label takes the formatting of the
         // paragraph mark — which is what `w:pPr/w:rPr` is for, and the one place it is visible.
-        (PageLabel? label, format) = ListFormatting(properties, format, mark, face);
+        (PageLabel? label, format) = ListFormatting(properties, format, mark, markFace ?? face);
 
         // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
         // preserves are the ones the notes and frames below were recorded against.
@@ -521,7 +528,7 @@ public sealed partial class DocxLayoutSource
         // A paragraph with nothing in it is its mark, so that is what sizes it; one with text is
         // sized by the text, and its mark formats a pilcrow nobody draws.
         WordTextStyle text = walker.Text.Length == 0 ? mark : body;
-        if (walker.Text.Length == 0) face = Face(mark) ?? face;
+        if (walker.Text.Length == 0) face = markFace ?? face;
 
         PageParagraph read = new()
         {
