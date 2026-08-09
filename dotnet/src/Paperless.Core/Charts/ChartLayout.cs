@@ -510,14 +510,16 @@ public static partial class ChartLayout
 
     /// <summary>Stamps the chart's label weight onto every label that did not state one.</summary>
     /// <remarks>
-    /// The counterpart of <see cref="InFamily"/> and there for the same reason. The three sites
-    /// that know their own weight — the main title, the axis titles, a legend entry — set
-    /// <see cref="ChartLabel.IsBold"/>; every other construction site leaves it null and gets the
-    /// chart's axis-label weight here. That is an approximation for exactly one kind of label: a
-    /// *data* label states its weight in its series' <c>c:dLbls/c:txPr</c> rather than on an axis,
-    /// and this gives it the axis'. It is the same approximation <see cref="ChartPlot.LabelSize"/>
-    /// already makes for the size, and no corpus document states a data-label weight that differs
-    /// from its axes'.
+    /// The counterpart of <see cref="InFamily"/> and there for the same reason. The sites that
+    /// know their own weight — the main title, the axis titles, a legend entry, and a data label
+    /// whose series states one — set <see cref="ChartLabel.IsBold"/>; every other construction
+    /// site leaves it null and gets the chart's axis-label weight here.
+    /// <para>
+    /// A data label that states <em>nothing</em> still lands here and takes the axis labels'
+    /// weight, which is round thirty's measured approximation and is deliberately kept: what
+    /// <see cref="ChartPlot.IsDataLabelBold"/> adds is only the case where the file answers the
+    /// question directly.
+    /// </para>
     /// </remarks>
     private static ChartDrawing InWeight(ChartDrawing drawing, bool bold)
     {
@@ -2122,7 +2124,7 @@ public static partial class ChartLayout
         if (points.Count == 0) return;
 
         double total = series.Total();
-        Length gap = plot.LabelSize / 5;
+        Length gap = plot.DataLabelFont / 5;
 
         foreach ((DocPoint at, int index, double value) in points)
         {
@@ -2155,7 +2157,9 @@ public static partial class ChartLayout
             if (where.X < area.Left) where = new DocPoint(area.Left, where.Y);
             if (where.X > area.Right) where = new DocPoint(area.Right, where.Y);
 
-            labels.Add(new ChartLabel(text, where, anchor, plot.LabelSize, AxisColour));
+            labels.Add(new ChartLabel(
+                text, where, anchor, plot.DataLabelFont, AxisColour,
+                IsBold: plot.IsDataLabelBold));
         }
     }
 
@@ -2432,8 +2436,9 @@ public static partial class ChartLayout
                             centre.X + along * Math.Cos(middle),
                             centre.Y - along * Math.Sin(middle)),
                         ChartLabelAnchor.Centre,
-                        plot.LabelSize,
-                        AxisColour));
+                        plot.DataLabelFont,
+                        AxisColour,
+                        IsBold: plot.IsDataLabelBold));
                 }
             }
 
@@ -2678,7 +2683,7 @@ public static partial class ChartLayout
         if (text is not { Length: > 0 }) return;
 
         ChartLabelPlacement placement = label.Placement ?? ChartLabelPlacement.Outside;
-        Length gap = plot.LabelSize / 5;
+        Length gap = plot.DataLabelFont / 5;
 
         DocPoint at;
         ChartLabelAnchor anchor;
@@ -2726,7 +2731,9 @@ public static partial class ChartLayout
             };
         }
 
-        labels.Add(new ChartLabel(text, at, anchor, plot.LabelSize, AxisColour));
+        labels.Add(new ChartLabel(
+            text, at, anchor, plot.DataLabelFont, AxisColour,
+            IsBold: plot.IsDataLabelBold));
     }
 
     /// <summary>The chart's title and its two axis titles.</summary>

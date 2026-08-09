@@ -569,6 +569,49 @@ public sealed partial record ChartPlot
     public bool IsLabelBold { get; init; }
 
     /// <summary>
+    /// The size a series' data labels are set at, when the file states one of their own.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A data label is not an axis label and states its size somewhere else — in the series'
+    /// <c>c:dLbls/c:txPr</c> rather than on an axis — so collapsing both into
+    /// <see cref="LabelSize"/> draws one of them at the other's size whenever a file states two.
+    /// </para>
+    /// <para>
+    /// <strong>Measured, on the page that named the defect.</strong> Page 11 of
+    /// <c>southern-classic-kennesaw-state-university-final.pptx</c> carries four charts;
+    /// <c>chart15.xml</c> states <c>sz="1600"</c> on each of its four series' <c>c:dLbls</c> and
+    /// <c>sz="1400"</c> on its category axis and its legend. LibreOffice's own <c>odp</c> of the
+    /// deck writes that chart's styles as four at <c>16pt</c> and two at <c>14pt</c>, so the two
+    /// sizes are in the imported model and not an artefact of the rendering; we drew all
+    /// seventy-four records on the page at one flat 14 pt.
+    /// </para>
+    /// <para>
+    /// Null rather than a default, exactly as <see cref="LegendSize"/> is: a reader that does not
+    /// look for it leaves every data label reading <see cref="LabelSize"/>, which is what all
+    /// three readers did before this existed.
+    /// </para>
+    /// </remarks>
+    public Length? DataLabelSize { get; init; }
+
+    /// <summary>The size a data label is drawn at, falling back to the axis labels'.</summary>
+    public Length DataLabelFont => DataLabelSize ?? LabelSize;
+
+    /// <summary>
+    /// Whether a series' data labels are set bold, when the file states a weight of their own.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than false for the reason <see cref="DataLabelSize"/> is null: an unstated
+    /// data-label weight has to keep taking the axis labels', which is what round thirty measured
+    /// and what <see cref="ChartLayout"/>'s stamping pass does. This only overrides the ones the
+    /// file states directly.
+    /// </remarks>
+    public bool? IsDataLabelBold { get; init; }
+
+    /// <summary>Whether a data label is drawn bold, falling back to the axis labels'.</summary>
+    public bool DataLabelBold => IsDataLabelBold ?? IsLabelBold;
+
+    /// <summary>
     /// The size a legend entry's name is set at, when the legend states one of its own.
     /// </summary>
     /// <remarks>
