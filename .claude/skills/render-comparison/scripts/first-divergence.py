@@ -85,7 +85,19 @@ def per_page_ink(ours: Path, ref: Path, tmp: Path):
     rows = []
     for line in out.splitlines():
         f = line.split("\t")
-        if len(f) >= 6 and f[0].isdigit():
+        if not f or not f[0].isdigit():
+            continue
+        # A page the image diff refuses to compare is the *strongest* divergence signal it has, and
+        # reading only the rows it managed to score walks straight past it. `pdf-image-diff` prints
+        # "page size differs: 363x512 vs 512x363" and three dashes for such a page, which is four
+        # fields and was skipped by a `len(f) >= 6` test. It cost a real finding: on
+        # `1_tpr_template__from_fy14_.docx` the sweep reported the divergence starting at page 5 when
+        # our page 3 is portrait where the reference's is landscape — we emit an extra page before an
+        # orientation change — and pages 3, 4 and 8 were all invisible for this reason.
+        if any("page size differs" in cell for cell in f):
+            rows.append((int(f[0]), float("inf"), "page size differs"))
+            continue
+        if len(f) >= 6:
             try:
                 rows.append((int(f[0]), float(f[3]), f[5]))
             except ValueError:
@@ -153,6 +165,14 @@ def analyse(ours: Path, ref: Path):
         result = {"pages_ours": no, "pages_ref": nr, "first": first,
                   "ink": next((i for p, i, _ in rows if p == first), 0.0),
                   "compared": len(rows)}
+        sized = next((v for p, _, v in rows if p == first), "") == "page size differs"
+        if sized:
+            # No operator diff is worth running: the two pages are not the same shape, so every
+            # record is one-sided by construction and the finding is the shape.
+            result.update(counts={}, only_ours=0, only_ref=0, gdelta=0, blank_ref=0,
+                          ink=float("nan"), dominant="page size",
+                          text=first_text(ref, first))
+            return result
         if first and first <= min(no, nr):
             counts, oo, orr, dom, gd, br = classify(ours, ref, first)
             result.update(counts=counts, only_ours=oo, only_ref=orr, dominant=dom,
