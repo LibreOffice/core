@@ -377,14 +377,21 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             //
             // Only where Default is otherwise unfilled: a slot inherited from an earlier section is what
             // LibreOffice's own CopyPageDescHdFt puts there, and an inherited head beats a blank.
-            //
-            // The even slot is deliberately not completed the same way. `Read_HdFt` gives the *left*
-            // page one only on the even iteration itself, so a facing-pages section with no even story
-            // has none on its even pages — which this dictionary cannot say, an absent slot meaning
-            // "fall back to Default".
             if (!into.ContainsKey(Model.PageFurnitureSlot.Default))
             {
                 into[Model.PageFurnitureSlot.Default] =
+                    BlocksOf(fonts, _reader.BlankFurniture(section), widths);
+            }
+
+            // The left page by the same rule and a narrower condition: `if (bUseLeft)` sets the frame on
+            // `pPD->GetLeft()` on the even iteration alone, so an even slot whose bit is on but whose
+            // story is empty and uninheritable is a blank rather than a fall-back to the master's. Where
+            // the bit is *off* the left page has no header at all, which this dictionary still cannot
+            // say — an absent slot means "fall back to Default". That case reaches five sections of
+            // three .doc in this corpus, measured over the header PLC of all 66; it is not this one.
+            if ((on & even) != 0 && !into.ContainsKey(Model.PageFurnitureSlot.Even))
+            {
+                into[Model.PageFurnitureSlot.Even] =
                     BlocksOf(fonts, _reader.BlankFurniture(section), widths);
             }
 
