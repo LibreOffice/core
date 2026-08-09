@@ -85,6 +85,47 @@ public class SheetPinnedBandTests
         cramped.ShouldBeFalse();
     }
 
+    /// <summary>
+    /// A band pinned at no height at all still draws, starting at the margin it has no room
+    /// above.
+    /// </summary>
+    /// <remarks>
+    /// <c>sheet-zero-band-xls.xls</c> is the same document with the footer band taken to nothing:
+    /// a 0.25 in bottom margin against a 0.25 in footer margin, so the two are equal and Calc
+    /// pins the band at zero. `PrintHF` clips the text to
+    /// <c>tools::Rectangle(aStart, aPaperSize)</c>, and a VCL rectangle built from a zero-height
+    /// <c>Size</c> is unbounded rather than empty, so the text is drawn and runs down into the
+    /// margin. LibreOffice 24.2.7.2 puts the top of `Zero band footer` at <strong>773.95 pt</strong>
+    /// on a 792 pt page, which is the bottom margin line; before this round we drew it 12.6 pt
+    /// higher, inside a band we had floored at 425 twips, and paginated the sheet on two pages.
+    /// </remarks>
+    [Fact]
+    public void AFooterPinnedAtNothingIsStillDrawnAtTheMargin()
+    {
+        using IPaginatedDocument document =
+            (IPaginatedDocument)new SpreadsheetReader().Read(
+                DocumentSource.FromFile(Corpus.Require("sheet-zero-band-xls.xls")));
+
+        SpreadsheetPages pages = (SpreadsheetPages)document.Layout();
+        pages.Count.ShouldBe(1);
+
+        SheetPrintSetup setup = pages.Sheets[0].Setup;
+        setup.FooterHeight.ShouldBe(Length.Zero);
+        setup.FooterGap.ShouldBe(Length.Zero);
+
+        RecordingDrawingSink sink = new();
+        pages.Pages[0].Draw(sink);
+
+        List<DrawnWord> footer =
+            [.. DrawnWords.On(sink.Pages[0]).Where(word => word.Text.StartsWith("Zero", StringComparison.Ordinal))];
+
+        footer.Count.ShouldBe(1);
+
+        // The baseline is the pen, so the top of the line is a shade above it; the reference's
+        // own box starts at 773.95 on a 792 pt page whose bottom margin is 18.
+        footer[0].Baseline.ShouldBeInRange(774.0, 786.0);
+    }
+
     [Fact]
     public void ABandTheMarginsLeaveNoRoomForIsPinnedAtNothing()
     {
