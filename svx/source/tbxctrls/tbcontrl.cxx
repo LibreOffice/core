@@ -321,6 +321,95 @@ private:
     SvxFontNameBox_Base* m_pBox;
 };
 
+class SvxFontStyleBox_Impl;
+class SvxFontStyleBox_Base;
+
+using SvxFontStyleToolBoxControl_Base
+    = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
+
+class SvxFontStyleToolBoxControl final : public SvxFontStyleToolBoxControl_Base
+{
+public:
+    SvxFontStyleToolBoxControl();
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
+    // XToolbarController
+    virtual css::uno::Reference<css::awt::XWindow>
+        SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+
+    // WeakComponentImplHelperBase
+    using SvxFontStyleToolBoxControl_Base::disposing;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+private:
+    VclPtr<SvxFontStyleBox_Impl> m_xVclBox;
+    std::unique_ptr<SvxFontStyleBox_Base> m_xWeldBox;
+    SvxFontStyleBox_Base* m_pBox;
+};
+
+class SvxFontStyleBox_Base
+{
+protected:
+    Reference<XFrame> m_xFrame;
+    std::unique_ptr<FontStyleBox> m_xWidget;
+    const FontList* m_pFontList;
+    std::unique_ptr<FontList> m_xOwnFontList;
+    OUString m_aFontName;
+    OUString m_aSubfamily;
+    FontWeight m_eWeight;
+    FontItalic m_eItalic;
+    bool m_bVariations;
+    bool m_bSupported;
+
+    const FontList* GetFontList();
+    void UpdateStyle();
+    void ApplyStyle();
+
+public:
+    SvxFontStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget, Reference<XFrame> xFrame);
+    virtual ~SvxFontStyleBox_Base();
+
+    void statusChanged_Impl(const css::frame::FeatureStateEvent& rEvent);
+
+    virtual void set_sensitive(bool bSensitive) { m_xWidget->set_sensitive(bSensitive); }
+
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+};
+
+class SvxFontStyleBox_Impl final : public InterimItemWindow, public SvxFontStyleBox_Base
+{
+public:
+    SvxFontStyleBox_Impl(vcl::Window* pParent, const Reference<XFrame>& rFrame);
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual ~SvxFontStyleBox_Impl() override { disposeOnce(); }
+
+    virtual void set_sensitive(bool bSensitive) override
+    {
+        m_xWidget->set_sensitive(bSensitive);
+        if (bSensitive)
+            InterimItemWindow::Enable();
+        else
+            InterimItemWindow::Disable();
+    }
+};
+
 class FontOptionsListener final : public comphelper::ConfigurationListenerProperty<bool>
 {
 private:
@@ -3509,6 +3598,269 @@ com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
     css::uno::Sequence<css::uno::Any> const & )
 {
     return cppu::acquire( new SvxFontNameToolBoxControl() );
+}
+
+SvxFontStyleBox_Base::SvxFontStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
+                                           Reference<XFrame> xFrame)
+    : m_xFrame(std::move(xFrame))
+    , m_xWidget(new FontStyleBox(std::move(xWidget)))
+    , m_pFontList(nullptr)
+    , m_eWeight(WEIGHT_NORMAL)
+    , m_eItalic(ITALIC_NONE)
+    , m_bVariations(false)
+    , m_bSupported(false)
+{
+    m_xWidget->connect_changed(LINK(this, SvxFontStyleBox_Base, SelectHdl));
+    m_xWidget->connect_entry_activate(LINK(this, SvxFontStyleBox_Base, ActivateHdl));
+    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
+}
+
+SvxFontStyleBox_Base::~SvxFontStyleBox_Base() {}
+
+const FontList* SvxFontStyleBox_Base::GetFontList()
+{
+    const SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFontListItem
+        = pDocSh ? pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr;
+    if (pFontListItem)
+        m_pFontList = pFontListItem->GetFontList();
+    else if (!m_pFontList)
+    {
+        m_xOwnFontList.reset(new FontList(Application::GetDefaultDevice()));
+        m_pFontList = m_xOwnFontList.get();
+    }
+    return m_pFontList;
+}
+
+void SvxFontStyleBox_Base::statusChanged_Impl(const css::frame::FeatureStateEvent& rEvent)
+{
+    if (rEvent.FeatureURL.Complete == ".uno:CharFontName")
+    {
+        css::awt::FontDescriptor aFontDesc;
+        if (!rEvent.IsEnabled || !(rEvent.State >>= aFontDesc))
+            m_aFontName.clear();
+        else
+        {
+            const FontList* pFontList = GetFontList();
+            if (pFontList && aFontDesc.Name != m_aFontName)
+            {
+                m_aFontName = aFontDesc.Name;
+                m_xWidget->Fill(m_aFontName, pFontList);
+            }
+            m_aSubfamily = aFontDesc.StyleName;
+        }
+    }
+    else if (rEvent.FeatureURL.Complete == ".uno:Bold")
+    {
+        bool bBold = false;
+        m_eWeight = (rEvent.State >>= bBold) && bBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
+    }
+    else if (rEvent.FeatureURL.Complete == ".uno:Italic")
+    {
+        bool bItalic = false;
+        m_eItalic = (rEvent.State >>= bItalic) && bItalic ? ITALIC_NORMAL : ITALIC_NONE;
+    }
+    else if (rEvent.FeatureURL.Complete == ".uno:FontVariations")
+    {
+        OUString sVariations;
+        m_bVariations = (rEvent.State >>= sVariations) && !sVariations.isEmpty();
+    }
+    else
+    {
+        // The own command carries no state, it only says whether a style can be
+        // applied here at all.
+        m_bSupported = rEvent.IsEnabled;
+    }
+
+    UpdateStyle();
+}
+
+void SvxFontStyleBox_Base::UpdateStyle()
+{
+    set_sensitive(m_bSupported && !m_aFontName.isEmpty());
+
+    // The status arrives while a style is being typed too, and it describes
+    // the one being replaced.
+    if (m_xWidget->has_focus())
+        return;
+
+    const FontList* pFontList = GetFontList();
+    if (!pFontList || m_aFontName.isEmpty())
+    {
+        m_xWidget->set_active_or_entry_text(OUString());
+        return;
+    }
+
+    // Variation settings describe a font the family does not name, so no style
+    // names it either.
+    m_xWidget->set_active_or_entry_text(
+        m_bVariations ? OUString()
+                      : pFontList->GetStyleText(m_aFontName, m_aSubfamily, m_eWeight, m_eItalic));
+}
+
+void svx::ApplyFontStyle(const Reference<XFrame>& rFrame, const FontList& rFontList,
+                         const OUString& rFontName, const OUString& rStyle)
+{
+    FontMetric aFontMetric(rFontList.Get(rFontName, rStyle));
+
+    OUString aStyleName;
+    FontWeight eWeight;
+    FontItalic eItalic;
+    rFontList.SplitStyleText(rFontName, rStyle, aStyleName, eWeight, eItalic);
+
+    const Reference<XDispatchProvider> xProvider(rFrame, UNO_QUERY);
+
+    SvxFontItem aFontItem(aFontMetric.GetFamilyTypeMaybeAskConfig(), aFontMetric.GetFamilyName(),
+                          aStyleName, aFontMetric.GetPitchMaybeAskConfig(),
+                          aFontMetric.GetCharSet(), SID_ATTR_CHAR_FONT);
+    Sequence<PropertyValue> aFontArgs{ comphelper::makePropertyValue(u"CharFontName"_ustr, Any()) };
+    aFontItem.QueryValue(aFontArgs.getArray()[0].Value);
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:CharFontName"_ustr, aFontArgs);
+
+    Sequence<PropertyValue> aWeightArgs{ comphelper::makePropertyValue(
+        u"Bold"_ustr, Any(eWeight == WEIGHT_BOLD)) };
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:Bold"_ustr, aWeightArgs);
+
+    Sequence<PropertyValue> aPostureArgs{ comphelper::makePropertyValue(
+        u"Italic"_ustr, Any(eItalic != ITALIC_NONE)) };
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:Italic"_ustr, aPostureArgs);
+}
+
+IMPL_LINK(SvxFontStyleBox_Base, SelectHdl, weld::ComboBox&, rCombo, void)
+{
+    // Applying a partial style name would replace the text being typed, so wait
+    // for the full name.
+    if (rCombo.changed_by_direct_pick())
+        ApplyStyle();
+}
+
+IMPL_LINK_NOARG(SvxFontStyleBox_Base, ActivateHdl, weld::ComboBox&, bool)
+{
+    ApplyStyle();
+    return true;
+}
+
+void SvxFontStyleBox_Base::ApplyStyle()
+{
+    const FontList* pFontList = GetFontList();
+    if (!pFontList || m_aFontName.isEmpty())
+        return;
+
+    const OUString sStyle = m_xWidget->get_active_text();
+    if (sStyle.isEmpty())
+        return;
+
+    svx::ApplyFontStyle(m_xFrame, *pFontList, m_aFontName, sStyle);
+}
+
+SvxFontStyleBox_Impl::SvxFontStyleBox_Impl(vcl::Window* pParent, const Reference<XFrame>& rFrame)
+    : InterimItemWindow(pParent, u"svx/ui/fontstylebox.ui"_ustr, u"FontStyleBox"_ustr, true)
+    , SvxFontStyleBox_Base(m_xBuilder->weld_combo_box(u"fontstylecombobox"_ustr), rFrame)
+{
+    SetSizePixel(get_preferred_size());
+}
+
+SvxFontStyleToolBoxControl::SvxFontStyleToolBoxControl()
+    : m_pBox(nullptr)
+{
+}
+
+void SvxFontStyleToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    svt::ToolboxController::initialize(rArguments);
+
+    // The style has no attribute of its own; it is composed from the font, the
+    // weight and the posture, and variation settings leave it unnamed.
+    addStatusListener(u".uno:CharFontName"_ustr);
+    addStatusListener(u".uno:Bold"_ustr);
+    addStatusListener(u".uno:Italic"_ustr);
+    addStatusListener(u".uno:FontVariations"_ustr);
+}
+
+void SvxFontStyleToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+{
+    SolarMutexGuard aGuard;
+    if (m_pBox)
+        m_pBox->statusChanged_Impl(rEvent);
+
+    if (rEvent.FeatureURL.Complete != m_aCommandURL)
+        return;
+
+    if (m_pToolbar)
+        m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
+    else
+    {
+        ToolBox* pToolBox = nullptr;
+        ToolBoxItemId nId;
+        if (getToolboxId(nId, &pToolBox))
+            pToolBox->EnableItem(nId, rEvent.IsEnabled);
+    }
+}
+
+css::uno::Reference<css::awt::XWindow>
+SvxFontStyleToolBoxControl::createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent)
+{
+    uno::Reference<awt::XWindow> xItemWindow;
+
+    if (m_pBuilder)
+    {
+        SolarMutexGuard aSolarMutexGuard;
+
+        std::unique_ptr<weld::ComboBox> xWidget(
+            m_pBuilder->weld_combo_box(u"fontstylecombobox"_ustr));
+
+        xItemWindow
+            = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
+
+        m_xWeldBox.reset(new SvxFontStyleBox_Base(std::move(xWidget), m_xFrame));
+        m_pBox = m_xWeldBox.get();
+    }
+    else
+    {
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
+        if (pParent)
+        {
+            SolarMutexGuard aSolarMutexGuard;
+            m_xVclBox = VclPtr<SvxFontStyleBox_Impl>::Create(pParent, m_xFrame);
+            m_pBox = m_xVclBox.get();
+            xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
+        }
+    }
+
+    return xItemWindow;
+}
+
+void SvxFontStyleToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
+{
+    ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
+    SolarMutexGuard aSolarMutexGuard;
+    m_xVclBox.disposeAndClear();
+    m_xWeldBox.reset();
+    m_pBox = nullptr;
+}
+
+OUString SvxFontStyleToolBoxControl::getImplementationName()
+{
+    return u"com.sun.star.comp.svx.FontStyleToolBoxControl"_ustr;
+}
+
+sal_Bool SvxFontStyleToolBoxControl::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence<OUString> SvxFontStyleToolBoxControl::getSupportedServiceNames()
+{
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_FontStyleToolBoxControl_get_implementation(
+    css::uno::XComponentContext*,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxFontStyleToolBoxControl() );
 }
 
 SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :

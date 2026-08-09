@@ -191,6 +191,25 @@ public:
                                                     const std::vector<vcl::font::Variation>& rVariations,
                                                     const OUString& rPreferred ) const;
 
+    /** The style box entry describing this font, e.g. "Bold Italic" or "SemiBold".
+
+        Regular, italic, bold and bold italic are carried by the weight and
+        posture, anything beyond them by the subfamily, so both are needed to
+        name a style.
+     */
+    OUString                GetStyleText( const OUString& rName,
+                                          const OUString& rSubfamily,
+                                          FontWeight eWeight, FontItalic eItalic ) const;
+
+    /** Split a style box entry back into what the model stores for it.
+
+        The inverse of GetStyleText(): only an extended style is returned as the
+        subfamily, and using the font's own name for it rather than ours.
+     */
+    void                    SplitStyleText( const OUString& rName, const OUString& rStyle,
+                                            OUString& rSubfamily, FontWeight& rWeight,
+                                            FontItalic& rItalic ) const;
+
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
     FontMetric           Get( const OUString& rName,
