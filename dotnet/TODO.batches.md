@@ -9608,3 +9608,135 @@ Presentations 544; the four new tests are the title face reaching the measurer, 
 label, its control, and the reader carrying it apart from the chart's. Three mutations put back
 through `verify-test.sh`, all three detected, and deliberately separate ones for the measurer half
 and the label half — the first mutation passes the label test, which is the point of having both.
+## Round thirty-three — sheets: the header/footer band Calc pins rather than floors
+
+Base `9f44b2943`, checked before measuring. The baseline sweep reproduced the brief to the digit:
+**149/171, absolute page error 86, 155 exact page counts, absolute word error 32729**, and the
+per-batch line as well. 171 rows, no duplicate path, no `ref-failed` and no `ours-failed`.
+
+Full working, citations and the mutation table are in `probes/sheets-r33/README.md`.
+
+**The lead the brief handed over was measured right and read wrong, and the two had to be checked
+separately.** The claim was that five of batches 011 and 016's six failures are one quantity with
+both signs — how many columns fit in a column band. It is not the columns. `probes/sheets-r33/colwidth.py`
+replays our SpreadsheetML column-width arithmetic against LibreOffice's own `style:column-width`
+and reproduces **all 16384 columns on all eleven sheets** of `SIL_TDB648.xlsx` exactly, margins
+included. And on `RMP 2011-2014 and Inventory.xls` it is not even the columns' axis: that sheet is
+`fitToWidth=1`, so it has one column band whatever the widths are. The quantity is the printable
+page **height**, and the term that is wrong in it really is a threshold — just not the one named.
+
+**A BIFF header or footer band the filter pins has no minimum height, and we applied one to
+every band.** `XclImpPageSettings::Finalize` splits on whether the band's text fits the distance
+the two margins leave (`xipage.cxx:315-331`). When it fits, the band is dynamic and no
+`ATTR_PAGE_SIZE` is written, so `nManHeight` stays at the page style's own 425 twips and
+`UpdateHFHeight` floors the band there. When it does not fit — #i23296 — the band is marked *not*
+dynamic and `ATTR_PAGE_SIZE` is written at the margin distance; `UpdateHFHeight` then returns on
+its own first line (`printfun.cxx:793`) and never reaches the floor at all.
+
+**Measured against LibreOffice's four numbers rather than derived.** `RMP`'s flat-ODF export
+states every band height on both its sheets: a dynamic header floored at 425 twips, a pinned
+footer of 176, a pinned header of 380 and a pinned footer of 113. We gave all four 425. All four
+now agree exactly, and the exported distances corroborate the *branch* as well as the height.
+
+**The row bands were reproduced in a script before any C# was written.** `rowbands.py` replays
+`ScTable::UpdatePageBreaks` down the rows over LibreOffice's own row heights — which agree with
+ours to the twip on all 210 rows — and gives our 22 bands at the floored page height and the
+reference's 21 at the pinned one. Two page heights produce 21 bands; the one that also puts row
+120 on page 12 is the reference's, which token overlap confirms.
+
+**The census covered the whole track and the reach matched it by name.** 61 of the 171 documents
+open as an OLE2 workbook stream and 110 as a zip, and only the BIFF reader carries the floor, so
+the zip half is empty by construction. The census names **five** documents; rendering all 171
+with both CLIs under a pinned clock, **five differ and 166 are byte-identical** — the same five.
+
+**Stopping at the band height would have cost two matches, and the first sweep is why.** Three of
+the five state a footer margin equal to the page margin, so their pinned band is *nothing* — and
+Calc still draws the footer. `PrintHF` clips to `tools::Rectangle(aStart, aPaperSize)`, and a VCL
+rectangle built from a zero-height `Size` has no bottom edge at all rather than being empty
+(`printfun.cxx:1870`), so a zero band suppresses the space and not the ink. Measured: LibreOffice
+draws `Page 6 - 2` with its top at 575.95 pt on a 612 pt page, which is the bottom margin line to
+a twentieth of a point. The gap goes with it — the pinning branch writes the distance out as zero
+(`xipage.cxx:322`) — and a dynamic band's distance is left at the shared default, labelled in the
+source as a small unmeasured deviation rather than a decision.
+
+Two fixtures, both authored as flat ODF and converted by LibreOffice so their BIFF page records
+say what they are meant to, and both verified by reading the records back:
+`sheet-pinned-band-xls.xls` (a 144-twip pinned footer, one page against two) and
+`sheet-zero-band-xls.xls` (a band pinned at nothing, whose footer the reference draws at the
+margin line). Five cases in `SheetPinnedBandTests`; five reintroduced defects, all detected —
+`probes/sheets-r33/mutate.sh`. A sixth mutation is recorded there as an **equivalent formulation
+rather than a gap**, which is what `verify-test.sh` reporting it undetected correctly means.
+
+**Whole track on the final tree, 171 rows with no duplicate path: 150/171 matches, absolute page
+error 85, 156 exact page counts, absolute word error 32673** — from 149, 86, 155 and 32729. Per
+batch: 001–009 89/89, 010 8/10, **011 8/10**, 012 8/10, 013 8/10, 014 9/10, 015 6/9, 016 5/9,
+017 6/10, 018 3/4. **No batch fell**, and **exactly one row of 171 changes**:
+`RMP 2011-2014 and Inventory.xls` goes 39 pages to **38 against 38** and from `pages` to `match`.
+The other four documents the change reaches keep the word counts they had at the baseline, which
+is the point — the band height moved on all five and only one of them was paginating wrongly
+because of it.
+
+**Two rows of that sweep came back `ref-failed` and are spliced rather than believed.**
+`fy2011-aip-grants.xls` and `6880ac7361ca1b99a9230811_ST Capability List Rev.16 - Web.xlsx` both
+convert cleanly when re-run alone at one worker — 93/93 and 217/217, both `match`. That is the
+`soffice`-wedging-past-its-own-timeout shape, on a machine at a load average of about 17.
+Believing the raw sweep would have reported 148/171 with two batches falling, from a reference
+converter that had nothing to do with the change.
+
+**The largest residue outside the round is diagnosed and deliberately not shipped.**
+`EASA-IFP-145Scope(WEB)_…xlsx` loses exactly 2350 words, and the brief attributed it to one
+column's width or alignment. It is neither, and it is not in the spreadsheet code: the content
+streams are identical — same glyph codes, same `Td`, same subset — and what differs is that
+**LibreOffice truncates its `/Widths` to whole thousandths of an em where we state four
+decimals**. `EASA.UK.1` therefore ends at 98.386 in the reference and 98.441 in ours, a gap of
+1.1375 pt against 1.0830, and poppler's word break sits between them at 0.1 of the font size.
+Truncation is LibreOffice's rule beyond doubt — it reproduces all 77 of that document's width
+entries where rounding misses 39, and Liberation Sans and Liberation Sans Bold at every entry
+where the two rules disagree. It was not shipped because truncating alone would not reproduce it:
+`PdfContentSink` corrects the pen past 0.0025 pt of drift, so every glyph would take a `TJ`
+adjustment and land back where layout put it. Matching the reference means adopting the
+truncation *and* the uncorrected drift it causes, in the shared PDF writer, which is a decision
+for a round that can sweep all three tracks.
+
+Per-project tests, all matching the known-good counts with 0 skipped: Core 275, Containers 109,
+Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
+Spreadsheets **598** (593 plus this round's 5), Presentations 542.
+
+**Every source change is inside `Paperless.Spreadsheets`** — `MsBinary/XlsPrintSetup.cs`,
+`Layout/SheetBandHeight.cs` and `Layout/SheetPageDecoration.cs` — so the words and slides tracks
+cannot be reached by it.
+
+### The twelve-document pagination cluster is not the column-fit predicate
+
+A mid-round review widened the brief's three documents to twelve — every sheet whose page count
+is wrong while its words are right, deltas −3 −3 −2 −1 −1 −1 −1 +1 +1 +1 +1 +3 — and asked for
+the observation separating one predicate from twelve coincidences. It is cheap and it is negative.
+
+**Every input to the column-band predicate agrees with LibreOffice on every document checked.**
+`UpdatePageBreaks` measures column widths against the printable page width and nothing else, and
+our port is faithful, so the split can only differ if one of those numbers does. Against the
+flat-ODF export, on `SIL_TDB648`, `CSJU`, `tk-syllabus`, `flightstandards`, `Capability_List`,
+`FAA-2019-0995-0002` and `seihon` — 55 sheets between them — **zero** column widths differ and
+**zero** page terms differ (paper, all four margins, scale, pinned bands). And two of the
+fourteen have a single column band per sheet, so no value of the predicate can reach them.
+
+**What the cluster does look like is a wrapped row one text line out, in both directions.** The
+row heights are the last input and they do differ: 129 rows on `seihon`'s one sheet, 16 across
+`tk-syllabus`'s seventeen, 12 on `flightstandards`, 1 on `Capability_List` — and every
+difference is a whole multiple of one line of the cell's own text (224.1 twips at 11 pt,
+268.8 at 13), with both signs. That is the brief's *one quantity with both signs*, attached to
+the wrong axis: it is `SheetOptimalRowHeights` and cell wrapping, not the column fit.
+
+**Two of the seven do not fit even that, and that is the part worth carrying forward.**
+`CSJU List of Recipients of funds 2013-2020.xlsx` has word counts *exactly* equal at
+55219/55219, is one page long, and has not one differing column width, row height or page term
+across its eight sheets and 5500 rows; `FAA-2019-0995-0002_attachment_2.xlsx` is the same. Those
+two are downstream of the geometry entirely. A cluster of one symptom is not a cluster of one
+cause, and this one is at least three.
+
+`probes/sheets-r33/axis-triage.sh` says which axis can possibly be at fault; `geom-check.py` and
+`page-check.py` rule out the column axis in one run each; `row-check.py` names the rows. The
+review's other findings on this track — `Capability_List`'s taller cells (the same finding as its
+row heights), `grants-2005.xls`'s uncropped header text, `sectors-defense-and-aerospace.xlsx`'s
+missing empty-cell shading, `ans_mappings`'s hyperlink colour, `Keywords_Mapping`'s missing
+borders and chart scale, and `Template Pilot Logbook`'s angled category labels — are untouched.

@@ -253,7 +253,17 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
         SheetPrintSetup setup = sheet.Setup;
         DocSize page = setup.PageSize;
 
-        if (setup.Header is { IsEmpty: false } header && setup.HeaderHeight > Length.Zero)
+        // A band of no height at all is still drawn, and that is not an edge case worth
+        // suppressing: three of this track's workbooks state a footer margin equal to the page
+        // margin, so Calc pins their band at nothing and draws the text starting *at* the margin
+        // and running down into it. `PrintHF` clips to `tools::Rectangle(aStart, aPaperSize)`,
+        // and a VCL rectangle built from a zero-height Size has no bottom edge at all — it is
+        // unbounded rather than empty — so a zero band suppresses the *space* and not the ink
+        // (`sc/source/ui/view/printfun.cxx:1870`). Measured on
+        // `2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls`, whose sheet has a 0.5 in bottom
+        // margin and a 0.5 in footer margin: LibreOffice draws `Page 6 - 2` at y 575.95 on a
+        // 612 pt page, which is the bottom margin line to a twentieth of a point.
+        if (setup.Header is { IsEmpty: false } header)
         {
             DrawBand(
                 header,
@@ -267,7 +277,7 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
                 sink);
         }
 
-        if (setup.Footer is { IsEmpty: false } footer && setup.FooterHeight > Length.Zero)
+        if (setup.Footer is { IsEmpty: false } footer)
         {
             // The footer's gap sits at the *top* of its band, between the last row and the text,
             // so the text starts that far below the band's top rather than at it.
@@ -295,7 +305,7 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
         bool fromBottom,
         IDrawingSink sink)
     {
-        if (right <= left || height <= Length.Zero) return;
+        if (right <= left || height < Length.Zero) return;
 
         // The band is drawn at the page's own zoom. `ScPrintFunc::PrintHF` switches the device to
         // `aTwipMode`, which carries the zoom as its scale fraction

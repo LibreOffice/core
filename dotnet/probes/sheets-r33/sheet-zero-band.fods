@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="table-cell">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="3in"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.75cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="ta1" style:family="table" style:master-page-name="ZeroBand">
+   <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.5in" fo:margin-bottom="0.25in" fo:margin-left="0.7in" fo:margin-right="0.7in" style:writing-mode="lr-tb" style:print="charts drawings objects zero-values"/>
+   <style:header-style/>
+   <style:footer-style>
+    <style:header-footer-properties svg:height="0in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0in" style:dynamic-spacing="false"/>
+   </style:footer-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="ZeroBand" style:page-layout-name="pm1">
+   <style:header style:display="false"/>
+   <style:footer>
+    <text:p>Zero band footer</text:p>
+   </style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="ZeroBand" table:style-name="ta1">
+    <table:table-column table:style-name="co1"/>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 1 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 2 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 3 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 4 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 5 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 6 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 7 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 8 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 9 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 10 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 11 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 12 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 13 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 14 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 15 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 16 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 17 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 18 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 19 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 20 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 21 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 22 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 23 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 24 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 25 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 26 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 27 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 28 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 29 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 30 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 31 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 32 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 33 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+<table:table-row table:style-name="ro1"><table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Row 34 of the zero-band fixture</text:p></table:table-cell></table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

@@ -89,8 +89,36 @@ internal static class SheetBandHeight
     /// </param>
     public static Length Printed(
         string? codes, Length statedBand, SheetDefaultFont? defaultFont = null)
+        => Printed(codes, statedBand, defaultFont, out _);
+
+    /// <inheritdoc cref="Printed(string?, Length, SheetDefaultFont?)"/>
+    /// <param name="codes">The header or footer string as the file wrote it.</param>
+    /// <param name="statedBand">
+    /// The band the file's two margins imply — <c>top - header</c>, or <c>bottom - footer</c>.
+    /// </param>
+    /// <param name="defaultFont">The workbook's own default cell font.</param>
+    /// <param name="isDynamic">
+    /// Whether Calc leaves the band <em>dynamic</em>, which is the branch both filters take when
+    /// the text fits inside the stated band (<c>xipage.cxx:315-331</c>,
+    /// <c>pagesettings.cxx:1032</c>). It is worth reporting because it decides whether the
+    /// band has a minimum height at all: <c>UpdateHFHeight</c> returns before it reaches
+    /// <c>nManHeight</c> for a band that is not dynamic (<c>printfun.cxx:793</c>), so a pinned
+    /// band prints at exactly the stated height however short that is. The BIFF filter is the
+    /// only one where this shows, because it is the only one that leaves a <em>page style
+    /// default</em> in <c>ATTR_PAGE_SIZE</c> for the dynamic case — see
+    /// <c>XlsPrintSetup.Band</c>.
+    /// </param>
+    public static Length Printed(
+        string? codes, Length statedBand, SheetDefaultFont? defaultFont, out bool isDynamic)
     {
-        if (string.IsNullOrEmpty(codes) || statedBand <= Length.Zero) return statedBand;
+        isDynamic = true;
+        if (string.IsNullOrEmpty(codes) || statedBand <= Length.Zero)
+        {
+            // A band the margins leave no room for is the #i23296 case at its extreme: the
+            // filter pins it at nothing rather than making it dynamic.
+            isDynamic = statedBand > Length.Zero;
+            return statedBand;
+        }
 
         (Length nominal, Length measured) = Measure(codes, defaultFont ?? SheetDefaultFont.Calc);
 
@@ -98,7 +126,11 @@ internal static class SheetBandHeight
         // what prints. Testing the nominal height is deliberate: it is the figure the *filter*
         // compared when it decided, and using the measured one here would make a band dynamic or
         // fixed on a different test from Calc's.
-        if (nominal > statedBand) return statedBand;
+        if (nominal > statedBand)
+        {
+            isDynamic = false;
+            return statedBand;
+        }
 
         Length growth = measured - nominal;
         return growth > Length.Zero ? statedBand + growth : statedBand;
