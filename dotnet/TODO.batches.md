@@ -11501,3 +11501,83 @@ page. The token multiset says the opposite of the scalar: over the three documen
 under-draw falls **608 → 164** and total mismatch **1211 → 896**. Recorded here because the scalar is
 the number the scoreboard carries, and a future round reading only the scoreboard would read this as
 a regression.
+
+## Round forty-three — words: the head that is not inherited, and the matcher that was inventing rules
+
+Branch `worktree-words-r43` on `cce1cc314`. Baseline reproduced **exactly**: 154/200, absolute page
+error 78, 164 exactly-correct page counts, absolute word error 6512.
+`probes/words-r43/baseline.tsv`.
+
+**Nothing under `dotnet/src` is touched, so the scoreboard is unchanged and the reach is zero by
+construction.** The corpus was rendered once and classified twice. What the round produces is two
+refutations, one mechanism established from both ends, three tests, and a repaired instrument.
+
+### 1. Two of the brief's three over-drawing documents have no header question at all
+
+The brief names `UG.CAO.00133 … Language.docx`, `A1. EASA Form 2.docx` and
+`B11. TE.CAO.00129  Experience  logbook.docx` as one class of "draws its running head on pages the
+reference leaves bare". They are not one class.
+
+`A1. EASA Form 2.docx` has **one** section and one `default` header; `B11. TE.CAO.00129` names a
+`default` header in **every** section. Neither has an inheritance decision to get wrong. Their word
+surplus is their page count — **9 pages against 7** and **7 against 6** — and the head is on every
+page of both renderings, measured with a header-only marker: ours `[1…9]`, the reference `[1…7]`.
+Per-page extracted words say the same, `[503, 246, 180, 479, 198, 95, 207, 432, 97]` against
+`[451, 199, 225, 312, 395, 314, 345]`.
+
+So round 42's residual over-draw on those two is **a pagination defect being counted in words**,
+and the running-head question is one document's.
+
+### 2. The header LibreOffice does not inherit is a header made only of tables
+
+Round 42's refutation reproduces in one command — six authored two-section shapes, LibreOffice
+inherits in all six, our link-to-previous rule is right. What it assumed next, that the sections'
+header references are therefore the variable, is wrong.
+
+`probes/words-r43/header-slot-mutations.py` mutates the real document. Deleting **every**
+`w:headerReference` from sections 1, 2 and 4 — the shape §17.10.1 calls link-to-previous outright —
+leaves the reference still drawing the head on 5 pages of 18. Adding a `default` reference to those
+sections puts it on all eighteen. Filling the empty even/first parts they name draws that text on no
+page at all, so those slots are inert (no `w:evenAndOddHeaders`, no `w:titlePg`).
+
+`probes/words-r43/header-inherit-bisect.py` cuts the document to its first two sections — three
+pages, the whole effect — and replaces one part at a time. `settings.xml`, `styles.xml`, the footer
+reference, `w:cols`, `w:noEndnote` and section 0's entire body are all not it. **`word/header1.xml`
+is.** Replace it with a line of text and the head appears on page 2; take the tables out and it
+appears; add a bare `<w:p/>` after the last table, or before the first, and it appears — same table,
+same logo, same eleven runs.
+
+`probes/words-r43/header-inherit-content-shape.py` authors it from the other side, holding the
+section markup at round 42's inheriting shape and varying only what the header holds. Eight
+variants — text, a table, a nested table, an inline image, a table with the image in it, a
+paragraph then a table, a table with a trailing paragraph, a table with none — and **seven
+inherit**. The one that does not is the corpus shape exactly.
+
+> LibreOffice copies a section's header into a following section only when the source header holds
+> at least one top-level `w:p`. A header whose content is nothing but tables arrives **empty**.
+
+**It is the reference's import defect, and the document supplies the control.**
+`word/header1.xml`'s only top-level child is a `w:tbl` and `word/footer1.xml`'s is a `w:p`; section 1
+names neither of its own, and the reference prints the **footer** on all eighteen pages while
+printing the header on five. One file, one mechanism, opposite outcomes, the only difference being
+the kind of the top-level node. Three readings agree: LibreOffice's flat-ODF export gives the
+inheriting sections a `<style:header>` that is present and **empty** — header on, no content, which
+is not what declining to link looks like; the identical header content *named* by section 3's own
+reference draws perfectly on four landscape pages; and LibreOffice's source says it means to link
+and does it by copying (`sw/source/writerfilter/dmapper/PropertyMap.cxx`:1118-1146, cited as a
+mechanism — the reference binary is 24.2.7.2 and the tree is a development branch).
+
+**Not implemented, deliberately**, per CLAUDE.md's rule to record a reference import defect rather
+than contort Paperless into reproducing it — and pinned by `SectionInheritedHeaderTests` rather than
+left in a report, so a later round that wants it has to delete a test that explains why not.
+
+The cost is stated rather than hidden. `probes/words-r43/table-only-header-census.py`: **3 of the
+134 DOCX** have a section inheriting a table-only header, and it can see none of the **66 `.doc`**.
+Reproducing the reference would gain **one** verdict — `UG.CAO.00133`, 3944 words against 3700,
+whose surplus is exactly that head on thirteen pages — improve `UG.CAO.00006`'s word error without
+moving its verdict, and make `docs-quality-MA.IMS.00001`'s word error worse.
+
+A measurement trap worth keeping: this document's running head opens with "European Aviation Safety
+Agency" and so does its **footer**, which prints on every page of both renderings. A probe keyed on
+that phrase reports the head everywhere and closes the question in the wrong direction. The probes
+key on "Approval Date", checked absent from every footer and from `word/document.xml`.
