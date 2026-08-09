@@ -10000,3 +10000,7 @@ not: its only sheet's 360 rows agree with LibreOffice's own `style:row-height` *
 360**, before and after this round. Whatever wraps differently there never reaches the reserved
 height, which puts it on the drawing side — consistent with the document being page-exact
 (162/162) while over-drawing 2098 words.
+
+Test counts on the final tree, run project by project: Core **284** (278 before), Containers 109,
+Text 255, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 706,
+Spreadsheets **605** (598 before), Presentations 545, Fidelity 550, **0 skipped** throughout.

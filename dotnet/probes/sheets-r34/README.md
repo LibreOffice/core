@@ -158,6 +158,11 @@ resolves to the unwired default and would pass whatever the code did for a secon
 Its five rows differ only in `wrapText` and in where the breaks fall. LibreOffice's own flat-ODF
 export gives **252.9 / 700.7 / 700.7 / 476.8 / 256.3** twips; we give 256 / 701 / 701 / 477 / 256.
 
+Test counts on the final tree, every project run individually: Core **284** (was 278),
+Containers 109, Text 255, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing 706, Spreadsheets **605** (was 598), Presentations 545, Fidelity 550,
+**0 skipped** throughout.
+
 Both halves were verified by reintroduction, through `verify-test.sh`:
 
 | mutation | detected by |
