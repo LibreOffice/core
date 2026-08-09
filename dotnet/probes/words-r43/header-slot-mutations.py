@@ -29,9 +29,16 @@ from pathlib import Path
 SOURCE = Path("/workspace/sample-files/words/batch-014/docx/"
               "UG.CAO.00133 Foreign Part 145 approvals - Language.docx")
 
-# The running head's own words. It is the only place in the document where this phrase is set on
-# its own line, so counting the pages carrying it counts the pages carrying the head.
-HEAD = "European Aviation Safety Agency"
+# The running head's own words — and the first choice was wrong in a way worth recording. The
+# head's opening line is "European Aviation Safety Agency", and so is the *footer's*: it prints
+# "© European Aviation Safety Agency. All rights reserved." on every page of both renderings. A
+# probe keyed on that phrase reports the head present on all eighteen pages of the reference,
+# which is exactly the answer that would have made this round conclude the head is drawn
+# everywhere and the difference is elsewhere.
+#
+# "Approval Date" appears in `word/header1.xml` and `word/header6.xml`, in no footer, and zero
+# times in `word/document.xml`. Checked before use.
+HEAD = "Approval Date"
 
 SECTPR = re.compile(rb"<w:sectPr\b.*?</w:sectPr>", re.S)
 HEADER_REF = re.compile(rb'<w:headerReference[^>]*/>')
