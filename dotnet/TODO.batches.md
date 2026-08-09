@@ -10958,3 +10958,92 @@ mutations, five detections, and each mutation was caught by a *different* test �
 lookup fails the fill and border tests, removing the interior suppression fails the border test,
 removing the grid suppression fails the grid test, bucketing a merge by its first row only fails the
 tall-block test, and removing the grid's run-coalescing fails the unmerged-sheet test.
+
+## Round thirty-eight — words: the elements the layout walker dropped, in both readers
+
+Branch `worktree-words-r38`, 13 commits on `545550952`. Baseline reproduced exactly: **154/200**,
+page error 78, 164 exact, word error 6456.
+
+The brief's first item was a single symbol bullet. A census comparing the element cases each DOCX
+**extraction** walker handles against the ones the **layout** walker handles turned it into a class:
+`w:sym` (16 documents, 158 elements) and `w:noBreakHyphen` (9 documents, 138) both fell through
+`default:` and drew nothing. A font-set comparison then found the same hole a second time in the
+**WW8** reader — `sprmCFSpec` declared in `Ww8Sprm` and referenced from nowhere, `sprmCSymbol` not
+declared at all — so a symbol run came out as its placeholder text drawn literally
+(`3.6(-more-efficient` against `3.6×-more-efficient`). That is the fourth wiring hole of this shape
+this project has found: two complete halves with nothing joining them.
+
+The `.doc` non-breaking hyphen is **U+002D, not U+2011** — `itrform2.cxx:1881` swaps
+`CHAR_HARDHYPHEN` for `'-'`. Ours was U+2011 and was pulling a fallback face in for an unrelated
+reason.
+
+| stage | reach | verdicts | word error |
+|---|---:|---:|---:|
+| `w:sym` + `w:noBreakHyphen`, DOCX | 22 of 200 | 0 | 6456 → 6437 |
+| `sprmCSymbol` + `sprmCFSpec`, WW8 | 10 of 200 | 0 | 6437 → 6427 |
+| the `.doc` hyphen | 8 of 200 | 0 | 6427 → 6427 |
+| **round total, byte-compared** | **34 of 200** | **0** | **6456 → 6427** |
+
+Zero verdicts, predicted before each sweep and correct each time — the gate reads page count, words
+and unembedded fonts, and none of these three moves any of them. The instrument that does read them
+is the font set, and it has to be read as a total because the change moves faces both ways: 70 → 60
+documents with a font-set mismatch, and reference-embeds-OpenSymbol-and-we-embed-none 15 → 5.
+
+**The round total is 34, not 40.** The first attempt added the three per-stage reaches; six
+documents changed in more than one stage. One `cmp` loop caught it. Arithmetic over three reports is
+exactly the class this skill warns about.
+
+### Refuted: the brief's second item is not a numbering defect
+
+The brief read `.doc` documents whose `ilfo` is nought as losing `sprmPAnld` numbering.
+`316r_a_e.doc` contains **zero** `sprmPAnld` bytes, and LibreOffice's own flat-ODF export of it has
+**0** `<text:list>` across 438 paragraphs. LibreOffice reads no list there either. What those nine
+documents actually had wrong was `sprmCSymbol`.
+
+One briefed figure also did not reproduce: `150-5370-10H.docx` is **711/721**, not 712, and was 711
+at the briefed base commit too.
+
+### Published against itself
+
+The dead-constant census that found `sprmCFSpec` scored **1 useful hit in 33** — worth recording as
+the precision of that instrument, not as a technique to repeat blind.
+
+### Two leads opened and not closed, both measured
+
+- Two different `sprmCSymbol` slots in one paragraph both emit the **first** one's code point.
+  Reproduced on the baseline binary and on a file carrying no `sprmCSymbol` at all, so it is neither
+  this round's nor that sprm's — it is in whatever resolves a character's CHPX per position.
+- `absrc-pac-01-info-note-en.doc` page 1: the reference draws two 2-glyph records at x = 76.60 in
+  DejaVu Sans and DejaVu Sans Bold; we draw the bold one only. Our U+2011 was pulling DejaVu Sans in
+  and **masking** the gap — removing it exposed the gap rather than causing it.
+
+### Still open, unchanged
+
+46 mismatches, unchanged in count. Page delta, ours minus reference, over the 46:
+
+    -11 -10  -9  -3  -2  -1   0  +1  +2  +3  +4
+      1   1   1   1   2  13  10  11   3   1   2      docx 34, doc 12
+
+Ten paginate exactly and fail on words alone, so the useful split is still ±1 (24 documents) against
+the three large ones: `AC-150-5370-10G-updated-201604.docx` 686/697 and `150-5370-10H.docx` 711/721
+(the rule-and-fill cluster, one document in two revisions), and `A_320.doc` 141/150 (the printer
+device). Untouched, as are both reader-split clusters, `UG.CAO.00133`'s section break, and
+`手机免提系统TSB.doc` — still the track's only `unembedded` verdict, at 2/2 pages and 36/40 words.
+
+### A full disk fails the fidelity suite in the constructor
+
+The round's first fidelity run reported **Failed: 357, Passed: 193** under
+`System.IO.IOException : No space left on device`. It reads as a catastrophic regression. Two tells,
+either alone sufficient: every test in a class dies at **< 1 ms**, and the failure list **spans
+families the change cannot reach** — spreadsheet and ODF tests failing on a word-processing change.
+The second attempt was two `dotnet test` runs alive at once writing to one output file, both started
+by the same agent because a missing `;` had merged the first into the preceding line so it looked
+like it had never launched.
+
+Both censuses shipped with the author's worktree path baked in as `ROOT` — the same trap
+`batch-check.sh` carries a comment about, and it fails silently by measuring a tree that builds and
+passes and is not yours. They now derive `dotnet/` from their own location.
+
+Test counts on the merged tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing **725** (723 + `SymbolRunTests`), Spreadsheets 621,
+Presentations 573, Fidelity 550 — **0 skipped**, 0 warnings.
