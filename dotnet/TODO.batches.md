@@ -8535,3 +8535,41 @@ the rule predicts and the opposite of what we drew.
 `probes/ww8-header-stories.py` is committed: it reads the FIB, `PlcfHdd`, the piece table and
 `PlcfSed` straight out of a `.doc` and prints each section's six story lengths, their text, the
 synthesised `grpfIhdt` and the break kind. Every census in this entry came from it.
+
+## Round thirty-one — sheets
+
+Base `150a3dac1`, verified before measuring. The baseline sweep reproduced the brief to the
+digit: **147/171, absolute page error 90, 154 exact page counts, absolute word error 42322**, and
+the per-batch line as well. 171 rows, no duplicate path, no `ref-failed`.
+
+Two defects, both ported from LibreOffice and both measured against its own output. Full
+working, citations and the mutation table are in `probes/sheets-r31/README.md`.
+
+**A collapsed outline group hides its detail rows.** SpreadsheetML states an `outlineLevel` per
+row and a `collapsed` flag on the summary row beside the group, and expects the reader to derive
+the rest; Excel normally also writes `hidden="1"` on every detail row, so the derivation is
+invisible on almost everything. `Application_Compliance_Checklist_5_Apr_2021.xlsx` states no
+`hidden` anywhere, and **329 of one sheet's 1033 rows** are hidden by the rule alone — 18 printed
+pages against 14. A Python prototype of `convertOutlines` reproduced LibreOffice's own hidden set
+exactly, 329 of 329, before any C# was written. XLSX and XLSB; **BIFF deliberately not**, because
+a `ROW` record carries `fHidden` itself and the outline array there only records the state.
+
+**The header and footer band was drawn in six wrong ways at once.** Only the first line of each
+part was drawn; the `&n` size code was parsed and discarded; the page's own zoom was not applied;
+the text was centred where Calc anchors it to the edge its margin fixes; the three parts were
+sized independently rather than sharing the tallest one's height; and a section switch did not
+reset the font. Ours now lands within **0.08 pt** of LibreOffice's header top and footer bottom
+on two corpus pages at two different zooms, and within 0.03 pt on the authored fixture.
+
+**The anchoring is measured right on SpreadsheetML and measured wrong on BIFF**, so it is set by
+the OOXML readers only. LibreOffice's own PDFs of the `sheet-decor` fixture triple put the `.xls`
+band 1.5 pt further inside the page than the `.xlsx` band at both edges, with the `.fods`
+agreeing with the `.xls`. 1.5 pt is the gap between a measured line height and the bare point
+size the filters use as their nominal, so the cause is probably in that arithmetic — **not
+settled**, and `XlsPrintSetup` carries the measurement in a comment rather than a guess.
+
+New fixture `tests/corpus/features/sheet-outline-collapse.xlsx`, authored to separate the
+decisions rather than copied from a corpus workbook. Two test classes, 15 cases, every asserted
+coordinate LibreOffice 24.2.7.2's own. Six reintroduced defects, all six detected —
+`probes/sheets-r31/mutate.sh`. One of those mutations came back *undetected* on its first
+version and the mutation was wrong, not the test; that is recorded rather than quietly fixed.
