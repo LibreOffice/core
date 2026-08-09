@@ -13,6 +13,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <o3tl/unreachable.hxx>
 
@@ -35,18 +36,29 @@ void SkiaZone::hardDisable()
 
     bDisabled = true;
 
-    // Instead of disabling Skia as a whole, only force the CPU-based
-    // raster mode, which should be safe as it does not use drivers.
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::VCL::ForceSkiaRaster::set(true, xChanges);
-    xChanges->commit();
+    // ForceSkiaRaster can be finalized by an administrator, in which case
+    // configmgr throws from Access::checkFinalized(). We are called from a
+    // signal handler and from the watchdog thread, so let the exception never
+    // escape.
+    try
+    {
+        // Instead of disabling Skia as a whole, only force the CPU-based
+        // raster mode, which should be safe as it does not use drivers.
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::VCL::ForceSkiaRaster::set(true, xChanges);
+        xChanges->commit();
 
-    // Force synchronous config write
-    css::uno::Reference<css::util::XFlushable>(
-        css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY_THROW)
-        ->flush();
+        // Force synchronous config write
+        css::uno::Reference<css::util::XFlushable>(
+            css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
+            css::uno::UNO_QUERY_THROW)
+            ->flush();
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("vcl.skia", "cannot force Skia raster mode in the configuration");
+    }
 }
 
 void SkiaZone::checkDebug(int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues)
