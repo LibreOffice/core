@@ -64,8 +64,15 @@ because the source in this checkout has twice been wrong about a constant the bi
      bites at all, 171 cells of 78287.
 
 Run it with no arguments; it authors its own fixtures and prints one table per section.
-Every fixture states its font in `word/styles.xml` — an authored probe with no styles part
-lays out in the fallback face, and every length it then measures is meaningless.
+
+Two things the fixtures carry deliberately. Every one states its font in `word/styles.xml` —
+an authored probe with no styles part lays out in the fallback face, and every length it then
+measures is meaningless. Every DOCX also carries a `word/settings.xml`, because a hand-built
+DOCX without one does not get LibreOffice's OOXML compatibility defaults and can answer a
+different question from the one asked. Measured both ways for section 3 and every figure is
+identical, which is worth knowing rather than assuming: the compatibility mode reaches the
+table's *placement* in `DomainMapperTableHandler`, and this probe measures widths and insets
+relative to the drawn border, both of which are immune to where the table sits.
 """
 import re
 import shutil
@@ -175,6 +182,7 @@ CT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
  <Default Extension="xml" ContentType="application/xml"/>
  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+ <Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>
 </Types>"""
 
 RELS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -185,7 +193,13 @@ RELS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 DRELS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+ <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
 </Relationships>"""
+
+SETTINGS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+ <w:compat><w:compatSetting w:name="compatibilityMode"
+   w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat></w:settings>"""
 
 STYLES = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -210,6 +224,7 @@ def write_docx(path, sz, cellmar, c1=9072, c2=0):
         z.writestr("_rels/.rels", RELS)
         z.writestr("word/_rels/document.xml.rels", DRELS)
         z.writestr("word/styles.xml", STYLES)
+        z.writestr("word/settings.xml", SETTINGS)
         z.writestr("word/document.xml", doc)
 
 
