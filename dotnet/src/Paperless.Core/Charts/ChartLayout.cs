@@ -220,6 +220,18 @@ public readonly record struct ChartText(IChartTextMeasurer Measurer, string? Fam
     /// <param name="bold">Whether it is set bold; only a chart's titles ever are.</param>
     public DocSize Measure(string text, Length size, bool bold = false)
         => Measurer.Measure(text, size, Family, bold);
+
+    /// <summary>The same measurer bound to another family, or this one when none is named.</summary>
+    /// <remarks>
+    /// The rebinding point the type's own remarks anticipated. One element of a chart — its main
+    /// title — may name a face the chart space does not, so the *measurement* has to move with
+    /// the drawing or the room reserved above the plot is the wrong height for the type that
+    /// lands in it. A null family means "nothing stated here", which is not the same as "no
+    /// family": it takes what the chart already bound.
+    /// </remarks>
+    /// <param name="family">The family to rebind to, or null to keep the chart's own.</param>
+    public ChartText For(string? family)
+        => family is null ? this : this with { Family = family };
 }
 
 /// <summary>
@@ -1224,7 +1236,7 @@ public static partial class ChartLayout
         // pie's margin twice puts a titled pie 8 pt low on a 12 cm chart.
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold,
+            top += Shape(measurer.For(plot.TitleFamily), title, plot.TitleSize, plot.IsTitleBold,
                          frame.Width * TitleWidthFraction).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }
@@ -2754,21 +2766,26 @@ public static partial class ChartLayout
     {
         if (plot.Title is { Length: > 0 } title)
         {
+            // Measured and drawn in the title's own face where it names one — the one place a
+            // chart's text is not all one family. See ChartPlot.TitleFamily.
+            ChartText titles = measurer.For(plot.TitleFamily);
+
             // Line by line, top down, from the same origin the reservation above measured from,
             // so a two-line title fills exactly the band that was kept for it.
             Length pen = frame.Y + (frame.Height * PageMargin);
             foreach (string line in LinesOf(
-                         measurer, title, plot.TitleSize, plot.IsTitleBold,
+                         titles, title, plot.TitleSize, plot.IsTitleBold,
                          frame.Width * TitleWidthFraction))
             {
-                Length height = measurer.Measure(line, plot.TitleSize, plot.IsTitleBold).Height;
+                Length height = titles.Measure(line, plot.TitleSize, plot.IsTitleBold).Height;
                 labels.Add(new ChartLabel(
                     line,
                     new DocPoint(frame.X + frame.Width / 2, pen + height / 2),
                     ChartLabelAnchor.Centre,
                     plot.TitleSize,
                     AxisColour,
-                    IsBold: plot.IsTitleBold));
+                    IsBold: plot.IsTitleBold,
+                    Family: plot.TitleFamily));
                 pen += height;
             }
         }
@@ -3189,7 +3206,7 @@ public static partial class ChartLayout
 
         if (plot.Title is { Length: > 0 } title)
         {
-            top += Shape(measurer, title, plot.TitleSize, plot.IsTitleBold,
+            top += Shape(measurer.For(plot.TitleFamily), title, plot.TitleSize, plot.IsTitleBold,
                          frame.Width * TitleWidthFraction).Height
                    + (frame.Height * PageMargin) + TitleGap;
         }

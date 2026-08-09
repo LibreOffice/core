@@ -9508,3 +9508,103 @@ producing something no per-document instrument could: the observation that half 
 the same way. **Run the cross-document filter after every review** — "what do these failures have
 in common" is a question only a whole-track view can answer, and it turned a three-document lead
 into a fourteen-document one in a single query.
+## Round thirty-three — slides: the anisotropic chart text is content overflow, and a human read the residue
+
+Baseline verified at `80ed114ce` before anything changed, against the same 163 reference PDFs
+round twenty kept: **151 of 163, ink 1269.52, 428 major pages.** The size census re-run on that
+same sweep gives **4199 pages compared, 303 unexplained over 91 documents**. Every figure the
+brief carried reproduced to the digit, which is the first time in several rounds that has
+happened and is worth recording as such.
+
+### The residue four rounds chased is a whole-chart squash, and the cause it was attributed to is dead
+
+Round thirty-one established that `southern-classic-kennesaw-state-university-final.pptx` page 11
+draws one chart's labels with a font height and an independent horizontal scale — `13.589 Tf`
+under `a = 1.030454` — and recorded, explicitly as an untested correlation on a single case, that
+the one thing distinguishing that chart is a frame starting 1.36 pt off the left edge of the
+slide. It asked for two authored decks. `research/probes/slides-r33/chart-overflow-probe.py` runs
+them, by mutating one attribute of the corpus file at a time:
+
+| what was changed | result |
+|---|---|
+| the frame moved wholly onto the slide, and eight times further off | `a` unchanged to six decimals, three times |
+| the frame's **height**, 40 pt → 265 pt | `a` 1.9878 → 1.1797 → 1.0330 → 1.0000 |
+| the frame's **width**, ×0.5 → ×1.5 | `a` 1.030393 / 1.030454 / 1.030474 |
+| the data labels 16 pt → 10 pt | `a` 1.030454 → **1.000100**, compression gone |
+| the data labels 16 pt → 24 pt | `a` → 1.085123 |
+| the legend deleted; the legend 14 pt → 8 pt | 1.030454; 1.026799 |
+| the legend → 40 pt with the labels fitting | **`a` = 0.863091**, `Tf` at the stated 40 |
+
+The overhang is refuted outright; the compression is on one axis at a time; and what drives it is
+the chart's own content overflowing its page. The last row is the mirror case — overflow the width
+instead and the width is what compresses.
+
+**It is the whole chart, not its type.** The legend key square measures 8.39 × 8.39 pt where
+nothing overflows and 8.39 × 8.11, 8.39 × 7.76, 8.39 × 7.11 at frame heights of 175, 130 and
+85 pt — the width fixed, the height tracking the font's vertical scale to three decimals. So this
+reaches the plot rectangle and the bars, not only the glyphs. The chart *model* never learns about
+it: `soffice --convert-to odp` writes each `chart:chart`'s `svg:width`/`svg:height` equal to its
+frame's at every swept height.
+
+Reach, counted over the reference PDFs of the 15 slides documents holding chart parts: **8 of the
+15 carry a stretched show, 698 of 1808.** Four hold no `.emf` or `.wmf` at all, so no metafile
+explanation is available there — `Demick_JetBlue` 142/142, `171128IPAP` 108/224,
+`N2_E_Maestroni_Swarm_COP` 27/27 — and `southern-classic` has one metafile against 21 charts and
+189/383. The previous record named three decks.
+
+**Not implemented, deliberately.** Reproducing it means composing the chart, taking the union of
+the frame with the ink produced, and scaling by the ratio — faithful only if our data-label
+placement overflows by the same amount chart2's does. Our plot rectangle already differs by up to
+5 pt on a rotated axis, so the overflow would be a difference of differences. The unmeasured
+quantity is our own overflow against LibreOffice's; measure that before writing code.
+
+### The one code change, and it trades the metric for correctness
+
+`ChartPlot.TitleFamily` — the chart title's own face, carried apart from the chart's, with
+`ChartText.For` rebinding the measurer at the three sites that reserve room above the plot. On
+`171128IPAP` page 38 the title moves from Carlito-Bold to LiberationSans-Bold, matching the
+reference's 41 glyphs of `LiberationSans-Bold` exactly.
+
+**Swept, both numbers.** 151/163 unchanged, 428 major pages unchanged, ink **1269.52 → 1269.70**.
+Byte-comparing the two renderings with `SOURCE_DATE_EPOCH` pinned: **1 of 160 documents changed**,
+and it is the one the census named. All 0.18 of the movement is that document's page 38
+(1.32 → 1.45), which is the round-thirty pattern again — the correct face is metrically unlike the
+wrong one, so drawing it right puts more ink into a mismatch that has two *other* causes on that
+page, both now localised: the chart carries the content-overflow compression at `a ≈ 1.013`, so
+the reference's title is 13.79 pt tall by 13.97 wide against our 14.00; and the page's one
+remaining one-sided record is a `c:userShapes` text box we do not read at all.
+
+Census over the corpus's OOXML half: **2 of 61 chart parts over 1 document on slides, 0 of 11 on
+sheets, 0 of 1 on words.** Neither other track can move on it.
+`research/probes/slides-r33/chart-title-face-census.py`, and note what it had to get right:
+`c:txPr` is a child of `c:chartSpace` and *follows* `c:chart`, so a census looking for it before
+`<c:chart>` finds the title's own and reports zero. The first run of it did exactly that.
+
+### Named for the next round, none of it started
+
+- **A chart part's `c:userShapes`** — its own drawing, anchored in fractions of the chart
+  rectangle — is not read. 11 of 61 chart parts over 4 slides documents, 20 shapes.
+- **Automatic series colours.** From the human review: `Demick_JetBlue`'s sixteen line series
+  carry no `c:spPr` at all, so we draw them black where LibreOffice derives accent1/2/3 under the
+  theme's subtle line style. Diagnosed to `objectformatter.cxx`, not started — it needs the chart
+  style index, the accent cycle's shade/tint, and the theme's style lists, which `DrawingTheme`
+  does not expose.
+- **Minor gridlines** are unread and the category axis' major gridlines are undrawn: on
+  `Demick_JetBlue` page 4 the reference strokes 49 `#8B8B8B` and 35 `#666666` where we stroke 21
+  `#B3B3B3` and 8 `#F07F09`.
+- **The `.ppt` autofit scale**, which is the census's largest group rather than anything chart:
+  `2015-Civil-Rights-Website-training.ppt` page 2 draws 31.01 pt against our 32.00, one scale of
+  0.9691 over the whole body. The commonest size pairs go both ways, so "we never shrink" is
+  already refuted and which of `Autofits` and `SlideAutofit` is wrong is unmeasured.
+- **The wrap limit** stays as it is and the alternative is named beside it: the tick spacing and
+  `0.95 × spacing + 2 × inset` fit all three measured rotation boundaries and differ by at most
+  0.36 em, so this corpus cannot prefer one. Said, not picked.
+
+### Test counts
+
+Core **278**, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing 696, Spreadsheets 593, Presentations **545**, Fidelity 550. **0 skipped.** Core was 275 and
+Presentations 544; the four new tests are the title face reaching the measurer, reaching the
+label, its control, and the reader carrying it apart from the chart's. Three mutations put back
+through `verify-test.sh`, all three detected, and deliberately separate ones for the measurer half
+and the label half — the first mutation passes the label test, which is the point of having both.

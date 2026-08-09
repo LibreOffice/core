@@ -110,4 +110,66 @@ public class ChartTextFamilyTests
         ruler.Families.ShouldAllBe(family => family == null);
         drawing.Labels.ShouldAllBe(label => label.Family == null);
     }
+
+    /// <summary>
+    /// A title naming its own face is drawn in it, and takes nothing else with it.
+    /// </summary>
+    /// <remarks>
+    /// Both halves again, and the second is the one that matters: the title is the only element
+    /// allowed to disagree, so a change that let its face leak into the stamping pass would
+    /// recolour every axis label on the same chart. Measured on <c>171128IPAP.pptx</c>, whose
+    /// <c>chart7.xml</c> states Arial on <c>c:title/c:txPr</c> and Calibri on
+    /// <c>c:chartSpace/c:txPr</c>.
+    /// </remarks>
+    [Fact]
+    public void ATitleNamingItsOwnFaceIsDrawnInItAndNothingElseIs()
+    {
+        ChartDrawing drawing = ChartLayout.Place(
+            Bars() with { TextFamily = "Liberation Mono", TitleFamily = "Liberation Serif" },
+            Frame,
+            new Ruler());
+
+        ChartLabel title = drawing.Labels
+            .Where(label => label.Text == "Revenue")
+            .ShouldHaveSingleItem();
+        title.Family.ShouldBe("Liberation Serif");
+
+        drawing.Labels
+            .Where(label => label.Text != "Revenue")
+            .ShouldAllBe(label => label.Family == "Liberation Mono");
+    }
+
+    /// <summary>
+    /// The room reserved above the plot is measured in the title's face, not the chart's.
+    /// </summary>
+    /// <remarks>
+    /// The half that moves the picture. <see cref="Ruler"/> answers by character, so a title
+    /// measured in a face wider per character reserves a taller band and pushes the plot area
+    /// down; if the family reached only the label the plot would sit where the *chart's* face
+    /// put it and the title would be drawn over the top of it.
+    /// </remarks>
+    [Fact]
+    public void TheTitlesOwnFaceIsWhatTheTitleIsMeasuredIn()
+    {
+        Ruler ruler = new();
+        ChartLayout.Place(
+            Bars() with { TextFamily = "Liberation Mono", TitleFamily = "Liberation Serif" },
+            Frame,
+            ruler);
+
+        ruler.Families.ShouldContain("Liberation Serif");
+        ruler.Families.ShouldContain("Liberation Mono");
+    }
+
+    /// <summary>The control for the pair above: an unstated title face changes nothing.</summary>
+    [Fact]
+    public void ATitleStatingNoFaceTakesTheChartsOwn()
+    {
+        Ruler ruler = new();
+        ChartDrawing drawing = ChartLayout.Place(
+            Bars() with { TextFamily = "Liberation Mono" }, Frame, ruler);
+
+        ruler.Families.ShouldAllBe(family => family == "Liberation Mono");
+        drawing.Labels.ShouldAllBe(label => label.Family == "Liberation Mono");
+    }
 }

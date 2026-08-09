@@ -212,6 +212,11 @@ public static class DrawingChartPlot
             DataLabelSize = DataLabelSizeOf(plotArea),
             IsDataLabelBold = DataLabelBoldOf(plotArea),
             TextFamily = FamilyOf(chartSpace, theme),
+
+            // The main title's own face, when it names one. Read from c:title alone and left null
+            // otherwise, so a chart whose title says nothing goes on taking TextFamily and the
+            // stamping pass in ChartLayout.InFamily still decides every other label.
+            TitleFamily = LiteralFamily(Child(chart, "title")),
             // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
             // its own — the frame is the space — which is what keeps it out of the stretch an
             // ODF chart goes through.
