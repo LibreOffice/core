@@ -8958,9 +8958,9 @@ corpus sheet: the comment beside it already recorded that every corpus workbook 
 ### Test counts
 
 Core 275, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
-WordProcessing 696, Spreadsheets 573, Presentations **545**, Fidelity 550. **0 skipped.**
-Presentations was 542 at `b8a8125ec`; the three new tests are the data-label size, the data-label
-weight and the face precedence.
+WordProcessing 696, Spreadsheets 573, Presentations **544**, Fidelity 550. **0 skipped.**
+Presentations was 542 at `b8a8125ec`; the two new tests are the data label's own size and weight
+against a single point's `c:dLbl` override, and the face precedence.
 
 Two mutations put back through `verify-test.sh`, both detected: the data-label reader searching
 `c:dLbls`' descendants instead of its own `c:txPr`, and the face precedence swapped back.
