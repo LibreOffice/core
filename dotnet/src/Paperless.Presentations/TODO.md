@@ -2168,17 +2168,57 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       11's charts, and LibreOffice's own `odp` writes each `chart:chart`'s `svg:width`/`svg:height`
       equal to its frame's.
 
-      **The `a` is per chart and not per deck**, measured on the one page-11 content stream:
-      Objects 12, 13 and 14 carry `a = 1.000102`, `1.000103` and `1.000103`, and Object 15 carries
-      `1.030454`. One thing distinguishes Object 15 in the file and it is **an untested
-      correlation on a single case**: its frame starts at `x = -17268` EMU, 1.36 pt off the left
-      edge of the slide, and the other three are wholly on it. Two authored decks — one chart on
-      the slide, the same chart overhanging it — would settle that in one `soffice` run, and
-      nothing here has run it.
+      **Round thirty-three settled it, and it is the chart's own content overflowing its page.**
+      `research/probes/slides-r33/chart-overflow-probe.py` mutates one attribute of that corpus
+      deck at a time and reads `(a, Tf)` back out of `soffice`'s PDF.
+
+      *The overhang correlation is refuted.* Moving that chart wholly onto the slide
+      (`x = -17268` → `+17268`), moving it eight times further off (`-200000`), and pushing
+      either of the page's two well-behaved charts off the same edge each leave **every `a` on
+      the page unchanged to six decimals**, while the chart's drawn `x` moves by exactly the
+      2.72 pt the edit asks for. The record above stated that correlation as untested; it is now
+      tested and dead.
+
+      *It is the frame's height and not its width.* Sweeping the frame height over sixteen values
+      gives `a` = 1.9878 at 40 pt, 1.1797 at 85, 1.0811 at 130, 1.0330 at 175, 1.0047 at 220 and
+      1.0000 from 235 pt up — and sweeping the frame *width* over a factor of three moves `a` in
+      the **fifth** decimal (1.030393 / 1.030454 / 1.030474). So one axis is compressed and the
+      other is not, which already rules out any scale derived from the frame's own rectangle.
+
+      *It is the data labels.* Holding the frame at its own size and editing the chart part:
+      dropping `c:dLbls` from `sz="1600"` to `sz="1000"` removes the compression outright
+      (`a` 1.030454 → 1.000100, the labels drawing 10.005 and the axes 14.001); raising them to
+      2400 deepens it to 1.085123. Deleting the whole `c:legend` changes `a` by nothing and
+      shrinking the legend's font to 800 moves it to 1.026799. Raising the *legend* to 4000 while
+      the data labels fit gives **`a = 0.863091` with `Tf` at the stated 39.991** — the mirror
+      case, a horizontal compression with the vertical untouched.
+
+      *And the whole chart is scaled, not only its type.* The legend key square in the same
+      chart measures `8.39 × 8.39` pt where nothing overflows and `8.39 × 8.11`, `8.39 × 7.76`,
+      `8.39 × 7.11` at frame heights of 175, 130 and 85 pt — the width fixed and the height
+      tracking the font's vertical scale to three decimals. So this reaches the plot rectangle,
+      the bars and the gridlines, not just the glyphs.
+
+      Read together: **LibreOffice composes a chart at its frame's size, and when the chart's own
+      content overflows that page along an axis it hands the frame a picture bigger than the
+      frame along that axis and scales it back in.** The comment at
+      `svx/source/svdraw/svdoole2.cxx`:1710 — `#i83860# resizing charts in impress distorts
+      fonts` — names the same effect from the other side.
+
+      **Not implemented, deliberately.** Reproducing it means composing the chart, taking the
+      union of the frame with the ink it actually produced, and scaling by the ratio — which is
+      a faithful transcription only if our own data-label placement overflows by the same amount
+      as chart2's. It does not: our plot rectangle already differs from the reference's by up to
+      5 pt on a rotated axis, so the overflow would be a difference of differences and a wrong
+      squash is worse than none. What is now known is the *shape* of the rule and the observable
+      that decides it, which is what the next round needs; the unmeasured quantity is our own
+      overflow against LibreOffice's, and that is the thing to measure before writing any code.
 
       **The model's sizes are right and it is the device that moves**, which is worth stating
       because it closes the cheapest wrong theory: `soffice --convert-to odp` writes those four
-      charts' styles at exactly `10pt`, `14pt` and `16pt`.
+      charts' styles at exactly `10pt`, `14pt` and `16pt` — and writes each `chart:chart`'s own
+      `svg:width`/`svg:height` equal to its frame's at every one of the swept heights, so the
+      chart *model* never learns about the compression either.
 
       Round twenty-three's own reading of it as "the chart's text scale, from the OLE object's
       stored visual area against the size of the frame it sits in" is refuted on both halves.
