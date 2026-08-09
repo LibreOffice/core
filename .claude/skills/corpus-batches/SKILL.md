@@ -1102,6 +1102,22 @@ check for a running sweep before starting one. The skill's existing sanity check
 path, count the rows) are what caught this; keep running them on every sweep rather than only on
 suspicious ones.
 
+### Never `pkill` on a tool name while another agent is running
+
+Three agents share this machine and run the same scripts. A round stopped its own comparison
+with `pkill -f pdf-image-diff` and recorded afterwards that **it would have killed the slides
+agent's comparison too** — same script, different worktree, no way for the pattern to tell them
+apart.
+
+Match on your own script's **full path** — `pkill -f /tmp/…/scratchpad/<your-dir>/sweep.sh` — or
+better, keep the PID you started and kill that. A tool name is never specific enough here.
+
+The same reasoning covers the reverse direction: **a byte-reach outlier measured under load is
+not a finding until it is re-run alone.** A cross-track sweep reported two slides documents
+changed by a sheets-only change; both were renders truncated at load average 20–35 and came back
+byte-identical when re-run individually. Two is exactly the size of result that looks worth
+explaining.
+
 ### `pkill` on `dotnet test` orphans the runner that was doing the work
 
 Killing a `dotnet test` leaves its `vstest.console` child alive. The orphan keeps its share of
