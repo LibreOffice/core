@@ -710,6 +710,38 @@ OUString FontList::FindStyleForVariations(const OUString& rName,
     return OUString();
 }
 
+OUString FontList::GetStyleText(const OUString& rName, const OUString& rSubfamily,
+                                FontWeight eWeight, FontItalic eItalic) const
+{
+    if (!rSubfamily.isEmpty())
+    {
+        // Get the stored subfamily, not the face reconstructed from weight and
+        // posture, so an extended style keeps its name.
+        FontMetric aFontMetric;
+        aFontMetric.SetStyleName(rSubfamily);
+        aFontMetric.SetWeight(eWeight);
+        aFontMetric.SetItalic(eItalic);
+        return GetStyleName(aFontMetric);
+    }
+
+    return GetStyleName(Get(rName, eWeight, eItalic));
+}
+
+void FontList::SplitStyleText(const OUString& rName, const OUString& rStyle,
+                              OUString& rSubfamily, FontWeight& rWeight,
+                              FontItalic& rItalic) const
+{
+    FontMetric aFontMetric(Get(rName, rStyle));
+
+    rSubfamily.clear();
+    if (!rStyle.isEmpty() && rStyle != GetNormalStr() && rStyle != GetItalicStr()
+        && rStyle != GetBoldStr() && rStyle != GetBoldItalicStr())
+        rSubfamily = GetFaceStyleName(rName, rStyle);
+
+    rWeight = aFontMetric.GetWeightMaybeAskConfig();
+    rItalic = aFontMetric.GetItalicMaybeAskConfig();
+}
+
 FontMetric FontList::Get(const OUString& rName, const OUString& rStyleName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
