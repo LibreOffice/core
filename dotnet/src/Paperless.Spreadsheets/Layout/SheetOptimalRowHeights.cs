@@ -426,9 +426,31 @@ internal static class SheetOptimalRowHeights
                 // A hyperlink cell is one EditEngine field, and a field is never broken across
                 // lines — so it is measured at one line however narrow its column is. Missing
                 // that makes a column of URLs four or five times too tall.
+                //
+                // A hard break in a cell that does *not* wrap reaches neither the height nor the
+                // page, and that is the **format's** decision rather than the text's. Both
+                // importers say so in the same words, and say it whether the string is plain or
+                // rich: `bSingleLine = !pXf->getAlignment().getModel().mbWrapText` before
+                // `putRichString`, which is `rEE.SetSingleLine(bSingleLine)`
+                // (`sc/source/filter/oox/sheetdatabuffer.cxx:125-133`,
+                // `worksheethelper.cxx:1607-1611`), and `bSingleLine = !pXF->GetLineBreak()`
+                // before the same call on the BIFF side (`xihelper.cxx:246-256`). An EditEngine in
+                // single-line mode makes one paragraph of the whole string, so the U+000A stays in
+                // the text and starts nothing. The height agrees from the other end — Calc's
+                // `bStdOnly` is `!bBreak` (`column2.cxx:930-935`) — and so does the drawing:
+                // `HasEditCharacters` (`output2.cxx:823-847`) lists seven code points and U+000A is
+                // not among them, so `DrawStrings` shows the whole string on one line with the
+                // break contributing no glyph. Measured on `Capability_List…unsorted.xlsx`, whose
+                // A452 is `19090-105 (SCD\n604-85001-23)` in a cell with no wrap: LibreOffice
+                // states 285.1 twips for the row — one line — and its PDF holds
+                // `19090-105 (SCD604-85001-23)` as a single run with no space in it.
+                //
+                // ODF is the one importer that disagrees: `ScXMLImport` makes a cell of several
+                // `text:p` a multi-paragraph edit cell whatever the wrap says. The sheets track
+                // holds no `.ods`, so this is an unmeasured deviation rather than a measured one,
+                // and `SheetHardBreakTests` records the same gap on the drawing side.
                 bool breaks =
-                    (SheetTextLayout.Breaks(format, cell.Value is not null and not string)
-                     || text.AsSpan().IndexOfAny('\n', '\r') >= 0)
+                    SheetTextLayout.Breaks(format, cell.Value is not null and not string)
                     && !sheet.HoldsField(cell.Row, cell.Column);
 
                 IReadOnlyList<SheetTextPortion>? portions =

@@ -10008,3 +10008,108 @@ them. Anyone picking this up should split by ratio band before theorising.
   `MSO_SPT` and `.pptx` by `a:prstGeom`, with per-document counts.
 - `probes/mso-shape-type-presets.json` — the 203-entry `MSO_SPT` → DrawingML preset table the
   fix was generated from, so it can be regenerated rather than re-transcribed.
+## Round thirty-four — sheets: a hard break belongs to the cell's format, not to its text
+
+Base `a115b723b`, checked with `git log --oneline -1` before anything was measured. The baseline
+sweep reproduced the brief on three of its four figures to the digit — **150/171, absolute page
+error 85, 156 exact page counts** — and gave **32678** for the word error against the brief's
+32673, five out on a track whose reference has been shown to move a page between sweeps. 171 rows,
+no duplicate path, no `ref-failed`, no `ours-failed`.
+
+Full working, citations, the reach and the mutation table are in `probes/sheets-r34/README.md`.
+
+**Result: 150/171 → 153/171, page error 85 → 77, exact page counts 156 → 159, word error
+32678 → 32630.** Every earlier batch is where it was; 011 and 012 each gained one and 016 gained
+one. Three verdicts moved and all three the right way — `Capability_List…unsorted.xlsx`
+150/147 → 147/147, `sectors-defense-and-aerospace.xlsx` 225/227 → 227/227,
+`flightstandards-doc-Cross-reference-table_version02.xlsx` 461/464 → 464/464.
+
+**The brief's measurement was right and it had two causes, not one.** The cluster was reported as
+row heights differing by a whole multiple of one line of the cell's own text, both signs. Compared
+against LibreOffice's own `style:row-height` and then traced back to the cells that decide them,
+the two signs turn out to be two different mechanisms that happen to share a unit.
+
+**A hard break in a cell that does not wrap is not a break at all.** Both importers say so in the
+same words: `SheetDataBuffer::setStringCell` computes
+`bSingleLine = !pXf->getAlignment().getModel().mbWrapText` and hands it to `putRichString`, which
+is `rEE.SetSingleLine(bSingleLine)` (`sheetdatabuffer.cxx:125-133`, `worksheethelper.cxx:1607-1611`);
+`XclImpStringHelper::SetToDocument` computes `bSingleLine = !pXF->GetLineBreak()` and calls the
+same thing (`xihelper.cxx:246-256`). An EditEngine in single-line mode makes one paragraph of the
+whole string, so the U+000A stays in the text and starts nothing. `bStdOnly = !bBreak`
+(`column2.cxx:930-935`) says it again from the height's end, and `HasEditCharacters`
+(`output2.cxx:823-847`) — seven code points, U+000A not among them — from the drawing's.
+Our row-height path measured any cell whose *text* held a break, whatever its format said.
+Measured: `Capability_List…unsorted.xlsx` A452 is `19090-105 (SCD\n604-85001-23)` in a
+non-wrapping cell, LibreOffice states 285.1 twips for the row and its PDF holds
+`19090-105 (SCD604-85001-23)` as one run with no space in it.
+
+**A trailing break is an empty paragraph, and Calc reserves a line for it.** That half is ours
+rather than Calc's: `ContentTableCell.AppendText` stripped *every* trailing newline where its own
+comment says it takes the one the last paragraph contributes. Each paragraph terminates itself,
+so a cell whose last paragraph is empty ends in two, and taking both erases the paragraph rather
+than the terminator.
+
+**The first version of the first rule carried a `rich &&` qualifier and it was wrong.** Neither
+importer asks whether the string is rich, and a plain string cannot reach the other branch either
+because `RichString::extractPlainString` refuses a string holding U+000A (`richstring.cxx:375`).
+Removing the qualifier left **171 of 171 renderings byte-identical**, which is why the sweep was
+not repeated — and it is the reason to read the importer rather than infer the rule from the
+corpus, because the corpus could not distinguish the two.
+
+**Rows disagreeing with LibreOffice's own heights, before and after:** `Capability_List` 16 of
+2225 → 1, `flightstandards` 45 of 2201 → 7, `tk-syllabus-comparison-document-v5` 20 of 6520 → 19,
+`seihon_zassi_kikou_20221215` (the brief's 129) → 0 of 4000.
+
+**The +3 pages and the human review's "some cells are taller on paperless" were one finding**, as
+the brief asked. The sixteen taller rows are the three pages.
+
+**Reach: predicted 25–40 documents and 2–4 verdicts before the sweep; measured 24 and 3.** Three
+of the 24 are `.xls`. The census that can be run reads only the zip half — 43 of 118 documents
+hold a cell string with a break, 32 of those a trailing one — so it over-stated the half it can
+see by about 1.8× and would have reported nothing at all for the three binary documents that
+moved.
+
+### What is left of the cluster, and the trap in measuring it
+
+The residue is a ±1 line difference in the 96 dpi measurement, in **both** directions on the same
+document, which is a per-line rounding rather than a ratio. It is what still costs
+`tk-syllabus-comparison-document-v5.xlsx` its three pages.
+
+**The reference PDF cannot arbitrate it.** Calc measures a row against a 96 dpi `VirtualDevice`
+and draws it against the export device, and the two break the same cell differently: on the header
+row of `flightstandards`' Cross-Reference Table, LibreOffice *reserves* 1819.9 twips — eight lines
+— and *draws* four, which is what we both draw and also what we reserve. Anyone diagnosing this
+from the rendering will measure the wrong device. The flat-ODF `style:row-height` is the only
+oracle.
+
+### Two small things left open and labelled
+
+- **3.4 twips on a non-wrapping multi-line row.** Calc keeps such a string as an `EditTextObject`
+  even in single-line mode, so `HasEditCells` sends the row through `GetNeededSize`, which measures
+  one line and applies **no** floor; our arithmetic path floors it at the sheet's optimal minimum.
+  LibreOffice writes 252.9 twips where we write 256, and 256.3 for the plain-string row beside it
+  where we also write 256.
+- **ODF.** `ScXMLImport` makes a cell of several `text:p` a multi-paragraph edit cell whatever the
+  wrap says, so the rule shipped here is wrong for `.ods`. The sheets track holds none, so this is
+  unmeasured rather than measured, and `SheetHardBreakTests` already records the same gap on the
+  drawing side.
+
+### A contradiction in the brief, recorded rather than resolved
+
+The dispatch brief said of `first-divergence.py` **"Never run on sheets"** and, in the next
+sentence, *"Running it here is cheap and may reorder this brief; if it does, follow the
+measurement and say so."* The two cannot both be followed. The prohibition was honoured and the
+instrument was not run on this track; whoever writes the next brief should say which was meant.
+
+### One review item refuted by measurement
+
+The brief asked whether `T0A0D0000090006XLSE.xls`'s *"minor text sizing causes different wrapping
+in some cells"* shares a root with the row-height cluster, before treating it as separate. It does
+not: its only sheet's 360 rows agree with LibreOffice's own `style:row-height` **exactly, 0 of
+360**, before and after this round. Whatever wraps differently there never reaches the reserved
+height, which puts it on the drawing side — consistent with the document being page-exact
+(162/162) while over-drawing 2098 words.
+
+Test counts on the final tree, run project by project: Core **284** (278 before), Containers 109,
+Text 255, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 706,
+Spreadsheets **605** (598 before), Presentations 545, Fidelity 550, **0 skipped** throughout.
