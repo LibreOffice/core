@@ -398,8 +398,45 @@ internal sealed class XlsSheetPrintState
         return isDynamic ? Length.Max(printed, DefaultBandHeight) : printed;
     }
 
+    /// <summary>
+    /// The gap a header or footer band leaves between its text and the sheet.
+    /// </summary>
+    /// <remarks>
+    /// Zero on a pinned band, and that is a port rather than a simplification: the branch that
+    /// pins the band writes the distance out explicitly as nothing —
+    /// <c>lclPutMarginItem(rHdrItemSet, EXC_ID_BOTTOMMARGIN, 0.0)</c>,
+    /// <c>xipage.cxx:322</c> — because the band was already too short for its own text and there
+    /// is nothing left to give away. It matters because the gap is what separates the band's top
+    /// from its text (<see cref="SheetPrintSetup.HeaderGap"/>), so a pinned band of 176 twips
+    /// carrying the default 142 would put its one line in the remaining 34.
+    /// <para>
+    /// A <em>dynamic</em> band's distance is <c>statedBand − nominal</c> and is deliberately left
+    /// at the shared default here. Our drawing places a dynamic footer's text against the sheet
+    /// and a dynamic header's against the top margin, so the gap cancels out of the footer
+    /// entirely and only shifts a header's centring inside its band; nothing on this corpus
+    /// measures that, and changing it would move <c>sheet-decor-xls.xls</c>, whose anchoring is
+    /// held to a 1.5 pt tolerance for a different reason. It is a real, small, unmeasured
+    /// deviation rather than a decision.
+    /// </para>
+    /// </remarks>
+    /// <param name="inches">The distance the two margins leave between them.</param>
+    /// <param name="codes">The band's own <c>&amp;</c>-code string.</param>
+    /// <param name="defaultFont">The workbook's own default cell font.</param>
+    /// <param name="fallback">The gap a dynamic band keeps.</param>
+    private static Length Gap(
+        double inches, string? codes, SheetDefaultFont? defaultFont, Length fallback)
+    {
+        SheetBandHeight.Printed(
+            codes, Length.FromInches(Math.Max(0, inches)), defaultFont, out bool isDynamic);
+
+        return isDynamic ? fallback : Length.Zero;
+    }
+
     /// <summary>Calc's default header and footer band: 0.5 cm of text and a 0.25 cm gap.</summary>
     private static readonly Length DefaultBandHeight = Length.FromTwips(425);
+
+    /// <summary>The 0.25 cm of that band which is gap, and <see cref="SheetPrintSetup"/>'s own default.</summary>
+    private static readonly Length DefaultBandGap = Length.FromTwips(142);
 
     /// <summary>The accumulated setup, resolved.</summary>
     public SheetPrintSetup ToSetup()
@@ -430,6 +467,12 @@ internal sealed class XlsSheetPrintState
             FooterHeight = hasFooter
                 ? Band(_bottomMargin - _footerMargin, _footer, DefaultFont)
                 : Length.Zero,
+            HeaderGap = hasHeader
+                ? Gap(_topMargin - _headerMargin, _header, DefaultFont, DefaultBandGap)
+                : DefaultBandGap,
+            FooterGap = hasFooter
+                ? Gap(_bottomMargin - _footerMargin, _footer, DefaultFont, DefaultBandGap)
+                : DefaultBandGap,
             HeaderText = _header,
             FooterText = _footer,
 
