@@ -10,8 +10,9 @@ like support, and the constant's own doc comment reads like a specification.
 """
 import re, os, sys, collections
 
+# As above: the `dotnet/` directory this probe lives under, not the one it was written in.
 ROOT = sys.argv[1] if len(sys.argv) > 1 else \
-    "/home/user/libreoffice-core/.claude/worktrees/words-r38/dotnet"
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CONST = re.compile(
     r'^\s*(?:public|internal|private)\s+const\s+(?:ushort|uint|short|int|byte|string|char)\s+'

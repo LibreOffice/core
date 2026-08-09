@@ -7,7 +7,10 @@ joining them' shape.
 """
 import re, sys, os, collections
 
-ROOT = "/home/user/libreoffice-core/.claude/worktrees/words-r38/dotnet"
+# The `dotnet/` directory this probe lives under, so it reads the tree it was run from
+# rather than the one it was written in — an absolute path here made an earlier probe
+# measure another worktree entirely.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECTS = ["src/Paperless.Core", "src/Paperless.Text"]
 
 TYPE_RE = re.compile(
