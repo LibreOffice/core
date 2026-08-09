@@ -2086,16 +2086,94 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       draws that page at three sizes where we draw one and the heavier face puts more ink into
       the mismatch. See the scoreboard.
 
-- [ ] **The chart's per-element text *size*, which `ChartPlot` collapses into one `LabelSize`.**
-      Named by the weight work above rather than guessed at. On
-      `southern-classic-kennesaw-state-university-final.pptx` page 11 the reference draws 55
-      records at 14.00 pt, 12 at 15.49 and 7 at 13.59, all Carlito-Bold; we draw 74 at one flat
-      14.00. Pages 12 and 5 are the same shape. That is `c:txPr` on the individual axis, legend
-      and `c:dLbls` elements, and it is where 2.26 of the round's 2.62 sits.
+- [x] **A *data label's* own text size, which `ChartPlot` collapsed into `LabelSize`.** Named by
+      the weight work above rather than guessed at, and it was two things rather than one.
 
-- [ ] **The chart text residual is neither a constant offset nor a constant factor**, and round
-      twenty-three's reading of it as "the chart's own text scale, from the OLE object's stored
-      visual area against the size of the frame it sits in" is refuted on both halves.
+      Closed by `ChartPlot.DataLabelSize`/`IsDataLabelBold`, `DataLabelFont`/`DataLabelBold`, and
+      `DrawingChartPlot.DataLabelSizeOf`/`DataLabelBoldOf` reading the series' `c:dLbls/c:txPr`.
+      Read from that element's *direct* `c:txPr` child: a `c:dLbl` for one point precedes it in
+      `CT_DLbls`' order, so a descendant search sizes every label by one point's override — the
+      same trap the legend's reader already documents. Both fields are nullable so the ODF and PPT
+      readers keep taking `LabelSize` and neither of the other two tracks can move.
+
+      **Verified by glyph count rather than by the pixel metric, which is nearly silent here.** On
+      `southern-classic` page 12 the reference draws 119 glyphs at 18.00 pt; we drew 84 before and
+      draw 119 after, on a page whose two size groups had been laid down *swapped*. On page 11 the
+      reference draws 22 glyphs at its larger size and exactly 22 moved out of the 14.00 pt group
+      into it. Swept reach: 6 of 163 documents, `|ink|%` 1591.86 → 1591.43.
+
+      **What is left on those pages is not a size.** See the anisotropic-stretch item below: the
+      reference draws page 11's 14 pt labels as `13.589 Tf` under a horizontal scale of `1.030454`,
+      so they are 14.003 pt wide and 13.589 pt tall, and ours are 15.99 in both directions with the
+      width within 0.03 pt.
+
+- [ ] **The per-*axis* size, which is the half of that collapse still standing.** `LabelSize` is
+      still one answer for the category axis and the value axis together — `AxisLabelSizeOf` takes
+      the first axis that states one. `171128IPAP.pptx`'s `chart8.xml` states `sz="1100"` on its
+      category axis and `sz="1000"` on its value axis, and `chart6.xml` 1200 and 1100. Census over
+      the OOXML half of the slides track, which is 112 of its 163 documents: **2 of 61 chart parts,
+      1 document** — much the smaller half, and the reason it was not done with the data labels is
+      that it needs threading through the value-label and category-label measurement sites
+      separately, where the data label had five construction sites and one meaning.
+      `research/probes/slides-r31/chart-size-census.py` produces both numbers.
+
+- [x] **A chart's face is its chart space's statement, not whichever element states one first.**
+      `DrawingChartPlot.FamilyOf` took the first literal `a:latin/@typeface` anywhere in the part.
+      `c:chart` precedes `c:txPr` under `c:chartSpace`, so a part whose *title* names one face and
+      whose chart space names another had every axis label, legend entry and data label measured
+      and drawn in the title's — document order read as a precedence rule.
+
+      `171128IPAP.pptx`'s `chart7.xml` states `Arial` on `c:title/c:txPr` and `Calibri` on
+      `c:chartSpace/c:txPr`. On page 38 the reference draws 31 records Carlito-Bold, 13
+      Carlito-Regular and 2 LiberationSans — its title, correctly in Arial — and we drew 34
+      LiberationSans-Bold. Now 35 Carlito-Bold and 9 Carlito-Regular. Census: 2 of 61 chart parts,
+      1 document. Swept: that document's `|ink|%` 16.36 → 15.90, which is the whole of the 0.41
+      round thirty localised there and said was a different residue from the size work. It was.
+
+- [ ] **The chart *title's* own face, which the model still cannot carry.** `ChartPlot.TextFamily`
+      is one family for the whole chart, so the fix above takes `171128IPAP` page 38 from 44 wrong
+      records to 2 — the title's. Closing it needs what the sizes needed: a nullable `TitleFamily`
+      beside it, and `ChartText` bound per label rather than per chart, because the measurer
+      carries the family it measures in.
+
+- [ ] **The chart text residual has *two* components, and every round that has chased it has been
+      reading one number where there are two.** A PDF show carries a font height in `Tf` and an
+      independent horizontal scale in the text matrix's `a`; `pdf-ops.py` reports their product, so
+      a stretched run reads there as a run at some other size.
+      `research/probes/slides-r31/text-stretch-census.py` reads both.
+
+      Over the 163 kept reference PDFs, **7078 shows are written in the `Tm`+`Tf` form it reads and
+      4881 of them carry an `a` more than 0.002 from unity, across 21 documents.** Most are `.ppt`
+      metafile text and are already attributed by the size census's `metafile text` bucket; three
+      PPTX decks with charts are not — `Demick_JetBlue` (142 of 142 shows at a uniform
+      `a = 1.002932`), `southern-classic` and `171128IPAP`.
+
+      On `southern-classic` page 11 the whole of one chart is drawn at `a = 1.030454` with its
+      heights divided by it — `13.589 Tf` for a 14 pt label and `15.486 Tf` for a 16 pt one — while
+      the page's other three charts sit at `a = 1.000102`. So it is per chart, not per deck.
+
+      Reading the second column changes what round twenty-three's table says. `Demick_JetBlue`'s
+      drawn heights against the stated sizes are 6.987/7, 9.889/10, 13.889/14, 17.890/18,
+      29.807/30, 39.808/40 — **absolute** shortfalls of 0.013, 0.111, 0.111, 0.110, 0.193, 0.192,
+      piecewise constant in three bands. Folding the horizontal scale back in does not make it
+      uniform either: the width-equivalents are 9.918 and 17.942 against 10 and 18. Measured,
+      characterised, **not fitted**.
+
+      `ChartLabel.Stretch` and `ChartLayout.Stretch` already model this exact shape — a chart
+      composed at its own size, the em following the vertical factor, the residual `sx/sy` carried
+      onto the label — and the path never fires for an OOXML chart because `ChartPlot.Space` is
+      null for one by construction. So the question is what gives an OOXML chart a natural size
+      different from its frame. Two candidates are already dead: the OLE replacement metafile's
+      `VCLMTF` preferred size is the frame's to the unit on all four of `southern-classic` page
+      11's charts, and LibreOffice's own `odp` writes each `chart:chart`'s `svg:width`/`svg:height`
+      equal to its frame's.
+
+      **The model's sizes are right and it is the device that moves**, which is worth stating
+      because it closes the cheapest wrong theory: `soffice --convert-to odp` writes those four
+      charts' styles at exactly `10pt`, `14pt` and `16pt`.
+
+      Round twenty-three's own reading of it as "the chart's text scale, from the OLE object's
+      stored visual area against the size of the frame it sits in" is refuted on both halves.
 
       The factor first: 10 × 0.9889 = 9.889 and the reference draws 9.889, but 18 × 0.9889 =
       17.80 and it draws 17.89. One pair fits. Restating the same deck's title at six sizes and
