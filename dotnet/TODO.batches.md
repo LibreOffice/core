@@ -10216,3 +10216,145 @@ Three things this round measured that the next one should not re-derive:
   writer documents as unembeddable, so `手机免提系统TSB.doc` now also fails `unembedded` — the
   words track reaching a limitation the slides track had already recorded. **Unmeasured:**
   whether any ordering rule that is not fontconfig gets closer to LibreOffice's single face.
+
+## Words round 36: the glyph cluster was the instrument, and a paragraph mark was formatting its text
+
+### The classification the round inherited does not survive its own control
+
+`first-divergence.py` decides the dominant difference by counting `pdf-ops.py` notes on the
+first divergent page, and round 35 corrected it three times. The check nobody had run is the
+one that settles it: **run the classifier over documents that already match the gate.** Thirty
+of them, sampled from the 154 (`probes/words-r36/pdf-ops-matching-calibration.tsv`):
+
+| on documents that MATCH page count, word count and embedding | |
+|---|---:|
+| `glyphs a vs b` note fires at all | **26 of 30** |
+| `glyphs` is the *dominant* kind | **22 of 30** |
+| worst page-1 glyph delta ≥ 20 | **15 of 30** |
+| worst page-1 glyph delta, largest seen | **97** |
+
+Round 35 reported the glyph cluster as 27 of 46 failing documents with 21 past a delta of 20,
+and read the threshold as evidence the cluster is "a break difference, not a size difference".
+It is neither: `foca_form_1.doc` matches the gate exactly, its image diff says every page
+agrees, and its page 1 scores a glyph delta of **86**. The rate is *higher* on the documents
+with nothing wrong with them (73%) than on the failing ones (59%).
+
+The mechanism is the same one that retired `shows`, one level up. A `pdf-ops.py` record is a
+single show operator, and LibreOffice writes one show per *character* on printer-metric text —
+`glyphs 34 vs 36; shows 1 vs 35` is a routine line on an agreeing page. Our one record then
+pairs with whichever of their thirty-five is nearest and the rest land in the one-sided lists,
+so a line that agrees produces one glyph note and thirty-four one-sided records.
+
+**Do not re-derive the glyph cluster.** `gdelta` is a property of our PDF writer's batching.
+
+### `line-anatomy.py`, and what it costs to be honest about it
+
+`.claude/skills/render-comparison/scripts/line-anatomy.py` asks poppler for the *lines*
+(`pdftotext -bbox-layout`) and aligns the two lists by text and nearest y. The unit is then what
+the layout engine decides: `text`, `linebreak`, `advance`, `indent`, `pitch`, `rule` — and
+`advance` and `linebreak` are reported apart, which is the distinction the corpus keeps losing.
+
+Three calibration faults were found and fixed by the same control population: compare
+whitespace-stripped text (poppler re-infers word boundaries from geometry), match by text and
+nearest y rather than by sequence position (a page with text frames is blocked differently by
+poppler from the two files — `FAA-High-Level-Org-Chart.docx` matches the gate and reported 25 of
+its 38 lines one-sided), and decide a rewrap on the concatenation rather than the word multiset.
+
+**Its residual false-positive rate is 12 of 30 on matching documents, and that is not good
+enough to publish a cluster table from.** It is a large improvement on 22 of 30 and it is not a
+clean instrument. Treat a per-document verdict as a lead and the aggregate as noise, until
+somebody drives the one-sided-line rate below about one in ten.
+
+The 46 failing documents, classified with it (`probes/words-r36/line-anatomy-failing.tsv`):
+33 `text`, 6 `rule`, 4 `advance`, 2 `linebreak`, 1 `pitch`. Read the individual rows.
+
+### The paragraph mark's run properties were formatting the paragraph's text
+
+`w:pPr/w:rPr` is the run formatting of the **paragraph mark**. ECMA-376 names it that, Word
+applies it to the pilcrow, and LibreOffice's flat-ODF export puts it on `loext:marker-style-name`
+and an empty `text:span` while leaving the paragraph's text in the paragraph style.
+`DocxLayoutSource` resolved it as the paragraph's own character formatting, with the comment
+"they are what a run with no properties of its own inherits" — and most runs have none.
+
+Measured against LibreOffice 24.2.7.2 with `probes/words-r36/ppr-rpr-probe.py`, which states
+every face and size outright:
+
+| the paragraph | reference | ours, before | ours, after |
+|---|---|---|---|
+| bold style, mark says `<w:b w:val="0"/>` | LiberationSans-**Bold** 18pt | LiberationSans 18pt | Bold ✓ |
+| bold style, mark says nothing | Bold 18pt | Bold 18pt | ✓ |
+| no style, mark says `<w:b/><w:sz w:val="48"/>` | LiberationSerif 10pt | LiberationSerif-**Bold 24pt** | 10pt ✓ |
+| mark says `b=0`, run says `<w:b/>` | Bold | Bold | ✓ |
+| empty paragraph, mark says `<w:sz w:val="72"/>` | 36pt of height | 36pt | 36pt ✓ |
+
+The empty case is why the mark's style is kept rather than dropped: a paragraph with nothing in
+it *is* its mark. The list label keeps the mark's style too — a number or bullet takes the
+paragraph mark's formatting, which is the one place `w:pPr/w:rPr` is meant to show.
+
+The corpus document that found it is
+`review-welsh-government-communications-mister-peter-mandelson.docx`, whose title is a bold
+`Heading1` carrying exactly that mark: three `face DejaVuSans vs DejaVuSans-Bold` notes before,
+**zero** after. That closes round 35's "unmeasured lead: the reference draws headings in
+DejaVuSans-Bold where we draw DejaVuSans", and it was not a missing bold face.
+
+**The WW8 reader does not have this defect.** `Ww8DocumentReader.Describe` resolves the
+paragraph's character layout at the paragraph's *first character*, not at its mark.
+
+#### Measured reach, and a verdict count that did not move
+
+Rendering the whole track twice with `SOURCE_DATE_EPOCH` pinned and byte-comparing:
+**132 of 200 renderings changed** — the largest reach any words change has had.
+
+| | at `20711256c` | after |
+|---|---:|---:|
+| documents matching | 154 | **154** |
+| absolute page error | 76 | **78** |
+| exactly-correct page counts | 164 | **164** |
+| word error | 6690 | **6639** |
+
+**Nothing moved on the scoreboard, and that is the headline.** Word error improves by 51 and
+page error worsens by 2 — the two pages are `150-5370-10H.docx` (712→711 against 721) and
+`AC-150-5370-10G-updated-201604.docx` (687→686 against 697), both already 9 and 10 pages short,
+so the change makes an existing under-pagination one page worse on the two longest documents in
+the track and touches no other page count anywhere.
+
+#### The trap inside the fix, which cost a sweep
+
+Resolving only the *body's* face took nine documents from `match` to `unembedded` with the
+layout byte-for-byte irrelevant: `Face()` is also what fills `_references`, and a `FontReference`
+is the only thing the PDF writer can turn back into an embedded font program. The list label
+takes the *mark's* style, so it had no reference to embed through. Both faces are now resolved.
+The tell was that page counts were identical (164 either way) while nine verdicts changed —
+**a verdict change with no geometric change is a metadata defect, not a layout one.**
+
+### Named causes for three documents, and one lead with a large ceiling
+
+- **`xx_SETIS_PWS_template_10.19.22.docx` is line numbering.** Its page 1 is missing 45
+  reference-only lines and they are the integers 1–45 in the left margin: `w:sectPr/w:lnNumType`,
+  which nothing reads. 15 pages against 15 and 541 words short, which is about 45 × 15. **It is
+  the only DOCX in the track that declares it**, so implementing it would be a special case.
+- **`absrc-pac-01-info-note-en.doc` is two faults.** Its `PAGEREF` fields resolve one page high
+  throughout (ours "page 3, pages 4, 6" against the reference's "page 2, pages 3, 5"), and a
+  whole table-of-contents block sits at the top of our page 1 and at the bottom of the
+  reference's.
+- **The reference re-evaluates `DATE` fields to today.** Two documents print `9 August 2026`
+  where the stored result is `4 February 2010` and `10/19/2022`. `SOURCE_DATE_EPOCH` pins *our*
+  clock and cannot pin LibreOffice's, so those documents are not reproducible across days on the
+  reference side. Byte-compare our own two renderings before attributing any movement on them.
+- **Symbol-font bullets resolve to the paragraph's face where LibreOffice uses OpenSymbol.**
+  `WordNumbering.FormatLabel` normalises a private-use bullet to U+2022 and `LabelFace` keeps the
+  paragraph's face, so we draw LiberationSans's bullet where the reference draws OpenSymbol's —
+  `face LiberationSans vs OpenSymbol` and `face DejaVuSans vs OpenSymbol`, measured on two
+  documents. `Paperless.Text.Fonts.SymbolFontRecode` already ports LibreOffice's whole recode
+  table and **is referenced from no file in `Paperless.WordProcessing`** — the same shape as
+  round 35's glyph fallback, a facility built for one family and never wired into another.
+  **Ceiling: 100 of the 134 DOCX in the track declare a bullet level in a legacy symbol face**,
+  over the format the census can read; the 66 `.doc` are invisible to it. That is a ceiling and
+  not a reach — a declared level need not be used, and a label that is followed by a tab to a
+  fixed stop moves no text after it, so expect fidelity rather than pagination.
+
+Test counts on the final tree, project by project: Core 284, Containers 109, Text 255,
+Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing **720** (715 before,
++5 from `ParagraphMarkPropertiesTests`), Spreadsheets 605, Presentations 571, Fidelity 550,
+**0 skipped** throughout. The five new tests were verified with `verify-test.sh`: collapsing
+`body` back onto `mark` fails three of them.
