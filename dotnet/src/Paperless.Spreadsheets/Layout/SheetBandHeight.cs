@@ -156,9 +156,11 @@ internal static class SheetBandHeight
 
             switch (code)
             {
-                case 'L': part = 0; break;
-                case 'C': part = 1; break;
-                case 'R': part = 2; break;
+                // A section switch resets the font to the workbook's own default —
+                // `ResetFontData` (xihelper.cxx:534-542), `setNewPortion` (pagesettings.cxx:868).
+                case 'L': part = 0; size = defaultFont.Size; family = defaultFont.Family; break;
+                case 'C': part = 1; size = defaultFont.Size; family = defaultFont.Family; break;
+                case 'R': part = 2; size = defaultFont.Size; family = defaultFont.Family; break;
 
                 // The fields. Each is inserted as one character and counts as text, because
                 // `InsertField` calls `UpdateCurrMaxLineHeight` exactly as `InsertText` does

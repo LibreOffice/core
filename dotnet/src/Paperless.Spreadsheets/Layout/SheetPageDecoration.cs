@@ -303,6 +303,23 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
         // 33% is drawn at a third of its stated size along with everything else.
         double zoom = Math.Max(1, placement.ZoomPercentage) / 100.0;
 
+        // The three parts share one band and are each centred in it, which is why the band's own
+        // height is the tallest of the three rather than each part's own: `PrintHF` gives the
+        // EditEngine one `aPaperSize` and computes `nDif` per area against it
+        // (sc/source/ui/view/printfun.cxx:1876-1912), and `UpdateHFHeight` has set that height to
+        // the greatest of the three (`:820-834`). Measured on `sheet-outline-collapse.xlsx`,
+        // whose footer holds two 8 pt lines on the left and one on the right: LibreOffice puts
+        // the left part's last line hard against the footer margin and the right part's single
+        // line 3.35 pt above it, which is half the difference between the two.
+        Length bandText = Length.Zero;
+        foreach (SheetHeaderPart part in (SheetHeaderPart[])[band.Left, band.Centre, band.Right])
+            bandText = Length.Max(bandText, TextHeight(part, context, zoom));
+
+        if (bandText <= Length.Zero) return;
+
+        Length drawn = dynamic ? bandText : height;
+        Length bandTop = dynamic && fromBottom ? top + height - bandText : top;
+
         Place(band.Left, _ => left);
         Place(band.Centre, width => left + ((right - left - width) / 2));
         Place(band.Right, width => right - width);
@@ -317,17 +334,8 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
             Length text = Length.Zero;
             foreach (IReadOnlyList<SheetHeaderPiece> line in lines) text += LineHeight(line, zoom);
 
-            // A dynamic band is exactly as tall as its text, so its `nDif` is nought and the
-            // text fills it — which anchors a header to the band's top edge and a footer to its
-            // bottom one, because those are the edges the margins fix. A fixed band centres what
-            // fits in it and, when the text is taller, still starts at the top.
-            Length pen;
-            if (dynamic) pen = fromBottom ? top + height - text : top;
-            else
-            {
-                Length spare = height - text;
-                pen = top + (spare > Length.Zero ? spare / 2 : Length.Zero);
-            }
+            Length spare = drawn - text;
+            Length pen = bandTop + (spare > Length.Zero ? spare / 2 : Length.Zero);
 
             foreach (IReadOnlyList<SheetHeaderPiece> line in lines)
             {
@@ -366,6 +374,19 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
                 pen += lineHeight;
             }
         }
+    }
+
+    /// <summary>How tall one part of a band is: the sum of its lines.</summary>
+    private static Length TextHeight(
+        SheetHeaderPart part, SheetHeaderContext context, double zoom)
+    {
+        if (part.IsEmpty) return Length.Zero;
+
+        Length height = Length.Zero;
+        foreach (IReadOnlyList<SheetHeaderPiece> line in part.Lines(context))
+            height += LineHeight(line, zoom);
+
+        return height;
     }
 
     /// <summary>The em size one piece of a band is drawn at, the page's zoom applied.</summary>

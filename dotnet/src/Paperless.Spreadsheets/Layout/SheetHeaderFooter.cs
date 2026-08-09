@@ -303,9 +303,15 @@ public sealed record SheetHeaderFooter(
 
             switch (code)
             {
-                case 'L': Flush(); current = left; break;
-                case 'C': Flush(); current = centre; break;
-                case 'R': Flush(); current = right; break;
+                // A section switch resets the font to the workbook's own default, which is
+                // `ResetFontData` in the BIFF parser (xihelper.cxx:534-542) and
+                // `maFontModel = getDefaultFontModel()` in the OOXML one
+                // (pagesettings.cxx:868-876). Measured on `sheet-outline-collapse.xlsx`, whose
+                // footer is `&L&8… &RFoot right`: LibreOffice draws the right part at the
+                // workbook's ten point and carrying the eight across draws it at eight.
+                case 'L': Flush(); current = left; size = null; break;
+                case 'C': Flush(); current = centre; size = null; break;
+                case 'R': Flush(); current = right; size = null; break;
 
                 case 'P': Field(SheetHeaderField.PageNumber); break;
                 case 'N': Field(SheetHeaderField.PageCount); break;
