@@ -213,6 +213,11 @@ public sealed partial class Ww8DocumentReader
     /// <param name="AutoKerning">
     /// True when <c>sprmCHpsKern</c> asks for the run's pairs to be kerned. Off unless it does.
     /// </param>
+    /// <param name="SymbolSlot">
+    /// The slot <c>sprmCSymbol</c> names, or null for ordinary text. The character the file stores at
+    /// this position is a placeholder and this is what stands in its place; <see cref="FamilyName"/> is
+    /// already the face the same sprm named, since a slot means nothing without one.
+    /// </param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -227,7 +232,8 @@ public sealed partial class Ww8DocumentReader
         Colour? Highlight = null,
         bool IsUnderlined = false,
         bool IsStruckThrough = false,
-        bool AutoKerning = false)
+        bool AutoKerning = false,
+        char? SymbolSlot = null)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -1233,7 +1239,8 @@ public sealed partial class Ww8DocumentReader
                 format.Highlight,
                 format.IsUnderlined ?? false,
                 format.IsStruckThrough ?? false,
-                format.AutoKerning ?? false);
+                format.AutoKerning ?? false,
+                format.SymbolSlot);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -1855,6 +1862,17 @@ public sealed partial class Ww8DocumentReader
                 case LayoutSprms.FontIndex:
                     format = format with { FontIndex = sprm.Word };
                     break;
+
+                // The face comes with the slot, exactly as Read_Symbol sets RES_CHRATR_FONT beside
+                // m_cSymbol: a slot means nothing without the face it indexes into.
+                case LayoutSprms.Symbol when sprm.Operand.Length >= 4:
+                    format = format with
+                    {
+                        FontIndex = BinaryPrimitives.ReadUInt16LittleEndian(sprm.Operand.Span),
+                        SymbolSlot = (char)BinaryPrimitives.ReadUInt16LittleEndian(
+                            sprm.Operand.Span[2..]),
+                    };
+                    break;
                 case LayoutSprms.Bold:
                     format = format with
                     {
@@ -2099,6 +2117,25 @@ public sealed partial class Ww8DocumentReader
 
         internal const ushort FontSize = 0x4A43;
         internal const ushort FontIndex = 0x4A4F;
+
+        /// <summary>
+        /// <c>sprmCSymbol</c>: a character named by slot in a face of its own, WW8's <c>w:sym</c>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Four bytes: <c>ftcSym</c>, an index into the font table, then <c>xchar</c>, the slot
+        /// (<c>SwWW8ImplReader::Read_Symbol</c>, <c>sw/source/filter/ww8/ww8par6.cxx:3009-3048</c>).
+        /// The text stream holds a placeholder at that position — <c>(</c>, U+0028, on every corpus
+        /// document carrying one — and <c>SwWW8ImplReader::ReadChars</c> (<c>ww8par.cxx</c>:3395-3418)
+        /// throws it away and inserts <c>xchar</c> once per character the run covers instead.
+        /// </para>
+        /// <para>
+        /// Its companion <c>sprmCFSpec</c> (0x0855) is what marks the placeholder as special, and it
+        /// is not needed to read this: a CHPX carrying <c>sprmCSymbol</c> is the case, and Word writes
+        /// the two together.
+        /// </para>
+        /// </remarks>
+        internal const ushort Symbol = 0x6A09;
         internal const ushort Language80 = 0x486D;
         internal const ushort Language = 0x4873;
         internal const ushort ColourIndex = 0x2A42;

@@ -218,6 +218,16 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>The font table index, from <c>sprmCRgFtc0</c>.</summary>
     public int? FontIndex { get; init; }
 
+    /// <summary>
+    /// The slot <c>sprmCSymbol</c> names, or null when the run is ordinary text.
+    /// </summary>
+    /// <remarks>
+    /// WW8's <c>w:sym</c>. The run's characters are placeholders in the file and this is what stands
+    /// in their place; <see cref="FontIndex"/> is set from the same sprm, because a slot addresses a
+    /// glyph by byte position in one particular face and means nothing in any other.
+    /// </remarks>
+    public char? SymbolSlot { get; init; }
+
     /// <summary>True when the text is bold.</summary>
     public bool? IsBold { get; init; }
 

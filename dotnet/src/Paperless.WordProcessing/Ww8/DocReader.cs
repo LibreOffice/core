@@ -1,3 +1,4 @@
+using System.Text;
 using Paperless.Containers;
 using Paperless.Containers.Ole2;
 using Paperless.Core;
@@ -620,7 +621,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
             paragraphs.Add(new PageParagraph
             {
-                Text = CaseMapping.Apply(paragraph.Text, runs),
+                Text = CaseMapping.Apply(WithSymbols(fonts, paragraph), runs),
                 Face = face,
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
@@ -709,6 +710,56 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             },
             TabStop = Core.Units.Length.FromTwips(paragraph.ListTabStop),
         };
+    }
+
+    /// <summary>
+    /// The paragraph's text with every <c>sprmCSymbol</c> run's placeholder replaced by its slot.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A WW8 symbol is not stored where it is drawn. The piece table holds a placeholder — U+0028 on
+    /// every corpus document carrying one — and the slot lives in the CHPX beside it, so a reader that
+    /// takes the stream at its word draws <c>(</c> where the document asks for <c>×</c>. Measured on
+    /// <c>RMI_…GettingOffOil.doc</c>, whose reference reads <c>3.6×-more-efficient</c> against our
+    /// <c>3.6(-more-efficient</c>.
+    /// </para>
+    /// <para>
+    /// The replacement is one character per character the run covers, which is what
+    /// <c>SwWW8ImplReader::ReadChars</c> does — it inserts <c>m_cSymbol</c> once for every character
+    /// position the sprm is in force over (<c>ww8par.cxx</c>:3410-3413). Preserving the length is not
+    /// incidental: every note, frame and field offset in the paragraph was recorded against this
+    /// string, and a substitution that changed its length would move all of them.
+    /// </para>
+    /// <para>
+    /// Unconditional, unlike the face beside it. LibreOffice replaces the placeholder whether or not
+    /// the face it names can be loaded, so a slot with no recode table still draws its own code point
+    /// rather than the placeholder.
+    /// </para>
+    /// </remarks>
+    private static string WithSymbols(
+        LayoutFonts fonts, Ww8DocumentReader.Ww8LayoutParagraph paragraph)
+    {
+        IReadOnlyList<Ww8DocumentReader.Ww8LayoutRun> runs = paragraph.Runs ?? [];
+
+        StringBuilder? text = null;
+
+        foreach (Ww8DocumentReader.Ww8LayoutRun run in runs)
+        {
+            if (run.SymbolSlot is not { } slot || slot == '\0') continue;
+
+            char drawn = SymbolLabel(fonts, run.FamilyName, slot) is { Text: [char recoded] }
+                ? recoded
+                : slot;
+
+            text ??= new StringBuilder(paragraph.Text);
+
+            for (int index = run.Start; index < run.End && index < text.Length; index++)
+            {
+                text[index] = drawn;
+            }
+        }
+
+        return text?.ToString() ?? paragraph.Text;
     }
 
     /// <summary>
@@ -900,8 +951,18 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         foreach (Ww8DocumentReader.Ww8LayoutRun run in stated)
         {
-            OpenTypeFace face =
-                fonts.Face(run.FamilyName, run.Weight, run.IsItalic) ?? paragraphFace;
+            // A `sprmCSymbol` run's face is decided together with the character it draws — see
+            // WithSymbols — so the same resolution answers both, and a slot recoded into OpenSymbol
+            // has to be drawn from OpenSymbol or it is .notdef.
+            (OpenTypeFace Face, FontReference? Font)? symbol = run.SymbolSlot is { } slot
+                ? SymbolLabel(fonts, run.FamilyName, slot) is { } resolved
+                    ? (resolved.Face, resolved.Font)
+                    : null
+                : null;
+
+            OpenTypeFace face = symbol?.Face
+                ?? fonts.Face(run.FamilyName, run.Weight, run.IsItalic)
+                ?? paragraphFace;
 
             // The escapement is resolved here rather than where it was read, because its rise is a
             // fraction of the face's height and the face is only known now.
@@ -927,7 +988,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 // Kerning, unlike the two rules, does change a measurement — so a run that kerns
                 // inside a paragraph that does not has to survive the shortcut or its width is the
                 // paragraph's answer rather than its own.
-                || run.AutoKerning != paragraph.AutoKerning)
+                || run.AutoKerning != paragraph.AutoKerning
+                // A symbol's face is its own even when it happens to equal the paragraph's: losing the
+                // runs here would draw its slot out of whatever the paragraph is set in.
+                || run.SymbolSlot is not null)
             {
                 varies = true;
             }
@@ -937,7 +1001,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 run.Length,
                 face,
                 size,
-                fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
+                symbol is { } named
+                    ? named.Font
+                    : fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
                 run.Colour ?? paragraph.Colour ?? Colour.Black,
                 new Text.Shaping.ShapingOptions(
                     Language: run.Language, DisableKerning: !run.AutoKerning),
