@@ -10825,3 +10825,136 @@ Markup 259, OpenDocument 125, WordProcessing 720, Spreadsheets **611** (605 befo
 tests were verified with `verify-test.sh`: removing the layouter's shaper fails the line-breaking
 one and removing the drawing pass's itemisation fails the shaping one — two mutations, two different
 tests, which is why the two passes are asserted separately.
+
+## Round thirty-seven — sheets: a merged range's decoration comes from its origin
+
+Base `545550952`, checked with `git log --oneline -1` before anything was measured. The baseline
+sweep reproduced **three of the brief's four figures to the digit** — 155/171, absolute page error
+73, 161 exact page counts — and came out **27163** against the brief's 27161 on word error, two
+words over 171 documents. 171 rows, no duplicate path, no `ref-failed`, no `ours-failed`.
+
+Full working, citations, the probes, the census and every measurement are in
+`probes/sheets-r37/` — `README.md` for the probes, `RESULTS.md` for the numbers.
+
+**Result: nothing moved on the scoreboard, and that is the honest headline.** 155/171, page error
+73, exact page counts 161, word error 27163 — every figure identical, every earlier batch intact.
+**52 of 171 renderings changed** and total `|ink|%` against the reference over the comparable ones
+went **583.90 → 512.14**. The gate cannot see this change by construction: it decides on page
+count, extractable words and unembedded fonts, and a suppressed border, a recoloured fill and a
+grid that stops short reach none of the three.
+
+### The lead the last round left, taken and measured
+
+`SheetPageDecoration` had no notion of a merge: `DrawBackgrounds` and `Edges.Build` both asked
+`SheetFormatting.At(row, column)` per placed cell, and `DrawGrid` drew one rule per column and per
+row straight across the block. Two authored flat-ODS probes settle what LibreOffice does — a 2 × 3
+merged block whose origin states a red fill and a 2 pt blue box over covered cells stating a green
+fill and a 1 pt magenta box:
+
+1. **The fill is the origin's and covers the whole range.** One `#FF0000` rectangle over two
+   columns by three rows; `#00FF00` appears nowhere.
+2. **The border is the origin's and every interior edge is suppressed.** Four `#0000FF` lines,
+   one per side; `#FF00FF` nowhere.
+3. **The printed grid stops at the range in both directions**, which is a third pass and was
+   not in the lead at all.
+
+`Array::GetCellStyleTop` and its three siblings read from `GetMergedStyleSourceCell` and return
+`OBJ_STYLE_NONE` when `IsMergedOverlapped*` (`svx/source/dialog/framelinkarray.cxx:460-490,
+782-856`); `ScOutputData::DrawBackground` extends a run across `ATTR_MERGE`'s column count;
+`DrawGrid` skips a line where the neighbour is `bHOverlapped`. `SheetMerges` is the index the three
+passes share — `MergedRanges` is a list and one corpus workbook states 7818 merges, so it is
+bucketed by a band of 64 rows once per sheet rather than walked per cell per page.
+
+Note which edges this suppresses and which it does not, because it is the part that is easy to get
+backwards: a block three rows tall still emits its left edge **per row**, all three carrying the
+origin's style, because only an overlap in the *column* direction suppresses a left edge. The
+reference merges those three into one line (`tryMergeBorderLinePrimitive2D`, which merges collinear
+lines only when their `LineAttribute` matches); three abutting butt-capped segments of one colour
+put the same ink down, so the merging is not reproduced.
+
+### And a second, BIFF-only half that the first half made necessary
+
+An Excel writer states a border on **every** cell of a merged range, so the origin's own right
+border is the range's first *interior* line and its own bottom border is the line under its first
+row. Drawing the range from its origin therefore puts the wrong two edges on its outside — which is
+why the import moves them first: `XclImpXFRangeBuffer::SetBorderLine` copies the right border of
+`(lastColumn, firstRow)` and the bottom border of `(firstColumn, lastRow)` onto the origin
+(`sc/source/filter/excel/xistyle.cxx:1976-1990` and `:2077-2090`). Left and top need no move.
+BIFF only, deliberately: neither the SpreadsheetML nor the ODF import does anything equivalent.
+
+The two halves are measured separately and the second one **lowers** the reach: the decoration
+change alone moves 57 renderings, the pair moves 52, and of the 16 `.xls` renderings the transfer
+touches, **five come back byte-identical to the baseline** — the outer edge restored to the line
+the covered cells used to draw.
+
+### The census, and what it counted over
+
+`census.py`/`census2.py` read `xl/worksheets/*.xml` and `xl/styles.xml`, so they can read **110 of
+the track's 171 documents**; the other 61 are `.xls`, which states a merge in a `MERGEDCELLS`
+record no zip-level census can see. Over the 110: 56 state a `mergeCell`, 8 print the grid, and
+**47 hold a merge whose covered cell's style paints a border or a fill** — 7818 merges in total,
+2592 with a covered cell stating a different style index. Measured reach came in at 52 of 171,
+with 17 of them `.xls` the census is blind to.
+
+### The prediction, and how it did
+
+`probes/sheets-r37/PREDICTION.md` was committed before any post-change rendering.
+
+| | predicted | measured |
+|---|---|---:|
+| sheets renderings byte-changed | 40–80 | **52 of 171** |
+| verdicts moved | 0, band 0–1 | **0** |
+| words renderings byte-changed | 0 | **0 of 200** |
+| slides renderings byte-changed | 0 | **0 of 163** |
+
+The band was deliberately set high, on the reasoning that this census's condition nearly *implies*
+a changed rendering rather than merely permitting one — the commonest way a file states a merge is
+to write the same box on every cell of it, which is exactly the case whose interior edges we used
+to draw. That came out right.
+
+### A byte-reach outlier under load is not necessarily a byte-reach finding
+
+The slides cross-track sweep first reported **2 of 163 changed**, on a change confined to
+`Paperless.Spreadsheets`. Both were artefacts: re-rendered individually the two decks are
+byte-identical between the snapshots, and the base CLI run twice is byte-identical to itself. The
+sweep ran at load average 20–35 beside three other agents, and **a render truncated under load
+leaves a file that exists and differs**, which a byte comparison reports exactly as a real change.
+Re-run an outlier individually before believing it; it costs one render.
+
+The same round contains the operational mirror of that: `pkill -f pdf-image-diff` to stop this
+round's own comparison would have killed the slides agent's as well. The scratchpad is shared and
+so is the process table — **match on the full path of your own script, never on a tool name.**
+
+### The document the lead came from is still open, and the question has changed
+
+`7-memento-2015-transports-aeriens-b.xls` did **not** move. On page 2 the reference draws 115.28 pt
+verticals at x = 119.99 and 512.39 in `#0066CC`; we draw a **single 13.1 pt segment** at x = 120.02
+in `#0066CC` and nothing below it, identically before and after.
+
+That relocates the question rather than answering it. A merged block the decoration path knows
+about emits its left edge once per covered row, each carrying the origin's style — eight segments
+here. One segment, with the covered rows drawing nothing at all, says **the block is not in our
+model as a merge**, so what needs finding is why that `MERGEDCELLS` range does not reach
+`StatedMerges` for this sheet. Round thirty-six's framing — which cell's colour wins over a merged
+range — is implemented and is not what this document needs. **Unmeasured beyond that.**
+
+### Still open, unchanged
+
+- **The 3.4 twips on a non-wrapping multi-line row** (`bStdAllowed = false` for an edit-cell row):
+  confirmed, unimplemented, corpus reach unmeasured.
+- **The narrower leg of the solidus rule**: needs the fitting limit to the character.
+- **`aircraft_analysis_2016-04-27.xls`** reads 44/46 and its cell fallback never fires.
+- **We do not pick the reference's fallback face** (`IPAGothic` + `WenQuanYiZenHei` against
+  `WenQuanYiZenHei`), and every affected row height is still exact.
+- **Sixteen of the fifty comparable changed documents are measurably further from the reference**
+  after this round, by between 0.14 and 2.07 of `|ink|%` against gains of up to 21.80. Small, real,
+  and not followed here.
+
+Test counts on the final tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing 723, Spreadsheets **621** (611 before, +6 from
+`SheetMergedDecorationTests` and +4 from `XlsMergedBorderTests`), Presentations 573, Fidelity 550 —
+**0 skipped** throughout. The six decoration tests were each verified with `verify-test.sh`: five
+mutations, five detections, and each mutation was caught by a *different* test — removing the origin
+lookup fails the fill and border tests, removing the interior suppression fails the border test,
+removing the grid suppression fails the grid test, bucketing a merge by its first row only fails the
+tall-block test, and removing the grid's run-coalescing fails the unmerged-sheet test.
