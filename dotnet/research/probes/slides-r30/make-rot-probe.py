@@ -55,8 +55,15 @@ for k in (4, 6, 8, 10, 12):
     VARIANTS[f"rot-w{k:02d}"] = dict(chars=k, count=26, size=None)
 for s in (700, 900, 1200, 1400):
     VARIANTS[f"rot-s{s}"] = dict(chars=6, count=26, size=s)
-for n in (14, 20, 32):
+for n in (12, 13, 14, 15, 16, 17, 18, 20, 32):
     VARIANTS[f"rot-n{n:02d}"] = dict(chars=6, count=n, size=None)
+# A second boundary, crossed by the character count instead of the category count: at twenty
+# categories the slot is 27.3 pt, so the two candidate limits part company between four and
+# five characters, and at ten categories between eight and ten.
+for k in (3, 4, 5, 6):
+    VARIANTS[f"rot-n20c{k:02d}"] = dict(chars=k, count=20, size=None)
+for k in (7, 8, 9, 10, 11):
+    VARIANTS[f"rot-n10c{k:02d}"] = dict(chars=k, count=10, size=None)
 
 
 def main():
