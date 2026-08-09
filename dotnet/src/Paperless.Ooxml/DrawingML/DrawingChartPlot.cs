@@ -1198,10 +1198,27 @@ public static class DrawingChartPlot
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The first <em>literal</em> <c>a:latin/@typeface</c> anywhere in the part, then the theme's
-    /// minor Latin face. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
+    /// The <c>c:chartSpace</c>'s own <c>c:txPr</c> first — the part's <em>global</em> statement,
+    /// which is the same element <see cref="AutoText"/> reads a global size from — then the first
+    /// <em>literal</em> <c>a:latin/@typeface</c> anywhere in the part, then the theme's minor
+    /// Latin face. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
     /// <em>reference</em> to the theme rather than a name, so taking it as one asks the resolver
     /// for a family no system has and every label is measured in a fallback.
+    /// </para>
+    /// <para>
+    /// <strong>Document order is not a precedence rule, and reading it as one cost a whole
+    /// deck.</strong> <c>c:chart</c> precedes <c>c:txPr</c> under <c>c:chartSpace</c>, so a part
+    /// whose <em>title</em> names a face and whose chart space names another had every axis
+    /// label, legend entry and data label drawn in the title's. Measured on page 38 of
+    /// <c>171128IPAP.pptx</c>, whose <c>chart7.xml</c> states <c>Arial</c> on
+    /// <c>c:title/c:txPr</c> and <c>Calibri</c> on <c>c:chartSpace/c:txPr</c>: the reference draws
+    /// 31 records in Carlito-Bold and 2 in LiberationSans — its title, in Arial — and we drew 34
+    /// in LiberationSans-Bold. Two of the corpus's 61 chart parts state two faces this way.
+    /// </para>
+    /// <para>
+    /// The title's own face is still lost, because the model carries one family: what this
+    /// changes is which of the two the whole chart takes, and the chart-wide one is right for
+    /// every element but the title.
     /// </para>
     /// <para>
     /// <strong>Falling back to the theme's minor face is not a guess.</strong> All three of the
@@ -1222,8 +1239,16 @@ public static class DrawingChartPlot
     /// </para>
     /// </remarks>
     private static string? FamilyOf(XElement chartSpace, DrawingTheme? theme)
+        => LiteralFamily(Child(chartSpace, "txPr"))
+           ?? LiteralFamily(chartSpace)
+           ?? theme?.Fonts?.MinorLatin;
+
+    /// <summary>The first literal <c>a:latin/@typeface</c> under an element, or null.</summary>
+    private static string? LiteralFamily(XElement? element)
     {
-        foreach (XElement latin in chartSpace.Descendants(
+        if (element is null) return null;
+
+        foreach (XElement latin in element.Descendants(
                      XName.Get("latin", OoxmlNamespaces.DrawingML)))
         {
             string? typeface = latin.Attribute("typeface")?.Value;
@@ -1233,7 +1258,7 @@ public static class DrawingChartPlot
             return typeface;
         }
 
-        return theme?.Fonts?.MinorLatin;
+        return null;
     }
 
     /// <summary>
