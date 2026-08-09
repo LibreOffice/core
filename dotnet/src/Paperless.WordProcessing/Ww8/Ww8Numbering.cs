@@ -42,6 +42,10 @@ namespace Paperless.WordProcessing.Ww8;
 /// The size the label is set at, in half-points, from <c>sprmCHps</c> in the level's
 /// <c>grpprlChpx</c>, or nought when the level states none.
 /// </param>
+/// <param name="FontIndex">
+/// The font-table index the label is set in, from <c>sprmCRgFtc0</c> in the level's
+/// <c>grpprlChpx</c>, or −1 when the level states none.
+/// </param>
 public readonly record struct Ww8ListLevel(
     int StartAt,
     byte NumberFormat,
@@ -54,7 +58,8 @@ public readonly record struct Ww8ListLevel(
     int FirstLineIndent = 0,
     int TabPosition = 0,
     byte Follow = 0,
-    int HalfPointSize = 0)
+    int HalfPointSize = 0,
+    int FontIndex = -1)
 {
     /// <summary>The <c>nfc</c> meaning "this level draws a bullet, not a number".</summary>
     public const byte BulletFormat = 23;
@@ -414,6 +419,7 @@ public sealed class Ww8Numbering
         position += paragraphPropertiesLength;
         if (position < 0 || position + characterPropertiesLength > stream.Length) return false;
         int halfPointSize = LevelSize(stream.Slice(position, characterPropertiesLength));
+        int fontIndex = LevelFont(stream.Slice(position, characterPropertiesLength));
 
         position += characterPropertiesLength;
         if (position < 0 || position + 2 > stream.Length) return false;
@@ -429,8 +435,43 @@ public sealed class Ww8Numbering
 
         level = new Ww8ListLevel(
             startAt, numberFormat, numberText, placeholders, isLegal, neverRestarts, restartLimit,
-            indentAt, firstLine, tabPosition, follow, halfPointSize);
+            indentAt, firstLine, tabPosition, follow, halfPointSize, fontIndex);
         return true;
+    }
+
+    /// <summary>
+    /// The font-table index the level sets its label in, or −1 when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The second thing worth having out of the level's <c>grpprlChpx</c>, and the one that decides
+    /// which <em>picture</em> a bullet is rather than how big it is. LibreOffice takes the same value
+    /// through the level's character format and hangs it on the numbering rule as its bullet font
+    /// (<c>WW8ListManager::ReadLVL</c>, <c>sw/source/filter/ww8/ww8par3.cxx</c>:1077-1095, which reads
+    /// the <c>SvxFontItem</c> out of the level's <c>SwCharFormat</c> and calls <c>SetBulletFont</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Not reading it is why a WW8 bullet came out as a middle dot.</strong> A WW8 level states
+    /// its bullet as a raw slot — Word writes <c>0xB7</c> against a font of <c>Symbol</c>, not the
+    /// private-use alias DOCX uses — so nothing about the character alone says it is a symbol at all.
+    /// Without the face there is no way to tell <c>0xB7</c> meaning "Symbol's bullet" from <c>0xB7</c>
+    /// meaning MIDDLE DOT, and the character was drawn literally in the paragraph's own face.
+    /// </para>
+    /// </remarks>
+    private static int LevelFont(ReadOnlySpan<byte> grpprl)
+    {
+        byte[] copy = grpprl.ToArray();
+
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(copy))
+        {
+            if (sprm.Identifier is not (FontIndexSprm or FontIndexSprm97)) continue;
+            if (sprm.Operand.Length < 2) continue;
+
+            int index = BinaryPrimitives.ReadUInt16LittleEndian(sprm.Operand.Span);
+            if (index >= 0) return index;
+        }
+
+        return -1;
     }
 
     /// <summary>
@@ -541,6 +582,16 @@ public sealed class Ww8Numbering
 
     /// <summary><c>sprmCHps</c> in its earlier spelling, which a Word 6/95 level may carry.</summary>
     private const ushort FontSizeSprm = 0x0043;
+
+    /// <summary><c>sprmCRgFtc0</c>, the label's font-table index, as Word 97 wrote it.</summary>
+    private const ushort FontIndexSprm97 = 0x4A4F;
+
+    /// <summary><c>sprmCFtc</c>, the same thing in the spelling a Word 6/95 level may carry.</summary>
+    /// <remarks>
+    /// Sixty-eight, one past <see cref="FontSizeSprm"/>'s sixty-seven, which is the order the Word 6
+    /// character sprms are numbered in.
+    /// </remarks>
+    private const ushort FontIndexSprm = 0x0044;
 
     /// <summary><c>sprmPDxaLeft</c> as Word 97 wrote it.</summary>
     private const ushort LeftIndentSprm97 = 0x840F;
