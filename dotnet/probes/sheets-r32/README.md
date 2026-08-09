@@ -91,6 +91,12 @@ by exactly that much. Using the file's own `ht` values instead made all four agr
 - **The caption is drawn as a rectangle**, not as `SdrCaptionObj`'s rounded box with a tail to the
   cell and a shadow. The fill (`#ffffe1`, or the VML's own `fillcolor`) and the hairline border are
   drawn.
+- **A comment with no VML note shape at all is shown by LibreOffice and is not shown here.**
+  `Comment::finalizeImport` initialises `bVisible` to *true* and only overwrites it from a shape
+  it finds (`commentsbuffer.cxx:222-258`), so such a comment gets a caption at Calc's own default
+  position and size through `AutoPlaceCaption`. That branch is not implemented, and the census
+  says why it could not be measured either way: of the track's **8** workbooks carrying a comments
+  part, **0** lack a VML part.
 - **LibreOffice drops the character formatting of a comment's *first* run** when it builds the
   caption — measured on both the corpus workbook and the authored fixture, where the reference
   draws the first run at the Note style's 10 pt Liberation Sans and every later run at the stated
