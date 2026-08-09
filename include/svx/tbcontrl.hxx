@@ -146,6 +146,15 @@ class PaletteManager;
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace sfx { struct CurrencyID; }
 
+class FontList;
+
+namespace svx
+{
+SVXCORE_DLLPUBLIC void ApplyFontStyle(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                      const FontList& rFontList, const OUString& rFontName,
+                                      const OUString& rStyle);
+}
+
 using SvxStyleToolBoxControl_Base = cppu::ImplInheritanceHelper<svt::ToolboxController,
                                                                 css::lang::XServiceInfo>;
 
