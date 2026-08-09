@@ -406,6 +406,10 @@ internal sealed class XlsSheetPrintState
             // does, which is not a coincidence: the OOXML spelling was inherited from it.
             Header = _header is null ? null : SheetHeaderFooter.ParseCodes(_header),
             Footer = _footer is null ? null : SheetHeaderFooter.ParseCodes(_footer),
+
+            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
+            HeaderIsDynamic = true,
+            FooterIsDynamic = true,
             ScaleMode = _fitsToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
 
             // The scale is SETUP's, and SETUP's fields are only meant when the record is valid.

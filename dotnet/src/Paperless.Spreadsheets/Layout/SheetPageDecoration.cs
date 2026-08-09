@@ -262,6 +262,8 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
                 page.Width - setup.RightMargin - setup.HeaderRightMargin,
                 setup.TopMargin,
                 setup.HeaderHeight - setup.HeaderGap,
+                setup.HeaderIsDynamic,
+                false,
                 sink);
         }
 
@@ -276,26 +278,30 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
                 page.Width - setup.RightMargin - setup.FooterRightMargin,
                 page.Height - setup.BottomMargin - setup.FooterHeight + setup.FooterGap,
                 setup.FooterHeight - setup.FooterGap,
+                setup.FooterIsDynamic,
+                true,
                 sink);
         }
     }
 
-    private static void DrawBand(
+    private void DrawBand(
         SheetHeaderFooter band,
         SheetHeaderContext context,
         Length left,
         Length right,
         Length top,
         Length height,
+        bool dynamic,
+        bool fromBottom,
         IDrawingSink sink)
     {
         if (right <= left || height <= Length.Zero) return;
 
-        Length size = SheetBandText.DefaultSize;
-        Length line = SheetBandText.LineHeightAt(size);
-        Length spare = height - line;
-        Length baseline = top + (spare > Length.Zero ? spare / 2 : Length.Zero)
-                          + SheetBandText.AscentAt(size);
+        // The band is drawn at the page's own zoom. `ScPrintFunc::PrintHF` switches the device to
+        // `aTwipMode`, which carries the zoom as its scale fraction
+        // (`InitModes`, sc/source/ui/view/printfun.cxx:2645), so a header on a sheet printed at
+        // 33% is drawn at a third of its stated size along with everything else.
+        double zoom = Math.Max(1, placement.ZoomPercentage) / 100.0;
 
         Place(band.Left, _ => left);
         Place(band.Centre, width => left + ((right - left - width) / 2));
@@ -305,18 +311,81 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
         {
             if (part.IsEmpty) return;
 
-            // Only the first line is drawn. A header may hold several — every format can write a
-            // line break into one — and laying the rest out needs the band to grow, which is a
-            // pagination question rather than a drawing one. Recorded in the module's TODO.
-            string text = part.Resolve(context).Split('\n')[0];
-            if (text.Length == 0) return;
+            IReadOnlyList<IReadOnlyList<SheetHeaderPiece>> lines = part.Lines(context);
+            if (lines.Count == 0) return;
 
-            BandRun? run = SheetBandText.Shape(text, size);
-            if (run is null) return;
+            Length text = Length.Zero;
+            foreach (IReadOnlyList<SheetHeaderPiece> line in lines) text += LineHeight(line, zoom);
 
-            sink.DrawGlyphRun(
-                run.At(new DocPoint(position(run.Width), baseline)), Paint.Solid(Colour.Black));
+            // A dynamic band is exactly as tall as its text, so its `nDif` is nought and the
+            // text fills it — which anchors a header to the band's top edge and a footer to its
+            // bottom one, because those are the edges the margins fix. A fixed band centres what
+            // fits in it and, when the text is taller, still starts at the top.
+            Length pen;
+            if (dynamic) pen = fromBottom ? top + height - text : top;
+            else
+            {
+                Length spare = height - text;
+                pen = top + (spare > Length.Zero ? spare / 2 : Length.Zero);
+            }
+
+            foreach (IReadOnlyList<SheetHeaderPiece> line in lines)
+            {
+                Length lineHeight = LineHeight(line, zoom);
+                if (line.Count == 0)
+                {
+                    pen += lineHeight;
+                    continue;
+                }
+
+                Length width = Length.Zero;
+                List<(BandRun Run, Length Size)> runs = [];
+                foreach (SheetHeaderPiece piece in line)
+                {
+                    Length size = SizeOf(piece, zoom);
+                    if (SheetBandText.Shape(piece.Text, size) is not { } run) continue;
+                    runs.Add((run, size));
+                    width += run.Width;
+                }
+
+                if (runs.Count > 0)
+                {
+                    Length ascent = Length.Zero;
+                    foreach ((_, Length size) in runs)
+                        ascent = Length.Max(ascent, SheetBandText.AscentAt(size));
+
+                    Length x = position(width);
+                    foreach ((BandRun run, _) in runs)
+                    {
+                        sink.DrawGlyphRun(
+                            run.At(new DocPoint(x, pen + ascent)), Paint.Solid(Colour.Black));
+                        x += run.Width;
+                    }
+                }
+
+                pen += lineHeight;
+            }
         }
+    }
+
+    /// <summary>The em size one piece of a band is drawn at, the page's zoom applied.</summary>
+    private static Length SizeOf(SheetHeaderPiece piece, double zoom)
+        => (piece.Size ?? SheetBandText.DefaultSize) * zoom;
+
+    /// <summary>How tall one line of a band is: the tallest of the pieces on it.</summary>
+    /// <remarks>
+    /// An empty line — a bare break, which a footer written as <c>&amp;RPage &amp;P\n\nrest</c>
+    /// contains — still takes a line, at the sheet's default height.
+    /// </remarks>
+    private static Length LineHeight(IReadOnlyList<SheetHeaderPiece> line, double zoom)
+    {
+        Length height = Length.Zero;
+        foreach (SheetHeaderPiece piece in line)
+            height = Length.Max(height, SheetBandText.LineHeightAt(SizeOf(piece, zoom)));
+
+        return height > Length.Zero
+            ? height
+            : SheetBandText.LineHeightAt(SheetBandText.DefaultSize * zoom);
     }
 
     /// <summary>One stroke of a border, with its ends extended to meet what it crosses.</summary>

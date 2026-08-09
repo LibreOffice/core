@@ -192,6 +192,10 @@ internal static class XlsxPrintSetup
             // the page's own margins, where the ODS twin indents by a further two centimetres.
             Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),
             Footer = footerText is null ? null : SheetHeaderFooter.ParseCodes(footerText),
+
+            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
+            HeaderIsDynamic = true,
+            FooterIsDynamic = true,
             ScaleMode = mode,
             ScalePercentage = percentage,
             FitToPagesWide = wide,

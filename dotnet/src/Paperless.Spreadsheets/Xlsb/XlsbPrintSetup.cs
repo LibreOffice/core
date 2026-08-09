@@ -287,6 +287,10 @@ internal static class XlsbPrintSetup
             FooterText = footerText,
             Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),
             Footer = footerText is null ? null : SheetHeaderFooter.ParseCodes(footerText),
+
+            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
+            HeaderIsDynamic = true,
+            FooterIsDynamic = true,
             ScaleMode = fitToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
             ScalePercentage = scale > 0 ? scale : 100,
             FitToPagesWide = fitToPages ? Math.Max(0, fitToWidth) : 0,

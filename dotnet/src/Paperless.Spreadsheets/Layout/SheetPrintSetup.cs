@@ -139,6 +139,36 @@ public sealed record SheetPrintSetup
     /// <summary>The footer band's whole height, its gap to the last row included.</summary>
     public Length FooterHeight { get; init; }
 
+    /// <summary>
+    /// True when the band's height follows its text rather than being set by the file.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ATTR_PAGE_DYNAMIC</c>, and what it decides is where the text sits inside the band.
+    /// <c>ScPrintFunc::PrintHF</c> gives the EditEngine a paper height of
+    /// <c>nHeight - nDistance</c> and centres the text in it —
+    /// <c>nDif = paperHeight - textHeight; if (nDif &gt; 0) aDraw.Y += nDif / 2</c>
+    /// (<c>sc/source/ui/view/printfun.cxx:1876-1912</c>) — and
+    /// <c>ScPrintFunc::UpdateHFHeight</c> has already set <c>nHeight</c> to exactly the text's
+    /// own height plus the distance when the band is dynamic (<c>:789-848</c>). So a dynamic
+    /// band has <c>nDif == 0</c> and its text starts at the band's top edge.
+    /// </para>
+    /// <para>
+    /// <strong>Every Excel band is dynamic and the distinction is not cosmetic.</strong>
+    /// <c>XclImpPageSettings::Finalize</c> sets the flag true whenever the header fits between
+    /// the header margin and the top margin, and where it does not it shrinks the band to
+    /// exactly that distance instead (<c>sc/source/filter/excel/xipage.cxx:316-331</c>) — which
+    /// leaves <c>nDif</c> at or below zero either way. Measured on
+    /// <c>fm-provider-service-measures.xlsx</c>, whose header margin is 0.3 in: LibreOffice puts
+    /// the top of its header's first line at 21.609 pt on every page carrying one, and we put a
+    /// centred single line at 30.212 pt.
+    /// </para>
+    /// </remarks>
+    public bool HeaderIsDynamic { get; init; }
+
+    /// <inheritdoc cref="HeaderIsDynamic"/>
+    public bool FooterIsDynamic { get; init; }
+
     /// <summary>Which of the three scaling modes the sheet uses.</summary>
     public PrintScaleMode ScaleMode { get; init; } = PrintScaleMode.Percentage;
 
