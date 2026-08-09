@@ -548,6 +548,11 @@ public sealed class Paginator
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
+
+        // Blank pages an even- or odd-page section break made Writer insert and PDF export then dropped.
+        // They are not in `pages` and never drawn, but they are real pages of the layout: they take a
+        // page number with them, and the physical parity the next such break tests counts them.
+        int skippedBlanks = 0;
         int sectionFirstPage = 0;
         int column = 0;
 
@@ -725,14 +730,30 @@ public sealed class Paginator
                         FinishPage();
                     }
 
-                    // An even- or odd-page break leaves a blank page when the parity is already wrong. The
-                    // filler belongs to the section that ended, so it is emitted before the geometry
-                    // changes — which is also what puts the old section's header on it.
+                    // An even- or odd-page break leaves a blank page when the parity is already wrong —
+                    // and that page is never drawn. Writer expresses the break as a page style whose
+                    // `UseOn` names one side only (`ww8par.cxx`:4470-4479 for DOC, `PropertyMap.cxx`:1568
+                    // for `w:type="oddPage"`), so `SwFrame::InsertPage` takes `rDoc.GetEmptyPageFormat()`
+                    // when the wished side and the natural next side disagree (`pagechg.cxx`:1613-1616).
+                    // An *automatically inserted* empty page of that kind is skipped by PDF export:
+                    // `SwPrintUIOptions::IsPrintEmptyPages` reads `IsSkipEmptyPages`, whose default is
+                    // true (`printdata.cxx`:391-399). Measured on a two-section probe whose second
+                    // section carries `w:type="oddPage"` and prints its own `PAGE` field: LibreOffice's
+                    // PDF holds **two** pages and the second one reads **3**. The blank exists in the
+                    // layout and consumes a page number; it is not part of the output.
+                    //
+                    // Which side is "wished" is decided physically, not by the printed number. The style
+                    // states one of `GetRightFormat`/`GetLeftFormat` and the other is null, so
+                    // `InsertPage`'s flip forces the side regardless of any `SetNumOffset` read a few
+                    // lines above it, and `OnRightPage()` is `GetPhyPageNum() % 2` (`frame.hxx`:757).
+                    // So the parity to test is the *physical* page about to be laid out — which counts
+                    // the skipped blanks — and not `pageNumber`, which a section restart moves.
                     while (kind is SectionBreak.EvenPage or SectionBreak.OddPage
-                           && pageNumber % 2 == 0 != (kind == SectionBreak.EvenPage)
-                           && pages.Count < _options.MaxPages)
+                           && (pages.Count + skippedBlanks + 1) % 2 == 0 != (kind == SectionBreak.EvenPage)
+                           && pages.Count + skippedBlanks < _options.MaxPages)
                     {
-                        FinishPage();
+                        skippedBlanks++;
+                        pageNumber++;
                     }
                 }
 
