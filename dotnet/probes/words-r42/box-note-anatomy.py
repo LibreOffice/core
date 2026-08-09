@@ -36,8 +36,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-OPS = Path("/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py")
-BOX = re.compile(r"\bsize ([\d.]+)x([\d.]+) vs ([\d.]+)x([\d.]+)")
+# Which `pdf-ops.py` to measure. The default is the main checkout's, which is what this probe was
+# written against; `$PDF_OPS` points it at a worktree's copy so the same oracle can score the
+# matcher before and after a change to it. Round 43 needs exactly that comparison.
+OPS = Path(os.environ.get(
+    "PDF_OPS",
+    "/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py"))
+
+# `hairline` is the same note under a second name: round 43 made `pdf-ops.py` label a box note
+# whose longer side is a few points as a flattened path rather than a rule. The anatomy still
+# classifies from the geometry it reads, so accepting both spellings keeps this probe's verdicts
+# identical either side of that change and lets the two runs be compared directly.
+BOX = re.compile(r"\b(?:size|hairline) ([\d.]+)x([\d.]+) vs ([\d.]+)x([\d.]+)")
 REC = re.compile(r"^\s*(text|fill|stroke|image)\b")
 
 

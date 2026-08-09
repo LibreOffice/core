@@ -67,6 +67,12 @@ INK_THRESHOLD = 0.35
 NOTE_PATTERNS = {
     "size": re.compile(r"\bsize [\d.]+ vs [\d.]+"),
     "box": re.compile(r"\bsize [\d.]+x[\d.]+ vs "),
+    # `pdf-ops.py` splits the box note in two. `size WxH vs WxH` is now only ever two rules of the
+    # *same* orientation disagreeing; `hairline WxH vs WxH` is two flattenings of one curve, which
+    # is what 146 of 439 box notes over this track turned out to be — segments of a logo both
+    # renderers draw. A stored `box` count from before that split (rounds 34, 39 and 42) is the sum
+    # of these two plus the cross-orientation pairs the matcher no longer makes.
+    "hairline": re.compile(r"\bhairline [\d.]+x[\d.]+ vs "),
     "width": re.compile(r"\bwidth [\d.]+ vs [\d.]+"),
     "face": re.compile(r"\bface \S+ vs \S+"),
     "glyphs": re.compile(r"\bglyphs \d+ vs \d+"),

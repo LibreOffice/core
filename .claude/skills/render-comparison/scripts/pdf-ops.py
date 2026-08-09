@@ -547,6 +547,53 @@ def anchor(record):
     return record["x0"], record["y1"]
 
 
+# A record is *linear* when one side is at least this many times the other: a rule, a hairline
+# segment of a flattened curve, a cell edge. Anything squarer is a panel or a shading and the
+# orientation gate below leaves it alone, because a 100x99 fill against a 100x101 one would
+# otherwise be split into two one-sided records over a two-point difference.
+LINEAR_RATIO = 3.0
+
+# Below this length along the major axis a linear record is a piece of a flattened path rather
+# than a rule. A logo arrives as dozens of segments a few points long and the two renderers
+# flatten the curve at different sub-point positions, so every segment mismatches its partner and
+# one 12 pt graphic mints two hundred notes. Measured on `150-5370-10H.docx` page 1: 236 box
+# notes, 146 of them segments of one 12x12 pt graphic that *both* renderers draw.
+HAIRLINE_LENGTH = 20.0
+
+
+def extent(record):
+    """(orientation, major, minor) for a fill or a stroke; orientation is 'h', 'v' or None.
+
+    `None` means the record is not linear enough for its direction to mean anything.
+    """
+    if record["kind"] not in ("fill", "stroke"):
+        return None, 0.0, 0.0
+    w = record["x1"] - record["x0"]
+    h = record["y1"] - record["y0"]
+    major, minor = (w, h) if w >= h else (h, w)
+    if minor * LINEAR_RATIO > major:
+        return None, major, minor
+    return ("h" if w >= h else "v"), major, minor
+
+
+def pairable(a, b):
+    """May these two records be the same drawing act?
+
+    They may not when both are linear and run in *different directions*. `anchor()` returns a
+    non-text record's top-left corner, and the left edge and the top edge of any rectangle share
+    that corner exactly — so greedy nearest-neighbour pairs our vertical rule against the
+    reference's horizontal one at every table corner, and `compare()` then reports one rule's
+    width against another's height. Measured over the 44 words documents carrying any box note on
+    their first divergent page: 142 of 439 notes were this and nothing else.
+
+    The gate is deliberately narrow. It refuses only the pair no geometry can justify, and it says
+    nothing about records that are squarer than `LINEAR_RATIO` — those keep the old behaviour.
+    """
+    ao, _, _ = extent(a)
+    bo, _, _ = extent(b)
+    return ao is None or bo is None or ao == bo
+
+
 def compare(a, b):
     """What differs between two records that are the same drawing act, as notes."""
     notes = []
@@ -570,7 +617,15 @@ def compare(a, b):
             aw, ah = a["x1"] - a["x0"], a["y1"] - a["y0"]
             bw, bh = b["x1"] - b["x0"], b["y1"] - b["y0"]
             if abs(aw - bw) > MATCH_WINDOW or abs(ah - bh) > MATCH_WINDOW:
-                notes.append(f"size {aw:.1f}x{ah:.1f} vs {bw:.1f}x{bh:.1f}")
+                # `hairline` and `size` are the same measurement under two names, and the name is
+                # the finding: a `size` note is two rules disagreeing, a `hairline` note is two
+                # flattenings of one curve disagreeing, and only the first is a rendering defect
+                # worth chasing. They are separated here rather than filtered so that nothing is
+                # hidden — a reader still sees the count, labelled.
+                _, amaj, _ = extent(a)
+                _, bmaj, _ = extent(b)
+                kind = "hairline" if max(amaj, bmaj) < HAIRLINE_LENGTH else "size"
+                notes.append(f"{kind} {aw:.1f}x{ah:.1f} vs {bw:.1f}x{bh:.1f}")
     return notes
 
 
@@ -597,9 +652,20 @@ def differences(mine, theirs):
                     bx, by = anchor(b)
                     if abs(ax - bx) > MATCH_WINDOW or abs(ay - by) > MATCH_WINDOW:
                         continue
+                    if not pairable(a, b):
+                        continue
+                    # Distance decides, and the tie-break is the finding. Two rules that meet at a
+                    # table corner have *identical* anchors, so the nearest-neighbour distance is
+                    # exactly equal for both and whichever was written first wins — which is how a
+                    # 36 pt cell edge came to be compared against a 487 pt row rule. Preferring the
+                    # candidate of the closest extent only ever fires on an exact tie, so it cannot
+                    # reorder a pairing that distance already decides.
                     distance = math.hypot(ax - bx, ay - by)
-                    if best_distance is None or distance < best_distance:
-                        best, best_distance = i, distance
+                    _, amaj, _ = extent(a)
+                    _, bmaj, _ = extent(b)
+                    rank = (distance, abs(amaj - bmaj))
+                    if best_distance is None or rank < best_distance:
+                        best, best_distance = i, rank
                 if best is None:
                     only_ours.append(a)
                     continue
