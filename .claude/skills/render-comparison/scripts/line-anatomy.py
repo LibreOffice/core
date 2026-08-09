@@ -49,7 +49,6 @@ import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ElementTree
-from difflib import SequenceMatcher
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -137,34 +136,58 @@ def pair_marks(ours, ref):
 
 
 def normalise(text: str) -> str:
-    return " ".join(text.split())
+    """A line's text with every space removed.
+
+    Poppler re-infers word boundaries from geometry, so the *same* line comes back with
+    different spacing from two renderers whenever their advances differ slightly — which is
+    the thing being measured, not a difference in content. Measured over 59 matching
+    documents: comparing space-preserving text reported one-sided lines on 34 of them, almost
+    all of them a single line differing by one space.
+    """
+    return "".join(text.split())
 
 
 def compare_page(ours_pdf: Path, ref_pdf: Path, page: int):
-    a = lines_of(ours_pdf, page)
-    b = lines_of(ref_pdf, page)
+    # Sorted by position rather than left in poppler's reading order. Poppler orders by block,
+    # and a page with text frames on it is blocked differently from the two files — measured on
+    # `FAA-High-Level-Org-Chart.docx`, which matches the gate and reported 25 of its 38 lines
+    # one-sided purely because the two orderings interleave.
+    a = sorted(lines_of(ours_pdf, page), key=lambda r: (round(r[1], 0), round(r[0], 0)))
+    b = sorted(lines_of(ref_pdf, page), key=lambda r: (round(r[1], 0), round(r[0], 0)))
     ka = [normalise(r[4]) for r in a]
     kb = [normalise(r[4]) for r in b]
 
+    # Matched by text and nearest y, not by sequence position. A page holding text frames is
+    # blocked differently by poppler from the two files, so the two line lists interleave rather
+    # than align — measured on `FAA-High-Level-Org-Chart.docx`, which matches the gate and
+    # reported 25 of its 38 lines one-sided under a positional alignment.
+    pool: dict[str, list[int]] = {}
+    for j, key in enumerate(kb):
+        pool.setdefault(key, []).append(j)
+
     matched = []
-    only_ours = only_ref = rewrapped = 0
-    for op, i1, i2, j1, j2 in SequenceMatcher(None, ka, kb, autojunk=False).get_opcodes():
-        if op == "equal":
-            matched.extend((a[i1 + k], b[j1 + k]) for k in range(i2 - i1))
-        elif op == "delete":
-            only_ours += i2 - i1
-        elif op == "insert":
-            only_ref += j2 - j1
-        else:
-            # A replace is words moving between lines when the two sides hold the same words,
-            # and content otherwise. Deciding by the word multiset rather than by the line
-            # keeps a rewrap from being reported as missing text — the two are different
-            # findings and the corpus is full of both.
-            if sorted(" ".join(ka[i1:i2]).split()) == sorted(" ".join(kb[j1:j2]).split()):
-                rewrapped += max(i2 - i1, j2 - j1)
-            else:
-                only_ours += i2 - i1
-                only_ref += j2 - j1
+    unmatched_ours, taken = [], set()
+    for i, key in enumerate(ka):
+        candidates = pool.get(key)
+        if not candidates:
+            unmatched_ours.append(i)
+            continue
+        j = min(candidates, key=lambda j: abs(a[i][1] - b[j][1]))
+        candidates.remove(j)
+        taken.add(j)
+        matched.append((a[i], b[j]))
+    unmatched_ref = [j for j in range(len(kb)) if j not in taken]
+
+    # What is left over is a rewrap when the two sides hold the same characters in a different
+    # cut, and content otherwise. The two are different findings and the corpus is full of both.
+    left_ours = "".join(ka[i] for i in unmatched_ours)
+    left_ref = "".join(kb[j] for j in unmatched_ref)
+    if left_ours and left_ours == left_ref:
+        rewrapped = max(len(unmatched_ours), len(unmatched_ref))
+        only_ours = only_ref = 0
+    else:
+        rewrapped = 0
+        only_ours, only_ref = len(unmatched_ours), len(unmatched_ref)
 
     # Matched lines: how far their edges moved. dy is taken against the page's *median* dy so
     # that a whole-page offset — which is a margin, not a per-line fault — does not read as one.
