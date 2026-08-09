@@ -1065,8 +1065,30 @@ public sealed partial class Ww8DocumentReader
     /// </summary>
     private const char LineSeparator = '\u2028';
 
-    /// <summary>The non-breaking hyphen a WW8 U+001E becomes.</summary>
-    private const char NonBreakingHyphen = '\u2011';
+    /// <summary>
+    /// The character a WW8 U+001E is <em>drawn</em> as: an ordinary hyphen.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Not U+2011, which is what the model holds and what this reader's extraction half still
+    /// reports. Writer keeps the character as <c>CHAR_HARDHYPHEN</c> (U+2011,
+    /// <c>sw/inc/swtypes.hxx:179</c>) and the layout then swaps it out \u2014
+    /// <c>case CHAR_HARDHYPHEN: pPor = new SwBlankPortion('-')</c>,
+    /// <c>sw/source/core/text/itrform2.cxx:1881-1882</c>. Measured on the reference's own PDF of
+    /// <c>316r_a_e.doc</c>, whose text layer reads <c>A340-500/600</c> with a U+002D against our
+    /// <c>A340\u2011500/600</c>.
+    /// </para>
+    /// <para>
+    /// It is not only a code point. U+2011 is in no Liberation face and in no Carlito, so keeping it
+    /// sent one character of a word through glyph fallback and pulled DejaVu Sans into the PDF for it.
+    /// </para>
+    /// <para>
+    /// The half not reproduced is the one the name states: a <c>SwBlankPortion</c> cannot be broken
+    /// and U+002D is UAX #14 class HY, which is a break opportunity. Drawing the right glyph in the
+    /// right face is worth more than the breaking, which differs only when a line ends exactly there.
+    /// </para>
+    /// </remarks>
+    private const char NonBreakingHyphen = '-';
 
     /// <summary>The character an anchor occupies, matching the other formats' readers.</summary>
     private const char AnchorCharacter = '\u0001';
