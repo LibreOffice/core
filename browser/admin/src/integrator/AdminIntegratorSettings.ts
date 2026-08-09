@@ -225,6 +225,7 @@ const defaultBrowserSetting: Record<string, any> = {
 	darkTheme: false,
 	accessibilityState: false,
 	lockAccessibilityOn: false,
+	spellOnline: true,
 	smartZoom: true,
 	defaultZoom: {
 		value: 9,
@@ -610,6 +611,7 @@ class SettingIframe {
 	private readonly settingLabels: Record<string, string> = {
 		lockAccessibilityOn: _('In-document Screen Reader'),
 		darkTheme: _('Dark Mode'),
+		spellOnline: _('Automatic Spell Checking'),
 		smartZoom: _('Smart Zoom'),
 		defaultZoom: _('Default Zoom'),
 		compactMode: _('Compact layout'),
