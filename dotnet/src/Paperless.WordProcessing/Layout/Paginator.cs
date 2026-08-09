@@ -806,7 +806,11 @@ public sealed class Paginator
                 // a restart to 20 gives 1, 20, 21. All three export three pages. The 21 in the second is
                 // two skipped blanks — one to put the odd restart on an odd sheet, one for the odd-page
                 // break that then lands on an even one.
-                if (kind is not (SectionBreak.Continuous or SectionBreak.EvenPage or SectionBreak.OddPage)
+                // NewColumn is excluded beside Continuous for the same reason: by the time control reaches
+                // here it means the columns did line up, so the break stayed inside the sheet and no page
+                // was inserted to have a side.
+                if (kind is not (SectionBreak.Continuous or SectionBreak.NewColumn
+                                 or SectionBreak.EvenPage or SectionBreak.OddPage)
                     && geometry.RestartPageNumberAt is { } restartAt
                     && pages.Count + skippedBlanks < _options.MaxPages)
                 {
