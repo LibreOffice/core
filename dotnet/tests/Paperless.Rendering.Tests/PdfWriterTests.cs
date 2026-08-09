@@ -301,7 +301,55 @@ public sealed class PdfWriterTests
     [Fact]
     public void AJpegIsPassedThroughRatherThanReEncoded()
     {
-        byte[] jpeg = [0xFF, 0xD8, 0xFF, 0xE0, 0, 16, .. new byte[40], 0xFF, 0xD9];
+        byte[] jpeg = Jpeg(components: 3);
+        PdfFile pdf = WriteImage(jpeg);
+
+        // PDF's DCTDecode filter and JPEG are the same thing, so re-encoding the pixels would
+        // spend time to produce a larger and worse image.
+        pdf.Text.ShouldContain("/Filter/DCTDecode");
+        pdf.Text.ShouldContain("/ColorSpace/DeviceRGB");
+        pdf.Streams().ShouldContain(s => !s.Deflated && s.Data.Length == jpeg.Length);
+    }
+
+    /// <summary>
+    /// A one-component JPEG is announced as <c>/DeviceGray</c>.
+    /// </summary>
+    /// <remarks>
+    /// A passed-through JPEG takes its colour space from the PDF and not from itself, so a greyscale
+    /// image announced as three-channel is read three samples at a time out of a stream that has one.
+    /// Measured on <c>omrIMInterpretiveGuideLine.doc</c>, whose departmental seal is a 635×638
+    /// one-component JPEG and drew as three squashed copies across the top of its box — which reads
+    /// as a decoder fault and is a metadata one.
+    /// </remarks>
+    [Fact]
+    public void AGreyscaleJpegIsAnnouncedAsDeviceGray()
+    {
+        PdfFile pdf = WriteImage(Jpeg(components: 1));
+
+        pdf.Text.ShouldContain("/Filter/DCTDecode");
+        pdf.Text.ShouldContain("/ColorSpace/DeviceGray");
+        pdf.Text.ShouldNotContain("/ColorSpace/DeviceRGB");
+    }
+
+    /// <summary>
+    /// A four-component JPEG is decoded rather than passed through.
+    /// </summary>
+    /// <remarks>
+    /// There is no correct pass-through for one: whether a CMYK JPEG's samples are inverted depends on
+    /// an Adobe <c>APP14</c> marker, and getting that wrong turns a photograph into its negative.
+    /// Decoding costs a re-encode on a rare input and cannot be wrong.
+    /// </remarks>
+    [Fact]
+    public void ACmykJpegIsDecodedRatherThanPassedThrough()
+    {
+        PdfFile pdf = WriteImage(Jpeg(components: 4));
+
+        pdf.Text.ShouldNotContain("/Filter/DCTDecode");
+        pdf.Text.ShouldContain("/ColorSpace/DeviceRGB");
+    }
+
+    private PdfFile WriteImage(byte[] jpeg)
+    {
         RasterImage image = new()
         {
             Width = 8,
@@ -311,14 +359,30 @@ public sealed class PdfWriterTests
             EncodedMediaType = "image/jpeg",
         };
 
-        PdfFile pdf = Write(new DrawnPage(
+        return Write(new DrawnPage(
             DrawnPage.A4,
             sink => sink.DrawImage(image, new DocRect(Points(0), Points(0), Points(72), Points(72)))));
+    }
 
-        // PDF's DCTDecode filter and JPEG are the same thing, so re-encoding the pixels would
-        // spend time to produce a larger and worse image.
-        pdf.Text.ShouldContain("/Filter/DCTDecode");
-        pdf.Streams().ShouldContain(s => !s.Deflated && s.Data.Length == jpeg.Length);
+    /// <summary>
+    /// The smallest byte sequence that is a JPEG as far as its frame header: an <c>APP0</c> segment
+    /// to be skipped, then an <c>SOF0</c> stating an 8×8 image in <paramref name="components"/>
+    /// channels.
+    /// </summary>
+    private static byte[] Jpeg(int components)
+    {
+        List<byte> sof = [8, 0, 8, 0, 8, (byte)components];
+        for (int i = 0; i < components; i++) sof.AddRange([(byte)(i + 1), 0x11, 0]);
+
+        int length = sof.Count + 2;
+
+        return
+        [
+            0xFF, 0xD8,
+            0xFF, 0xE0, 0, 16, .. new byte[14],
+            0xFF, 0xC0, (byte)(length >> 8), (byte)length, .. sof,
+            0xFF, 0xD9,
+        ];
     }
 
     [Fact]
