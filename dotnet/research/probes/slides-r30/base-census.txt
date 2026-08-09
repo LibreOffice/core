@@ -1,0 +1,57 @@
+measuring ./cli-base/Paperless.Cli
+documents: 163
+
+TOTAL 163  MATCH 151
+INK 1268.44  |INK| 1589.24  MAJOR PAGES 427  over 163 documents
+
+pages compared                             4199  over 163 documents
+  dominant size agrees                     3542
+  differs, within 1% — the mm100 grid      25
+  differs, same sizes cut up differently   137
+  differs, the reference draws far less    61   raster ceiling
+  differs, its size is off the mm100 grid  131   metafile text
+  differs, and neither explains it         303   over 91 documents
+
+worst documents:
+    16  ITE106-Chapter 4__ppt
+    16  2015-Civil-Rights-Website-training__ppt
+    11  RESPA_-_Section_8_Webinar__ppt
+     9  NAS-Infrastructure-Roadmaps-v16.0__pptx
+     9  2014BSA_Sunday_Killion__pptx
+     8  gfopportunitiesforlinkagespres_2010_en__ppt
+     8  ws_prod-g-doc-Events-Part-M-presentation__ppt
+     8  ws_prod-g-doc-Events-r-6.-ESM__ppt
+     8  RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+     8  Architecture__ppt
+     7  8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+     6  ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt
+     6  pods05__ppt
+     6  REDAC Briefing_SSIT_CARA_08132014.ppt__pptx
+     6  JesuitAssocOfStudentPersonnel__ppt
+     5  010605Vul__ppt
+     5  Lepore__ppt
+     5  71393_pp7__ppt
+     5  joint_user_outcomes_michael_fullerton_29.06.12__ppt
+     5  vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c__pptx
+
+commonest (ours, ref) pairs:
+    13  ours   18.99  ref   20.01   ratio 0.9490
+    10  ours   18.00  ref   18.99   ratio 0.9479
+     9  ours   24.01  ref   22.99   ratio 1.0444
+     8  ours   27.01  ref   28.01   ratio 0.9643
+     7  ours   15.00  ref   15.99   ratio 0.9381
+     7  ours   17.01  ref   18.00   ratio 0.9450
+     7  ours   10.01  ref    7.99   ratio 1.2528
+     6  ours   22.99  ref   24.01   ratio 0.9575
+     5  ours   25.99  ref   25.00   ratio 1.0396
+     5  ours   20.01  ref   18.99   ratio 1.0537
+     5  ours   10.01  ref    9.89   ratio 1.0121
+     4  ours   15.99  ref   18.00   ratio 0.8883
+     4  ours   22.00  ref   22.99   ratio 0.9569
+     4  ours   21.00  ref   20.01   ratio 1.0495
+     4  ours   15.99  ref   17.01   ratio 0.9400
+     4  ours   14.00  ref   15.99   ratio 0.8755
+     4  ours   18.00  ref   17.01   ratio 1.0582
+     4  ours    9.01  ref   24.01   ratio 0.3753
+     4  ours    4.99  ref   32.00   ratio 0.1559
+     4  ours    4.99  ref   15.99   ratio 0.3121

@@ -152,7 +152,7 @@ public static class SlideChart
         if (label.Text.Length == 0) return null;
 
         DocSize measured =
-            new Measurer(fonts).Measure(label.Text, label.Size, label.Family, label.IsBold);
+            new Measurer(fonts).Measure(label.Text, label.Size, label.Family, label.IsBold == true);
         if (measured.Width <= Length.Zero) return null;
 
         // A non-square stretch leaves a residual horizontal factor the em cannot carry. The text
@@ -178,7 +178,7 @@ public static class SlideChart
         };
 
         SlideTextBody body =
-            Measurer.Body(label.Text, label.Size, label.Colour, label.Family, label.IsBold);
+            Measurer.Body(label.Text, label.Size, label.Colour, label.Family, label.IsBold == true);
 
         AffineTransform transform = stretch == 1.0
             ? placement

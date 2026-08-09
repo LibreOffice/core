@@ -65,7 +65,7 @@ public class ChartTitleWeightTests
     {
         ChartDrawing drawing = ChartLayout.Place(Bars(), Frame, new Ruler());
 
-        drawing.Labels.ShouldAllBe(label => !label.IsBold);
+        drawing.Labels.ShouldAllBe(label => label.IsBold != true);
     }
 
     /// <summary>The titles carry the weight and the categories do not.</summary>
@@ -75,10 +75,10 @@ public class ChartTitleWeightTests
         ChartDrawing drawing = ChartLayout.Place(
             Bars() with { IsTitleBold = true, IsAxisTitleBold = true }, Frame, new Ruler());
 
-        drawing.Labels.First(label => label.Text == "Sales").IsBold.ShouldBeTrue();
-        drawing.Labels.First(label => label.Text == "Quarter").IsBold.ShouldBeTrue();
-        drawing.Labels.First(label => label.Text == "Gallons").IsBold.ShouldBeTrue();
-        drawing.Labels.First(label => label.Text == "Q1").IsBold.ShouldBeFalse();
+        drawing.Labels.First(label => label.Text == "Sales").IsBold.ShouldBe(true);
+        drawing.Labels.First(label => label.Text == "Quarter").IsBold.ShouldBe(true);
+        drawing.Labels.First(label => label.Text == "Gallons").IsBold.ShouldBe(true);
+        drawing.Labels.First(label => label.Text == "Q1").IsBold.ShouldBe(false);
     }
 
     /// <summary>The two weights are independent, because a file may state one and not the other.</summary>
@@ -88,8 +88,8 @@ public class ChartTitleWeightTests
         ChartDrawing drawing = ChartLayout.Place(
             Bars() with { IsTitleBold = true }, Frame, new Ruler());
 
-        drawing.Labels.First(label => label.Text == "Sales").IsBold.ShouldBeTrue();
-        drawing.Labels.First(label => label.Text == "Quarter").IsBold.ShouldBeFalse();
+        drawing.Labels.First(label => label.Text == "Sales").IsBold.ShouldBe(true);
+        drawing.Labels.First(label => label.Text == "Quarter").IsBold.ShouldBe(false);
     }
 
     /// <summary>

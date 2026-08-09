@@ -8693,3 +8693,162 @@ cannot change a page count -- but anything measuring a height needs a styles par
   one this round closed, and the filler was masking it.
 - **The even page with no even story** — the three-document ceiling from last round, untouched.
 - **Unequal column widths** — untouched; zero DOCX declare `w:cols w:equalWidth="0"`.
+## Round thirty: slides — asking LibreOffice for the plot rectangle instead of measuring the ink
+
+Baseline measured first at `946b3defc`, against the kept reference set with two of its 163 PDFs
+re-converted by a fresh `soffice` first — `wells08_basic.ppt` 27 pages/1013 words and
+`Demick_JetBlue.pptx` 10/617, both page-, word- and pixel-identical to the kept copy, which is
+the seventh time that set has been checked. It reproduces the brief **exactly**: `MATCH 151/163`,
+`ink%` 1268.44, `|ink|%` 1589.24, 427 major pages, 4199 census pages with **303 unexplained over
+91 documents**.
+
+### The instrument the brief asked for, and the two readings it needed before it meant anything
+
+`chart:coordinate-region` in an `odp` export is `calculateDiagramPositionExcludingAxes`
+(`xmloff/source/chart/SchXMLExport.cxx`:2274), so converting a deck to `.odp` states the plot
+rectangle LibreOffice computed for **every** chart on it, including the ones that draw no
+gridline. `research/probes/slides-r30/region.py` reads it and `compare-region.py` joins it to the
+rectangle read off either PDF's ink, so the model is checked against LibreOffice's own ink before
+it is trusted — on `Demick_JetBlue` the two agree to 0.66–1.00 pt on all five charts.
+
+Two reader faults had to be fixed first, and **both looked like enormous defects rather than like
+instrument faults**:
+
+- Round twenty-nine's `plotrect.py` takes the *modal* stroke span, which on any axis carrying
+  more ticks than gridlines returns the tick's own 4 pt span — and it needs a grid at all, which
+  **47 of the 61 chart parts do not draw**. It now finds the two axis lines by the corner they
+  share.
+- A slide carrying four charts draws four plot rectangles on one page, and the reader returned
+  the biggest for all four. Restricting it to each chart's own frame took `southern-classic`'s
+  reported left error from **2161 pt to 25.64**.
+
+At the base commit: 37 of 61 charts measurable, mean per-edge error **2.83 pt**, total `|error|`
+418.77 pt of which bottom 208.65, left 103.45, right 95.47, top 11.20.
+
+### The brief's first item is refuted in its stated form
+
+**`PlotAreaOf`'s per-edge reservation *is* what `adjustInnerSize` computes.** Working the C++
+through: the new inner rectangle is the available one shrunk on each edge by how far the consumed
+bounding box overhangs the old inner rectangle on that edge, and the loop runs to a fixpoint
+(`ChartView.cxx`:593-621 calls it three times, and the `bLessSpaceConsumedThanExpected` guard is
+true for every chart because its last disjunct compares a top against a bottom). "A bounding box
+rather than a sum" is therefore exactly the
+`Length.Max(categoryHeight + categorySpace, valueHeight / 2)` round twenty-nine already landed.
+
+The eleven-variant band probe agrees: **with the labels upright our rectangle matches
+LibreOffice's own to 0.09 pt on every edge of every variant** — legend on and off, axis titles on
+and off, labels on and off, 8, 12 and 26 categories. Mean over 44 edges 0.77 pt, and 0.68 of that
+is the two variants that change the label *size*.
+
+What is left splits in two, and neither is the shape of the algorithm.
+
+### The room a category label has is the tick spacing, not 88% of it
+
+A word that does not fit between two ticks makes chart2 give up on wrapping and start again, and
+that restart is the only route from "the labels collide" to "the labels are turned 45°". So the
+limit decides whether a whole axis is turned. Ours was 0.95 of the tick spacing less the text
+shape's two horizontal insets — 0.88 of it at ten point — and **both corrections are in
+LibreOffice's source and neither is in its binary**: `createTextShapes` reduces by 5% "to have a
+visible distance between the labels" (`VCartesianAxis.cxx`:753-759) and hands the result to a
+shape whose text area is that width less the insets `ShapeFactory::createText` sets.
+
+Three boundaries, each crossed by a different variable, read off `chart:coordinate-region`:
+
+| probe | LibreOffice | ours, before | limit ÷ spacing |
+|---|---|---|---|
+| 26 six-character categories down to 12 | upright at 15, turned at 16 | turned at 14 | 0.990–1.056 |
+| 20 categories, 3 to 6 characters | upright at 4, turned at 5 | turned at 4 | 0.880–1.100 |
+| 10 categories, 7 to 11 characters | upright at 9, turned at 10 | turned at 9 | 0.990–1.100 |
+
+One is the only round number in the intersection. On the four probes that sat in the band the
+bottom edge was 29.03, 29.03, 20.54 and 41.77 pt out and is now 0.09.
+
+**What the corpus cannot separate** is that from `0.95 × spacing + 2 × inset`, which fits all
+three boundaries equally: the two differ by at most 0.36 em and no reachable category count lands
+between them. Recorded in the remarks rather than resolved.
+
+**And it moves zero of the 163 documents.** Rendered at both commits with `SOURCE_DATE_EPOCH`
+set: byte-identical on all 163, and the plot-rectangle total is 418.77 → 420.27 pt, all of that
+movement the weight's. No corpus chart sits in the band the rule governs. That is a fact about
+the corpus, not a reason to keep the refuted rule — the same shape as round twenty-nine's tick
+labels.
+
+### A stated weight on the axis labels and the legend
+
+`ChartPlot.IsLabelBold` and `IsLegendBold`, `ChartLabel.IsBold` as `bool?`, and an `InWeight`
+stamping pass beside `InFamily` — the design `Paperless.Presentations/TODO.md` recorded, taken
+verbatim. It reaches the *measurement* as well as the drawing, which is the point: a bold face is
+wider, so the widest value label reserves a different left edge and two category labels collide at
+a different width. A data label takes the axis' weight rather than its series' own
+`c:dLbls/c:txPr` — the same approximation `LabelSize` already makes, and no corpus document
+contradicts it.
+
+### The numbers, said plainly
+
+| slides, 163 documents | base `946b3defc` | +weight | +wrap limit |
+|---|---:|---:|---:|
+| word gate | 151 | 151 | 151 |
+| `ink%` | 1268.44 | **1270.05** | 1270.05 |
+| `\|ink\|%` | 1589.24 | **1591.86** | 1591.86 |
+| major pages | 427 | 427 | 427 |
+| census, unexplained | 303 over 91 | 303 over 91 | 303 over 91 |
+| plot rectangle, total \|error\| | 418.77 | 420.27 | 420.27 |
+
+Verdicts changed: **0**. Every batch holds its count.
+
+**The metric moved against us and the faces moved with the reference, so both numbers are
+here.** Reach measured by rendering: 160 of 163 byte-identical, **3 changed** —
+`southern-classic` +2.26, `171128IPAP` +0.41, `Sector_Skills` −0.05. The census that says 36 of
+61 chart parts state a weight is the ceiling, and it counts only over the 15 documents carrying
+an OOXML chart part at all.
+
+**The second error is localised.** On `southern-classic` page 11 the reference draws 74 bold
+records where we drew 69 regular and 5 bold; we now draw 74 bold, and pages 12 and 5 are the same
+shape. What is left there is the *size*: the reference draws that page at 13.59, 14.00 and
+15.49 pt where we draw one flat 14.00, so a heavier face puts more ink into a mismatch that was
+already there. That is the per-element `c:txPr` size `ChartPlot` collapses into one `LabelSize`,
+it is now an item in `Paperless.Presentations/TODO.md`, and it is where 2.26 of the 2.62 sits.
+`171128IPAP`'s +0.41 is a different residue: its page 38 chart is drawn in LiberationSans where
+the reference resolves Carlito, so the weight is now right in the wrong family; its page 36,
+whose family is right, moved to Carlito-Bold exactly as the reference has it.
+
+### Cross-track
+
+The weight cannot reach the other two tracks by construction — `SheetChart` and `FrameChart`
+measure through an `IChartTextMeasurer` that already took a weight and already documents in code
+that it drops it — but the wrap limit is unconditional and does. Rendered at both commits with
+`SOURCE_DATE_EPOCH` set and byte-compared over all 371 words and sheets documents: **0 changed.**
+Every chart either track holds either has room for its labels or is already far past the
+boundary.
+
+### Measured and not resolved: the rotated label's depth
+
+With the labels turned, our reserved band is **7.94 pt too deep at 10 pt** and the excess is flat
+in the label's width — 7.42, 7.94, 7.96, 7.93 and 8.48 pt at four to twelve characters. Per point
+of label width LibreOffice reserves 0.685 against our `sin 45°` of 0.7071, and the baseline of its
+first rotated label sits at the same y whatever the label's width. Neither
+`W_shape·sin θ + H_shape·cos θ` nor that formula with either inset removed reproduces it. Left
+measured rather than fitted.
+
+### Test counts
+
+Core **275**, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
+WordProcessing 690, Spreadsheets 566, Presentations **542**, Fidelity 550. **0 skipped.**
+Core was 264 and Presentations 538 at `946b3defc`; the eleven and four new tests are the weight
+and the wrap limit.
+
+Seven mutations put back through `verify-test.sh`, all detected: the stamping pass removed, the
+value-label weight dropped from the measurement, the legend's weight dropped from the measurement,
+the legend label forced regular, the axis reader reading descendants instead of `c:txPr`, the
+legend reader removed, and the wrap limit restored to 0.95 less the insets.
+
+### What the next round should take, in order
+
+1. **The chart's per-element text size.** Named by measurement rather than guessed at, and it is
+   the largest single term left on the two decks that carry most of the residue. `southern-classic`
+   page 11's reference draws 55 records at 14.00 pt, 12 at 15.49 and 7 at 13.59; we draw 74 at one
+   flat 14.00. `ChartPlot` carries one `LabelSize` for every axis, the legend and the data labels.
+2. **The rotated category label's reserved depth**, with the numbers above and the warning that
+   the obvious formula is refuted.
+3. **The legend row pitch's rate**, still the open half of the 96 dpi grid, and the 6.5 pt
+   residual on the bottom axis title, still measured rather than fitted.

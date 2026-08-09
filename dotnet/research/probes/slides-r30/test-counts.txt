@@ -1,0 +1,12 @@
+per-project test counts at the round's head, all 0 skipped
+Core             Failed:     0, Passed:   275, Skipped:     0
+Containers       Failed:     0, Passed:   109, Skipped:     0
+Text             Failed:     0, Passed:   240, Skipped:     0
+Vector           Failed:     0, Passed:   291, Skipped:     0
+Rendering        Failed:     0, Passed:   119, Skipped:     0
+Markup           Failed:     0, Passed:   259, Skipped:     0
+OpenDocument     Failed:     0, Passed:   125, Skipped:     0
+WordProcessing   Failed:     0, Passed:   690, Skipped:     0
+Spreadsheets     Failed:     0, Passed:   566, Skipped:     0
+Presentations    Failed:     0, Passed:   542, Skipped:     0
+Fidelity         Failed:     0, Passed:   550, Skipped:     0

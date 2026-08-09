@@ -196,10 +196,16 @@ public static class DrawingChartPlot
             LabelSize = AxisLabelSizeOf(plotArea)
                         ?? AutoText(chartSpace, 10.0, 100),
 
+            // The axes' own c:txPr, which states the weight of their *labels*. Unlike the two
+            // titles this defaults to regular, because the auto-text table leaves spOtherTexts
+            // regular — so an unstated weight and a stated b="0" mean the same thing here.
+            IsLabelBold = AxisLabelBoldOf(plotArea) ?? false,
+
             // The legend's own c:txPr, not the axes' — every length in the legend is a fraction
             // of it. Read from the legend element directly rather than through its descendants,
             // because a c:legendEntry carries a c:txPr of its own and precedes the legend's.
             LegendSize = SizeOf(Child(Child(chart, "legend"), "txPr")),
+            IsLegendBold = BoldOf(Child(Child(chart, "legend"), "txPr")),
             TextFamily = FamilyOf(chartSpace, theme),
             // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
             // its own — the frame is the space — which is what keeps it out of the stretch an
@@ -1319,6 +1325,26 @@ public static class DrawingChartPlot
     }
 
     /// <summary>The size the axis <em>labels</em> are set at — <c>c:txPr</c>, not the title's.</summary>
+    /// <summary>The weight the axis <em>labels</em> state, from the first axis that states one.</summary>
+    /// <remarks>
+    /// The same one-answer-per-chart simplification <see cref="AxisLabelSizeOf"/> makes, and the
+    /// model carries one label weight for the same reason it carries one label size. Read from
+    /// the axis' own <c>c:txPr</c> rather than from its descendants, because a <c>c:title</c>
+    /// under the same axis carries a <c>c:txPr</c> of its own and states the <em>title's</em>
+    /// weight — which is a different question and already has its own reader.
+    /// </remarks>
+    private static bool? AxisLabelBoldOf(XElement plotArea)
+    {
+        foreach (XElement axis in plotArea.Elements())
+        {
+            if (axis.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
+            if (!axis.Name.LocalName.EndsWith("Ax", StringComparison.Ordinal)) continue;
+            if (BoldOf(Child(axis, "txPr")) is { } bold) return bold;
+        }
+
+        return null;
+    }
+
     private static Length? AxisLabelSizeOf(XElement plotArea)
     {
         foreach (XElement axis in plotArea.Elements())

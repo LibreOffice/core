@@ -130,4 +130,59 @@ public class DrawingChartAutoTextTests
         plot.AxisTitleSize.ShouldBe(Length.FromPoints(14));
         plot.LabelSize.ShouldBe(Length.FromPoints(14));
     }
+
+    /// <summary>Axis labels state their weight on the axis' own <c>c:txPr</c>.</summary>
+    /// <remarks>
+    /// Seen on <c>171128IPAP.pptx</c>'s <c>chart4.xml</c>, which puts
+    /// <c>&lt;a:defRPr sz="900" b="1"/&gt;</c> on both axes; the reference draws those labels in
+    /// Carlito-Bold. 36 of the slides corpus's 61 chart parts state a weight somewhere.
+    /// </remarks>
+    [Fact]
+    public void AStatedAxisLabelWeightIsRead()
+    {
+        const string Bold = "<c:txPr><a:p><a:pPr><a:defRPr b=\"1\"/></a:pPr></a:p></c:txPr>";
+
+        ChartPlot plot = Read(
+            Bar().Replace("<c:valAx><c:axId val=\"2\"/>", "<c:valAx><c:axId val=\"2\"/>" + Bold,
+                          StringComparison.Ordinal));
+
+        plot.IsLabelBold.ShouldBeTrue();
+    }
+
+    /// <summary>Unlike the titles, an unstated axis-label weight is regular.</summary>
+    /// <remarks>
+    /// The auto-text table leaves <c>spOtherTexts</c> clear, so this is the one weight on which
+    /// the OOXML default and <c>chart2</c>'s model default agree.
+    /// </remarks>
+    [Fact]
+    public void AnUnstatedAxisLabelWeightIsRegular()
+        => Read(Bar(Title("Sales"), Title("Year"))).IsLabelBold.ShouldBeFalse();
+
+    /// <summary>
+    /// A weight on an axis <em>title</em> says nothing about that axis' labels.
+    /// </summary>
+    /// <remarks>
+    /// The two live in different elements — <c>c:catAx/c:title/…/a:defRPr</c> against
+    /// <c>c:catAx/c:txPr/…/a:defRPr</c> — and reading the axis' descendants rather than its own
+    /// <c>c:txPr</c> would make every bold axis title bold every label under it.
+    /// </remarks>
+    [Fact]
+    public void AnAxisTitlesWeightDoesNotReachItsLabels()
+        => Read(Bar(axisTitle: Title("Year", "b=\"1\""))).IsLabelBold.ShouldBeFalse();
+
+    /// <summary>The legend states its own weight, and leaves it unset when it does not.</summary>
+    /// <remarks>
+    /// Null rather than false so an unstated legend follows the axis labels — see
+    /// <c>ChartPlot.IsLegendBold</c>, which is the same reason <c>LegendSize</c> is nullable.
+    /// </remarks>
+    [Fact]
+    public void TheLegendStatesItsOwnWeight()
+    {
+        const string Legend =
+            "<c:legend><c:legendPos val=\"r\"/>"
+            + "<c:txPr><a:p><a:pPr><a:defRPr b=\"1\"/></a:pPr></a:p></c:txPr></c:legend>";
+
+        Read(Bar() + Legend).IsLegendBold.ShouldBe(true);
+        Read(Bar()).IsLegendBold.ShouldBeNull();
+    }
 }
