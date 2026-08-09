@@ -553,6 +553,12 @@ public sealed class Paginator
         // They are not in `pages` and never drawn, but they are real pages of the layout: they take a
         // page number with them, and the physical parity the next such break tests counts them.
         int skippedBlanks = 0;
+
+        // Whether page one of the layout carries an odd number, which is what Writer means by a right-hand
+        // sheet: `sw::IsRightPageByNumber` compares a wanted number's parity against this and nothing else
+        // (`sw/source/core/layout/frmtool.cxx`:3146-3153). A document whose first page is numbered two has
+        // its right-hand sheets on even numbers.
+        bool firstPageIsOdd = pageNumber % 2 == 1;
         int sectionFirstPage = 0;
         int column = 0;
 
@@ -784,6 +790,35 @@ public sealed class Paginator
 
                 deferredPage = kind == SectionBreak.Continuous && !pageIsEmpty ? geometry.Page : null;
                 sectionFirstPage = pages.Count;
+
+                // A restart of the page numbering also decides which side of the sheet the section wants,
+                // and leaves the same undrawn blank when the sides disagree. `SwFrame::InsertPage` takes
+                // the wished side from the restart value through `sw::IsRightPageByNumber`
+                // (`pagechg.cxx`:1590-1596), which asks only whether the restart's parity agrees with the
+                // *first* page of the layout's own number (`frmtool.cxx`:3146-3153). An even- or odd-page
+                // break does not come through here: its page style states one side only, so the flip below
+                // that reading overrides the restart entirely — which is why this arm excludes them rather
+                // than running beside the loop above.
+                //
+                // Measured on LibreOffice 24.2, three probes differing only in the restart value, each a
+                // three-section document whose last section breaks to an odd page and whose paragraphs
+                // print their own `PAGE`: no restart gives 1, 2, 3; a restart to 19 gives 1, 19, **21**;
+                // a restart to 20 gives 1, 20, 21. All three export three pages. The 21 in the second is
+                // two skipped blanks — one to put the odd restart on an odd sheet, one for the odd-page
+                // break that then lands on an even one.
+                if (kind is not (SectionBreak.Continuous or SectionBreak.EvenPage or SectionBreak.OddPage)
+                    && geometry.RestartPageNumberAt is { } restartAt
+                    && pages.Count + skippedBlanks < _options.MaxPages)
+                {
+                    // "Right" is the side page one of the layout is on, so the restart wants a right-hand
+                    // sheet exactly when its parity matches page one's number. A right-hand sheet is an
+                    // odd physical one, and the next physical sheet is pages.Count + skippedBlanks + 1.
+                    bool wantsRight = restartAt % 2 == 1 == firstPageIsOdd;
+                    bool nextIsRight = (pages.Count + skippedBlanks) % 2 == 0;
+
+                    if (wantsRight != nextIsRight) skippedBlanks++;
+                }
+
                 pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
 
                 // A page with nothing on it yet belongs to the section starting here; one that already

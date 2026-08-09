@@ -68,6 +68,39 @@ public sealed class OddPageBreakFillerTests
         pages[1].Number.ShouldBe(4);
     }
 
+    /// <summary>
+    /// A restart of the page numbering picks a side of the sheet too, and leaves the same undrawn blank.
+    /// </summary>
+    /// <remarks>
+    /// Three sections, the last broken to an odd page, each printing its own number. Measured against
+    /// LibreOffice 24.2: with no restart the three read 1, 2, 3; restarting the middle section at 19 gives
+    /// 1, 19, <em>21</em>; restarting it at 20 gives 1, 20, 21. All three export three pages. The 21 in
+    /// the middle case is two skipped blanks — one putting an odd restart on an odd sheet, one for the
+    /// odd-page break that then lands on an even one.
+    /// </remarks>
+    [Theory]
+    [InlineData(null, 2, 3)]
+    [InlineData(19, 19, 21)]
+    [InlineData(20, 20, 21)]
+    public void ARestartOfTheNumberingPicksASideToo(int? restartAt, int second, int third)
+    {
+        IReadOnlyList<LaidOutPage> pages = PaginateThree(restartAt);
+
+        pages.Count.ShouldBe(3);
+        pages[0].Number.ShouldBe(1);
+        pages[1].Number.ShouldBe(second);
+        pages[2].Number.ShouldBe(third);
+    }
+
+    private static IReadOnlyList<LaidOutPage> PaginateThree(int? restartAt)
+    {
+        MemoryStream package = BuildThreeSectionPackage(restartAt);
+        using DocumentSource source = DocumentSource.FromStream(package, "restart.docx");
+        using IDocument document = new WordProcessingReader().Read(source);
+
+        return ((WordProcessingPages)((IPaginatedDocument)document).Layout()).Pages;
+    }
+
     private static IReadOnlyList<LaidOutPage> Paginate(int? firstPageNumber)
     {
         MemoryStream package = BuildPackage(firstPageNumber);
@@ -83,6 +116,28 @@ public sealed class OddPageBreakFillerTests
     /// runs to two pages would need no blank and prove nothing.
     /// </summary>
     private static MemoryStream BuildPackage(int? firstPageNumber)
+    {
+        string startAt = firstPageNumber is { } n ? $"""<w:pgNumType w:start="{n}"/>""" : string.Empty;
+
+        string document = $"""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+              <w:body>
+                <w:p>
+                  <w:pPr><w:sectPr>{Sheet}{startAt}</w:sectPr></w:pPr>
+                  <w:r><w:t>Section one</w:t></w:r>
+                </w:p>
+                <w:p><w:r><w:t>Section two</w:t></w:r></w:p>
+                <w:sectPr><w:type w:val="oddPage"/>{Sheet}</w:sectPr>
+              </w:body>
+            </w:document>
+            """;
+
+        return Package(document);
+    }
+
+    /// <summary>Wraps one <c>word/document.xml</c> body in the smallest package the reader accepts.</summary>
+    private static MemoryStream Package(string document)
     {
         const string ContentTypes = """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -120,34 +175,6 @@ public sealed class OddPageBreakFillerTests
             <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>
             """;
 
-        string startAt = firstPageNumber is { } n ? $"""<w:pgNumType w:start="{n}"/>""" : string.Empty;
-
-        string document = $"""
-            <?xml version="1.0" encoding="UTF-8"?>
-            <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-              <w:body>
-                <w:p>
-                  <w:pPr>
-                    <w:sectPr>
-                      <w:pgSz w:w="11906" w:h="16838"/>
-                      <w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"
-                               w:header="0" w:footer="0" w:gutter="0"/>
-                      {startAt}
-                    </w:sectPr>
-                  </w:pPr>
-                  <w:r><w:t>Section one</w:t></w:r>
-                </w:p>
-                <w:p><w:r><w:t>Section two</w:t></w:r></w:p>
-                <w:sectPr>
-                  <w:type w:val="oddPage"/>
-                  <w:pgSz w:w="11906" w:h="16838"/>
-                  <w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"
-                           w:header="0" w:footer="0" w:gutter="0"/>
-                </w:sectPr>
-              </w:body>
-            </w:document>
-            """;
-
         MemoryStream result = new();
         using (ZipArchive archive = new(result, ZipArchiveMode.Create, leaveOpen: true))
         {
@@ -167,4 +194,40 @@ public sealed class OddPageBreakFillerTests
             entry.Write(Encoding.UTF8.GetBytes(content));
         }
     }
+
+    /// <summary>
+    /// Three one-line sections: a plain first, a second broken to the next page and optionally restarting
+    /// its numbering, and a third broken to the next odd page.
+    /// </summary>
+    private static MemoryStream BuildThreeSectionPackage(int? restartAt)
+    {
+        string restart = restartAt is { } n ? $"""<w:pgNumType w:start="{n}"/>""" : string.Empty;
+
+        string document = $"""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+              <w:body>
+                <w:p>
+                  <w:pPr><w:sectPr>{Sheet}</w:sectPr></w:pPr>
+                  <w:r><w:t>Section one</w:t></w:r>
+                </w:p>
+                <w:p>
+                  <w:pPr><w:sectPr>{Sheet}{restart}</w:sectPr></w:pPr>
+                  <w:r><w:t>Section two</w:t></w:r>
+                </w:p>
+                <w:p><w:r><w:t>Section three</w:t></w:r></w:p>
+                <w:sectPr><w:type w:val="oddPage"/>{Sheet}</w:sectPr>
+              </w:body>
+            </w:document>
+            """;
+
+        return Package(document);
+    }
+
+    /// <summary>A4 with even margins and no header or footer band, shared by every section here.</summary>
+    private const string Sheet = """
+        <w:pgSz w:w="11906" w:h="16838"/>
+        <w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"
+                 w:header="0" w:footer="0" w:gutter="0"/>
+        """;
 }
