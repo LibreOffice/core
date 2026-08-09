@@ -576,6 +576,33 @@ cited fix.
 Read the source to learn *what mechanism exists*. Measure the binary to learn *what it does*.
 When they disagree, the binary wins, because the binary made the reference PDFs.
 
+**This has now happened often enough to plan around rather than treat as an exception.** A later
+round found the source wrong *twice about the same constant* — the limit at which an axis wraps
+its category labels — while the binary was right both times. Three probe boundaries, each
+crossed by a different variable, bracketed the real value in `[0.990, 1.056]` of the tick
+spacing; the code in the tree says something else, and a fix built on it had been turning an
+axis two categories early and costing 20–42 pt of band.
+
+The practical form of the rule: **a citation is a hypothesis with a file and a line number.** It
+is more convincing than a bare guess and it is not evidence. Cite the source in the report by
+all means, but derive the number from a probe against the installed binary, and say which of the
+two each claim rests on. Several of this project's best rounds have cited a mechanism precisely
+and then measured a different constant from the one the citation implies.
+
+### An instrument can manufacture a defect out of nothing
+
+Two measurement faults in one round each read as an enormous rendering error:
+
+- A plot-rectangle reader taking the *modal span* of drawn lines returned a tick's 4 pt span
+  instead of the plot's, and needed a gridline **47 of 61 chart parts do not draw**.
+- The same reader, not restricted to the chart's own frame, reported **2161 pt** of error on a
+  deck whose real error is **25.64 pt**.
+
+Both numbers are absurd on their face and both were nearly acted on, because a large number
+reads as a large finding. Before believing an instrument's first big result, **run it on a case
+whose answer you already know** — a document that matches, or a probe you authored — and check
+it returns something near zero. That costs one run and it has now saved two rounds.
+
 ## Recording results
 
 Keep the reference version with the numbers — `soffice --version`. LibreOffice's layout
