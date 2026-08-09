@@ -9898,3 +9898,113 @@ dominant kind, the one-sided counts either way, and the text of that page.
 **Run this after every review, and on the other two tracks.** The sheets review already showed
 what a cross-document filter finds that per-document triage cannot; this is the same move applied
 to *where* rather than *what*.
+
+## Slides round twenty-one: the binary path's shape vocabulary, and what the size cluster is not
+
+Baseline re-measured at `a115b723b` against round twenty's reference PDFs and **reproduced to
+the digit** — 163 documents, 151 matching, `|ink|%` **1269.70**, **428** major pages. Every test
+project matched its known-good count, `Paperless.Fidelity.Tests` at 550 with 0 skipped.
+
+### The fix: every `MSO_SPT` that names a preset the evaluator already knows
+
+`PptShapeGeometry.PresetOf` mapped **six** binary shape types onto DrawingML preset names and
+everything else drew its bounding rectangle. `SlidePresetGeometry` has evaluated all 187 presets
+for several rounds, so the binary path was a second, much smaller shape vocabulary sitting on top
+of a complete one. The table is now **148** entries, transcribed from `GETVMLShapeType`
+(`filter/source/msfilter/util.cxx`:1072-1290) joined to the numbering in `MSO_SPT`
+(`include/svx/msdffdef.hxx`:274) and filtered to names `PresetShapeGeometry` actually holds.
+
+| | |
+|---|---|
+| census ceiling | **37 of the 51 `.ppt`**, 1947 shapes that named no preset |
+| measured reach | **37 of 163 renderings changed** — the ceiling exactly, which is unusual |
+| `\|ink\|%` | 1269.70 → **1233.03** |
+| major pages | 428 → **415** |
+| verdicts moved | **0** — the gate decides on pages, words and embedding, and sees none of this |
+
+22 documents improved, 6 moved slightly the other way (+0.04 to +0.41), 9 changed without moving
+their ink. The two documents a human review flagged as *"blocks joined by arrows come out as
+plain rectangles"* both roughly halve: `Fundamentals_Module_1_basics.ppt` 7.18 → 3.37 and
+`W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt` 7.61 → 3.78. Both are page-exact
+and word-exact, before and after.
+
+Adjustment values are deliberately **not** converted for the new entries. A scale factor is not a
+translation: DrawingML defines each preset's adjustments against that preset's own guides and the
+binary vocabulary defines them against `EnhancedCustomShapeGeometry`'s handles, which for most
+shapes are neither the same quantity nor the same count. A right arrow at its default head is
+right in outline and slightly wrong in proportion; one fed a foreign adjustment is neither.
+
+Pinned by `PptPresetShapeTypeTests` — 26 tests, verified by `verify-test.sh` to fail **11** when
+the six-entry table is put back. Presentations 545 → 571.
+
+**The largest regression, localised.** `berlin.ppt` gains 0.23 `|ink|%` on pages 2 and 3 while
+its document total falls 6.26 → 5.78. Its only newly-mapped type is `line` (35 shapes): we used
+to stroke a line's bounding *rectangle* and now stroke its diagonal, and on those two pages the
+rectangle's extra edges happened to overlap clip art the reference draws and we do not. Less
+accidental overlap, not new wrongness.
+
+**`pdf-ops.py` cannot see this change at all.** It records a stroke as a bounding box and a
+colour, so a rectangle outline and its diagonal are the *same record* — the page-2 dumps are
+identical before and after while the rasters differ. Reach for the image diff here, not the
+operator diff.
+
+### `first-divergence.py` on slides, for the first time
+
+`probes/slides-divergence.tsv`, one row per document, computed over the sweep's own per-page ink
+tables rather than by re-rendering.
+
+- **26 of 163 documents have no materially divergent page at all** (`|ink|%` under 0.35 on every
+  page). 22 of the 26 are `.pptx`.
+- The `dominant` column as the tool computes it says **`shows` on 104 of 163**, and that is an
+  artefact rather than a finding: a show count is PDF operator granularity, it moves no pixels,
+  and it differs on nearly every matched record because the reference routinely emits one show
+  per glyph. **Rank only the kinds that can move ink** and the picture is glyph count 77,
+  effective size 36, none 26, face 8. Do not aggregate that column on this track without saying
+  which kinds were ranked.
+- Effective size is dominant on **19 of 51 `.ppt` (37%)** against **17 of 112 `.pptx` (15%)**, so
+  a size cluster on the binary path is real.
+
+### Refuted: the `.ppt` size cluster is not one scale, and is not mostly autofit
+
+The handed-down claim was *"the size census's largest group is `.ppt` autofit, drawing 31.01 pt
+against the reference's 32.00, a single scale of 0.9691"*. Measured over the 19 `.ppt` whose
+first divergent page is size-dominant, 2955 differing-size records:
+
+- **No `31.01` against `32.00` group exists.** The whole-point-step groups that do exist are
+  `18.99/20.01` (6 documents), `24.01/22.99` (3), `27.01/28.01` (2), `29.99/31.01` (2) — one
+  point apart, **in both directions**, which is a step in a search rather than a factor.
+- **The largest groups are sub-1% and not steps at all**: 253 records at 5.77 against 5.80, 195
+  at 5.75/5.80, 136 at 5.67/5.70, 127 at 12.37/12.40. About half of all 2955 differ by under
+  0.6%, which is quantisation, not fitting.
+- Ours smaller on 1964, ours bigger on 991.
+- **Disabling `.ppt` autofit outright leaves the largest groups unchanged** on the documents
+  carrying them, and **relaxing the `Wraps(shape)` gate in `Autofits` changes nothing at all** on
+  five of them — byte-identical renderings. That gate is the approximation the code comment names
+  as "the first place to look"; it is not biting here.
+- LibreOffice's own flat-ODF export of `JesuitAssocOfStudentPersonnel.ppt` states **no size that
+  is not a whole point**, so the reference's 22.99 and 23.50 are produced at layout. We draw
+  24.01 in the same places.
+
+So the cluster is at least three different things and the autofit framing owns the smallest of
+them. Anyone picking this up should split by ratio band before theorising.
+
+### Received, checked, and doubtful as stated
+
+- `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` "table cell backgrounds (orange) and borders not
+  drawn" — its worst page (14, `|ink|` 2.07) reads as *the same marks in a different colour*, not
+  a missing fill, and its `a:tblPr` names **no `a:tableStyleId`**. `DrawingTableStyle.Read`
+  already documents, with a measurement, that LibreOffice ignores `a:tblStyleLst/@def` where
+  PowerPoint applies it. If the review was against PowerPoint's look rather than the reference's,
+  there is nothing here.
+- `16 - UTM - (NASA).pptx` "replacement glyphs in chart text" — **not** "the same ten embedded
+  faces both sides". We emit **twelve** faces to the reference's eleven, and the extra one is
+  `KAAAAA+Unifont`, **not embedded**, carrying 62 single-glyph runs on page 29. That is the whole
+  of the document's `unembedded` verdict and the only such verdict in the track. A font we name
+  and cannot embed is a defect on its own.
+
+### Instruments added
+
+- `probes/slides-shape-type-census.py` — which shape geometries the track references, `.ppt` by
+  `MSO_SPT` and `.pptx` by `a:prstGeom`, with per-document counts.
+- `probes/mso-shape-type-presets.json` — the 203-entry `MSO_SPT` → DrawingML preset table the
+  fix was generated from, so it can be regenerated rather than re-transcribed.
