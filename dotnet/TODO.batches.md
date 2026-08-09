@@ -9443,3 +9443,68 @@ diff can name them and nobody had looked at these twelve pages with it.
 
 **A periodic human pass over the proof sheet is worth more than another metric.** Schedule one
 per track rather than treating this as a one-off.
+
+## Sheets: a human review of the residue, and the cluster it exposed
+
+The same visual pass as the slides review, over the twenty-two non-matching workbooks. It found
+twelve defects — and one of them is not a defect at all but a **pattern across the track that no
+per-document reading had surfaced**.
+
+### Pagination is the track's dominant failure, and it was hiding in plain sight
+
+The reviewer wrote *"page split is not matching, content is not the same"* on five documents
+without prompting. Filtering the whole track for **page count wrong while the word count is
+within 1%** gives twelve:
+
+| batch | Δ pages | words Δ | document |
+|---|---:|---:|---|
+| 011 | **+3** | −0.01% | `Capability_List_…_unsorted.xlsx` |
+| 011 | +1 | +0.46% | `RMP 2011-2014 and Inventory.xls` |
+| 012 | −1 | −0.89% | `FAA-2019-0995-0002_attachment_2.xlsx` |
+| 013 | +1 | **0.00%** | `CSJU List of Recipients of funds 2013-2020.xlsx` |
+| 014 | −2 | +0.01% | `aircraft_analysis_2016-04-27.xls` |
+| 015 | −1 | −0.01% | `grants-2005.xls` |
+| 015 | +1 | +0.04% | `ans_mappings_of_eccairs_terms.xlsx` |
+| 015 | −1 | +0.11% | `seihon_zassi_kikou_20221215.xlsx` |
+| 016 | −1 | +0.01% | `7-memento-2015-transports-aeriens-b.xls` |
+| 016 | +1 | +0.01% | `SIL_TDB648.xlsx` |
+| 016 | **−3** | +0.07% | `flightstandards-doc-Cross-reference-table_version02.xlsx` |
+| 016 | **−3** | +0.09% | `tk-syllabus-comparison-document-v5.xlsx` |
+
+Deltas **−3, −3, −2, −1, −1, −1, −1, +1, +1, +1, +1, +3** — both signs, small magnitudes, and
+`CSJU` has word counts **exactly equal** at 55219: the same content, split differently. Two more
+sit just outside the band and are almost certainly the same class, `FY2018_Q4_UAS_Sightings.xlsx`
+(+2) and `sectors-defense-and-aerospace.xlsx` (−2); the reviewer described the first as *"an
+empty cell present due to wrong page split, so the cells are shifted down"*.
+
+**Up to fourteen of the track's twenty-two failures on one predicate, spanning batches 011–016.**
+The round in flight was briefed on three documents in two batches. Nobody had run the filter,
+because per-document triage never asks "what do the failures have in common".
+
+Two cautions carried into the work. `ans_mappings_of_eccairs_terms.xlsx`'s ±1 is suspect — a
+one-page movement on it was traced to *the reference*, which returned 191 then 190 on successive
+sweeps while our output was byte-identical. And a cluster of one shape is not proof of one cause;
+the skill's own rule is that symptom clusters often do not share a root.
+
+### The other defects, none of which any gate can see
+
+- **Charts.** `Keywords_Mapping…xlsx` — table border missing, chart border missing, chart vertical
+  scale very different. `Template Pilot Logbook…xls` — category axis labels **angled in the
+  reference and horizontal in ours**, and the plot area drawn as a rectangle where the reference
+  draws outlined polygons. That second document *cannot* pass the word gate whatever happens, and
+  the review found real rendering work in it that the gate could never have pointed at.
+- **Row height.** `Capability_List…xlsx` draws some cells taller than the reference — and it is
+  also +3 pages, so this may be the mechanism rather than a second finding.
+- **Text metrics.** `T0A0D0000090006XLSE.xls` wraps differently in some cells from minor size drift.
+- **Clipping.** `grants-2005.xls` does not crop header text to its cell; the reference clips it.
+- **Fills.** `sectors-defense-and-aerospace.xlsx` leaves some empty cells unshaded.
+- **Colour.** `ans_mappings_of_eccairs_terms.xlsx` draws hyperlinks in the wrong colour.
+
+### What both reviews say together
+
+Across the two tracks reviewed, **twenty defects, and not one of them is visible to the page
+gate, the word gate or the font gate**. The sheets pass went further than the slides pass by
+producing something no per-document instrument could: the observation that half the track fails
+the same way. **Run the cross-document filter after every review** — "what do these failures have
+in common" is a question only a whole-track view can answer, and it turned a three-document lead
+into a fourteen-document one in a single query.
