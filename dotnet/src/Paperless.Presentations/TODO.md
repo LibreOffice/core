@@ -2130,11 +2130,73 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       1 document. Swept: that document's `|ink|%` 16.36 → 15.90, which is the whole of the 0.41
       round thirty localised there and said was a different residue from the size work. It was.
 
-- [ ] **The chart *title's* own face, which the model still cannot carry.** `ChartPlot.TextFamily`
-      is one family for the whole chart, so the fix above takes `171128IPAP` page 38 from 44 wrong
-      records to 2 — the title's. Closing it needs what the sizes needed: a nullable `TitleFamily`
-      beside it, and `ChartText` bound per label rather than per chart, because the measurer
-      carries the family it measures in.
+- [x] **The chart *title's* own face, which the model could not carry.** `ChartPlot.TextFamily`
+      is one family for the whole chart, so the fix above took `171128IPAP` page 38 from 44 wrong
+      records to 2 — the title's.
+
+      Closed in round thirty-three exactly as this said: a nullable `ChartPlot.TitleFamily` beside
+      `TextFamily`, read from `c:title` alone, plus `ChartText.For` — the rebinding point that
+      type's own remarks anticipated — at the three sites that reserve room above the plot. Both
+      halves were needed and neither implies the other: a family that reaches only the label names
+      a face nothing was measured in, so the band above the plot is reserved for one face and
+      filled with another. Page 38 goes from 35 Carlito-Bold + 9 Carlito-Regular to 34 + 9 + 1
+      LiberationSans-Bold, against the reference's 31 + 13 + 1 LiberationSans-Bold.
+
+      Census over the corpus's OOXML half — 112 of the slides track's 163 documents, and the
+      binary half states a chart's faces where no zip-level census can see them:
+      **2 of 61 chart parts over 1 document on slides, 0 of 11 on sheets and 0 of 1 on words**, so
+      neither other track can move on it over this corpus.
+      `research/probes/slides-r33/chart-title-face-census.py` produces those numbers, and note
+      what it had to get right to produce them: `c:txPr` is a *child* of `c:chartSpace` and
+      **follows** `c:chart`, so a census that looks for it before `<c:chart>` finds the title's
+      own and reports zero disagreements. The first run of it did exactly that.
+
+- [ ] **A chart part's `c:userShapes` — its own little drawing — is not read at all.** Found by
+      finishing the title above rather than by looking for it: with the face right, `171128IPAP`
+      page 38's one remaining one-sided record is a source note the reference draws at
+      `(102.86, 71.10)` in `LiberationSans-BoldItalic` at 9.90 pt reading
+      `Source: StatsSA, BER forecast`. It is in the file, in
+      `ppt/drawings/drawing6.xml`, related from `chart7.xml` — a `c:userShapes` root holding a
+      `cdr:relSizeAnchor` around a `cdr:sp` text box.
+
+      A chart part may relate a *drawing* of its own, anchored in fractions of the chart's
+      rectangle (`cdr:relSizeAnchor`, `cdr:from`/`cdr:to`) or in EMUs from its top-left
+      (`cdr:absSizeAnchor`, `cdr:from` + `cdr:ext`); inside the anchor is ordinary DrawingML —
+      `cdr:sp`, `cdr:pic`, `cdr:graphicFrame`, `cdr:grpSp`, `cdr:cxnSp` — with `a:`-namespaced
+      bodies the shared reader already understands. LibreOffice imports it in
+      `oox/source/drawingml/chart/chartdrawingfragment.cxx` (`ShapeAnchor::calcAnchorRectEmu` at
+      `:77-110` is the whole of the anchor arithmetic) and hands the shapes to chart2 as the
+      model's `AdditionalShapes`, which is why `ChartModel::setVisualAreaSize` has an
+      `impl_adjustAdditionalShapesPositionAndSize` beside it.
+
+      Census over the corpus's OOXML half: **11 of 61 chart parts over 4 documents on slides,
+      20 shapes; 0 of 11 chart parts on sheets and 1 of 1 on words** — the words one carries the
+      relationship with no shape in it. `bitesize-writing-a-report.pptx`,
+      `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx`, `RPA P4 - Advanced Material.pptx` and
+      `171128IPAP.pptx` (8 of its 9 parts) are the four.
+
+      The work is a reader, not a measurement: the anchor is two lines of arithmetic and the
+      shapes are the shared DrawingML ones, but they have to reach a sink from inside a chart,
+      which nothing in `ChartDrawing` currently allows — `ChartLayout` produces labels, fills,
+      strokes and markers and has no idea of an arbitrary shape.
+
+      Worth noting what the same page says about the item below it: the reference draws that note
+      and the title as `9.90ptx10.03w` and `13.79ptx13.97w`, so this chart carries the
+      content-overflow compression too, at `a ≈ 1.013`. It is not confined to
+      `southern-classic`.
+
+- [ ] **The category axis' wrap limit: two rules fit every measurement and this corpus cannot
+      separate them, which is the finding.** `ChartAxisLabels.Wraps` gives a label the tick
+      spacing itself, and the three rotation boundaries in
+      `research/probes/slides-r30/make-rot-probe.py` bracket the limit at `[0.990, 1.056]`,
+      `[0.880, 1.100]` and `[0.990, 1.100]` of the spacing — one being the only round number in
+      the intersection. **`0.95 × spacing + 2 × inset` fits all three equally**: the two differ by
+      at most 0.36 em and no reachable category count lands between them, so no document in the
+      corpus can prefer one. Separating them wants an authored deck whose category width falls in
+      that 0.36 em band at a size where both rules are still in range — and it is worth saying
+      that such a deck buys a boundary case and nothing else, which is why the honest entry is
+      this one rather than a choice. The rule in the code is stated as measured and the
+      alternative is named beside it; do not quietly replace one with the other on a hunch.
 
 - [ ] **The chart text residual has *two* components, and every round that has chased it has been
       reading one number where there are two.** A PDF show carries a font height in `Tf` and an
