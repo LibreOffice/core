@@ -9845,3 +9845,56 @@ Markup 259, OpenDocument 125, WordProcessing 706, Spreadsheets 593, Presentation
 Do not re-propose rounding a glyph advance to a whole device pixel; `MetricGridTests` fails if you
 do. Do not conclude `fUsePrinterMetrics` is inert from a Dop patch at 0x54 — patch 0x1fc too, and
 check a quantity known to differ before believing a null result.
+
+## Words: a human review, and the first-divergence sweep it prompted
+
+### Four defects, and one that shows the word gate can miss everything
+
+- **`手机免提系统TSB.doc` — every Asian character is missing.** The gate reads **36 words against
+  40**. `wc -w` in the POSIX locale counts a word only where it sees a printable ASCII byte, so a
+  document can lose its *entire* content and be scored four words out. The blind spot was already
+  documented; this is the first case where it hides a total failure rather than a percentage.
+- `FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx` — an image is not drawn.
+- `omrIMInterpretiveGuideLine.doc` — a header in a text box, or an image, or both, is missing.
+- `UG.CAO.00133 Foreign Part 145 approvals - Language.docx` — a break, probably a section break,
+  handled differently: the reference shows pages 8 and 1 beside the header text where we show 1
+  and 2.
+
+### The instrument the review asked for: `first-divergence.py`
+
+The reviewer's suggestion was to render increasing page prefixes until the output breaks, and
+then look at what is on that page. That is the right idea and it does not need prefixes —
+rendering errors cascade, so comparing page *N* against page *N* down a whole document measures
+the cascade rather than the fault, and **the first page that materially differs is where the
+cause lives**. The tool walks forward to that page, runs the operator diff on it alone, and
+classifies what differs. `--corpus` sweeps a track so the result can be aggregated, which is the
+question no per-document reading can answer.
+
+Swept over all 46 non-matching words documents:
+
+| First divergent page | documents |
+|---|---:|
+| **page 1** | **28** |
+| pages 2–3 | 12 |
+| page 4 or later | 6 |
+
+| Dominant difference on that page | documents |
+|---|---:|
+| glyph count | 19 |
+| show count | 14 |
+| effective size | 9 |
+| an element only one side draws | 4 |
+
+**Twenty-eight of forty-six diverge on page 1**, so this is overwhelmingly not accumulated drift
+— it is wrong from the first line, which is what the reviewer suspected from the images. And the
+dominant difference is *glyph and show counts* rather than size: the text is being **broken**
+differently more often than it is being **sized** differently. Those are related — a wrong
+advance changes where a line breaks — but they are not the same claim, and the distinction says
+where to look.
+
+`dotnet/probes/words-divergence.tsv` holds the per-document rows: first page, its `|ink|%`, the
+dominant kind, the one-sided counts either way, and the text of that page.
+
+**Run this after every review, and on the other two tracks.** The sheets review already showed
+what a cross-document filter finds that per-document triage cannot; this is the same move applied
+to *where* rather than *what*.
