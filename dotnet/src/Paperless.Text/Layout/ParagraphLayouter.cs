@@ -140,14 +140,20 @@ public sealed class ParagraphLayouter
     /// see <see cref="LineMetrics.ScaledAscent"/>. Defaulting it false keeps the two engines that do
     /// not add it — Impress's and Calc's, both EditEngine — right without having to say so.
     /// </param>
+    /// <param name="shaper">
+    /// The shaper to measure with, or null for the default. The only caller that passes one is
+    /// measuring text its face may not cover — see <see cref="FallbackShaper"/>, whose advances are
+    /// usable and whose glyph identifiers are not.
+    /// </param>
     public ParagraphLayouter(
         OpenTypeFace face,
         ILineBreaker? breaker = null,
         MetricGrid? grid = null,
-        bool leadingAboveText = false)
+        bool leadingAboveText = false,
+        ITextShaper? shaper = null)
     {
         ArgumentNullException.ThrowIfNull(face);
-        _measurer = new TextMeasurer(face);
+        _measurer = shaper is null ? new TextMeasurer(face) : new TextMeasurer(face, shaper);
         _filler = new LineFiller(_measurer, breaker);
         _metrics = LineSpacing.Resolve(face, grid, leadingAboveText);
     }
