@@ -2066,22 +2066,32 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       drop it, the shape `ChartPlot.TextFamily` set — so neither the sheets nor the words track
       moves. Swept reach on the slides track: see the scoreboard.
 
-- [ ] **A *stated* weight on a chart's axis labels, legend or data labels is still unread.**
-      This is the larger half of the weight work and it is untouched. Round twenty-four read
-      `@b` on the two titles only, because the auto-text table's *default* is title-only; a file
-      that states `b="1"` on `c:valAx/c:txPr` states it about the labels, and **36 of the 61
+- [x] **A *stated* weight on a chart's axis labels, legend or data labels.** Round twenty-four
+      read `@b` on the two titles only, because the auto-text table's *default* is title-only; a
+      file that states `b="1"` on `c:valAx/c:txPr` states it about the labels, and **36 of the 61
       chart parts across 7 documents state one somewhere**. Seen directly on page 35 of
       `171128IPAP.pptx`, whose `chart4.xml` states `<a:defRPr sz="900" b="1"/>` on both axes: the
-      reference draws those labels 8.99 pt Carlito-**Bold** and we draw 9.01 pt Carlito-Regular.
+      reference draws those labels 8.99 pt Carlito-**Bold** and we drew 9.01 pt Carlito-Regular.
 
-      The design is decided and the work is not: `ChartPlot` needs `IsLabelBold` and
-      `IsLegendBold` beside `LabelSize` and `LegendSize`, and the twenty-odd `new ChartLabel`
-      sites that pass `plot.LabelSize` need the weight too. **Do it with a stamping pass, not
-      twenty arguments** — `ChartLabel.IsBold` becomes `bool?`, the title and legend sites set it
-      explicitly, and a pass beside `InFamily` fills the nulls, which is exactly how `Family` is
-      already threaded and for the reason recorded there. The one thing that pass gets wrong is a
-      *data* label, whose weight is its series' `c:dLbls/c:txPr` rather than the axis'; decide
-      whether to carry a third field or accept the approximation before starting.
+      Closed in round thirty exactly as the design here said: `ChartPlot.IsLabelBold` and
+      `IsLegendBold`, `ChartLabel.IsBold` as `bool?`, and an `InWeight` stamping pass beside
+      `InFamily`. The data label takes the axis' weight rather than its series' own
+      `c:dLbls/c:txPr` — the same approximation `LabelSize` already makes, and no corpus document
+      contradicts it. The weight reaches the *measurement* too, which is what moves the plot
+      rectangle: `ChartAxisLabels.Resolve` takes it because a bold label collides at a different
+      width.
+
+      Swept reach: 3 of 163 documents changed, `|ink|%` +2.62 — the faces move to the
+      reference's and the metric moves against us, because on southern-classic the reference
+      draws that page at three sizes where we draw one and the heavier face puts more ink into
+      the mismatch. See the scoreboard.
+
+- [ ] **The chart's per-element text *size*, which `ChartPlot` collapses into one `LabelSize`.**
+      Named by the weight work above rather than guessed at. On
+      `southern-classic-kennesaw-state-university-final.pptx` page 11 the reference draws 55
+      records at 14.00 pt, 12 at 15.49 and 7 at 13.59, all Carlito-Bold; we draw 74 at one flat
+      14.00. Pages 12 and 5 are the same shape. That is `c:txPr` on the individual axis, legend
+      and `c:dLbls` elements, and it is where 2.26 of the round's 2.62 sits.
 
 - [ ] **The chart text residual is neither a constant offset nor a constant factor**, and round
       twenty-three's reading of it as "the chart's own text scale, from the OLE object's stored
