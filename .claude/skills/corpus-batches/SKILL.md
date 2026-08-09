@@ -1012,6 +1012,22 @@ conflicted file is easy to miss:
 The same shape catches other inverted guards: any `check && commit` where the check reports a
 *count* rather than a verdict is backwards.
 
+### `nohup … &` inside a tool call orphans the sweep instead of ending it
+
+A sweep started with `nohup … &` from a backgrounded call is **not killed when the call returns**
+— it is reparented and keeps running. Start a second sweep and both append to the same
+`rows.tsv` while twice the workers fight over the cores.
+
+Measured: duplicate paths in the output and about **thirty documents reported `ours-failed` or
+`ref-failed` purely from 240-second timeouts**. Both symptoms are indistinguishable from a code
+regression, and the round nearly began by bisecting one.
+
+The tell is `ps -eo ppid,args` against the sweep script: **an orphan has ppid 1**. Two habits make
+it safe — write each sweep to its own output path rather than appending to a shared one, and
+check for a running sweep before starting one. The skill's existing sanity checks (no duplicate
+path, count the rows) are what caught this; keep running them on every sweep rather than only on
+suspicious ones.
+
 ### `pkill` on `dotnet test` orphans the runner that was doing the work
 
 Killing a `dotnet test` leaves its `vstest.console` child alive. The orphan keeps its share of
