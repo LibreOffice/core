@@ -213,12 +213,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         Paginator paginator = new(pagination);
 
         List<PaginatedSection> sections = new(Sections.Count);
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
+        FurnitureCarry carry = new();
 
         for (int i = 0; i < Sections.Count; i++)
         {
-            sections.Add(new PaginatedSection(Sections[i], Furniture(fonts, i, headers, footers)));
+            sections.Add(new PaginatedSection(Sections[i], Furniture(fonts, i, carry)));
         }
 
         return new WordProcessingPages(
@@ -246,46 +245,128 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// after the first with no running head at all, and a page with no header is a page that holds more
     /// lines — so the document silently paginates short.
     /// </para>
+    /// <para>
+    /// <em>Inherited from the section before it</em> is the whole of the rule and not a paraphrase of it.
+    /// <c>CopyPageDescHdFt(pPrev, …)</c> copies out of <c>pPrevious-&gt;mpPage</c>, the immediately
+    /// preceding <em>segment's page descriptor</em> — and a continuous section never gets one, because
+    /// <c>InsertSegments</c> turns it into a Writer text section instead (<c>ww8par.cxx</c>:4422). So when
+    /// the section before this one is continuous the copy source is null, the <c>else if (pPrev)</c> arm
+    /// never runs, and the slot keeps the empty format <c>SwFormatHeader(true)</c> left there: the running
+    /// head <em>stops</em>, rather than reaching back past the continuous section to the last one that had
+    /// a page of its own. Carrying it further is how the FAA advisory circulars grew a running head on
+    /// every page that should have had none.
+    /// </para>
+    /// <para>
+    /// A slot also stops being inherited at all once <c>grpfIhdt</c> loses its bit, which
+    /// <c>InsertSegments</c> clears for an empty story whose predecessor's bit was already clear
+    /// (<c>ww8par6.cxx</c>:1237-1258). That is why this works off the six story lengths rather than off
+    /// what the dictionaries happen to hold: a slot missing from them may have had no story, or a story
+    /// whose blocks all came out empty, and only the first of those two ends the inheritance.
+    /// </para>
     /// </remarks>
     /// <param name="fonts">The font cache shared with the body.</param>
     /// <param name="section">Which section's furniture to read.</param>
-    /// <param name="headers">
-    /// The headers in force, by slot, carried across the sections and updated in place: what this section
-    /// states replaces a slot, and what it leaves empty keeps whatever the section before it had.
+    /// <param name="carry">
+    /// What the section before this one left in force, updated in place: the furniture of the last section
+    /// that had a page descriptor, its <c>grpfIhdt</c>, and whether it was the immediately preceding
+    /// section — which is what decides whether this one may copy from it at all.
     /// </param>
-    /// <param name="footers">The footers in force, by the same rule.</param>
-    private PageFurnitureSet? Furniture(
-        LayoutFonts fonts,
-        int section,
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers,
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers)
+    private PageFurnitureSet? Furniture(LayoutFonts fonts, int section, FurnitureCarry carry)
     {
         Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture(section);
         IReadOnlyList<Length> widths = TextWidths();
 
-        Fill(headers, stated.Headers);
-        Fill(footers, stated.Footers);
+        // `grpfIhdt` as `wwSectionManager::InsertSegments` synthesises it for Word 8 and later: every
+        // section states an odd and a first pair, and an even pair as well under `fFacingPages`; a bit
+        // whose story is empty survives only where the section before it had that bit on.
+        int on = HeaderOddBit | FooterOddBit | HeaderFirstBit | FooterFirstBit;
+        if (_reader.DocumentProperties.HasFacingPages) on |= HeaderEvenBit | FooterEvenBit;
+
+        for (int slot = 0; slot < FurnitureStoryCount; slot++)
+        {
+            int bit = 1 << slot;
+            if ((on & bit) == 0) continue;
+            if (StoryLength(stated, slot) > 0) continue;
+            if (section > 0 && (carry.Enabled & bit) != 0) continue;
+            on &= ~bit;
+        }
+
+        // A continuous section becomes a Writer *text* section rather than a page descriptor, so
+        // `SetHdFt` is never called for it and the page descriptor in force stays in force. Its own
+        // stories are not read at all — Word writes a full set into every section descriptor whether or
+        // not the section can use them.
+        bool hasPageDesc = section == 0 || Sections[section].Break != Model.SectionBreak.Continuous;
+        if (!hasPageDesc)
+        {
+            carry.Enabled = on;
+            carry.IsImmediate = false;
+            return carry.Set;
+        }
+
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         bool titlePage = Sections[section].HasDifferentFirstPage;
 
-        Complete(headers);
-        Complete(footers);
+        for (int slot = 0; slot < FurnitureStoryCount; slot++)
+        {
+            if ((on & (1 << slot)) == 0) continue;
+
+            (bool isHeader, Model.PageFurnitureSlot which) = FurnitureSlotOf(slot);
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into = isHeader ? headers : footers;
+
+            IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> from =
+                isHeader ? stated.Headers : stated.Footers;
+
+            if (StoryLength(stated, slot) > 0 && from.TryGetValue(which, out List<Ww8LayoutBlock>? own))
+            {
+                List<PageBlock> converted = BlocksOf(fonts, own, widths);
+                if (converted.Count > 0)
+                {
+                    into[which] = converted;
+                    continue;
+                }
+            }
+
+            // `else if (pPrev) CopyPageDescHdFt(pPrev, pPD, nI)` — one slot, out of the immediately
+            // preceding section's page descriptor, and nothing at all when it has none.
+            if (!carry.IsImmediate) continue;
+
+            IReadOnlyDictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> source =
+                isHeader ? carry.Headers : carry.Footers;
+
+            if (source.TryGetValue(which, out IReadOnlyList<PageBlock>? inherited)) into[which] = inherited;
+        }
+
+        Complete(headers, isHeader: true);
+        Complete(footers, isHeader: false);
 
         PageFurnitureSet set = new(headers, footers);
-        return set.IsEmpty ? null : set;
+        PageFurnitureSet? result = set.IsEmpty ? null : set;
+
+        carry.Headers = headers;
+        carry.Footers = footers;
+        carry.Set = result;
+        carry.Enabled = on;
+        carry.IsImmediate = true;
+
+        return result;
 
         // The two rules `Read_HdFt` applies to every slot it turns on (ww8par.cxx:2519-2545), which
         // between them decide what the master page and the title page carry when only one page kind has
         // a story of its own.
-        void Complete(Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into)
+        void Complete(Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into, bool isHeader)
         {
-            // Which of this kind's slots the section has turned on, after inheritance. The even slot
-            // counts only under `fFacingPages` and the first only under a title page, because those are
-            // the conditions the synthesised `grpfIhdt` carries their bits under.
-            bool enabled = into.ContainsKey(Model.PageFurnitureSlot.Default)
-                || (_reader.DocumentProperties.HasFacingPages
-                    && into.ContainsKey(Model.PageFurnitureSlot.Even))
-                || (titlePage && into.ContainsKey(Model.PageFurnitureSlot.First));
+            // Which of this kind's slots the section has turned on, read off the synthesised `grpfIhdt`
+            // rather than off what landed in the dictionary: a slot whose bit is on and whose story is
+            // both empty and uninheritable turns the master page's on while putting nothing in it.
+            int odd = isHeader ? HeaderOddBit : FooterOddBit;
+            int even = isHeader ? HeaderEvenBit : FooterEvenBit;
+            int first = isHeader ? HeaderFirstBit : FooterFirstBit;
+
+            bool enabled = (on & odd) != 0
+                || (on & even) != 0
+                || (titlePage && (on & first) != 0);
 
             if (!enabled) return;
 
@@ -324,16 +405,61 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             }
         }
 
-        void Fill(
-            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
-            IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> from)
-        {
-            foreach ((Model.PageFurnitureSlot slot, List<Ww8LayoutBlock> stories) in from)
-            {
-                List<PageBlock> converted = BlocksOf(fonts, stories, widths);
-                if (converted.Count > 0) into[slot] = converted;
-            }
-        }
+    }
+
+    /// <summary>How many header stories a DOC section descriptor writes, whatever the section uses.</summary>
+    private const int FurnitureStoryCount = 6;
+
+    // The `grpfIhdt` bits, in the order the stories are written — `nsHdFtFlags` in `ww8scan.hxx`.
+    private const int HeaderEvenBit = 0x01;
+    private const int HeaderOddBit = 0x02;
+    private const int FooterEvenBit = 0x04;
+    private const int FooterOddBit = 0x08;
+    private const int HeaderFirstBit = 0x10;
+    private const int FooterFirstBit = 0x20;
+
+    /// <summary>What the story at <paramref name="slot"/> is, as a kind and a slot.</summary>
+    private static (bool IsHeader, Model.PageFurnitureSlot Slot) FurnitureSlotOf(int slot) => slot switch
+    {
+        0 => (true, Model.PageFurnitureSlot.Even),
+        1 => (true, Model.PageFurnitureSlot.Default),
+        2 => (false, Model.PageFurnitureSlot.Even),
+        3 => (false, Model.PageFurnitureSlot.Default),
+        4 => (true, Model.PageFurnitureSlot.First),
+        _ => (false, Model.PageFurnitureSlot.First),
+    };
+
+    /// <summary>How long a section's story is, nought where the subdocument ends before it.</summary>
+    private static int StoryLength(Ww8LayoutFurniture furniture, int slot)
+        => slot < furniture.StoryLengths.Count ? furniture.StoryLengths[slot] : 0;
+
+    /// <summary>
+    /// What the section before this one left in force, threaded through the whole document.
+    /// </summary>
+    /// <remarks>
+    /// Three things rather than one, because <c>Read_HdFt</c> asks three separate questions of the
+    /// predecessor: what its page descriptor holds, which of the six slots its <c>grpfIhdt</c> had on, and
+    /// whether the <em>immediately</em> preceding section had a page descriptor at all — a continuous one
+    /// has none, and the copy is then never made.
+    /// </remarks>
+    private sealed class FurnitureCarry
+    {
+        /// <summary>The last page descriptor's headers, by slot.</summary>
+        public IReadOnlyDictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> Headers { get; set; } =
+            new Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>>();
+
+        /// <summary>The last page descriptor's footers, by slot.</summary>
+        public IReadOnlyDictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> Footers { get; set; } =
+            new Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>>();
+
+        /// <summary>The whole set, which a continuous section hands straight on.</summary>
+        public PageFurnitureSet? Set { get; set; }
+
+        /// <summary>The previous section's <c>grpfIhdt</c>, which decides what a bit may inherit.</summary>
+        public int Enabled { get; set; }
+
+        /// <summary>True when the section immediately before this one had a page descriptor.</summary>
+        public bool IsImmediate { get; set; }
     }
 
     /// <summary>

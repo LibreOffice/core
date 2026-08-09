@@ -390,11 +390,13 @@ public sealed partial class Ww8DocumentReader
 
         Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> headers = [];
         Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> footers = [];
+        int[] lengths = new int[FurnitureSlots.Length];
 
         for (int slot = 0; slot < FurnitureSlots.Length; slot++)
         {
             int story = SeparatorStories + (Math.Max(0, section) * FurnitureSlots.Length) + slot;
             if (story >= stories.Count) break;
+            lengths[slot] = stories[story].Length;
             if (stories[story].Length <= 0) continue;
 
             // Each flow numbers its own lists: a numbered paragraph in a running head does not continue
@@ -412,7 +414,7 @@ public sealed partial class Ww8DocumentReader
             (isHeader ? headers : footers)[which] = blocks;
         }
 
-        return new Ww8LayoutFurniture(headers, footers);
+        return new Ww8LayoutFurniture(headers, footers, lengths);
     }
 
     /// <summary>
@@ -2220,6 +2222,13 @@ public sealed partial class Ww8DocumentReader
 /// </remarks>
 /// <param name="Headers">The headers, by slot; a slot with no entry has no header.</param>
 /// <param name="Footers">The footers, by slot.</param>
+/// <param name="StoryLengths">
+/// How long each of the section's six stories is, in the order DOC writes them, which is also the bit
+/// order of <c>grpfIhdt</c>. The dictionaries above cannot answer the question the caller has to ask —
+/// a slot missing from them may hold a story that was empty, or one whose blocks all came out blank —
+/// and the difference decides whether the section inherits the slot from the one before it.
+/// </param>
 public sealed record Ww8LayoutFurniture(
     IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> Headers,
-    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> Footers);
+    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> Footers,
+    IReadOnlyList<int> StoryLengths);
