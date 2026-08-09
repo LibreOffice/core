@@ -1437,8 +1437,13 @@ internal sealed partial class PptxSlideLayout
     /// Office theme's gradient a gradient at all: its <c>fillToRect</c> is
     /// <c>t="-80000" b="180000"</c>, a centre 80% of the box above its own top edge, and
     /// unclamped every point of the box sits past the ramp's last stop and the fill comes out
-    /// flat. 79 of the corpus's 114 zip-container decks carry it. The <b>truncation</b> to whole
-    /// per cent decides the corner test in <see cref="Gradient"/>: measured against
+    /// flat. On the probe deck that is 56.94% of the page's pixels against 0.15%.
+    /// <b>Its measured corpus reach is nought</b>, and the distinction is worth keeping: 79 of the
+    /// 114 zip-container decks state that exact <c>fillToRect</c>, all of them in a theme's
+    /// <c>a:fillStyleLst</c>, and not one of them changed a pixel when this landed — a theme's
+    /// third fill style is almost never what a drawn shape resolves to. Correct, tested, and
+    /// waiting for a document. The <b>truncation</b> to whole per cent decides the corner test in
+    /// <see cref="Gradient"/>, which is where the corpus movement was: measured against
     /// LibreOffice 24.2.7.2, a stated centre of 0.5% is treated as 0 and takes the linear
     /// branch, and 1% does not (<c>probes/slides-r39/gradient-path.md</c>).
     /// </remarks>
