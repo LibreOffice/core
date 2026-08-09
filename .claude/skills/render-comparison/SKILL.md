@@ -625,6 +625,30 @@ about the corpus, not a measurement of it.** Publish the rate beside the cluster
 instrument on that track was shipped saying "12 of 30 on matching documents — read its rows as
 leads, not as a table", which is the right way to ship something imperfect.
 
+#### But a high rate on matching documents is not always a refutation
+
+The rule above is about *inferred* signals. Applied blindly it will throw away real findings, so
+the distinction matters: **ask whether the observable is a fact or an inference.**
+
+A words round measured "the reference embeds OpenSymbol and we embed none" — a comparison of two
+font lists, with no inference in it. That fired on **69 of the 154 matching documents (45%)** and
+27 of 46 failing ones. By the control rule alone it looks exactly like the glyph-count artefact.
+It was the opposite: symbol-font bullets were being drawn as U+2022 in the paragraph's face on
+almost half the corpus, and the high rate on passing documents **is the finding** — the gate
+cannot see one non-ASCII glyph, so a defect that widespread leaves the scoreboard untouched.
+Wiring the recode closed it on 81 of 96 documents and changed 84 of 200 renderings with zero
+verdicts moved.
+
+So the test is not "does it fire on passing documents" but **"could this observable be produced
+by anything other than the defect?"**
+
+- `glyphs 34 vs 36` — yes: one show operator per character produces it on agreeing text. Artefact.
+- `size 9.6x0.0 vs 0.5x0.0` — yes: a stroke's bounding box is spelled like a font size. Artefact.
+- *the two PDFs embed different font sets* — no. Fact, and the rate is the reach.
+
+When the answer is "no", a high rate on matching documents means the gate is blind to the class,
+which is worth knowing and is the opposite of a reason to drop it.
+
 ### An instrument can manufacture a defect out of nothing
 
 Two measurement faults in one round each read as an enormous rendering error:
