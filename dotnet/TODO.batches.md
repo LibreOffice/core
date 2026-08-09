@@ -11695,3 +11695,143 @@ column still reproduces against the main checkout's copy. **A `box` count stored
 the sum of three populations** — same-direction rules, cross-orientation pairs and hairline
 segments — and is not comparable with one measured after it. Any round that quotes a stored `box`
 figure must say which side of `cce1cc314` it was taken on.
+
+## Round forty-four — words: the row-height law refuted, a DOC group that drew nothing, and a colour space
+
+Branch `worktree-words-r44` on `7f7c5fbb7`. Baseline reproduced **exactly**: 154/200, absolute page
+error 78, 164 exactly-correct page counts, absolute word error 6512. `probes/words-r44/baseline.tsv`.
+
+| | baseline `7f7c5fbb7` | after | predicted |
+|---|---:|---:|---|
+| documents matching | 154 | **155** | 155–156 |
+| absolute page error | 78 | **77** | 74–80 |
+| exactly-correct page counts | 164 | **165** | 164–166 |
+| absolute word error | 6512 | **6605** | 6400–6560 — **missed, and said why in advance** |
+| renderings changed | — | **14** | 10–30 |
+
+`probes/words-r44/prediction.md`, committed at `9d4a8873c` before anything was rendered post-change.
+
+### 1. Refuted: DOCX table row heights carry no law
+
+The brief's hypothesis was that a row height too tall is to words what it was to sheets. Two
+independent measurements say no.
+
+**The track.** `row-height-census.py` reads the vertical strokes of the 400 PDFs the baseline sweep
+had already written — a vertical stroke inside a table is a cell edge and its length is that cell's
+drawn height, so the sorted multiset per page is the multiset of drawn row heights, translation
+invariant. Over the 164 page-exact documents: **4264 paired rules, 3410 of them (80%) agree within
+1 pt**, and of the 854 that differ **383 are ours taller and 471 ours shorter**, median −1.68. No
+direction, so no law.
+
+**The control.** Of the 76 *matching* page-exact documents drawing any pairable cell edge, **46 have
+a row height off by more than 1 pt and 35 by 10 pt or more** — 61% and 46%, against 6 of 8 on the
+documents failing on words alone.
+
+### 2. The one rule that was under it: OOXML's mandatory paragraph after a nested table
+
+`header-row-mutations.py` varies what one cell of `UG.CAO.00133`'s header holds and reads the drawn
+cell edges out of both renderers. Seven variants; one rule fits all of them to a tenth of a point:
+
+> LibreOffice does not lay out a cell's **last** paragraph when it is empty and the block before it
+> is a **table**.
+
+Both conditions bite. With *two* trailing empty paragraphs LibreOffice lays out **both**, because
+the last follows a paragraph — so "drop a trailing empty paragraph" and "drop an empty paragraph
+after a table" are each refuted by a measurement, and both are pinned by a test.
+
+Implemented in `DocxLayoutSource.ReadCell`, DOCX only: an ODF cell may end with a table, so an
+empty paragraph after one there is the author's. `nested-filler-census.py` says **8 of 134 DOCX**
+carry the shape and **all 8 changed** — the one census this round that was exact. The header row
+goes 36.65 pt to 25.0 against the reference's 26.35, and `May 25 bulletin focus on carers in the
+workplace.docx` goes 5/4 pages to **4/4**.
+
+### 3. A DOC shape group drew its outline and none of its contents
+
+The user's `omrIMInterpretiveGuideLine.doc` — *"missing what looks like a header in a text box or an
+image or both"*. `paperless extract` has every word of the masthead, so it was never a reading
+fault. Three defects stacked:
+
+- **A group is one `FSPA` and many shapes.** Members have no anchor of their own and state their
+  rectangles in the group's `msofbtSpgr` space; one frame per anchor drew the envelope and nothing
+  else. Flattened into an envelope plus one sibling per leaf, as `DocxFrames` already does for a
+  `wpg:wgp`; `Ww8GroupTransform` divides out the child space and composes through nesting.
+- **The envelope painted an opaque white box** over the body text underneath, because `fFilled` and
+  `fLine` default true and a group states neither. An `SdrObjGroup` paints nothing.
+- Its seal is a greyscale JPEG — see below.
+
+355 words against 382 before, **376 against 382** after (`words` → `match`); under-draw 27 → 6.
+
+**Reach 2 of 66 `.doc`, against a guessed 4–15.** The estimate with no census behind it is the one
+that missed, which `prediction.md` said would happen.
+
+### 4. A greyscale JPEG was announced to PDF as three-channel colour
+
+`PdfImages` wrote `/ColorSpace/DeviceRGB` on **every** passed-through JPEG. A passed-through JPEG
+takes its colour space from the PDF and not from itself, so a one-component image is read three
+samples at a time out of a stream that has one — it draws repeated across the row and squashed down
+the page, which reads as a decoder fault and is a metadata one. Now: one component is
+`/DeviceGray`, three is `/DeviceRGB`, and anything else — a CMYK JPEG, whose inversion depends on
+an Adobe marker — falls through to be decoded rather than passed through wrong.
+
+**Not a words defect.** `jpeg-component-census.py` scans whole files for JPEG frame headers, so it
+reads zip and OLE2 containers alike and the count is a reach rather than a ceiling:
+
+| track | documents carrying a 1- or 4-component JPEG |
+|---|---:|
+| words | **5** of 200 |
+| slides | **7** of 163 |
+| sheets | **0** of 171 |
+
+Words is the control — the census says 5 and exactly 5 words documents changed for this reason.
+**A slides sweep is owed**, and none of its 7 can move a page count or a word count.
+
+### The word error rose 93 and the tree is better
+
+One document. `150_5335_5a.doc`, whose group members are drawn at last:
+
+| | under-draw | over-draw | total | sum \|ink\|% over 63 pages |
+|---|---:|---:|---:|---:|
+| before | 236 | 227 | 463 | 45.94 |
+| after | **191** | 325 | 516 | **39.23** |
+
+Major-page count 14 either side; the document still matches.
+
+### `FO.FCTOA.00010` is 249 form checkboxes, established and deliberately not fixed
+
+The user reported *"missing image"*. The document holds **one** image and both renderers draw it on
+every page. What is missing is **249 legacy `FORMCHECKBOX` form fields**, which the reference draws
+as a stroked square in the run of text and we draw as nothing at all.
+
+`formfield-census.py`: **16 of 200 documents** carry one, 13 DOCX and 3 `.doc`.
+
+Not implemented, because the size constant would not pin: the drawn square is 9.0, 9.05, 9.7,
+10.95, 11.3 and 15.9 pt across the corpus and does not follow `w:checkBox/w:size`.
+`FormControlHelper::createCheckbox` computes `16 × size` in 1/100 mm, or
+`floor(CharHeight × 35.3)` for `sizeAuto` — 3.53 mm for a 10 pt run where the drawn square is
+3.175 mm, so the control's rectangle is not the square. **Twelve of the sixteen documents currently
+match**, and adding an advance to every checkbox line with a guessed constant risks them for a
+change the word gate cannot see. Left as a specified lead.
+
+### A trap worth carrying forward
+
+**Byte-comparing our own two renderings does not measure reach here.** All 200 differ, because the
+writer stamps `/CreationDate`; normalising that one string gives 14. The skill offers the byte
+comparison as the cheap decisive check and it silently answers 200. (`SOURCE_DATE_EPOCH` also fixes
+it — `dotnet/CLAUDE.md` says so and this round did not use it.)
+
+### Still open
+
+- **45 mismatches.** The ±1 page cluster is still the mass: 23 documents after this round.
+- `FO.FCTOA.00010` (15/16) and the other 15 documents with form checkboxes.
+- Everything round 43 handed over and did not touch: the `.doc` reader-split clusters, `A_320.doc`
+  141/150, both round-38 leads, `手机免提系统TSB.doc`, `AC-150-5370-10G-updated-201604.docx` /
+  `150-5370-10H.docx`, and the standing decision on the table-only-header import defect.
+- `UG.CAO.00133`'s header row is now 25.0 pt against 26.35 — a 1.35 pt residue, not the 10.3 pt one.
+- **Escher picture cropping is not implemented anywhere in the word-processing path.** Nothing in
+  the corpus was measured to need it; noted because it was ruled out as the cause of the seal
+  before the colour space was found, and the next reader of that page should not re-derive it.
+
+Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, Rendering **121**
+(119 + two JPEG colour-space tests), Markup 259, OpenDocument 125, WordProcessing **746** (734 +
+five `NestedTableFillerTests` + seven `DocShapeGroupTests`), Spreadsheets 621, Presentations 576,
+Fidelity 550 — **0 skipped, 0 warnings**.
