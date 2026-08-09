@@ -159,7 +159,19 @@ public sealed class TableRowSplitTests
     /// at-least height of 5.2 cm with 3.5 cm left on the page — and on two further sweeps of the same
     /// shape at A4 with the declared height varied from nought to 10 cm: LibreOffice breaks the row in
     /// every one of them, keeping exactly the lines that fit, and the declared height changes nothing.
-    /// Making the minimum bar the break instead cost <c>batch-008</c> a document and bought none.
+    /// Re-measured since at 4.8, 5.2, 5.6, 6.0 and 8.0 cm — the last of which is the whole body height of
+    /// that page — and the row still breaks after the same seven lines every time. Making the minimum bar
+    /// the break instead cost <c>batch-008</c> a document and bought none.
+    /// </para>
+    /// <para>
+    /// <em>But the floor does gate the break on a real document, and this test must not be read as saying
+    /// it never does.</em> On <c>f445896eb008d14c1746fc37d412dc22.docx</c> the floor is the whole reason
+    /// LibreOffice leaves 140 pt blank at the foot of page 3 and takes a sixteenth page: lower row 8's
+    /// <c>w:trHeight</c> and nothing else, and the row breaks again. The flip is sharp, between 4250 and
+    /// 4300 twips — and it is *not* at the 2800 twips of room left, so "the room is less than the floor"
+    /// is refuted by the fixture above and the boundary is refuted by the document itself. What condition
+    /// separates the two is open; <c>dotnet/probes/trheight-split-gate.py</c> reproduces both halves in
+    /// one command, and lists what has already been ruled out.
     /// </para>
     /// </remarks>
     [Fact]
