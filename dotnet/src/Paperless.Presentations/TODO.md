@@ -2267,6 +2267,14 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       `svx/source/svdraw/svdoole2.cxx`:1710 — `#i83860# resizing charts in impress distorts
       fonts` — names the same effect from the other side.
 
+      **And the reach is larger than "three PPTX decks with charts".** Counting stretched shows
+      over the reference PDFs of the 15 slides documents that hold chart parts: **8 of the 15
+      carry at least one, 698 shows of 1808.** Four of those hold *no* `.emf` or `.wmf` at all
+      and so have no metafile explanation available — `Demick_JetBlue` (142 of 142 shows, 5
+      charts), `171128IPAP` (108 of 224, 9 charts), `N2_E_Maestroni_Swarm_COP` (27 of 27, 1
+      chart) — and `southern-classic` carries one metafile against 21 charts and 189 of 383. The
+      remaining four each hold several metafiles and are not attributed either way here.
+
       **Not implemented, deliberately.** Reproducing it means composing the chart, taking the
       union of the frame with the ink it actually produced, and scaling by the ratio — which is
       a faithful transcription only if our own data-label placement overflows by the same amount
