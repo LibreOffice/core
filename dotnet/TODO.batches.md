@@ -9740,3 +9740,108 @@ review's other findings on this track — `Capability_List`'s taller cells (the 
 row heights), `grants-2005.xls`'s uncropped header text, `sectors-defense-and-aerospace.xlsx`'s
 missing empty-cell shading, `ans_mappings`'s hyperlink colour, `Keywords_Mapping`'s missing
 borders and chart scale, and `Template Pilot Logbook`'s angled category labels — are untouched.
+## Words r34: the printer's device grid reaches advance widths too, and it was never the whole of `A_320`
+
+Baseline re-measured at `a98e59a70` before anything was touched, with `SOURCE_DATE_EPOCH` pinned and
+the CLI snapshotted so a rebuild could not land under the sweep: **154/200, absolute page error 76,
+164 exact page counts, word error 6696**, and per batch 001–005 10/10, 006 9/10, 007 10/10, 008
+9/10, 009 10/10, 010 8/9, 011 9/10, 012 9/10, 013 6/9, 014 4/10, 015 5/10, 016 7/10, 017 6/10, 018
+6/10, 019 4/10, 020 2/10, 021 0/2. Every figure reproduces the inherited ones to the digit — the
+first round in a while where that is true of all of them.
+
+### The rule, measured on an authored pair rather than inferred
+
+`dotnet/probes/printer-metric-advance.py` writes one body out through LibreOffice's own DOC export
+and then patches `WW8Dop::fUsePrinterMetrics` two ways, which is the only way to vary the flag while
+holding a document still: nine of the 200 set it and no two of them are otherwise alike. On 96 rows —
+two faces, four sizes, three glyphs, four run lengths — the printer device's width is
+
+```
+width = floor( N · advance · px_em / upem )  device pixels,   px_em = round(size / 72 · 300)
+```
+
+exact on **96 of 96**, max error 0.02 pt. Every alternative is out by up to 6.96 pt. The control half
+is decisive the other way: on the virtual device unquantised scaling is exact on 96 of 96 and this
+rule is out by 6.73, so the rule is the device's and not the font's.
+
+**Two quantisations, and the first is much the larger.** The em is rounded to whole device pixels
+before any advance is scaled through it, so at 9 pt the device sets 38 px for 37.5 and every advance
+is 1.33% wider than the size asked for; the truncation that follows is worth at most 0.24 pt on a
+whole portion and pulls the other way. Shipped as `MetricGrid.ToAdvance`, applied to each cumulative
+width in `MeasuredParagraph` — a sub-run is the nearest thing we have to Writer's text portion, and
+`floor` is monotonic so the prefix table stays monotonic.
+
+**Rounding each glyph separately is refuted, and it is the reading the source invites.**
+`GenericSalLayout::LayoutText` rounds every advance to a whole device pixel unless subpixel
+positioning is on (`vcl/source/gdi/CommonSalLayout.cxx`:826–831) — and a mapped device turns it on,
+so the advances stay exact and the truncation happens once. Pinned: `MetricGridTests` grew 240 → 255
+and three of the new tests each fail if the rule is replaced by the alternative they name.
+
+### The trap that nearly cost the round
+
+**The compatibility dword is stored twice in a `.doc` and the late copy wins.** `WW8Dop::WW8Dop`
+reads it at Dop+0x54 and then, `if (nRead >= 516)`, reads it again at **0x1fc** and overwrites
+("500 -> 508, Appear to be repeated here in 2000+"). Patching 0x54 alone changes nothing at all:
+`Temp16`, `chg12` and `A_320` all came back with byte-identical content streams and identical page
+counts, which reads exactly like *the flag reaches nothing on this reference* — a conclusion that
+would have refuted the round's own premise and the shipped `MetricGrid` with it. Patching both moves
+`A_320` from **150 pages to 118** and `chg12` from 33 to 32.
+
+Our own reader takes 0x54 only. The two copies agree on all 66 corpus `.doc`, so it is a latent
+defect with no corpus reach rather than something to chase — recorded here so the next reader of
+`Ww8DocumentProperties` knows.
+
+### Reach, and the verdict it moved: none
+
+**8 of 200 renderings changed** at the byte level, measured by rendering the track twice and
+diffing, not by censusing. Matches **154**, absolute page error **76**, exact page counts **164** —
+all unmoved. Word error **6696 → 6690**, all of it toward the reference on `chg8`, `chg10` and
+`chg12`. That is the honest headline: the rule is right on its own evidence and it is not what
+`A_320` is missing.
+
+**The census was wrong in the direction nobody checks, again, and this time by omission.** The first
+pass reported "**no** DOCX states `<w:usePrinterMetrics/>`" — because it globbed `words/*/*`, which
+is the *directories*, and read no OOXML at all. There is one, `batch-010/docx/195584360.docx`, it
+passes its batch, and its ink moved. So: **9 of 200**, over 66 OLE2 read through the FIB's `fcDop`
+and 134 OOXML read through `word/settings.xml`. `dotnet/probes/dop-printer-metrics-census.py` now
+sniffs both halves and prints what it read.
+
+### What `A_320` actually is, as far as this round got
+
+Not the advance rule, and not line pitch either. LibreOffice gives 150 pages with the printer device
+and **118** without it; we give 141 with the vertical grid and **119** without. So our model of the
+*non*-printer case is right to within a page, and of the 32 pages the printer device adds for
+LibreOffice we reproduce 22. The dominant baseline pitch agrees exactly — 13.000 pt at 11 pt on 1418
+lines against 1407 — so the missing ten pages are not in the line box.
+
+Aligning the two documents by content, the drift is **gradual**: −1 by reference page 4, −2 by page
+27, −8 by page 134. About one page lost per eighteen, which is a fraction of a line per page rather
+than one event. Paragraph spacing and table row heights are where that lives and neither was
+measured this round. The one visible pitch difference is a 17.750 pt gap the reference draws 212
+times where we draw 17.375 and 17.562 — worth roughly a page, not nine.
+
+### Per batch at `7c6a5c7ca`, measured
+
+001–005 10/10, 006 9/10, 007 10/10, 008 9/10, 009 10/10, 010 8/9, 011 9/10, 012 9/10, 013 6/9,
+014 4/10, 015 5/10, 016 7/10, 017 6/10, 018 6/10, 019 4/10, 020 2/10, 021 0/2. Whole track
+**154/200**, row for row identical to the baseline apart from three word counts, so every earlier
+batch is re-proved by construction.
+
+Tests: Core 275, Containers 109, Text **255** (240 + the fifteen new), Vector 291, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing 706, Spreadsheets 593, Presentations 544, Fidelity 550,
+0 skipped.
+
+### Still open
+
+- **`A_320`'s remaining nine pages are vertical and gradual**, per the alignment above. Paragraph
+  spacing and table row height are the two unmeasured candidates.
+- **Batch 006 stays 9/10**, the row-split gate — refuted rule and all, see `trheight-split-gate.py`.
+- **`chg12`'s under-pagination near pages 9–10**; the even-page-with-no-even-story ceiling (3
+  documents); unequal column widths (`.doc`-only, small). All untouched.
+- **Our `Ww8DocumentProperties` reads the compatibility dword at 0x54 only.** No corpus reach today.
+
+### Retired
+
+Do not re-propose rounding a glyph advance to a whole device pixel; `MetricGridTests` fails if you
+do. Do not conclude `fUsePrinterMetrics` is inert from a Dop patch at 0x54 — patch 0x1fc too, and
+check a quantity known to differ before believing a null result.

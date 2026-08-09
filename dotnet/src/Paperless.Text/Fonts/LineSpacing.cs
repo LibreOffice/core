@@ -80,6 +80,46 @@ public readonly record struct MetricGrid(int Dpi)
         => Dpi <= 0 ? Length.Zero : Length.FromTwips((long)Math.Round(pixels * TwipsPerPixel));
 
     /// <summary>
+    /// An advance width as the device measures it: the whole run's advance in device pixels,
+    /// <b>truncated</b>, and only then converted back to a length.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Two quantisations, and the first is much the larger. The em is rounded to whole device
+    /// pixels before any advance is scaled through it — <see cref="ToEmSize"/>'s rounding — so at
+    /// 9 pt on a 300 dpi grid the device sets 38 pixels for 37.5 and <em>every</em> advance comes
+    /// out 1.33% wider than the size the document asked for. The truncation that follows is worth
+    /// at most one pixel, 0.24 pt, on a whole portion, and pulls the other way.
+    /// </para>
+    /// <para>
+    /// <b>The truncation is of the total, not of each glyph.</b> That distinction is the whole of
+    /// what <c>dotnet/probes/printer-metric-advance.py</c> settles: over 96 authored rows — two
+    /// faces, four sizes, three glyphs, four run lengths, with <c>fUsePrinterMetrics</c> varied on
+    /// one body — this rule is exact on 96 and rounding each glyph's advance separately is out by
+    /// up to 6.96 pt. Rounding per glyph is what <c>GenericSalLayout::LayoutText</c> appears to
+    /// say (<c>vcl/source/gdi/CommonSalLayout.cxx</c>:826-831, <c>std::round</c> when subpixel
+    /// positioning is off) and it is not what the binary does: a mapped device turns subpixel
+    /// positioning <em>on</em>, so the advances stay exact and the truncation happens once, where
+    /// the device width is converted to logical units.
+    /// </para>
+    /// <para>
+    /// On the virtual reference device none of this applies and the caller passes no grid — the
+    /// same probe's control half has unquantised scaling exact on 96 of 96 there, and this rule
+    /// out by 6.73 pt.
+    /// </para>
+    /// </remarks>
+    /// <param name="designUnits">The run's advance in the face's design units.</param>
+    /// <param name="unitsPerEm">The design grid that advance is in.</param>
+    /// <param name="emSize">The font size the document asks for.</param>
+    public Length ToAdvance(long designUnits, int unitsPerEm, Length emSize)
+    {
+        if (unitsPerEm <= 0 || Dpi <= 0) return Length.Zero;
+
+        double em = Math.Round(emSize.Twips / TwipsPerPixel);
+        return ToLength((long)Math.Floor(designUnits * em / unitsPerEm));
+    }
+
+    /// <summary>
     /// An em size as the device can actually set it: rounded to whole pixels and back.
     /// </summary>
     /// <remarks>
