@@ -69,6 +69,26 @@ corner branch is the whole of the movement. The clamp is still right: probe slid
 gradient and drawing a flat fill. It is correct code waiting for a document, and it is pinned by
 `SlideGradientPathTests` so it cannot be silently undone.
 
+## What is left on the deck that moved
+
+Per page of `Wildlife for REDAC September 11.pptx`, `diff%` and `|ink|%`:
+
+| page | before | after |
+|---|---|---|
+| 32 | 60.12, 16.97 MAJOR | **0.36, 0.00 ok** |
+| 33 | 85.07, 3.22 MAJOR | **0.44, 0.00 ok** |
+| 3 | 65.51, 17.56 MAJOR | 10.20, 0.48 shifted |
+| 13 | 57.46, 12.54 MAJOR | 15.15, 5.53 MAJOR |
+| 16, 27 | 4.14 / 3.40 MAJOR | unchanged |
+
+Two of the four backgrounds now match outright. What is left is not the gradient:
+
+- **page 3** — the reference draws the poster picture rotated a couple of degrees with a drop
+  shadow and we draw it axis-aligned. Whole remaining residue on that page.
+- **page 13** — two blocks in the right-hand third, `x 0.61–0.91`, that *we* draw and the
+  reference does not. Not a background; a separate lead, and the largest single page left on
+  this deck.
+
 ## Files
 
 `slides-parity.tsv` is the after sweep's rows; `slides-ink-ranking.tsv` is the ranking
