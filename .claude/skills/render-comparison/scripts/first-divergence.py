@@ -44,7 +44,18 @@ OPS = HERE / "pdf-ops.py"
 # it near nought and a genuinely different page does not.
 INK_THRESHOLD = 0.35
 
-NOTE_KINDS = ("size", "width", "face", "glyphs", "shows")
+# `shows` is deliberately absent, and the omission is a finding rather than a tuning choice.
+# Our PDF writer batches glyphs into show operators differently from LibreOffice's, so a run
+# identical in face, size, position and glyph count still reports a different show count.
+# Settled by reading both content streams on three documents: on
+# `review-welsh-government-communications…docx` every `shows` note pairs records agreeing on
+# all four of those; on `template---tpr…docx` the direction reverses (ours 1, the reference
+# 2-5) and the records still agree; on `1228841571067…doc` six of seven notes are
+# show-count-only. Counting it made `shows` the dominant kind on 14 of 46 swept documents — a
+# third of a track classified by something that moves no mark on any page. `pdf-ops.py` still
+# *prints* it, because operator granularity genuinely matters to the text layer (poppler reads
+# a reposition as a word boundary); it is simply not a difference in the page.
+NOTE_KINDS = ("size", "width", "face", "glyphs")
 
 
 def run(cmd, **kw):
@@ -82,11 +93,22 @@ def per_page_ink(ours: Path, ref: Path, tmp: Path):
     return rows, no, nr
 
 
+# A text record the reference draws and we do not, holding one glyph and no decodable word.
+# LibreOffice ends every justified line with a separate `BT … Td /F 12 Tf <space> Tj ET`, so a
+# fully-agreeing page still reports one reference-only record per line. They carry no ink, and
+# they are counted separately rather than suppressed: a genuinely absent one-glyph mark — a
+# bullet, a page-number digit — has the same shape, and hiding it would trade one artefact for
+# a blind spot.
+BLANK_RECORD = re.compile(r"^text .*\b1 glyphs in 1 show\(s\)\s*$")
+GLYPH_NOTE = re.compile(r"\bglyphs (\d+) vs (\d+)")
+
+
 def classify(ours: Path, ref: Path, page: int):
     """What differs on one page, as counts by kind."""
     out = run([OPS, "diff", ours, ref, "--page", page]).stdout
     counts = {k: 0 for k in NOTE_KINDS}
-    only_ours = only_ref = 0
+    only_ours = only_ref = blank_ref = 0
+    gdelta = 0
     section = None
     for line in out.splitlines():
         if line.startswith("=== only in ours"):
@@ -100,14 +122,19 @@ def classify(ours: Path, ref: Path, page: int):
                 only_ours += 1
             elif section == "ref":
                 only_ref += 1
+                if BLANK_RECORD.match(line.strip()):
+                    blank_ref += 1
         else:
             for k in NOTE_KINDS:
                 if re.search(rf"\b{k} [\d.]+ vs |\b{k} \S+ vs ", line):
                     counts[k] += 1
+            m = GLYPH_NOTE.search(line)
+            if m:
+                gdelta = max(gdelta, abs(int(m.group(1)) - int(m.group(2))))
     dominant = max(counts, key=lambda k: counts[k]) if any(counts.values()) else ""
     if not dominant and (only_ours or only_ref):
         dominant = "one-sided"
-    return counts, only_ours, only_ref, dominant
+    return counts, only_ours, only_ref, dominant, gdelta, blank_ref
 
 
 def first_text(pdf: Path, page: int, limit: int = 90) -> str:
@@ -127,11 +154,11 @@ def analyse(ours: Path, ref: Path):
                   "ink": next((i for p, i, _ in rows if p == first), 0.0),
                   "compared": len(rows)}
         if first and first <= min(no, nr):
-            counts, oo, orr, dom = classify(ours, ref, first)
+            counts, oo, orr, dom, gd, br = classify(ours, ref, first)
             result.update(counts=counts, only_ours=oo, only_ref=orr, dominant=dom,
-                          text=first_text(ref, first))
+                          gdelta=gd, blank_ref=br, text=first_text(ref, first))
         else:
-            result.update(counts={}, only_ours=0, only_ref=0,
+            result.update(counts={}, only_ours=0, only_ref=0, gdelta=0, blank_ref=0,
                           dominant="extra page" if first else "",
                           text=first_text(ref, min(first or 1, nr)) if nr else "")
         return result
@@ -163,7 +190,8 @@ def main() -> int:
     if args.corpus:
         rows = [l.rstrip("\n").split("\t") for l in args.corpus.read_text().splitlines() if l.strip()]
         rows = [r for r in rows if r[0] != "path"]
-        lines = ["path\tpages\tfirst_page\tof\tink\tdominant\tonly_ours\tonly_ref\ttext"]
+        lines = ["path\tpages\tfirst_page\tof\tink\tdominant\tgdelta\tonly_ours\tonly_ref"
+                 "\tblank_ref\ttext"]
         for i, r in enumerate(rows, 1):
             src = args.root / r[0]
             tmp = Path(tempfile.mkdtemp())
@@ -176,7 +204,8 @@ def main() -> int:
                 lines.append("\t".join(str(x) for x in [
                     r[0], f"{a['pages_ours']}/{a['pages_ref']}", a["first"] or "",
                     min(a["pages_ours"], a["pages_ref"]), f"{a['ink']:.2f}",
-                    a["dominant"], a["only_ours"], a["only_ref"], a["text"]]))
+                    a["dominant"], a["gdelta"], a["only_ours"], a["only_ref"],
+                    a["blank_ref"], a["text"]]))
                 print(f"  [{i}/{len(rows)}] {r[0]} first={a['first']} {a['dominant']}", flush=True)
             finally:
                 shutil.rmtree(tmp, ignore_errors=True)
@@ -200,7 +229,10 @@ def main() -> int:
     print(f"dominant       {a['dominant']}")
     if a["counts"]:
         print("               " + ", ".join(f"{k} {v}" for k, v in a["counts"].items() if v))
-    print(f"one-sided      {a['only_ours']} ours, {a['only_ref']} reference")
+    if a.get("gdelta"):
+        print(f"glyph delta    {a['gdelta']} worst on the page")
+    print(f"one-sided      {a['only_ours']} ours, {a['only_ref']} reference"
+          f" ({a.get('blank_ref', 0)} of them one inkless glyph)")
     if a["text"]:
         print(f"page text      {a['text']}")
     return 0
