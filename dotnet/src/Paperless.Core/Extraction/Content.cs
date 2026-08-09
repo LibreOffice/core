@@ -283,12 +283,22 @@ public sealed class ContentTableCell : ContentNode
     /// Appends the cell's text without the trailing newline its last paragraph contributes,
     /// so that <see cref="ContentTableRow"/> can join cells onto one line.
     /// </summary>
+    /// <remarks>
+    /// <strong>Exactly one newline, not every trailing one.</strong> Each paragraph terminates
+    /// itself, so a cell whose last paragraph is empty ends in two — and taking both erases the
+    /// empty paragraph rather than the terminator. That paragraph is a hard break at the end of a
+    /// cell, which every spreadsheet format can express and which a reader must be able to see:
+    /// Calc reserves a whole line for it, so a row holding one is a line taller than the same row
+    /// without. Measured on <c>flightstandards-doc-Cross-reference-table_version02.xlsx</c>, whose
+    /// cell D936 ends <c>…GENERAL\r\n</c>: LibreOffice's own flat-ODF export states 700.7 twips for
+    /// that row — three lines — where taking both newlines leaves two.
+    /// </remarks>
     protected internal override void AppendText(System.Text.StringBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
         int start = builder.Length;
         base.AppendText(builder);
-        while (builder.Length > start && builder[^1] == '\n') builder.Length--;
+        if (builder.Length > start && builder[^1] == '\n') builder.Length--;
     }
 }
 

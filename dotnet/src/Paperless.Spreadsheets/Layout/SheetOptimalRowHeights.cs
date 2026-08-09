@@ -420,19 +420,33 @@ internal static class SheetOptimalRowHeights
 
                 SheetCellFormat format = formats.At(cell.Row, cell.Column);
 
+                IReadOnlyList<SheetTextPortion>? portions =
+                    sheet.RichText.At(cell.Row, cell.Column, text);
+
                 // The same wrap decision the drawing path makes, so that a row is measured exactly
                 // when its text will be broken — including Calc's rule that a plain number never
                 // breaks however the cell is formatted.
                 // A hyperlink cell is one EditEngine field, and a field is never broken across
                 // lines — so it is measured at one line however narrow its column is. Missing
                 // that makes a column of URLs four or five times too tall.
+                //
+                // A hard break in a cell that does *not* wrap reaches neither the height nor the
+                // page, and that is the format's decision rather than the text's. Calc's
+                // `bStdOnly` is `!bBreak` (`sc/source/core/data/column2.cxx:930-935`), so a run of
+                // such cells takes `lcl_GetAttribHeight` alone and nothing is ever measured; the
+                // one thing that reopens it is the cell being an EditEngine cell rather than a
+                // string (`HasEditCells`, `:948-956`), which a plain string is not however many
+                // breaks it holds. The drawing agrees: `HasEditCharacters` (`output2.cxx:823-847`)
+                // lists seven code points and U+000A is not among them, so `DrawStrings` shows the
+                // whole string on one line with the break contributing no glyph. Measured on
+                // `Capability_List…unsorted.xlsx`, whose A452 is `19090-105 (SCD\n604-85001-23)` in
+                // a cell with no wrap: LibreOffice states 285.1 twips for the row — one line — and
+                // its PDF holds `19090-105 (SCD604-85001-23)` as one run.
+                bool rich = portions is { Count: > 0 };
                 bool breaks =
                     (SheetTextLayout.Breaks(format, cell.Value is not null and not string)
-                     || text.AsSpan().IndexOfAny('\n', '\r') >= 0)
+                     || (rich && text.AsSpan().IndexOfAny('\n', '\r') >= 0))
                     && !sheet.HoldsField(cell.Row, cell.Column);
-
-                IReadOnlyList<SheetTextPortion>? portions =
-                    sheet.RichText.At(cell.Row, cell.Column, text);
 
                 // A turned cell's size is its text's *width* put through the angle, which
                 // `RotatedHeight` reproduces — but only along Calc's direct-output path, which is
