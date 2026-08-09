@@ -263,9 +263,19 @@ telling the truth.
 ### Two design points worth knowing before you trust it
 
 - **Matching is nearest-neighbour inside three points, not an exact key.** The first version
-  keyed on position rounded to a tenth of a point and matched *nothing*: the two renderers put
-  their page origin about a point apart (51.39 against 52.38), so every record reported as
-  one-sided. If you see that shape, the window is too tight, not the document too different.
+  keyed on position rounded to a tenth of a point and matched *nothing*: every show sat about a
+  point from its counterpart (51.39 against 52.38), so every record reported as one-sided. If you
+  see that shape, the window is too tight, not the document too different.
+
+  **But the window is a matching device, not a verdict.** The comment beside it said for four
+  rounds that the offset was "the two renderers putting their page origin in slightly different
+  places", and that was wrong on the very workbook it quoted: an `.xls` cell's margin is 40 twips
+  where every other format's is 20, and we had one shared constant. The tell is the *sign* — a
+  page origin moves every run the same way, a margin moves left-aligned text right and
+  right-aligned text left, and the reference did the second. Nobody looked, because the tolerance
+  came with a reassuring story attached. **A sub-window offset is not evidence of anything
+  benign**; a whole page sitting uniformly displaced is worth measuring, and a displacement that
+  reverses with alignment is a margin.
 - **Subset prefixes are stripped.** `AAAAAA+Carlito` and `BAAAAA+Carlito` are the same face and
   the prefix is assigned per file; `Carlito` against `Carlito-Bold` is what remains, and that is
   a finding.

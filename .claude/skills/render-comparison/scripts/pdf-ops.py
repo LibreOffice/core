@@ -51,12 +51,20 @@ import zlib
 #
 # This has to be generous, and the first version got it wrong. Keying on position rounded to a
 # tenth of a point matched nothing at all between two renderers: measured on one workbook, every
-# show sits about 1 pt apart (51.39 against 52.38, 743.75 against 742.73) because the two put
-# their page origin in slightly different places. Everything then reported as one-sided, which is
-# the most useless answer a diff can give.
+# show sits about 1 pt apart (51.39 against 52.38, 743.75 against 742.73). So records are paired
+# by *nearest neighbour* inside this window rather than by an exact key.
 #
-# So records are paired by *nearest neighbour* inside this window rather than by an exact key.
-# Three points is wider than any origin offset seen here and far narrower than a line.
+# The explanation written here for four rounds — "the two put their page origin in slightly
+# different places" — was wrong, and wrong in the direction that matters. On that very workbook
+# the offset was a real defect: an `.xls` cell's margin is 40 twips where every other format's is
+# 20, and Paperless had one shared constant. A page origin moves every run the same way; a margin
+# moves left-aligned text right and right-aligned text left, and the reference does the second.
+# The sign of the right-aligned runs is what separates them, and nobody looked until round thirty.
+#
+# So: **a sub-window offset is not evidence of anything benign.** The window exists because an
+# exact key is useless, not because everything inside it agrees. If a whole page sits uniformly
+# displaced, that is worth measuring rather than tolerating — and if the displacement reverses
+# with alignment, it is a margin and not an origin.
 MATCH_WINDOW = 3.0
 SIZE_TOLERANCE = 0.01
 
