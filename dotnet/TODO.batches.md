@@ -9333,7 +9333,7 @@ sheets, 0 of 1 on words.** Neither other track can move on it.
 ### Test counts
 
 Core **278**, Containers 109, Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125,
-WordProcessing 696, Spreadsheets 593, Presentations **545**. **0 skipped.** Core was 275 and
+WordProcessing 696, Spreadsheets 593, Presentations **545**, Fidelity 550. **0 skipped.** Core was 275 and
 Presentations 544; the four new tests are the title face reaching the measurer, reaching the
 label, its control, and the reader carrying it apart from the chart's. Three mutations put back
 through `verify-test.sh`, all three detected, and deliberately separate ones for the measurer half
