@@ -10720,3 +10720,108 @@ rows of `ARecodedBulletIsSetInTheSubstituteFace`), Spreadsheets 605, Presentatio
 both readers reports **6 failures across both tests**, so the refutation is pinned. No shared
 layer changed — the diff is `Paperless.WordProcessing` and one test file — so no cross-track
 sweep is owed.
+
+## Round thirty-six — sheets: a cell's face is chosen once, and coverage is per character
+
+Base `b2e324b1b`, checked with `git log --oneline -1` before anything was measured. The baseline
+sweep reproduced **all four** of the brief's figures to the digit — 154/171, absolute page error 74,
+160 exact page counts, absolute word error 27428 — for the second round running on this track.
+171 rows, no duplicate path, no `ref-failed`, no `ours-failed`.
+
+Full working, citations, the probe tables and the cross-track measurement are in
+`probes/sheets-r36/README.md`.
+
+**Result: 154/171 → 155/171, page error 74 → 73, exact page counts 160 → 161, word error
+27428 → 27161.** One verdict moved and it moved the right way —
+`seihon_zassi_kikou_20221215.xlsx` 83/84 `pages` → **84/84 `match`**. Every earlier batch holds.
+
+### Glyph fallback was wired into the word processor and not into the spreadsheet
+
+Round 35 on the words track found `ItemisationOptions.GlyphFallback` assigned nowhere in the tree
+and wired it. The spreadsheet path never used that property at all: it resolves a cell's face once
+from the family name in the format, then measures, breaks and draws through three different objects
+— `SheetText.Shape`, `ParagraphLayouter` inside `SheetTextLayout`, and `MeasuredParagraph` for a
+rich cell — none of which asked whether the face covered the text.
+
+So a workbook naming a Latin face and holding Japanese asked DejaVu Sans to draw ideographs and got
+its missing-glyph box **at DejaVu Sans's own `.notdef` advance**. Invisible text, and an advance
+nothing like a full-width ideograph, so the cell breaks in the wrong place and the row reserves too
+little height.
+
+Three places had to learn it, and `FallbackShaper` (new, `Paperless.Text`) is deliberately a
+*measuring* device — it splices glyphs from several faces into one `ShapedText` in the primary
+face's design grid and does not report which came from where. That is everything a line breaker
+wants and nothing a painter can use, which is why `SheetText` itemises for itself.
+
+The oracle was LibreOffice's own `style:row-height`, not the reference PDF. On
+`seihon_zassi_kikou_20221215.xlsx`: **121 of 5159 rows disagreed, every one by exactly 268.8
+twips; now 0 of 5159.** The pitch itself was already right — 835.0 = 3 × 268.8 + 28.6 and
+1103.8 = 4 × 268.8 + 28.6 — which is what says the defect was in the width and not in the metrics,
+and why a change that only moves advances lands exactly.
+
+### The prediction, and how it did
+
+`probes/sheets-r36/PREDICTION.md` was committed before the sweep started.
+
+| | predicted | measured |
+|---|---|---:|
+| sheets renderings byte-changed | 8–30 | **13 of 171** |
+| verdicts moved | 1–3 | **1** |
+| words renderings byte-changed | 0 | **0 of 200** |
+| slides renderings byte-changed | 0 | **0 of 163** |
+
+Both halves landed inside their bands, at the bottom of both; the prediction also said in as many
+words to expect the *upper* half of the reach band, and that was wrong. The words and slides
+figures are measured — every document rendered with both snapshotted CLIs and byte-compared —
+rather than argued from "the new parameter is optional and nobody passes it".
+
+### Refuted: the three "BIFF cell-format defects" are one defect, and it is not BIFF
+
+All three of the brief's measurements on `7-memento-2015-transports-aeriens-b.xls` reproduce. All
+three explanations are wrong, the same way.
+
+- **"A white fill emitted for every cell where the reference emits none."** Same colour, different
+  rectangles. The operator diff pairs our 12.7 pt fills against reference fills of **101.8 pt**,
+  which is eight rows. `ScOutputData::DrawBackground` merges runs of rows with equal backgrounds and
+  extends across a merge's columns before emitting one `DrawRect`. **No `XF` default is misread**,
+  which was the expensive possibility the brief flagged.
+- **"A border colour resolved to palette index 56 where Calc resolves 30."** The index we resolve is
+  the index the file states, and LibreOffice's own flat-ODF export of the workbook carries **both**
+  colours — 15 cell styles at `#003366` and 20 at `#0066cc`. What differs is which cell's border is
+  drawn over a **merged range**: the export shows a `table:number-rows-spanned="8"` cell whose style
+  is `fo:border: 0.74pt solid #0066cc` over data cells at `#003366`, and the reference draws one
+  115 pt vertical in `#0066cc` where we draw eight 12.7 pt segments in `#003366`. That the
+  reference's line is *one* primitive is itself decisive: `tryMergeBorderLinePrimitive2D` merges two
+  collinear border lines only when their `LineAttribute` — which carries the colour — matches.
+- **"A fill colour off by one adjacent palette entry."** Same class, same column band.
+
+**The lead this leaves, and it is a lead rather than a diagnosis:** a merged range's decoration
+comes from its origin cell and covers the whole range, and `SheetPageDecoration` has no notion of a
+merge at all — `Edges.Build` and `DrawBackgrounds` both ask `SheetFormatting.At(row, column)` per
+placed cell. LibreOffice reaches the origin through `Array::GetMergedStyleSourceCell` and suppresses
+the interior edges through `IsMergedOverlapped*` (`svx/source/dialog/framelinkarray.cxx:782-850`);
+the BIFF import first copies the *last* column's right border and the *last* row's bottom border
+onto the origin (`XclImpXFRangeBuffer::SetBorderLine`). `SheetLayout.MergedRanges` already exists.
+**Corpus reach unmeasured**, and fidelity-only on the evidence so far — that document is 190 pages
+against 191 and the missing page is not this.
+
+### Still open, unchanged
+
+- **The 3.4 twips on a non-wrapping multi-line row** (`bStdAllowed = false` for an edit-cell row):
+  confirmed, unimplemented, corpus reach unmeasured.
+- **The narrower leg of the solidus rule**: needs the fitting limit to the character.
+- **`aircraft_analysis_2016-04-27.xls`** is the reference's `Unifont` document and reads 44/46 both
+  before and after. Its cell fallback never fires, so whatever the two missing pages are, it is not
+  glyph coverage in a cell.
+- **We do not pick the reference's fallback face.** We take LibreOffice's hard-coded generic list and
+  then anything installed, by name; LibreOffice asks fontconfig with the missing character as a
+  charset. Here that is `IPAGothic` + `WenQuanYiZenHei` against the reference's `WenQuanYiZenHei`
+  alone. Every row height on `seihon` still comes out exact, so the two agree about an ideograph's
+  advance — but a face that did not would show as a wrong break, not a wrong-looking page.
+
+Test counts on the final tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing 720, Spreadsheets **611** (605 before, +6 from
+`SheetGlyphFallbackTests`), Presentations 573, Fidelity 550 — **0 skipped** throughout. The six new
+tests were verified with `verify-test.sh`: removing the layouter's shaper fails the line-breaking
+one and removing the drawing pass's itemisation fails the shaping one — two mutations, two different
+tests, which is why the two passes are asserted separately.

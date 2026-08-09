@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Shaping;
 
 namespace Paperless.Spreadsheets.Layout;
 
@@ -206,12 +207,15 @@ internal static class SheetFonts
     {
         try
         {
-            SystemFontResolver resolver = SystemFontResolver.Build();
-            FontReference reference = resolver.Resolve(
-                new FontRequest(key.Family, key.Weight, key.Italic));
-            OpenTypeFace face = resolver.LoadOpenType(reference);
+            lock (Gate)
+            {
+                SystemFontResolver resolver = Shared;
+                FontReference reference = resolver.Resolve(
+                    new FontRequest(key.Family, key.Weight, key.Italic));
+                OpenTypeFace face = resolver.LoadOpenType(reference);
 
-            return new SheetFace(face, reference, LineSpacing.Resolve(face));
+                return new SheetFace(face, reference, LineSpacing.Resolve(face));
+            }
         }
         catch (Exception exception) when (exception is Core.MalformedDocumentException
                                              or IOException
@@ -220,6 +224,80 @@ internal static class SheetFonts
             // No readable face is not a reason to fail a layout — the pages, their count and
             // their geometry are all already decided, and only the ink is missing.
             return null;
+        }
+    }
+
+    // ------------------------------------------------------------------------ glyph fallback
+
+    private static readonly object Gate = new();
+    private static SystemFontResolver? _shared;
+
+    private static readonly ConcurrentDictionary<OpenTypeFace, SheetFace?> FallbackFaces =
+        new(ReferenceEqualityComparer.Instance);
+
+    /// <summary>
+    /// The one resolver a workbook's faces are loaded through.
+    /// </summary>
+    /// <remarks>
+    /// Shared rather than built per lookup because glyph fallback needs the <em>same</em> resolver
+    /// that loaded the primary face: <see cref="SystemFontResolver.ReferenceFor"/> answers only for
+    /// faces that resolver itself handed out, and a fallback face named without a reference reaches
+    /// the PDF writer with no font program behind it — announced in the file and not embedded.
+    /// </remarks>
+    private static SystemFontResolver Shared => _shared ??= SystemFontResolver.Build();
+
+    /// <summary>
+    /// Where a cell's face sends the characters it has no glyph for.
+    /// </summary>
+    /// <remarks>
+    /// A cell's face is chosen from the format's family name, and coverage is a property of a
+    /// character — so a spreadsheet whose cells name a Latin face and hold Japanese asks a face
+    /// with no CJK coverage to draw ideographs. Without this it draws its missing-glyph box at its
+    /// own <c>.notdef</c> advance, which is both visibly wrong and, being far narrower than a
+    /// full-width ideograph, breaks the cell's lines in the wrong places and reserves too short a
+    /// row.
+    /// </remarks>
+    public static IGlyphFallbackResolver Fallback { get; } = new Locked();
+
+    /// <summary>The shaper cell text is measured with: the default one, plus glyph fallback.</summary>
+    public static ITextShaper Shaper { get; } = new FallbackShaper(TextShaper.Default, Fallback);
+
+    /// <summary>
+    /// A fallback face dressed as a <see cref="SheetFace"/>, or null when it cannot be named.
+    /// </summary>
+    /// <param name="face">A face <see cref="Fallback"/> returned.</param>
+    public static SheetFace? ForFallback(OpenTypeFace face)
+    {
+        ArgumentNullException.ThrowIfNull(face);
+
+        return FallbackFaces.GetOrAdd(face, static resolved =>
+        {
+            FontReference? reference = Fallback.ReferenceFor(resolved);
+            return reference is null
+                ? null
+                : new SheetFace(resolved, reference, LineSpacing.Resolve(resolved));
+        });
+    }
+
+    /// <summary>
+    /// The shared resolver behind a lock.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="SystemFontResolver"/> caches into plain dictionaries, and <see cref="Cache"/> is
+    /// concurrent — so two threads asking for two faces at once would otherwise be mutating one
+    /// resolver. The lock is uncontended in the single-threaded layout that actually runs; it is
+    /// here so that the test host's parallel classes cannot corrupt it.
+    /// </remarks>
+    private sealed class Locked : IGlyphFallbackResolver
+    {
+        public OpenTypeFace? FallbackFor(int codePoint, int weight = 400, bool isItalic = false)
+        {
+            lock (Gate) return Shared.FallbackFor(codePoint, weight, isItalic);
+        }
+
+        public FontReference? ReferenceFor(OpenTypeFace face)
+        {
+            lock (Gate) return Shared.ReferenceFor(face);
         }
     }
 }

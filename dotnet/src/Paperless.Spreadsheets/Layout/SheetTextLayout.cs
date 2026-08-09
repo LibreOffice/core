@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Numbers;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 
 namespace Paperless.Spreadsheets.Layout;
@@ -585,7 +586,7 @@ internal static class SheetTextLayout
             }
 
             layouter ??= Layouters.GetOrAdd(
-                face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
+                face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face, shaper: SheetFonts.Shaper));
 
             LaidOutParagraph laid = layouter.Layout(
                 paragraph, emSize: size, textAreaWidth: available, options: SheetText.NoKerning);
@@ -628,7 +629,7 @@ internal static class SheetTextLayout
         if (text.Length == 0) return [];
 
         ParagraphLayouter layouter = Layouters.GetOrAdd(
-            face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
+            face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face, shaper: SheetFonts.Shaper));
 
         LaidOutParagraph laid = layouter.Layout(
             Measured(text, portions, scale: 1.0, device), textAreaWidth: available);
@@ -960,7 +961,7 @@ internal static class SheetTextLayout
             return [whole];
 
         ParagraphLayouter layouter = Layouters.GetOrAdd(
-            face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
+            face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face, shaper: SheetFonts.Shaper));
 
         // A rich cell breaks against its own runs rather than against one face, through the
         // layouter's run-aware overload: a bold word is wider than the same characters set
@@ -1067,7 +1068,13 @@ internal static class SheetTextLayout
                 portion.Start, portion.Length, face.Face, size, SheetText.NoKerning));
         }
 
-        return MeasuredParagraph.Measure(text, runs);
+        // With the same glyph fallback the single-face path measures through: a rich cell whose
+        // portions name a Latin face and whose text is not Latin otherwise measures its ideographs
+        // at that face's `.notdef` advance, and breaks its lines accordingly.
+        return MeasuredParagraph.Measure(
+            text,
+            runs,
+            itemisation: new ItemisationOptions { GlyphFallback = SheetFonts.Fallback });
     }
 
     // ---------------------------------------------------------------------------- placement
