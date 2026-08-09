@@ -344,8 +344,26 @@ internal static class XlsxNoteCaptions
 
         paragraphs.Add(Paragraph(current, DefaultSize, null));
 
-        return new SheetShapeText { Paragraphs = paragraphs };
+        return new SheetShapeText
+        {
+            Paragraphs = paragraphs,
+            LeftInset = CaptionInset,
+            RightInset = CaptionInset,
+            TopInset = CaptionInset,
+            BottomInset = CaptionInset,
+        };
     }
+
+    /// <summary>How far a caption's text sits inside its box, on every side.</summary>
+    /// <remarks>
+    /// A hundredth-millimetre hundred — one millimetre — on all four sides, which is what Calc's
+    /// own <c>Note</c> frame style states (<c>makeSdrTextLeftDistItem(100)</c> and its three
+    /// siblings, <c>ScDrawLayer::CreateDefaultStyles</c>,
+    /// <c>sc/source/core/data/drwlayer.cxx:391-394</c>). That is not the 250/125 an ordinary
+    /// drawing text object defaults to, and the difference shows: measured on the fixture, using
+    /// the default put the first glyph 4.3 pt right of where LibreOffice draws it.
+    /// </remarks>
+    private static Length CaptionInset { get; } = Length.FromMm100(100);
 
     /// <summary>One paragraph, with an empty one still carrying the size it would be typed at.</summary>
     private static SheetShapeParagraph Paragraph(
