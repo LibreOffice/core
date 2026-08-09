@@ -279,6 +279,11 @@ Two documents rise past it in share of what is left, and **neither has ever been
 rasterisation ceiling — so the automatic-series-colour work it motivates is worth less than its
 headline suggested.
 
+**Regenerate this after any round that moves the track.** The table above is `2ced17655`; the
+round that produced it then took the track to `|ink|%` 1185.07 over ten documents, so the residual
+is about 984 and the ranking's top rows have moved. The three scripts read a finished sweep's own
+output and cost nothing but the reading.
+
 **The ceiling subtraction is a floor on the ceiling, not a measurement of it.** Mechanism 1's
 threshold is this file's own, and the section above records that it under-counts; mechanism 2 is
 exact for `pptx` and blind to `.ppt`, which has no `mc:AlternateContent` to census. So 1031.76 is
