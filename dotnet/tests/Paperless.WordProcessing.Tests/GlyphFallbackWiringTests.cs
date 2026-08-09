@@ -1,3 +1,6 @@
+using System.IO.Compression;
+using System.Text;
+using Paperless.Core.Documents;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -86,6 +89,83 @@ public sealed class GlyphFallbackWiringTests
         => Draw(Paragraph(withFallback: false))
             .SelectMany(run => run.Glyphs)
             .ShouldContain(glyph => glyph.GlyphId == 0);
+
+    /// <summary>
+    /// A document read by the DOCX reader arrives at the layout with a resolver on its paragraphs.
+    /// </summary>
+    /// <remarks>
+    /// The seam tests above construct their paragraph, so they hold when the layout is right and the
+    /// four readers set nothing — which is exactly the state this change found the tree in, and
+    /// exactly what a mutation run proved they miss. This one reads a package, so it fails if the
+    /// reader stops passing the resolver down.
+    /// </remarks>
+    [Fact]
+    public void TheDocxReaderGivesItsParagraphsAFallbackResolver()
+    {
+        using IDocument document = ReadDocx(FixtureText);
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+        PageParagraph paragraph = pages.Blocks.OfType<PageParagraph>().First();
+
+        paragraph.Fallback.ShouldNotBeNull();
+        Draw(paragraph).SelectMany(run => run.Glyphs).ShouldAllBe(glyph => glyph.GlyphId != 0);
+    }
+
+    private static IDocument ReadDocx(string text)
+    {
+        const string ContentTypes = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+              <Default Extension="rels"
+                       ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+              <Default Extension="xml" ContentType="application/xml"/>
+              <Override PartName="/word/document.xml"
+                        ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+            </Types>
+            """;
+
+        const string RootRelationships = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+              <Relationship Id="rId1" Target="word/document.xml"
+                            Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"/>
+            </Relationships>
+            """;
+
+        // The run names a Latin face outright, so the fixture cannot pass by the reader happening to
+        // resolve a CJK font for it — the coverage check is the only thing that can draw this text.
+        string document = $"""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+              <w:body>
+                <w:p>
+                  <w:r>
+                    <w:rPr><w:rFonts w:ascii="Liberation Serif" w:hAnsi="Liberation Serif"/></w:rPr>
+                    <w:t xml:space="preserve">{text}</w:t>
+                  </w:r>
+                </w:p>
+              </w:body>
+            </w:document>
+            """;
+
+        MemoryStream package = new();
+        using (ZipArchive archive = new(package, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            Write(archive, "[Content_Types].xml", ContentTypes);
+            Write(archive, "_rels/.rels", RootRelationships);
+            Write(archive, "word/document.xml", document);
+        }
+
+        package.Position = 0;
+        using DocumentSource source = DocumentSource.FromStream(package, "glyph-fallback.docx");
+        return new WordProcessingReader().Read(source);
+
+        static void Write(ZipArchive archive, string name, string content)
+        {
+            using Stream entry = archive.CreateEntry(name).Open();
+            entry.Write(Encoding.UTF8.GetBytes(content));
+        }
+    }
 
     /// <summary>Latin, Chinese and Latin again, so the split has to happen twice and not once.</summary>
     private const string FixtureText = "ab汉字cd";
