@@ -151,3 +151,62 @@ Verified by reintroducing each defect (`mutate.sh`, run through
 changed the `&L` case alone, and the case that detects the defect uses `&L&8Left&RRight`, where
 the reset that matters is the one on `&R`. Recorded because "undetected" was the honest first
 reading and it took a second look to see which side was at fault.
+
+## The whole-track result
+
+Both sweeps: 171 rows, no duplicate path, **zero `ref-failed`**.
+
+| | matches | abs page error | exact page counts | abs word error |
+|---|---|---|---|---|
+| `base-whole-track.tsv` | 147/171 | 90 | 154 | 42322 |
+| `final-whole-track.tsv` | **148/171** | **86** | **155** | **33179** |
+
+Per batch at the end: 001–009 89/89, 010 8/10, 011 6/10, 012 8/10, 013 8/10, 014 9/10,
+**015 6/9**, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
+
+Two verdicts moved, and only one of them is a match:
+
+| document | before | after |
+|---|---|---|
+| `fm-provider-service-measures.xlsx` | 38/38, 20944/21458 `words` | 38/38, 21364/21458 **`match`** |
+| `Application_Compliance_Checklist_5_Apr_2021.xlsx` | 18/14, 26353/17718 `pages,words` | **14/14**, 17235/17718 `words` |
+
+**The checklist is the round's biggest single movement and it still fails the word gate**, by 483
+words against a 354 band. What is left is its **visible cell comments**: the workbook's sheets
+carry `comments2.xml` and a VML drawing marking several of them visible, LibreOffice draws them
+as note shapes inline, and we draw none of them. That is also why our fit-to-width zoom is 2.6%
+larger than LibreOffice's on that sheet — the note shapes extend its print area four columns to
+the right, to column O against our K. Diagnosed, **not implemented**.
+
+Twelve documents moved their word count by twenty or more, ten of them towards the reference:
+
+| Δ error | document | before → after |
+|---:|---|---|
+| −8152 | `Application_Compliance_Checklist_5_Apr_2021.xlsx` | 26353 → 17235 / 17718 |
+| −420 | `fm-provider-service-measures.xlsx` | 20944 → 21364 / 21458 |
+| −314 | `cy01_state.xls` | 20235 → 20559 / 20554 |
+| −305 | `npias_2009_appA.xls` | 49492 → 49857 / 49827 |
+| −82 | `TICAPCapability_Final.xls` | 4838 → 4940 / 4930 |
+| −49 | `cy06_primary_np_comm.xls` | 7037 → 7092 / 7089 |
+| −48 | `FAA-2019-0995-0002_attachment_2.xlsx` | 10106 → 10154 / 10245 |
+| −26 | `SLSA_Directory_031423.xlsx` | 5874 → 5904 / 5902 |
+| −24 | `jobs-bulletin-51-22-december-2025.xlsx` | 1866 → **1890** / 1890 |
+| −24 | `hdss-bulletin-index-2019-2022.xlsx` | 3741 → 3765 / 3780 |
+| +48 | `RMP 2011-2014 and Inventory.xls` | 18586 → 18634 / 18548 |
+| +266 | `FY2023-AIP-grants.xlsx` | 91910 → 92176 / 91849 |
+
+Four of those ten are `.xls`, which no census of an OOXML part could have found and which is
+exactly the blind spot the skill warns about — the multi-line footer is stated in a BIFF `FOOTER`
+record there. The two that moved *away* both stay on the verdict they had: `RMP` was failing on
+its page count before and after, and `FY2023-AIP-grants` is 0.36% over a 2% band.
+
+**Only one page count in the whole track changed**, and the page-error and exact-count movements
+are entirely that document: 90 − 4 = 86, 154 + 1 = 155. That is the outcome to be suspicious of
+and it has the same explanation the margin round had — a header band's height comes from the two
+margins and `SheetBandHeight` already modelled its growth, so drawing the band correctly moves
+ink and words and not paper. The outline rule is what moved paper, on the one document that has
+one.
+
+## Byte-level reach
+
+`reach.sh`, both CLIs under `SOURCE_DATE_EPOCH=1700000000`.

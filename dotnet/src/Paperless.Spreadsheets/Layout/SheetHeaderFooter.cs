@@ -160,7 +160,29 @@ public sealed record SheetHeaderPart(IReadOnlyList<SheetHeaderSegment> Segments)
         // do draw is a blank line and keeps its height, which is why only the tail is trimmed.
         while (lines.Count > 0 && lines[^1].Count == 0) lines.RemoveAt(lines.Count - 1);
 
+        // Neighbouring pieces at one size are one piece. A part is normally a literal, a field
+        // and another literal — "Page ", &P, " of ", &N — and drawing those as four shows splits
+        // the text layer four ways for nothing: a PDF reader infers a word boundary at every
+        // reposition. Only a size change is a reason to start a new run.
+        for (int at = 0; at < lines.Count; at++) lines[at] = Coalesce(lines[at]);
+
         return lines;
+    }
+
+    private static IReadOnlyList<SheetHeaderPiece> Coalesce(IReadOnlyList<SheetHeaderPiece> line)
+    {
+        if (line.Count < 2) return line;
+
+        List<SheetHeaderPiece> merged = [];
+        foreach (SheetHeaderPiece piece in line)
+        {
+            if (merged.Count > 0 && merged[^1].Size == piece.Size)
+                merged[^1] = merged[^1] with { Text = merged[^1].Text + piece.Text };
+            else
+                merged.Add(piece);
+        }
+
+        return merged;
     }
 }
 

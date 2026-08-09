@@ -407,9 +407,20 @@ internal sealed class XlsSheetPrintState
             Header = _header is null ? null : SheetHeaderFooter.ParseCodes(_header),
             Footer = _footer is null ? null : SheetHeaderFooter.ParseCodes(_footer),
 
-            // Every Excel band is dynamic — see `SheetPrintSetup.HeaderIsDynamic`.
-            HeaderIsDynamic = true,
-            FooterIsDynamic = true,
+            // **Deliberately not `HeaderIsDynamic`.** The flag is measured right on
+            // SpreadsheetML and measured *wrong* here. LibreOffice's own PDFs of the
+            // `sheet-decor` fixture triple — one document in three formats — put the `.xls`
+            // band 1.5 pt further inside the page than the `.xlsx` band at both edges: the
+            // header's first line at 58.20 pt against 56.70, the footer's last at 783.66
+            // against 785.16, with the `.fods` agreeing with the `.xls`. Anchoring the BIFF
+            // band the way the OOXML one is anchored therefore draws it 1.5 pt out, which
+            // `SheetDecorationComparisonTests` catches at its 1.5 pt tolerance.
+            //
+            // 1.5 pt is 30 twips and is the gap between a line's measured height and the bare
+            // point size the filters use as their nominal — see `SheetBandHeight` — so the
+            // cause is almost certainly in that arithmetic and on the export side of the
+            // round trip that made the fixture. It is **not settled**, and leaving the flag
+            // off is what the fixture measures rather than what the source says.
             ScaleMode = _fitsToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
 
             // The scale is SETUP's, and SETUP's fields are only meant when the record is valid.
