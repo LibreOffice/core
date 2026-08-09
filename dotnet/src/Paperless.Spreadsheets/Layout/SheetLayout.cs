@@ -431,6 +431,18 @@ public sealed class SheetLayout
         }
     }
 
+    /// <summary>
+    /// The same blocks as <see cref="MergedRanges"/>, indexed for per-cell questions.
+    /// </summary>
+    /// <remarks>
+    /// Decoration asks about every placed cell on every page — is it covered, and where does the
+    /// block start — and the list <see cref="IsMerged"/> walks is linear. One workbook in the
+    /// sheets corpus states 7818 merges, so the index is built once per sheet and shared.
+    /// </remarks>
+    internal SheetMerges Merges => _mergeIndex ??= SheetMerges.Build(MergedRanges);
+
+    private SheetMerges? _mergeIndex;
+
     private Dictionary<(int Row, int Column), ContentTableCell>? _index;
     private List<SheetRange>? _merges;
 
