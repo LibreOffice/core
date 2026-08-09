@@ -589,6 +589,19 @@ all means, but derive the number from a probe against the installed binary, and 
 two each claim rests on. Several of this project's best rounds have cited a mechanism precisely
 and then measured a different constant from the one the citation implies.
 
+**And read the branch that reaches the line, not only the line.** A words round spent two
+rounds' worth of measurement on `SwCellFrame::Format` charging a cell's border width against its
+text width, citing `SwBorderAttrs::CalcLeft`/`CalcRight` exactly. The citation was correct and
+unreachable: the branch above it takes the margin alone when `IsCollapsingBorders()`, and
+`RES_COLLAPSING_BORDERS` defaults **true** for every Writer document, so a Word table never
+arrives at the cited code at all.
+
+That is also why the corpus could not settle it — **no Word document can take the other
+branch.** The answer needed an authored ODF pair differing in exactly one attribute, where
+`separating` loses precisely 2× the border of text area and `collapsing` loses none at any
+width. When a citation and a corpus measurement disagree and neither moves, ask whether the
+corpus can even express the case.
+
 ### An instrument can manufacture a defect out of nothing
 
 Two measurement faults in one round each read as an enormous rendering error:

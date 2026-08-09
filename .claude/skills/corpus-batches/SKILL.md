@@ -476,6 +476,19 @@ seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59
 with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
 improve would have shipped half a fix and called it done.
 
+### Pin a refuted rule with a test, so it cannot be silently re-proposed
+
+When a round kills a candidate rule, the refutation lives in a report that the next agent may or
+may not read. Put it in the suite instead. A words round shipped ten tests where
+**removing the rule it adopted fails five, and reinstating the rule it rejected fails nine** —
+so the dead idea now breaks the build if anyone tries it again.
+
+This is cheap and it is the only durable form a refutation takes. Two of this project's most
+expensive episodes were a correct measurement with a wrong sentence attached being inherited and
+built on; a test that fails on the wrong rule ends that chain.
+
+Ask for it whenever a round rejects a specific alternative it can state in code.
+
 ### A round that ships no code can be one of the better ones
 
 One words round changed nothing in `dotnet/src` and was worth having. In order, it:
