@@ -10494,3 +10494,118 @@ Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing **720** 
 +5 from `ParagraphMarkPropertiesTests`), Spreadsheets 605, Presentations 571, Fidelity 550,
 **0 skipped** throughout. The five new tests were verified with `verify-test.sh`: collapsing
 `body` back onto `mark` fails three of them.
+
+## Round 37: words — the symbol-bullet wiring hole, closed and measured
+
+Base `5f023fba5`, verified before measuring. The baseline sweep reproduced the inherited
+figures to the digit — **154/200, absolute page error 78, 164 exact page counts, word error
+6639, `doc` 54/12, `docx` 100/34** — so both the commit and the harness were what they were
+said to be.
+
+### The fix: `SymbolFontRecode` reaches `Paperless.WordProcessing`
+
+The type ported LibreOffice's whole recode table and was referenced from no file in the
+word-processing library. Both readers threw the level's face away and drew U+2022 in the
+paragraph's own face. LibreOffice substitutes OpenSymbol and recodes the slot through the
+same tables (`ConvertChar::RecodeChar`, `unotools/source/misc/fontcvt.cxx`).
+
+Three cases, decided as `SlideTextLayout.Recoded` already decides them on the presentation
+side — and the trigger is that the *stated* face is absent, not that the request happened to
+resolve to OpenSymbol:
+
+| | |
+|---|---|
+| the face is installed | draw the slot from it unchanged |
+| absent, and a table exists | recode into OpenSymbol |
+| neither | U+2022 in the paragraph's face, as before |
+
+**WW8 needed one thing DOCX did not.** A DOCX bullet arrives already aliased into the private
+use area, so a fallback can at least tell it is a symbol; WW8 states the slot raw — `0xB7`
+against a font of `Symbol` — so without `sprmCRgFtc0` the character cannot be told from MIDDLE
+DOT and was drawn as one. `Ww8ListLevel` now carries the level's font index, read from the
+same `grpprlChpx` its size already came from.
+
+### Reach, and a scoreboard that did not move
+
+| | at `5f023fba5` | after |
+|---|---:|---:|
+| documents matching | 154 | **154** |
+| absolute page error | 78 | **78** |
+| exactly-correct page counts | 164 | **164** |
+| word error | 6639 | **6638** |
+
+**Zero verdicts moved, and that is the headline.** A bullet is one non-ASCII glyph, so `wc -w`
+cannot count it, and a label followed by a tab to a fixed stop moves no text after it.
+
+Reach, by rendering the track twice with `SOURCE_DATE_EPOCH` pinned and byte-comparing:
+**84 of 200 renderings changed — 19 of 66 `.doc`, 65 of 134 `.docx`.**
+
+### The instrument, and why its rate on matching documents is the finding
+
+The signal is *the reference embeds OpenSymbol and we embed none* — a fact about two font
+lists, not an inference from operator batching. At the baseline it fired on **96 of 200**: 26
+`.doc` and 70 `.docx`. Split by verdict it fires on **69 of the 154 matching documents (45%)**
+and on 27 of the 46 failing ones (59%).
+
+That high rate on matching documents is the opposite of the glyph-count cluster's. There, a
+high rate on passing documents refuted the signal, because the observable was an artefact.
+Here the observable is that LibreOffice embedded a font we did not, which is true whatever the
+gate says — so a 45% rate on matching documents *is* the measurement: nearly half the
+documents that pass this gate were drawing the wrong bullet.
+
+After the fix the gap is closed on **81 of 96**; 15 remain, 9 `.doc` and 6 `.docx`, of which 13
+already match. The census over `numbering.xml` had put the ceiling at 101 of 134 DOCX and could
+see none of the 66 `.doc` at all.
+
+### Refuted this round
+
+- **`absrc-pac-01-info-note-en.doc` is one fault, not two.** The brief carried its `PAGEREF`
+  fields resolving one page high as a separate defect from its misplaced table-of-contents
+  block. Convert it to flat ODF with `soffice` and render *that* through our own engine: **7
+  pages against the reference's 7** where our WW8 reader gives 6, and the PAGEREF results come
+  out exactly the reference's (`page 2`, `page 1`, `pages 3, 5`). Nothing is wrong with field
+  resolution — the numbers are one high because page 1 is wrong. The layout engine is
+  exonerated and the defect is in the WW8 reader, where page 1's blocks are drawn overlapping
+  (the TOC from y=746 at x=328–506, over the header block at x=419) instead of flowing onto a
+  second page. LibreOffice's own conversion makes the head of that document a five-column
+  table.
+- **Recoding *body* runs the same way is right in mechanism and wrong at the gate.** LibreOffice
+  hangs the conversion on the font instance and applies it to every string it draws, measurement
+  included (`vcl/source/font/fontcache.cxx`:167-171, `vcl/source/outdev/text.cxx`:1157-1161), so
+  the rule generalises past bullets. Implemented and swept: **2 of 200 renderings changed and
+  one match was lost.** `1245685 1 Comment.doc` went `match` → `unembedded` because the recode
+  moved a character *out* of the face that could draw it — OpenSymbol (embedded) became
+  UnifontCSUR (CFF, unembeddable). The run was already resolving to OpenSymbol: `fc-match Symbol`
+  answers OpenSymbol on this machine, so `IsSubstituted` is true where LibreOffice's
+  `maTargetName != maSearchName` is false, because for it OpenSymbol is the intended destination
+  rather than a substitution. Reverted. Whoever revisits it must leave a run already in
+  OpenSymbol alone — the label path is safe only because it tests `IsSubstituteFamily` on the
+  *resolved* family, and the run path tested it on the requested one.
+- **A shell counter that returns zero from a bad path looks exactly like a true absence.** This
+  round's first reach figure was 61 of 96 and the real one is 81; the recount loop left `$id`
+  unquoted, so every filename containing a space made `pdffonts` fail on a truncated path. The
+  control that catches it costs one line: run the counter over the *baseline* renderings too and
+  confirm it returns zero.
+
+### Still open, and what is known about each
+
+- **`316r_a_e.doc` and its siblings have no lists at all as we read them.** Instrumented,
+  `Ww8LayoutParagraph` is built 442 times and the level is null every one of them — `ilfo` is
+  nought on every paragraph — while LibreOffice's conversion of the same file carries 36 bullet
+  levels in Symbol and Wingdings. Most likely the older `sprmPAnld`/ANLD auto-numbering rather
+  than the LFO table; unverified. This is nine of the fifteen documents still showing the
+  OpenSymbol gap.
+- **`w:sym` is not drawn at all by the DOCX layout walk.** `DocxContentReader` handles it and
+  `DocxLayoutSource.RunWalker` has no case for it, so the character is extracted and never
+  rendered. **16 of 134 DOCX carry one, 158 elements in all**, the largest being 69 in
+  `t_TEMPforInvProgs.docx` — which passes its batch, so the gate cannot see this either.
+- `A_320.doc`, the rule-and-fill cluster, the one-sided cluster and the `unembedded` fallback
+  ordering are untouched this round.
+
+Test counts on the final tree: Core 284, Containers 109, Text 255, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing **723** (720 before; the three added are the theory
+rows of `ARecodedBulletIsSetInTheSubstituteFace`), Spreadsheets 605, Presentations 573, Fidelity
+550, **0 skipped** throughout. `verify-test.sh` over `ListLabelTests` with the recode disabled in
+both readers reports **6 failures across both tests**, so the refutation is pinned. No shared
+layer changed — the diff is `Paperless.WordProcessing` and one test file — so no cross-track
+sweep is owed.
