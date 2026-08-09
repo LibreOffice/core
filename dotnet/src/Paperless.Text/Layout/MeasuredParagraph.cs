@@ -536,6 +536,33 @@ public sealed class MeasuredParagraph
     /// </remarks>
     public (Length Height, Length Ascent) HeightOf(int start, int end)
     {
+        (Length height, Length ascent, _) = MeasureLine(start, end);
+        return (height, ascent);
+    }
+
+    /// <summary>
+    /// The same measurement, with the height the line's <em>text</em> alone wants beside it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The two differ only where an as-character object is taller than the text around it, and the
+    /// difference is what proportional line spacing multiplies. Writer keeps them apart deliberately:
+    /// <c>SwLineLayout::Height(nNew, bText)</c> (<c>sw/source/core/text/porlay.cxx</c>:110) records
+    /// <c>m_nLineSpacingBaseHeight</c> only when the portion that raised the line
+    /// <c>IsUsedToCalcLineSpacingHeight</c>, which for a legacy document is true for text portions and
+    /// false for a fly-in-content — so an inline picture raises <c>Height()</c> and leaves the base
+    /// alone. <c>SwTextFormatter::CalcRealHeight</c> then adds
+    /// <c>(prop − 100)% × GetLineSpacingBaseHeight()</c> to the full line height rather than scaling it.
+    /// </para>
+    /// <para>
+    /// Zero when the range holds no run at all — a paragraph whose whole content is a picture. Writer
+    /// falls back to the paragraph's own font there (<c>porlay.cxx</c>:645,
+    /// <c>SetLineSpacingBaseHeight(rInf.GetTextHeight())</c>), which the caller supplies because it is
+    /// the one that knows the paragraph's face and size.
+    /// </para>
+    /// </remarks>
+    public (Length Height, Length Ascent, Length TextHeight) MeasureLine(int start, int end)
+    {
         Length height = Length.Zero;
         Length ascent = Length.Zero;
         Length descent = Length.Zero;
@@ -555,6 +582,9 @@ public sealed class MeasuredParagraph
         {
             Accumulate(_runs[0], ref height, ref ascent, ref descent);
         }
+
+        // Held before the objects have their say: this is what proportional line spacing scales.
+        Length textHeight = Length.Max(height, ascent + descent);
 
         // An as-character object divides at the baseline: the part above raises the ascent and the part
         // below raises the descent, which for the ordinary inline picture is the whole of it above and
@@ -576,7 +606,7 @@ public sealed class MeasuredParagraph
             descent = Length.Max(descent, one.BelowBaseline);
         }
 
-        return (Length.Max(height, ascent + descent), ascent);
+        return (Length.Max(height, ascent + descent), ascent, textHeight);
     }
 
     /// <summary>Folds every run touching a range into the maxima a line's height is built from.</summary>

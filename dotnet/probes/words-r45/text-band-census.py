@@ -54,13 +54,52 @@ def bands(pdf: Path):
     return out
 
 
+def extremes(b):
+    """(how high a mark ever starts, how low one ever ends) — the text area, in effect.
+
+    Taken as the 5th and 95th percentile rather than the outright min and max so that one
+    floating object outside the margins does not stand for the whole document."""
+    tops = sorted(t for _, t, _ in b if t is not None)
+    bots = sorted(x for _, _, x in b if x is not None)
+    if not tops:
+        return None, None
+    return tops[max(0, len(tops) * 5 // 100)], bots[min(len(bots) - 1, len(bots) * 95 // 100)]
+
+
+def corpus(rows_tsv: str, pdfs: str) -> int:
+    for line in Path(rows_tsv).read_text().splitlines():
+        f = line.split("\t")
+        if len(f) < 7:
+            continue
+        stem = Path(f[0]).stem + "__" + Path(f[0]).suffix.lstrip(".").lower()
+        o = Path(pdfs) / "ours" / f"{stem}.pdf"
+        r = Path(pdfs) / "ref" / f"{stem}.pdf"
+        if not o.exists() or not r.exists():
+            continue
+        bo, br = bands(o), bands(r)
+        to, boto = extremes(bo)
+        tr, botr = extremes(br)
+        if to is None or tr is None:
+            continue
+        print("\t".join([f[0], f[6], f[2],
+                         f"{to:.2f}", f"{tr:.2f}", f"{to - tr:+.2f}",
+                         f"{boto:.2f}", f"{botr:.2f}", f"{boto - botr:+.2f}",
+                         f"{(boto - to) - (botr - tr):+.2f}"]), flush=True)
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("ours")
-    ap.add_argument("ref")
+    ap.add_argument("ours", nargs="?")
+    ap.add_argument("ref", nargs="?")
     ap.add_argument("--upto", type=int, default=0)
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--corpus")
+    ap.add_argument("--pdfs")
     args = ap.parse_args()
+
+    if args.corpus:
+        return corpus(args.corpus, args.pdfs)
 
     o, r = bands(Path(args.ours)), bands(Path(args.ref))
     n = min(len(o), len(r))

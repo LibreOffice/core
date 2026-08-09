@@ -318,9 +318,10 @@ public sealed class ParagraphLayouter
             // Across every stretch of the line, not just this one: a line whose text left of a frame is
             // 11 pt and whose text right of it is 24 pt is a 24 pt line, and both stretches sit on the
             // baseline that gives. Measuring each stretch alone would put the two on different baselines.
-            (Length natural, Length ascent) = BandHeight(measured, lines, wrapped, i);
+            (Length natural, Length ascent, Length textHeight) =
+                BandHeight(measured, lines, wrapped, i);
 
-            Length height = paragraph.LineSpacing.Apply(natural);
+            Length height = paragraph.LineSpacing.Apply(natural, textHeight);
             (Length baseline, Length spaceAbove) =
                 BaselineFrom(height, natural, ascent, paragraph.LineSpacing.Mode);
 
@@ -348,12 +349,14 @@ public sealed class ParagraphLayouter
         {
             if (index < broken.Count)
             {
-                (Length own, _) = measured.HeightOf(broken[index].Start, broken[index].VisibleEnd);
-                return paragraph.LineSpacing.Apply(own);
+                (Length own, _, Length ownText) =
+                    measured.MeasureLine(broken[index].Start, broken[index].VisibleEnd);
+                return paragraph.LineSpacing.Apply(own, ownText);
             }
 
-            (Length fallback, _) = measured.HeightOf(0, Math.Min(1, measured.Text.Length));
-            return paragraph.LineSpacing.Apply(fallback);
+            (Length fallback, _, Length fallbackText) =
+                measured.MeasureLine(0, Math.Min(1, measured.Text.Length));
+            return paragraph.LineSpacing.Apply(fallback, fallbackText);
         }
 
         return new LaidOutParagraph(
@@ -372,11 +375,12 @@ public sealed class ParagraphLayouter
     /// line rather than for itself. Without obstacles there is nothing to walk and this is the single
     /// measurement it always was.
     /// </remarks>
-    private static (Length Natural, Length Ascent) BandHeight(
+    private static (Length Natural, Length Ascent, Length TextHeight) BandHeight(
         MeasuredParagraph measured, List<TextLine> lines, WrappedLines? wrapped, int index)
     {
-        (Length natural, Length ascent) = measured.HeightOf(lines[index].Start, lines[index].VisibleEnd);
-        if (wrapped is null) return (natural, ascent);
+        (Length natural, Length ascent, Length text) =
+            measured.MeasureLine(lines[index].Start, lines[index].VisibleEnd);
+        if (wrapped is null) return (natural, ascent, text);
 
         int first = index;
         while (first > 0 && wrapped.SharesLineWithNext(first - 1)) first--;
@@ -388,12 +392,14 @@ public sealed class ParagraphLayouter
         {
             if (i == index) continue;
 
-            (Length own, Length up) = measured.HeightOf(lines[i].Start, lines[i].VisibleEnd);
+            (Length own, Length up, Length ownText) =
+                measured.MeasureLine(lines[i].Start, lines[i].VisibleEnd);
             natural = Length.Max(natural, own);
             ascent = Length.Max(ascent, up);
+            text = Length.Max(text, ownText);
         }
 
-        return (natural, ascent);
+        return (natural, ascent, text);
     }
 
     /// <summary>

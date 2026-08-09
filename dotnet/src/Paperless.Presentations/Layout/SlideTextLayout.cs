@@ -896,7 +896,7 @@ public static partial class SlideTextLayout
     /// <remarks>
     /// <para>
     /// A pass-through for single spacing rather than a call to
-    /// <see cref="LineSpacingRule.Apply"/>, and the reason is the unit rather than the arithmetic.
+    /// <see cref="LineSpacingRule.Apply(Length)"/>, and the reason is the unit rather than the arithmetic.
     /// <c>Apply</c> computes in <strong>whole twips</strong>, because that is Writer's layout unit
     /// and the truncation there is observable; Impress lays out in hundredths of a millimetre, and
     /// a twip is 0.05 pt against a hundredth of a millimetre's 0.028, so round-tripping a line
@@ -936,7 +936,7 @@ public static partial class SlideTextLayout
     /// back to 7 pt at full spacing and drawing the text a point too small.
     /// </para>
     /// <para>
-    /// Two divergences from <see cref="LineSpacingRule.Apply"/> come with the change, both
+    /// Two divergences from <see cref="LineSpacingRule.Apply(Length)"/> come with the change, both
     /// deliberate. <c>Apply</c> raises a proportion below fifty per cent to fifty, which is Writer's
     /// <c>CalcRealHeight</c> rule and not EditEngine's; measured across the slides track,
     /// <strong>nothing states a line proportion under fifty per cent at all</strong> — the minimum
@@ -951,7 +951,7 @@ public static partial class SlideTextLayout
     /// <para>
     /// <strong>The paragraph above described this method and the code did the opposite.</strong>
     /// A rule that changes nothing — single spacing, or a proportion of exactly one hundred per
-    /// cent — went to <see cref="LineSpacingRule.Apply"/>, whose <em>first</em> line is
+    /// cent — went to <see cref="LineSpacingRule.Apply(Length)"/>, whose <em>first</em> line is
     /// <c>naturalHeight.Twips</c>, so it round-trips through whole twips before its
     /// <c>_ =&gt; natural</c> arm hands the value back. That is a quantisation on every
     /// single-spaced slide line in the corpus, and it survives only line heights that are a whole
@@ -973,7 +973,7 @@ public static partial class SlideTextLayout
 
     /// <summary>Whether a rule leaves a natural line height alone.</summary>
     /// <remarks>
-    /// Exactly the rules <see cref="LineSpacingRule.Apply"/> would return the natural height for,
+    /// Exactly the rules <see cref="LineSpacingRule.Apply(Length)"/> would return the natural height for,
     /// so this changes the unit the answer is held in and never the answer itself. The three modes
     /// that state an absolute height keep going through <c>Apply</c>, because a stated height is a
     /// length the file gives rather than one the line derives.
