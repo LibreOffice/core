@@ -128,6 +128,13 @@ The census names **five** documents. Rendering all 171 with both CLIs under
 `SOURCE_DATE_EPOCH=1700000000`: **five differ, 166 are byte-identical**, and they are the same
 five by name.
 
+Re-measured on the round's **two** changes together (`reach2.tsv`), it is **seven differ, 164
+identical**: the drawing half also moves `programs contact list as of 07-01-10.xls` and
+`cy06_primary_np_comm.xls`, whose pinned bands lose their 142-twip gap and therefore move their
+footer text without moving a page. Both were matching before and match after. **Every one of the
+seven is a `.xls`** — the relaxed drawing guard reaches no XLSX and no ODS on this corpus, which
+is the ceiling the census gave.
+
 | document | batch |
 |---|---|
 | `2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls` | 002 |
