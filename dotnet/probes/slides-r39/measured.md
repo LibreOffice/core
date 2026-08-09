@@ -129,3 +129,43 @@ on disk, so the rows and the comparisons were **spliced** — recomputed for tho
 alone against the kept reference set — rather than the sweep being repeated. The verdict
 `ref-failed` on a document that renders fine when re-run is exactly the infrastructure
 signature the skill describes, and it arrived here from disk rather than from code.
+
+## The divergence table, re-run — and the control that reads it
+
+`slides-divergence.tsv` here replaces `probes/slides-divergence.tsv`, which predates all three of
+the words track's fixes to the tool. Regenerated from this round's after-sweep with
+`divergence-from-sweep.py`, so it describes the tree that ships.
+
+Dominant first-divergence kind, split by whether the document **passes the corpus gate** — the
+control the skill asks for and which has killed three clusters:
+
+| dominant | on the 151 that match | on the 12 that fail |
+|---|---:|---:|
+| `glyphs` | **66 (44%)** | 8 |
+| *(no divergent page)* | 28 | 1 |
+| `size` | **22 (15%)** | **0** |
+| `one-sided` | 12 | 1 |
+| `box` | 10 | 1 |
+| `face` | 9 | 1 |
+| `colour` | 3 | 0 |
+| `width` | 1 | 0 |
+
+Two readings, and they go opposite ways:
+
+- **`glyphs` is not a lead.** It is dominant on 44% of the documents with nothing wrong, which is
+  the words track's refutation reproducing on slides: a `pdf-ops.py` record is one show operator
+  and LibreOffice writes one per character on printer-metric text, so an agreeing line reports a
+  glyph delta. Anything built on the 74 documents it names is building on that.
+- **`size` is a lead, and the rate is the reach.** It fires on 22 matching documents and **zero
+  failing ones**. By the test that separated the OpenSymbol finding from the artefacts — *could
+  this observable be produced by anything other than the defect?* — a drawn font size differing is
+  a fact about the two PDFs, not an inference from one. Firing only where the gate passes means
+  the gate is blind to the class, which is the opposite of a reason to drop it.
+
+The `.ppt` bias survives the tool's fixes at a smaller magnitude than the brief reported:
+**14 of 51 `.ppt` (27%) against 8 of 112 `.pptx` (7%)**, where the brief had 19/51 and 17/112. The
+change is in the expected direction — the fixed tool splits `box` out of what used to be `size`,
+and `box` is now dominant on 13 documents of its own.
+
+`010605Vul__ppt` and `undp_presentation_revised_17_may__ppt` carry the most ink of the `size`
+group and diverge on pages 9 and 2 respectively, which makes them the two to open first.
