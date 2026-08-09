@@ -1971,15 +1971,6 @@ public sealed class Paginator
         List<Length> heights = laid.RowHeights;
         List<PlacedTableCell> cells = [];
 
-        if (from == 0 && drawn <= Length.Zero)
-        {
-            for (int r = 0; r < heights.Count; r++)
-            {
-                Trace($"ROW {r} laid={heights[r].Points:F2} min={table.Rows[r].MinHeight.Points:F2} "
-                    + $"exact={table.Rows[r].HasExactHeight} split={table.Rows[r].CanSplit}");
-            }
-        }
-
         // The headings, moved from the top of the table to the top of this part. Only on a continuation:
         // on the table's own first part they are the rows about to be placed.
         int headings = Math.Min(Math.Max(table.HeaderRowCount, 0), from);
@@ -2009,9 +2000,6 @@ public sealed class Paginator
             // than unfinished. Asking again is what would not terminate.
             if (tail is { } rest)
             {
-                Trace($"TAIL row={from} drawn={drawn.Points:F2} room={(room - placed).Points:F2} "
-                    + $"height={rest.Height.Points:F2} cut={rest.Cut.Points:F2} complete={rest.IsComplete} "
-                    + $"min={table.Rows[from].MinHeight.Points:F2} laid={heights[from].Points:F2}");
                 cells.AddRange(TableLayouter.Offset(rest.Cells, body.X, body.Y + top + placed));
                 placed += rest.Height;
 
@@ -2056,9 +2044,6 @@ public sealed class Paginator
             if (TableLayouter.SliceRow(table.Rows[end], rowCells, Length.Zero, room - placed)
                 is { } head)
             {
-                Trace($"HEAD row={end} room={(room - placed).Points:F2} height={head.Height.Points:F2} "
-                    + $"cut={head.Cut.Points:F2} complete={head.IsComplete} "
-                    + $"min={table.Rows[end].MinHeight.Points:F2} laid={heights[end].Points:F2}");
                 cells.AddRange(TableLayouter.Offset(head.Cells, body.X, body.Y + top + placed));
                 placed += head.Height;
 
@@ -2084,16 +2069,8 @@ public sealed class Paginator
             end = from + 1;
         }
 
-        Trace($"PART from={from} end={end} drawn={drawn.Points:F2} room={room.Points:F2} placed={placed.Points:F2}");
-
         return new TablePart(
             Part(table, cells, body, top, column, placed, from, end), placed, end, Length.Zero);
-    }
-
-    internal static void Trace(string what)
-    {
-        if (Environment.GetEnvironmentVariable("PAPERLESS_TRACE_ROWS") is null) return;
-        Console.Error.WriteLine(what);
     }
 
     /// <summary>The cells of one row, as the table's own layout left them.</summary>

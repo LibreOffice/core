@@ -8693,3 +8693,82 @@ cannot change a page count -- but anything measuring a height needs a styles par
   one this round closed, and the filler was masking it.
 - **The even page with no even story** — the three-document ceiling from last round, untouched.
 - **Unequal column widths** — untouched; zero DOCX declare `w:cols w:equalWidth="0"`.
+
+## Words, round thirty-two, at `06bede896` — the `w:trHeight` gate is real, is caused, and is not the room
+
+### The baseline reproduced the brief exactly, and the reference was held fixed
+
+Whole-track sweep against a checksummed CLI snapshot with `SOURCE_DATE_EPOCH` pinned:
+**154/200, absolute page error 76, 164 exactly-correct page counts, absolute word error 6694.**
+200 rows, no path twice. Every figure in the brief reproduced to the digit.
+
+Our own renderer is byte-deterministic under a pinned clock — 11 of 11 documents re-rendered
+identical — so every comparison below re-uses one set of reference PDFs and varies only our side.
+That takes `soffice`'s own instability out of the measurement rather than assuming it away.
+
+### The handover's stated cause is refuted: nothing is lost across a split
+
+The brief said `SliceRow` measures a split part from its cells' line bottoms and never consults
+`MinHeight`, so the floor is lost the moment a row crosses a page. Traced on
+`f445896eb008d14c1746fc37d412dc22.docx`: nine rows split, and **every one of them already sums to
+more than its floor across its parts** — row 5 to 220.30 pt against a floor of 185.05, row 8 to
+264.80 against 248.25, row 12 to 693.90 against 690.00, row 14 to 2467.80 against 690.00, and so
+on for all nine. There is nothing for the floor to add.
+
+LibreOffice charges the floor to the sum too, so the two engines already agree here:
+`lcl_CalcMinRowHeight` skips it for a row `IsInSplit()` (`sw/source/core/layout/tabfrm.cxx`:5087)
+and `lcl_calcHeightOfRowBeforeThisFrame` subtracts the earlier parts' heights for a follow (:5696).
+
+### The floor *is* the cause, and the mechanism is a gate on breaking rather than a height
+
+Lower row 8's `w:trHeight` and change nothing else, and LibreOffice breaks the row again. The flip
+is sharp, between **4250 and 4300 twips**. Below it page 3 holds 416 words (`wc -w`) — which is
+exactly what we produce — and above it 323, with 140 pt of page left blank. Every one of the
+document's ten split decisions fits "the row is broken only when the room left is at least its
+declared floor", 10 of 10, and that rule takes pages 1–12 from diverging at page 3 to matching the
+reference word for word.
+
+**And the rule is wrong.** `dotnet/tests/corpus/features/table-row-min-height` breaks its floored
+row at every declared floor from 4.8 cm to 8.0 cm with about 100 pt of room — the last of those is
+the entire body height of its page, and the row still gives up exactly seven lines. So the gate is
+conditional on something these two documents differ in, and the sharp boundary at ~4275 twips is
+not the 2800 twips of room either. Implementing the rule anyway fails five tests in
+`Paperless.WordProcessing.Tests`, four of them that fixture's own, and it was reverted.
+
+`dotnet/probes/trheight-split-gate.py` reproduces both halves in one command and lists what is
+already ruled out: the floor being lost across the split, `SwTabFrame::Split`:1188-1196 (that
+branch is reached only inside a splittable fly), the row being on a follow table rather than a
+master one (row 5 of the same document is on a follow table and breaks), and any ratio between
+floor and room.
+
+### Reach, measured by rendering, and what the census would have claimed
+
+The reverted rule changed **12 of 200 renderings** and moved **one** verdict — and moved it from
+15/16 pages to 17/16, so absolute page error stayed at 76, exact page counts at 164, matches at
+154 and word error at 6694, with no word count anywhere changed at all. Worth recording as the
+shape of this defect: it is a page-boundary rule, so it reaches few documents and each one hard.
+
+The census over-states by about sevenfold. **89 of 134 DOCX declare at least one `w:trHeight`,
+and that is 134 of the track's 200** — the other 66 are `.doc`, which state a row's height as
+`sprmTDyaRowHeight` inside a binary table stream and are invisible to any zip-level count.
+
+### The residue on that document is a line break, not a row split
+
+With the rule in, pages 1–12 match word for word and the first divergence moves to page 13, where
+one line differs: LibreOffice wraps `industry.` to the next line and we keep it, on a line whose
+ink then reaches 519.7 pt where the reference's longest line on that page reaches 523.3. The
+paragraph ends with a non-breaking space, which our `TrimTrailingSpaces` already declines to trim.
+The nearest untested cause is that **Writer takes the cell's border line width off the cell's text
+width and we take off only the margin** — `SwCellFrame::Format` uses `SwBorderAttrs::CalcLeft`/
+`CalcRight`, which are `CalcLeftLine()`/`CalcRightLine()` plus the box's LR spacing
+(`frmtool.cxx`:2358-2368, `tabfrm.cxx`:6118-6120), while `TableLayouter.LayOut` computes
+`inner = width - cell.Padding.Horizontal`. That is a 1 pt narrowing on this table and the decision
+is marginal at about that size, so it is a candidate rather than a finding — and it would change
+every bordered cell's line breaking in the corpus, so it needs its own sweep.
+
+### Still open
+
+- **Batch 006 stays 9/10.** The one failure is the row-split gate above, now caused rather than
+  guessed, with a reproducible probe and a refuted rule.
+- **`chg12`'s under-pagination near pages 9–10** — inherited, still unmeasured.
+- **The even page with no even story** (3 documents) and **unequal column widths** — untouched.
