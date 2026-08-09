@@ -55,8 +55,11 @@ internal static class SheetTextOverflow
     private const int MeasurementBudget = 20_000;
 
     /// <summary>The cell text margin either side, which counts towards the width needed.</summary>
-    /// <remarks><c>ATTR_MARGIN</c>'s default of 20 twips, left and right.</remarks>
-    private static readonly Length CellMargins = SheetTextLayout.CellMargin * 2;
+    /// <remarks>
+    /// The cell's own <c>ATTR_MARGIN</c> rather than the pool default, because an <c>.xls</c>
+    /// states 40 twips on every format — see <see cref="SheetCellFormat.Margin"/>.
+    /// </remarks>
+    private static Length CellMarginsOf(SheetCellFormat format) => format.Margin * 2;
 
     /// <summary>The last column a sheet's contents reach, overflow included.</summary>
     /// <param name="sheet">The sheet.</param>
@@ -103,7 +106,7 @@ internal static class SheetTextOverflow
                 if (!widths.TryGetValue((text, format), out Length width))
                 {
                     width = SheetText.Measure(text, SheetFonts.For(format), format.FontSize)
-                            + CellMargins + format.Indent;
+                            + CellMarginsOf(format) + format.Indent;
                     widths[(text, format)] = width;
                 }
 

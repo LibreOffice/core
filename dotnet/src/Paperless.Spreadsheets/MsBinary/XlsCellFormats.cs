@@ -60,6 +60,21 @@ internal sealed class XlsCellFormats
     /// <summary>One indent level, in twips.</summary>
     private const int TwipsPerIndentLevel = 200;
 
+    /// <summary>
+    /// The cell margin every BIFF format carries, on all four sides, in twips.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclImpXF::CreatePattern</c> ends by putting
+    /// <c>SvxMarginItem(40, 40, 40, 40, ATTR_MARGIN)</c> on every pattern it builds, under the
+    /// comment "Excel's cell margins are different from Calc's default margins"
+    /// (<c>sc/source/filter/excel/xistyle.cxx:1349-1351</c>). It is unconditional — cell XFs and
+    /// style XFs alike — and it is the only place in <c>sc/source/filter</c> that touches
+    /// <c>ATTR_MARGIN</c> at all, so the other formats keep the pool's 20. Twice the margin is
+    /// two points off the room a cell's text has across and two points down, which decides where
+    /// a string starts, how much of a clipped one survives, and how tall an auto-height row is.
+    /// </remarks>
+    public static readonly Length CellMargin = Length.FromTwips(40);
+
     /// <summary>The <c>FONT</c> index that is never used.</summary>
     private const int SkippedFontIndex = 4;
 
@@ -151,6 +166,7 @@ internal sealed class XlsCellFormats
             Wraps = alignment.Wraps,
             ShrinksToFit = alignment.Shrinks,
             Indent = Length.FromTwips((long)alignment.IndentLevels * TwipsPerIndentLevel),
+            Margin = CellMargin,
             RotationDegrees = alignment.Rotation,
             IsStacked = alignment.Stacked,
             NumberFormatKind = format.IsGeneral || format.Sections.Count == 0

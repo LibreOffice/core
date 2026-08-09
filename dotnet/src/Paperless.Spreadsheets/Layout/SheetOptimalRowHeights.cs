@@ -92,28 +92,20 @@ internal static class SheetOptimalRowHeights
     private const int StandardRowHeightDifference = 23;
 
     /// <summary>
-    /// A cell's margin on any one side, in twips.
-    /// </summary>
-    /// <remarks>
-    /// Calc's default <c>ATTR_MARGIN</c> is 20 twips on all four sides
-    /// (<c>SvxMarginItem</c>'s default constructor, <c>svx/source/items/algitem.cxx:123-132</c>),
-    /// and none of the three readers reads a cell's vertical margins — no format states one that
-    /// Paperless keeps, and the indent it does keep is horizontal. So this is a constant rather
-    /// than a lookup, and it is the constant that turns a 12 pt font's 283 twips into the 300 Calc
-    /// writes.
-    /// </remarks>
-    private const int CellMarginTwips = 20;
-
-    /// <summary>
     /// A cell's top and bottom margins, together, in twips.
     /// </summary>
     /// <remarks>
-    /// The pair, because the arithmetic height adds both at once. The horizontal pair is not the
-    /// same number of *pixels*: it comes off the paper as two truncations of
-    /// <c>CellMarginTwips × nPPTX</c>, and <c>nPPTX</c> has been divided by
+    /// The pair, because the arithmetic height adds both at once
+    /// (<c>lcl_GetAttribHeight</c>, <c>column2.cxx:882-884</c>). It is the cell's own
+    /// <c>ATTR_MARGIN</c> and not a constant, because the BIFF filter puts 40 twips on every
+    /// format it builds where the pool default is 20 — see <see cref="SheetCellFormat.Margin"/>.
+    /// At the pool default it is what turns a 12 pt font's 283 twips into the 300 Calc writes.
+    /// The horizontal pair is not the same number of *pixels*: it comes off the paper as two
+    /// truncations of the margin times <c>nPPTX</c>, and <c>nPPTX</c> has been divided by
     /// <see cref="OutputFactor"/>.
     /// </remarks>
-    private const int VerticalMarginTwips = 2 * CellMarginTwips;
+    private static int VerticalMarginTwipsOf(SheetCellFormat format)
+        => 2 * (int)format.Margin.Twips;
 
     /// <summary>
     /// The twips a pixel is worth on the device Calc measures rows against.
@@ -171,9 +163,11 @@ internal static class SheetOptimalRowHeights
     /// </summary>
     /// <remarks>
     /// <c>static_cast&lt;tools::Long&gt;(20 * 0.067)</c> is 1, and the truncation is why the pair
-    /// of them is worth 2 pixels rather than the 2.68 the twips would give.
+    /// of them is worth 2 pixels rather than the 2.68 the twips would give. A BIFF cell's 40
+    /// twips truncate to 2 by the same expression.
     /// </remarks>
-    private const int MarginPixels = 1;
+    private static int MarginPixelsOf(SheetCellFormat format)
+        => (int)(format.Margin.Twips * PixelsPerTwip);
 
     /// <summary>
     /// The print-to-screen factor the horizontal resolution — and only the horizontal — is
@@ -556,7 +550,7 @@ internal static class SheetOptimalRowHeights
             }
         }
 
-        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixels)) / PixelsPerTwip);
+        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixelsOf(format))) / PixelsPerTwip);
     }
 
     /// <summary>
@@ -609,7 +603,7 @@ internal static class SheetOptimalRowHeights
         // (`column2.cxx:466-470`). A left- or right-aligned indent comes off as well.
         double horizontal = PixelsPerTwip / OutputFactor;
         long paper = (long)(width * horizontal)
-                     - (2 * (long)(CellMarginTwips * horizontal)) - 1;
+                     - (2 * (long)(format.Margin.Twips * horizontal)) - 1;
         if (format.Horizontal is SheetHorizontalAlignment.Left or SheetHorizontalAlignment.Right)
             paper -= (long)(format.Indent.Twips * horizontal);
 
@@ -622,7 +616,7 @@ internal static class SheetOptimalRowHeights
             ? RichPixels(text, portions, face, size, available, grid)
             : PlainPixels(text, face, size, available, grid);
 
-        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixels)) / PixelsPerTwip);
+        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixelsOf(format))) / PixelsPerTwip);
     }
 
     /// <summary>The pixels a cell in one face needs: its line count times one line.</summary>
@@ -744,7 +738,7 @@ internal static class SheetOptimalRowHeights
     private static int AttributeHeight(SheetCellFormat format, int minimum)
     {
         int height = (int)(format.FontSize.Twips * FontHeightFactor);
-        height += VerticalMarginTwips;
+        height += VerticalMarginTwipsOf(format);
         if (height > StandardRowHeightDifference) height -= StandardRowHeightDifference;
         return Math.Max(height, minimum);
     }

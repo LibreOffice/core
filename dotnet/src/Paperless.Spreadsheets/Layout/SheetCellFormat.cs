@@ -173,6 +173,32 @@ public sealed record SheetCellFormat
     public Length Indent { get; init; }
 
     /// <summary>
+    /// The gap between the cell's edge and its text, on all four sides.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ATTR_MARGIN</c>, whose pool default is 20 twips on every side
+    /// (<c>SvxMarginItem</c>'s default constructor, <c>svx/source/items/algitem.cxx:123-132</c>,
+    /// installed by <c>ScDocumentPool</c> at <c>docpool.cxx:145</c>). It is a cell attribute
+    /// rather than a constant because <strong>the BIFF filter overrides it on every cell format
+    /// it builds</strong> — <c>SvxMarginItem aItem(40, 40, 40, 40, ATTR_MARGIN)</c> under the
+    /// comment "Excel's cell margins are different from Calc's default margins"
+    /// (<c>XclImpXF::CreatePattern</c>, <c>sc/source/filter/excel/xistyle.cxx:1349-1351</c>).
+    /// That line is the whole of the difference: it is in no other import filter, so a
+    /// SpreadsheetML, XLSB or ODF workbook keeps the pool's 20 and only an <c>.xls</c> gets 40.
+    /// </para>
+    /// <para>
+    /// One attribute, four consequences, because Calc reads the item in four places: where the
+    /// text is placed inside the cell (<c>output2.cxx:1841</c>, <c>:2049</c>), how much of a
+    /// clipped string is kept (the same <c>nTotalMargin</c> reaching
+    /// <c>ScOutputData::GetOutputArea</c>), the width a wrapping cell breaks at and the height a
+    /// row asks for (<c>lcl_GetAttribHeight</c>, <c>column2.cxx:882-884</c>), and how far a long
+    /// string reaches when it widens the print area (<c>ScColumn::GetNeededSize</c>).
+    /// </para>
+    /// </remarks>
+    public Length Margin { get; init; } = Length.FromTwips(20);
+
+    /// <summary>
     /// The angle the text is turned through, anticlockwise, in whole degrees from -90 to 90.
     /// </summary>
     /// <remarks>

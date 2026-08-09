@@ -83,7 +83,15 @@ internal readonly record struct SheetCellText(
 /// </remarks>
 internal static class SheetTextLayout
 {
-    /// <summary>The margin between a cell's edge and its text, on all four sides.</summary>
+    /// <summary>
+    /// The margin between a cell's edge and its text when the cell states none.
+    /// </summary>
+    /// <remarks>
+    /// The item pool's default. What a given cell actually uses is
+    /// <see cref="SheetCellFormat.Margin"/>, because the BIFF filter overrides it — see that
+    /// property. This is kept as the default the format itself carries and as the value the
+    /// callers that have no cell in hand fall back to.
+    /// </remarks>
     public static readonly Length CellMargin = Length.FromTwips(20);
 
     /// <summary>How many times the shrink loop is allowed to try again.</summary>
@@ -302,7 +310,7 @@ internal static class SheetTextLayout
         // what puts a ten-point cell's text at 10.0063 pt and its left edge 0.9921 pt inside the
         // column rather than a whole point.
         Length size = SheetDeviceUnits.SnapFontSize(format.FontSize, scale);
-        Length margin = SheetDeviceUnits.Snap(CellMargin) * scale;
+        Length margin = SheetDeviceUnits.Snap(format.Margin) * scale;
 
         // The indent counts only when the cell states left or right alignment outright. Calc reads
         // ATTR_INDENT solely in that case (output2.cxx:445), so a General-aligned cell carrying an
@@ -1139,7 +1147,7 @@ internal static class SheetTextLayout
             return;
         }
 
-        Length margin = CellMargin * context.Scale;
+        Length margin = cell.Format.Margin * context.Scale;
         bool quarter = IsQuarterTurned(cell.Format);
 
         // Anticlockwise the block runs up and to the right of the cell's bottom-left corner;
@@ -1266,7 +1274,7 @@ internal static class SheetTextLayout
 
         Length size = placement.Lines[0].Run.Size;
         Length pitch = face.LineHeightAt(size);
-        Length y = cell.Box.Y + (CellMargin * context.Scale) + face.AscentAt(size);
+        Length y = cell.Box.Y + (cell.Format.Margin * context.Scale) + face.AscentAt(size);
 
         foreach (char character in cell.Text)
         {

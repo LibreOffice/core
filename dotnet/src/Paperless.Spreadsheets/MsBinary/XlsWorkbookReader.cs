@@ -811,6 +811,14 @@ internal sealed class XlsWorkbookReader
         SheetCellFormats.Builder formats = new();
         Dictionary<int, int> pooled = [];
 
+        // A cell the sheet records no XF for still gets Excel's margins, because the filter puts
+        // them on every pattern it builds and Calc's default pattern for a BIFF document is one
+        // of them (`XclImpXF::CreatePattern`, `sc/source/filter/excel/xistyle.cxx:1349`). Without
+        // this the fallback would be the item pool's 20 twips, which is the one thing on this
+        // path that is not what an `.xls` states.
+        formats.SetSheetDefault(
+            formats.Intern(SheetCellFormat.Default with { Margin = XlsCellFormats.CellMargin }));
+
         foreach ((int row, int column, int xf) in builder.CellFormats())
         {
             formats.SetCell(row, column, Pool(xf));
