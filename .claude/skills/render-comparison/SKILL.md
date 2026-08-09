@@ -663,6 +663,29 @@ reads as a large finding. Before believing an instrument's first big result, **r
 whose answer you already know** — a document that matches, or a probe you authored — and check
 it returns something near zero. That costs one run and it has now saved two rounds.
 
+### A census of what a file *declares* is not a census of what it *draws*
+
+Before a slides round changed how a gradient's focus is read, its committed prediction said 35–55
+of 163 renderings would change. The measured reach was **2**. The census behind the estimate
+counted decks that state a circle-path gradient anywhere in the package: 87 decks, 81 of them with
+an out-of-box focus. **Not one of the 81 changed a pixel** — every one of them stated it in a
+*theme* part, and a theme's third fill style is almost never what a drawn shape resolves to.
+
+The magnitude band in the same prediction was right, because it came from measuring the two pages
+that were known to be wrong. Only the breadth was out, and by fortyfold, because it came from
+grep.
+
+So: **estimate reach from what a shape resolves to, never from what a part declares.** A property
+in a theme, a master, a style table or a default is a candidate that something must select before
+it reaches the page, and the selection is where nearly all of the population is lost. If resolving
+it properly is too expensive to do over the corpus, say the count is an upper bound and give the
+band the room — do not quietly let a grep stand in for a resolver.
+
+The mirror of this is worth stating too: a fix with **no measured corpus reach** is not thereby
+wrong. The gradient corner branch was the whole of the movement and the clamp beside it moved
+nothing, and both are correct. Record which is which in the code comment, so the next round does
+not re-derive the reach from the same grep.
+
 ## Recording results
 
 Keep the reference version with the numbers — `soffice --version`. LibreOffice's layout
