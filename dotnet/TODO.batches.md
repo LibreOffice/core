@@ -10096,6 +10096,48 @@ last three rounds' method has been resting on without evidence: **146 references
 match round twenty's kept set exactly** — same page count and same word count on every one, none
 differing. Re-running with the kept set is sound.
 
+### What the round measured, whole track
+
+| slides, 163 documents | base `2ced17655` | + both fixes |
+|---|---|---|
+| match | 151 | **151** |
+| `unembedded` verdicts | 1 | **0** |
+| `\|ink\|%` | 1233.03 | **1185.07** |
+| major pages | 415 | **407** |
+
+**No verdict moved**, and that is the honest headline: the metafile fix removes the `unembedded`
+flag from `16 - UTM - (NASA).pptx` and the document still fails on words, so it changes
+`words,unembedded` into `words`. The table styles move no verdict at all, because the gate decides
+on page count, word count and font embedding and a table fill reaches none of them.
+
+Reach, measured by rendering the track twice and byte-comparing: **10 of 163 documents changed,
+and every one of the ten improved — no page anywhere got worse.** Against the census ceiling of
+eleven (ten decks naming an unresolvable table style, one carrying tabs in a metafile) the miss is
+`passiv.pptx`, whose single table names `{69CF1AB2-…}`, Medium Style 4 - Accent 1, and whose
+rendering is byte-identical either way.
+
+| document | `\|ink\|%` | major |
+|---|---|---|
+| `ghgp-supply-chain-initiative_20100323_wri.pptx` | 20.34 → **5.01** | 7 → 5 |
+| `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` | 15.06 → **5.92** | 5 → 1 |
+| `flying-by-numbers-presentation.pptx` | 9.27 → **0.65** | 10 → 10 |
+| `RPA P4 - Advanced Material.pptx` | 10.17 → **5.01** | 3 → 3 |
+| `vvsummit2022-Research-Roadmap…pptx` | 14.23 → **10.31** | 2 → 1 |
+| `REDAC HF briefing Sep 2016…pptx` | 4.85 → **1.12** | 0 → 0 |
+| `NAS-Infrastructure-Roadmaps-v16.0.pptx` | 224.77 → **223.68** | 66 → 65 |
+| `OnTrac_StarCertificationProgram-3Day.pptx` | 7.14 → **6.29** | 11 → 11 |
+| `16 - UTM - (NASA).pptx` | 20.54 → **20.42** | 5 → 5 |
+| `John_Broggio__RSS_Campion_event…pptx` | 3.41 → 3.41 | 0 → 0 |
+
+Tests, run per project and compared against the known-good counts: Core 278, Containers 109, Text
+255, Vector **293** (291 + 2), Rendering 119, Markup 259, OpenDocument 125, WordProcessing 706,
+Spreadsheets 598, Presentations **573** (571 + 2), Fidelity 550, **0 skipped**.
+
+Both changes are in layers the other two tracks share. Neither reaches them, and this is measured
+rather than argued: **no document in words or sheets names an `a:tableStyleId` at all** (exact —
+DrawingML tables do not exist in the binary formats), and the **39 words/sheets documents that
+carry a metafile render byte-identically** before and after.
+
 ### Not done, and why
 
 - **`first-divergence.py`'s `shows` column.** The words agent owns the fix and it has not landed at
