@@ -19,6 +19,13 @@ every stated height and measures the content again:
     row 2  Alpha\\nBravo\\nCharlie   wrap       three lines
     row 3  Alpha\\nBravo\\n          wrap       three lines — the trailing break is a paragraph
     row 4  Alpha\\nBravo            wrap       two lines
+    row 5  Alpha                  no wrap    one line   — the control row 1 is compared against
+
+Row 5 exists so that row 1 can be asserted against a row with no break in it rather than
+against a constant. The two are the same height for the same reason and the assertion then
+does not also depend on the sheet's optimal-minimum floor, which is a separate quantity and a
+separate open question: LibreOffice writes 252.9 twips for both of these rows and we write
+256, because we default the floor to the standard row height where Calc defaults it to none.
 """
 import sys, zipfile
 
@@ -63,8 +70,9 @@ STYLES = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 </cellXfs>
 </styleSheet>'''
 
-STRINGS = ['Alpha\nBravo\nCharlie', 'Alpha\nBravo\nCharlie', 'Alpha\nBravo\n', 'Alpha\nBravo']
-XF = [0, 1, 1, 1]
+STRINGS = ['Alpha\nBravo\nCharlie', 'Alpha\nBravo\nCharlie', 'Alpha\nBravo\n', 'Alpha\nBravo',
+           'Alpha']
+XF = [0, 1, 1, 1, 0]
 
 sst = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="%d" uniqueCount="%d">%s</sst>' % (
     len(STRINGS), len(STRINGS),
