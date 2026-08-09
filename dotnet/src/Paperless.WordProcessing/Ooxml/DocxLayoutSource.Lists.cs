@@ -104,10 +104,11 @@ public sealed partial class DocxLayoutSource
             return (null, format with { FirstLineIndent = ownFirstLine });
         }
 
-        (OpenTypeFace labelFace, FontReference? labelFont) = LabelFace(definition, text, face);
+        (string labelText, OpenTypeFace labelFace, FontReference? labelFont) =
+            LabelFace(definition, text, face, drawn);
 
         PageLabel label = PageLabel.Measured(
-            drawn, labelFace, LabelSize(definition, text),
+            labelText, labelFace, LabelSize(definition, text),
             new ShapingOptions(Language: text.Language, DisableKerning: !text.AutoKerning));
 
         return (
@@ -161,40 +162,116 @@ public sealed partial class DocxLayoutSource
     }
 
     /// <summary>
-    /// The face the label is set in: the level's own, unless its bullet had to be normalised.
+    /// What the label draws, and the face it is drawn in.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A bullet level names a symbol font and states its bullet as a code point in that font's private
-    /// use area, which means nothing anywhere else. <see cref="WordNumbering.FormatLabel"/> has already
-    /// turned such a code point into U+2022, so keeping the level's font would draw a real bullet
-    /// character through a font that has no such glyph — and the font is unlikely to be installed in any
-    /// case. A level naming a font for an ordinary character keeps it.
+    /// use area, which means nothing anywhere else. <see cref="WordNumbering.FormatLabel"/> has turned
+    /// such a code point into U+2022, which is the right answer only when nothing better is available —
+    /// LibreOffice recodes the slot into OpenSymbol and draws the picture the document asked for. See
+    /// <see cref="Symbol"/>, which decides between the cases; U+2022 in the paragraph's own face is
+    /// what is left when it declines.
+    /// </para>
+    /// <para>
+    /// A level naming a font for an ordinary character keeps it.
+    /// </para>
     /// </remarks>
     /// <returns>
-    /// The face and the reference it was resolved through. Both, because the reference cannot be
-    /// recovered from the face afterwards \u2014 an <see cref="OpenTypeFace"/> is a parsed table
+    /// The text to draw, the face, and the reference it was resolved through. The reference because it
+    /// cannot be recovered from the face afterwards: an <see cref="OpenTypeFace"/> is a parsed table
     /// directory and does not carry the path it was read from, and the path is the only thing a
     /// PDF can turn back into an embedded font program. A label drawn from a family-named
     /// reference is referenced and not embedded, which is what <c>pdffonts</c> reported for
     /// <c>word-features.docx</c>'s <c>LiberationSerif</c> and <c>OpenSymbol</c> labels while every
     /// body face in the same file embedded.
     /// </returns>
-    private (OpenTypeFace Face, FontReference? Font) LabelFace(
-        WordNumberingLevel definition, WordTextStyle text, OpenTypeFace face)
+    private (string Text, OpenTypeFace Face, FontReference? Font) LabelFace(
+        WordNumberingLevel definition, WordTextStyle text, OpenTypeFace face, string drawn)
     {
         FontReference? own = _references.GetValueOrDefault(text.FaceKey);
 
-        if (definition.LevelText is [>= '\uE000' and <= '\uF8FF']) return (face, own);
-
         string? family = WordParagraphFormats.SlotFamily(
             Word.Child(definition.RunProperties, "rFonts"), _theme?.Fonts, "ascii", "asciiTheme");
-        if (family is not { Length: > 0 }) return (face, own);
+
+        if (definition.LevelText is [>= '\uE000' and <= '\uF8FF' and var slot])
+        {
+            return Symbol(family, slot) ?? (drawn, face, own);
+        }
+
+        if (family is not { Length: > 0 }) return (drawn, face, own);
 
         WordTextStyle named = text with { FamilyName = family };
 
         return Face(named) is { } resolved
-            ? (resolved, _references.GetValueOrDefault(named.FaceKey))
-            : (face, own);
+            ? (drawn, resolved, _references.GetValueOrDefault(named.FaceKey))
+            : (drawn, face, own);
+    }
+
+    /// <summary>
+    /// A symbol level's slot, drawn from the face that can actually show it, or null when none can.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The trigger is that the face itself is absent, not that the request happened to resolve
+    /// to OpenSymbol.</strong> When the face is installed, the slot is drawn from it unchanged. When it
+    /// is not — and Wingdings, Webdings and Monotype Sorts are not fonts Linux has — LibreOffice
+    /// substitutes OpenSymbol and recodes through the tables <see cref="SymbolFontRecode"/> ports, whose
+    /// F000–F0FF coverage is ten code points, so drawing the slot there instead would be
+    /// <c>.notdef</c>.
+    /// </para>
+    /// <para>
+    /// Keying on the <em>resolved</em> family is too narrow: it works for the faces <c>VCL.xcu</c>
+    /// gives a substitution chain — Wingdings names <c>opensymbol</c> fourth — and silently fails for
+    /// the ones it does not, since nothing in that table mentions <c>monotypesorts</c> or
+    /// <c>mtextra</c>. LibreOffice never asks fontconfig about a symbol font at all
+    /// (<c>FcPreMatchSubstitution::FindFontSubstitute</c> returns false outright for one,
+    /// <c>vcl/unx/generic/font/fontsubst.cxx:100-107</c>), which is why the absence of a chain costs it
+    /// nothing. Mirrors <c>SlideTextLayout.Recoded</c>, which reached the same shape from the
+    /// presentation side.
+    /// </para>
+    /// <para>
+    /// Null means nothing here can improve on the caller's fallback, which is U+2022 in the
+    /// paragraph's own face — a symbol face with no table, a slot out of range, or a resolution that
+    /// failed.
+    /// </para>
+    /// </remarks>
+    private (string Text, OpenTypeFace Face, FontReference? Font)? Symbol(string? family, char slot)
+    {
+        if (family is not { Length: > 0 }) return null;
+        if (!SymbolFontRecode.IsRecodeable(family)) return null;
+
+        // Weight and italic are the level's own, and a symbol face has one of each; the size is
+        // decided by LabelSize and plays no part in which file is loaded.
+        WordTextStyle stated = new(family, Length.Zero, 400, false, null);
+        if (Face(stated) is not { } statedFace) return null;
+
+        FontReference? reference = _references.GetValueOrDefault(stated.FaceKey);
+
+        // The face's own file is present, so its slots are drawable as they stand.
+        if (reference is not null
+            && !reference.IsSubstituted
+            && !SymbolFontRecode.IsSubstituteFamily(reference.FamilyName))
+        {
+            return (slot.ToString(), statedFace, reference);
+        }
+
+        if (!SymbolFontRecode.TryRecode(family, slot, out char recoded)) return null;
+
+        // The recode and the face go together: the code point means nothing anywhere but OpenSymbol,
+        // so a resolution that landed elsewhere leaves the caller's fallback in place rather than
+        // drawing it out of whatever the request happened to reach.
+        WordTextStyle substitute = stated with { FamilyName = SymbolFontRecode.SubstituteFamily };
+        if (Face(substitute) is not { } symbolFace) return null;
+
+        FontReference? symbolReference = _references.GetValueOrDefault(substitute.FaceKey);
+        if (symbolReference is null
+            || !SymbolFontRecode.IsSubstituteFamily(symbolReference.FamilyName))
+        {
+            return null;
+        }
+
+        return (recoded.ToString(), symbolFace, symbolReference);
     }
 
     /// <summary>

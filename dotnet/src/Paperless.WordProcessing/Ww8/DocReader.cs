@@ -625,7 +625,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
-                Label = Label(paragraph, face, font),
+                Label = Label(fonts, paragraph, face, font),
                 Borders = paragraph.Borders,
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
@@ -657,13 +657,12 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// </summary>
     /// <remarks>
     /// <para>
-    /// In the item's own face, at the level's own size. WW8 states a label's character formatting in the
-    /// level's <c>grpprlChpx</c>, and the two halves of it are treated differently on purpose: the
-    /// <em>font</em> is not read, because the only thing it usually carries is a symbol face for a bullet
-    /// whose code point <see cref="Ww8Numbering"/> has already normalised to U+2022 — keeping it would
-    /// draw a real bullet through a face with no glyph for it — while the <em>size</em> is, because it
-    /// survives that normalisation and Word writes it constantly. A level a size larger than its items
-    /// makes their first lines taller; see <see cref="PageParagraph.LabelRaisesFirstLine"/>.
+    /// At the level's own size, and — for a bullet whose level names a symbol face — in the face
+    /// LibreOffice would substitute for it. Both halves come out of the level's <c>grpprlChpx</c>:
+    /// <c>sprmCHps</c> for the size, which Word writes constantly and which makes an item's first line
+    /// taller when it exceeds the item's own (see <see cref="PageParagraph.LabelRaisesFirstLine"/>),
+    /// and <c>sprmCRgFtc0</c> for the face, which is what <see cref="SymbolLabel"/> needs in order to
+    /// tell a symbol slot from the character it collides with.
     /// </para>
     /// <para>
     /// The follower and its stop come from the level's <c>ixchFollow</c> and its <c>grpprlPapx</c>, which
@@ -681,27 +680,89 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// </para>
     /// </remarks>
     private static PageLabel? Label(
-        Ww8DocumentReader.Ww8LayoutParagraph paragraph, OpenTypeFace face, FontReference? font)
-        => paragraph.ListMarker is { Length: > 0 } marker
-            ? PageLabel.Measured(
-                marker, face,
-                paragraph.ListLabelSize > Core.Units.Length.Zero
-                    ? paragraph.ListLabelSize
-                    : paragraph.Size,
-                new Text.Shaping.ShapingOptions(
-                    Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning)) with
+        LayoutFonts fonts,
+        Ww8DocumentReader.Ww8LayoutParagraph paragraph,
+        OpenTypeFace face,
+        FontReference? font)
+    {
+        if (paragraph.ListMarker is not { Length: > 0 } marker) return null;
+
+        (string text, OpenTypeFace labelFace, FontReference? labelFont) =
+            SymbolLabel(fonts, paragraph.ListLabelFamily, paragraph.ListLabelSlot)
+            ?? (marker, face, font);
+
+        return PageLabel.Measured(
+            text, labelFace,
+            paragraph.ListLabelSize > Core.Units.Length.Zero
+                ? paragraph.ListLabelSize
+                : paragraph.Size,
+            new Text.Shaping.ShapingOptions(
+                Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning)) with
+        {
+            Font = labelFont,
+            Colour = paragraph.Colour ?? Colour.Black,
+            Follow = paragraph.ListFollow switch
             {
-                Font = font,
-                Colour = paragraph.Colour ?? Colour.Black,
-                Follow = paragraph.ListFollow switch
-                {
-                    1 => LabelFollow.Space,
-                    2 => LabelFollow.Nothing,
-                    _ => LabelFollow.ListTab,
-                },
-                TabStop = Core.Units.Length.FromTwips(paragraph.ListTabStop),
-            }
+                1 => LabelFollow.Space,
+                2 => LabelFollow.Nothing,
+                _ => LabelFollow.ListTab,
+            },
+            TabStop = Core.Units.Length.FromTwips(paragraph.ListTabStop),
+        };
+    }
+
+    /// <summary>
+    /// A symbol level's slot, drawn from the face that can actually show it, or null when none can.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The WW8 half of <c>DocxLayoutSource.Symbol</c>, and the same three cases: the face is installed
+    /// and its slots are drawn as they stand; the face is absent and <see cref="SymbolFontRecode"/>
+    /// holds a table for it, so the slot is recoded into OpenSymbol exactly as LibreOffice's
+    /// <c>ConvertChar::RecodeChar</c> does; or neither, and the caller's own text and face stand.
+    /// </para>
+    /// <para>
+    /// <strong>WW8 needs the face more than DOCX does.</strong> A DOCX bullet arrives already aliased
+    /// into the private use area, so a fallback can at least tell it is a symbol. WW8 states the slot
+    /// raw — <c>0xB7</c> in <c>Symbol</c> — so without <c>sprmCRgFtc0</c> the character is
+    /// indistinguishable from MIDDLE DOT and was drawn as one.
+    /// </para>
+    /// </remarks>
+    private static (string Text, OpenTypeFace Face, FontReference? Font)? SymbolLabel(
+        LayoutFonts fonts, string? family, char slot)
+    {
+        if (family is not { Length: > 0 }) return null;
+        if (slot == '\0') return null;
+        if (!SymbolFontRecode.IsRecodeable(family)) return null;
+
+        if (fonts.Face(family, 400, false) is not { } statedFace) return null;
+        FontReference? reference = fonts.Reference(family, 400, false);
+
+        // The face's own file is present, so its slots are drawable as they stand.
+        if (reference is not null
+            && !reference.IsSubstituted
+            && !SymbolFontRecode.IsSubstituteFamily(reference.FamilyName))
+        {
+            return (slot.ToString(), statedFace, reference);
+        }
+
+        if (!SymbolFontRecode.TryRecode(family, slot, out char recoded)) return null;
+
+        // The recode and the face go together: the code point means nothing anywhere but OpenSymbol,
+        // so a resolution that landed elsewhere leaves the caller's fallback in place.
+        if (fonts.Face(SymbolFontRecode.SubstituteFamily, 400, false) is not { } symbolFace)
+        {
+            return null;
+        }
+
+        FontReference? symbolReference =
+            fonts.Reference(SymbolFontRecode.SubstituteFamily, 400, false);
+
+        return symbolReference is not null
+               && SymbolFontRecode.IsSubstituteFamily(symbolReference.FamilyName)
+            ? (recoded.ToString(), symbolFace, symbolReference)
             : null;
+    }
 
     /// <summary>
     /// The floating shapes anchored in a paragraph, as frames the layout engine can place.

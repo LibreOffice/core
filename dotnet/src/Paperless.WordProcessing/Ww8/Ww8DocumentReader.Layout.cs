@@ -69,6 +69,25 @@ public sealed partial class Ww8DocumentReader
     /// from <paramref name="Size"/>, and then it makes the item's first line taller — see
     /// <see cref="Layout.PageParagraph.LabelRaisesFirstLine"/>.
     /// </param>
+    /// <param name="ListLabelFamily">
+    /// The face the level sets its label in, from <c>sprmCRgFtc0</c> in the level's <c>grpprlChpx</c>,
+    /// or null when the level states none and the label takes the item's own face.
+    /// <para>
+    /// It is the face rather than the character that says a bullet is a symbol: WW8 states the slot
+    /// raw — <c>0xB7</c> against a font of <c>Symbol</c>, where DOCX would write the private-use
+    /// alias — so the character on its own cannot be told from MIDDLE DOT.
+    /// </para>
+    /// </param>
+    /// <param name="ListLabelSlot">
+    /// A bullet level's character exactly as the file states it, or <c>\0</c> when the level draws a
+    /// counter rather than a bullet.
+    /// <para>
+    /// Carried beside <paramref name="ListMarker"/> rather than replacing it because the two answer
+    /// different questions. <paramref name="ListMarker"/> is what a caller <em>extracts</em>, and a
+    /// private-use code point means nothing outside one font, so it is normalised to U+2022. This is
+    /// what the level <em>drew</em>, which only a resolved face can interpret.
+    /// </para>
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -86,7 +105,9 @@ public sealed partial class Ww8DocumentReader
         string? ListMarker = null,
         byte ListFollow = 2,
         int ListTabStop = 0,
-        Length ListLabelSize = default)
+        Length ListLabelSize = default,
+        string? ListLabelFamily = null,
+        char ListLabelSlot = '\0')
     {
         /// <summary>
         /// True when <see cref="Text.Layout.ParagraphFormat.SpaceBefore"/> came from
@@ -1101,7 +1122,11 @@ public sealed partial class Ww8DocumentReader
             ListTabStop: level?.TabPosition ?? 0,
             ListLabelSize: level is { HalfPointSize: > 0 } sized
                 ? Length.FromPoints(sized.HalfPointSize / 2.0)
-                : default)
+                : default,
+            ListLabelFamily: level is { FontIndex: >= 0 } faced ? Fonts.Name(faced.FontIndex) : null,
+            ListLabelSlot: level is { IsBullet: true, NumberText.Length: 1 } bullet
+                ? bullet.NumberText[0]
+                : '\0')
         {
             HasAutoSpaceBefore = layout.HasAutoSpaceBefore ?? false,
             HasAutoSpaceAfter = layout.HasAutoSpaceAfter ?? false,
