@@ -49,6 +49,30 @@ public static class ShapingControls
         or '\uFEFF' or '\uFFFE' or '\uFFFF';
 
     /// <summary>
+    /// True for a character LibreOffice's <c>IsControlChar</c> is true for \u2014 the tab included.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <see cref="IsRemovedBeforeShaping"/> keeps the tab because a paragraph resolves it against its
+    /// own stops, and a caller that has no stops to resolve it against must not. <b>A metafile text
+    /// record is that caller</b>: a GDI <c>ExtTextOut</c> states a point, a string and a per-character
+    /// advance array, and there is no paragraph, no ruler and no next stop anywhere in the picture.
+    /// LibreOffice plays those records through <c>OutputDevice::DrawTextArray</c>, so they reach
+    /// <c>ImplLayoutArgs::AddRun</c> and every C0 character is split out before a shaper sees it
+    /// (<c>vcl/source/text/ImplLayoutArgs.cxx</c>:112-165).
+    /// </para>
+    /// <para>
+    /// Measured on <c>16 - UTM - (NASA).pptx</c>, whose slide 29 is a single EMF holding <b>62
+    /// <c>EMR_EXTTEXTOUTW</c> records whose whole string is one tab</b>. Kept, each one misses in every
+    /// installed text face, falls through glyph fallback to GNU Unifont \u2014 which does draw the C0 range,
+    /// as a hex box \u2014 and put a twelfth face in our PDF against the reference's eleven, unembedded.
+    /// That was the slides track's only <c>unembedded</c> verdict.
+    /// </para>
+    /// </remarks>
+    public static bool IsControlCharacter(char character)
+        => character == '	' || IsRemovedBeforeShaping(character);
+
+    /// <summary>
     /// Where the next character a shaper may be given is, at or after a position.
     /// </summary>
     /// <param name="text">The text being shaped.</param>
