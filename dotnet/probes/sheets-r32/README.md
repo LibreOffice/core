@@ -138,6 +138,55 @@ Five cases in `SheetShownCommentTests`, verified by reintroducing each defect th
 turns the unreachable code into an error, and `verify-test.sh` correctly refuses to call that a
 detection. Rewritten as a relationship-name change it detects four of the five.
 
+## What batches 011 and 016 are, triaged and not fixed
+
+Both batches' residue is **pagination with the words already right**, and the diagnosis below is
+the first divergent page of each document, read off the baseline sweep's own renderings rather
+than re-rendered.
+
+| document | batch | pages | words | first divergence |
+|---|---|---|---|---|
+| `Capability_List_…unsorted.xlsx` | 011 | 150/147 | 29917/29920 | page 12, a different column band |
+| `RMP 2011-2014 and Inventory.xls` | 011 | 39/38 | 18634/18548 | page 1 ends a column early |
+| `SIL_TDB648.xlsx` | 016 | 89/88 | 7680/7679 | page 5 starts a column late |
+| `tk-syllabus-comparison-document-v5.xlsx` | 016 | 852/855 | 235372/235154 | page 5 starts a column late |
+| `flightstandards-doc-Cross-reference-table_version02.xlsx` | 016 | 461/464 | 68159/68113 | page 2, a cell wraps one token later |
+| `7-memento-2015-transports-aeriens-b.xls` | 016 | 190/191 | 28848/28846 | page 7, a word missing from a wrap |
+
+**Five of the six are the same quantity with both signs: how many columns fit in one column
+band.** On `SIL_TDB648` and `RMP` our band takes one column *fewer* than LibreOffice's, so we
+print an extra band and an extra page; on `tk-syllabus` our band takes one *more*, so we print
+three fewer. `Capability_List`'s page 12 holds a band ours has already moved past. That is the
+shape the skill warns about — opposite signs of one quantity are the same code with the same
+bug — and it says the lead is the predicate that decides whether the next column still fits the
+printable width, not six separate documents.
+
+The remaining two are cell wrapping rather than paging: on `flightstandards` the header
+`IR/AMC/GM` breaks after the first solidus in the reference and after the second in ours, which
+is a width question rather than a break-opportunity one, since both renderers break after a
+solidus and ours simply fits more before it.
+
+`T0A0D0000090006XLSE.xls` (011, pages exact, **+2098 words**) is not in that cluster: we
+over-draw. It was not chased.
+
+**One residue outside these batches is much larger than any of them and is cheap to state.**
+`EASA-IFP-145Scope(WEB)_…xlsx` (018, 114/114 pages, 32485 against 34835 words) loses exactly
+2350 words to one boundary: the reference draws `EASA.UK.1` and the next cell's text as two
+tokens and we draw them touching, so `pdftotext` reads `EASA.UK.1AEM` as one. The token multiset
+is decisive — under-draw 4747, over-draw 2397, and the difference is exactly the 2350 occurrences
+of `EASA.UK.1`. Both renderers join the *following* pair (`LIMITUNITED`), so this is one column's
+width or alignment rather than the sink's operator granularity.
+
+## An unexplained vertical offset on the checklist's own sheet
+
+Worth recording because it was found while measuring something else and is not the comments.
+On `Application_Compliance_Checklist_5_Apr_2021.xlsx` our whole printed block on the
+`App. Compliance Checklist` sheet sits **31.2 pt lower** than LibreOffice's — the repeated title
+row's own text is at 85.96 pt where the reference draws it at 54.75, and every horizontal
+coordinate agrees to a fifth of a point. The captions are placed correctly *relative to our own
+block*, which is why they land 31.4 pt below the reference's. It moves no gate, it is not the
+comments, and it was not chased.
+
 ## Test counts
 
 Every project run individually, whole output captured, **0 skipped** everywhere.
