@@ -301,7 +301,7 @@ public sealed class MeasuredParagraph
                 // moment a control character left a gap between two sub-runs.
                 for (int i = 1; i <= part.Length; i++)
                 {
-                    prefix[part.Start + i] = running + shaped.WidthUpTo(i, part.EmSize).Emu;
+                    prefix[part.Start + i] = running + Advance(shaped, shaped.AdvanceUpTo(i), part.EmSize, grid);
                 }
 
                 if (part.Tracking != Length.Zero)
@@ -310,7 +310,7 @@ public sealed class MeasuredParagraph
                     for (int i = 0; i < part.Length; i++) tracking[part.Start + i] = part.Tracking.Emu;
                 }
 
-                running += shaped.Width(part.EmSize).Emu;
+                running += Advance(shaped, shaped.AdvanceInDesignUnits, part.EmSize, grid);
             }
         }
 
@@ -472,6 +472,21 @@ public sealed class MeasuredParagraph
 
         return parts;
     }
+
+    /// <summary>
+    /// A sub-run's advance width, through the device grid when the document asks for one.
+    /// </summary>
+    /// <remarks>
+    /// Applied to each *cumulative* width rather than to each glyph, because that is what the device
+    /// does — see <see cref="MetricGrid.ToAdvance"/>. A sub-run is the nearest thing this measurement
+    /// has to Writer's text portion, which is the unit the reference device's width is truncated over.
+    /// The truncation is monotonic, so the prefix table stays monotonic, which every reader of it
+    /// depends on.
+    /// </remarks>
+    private static long Advance(ShapedText shaped, long designUnits, Length emSize, MetricGrid? grid)
+        => grid is { } device
+            ? device.ToAdvance(designUnits, shaped.UnitsPerEm, emSize).Emu
+            : shaped.Scale(designUnits, emSize).Emu;
 
     /// <summary>The width of the characters between two indices.</summary>
     public Length WidthBetween(int start, int end)
