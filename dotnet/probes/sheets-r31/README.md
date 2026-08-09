@@ -9,6 +9,7 @@ against the *other* snapshot's — before each run started.
 |---|---|
 | `base-whole-track.tsv` | whole-track sweep at `150a3dac1`, before any change |
 | `final-whole-track.tsv` | the same on the final tree |
+| `intermediate-whole-track.tsv` | the same before the last two corrections, kept for the comparison below |
 | `reach.tsv` | which documents' rendered bytes the round moved, clock pinned |
 | `score.py` | turns a `rows.tsv` into matches, page error, exact counts, word error |
 | `reach.sh` | renders a track with two CLIs under a pinned clock and diffs the bytes |
@@ -159,7 +160,7 @@ Both sweeps: 171 rows, no duplicate path, **zero `ref-failed`**.
 | | matches | abs page error | exact page counts | abs word error |
 |---|---|---|---|---|
 | `base-whole-track.tsv` | 147/171 | 90 | 154 | 42322 |
-| `final-whole-track.tsv` | **148/171** | **86** | **155** | **33179** |
+| `final-whole-track.tsv` | **148/171** | **86** | **155** | **33174** |
 
 Per batch at the end: 001–009 89/89, 010 8/10, 011 6/10, 012 8/10, 013 8/10, 014 9/10,
 **015 6/9**, 016 5/9, 017 6/10, 018 3/4. **No batch fell.**
@@ -229,26 +230,25 @@ coalescing and the BIFF anchoring — because it was already three quarters thro
 fidelity suite found them. Both corrections change bytes, so the true figure for the final tree is
 near this and is not this. It is quoted as what it is: `reach-intermediate.tsv`.
 
-## Which tree each sweep measured, and what the last two corrections moved
+## What the last two corrections moved
 
-`final-whole-track.tsv` is a complete 171-row sweep of the tree at commit `ac42fe758` — after
-both fixes and before the two corrections the fidelity suite then found (coalescing a line's
-same-size pieces into one run, and not anchoring the BIFF band). A second whole-track sweep was
-started on the corrected tree and **did not finish inside the round**; it is quoted here as the
-partial it is, `final-tree-partial.tsv`.
+The fidelity suite found two defects after the first complete whole-track sweep had run —
+coalescing a line's same-size pieces into one run, and not anchoring the BIFF band — so **the
+track was swept twice on two trees**, `intermediate-whole-track.tsv` and
+`final-whole-track.tsv`. Both are 171 rows with no duplicate path and no `ref-failed`.
 
-Over the **133 of 171 rows** it reached, the two corrections move the gate on **two documents**,
-by **six words in total**, and move **no verdict**:
+Between them, **three documents change and no verdict does**:
 
 | document | words before → after |
 |---|---|
 | `TOGAF9-Tool-ConfReqts-CSQ.xls` | 24214 → 24209 / 24097, `match` either way |
 | `fy2010-aip-grants.xls` | 63113 → 63112 / 63452, `match` either way |
+| `environment-edb-docs-edb-emissions-databank.xls` | 65602 → 65603 / 65604, `match` either way |
 
-Neither correction can move a glyph: one changes how many `Tj` operators a band's text is written
-as, and the other moves a BIFF band's text vertically inside a band whose height did not change.
-The headline is therefore quoted from the complete sweep and this partial is the evidence that it
-still describes the tree being handed over — **stated as a partial rather than extrapolated.**
+Seven words across 171 documents. Neither correction can move a glyph — one changes how many
+`Tj` operators a band's text is written as, and the other moves a BIFF band's text vertically
+inside a band whose height did not change — and the two sweeps say so rather than the argument
+saying so.
 
 ## Test counts
 
@@ -260,12 +260,14 @@ Every project run individually, whole output captured, **0 skipped** everywhere:
 
 Every count is the briefed known-good except Spreadsheets, which is 573 plus this round's 15.
 
-`Paperless.Fidelity.Tests` was run twice. **The first run failed 3 of 550**, all three
+`Paperless.Fidelity.Tests`, on the final tree: **550 of 550, 0 skipped**, the briefed known-good
+count exactly.
+
+It was run twice, and the first run is the more useful of the two. **It failed 3 of 550**, all three
 `SheetDecorationComparisonTests.TheHeaderExpandsItsFieldsIntoThreeSeparatelyAlignedParts`, and
 both corrections above came out of reading them: the `.ods` and `.xlsx` cases counted 10 band runs
 where the test expects 5, and the `.xls` case put a footer run 1.53 pt below LibreOffice's against
 a 1.5 pt tolerance. **That is the round's most useful test result and it is the one that nearly
 did not get run** — the suite takes hours under this load and had to be started in the background
 before the corpus sweep. After both corrections the class passes 12 of 12; the full 550-case
-re-run was started and had not returned when the round closed, so **the whole-suite count for the
-final tree is unmeasured** rather than assumed.
+re-run then came back 550 of 550 on the final tree.
