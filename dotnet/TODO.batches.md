@@ -10825,3 +10825,80 @@ Markup 259, OpenDocument 125, WordProcessing 720, Spreadsheets **611** (605 befo
 tests were verified with `verify-test.sh`: removing the layouter's shaper fails the line-breaking
 one and removing the drawing pass's itemisation fails the shaping one — two mutations, two different
 tests, which is why the two passes are asserted separately.
+
+## Slides round 39 — a gradient's focus, and a census that overstated by forty-fold
+
+Base `545550952`, verified. Whole-track sweep before and after, both sides against round twenty's
+kept reference PDFs with `SOURCE_DATE_EPOCH` pinned. Full numbers and the sweep's own caveats are
+in `probes/slides-r39/measured.md`.
+
+| | base | after |
+|---|---:|---:|
+| match | 151/163 | **151/163** |
+| `\|ink\|%` | 1493.00 | **1448.71** |
+| signed `ink%` | 1181.39 | 1132.20 |
+| major pages | 395 | **392** |
+| renderings byte-changed | — | **2 of 163** |
+
+### The fix
+
+`a:gradFill/a:path/a:fillToRect`, measured against the installed binary rather than read off the
+C++ beside it — which is a development branch and states the opposite of the second half:
+
+- the focus is **clamped into the box**, in whole per cent;
+- a `path="circle"` whose clamped focus is a **corner** (both axes at 0 or 100) is imported as a
+  **45-degree linear ramp**, stop 0 at that corner, not as a radial gradient.
+
+Verified on sixteen `fillToRect` values including the pair that brackets the truncation: a focus of
+0.5% takes the linear branch and 1% does not. `probes/slides-r39/gradient-path.md` has the table
+and the generator; `slide-gradient-path.pptx` and `SlideGradientPathTests` pin all three refuted
+readings, each of which fails a different one of the three tests under `verify-test.sh`.
+
+### The part worth carrying forward: the census was a forty-fold overstatement
+
+The prediction, committed before the sweep, was 35–55 renderings on the strength of **87 decks
+carrying a circle path gradient in a theme part, 81 with a focus outside the box**. Measured:
+**2**. Not one of those 81 changed a pixel — the theme's third fill style is present in nearly
+every Office-authored deck and is almost never what a drawn shape resolves to. Only 6 decks state
+a path gradient in a slide, layout or master at all, and only 3 have a corner focus.
+
+So **the clamp has no measured corpus reach** and the corner branch is the whole of the movement
+(44.28 of 44.29 on `Wildlife for REDAC September 11.pptx`, whose three whole-page backgrounds went
+from a circle to the diagonal ramp the reference draws). The clamp is still right — it takes the
+probe's stock-theme slide from 56.94% of pixels differing to 0.15%, and it is the difference
+between drawing that gradient and drawing a flat fill — and it is now a test rather than a claim.
+
+### Two numbers that were not the same measurement
+
+The track's inherited headline, `|ink|% 1185.07` with 407 major pages, does not reproduce as an
+unsigned sum. At the same commit the **signed** sum is 1181.39 and the **unsigned** is 1493.00,
+with 395 major pages, and `probes/slides-r22/slides-ink-ranking.py` ranks on the signed column.
+The figure the track has been quoting as `|ink|%` is the signed one. Every table in this round
+says which column it is; `probes/slides-r39/ink-ranking.py` prints both and asserts the invariant
+between them.
+
+### Ranking, regenerated
+
+`probes/slides-r39/slides-ink-ranking.tsv`, from the after sweep, with both ceilings subtracted per
+page and a new residual-per-page column — because the old ranking put a 268-page deck with a
+uniform 0.26 drift level with a 41-page deck whose whole residual was three ruined backgrounds.
+
+`Reporting_responsibilities_matrix.pptx` was the second of the two decks the brief said had never
+been opened. It is **not a lever**: 268 pages at 0.26 apiece, every page `shifted`, and the only
+structural finding in an operator diff of its worst page is a white page-background fill the
+reference paints and we do not. Everything else in that diff is `shows`, the retired artefact.
+
+### Corrected: the theme's line and fill style lists *are* read
+
+The standing note on automatic chart series colours says they need "the theme's `a:lnStyleLst` /
+`a:fillStyleLst`, which `DrawingTheme` does not expose". `DrawingStyleMatrix.Read` parses both,
+and `Line`/`Fill` resolve one against a placeholder colour; `PptxSlideLayout` already carries a
+matrix in its theme context. What is missing is the automatic-colour rule itself — which `lnRef`
+index a chart style implies, and the accent cycle over series index — and a route from the chart
+reader to the matrix. Smaller than it was written up as, and in a different place.
+
+Test counts on the final tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
+Markup 259, OpenDocument 125, WordProcessing 723, Spreadsheets 611, Presentations **576** (573
+before, +3 from `SlideGradientPathTests`), Fidelity 550 — 0 skipped throughout. The change is one
+file in `Paperless.Presentations`, so no shared layer moved and the other two tracks are not owed
+a sweep.
