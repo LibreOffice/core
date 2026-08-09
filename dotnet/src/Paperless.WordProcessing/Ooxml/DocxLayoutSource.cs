@@ -231,9 +231,49 @@ public sealed partial class DocxLayoutSource
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
+        DropNestedTableFiller(blocks);
         SuppressAutoSpacingInCell(blocks);
         ParagraphBorderJoin.Apply(blocks);
         return blocks;
+    }
+
+    /// <summary>
+    /// Drops the empty paragraph OOXML makes mandatory after a nested table.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>w:tc</c> may not end with a <c>w:tbl</c>, so Word writes an empty paragraph after every
+    /// nested table whether or not the author put one there. LibreOffice does not lay it out, and the
+    /// difference is a whole line per nested table — on <c>UG.CAO.00133</c>'s header the row is
+    /// 26.35 pt in the reference against our 36.65.
+    /// </para>
+    /// <para>
+    /// <strong>The rule is stated from the reference rather than from the specification</strong>, by
+    /// varying what one real cell holds and reading the drawn cell edges back out of both PDFs
+    /// (<c>dotnet/probes/words-r44/header-row-mutations.py</c>). Seven variants, one rule fitting all
+    /// of them to a tenth of a point:
+    /// </para>
+    /// <list type="bullet">
+    /// <item>table then one empty paragraph — the paragraph is not laid out;</item>
+    /// <item>table then a paragraph with text — laid out, so it is emptiness that decides;</item>
+    /// <item>table then <em>two</em> empty paragraphs — <strong>both</strong> laid out, because the last
+    /// one follows a paragraph rather than a table;</item>
+    /// <item>empty paragraph, table, empty paragraph — the leading one is laid out and the trailing one
+    /// is not, so it is neither "the cell's first" nor "every empty paragraph".</item>
+    /// </list>
+    /// <para>
+    /// Hence the two conditions together: the <em>last</em> block, and the block before it a table.
+    /// Applied in the DOCX reader rather than in the layout because the shape is OOXML's own — an ODF
+    /// cell may end with a table, so an empty paragraph after one there is the author's.
+    /// </para>
+    /// </remarks>
+    private static void DropNestedTableFiller(List<PageBlock> blocks)
+    {
+        if (blocks.Count < 2) return;
+        if (blocks[^1] is not PageParagraph last || blocks[^2] is not PageTable) return;
+        if (last.Text.Length > 0 || last.Frames.Count > 0 || last.Notes.Count > 0) return;
+
+        blocks.RemoveAt(blocks.Count - 1);
     }
 
     /// <summary>
