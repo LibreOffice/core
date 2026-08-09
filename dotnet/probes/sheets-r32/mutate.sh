@@ -12,7 +12,7 @@ G=dotnet/src/Paperless.Spreadsheets/Layout/SheetPageGraphics.cs
 case "${1:?usage: mutate.sh m1|m2|m3|m4|m5}" in
 
 # The shown comments are never read at all — the tree as it stood before this round.
-m1) sed -i 's|List<SheetDrawing> captions = \[\];|List<SheetDrawing> captions = []; return captions;|' "$N" ;;
+m1) sed -i 's|RelationshipNamespace + "/vmlDrawing"|RelationshipNamespace + "/legacyDrawing"|' "$N" ;;
 
 # Visibility keyed on the `x:Visible` element rather than on the shape's CSS, which draws
 # every note the file marks visible in either sense.
