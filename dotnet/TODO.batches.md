@@ -8949,11 +8949,17 @@ odp` writes `southern-classic`'s four page-11 charts with `fo:font-size` of exac
 
 ### Cross-track
 
-Nothing outside the OOXML chart reader and `Core/Charts` changed, and the two new `ChartPlot`
-fields are null for every reader that was not taught to set them — so `SheetChart` and
-`FrameChart` see the same model they saw before. `SheetChart.Sized` was given the two nullable
-sizes it was silently dropping through the print zoom, which is a correctness fix reaching no
-corpus sheet: the comment beside it already recorded that every corpus workbook is at 100%.
+`DrawingChartPlot` is shared by all three families, so the reach claim needed measuring rather
+than reasoning about: an `.xlsx` or `.docx` chart with a `c:dLbls/c:txPr` would move too.
+**Rendered at both CLIs with `SOURCE_DATE_EPOCH` pinned and byte-compared over all 371 words and
+sheets documents: 0 changed.** No chart in either track states a data-label size, a data-label
+weight, or two faces.
+
+`SheetChart.Sized` was also given the two nullable sizes it was silently dropping through the
+print zoom — `LegendSize` as well as the new `DataLabelSize`, since it had never scaled the
+legend's either. That is a correctness fix reaching no corpus sheet, and the sweep above is why
+that can be said rather than assumed: the comment beside it already recorded that every corpus
+workbook is at 100%.
 
 ### Test counts
 
