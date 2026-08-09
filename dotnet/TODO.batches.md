@@ -9201,3 +9201,38 @@ Spreadsheets **598** (593 plus this round's 5), Presentations 542.
 **Every source change is inside `Paperless.Spreadsheets`** — `MsBinary/XlsPrintSetup.cs`,
 `Layout/SheetBandHeight.cs` and `Layout/SheetPageDecoration.cs` — so the words and slides tracks
 cannot be reached by it.
+
+### The twelve-document pagination cluster is not the column-fit predicate
+
+A mid-round review widened the brief's three documents to twelve — every sheet whose page count
+is wrong while its words are right, deltas −3 −3 −2 −1 −1 −1 −1 +1 +1 +1 +1 +3 — and asked for
+the observation separating one predicate from twelve coincidences. It is cheap and it is negative.
+
+**Every input to the column-band predicate agrees with LibreOffice on every document checked.**
+`UpdatePageBreaks` measures column widths against the printable page width and nothing else, and
+our port is faithful, so the split can only differ if one of those numbers does. Against the
+flat-ODF export, on `SIL_TDB648`, `CSJU`, `tk-syllabus`, `flightstandards`, `Capability_List`,
+`FAA-2019-0995-0002` and `seihon` — 55 sheets between them — **zero** column widths differ and
+**zero** page terms differ (paper, all four margins, scale, pinned bands). And two of the
+fourteen have a single column band per sheet, so no value of the predicate can reach them.
+
+**What the cluster does look like is a wrapped row one text line out, in both directions.** The
+row heights are the last input and they do differ: 129 rows on `seihon`'s one sheet, 16 across
+`tk-syllabus`'s seventeen, 12 on `flightstandards`, 1 on `Capability_List` — and every
+difference is a whole multiple of one line of the cell's own text (224.1 twips at 11 pt,
+268.8 at 13), with both signs. That is the brief's *one quantity with both signs*, attached to
+the wrong axis: it is `SheetOptimalRowHeights` and cell wrapping, not the column fit.
+
+**Two of the seven do not fit even that, and that is the part worth carrying forward.**
+`CSJU List of Recipients of funds 2013-2020.xlsx` has word counts *exactly* equal at
+55219/55219, is one page long, and has not one differing column width, row height or page term
+across its eight sheets and 5500 rows; `FAA-2019-0995-0002_attachment_2.xlsx` is the same. Those
+two are downstream of the geometry entirely. A cluster of one symptom is not a cluster of one
+cause, and this one is at least three.
+
+`probes/sheets-r33/axis-triage.sh` says which axis can possibly be at fault; `geom-check.py` and
+`page-check.py` rule out the column axis in one run each; `row-check.py` names the rows. The
+review's other findings on this track — `Capability_List`'s taller cells (the same finding as its
+row heights), `grants-2005.xls`'s uncropped header text, `sectors-defense-and-aerospace.xlsx`'s
+missing empty-cell shading, `ans_mappings`'s hyperlink colour, `Keywords_Mapping`'s missing
+borders and chart scale, and `Template Pilot Logbook`'s angled category labels — are untouched.

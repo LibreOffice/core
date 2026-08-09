@@ -303,3 +303,67 @@ Every source change is inside `Paperless.Spreadsheets` — `MsBinary/XlsPrintSet
 `Layout/SheetBandHeight.cs`, `Layout/SheetPageDecoration.cs` — so the words and slides tracks
 cannot be reached by it. The one lead that *would* reach them, the `/Widths` rounding above, is
 diagnosed and deliberately unshipped for exactly that reason.
+
+## The twelve-document pagination cluster is not a column-fit predicate
+
+A mid-round review widened the brief's three documents to twelve (plus two just outside a 1%
+word band): every document whose page count is wrong while its words are right, deltas
+−3 −3 −2 −1 −1 −1 −1 +1 +1 +1 +1 +3. The question asked was for the observation that separates
+*one predicate* from *twelve coincidences*. It is cheap, and it is negative.
+
+**Every input to the column-band predicate agrees with LibreOffice, on every document checked.**
+`ScTable::UpdatePageBreaks` measures column widths against the printable page width and nothing
+else, and our port is faithful, so the split can only differ if one of those numbers does.
+Against LibreOffice's own flat-ODF export (`geom-check.py`, `page-check.py`):
+
+| document | sheets | column widths differing | page rectangle differing |
+|---|---:|---:|---:|
+| `SIL_TDB648.xlsx` | 11 | **0** of 16384 per sheet | **0** |
+| `CSJU List of Recipients…xlsx` | 8 | **0** | **0** |
+| `tk-syllabus-comparison-document-v5.xlsx` | 17 | **0** | **0** |
+| `flightstandards-doc-Cross-reference-table_version02.xlsx` | 6 | **0** | **0** |
+| `Capability_List_…unsorted.xlsx` | 1 | **0** | **0** |
+| `FAA-2019-0995-0002_attachment_2.xlsx` | 11 | **0** | **0** |
+| `seihon_zassi_kikou_20221215.xlsx` | 1 | **0** | **0** |
+
+The page rectangle here is the paper size, all four margins, the scale and the pinned band
+heights — every term of `GetDocPageSize`.
+
+**And two of the fourteen have one column band per sheet**, so a column-fit defect cannot reach
+them at any value: `RMP 2011-2014 and Inventory.xls` (`fitToWidth=1`, and its cause turned out to
+be the page *height*) and `seihon_zassi_kikou_20221215.xlsx`. `axis-triage.sh` prints the band
+counts for the whole list.
+
+### What the cluster does look like: a wrapped row one text line out, in both directions
+
+The row heights are the last input, and they differ — always by a whole multiple of one line of
+the cell's own text, and in both directions (`row-check.py`, ours against the export):
+
+| document | rows compared | differing | examples (ours vs LibreOffice, twips) |
+|---|---:|---:|---|
+| `tk-syllabus…v5.xlsx` | 300/sheet | 16 over 17 sheets | 477 vs 701, 701 vs 925, 925 vs 1149, 3611 vs 3388, 1597 vs 1373 |
+| `flightstandards…version02.xlsx` | 400 | 12 | 925 vs 1820, 925 vs 1149, 1373 vs 1597, 2716 vs 2940 |
+| `seihon_zassi_kikou_20221215.xlsx` | 5159 | **129** | 1104 vs 1373, 1373 vs 1641 |
+| `Capability_List_…unsorted.xlsx` | 400 | 1 | 390 vs 567 |
+
+224.1 twips is one 11 pt line on these documents and 268.8 is one 13 pt line; every difference
+above is a whole number of them. That is a wrapped cell taking one line more or fewer than
+LibreOffice's, which is exactly the shape the brief described — *one quantity with both signs* —
+attached to the wrong axis.
+
+**Two of the seven do not fit even that, and saying so is the point.** `CSJU List of Recipients
+of funds 2013-2020.xlsx` has **word counts exactly equal** at 55219/55219, +1 page, and **not one
+differing column width, row height or page term on any of its eight sheets, over 5500 rows**.
+`FAA-2019-0995-0002_attachment_2.xlsx` is the same on every sheet it has. Whatever splits those
+two differently is downstream of the geometry entirely — a repeated band, a print area, an empty
+page — and it is not the same finding as the row heights. A cluster of one symptom is not a
+cluster of one cause, and this one is at least three.
+
+### What to do with it
+
+The instruments are committed and the next round can start from a measurement rather than a
+hypothesis: `axis-triage.sh` says which axis can possibly be at fault, `geom-check.py` and
+`page-check.py` rule out the column axis in one run each, and `row-check.py` names the rows.
+`SheetOptimalRowHeights` is where the row-height work lands, and the population is large —
+129 rows on one sheet of one document — so it is worth a prototype against the export's own
+answer before any C#, in the shape that closed this round's own lead.
