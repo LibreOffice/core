@@ -494,7 +494,7 @@ public sealed partial class DocxLayoutSource
         bool breaksPage = _pageBreakPending;
         _pageBreakPending = false;
 
-        RunWalker walker = new(CitationOf, _footnoteNumber, _endnoteNumber);
+        RunWalker walker = new(CitationOf, Symbol, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
         // Where the note's own number landed, for a renumbering pass that has to find it again. A field
@@ -712,7 +712,10 @@ public sealed partial class DocxLayoutSource
 
             if (range.IsCitation) style = AsCitation(style);
 
-            OpenTypeFace face = Face(style) ?? paragraphFace;
+            // A `w:sym` names its own face for one character, and it was resolved when the character was
+            // chosen. Everything else about the run — its size, its colour, its escapement — still comes
+            // from the run, so only the face is taken from the symbol.
+            OpenTypeFace face = range.Symbol?.Face ?? Face(style) ?? paragraphFace;
 
             // The escapement is resolved here rather than where it was read, because its rise is a fraction
             // of the face's height and the face is only known now.
@@ -720,6 +723,10 @@ public sealed partial class DocxLayoutSource
             Length rise = style.Escapement.RiseOf(face, style.Size);
 
             if (face != paragraphFace
+                // A symbol's face is its own even when it happens to equal the paragraph's: losing the
+                // runs here would draw its code point out of whatever the paragraph is set in, which for
+                // a Private Use Area slot is .notdef.
+                || range.Symbol is not null
                 || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
@@ -750,7 +757,7 @@ public sealed partial class DocxLayoutSource
                 range.Length,
                 face,
                 size,
-                _references.GetValueOrDefault(style.FaceKey),
+                range.Symbol is { } symbol ? symbol.Font : _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language, DisableKerning: !style.AutoKerning),
                 rise,
@@ -776,8 +783,17 @@ public sealed partial class DocxLayoutSource
     /// <param name="IsCitation">
     /// True for a note's citation, which Word draws superscript whether the run says so or not.
     /// </param>
+    /// <param name="Symbol">
+    /// The face a <c>w:sym</c> resolved to, or null for ordinary text. Carried already resolved because
+    /// the same decision picks the character: a slot recoded into OpenSymbol is a different code point
+    /// from the one the file states, so the face cannot be chosen after the text is built.
+    /// </param>
     private readonly record struct StyledRange(
-        int Start, int Length, XElement? RunProperties, bool IsCitation = false);
+        int Start,
+        int Length,
+        XElement? RunProperties,
+        bool IsCitation = false,
+        (OpenTypeFace Face, FontReference? Font)? Symbol = null);
 
     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
@@ -868,10 +884,21 @@ public sealed partial class DocxLayoutSource
         /// How many footnotes came before this paragraph. Passed in because notes are numbered across the
         /// document rather than within a paragraph, so the counters belong to the source.
         /// </param>
+        /// <param name="symbol">
+        /// How a <c>w:sym</c>'s face and slot resolve to something drawable, or null when nothing can
+        /// draw it. Supplied by the source for the same reason the citation is: font resolution is the
+        /// source's, and the answer decides the *characters* — a recoded slot is a different code point
+        /// from the one the file states — so it cannot be deferred to the pass that styles the ranges.
+        /// </param>
         /// <param name="endnote">How many endnotes came before it, counted separately.</param>
-        internal RunWalker(Func<bool, int, string> citation, int footnote = 0, int endnote = 0)
+        internal RunWalker(
+            Func<bool, int, string> citation,
+            Func<string?, char, (string Text, OpenTypeFace Face, FontReference? Font)?> symbol,
+            int footnote = 0,
+            int endnote = 0)
         {
             _citationOf = citation;
+            _symbolOf = symbol;
             _footnote = footnote;
             _endnote = endnote;
         }
@@ -882,6 +909,12 @@ public sealed partial class DocxLayoutSource
         /// settings, which the source read, and a walker is built per paragraph.
         /// </remarks>
         private readonly Func<bool, int, string> _citationOf;
+
+        /// <summary>How a <c>w:sym</c> resolves to a drawable character and face.</summary>
+        private readonly Func<string?, char, (string Text, OpenTypeFace Face, FontReference? Font)?> _symbolOf;
+
+        /// <summary>The face a <c>w:sym</c> resolved to, in force for exactly the character it emits.</summary>
+        private (OpenTypeFace Face, FontReference? Font)? _symbolFace;
 
         /// <summary>How deep a paragraph's element nesting is followed.</summary>
         /// <remarks>
@@ -1058,6 +1091,35 @@ public sealed partial class DocxLayoutSource
                         Emit("\t");
                         break;
 
+                    // A character named by slot in a face of its own, and the only run-level element
+                    // that overrides the run's font for one character. LibreOffice sets
+                    // PROP_CHAR_FONT_NAME to `w:font` with charset SYMBOL and appends the raw `w:char`
+                    // (`DomainMapper::sprmWithProps`, `LN_EG_RunInnerContent_sym`), so the face travels
+                    // with the character rather than with the run.
+                    case "sym" when !_inInstruction:
+                        EmitSymbol(child);
+                        break;
+
+                    // Word states it as an element rather than a character, and dropping it closes up
+                    // the space it occupies exactly as dropping a `w:tab` would.
+                    //
+                    // An ordinary hyphen, not U+2011, and that is measured rather than assumed. The
+                    // import carries it as U+2011 (`OOXMLFastContextHandler.cxx:54`, `uNoBreakHyphen`)
+                    // and the *layout* then swaps the character out:
+                    // `case CHAR_HARDHYPHEN: pPor = new SwBlankPortion('-')`
+                    // (`sw/source/core/text/itrform2.cxx:1881-1882`). The reference PDF agrees — the
+                    // text layer of `Company-profile-2022-EN.docx` reads `the -600 series` with a
+                    // U+002D — and it has to, because U+2011 is in neither Carlito nor any Liberation
+                    // face, so keeping it would draw a fallback face's glyph beside text in neither.
+                    //
+                    // What this does not reproduce is the half of the name that says "no break": a
+                    // `SwBlankPortion` cannot be broken and a U+002D is UAX #14 class HY, which is a
+                    // break opportunity. Drawing the hyphen in the right face is worth more than the
+                    // breaking, which only differs when a line ends exactly there.
+                    case "noBreakHyphen" when !_inInstruction:
+                        Emit("-");
+                        break;
+
                     // A `w:br` is three things wearing one name and only one of them is a line break.
                     // `w:type="page"` moves everything after it to the next page and contributes no
                     // character at all: LibreOffice turns it back into the DOC's own U+000C
@@ -1147,6 +1209,31 @@ public sealed partial class DocxLayoutSource
             }
         }
 
+        /// <summary>
+        /// Emits a <c>w:sym</c>: one character, in the face the element names rather than the run's.
+        /// </summary>
+        /// <remarks>
+        /// The slot is passed on exactly as the file states it — <c>00DE</c> stays <c>U+00DE</c> and
+        /// <c>F0B7</c> stays <c>U+F0B7</c> — because the recode tables accept a symbol slot in both its
+        /// plain and its Private Use Area spelling and LibreOffice hands them the value unaltered.
+        /// Nothing is emitted when the resolver declines: the code point means nothing outside the face
+        /// that is missing, so drawing it in the paragraph's own face would put a <c>.notdef</c> box
+        /// where the document asked for a picture.
+        /// </remarks>
+        private void EmitSymbol(XElement symbol)
+        {
+            string? code = Word.Attribute(symbol, "char");
+            if (code is null) return;
+            if (!ushort.TryParse(code, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ushort slot))
+                return;
+
+            if (_symbolOf(Word.Attribute(symbol, "font"), (char)slot) is not { } resolved) return;
+
+            _symbolFace = (resolved.Face, resolved.Font);
+            Emit(resolved.Text);
+            _symbolFace = null;
+        }
+
         /// <summary>Appends text under the run properties currently in force.</summary>
         private void Emit(string text)
         {
@@ -1156,7 +1243,10 @@ public sealed partial class DocxLayoutSource
 
             // Adjacent runs with the same properties merge, which matters because a DOCX splits runs for
             // reasons that are not formatting: a proofing error, a revision id, a bookmark boundary.
+            // A symbol never merges: its face is its own and the character beside it is not in it.
             if (_ranges.Count > 0
+                && _symbolFace is null
+                && _ranges[^1].Symbol is null
                 && _ranges[^1].IsCitation == _inCitation
                 && _ranges[^1].RunProperties == _runProperties)
             {
@@ -1165,7 +1255,7 @@ public sealed partial class DocxLayoutSource
             }
 
             _ranges.Add(new StyledRange(
-                _builder.Length - text.Length, text.Length, _runProperties, _inCitation));
+                _builder.Length - text.Length, text.Length, _runProperties, _inCitation, _symbolFace));
         }
 
         /// <summary>True while a note's citation is being emitted.</summary>
