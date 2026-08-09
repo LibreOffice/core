@@ -9103,3 +9103,77 @@ the reference draws `EASA.UK.1` and the next cell as two tokens and we draw them
 Per-project tests, all matching the known-good counts with 0 skipped: Core 275, Containers 109,
 Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
 Spreadsheets **593** (588 plus this round's 5), Presentations 542, Fidelity **550**.
+
+## Round thirty-three — sheets: the header/footer band Calc pins rather than floors
+
+Base `9f44b2943`, checked before measuring. The baseline sweep reproduced the brief to the digit:
+**149/171, absolute page error 86, 155 exact page counts, absolute word error 32729**, and the
+per-batch line as well. 171 rows, no duplicate path, no `ref-failed` and no `ours-failed`.
+
+Full working, citations and the mutation table are in `probes/sheets-r33/README.md`.
+
+**The lead the brief handed over was measured right and read wrong, and the two had to be checked
+separately.** The claim was that five of batches 011 and 016's six failures are one quantity with
+both signs — how many columns fit in a column band. It is not the columns. `probes/sheets-r33/colwidth.py`
+replays our SpreadsheetML column-width arithmetic against LibreOffice's own `style:column-width`
+and reproduces **all 16384 columns on all eleven sheets** of `SIL_TDB648.xlsx` exactly, margins
+included. And on `RMP 2011-2014 and Inventory.xls` it is not even the columns' axis: that sheet is
+`fitToWidth=1`, so it has one column band whatever the widths are. The quantity is the printable
+page **height**, and the term that is wrong in it really is a threshold — just not the one named.
+
+**A BIFF header or footer band the filter pins has no minimum height, and we applied one to
+every band.** `XclImpPageSettings::Finalize` splits on whether the band's text fits the distance
+the two margins leave (`xipage.cxx:315-331`). When it fits, the band is dynamic and no
+`ATTR_PAGE_SIZE` is written, so `nManHeight` stays at the page style's own 425 twips and
+`UpdateHFHeight` floors the band there. When it does not fit — #i23296 — the band is marked *not*
+dynamic and `ATTR_PAGE_SIZE` is written at the margin distance; `UpdateHFHeight` then returns on
+its own first line (`printfun.cxx:793`) and never reaches the floor at all.
+
+**Measured against LibreOffice's four numbers rather than derived.** `RMP`'s flat-ODF export
+states every band height on both its sheets: a dynamic header floored at 425 twips, a pinned
+footer of 176, a pinned header of 380 and a pinned footer of 113. We gave all four 425. All four
+now agree exactly, and the exported distances corroborate the *branch* as well as the height.
+
+**The row bands were reproduced in a script before any C# was written.** `rowbands.py` replays
+`ScTable::UpdatePageBreaks` down the rows over LibreOffice's own row heights — which agree with
+ours to the twip on all 210 rows — and gives our 22 bands at the floored page height and the
+reference's 21 at the pinned one. Two page heights produce 21 bands; the one that also puts row
+120 on page 12 is the reference's, which token overlap confirms.
+
+**The census covered the whole track and the reach matched it by name.** 61 of the 171 documents
+open as an OLE2 workbook stream and 110 as a zip, and only the BIFF reader carries the floor, so
+the zip half is empty by construction. The census names **five** documents; rendering all 171
+with both CLIs under a pinned clock, **five differ and 166 are byte-identical** — the same five.
+
+**Stopping at the band height would have cost two matches, and the first sweep is why.** Three of
+the five state a footer margin equal to the page margin, so their pinned band is *nothing* — and
+Calc still draws the footer. `PrintHF` clips to `tools::Rectangle(aStart, aPaperSize)`, and a VCL
+rectangle built from a zero-height `Size` has no bottom edge at all rather than being empty
+(`printfun.cxx:1870`), so a zero band suppresses the space and not the ink. Measured: LibreOffice
+draws `Page 6 - 2` with its top at 575.95 pt on a 612 pt page, which is the bottom margin line to
+a twentieth of a point. The gap goes with it — the pinning branch writes the distance out as zero
+(`xipage.cxx:322`) — and a dynamic band's distance is left at the shared default, labelled in the
+source as a small unmeasured deviation rather than a decision.
+
+Two fixtures, both authored as flat ODF and converted by LibreOffice so their BIFF page records
+say what they are meant to, and both verified by reading the records back:
+`sheet-pinned-band-xls.xls` (a 144-twip pinned footer, one page against two) and
+`sheet-zero-band-xls.xls` (a band pinned at nothing, whose footer the reference draws at the
+margin line). Five cases in `SheetPinnedBandTests`; five reintroduced defects, all detected —
+`probes/sheets-r33/mutate.sh`. A sixth mutation is recorded there as an **equivalent formulation
+rather than a gap**, which is what `verify-test.sh` reporting it undetected correctly means.
+
+**The largest residue outside the round is diagnosed and deliberately not shipped.**
+`EASA-IFP-145Scope(WEB)_…xlsx` loses exactly 2350 words, and the brief attributed it to one
+column's width or alignment. It is neither, and it is not in the spreadsheet code: the content
+streams are identical — same glyph codes, same `Td`, same subset — and what differs is that
+**LibreOffice truncates its `/Widths` to whole thousandths of an em where we state four
+decimals**. `EASA.UK.1` therefore ends at 98.386 in the reference and 98.441 in ours, a gap of
+1.1375 pt against 1.0830, and poppler's word break sits between them at 0.1 of the font size.
+Truncation is LibreOffice's rule beyond doubt — it reproduces all 77 of that document's width
+entries where rounding misses 39, and Liberation Sans and Liberation Sans Bold at every entry
+where the two rules disagree. It was not shipped because truncating alone would not reproduce it:
+`PdfContentSink` corrects the pen past 0.0025 pt of drift, so every glyph would take a `TJ`
+adjustment and land back where layout put it. Matching the reference means adopting the
+truncation *and* the uncorrected drift it causes, in the shared PDF writer, which is a decision
+for a round that can sweep all three tracks.

@@ -21,3 +21,13 @@ m2) sed -i 's|            isDynamic = statedBand > Length.Zero;|            isDy
 m3) perl -0pi -e 's/            isDynamic = false;\n            return statedBand;/            isDynamic = nominal >= statedBand;\n            return statedBand;/' \
       dotnet/src/Paperless.Spreadsheets/Layout/SheetBandHeight.cs ;;
 esac
+# Added with the second half of the round:
+#   m4  a band of no height suppressed rather than drawn
+#   m5  a pinned band keeping the shared 142-twip gap
+# m4 detected by 1 of 5 cases, m5 by 1.
+case "${1:-}" in
+m4) sed -i 's|        if (right <= left || height < Length.Zero) return;|        if (right <= left || height <= Length.Zero) return;|' \
+      dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs ;;
+m5) perl -0pi -e 's/        return isDynamic \? fallback : Length.Zero;/        return fallback;/' \
+      dotnet/src/Paperless.Spreadsheets/MsBinary/XlsPrintSetup.cs ;;
+esac

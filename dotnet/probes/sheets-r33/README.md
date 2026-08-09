@@ -10,7 +10,8 @@ rendering the one document whose page count it moves.
 |---|---|
 | `base-whole-track.tsv` | whole-track sweep at `9f44b2943`, before any change |
 | `final-whole-track.tsv` | the same on the final tree |
-| `reach.log` | the byte-level reach, clock pinned, over all 171 documents |
+| `reach.log` | the byte-level reach, clock pinned, over all 171 documents — the summary rather than the per-row TSV, which was cleaned up with the sweep's PDFs before it was copied |
+| `interim-band-only.tsv` | the whole-track sweep with the band height fixed and the drawing half not yet — kept because it is what found the second half |
 | `reach.sh` | renders the track with two CLIs and diffs the bytes; unchanged from r31 |
 | `score.py` | turns a `rows.tsv` into matches, page error, exact counts, word error |
 | `mutate.sh` | the reintroduced defects the round's tests were verified against |
@@ -136,6 +137,40 @@ five by name.
 Three of the five state a footer margin *equal* to the page margin, so their pinned band is
 nothing at all where we gave it 425 twips.
 
+## The half of the rule the first sweep found
+
+Withholding the floor and stopping there **cost two matches and gained one**: the whole-track
+sweep came back 148/171, page error 85, 156 exact page counts, word error 32726
+(`interim-band-only.tsv`). Exactly the five documents moved and no others, which is the census
+again, but two of them lost their word gate.
+
+The three workbooks whose pinned band is *nothing* stopped drawing their footer. Calc does not:
+`PrintHF` clips the text to `tools::Rectangle(aStart, aPaperSize)`, and **a VCL rectangle built
+from a zero-height `Size` has no bottom edge at all** — it is unbounded rather than empty
+(`printfun.cxx:1870`). So a zero band suppresses the *space* and not the ink. Measured on
+`2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls`, whose printed sheet has a 0.5 in bottom
+margin and a 0.5 in footer margin: LibreOffice draws `Page 6 - 2` with its top at **575.95 pt**
+on a 612 pt page — the bottom margin line to a twentieth of a point — running down into the
+margin, and the words it drops are exactly the four pages of `Page 6 - N`.
+
+The gap goes with it, and for the same citation: the branch that pins a band writes the distance
+to the body out as nothing (`lclPutMarginItem(…, EXC_ID_BOTTOMMARGIN, 0.0)`, `xipage.cxx:322`),
+because the band was already too short for its own text. Without that a pinned 176-twip band
+would put its one line in the 34 twips left after the shared 142-twip default. **A dynamic
+band's distance is `statedBand − nominal` and is deliberately left at the default**: our drawing
+places a dynamic footer against the sheet and a dynamic header against the top margin, so the gap
+cancels out of the footer entirely and only shifts a header's centring inside its own band.
+Nothing on this corpus measures that. It is a real, small, unmeasured deviation and is labelled
+as one in the source.
+
+| document | baseline | band height only | with the drawing half |
+|---|---|---|---|
+| `2012-GA-Survey-Chapter-5…` | 537/537 `match` | 529/537 `match` | **537/537** |
+| `2012-GA-Survey-Chapter-6…` | 643/643 `match` | 627/643 `words` | **643/643** |
+| `CSA_CCM_v1.2.xls` | 15958/15852 `match` | unchanged | unchanged |
+| `PC1000.xls` | 864/873 `match` | 855/873 `words` | **864/873** |
+| `RMP 2011-2014 and Inventory.xls` | 39/38 `pages` | 38/38 `match` | **38/38 `match`** |
+
 ## Tests
 
 `tests/corpus/features/sheet-pinned-band-xls.xls`, authored as flat ODF and converted by
@@ -149,7 +184,13 @@ Its 34 rows total 14450 twips against a body of **14616** pinned and **14335** f
 sheet is one page if the floor is withheld and two if it is applied. LibreOffice renders it on
 one; we rendered it on two before and one after.
 
-Four cases in `SheetPinnedBandTests`, verified by reintroducing each defect through
+`tests/corpus/features/sheet-zero-band-xls.xls` is the same document with the footer band taken
+to **nothing** — a 0.25 in bottom margin against a 0.25 in footer margin. LibreOffice renders it
+on one page with the top of `Zero band footer` at **773.95 pt** on a 792 pt page, which is its
+bottom margin line; before this round we rendered two pages and drew the footer 12.6 pt higher,
+and after it we draw it at 774.00.
+
+Five cases in `SheetPinnedBandTests`, verified by reintroducing each defect through
 `.claude/skills/corpus-batches/scripts/verify-test.sh`:
 
 | mutation | cases that fail |
@@ -157,6 +198,8 @@ Four cases in `SheetPinnedBandTests`, verified by reintroducing each defect thro
 | `m1` the floor applied to every band, dynamic or not — the defect this round removed | 2 |
 | `m2` a band the margins leave no room for treated as dynamic | 1 |
 | `m3` a band whose text overflows it still reported dynamic | 3 |
+| `m4` a band of no height suppressed rather than drawn | 1 |
+| `m5` a pinned band keeping the shared 142-twip gap | 1 |
 
 A fourth mutation is worth recording as a **non-detection rather than a gap**: writing `m3` as
 `isDynamic = nominal > statedBand + Length.FromPoints(1000)` changes nothing, because inside that
