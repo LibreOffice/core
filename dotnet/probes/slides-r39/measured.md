@@ -95,6 +95,31 @@ Two of the four backgrounds now match outright. What is left is not the gradient
 regenerated from it by `ink-ranking.py`, with the `mc:AlternateContent` and rasterisation
 ceilings subtracted per page.
 
+## The test suite, and one run of it that was a lie
+
+Final counts: Core 284, Containers 109, Text 262, Vector 293, Rendering 119, Markup 259,
+OpenDocument 125, WordProcessing 723, Spreadsheets 611, Presentations **576** (573 before, +3),
+Fidelity 550 — **0 skipped** throughout.
+
+The first Fidelity run of the same tree reported **Failed: 296, Passed: 254**. It was the disk,
+not the code: every failure reads `LibreOffice produced no output converting …`, on `.odt`,
+`.ods` and `.docx` documents a PPTX gradient cannot reach. `soffice` exits 0 having converted
+nothing when there is nowhere to write, and `LibreOfficeRunner` turns that into an exception per
+document. **550 discovered, 550 attempted, 296 "failed"** — so the count was right and the colour
+was wrong, which is the opposite of the truncation trap and just as convincing. Re-run with a
+gigabyte freed: 550 passed, 0 failed, 0 skipped.
+
+Worth stating plainly because the natural reading of 296 failures is that the round broke the
+tree, and the disposition that follows from it is to revert.
+
+## Not run: the corpus divergence table
+
+`first-divergence.py`'s corpus table is stale by three fixes and is worth regenerating.
+`divergence-from-sweep.py` does it from a sweep's own PDFs instead of rendering the track twice
+more, and it got 26 of 163 in before dying on `OSError: [Errno 28] No space left on device`.
+The script is committed and correct; the machine is what was not available. Run it against any
+sweep's `ours` directory and the kept reference set.
+
 ## A note on the sweep that produced these
 
 Twenty-five documents came back `ref-failed` and one comparison came back empty because the
