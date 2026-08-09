@@ -417,12 +417,18 @@ public:
     }
     void set_active_or_entry_text(const OUString& rText);
     void set_size_request(int nWidth, int nHeight) {  m_xComboBox->set_size_request(nWidth, nHeight); }
+    void set_entry_width_chars(int nChars) { m_xComboBox->set_entry_width_chars(nChars); }
 
     void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
     void save_value() { m_xComboBox->save_value(); }
     OUString const& get_saved_value() const { return m_xComboBox->get_saved_value(); }
     int get_count() const { return m_xComboBox->get_count(); }
+    bool has_focus() const { return m_xComboBox->has_focus(); }
+    void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink)
+    {
+        m_xComboBox->connect_entry_activate(rLink);
+    }
     int find_text(const OUString& rStr) const { return m_xComboBox->find_text(rStr); }
     weld::ComboBox& get_widget() { return *m_xComboBox; }
 private:
