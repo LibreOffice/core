@@ -4602,13 +4602,13 @@ static size_t sendURPData(void* context, signed char* buffer, size_t bytesToRead
     return ptr - buffer;
 }
 
-static int receiveURPFromLO(void* context, const signed char* buffer, int bytesToWrite)
+static int receiveURPFromEngine(void* context, const signed char* buffer, int bytesToWrite)
 {
     assert(bytesToWrite >= 0 && "cannot be negative");
     return receiveURPData(context, buffer, bytesToWrite);
 }
 
-static int sendURPToLO(void* context, signed char* buffer, int bytesToRead)
+static int sendURPToEngine(void* context, signed char* buffer, int bytesToRead)
 {
     assert(bytesToRead >= 0 && "cannot be negative");
     return sendURPData(context, buffer, bytesToRead);
@@ -4630,7 +4630,7 @@ bool startURP(const std::shared_ptr<COKit>& LOKit, void** ppURPContext)
 
     *ppURPContext = LOKit->startURP(reinterpret_cast<void*>(URPfromLoFDs[1]),
                                     reinterpret_cast<void*>(URPtoLoFDs[0]),
-                                    receiveURPFromLO, sendURPToLO);
+                                    receiveURPFromEngine, sendURPToEngine);
 
     if (!*ppURPContext)
     {

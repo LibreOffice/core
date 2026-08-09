@@ -290,7 +290,7 @@ extern "C" {
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
 
-static LibCO_Impl *gImpl = nullptr;
+static COKitImpl *gImpl = nullptr;
 static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
 static bool bInitialized = false;
@@ -842,7 +842,7 @@ static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
 namespace {
 
-OUString lcl_getCurrentDocumentMimeType(const LibLODocument_Impl* pDocument)
+OUString lcl_getCurrentDocumentMimeType(const COKitDocumentImpl* pDocument)
 {
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
@@ -1362,7 +1362,7 @@ static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnable
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
@@ -1460,7 +1460,7 @@ COKitDocumentType getDocumentType (COKitDocument* pThis)
 {
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     try
     {
@@ -1497,7 +1497,7 @@ COKitDocumentType getDocumentType (COKitDocument* pThis)
 } // anonymous namespace
 
 WaitUntilIdle::WaitUntilIdle()
-    : maIdle{"LibLODocument IdleTask"}
+    : maIdle{"COKitDocumentImpl IdleTask"}
 {
     maIdle.SetPriority(TaskPriority::TOOLKIT_DEBUG);
     maIdle.SetInvokeHandler(LINK(this, WaitUntilIdle, IdleHdl));
@@ -1538,7 +1538,7 @@ IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
     mnViewId = -1;
 }
 
-LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
+COKitDocumentImpl::COKitDocumentImpl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
     : mxComponent(std::move(xComponent))
     , mnDocumentId(nDocumentId)
 {
@@ -1547,17 +1547,17 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
     forceSetClipboardForCurrentView(this);
 }
 
-bool LibLODocument_Impl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
+bool COKitDocumentImpl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
 {
     return doc_saveAs(this, pUrl, pFormat, pFilterOptions);
 }
 
-COKitDocumentType LibLODocument_Impl::getDocumentType()
+COKitDocumentType COKitDocumentImpl::getDocumentType()
 {
     return doc_getDocumentType(this);
 }
 
-void LibLODocument_Impl::paintTile(unsigned char* pBuffer, const int nCanvasWidth,
+void COKitDocumentImpl::paintTile(unsigned char* pBuffer, const int nCanvasWidth,
                                    const int nCanvasHeight, const int nTilePosX,
                                    const int nTilePosY, const int nTileWidth, const int nTileHeight)
 {
@@ -1565,110 +1565,110 @@ void LibLODocument_Impl::paintTile(unsigned char* pBuffer, const int nCanvasWidt
                   nTileHeight);
 }
 
-COKitTileMode LibLODocument_Impl::getTileMode()
+COKitTileMode COKitDocumentImpl::getTileMode()
 {
     return doc_getTileMode(this);
 }
 
-void LibLODocument_Impl::getDocumentSize(long* pWidth, long* pHeight)
+void COKitDocumentImpl::getDocumentSize(long* pWidth, long* pHeight)
 {
     doc_getDocumentSize(this, pWidth, pHeight);
 }
 
-void LibLODocument_Impl::initializeForRendering(const char* pArguments)
+void COKitDocumentImpl::initializeForRendering(const char* pArguments)
 {
     doc_initializeForRendering(this, pArguments);
 }
 
-void LibLODocument_Impl::registerCallback(COKitCallback pCallback, void* pData)
+void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
 {
     doc_registerCallback(this, pCallback, pData);
 }
 
-void LibLODocument_Impl::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
+void COKitDocumentImpl::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     doc_postKeyEvent(this, eType, nCharCode, nKeyCode);
 }
 
-void LibLODocument_Impl::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+void COKitDocumentImpl::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
                                         int nButtons, int nModifier)
 {
     doc_postMouseEvent(this, eType, nX, nY, nCount, nButtons, nModifier);
 }
 
-void LibLODocument_Impl::postUnoCommand(const char* pCommand, const char* pArguments,
+void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArguments,
                                         bool bNotifyWhenFinished)
 {
     doc_postUnoCommand(this, pCommand, pArguments, bNotifyWhenFinished);
 }
 
-void LibLODocument_Impl::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
+void COKitDocumentImpl::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
 {
     doc_setTextSelection(this, eType, nX, nY);
 }
 
-char* LibLODocument_Impl::getTextSelection(const char* pMimeType, char** pUsedMimeType)
+char* COKitDocumentImpl::getTextSelection(const char* pMimeType, char** pUsedMimeType)
 {
     return doc_getTextSelection(this, pMimeType, pUsedMimeType);
 }
 
-bool LibLODocument_Impl::paste(const char* pMimeType, const char* pData, size_t nSize)
+bool COKitDocumentImpl::paste(const char* pMimeType, const char* pData, size_t nSize)
 {
     return doc_paste(this, pMimeType, pData, nSize);
 }
 
-void LibLODocument_Impl::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
+void COKitDocumentImpl::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
 {
     doc_setGraphicSelection(this, eType, nX, nY);
 }
 
-void LibLODocument_Impl::resetSelection()
+void COKitDocumentImpl::resetSelection()
 {
     doc_resetSelection(this);
 }
 
-char* LibLODocument_Impl::getCommandValues(const char* pCommand)
+char* COKitDocumentImpl::getCommandValues(const char* pCommand)
 {
     return doc_getCommandValues(this, pCommand);
 }
 
-void LibLODocument_Impl::setClientZoom(int nTilePixelWidth, int nTilePixelHeight,
+void COKitDocumentImpl::setClientZoom(int nTilePixelWidth, int nTilePixelHeight,
                                        int nTileTwipWidth, int nTileTwipHeight)
 {
     doc_setClientZoom(this, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
 }
 
-void LibLODocument_Impl::setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
+void COKitDocumentImpl::setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
 {
     doc_setClientVisibleArea(this, nX, nY, nWidth, nHeight);
 }
 
-int LibLODocument_Impl::createView()
+int COKitDocumentImpl::createView()
 {
     return doc_createView(this);
 }
 
-void LibLODocument_Impl::destroyView(int nId)
+void COKitDocumentImpl::destroyView(int nId)
 {
     doc_destroyView(this, nId);
 }
 
-void LibLODocument_Impl::setView(int nId)
+void COKitDocumentImpl::setView(int nId)
 {
     doc_setView(this, nId);
 }
 
-int LibLODocument_Impl::getView()
+int COKitDocumentImpl::getView()
 {
     return doc_getView(this);
 }
 
-int LibLODocument_Impl::getViewsCount()
+int COKitDocumentImpl::getViewsCount()
 {
     return doc_getViewsCount(this);
 }
 
-void LibLODocument_Impl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                                        const int nCanvasWidth, const int nCanvasHeight,
                                        const int nTilePosX, const int nTilePosY,
                                        const int nTileWidth, const int nTileHeight)
@@ -1677,60 +1677,60 @@ void LibLODocument_Impl::paintPartTile(unsigned char* pBuffer, const int nPart, 
                       nTilePosY, nTileWidth, nTileHeight);
 }
 
-bool LibLODocument_Impl::getViewIds(int* pArray, size_t nSize)
+bool COKitDocumentImpl::getViewIds(int* pArray, size_t nSize)
 {
     return doc_getViewIds(this, pArray, nSize);
 }
 
-void LibLODocument_Impl::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
+void COKitDocumentImpl::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
     doc_setOutlineState(this, bColumn, nLevel, nIndex, bHidden);
 }
 
-void LibLODocument_Impl::paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x,
+void COKitDocumentImpl::paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x,
                                      const int y, const int width, const int height)
 {
     doc_paintWindow(this, nWindowId, pBuffer, x, y, width, height);
 }
 
-void LibLODocument_Impl::postWindow(unsigned nWindowId, COKitWindowAction eAction,
+void COKitDocumentImpl::postWindow(unsigned nWindowId, COKitWindowAction eAction,
                                     const char* pData)
 {
     doc_postWindow(this, nWindowId, eAction, pData);
 }
 
-void LibLODocument_Impl::postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType,
+void COKitDocumentImpl::postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType,
                                             int nCharCode, int nKeyCode)
 {
     doc_postWindowKeyEvent(this, nWindowId, eType, nCharCode, nKeyCode);
 }
 
-void LibLODocument_Impl::postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType,
+void COKitDocumentImpl::postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType,
                                               int nX, int nY, int nCount, int nButtons,
                                               int nModifier)
 {
     doc_postWindowMouseEvent(this, nWindowId, eType, nX, nY, nCount, nButtons, nModifier);
 }
 
-void LibLODocument_Impl::setViewLanguage(int nId, const char* language)
+void COKitDocumentImpl::setViewLanguage(int nId, const char* language)
 {
     doc_setViewLanguage(this, nId, language);
 }
 
-void LibLODocument_Impl::postWindowExtTextInputEvent(unsigned nWindowId,
+void COKitDocumentImpl::postWindowExtTextInputEvent(unsigned nWindowId,
                                                      COKitExtTextInputType eType, const char* pText)
 {
     doc_postWindowExtTextInputEvent(this, nWindowId, eType, pText);
 }
 
-void LibLODocument_Impl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
+void COKitDocumentImpl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
                                         const int y, const int width, const int height,
                                         const double dpiscale)
 {
     doc_paintWindowDPI(this, nWindowId, pBuffer, x, y, width, height, dpiscale);
 }
 
-bool LibLODocument_Impl::insertCertificate(const unsigned char* pCertificateBinary,
+bool COKitDocumentImpl::insertCertificate(const unsigned char* pCertificateBinary,
                                            const int nCertificateBinarySize,
                                            const unsigned char* pPrivateKeyBinary,
                                            const int nPrivateKeyBinarySize)
@@ -1739,160 +1739,160 @@ bool LibLODocument_Impl::insertCertificate(const unsigned char* pCertificateBina
                                  pPrivateKeyBinary, nPrivateKeyBinarySize);
 }
 
-bool LibLODocument_Impl::addCertificate(const unsigned char* pCertificateBinary,
+bool COKitDocumentImpl::addCertificate(const unsigned char* pCertificateBinary,
                                         const int nCertificateBinarySize)
 {
     return doc_addCertificate(this, pCertificateBinary, nCertificateBinarySize);
 }
 
-int LibLODocument_Impl::getSignatureState()
+int COKitDocumentImpl::getSignatureState()
 {
     return doc_getSignatureState(this);
 }
 
-size_t LibLODocument_Impl::renderShapeSelection(char** pOutput)
+size_t COKitDocumentImpl::renderShapeSelection(char** pOutput)
 {
     return doc_renderShapeSelection(this, pOutput);
 }
 
-void LibLODocument_Impl::postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX,
+void COKitDocumentImpl::postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX,
                                                 int nY, int nOffset)
 {
     doc_postWindowGestureEvent(this, nWindowId, pType, nX, nY, nOffset);
 }
 
-int LibLODocument_Impl::createViewWithOptions(const char* pOptions)
+int COKitDocumentImpl::createViewWithOptions(const char* pOptions)
 {
     return doc_createViewWithOptions(this, pOptions);
 }
 
-void LibLODocument_Impl::resizeWindow(unsigned nWindowId, const int width, const int height)
+void COKitDocumentImpl::resizeWindow(unsigned nWindowId, const int width, const int height)
 {
     doc_resizeWindow(this, nWindowId, width, height);
 }
 
-bool LibLODocument_Impl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+bool COKitDocumentImpl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
                                       char      ***pOutMimeTypes, size_t     **pOutSizes,
                                       char      ***pOutStreams)
 {
     return doc_getClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
 }
 
-bool LibLODocument_Impl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+bool COKitDocumentImpl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
                                       const size_t  *pInSizes, const char   **pInStreams)
 {
     return doc_setClipboard(this, nInCount, pInMimeTypes, pInSizes, pInStreams);
 }
 
-COKitSelectionType LibLODocument_Impl::getSelectionType()
+COKitSelectionType COKitDocumentImpl::getSelectionType()
 {
     return doc_getSelectionType(this);
 }
 
-void LibLODocument_Impl::removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
+void COKitDocumentImpl::removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
 {
     doc_removeTextContext(this, nWindowId, nBefore, nAfter);
 }
 
-void LibLODocument_Impl::sendDialogEvent(unsigned long long int nKitWindowId,
+void COKitDocumentImpl::sendDialogEvent(unsigned long long int nKitWindowId,
                                          const char* pArguments)
 {
     doc_sendDialogEvent(this, nKitWindowId, pArguments);
 }
 
-unsigned char* LibLODocument_Impl::renderFontOrientation(const char* pFontName, const char* pChar,
+unsigned char* COKitDocumentImpl::renderFontOrientation(const char* pFontName, const char* pChar,
                                                          int* pFontWidth, int* pFontHeight,
                                                          int pOrientation)
 {
     return doc_renderFontOrientation(this, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
 }
 
-void LibLODocument_Impl::paintWindowForView(unsigned nWindowId, unsigned char* pBuffer,
+void COKitDocumentImpl::paintWindowForView(unsigned nWindowId, unsigned char* pBuffer,
                                             const int x, const int y, const int width,
                                             const int height, const double dpiscale, int viewId)
 {
     doc_paintWindowForView(this, nWindowId, pBuffer, x, y, width, height, dpiscale, viewId);
 }
 
-void LibLODocument_Impl::completeFunction(const char* pFunctionName)
+void COKitDocumentImpl::completeFunction(const char* pFunctionName)
 {
     doc_completeFunction(this, pFunctionName);
 }
 
-void LibLODocument_Impl::setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
+void COKitDocumentImpl::setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
 {
     doc_setWindowTextSelection(this, nWindowId, bSwap, nX, nY);
 }
 
-void LibLODocument_Impl::sendFormFieldEvent(const char* pArguments)
+void COKitDocumentImpl::sendFormFieldEvent(const char* pArguments)
 {
     doc_sendFormFieldEvent(this, pArguments);
 }
 
-void LibLODocument_Impl::setBlockedCommandList(int nViewId, const char* blockedCommandList)
+void COKitDocumentImpl::setBlockedCommandList(int nViewId, const char* blockedCommandList)
 {
     doc_setBlockedCommandList(this, nViewId, blockedCommandList);
 }
 
-bool LibLODocument_Impl::renderSearchResult(const char* pSearchResult,
+bool COKitDocumentImpl::renderSearchResult(const char* pSearchResult,
                                             unsigned char** pBitmapBuffer, int* pWidth,
                                             int* pHeight, size_t* pByteSize)
 {
     return doc_renderSearchResult(this, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
 }
 
-void LibLODocument_Impl::sendContentControlEvent(const char* pArguments)
+void COKitDocumentImpl::sendContentControlEvent(const char* pArguments)
 {
     doc_sendContentControlEvent(this, pArguments);
 }
 
-COKitSelectionType LibLODocument_Impl::getSelectionTypeAndText(const char* pMimeType, char** pText,
+COKitSelectionType COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType, char** pText,
                                                                char** pUsedMimeType)
 {
     return doc_getSelectionTypeAndText(this, pMimeType, pText, pUsedMimeType);
 }
 
-void LibLODocument_Impl::getDataArea(long nPart, long* pCol, long* pRow)
+void COKitDocumentImpl::getDataArea(long nPart, long* pCol, long* pRow)
 {
     doc_getDataArea(this, nPart, pCol, pRow);
 }
 
-void LibLODocument_Impl::setViewTimezone(int nId, const char* pTimezone)
+void COKitDocumentImpl::setViewTimezone(int nId, const char* pTimezone)
 {
     doc_setViewTimezone(this, nId, pTimezone);
 }
 
-void LibLODocument_Impl::setAccessibilityState(int nId, bool nEnabled)
+void COKitDocumentImpl::setAccessibilityState(int nId, bool nEnabled)
 {
     doc_setAccessibilityState(this, nId, nEnabled);
 }
 
-char* LibLODocument_Impl::getA11yFocusedParagraph()
+char* COKitDocumentImpl::getA11yFocusedParagraph()
 {
     return doc_getA11yFocusedParagraph(this);
 }
 
-int LibLODocument_Impl::getA11yCaretPosition()
+int COKitDocumentImpl::getA11yCaretPosition()
 {
     return doc_getA11yCaretPosition(this);
 }
 
-void LibLODocument_Impl::setViewReadOnly(int nId, const bool readOnly)
+void COKitDocumentImpl::setViewReadOnly(int nId, const bool readOnly)
 {
     doc_setViewReadOnly(this, nId, readOnly);
 }
 
-void LibLODocument_Impl::setAllowChangeComments(int nId, const bool allow)
+void COKitDocumentImpl::setAllowChangeComments(int nId, const bool allow)
 {
     doc_setAllowChangeComments(this, nId, allow);
 }
 
-char* LibLODocument_Impl::getPresentationInfo()
+char* COKitDocumentImpl::getPresentationInfo()
 {
     return doc_getPresentationInfo(this);
 }
 
-bool LibLODocument_Impl::createSlideRenderer(const char* pSlideHash, int nSlideNumber,
+bool COKitDocumentImpl::createSlideRenderer(const char* pSlideHash, int nSlideNumber,
                                              unsigned* nViewWidth, unsigned* nViewHeight,
                                              bool bRenderBackground, bool bRenderMasterPage)
 {
@@ -1900,45 +1900,45 @@ bool LibLODocument_Impl::createSlideRenderer(const char* pSlideHash, int nSlideN
                                    bRenderBackground, bRenderMasterPage);
 }
 
-void LibLODocument_Impl::postSlideshowCleanup()
+void COKitDocumentImpl::postSlideshowCleanup()
 {
     doc_postSlideshowCleanup(this);
 }
 
-bool LibLODocument_Impl::renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer,
+bool COKitDocumentImpl::renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer,
                                               double* pScale, char** pJsonMessage)
 {
     return doc_renderNextSlideLayer(this, pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
 }
 
-void LibLODocument_Impl::setViewOption(const char* pOption, const char* pValue)
+void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
 {
     doc_setViewOption(this, pOption, pValue);
 }
 
-void LibLODocument_Impl::setColorPreviewState(int nId, bool nEnabled)
+void COKitDocumentImpl::setColorPreviewState(int nId, bool nEnabled)
 {
     doc_setColorPreviewState(this, nId, nEnabled);
 }
 
-void LibLODocument_Impl::setAllowManageRedlines(int nId, bool allow)
+void COKitDocumentImpl::setAllowManageRedlines(int nId, bool allow)
 {
     doc_setAllowManageRedlines(this, nId, allow);
 }
 
-void LibLODocument_Impl::transferClipboardFromView(int nSourceViewId)
+void COKitDocumentImpl::transferClipboardFromView(int nSourceViewId)
 {
     doc_transferClipboardFromView(this, nSourceViewId);
 }
 
-void LibLODocument_Impl::flushClipboard()
+void COKitDocumentImpl::flushClipboard()
 {
     doc_flushClipboard(this);
 }
 
-LibLODocument_Impl::~LibLODocument_Impl()
+COKitDocumentImpl::~COKitDocumentImpl()
 {
-    comphelper::ProfileZone aZone("~LibLODocument_Impl");
+    comphelper::ProfileZone aZone("~COKitDocumentImpl");
 
     SolarMutexGuard aGuard;
 
@@ -3197,11 +3197,11 @@ static char* lo_extractRequest(COKit* pThis,
 static void lo_trimMemory(COKit* pThis, int nTarget);
 
 static void*
-lo_startURP(COKit* pThis, void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
+lo_startURP(COKit* pThis, void* pReceiveURPFromEngineContext, void* pSendURPToEngineContext,
+            int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+            int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen));
 
-static void lo_stopURP(COKit* pThis, void* pSendURPToLOContext);
+static void lo_stopURP(COKit* pThis, void* pSendURPToEngineContext);
 
 static bool lo_joinThreads(COKit* pThis);
 
@@ -3251,7 +3251,7 @@ static void lo_cancelProxyCalls();
 static bool lo_isExpectedReentry();
 static bool lo_takeLegacyUnoApiUseFlag();
 
-LibCO_Impl::LibCO_Impl()
+COKitImpl::COKitImpl()
     : maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
@@ -3259,52 +3259,52 @@ LibCO_Impl::LibCO_Impl()
 {
 }
 
-COKitDocument* LibCO_Impl::documentLoad(const char* pURL)
+COKitDocument* COKitImpl::documentLoad(const char* pURL)
 {
     return lo_documentLoad(this, pURL);
 }
 
-char* LibCO_Impl::getError()
+char* COKitImpl::getError()
 {
     return lo_getError(this);
 }
 
-COKitDocument* LibCO_Impl::documentLoadWithOptions(const char* pURL, const char* pOptions)
+COKitDocument* COKitImpl::documentLoadWithOptions(const char* pURL, const char* pOptions)
 {
     return lo_documentLoadWithOptions(this, pURL, pOptions);
 }
 
-void LibCO_Impl::registerCallback(COKitCallback pCallback, void* pData)
+void COKitImpl::registerCallback(COKitCallback pCallback, void* pData)
 {
     lo_registerCallback(this, pCallback, pData);
 }
 
-char* LibCO_Impl::getFilterTypes()
+char* COKitImpl::getFilterTypes()
 {
     return lo_getFilterTypes(this);
 }
 
-void LibCO_Impl::setOptionalFeatures(COKitOptionalFeatures features)
+void COKitImpl::setOptionalFeatures(COKitOptionalFeatures features)
 {
     lo_setOptionalFeatures(this, features);
 }
 
-void LibCO_Impl::setDocumentPassword(char const* pURL, char const* pPassword)
+void COKitImpl::setDocumentPassword(char const* pURL, char const* pPassword)
 {
     lo_setDocumentPassword(this, pURL, pPassword);
 }
 
-char* LibCO_Impl::getVersionInfo()
+char* COKitImpl::getVersionInfo()
 {
     return lo_getVersionInfo(this);
 }
 
-bool LibCO_Impl::runMacro(const char* pURL)
+bool COKitImpl::runMacro(const char* pURL)
 {
     return lo_runMacro(this, pURL);
 }
 
-bool LibCO_Impl::signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
+bool COKitImpl::signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
                               const int nCertificateBinarySize,
                               const unsigned char* pPrivateKeyBinary,
                               const int nPrivateKeyBinarySize)
@@ -3313,124 +3313,124 @@ bool LibCO_Impl::signDocument(const char* pUrl, const unsigned char* pCertificat
                            pPrivateKeyBinary, nPrivateKeyBinarySize);
 }
 
-void LibCO_Impl::runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
+void COKitImpl::runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
                          void* pData)
 {
     lo_runLoop(this, pPollCallback, pWakeCallback, pData);
 }
 
-void LibCO_Impl::sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments)
+void COKitImpl::sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments)
 {
     lo_sendDialogEvent(this, nKitWindowId, pArguments);
 }
 
-void LibCO_Impl::setOption(const char* pOption, const char* pValue)
+void COKitImpl::setOption(const char* pOption, const char* pValue)
 {
     lo_setOption(this, pOption, pValue);
 }
 
-void LibCO_Impl::dumpState(const char* pOptions, char** pState)
+void COKitImpl::dumpState(const char* pOptions, char** pState)
 {
     lo_dumpState(this, pOptions, pState);
 }
 
-char* LibCO_Impl::extractRequest(const char* pFilePath)
+char* COKitImpl::extractRequest(const char* pFilePath)
 {
     return lo_extractRequest(this, pFilePath);
 }
 
-void LibCO_Impl::trimMemory(int nTarget)
+void COKitImpl::trimMemory(int nTarget)
 {
     lo_trimMemory(this, nTarget);
 }
 
-void* LibCO_Impl::startURP(
-    void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
+void* COKitImpl::startURP(
+    void* pReceiveURPFromEngineContext, void* pSendURPToEngineContext,
+    int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+    int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen))
 {
-    return lo_startURP(this, pReceiveURPFromLOContext, pSendURPToLOContext, fnReceiveURPFromLO,
-                       fnSendURPToLO);
+    return lo_startURP(this, pReceiveURPFromEngineContext, pSendURPToEngineContext, fnReceiveURPFromEngine,
+                       fnSendURPToEngine);
 }
 
-void LibCO_Impl::stopURP(void* pSendURPToLOContext)
+void COKitImpl::stopURP(void* pSendURPToEngineContext)
 {
-    lo_stopURP(this, pSendURPToLOContext);
+    lo_stopURP(this, pSendURPToEngineContext);
 }
 
-bool LibCO_Impl::joinThreads()
+bool COKitImpl::joinThreads()
 {
     return lo_joinThreads(this);
 }
 
-void LibCO_Impl::startThreads()
+void COKitImpl::startThreads()
 {
     lo_startThreads(this);
 }
 
-void LibCO_Impl::setForkedChild(bool bIsChild)
+void COKitImpl::setForkedChild(bool bIsChild)
 {
     lo_setForkedChild(this, bIsChild);
 }
 
-char* LibCO_Impl::extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
+char* COKitImpl::extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
 {
     return lo_extractDocumentStructureRequest(this, pFilePath, pFilter);
 }
 
-void LibCO_Impl::registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
+void COKitImpl::registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
 {
     lo_registerAnyInputCallback(this, pCallback, pData);
 }
 
-int LibCO_Impl::getDocsCount()
+int COKitImpl::getDocsCount()
 {
     return lo_getDocsCount(this);
 }
 
-void LibCO_Impl::registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
+void COKitImpl::registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
 {
     lo_registerFileSaveDialogCallback(this, pCallback);
 }
 
-void LibCO_Impl::executeScript(char const * script, char ** result, char ** error,
+void COKitImpl::executeScript(char const * script, char ** result, char ** error,
                                void (*proxyCallback) (void * data, char const * payload),
                                void * proxyCallbackData, bool * usedLegacyUnoApi)
 {
     lo_executeScript(script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
 }
 
-void LibCO_Impl::deliverProxyResult(char const * callId, char const * jsonValue)
+void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)
 {
     lo_deliverProxyResult(callId, jsonValue);
 }
 
-void LibCO_Impl::cancelProxyCalls()
+void COKitImpl::cancelProxyCalls()
 {
     lo_cancelProxyCalls();
 }
 
-bool LibCO_Impl::isExpectedReentry()
+bool COKitImpl::isExpectedReentry()
 {
     return lo_isExpectedReentry();
 }
 
-bool LibCO_Impl::takeLegacyUnoApiUseFlag()
+bool COKitImpl::takeLegacyUnoApiUseFlag()
 {
     return lo_takeLegacyUnoApiUseFlag();
 }
 
-void LibCO_Impl::registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
+void COKitImpl::registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
 {
     lo_registerRevealInFileManagerCallback(this, pCallback);
 }
 
-void LibCO_Impl::installClipboardProvider(const COKitClipboardProvider* pProvider)
+void COKitImpl::installClipboardProvider(const COKitClipboardProvider* pProvider)
 {
     lo_installClipboardProvider(this, pProvider);
 }
 
-bool LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+bool COKitImpl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
                                     char      ***pOutMimeTypes, size_t     **pOutSizes,
                                     char      ***pOutStreams)
 {
@@ -3438,13 +3438,13 @@ bool LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCo
                                  pOutStreams);
 }
 
-LibCO_Impl::~LibCO_Impl()
+COKitImpl::~COKitImpl()
 {
     SolarMutexClearableGuard aGuard;
 
     gImpl = nullptr;
 
-    SAL_INFO("kit", "LO Destroy");
+    SAL_INFO("kit", "COKitImpl dtor");
 
     comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
@@ -3468,7 +3468,7 @@ LibCO_Impl::~LibCO_Impl()
     osl_destroyThread(maThread);
 
     bInitialized = false;
-    SAL_INFO("kit", "LO Destroy Done");
+    SAL_INFO("kit", "COKitImpl dtor done");
 }
 
 namespace
@@ -3509,7 +3509,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
     static int nDocumentIdCounter = 0;
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     const OUString aURL(getAbsoluteURL(pURL));
@@ -3718,7 +3718,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         assert(comphelper::COKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
-        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
+        COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
         // After loading the document, its initial view is the "current" view.
@@ -3844,7 +3844,7 @@ static bool lo_runMacro(COKit* pThis, const char *pURL)
 
     SolarMutexGuard aGuard;
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     OUString sURL( pURL, strlen(pURL), RTL_TEXTENCODING_UTF8 );
@@ -4194,7 +4194,7 @@ public:
                                         void*, int (*)(void* pContext, signed char* pBuffer, int nLen));
     ~FunctionBasedURPConnection();
 
-    // These overridden member functions use "read" and "write" from the point of view of LO,
+    // These overridden member functions use "read" and "write" from the point of view of engine,
     // i.e. the opposite to how startURP() uses them.
     virtual sal_Int32 read(Sequence<sal_Int8>& rReadBytes,
                                     sal_Int32 nBytesToRead) override;
@@ -4207,22 +4207,22 @@ public:
     inline static int g_connectionCount = 0;
 
 private:
-    void* m_pRecieveFromLOContext;
-    void* m_pSendURPToLOContext;
-    int (*m_fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen);
-    int (*m_fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen);
+    void* m_pRecieveFromEngineContext;
+    void* m_pSendURPToEngineContext;
+    int (*m_fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen);
+    int (*m_fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen);
     Reference<XBridge> m_URPBridge;
 };
 
 FunctionBasedURPConnection::FunctionBasedURPConnection(
-    void* pRecieveFromLOContext,
-    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-    void* pSendURPToLOContext,
-    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
-    : m_pRecieveFromLOContext(pRecieveFromLOContext)
-    , m_pSendURPToLOContext(pSendURPToLOContext)
-    , m_fnReceiveURPFromLO(fnReceiveURPFromLO)
-    , m_fnSendURPToLO(fnSendURPToLO)
+    void* pRecieveFromEngineContext,
+    int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+    void* pSendURPToEngineContext,
+    int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen))
+    : m_pRecieveFromEngineContext(pRecieveFromEngineContext)
+    , m_pSendURPToEngineContext(pSendURPToEngineContext)
+    , m_fnReceiveURPFromEngine(fnReceiveURPFromEngine)
+    , m_fnSendURPToEngine(fnSendURPToEngine)
 {
     g_connectionCount++;
 }
@@ -4244,12 +4244,12 @@ sal_Int32 FunctionBasedURPConnection::read(Sequence<sal_Int8>& rReadBytes, sal_I
         rReadBytes.realloc(nBytesToRead);
 
     // As with osl::StreamPipe, we must always read nBytesToRead...
-    return m_fnSendURPToLO(m_pSendURPToLOContext, rReadBytes.getArray(), nBytesToRead);
+    return m_fnSendURPToEngine(m_pSendURPToEngineContext, rReadBytes.getArray(), nBytesToRead);
 }
 
 void FunctionBasedURPConnection::write(const Sequence<sal_Int8>& rData)
 {
-    m_fnReceiveURPFromLO(m_pRecieveFromLOContext, rData.getConstArray(), rData.getLength());
+    m_fnReceiveURPFromEngine(m_pRecieveFromEngineContext, rData.getConstArray(), rData.getLength());
 }
 
 void FunctionBasedURPConnection::flush() {}
@@ -4265,18 +4265,18 @@ void FunctionBasedURPConnection::setBridge(const Reference<XBridge>& xBridge) { 
 }
 
 static void*
-lo_startURP(COKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOContext,
-            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
+lo_startURP(COKit* /* pThis */, void* pRecieveFromEngineContext, void* pSendToEngineContext,
+            int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+            int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen))
 {
-    // Here we will roughly do what desktop LO does when one passes a command-line switch like
+    // Here we will roughly do what desktop CO does when one passes a command-line switch like
     // --accept=socket,port=nnnn;urp;StarOffice.ServiceManager. Except that no listening socket will
-    // be created. The communication to the URP will be through the nReceiveURPFromLO and nSendURPToLO
+    // be created. The communication to the URP will be through the nReceiveURPFromEngine and nSendURPToEngine
     // functions.
 
     rtl::Reference<FunctionBasedURPConnection> connection(
-        new FunctionBasedURPConnection(pRecieveFromLOContext, fnReceiveURPFromLO,
-                                       pSendToLOContext, fnSendURPToLO));
+        new FunctionBasedURPConnection(pRecieveFromEngineContext, fnReceiveURPFromEngine,
+                                       pSendToEngineContext, fnSendURPToEngine));
 
     Reference<XBridgeFactory> xBridgeFactory = css::bridge::BridgeFactory::create(xContext);
 
@@ -4294,7 +4294,7 @@ lo_startURP(COKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOCont
 /**
  * Stop a function based URP connection that you started with lo_startURP above
  *
- * @param pSendToLOContext a pointer to the context returned by lo_startURP */
+ * @param pSendToEngineContext a pointer to the context returned by lo_startURP */
 static void lo_stopURP(COKit* /* pThis */,
                        void* pFunctionBasedURPConnection/* FunctionBasedURPConnection* */)
 {
@@ -4384,7 +4384,7 @@ static void lo_registerCallback (COKit* pThis,
     Application* pApp = GetpApp();
     assert(pApp);
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     pApp->m_pCallback = pLib->mpCallback = pCallback;
@@ -4393,7 +4393,7 @@ static void lo_registerCallback (COKit* pThis,
 
 static SfxObjectShell* getSfxObjectShell(COKitDocument* pThis)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     if (!pDocument)
         return nullptr;
 
@@ -4411,7 +4411,7 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     OUString sFormat = getUString(pFormat);
     OUString aURL(getAbsoluteURL(sUrl));
@@ -4735,9 +4735,9 @@ static COKitDocumentType doc_getDocumentType (COKitDocument* pThis)
     return getDocumentType(pThis);
 }
 
-int LibLODocument_Impl::getParts()
+int COKitDocumentImpl::getParts()
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getParts");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getParts");
 
     SolarMutexGuard aGuard;
 
@@ -4751,9 +4751,9 @@ int LibLODocument_Impl::getParts()
     return pDoc->getParts();
 }
 
-int LibLODocument_Impl::getPart()
+int COKitDocumentImpl::getPart()
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPart");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPart");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4781,7 +4781,7 @@ int LibLODocument_Impl::getPart()
 
 static void doc_setPartIndexImpl(COKitDocument* pThis, int nPartIndex, bool bAllowChangeFocus = true)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::setPart");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setPart");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4823,14 +4823,14 @@ static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFo
     doc_setPartIndexImpl(pThis, nPart, bAllowChangeFocus);
 }
 
-void LibLODocument_Impl::setPart(int nPart)
+void COKitDocumentImpl::setPart(int nPart)
 {
     doc_setPartImpl(this, nPart, true);
 }
 
-char* LibLODocument_Impl::getPartInfo(int nPart)
+char* COKitDocumentImpl::getPartInfo(int nPart)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartInfo");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartInfo");
 
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(this);
@@ -4843,9 +4843,9 @@ char* LibLODocument_Impl::getPartInfo(int nPart)
     return convertOUString(pDoc->getPartInfo(nPart));
 }
 
-unsigned long long LibLODocument_Impl::getPartUniqueId(int nPart, int nMode)
+unsigned long long COKitDocumentImpl::getPartUniqueId(int nPart, int nMode)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartUniqueId");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartUniqueId");
 
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(this);
@@ -4858,9 +4858,9 @@ unsigned long long LibLODocument_Impl::getPartUniqueId(int nPart, int nMode)
     return pDoc->getPartUniqueId(nPart, nMode);
 }
 
-int LibLODocument_Impl::getPartIndex(int nPart, int nMode)
+int COKitDocumentImpl::getPartIndex(int nPart, int nMode)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartIndex");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartIndex");
 
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(this);
@@ -4877,7 +4877,7 @@ int LibLODocument_Impl::getPartIndex(int nPart, int nMode)
     return partIndexFromNumber(pDoc, nPart, nMode);
 }
 
-void LibLODocument_Impl::selectPart(int nPart, int nSelect)
+void COKitDocumentImpl::selectPart(int nPart, int nSelect)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4905,7 +4905,7 @@ void LibLODocument_Impl::selectPart(int nPart, int nSelect)
     pDoc->selectPart( nPart, nSelect );
 }
 
-void LibLODocument_Impl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
+void COKitDocumentImpl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4920,9 +4920,9 @@ void LibLODocument_Impl::moveSelectedParts(int nPosition, bool bDuplicate, int n
     pDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
 }
 
-char* LibLODocument_Impl::getPartPageRectangles()
+char* COKitDocumentImpl::getPartPageRectangles()
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartPageRectangles");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartPageRectangles");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4977,9 +4977,9 @@ static int  doc_getA11yCaretPosition(COKitDocument* pThis)
 
 }
 
-char* LibLODocument_Impl::getPartName(int nPart)
+char* COKitDocumentImpl::getPartName(int nPart)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartName");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartName");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4994,9 +4994,9 @@ char* LibLODocument_Impl::getPartName(int nPart)
     return convertOUString(pDoc->getPartName(nPart));
 }
 
-char* LibLODocument_Impl::getPartHash(int nPart)
+char* COKitDocumentImpl::getPartHash(int nPart)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getPartHash");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartHash");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5011,9 +5011,9 @@ char* LibLODocument_Impl::getPartHash(int nPart)
     return convertOUString(pDoc->getPartHash(nPart));
 }
 
-void LibLODocument_Impl::setPartMode(COKitPartMode eMode)
+void COKitDocumentImpl::setPartMode(COKitPartMode eMode)
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::setPartMode");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setPartMode");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5050,9 +5050,9 @@ void LibLODocument_Impl::setPartMode(COKitPartMode eMode)
     }
 }
 
-int LibLODocument_Impl::getEditMode()
+int COKitDocumentImpl::getEditMode()
 {
-    comphelper::ProfileZone aZone("LibLODocument_Impl::getEditMode");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getEditMode");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5165,7 +5165,7 @@ static void doc_paintTile(COKitDocument* pThis,
 
     // Inform all views with the same view render state about the paint, so they know if makes sense
     // to invalidate those areas later.
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
     int nPart = pDoc->getPart();
     int nMode = pDoc->getEditMode();
@@ -5217,14 +5217,14 @@ inline static int getFirstViewIdAsFallback(COKitDocument* pThis)
     return result;
 }
 
-inline static void disableViewCallbacks(LibLODocument_Impl* pDocument, const int viewId)
+inline static void disableViewCallbacks(COKitDocumentImpl* pDocument, const int viewId)
 {
     const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(viewId);
     if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
         handlerIt->second->disableCallbacks();
 }
 
-inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int viewId)
+inline static void enableViewCallbacks(COKitDocumentImpl* pDocument, const int viewId)
 {
     const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(viewId);
     if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
@@ -5237,7 +5237,7 @@ inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRendera
     // The painted tile belongs to a single document. When several documents
     // live in one process, other documents may have a view sitting on the
     // requested part, so the candidate view must belong to this document.
-    const ViewShellDocId aThisDocId(static_cast<LibLODocument_Impl*>(pThis)->mnDocumentId);
+    const ViewShellDocId aThisDocId(static_cast<COKitDocumentImpl*>(pThis)->mnDocumentId);
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -5306,7 +5306,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
         }
     }
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     int nOrigViewId = doc_getView(pThis);
 
@@ -5437,7 +5437,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
     pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
 }
 
-void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle)
+void COKitDocumentImpl::updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle)
 {
     auto it = mpCallbackFlushHandlers.find(nOrigViewId);
     if (it == mpCallbackFlushHandlers.end())
@@ -5564,7 +5564,7 @@ static void doc_registerCallback(COKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
     SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (!pViewShell)
@@ -5913,7 +5913,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
 
     try
     {
-        LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+        COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
         if (!doc_hasShapeSelection(pDocument->mxComponent))
             return 0;
@@ -6315,14 +6315,14 @@ static void lo_dumpState (COKit* pThis, const char* /* pOptions */, char** pStat
     *pState = nullptr;
     OStringBuffer aState(4096*256);
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
 
     pLib->dumpState(aState);
 
     *pState = convertOString(aState.makeStringAndClear());
 }
 
-void LibCO_Impl::dumpState(rtl::OStringBuffer &rState)
+void COKitImpl::dumpState(rtl::OStringBuffer &rState)
 {
     rState.append("COKit state:"
                   "\n\tLastExceptionMsg:\t");
@@ -6366,7 +6366,7 @@ static bool isCommandAllowed(std::u16string_view command)
     return std::find(std::begin(denyList), std::end(denyList), command) == std::end(denyList);
 }
 
-static void lcl_reportSaveResult(LibLODocument_Impl* pDocument, int nView, const OString& rResult)
+static void lcl_reportSaveResult(COKitDocumentImpl* pDocument, int nView, const OString& rResult)
 {
     // Report result to the provided view
     auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
@@ -6404,7 +6404,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     if (gImpl && aCommand == ".uno:None")
         return;
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
@@ -6855,7 +6855,7 @@ static char* doc_getPresentationInfo(COKitDocument* pThis)
     }
 
     bool bAllyState = false;
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
     SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (pViewShell)
@@ -7947,7 +7947,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
 
 static char* getStyles(COKitDocument* pThis, const char* pCommand)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return getComponentStyles(pDocument->mxComponent, doc_getDocumentType(pThis), pCommand);
 }
 
@@ -7964,7 +7964,7 @@ enum class UndoOrRedo
 /// Returns the JSON representation of either an undo or a redo stack.
 static char* getUndoOrRedo(COKitDocument* pThis, UndoOrRedo eCommand)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
@@ -8003,7 +8003,7 @@ static char* getPrintRanges(COKitDocument* pThis)
 /// Returns only the number of the undo or redo elements
 static char* getUndoOrRedoCount(COKitDocument* pThis, UndoOrRedo eCommand)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
@@ -8031,7 +8031,7 @@ static char* getUndoOrRedoCount(COKitDocument* pThis, UndoOrRedo eCommand)
 /// Returns the JSON representation of the redline stack.
 static char* getTrackedChanges(COKitDocument* pThis)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     uno::Reference<document::XRedlinesSupplier> xRedlinesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
     tools::JsonWriter aJson;
@@ -8122,7 +8122,7 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
     {
         // The requesting view renders from vector primitives rather than
         // bitmap tiles; record that on its callback handler.
-        LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+        COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
         if (const SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             auto it = pDocument->mpCallbackFlushHandlers.find(pViewShell->GetViewShellId().get());
@@ -8407,7 +8407,7 @@ static int doc_createViewWithOptions(COKitDocument* pThis,
     const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
     KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     const int nId = KitHelper::createView(pDocument->mnDocumentId);
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
@@ -8435,7 +8435,7 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId)
 
     KitHelper::destroyView(nId);
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 }
 
@@ -8456,7 +8456,7 @@ static int doc_getView(SAL_UNUSED_PARAMETER COKitDocument* pThis)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return KitHelper::getViewId(pDocument->mnDocumentId);
 }
 
@@ -8467,7 +8467,7 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER COKitDocument* pThis)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return KitHelper::getViewsCount(pDocument->mnDocumentId);
 }
 
@@ -8478,7 +8478,7 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArra
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return KitHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
 }
 
@@ -8729,7 +8729,7 @@ static bool doc_insertCertificate(COKitDocument* pThis,
     if (!xContext.is())
         return false;
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     if (!pDocument->mxComponent.is())
         return false;
@@ -8764,7 +8764,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
     if (!xContext.is())
         return false;
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     if (!pDocument->mxComponent.is())
         return false;
@@ -8817,7 +8817,7 @@ static int doc_getSignatureState(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getSignatureState");
 
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     if (!pDocument->mxComponent.is())
         return int(SignatureState::UNKNOWN);
@@ -9119,7 +9119,7 @@ static char* lo_getError (COKit *pThis)
 
     SolarMutexGuard aGuard;
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
     return convertOUString(pLib->maLastExceptionMsg);
 }
 
@@ -9128,7 +9128,7 @@ static char* lo_getFilterTypes(COKit* pThis)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibCO_Impl* pImpl = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pImpl = static_cast<COKitImpl*>(pThis);
 
     if (!xSFactory.is())
         xSFactory = comphelper::getProcessServiceFactory();
@@ -9167,7 +9167,7 @@ static void lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures const fea
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl *const pLib = static_cast<COKitImpl*>(pThis);
     pLib->mOptionalFeatures = features;
     if ((features & COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK)
         != COKitOptionalFeatures::NONE)
@@ -9190,7 +9190,7 @@ static void lo_setDocumentPassword(COKit* pThis,
 
     assert(pThis);
     assert(pURL);
-    LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl *const pLib = static_cast<COKitImpl*>(pThis);
     auto it = pLib->mInteractionMap.find(OString(pURL));
     assert(it != pLib->mInteractionMap.end());
     it->second->SetPassword(pPassword);
@@ -9360,7 +9360,7 @@ static int lo_getDocsCount(COKit* /*pThis*/)
 
 static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIndicatorCallbackType type, int percent, const char* pText)
 {
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(data);
+    COKitImpl* pLib = static_cast<COKitImpl*>(data);
 
     if (!pLib->mpCallback)
         return;
@@ -9809,7 +9809,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         if (cok_preinit_2_called)
         {
             SAL_INFO("kit", "Create libreoffice object");
-            gImpl = new LibCO_Impl();
+            gImpl = new COKitImpl();
         }
     }
     else if (bPreInited)
@@ -9817,7 +9817,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     else
         eStage = FULL_INIT;
 
-    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
+    COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
 
     if (bInitialized)
         return 1;
@@ -10178,7 +10178,7 @@ COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
         if (!cok_preinit_2_called)
         {
             SAL_INFO("kit", "Create libreoffice object");
-            gImpl = new LibCO_Impl();
+            gImpl = new COKitImpl();
         }
 
         if (!lo_initialize(gImpl, install_path, user_profile_url))

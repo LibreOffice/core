@@ -1093,7 +1093,7 @@ enum class COKitCallbackType
     A11Y_SELECTION_CHANGED = 69,
 
     /**
-     * Forwarding logs from core to client can be useful
+     * Forwarding logs from engine to client can be useful
      * for keep track of the real core/client event sequence
      *
      * Payload is the log to be sent
@@ -1558,7 +1558,7 @@ struct COKit
     virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
 
     /**
-     * Generic function to toggle and tweak various things in the core LO
+     * Generic function to toggle and tweak various things in engine
      *
      * The currently available option names and their allowed values are:
      *
@@ -1622,22 +1622,22 @@ struct COKit
     /**
      * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
      *
-     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
-     * @param pSendURPToLOContext A pointer that will be passed to your fnSendURPToLO function
-     * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
-     * @param fnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO
+     * @param pReceiveURPFromEngineContext A pointer that will be passed to your fnRecieveURPFromEngine function
+     * @param pSendURPToEngineContext A pointer that will be passed to your fnSendURPToEngine function
+     * @param fnReceiveURPFromEngine A function pointer that engine ushould use to pass URP back to the caller
+     * @param fnSendURPToEngine A function pointer pointer that the caller should use to pass URP to engine
      */
     virtual void* startURP(
-        void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-        int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-        int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) = 0;
+        void* pReceiveURPFromEngineContext, void* pSendURPToEngineContext,
+        int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+        int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen)) = 0;
 
     /**
      * Stop a function based URP connection you previously started with startURP
      *
      * @param pURPContext the context returned by startURP  when starting the connection
      */
-    virtual void stopURP(void* pSendURPToLOContext) = 0;
+    virtual void stopURP(void* pSendURPToEngineContext) = 0;
 
     /**
      * Joins all threads if possible to get down to a single process
@@ -2006,7 +2006,7 @@ struct COKitDocument
                                int nTileTwipHeight) = 0;
 
     /**
-     * Inform core about the currently visible area of the document on the
+     * Inform engine about the currently visible area of the document on the
      * client, so that it can perform e.g. page down (which depends on the
      * visible height) in a sane way.
      *
@@ -2432,7 +2432,7 @@ struct COKitDocument
     /// Get the information about the current presentation (Impress only).
     virtual char* getPresentationInfo() = 0;
 
-    /// Create a slide renderer in core for the input slide.
+    /// Create a slide renderer in engine for the input slide.
     virtual bool createSlideRenderer(const char* pSlideHash, int nSlideNumber,
                                      unsigned* nViewWidth, unsigned* nViewHeight,
                                      bool bRenderBackground, bool bRenderMasterPage) = 0;

@@ -282,7 +282,7 @@ namespace desktop {
         DECL_LINK(IdleHdl, Timer*, void);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public COKitDocument
+    struct DESKTOP_DLLPUBLIC COKitDocumentImpl : public COKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
@@ -294,9 +294,9 @@ namespace desktop {
         // touching the possibly-disposed model. See comphelper::COKit.
         OUString maOriginalDocumentUrlKey;
 
-        explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
+        explicit COKitDocumentImpl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
-        ~LibLODocument_Impl();
+        ~COKitDocumentImpl();
 
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
 
@@ -415,7 +415,7 @@ namespace desktop {
         int getPartIndex(int nPart, int nMode) override;
     };
 
-    struct DESKTOP_DLLPUBLIC LibCO_Impl : public COKit
+    struct DESKTOP_DLLPUBLIC COKitImpl : public COKit
     {
         OUString maLastExceptionMsg;
         oslThread maThread;
@@ -424,8 +424,8 @@ namespace desktop {
         COKitOptionalFeatures mOptionalFeatures;
         std::map<OString, rtl::Reference<KitInteractionHandler>> mInteractionMap;
 
-        LibCO_Impl();
-        ~LibCO_Impl();
+        COKitImpl();
+        ~COKitImpl();
 
         bool hasOptionalFeature(COKitOptionalFeatures const feature)
         {
@@ -454,10 +454,10 @@ namespace desktop {
         char* extractRequest(const char* pFilePath) override;
         void trimMemory(int nTarget) override;
         void* startURP(
-            void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) override;
-        void stopURP(void* pSendURPToLOContext) override;
+            void* pReceiveURPFromEngineContext, void* pSendURPToEngineContext,
+            int (*fnReceiveURPFromEngine)(void* pContext, const signed char* pBuffer, int nLen),
+            int (*fnSendURPToEngine)(void* pContext, signed char* pBuffer, int nLen)) override;
+        void stopURP(void* pSendURPToEngineContext) override;
         bool joinThreads() override;
         void startThreads() override;
         void setForkedChild(bool bIsChild) override;

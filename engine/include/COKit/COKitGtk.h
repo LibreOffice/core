@@ -234,7 +234,7 @@ KIT_DOC_VIEW_DLLPUBLIC gboolean kit_doc_view_get_edit              (KitDocumentV
 /**
  * kit_doc_view_post_command:
  * @pDocView: the #KitDocumentView instance
- * @pCommand: the command to issue to LO core
+ * @pCommand: the command to issue to engine
  * @pArguments: the arguments to the given command
  * @bNotifyWhenFinished: normally false, but it may be useful for eg. .uno:Save
  *
@@ -248,7 +248,7 @@ KIT_DOC_VIEW_DLLPUBLIC void    kit_doc_view_post_command           (KitDocumentV
 /**
  * kit_doc_view_get_command_values:
  * @pDocView: the #KitDocumentView instance
- * @pCommand: the command to issue to LO core
+ * @pCommand: the command to issue to engine
  *
  * Get a json mapping of the possible values for the given command.
  * In the form of: {commandName: unoCmd, commandValues: {possible_values}}

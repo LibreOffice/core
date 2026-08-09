@@ -31,8 +31,8 @@
 #include <COKit/COKit.hxx>
 
 namespace desktop {
-    struct LibCO_Impl;
-    struct LibLODocument_Impl;
+    struct COKitImpl;
+    struct COKitDocumentImpl;
 }
 
 /** InteractionHandler is an interface that provides the user with various dialogs / error messages.
@@ -48,8 +48,8 @@ class KitInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo
                                                          css::task::XInteractionHandler2>
 {
 private:
-    desktop::LibCO_Impl * m_pKit;
-    desktop::LibLODocument_Impl * m_pKitDocument;
+    desktop::COKitImpl * m_pKit;
+    desktop::COKitDocumentImpl * m_pKitDocument;
 
     /// Command for which we use this interaction handler (like "load", "save", "saveas", ...)
     OString m_command;
@@ -83,8 +83,8 @@ public:
 
     explicit KitInteractionHandler(
             OString command,
-            desktop::LibCO_Impl *,
-            desktop::LibLODocument_Impl *pKitDocumt = nullptr);
+            desktop::COKitImpl *,
+            desktop::COKitDocumentImpl *pKitDocumt = nullptr);
 
     virtual ~KitInteractionHandler() override;
 

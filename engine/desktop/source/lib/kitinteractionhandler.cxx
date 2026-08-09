@@ -61,8 +61,8 @@ using namespace com::sun::star;
 
 KitInteractionHandler::KitInteractionHandler(
         OString command,
-        desktop::LibCO_Impl *const pKit,
-        desktop::LibLODocument_Impl *const pKitDocument)
+        desktop::COKitImpl *const pKit,
+        desktop::COKitDocumentImpl *const pKitDocument)
     : m_pKit(pKit)
     , m_pKitDocument(pKitDocument)
     , m_command(std::move(command))
