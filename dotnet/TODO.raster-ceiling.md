@@ -224,3 +224,62 @@ that its headline example was also wrong: `apron-area.xls` was recorded as drawi
 against the reference's 1670, and the census that produced it was counting placements of EMFs
 that draw as vector content. The document was a full match all along, page-1 ink 1.09%. Treat the
 rest of that census as suspect.
+
+## The slides track's ink, ranked with both ceilings subtracted
+
+**Read this before ranking anything by `|ink|%`.** Measured at `2ced17655` over the whole
+163-document slides track, from the sweep's own kept comparison reports and its two sets of
+rendered PDFs — no re-rendering, so it can be reproduced from any sweep's output:
+
+```sh
+python3 dotnet/probes/slides-r22/alternate-content-oleobj-census.py /workspace/sample-files/slides > altcontent.tsv
+python3 dotnet/probes/slides-r22/raster-pages-from-renderings.py <sweepdir> > raster-pages.tsv
+python3 dotnet/probes/slides-r22/slides-ink-ranking.py            # reads both, beside sweep-base/
+```
+
+| | ink | pages | major pages |
+|---|---:|---:|---:|
+| the track, as swept | **1233.03** | 4199 | 415 |
+| on a page at one of the two ceilings | 201.27 | 63 | 38 |
+| **residual — what a fix can still win** | **1031.76** | 4136 | 377 |
+
+The full ranking is `dotnet/probes/slides-ink-ranking.tsv`, sorted by the residual column.
+
+**The two ceilings are different mechanisms and only one of them is visible to `pdfimages`.**
+
+1. *The reference rasterises.* The signature this file's table already uses, applied per page:
+   the reference draws a raster we do not draw, and we extract at least 8 and at least 25% more
+   words there. **27 pages, 40.74 of ink.**
+2. *The reference draws nothing at all,* because it takes an `mc:Choice` it claims and finds an
+   unreachable external link, where we take the `mc:Fallback` and draw the replacement picture —
+   the mechanism named in the section above. Censused from the packages rather than inferred:
+   **38 slides across 10 documents, 165.46 of ink, 28 major pages.**
+
+The two overlap on two pages of `16 - UTM - (NASA).pptx`, which is why the totals are 63 rather
+than 65.
+
+### What the subtraction changes, which is the point of doing it
+
+`NAS-Infrastructure-Roadmaps-v16.0.pptx` has been quoted at **224.77, 18% of the track**. That
+over-attributes it by more than two to one: **152.14 of the 224.77 is on the 24 slides carrying a
+`Requires="v"` `p:oleObj`** and **72.63 is not** — which reproduces the 152.12/73.21 recorded in
+the section above, independently and from a different instrument. NAS stays first on the residual
+ranking and is worth a fifth of what its headline says.
+
+Two documents rise past it in share of what is left, and **neither has ever been taken apart**:
+
+| document | ink | residual | ceiling pages |
+|---|---:|---:|---:|
+| `Wildlife for REDAC September 11.pptx` | 54.89 | **54.78** | 1 |
+| `Reporting_responsibilities_matrix.pptx` (268 pages) | 54.27 | **54.27** | 0 |
+| `Thailand17.ppt` | 48.80 | 47.96 | 1 |
+| `ITE106-Chapter 4.ppt` | 27.98 | 27.98 | 0 |
+
+`Demick_JetBlue.pptx` moves the other way — 36.40 to **16.19**, three of its ten pages being the
+rasterisation ceiling — so the automatic-series-colour work it motivates is worth less than its
+headline suggested.
+
+**The ceiling subtraction is a floor on the ceiling, not a measurement of it.** Mechanism 1's
+threshold is this file's own, and the section above records that it under-counts; mechanism 2 is
+exact for `pptx` and blind to `.ppt`, which has no `mc:AlternateContent` to census. So 1031.76 is
+an upper bound on what is winnable, and the ranking is the part to trust rather than the total.
