@@ -10,9 +10,9 @@ rendering one document whose word count it moves.
 |---|---|
 | `base-whole-track.tsv` | whole-track sweep at `12cf74f08`, before any change |
 | `final-whole-track.tsv` | the same on the final tree |
-| `reach.tsv` | the byte-level reach, clock pinned |
+| `reach.tsv` | the byte-level reach, clock pinned — **the ten VML-carrying workbooks, not the whole track**; see below for why that is the complete answer here |
 | `score.py` | turns a `rows.tsv` into matches, page error, exact counts, word error |
-| `reach.sh` | renders a track with two CLIs under a pinned clock and diffs the bytes |
+| `reach.sh` | the round thirty-one whole-track version, kept because it is the general tool; **this round did not run it** |
 | `mutate.sh` | the reintroduced defects the round's tests were verified against |
 
 ## The baseline reproduces the brief exactly
