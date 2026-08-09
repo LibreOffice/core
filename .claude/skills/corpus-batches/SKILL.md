@@ -476,6 +476,30 @@ seven probe decks measurably worse (mean absolute plot-edge error 11.14 → 9.59
 with the second fix beside it). A successor that merely re-ran the sweep and saw the aggregate
 improve would have shipped half a fix and called it done.
 
+### Prototype a ported algorithm in a script until it reproduces the reference's own answer
+
+The largest single move on the sheets track came from porting `convertOutlines` — the rule by
+which a collapsed outline group hides its detail rows. SpreadsheetML states `outlineLevel` per
+row and `collapsed` on the summary row and expects the reader to derive the rest; Excel normally
+*also* writes `hidden="1"`, so the derivation is invisible on almost every document. One
+workbook states no `hidden` anywhere, and **329 of one sheet's 1033 rows** are hidden by the
+rule alone.
+
+What made it cheap was the order of work: **a Python prototype reproduced LibreOffice's own
+hidden set exactly, 329 of 329, before a line of C# was written.** The port then had a known
+answer to be right against, and the C# was a transcription rather than an experiment.
+
+Use this shape whenever porting an algorithm rather than a constant:
+
+1. Get the reference's answer out of the binary — a hidden-row set, a computed rectangle, an
+   exported ODF attribute. Not from the source; the source has been wrong about a constant twice
+   while the binary was right both times.
+2. Reproduce it in a throwaway script. Iterate there, where a run costs seconds.
+3. Only then write the C#, and verify it against the same answer.
+
+The temptation is to skip to (3) because the C++ is right there. That is how a port becomes a
+debugging session against a corpus, at minutes per iteration, with no oracle.
+
 ### An authored probe must state its styles, or it measures a different document
 
 Authoring a probe is now the standard move when the corpus cannot separate two hypotheses, and
