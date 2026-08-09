@@ -2900,6 +2900,11 @@ void ImplListBoxFloatingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
 
 void ImplListBoxFloatingWindow::Resize()
 {
+    // A frame does not necessarily resize before StartFloat() returns, so the
+    // list may still have the previous popup's size. Resize with the window
+    // instead, once the new size has taken effect.
+    mpImplLB->SetSizePixel(GetOutputSizePixel());
+
     mpImplLB->GetMainWindow()->ImplClearLayoutData();
     FloatingWindow::Resize();
 }
