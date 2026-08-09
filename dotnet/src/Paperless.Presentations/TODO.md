@@ -2039,6 +2039,67 @@ a 40 pt line. LibreOffice keeps the whole string through its import
 point rather than a UTF-16 unit, so an astral bullet survives. No corpus document exercises it;
 the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the reference file above.
 
+### From the first human review of this track's residue
+
+A person read all twelve non-matching slides documents against the reference page by page, which
+no gate in the harness can do. Three of the eight defects it found are chart work; the first is
+diagnosed here to a citation and the other two are recorded as *received and not investigated*,
+which is the honest state of them.
+
+- [ ] **An OOXML chart series that states no `c:spPr` gets no colour at all from us, and
+      LibreOffice gives it an automatic one.** The largest of the three and much the widest.
+      `Demick_JetBlue.pptx`'s five chart parts are all `c:lineChart` and **not one of their
+      sixteen series carries a `c:spPr`**, so `FillOf`/`LineOf` return null and
+      `ChartLayout.AddLines`' last resort — `series.Line ?? series.Fill ?? Colour.Black` — draws
+      every line black. Page 4 measured: we stroke three black polylines where the reference
+      strokes three in `#B45D03`, `#761D26` and `#12415C`.
+
+      **Those three are derived, not stated, and the derivation is in the tree.** The deck's
+      theme states `accent1 F07F09`, `accent2 9F2936`, `accent3 1B587C`, and its
+      `a:lnStyleLst`'s *first* entry — `THEMED_STYLE_SUBTLE` — is
+      `<a:schemeClr val="phClr"><a:shade val="50000"/><a:satMod val="103000"/>`. Accent *n* under
+      that transform is exactly what the reference draws. The machinery is
+      `oox/source/drawingml/chart/objectformatter.cxx`: `spLinearSeriesLines` picks a colour
+      pattern from the chart's `c:style` (`spAutoFormatPattern2` — accent1…accent6 — for style 2,
+      which is the default), `DetailFormatterBase::getPhColor` (`:766-813`) cycles it per series
+      and applies a shade/tint of `(cycle+1)/(maxCycle+2) × 1.4 − 0.7` **per colour cycle** — zero
+      here, since three series fit in one cycle of six — and `LineFormatter` (`:826-838`) then
+      lays the theme's line style over the result. `spFilledSeries2dFills` is the same table for a
+      bar or area series' fill.
+
+      Three things this also explains, and all three were separately in the review: the legend
+      key for such a series is drawn in the same absent colour, so it disappears; the markers go
+      with it; and a chart's *automatic* look is wrong on every deck that leaves its series
+      unstyled, which is the normal case for a chart pasted from Excel.
+
+      **Not started.** It needs the chart style index, the accent cycle with the shade/tint, and
+      the theme's `a:lnStyleLst`/`a:fillStyleLst` applied to a placeholder colour — the last of
+      which `DrawingTheme` does not expose today. That is a piece of work, not a patch, and
+      half-doing it would recolour every unstyled series to something else wrong.
+
+- [ ] **`Demick_JetBlue.pptx` also draws no minor gridlines, and its major ones are the wrong
+      grey.** Same page 4, counted by stroke orientation: the reference draws 28 horizontal and 21
+      vertical `#8B8B8B` strokes — the minor grid, on both axes — and 23 vertical plus 12
+      horizontal `#666666` ones; we draw 21 vertical `#B3B3B3` and 8 horizontal `#F07F09` and
+      nothing else. So `c:minorGridlines` is unread (it appears nowhere in `Core/Charts` or in
+      `DrawingChartPlot`), the category axis' major gridlines are not drawn at all, and the value
+      axis' are drawn in the `0xB3B3B3` chart2 default where this file's reference uses `#666666`.
+      The grey is likely the same automatic-formatting table as the item above and is not
+      separately measured.
+
+- [ ] **`N2_E_Maestroni_Swarm_COP.pptx` draws one rectangle per row where the reference draws
+      two**, the missing one apparently carrying a semi-transparent gradient. Received from the
+      review; **not investigated** beyond confirming the gap is large — 539 fill records against
+      the reference's 738 over the deck. Do not assume the gradient is the cause: that is the
+      reviewer's plausible reading, not a measurement.
+
+- [ ] **`16 - UTM - (NASA).pptx` shows missing-glyph boxes in chart text in several places.**
+      Received from the review; **not reproduced here**. What was checked and does *not* explain
+      it: both PDFs embed the same ten faces under the same names, and `pdftotext` over our output
+      finds no replacement character, so the text layer is clean and whatever is wrong is in which
+      glyph is selected rather than in which font is resolved. The word gate scores this document
+      as agreeing, which is why only a human found it.
+
 ### Small differences that are measured and not yet closed
 
 - [ ] **The largest unexplained group on the track is not a chart at all: it is a `.ppt` outline
