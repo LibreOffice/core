@@ -278,18 +278,34 @@ public sealed class ParagraphLayouter
     /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
     /// <param name="follows">The format of the paragraph above, for contextual spacing.</param>
     /// <param name="obstacles">The floating frames the text has to flow around, or null for none.</param>
+    /// <param name="emSize">
+    /// The paragraph's own font size, used only where a line holds no text to measure — a paragraph
+    /// whose whole content is an inline picture. Proportional line spacing is a percentage of the text
+    /// height, and such a line has none of its own.
+    /// </param>
     public LaidOutParagraph Layout(
         MeasuredParagraph measured,
         ParagraphFormat? format = null,
         Length? textAreaWidth = null,
         string? language = null,
         ParagraphFormat? follows = null,
-        ILineObstacles? obstacles = null)
+        ILineObstacles? obstacles = null,
+        Length? emSize = null)
     {
         ArgumentNullException.ThrowIfNull(measured);
 
         ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
         Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
+
+        // What proportional line spacing takes its percentage of when a line holds no text at all —
+        // the commonest such line being a paragraph whose entire content is one inline picture, which
+        // in a `.doc` carries no run of its own and so measures no text height. Writer has the same
+        // gap and fills it the same way: `SwLineLayout::CalcLine` finishes with
+        // `if (!GetLineSpacingBaseHeight()) SetLineSpacingBaseHeight(rInf.GetTextHeight())`
+        // (`sw/source/core/text/porlay.cxx`:645), the paragraph's own font.
+        Length paragraphText = emSize is { } em
+            ? Length.FromTwips(_metrics.ScaledLineHeight(em).Twips)
+            : Length.Zero;
 
         WrappedLines? wrapped = obstacles is { IsEmpty: false }
             ? new WrappedLines(obstacles, paragraph, areaWidth, HeightOfLine)
@@ -321,7 +337,8 @@ public sealed class ParagraphLayouter
             (Length natural, Length ascent, Length textHeight) =
                 BandHeight(measured, lines, wrapped, i);
 
-            Length height = paragraph.LineSpacing.Apply(natural, textHeight);
+            Length height = paragraph.LineSpacing.Apply(
+                natural, textHeight > Length.Zero ? textHeight : paragraphText);
             (Length baseline, Length spaceAbove) =
                 BaselineFrom(height, natural, ascent, paragraph.LineSpacing.Mode);
 
@@ -351,12 +368,14 @@ public sealed class ParagraphLayouter
             {
                 (Length own, _, Length ownText) =
                     measured.MeasureLine(broken[index].Start, broken[index].VisibleEnd);
-                return paragraph.LineSpacing.Apply(own, ownText);
+                return paragraph.LineSpacing.Apply(
+                    own, ownText > Length.Zero ? ownText : paragraphText);
             }
 
             (Length fallback, _, Length fallbackText) =
                 measured.MeasureLine(0, Math.Min(1, measured.Text.Length));
-            return paragraph.LineSpacing.Apply(fallback, fallbackText);
+            return paragraph.LineSpacing.Apply(
+                fallback, fallbackText > Length.Zero ? fallbackText : paragraphText);
         }
 
         return new LaidOutParagraph(
