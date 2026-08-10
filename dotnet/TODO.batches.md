@@ -12021,3 +12021,21 @@ Nothing measured was affected; the restored tree reproduces the three gained doc
 Test counts on the final tree: Core 284, Containers 109, Text **277** (271 + six
 `InlineObjectLineSpacingTests`), Vector 293, Rendering 121, Markup 259, OpenDocument 125,
 WordProcessing 746, Spreadsheets 621, Presentations 576, Fidelity 550 — **0 skipped, 0 warnings**.
+
+### Merge note, words round 45
+
+Text **277** (271 + `InlineObjectLineSpacingTests`), everything else at its known-good count,
+Fidelity 550, 0 skipped, 0 warnings. **Words 155 → 157 of 200**, page error 77 → 75, exact pages
+165 → 167.
+
+The change spans `Paperless.Text` and `Paperless.Presentations` as well as `Paperless.WordProcessing`,
+so a cross-track measurement was owed and the round made one: slides and sheets rendered whole at
+base and at the branch, **334 of 334 byte-identical**. Confirmed on the merged tree by
+`git diff 45fea26c2..HEAD --stat -- dotnet/src`, which is also the check named below.
+
+**A new operational check, from a mistake worth keeping.** The round ran its cross-track sweep by
+checking `dotnet/src` out at the base commit, and a `git add -A` while that checkout was in place
+committed the revert — twice. The branch briefly held the round's tests and results with **none of
+its code**, and `git status` was clean the whole time because the tree matched its own HEAD. The
+check that catches it is `git diff <base>..HEAD --stat -- dotnet/src`: a round that shipped code and
+shows no `src` diff has lost it. Run it before reporting, and again at the merge.
