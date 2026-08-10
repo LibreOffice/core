@@ -1610,6 +1610,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16067_footnoteSpaceFreedBySplit)
     assertXPath(pXmlDoc, "//page[4]/body/tab/row", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16071_footnoteTailKeptWhenTruncated)
+{
+    // The first row's footnote fills the footnote area of the page it ends up on, and the last
+    // row travels between pages carrying a footnote of three lines. That leaves the lines after
+    // the first formatted against a footnote area with no room for them.
+    createSwDoc("Cool16071_footnoteTailKeptWhenTruncated.fodt");
+    // A layout dump would format what it reads, and that alone repairs the frame: measure the
+    // export instead.
+    save(TestFilter::PDF_WRITER);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
+    if (!pPdf)
+        return;
+
+    // the last word of the last footnote, on its third line
+    bool bTailExported = false;
+    for (int nPage = 0; nPage < pPdf->getPageCount() && !bTailExported; ++nPage)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(nPage);
+        std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPage->getTextPage();
+        for (int i = 0; i < pPage->getObjectCount() && !bTailExported; ++i)
+        {
+            std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pPage->getObject(i);
+            if (pObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+                bTailExported = pObject->getText(pTextPage).indexOf("TAILMARK") >= 0;
+        }
+    }
+
+    // Without the fix the footnote kept its first line only: the two lines cut away from it had
+    // nowhere to go, so their text was missing from the document altogether.
+    CPPUNIT_ASSERT(bTailExported);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
 {
     createSwDoc("hidden-para-follow-frame.fodt");
