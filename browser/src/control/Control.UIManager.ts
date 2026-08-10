@@ -2660,6 +2660,97 @@ class UIManager extends window.L.Control {
 		]);
 	}
 
+	/**
+	 * Shows a modal that asks for a new password, entered twice.
+	 * The callback runs with the password once both entries hold the same value.
+	 * If they differ, pressing the button shows a warning and the dialog stays open.
+	 * @param id - Base ID for the dialog.
+	 * @param title - Dialog title.
+	 * @param message - Label shown above the first password field.
+	 * @param buttonText - Text inside the confirmation button.
+	 * @param callback - Function called with the password.
+	 */
+	showPasswordConfirmModal(
+		id: string,
+		title: string,
+		message: string,
+		buttonText: string,
+		callback: (password: string) => void,
+	): void {
+		const dialogId = this.generateModalId(id);
+		const json = this._modalDialogJSON(id, title, !window.mode.isDesktop(), [
+			{
+				id: 'info-modal-label1',
+				type: 'fixedtext',
+				text: message,
+				labelFor: 'password-modal',
+			},
+			{
+				id: 'password-modal',
+				type: 'edit',
+				password: true,
+				text: '',
+				labelledBy: 'info-modal-label1'
+			},
+			{
+				id: 'info-modal-label2',
+				type: 'fixedtext',
+				text: _('Confirm password'),
+				labelFor: 'password-confirm',
+			},
+			{
+				id: 'password-confirm',
+				type: 'edit',
+				password: true,
+				text: '',
+				labelledBy: 'info-modal-label2'
+			},
+			{
+				id: 'info-modal-label-mismatch',
+				type: 'fixedtext',
+				text: '',
+				allyRole: 'alert',
+			},
+			{
+				id: '',
+				type: 'buttonbox',
+				text: '',
+				enabled: true,
+				children: [
+					{
+						id: 'response-cancel',
+						type: 'pushbutton',
+						text: _('Cancel'),
+					},
+					{
+						id: 'response-ok',
+						type: 'pushbutton',
+						text: buttonText,
+						'has_default': true,
+					}
+				],
+				vertical: false,
+				layoutstyle: 'end'
+			},
+		], 'password-modal-input');
+
+		this.showModal(json, [
+			{id: 'response-ok', func: () => {
+				const password = document.getElementById('password-modal-input') as HTMLInputElement;
+				const confirmation = document.getElementById('password-confirm-input') as HTMLInputElement;
+				if (password.value !== confirmation.value) {
+					const warning = document.getElementById('info-modal-label-mismatch');
+					if (warning)
+						warning.textContent = _('The confirmation does not match the password');
+					return;
+				}
+				if (typeof callback === 'function')
+					callback(password.value);
+				this.closeModal(dialogId);
+			}}
+		]);
+	}
+
 	/// Shows an info bar at the bottom right of the view.
 	/// This is called by map.fire('infobar', {data}).
 	showInfoBar(e: any): void {

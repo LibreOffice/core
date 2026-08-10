@@ -722,6 +722,15 @@ a.leaflet-control-zoom-in {
 	color: var(--color-text-light) !important;
 }
 
+#mobile-wizard #mobile-wizard-content-modal-dialog-protect-sheet-modal [id^='info-modal-label'].mobile-wizard.ui-text {
+	font-size: 1em;
+	color: var(--color-text-light) !important;
+}
+
+#mobile-wizard #mobile-wizard-content-modal-dialog-protect-sheet-modal #info-modal-label-mismatch.mobile-wizard.ui-text {
+	color: var(--color-error) !important;
+}
+
 #mobile-wizard [id^='mobile-wizard-content-modal-dialog-'] {
 	width: 100%;
 }

@@ -4342,7 +4342,7 @@ SfxVoidItem PreviousPage SID_PREVIEW_PREVIOUS
 
 
 SfxVoidItem Protect FID_PROTECT_TABLE
-(SfxBoolItem Protect FID_PROTECT_TABLE)
+(SfxBoolItem Protect FID_PROTECT_TABLE,SfxStringItem Password FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

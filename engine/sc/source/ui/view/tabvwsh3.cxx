@@ -272,6 +272,31 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
             rReq.Ignore();
             return;
         }
+
+        // A password passed as an argument applies the protection change right away.
+        if( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
+        {
+            const OUString aPassword = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            if (bOldProtection)
+            {
+                Unprotect( nTab, aPassword );
+            }
+            else
+            {
+                pScMod->InputEnterHandler();
+
+                const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+                std::unique_ptr<ScTableProtection> pNewProtect(
+                    pProtect ? new ScTableProtection(*pProtect) : new ScTableProtection());
+                pNewProtect->setProtected(true);
+                pNewProtect->setPassword(aPassword);
+                ProtectSheet(nTab, *pNewProtect);
+            }
+            // Skip recording, so that the password does not end up in a recorded macro.
+            rReq.Ignore();
+            FinishProtectTable();
+            return;
+        }
     }
 
     if (bOldProtection)

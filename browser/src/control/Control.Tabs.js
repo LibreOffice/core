@@ -229,6 +229,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 						'insertsheetafter'  :   this._menuItem['insertsheetafter'],
 						'Name' : this._menuItem['.uno:Name'],
 						'DuplicateSheet' : this._menuItem['.uno:DuplicateSheet'],
+						'Protect' : this._menuItem['.uno:Protect'],
 					}
 				);
 				if (app.calc.isAnyPartHidden()) {
@@ -698,8 +699,35 @@ window.L.Control.Tabs = window.L.Control.extend({
 	// Trigger sheet protection. It seems that it does it for the current sheet
 	// so we select it first.
 	_protectSheet: function() {
-		if (!this._setPartIndex(this._tabForContextMenu)) {
-			this._map.sendUnoCommand('.uno:Protect');
+		if (this._setPartIndex(this._tabForContextMenu)) {
+			return;
+		}
+		if (window.mode.isSmallScreenDevice()) {
+			this._askProtectSheetPassword();
+			return;
+		}
+		this._map.sendUnoCommand('.uno:Protect');
+	},
+
+	// Small screens ask for the password with the browser modal and send it as a command
+	// argument, so the engine applies the protection change directly, with no engine dialog.
+	_askProtectSheetPassword: function() {
+		const bProtect = !this._isProtectedSheet(this._tabForContextMenu);
+		const sendProtect = function(password) {
+			this._map.sendUnoCommand('.uno:Protect', {
+				'Protect': { type: 'boolean', value: bProtect },
+				'Password': { type: 'string', value: password },
+			}, true /* force */);
+		}.bind(this);
+		if (bProtect) {
+			this._map.uiManager.showPasswordConfirmModal('protect-sheet-modal',
+				_('Protect Sheet'), _('Enter a password to protect the sheet'),
+				_('OK'), sendProtect);
+		} else {
+			this._map.uiManager.showInputModal('protect-sheet-modal',
+				_('Unprotect Sheet'), _('Enter the password to unprotect the sheet'),
+				'', _('OK'), sendProtect,
+				true /* password input */);
 		}
 	},
 
