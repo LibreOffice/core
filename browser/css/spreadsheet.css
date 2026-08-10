@@ -63,13 +63,13 @@
 .spreadsheet-tab.spreadsheet-tab-protected > .lock, .spreadsheet-tab.spreadsheet-tab-protected:hover > .lock {
 	width: 16px;
 	height: 16px;
-	background-image: url('images/lc_spreadsheet_protected.svg') !important;
+	background-image: url('images/lc_protect.svg') !important;
 	background-repeat: no-repeat !important;
 }
 
 [data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-protected > .lock,
 [data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-protected:hover > .lock {
-	background-image: url('images/dark/lc_spreadsheet_protected.svg') !important;
+	background-image: url('images/dark/lc_protect.svg') !important;
 }
 
 .spreadsheet-tab.spreadsheet-tab-protected.spreadsheet-tab-lock-black > .lock,
