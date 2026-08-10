@@ -36,7 +36,7 @@ public:
     virtual ~SvxInsertStatusBarControl() override;
 
 private:
-    bool bInsert;
+    bool m_bInsert;
 
     SVX_DLLPRIVATE void DrawItemText_Impl();
 };

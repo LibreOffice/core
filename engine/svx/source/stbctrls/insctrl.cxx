@@ -33,7 +33,7 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
                                                       StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bInsert( true )
+    m_bInsert( true )
 {
 }
 
@@ -50,9 +50,9 @@ void SvxInsertStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16 , Sfx
     {
         DBG_ASSERT( dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr, "invalid item type" );
         const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
-        bInsert = pItem->GetValue();
+        m_bInsert = pItem->GetValue();
 
-        if ( bInsert )
+        if ( m_bInsert )
             GetStatusBar().SetQuickHelpText( GetId(), SvxResId( RID_SVXSTR_INSERT_HELPTEXT ) );
         else
             GetStatusBar().SetQuickHelpText( GetId(), SvxResId( RID_SVXSTR_OVERWRITE_HELPTEXT ) );
@@ -71,10 +71,10 @@ void SvxInsertStatusBarControl::DrawItemText_Impl()
     // tdf#107918 on macOS without an Insert key it's hard to figure out how to switch modes
     // so we show both Insert and Overwrite
 #ifdef MACOSX
-    if ( bInsert )
+    if ( m_bInsert )
         aText = SvxResId( RID_SVXSTR_INSERT_TEXT );
 #endif
-    if ( !bInsert )
+    if ( !m_bInsert )
         aText = SvxResId( RID_SVXSTR_OVERWRITE_TEXT );
 
     GetStatusBar().SetItemText( GetId(), aText );
