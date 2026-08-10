@@ -118,6 +118,9 @@ public:
     void testInsertFileAsPageAdoptDesign();
     void testInsertFileAsPageAdoptDesignAtStart();
     void testInsertFileAsPageKeepDesign();
+    void testInsertFileAsPageLinkRecordsSource();
+    void testInsertFileAsPageLinkWithoutSourceRecordsMedium();
+    void testInsertWholeFileAsPagesLinkRecordsSource();
 
 private:
     SdDrawDocument* loadSlideImportDocs();
@@ -161,6 +164,9 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageAdoptDesign);
     CPPUNIT_TEST(testInsertFileAsPageAdoptDesignAtStart);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesign);
+    CPPUNIT_TEST(testInsertFileAsPageLinkRecordsSource);
+    CPPUNIT_TEST(testInsertFileAsPageLinkWithoutSourceRecordsMedium);
+    CPPUNIT_TEST(testInsertWholeFileAsPagesLinkRecordsSource);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1665,6 +1671,89 @@ void SdMiscTest::testInsertFileAsPageKeepDesign()
     pDoc->GetDocSh()->GetUndoManager()->Undo();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+}
+
+void SdMiscTest::testInsertFileAsPageLinkRecordsSource()
+{
+    // A page inserted as a link records the source document the caller named,
+    // rather than the file the pages were read from. The name a caller passes
+    // is one that still finds the source document the next time the document
+    // is opened, which the file a copy was read from need not be.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const OUString aSource = u"vnd.collabora.slide-source:Sales%20deck.odp"_ustr;
+    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForFileInsert(/*bLinkPages=*/true);
+    aOptions.aLinkSourceUrl = aSource;
+
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr, aOptions, 3, nullptr,
+                                          /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(aSource, pInserted->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pInserted->GetBookmarkName());
+
+    // Saving keeps the link on the page, as a reference to the source slide.
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(aSource + u"#SourceA"),
+        getXPath(pXmlDoc,
+                 "/office:document-content/office:body/office:presentation/draw:page[2]"_ostr,
+                 "href"));
+
+    // The saved reference names the same source document and page after the
+    // document is opened again, which is what a page keeps a link for.
+    loadFromURL(maTempFile.GetURL());
+    SdXImpressDocument* pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pReloaded);
+    SdPage* pLinked = pReloaded->GetDoc()->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(aSource, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+}
+
+void SdMiscTest::testInsertFileAsPageLinkWithoutSourceRecordsMedium()
+{
+    // An insertion that names no source keeps the older behaviour: the pages
+    // record the file they were read from.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForFileInsert(
+                                              /*bLinkPages=*/true),
+                                          3, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(createFileURL(u"slide-import-source.odp"), pInserted->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pInserted->GetBookmarkName());
+}
+
+void SdMiscTest::testInsertWholeFileAsPagesLinkRecordsSource()
+{
+    // Inserting a whole file, rather than pages picked from it, records the
+    // named source on every page it brings in.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const OUString aSource = u"vnd.collabora.slide-source:Sales%20deck.odp"_ustr;
+    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForFileInsert(/*bLinkPages=*/true);
+    aOptions.aLinkSourceUrl = aSource;
+
+    // An empty list of page names asks for the whole file.
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage({}, nullptr, aOptions, 5, nullptr,
+                                          /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    for (sal_uInt16 nSdPage = 2; nSdPage <= 3; ++nSdPage)
+    {
+        SdPage* pInserted = pDoc->GetSdPage(nSdPage, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(aSource, pInserted->GetFileName());
+        CPPUNIT_ASSERT(!pInserted->GetBookmarkName().isEmpty());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

@@ -65,6 +65,19 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/** The source document to record on the pages of one insertion, for an
+    insertion that links them to their source. An insertion that names no
+    source falls back to the name of the medium the pages are read from.
+*/
+const OUString& getLinkSourceUrl(const InsertBookmarkOptions& rOptions,
+                                 const PageInsertionParams& rParams)
+{
+    return rOptions.aLinkSourceUrl.isEmpty() ? rParams.aBookmarkName : rOptions.aLinkSourceUrl;
+}
+}
+
 /** Concrete incarnations get called by lcl_IterateBookmarkPages, for
     every page in the bookmark document/list
  */
@@ -697,7 +710,7 @@ void SdDrawDocument::insertAllPages(PageInsertionParams& rParams,
         if (rOptions.bLink)
         {
             // Assemble all link names
-            pPage->SetFileName(rParams.aBookmarkName);
+            pPage->SetFileName(getLinkSourceUrl(rOptions, rParams));
             pPage->SetBookmarkName(aNameMap[nBMSdPage]);
         }
 
@@ -815,7 +828,7 @@ void SdDrawDocument::insertSelectedPages(const PageNameList& rBookmarkList,
             if (rOptions.bLink)
             {
                 SdPage* pPage = static_cast<SdPage*>( GetPage(nActualInsertPos) );
-                pPage->SetFileName(rParams.aBookmarkName);
+                pPage->SetFileName(getLinkSourceUrl(rOptions, rParams));
                 pPage->SetBookmarkName(aPgName);
             }
 

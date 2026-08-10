@@ -185,6 +185,14 @@ struct InsertBookmarkOptions
     bool bIsSameDocumentOperation; // Operation within the same document
     bool bIsFileDocument;     // Operation involves a file document
     bool bAdoptTargetDesign;  // Inserted pages take the design of the destination document
+    // The reference to record as the source of pages inserted as links, or
+    // empty for the name of the medium the pages are read from. A valid
+    // reference is absolute and holds no '#' of its own, since the name of the
+    // source page is appended to it after a '#'. It escapes the characters
+    // that would otherwise be read as delimiters and leaves the rest as they
+    // are: an escape for a character outside ASCII comes back as that
+    // character once the document has been saved and read again.
+    OUString aLinkSourceUrl;
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
