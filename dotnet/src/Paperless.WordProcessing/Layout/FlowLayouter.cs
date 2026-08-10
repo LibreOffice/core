@@ -148,7 +148,9 @@ public static class FlowLayouter
                     paragraph.Format,
                     area.Width,
                     paragraph.Language,
-                    previous)
+                    previous,
+                    obstacles: null,
+                    emSize: paragraph.EmSize)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,
