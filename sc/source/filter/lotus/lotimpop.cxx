@@ -163,7 +163,7 @@ void ImportLotus::Userrange()
 
     char aBuffer[ 17 ];
     aBuffer[pIn->ReadBytes(aBuffer, 16)] = 0;
-    OUString aName(aBuffer, strlen(aBuffer), eQuellChar);
+    OUString aName(aBuffer, strlen(aBuffer), eSrcEncoding);
 
     Read(aScRange);
 
@@ -311,7 +311,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
 
 void ImportLotus::Read( OUString &r )
 {
-    ScfTools::AppendCString( *pIn, r, eQuellChar );
+    ScfTools::AppendCString( *pIn, r, eSrcEncoding );
 }
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )

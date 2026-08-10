@@ -72,7 +72,7 @@
 using namespace ::com::sun::star;
 
 ImportTyp::ImportTyp(ScDocument& rDoc, rtl_TextEncoding eQ)
-    : eQuellChar(eQ)
+    : eSrcEncoding(eQ)
     , rD(rDoc)
 
 {

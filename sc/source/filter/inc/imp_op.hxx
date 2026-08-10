@@ -42,7 +42,7 @@ struct XclAddress;
 class ImportTyp
 {
 protected:
-    rtl_TextEncoding    eQuellChar;     // source (Quelle) character set
+    rtl_TextEncoding    eSrcEncoding;   // source encoding
     ScDocument&         rD;             // document
 
 public:
