@@ -924,21 +924,20 @@ void DesktopKitTest::testPasteWriterJPEG()
 void DesktopKitTest::testClipboardMarkdownFlavor()
 {
     // Given text/plain and markdown data on the kit clipboard:
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     OString aText("foo _bar_ baz"_ostr);
     const char* pInMimeTypes[] = { "text/plain;charset=utf-8" };
     const size_t pInSizes[] = { static_cast<size_t>(aText.getLength()) };
     const char* pInStreams[] = { aText.getStr() };
-    CPPUNIT_ASSERT(pDocument->pClass->setClipboard(pDocument, 1, pInMimeTypes, pInSizes,
-                                                   pInStreams));
+    CPPUNIT_ASSERT(pDocument->setClipboard(1, pInMimeTypes, pInSizes, pInStreams));
 
     // When getting the clipboard content:
     size_t nOutCount = 0;
     char** pOutMimeTypes = nullptr;
     size_t* pOutSizes = nullptr;
     char** pOutStreams = nullptr;
-    CPPUNIT_ASSERT(pDocument->pClass->getClipboard(pDocument, nullptr, &nOutCount, &pOutMimeTypes,
-                                                   &pOutSizes, &pOutStreams));
+    CPPUNIT_ASSERT(pDocument->getClipboard(nullptr, &nOutCount, &pOutMimeTypes, &pOutSizes,
+                                           &pOutStreams));
 
     // Then make sure the plain text data is also advertised as markdown:
     bool bHasPlain = false;
