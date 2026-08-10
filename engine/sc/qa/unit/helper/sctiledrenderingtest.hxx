@@ -18,10 +18,12 @@
 
 #include "scqahelperdllapi.h"
 
+class Bitmap;
 class ScTestViewCallback;
 class ScModelObj;
 class ScTabViewShell;
 class ScAddress;
+class ScViewData;
 class SfxViewShell;
 
 class SCQAHELPER_DLLPUBLIC ScTiledRenderingTest : public UnoApiXmlTest
@@ -42,6 +44,10 @@ public:
 
     void typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
                          ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true);
+
+    static bool hasEditView(const ScViewData& rViewData);
+    static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY,
+                          tools::Long nTileWidth, tools::Long nTileHeight);
 
     /// document size changed callback.
     osl::Condition m_aDocSizeCondition;

@@ -16,9 +16,11 @@
 #include <sfx2/kit/helper.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/virdev.hxx>
 
 #include <docuno.hxx>
 #include <tabvwsh.hxx>
+#include <viewdata.hxx>
 
 #include "sctestviewcallback.hxx"
 
@@ -170,6 +172,32 @@ void ScTiledRenderingTest::typeCharsInCell(const std::string& aStr, SCCOL nCol, 
         pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
+}
+
+bool ScTiledRenderingTest::hasEditView(const ScViewData& rViewData)
+{
+    for (unsigned int i = 0; i < 4; i++)
+    {
+        if (rViewData.HasEditView(static_cast<ScSplitPos>(i)))
+            return true;
+    }
+    return false;
+}
+
+Bitmap ScTiledRenderingTest::getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY,
+                                     tools::Long nTileWidth, tools::Long nTileHeight)
+{
+    size_t nCanvasSize = 1024;
+    size_t nTileSize = 256;
+    // BGRA format data
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize),
+            1.0, Point(), aPixmap.data());
+    pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    xDevice->EnableMapMode(false);
+    return xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
