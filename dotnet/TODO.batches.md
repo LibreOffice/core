@@ -11858,3 +11858,136 @@ at all.
 **Byte comparison does not measure reach on this project, even with `SOURCE_DATE_EPOCH` pinned** —
 all 200 words renderings differ on `/CreationDate`, and so do all seven of these. Normalise the date
 out before quoting a reach; round 44's own words figure is 14 of 200 *after* normalising.
+
+## Round forty-five — words: proportional line spacing is a share of the text, not of the line
+
+Branch `worktree-words-r45` on `45fea26c2`. Baseline reproduced **exactly**: 155/200, absolute page
+error 77, 165 exactly-correct page counts, absolute word error 6605. `probes/words-r45/baseline.tsv`.
+
+| | baseline `45fea26c2` | after | predicted |
+|---|---:|---:|---|
+| documents matching | 155 | **157** | 156–157 |
+| absolute page error | 77 | **75** | 75–77 |
+| exactly-correct page counts | 165 | **167** | 166–167 |
+| absolute word error | 6605 | **6602** | 6590–6610 |
+| renderings changed | — | **11** | 2–4 — **missed, threefold low** |
+
+`probes/words-r45/prediction.md`, committed at `352329901` before anything was rendered post-change.
+
+### The rule
+
+> Proportional line spacing extends a line by **(prop − 100)% of the line's *text* height** and does
+> not scale the line. An as-character picture makes the line taller and takes no share of the
+> percentage.
+
+`SwTextFormatter::CalcRealHeight` (`itrform2.cxx`:2441-2453) takes the percentage of
+`GetLineSpacingBaseHeight()`, and `SwLineLayout::Height(nNew, bText)` (`porlay.cxx`:110) records that
+base only for a portion that `IsUsedToCalcLineSpacingHeight` — in the legacy mode these documents are
+in, `PortionType::Text` and nothing else. A fly-in-content is not one; neither is a number portion.
+
+**Eight authored DOCX probes measured against the installed 24.2.7.2 are the evidence, the citation
+is only the hypothesis.** A 150 pt picture in a 12 pt paragraph: at 150% LibreOffice's gap is 177.6
+where scaling gives 252.6, at 200% 191.4 against 341.4, with 12 pt of text beside it 180.2 and with
+36 pt of text 199.15 — two points fixing the slope, and two fixing the base as the *line's* text
+rather than the paragraph's.
+
+**Below 100% the whole line, picture included, really is scaled** — Writer's other branch,
+`PROP_LINE_SPACING_SHRINKS_FIRST_LINE`, which multiplies `nLineHeight`. The 75% probe comes back
+122.85 = 150 × 0.75, not 146.55. A fix using the text height at every percentage would have been
+wrong in a way no corpus document exercises, and that refuted rule is pinned by a test.
+
+### The half that looked done and had not reached the document
+
+The first commit took the text height from the measured runs, fixed every DOCX probe, and moved
+**nothing** on the `.doc` the rule came from — while LibreOffice's own DOCX round-trip of that same
+file did move, to within 2.5 pt of the reference. A `.doc` states a picture-only paragraph with **no
+run at all**, so the line had no text height to take a percentage of. `porlay.cxx`:645 has the same
+gap and fills it with the paragraph's own font; so do we now, threaded as an optional `emSize`.
+
+Worth carrying forward as a shape: **a fix verified on an authored probe and on a round-tripped copy
+of the failing document had not reached the failing document.**
+
+### The census was three times too low, and understating is the worse direction
+
+| census | reads | over | said | of the 11 it names |
+|---|---|---:|---:|---:|
+| the one the prediction used | direct `w:spacing` on the `w:p` | 134 DOCX | 1 | 1 |
+| + `w:pStyle` and `w:basedOn` | `word/styles.xml` | 134 DOCX | 4 | 3 |
+| + the default style and `w:docDefaults` | the top of the chain | 134 DOCX | **17** | **5** |
+| the `.doc` half, via flat ODF | LibreOffice's own import | 66 `.doc` | 3 | 3 |
+
+The standing warning is that a grep over what a file *declares* overstates what it *draws*. This is
+the same mistake pointing the other way and it is worse: an overstated ceiling is labelled as one and
+read as one, while an understated ceiling produces a **low prediction, and a low prediction that
+comes true reads as a good prediction**. Mine did not come true, which is the only reason it was found.
+
+Even repaired the census names only 5 of the 8 DOCX that moved. The other three carry **no inline
+object at all**: a list label taller than its item enters measurement as a phantom inline object, so a
+numbered paragraph above 100% spacing is the same rule with no picture in it —
+`template---tpr…docx` has zero inline objects, a 14 pt numbering level, and it moved.
+
+### The verdict that went the other way, and why it was not reverted
+
+`gpp-pr-top-7-office-markets-4q-2023.docx` matched at 4/4 and now paginates 3 against 4. Its first
+body line after a 178 pt inline picture at 120% goes **418.84 → 385.24 against the reference's
+382.24** — 36.6 pt out becomes 3.0 pt out, and the twenty-three lines below it move with it. What the
+change exposed underneath is that we set about 46 pt of body below where the reference stops page 1.
+Cancelling errors, and the aggregate is the check: page error 77 → 75 and exact pages 165 → 167 over
+the same change.
+
+### Refuted: the ±1 page cluster has no shared cause
+
+Two measurements, each a refutation on its own, both with the control run over the documents that
+already match.
+
+**It is not a page-capacity defect.** `text-band-census.py` reads every word box out of both
+renderings and reports the band of ink. Of the 23 documents at a page delta of ±1, **14 differ by
+under 1 pt** and 17 by under 3 — while over the 155 documents that **match**, 36 differ by 3 pt or
+more and **17 by 10 pt or more**. The observable is commoner where nothing is wrong.
+
+**The divergence pages do not concentrate.** `page-boundary-drift.py` aligns the two token streams
+whole and reports where each of our page ends lands in the reference's stream. The first break that
+moves by 30 tokens or more is on page 1–3 for 9 of the 23, elsewhere in the first third for 6, the
+middle third for 5, the last third for 1, and never for 2 — spread from page 1 to page 91, with
+`line-anatomy.py` returning its generic `text` verdict on 22 of 23. **The nine that diverge in the
+first three pages are the sub-group worth working**; both documents fixed this round are among them.
+
+As a magnitude the drift ranks well and diagnoses nothing: max |drift| ≥ 100 tokens on **32 of 43
+failing** against **9 of 155 matching**, measured over 198 of 200 (the two 700-page documents are too
+large for a quadratic alignment and are named as skipped).
+
+**An empty page is not it either.** Pages with no extractable text differ from the reference on 3 of
+45 failing documents and 2 of 155 matching. Only `150_5300_13_chg12.doc` is in the ±1 cluster, and its
+breaks have already diverged by page 5.
+
+### The instrument lied twice before it worked
+
+`page-boundary-drift.py` keeps both dead designs in its docstring. A local anchor cannot resolve a
+page whose last tokens are its **footer**, because the footer holds a page number that differs on
+every page after the pagination diverges — and it then reported those pages as *aligned*. Measured on
+`33004.docx`: 47 pages compared, five unresolved, the extra page inside them, the document scored
+"every break agrees" while being a page long. **Ten of the 23 ±1 documents were scored that way.**
+Retrying the anchor further back fixes that one and invents ±80 tokens of drift from a repeated
+running head. **A probe reporting "no difference" is making a claim and needs the same scepticism as
+one reporting a difference.**
+
+### Tests
+
+Six in `InlineObjectLineSpacingTests`, `Paperless.Text` 271 → **277**. Verified with
+`verify-test.sh`: reverting the base to the line's height fails **three** and nothing else in the
+project; removing the at-or-above-100% guard fails **one**, which is the refuted rule pinned in code.
+Two are preconditions and were **not** verified by reintroduction — that the change is inert on
+ordinary text, and that the measurement reports the two heights apart.
+
+### Still open
+
+- **A picture alone on its line keeps 2.6 pt of the paragraph font's descent LibreOffice drops.**
+  Every probe with text beside the picture matches to 0.05 pt. Not touched: `MeasuredParagraph` cites
+  an **ODF** fixture where LibreOffice *does* add that descent, and these probes cannot separate a
+  format difference from a text-on-the-line one.
+- **`gpp-pr-top-7-office-markets-4q-2023.docx` sets ~46 pt of body below where the reference stops
+  page 1.** A verdict, and not this rule.
+- **The list-label population is unmeasured** — three of the eleven changed renderings are it.
+- 43 mismatches. The ±1 cluster is 21 documents with no shared cause; `FO.FCTOA.00010` and the other
+  15 form-checkbox documents; `AC-150-5370-10G` / `150-5370-10H`; `A_320.doc`; the `.doc` reader-split
+  clusters; both round-38 leads; `手机免提系统TSB.doc`; and the standing table-only-header decision.

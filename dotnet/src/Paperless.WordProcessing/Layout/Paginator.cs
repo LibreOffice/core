@@ -530,8 +530,7 @@ public sealed class Paginator
                     width,
                     paragraph.Language,
                     previous,
-                    obstacles,
-                    paragraph.EmSize)
+                    obstacles)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,

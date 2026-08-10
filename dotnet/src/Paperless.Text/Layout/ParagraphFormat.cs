@@ -152,42 +152,13 @@ public readonly record struct LineSpacingRule(
     /// every line on one baseline, which is worse output than ignoring the document.
     /// </para>
     /// </remarks>
-    public Length Apply(Length naturalHeight) => Apply(naturalHeight, naturalHeight);
-
-    /// <summary>
-    /// The height a line gets, when the height its <em>text</em> wants differs from the height of the
-    /// line.
-    /// </summary>
-    /// <param name="naturalHeight">The line's own height, an as-character object included.</param>
-    /// <param name="baseHeight">
-    /// The height the line's text alone wants. Proportional spacing is a percentage <em>of this</em>,
-    /// added to <paramref name="naturalHeight"/> — never a scaling of the line.
-    /// </param>
-    /// <remarks>
-    /// The two are the same on any line of plain text, and differ on a line an inline picture has made
-    /// taller. <c>SwTextFormatter::CalcRealHeight</c> (<c>sw/source/core/text/itrform2.cxx</c>:2441-2453)
-    /// is explicit — <em>"extend line height by (nPropLineSpace - 100) percent of the font height"</em> —
-    /// and the height it takes the percentage of is <c>GetLineSpacingBaseHeight()</c>, which only a
-    /// portion that <c>IsUsedToCalcLineSpacingHeight</c> ever raises. A fly-in-content is not one.
-    ///
-    /// Measured on <c>1257259179492_2007_TPPT_102_Supporting_Doc_2.doc</c>, a 214.5 pt inline picture
-    /// alone in a 12 pt paragraph at 150%: LibreOffice gives the line 221.5 pt and scaling it gives
-    /// 321.9, a difference of 100.4 pt on page one that pushed four lines of the introduction onto a
-    /// tenth page the reference does not have.
-    /// </remarks>
-    public Length Apply(Length naturalHeight, Length baseHeight)
+    public Length Apply(Length naturalHeight)
     {
         long natural = naturalHeight.Twips;
 
-        // Below a hundred per cent Writer takes the other branch and scales the whole line, object
-        // included — `SvxLineSpaceRule::Auto` with `PROP_LINE_SPACING_SHRINKS_FIRST_LINE`, which does
-        // `nTmp *= nLineHeight` rather than the base height. Measured on the authored probes: a 150 pt
-        // picture at 75% comes back 112.5 pt, which is 150 × 0.75 and not 150 − 25% of the text.
-        long basis = Proportion >= 1.0 && baseHeight.Twips > 0 ? baseHeight.Twips : natural;
-
         long twips = Mode switch
         {
-            LineSpacingMode.Proportional => natural + Extra(basis),
+            LineSpacingMode.Proportional => natural + Extra(natural),
             LineSpacingMode.AtLeast => Math.Max(natural, Value.Twips),
             LineSpacingMode.Exact => Value.Twips,
             LineSpacingMode.Leading => natural + Value.Twips,
