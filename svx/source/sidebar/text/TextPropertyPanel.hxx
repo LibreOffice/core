@@ -48,6 +48,8 @@ public:
 private:
     std::unique_ptr<weld::Toolbar> mxFont;
     std::unique_ptr<ToolbarUnoDispatcher> mxFontDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontStyle;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontStyleDispatch;
     std::unique_ptr<weld::Toolbar> mxFontHeight;
     std::unique_ptr<ToolbarUnoDispatcher> mxFontHeightDispatch;
     std::unique_ptr<weld::Toolbar> mxFontEffects;

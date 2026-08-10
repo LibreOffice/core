@@ -44,6 +44,8 @@ TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Refe
     : PanelLayout(pParent, u"SidebarTextPanel"_ustr, u"svx/ui/sidebartextpanel.ui"_ustr)
     , mxFont(m_xBuilder->weld_toolbar(u"font"_ustr))
     , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
+    , mxFontStyle(m_xBuilder->weld_toolbar(u"fontstyle"_ustr))
+    , mxFontStyleDispatch(new ToolbarUnoDispatcher(*mxFontStyle, *m_xBuilder, rxFrame))
     , mxFontHeight(m_xBuilder->weld_toolbar(u"fontheight"_ustr))
     , mxFontHeightDispatch(new ToolbarUnoDispatcher(*mxFontHeight, *m_xBuilder, rxFrame))
     , mxFontEffects(m_xBuilder->weld_toolbar(u"fonteffects"_ustr))
@@ -79,6 +81,7 @@ TextPropertyPanel::~TextPropertyPanel()
     mxFontAdjustDispatch.reset();
     mxFontEffectsDispatch.reset();
     mxFontHeightDispatch.reset();
+    mxFontStyleDispatch.reset();
     mxFontDispatch.reset();
 
     mxResetBar.reset();
@@ -91,6 +94,7 @@ TextPropertyPanel::~TextPropertyPanel()
     mxFontAdjust.reset();
     mxFontEffects.reset();
     mxFontHeight.reset();
+    mxFontStyle.reset();
     mxFont.reset();
 }
 
