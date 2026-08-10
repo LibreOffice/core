@@ -23,12 +23,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 
 	// Every custom property row is built from the same fragment, so the rows have to
 	// be told apart by position rather than by name. The dialog keeps a few spare
-	// rows hidden instead of throwing them away, so only the ones on screen count.
+	// rows hidden instead of throwing them away, and a row that is not in use carries
+	// the hidden class. A :visible filter would drop a row that is only scrolled out
+	// of the list, because Cypress counts a clipped element as invisible.
 	// The controls inside a row are reached by class: the ids repeat from row to row,
 	// only the first row of the run keeps the plain id, and an id written as #id comes
 	// back as a single element however many share it.
 	function shownRow(position) {
-		return cy.cGet('#properties .ui-grid:visible').eq(position);
+		return cy.cGet('#properties .ui-grid:not(.hidden)').eq(position);
 	}
 
 	function nameBox(position) {
@@ -39,10 +41,15 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 		return shownRow(position).find('select.ui-listbox');
 	}
 
-	// The value box a row shows depends on the type of property it holds: the plain
-	// text box for a text property, the duration box for a duration one.
-	function valueBox(position) {
-		return shownRow(position).find('input.ui-edit:visible');
+	// Every row holds both value boxes, the plain text one and the duration one, and
+	// the box a row does not use sits in a hidden container that leaves no mark on the
+	// box itself. So a box is told from the other by the id it starts with.
+	function textValueBox(position) {
+		return shownRow(position).find('input[id^="valueedit"]');
+	}
+
+	function durationValueBox(position) {
+		return shownRow(position).find('input[id^="duration"]');
 	}
 
 	// Yes comes before No in the row.
@@ -123,7 +130,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 
 		// A second property can still be added -> two editable rows.
 		cy.cGet('#add.ui-pushbutton-wrapper').click();
-		cy.cGet('#properties .ui-combobox-content:visible').should('have.length', 2);
+		cy.cGet('#properties .ui-grid:not(.hidden)').should('have.length', 2);
 		cy.cGet('#add.ui-pushbutton-wrapper').should('be.visible');
 
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
@@ -163,7 +170,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 		// A text property.
 		cy.cGet('#add.ui-pushbutton-wrapper').click();
 		nameBox(0).type('Mailstop');
-		valueBox(0).type('123 Address');
+		textValueBox(0).type('123 Address');
 
 		// A duration property, whose value is entered in a sub-dialog. The button
 		// that opens it is labelled "...", which tells it from the row's Remove
@@ -195,10 +202,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 		// The reopened page sorts the rows by name, so the three are read back in
 		// alphabetical order rather than the order they were typed in.
 		nameBox(0).should('have.value', 'Mailstop');
-		valueBox(0).should('have.value', '123 Address');
+		textValueBox(0).should('have.value', '123 Address');
 
 		nameBox(1).should('have.value', 'Received from');
-		valueBox(1).should('have.value', '- Y: 1 M: 0 D: 2 H: 0 M: 0 S: 3');
+		durationValueBox(1).should('have.value', '- Y: 1 M: 0 D: 2 H: 0 M: 0 S: 3');
 
 		nameBox(2).should('have.value', 'Telephone number');
 		yesButton(2).should('be.checked');
