@@ -1914,7 +1914,7 @@ menuDefinitions.set('RejectTrackedChangesMenu', [
 
 menuDefinitions.set('ConditionalFormatMenu', [
 	{
-		text: _('Highlight cells with...'),
+		text: _('Highlight cells with'),
 		items: [
 			{
 				text: _('Values greater than...'),
@@ -1945,7 +1945,7 @@ menuDefinitions.set('ConditionalFormatMenu', [
 		],
 	},
 	{
-		text: _('Top/Bottom Rules...'),
+		text: _('Top/Bottom Rules'),
 		items: [
 			{
 				text: _('Top N elements...'),
@@ -1976,19 +1976,22 @@ menuDefinitions.set('ConditionalFormatMenu', [
 		],
 	},
 	{ type: 'separator' },
+	// These three entries open a submenu, already shown by its arrow, so their
+	// label skips the ellipsis that the shared .uno: label carries for the
+	// dialog opened directly from the classic menu bar.
 	{
 		id: 'scaleset',
-		text: _UNO('.uno:ColorScaleFormatDialog', 'spreadsheet'),
+		text: _('Color Scale'),
 		items: [{ type: 'html', htmlId: 'scaleset' }],
 	},
 	{
 		id: 'databarset',
-		text: _UNO('.uno:DataBarFormatDialog', 'spreadsheet'),
+		text: _('Data Bar'),
 		items: [{ type: 'html', htmlId: 'databarset' }],
 	},
 	{
 		id: 'iconset',
-		text: _UNO('.uno:IconSetFormatDialog', 'spreadsheet'),
+		text: _('Icon Set'),
 		items: [{ type: 'html', htmlId: 'iconset' }],
 	},
 	{
