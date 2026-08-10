@@ -1,0 +1,7 @@
+{
+    "manifestVersion": "0.1",
+    "name": "Word cloud",
+    "entry": "index.html",
+    "icon": "icon.svg",
+    "supports": ["text"]
+}

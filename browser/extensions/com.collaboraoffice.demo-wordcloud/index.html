@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Word cloud</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; padding: 12px; }
+label { display: block; margin: 8px 0 4px; font-weight: 600; }
+input[type="number"] { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+.radio-row { display: flex; gap: 12px; margin: 4px 0 12px; }
+.radio-row label { margin: 0; font-weight: 400; }
+button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; background: #7c3aed; color: #fff; margin-top: 8px; }
+button:disabled { background: #a78bfa; cursor: default; }
+.result { margin-top: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; min-height: 1.5em; white-space: pre-wrap; word-break: break-word; }
+.result.error { color: #b00; border-color: #f5c0c0; background: #fff5f5; }
+.preview { margin-top: 12px; border: 1px solid #ddd; border-radius: 4px; background: #fff; }
+.preview svg { display: block; width: 100%; height: auto; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<label>Source:</label>
+<div class="radio-row">
+    <label><input type="radio" name="source" value="all" checked> Whole document</label>
+    <label><input type="radio" name="source" value="selection"> Selection</label>
+</div>
+
+<label for="maxwords">Maximum words:</label>
+<input id="maxwords" type="number" min="5" max="200" value="40">
+
+<label for="width">Insert width (cm):</label>
+<input id="width" type="number" min="4" max="30" step="0.5" value="12">
+
+<button id="generate" onclick="generate()">Generate &amp; insert</button>
+
+<div id="result" class="result">no cloud yet</div>
+<div id="preview" class="preview" hidden></div>
+
+<script>
+// Small English stopword list; extend as needed.  The list is deliberately
+// small so short documents still yield something interesting.
+const STOPWORDS = new Set([
+    'the','a','an','and','or','but','if','then','else','when','while','to','of',
+    'in','on','at','by','for','with','from','as','is','are','was','were','be',
+    'been','being','have','has','had','do','does','did','this','that','these',
+    'those','i','you','he','she','it','we','they','me','him','her','us','them',
+    'my','your','his','its','our','their','not','no','yes','so','very','just',
+    'also','only','than','too','more','most','some','any','all','each','both',
+    'few','much','other','such','own','same','because','about','above','below',
+    'over','under','up','down','out','into','through','during','before','after',
+    'will','would','can','could','should','shall','may','might','must','one',
+]);
+
+// Split text on non-word characters (Unicode-aware), lowercase, drop stopwords
+// and very short tokens; return [{word, count}] sorted by count desc.
+function extractWords(text) {
+    const raw = text.toLowerCase().match(/[\p{L}\p{N}']+/gu) || [];
+    const counts = new Map();
+    for (const w of raw) {
+        if (w.length < 3) continue;
+        if (STOPWORDS.has(w)) continue;
+        counts.set(w, (counts.get(w) || 0) + 1);
+    }
+    return Array.from(counts.entries())
+        .map(([word, count]) => ({ word, count }))
+        .sort((a, b) => b.count - a.count);
+}
+
+const PALETTE = [
+    '#dc2626', '#ea580c', '#ca8a04', '#16a34a', '#0d9488',
+    '#2563eb', '#4f46e5', '#7c3aed', '#db2777',
+];
+
+// Naive Archimedean-spiral placement.  Each word has a font size proportional
+// to its frequency, is measured with a canvas 2D context (headless, so it does
+// not need to be in the DOM), and is placed at the first spiral position that
+// stays inside the canvas and does not overlap any earlier word.
+function layout(words, W, H) {
+    if (words.length === 0) return [];
+    const maxCount = words[0].count;
+    const minCount = words[words.length - 1].count;
+    const minSize = 12, maxSize = 60;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const placed = [];
+    const cx = W / 2, cy = H / 2;
+    for (const w of words) {
+        const t = maxCount === minCount
+            ? 1
+            : (w.count - minCount) / (maxCount - minCount);
+        const size = minSize + t * (maxSize - minSize);
+        ctx.font = `bold ${size}px sans-serif`;
+        const metrics = ctx.measureText(w.word);
+        const boxW = metrics.width + 4;
+        const boxH = size * 1.1;
+        // Spiral: r = a*theta, step in theta small enough to try many spots.
+        let placedOk = false;
+        for (let theta = 0; theta < 300; theta += 0.18) {
+            const r = 3 * theta;
+            const x = cx + r * Math.cos(theta);
+            const y = cy + r * Math.sin(theta);
+            const box = { x: x - boxW / 2, y: y - boxH / 2, w: boxW, h: boxH };
+            if (box.x < 4 || box.y < 4 || box.x + box.w > W - 4 || box.y + box.h > H - 4) continue;
+            let hit = false;
+            for (const p of placed) {
+                if (!(box.x + box.w < p.x || p.x + p.w < box.x ||
+                      box.y + box.h < p.y || p.y + p.h < box.y)) {
+                    hit = true;
+                    break;
+                }
+            }
+            if (!hit) {
+                placed.push({ ...box, word: w.word, size, count: w.count });
+                placedOk = true;
+                break;
+            }
+        }
+        if (!placedOk) {
+            // Word did not fit anywhere on the canvas; skip it and keep going.
+        }
+    }
+    return placed;
+}
+
+function escapeXml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function buildSvg(placed, W, H) {
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+    for (let i = 0; i < placed.length; i++) {
+        const p = placed[i];
+        // Cycle through the palette by index so the same input gives the same
+        // colouring on re-run.  Placement itself is deterministic too.
+        const color = PALETTE[i % PALETTE.length];
+        const cx = p.x + p.w / 2;
+        const cy = p.y + p.h / 2;
+        svg += `<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}"`
+            + ` font-size="${p.size.toFixed(1)}" font-weight="bold"`
+            + ` font-family="sans-serif" fill="${color}"`
+            + ` text-anchor="middle" dominant-baseline="central">`
+            + escapeXml(p.word) + '</text>';
+    }
+    svg += '</svg>';
+    return svg;
+}
+
+async function generate() {
+    const btn = document.getElementById('generate');
+    const source = document.querySelector('input[name="source"]:checked').value;
+    const maxWords = Math.max(5, Math.min(200, parseInt(document.getElementById('maxwords').value, 10) || 40));
+    const widthCm = Math.max(4, Math.min(30, parseFloat(document.getElementById('width').value) || 12));
+    const resultEl = document.getElementById('result');
+    const previewEl = document.getElementById('preview');
+    resultEl.classList.remove('error');
+    btn.disabled = true;
+    try {
+        resultEl.textContent = 'gathering text...';
+        const text = await cool.callRemote(function (useSelection) {
+            const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+            const model = desktop.getCurrentFrame().getController().getModel();
+            if (useSelection) {
+                // The Writer selection is an XIndexAccess of XTextRange:
+                const ranges = model.getCurrentController().getSelection();
+                const parts = [];
+                for (let i = 0; i !== ranges.getCount(); ++i) {
+                    parts.push(ranges.getByIndex(i).getString());
+                }
+                return parts.join(' ');
+            }
+            return model.getText().getString();
+        }, source === 'selection');
+        if (!text || !text.trim()) {
+            resultEl.classList.add('error');
+            resultEl.textContent = source === 'selection'
+                ? 'no text selected'
+                : 'document is empty';
+            return;
+        }
+        const allWords = extractWords(text);
+        const words = allWords.slice(0, maxWords);
+        if (words.length === 0) {
+            resultEl.classList.add('error');
+            resultEl.textContent = 'no words left after filtering';
+            return;
+        }
+        const W = 600, H = 400;
+        const placed = layout(words, W, H);
+        if (placed.length === 0) {
+            resultEl.classList.add('error');
+            resultEl.textContent = 'nothing fit on the canvas';
+            return;
+        }
+        const svg = buildSvg(placed, W, H);
+        previewEl.innerHTML = svg;
+        previewEl.hidden = false;
+        resultEl.textContent = 'inserting ' + placed.length + ' / ' + words.length + ' words...';
+        // Encode the SVG as a UTF-8 byte array on the browser side and ship the
+        // bytes; QuickJS in the kit does not have atob/btoa, so encoding here
+        // saves the kit from writing a UTF-8 encoder itself.  The array of
+        // small integers travels through the executescript JSON envelope fine.
+        const utf8 = unescape(encodeURIComponent(svg));
+        const svgBytes = new Array(utf8.length);
+        for (let i = 0; i < utf8.length; i++) svgBytes[i] = utf8.charCodeAt(i);
+        const heightCm = widthCm * H / W;
+        const res = await cool.callRemote(function (bytes, widthCm, heightCm) {
+            const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+            const doc = desktop.getCurrentFrame().getController().getModel();
+            const smgr = uno.componentContext.getServiceManager();
+            // GraphicProvider does not accept data: URLs reliably, so stage the
+            // SVG in a TempFile inside the kit's jail and hand its file:// URL
+            // to queryGraphic.  TextGraphicObject.Graphic embeds the loaded
+            // graphic bytes, so the temp file's default lifetime is enough.
+            const tmp = smgr.createInstanceWithContext(
+                'com.sun.star.io.TempFile', uno.componentContext);
+            const os = tmp.getOutputStream();
+            os.writeBytes(bytes);
+            os.closeOutput();
+            const url = tmp.Uri;
+            const gp = smgr.createInstanceWithContext(
+                'com.sun.star.graphic.GraphicProvider', uno.componentContext);
+            const xgraphic = gp.queryGraphic([{Name: 'URL', Value: url}]);
+            if (!xgraphic) return { ok: false, error: 'GraphicProvider.queryGraphic returned null for ' + url };
+            const graphic = doc.createInstance('com.sun.star.text.TextGraphicObject');
+            graphic.Graphic = xgraphic;
+            // 1/100 mm units: 1 cm == 1000.
+            graphic.Width = Math.round(widthCm * 1000);
+            graphic.Height = Math.round(heightCm * 1000);
+            graphic.AnchorType = uno.idl.com.sun.star.text.TextContentAnchorType.AS_CHARACTER;
+            const cursor = doc.getCurrentController().getViewCursor();
+            doc.getText().insertTextContent(cursor, graphic, false);
+            return { ok: true };
+        }, svgBytes, widthCm, heightCm);
+        if (res.ok) {
+            resultEl.textContent = 'inserted ' + placed.length + ' words';
+        } else {
+            resultEl.classList.add('error');
+            resultEl.textContent = 'insert failed: ' + res.error;
+        }
+    } catch (err) {
+        resultEl.classList.add('error');
+        resultEl.textContent = err.message || String(err);
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
