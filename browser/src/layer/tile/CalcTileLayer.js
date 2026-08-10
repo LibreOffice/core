@@ -409,7 +409,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		const { marginLeft, marginTop, scrollBarThickness } = this._getMarginPropertiesForTheMap();
 
 		// Available for tiles section.
-		const availableSpace = [documentContainerSize[0] - marginLeft - scrollBarThickness, documentContainerSize[1] - marginTop - scrollBarThickness];
+		// In mobile, the margins and the scroll bar can take more space than the document container
+		// when the on-screen keyboard is enabled in landscape mode. Clamp to zero so the map element
+		// gets a valid CSS size and the next resize is detected as a real size change.
+		const availableSpace = [
+			Math.max(0, documentContainerSize[0] - marginLeft - scrollBarThickness),
+			Math.max(0, documentContainerSize[1] - marginTop - scrollBarThickness)
+		];
 		const { newMapSize, newCanvasSize } = this._calculateNewCanvasAndMapSizes(documentContainerSize, availableSpace, marginLeft, marginTop, scrollBarThickness);
 
 		const mapElement = document.getElementById('map'); // map's size = tiles section's size.
