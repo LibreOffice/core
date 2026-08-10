@@ -1179,8 +1179,8 @@ enum class COKitCallbackType
      *
      * Pushed to every view of the document when a slide's content changes
      * (a shape is added, moved, resized or deleted) or the set or order of
-     * pages changes. The payload is empty; the receiving view rebuilds the
-     * full presentationinfo JSON for itself.
+     * pages changes. The payload is a JSON object naming the reason and the
+     * changed part, for example { "reason": "gifupdate", "part": 3 }.
      */
     PRESENTATION_INFO = 77
 };

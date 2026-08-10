@@ -2242,15 +2242,23 @@ void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPa
     }
 }
 
-// Sends the presentation-info-changed callback to every view of the document.
-// The payload is empty.
-void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell)
+// A slide's presentation info changed, so tell every view of the document.
+// The payload names the reason and the changed part.
+void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
 {
+    if (!comphelper::COKit::isActive() || !pDocShell)
+        return;
+
+    ::tools::JsonWriter aWriter;
+    aWriter.put("reason", "gifupdate");
+    aWriter.put("part", nPart);
+    const OString aPayload = aWriter.finishAndGetAsOString();
+
     SfxViewShell* pShell = SfxViewShell::GetFirst(false);
     while (pShell)
     {
         if (pShell->GetObjectShell() == pDocShell)
-            pShell->viewCallback(COKitCallbackType::PRESENTATION_INFO, OString());
+            pShell->viewCallback(COKitCallbackType::PRESENTATION_INFO, aPayload);
         pShell = SfxViewShell::GetNext(*pShell, false);
     }
 }
@@ -2352,7 +2360,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                     = dynamic_cast<const SdrGrafObj*>(pObject))
                             {
                                 if (pGraphicObject->GetGraphic().IsAnimated())
-                                    notifyViewsPresentationInfoChanged(mpDocShell);
+                                    notifyViewsPresentationInfoChanged(mpDocShell, nPart);
                             }
                         }
                     }
@@ -5428,12 +5436,6 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
         //  we have painted the tile, resulting in an invalidate, followed
         //  by the tile being rerendered - which is wasteful and ugly).
         pDrawView->SetSwapAsynchron(false);
-
-        // Send the presentation info once the view is ready at load. The
-        // images are already forced in above, so the animated ones are
-        // detectable now.
-        if (comphelper::COKit::isActive() && mpDocShell)
-            notifyViewsPresentationInfoChanged(mpDocShell);
     }
 
     // when the "This document may contain formatting or content that cannot

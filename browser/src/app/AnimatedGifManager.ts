@@ -23,9 +23,22 @@ class AnimatedGifManager {
 
 	constructor(map: any) {
 		this._map = map;
+		map.on('docloaded', this._onDocLoaded, this);
 		map.on('presentationinfo', this._onPresentationInfo, this);
 		map.on('updateparts', this._onUpdateParts, this);
 		map.on('zoomend', this._onZoomEnd, this);
+	}
+
+	// Ask for the presentation info on load so animated images already in the
+	// file start playing without a prior edit.
+	private _onDocLoaded() {
+		const docType = this._map.getDocType();
+		if (
+			(docType === 'presentation' || docType === 'drawing') &&
+			app.socket.connected()
+		) {
+			app.socket.sendMessage('getpresentationinfo');
+		}
 	}
 
 	private _onPresentationInfo(info: any) {
