@@ -358,6 +358,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sb \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	scn \
+	scriptinterop \
 	sd \
 	sdd \
 	sfx \

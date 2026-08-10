@@ -134,6 +134,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	) \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
 	scripting \
+	scriptinterop \
     $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	sd \
 	sdext \

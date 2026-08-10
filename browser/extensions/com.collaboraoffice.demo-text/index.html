@@ -48,16 +48,13 @@ function apply() {
   const colorize = document.getElementById('colorize').checked;
   cool.callRemote(function (greeting, colorize) {
     console.log('script called with:', greeting, colorize);
-    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-    const model = desktop.getCurrentFrame().getController().getModel();
-    const text = model.getText();
-    const cursor = text.createTextCursor();
-    cursor.setString(greeting);
+    const doc = cool.getActiveDocument();
+    doc.uno.getText().createTextCursor().setString(greeting);
     if (colorize) {
-      for (const para of text.createEnumeration()) {
+      for (const para of doc.getParagraphs()) {
         const color = Math.floor(Math.random() * 0xffffff);
         try {
-          para.setPropertyValue('CharColor', color);
+          para.uno.setPropertyValue('CharColor', color);
         } catch (e) {
           console.log('caught:', e);
         }
@@ -86,11 +83,9 @@ async function pickAndColorize() {
   el.appendChild(document.createTextNode('applying ' + picked.name + ' (' + picked.color + ')...'));
   const rgb = parseInt(picked.color.slice(1), 16); // color value is "#rrggbb"
   await cool.callRemote(function (rgb) {
-    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-    const text = desktop.getCurrentFrame().getController().getModel().getText();
-    for (const para of text.createEnumeration()) {
+    for (const para of cool.getActiveDocument().getParagraphs()) {
       try {
-        para.setPropertyValue('CharColor', rgb);
+        para.uno.setPropertyValue('CharColor', rgb);
       } catch (e) {
         console.log('caught:', e);
       }
@@ -105,13 +100,7 @@ function readNthParagraph() {
   resultEl.classList.remove('error');
   resultEl.textContent = '...';
   cool.callRemote(function (n) {
-    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-    const model = desktop.getCurrentFrame().getController().getModel();
-    const en = model.getText().createEnumeration();
-    for (let i = 1; i < n; i++) {
-      en.nextElement();
-    }
-    return en.nextElement().getString();
+    return cool.getActiveDocument().getParagraphs()[n - 1].getText();
   }, n).then(function (text) {
     resultEl.textContent = text;
   }).catch(function (err) {

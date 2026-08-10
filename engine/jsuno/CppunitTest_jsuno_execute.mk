@@ -22,6 +22,14 @@ $(eval $(call gb_CppunitTest_use_libraries,jsuno_execute, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,jsuno_execute))
 
+$(eval $(call gb_CppunitTest_use_api,jsuno_execute,\
+    scriptinterop \
+))
+
 $(eval $(call gb_CppunitTest_use_ure,jsuno_execute))
+
+$(eval $(call gb_CppunitTest_use_components,jsuno_execute,\
+    scriptinterop/util/scriptinterop \
+))
 
 # vim: set noet sw=4 ts=4:

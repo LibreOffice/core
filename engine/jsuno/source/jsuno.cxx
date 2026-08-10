@@ -54,6 +54,7 @@
 #include <cpo/uno/genfunc.hxx>
 #include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cool.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <jsuno/detail/dllapi.hxx>
@@ -2979,6 +2980,9 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
             ctx, internalObj, "suppressLegacyUnoApiEnd",
             JS_NewCFunction(ctx, internalSuppressLegacyUnoApiEnd, "suppressLegacyUnoApiEnd", 0));
         JS_SetPropertyStr(ctx, global, "$internal", internalObj.release());
+        JS_SetPropertyStr(
+            ctx, global, "cool",
+            wrapUnoObject(ctx, cool::get(comphelper::getProcessComponentContext())));
         auto const input = script.toUtf8();
         ValueRef const evalRes(
             ctx, JS_Eval(ctx, input.getStr(), input.getLength(), "<input>", JS_EVAL_TYPE_GLOBAL));

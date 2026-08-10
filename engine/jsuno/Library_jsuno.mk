@@ -31,4 +31,8 @@ $(eval $(call gb_Library_use_libraries,jsuno, \
 
 $(eval $(call gb_Library_use_sdk_api,jsuno))
 
+$(eval $(call gb_Library_use_api,jsuno,\
+    scriptinterop \
+))
+
 # vim: set noet sw=4 ts=4:

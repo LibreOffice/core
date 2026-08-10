@@ -160,18 +160,11 @@ async function generate() {
     try {
         resultEl.textContent = 'gathering text...';
         const text = await cool.callRemote(function (useSelection) {
-            const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-            const model = desktop.getCurrentFrame().getController().getModel();
+            const doc = cool.getActiveDocument();
             if (useSelection) {
-                // The Writer selection is an XIndexAccess of XTextRange:
-                const ranges = model.getCurrentController().getSelection();
-                const parts = [];
-                for (let i = 0; i !== ranges.getCount(); ++i) {
-                    parts.push(ranges.getByIndex(i).getString());
-                }
-                return parts.join(' ');
+                return doc.getSelection().getText();
             }
-            return model.getText().getString();
+            return doc.getText();
         }, source === 'selection');
         if (!text || !text.trim()) {
             resultEl.classList.add('error');
@@ -206,40 +199,10 @@ async function generate() {
         const svgBytes = new Array(utf8.length);
         for (let i = 0; i < utf8.length; i++) svgBytes[i] = utf8.charCodeAt(i);
         const heightCm = widthCm * H / W;
-        const res = await cool.callRemote(function (bytes, widthCm, heightCm) {
-            const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-            const doc = desktop.getCurrentFrame().getController().getModel();
-            const smgr = uno.componentContext.getServiceManager();
-            // GraphicProvider does not accept data: URLs reliably, so stage the
-            // SVG in a TempFile inside the kit's jail and hand its file:// URL
-            // to queryGraphic.  TextGraphicObject.Graphic embeds the loaded
-            // graphic bytes, so the temp file's default lifetime is enough.
-            const tmp = smgr.createInstanceWithContext(
-                'com.sun.star.io.TempFile', uno.componentContext);
-            const os = tmp.getOutputStream();
-            os.writeBytes(bytes);
-            os.closeOutput();
-            const url = tmp.Uri;
-            const gp = smgr.createInstanceWithContext(
-                'com.sun.star.graphic.GraphicProvider', uno.componentContext);
-            const xgraphic = gp.queryGraphic([{Name: 'URL', Value: url}]);
-            if (!xgraphic) return { ok: false, error: 'GraphicProvider.queryGraphic returned null for ' + url };
-            const graphic = doc.createInstance('com.sun.star.text.TextGraphicObject');
-            graphic.Graphic = xgraphic;
-            // 1/100 mm units: 1 cm == 1000.
-            graphic.Width = Math.round(widthCm * 1000);
-            graphic.Height = Math.round(heightCm * 1000);
-            graphic.AnchorType = uno.idl.com.sun.star.text.TextContentAnchorType.AS_CHARACTER;
-            const cursor = doc.getCurrentController().getViewCursor();
-            doc.getText().insertTextContent(cursor, graphic, false);
-            return { ok: true };
+        await cool.callRemote(function (bytes, widthCm, heightCm) {
+            cool.getActiveDocument().insertImage(bytes, { widthCm, heightCm });
         }, svgBytes, widthCm, heightCm);
-        if (res.ok) {
-            resultEl.textContent = 'inserted ' + placed.length + ' words';
-        } else {
-            resultEl.classList.add('error');
-            resultEl.textContent = 'insert failed: ' + res.error;
-        }
+        resultEl.textContent = 'inserted ' + placed.length + ' words';
     } catch (err) {
         resultEl.classList.add('error');
         resultEl.textContent = err.message || String(err);

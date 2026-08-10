@@ -19,10 +19,15 @@ $(eval $(call gb_CppunitTest_use_libraries,jsuno_testuno, \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,jsuno_testuno, \
+    scriptinterop/util/scriptinterop \
     unotest/source/testuno/testuno \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,jsuno_testuno))
+
+$(eval $(call gb_CppunitTest_use_api,jsuno_testuno,\
+    scriptinterop \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,jsuno_testuno))
 
