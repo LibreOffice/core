@@ -493,6 +493,7 @@ chart2/qa/extras/chart2dump/chart2dump.cxx
 chart2/qa/extras/chart2export.cxx
 chart2/qa/extras/chart2export3.cxx
 chart2/qa/extras/chart2import.cxx
+chart2/qa/extras/chart2import2.cxx
 chart2/qa/extras/charttest.hxx
 chart2/qa/unit/common_functor_test.cxx
 chart2/source/controller/accessibility/AccessibleBase.cxx
@@ -876,6 +877,9 @@ chart2/source/model/template/ColumnChartType.hxx
 chart2/source/model/template/ColumnLineChartTypeTemplate.cxx
 chart2/source/model/template/ColumnLineChartTypeTemplate.hxx
 chart2/source/model/template/ColumnLineDataInterpreter.cxx
+chart2/source/model/template/CorrelationCircleChartType.cxx
+chart2/source/model/template/CorrelationCircleChartType.hxx
+chart2/source/model/template/CorrelationCircleChartTypeTemplate.hxx
 chart2/source/model/template/DataInterpreter.cxx
 chart2/source/model/template/FilledNetChartType.cxx
 chart2/source/model/template/LineChartType.cxx
@@ -1005,6 +1009,8 @@ chart2/source/view/charttypes/BubbleChart.hxx
 chart2/source/view/charttypes/CandleStickChart.cxx
 chart2/source/view/charttypes/CandleStickChart.hxx
 chart2/source/view/charttypes/CategoryPositionHelper.cxx
+chart2/source/view/charttypes/CorrelationCircleChart.cxx
+chart2/source/view/charttypes/CorrelationCircleChart.hxx
 chart2/source/view/charttypes/NetChart.cxx
 chart2/source/view/charttypes/NetChart.hxx
 chart2/source/view/charttypes/PieChart.cxx
@@ -5910,6 +5916,7 @@ javaunohelper/source/juhx-export-types.hxx
 javaunohelper/source/preload.cxx
 javaunohelper/source/vm.cxx
 javaunohelper/source/vm.hxx
+jsuno/source/jsuno.cxx
 jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c
 jurt/source/pipe/wrapper/wrapper.c
 jvmaccess/source/classpath.cxx
@@ -8406,6 +8413,7 @@ sd/source/filter/html/htmlattr.cxx
 sd/source/filter/html/htmlattr.hxx
 sd/source/filter/html/htmlex.cxx
 sd/source/filter/html/htmlex.hxx
+sd/source/filter/html/sdhtmlfilter.cxx
 sd/source/filter/ppt/ppt97animations.cxx
 sd/source/filter/ppt/ppt97animations.hxx
 sd/source/filter/ppt/pptanimations.hxx
@@ -8607,6 +8615,7 @@ sd/source/ui/inc/AccessibleSlideSorterView.hxx
 sd/source/ui/inc/AnimationChildWindow.hxx
 sd/source/ui/inc/CustomAnimationList.hxx
 sd/source/ui/inc/CustomAnimationPane.hxx
+sd/source/ui/inc/DesignTemplates.hxx
 sd/source/ui/inc/DocumentRenderer.hxx
 sd/source/ui/inc/DrawController.hxx
 sd/source/ui/inc/DrawDocShell.hxx
@@ -11918,6 +11927,7 @@ sw/source/uibase/shells/textidx.cxx
 sw/source/uibase/shells/textsh.cxx
 sw/source/uibase/shells/textsh1.cxx
 sw/source/uibase/shells/textsh2.cxx
+sw/source/uibase/shells/translatehelper.cxx
 sw/source/uibase/shells/txtattr.cxx
 sw/source/uibase/shells/txtcrsr.cxx
 sw/source/uibase/shells/txtnum.cxx
@@ -13882,6 +13892,8 @@ xmloff/inc/xmlmultiimagehelper.hxx
 xmloff/inc/xmlsdtypes.hxx
 xmloff/inc/xmltabe.hxx
 xmloff/inc/xmlversion.hxx
+xmloff/inc/xmlxtexp.hxx
+xmloff/inc/xmlxtimp.hxx
 xmloff/qa/unit/tokenmap-test.cxx
 xmloff/qa/unit/uxmloff.cxx
 xmloff/source/chart/ColorPropertySet.cxx
@@ -14130,6 +14142,7 @@ xmloff/source/style/XMLIsPercentagePropertyHandler.cxx
 xmloff/source/style/XMLPageExport.cxx
 xmloff/source/style/XMLPercentOrMeasurePropertyHandler.cxx
 xmloff/source/style/XMLRectangleMembersHandler.cxx
+xmloff/source/style/XPropertyTableFilters.cxx
 xmloff/source/style/adjushdl.cxx
 xmloff/source/style/adjushdl.hxx
 xmloff/source/style/backhdl.cxx
@@ -14190,6 +14203,8 @@ xmloff/source/style/xmlprmap.cxx
 xmloff/source/style/xmlstyle.cxx
 xmloff/source/style/xmltabe.cxx
 xmloff/source/style/xmltabi.cxx
+xmloff/source/style/xmlxtexp.cxx
+xmloff/source/style/xmlxtimp.cxx
 xmloff/source/table/XMLTableExport.cxx
 xmloff/source/table/XMLTableImport.cxx
 xmloff/source/text/XMLAnchorTypePropHdl.hxx
