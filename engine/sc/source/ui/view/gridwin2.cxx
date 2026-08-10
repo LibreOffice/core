@@ -133,6 +133,9 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     tools::Rectangle aRect(aPopupPos, aPopupSize);
     if (aRect.Contains(rMEvt.GetPosPixel()))
     {
+        if (bLOKActive && mrViewData.GetViewShell()->IsKitReadOnlyView())
+            return true;
+
         if ( DoPageFieldSelection( nCol, nRow ) )
             return true;
 
