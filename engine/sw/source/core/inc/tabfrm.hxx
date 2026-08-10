@@ -27,6 +27,9 @@
 class SwTable;
 class SwAttrSetChg;
 
+/// What is left to try for a first table row that a footnote left too little space for
+enum class SwFootnoteRescue;
+
 enum class SwTabFrameInvFlags : sal_uInt8
 {
     NONE = 0x00,
@@ -107,7 +110,8 @@ class SW_DLLPUBLIC SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
      * created and constructed and inserted directly after this.
      * Join() gets the Follow's content and destroys it.
      */
-    bool Split(const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep, bool & rIsFootnoteGrowth);
+    bool Split(const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep, bool& rIsFootnoteGrowth,
+               SwFootnoteRescue& rRescue);
     void Join();
 
     void UpdateAttr_(

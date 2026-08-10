@@ -225,11 +225,28 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow);
 /// The height a single row of rTab can ever get: a page body with nothing else on it
 static SwTwips lcl_GetMaxRowHeight(const SwTabFrame& rTab)
 {
-    SwTwips nRet = rTab.FindPageFrame()->getFramePrintArea().Height();
-    for (auto pBody = rTab.FindBodyFrame(); pBody; pBody = pBody->GetUpper()->FindBodyFrame())
+    const SwPageFrame* pPage = rTab.FindPageFrame();
+    SwRectFnSet aRectFnSet(*pPage);
+    SwTwips nRet = aRectFnSet.GetHeight(pPage->getFramePrintArea());
+
+    bool bInPageBody = false;
+    for (auto pBody = rTab.FindBodyFrame(); pBody && !bInPageBody;
+         pBody = pBody->GetUpper()->FindBodyFrame())
     {
-        if (pBody->IsPageBodyFrame())
-            nRet = pBody->getFramePrintArea().Height();
+        bInPageBody = pBody->IsPageBodyFrame();
+    }
+    if (!bInPageBody)
+        return nRet;
+
+    // The row has to fit into the page body, but not into the body as it stands: the footnotes of
+    // the page took their space from it, and they give it back when the row needs it - the ones
+    // anchored before the row stay behind on the page the row leaves, and the row's own ones move
+    // on with the row. So take the body with the page to itself: the print area without header and
+    // footer.
+    for (const SwFrame* pLower = pPage->Lower(); pLower; pLower = pLower->GetNext())
+    {
+        if (pLower->IsHeaderFrame() || pLower->IsFooterFrame())
+            nRet -= aRectFnSet.GetHeight(pLower->getFrameArea());
     }
     return nRet;
 }
@@ -1112,8 +1129,40 @@ static bool lcl_FindSectionsInRow( const SwRowFrame& rRow )
     return bRet;
 }
 
-bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
-        bool bTableRowKeep, bool & rIsFootnoteGrowth)
+enum class SwFootnoteRescue
+{
+    None,
+    MoveTable, ///< the footnote stays on this page, so the table is the one to move
+    MoveOwnFootnote, ///< the footnote goes where the row goes, so it is the one to move
+};
+
+// A footnote took the space the row needed, and which footnote it is decides who gives way.
+static SwFootnoteRescue lcl_GetFootnoteRescue(const SwRowFrame& rRow)
+{
+    const SwPageFrame* pPage = rRow.FindPageFrame();
+    const SwFootnoteContFrame* pCont = pPage->FindFootnoteCont();
+    if (!pCont)
+        return SwFootnoteRescue::None;
+
+    bool bOfRow = false;
+    for (const SwFrame* pFootnote = pCont->Lower(); pFootnote; pFootnote = pFootnote->GetNext())
+    {
+        const SwContentFrame* pRef = static_cast<const SwFootnoteFrame*>(pFootnote)->GetRef();
+        const SwPageFrame* pRefPage = pRef ? pRef->FindPageFrame() : nullptr;
+        if (!pRefPage)
+            continue;
+        // A footnote pushed onto this page from an earlier one stays here when what follows it
+        // moves on, so the move leaves no page blank - and it cannot repeat itself from page to
+        // page, as a move away from a footnote travelling with its own anchor would.
+        if (pRefPage->GetPhyPageNum() < pPage->GetPhyPageNum())
+            return SwFootnoteRescue::MoveTable;
+        bOfRow = bOfRow || rRow.IsAnLower(pRef);
+    }
+    return bOfRow ? SwFootnoteRescue::MoveOwnFootnote : SwFootnoteRescue::None;
+}
+
+bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep,
+                       bool& rIsFootnoteGrowth, SwFootnoteRescue& rRescue)
 {
     bool bRet = true;
 
@@ -1273,7 +1322,12 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         else if (nRepeat && pRow->getFrameArea().Height() <= nMaxHeight)
             bOmitHeadline = true;
         else
+        {
             bKeepNextRow = true;
+            // Keeping the row here means cutting it off at the page's bottom, so see first whether
+            // the footnote that took its space can be got out of the way
+            rRescue = lcl_GetFootnoteRescue(*pRow);
+        }
     }
 
     // Better keep the next row in this table:
@@ -1346,7 +1400,12 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     {
         SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         if ( pRow == pFirstNonHeadlineRow )
+        {
+            // The first row cannot be handed to a follow: that would leave this table without rows.
+            // It can still get the space of a footnote, and then it is not cut off here after all.
+            rRescue = lcl_GetFootnoteRescue(*pRow);
             return false;
+        }
 
         // #i91764#
         // Ignore row span lines
@@ -1357,6 +1416,8 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         }
         if ( !pTmpRow || pRow == pTmpRow )
         {
+            if (pTmpRow)
+                rRescue = lcl_GetFootnoteRescue(*pRow);
             return false;
         }
     }
@@ -2343,6 +2404,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // as long as bRetryRegainedSpace is true, the rows the split rejected may be measured once
     // more, against the space that has appeared under that bottom since
     bool bRetryRegainedSpace = true;
+    // the footnotes anchored in the table are moved past its bottom only once
+    bool bMovedOwnFootnotes = false;
     const bool bFootnotesInDoc = !GetFormat()->GetDoc().GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
@@ -3175,9 +3238,37 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         // The second attempt; ignore all the flags allowing to split the row
                         bEffectiveTableRowKeep = bTableRowKeep;
                     }
-                    const bool bSplitError = !Split(nDeadLine, bTryToSplit,
-                        bEffectiveTableRowKeep,
-                        isFootnoteGrowth);
+                    SwFootnoteRescue eRescue = SwFootnoteRescue::None;
+                    const bool bSplitError = !Split(nDeadLine, bTryToSplit, bEffectiveTableRowKeep,
+                                                    isFootnoteGrowth, eRescue);
+
+                    // The table cannot make room for its first row by splitting, and the footnote
+                    // that took the space stays on this page: move the table rather than leave the
+                    // row here to be cut off at the page's bottom
+                    if (eRescue == SwFootnoteRescue::MoveTable)
+                    {
+                        // Move always: there is no previous frame on this page to move relative to,
+                        // which is what normally forbids the move - and the page is not left blank,
+                        // it keeps the footnote. A move off the page ends the page making.
+                        if (!MoveFwd(true, false, true))
+                            bMakePage = false;
+                        bMovedFwd = true;
+                        setFrameAreaPositionValid(false);
+                        continue;
+                    }
+
+                    // The footnote that took the row's space is the row's own, so it is the one to
+                    // move: send the footnotes past the table's bottom, and what has no room left
+                    // there goes to the next page, leaving the row the space it needs
+                    if (eRescue == SwFootnoteRescue::MoveOwnFootnote && !bMovedOwnFootnotes)
+                    {
+                        bMovedOwnFootnotes = true;
+                        FindPageFrame()->RearrangeFootnotes(aRectFnSet.GetBottom(getFrameArea()),
+                                                            false);
+                        m_bCalcLowers = true;
+                        setFrameAreaSizeValid(false);
+                        continue;
+                    }
 
                     // tdf#130639 don't start table on a new page after the fallback "switch off repeating header"
                     if (bSplitError && nRepeat > GetTable()->GetRowsToRepeat())
