@@ -46,4 +46,34 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 		// Without the fix only the first char '1' will be in the input box.
 		input.should('have.value', '1331');
 	});
+
+	function checkSubmenuGridHasEvenColumnSpacing(entryText, iconPrefix) {
+		cy.cGet('#toolbar-up #Home .unoConditionalFormatMenu:visible').click();
+		desktopHelper.getDropdown('home-conditional-format-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', entryText).click();
+
+		cy.cGet('#conditionalformatmenu-grid').should('be.visible');
+		cy.cGet('#conditionalformatmenu-grid button.' + iconPrefix + '00' +
+			', #conditionalformatmenu-grid button.' + iconPrefix + '01' +
+			', #conditionalformatmenu-grid button.' + iconPrefix + '02')
+			.should('have.length', 3)
+			.then(function(buttons) {
+				const left0 = buttons[0].getBoundingClientRect().left;
+				const left1 = buttons[1].getBoundingClientRect().left;
+				const left2 = buttons[2].getBoundingClientRect().left;
+				// Without the fix, the "More..." button at the bottom of the grid
+				// does not span the full row, so it widens the first column
+				// instead, and the gap before the second column no longer
+				// matches the gap before the third.
+				expect(left1 - left0).to.be.closeTo(left2 - left1, 1);
+			});
+	}
+
+	it('Data bar submenu grid has even column spacing', function() {
+		checkSubmenuGridHasEvenColumnSpacing('Data Bar...', 'databarset');
+	});
+
+	it('Color scale submenu grid has even column spacing', function() {
+		checkSubmenuGridHasEvenColumnSpacing('Color Scale...', 'scaleset');
+	});
 });
