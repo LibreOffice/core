@@ -28,6 +28,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/timer.hxx>
@@ -395,6 +396,9 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const tools::Rectangle& 
     , mpAlpha(nullptr)
     , maDestPixel(rDestPixel)
 {
+    auto aRangePixel = vcl::unotools::b2DRectangleFromRectangle(maDestPixel);
+    aRangePixel.transform(mrOutDev.GetViewTransformation());
+    maDestPixel = vcl::unotools::rectangleFromB2DRectangle(aRangePixel);
     maDestPixel.Intersection(tools::Rectangle{ Point{}, mrOutDev.GetOutputSizePixel() });
 
     if (!isVisible())
