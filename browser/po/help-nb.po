@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-09 01:51+0000\n"
+"PO-Revision-Date: 2026-08-10 18:53+0000\n"
 "Last-Translator: Someone That Is A Christian <helgen77@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "collabora-online/help/nb_NO/>\n"
@@ -36,7 +36,7 @@ msgstr "Klipp ut"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-38
 msgid "Copy"
-msgstr ""
+msgstr "Kopier"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 #, fuzzy
@@ -73,10 +73,13 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
-msgstr ""
+msgstr "Åpne"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
@@ -95,11 +98,11 @@ msgstr "Skriv ut"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Finn"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Finn og erstatt"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -107,7 +110,7 @@ msgstr "Viser hjelpen for tastatur hurtigtaster"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-38
 msgid "Focus to notebookbar menu"
-msgstr ""
+msgstr "Fokuser på notatboklinjemenyen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 #, fuzzy
@@ -121,15 +124,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
 msgid "Focus to document from menu"
-msgstr ""
+msgstr "Fokuser til dokument fra menyen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-92
 msgid "ESC"
-msgstr ""
+msgstr "ESC"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-38
 msgid "Focus to selected comment's menu"
-msgstr ""
+msgstr "Fokuser på menyen for valgt kommentar"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 #, fuzzy
@@ -140,7 +143,7 @@ msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Delete"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Åpne hurtigmenyen ved markøren eller den valgte cellen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
@@ -156,14 +159,16 @@ msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Flytt fokus til neste område i programmet (menylinje, formellinje, dokument, "
+"sidefelt, arkfaner, statuslinje)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Flytt fokus til forrige område i applikasjonen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
@@ -259,7 +264,7 @@ msgstr "Høyrejustering"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
 msgid "Justify"
-msgstr "Rett inn"
+msgstr "Blokkjuster"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-38
 msgid "Apply Default paragraph style"
