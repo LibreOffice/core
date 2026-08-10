@@ -124,7 +124,7 @@ bool DocxExportFilter::exportDocument()
         {
             xStatusIndicator->end();
         }
-        catch ( const uno::Exception& )
+        catch ( const cpo::uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "sw.ww8", "ending the status indicator" );
         }

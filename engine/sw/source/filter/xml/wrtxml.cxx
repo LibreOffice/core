@@ -113,7 +113,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         {
             xStatusIndicator->end();
         }
-        catch (const uno::Exception&)
+        catch (const cpo::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sw.filter", "ending the status indicator");
         }
