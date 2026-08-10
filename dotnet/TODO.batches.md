@@ -11979,6 +11979,32 @@ project; removing the at-or-above-100% guard fails **one**, which is the refuted
 Two are preconditions and were **not** verified by reintroduction — that the change is inert on
 ordinary text, and that the measurement reports the two heights apart.
 
+### The cross-track sweep, measured rather than argued
+
+`Paperless.Text` is a shared layer and both other families reference `ParagraphLayouter`. Slides and
+sheets — 334 documents — were rendered whole with our own CLI at `45fea26c2` and at this branch,
+`SOURCE_DATE_EPOCH` pinned, and compared with `/CreationDate` normalised: **334 of 334
+byte-identical, 0 differing.** The single-argument `Apply` those layouts call forwards to the old
+arithmetic exactly; only `ParagraphLayouter`'s per-line path passes a base height apart from the
+line's.
+
+### A trap worth carrying forward: a clean `git status` over a reverted `dotnet/src`
+
+The cross-track measurement needs the *old* code to render with, so `dotnet/src` was checked out at
+the base commit. The two commits that followed used `git add -A` and each committed that revert — so
+the branch briefly held the round's tests, probes, results and scoreboard with **none of its code**,
+and every ordinary check passed: `git status` was clean because the tree really did match its own
+HEAD, and the build succeeded because the reverted source is last round's source.
+
+The skill's warning is that `git add -A` while a *mutation* is applied commits the defect. This is the
+same shape with the sign reversed. One line catches it, and it belongs before any commit claiming a
+round shipped code:
+
+    git diff <base>..HEAD --stat -- dotnet/src      # must be non-empty
+
+Nothing measured was affected; the restored tree reproduces the three gained documents at 9, 12 and
+20 pages.
+
 ### Still open
 
 - **A picture alone on its line keeps 2.6 pt of the paragraph font's descent LibreOffice drops.**
@@ -11991,3 +12017,7 @@ ordinary text, and that the measurement reports the two heights apart.
 - 43 mismatches. The ±1 cluster is 21 documents with no shared cause; `FO.FCTOA.00010` and the other
   15 form-checkbox documents; `AC-150-5370-10G` / `150-5370-10H`; `A_320.doc`; the `.doc` reader-split
   clusters; both round-38 leads; `手机免提系统TSB.doc`; and the standing table-only-header decision.
+
+Test counts on the final tree: Core 284, Containers 109, Text **277** (271 + six
+`InlineObjectLineSpacingTests`), Vector 293, Rendering 121, Markup 259, OpenDocument 125,
+WordProcessing 746, Spreadsheets 621, Presentations 576, Fidelity 550 — **0 skipped, 0 warnings**.

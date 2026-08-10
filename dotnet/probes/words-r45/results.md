@@ -253,6 +253,47 @@ reintroduction: `APlainLineOfTextMeasuresTheSameHeightEitherWay` asserts the cha
 ordinary text, and `AnInlinePictureRaisesTheLineAndLeavesTheTextHeightAlone` asserts the measurement
 reports the two heights apart.
 
+## The cross-track measurement a shared-layer change owes
+
+`Paperless.Text` is below all three families, and `Paperless.Presentations` and
+`Paperless.Spreadsheets` both reference `ParagraphLayouter` and `MeasuredParagraph`, so "no gate
+input can move" would have been an argument rather than a measurement.
+
+Both other tracks were rendered whole with our own CLI — no `soffice` — at `45fea26c2` and at this
+branch, `SOURCE_DATE_EPOCH` pinned, and compared with `/CreationDate` normalised out:
+
+| | documents | rendered both sides | byte-identical | differing |
+|---|---:|---:|---:|---:|
+| slides + sheets | 334 | **334** | **334** | **0** |
+
+Nothing moved. The single-argument `Apply(natural)` both other layouts call now forwards to
+`Apply(natural, natural)`, which is the old arithmetic exactly; only `ParagraphLayouter`'s per-line
+path passes a base height apart from the line height, and only a word-processing paragraph reaches it
+with an inline object on the line.
+
+## A trap worth carrying forward: a clean `git status` over a reverted `dotnet/src`
+
+The cross-track measurement a `Paperless.Text` change owes needs the *old* code to render with, so
+`dotnet/src` was checked out at the base commit to render the slides and sheets tracks. The two
+commits that followed used `git add -A`, and each of them committed that revert; the branch then held
+the round's tests, probes, results and scoreboard with **none of its code**.
+
+Every ordinary check passed. `git status` was clean — the tree really did match its own HEAD. The
+build succeeded, because the reverted source is the source that shipped last round. The tests would
+have failed, but they had already been run.
+
+The skill warns that `git add -A` while a mutation is applied commits the defect. This is the same
+shape with the sign reversed: `git add -A` while the *fix* is un-applied commits its absence. The
+check that catches it is one line, and it is worth running before any commit that says a round
+shipped code:
+
+    git diff <base>..HEAD --stat -- dotnet/src      # must be non-empty
+
+Nothing measured is affected — the sweep, the reach comparison and every test count were produced by
+a tree built from the fixed source, before the checkout, and the restored tree reproduces the three
+gained documents at 9, 12 and 20 pages. What was wrong was only what the branch would have handed on,
+which is the part nobody re-measures.
+
 ## Left open
 
 - **A picture alone on its line keeps 2.6 pt of the paragraph font's descent that LibreOffice
@@ -269,3 +310,10 @@ reports the two heights apart.
 - **The list-label population is unmeasured.** Three of the eleven renderings that changed carry no
   inline object at all; a numbering level taller than its item is the same rule, and how many
   documents it reaches was not counted.
+
+## Test counts on the final tree
+
+Core 284, Containers 109, Text **277** (271 + six `InlineObjectLineSpacingTests`), Vector 293,
+Rendering 121, Markup 259, OpenDocument 125, WordProcessing 746, Spreadsheets 621, Presentations 576,
+Fidelity 550 — **0 skipped, 0 warnings**, each project run on its own and its count compared against
+the known-good one.
