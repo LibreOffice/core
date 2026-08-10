@@ -113,12 +113,12 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="textcharset">
+                      <object class="GtkLabel" id="textencoding">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="textimportcsv|textcharset">Ch_aracter set:</property>
+                        <property name="label" translatable="yes" context="textimportcsv|textencoding">E_ncoding:</property>
                         <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">charset</property>
+                        <property name="mnemonic-widget">encoding</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -155,12 +155,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="charset">
+                      <object class="GtkComboBoxText" id="encoding">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="charset-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|charset">Specifies the character set to be used in the imported file.</property>
+                          <object class="AtkObject" id="encoding-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|encoding">Specifies the encoding to be used in the imported file.</property>
                           </object>
                         </child>
                       </object>
@@ -170,11 +170,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="textdetectedcharset">
+                      <object class="GtkLabel" id="textdetectedencoding">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="no" context="textimportcsv|textcharset"></property>
+                        <property name="label" translatable="no" context="textimportcsv|textencoding"></property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>

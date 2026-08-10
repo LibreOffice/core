@@ -49,15 +49,15 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     OUString                    maDetectedFieldSeps; // detected field seps
     sal_Unicode                 mcTextSep;
 
-    rtl_TextEncoding            meCharSet;          /// Selected char set.
-    rtl_TextEncoding            meDetectedCharSet;  /// This is computed only once at initialization, so store it.
-    bool                        mbCharSetSystem;    /// Is System char set selected?
-    bool                        mbCharSetDetect;    /// Should we autodetect character set ?
+    rtl_TextEncoding            meEncoding;         /// Selected encoding.
+    rtl_TextEncoding            meDetectedEncoding; /// This is computed only once at initialization, so store it.
+    bool                        mbEncodingSystem;   /// Is System encoding selected?
+    bool                        mbEncodingDetect;   /// Should we autodetect encoding?
     ScImportAsciiCall           meCall;             /// How the dialog is called (see asciiopt.hxx)
 
-    std::unique_ptr<weld::Label> mxFtCharSet;
-    std::unique_ptr<SvxTextEncodingBox> mxLbCharSet;
-    std::unique_ptr<weld::Label> mxFtDetectedCharSet;
+    std::unique_ptr<weld::Label> mxFtEncoding;
+    std::unique_ptr<SvxTextEncodingBox> mxLbEncoding;
+    std::unique_ptr<weld::Label> mxFtDetectedEncoding;
     std::unique_ptr<weld::Label> mxFtCustomLang;
     std::unique_ptr<SvxLanguageBox> mxLbCustomLang;
 
@@ -102,8 +102,8 @@ public:
     void                        SaveParameters();
 
 private:
-    /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
-    void                        SetSelectedCharSet();
+    /** Sets the selected char set data to meEncoding and mbEncodingSystem. */
+    void                        SetSelectedEncoding();
     /** Set separators in ui from maFieldSeparators or an optionally defined
         separator. */
     void                        SetSeparators( sal_Unicode cSep );
@@ -120,7 +120,7 @@ private:
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
     void                        RbSepFix();
 
-                                DECL_LINK( CharSetHdl, weld::ComboBox&, void );
+                                DECL_LINK( EncodingHdl, weld::ComboBox&, void );
                                 DECL_LINK( FirstRowHdl, weld::SpinButton&, void );
                                 DECL_LINK( RbSepFixHdl, weld::Toggleable&, void );
                                 DECL_LINK(SeparatorEditHdl, weld::TextWidget&, void);

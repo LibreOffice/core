@@ -78,7 +78,7 @@
 #define SCSTR_VALID_RANGE                           NC_("SCSTR_VALID_RANGE", "~Source")
 #define SCSTR_VALID_LIST                            NC_("SCSTR_VALID_LIST", "~Entries")
 // for dialogues:
-#define SCSTR_CHARSET_USER                          NC_("SCSTR_CHARSET_USER", "System")
+#define SCSTR_ENCODING_USER                         NC_("SCSTR_ENCODING_USER", "System")
 #define SCSTR_COLUMN_USER                           NC_("SCSTR_COLUMN_USER", "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Skip")
 #define SCSTR_FIELDSEP_TAB                          NC_("SCSTR_FIELDSEP_TAB", "Tab")
 #define SCSTR_FIELDSEP_SPACE                        NC_("SCSTR_FIELDSEP_SPACE", "space")
