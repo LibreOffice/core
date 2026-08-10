@@ -75,6 +75,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 			},
 			'.uno:Name': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:RenameTable', 'spreadsheet', true), 'Name'),
+				isHtmlName: true,
 				callback: (this._renameSheet).bind(this),
 				visible: function() {
 					return !this._isProtectedSheet(this._tabForContextMenu);
@@ -149,6 +150,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 			},
 			'.uno:Move': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Move', 'spreadsheet', true), 'Move'),
+				isHtmlName: true,
 				callback: (this._moveOrCopySheet).bind(this),
 				visible: areTabsMultiple,
 				_image: 'Move',

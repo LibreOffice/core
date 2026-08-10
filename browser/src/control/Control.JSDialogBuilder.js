@@ -14,7 +14,7 @@
  * from the JSON description provided by the server.
  */
 
-/* global app $ _ JSDialog ColorPicker */
+/* global app $ _ JSDialog ColorPicker DocUtil */
 
 window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
@@ -2523,8 +2523,11 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 		return null;
 
 	var itemText = '';
-	if (menu.name)
-		itemText = menu.name;
+	if (menu.name) {
+		// An HTML name carries markup for the desktop menu widget. The mobile
+		// wizard shows entry titles as plain text.
+		itemText = menu.isHtmlName ? DocUtil.stripHTML(menu.name) : menu.name;
+	}
 
 	var itemType = 'submenu';
 	var executionType = 'menu';
