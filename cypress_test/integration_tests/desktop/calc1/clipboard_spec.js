@@ -369,4 +369,29 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', { 
 
 		cy.cGet('#PasteSpecial').should('not.exist');
 	});
+
+	it('Paste Special offers Markdown in cell edit mode.', function() {
+		// Given a Calc document in cell text edit mode and some text on the
+		// clipboard:
+		calcHelper.dblClickOnFirstCell();
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
+		helper.typeIntoDocument('foo *bar* baz');
+		helper.typeIntoDocument('{ctrl}a');
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.sendUnoCommand('.uno:Copy');
+			helper.processToIdle(win);
+		});
+
+		// When triggering Paste Special:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.sendUnoCommand('.uno:PasteSpecial');
+		});
+
+		// Then the paste special dialog should offer a "Markdown" item:
+		cy.cGet('#PasteSpecialDialog').should('be.visible');
+		// Without the accompanying fix in place, this test would have failed,
+		// the list had no markdown item.
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("Markdown")')
+			.should('be.visible');
+	});
 });
