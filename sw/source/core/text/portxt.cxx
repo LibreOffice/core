@@ -639,7 +639,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         ? aAdjustItem.GetPropWordSpacing()
                         : aAdjustItem.GetPropWordSpacing() * fLevel * 2 +
                                    aAdjustItem.GetPropWordSpacingMaximum() * (0.5 - fLevel) * 2;
-                // add a full extra space, when fLevel = 0.0 (max. less hyphen)
+                // add a full extra space, when fLevel = 0.0 (max. Fewer hyphens)
                 sal_Int32 nExtraWordSpacing = fLevel >= 0.5
                         ? 0
                         : (0.5 - fLevel) * 200;

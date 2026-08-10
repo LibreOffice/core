@@ -847,8 +847,8 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bKeep )
             {
-                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_TRUE) +
-                                 cpDelimTmp + OUString::number( nKeepType );
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_TRUE) +
+                                 cpDelimTmp + OUString::number( nKeepType ) + " ";
                 if ( bKeepLine )
                     rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_LINE_TRUE);
                 else
@@ -871,16 +871,24 @@ bool SvxHyphenZoneItem::GetPresentation
                     EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
-                    cpDelimTmp +
-                    EditResId(RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD).replaceAll("%1", OUString::number(nCompoundMinLead)) +
-                    cpDelimTmp +
-                    EditResId(RID_SVXITEMS_HYPHEN_COMPOUND_MINTRAIL).replaceAll("%1", OUString::number(nCompoundMinTrail)) +
+                    ( nCompoundMinLead == 2
+                        ? EMPTY_OUSTRING
+                        : cpDelimTmp +
+                            EditResId(RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD).replaceAll("%1", OUString::number(nCompoundMinLead)) ) +
+                    ( nCompoundMinTrail == 2
+                        ? EMPTY_OUSTRING
+                        : cpDelimTmp +
+                            EditResId(RID_SVXITEMS_HYPHEN_COMPOUND_MINTRAIL).replaceAll("%1", OUString::number(nCompoundMinTrail)) ) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens)) +
-                    cpDelimTmp +
-                    EditResId(RID_SVXITEMS_HYPHEN_MINWORDLEN).replaceAll("%1", OUString::number(nMinWordLength)) +
-                    cpDelimTmp +
-                    EditResId(RID_SVXITEMS_HYPHEN_LEVEL).replaceAll("$(ARG1)", OUString::number(100 - nLevel));
+                    ( ( nMinWordLength == 0 || nMinWordLength == 4 )
+                        ? EMPTY_OUSTRING
+                        : cpDelimTmp +
+                             EditResId(RID_SVXITEMS_HYPHEN_MINWORDLEN).replaceAll("%1", OUString::number(nMinWordLength)) ) +
+                    ( nLevel == 50
+                        ? EMPTY_OUSTRING
+                        : cpDelimTmp +
+                            EditResId(RID_SVXITEMS_HYPHEN_LEVEL).replaceAll("$(ARG1)", OUString::number(100 - nLevel)) );
 
             if ( nTextHyphenZone > 0 || nTextHyphenZoneAlways > 0 ||
                  nTextHyphenZoneColumn > 0 || nTextHyphenZonePage > 0 ||
@@ -911,7 +919,7 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bKeep )
             {
-                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_TRUE) + cpDelimTmp;
+                rText += cpDelimTmp;
 
                 switch ( nKeepType )
                 {
@@ -933,12 +941,12 @@ bool SvxHyphenZoneItem::GetPresentation
                 }
 
                 if ( bKeepLine )
-                    rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_LINE_TRUE);
+                    rText += " " + EditResId(RID_SVXITEMS_HYPHEN_KEEP_LINE_TRUE);
                 else
-                    rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_LINE_FALSE);
+                    rText += " " + EditResId(RID_SVXITEMS_HYPHEN_KEEP_LINE_FALSE);
             }
             else
-                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_FALSE);
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_FALSE);
 
             return true;
         }

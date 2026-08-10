@@ -261,7 +261,7 @@
 #define RID_SVXITEMS_HYPHEN_KEEP_PAGE           NC_("RID_SVXITEMS_HYPHEN_KEEP_PAGE", "Avoid hyphenation across page")
 #define RID_SVXITEMS_HYPHEN_KEEP_COLUMN         NC_("RID_SVXITEMS_HYPHEN_KEEP_COLUMN", "Avoid hyphenation across column and page")
 #define RID_SVXITEMS_HYPHEN_KEEP_ALWAYS         NC_("RID_SVXITEMS_HYPHEN_KEEP_ALWAYS", "Avoid hyphenation across last full paragraph line, column and page")
-#define RID_SVXITEMS_HYPHEN_LEVEL               NC_("RID_SVXITEMS_HYPHEN_LEVEL", "Hyphenation leveled $(ARG1)%")
+#define RID_SVXITEMS_HYPHEN_LEVEL               NC_("RID_SVXITEMS_HYPHEN_LEVEL", "Hyphenation level $(ARG1)%")
 #define RID_SVXITEMS_PAGEMODEL_COMPLETE         NC_("RID_SVXITEMS_PAGEMODEL_COMPLETE", "Page Style: ")
 #define RID_SVXITEMS_KERNING_COMPLETE           NC_("RID_SVXITEMS_KERNING_COMPLETE", "Kerning ")
 #define RID_SVXITEMS_KERNING_EXPANDED           NC_("RID_SVXITEMS_KERNING_EXPANDED", "locked ")
