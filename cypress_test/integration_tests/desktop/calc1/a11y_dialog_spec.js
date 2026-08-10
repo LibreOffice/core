@@ -162,6 +162,19 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         }
     });
 
+    it('Table Design dialog', function () {
+        // The command is offered only for a table at the cursor, so make one first.
+        calcHelper.selectCellsInRange('A1:C3');
+        cy.getFrameWindow().then(function (frameWindow) {
+            frameWindow.app.socket.sendMessage('uno .uno:InsertCalcTable');
+        });
+        cy.cGet('#tablerangedialog').should('be.visible');
+        cy.cGet('#tablerangedialog #ok').click();
+        cy.cGet('#tablerangedialog').should('not.exist');
+
+        a11yHelper.testDialog(win, '.uno:NewTableStyle');
+    });
+
     it('Graphic dialog', function () {
         cy.viewport(1920,1080);
         helper.processToIdle(win);
