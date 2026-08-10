@@ -723,6 +723,41 @@ git merge --ff-only <briefed-commit>       # if not, fast-forward before measuri
 The tell that it worked: your own baseline sweep should reproduce the briefed numbers
 exactly. If it does not, stop — either the base is wrong or the measurement is.
 
+### A round can lose its own code and still show a clean tree
+
+To measure a shared-layer change cross-track, a round checked `dotnet/src` out at its base
+commit — the right idea — and then ran `git add -A` while that checkout was in place. It
+committed the revert. Twice. The branch held the round's tests, probes and results with
+**none of its code**, and `git status` was clean throughout, because the tree matched its own
+HEAD exactly. Nothing about the working copy said anything was wrong.
+
+The check is one command, and it belongs both in the round's own report and in the merge:
+
+```sh
+git diff <base>..HEAD --stat -- dotnet/src     # a round that shipped code must show a diff here
+```
+
+A round that describes a fix and shows no `src` diff has lost it. The general form: **`git
+status` compares the tree to HEAD, so it cannot see a bad HEAD.** Any workflow that moves
+`dotnet/src` to another commit — a cross-track sweep, a `--no-build` re-measurement, a
+bisect — must restore it before anything stages, and must be checked against the *base*
+rather than against the tree.
+
+### A prediction that is low for the wrong reason still comes true
+
+The standing warning is that a grep over what a file *declares* overstates what it *draws*.
+The mirror of it is worse. A census that searched each `w:p` for its own `w:spacing` missed
+style inheritance, gave a ceiling of 2–4 documents, and the round predicted 2–4 and measured
+**11**. Repaired three times, the census reached 17 of 134 and still named only 5 of the 8
+that moved — the other three carried no inline object at all, because a list label taller
+than its item is the same rule.
+
+A low prediction that comes true reads as a well-calibrated one, so an under-reaching census
+is self-concealing in a way an over-reaching one is not. State what the census **cannot**
+see, in the prediction file, before the sweep — inheritance, defaults, the other reader, the
+other format. The bands that have missed on this project were nearly all bands whose census
+had a blind spot nobody wrote down.
+
 ### The reference is not perfectly stable either
 
 The whole method rests on `soffice` being the fixed point, and it very nearly is — but not
