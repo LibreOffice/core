@@ -131,7 +131,7 @@ PlainTextFilterDetect::PlainTextFilterDetect() {}
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
-OUString SAL_CALL PlainTextFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& lDescriptor)
+OUString PlainTextFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& lDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
 
@@ -221,7 +221,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(cpo::uno::Sequence<beans::Proper
 
 // XInitialization
 
-void SAL_CALL PlainTextFilterDetect::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
+void PlainTextFilterDetect::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
 {
 }
 
@@ -236,17 +236,17 @@ cpo::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 }
 
 // XServiceInfo
-OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
+OUString PlainTextFilterDetect::getImplementationName()
 {
     return PlainTextFilterDetect_getImplementationName();
 }
 
-bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
+bool PlainTextFilterDetect::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PlainTextFilterDetect::getSupportedServiceNames()
 {
     return PlainTextFilterDetect_getSupportedServiceNames();
 }

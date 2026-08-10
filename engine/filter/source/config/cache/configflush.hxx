@@ -67,20 +67,20 @@ class ConfigFlush final : public ::cppu::WeakImplHelper<
 
         // XServiceInfo
 
-        virtual OUString SAL_CALL getImplementationName() override;
+        virtual OUString getImplementationName() override;
 
-        virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual bool supportsService(const OUString& sServiceName) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 
         // XRefreshable
 
-        virtual void SAL_CALL refresh() override;
+        virtual void refresh() override;
 
-        virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
+        virtual void addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
 
-        virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
+        virtual void removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
 };
 
 } // namespace filter::config

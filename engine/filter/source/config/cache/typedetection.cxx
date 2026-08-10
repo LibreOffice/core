@@ -76,7 +76,7 @@ TypeDetection::~TypeDetection()
 }
 
 
-OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
+OUString TypeDetection::queryTypeByURL(const OUString& sURL)
 {
     OUString sType;
 
@@ -380,7 +380,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
 
 }
 
-OUString SAL_CALL TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
+OUString TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               bool                                         bAllowDeep )
 {
     // make the descriptor more usable :-)

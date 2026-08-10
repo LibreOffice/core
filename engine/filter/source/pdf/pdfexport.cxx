@@ -1248,8 +1248,8 @@ public:
     explicit PDFErrorRequest( task::PDFExportException aExc );
 
     // XInteractionRequest
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > getContinuations() override;
 };
 
 
@@ -1259,7 +1259,7 @@ PDFErrorRequest::PDFErrorRequest( task::PDFExportException aExc ) :
 }
 
 
-cpo::uno::Any SAL_CALL PDFErrorRequest::getRequest()
+cpo::uno::Any PDFErrorRequest::getRequest()
 {
     std::unique_lock guard( m_aMutex );
 
@@ -1269,7 +1269,7 @@ cpo::uno::Any SAL_CALL PDFErrorRequest::getRequest()
 }
 
 
-cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations()
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFErrorRequest::getContinuations()
 {
     return cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
 }

@@ -74,10 +74,10 @@ public:
     explicit GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
     // XDocumentEventListener
-    virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
+    virtual void documentEventOccured( const css::document::DocumentEvent& Event ) override;
 
     // lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 private:
     XMLFilterTestDialog* mpDialog;
 };
@@ -87,7 +87,7 @@ GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 {
 }
 
-void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const css::document::DocumentEvent& Event )
+void GlobalEventListenerImpl::documentEventOccured( const css::document::DocumentEvent& Event )
 {
     ::SolarMutexGuard aGuard;
     if( Event.EventName == "OnFocus" || Event.EventName == "OnUnload" )
@@ -97,7 +97,7 @@ void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const css::document
     }
 }
 
-void SAL_CALL GlobalEventListenerImpl::disposing( const css::lang::EventObject& /* Source */ )
+void GlobalEventListenerImpl::disposing( const css::lang::EventObject& /* Source */ )
 {
 }
 

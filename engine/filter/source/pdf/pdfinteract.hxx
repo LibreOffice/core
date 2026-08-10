@@ -34,18 +34,18 @@ private:
     css::uno::Reference<css::awt::XWindow> m_xParent;
 protected:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
+    virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 
     // XInteractionHandler2
-    virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
+    virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 
 public:
 

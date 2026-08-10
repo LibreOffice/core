@@ -72,7 +72,7 @@ bool IsMediaTypeXML( const OUString& mediaType )
 
 }
 
-OUString SAL_CALL FilterDetect::detect( cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
+OUString FilterDetect::detect( cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     OUString sUrl;
     css::uno::Reference< css::io::XInputStream > xInStream;
@@ -208,22 +208,22 @@ OUString SAL_CALL FilterDetect::detect( cpo::uno::Sequence< css::beans::Property
 }
 
 // XInitialization
-void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
+void FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
 {
 }
 
 // XServiceInfo
-OUString SAL_CALL FilterDetect::getImplementationName(  )
+OUString FilterDetect::getImplementationName(  )
 {
     return u"com.sun.star.comp.filters.XMLFilterDetect"_ustr;
 }
 
-bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
+bool FilterDetect::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
+Sequence< OUString > FilterDetect::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }

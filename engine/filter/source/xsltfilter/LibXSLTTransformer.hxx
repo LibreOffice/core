@@ -126,30 +126,30 @@ namespace XSLT
         LibXSLTTransformer(css::uno::Reference<css::uno::XComponentContext> x);
 
         //  XServiceInfo
-        virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual bool supportsService(const OUString& sServiceName) override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XActiveDataSink
-        virtual void SAL_CALL
+        virtual void
         setInputStream(const css::uno::Reference<css::io::XInputStream>& inputStream) override;
-        virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
+        virtual css::uno::Reference<css::io::XInputStream>
         getInputStream() override;
         // XActiveDataSource
-        virtual void SAL_CALL
+        virtual void
         setOutputStream(const css::uno::Reference<css::io::XOutputStream>& outputStream) override;
-        virtual css::uno::Reference<css::io::XOutputStream> SAL_CALL
+        virtual css::uno::Reference<css::io::XOutputStream>
         getOutputStream() override;
         // XActiveDataControl
-        virtual void SAL_CALL
+        virtual void
         addListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
-        virtual void SAL_CALL
+        virtual void
         removeListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
-        virtual void SAL_CALL
+        virtual void
         start() override;
-        virtual void SAL_CALL
+        virtual void
         terminate() override;
-        virtual void SAL_CALL
+        virtual void
         initialize(const cpo::uno::Sequence<cpo::uno::Any>& params) override;
 
         void

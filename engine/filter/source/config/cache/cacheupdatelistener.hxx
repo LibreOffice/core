@@ -101,11 +101,11 @@ class CacheUpdateListener : public ::cppu::WeakImplHelper< css::util::XChangesLi
 
         // XChangesListener
 
-        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) override;
+        virtual void changesOccurred(const css::util::ChangesEvent& aEvent) override;
 
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 };
 
 } // namespace filter::config

@@ -84,18 +84,18 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
     virtual ~T602ImportFilterDialog() override;
 
     // XExecutableDialog
-       virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
-       virtual sal_Int16 SAL_CALL execute() override;
+       virtual void setTitle( const OUString& aTitle ) override;
+       virtual sal_Int16 execute() override;
 
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XPropertyAccess
         virtual cpo::uno::Sequence< css::beans::PropertyValue >
-                            SAL_CALL getPropertyValues() override;
-        virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence<
+                            getPropertyValues() override;
+        virtual void   setPropertyValues( const cpo::uno::Sequence<
                                     css::beans::PropertyValue >& aProps ) override;
 
 public:
@@ -218,23 +218,23 @@ private:
         virtual ~T602ImportFilter() override;
 
     // XFilter
-        virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-        virtual void SAL_CALL cancel(  ) override {};
+        virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        virtual void cancel(  ) override {};
 
     // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+        virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExtendedTypeDetection
-        virtual OUString SAL_CALL detect(
+        virtual OUString detect(
             cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 
     // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         void test();
 };

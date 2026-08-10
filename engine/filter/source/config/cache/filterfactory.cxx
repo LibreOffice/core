@@ -68,13 +68,13 @@ FilterFactory::~FilterFactory()
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
+css::uno::Reference< css::uno::XInterface > FilterFactory::createInstance(const OUString& sFilter)
 {
     return createInstanceWithArguments(sFilter, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
+css::uno::Reference< css::uno::XInterface > FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                 const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
@@ -114,7 +114,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > FilterFactory::getAvailableServiceNames()
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
                   which can be created as UNO Services really. That's why we search for filters,
@@ -139,7 +139,7 @@ cpo::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
 }
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const OUString& sQuery)
+css::uno::Reference< css::container::XEnumeration > FilterFactory::createSubSetEnumerationByQuery(const OUString& sQuery)
 {
     // reject old deprecated queries ...
     if (sQuery.startsWith("_filterquery_"))

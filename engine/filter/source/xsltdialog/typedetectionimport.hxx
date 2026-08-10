@@ -59,14 +59,14 @@ public:
     static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS,
                           std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
-    virtual void SAL_CALL startDocument(  ) override;
-    virtual void SAL_CALL endDocument(  ) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void startDocument(  ) override;
+    virtual void endDocument(  ) override;
+    virtual void startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void endElement( const OUString& aName ) override;
+    virtual void characters( const OUString& aChars ) override;
+    virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
 private:
     void fillFilterVector(  std::vector< std::unique_ptr<filter_info_impl> >& rFilters );

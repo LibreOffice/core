@@ -536,24 +536,24 @@ VBAMacroResolver::~VBAMacroResolver()
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
-OUString SAL_CALL VBAMacroResolver::getImplementationName()
+OUString VBAMacroResolver::getImplementationName()
 {
     return u"com.sun.star.comp.vba.VBAMacroResolver"_ustr;
 }
 
-bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
+bool VBAMacroResolver::supportsService( const OUString& rService )
 {
     return cppu::supportsService(this, rService);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > VBAMacroResolver::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.vba.VBAMacroResolver"_ustr };
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
+void VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     OSL_ENSURE( rArgs.getLength() > 1, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
@@ -572,7 +572,7 @@ void SAL_CALL VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::
 
 // com.sun.star.script.vba.XVBAMacroResolver interface ------------------------
 
-OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
+OUString VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
 {
     if( !mpObjShell )
         throw uno::RuntimeException();
@@ -603,7 +603,7 @@ OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& 
     return makeMacroURL( aInfo.msResolvedMacro );
 }
 
-OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& /*rScriptURL*/ )
+OUString VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& /*rScriptURL*/ )
 {
     OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
     throw uno::RuntimeException();

@@ -243,7 +243,7 @@ IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 }
 
 
-bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     FocusWindowWaitCursor aCur;
 
@@ -257,35 +257,35 @@ bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 }
 
 
-void SAL_CALL PDFFilter::cancel( )
+void PDFFilter::cancel( )
 {
 }
 
 
-void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
+void PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     mxSrcDoc = xDoc;
 }
 
 
-void SAL_CALL PDFFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
+void PDFFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
 }
 
 
-OUString SAL_CALL PDFFilter::getImplementationName()
+OUString PDFFilter::getImplementationName()
 {
     return u"com.sun.star.comp.PDF.PDFFilter"_ustr;
 }
 
 
-bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
+bool PDFFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > PDFFilter::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.PDFFilter"_ustr };
 }

@@ -76,7 +76,7 @@ void CacheUpdateListener::stopListening()
 }
 
 
-void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
+void  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -168,7 +168,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 }
 
 
-void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
+void CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);

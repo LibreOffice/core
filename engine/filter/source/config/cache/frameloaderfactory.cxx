@@ -40,13 +40,13 @@ FrameLoaderFactory::~FrameLoaderFactory()
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
+css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::createInstance(const OUString& sLoader)
 {
     return createInstanceWithArguments(sLoader, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
+css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
                                                                                                      const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
@@ -82,7 +82,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > FrameLoaderFactory::getAvailableServiceNames()
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
     return BaseContainer::getElementNames();

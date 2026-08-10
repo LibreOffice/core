@@ -73,33 +73,33 @@ public:
 
     // XFilter
 
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
 
-    virtual void SAL_CALL cancel(  ) override;
+    virtual void cancel(  ) override;
 
 
     // XExporter
 
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 
     // XImporter
 
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual OUString getImplementationName(  ) override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 };
 

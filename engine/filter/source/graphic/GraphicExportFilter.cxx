@@ -145,7 +145,7 @@ void GraphicExportFilter::gatherProperties( const cpo::uno::Sequence< beans::Pro
     }
 }
 
-bool SAL_CALL GraphicExportFilter::filter( const cpo::uno::Sequence< beans::PropertyValue > & rDescriptor )
+bool GraphicExportFilter::filter( const cpo::uno::Sequence< beans::PropertyValue > & rDescriptor )
 {
     gatherProperties(rDescriptor);
 
@@ -237,16 +237,16 @@ bool GraphicExportFilter::filterExportShape(
     return xGraphicExporter->filter( aDescriptor );
 }
 
-void SAL_CALL GraphicExportFilter::cancel( )
+void GraphicExportFilter::cancel( )
 {
 }
 
-void SAL_CALL GraphicExportFilter::setSourceDocument( const uno::Reference< lang::XComponent > & xDocument )
+void GraphicExportFilter::setSourceDocument( const uno::Reference< lang::XComponent > & xDocument )
 {
     mxDocument = xDocument;
 }
 
-void SAL_CALL GraphicExportFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any > & )
+void GraphicExportFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any > & )
 {
 }
 

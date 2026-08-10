@@ -94,15 +94,15 @@ namespace XSLT
         XSLTFilterStreamListener(XSLTFilter& rParent) : m_rParent(rParent) {}
 
         // XStreamListener
-        virtual void SAL_CALL
+        virtual void
         error(const Any& a) override;
-        virtual void SAL_CALL
+        virtual void
         closed() override;
-        virtual void SAL_CALL
+        virtual void
         terminated() override;
-        virtual void SAL_CALL
+        virtual void
         started() override;
-        virtual void SAL_CALL
+        virtual void
         disposing(const EventObject& e) override;
     private:
         XSLTFilter& m_rParent;
@@ -151,31 +151,31 @@ namespace XSLT
         explicit XSLTFilter(css::uno::Reference<XComponentContext> x);
 
         //  XServiceInfo
-        virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual bool supportsService(const OUString& sServiceName) override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XImportFilter
-        virtual bool SAL_CALL
+        virtual bool
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
                 const Sequence<OUString>& msUserData) override;
 
         // XImportFilter2
-        virtual bool SAL_CALL
+        virtual bool
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XFastParser>& xFastParser,
                 const Sequence<OUString>& msUserData) override;
 
         // XExportFilter
-        virtual bool SAL_CALL
+        virtual bool
         exporter(const Sequence<PropertyValue>& aSourceData, const Sequence<
                 OUString>& msUserData) override;
 
         // XDocumentHandler
-        virtual void SAL_CALL
+        virtual void
         startDocument() override;
-        virtual void SAL_CALL
+        virtual void
         endDocument() override;
     };
 

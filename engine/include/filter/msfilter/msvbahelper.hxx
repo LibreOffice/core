@@ -80,26 +80,26 @@ public:
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
                         supportsService( const OUString& rService ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
                         getSupportedServiceNames() override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
                             const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.script.vba.XVBAMacroResolver interface --------------------
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         resolveVBAMacroToScriptURL( const OUString& rVBAMacroName ) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         resolveScriptURLtoVBAMacro( const OUString& rScriptURL ) override;
 
 private:

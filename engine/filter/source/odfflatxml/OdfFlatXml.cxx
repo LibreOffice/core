@@ -68,30 +68,30 @@ namespace filter::odfflatxml {
             }
 
             // XImportFilter
-            virtual bool SAL_CALL
+            virtual bool
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& userData) override;
 
             // XImportFilter2
-            virtual bool SAL_CALL
+            virtual bool
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XFastParser >& fastParser,
                      const Sequence< OUString >& userData) override;
 
             // XExportFilter
-            virtual bool SAL_CALL
+            virtual bool
             exporter(
                      const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& userData) override;
 
-            OUString SAL_CALL getImplementationName() override
+            OUString getImplementationName() override
             { return u"com.sun.star.comp.filter.OdfFlatXml"_ustr; }
 
-            bool SAL_CALL supportsService(OUString const & ServiceName) override
+            bool supportsService(OUString const & ServiceName) override
             { return cppu::supportsService(this, ServiceName); }
 
-            cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            cpo::uno::Sequence<OUString> getSupportedServiceNames() override
             {
                 return cpo::uno::Sequence<OUString>{
                     u"com.sun.star.document.ImportFilter"_ustr,

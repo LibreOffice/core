@@ -384,13 +384,13 @@ public:
     virtual ~SVGWriter() override;
 
     // XSVGWriter
-    virtual void SAL_CALL write( const css::uno::Reference<css::xml::sax::XDocumentHandler>& rxDocHandler,
+    virtual void write( const css::uno::Reference<css::xml::sax::XDocumentHandler>& rxDocHandler,
                                  const cpo::uno::Sequence<sal_Int8>& rMtfSeq ) override;
 
     //  XServiceInfo
-    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual bool supportsService(const OUString& sServiceName) override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

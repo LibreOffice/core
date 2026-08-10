@@ -39,19 +39,19 @@ PDFDialog::~PDFDialog()
 }
 
 
-Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
+Sequence< sal_Int8 > PDFDialog::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 
-OUString SAL_CALL PDFDialog::getImplementationName()
+OUString PDFDialog::getImplementationName()
 {
     return u"com.sun.star.comp.PDF.PDFDialog"_ustr;
 }
 
 
-Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
+Sequence< OUString > PDFDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.PDFDialog"_ustr };
 }
@@ -95,7 +95,7 @@ void PDFDialog::executedAsyncDialog( std::shared_ptr<SfxTabDialogController> xAs
         maFilterData = static_cast<ImpPDFTabDialog*>(xAsyncDialog.get())->GetFilterData();
 }
 
-Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
+Reference< XPropertySetInfo > PDFDialog::getPropertySetInfo()
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -114,7 +114,7 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
 }
 
 
-Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
+Sequence< PropertyValue > PDFDialog::getPropertyValues()
 {
     sal_Int32 i, nCount;
 
@@ -135,7 +135,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 }
 
 
-void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
+void PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
 {
     maMediaDescriptor = rProps;
 
@@ -150,7 +150,7 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 }
 
 
-void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
+void PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     mxSrcDoc = xDoc;
 }

@@ -38,19 +38,19 @@ PDFInteractionHandler::~PDFInteractionHandler()
 {
 }
 
-void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteractionRequest >& i_xRequest )
+void PDFInteractionHandler::handle( const Reference< task::XInteractionRequest >& i_xRequest )
 {
     handleInteractionRequest( i_xRequest );
 }
 
-void SAL_CALL PDFInteractionHandler::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void PDFInteractionHandler::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"Parent"_ustr))
         aProperties.get(u"Parent"_ustr) >>= m_xParent;
 }
 
-bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
+bool PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
 {
     bool bHandled = false;
 
@@ -70,19 +70,19 @@ bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< 
     return bHandled;
 }
 
-OUString SAL_CALL PDFInteractionHandler::getImplementationName()
+OUString PDFInteractionHandler::getImplementationName()
 {
     return u"com.sun.star.comp.PDF.PDFExportInteractionHandler"_ustr;
 }
 
 
-bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServiceName )
+bool PDFInteractionHandler::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > PDFInteractionHandler::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.filter.pdfexport.PDFExportInteractionHandler"_ustr };
 }

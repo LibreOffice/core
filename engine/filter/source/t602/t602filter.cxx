@@ -171,19 +171,19 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
 }
 
 // XFilter
-bool SAL_CALL T602ImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool T602ImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     return importImpl ( aDescriptor );
 }
 
 // XImporter
-void SAL_CALL T602ImportFilter::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
+void T602ImportFilter::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
 {
     mxDoc = xDoc;
 }
 
 // XInitialization
-void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& /*aArguments*/ )
+void T602ImportFilter::initialize( const Sequence< Any >& /*aArguments*/ )
 {
 }
 
@@ -835,17 +835,17 @@ void T602ImportFilter::Read602()
 }
 
 // XServiceInfo
-OUString SAL_CALL T602ImportFilter::getImplementationName(  )
+OUString T602ImportFilter::getImplementationName(  )
 {
     return u"com.sun.star.comp.Writer.T602ImportFilter"_ustr;
 }
 
-bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
+bool T602ImportFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > T602ImportFilter::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
@@ -1040,11 +1040,11 @@ bool T602ImportFilterDialog::OptionsDlg()
     return ret;
 }
 
-void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
+void T602ImportFilterDialog::setTitle( const OUString& )
 {
 }
 
-sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
+sal_Int16 T602ImportFilterDialog::execute()
 {
     if (OptionsDlg())
         return css::ui::dialogs::ExecutableDialogResults::OK;
@@ -1052,28 +1052,28 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-cpo::uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> T602ImportFilterDialog::getPropertyValues()
 {
     return cpo::uno::Sequence<beans::PropertyValue>();
 }
 
-void SAL_CALL T602ImportFilterDialog::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& )
+void T602ImportFilterDialog::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& )
 {
 }
 
 
 // XServiceInfo
-OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
+OUString T602ImportFilterDialog::getImplementationName(  )
 {
     return u"com.sun.star.comp.Writer.T602ImportFilterDialog"_ustr;
 }
 
-bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
+bool T602ImportFilterDialog::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames(  )
+Sequence< OUString > T602ImportFilterDialog::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }

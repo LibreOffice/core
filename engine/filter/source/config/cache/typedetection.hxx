@@ -313,9 +313,9 @@ public:
 
     // XTypeDetection
 
-    virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL) override;
+    virtual OUString queryTypeByURL(const OUString& sURL) override;
 
-    virtual OUString SAL_CALL queryTypeByDescriptor(cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
+    virtual OUString queryTypeByDescriptor(cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                            bool                                         bAllowDeep ) override;
 
 };
@@ -328,17 +328,17 @@ private:
 public:
 
     using comphelper::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    virtual void disposing(const css::lang::EventObject&) override
     {
     }
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    virtual void queryTermination(const css::lang::EventObject&) override
     {
         m_pTypeDetection->cancel();
     }
 
-    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    virtual void notifyTermination(const css::lang::EventObject&) override
     {
     }
 

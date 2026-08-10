@@ -53,24 +53,24 @@ public:
 
 protected:
     // XTypeProvider
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual Sequence< sal_Int8 > getImplementationId() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XExecutableDialog
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
-    virtual sal_Int16 SAL_CALL execute(  ) override;
+    virtual void setTitle( const OUString& aTitle ) override;
+    virtual sal_Int16 execute(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const EventObject& Event ) override;
-    virtual void SAL_CALL notifyTermination( const EventObject& Event ) override;
-    virtual void SAL_CALL disposing( const EventObject& Source ) override;
+    virtual void queryTermination( const EventObject& Event ) override;
+    virtual void notifyTermination( const EventObject& Event ) override;
+    virtual void disposing( const EventObject& Source ) override;
 
     /** Called in dispose method after the listeners were notified.
     */
@@ -93,24 +93,24 @@ XMLFilterDialogComponent::XMLFilterDialogComponent(const css::uno::Reference< XC
     xDesktop->addTerminateListener( xListener );
 }
 
-OUString SAL_CALL XMLFilterDialogComponent::getImplementationName()
+OUString XMLFilterDialogComponent::getImplementationName()
 {
     return u"com.sun.star.comp.ui.XSLTFilterDialog"_ustr;
 }
 
-Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId()
+Sequence< sal_Int8 > XMLFilterDialogComponent::getImplementationId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();
 }
 
 
-Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames()
+Sequence< OUString > XMLFilterDialogComponent::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.XSLTFilterDialog"_ustr };
 }
 
-bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName)
+bool XMLFilterDialogComponent::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -131,7 +131,7 @@ void XMLFilterDialogComponent::disposing(std::unique_lock<std::mutex>& rGuard)
 
 
 // XTerminateListener
-void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ )
+void XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ )
 {
     ::SolarMutexGuard aGuard;
     if (!mxDialog)
@@ -139,7 +139,7 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
     mxDialog->present();
 }
 
-void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ )
+void XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ )
 {
     {
         ::SolarMutexGuard aGuard;
@@ -151,15 +151,15 @@ void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /*
     dispose();
 }
 
-void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& /* Source */ )
+void XMLFilterDialogComponent::disposing( const EventObject& /* Source */ )
 {
 }
 
-void SAL_CALL XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ )
+void XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ )
 {
 }
 
-sal_Int16 SAL_CALL XMLFilterDialogComponent::execute()
+sal_Int16 XMLFilterDialogComponent::execute()
 {
     ::SolarMutexGuard aGuard;
 
@@ -187,7 +187,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute()
     return 0;
 }
 
-void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArguments )
+void XMLFilterDialogComponent::initialize( const Sequence< Any >& aArguments )
 {
     for(const Any& rArgument : aArguments)
     {

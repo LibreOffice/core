@@ -196,15 +196,15 @@ std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( No
     return pFilter;
 }
 
-void SAL_CALL TypeDetectionImporter::startDocument(  )
+void TypeDetectionImporter::startDocument(  )
 {
 }
 
-void SAL_CALL TypeDetectionImporter::endDocument(  )
+void TypeDetectionImporter::endDocument(  )
 {
 }
 
-void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void TypeDetectionImporter::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
 {
     ImportState eNewState = e_Unknown;
 
@@ -260,7 +260,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 
     maStack.push( eNewState );
 }
-void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
+void TypeDetectionImporter::endElement( const OUString& /* aName */ )
 {
     if( maStack.empty()  )
         return;
@@ -295,20 +295,20 @@ void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
 
     maStack.pop();
 }
-void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars )
+void TypeDetectionImporter::characters( const OUString& aChars )
 {
     if( !maStack.empty() && maStack.top() == e_Value )
     {
         maValue += aChars;
     }
 }
-void SAL_CALL TypeDetectionImporter::ignorableWhitespace( const OUString& /* aWhitespaces */ )
+void TypeDetectionImporter::ignorableWhitespace( const OUString& /* aWhitespaces */ )
 {
 }
-void SAL_CALL TypeDetectionImporter::processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ )
+void TypeDetectionImporter::processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ )
 {
 }
-void SAL_CALL TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /* xLocator */ )
+void TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /* xLocator */ )
 {
 }
 

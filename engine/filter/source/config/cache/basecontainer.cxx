@@ -100,24 +100,24 @@ FilterCache* BaseContainer::impl_getWorkingCache(std::unique_lock<std::mutex>& /
 }
 
 
-OUString SAL_CALL BaseContainer::getImplementationName()
+OUString BaseContainer::getImplementationName()
 {
     return m_sImplementationName;
 }
 
 
-bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
+bool BaseContainer::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BaseContainer::getSupportedServiceNames()
 {
     return m_lServiceNames;
 }
 
 
-void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
+void BaseContainer::insertByName(const OUString& sItem ,
                                           const cpo::uno::Any&   aValue)
 {
     if (sItem.isEmpty())
@@ -151,7 +151,7 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
 }
 
 
-void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
+void BaseContainer::removeByName(const OUString& sItem)
 {
     // SAFE -> ----------------------------------
     std::unique_lock aLock(m_aMutex);
@@ -167,7 +167,7 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
 }
 
 
-void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
+void BaseContainer::replaceByName(const OUString& sItem ,
                                            const cpo::uno::Any&   aValue)
 {
     if (sItem.isEmpty())
@@ -201,7 +201,7 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
 }
 
 
-cpo::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
+cpo::uno::Any BaseContainer::getByName(const OUString& sItem)
 {
     if (sItem.isEmpty())
         throw css::container::NoSuchElementException( u"An empty item can't be part of this cache!"_ustr,
@@ -234,7 +234,7 @@ cpo::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
+cpo::uno::Sequence< OUString > BaseContainer::getElementNames()
 {
     cpo::uno::Sequence< OUString > lNames;
 
@@ -261,7 +261,7 @@ cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 }
 
 
-bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
+bool BaseContainer::hasByName(const OUString& sItem)
 {
     bool bHasOne = false;
 
@@ -287,7 +287,7 @@ bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
 }
 
 
-cpo::uno::Type SAL_CALL BaseContainer::getElementType()
+cpo::uno::Type BaseContainer::getElementType()
 {
     // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...
@@ -295,7 +295,7 @@ cpo::uno::Type SAL_CALL BaseContainer::getElementType()
 }
 
 
-bool SAL_CALL BaseContainer::hasElements()
+bool BaseContainer::hasElements()
 {
     bool bHasSome = false;
 
@@ -321,7 +321,7 @@ bool SAL_CALL BaseContainer::hasElements()
 }
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
+css::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
 {
     OSL_FAIL("not pure virtual ... but not really implemented .-)");
 
@@ -329,7 +329,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 }
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
+css::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
     std::vector<OUString>                               lKeys;
 
@@ -368,7 +368,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 }
 
 
-void SAL_CALL BaseContainer::flush()
+void BaseContainer::flush()
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -411,14 +411,14 @@ void SAL_CALL BaseContainer::flush()
 }
 
 
-void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
+void BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_lListener.addInterface(g, xListener);
 }
 
 
-void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
+void BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_lListener.removeInterface(g, xListener);

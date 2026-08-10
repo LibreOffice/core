@@ -47,14 +47,14 @@ public:
     ODFSerializer(const ODFSerializer&) = delete;
     ODFSerializer& operator=(const ODFSerializer&) = delete;
 
-    virtual void SAL_CALL startDocument(  ) override;
-    virtual void SAL_CALL endDocument(  ) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) override;
+    virtual void startDocument(  ) override;
+    virtual void endDocument(  ) override;
+    virtual void startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void endElement( const OUString& aName ) override;
+    virtual void characters( const OUString& aChars ) override;
+    virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) override;
 
 private:
     uno::Reference<io::XOutputStream> m_xOutStream;
@@ -62,7 +62,7 @@ private:
     cpo::uno::Sequence<sal_Int8>           m_aBuf;
 };
 
-void SAL_CALL ODFSerializer::startDocument(  )
+void ODFSerializer::startDocument(  )
 {
     OSL_PRECOND(m_xOutStream.is(), "ODFSerializer(): invalid output stream");
 
@@ -71,10 +71,10 @@ void SAL_CALL ODFSerializer::startDocument(  )
     characters(aElement.makeStringAndClear());
 }
 
-void SAL_CALL ODFSerializer::endDocument()
+void ODFSerializer::endDocument()
 {}
 
-void SAL_CALL ODFSerializer::startElement( const OUString& aName,
+void ODFSerializer::startElement( const OUString& aName,
                                            const uno::Reference< xml::sax::XAttributeList >& xAttribs )
 {
     OUStringBuffer aElement("<" + aName + " ");
@@ -87,12 +87,12 @@ void SAL_CALL ODFSerializer::startElement( const OUString& aName,
     characters(aElement.makeStringAndClear() + ">");
 }
 
-void SAL_CALL ODFSerializer::endElement( const OUString& aName )
+void ODFSerializer::endElement( const OUString& aName )
 {
     characters("</" + aName + ">");
 }
 
-void SAL_CALL ODFSerializer::characters( const OUString& aChars )
+void ODFSerializer::characters( const OUString& aChars )
 {
     const OString aStr = OUStringToOString(aChars, RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
@@ -105,17 +105,17 @@ void SAL_CALL ODFSerializer::characters( const OUString& aChars )
     m_xOutStream->writeBytes(m_aLineFeed);
 }
 
-void SAL_CALL ODFSerializer::ignorableWhitespace( const OUString& aWhitespaces )
+void ODFSerializer::ignorableWhitespace( const OUString& aWhitespaces )
 {
     // TODO(F1): Make pretty printing configurable
     characters(aWhitespaces);
 }
 
-void SAL_CALL ODFSerializer::processingInstruction( const OUString&,
+void ODFSerializer::processingInstruction( const OUString&,
                                                     const OUString& )
 {}
 
-void SAL_CALL ODFSerializer::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
+void ODFSerializer::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
 {}
 
 uno::Reference< xml::sax::XDocumentHandler> createSerializer(const uno::Reference<io::XOutputStream>& xOut )

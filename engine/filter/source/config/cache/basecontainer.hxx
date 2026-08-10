@@ -197,38 +197,38 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
 
         // XServiceInfo
 
-        virtual OUString SAL_CALL getImplementationName() override;
+        virtual OUString getImplementationName() override;
 
-        virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual bool supportsService(const OUString& sServiceName) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 
         // XNameContainer
 
-        virtual void SAL_CALL insertByName(const OUString& sItem ,
+        virtual void insertByName(const OUString& sItem ,
                                            const cpo::uno::Any&   aValue) override;
 
-        virtual void SAL_CALL removeByName(const OUString& sItem) override;
+        virtual void removeByName(const OUString& sItem) override;
 
 
         // XNameReplace
 
-        virtual void SAL_CALL replaceByName(const OUString& sItem ,
+        virtual void replaceByName(const OUString& sItem ,
                                             const cpo::uno::Any&   aValue) override;
 
 
         // XElementAccess
 
-        virtual cpo::uno::Any SAL_CALL getByName(const OUString& sItem) override;
+        virtual cpo::uno::Any getByName(const OUString& sItem) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-        virtual bool SAL_CALL hasByName(const OUString& sItem) override;
+        virtual bool hasByName(const OUString& sItem) override;
 
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
 
         // XContainerQuery
@@ -236,18 +236,18 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
         // must be implemented really by derived class...
         // We implement return of an empty result here only!
         // But we show an assertion :-)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
 
 
         // XFlushable
 
-        virtual void SAL_CALL flush() override;
+        virtual void flush() override;
 
-        virtual void SAL_CALL addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
+        virtual void addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
 
-        virtual void SAL_CALL removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
+        virtual void removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
 };
 
 } // namespace filter::config

@@ -90,7 +90,7 @@ SVGFilter::~SVGFilter()
     DBG_ASSERT( mpObjects == nullptr, "mpObjects not destroyed" );
 }
 
-bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     mbWriterFilter = false;
     mbCalcFilter = false;
@@ -582,16 +582,16 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     return implExport( rDescriptor );
 }
 
-void SAL_CALL SVGFilter::cancel( )
+void SVGFilter::cancel( )
 {
 }
 
-void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
+void SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     mxSrcDoc = xDoc;
 }
 
-void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
+void SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 {
     mxDstDoc = xDoc;
 }
@@ -778,7 +778,7 @@ public:
 
 }
 
-OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
+OUString SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);

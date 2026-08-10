@@ -331,28 +331,28 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
     return true;
 }
 
-bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
 }
-void SAL_CALL XmlFilterAdaptor::cancel(  )
+void XmlFilterAdaptor::cancel(  )
 {
 }
 // XExporter
-void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< css::lang::XComponent >& xDoc )
+void XmlFilterAdaptor::setSourceDocument( const Reference< css::lang::XComponent >& xDoc )
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
 }
 
 // XImporter
-void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
+void XmlFilterAdaptor::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 // XInitialization
-void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
+void XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
 {
     Sequence < PropertyValue > aAnySeq;
     if ( aArguments.hasElements() && ( aArguments[0] >>= aAnySeq ) )
@@ -368,17 +368,17 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
 }
 
 // XServiceInfo
-OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
+OUString XmlFilterAdaptor::getImplementationName(  )
 {
     return u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr;
 }
 
-bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
+bool XmlFilterAdaptor::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
+Sequence< OUString > XmlFilterAdaptor::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.ExportFilter"_ustr, u"com.sun.star.document.ImportFilter"_ustr };
 }

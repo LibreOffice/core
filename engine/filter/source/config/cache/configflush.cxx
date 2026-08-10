@@ -33,23 +33,23 @@ ConfigFlush::~ConfigFlush()
 {
 }
 
-OUString SAL_CALL ConfigFlush::getImplementationName()
+OUString ConfigFlush::getImplementationName()
 {
     return u"com.sun.star.comp.filter.config.ConfigFlush"_ustr;
     // <- SAFE
 }
 
-bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
+bool ConfigFlush::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ConfigFlush::getSupportedServiceNames()
 {
     return  { u"com.sun.star.document.FilterConfigRefresh"_ustr };
 }
 
-void SAL_CALL ConfigFlush::refresh()
+void ConfigFlush::refresh()
 {
     // notify listener outside the lock!
     // The used listener helper lives if we live
@@ -64,14 +64,14 @@ void SAL_CALL ConfigFlush::refresh()
 }
 
 
-void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
+void ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_aRefreshListeners.addInterface(g, xListener);
 }
 
 
-void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
+void ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_aRefreshListeners.removeInterface(g, xListener);

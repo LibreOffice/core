@@ -83,7 +83,7 @@ StorageFilterDetect::StorageFilterDetect(uno::Reference<uno::XComponentContext> 
 
 StorageFilterDetect::~StorageFilterDetect() {}
 
-OUString SAL_CALL StorageFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
+OUString StorageFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
     OUString aTypeName;
@@ -172,20 +172,20 @@ OUString SAL_CALL StorageFilterDetect::detect(cpo::uno::Sequence<beans::Property
 }
 
 // XInitialization
-void SAL_CALL StorageFilterDetect::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/) {}
+void StorageFilterDetect::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/) {}
 
 // XServiceInfo
-OUString SAL_CALL StorageFilterDetect::getImplementationName()
+OUString StorageFilterDetect::getImplementationName()
 {
     return u"com.sun.star.comp.filters.StorageFilterDetect"_ustr;
 }
 
-bool SAL_CALL StorageFilterDetect::supportsService(const OUString& rServiceName)
+bool StorageFilterDetect::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL StorageFilterDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> StorageFilterDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ExtendedTypeDetection"_ustr, u"com.sun.star.comp.filters.StorageFilterDetect"_ustr };
 }

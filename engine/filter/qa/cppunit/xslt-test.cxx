@@ -66,11 +66,11 @@ private:
     std::condition_variable m_cond;
     bool m_bDone;
 
-    virtual void SAL_CALL disposing(const lang::EventObject&) noexcept override {}
-    virtual void SAL_CALL started() noexcept override {}
-    virtual void SAL_CALL closed() noexcept override { notifyDone(); }
-    virtual void SAL_CALL terminated() noexcept override { notifyDone(); }
-    virtual void SAL_CALL error(const cpo::uno::Any& e) override
+    virtual void disposing(const lang::EventObject&) noexcept override {}
+    virtual void started() noexcept override {}
+    virtual void closed() noexcept override { notifyDone(); }
+    virtual void terminated() noexcept override { notifyDone(); }
+    virtual void error(const cpo::uno::Any& e) override
     {
         notifyDone(); // set on error too, otherwise main thread waits forever
         SAL_WARN("filter.xslt", e);

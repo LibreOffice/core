@@ -42,13 +42,13 @@ private:
     css::uno::Reference< css::lang::XComponent >     mxSrcDoc;
 
     // OGenericUnoDialog
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
     virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     // OGenericUnoAsyncDialog
@@ -58,12 +58,12 @@ private:
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues(  ) override;
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 public:
 

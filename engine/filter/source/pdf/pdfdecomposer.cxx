@@ -37,14 +37,14 @@ public:
     XPdfDecomposer& operator=(const XPdfDecomposer&) = delete;
 
     // XPdfDecomposer
-    cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL getDecomposition(
+    cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>> getDecomposition(
         const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
         const cpo::uno::Sequence<beans::PropertyValue>& xDecompositionParameters) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(const OUString&) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString&) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
@@ -73,7 +73,7 @@ bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nP
     return true;
 }
 
-cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>>
 XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
                                  const cpo::uno::Sequence<beans::PropertyValue>& xParameters)
 {
@@ -107,17 +107,17 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
         .toSequence();
 }
 
-OUString SAL_CALL XPdfDecomposer::getImplementationName()
+OUString XPdfDecomposer::getImplementationName()
 {
     return u"com.sun.star.comp.PDF.PDFDecomposer"_ustr;
 }
 
-bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
+bool XPdfDecomposer::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> XPdfDecomposer::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.PdfTools"_ustr };
 }
