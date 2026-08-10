@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <cpo/uno/Any.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -912,6 +913,8 @@ public:
 
     // return true if a bg was set, false otherwise
     bool setSuitableOutlinerBg(Outliner& rOutliner) const;
+    // the background setSuitableOutlinerBg() would set, empty if there is none
+    std::optional<Color> getSuitableOutlinerBgColor() const;
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
     const Graphic* getFillGraphic() const;
 

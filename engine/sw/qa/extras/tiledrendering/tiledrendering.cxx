@@ -33,6 +33,10 @@
 #include <comphelper/scopeguard.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
@@ -1560,6 +1564,47 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     KitHelper::setView(nFirstViewId);
     // First view still has inverted background
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
+}
+
+// Test that the automatic font color of a shape being edited is resolved against the fill of
+// that shape, not against the page background
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
+{
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
+
+    // Give the document a dark page background
+    {
+        SwView* pSwView = getSwDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame
+            = pSwView->GetViewFrame().GetFrame().GetFrameInterface();
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
+            = comphelper::InitPropertySequence({
+                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+            });
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+
+    // Fill the shape with white
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pObject->SetMergedItem(XFillColorItem(OUString(), COL_WHITE));
+
+    SdrView* pView = pWrtShell->GetDrawView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+
+    // Render, so the text edit paint path picks the background to resolve the auto color against
+    getTilePixelColor(pXTextDocument, 255, 255);
+
+    // Without the accompanying fix this was COL_WHITE, i.e. white text on the white shape while
+    // the shape was edited, turning dark only once text edit ended
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
+                         pView->GetTextEditOutliner()->GetEditEngine().GetAutoColor());
 }
 
 // Test that changing the theme sends the document background color as COKitCallbackType::DOCUMENT_BACKGROUND_COLOR

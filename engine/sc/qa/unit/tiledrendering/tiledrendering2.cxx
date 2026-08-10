@@ -34,6 +34,14 @@
 #include <postit.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svtools/colorcfg.hxx>
+#include <drwlayer.hxx>
 #include <editeng/flditem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <vcl/virdev.hxx>
@@ -744,6 +752,58 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkOverSelectionSavedToOOXM
     // the whole cell carries the link now, and the text it displays is unchanged
     CPPUNIT_ASSERT_EQUAL(u"[Docs and references](http://www.example.com/)"_ustr,
                          lcl_getCellTextWithLinks(*pReloadedDoc, aA1));
+}
+
+// The automatic font color of a shape being edited has to be resolved against the fill of
+// that shape, not against the page background
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
+{
+    // Register a dark scheme, so that .uno:ChangeTheme "Dark" gives a dark page background
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = Color(0x1c, 0x1c, 0x1c);
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Dark"_ustr);
+    }
+    ScModelObj* pModelObj = createDoc("shape.ods");
+
+    // Give the document a dark page background
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
+
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    SdrPage* pDrawPage = pViewData->GetDocument().GetDrawLayer()->GetPage(0);
+    SdrObject* pObject = pDrawPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    // Fill the shape with white
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pObject->SetMergedItem(XFillColorItem(OUString(), COL_WHITE));
+
+    SdrView* pView = pViewData->GetViewShell()->GetScDrawView();
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+
+    // Render, so the text edit paint path picks the background to resolve the auto color against
+    {
+        size_t nCanvasSize = 1024;
+        std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+        ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+        xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+        xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize), 1.0,
+                                                           Point(), aPixmap.data());
+        pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
+    }
+
+    // Without the accompanying fix this was COL_WHITE, i.e. white text on the white shape while
+    // the shape was edited, turning dark only once text edit ended
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pView->GetTextEditOutliner()->GetEditEngine().GetAutoColor());
+    pView->SdrEndTextEdit();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

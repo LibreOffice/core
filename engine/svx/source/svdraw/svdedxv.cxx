@@ -968,7 +968,25 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow,
     // so that the background color (and thus auto text color resolution) matches
     // the rendering user's theme, not the editing user's theme.
     const SdrPageView* pBgPageView = pRenderingPageView ? pRenderingPageView : GetSdrPageView();
-    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(pBgPageView, true));
+    Color aBackground(pPage->GetPageBackgroundColor(pBgPageView, true));
+
+    // The fill the text really sits on wins over the page background when the automatic
+    // font color is resolved: the edited text's own fill (a table cell has one of its
+    // own), else the object's, else the page's. These are the same backgrounds the text
+    // gets once it is rendered from the model again, so the color does not change when
+    // text edit ends.
+    const SdrTextObj* pTextObj = GetTextEditObject();
+    if (pTextObj)
+    {
+        std::optional<Color> oFillColor
+            = pTextObj->GetActiveTextBackgroundColor(pTextObj->getActiveText());
+        if (!oFillColor)
+            oFillColor = pTextObj->getSuitableOutlinerBgColor();
+        if (oFillColor)
+            aBackground = *oFillColor;
+    }
+
+    pOLV->SetBackgroundColor(aBackground);
     ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
 

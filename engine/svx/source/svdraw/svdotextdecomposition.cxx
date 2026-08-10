@@ -344,6 +344,16 @@ bool SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
     return false;
 }
 
+// Same background setSuitableOutlinerBg() would pick, for callers that want the
+// color instead of an Outliner to set it on.
+std::optional<Color> SdrObject::getSuitableOutlinerBgColor() const
+{
+    const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
+    if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
+        return {};
+    return GetDraftFillColor(*pBackgroundFillSet);
+}
+
 const SfxItemSet* SdrObject::getBackgroundFillSet() const
 {
     const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();

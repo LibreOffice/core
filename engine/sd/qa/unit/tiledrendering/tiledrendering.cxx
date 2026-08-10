@@ -44,6 +44,9 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svtools/colorcfg.hxx>
 #include <unotools/datetime.hxx>
 
 #include <DrawDocShell.hxx>
@@ -2197,8 +2200,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
 }
 
-// Helper function to get a tile to a bitmap and check the pixel color
-static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPixelX, int nPixelY, Color aColor)
+// Helper function to render the top left tile to a bitmap
+static Bitmap getTile(SdXImpressDocument* pXImpressDocument)
 {
     size_t nCanvasSize = 1024;
     size_t nTileSize = 256;
@@ -2209,10 +2212,92 @@ static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPix
             1.0, Point(), aPixmap.data());
     pXImpressDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
-    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    return pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+}
+
+// Helper function to get a tile to a bitmap and check the pixel color
+static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPixelX, int nPixelY, Color aColor)
+{
+    Bitmap aBitmap = getTile(pXImpressDocument);
     BitmapScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
     CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
+}
+
+// Registers a dark scheme, so that .uno:ChangeTheme "Dark" gives a dark page background
+static void addDarkScheme(const Color& rDarkColor)
+{
+    svtools::EditableColorConfig aColorConfig;
+    svtools::ColorConfigValue aValue;
+    aValue.bIsVisible = true;
+    aValue.nColor = rDarkColor;
+    aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+    aColorConfig.AddScheme(u"Dark"_ustr);
+}
+
+// Enters text edit on the shape and returns the automatic font color the paint path resolves
+static Color getShapeTextEditAutoColor(SdXImpressDocument* pXImpressDocument, SdrObject* pObject,
+                                       SdrView* pView)
+{
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+
+    // Render, so the text edit paint path picks the background to resolve the auto color against
+    getTile(pXImpressDocument);
+
+    Color aColor(pView->GetTextEditOutliner()->GetEditEngine().GetAutoColor());
+    pView->SdrEndTextEdit();
+    return aColor;
+}
+
+// The automatic font color of a shape being edited has to be resolved against the fill of
+// that shape, not against the page background
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorOnDarkPageImpress)
+{
+    addDarkScheme(Color(0x1c, 0x1c, 0x1c));
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    // Give the document a dark page background
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    // Fill the shape with white
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pObject->SetMergedItem(XFillColorItem(OUString(), COL_WHITE));
+
+    // Without the accompanying fix this was COL_WHITE, i.e. white text on the white shape while
+    // the shape was edited, turning dark only once text edit ended
+    CPPUNIT_ASSERT_EQUAL(
+        COL_BLACK, getShapeTextEditAutoColor(pXImpressDocument, pObject, pViewShell->GetView()));
+}
+
+// A shape without a fill has to keep following the page background, so that its text stays
+// readable on a dark page
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledShapeDraw)
+{
+    addDarkScheme(Color(0x1c, 0x1c, 0x1c));
+    SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
+
+    // Give the document a dark page background
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+
+    CPPUNIT_ASSERT_EQUAL(
+        COL_WHITE, getShapeTextEditAutoColor(pXImpressDocument, pObject, pViewShell->GetView()));
 }
 
 // Test that changing the theme in one view doesn't change it in the other view
