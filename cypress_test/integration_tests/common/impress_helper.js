@@ -260,18 +260,35 @@ function getSlideShowContent() {
 	return getSlideShow().its('0.contentDocument');
 }
 
+// The presenter re-centres the canvas shortly after the slideshow opens, and
+// a screenshot taken while the canvas moves comes out shifted. Wait for the
+// canvas rectangle to hold still before handing the canvas to the caller.
 function getSlideShowCanvas() {
+	let lastRect = null;
+	cy.waitUntil(() => {
+		return getSlideShowContent().find('#slideshow-canvas').then(($c) => {
+			const r = $c[0].getBoundingClientRect();
+			const rect = [r.x, r.y, r.width, r.height].join(',');
+			const stable = lastRect === rect;
+			lastRect = rect;
+			return stable;
+		});
+	}, { interval: 100, errorMsg: 'slideshow canvas never settled' });
 	return getSlideShowContent().find('#slideshow-canvas');
 }
 
 // Wait for the slideshow to have loaded a slide and for any
-// animations/transitions to finish. Waits for the navigator's
-// currentSlideIndex to be set (slide loaded via fetchAndRun)
-// then waits for no active 'slideshowupdate' timers.
+// animations/transitions to finish.
+// While the navigator fetches a slide, currentSlideIndex still holds the
+// previous slide's index and no 'slideshowupdate' timer runs, so
+// isSlideLoading is the only signal that a click sent now would land
+// mid-load.
 function waitForSlideShowIdle(win) {
 	cy.waitUntil(() => {
 		var presenter = win.app && win.app.map && win.app.map.slideShowPresenter;
 		if (!presenter || !presenter._slideShowNavigator)
+			return false;
+		if (presenter._slideShowNavigator.isSlideLoading)
 			return false;
 		return presenter._slideShowNavigator.currentSlideIndex !== undefined;
 	}, { interval: 50 });
