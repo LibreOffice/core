@@ -389,7 +389,8 @@ class CompactViewAccessibility {
 		if (app.map && app.map.jsdialog && app.map.jsdialog.hasDialogOpened())
 			return;
 
-		if (event.key.toUpperCase() === 'ALT') {
+		const key = event.key.toUpperCase();
+		if (key === 'ALT') {
 			if (!this.mayShowInfoBoxes) return;
 
 			if (this.infoBoxes.length > 0) {
@@ -397,6 +398,10 @@ class CompactViewAccessibility {
 			} else {
 				this.showInfoBoxes();
 			}
+		} else if (key !== 'SHIFT') {
+			// on Mac holding Option will send letter (for special characters) only
+			// to focused editor, info boxes flag will not be cleared so do it now
+			this.mayShowInfoBoxes = false;
 		}
 	}
 }
