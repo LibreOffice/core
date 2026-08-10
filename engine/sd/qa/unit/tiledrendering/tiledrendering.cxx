@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editeng.hxx>
@@ -2200,11 +2201,24 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
 }
 
-// Helper function to render the top left tile to a bitmap
+// Helper function to send a theme command with a named theme to the current view
+static void dispatchThemeCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
+                                 const OUString& rCommand, const OUString& rThemeName)
+{
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        {
+            { "NewTheme", cpo::uno::Any(rThemeName) },
+        }
+    );
+    unotest::MacrosTest::dispatchCommand(xComponent, rCommand, aPropertyValues);
+}
+
+// Helper function to paint a tile of the first slide and return it as a bitmap. The painted area
+// is smaller than the page, so every pixel of the tile is page and none of it is the area around
+// the page.
 static Bitmap getTile(SdXImpressDocument* pXImpressDocument)
 {
     size_t nCanvasSize = 1024;
-    size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
@@ -2212,7 +2226,25 @@ static Bitmap getTile(SdXImpressDocument* pXImpressDocument)
             1.0, Point(), aPixmap.data());
     pXImpressDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
-    return pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    return pDevice->GetBitmap(Point(0, 0), Size(nCanvasSize, nCanvasSize));
+}
+
+// Helper function to count the pixels of a tile that are light, so that text painted in a light
+// variant on a dark document background is counted and the background itself is not
+static int countLightPixels(Bitmap aBitmap)
+{
+    const Size aSize = aBitmap.GetSizePixel();
+    BitmapScopedReadAccess pAccess(aBitmap);
+    int nCount = 0;
+    for (tools::Long y = 0; y < aSize.Height(); ++y)
+    {
+        for (tools::Long x = 0; x < aSize.Width(); ++x)
+        {
+            if (!Color(pAccess->GetPixel(y, x)).IsDark())
+                ++nCount;
+        }
+    }
+    return nCount;
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color
@@ -2224,15 +2256,40 @@ static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPix
     CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
 }
 
-// Registers a dark scheme, so that .uno:ChangeTheme "Dark" gives a dark page background
-static void addDarkScheme(const Color& rDarkColor)
+// Registers a minimal scheme whose document background is the given color, so that
+// .uno:ChangeTheme with that scheme name gives that page background. The scheme added last is the
+// default one.
+static void addScheme(const OUString& rSchemeName, const Color& rColor)
 {
     svtools::EditableColorConfig aColorConfig;
     svtools::ColorConfigValue aValue;
     aValue.bIsVisible = true;
-    aValue.nColor = rDarkColor;
+    aValue.nColor = rColor;
     aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-    aColorConfig.AddScheme(u"Dark"_ustr);
+    aColorConfig.AddScheme(rSchemeName);
+}
+
+namespace
+{
+// Puts the document background color of the color configuration back when it goes out of scope. The
+// configuration holds one setting for the whole process, so a page left dark is painted dark
+// everywhere later on.
+class ScopedDocumentColor
+{
+    svtools::ColorConfigValue maOldValue;
+
+public:
+    ScopedDocumentColor()
+        : maOldValue(svtools::EditableColorConfig().GetColorValue(svtools::DOCCOLOR))
+    {
+    }
+
+    ~ScopedDocumentColor()
+    {
+        svtools::EditableColorConfig aColorConfig;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, maOldValue);
+    }
+};
 }
 
 // Enters text edit on the shape and returns the automatic font color the paint path resolves
@@ -2254,7 +2311,7 @@ static Color getShapeTextEditAutoColor(SdXImpressDocument* pXImpressDocument, Sd
 // that shape, not against the page background
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorOnDarkPageImpress)
 {
-    addDarkScheme(Color(0x1c, 0x1c, 0x1c));
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
 
     // Give the document a dark page background
@@ -2281,7 +2338,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorOnDarkPageI
 // readable on a dark page
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledShapeDraw)
 {
-    addDarkScheme(Color(0x1c, 0x1c, 0x1c));
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
     SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
 
     // Give the document a dark page background
@@ -2304,24 +2361,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledSha
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);
-    // Add a minimal dark scheme
-    {
-        svtools::EditableColorConfig aColorConfig;
-        svtools::ColorConfigValue aValue;
-        aValue.bIsVisible = true;
-        aValue.nColor = aDarkColor;
-        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Dark"_ustr);
-    }
-    // Add a minimal light scheme
-    {
-        svtools::EditableColorConfig aColorConfig;
-        svtools::ColorConfigValue aValue;
-        aValue.bIsVisible = true;
-        aValue.nColor = COL_WHITE;
-        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Light"_ustr);
-    }
+    addScheme(u"Dark"_ustr, aDarkColor);
+    addScheme(u"Light"_ustr, COL_WHITE);
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = KitHelper::getCurrentView();
     SdTestViewCallback aView1;
@@ -2367,6 +2408,42 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     }
     // Now in light scheme
     assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
+}
+
+// Text with a dark color of its own is painted in a light variant when the document background of
+// the view is dark, also when the color scheme of the view stays light
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInvertedBackgroundLightensText)
+{
+    // Inverting the background writes the document color of the whole process, so the light color
+    // that was in place is put back at the end of the test.
+    ScopedDocumentColor aScopedDocumentColor;
+
+    // Inverting the background picks the second default document color, so the dark scheme has to
+    // carry that same color for the two ways of turning the page dark to agree.
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addScheme(u"Dark"_ustr, aDarkColor);
+    addScheme(u"Light"_ustr, COL_WHITE);
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchThemeCommand(mxComponent, u".uno:ChangeTheme"_ustr, u"Light"_ustr);
+
+    // The document background is inverted on its own, the color scheme of the view stays light.
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Dark"_ustr);
+    assertTilePixelColor(pXImpressDocument, 255, 255, aDarkColor);
+
+    // An automatic color is resolved against the background and stays readable on its own, so the
+    // text needs a color of its own to show the mapping. The title placeholder is the only object
+    // of the first slide, so its text is all there is to paint on top of the page.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pViewShell->GetActualPage()->GetObj(0));
+    pTextObj->SetText(u"Lorem ipsum dolor sit amet"_ustr);
+    pTextObj->SetMergedItem(SvxColorItem(COL_BLACK, EE_CHAR_COLOR));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pTextObj->GetMergedItem(EE_CHAR_COLOR).GetValue());
+
+    // Without the fix the text kept its own black on the dark page, so the tile had no light pixel
+    // at all.
+    CPPUNIT_ASSERT(countLightPixels(getTile(pXImpressDocument)) > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)

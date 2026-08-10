@@ -358,7 +358,23 @@ bool SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
     const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
     if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
-        Color aColor(GetDraftFillColor(*pBackgroundFillSet).value_or(rOutliner.GetBackgroundColor()));
+        const Color aBehind(rOutliner.GetBackgroundColor());
+
+        if (pBackgroundFillSet == &GetObjectItemSet())
+        {
+            // The shape lies on the page, so the color behind a fill of its own is the color the
+            // outliner carries for that page.
+            const Color aColor(GetDraftFillColor(*pBackgroundFillSet, aBehind).value_or(aBehind));
+            rOutliner.SetBackgroundColor(aColor);
+            return true;
+        }
+
+        // The fill belongs to the page or to its master page, and a color the outliner already
+        // carries is the answer of the page being painted, so it stays.
+        if (COL_AUTO != aBehind)
+            return false;
+
+        const Color aColor(GetDraftFillColor(*pBackgroundFillSet).value_or(aBehind));
         rOutliner.SetBackgroundColor(aColor);
         return true;
     }

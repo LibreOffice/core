@@ -239,7 +239,7 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj& rObj)
     return bUnloaded;
 }
 
-std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
+std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet, std::optional<Color> oBehind)
 {
     drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
     Color aResult;
@@ -327,8 +327,18 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
     auto nTransparency = nTransparencyPercentage / 100.0;
     auto nOpacity = 1 - nTransparency;
 
-    svtools::ColorConfig aColorConfig;
-    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    Color aBackground;
+    if (oBehind)
+    {
+        aBackground = *oBehind;
+    }
+    else
+    {
+        // Without a color behind the fill, the document background comes from the color
+        // configuration, which holds one setting for the whole process.
+        svtools::ColorConfig aColorConfig;
+        aBackground = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    }
 
     // https://en.wikipedia.org/wiki/Alpha_compositing
     // We are here calculating transparency fill color against background with

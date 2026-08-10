@@ -3109,33 +3109,29 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
         const bool bPDFExporting(OUTDEV_PDF == pOut->GetOutDevType());
 
-        if (!bPrinting && !bPDFExporting && svtools::ColorConfig::IsDarkMode())
+        if (!bPrinting && !bPDFExporting)
         {
+            // The document background of the view being painted tells whether that view is in dark
+            // mode, so a dark and a light view of the same document each get their own answer.
+            const SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
+            const Color aViewDocColor
+                = pKitSh ? pKitSh->GetColorConfigColor(svtools::DOCCOLOR)
+                         : GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+
             Color aBackgroundColor = rFont.GetFillColor();
             if (aBackgroundColor == COL_TRANSPARENT || aBackgroundColor == COL_AUTO)
                 aBackgroundColor = GetBackgroundColor();
+            if (aBackgroundColor == COL_AUTO)
+                aBackgroundColor = aViewDocColor;
 
-            const SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
-            if (pKitSh)
-            {
-                if (aBackgroundColor == COL_AUTO)
-                    aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
-            }
-            else
-            {
-                if (aBackgroundColor == COL_AUTO)
-                    aBackgroundColor = GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            }
-
-            if (aBackgroundColor != COL_AUTO)
+            // The surface right behind the text has to be dark as well, so a dark shape fill or a
+            // dark character highlight in a light view keeps the text color it was given.
+            if (aViewDocColor.IsDark() && aBackgroundColor.IsDark())
             {
                 Color aNewColor = rFont.GetColor();
-                if (aBackgroundColor.IsDark())
-                {
-                    const sal_uInt8 nOriginalAlpha = aNewColor.GetAlpha();
-                    aNewColor = Color(basegfx::utils::getLightVariant(aNewColor.getBColor()));
-                    aNewColor.SetAlpha(nOriginalAlpha);
-                }
+                const sal_uInt8 nOriginalAlpha = aNewColor.GetAlpha();
+                aNewColor = Color(basegfx::utils::getLightVariant(aNewColor.getBColor()));
+                aNewColor.SetAlpha(nOriginalAlpha);
                 rFont.SetColor(aNewColor);
             }
         }

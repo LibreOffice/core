@@ -78,9 +78,13 @@ class SfxItemSet;
 /**
  * Returns a replacement for an XFillStyle
  *
+ * oBehind is the color behind the fill. A fill that is not fully opaque is mixed with it. An empty
+ * value means the document background of the color configuration.
+ *
  * @returns false for XFILL_NONE and rCol remains unchanged
  */
-SVXCORE_DLLPUBLIC std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet);
+SVXCORE_DLLPUBLIC std::optional<Color>
+GetDraftFillColor(const SfxItemSet& rSet, std::optional<Color> oBehind = std::nullopt);
 
 
 /**
