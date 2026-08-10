@@ -3077,6 +3077,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     bool bOverFly = false;
     bool bPageAnchored = false;
     bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
+    bool bOverHeaderFooter = IsInHeaderFooter( aDocPos, eControl );
 
     bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsKitReadOnlyView());
     if (bOverHeaderFooterFly && (!bIsViewReadOnly && rSh.GetCurField()))
@@ -3084,7 +3085,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         bOverHeaderFooterFly = false;
 
     // Are we clicking on a blank header/footer area?
-    if ( IsInHeaderFooter( aDocPos, eControl ) || bOverHeaderFooterFly )
+    if ( bOverHeaderFooter || bOverHeaderFooterFly )
     {
         const SwPageFrame* pPageFrame = rSh.GetLayout()->GetPageAtPos( aDocPos );
 
@@ -3147,7 +3148,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, eControl == FrameControlType::Header );
                 rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, eControl == FrameControlType::Footer );
 
-                if ( !rSh.IsHeaderFooterEdit() )
+                // Only switch to Header/Footer edit mode when clicking over Header/Footer
+                // To avoid selecting objects anchored in Header/Footer when editing body
+                if ( bOverHeaderFooter && !rSh.IsHeaderFooterEdit() )
                     rSh.ToggleHeaderFooterEdit();
 
                 // entering header/footer area

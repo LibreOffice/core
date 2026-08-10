@@ -824,7 +824,7 @@ public:
     static bool IsVerticalModeAtNdAndPos( const SwTextNode& _rTextNode,
                                    const Point& _rDocPos );
 
-    void ToggleHeaderFooterEdit( );
+    SW_DLLPUBLIC void ToggleHeaderFooterEdit();
     static void SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt16 nSlotId);
 
     void ClearColumnRowCache(SwTabFrame const*);

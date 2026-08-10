@@ -11,6 +11,7 @@
 
 #include <officecfg/Office/Writer.hxx>
 #include <test/commontesttools.hxx>
+#include <vcl/event.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -20,20 +21,26 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/configuration.hxx>
 
+#include <svx/svdpage.hxx>
+
 #include <editeng/brushitem.hxx>
 #include <hintids.hxx>
 #include <AnnotationWin.hxx>
 #include <cmdid.h>
 #include <docufld.hxx>
+#include <drawdoc.hxx>
 #include <edtwin.hxx>
 #include <fmtfsize.hxx>
 #include <i18nutil/paper.hxx>
 #include <pagedesc.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
 #include <PostItMgr.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <ndtxt.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <svx/svxids.hrc>
@@ -696,6 +703,55 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testCommentDeletionStaysDeletedAfterHighl
     // Without the fix the format redline on top of the delete redline hid the
     // deletion, so the comment turned back to VISIBLE.
     CPPUNIT_ASSERT_EQUAL(SwPostItHelper::SwLayoutStatus::DELETED, aPostItFields[0]->mLayoutStatus);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testHeaderFlyClickInBody)
+{
+    createSwDoc("header-bg.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+
+    // Get the object to calculate where to click
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    const tools::Rectangle& rFlyRect = pObject->GetLogicRect();
+
+    SwPageFrame* pPageFrame = static_cast<SwPageFrame*>(pWrtShell->GetLayout()->GetLower());
+    const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
+    const SwFrame* pLastPara = pBody->GetLastLower();
+
+    // Image anchored in header, wrapped through extends well over text in body
+    // Pick a point halfway between end of text and bottom of image
+    Point aPoint(rFlyRect.Center().X(),
+                 (pLastPara->getFrameArea().Bottom() + rFlyRect.Bottom()) / 2);
+    CPPUNIT_ASSERT(rFlyRect.Contains(aPoint));
+    CPPUNIT_ASSERT(pBody->getFrameArea().Contains(aPoint));
+    CPPUNIT_ASSERT_GREATER(pLastPara->getFrameArea().Bottom(), aPoint.Y());
+
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
+
+    auto lcl_mouseClick = [&rEditWin](const Point& rDocPos)
+    {
+        const Point aPixPos = rEditWin.LogicToPixel(rDocPos);
+        MouseEvent aEvent(aPixPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        rEditWin.MouseButtonDown(aEvent);
+        rEditWin.MouseButtonUp(aEvent);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // Without the fix the click would pick the wrap-through bg image anchored in header, even when editing body
+    lcl_mouseClick(aPoint);
+    CPPUNIT_ASSERT_MESSAGE(
+        "image anchored in header unexpectedly selected by click when not editing header",
+        pWrtShell->GetSelectedFlyFrame() == nullptr);
+
+    // Ensure expected behavior when clicking while editing header: image should become selected
+    pWrtShell->ToggleHeaderFooterEdit();
+    lcl_mouseClick(aPoint);
+    CPPUNIT_ASSERT_MESSAGE(
+        "image anchored in header should be selected by click when editing header",
+        pWrtShell->GetSelectedFlyFrame() != nullptr);
 }
 
 } // end of anonymous namespace
