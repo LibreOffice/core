@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <optional>
+
 #include <swtypes.hxx>
 #include "itrtxt.hxx"
 
@@ -26,14 +28,16 @@ class SwTextFrame;
 class SwTextFrameBreak
 {
 private:
-    SwTwips  m_nRstHeight;
+    // The height the frame has to fit into. Zero and negative values are considered valid. If not
+    // set, the whole upper is measured instead.
+    std::optional<SwTwips> m_oRstHeight;
     SwTwips  m_nOrigin;
 protected:
     SwTextFrame *m_pFrame;
     bool     m_bBreak;
     bool     m_bKeep;
 public:
-    SwTextFrameBreak( SwTextFrame *pFrame, const SwTwips nRst = 0  );
+    SwTextFrameBreak(SwTextFrame* pFrame, const std::optional<SwTwips>& oRst = std::nullopt);
     bool IsBreakNow( SwTextMargin &rLine );
     bool IsKeepAlways() const { return m_bKeep; }
 
@@ -56,8 +60,8 @@ private:
     sal_uInt16   m_nWidLines, m_nOrphLines;
 
 public:
-    WidowsAndOrphans( SwTextFrame *pFrame, const SwTwips nRst = 0,
-        bool bCheckKeep = true );
+    WidowsAndOrphans(SwTextFrame* pFrame, const std::optional<SwTwips>& oRst = std::nullopt,
+                     bool bCheckKeep = true);
     bool FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine );
     sal_uInt16 GetOrphansLines() const
     { return m_nOrphLines; }

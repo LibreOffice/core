@@ -59,8 +59,9 @@ bool IsNastyFollow( const SwTextFrame *pFrame )
 
 }
 
-SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
-    : m_nRstHeight(nRst), m_pFrame(pNewFrame)
+SwTextFrameBreak::SwTextFrameBreak(SwTextFrame* pNewFrame, const std::optional<SwTwips>& oRst)
+    : m_oRstHeight(oRst)
+    , m_pFrame(pNewFrame)
 {
     SwSwapIfSwapped swap(m_pFrame);
     SwRectFnSet aRectFnSet(*m_pFrame);
@@ -84,13 +85,13 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
 
     m_bBreak = false;
 
-    if( !m_nRstHeight && !m_pFrame->IsFollow() && m_pFrame->IsInFootnote() && m_pFrame->HasPara() )
+    if (!m_oRstHeight && !m_pFrame->IsFollow() && m_pFrame->IsInFootnote() && m_pFrame->HasPara())
     {
-        m_nRstHeight = m_pFrame->GetFootnoteFrameHeight();
-        m_nRstHeight += aRectFnSet.GetHeight(m_pFrame->getFramePrintArea()) -
-                      aRectFnSet.GetHeight(m_pFrame->getFrameArea());
-        if( m_nRstHeight < 0 )
-            m_nRstHeight = 0;
+        m_oRstHeight = m_pFrame->GetFootnoteFrameHeight()
+                       + aRectFnSet.GetHeight(m_pFrame->getFramePrintArea())
+                       - aRectFnSet.GetHeight(m_pFrame->getFrameArea());
+        if (*m_oRstHeight <= 0)
+            m_oRstHeight.reset();
     }
 }
 
@@ -144,8 +145,8 @@ bool SwTextFrameBreak::IsInside(SwTextMargin const& rLine, SwResizeLimitReason& 
         && rLine.GetEnd() >= TextFrameIndex(m_pFrame->GetText().getLength()))
         nLineHeight += m_pFrame->CalcAddLowerSpaceAsLastInTableCell();
 
-    if( m_nRstHeight )
-        bFit = m_nRstHeight >= nLineHeight;
+    if (m_oRstHeight)
+        bFit = *m_oRstHeight >= nLineHeight;
     else
     {
         // The Frame has a height to fit on the page.
@@ -297,22 +298,25 @@ void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
     // Consider bottom margin
     SwRectFnSet aRectFnSet(*m_pFrame);
 
-    m_nRstHeight = aRectFnSet.GetBottomMargin(*m_pFrame);
+    m_oRstHeight = aRectFnSet.GetBottomMargin(*m_pFrame);
 
     if ( aRectFnSet.IsVert() )
     {
            if ( m_pFrame->IsVertLR() )
-              m_nRstHeight = aRectFnSet.YDiff( m_pFrame->SwitchHorizontalToVertical( rLine.Y() ) , m_nOrigin );
+               m_oRstHeight
+                   = aRectFnSet.YDiff(m_pFrame->SwitchHorizontalToVertical(rLine.Y()), m_nOrigin);
            else
-               m_nRstHeight += m_nOrigin - m_pFrame->SwitchHorizontalToVertical( rLine.Y() );
+               *m_oRstHeight += m_nOrigin - m_pFrame->SwitchHorizontalToVertical(rLine.Y());
     }
     else
-        m_nRstHeight += rLine.Y() - m_nOrigin;
+        *m_oRstHeight += rLine.Y() - m_nOrigin;
 }
 
-WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
-    bool bChkKeep   )
-    : SwTextFrameBreak( pNewFrame, nRst ), m_nWidLines( 0 ), m_nOrphLines( 0 )
+WidowsAndOrphans::WidowsAndOrphans(SwTextFrame* pNewFrame, const std::optional<SwTwips>& oRst,
+                                   bool bChkKeep)
+    : SwTextFrameBreak(pNewFrame, oRst)
+    , m_nWidLines(0)
+    , m_nOrphLines(0)
 {
     SwSwapIfSwapped swap(m_pFrame);
 

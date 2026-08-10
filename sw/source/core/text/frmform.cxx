@@ -1849,7 +1849,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     rRepaint.Top( rLine.Y() );
     if( 0 >= rRepaint.Width() )
         rRepaint.Width(1);
-    WidowsAndOrphans aFrameBreak( this, rInf.IsTest() ? 1 : 0 );
+    WidowsAndOrphans aFrameBreak(this, rInf.IsTest() ? std::optional<SwTwips>(0) : std::nullopt);
 
     // rLine is now set to the first line which needs formatting.
     // The bFirst flag makes sure that Next() is not called.
