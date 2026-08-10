@@ -1643,6 +1643,79 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16071_footnoteTailKeptWhenTruncate
     CPPUNIT_ASSERT(bTailExported);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16072_rowWithOwnFootnoteKeepsThePage)
+{
+    // Here the footnote belongs to the unsplittable row itself. The row gets a page of its own all
+    // the same: the footnote goes where its anchor goes, so it leaves the page to the row. The row
+    // is 4436 twips of the 4535 the body has, which is not room for a footnote line, so the whole
+    // footnote lands on the next page. Word lays it out the same way.
+    createSwDoc("Cool16072_rowWithOwnFootnoteKeepsThePage.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 3);
+    // Without the fix the row was measured against the body as its own footnote had left it,
+    // counted as taller than any page, and split regardless of keep-together.
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[2]/ftncont", 0);
+    assertXPath(pXmlDoc, "//page[3]/ftncont/ftn", 1);
+
+    // The body took back all the space the footnote had, and the row stays inside it: without that
+    // the row hung over the body's bottom, into the footnote area.
+    CPPUNIT_ASSERT_LESSEQUAL(
+        getXPath(pXmlDoc, "//page[2]/body/infos/bounds", "bottom").toInt32(),
+        getXPath(pXmlDoc, "//page[2]/body/tab/infos/bounds", "bottom").toInt32());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16072_rowMovesPastAPushedFootnote)
+{
+    // Two rows that may not split, each filling a page on its own, and the first one's footnote has
+    // no room left beside it, so it is pushed to the next page - where it now takes the space the
+    // second row needs.
+    createSwDoc("Cool16072_rowMovesPastAPushedFootnote.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 4);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 1);
+    // Without the fix the second row was kept on the page the footnote had taken the space of, and
+    // cut off at its bottom: the words that did not fit were in no frame at all. It moves past that
+    // footnote now, which leaves the page to the footnote alone, the way Word lays it out.
+    assertXPath(pXmlDoc, "//page[2]/body/tab", 0);
+    assertXPath(pXmlDoc, "//page[2]/ftncont/ftn", 1);
+    assertXPath(pXmlDoc, "//page[3]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[3]/ftncont", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16072_keepTogetherRowVsFootnoteSpace)
+{
+    // The footnote of the first row shortens the page body by 585 twips; the second row is 4150
+    // high and may not be split, and the body is 4535 with the page to itself.
+    createSwDoc("Cool16072_keepTogetherRowVsFootnoteSpace.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 2);
+    // Without the fix the row was measured against the body as the footnote had left it, counted
+    // as taller than the page, and was split regardless of keep-together: the first page kept a
+    // 3322 twips fragment of it and the second page the remaining 838.
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 1);
+    // The footnote of the first row stays with its anchor, and the row moves past it
+    assertXPath(pXmlDoc, "//page[1]/ftncont/ftn", 1);
+    assertXPath(pXmlDoc, "//page[2]/ftncont", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16072_rowTallerThanPageStillSplits)
+{
+    // The same document with more text in the second row, which makes it 4702 high - taller than
+    // the 4535 body even with the page to itself, so it has to split whatever keep-together says.
+    createSwDoc("Cool16072_rowTallerThanPageStillSplits.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
 {
     createSwDoc("hidden-para-follow-frame.fodt");
