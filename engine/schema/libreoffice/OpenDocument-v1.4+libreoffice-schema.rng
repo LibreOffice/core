@@ -4450,6 +4450,33 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- TODO no proposal -->
+  <!-- A page whose content comes from a page of another document holds a
+       reference to it, made of the document and the name of the page in it. -->
+  <rng:define name="draw-page-attlist" combine="interleave">
+    <rng:optional>
+      <rng:group>
+        <rng:attribute name="xlink:href">
+          <rng:ref name="anyIRI"/>
+        </rng:attribute>
+        <rng:optional>
+          <rng:attribute name="xlink:type">
+            <rng:value>simple</rng:value>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="xlink:show">
+            <rng:value>replace</rng:value>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="xlink:actuate">
+            <rng:value>onRequest</rng:value>
+          </rng:attribute>
+        </rng:optional>
+      </rng:group>
+    </rng:optional>
+  </rng:define>
   <!-- TODO no proposal for page number on multipage formats -->
   <rng:define name="draw-image-attlist" combine="interleave">
     <rng:optional>
