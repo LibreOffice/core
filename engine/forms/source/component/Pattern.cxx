@@ -80,7 +80,7 @@ OPatternModel::~OPatternModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OPatternModel::createClone()
+css::uno::Reference< css::util::XCloneable > OPatternModel::createClone()
 {
     rtl::Reference<OPatternModel> pClone = new OPatternModel(this, getContext());
     pClone->clonedFrom(this);
@@ -89,7 +89,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OPatternModel::createClone
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OPatternModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
@@ -117,7 +117,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 }
 
 
-OUString SAL_CALL OPatternModel::getServiceName()
+OUString OPatternModel::getServiceName()
 {
     return FRM_COMPONENT_PATTERNFIELD;  // old (non-sun) name for compatibility !
 }

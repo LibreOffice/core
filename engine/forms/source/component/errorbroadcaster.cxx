@@ -77,13 +77,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OErrorBroadcaster::addSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
+    void OErrorBroadcaster::addSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
     {
         m_aErrorListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL OErrorBroadcaster::removeSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
+    void OErrorBroadcaster::removeSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
     {
         m_aErrorListeners.removeInterface( _rxListener );
     }

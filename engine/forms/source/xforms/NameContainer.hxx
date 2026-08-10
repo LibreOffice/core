@@ -80,12 +80,12 @@ public:
     // methods for XElementAccess
 
 
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         return cppu::UnoType<T>::get();
     }
 
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
     {
         return ! maItems.empty();
     }
@@ -94,7 +94,7 @@ public:
     // methods for XNameAccess (inherits XElementAccess)
 
 
-    virtual cpo::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any getByName(
         const OUString& rName ) override
     {
         typename map_t::const_iterator aIter = findItem( rName );
@@ -103,12 +103,12 @@ public:
         return cpo::uno::Any( aIter->second );
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence<OUString> getElementNames() override
     {
         return comphelper::mapKeysToSequence(maItems);
     }
 
-    virtual bool SAL_CALL hasByName(
+    virtual bool hasByName(
         const OUString& rName ) override
     {
         return hasItem( rName );
@@ -118,7 +118,7 @@ public:
     // methods for XNameReplace (inherits XNameAccess)
 
 
-    virtual void SAL_CALL replaceByName(
+    virtual void replaceByName(
         const OUString& rName,
         const cpo::uno::Any& aElement ) override
     {
@@ -134,7 +134,7 @@ public:
     // methods for XNameContainer (inherits XNameReplace)
 
 
-    virtual void SAL_CALL insertByName(
+    virtual void insertByName(
         const OUString& rName,
         const cpo::uno::Any& aElement ) override
     {
@@ -146,7 +146,7 @@ public:
         insert( rName, aItem );
     }
 
-    virtual void SAL_CALL removeByName(
+    virtual void removeByName(
         const OUString& rName ) override
     {
         if( !hasByName( rName ) )

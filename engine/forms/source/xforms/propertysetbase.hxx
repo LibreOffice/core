@@ -137,13 +137,13 @@ template< typename CLASS, typename VALUE >
 class APIPropertyAccessor
     :public GenericPropertyAccessor < CLASS
                                     , VALUE
-                                    , void (SAL_CALL CLASS::*)( const VALUE& )
-                                    , VALUE (SAL_CALL CLASS::*)()
+                                    , void (CLASS::*)( const VALUE& )
+                                    , VALUE (CLASS::*)()
                                     >
 {
 protected:
-    typedef void (SAL_CALL CLASS::*Writer)( const VALUE& );
-    typedef VALUE (SAL_CALL CLASS::*Reader)();
+    typedef void (CLASS::*Writer)( const VALUE& );
+    typedef VALUE (CLASS::*Reader)();
 public:
     APIPropertyAccessor( CLASS* pInstance, Writer pWriter, Reader pReader )
         :GenericPropertyAccessor< CLASS, VALUE, Writer, Reader >( pInstance, pWriter, pReader )
@@ -242,12 +242,12 @@ protected:
     void initializePropertyValueCache( sal_Int32 nHandle );
 
     /// OPropertysetHelper methods
-    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cppu::IPropertyArrayHelper& getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 public:
     /// helper struct for granting selective access to some notification-related methods

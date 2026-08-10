@@ -51,21 +51,21 @@ namespace frm
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextControl, UnoEditControl )
-        virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+        virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
         // XControl
-        virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
+        virtual void createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // UnoControl
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const override;
@@ -99,20 +99,20 @@ namespace frm
         virtual ~ORichTextPeer() override;
 
         // XView
-        void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
+        void draw( sal_Int32 nX, sal_Int32 nY ) override;
 
         // XVclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
+        virtual void setProperty( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 
         // XComponent
-        virtual void SAL_CALL dispose( ) override;
+        virtual void dispose( ) override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // ITextSelectionListener
         virtual void    onSelectionChanged() override;

@@ -66,14 +66,14 @@ public:
     virtual ~OEditBaseModel() override;
 
     // XPersistObject
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     // XPropertyState

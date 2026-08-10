@@ -102,44 +102,44 @@ namespace frm
         virtual ~FormOperations() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XFormOperations
-        virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getCursor() override;
-        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() override;
-        virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getController() override;
-        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() override;
-        virtual void SAL_CALL setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) override;
-        virtual css::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) override;
-        virtual bool SAL_CALL isEnabled(::sal_Int16 Feature) override;
-        virtual void SAL_CALL execute(::sal_Int16 Feature) override;
-        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const cpo::uno::Sequence< css::beans::NamedValue >& Arguments) override;
-        virtual bool SAL_CALL commitCurrentRecord(bool & RecordInserted) override;
-        virtual bool SAL_CALL commitCurrentControl() override;
-        virtual bool SAL_CALL isInsertionRow() override;
-        virtual bool SAL_CALL isModifiedRow() override;
+        virtual css::uno::Reference< css::sdbc::XRowSet > getCursor() override;
+        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > getUpdateCursor() override;
+        virtual css::uno::Reference< css::form::runtime::XFormController > getController() override;
+        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > getFeatureInvalidation() override;
+        virtual void setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) override;
+        virtual css::form::runtime::FeatureState getState(::sal_Int16 Feature) override;
+        virtual bool isEnabled(::sal_Int16 Feature) override;
+        virtual void execute(::sal_Int16 Feature) override;
+        virtual void executeWithArguments(::sal_Int16 Feature, const cpo::uno::Sequence< css::beans::NamedValue >& Arguments) override;
+        virtual bool commitCurrentRecord(bool & RecordInserted) override;
+        virtual bool commitCurrentControl() override;
+        virtual bool isInsertionRow() override;
+        virtual bool isModifiedRow() override;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) override;
-        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) override;
-        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) override;
+        virtual void cursorMoved( const css::lang::EventObject& event ) override;
+        virtual void rowChanged( const css::lang::EventObject& event ) override;
+        virtual void rowSetChanged( const css::lang::EventObject& event ) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& _rSource ) override;
+        virtual void modified( const css::lang::EventObject& _rSource ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent/OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     private:
         // service constructors

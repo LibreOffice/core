@@ -58,7 +58,7 @@ OFixedTextModel::~OFixedTextModel( )
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OFixedTextModel::createClone()
+css::uno::Reference< css::util::XCloneable > OFixedTextModel::createClone()
 {
     rtl::Reference<OFixedTextModel> pClone = new OFixedTextModel(this, getContext());
     pClone->clonedFrom(this);
@@ -66,7 +66,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OFixedTextModel::createClo
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OFixedTextModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OFixedTextModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -85,13 +85,13 @@ void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggre
 }
 
 
-OUString SAL_CALL OFixedTextModel::getServiceName()
+OUString OFixedTextModel::getServiceName()
 {
     return FRM_COMPONENT_FIXEDTEXT; // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
@@ -101,7 +101,7 @@ void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOu
 }
 
 
-void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OControlModel::read(_rxInStream);
 

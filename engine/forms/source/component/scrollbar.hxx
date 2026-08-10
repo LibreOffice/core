@@ -42,16 +42,16 @@ namespace frm
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual ::cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual ::cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XPersistObject
-        virtual OUString SAL_CALL getServiceName() override;
-        virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-        virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        virtual OUString getServiceName() override;
+        virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         // XPropertyState
         virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
@@ -62,9 +62,9 @@ namespace frm
         ) const override;
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+        virtual void getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+        virtual bool convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
         // OBoundControlModel
         virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;

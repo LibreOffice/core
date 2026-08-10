@@ -370,7 +370,7 @@ void Submission::initializePropertySet()
     initializePropertyValueCache( HANDLE_Standalone );
 }
 
-bool SAL_CALL Submission::convertFastPropertyValue(
+bool Submission::convertFastPropertyValue(
     Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     if ( nHandle == HANDLE_IncludeNamespacePrefixes )
@@ -393,12 +393,12 @@ bool SAL_CALL Submission::convertFastPropertyValue(
     return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
 }
 
-OUString SAL_CALL Submission::getName()
+OUString Submission::getName()
 {
     return getID();
 }
 
-void SAL_CALL Submission::setName( const OUString& sID )
+void Submission::setName( const OUString& sID )
 {
     setID( sID );
 }
@@ -410,7 +410,7 @@ static OUString lcl_message( std::u16string_view rID, std::u16string_view rText 
     return aMessage;
 }
 
-void SAL_CALL Submission::submitWithInteraction(
+void Submission::submitWithInteraction(
     const Reference<XInteractionHandler>& _rxHandler )
 {
     // as long as this class is not really threadsafe, we need to copy
@@ -492,18 +492,18 @@ void SAL_CALL Submission::submitWithInteraction(
     mxModel->rebuild();
 }
 
-void SAL_CALL Submission::submit( )
+void Submission::submit( )
 {
     submitWithInteraction( nullptr );
 }
 
-void SAL_CALL Submission::addSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ )
+void Submission::addSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ )
 {
     // TODO
     throw NoSupportException();
 }
 
-void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ )
+void Submission::removeSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ )
 {
     // TODO
     throw NoSupportException();
@@ -585,31 +585,31 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
 
 // some forwarding: XPropertySet is implemented in our base class,
 // but also available as base of XSubmission
-Reference< css::beans::XPropertySetInfo > SAL_CALL Submission::getPropertySetInfo(  )
+Reference< css::beans::XPropertySetInfo > Submission::getPropertySetInfo(  )
 {
     return PropertySetBase::getPropertySetInfo();
 }
-void SAL_CALL Submission::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void Submission::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     PropertySetBase::setPropertyValue( aPropertyName, aValue );
 }
-Any SAL_CALL Submission::getPropertyValue( const OUString& PropertyName )
+Any Submission::getPropertyValue( const OUString& PropertyName )
 {
     return PropertySetBase::getPropertyValue( PropertyName );
 }
-void SAL_CALL Submission::addPropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& xListener )
+void Submission::addPropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& xListener )
 {
     PropertySetBase::addPropertyChangeListener( aPropertyName, xListener );
 }
-void SAL_CALL Submission::removePropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& aListener )
+void Submission::removePropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& aListener )
 {
     PropertySetBase::removePropertyChangeListener( aPropertyName, aListener );
 }
-void SAL_CALL Submission::addVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener )
+void Submission::addVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener )
 {
     PropertySetBase::addVetoableChangeListener( PropertyName, aListener );
 }
-void SAL_CALL Submission::removeVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener )
+void Submission::removeVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener )
 {
     PropertySetBase::removeVetoableChangeListener( PropertyName, aListener );
 }

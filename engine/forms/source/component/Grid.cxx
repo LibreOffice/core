@@ -121,7 +121,7 @@ OGridControlModel::~OGridControlModel()
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL OGridControlModel::createClone( )
+Reference< XCloneable > OGridControlModel::createClone( )
 {
     rtl::Reference<OGridControlModel> pClone = new OGridControlModel( this, getContext() );
     pClone->OControlModel::clonedFrom( this );
@@ -174,7 +174,7 @@ cpo::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames()
     pSupported[aSupported.getLength()-1] = FRM_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
-Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType )
+Any OGridControlModel::queryAggregation( const Type& _rType )
 {
     Any aReturn = OGridControlModel_BASE::queryInterface(_rType);
     if ( !aReturn.hasValue() )
@@ -191,36 +191,36 @@ Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType )
 }
 
 // XSQLErrorListener
-void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent )
+void OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent )
 {
     // forward the errors which happened to my columns to my own listeners
     onError( _rEvent );
 }
 
 // XRowSetSupplier
-Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  )
+Reference< XRowSet > OGridControlModel::getRowSet(  )
 {
     return Reference< XRowSet >( getParent(), UNO_QUERY );
 }
 
-void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ )
+void OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ )
 {
     OSL_FAIL( "OGridControlModel::setRowSet: not supported!" );
 }
 
-void SAL_CALL OGridControlModel::addRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener )
+void OGridControlModel::addRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener )
 {
     if ( i_Listener.is() )
         m_aRowSetChangeListeners.addInterface( i_Listener );
 }
 
-void SAL_CALL OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener )
+void OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener )
 {
     m_aRowSetChangeListeners.removeInterface( i_Listener );
 }
 
 // XChild
-void SAL_CALL OGridControlModel::setParent( const css::uno::Reference<css::uno::XInterface>& i_Parent )
+void OGridControlModel::setParent( const css::uno::Reference<css::uno::XInterface>& i_Parent )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( i_Parent == getParent() )
@@ -230,7 +230,7 @@ void SAL_CALL OGridControlModel::setParent( const css::uno::Reference<css::uno::
     aGuard.clear();
     m_aRowSetChangeListeners.notifyEach( &XRowSetChangeListener::onRowSetChanged, aEvent );
 }
-Sequence< Type > SAL_CALL OGridControlModel::getTypes(  )
+Sequence< Type > OGridControlModel::getTypes(  )
 {
     return concatSequences(
             OControlModel::getTypes(),
@@ -261,7 +261,7 @@ void OGridControlModel::disposing(const EventObject& _rEvent)
 }
 
 // XSelectionSupplier
-bool SAL_CALL OGridControlModel::select(const Any& rElement)
+bool OGridControlModel::select(const Any& rElement)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference<XPropertySet> xSel;
@@ -291,7 +291,7 @@ bool SAL_CALL OGridControlModel::select(const Any& rElement)
     }
     return false;
 }
-Any SAL_CALL OGridControlModel::getSelection()
+Any OGridControlModel::getSelection()
 {
     return Any(m_xSelection);
 }
@@ -307,7 +307,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 }
 
 // XGridColumnFactory
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType)
+Reference<XPropertySet> OGridControlModel::createColumn(const OUString& ColumnType)
 {
     SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
@@ -334,13 +334,13 @@ rtl::Reference<OGridColumn>  OGridControlModel::createColumnById(sal_Int32 nType
     }
     return xReturn;
 }
-cpo::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes()
+cpo::uno::Sequence<OUString> OGridControlModel::getColumnTypes()
 {
     return frm::getColumnTypes();
 }
 
 // XReset
-void SAL_CALL OGridControlModel::reset()
+void OGridControlModel::reset()
 {
     ::comphelper::OInterfaceIteratorHelper3 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -353,11 +353,11 @@ void SAL_CALL OGridControlModel::reset()
         m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
-void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
+void OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
-void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
+void OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -752,7 +752,7 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 }
 
 // XPersistObject
-OUString SAL_CALL OGridControlModel::getServiceName()
+OUString OGridControlModel::getServiceName()
 {
     return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility!
 }

@@ -31,17 +31,17 @@ using namespace cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 
-OUString SAL_CALL OFormsCollection::getServiceName()
+OUString OFormsCollection::getServiceName()
 {
     return u"com.sun.star.form.Forms"_ustr;
 }
 
-Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  )
+Sequence< sal_Int8 > OFormsCollection::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Sequence<Type> SAL_CALL OFormsCollection::getTypes()
+Sequence<Type> OFormsCollection::getTypes()
 {
     return concatSequences(OInterfaceContainer::getTypes(), ::cppu::OComponentHelper::getTypes(), OFormsCollection_BASE::getTypes());
 }
@@ -69,7 +69,7 @@ OFormsCollection::~OFormsCollection()
     }
 }
 
-Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType)
+Any OFormsCollection::queryAggregation(const Type& _rType)
 {
     Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -83,23 +83,23 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType)
     return aReturn;
 }
 
-OUString SAL_CALL OFormsCollection::getImplementationName()
+OUString OFormsCollection::getImplementationName()
 {
     return u"com.sun.star.form.OFormsCollection"_ustr;
 }
 
-bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )
+bool OFormsCollection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OFormsCollection::getSupportedServiceNames()
 {
     return { u"com.sun.star.form.Forms"_ustr, u"com.sun.star.form.FormComponents"_ustr };
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  )
+Reference< XCloneable > OFormsCollection::createClone(  )
 {
     rtl::Reference<OFormsCollection> pClone = new OFormsCollection( *this );
     pClone->clonedFrom( *this );

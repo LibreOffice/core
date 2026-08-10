@@ -129,7 +129,7 @@ namespace frm
     {
     }
 
-    void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments )
+    void FormOperations::initialize( const Sequence< Any >& _arguments )
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();
@@ -150,56 +150,56 @@ namespace frm
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    OUString SAL_CALL FormOperations::getImplementationName(  )
+    OUString FormOperations::getImplementationName(  )
     {
         return u"com.sun.star.comp.forms.FormOperations"_ustr;
     }
 
-    bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName )
+    bool FormOperations::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  )
+    Sequence< OUString > FormOperations::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.form.runtime.FormOperations"_ustr };
     }
 
-    Reference< XRowSet > SAL_CALL FormOperations::getCursor()
+    Reference< XRowSet > FormOperations::getCursor()
     {
         MethodGuard aGuard( *this );
         return m_xCursor;
     }
 
-    Reference< XResultSetUpdate > SAL_CALL FormOperations::getUpdateCursor()
+    Reference< XResultSetUpdate > FormOperations::getUpdateCursor()
     {
         MethodGuard aGuard( *this );
         return m_xUpdateCursor;
     }
 
 
-    Reference< XFormController > SAL_CALL FormOperations::getController()
+    Reference< XFormController > FormOperations::getController()
     {
         MethodGuard aGuard( *this );
         return m_xController;
     }
 
 
-    Reference< XFeatureInvalidation > SAL_CALL FormOperations::getFeatureInvalidation()
+    Reference< XFeatureInvalidation > FormOperations::getFeatureInvalidation()
     {
         MethodGuard aGuard( *this );
         return m_xFeatureInvalidation;
     }
 
 
-    void SAL_CALL FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation )
+    void FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation )
     {
         MethodGuard aGuard( *this );
         m_xFeatureInvalidation = _rxFeatureInvalidation;
     }
 
 
-    FeatureState SAL_CALL FormOperations::getState( ::sal_Int16 _nFeature )
+    FeatureState FormOperations::getState( ::sal_Int16 _nFeature )
     {
         MethodGuard aGuard( *this );
 
@@ -383,7 +383,7 @@ namespace frm
     }
 
 
-    bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature )
+    bool FormOperations::isEnabled( ::sal_Int16 _nFeature )
     {
         MethodGuard aGuard( *this );
 
@@ -532,7 +532,7 @@ namespace frm
         }
     }
 
-    void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature )
+    void FormOperations::execute( ::sal_Int16 _nFeature )
     {
         SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
@@ -788,7 +788,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments )
+    void FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments )
     {
         if ( !lcl_requiresArguments( _nFeature ) )
         {
@@ -845,7 +845,7 @@ namespace frm
     }
 
 
-    bool SAL_CALL FormOperations::commitCurrentRecord( bool& _out_rRecordInserted )
+    bool FormOperations::commitCurrentRecord( bool& _out_rRecordInserted )
     {
         MethodGuard aGuard( *this );
         _out_rRecordInserted = false;
@@ -882,7 +882,7 @@ namespace frm
     }
 
 
-    bool SAL_CALL FormOperations::commitCurrentControl()
+    bool FormOperations::commitCurrentControl()
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
@@ -933,7 +933,7 @@ namespace frm
     }
 
 
-    bool SAL_CALL FormOperations::isInsertionRow()
+    bool FormOperations::isInsertionRow()
     {
         bool bIs = false;
         try
@@ -949,7 +949,7 @@ namespace frm
     }
 
 
-    bool SAL_CALL FormOperations::isModifiedRow()
+    bool FormOperations::isModifiedRow()
     {
         bool bIs = false;
         try
@@ -965,7 +965,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ )
+    void FormOperations::cursorMoved( const EventObject& /*_Event*/ )
     {
         MethodGuard aGuard( *this );
         m_bActiveControlModified = false;
@@ -974,19 +974,19 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::rowChanged( const EventObject& /*_Event*/ )
+    void FormOperations::rowChanged( const EventObject& /*_Event*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL FormOperations::rowSetChanged( const EventObject& /*_Event*/ )
+    void FormOperations::rowSetChanged( const EventObject& /*_Event*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL FormOperations::modified( const EventObject& /*_Source*/ )
+    void FormOperations::modified( const EventObject& /*_Source*/ )
     {
         MethodGuard aGuard( *this );
 
@@ -999,7 +999,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::propertyChange( const PropertyChangeEvent& _rEvent )
+    void FormOperations::propertyChange( const PropertyChangeEvent& _rEvent )
     {
         MethodGuard aGuard( *this );
 
@@ -1052,13 +1052,13 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::disposing( const EventObject& /*_Source*/ )
+    void FormOperations::disposing( const EventObject& /*_Source*/ )
     {
         // TODO: should we react on this? Or is this the responsibility of our owner to dispose us?
     }
 
 
-    void SAL_CALL FormOperations::disposing()
+    void FormOperations::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

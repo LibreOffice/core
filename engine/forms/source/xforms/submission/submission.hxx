@@ -52,11 +52,11 @@ class CCommandEnvironmentHelper final : public cppu::WeakImplHelper< css::ucb::X
     css::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
 
 public:
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override
+    virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override
     {
         return m_aInteractionHandler;
     }
-    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() override
+    virtual css::uno::Reference< css::ucb::XProgressHandler > getProgressHandler() override
     {
         return m_aProgressHandler;
     }
@@ -74,15 +74,15 @@ public:
     CProgressHandlerHelper()
         : m_count(0)
     {}
-    virtual void SAL_CALL push( const cpo::uno::Any& /*aStatus*/) override
+    virtual void push( const cpo::uno::Any& /*aStatus*/) override
     {
         std::unique_lock g(m_mLock);
         m_count++;
     }
-    virtual void SAL_CALL update(const cpo::uno::Any& /*aStatus*/) override
+    virtual void update(const cpo::uno::Any& /*aStatus*/) override
     {
     }
-    virtual void SAL_CALL pop() override
+    virtual void pop() override
     {
         std::unique_lock g(m_mLock);
         m_count--;

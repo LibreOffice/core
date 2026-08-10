@@ -124,7 +124,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OFilterControl::queryAggregation( const Type & rType )
+    Any OFilterControl::queryAggregation( const Type & rType )
     {
         Any aRet = UnoControl::queryAggregation( rType);
         if(!aRet.hasValue())
@@ -260,14 +260,14 @@ using namespace cpo::uno;
 
     // XEventListener
 
-    void SAL_CALL OFilterControl::disposing(const EventObject& Source)
+    void OFilterControl::disposing(const EventObject& Source)
     {
         UnoControl::disposing(Source);
     }
 
     // XItemListener
 
-    void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent )
+    void OFilterControl::itemStateChanged( const ItemEvent& rEvent )
     {
 #if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
         (void) rEvent;
@@ -470,7 +470,7 @@ using namespace cpo::uno;
 
     // XFocusListener
 
-    void SAL_CALL OFilterControl::focusGained(const FocusEvent& /*e*/)
+    void OFilterControl::focusGained(const FocusEvent& /*e*/)
     {
         // should we fill the combobox?
         if (m_bFilterList && !m_bFilterListFilled)
@@ -478,12 +478,12 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFilterControl::focusLost(const FocusEvent& /*e*/)
+    void OFilterControl::focusLost(const FocusEvent& /*e*/)
     {
     }
 
 
-    bool SAL_CALL OFilterControl::commit()
+    bool OFilterControl::commit()
     {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if ( !ensureInitialized( ) )
@@ -530,19 +530,19 @@ using namespace cpo::uno;
 
     // XTextComponent
 
-    void SAL_CALL OFilterControl::addTextListener(const Reference< XTextListener > & l)
+    void OFilterControl::addTextListener(const Reference< XTextListener > & l)
     {
         m_aTextListeners.addInterface( l );
     }
 
 
-    void SAL_CALL OFilterControl::removeTextListener(const Reference< XTextListener > & l)
+    void OFilterControl::removeTextListener(const Reference< XTextListener > & l)
     {
         m_aTextListeners.removeInterface( l );
     }
 
 
-    void SAL_CALL OFilterControl::setText( const OUString& aText )
+    void OFilterControl::setText( const OUString& aText )
     {
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
@@ -641,7 +641,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFilterControl::insertText( const css::awt::Selection& rSel, const OUString& aText )
+    void OFilterControl::insertText( const css::awt::Selection& rSel, const OUString& aText )
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -652,13 +652,13 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL OFilterControl::getText()
+    OUString OFilterControl::getText()
     {
         return m_aText;
     }
 
 
-    OUString SAL_CALL OFilterControl::getSelectedText()
+    OUString OFilterControl::getSelectedText()
     {
         OUString aSelected;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -669,7 +669,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFilterControl::setSelection( const css::awt::Selection& aSelection )
+    void OFilterControl::setSelection( const css::awt::Selection& aSelection )
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -677,7 +677,7 @@ using namespace cpo::uno;
     }
 
 
-    css::awt::Selection SAL_CALL OFilterControl::getSelection()
+    css::awt::Selection OFilterControl::getSelection()
     {
         css::awt::Selection aSel;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -687,14 +687,14 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OFilterControl::isEditable()
+    bool OFilterControl::isEditable()
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() && xText->isEditable();
     }
 
 
-    void SAL_CALL OFilterControl::setEditable( bool bEditable )
+    void OFilterControl::setEditable( bool bEditable )
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -702,14 +702,14 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int16 SAL_CALL OFilterControl::getMaxTextLen()
+    sal_Int16 OFilterControl::getMaxTextLen()
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() ? xText->getMaxTextLen() : 0;
     }
 
 
-    void SAL_CALL OFilterControl::setMaxTextLen( sal_Int16 nLength )
+    void OFilterControl::setMaxTextLen( sal_Int16 nLength )
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -731,7 +731,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFilterControl::initialize( const Sequence< Any >& aArguments )
+    void OFilterControl::initialize( const Sequence< Any >& aArguments )
     {
         PropertyValue aProp;
         NamedValue aValue;
@@ -851,17 +851,17 @@ using namespace cpo::uno;
 #endif
     }
 
-    OUString SAL_CALL OFilterControl::getImplementationName(  )
+    OUString OFilterControl::getImplementationName(  )
     {
         return u"com.sun.star.comp.forms.OFilterControl"_ustr;
     }
 
-    bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName )
+    bool OFilterControl::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames(  )
+    Sequence< OUString > OFilterControl::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.form.control.FilterControl"_ustr,
                  u"com.sun.star.awt.UnoControl"_ustr };

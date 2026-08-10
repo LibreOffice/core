@@ -60,9 +60,9 @@ namespace frm
         virtual ~OReferenceValueComponent() override;
 
         // OPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual bool convertFastPropertyValue(
                     cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
         virtual void describeFixedProperties(
             cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps

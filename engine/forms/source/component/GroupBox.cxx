@@ -54,7 +54,7 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OGroupBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OGroupBoxModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -71,7 +71,7 @@ OGroupBoxModel::~OGroupBoxModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OGroupBoxModel::createClone()
+css::uno::Reference< css::util::XCloneable > OGroupBoxModel::createClone()
 {
     rtl::Reference<OGroupBoxModel> pClone = new OGroupBoxModel(this, getContext());
     pClone->clonedFrom(this);
@@ -87,13 +87,13 @@ void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 }
 
 
-OUString SAL_CALL OGroupBoxModel::getServiceName()
+OUString OGroupBoxModel::getServiceName()
 {
     return FRM_COMPONENT_GROUPBOX;  // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOutStream)
+void OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
@@ -103,7 +103,7 @@ void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOu
 }
 
 
-void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInStream)
+void OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInStream)
 {
     OControlModel::read( _rxInStream );
 
@@ -129,7 +129,7 @@ OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OGroupBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OGroupBoxControl::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);

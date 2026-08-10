@@ -45,8 +45,8 @@ public:
         return m_aContextNode;
     }
 
-    virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() override;
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aSequence) override;
+    virtual css::xml::xpath::Libxml2ExtensionHandle getLibxml2ExtensionHandle() override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& aSequence) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

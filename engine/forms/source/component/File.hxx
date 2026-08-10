@@ -47,34 +47,34 @@ public:
     virtual ~OFileControlModel() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OFileControlModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XPropertySet and friends
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XReset
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
-    virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void reset() override;
+    virtual void addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -86,7 +86,7 @@ public:
     using OControlModel::getFastPropertyValue;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 

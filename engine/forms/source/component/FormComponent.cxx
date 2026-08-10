@@ -160,7 +160,7 @@ void OControl::doSetDelegator()
 }
 
 // UNO Binding
-Any SAL_CALL OControl::queryAggregation( const Type& _rType )
+Any OControl::queryAggregation( const Type& _rType )
 {
     // ask the base class
     Any aReturn( OComponentHelper::queryAggregation(_rType) );
@@ -176,12 +176,12 @@ Any SAL_CALL OControl::queryAggregation( const Type& _rType )
     return aReturn;
 }
 
-Sequence<sal_Int8> SAL_CALL OControl::getImplementationId()
+Sequence<sal_Int8> OControl::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Sequence<Type> SAL_CALL OControl::getTypes()
+Sequence<Type> OControl::getTypes()
 {
     TypeBag aTypes( _getTypes() );
 
@@ -213,7 +213,7 @@ void OControl::disposing()
 }
 
 // XServiceInfo
-bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName)
+bool OControl::supportsService(const OUString& _rsServiceName)
 {
     return cppu::supportsService(this, _rsServiceName);
 }
@@ -227,14 +227,14 @@ Sequence< OUString > OControl::getAggregateServiceNames() const
     return aAggServices;
 }
 
-Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames()
+Sequence<OUString> OControl::getSupportedServiceNames()
 {
     // no own supported service names
     return getAggregateServiceNames();
 }
 
 // XEventListener
-void SAL_CALL OControl::disposing(const css::lang::EventObject& _rEvent)
+void OControl::disposing(const css::lang::EventObject& _rEvent)
 {
     auto xAggAsIface = query_aggregation<XInterface>(m_xAggregate);
 
@@ -247,13 +247,13 @@ void SAL_CALL OControl::disposing(const css::lang::EventObject& _rEvent)
 }
 
 // XControl
-void SAL_CALL OControl::setContext(const Reference< XInterface >& Context)
+void OControl::setContext(const Reference< XInterface >& Context)
 {
     if (m_xControl.is())
         m_xControl->setContext(Context);
 }
 
-Reference< XInterface > SAL_CALL OControl::getContext()
+Reference< XInterface > OControl::getContext()
 {
     return m_xControl.is() ? m_xControl->getContext() : Reference< XInterface >();
 }
@@ -274,7 +274,7 @@ void OControl::impl_resetStateGuard_nothrow()
     m_aWindowStateGuard.attach( xWindow, xModel );
 }
 
-void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent)
+void OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent)
 {
     if ( m_xControl.is() )
     {
@@ -289,12 +289,12 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
     }
 }
 
-Reference<XWindowPeer> SAL_CALL OControl::getPeer()
+Reference<XWindowPeer> OControl::getPeer()
 {
     return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
-bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
+bool OControl::setModel(const Reference<XControlModel>& Model)
 {
     if ( !m_xControl.is() )
         return false;
@@ -304,28 +304,28 @@ bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
     return bSuccess;
 }
 
-Reference<XControlModel> SAL_CALL OControl::getModel()
+Reference<XControlModel> OControl::getModel()
 {
     return m_xControl.is() ? m_xControl->getModel() : Reference<XControlModel>();
 }
 
-Reference<XView> SAL_CALL OControl::getView()
+Reference<XView> OControl::getView()
 {
     return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
-void SAL_CALL OControl::setDesignMode(bool bOn)
+void OControl::setDesignMode(bool bOn)
 {
     if (m_xControl.is())
         m_xControl->setDesignMode(bOn);
 }
 
-bool SAL_CALL OControl::isDesignMode()
+bool OControl::isDesignMode()
 {
     return !m_xControl.is() || m_xControl->isDesignMode();
 }
 
-bool SAL_CALL OControl::isTransparent()
+bool OControl::isTransparent()
 {
     return !m_xControl.is() || m_xControl->isTransparent();
 }
@@ -346,7 +346,7 @@ Sequence< Type> OBoundControl::_getTypes()
     return TypeBag( OControl::_getTypes(), OBoundControl_BASE::getTypes() ).getTypes();
 }
 
-Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType)
+Any OBoundControl::queryAggregation(const Type& _rType)
 {
     Any aReturn;
 
@@ -366,12 +366,12 @@ Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType)
     return aReturn;
 }
 
-bool SAL_CALL OBoundControl::getLock()
+bool OBoundControl::getLock()
 {
     return m_bLocked;
 }
 
-void SAL_CALL OBoundControl::setLock(bool _bLock)
+void OBoundControl::setLock(bool _bLock)
 {
     if (m_bLocked == bool(_bLock))
         return;
@@ -398,12 +398,12 @@ void OBoundControl::_setLock(bool _bLock)
     }
 }
 
-bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel )
+bool OBoundControl::setModel( const Reference< XControlModel >& _rxModel )
 {
     return OControl::setModel( _rxModel );
 }
 
-void SAL_CALL OBoundControl::disposing(const EventObject& Source)
+void OBoundControl::disposing(const EventObject& Source)
 {
     // just disambiguate
     OControl::disposing(Source);
@@ -415,12 +415,12 @@ void OBoundControl::disposing()
 }
 
 // OControlModel
-Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId()
+Sequence<sal_Int8> OControlModel::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Sequence<Type> SAL_CALL OControlModel::getTypes()
+Sequence<Type> OControlModel::getTypes()
 {
     TypeBag aTypes( _getTypes() );
 
@@ -438,7 +438,7 @@ Sequence<Type> OControlModel::_getTypes()
     ).getTypes();
 }
 
-Any SAL_CALL OControlModel::queryAggregation(const Type& _rType)
+Any OControlModel::queryAggregation(const Type& _rType)
 {
     // base class 1
     Any aReturn(OComponentHelper::queryAggregation(_rType));
@@ -611,12 +611,12 @@ void OControlModel::doSetDelegator()
 }
 
 // XChild
-Reference< XInterface > SAL_CALL OControlModel::getParent()
+Reference< XInterface > OControlModel::getParent()
 {
     return m_xParent;
 }
 
-void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
+void OControlModel::setParent(const Reference< XInterface >& _rxParent)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -632,7 +632,7 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
 }
 
 // XNamed
-OUString SAL_CALL OControlModel::getName()
+OUString OControlModel::getName()
 {
     OUString aReturn;
     try
@@ -651,7 +651,7 @@ OUString SAL_CALL OControlModel::getName()
     return aReturn;
 }
 
-void SAL_CALL OControlModel::setName(const OUString& _rName)
+void OControlModel::setName(const OUString& _rName)
 {
     try
     {
@@ -669,7 +669,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName)
 }
 
 // XServiceInfo
-bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName)
+bool OControlModel::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -682,7 +682,7 @@ Sequence< OUString > OControlModel::getAggregateServiceNames() const
     return aAggServices;
 }
 
-Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames()
+Sequence<OUString> OControlModel::getSupportedServiceNames()
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -696,7 +696,7 @@ Sequence< OUString > OControlModel::getSupportedServiceNames_Static()
 }
 
 // XEventListener
-void SAL_CALL OControlModel::disposing(const css::lang::EventObject& _rSource)
+void OControlModel::disposing(const css::lang::EventObject& _rSource)
 {
     // release the parent
     if (_rSource.Source == m_xParent)
@@ -739,7 +739,7 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
         xPersist->read( _rxInStream );
 }
 
-void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+void OControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -1065,7 +1065,7 @@ Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
     return this;
 }
 
-Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo()
+Reference< XPropertySetInfo> OControlModel::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() );
 }
@@ -1075,22 +1075,22 @@ Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo()
     return m_aPropertyBagHelper.getInfoHelper();
 }
 
-void SAL_CALL OControlModel::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
+void OControlModel::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
 {
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
-void SAL_CALL OControlModel::removeProperty( const OUString& _rName )
+void OControlModel::removeProperty( const OUString& _rName )
 {
     m_aPropertyBagHelper.removeProperty( _rName );
 }
 
-Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues()
+Sequence< PropertyValue > OControlModel::getPropertyValues()
 {
     return m_aPropertyBagHelper.getPropertyValues();
 }
 
-void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps )
+void OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps )
 {
     m_aPropertyBagHelper.setPropertyValues( _rProps );
 }
@@ -1122,7 +1122,7 @@ void OControlModel::firePropertyChanges( const std::vector< sal_Int32 >& _rHandl
 }
 
 // OBoundControlModel
-Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType )
+Any OBoundControlModel::queryAggregation( const Type& _rType )
 {
     Any aReturn( OControlModel::queryAggregation(_rType) );
     if (!aReturn.hasValue())
@@ -1466,7 +1466,7 @@ void OBoundControlModel::doFormListening( const bool _bStart )
 }
 
 // XChild
-void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent)
+void OBoundControlModel::setParent(const Reference<XInterface>& _rxParent)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -1493,7 +1493,7 @@ void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxPare
 }
 
 // XEventListener
-void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEvent)
+void OBoundControlModel::disposing(const css::lang::EventObject& _rEvent)
 {
     ControlModelLock aLock( *this );
     if ( _rEvent.Source == getField() )
@@ -1525,7 +1525,7 @@ void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEven
 }
 
 // XServiceInfo
-cpo::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OBoundControlModel::getSupportedServiceNames()
 {
     return ::comphelper::combineSequences(
         getAggregateServiceNames(),
@@ -1543,7 +1543,7 @@ Sequence< OUString > OBoundControlModel::getSupportedServiceNames_Static()
 }
 
 // XPersist
-void SAL_CALL OBoundControlModel::write( const Reference<css::io::XObjectOutputStream>& _rxOutStream )
+void OBoundControlModel::write( const Reference<css::io::XObjectOutputStream>& _rxOutStream )
 {
     OControlModel::write(_rxOutStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -1616,7 +1616,7 @@ void OBoundControlModel::writeCommonProperties(const Reference<css::io::XObjectO
     xMark->deleteMark(nMark);
 }
 
-void SAL_CALL OBoundControlModel::read( const Reference< css::io::XObjectInputStream >& _rxInStream )
+void OBoundControlModel::read( const Reference< css::io::XObjectInputStream >& _rxInStream )
 {
     OControlModel::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -1787,7 +1787,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 }
 
 // XPropertyChangeListener
-void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt )
+void OBoundControlModel::propertyChange( const PropertyChangeEvent& evt )
 {
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName == PROPERTY_VALUE )
@@ -1833,7 +1833,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     }
 }
 
-void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*/ )
+void OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*/ )
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -1853,17 +1853,17 @@ void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*
 }
 
 // XBoundComponent
-void SAL_CALL OBoundControlModel::addUpdateListener(const Reference<XUpdateListener>& _rxListener)
+void OBoundControlModel::addUpdateListener(const Reference<XUpdateListener>& _rxListener)
 {
     m_aUpdateListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateListener>& _rxListener)
+void OBoundControlModel::removeUpdateListener(const Reference< XUpdateListener>& _rxListener)
 {
     m_aUpdateListeners.removeInterface(_rxListener);
 }
 
-bool SAL_CALL OBoundControlModel::commit()
+bool OBoundControlModel::commit()
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not committable!) " );
@@ -2087,7 +2087,7 @@ void OBoundControlModel::impl_disconnectDatabaseColumn_noNotify()
 }
 
 // XLoadListener
-void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent )
+void OBoundControlModel::loaded( const EventObject& _rEvent )
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2098,12 +2098,12 @@ void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent )
     impl_connectDatabaseColumn_noNotify( false );
 }
 
-void SAL_CALL OBoundControlModel::unloaded( const css::lang::EventObject& /*aEvent*/ )
+void OBoundControlModel::unloaded( const css::lang::EventObject& /*aEvent*/ )
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloaded: we should never reach this with an external value binding!" );
 }
 
-void SAL_CALL OBoundControlModel::reloading( const css::lang::EventObject& /*aEvent*/ )
+void OBoundControlModel::reloading( const css::lang::EventObject& /*aEvent*/ )
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
@@ -2112,7 +2112,7 @@ void SAL_CALL OBoundControlModel::reloading( const css::lang::EventObject& /*aEv
     m_bForwardValueChanges = false;
 }
 
-void SAL_CALL OBoundControlModel::unloading(const css::lang::EventObject& /*aEvent*/)
+void OBoundControlModel::unloading(const css::lang::EventObject& /*aEvent*/)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2122,7 +2122,7 @@ void SAL_CALL OBoundControlModel::unloading(const css::lang::EventObject& /*aEve
     impl_disconnectDatabaseColumn_noNotify();
 }
 
-void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent )
+void OBoundControlModel::reloaded( const EventObject& _rEvent )
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2492,7 +2492,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
         impl_connectDatabaseColumn_noNotify( false );
 }
 
-void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding )
+void OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding )
 {
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
     // the interface for this method should not have been exposed if we do not
@@ -2518,7 +2518,7 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
         connectExternalValueBinding( _rxBinding, aLock );
 }
 
-Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  )
+Reference< XValueBinding > OBoundControlModel::getValueBinding(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::getValueBinding: How did you reach this method?" );
@@ -2527,7 +2527,7 @@ Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  )
     return m_xExternalBinding;
 }
 
-void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent )
+void OBoundControlModel::modified( const EventObject& _rEvent )
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
@@ -2707,7 +2707,7 @@ void OBoundControlModel::disconnectValidator( )
     onDisconnectedValidator( );
 }
 
-void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _rxValidator )
+void OBoundControlModel::setValidator( const Reference< XValidator >& _rxValidator )
 {
     osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::setValidator: How did you reach this method?" );
@@ -2733,7 +2733,7 @@ void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _
         connectValidator( _rxValidator );
 }
 
-Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  )
+Reference< XValidator > OBoundControlModel::getValidator(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::getValidator: How did you reach this method?" );
@@ -2743,7 +2743,7 @@ Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  )
     return m_xValidator;
 }
 
-void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ )
+void OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ )
 {
     osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::validityConstraintChanged: How did you reach this method?" );
@@ -2753,7 +2753,7 @@ void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& 
     recheckValidity( false );
 }
 
-bool SAL_CALL OBoundControlModel::isValid(  )
+bool OBoundControlModel::isValid(  )
 {
     return m_bIsCurrentValueValid;
 }
@@ -2765,19 +2765,19 @@ cpo::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
     return getControlValue();
 }
 
-Any SAL_CALL OBoundControlModel::getCurrentValue(  )
+Any OBoundControlModel::getCurrentValue(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return getCurrentFormComponentValue();
 }
 
-void SAL_CALL OBoundControlModel::addFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener )
+void OBoundControlModel::addFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener )
 {
     if ( Listener.is() )
         m_aFormComponentListeners.addInterface( Listener );
 }
 
-void SAL_CALL OBoundControlModel::removeFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener )
+void OBoundControlModel::removeFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener )
 {
     if ( Listener.is() )
         m_aFormComponentListeners.removeInterface( Listener );

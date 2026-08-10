@@ -107,7 +107,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OClipboardDispatcher::dispatch( const URL& /*_rURL*/, const Sequence< PropertyValue >& /*Arguments*/ )
+    void OClipboardDispatcher::dispatch( const URL& /*_rURL*/, const Sequence< PropertyValue >& /*Arguments*/ )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !getEditView() )

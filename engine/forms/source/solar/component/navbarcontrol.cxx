@@ -62,7 +62,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarControl, UnoControl, ONavigationBarControl_Base )
 
 
-    Any SAL_CALL ONavigationBarControl::queryAggregation( const Type& _rType )
+    Any ONavigationBarControl::queryAggregation( const Type& _rType )
     {
         Any aReturn = UnoControl::queryAggregation( _rType );
 
@@ -103,7 +103,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer )
+    void ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer )
     {
         SolarMutexGuard aGuard;
 
@@ -152,20 +152,20 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL ONavigationBarControl::getImplementationName()
+    OUString ONavigationBarControl::getImplementationName()
     {
         return u"com.sun.star.comp.form.ONavigationBarControl"_ustr;
     }
 
 
-    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()
+    Sequence< OUString > ONavigationBarControl::getSupportedServiceNames()
     {
         return { u"com.sun.star.awt.UnoControl"_ustr,
         u"com.sun.star.form.control.NavigationToolBar"_ustr };
     }
 
 
-    void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         Reference< XDispatchProviderInterception > xTypedPeer(getPeer(), UNO_QUERY);
         if (xTypedPeer.is())
@@ -175,7 +175,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         Reference< XDispatchProviderInterception > xTypedPeer(getPeer(), UNO_QUERY);
         if (xTypedPeer.is())
@@ -185,7 +185,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarControl::setDesignMode( bool _bOn )
+    void ONavigationBarControl::setDesignMode( bool _bOn )
     {
         UnoControl::setDesignMode( _bOn );
         Reference< XVclWindowPeer > xTypedPeer(getPeer(), UNO_QUERY);
@@ -253,14 +253,14 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
 
-    void SAL_CALL ONavigationBarPeer::dispose(  )
+    void ONavigationBarPeer::dispose(  )
     {
         VCLXWindow::dispose();
         OFormNavigationHelper::dispose();
     }
 
 
-    void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
+    void ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
     {
         SolarMutexGuard aGuard;
 
@@ -339,7 +339,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName )
+    Any ONavigationBarPeer::getProperty( const OUString& _rPropertyName )
     {
         SolarMutexGuard aGuard;
 
@@ -445,7 +445,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarPeer::setDesignMode( bool _bOn )
+    void ONavigationBarPeer::setDesignMode( bool _bOn )
     {
         VCLXWindow::setDesignMode( _bOn  );
 

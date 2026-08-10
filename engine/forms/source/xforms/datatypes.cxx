@@ -98,13 +98,13 @@ namespace xforms
     }
 
 
-    OUString SAL_CALL OXSDDataType::getName(  )
+    OUString OXSDDataType::getName(  )
     {
         return m_sName;
     }
 
 
-    void SAL_CALL OXSDDataType::setName( const OUString& aName )
+    void OXSDDataType::setName( const OUString& aName )
     {
         // TODO: check the name for conflicts in the repository
         setFastPropertyValue( PROPERTY_ID_NAME, Any(aName) );
@@ -112,39 +112,39 @@ namespace xforms
     }
 
 
-    OUString SAL_CALL OXSDDataType::getPattern()
+    OUString OXSDDataType::getPattern()
     {
         return m_sPattern;
     }
 
 
-    void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern )
+    void OXSDDataType::setPattern( const OUString& _pattern )
     {
         setFastPropertyValue( PROPERTY_ID_XSD_PATTERN, Any(_pattern) );
         SAL_WARN_IF( m_sPattern != _pattern, "forms.misc", "OXSDDataType::setPattern: inconsistency!" );
     }
 
 
-    sal_Int16 SAL_CALL OXSDDataType::getWhiteSpaceTreatment()
+    sal_Int16 OXSDDataType::getWhiteSpaceTreatment()
     {
         return m_nWST;
     }
 
 
-    void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment )
+    void OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment )
     {
         setFastPropertyValue( PROPERTY_ID_XSD_WHITESPACE, Any(_whitespacetreatment) );
         SAL_WARN_IF( m_nWST != _whitespacetreatment, "forms.misc", "OXSDDataType::setWhiteSpaceTreatment: inconsistency!" );
     }
 
 
-    bool SAL_CALL OXSDDataType::getIsBasic()
+    bool OXSDDataType::getIsBasic()
     {
         return m_bIsBasic;
     }
 
 
-    sal_Int16 SAL_CALL OXSDDataType::getTypeClass()
+    sal_Int16 OXSDDataType::getTypeClass()
     {
         return m_nTypeClass;
     }

@@ -78,50 +78,50 @@ namespace frm
         explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
-        cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+        cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
 
         virtual OUString GetComponentServiceName() const override;
-        virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
+        virtual void   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
 
     // css::lang::XComponent
-        virtual void SAL_CALL   dispose() override;
+        virtual void   dispose() override;
 
     // css::awt::XTextComponent
-        virtual void            SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
-        virtual void            SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
-        virtual void            SAL_CALL setText( const OUString& aText ) override;
-        virtual void            SAL_CALL insertText( const css::awt::Selection& rSel, const OUString& aText ) override;
-        virtual OUString SAL_CALL getText() override;
-        virtual OUString SAL_CALL getSelectedText() override;
-        virtual void            SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
-        virtual css::awt::Selection SAL_CALL getSelection() override;
-        virtual bool        SAL_CALL isEditable() override;
-        virtual void            SAL_CALL setEditable( bool bEditable ) override;
-        virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) override;
-        virtual sal_Int16       SAL_CALL getMaxTextLen() override;
+        virtual void            addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            setText( const OUString& aText ) override;
+        virtual void            insertText( const css::awt::Selection& rSel, const OUString& aText ) override;
+        virtual OUString getText() override;
+        virtual OUString getSelectedText() override;
+        virtual void            setSelection( const css::awt::Selection& aSelection ) override;
+        virtual css::awt::Selection getSelection() override;
+        virtual bool        isEditable() override;
+        virtual void            setEditable( bool bEditable ) override;
+        virtual void            setMaxTextLen( sal_Int16 nLength ) override;
+        virtual sal_Int16       getMaxTextLen() override;
 
     // css::form::XBoundComponent
-        virtual void            SAL_CALL addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
-        virtual void            SAL_CALL removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
-        virtual bool        SAL_CALL commit() override;
+        virtual void            addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual void            removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual bool        commit() override;
 
     // css::lang::XEventListener
-        virtual void            SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void            disposing(const css::lang::EventObject& Source) override;
 
     // css::awt::XFocusListener
-        virtual void            SAL_CALL focusGained(const css::awt::FocusEvent& e) override;
-        virtual void            SAL_CALL focusLost(const css::awt::FocusEvent& e) override;
+        virtual void            focusGained(const css::awt::FocusEvent& e) override;
+        virtual void            focusLost(const css::awt::FocusEvent& e) override;
 
     // css::awt::XItemListener
-        virtual void            SAL_CALL itemStateChanged(const css::awt::ItemEvent& rEvent) override;
+        virtual void            itemStateChanged(const css::awt::ItemEvent& rEvent) override;
 
     // css::util::XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     private:
         virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;

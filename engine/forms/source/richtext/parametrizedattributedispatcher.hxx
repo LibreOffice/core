@@ -40,7 +40,7 @@ namespace frm
         virtual ~OParametrizedAttributeDispatcher() override;
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        virtual void dispatch( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
         // OAttributeDispatcher
         virtual void    fillFeatureEventFromAttributeState( css::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const override;

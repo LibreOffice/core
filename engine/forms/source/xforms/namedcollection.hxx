@@ -77,18 +77,18 @@ protected:
 public:
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         return Collection<T>::getElementType();
     }
 
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
     {
         return Collection<T>::hasElements();
     }
 
     // XNameAccess : XElementAccess
-    virtual cpo::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any getByName(
         const OUString& aName ) override
     {
         if( !hasItem( aName ) )
@@ -96,12 +96,12 @@ public:
         return cpo::uno::Any( getItem( aName ) );
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence<OUString> getElementNames() override
     {
         return getNames();
     }
 
-    virtual bool SAL_CALL hasByName(
+    virtual bool hasByName(
         const OUString& aName ) override
     {
         return hasItem( aName );

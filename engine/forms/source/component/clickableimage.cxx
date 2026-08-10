@@ -104,7 +104,7 @@ using namespace cpo::uno;
 
     // UNO Binding
 
-    Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType)
+    Any OClickableImageBaseControl::queryAggregation(const Type& _rType)
     {
         Any aReturn = OControl::queryAggregation(_rType);
         if (!aReturn.hasValue())
@@ -128,13 +128,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_aFeatureInterception.registerDispatchProviderInterceptor( _rxInterceptor  );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_aFeatureInterception.releaseDispatchProviderInterceptor( _rxInterceptor  );
     }
@@ -336,31 +336,31 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
+    void OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
     {
         m_aSubmissionVetoListeners.addInterface( listener );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
+    void OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
     {
         m_aSubmissionVetoListeners.removeInterface( listener );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler )
+    void OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler )
     {
         implSubmit( MouseEvent(), _rxHandler );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::submit(  )
+    void OClickableImageBaseControl::submit(  )
     {
         implSubmit( MouseEvent(), nullptr );
     }
 
 
-    Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  )
+    Sequence< OUString > OClickableImageBaseControl::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported = OControl::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -511,40 +511,40 @@ using namespace cpo::uno;
 
     // XImageProducer
 
-    void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer )
+    void OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->addConsumer( _rxConsumer );
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer )
+    void OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->removeConsumer( _rxConsumer );
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::startProduction(  )
+    void OClickableImageBaseModel::startProduction(  )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->startProduction();
     }
 
 
-    Reference< submission::XSubmission > SAL_CALL OClickableImageBaseModel::getSubmission()
+    Reference< submission::XSubmission > OClickableImageBaseModel::getSubmission()
     {
         return m_xSubmissionDelegate;
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission )
+    void OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission )
     {
         m_xSubmissionDelegate = _submission;
     }
 
 
-    Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  )
+    Sequence< OUString > OClickableImageBaseModel::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -565,7 +565,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType)
+    Any OClickableImageBaseModel::queryAggregation(const Type& _rType)
     {
         // order matters:
         // we definitely want to "override" the XImageProducer interface of our aggregate,

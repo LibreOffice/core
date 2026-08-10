@@ -426,7 +426,7 @@ void Model::refresh()
 }
 
 
-void SAL_CALL Model::submitWithInteraction(
+void Model::submitWithInteraction(
     const OUString& sID,
     const css::uno::Reference<css::task::XInteractionHandler>& _rxHandler )
 {
@@ -450,7 +450,7 @@ void Model::submit( const OUString& sID )
     submitWithInteraction( sID, nullptr );
 }
 
-css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL Model::getDataTypeRepository(  )
+css::uno::Reference<css::xforms::XDataTypeRepository> Model::getDataTypeRepository(  )
 {
     if ( !mxDataTypes.is() )
         mxDataTypes = new ODataTypeRepository;
@@ -478,7 +478,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const 
     return aInstance;
 }
 
-css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance()
+css::uno::Reference<css::xml::dom::XDocument> Model::getDefaultInstance()
 {
     ensureAtLeastOneInstance();
     DBG_ASSERT( mxInstances->countItems() > 0, "no instance?" );
@@ -491,7 +491,7 @@ css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance
 // bindings management
 
 
-css::uno::Reference<css::beans::XPropertySet> SAL_CALL Model::createBinding()
+css::uno::Reference<css::beans::XPropertySet> Model::createBinding()
 {
     DBG_INVARIANT();
     return new Binding();

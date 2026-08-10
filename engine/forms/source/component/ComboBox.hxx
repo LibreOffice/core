@@ -63,32 +63,32 @@ public:
     );
     virtual ~OComboBoxModel() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual bool convertFastPropertyValue(
                 cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
     // XLoadListener
-    virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) override;
+    virtual void reloaded( const css::lang::EventObject& aEvent ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OComboBoxModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() override;
-    virtual void SAL_CALL
+    virtual OUString    getServiceName() override;
+    virtual void
         write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL
+    virtual void
         read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
@@ -100,7 +100,7 @@ public:
     ) const override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
@@ -123,7 +123,7 @@ private:
 
     void loadData( bool _bForce );
 
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class OComboBoxControl : public OBoundControl
@@ -132,10 +132,10 @@ public:
     explicit OComboBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OComboBoxControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

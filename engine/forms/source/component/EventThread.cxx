@@ -56,7 +56,7 @@ OComponentEventThread::~OComponentEventThread()
     impl_clearEventQueue();
 }
 
-Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType)
+Any OComponentEventThread::queryInterface(const Type& _rType)
 {
     Any aReturn = OWeakObject::queryInterface(_rType);
 
@@ -123,7 +123,7 @@ void OComponentEventThread::addEvent( std::unique_ptr<EventObject> _pEvt,
     m_aCond.set();
 }
 
-void SAL_CALL OComponentEventThread::onTerminated()
+void OComponentEventThread::onTerminated()
 {
     OComponentEventThread_TBASE::onTerminated();
 

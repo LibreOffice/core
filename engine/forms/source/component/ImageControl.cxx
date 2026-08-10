@@ -180,7 +180,7 @@ OImageControlModel::~OImageControlModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OImageControlModel::createClone()
+css::uno::Reference< css::util::XCloneable > OImageControlModel::createClone()
 {
     rtl::Reference<OImageControlModel> pClone = new OImageControlModel(this, getContext());
     pClone->clonedFrom(this);
@@ -201,7 +201,7 @@ cpo::uno::Sequence<OUString>  OImageControlModel::getSupportedServiceNames()
 }
 
 
-Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType)
+Any OImageControlModel::queryAggregation(const Type& _rType)
 {
     // Order matters: we want to "override" the XImageProducer interface of the aggregate without
     // own XImageProducer interface, thus we need to query OImageControlModel_Base first
@@ -625,25 +625,25 @@ void OImageControlModel::resetNoBroadcast()
 }
 
 
-Reference< XImageProducer > SAL_CALL OImageControlModel::getImageProducer()
+Reference< XImageProducer > OImageControlModel::getImageProducer()
 {
     return this;
 }
 
 
-void SAL_CALL OImageControlModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer )
+void OImageControlModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer )
 {
     GetImageProducer()->addConsumer( _rxConsumer );
 }
 
 
-void SAL_CALL OImageControlModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer )
+void OImageControlModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer )
 {
     GetImageProducer()->removeConsumer( _rxConsumer );
 }
 
 
-void SAL_CALL OImageControlModel::startProduction(  )
+void OImageControlModel::startProduction(  )
 {
     GetImageProducer()->startProduction();
 }
@@ -690,7 +690,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
 }
 
 
-Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType)
+Any OImageControlControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation( _rType );
     if ( !aReturn.hasValue() )
@@ -716,19 +716,19 @@ cpo::uno::Sequence<OUString>  OImageControlControl::getSupportedServiceNames()
 }
 
 
-void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& Listener )
+void OImageControlControl::addModifyListener( const Reference< XModifyListener >& Listener )
 {
     m_aModifyListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& Listener )
+void OImageControlControl::removeModifyListener( const Reference< XModifyListener >& Listener )
 {
     m_aModifyListeners.removeInterface( Listener );
 }
 
 
-void SAL_CALL OImageControlControl::disposing()
+void OImageControlControl::disposing()
 {
     EventObject aEvent( *this );
     m_aModifyListeners.disposeAndClear( aEvent );
@@ -737,7 +737,7 @@ void SAL_CALL OImageControlControl::disposing()
 }
 
 
-void SAL_CALL OImageControlControl::disposing( const EventObject& Event )
+void OImageControlControl::disposing( const EventObject& Event )
 {
     OBoundControl::disposing( Event );
 }
@@ -954,17 +954,17 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
 }
 
 
-void SAL_CALL OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/)
+void OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/)
 {
 }
 
 
-void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/)
+void OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/)
 {
 }
 
 
-void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/)
+void OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/)
 {
 }
 

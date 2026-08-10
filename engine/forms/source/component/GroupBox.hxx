@@ -39,16 +39,16 @@ public:
     virtual ~OGroupBoxModel() override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OGroupBoxModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() override;
-    virtual void SAL_CALL
+    virtual OUString    getServiceName() override;
+    virtual void
         write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL
+    virtual void
         read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
@@ -57,7 +57,7 @@ public:
     ) const override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 
@@ -69,10 +69,10 @@ public:
     explicit OGroupBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OGroupBoxControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

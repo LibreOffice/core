@@ -38,9 +38,9 @@ class Enumeration
 public:
     explicit Enumeration( css::container::XIndexAccess* );
 
-    virtual bool SAL_CALL hasMoreElements() override;
+    virtual bool hasMoreElements() override;
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any nextElement() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

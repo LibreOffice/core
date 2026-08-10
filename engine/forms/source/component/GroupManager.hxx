@@ -167,15 +167,15 @@ public:
     virtual ~OGroupManager() override;
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
 // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+    virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
 // css::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& _rEvent) override;
-    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& _rEvent) override;
-    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& _rEvent) override;
+    virtual void elementInserted(const css::container::ContainerEvent& _rEvent) override;
+    virtual void elementRemoved(const css::container::ContainerEvent& _rEvent) override;
+    virtual void elementReplaced(const css::container::ContainerEvent& _rEvent) override;
 
 // Other functions
     sal_Int32 getGroupCount() const;

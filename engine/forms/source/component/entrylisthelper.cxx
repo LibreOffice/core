@@ -59,7 +59,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource )
+    void OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource )
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -72,13 +72,13 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XListEntrySource > SAL_CALL OEntryListHelper::getListEntrySource(  )
+    Reference< XListEntrySource > OEntryListHelper::getListEntrySource(  )
     {
         return m_xListSource;
     }
 
 
-    void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent )
+    void OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent )
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -102,7 +102,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent )
+    void OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent )
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -124,7 +124,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent )
+    void OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent )
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -166,7 +166,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent )
+    void OEntryListHelper::allEntriesChanged( const EventObject& _rEvent )
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -181,21 +181,21 @@ using namespace cpo::uno;
 
     // XRefreshable
 
-    void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener)
+    void OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener)
+    void OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.removeInterface( _rxListener );
     }
 
 
-    void SAL_CALL OEntryListHelper::refresh()
+    void OEntryListHelper::refresh()
     {
         {
             ControlModelLock aLock( m_rControlModel );

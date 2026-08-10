@@ -48,19 +48,19 @@ public:
 
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
     // css::beans::XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.ODateModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPropertySet
     using OEditBaseModel::getFastPropertyValue;
@@ -91,7 +91,7 @@ protected:
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class ODateControl: public OBoundControl
@@ -104,10 +104,10 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(ODateControl, OBoundControl)
 
 // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.ODateControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

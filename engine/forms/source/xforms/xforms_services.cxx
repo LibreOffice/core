@@ -35,13 +35,13 @@ class Implementation:
         NameContainer<css::uno::Reference<css::beans::XPropertySet>>,
         css::lang::XServiceInfo>
 {
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.XForms"_ustr; }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.xforms.XForms"_ustr};
     }

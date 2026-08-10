@@ -80,21 +80,21 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_aFeatureInterception.registerDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
 
-    void SAL_CALL OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+    void OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_aFeatureInterception.releaseDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
 
-    void SAL_CALL OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState )
+    void OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState )
     {
         for (auto & feature : m_aSupportedFeatures)
         {
@@ -119,7 +119,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFormNavigationHelper::disposing( const EventObject& _rSource )
+    void OFormNavigationHelper::disposing( const EventObject& _rSource )
     {
         // was it one of our external dispatchers?
         if ( !m_nConnectedFeatures )

@@ -22,55 +22,55 @@
 
 namespace com::sun::star::xforms {
 
-void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
+void XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
     bool canBubbleArg, bool cancelableArg)
 {
     initEvent(typeArg, canBubbleArg, cancelableArg);
 }
 
-OUString SAL_CALL XFormsEventConcrete::getType()
+OUString XFormsEventConcrete::getType()
 {
     return m_eventType;
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getTarget()
+css::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getTarget()
 {
     return css::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getCurrentTarget()
+css::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getCurrentTarget()
 {
     return css::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
-css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase()
+css::xml::dom::events::PhaseType XFormsEventConcrete::getEventPhase()
 {
     return css::xml::dom::events::PhaseType_CAPTURING_PHASE;
 }
 
-bool SAL_CALL XFormsEventConcrete::getBubbles()
+bool XFormsEventConcrete::getBubbles()
 {
     return m_bubbles;
 }
 
-bool SAL_CALL XFormsEventConcrete::getCancelable()
+bool XFormsEventConcrete::getCancelable()
 {
     return m_cancelable;
 }
 
-css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp()
+css::util::Time XFormsEventConcrete::getTimeStamp()
 {
     return css::util::Time();
 }
 
-void SAL_CALL XFormsEventConcrete::stopPropagation()
+void XFormsEventConcrete::stopPropagation()
 {
 }
-void SAL_CALL XFormsEventConcrete::preventDefault()
+void XFormsEventConcrete::preventDefault()
 {
 }
 
-void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+void XFormsEventConcrete::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
     bool cancelableArg)
 {
     m_eventType = eventTypeArg;

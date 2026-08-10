@@ -65,7 +65,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextControl, UnoEditControl, ORichTextControl_Base )
 
 
-    Any SAL_CALL ORichTextControl::queryAggregation( const Type& _rType )
+    Any ORichTextControl::queryAggregation( const Type& _rType )
     {
         Any aReturn = UnoEditControl::queryAggregation( _rType );
 
@@ -146,7 +146,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer )
+    void ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer )
     {
         bool bReallyActAsRichText = false;
         try
@@ -214,19 +214,19 @@ using namespace cpo::uno;
         mbCreatingPeer = false;
     }
 
-    OUString SAL_CALL ORichTextControl::getImplementationName()
+    OUString ORichTextControl::getImplementationName()
     {
         return u"com.sun.star.comp.form.ORichTextControl"_ustr;
     }
 
-    Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()
+    Sequence< OUString > ORichTextControl::getSupportedServiceNames()
     {
         return { u"com.sun.star.awt.UnoControl"_ustr,
                  u"com.sun.star.awt.UnoControlEdit"_ustr,
                  FRM_SUN_CONTROL_RICHTEXTCONTROL };
     }
 
-    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags )
+    Reference< XDispatch > ORichTextControl::queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags )
     {
         Reference< XDispatch > aReturn;
         Reference< XDispatchProvider > xTypedPeer( getPeer(), UNO_QUERY );
@@ -237,7 +237,7 @@ using namespace cpo::uno;
         return aReturn;
     }
 
-    Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
+    Sequence< Reference< XDispatch > > ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
     {
         Reference<XDispatchProvider> xTypedPeer(getPeer(), UNO_QUERY);
         if (xTypedPeer.is())
@@ -307,7 +307,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY )
+    void ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY )
     {
         SolarMutexGuard aGuard;
 
@@ -330,7 +330,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
+    void ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
     {
         SolarMutexGuard g;
 
@@ -576,7 +576,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const css::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ )
+    Reference< XDispatch > ORichTextPeer::queryDispatch( const css::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ )
     {
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
@@ -613,7 +613,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
+    Sequence< Reference< XDispatch > > ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
     {
         Sequence< Reference< XDispatch > >  aReturn( _rRequests.getLength() );
         std::transform(_rRequests.begin(), _rRequests.end(), aReturn.getArray(),

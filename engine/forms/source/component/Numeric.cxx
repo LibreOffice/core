@@ -77,7 +77,7 @@ ONumericModel::~ONumericModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL ONumericModel::createClone()
+css::uno::Reference< css::util::XCloneable > ONumericModel::createClone()
 {
     rtl::Reference<ONumericModel> pClone = new ONumericModel(this, getContext());
     pClone->clonedFrom(this);
@@ -123,7 +123,7 @@ void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 }
 
 
-OUString SAL_CALL ONumericModel::getServiceName()
+OUString ONumericModel::getServiceName()
 {
     return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
 }

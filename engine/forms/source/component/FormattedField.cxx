@@ -146,7 +146,7 @@ Sequence<Type> OFormattedControl::_getTypes()
         OBoundControl::_getTypes()
     );
 }
-Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType)
+Any OFormattedControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -284,14 +284,14 @@ OFormattedModel::~OFormattedModel()
 }
 
 // XCloneable
-css::uno::Reference< css::util::XCloneable > SAL_CALL OFormattedModel::createClone()
+css::uno::Reference< css::util::XCloneable > OFormattedModel::createClone()
 {
     rtl::Reference<OFormattedModel> pClone = new OFormattedModel(this, getContext());
     pClone->clonedFrom(this);
     return pClone;
 }
 
-void SAL_CALL OFormattedModel::disposing()
+void OFormattedModel::disposing()
 {
     OErrorBroadcaster::disposing();
     OEditBaseModel::disposing();
@@ -317,7 +317,7 @@ cpo::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames()
 }
 
 // XAggregation
-Any SAL_CALL OFormattedModel::queryAggregation(const Type& _rType)
+Any OFormattedModel::queryAggregation(const Type& _rType)
 {
     Any aReturn = OEditBaseModel::queryAggregation( _rType );
     return aReturn.hasValue() ? aReturn : OErrorBroadcaster::queryInterface( _rType );
@@ -333,7 +333,7 @@ Sequence< Type > OFormattedModel::_getTypes()
 }
 
 // XPersistObject
-OUString SAL_CALL OFormattedModel::getServiceName()
+OUString OFormattedModel::getServiceName()
 {
     return FRM_COMPONENT_EDIT;
 }
@@ -403,7 +403,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         return OEditBaseModel::getPropertyDefaultByHandle(nHandle);
 }
 
-Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName )
+Any OFormattedModel::getPropertyDefault( const OUString& aPropertyName )
 {
     OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );

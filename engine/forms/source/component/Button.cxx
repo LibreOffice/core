@@ -67,7 +67,7 @@ OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-Any SAL_CALL OButtonModel::queryAggregation( const Type& _type )
+Any OButtonModel::queryAggregation( const Type& _type )
 {
     Any aReturn = OClickableImageBaseModel::queryAggregation( _type );
     if ( !aReturn.hasValue() )
@@ -117,7 +117,7 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OButtonModel::createClone()
+css::uno::Reference< css::util::XCloneable > OButtonModel::createClone()
 {
     rtl::Reference<OButtonModel> pClone = new OButtonModel(this, getContext());
     pClone->clonedFrom(this);
@@ -227,14 +227,14 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 }
 
 
-void SAL_CALL OButtonModel::disposing()
+void OButtonModel::disposing()
 {
     m_aResetHelper.disposing();
     OClickableImageBaseModel::disposing();
 }
 
 
-void SAL_CALL OButtonModel::reset()
+void OButtonModel::reset()
 {
     if ( !m_aResetHelper.approveReset() )
         return;
@@ -245,19 +245,19 @@ void SAL_CALL OButtonModel::reset()
 }
 
 
-void SAL_CALL OButtonModel::addResetListener( const Reference< XResetListener >& _listener )
+void OButtonModel::addResetListener( const Reference< XResetListener >& _listener )
 {
     m_aResetHelper.addResetListener( _listener );
 }
 
 
-void SAL_CALL OButtonModel::removeResetListener( const Reference< XResetListener >& _listener )
+void OButtonModel::removeResetListener( const Reference< XResetListener >& _listener )
 {
     m_aResetHelper.removeResetListener( _listener );
 }
 
 
-void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+void OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch ( _nHandle )
     {
@@ -272,7 +272,7 @@ void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 }
 
 
-void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+void OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
 {
     switch ( _nHandle )
     {
@@ -292,7 +292,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
 }
 
 
-bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+bool OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
     switch ( _nHandle )
@@ -390,7 +390,7 @@ OButtonControl::~OButtonControl()
 
 // UNO binding
 
-Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType)
+Any OButtonControl::queryAggregation(const Type& _rType)
 {
     // if asked for the XTypeProvider, don't let OButtonControl_BASE do this
     Any aReturn;
@@ -407,7 +407,7 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType)
 }
 
 
-void SAL_CALL OButtonControl::disposing()
+void OButtonControl::disposing()
 {
     startOrStopModelPropertyListening( false );
 
@@ -416,7 +416,7 @@ void SAL_CALL OButtonControl::disposing()
 }
 
 
-void SAL_CALL OButtonControl::disposing( const EventObject& _rSource )
+void OButtonControl::disposing( const EventObject& _rSource )
 {
     OControl::disposing( _rSource );
     OFormNavigationHelper::disposing( _rSource );
@@ -521,7 +521,7 @@ void OButtonControl::setLabel(const OUString& Label)
 }
 
 
-void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand)
+void OButtonControl::setActionCommand(const OUString& _rCommand)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -533,13 +533,13 @@ void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand)
 }
 
 
-void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener)
+void OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener)
 {
     m_aActionListeners.addInterface(_rxListener);
 }
 
 
-void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener)
+void OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener)
 {
     m_aActionListeners.removeInterface(_rxListener);
 }
@@ -598,7 +598,7 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 }
 
 
-bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel )
+bool OButtonControl::setModel( const Reference< XControlModel >& _rxModel )
 {
     startOrStopModelPropertyListening( false );
     bool bResult = OClickableImageBaseControl::setModel( _rxModel );
@@ -630,7 +630,7 @@ void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 }
 
 
-void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent )
+void OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent )
 {
     if  (   _rEvent.PropertyName == PROPERTY_TARGET_URL
         ||  _rEvent.PropertyName == PROPERTY_BUTTONTYPE
@@ -685,7 +685,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
 }
 
 
-void SAL_CALL OButtonControl::setDesignMode( bool _bOn )
+void OButtonControl::setDesignMode( bool _bOn )
 {
     OClickableImageBaseControl::setDesignMode( _bOn  );
 
@@ -744,14 +744,14 @@ bool OButtonControl::isEnabled( sal_Int16 _nFeatureId ) const
 }
 
 
-void SAL_CALL OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+void OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
 {
     OClickableImageBaseControl::registerDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::registerDispatchProviderInterceptor( _rxInterceptor );
 }
 
 
-void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
+void OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
 {
     OClickableImageBaseControl::releaseDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );

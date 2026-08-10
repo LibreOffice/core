@@ -1158,7 +1158,7 @@ sal_Int64 Binding::getSomething( const cpo::uno::Sequence<sal_Int8>& xId )
 // XCloneable
 
 
-css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
+css::uno::Reference<css::util::XCloneable> Binding::createClone()
 {
     Reference< XPropertySet > xClone;
 
@@ -1260,7 +1260,7 @@ OUString Binding::getName()
     return getBindingID();
 }
 
-void SAL_CALL Binding::setName( const OUString& rName )
+void Binding::setName( const OUString& rName )
 {
     // use the XPropertySet methods, so the change in the name is notified to the
     // property listeners

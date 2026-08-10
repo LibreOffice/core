@@ -42,7 +42,7 @@ PropertySetBase::~PropertySetBase( )
 {
 }
 
-cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
+cppu::IPropertyArrayHelper& PropertySetBase::getInfoHelper()
 {
     if ( !m_pProperties )
     {
@@ -52,7 +52,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
     return *m_pProperties;
 }
 
-Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  )
+Reference< XPropertySetInfo > PropertySetBase::getPropertySetInfo(  )
 {
     return cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
@@ -127,7 +127,7 @@ PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle 
     return *aPropertyPos->second;
 }
 
-bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle,
+bool PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle,
     const Any& rValue )
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
@@ -143,13 +143,13 @@ bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, A
     return false;
 }
 
-void SAL_CALL PropertySetBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void PropertySetBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
     rAccessor.setValue( rValue );
 }
 
-void SAL_CALL PropertySetBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+void PropertySetBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
     rAccessor.getValue( rValue );

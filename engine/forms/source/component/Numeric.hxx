@@ -42,13 +42,13 @@ public:
     virtual ~ONumericModel() override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.ONumericModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -66,7 +66,7 @@ protected:
     virtual void            resetNoBroadcast() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class ONumericControl: public OBoundControl
@@ -75,10 +75,10 @@ public:
     explicit ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.ONumericControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

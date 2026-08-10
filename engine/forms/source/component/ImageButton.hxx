@@ -40,15 +40,15 @@ public:
     virtual ~OImageButtonModel() override;
 
 // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OImageButtonModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -56,7 +56,7 @@ public:
     ) const override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 typedef ::cppu::ImplHelper1< css::awt::XMouseListener> OImageButtonControl_BASE;
@@ -71,24 +71,24 @@ public:
     explicit OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OImageButtonControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override
+    virtual void disposing(const css::lang::EventObject& _rSource) override
         { OControl::disposing(_rSource); }
 
     // XMouseListener
-    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& e) override;
+    virtual void mousePressed(const css::awt::MouseEvent& e) override;
+    virtual void mouseReleased(const css::awt::MouseEvent& e) override;
+    virtual void mouseEntered(const css::awt::MouseEvent& e) override;
+    virtual void mouseExited(const css::awt::MouseEvent& e) override;
 
     // prevent method hiding
     using OClickableImageBaseControl::disposing;

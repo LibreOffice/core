@@ -74,17 +74,17 @@ namespace xforms
         virtual ~OXSDDataType() override;
 
     public:
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual void SAL_CALL setName( const OUString& aName ) override;
-        virtual OUString SAL_CALL getPattern() override;
-        virtual void SAL_CALL setPattern( const OUString& _pattern ) override;
-        virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() override;
-        virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) override;
-        virtual bool SAL_CALL getIsBasic() override;
-        virtual sal_Int16 SAL_CALL getTypeClass() override;
+        virtual OUString getName(  ) override;
+        virtual void setName( const OUString& aName ) override;
+        virtual OUString getPattern() override;
+        virtual void setPattern( const OUString& _pattern ) override;
+        virtual sal_Int16 getWhiteSpaceTreatment() override;
+        virtual void setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) override;
+        virtual bool getIsBasic() override;
+        virtual sal_Int16 getTypeClass() override;
 
-        virtual bool SAL_CALL validate( const OUString& value ) override;
-        virtual OUString SAL_CALL explainInvalid( const OUString& value ) override;
+        virtual bool validate( const OUString& value ) override;
+        virtual OUString explainInvalid( const OUString& value ) override;
 
     public:
         rtl::Reference<OXSDDataType> clone( const OUString& _rNewName ) const;

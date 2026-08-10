@@ -113,66 +113,66 @@ protected:
 
 public:
 // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName(  ) override = 0;
-    virtual void SAL_CALL write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    virtual void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    virtual OUString getServiceName(  ) override = 0;
+    virtual void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    virtual void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
 // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+    virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
 // css::container::XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override ;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override ;
+    virtual bool hasElements() override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    virtual css::uno::Reference< css::container::XEnumeration> createEnumeration() override;
 
 // css::container::XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence<OUString> getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
 // css::container::XNameReplace
-    virtual void SAL_CALL replaceByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
+    virtual void replaceByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
 
 // css::container::XNameContainer
-    virtual void SAL_CALL insertByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
-    virtual void SAL_CALL removeByName(const OUString& Name) override;
+    virtual void insertByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
+    virtual void removeByName(const OUString& Name) override;
 
 // css::container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _nIndex) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex(sal_Int32 _nIndex) override;
 
 // css::container::XIndexReplace
-    virtual void SAL_CALL replaceByIndex(sal_Int32 _nIndex, const cpo::uno::Any& _rElement) override;
+    virtual void replaceByIndex(sal_Int32 _nIndex, const cpo::uno::Any& _rElement) override;
 
 // css::container::XIndexContainer
-    virtual void SAL_CALL insertByIndex(sal_Int32 _nIndex, const cpo::uno::Any& Element) override;
-    virtual void SAL_CALL removeByIndex(sal_Int32 _nIndex) override;
+    virtual void insertByIndex(sal_Int32 _nIndex, const cpo::uno::Any& Element) override;
+    virtual void removeByIndex(sal_Int32 _nIndex) override;
 
 // css::container::XContainer
-    virtual void SAL_CALL addContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
-    virtual void SAL_CALL removeContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
+    virtual void addContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
+    virtual void removeContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
 
 // css::script::XEventAttacherManager
-    virtual void SAL_CALL registerScriptEvent( sal_Int32 nIndex, const css::script::ScriptEventDescriptor& aScriptEvent ) override;
-    virtual void SAL_CALL registerScriptEvents( sal_Int32 nIndex, const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& aScriptEvents ) override;
-    virtual void SAL_CALL revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) override;
-    virtual void SAL_CALL revokeScriptEvents( sal_Int32 nIndex ) override;
-    virtual void SAL_CALL insertEntry( sal_Int32 nIndex ) override;
-    virtual void SAL_CALL removeEntry( sal_Int32 nIndex ) override;
-    virtual cpo::uno::Sequence< css::script::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) override;
-    virtual void SAL_CALL attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
-    virtual void SAL_CALL detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
-    virtual void SAL_CALL addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
-    virtual void SAL_CALL removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
+    virtual void registerScriptEvent( sal_Int32 nIndex, const css::script::ScriptEventDescriptor& aScriptEvent ) override;
+    virtual void registerScriptEvents( sal_Int32 nIndex, const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& aScriptEvents ) override;
+    virtual void revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) override;
+    virtual void revokeScriptEvents( sal_Int32 nIndex ) override;
+    virtual void insertEntry( sal_Int32 nIndex ) override;
+    virtual void removeEntry( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Sequence< css::script::ScriptEventDescriptor > getScriptEvents( sal_Int32 Index ) override;
+    virtual void attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
+    virtual void detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
+    virtual void addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
+    virtual void removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
 
 protected:
     // helper
-    virtual void SAL_CALL disposing();
+    virtual void disposing();
     void removeElementsNoEvents();
 
     /** to be overridden if elements which are to be inserted into the container shall be checked
@@ -221,8 +221,8 @@ protected:
                     ::osl::ClearableMutexGuard& _rInstanceLock
                 );
 
-    void SAL_CALL writeEvents(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
-    void SAL_CALL readEvents(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void writeEvents(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void readEvents(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     /** replace an element, specified by position
 
@@ -278,15 +278,15 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, ::cppu::OComponentHelper)
 
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // css::form::XFormComponent
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getParent() override;
-    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<css::uno::XInterface> getParent() override;
+    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
 
     // XEventListener
     using OInterfaceContainer::disposing;

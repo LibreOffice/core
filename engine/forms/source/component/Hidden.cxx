@@ -59,7 +59,7 @@ OHiddenModel::~OHiddenModel( )
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OHiddenModel::createClone()
+css::uno::Reference< css::util::XCloneable > OHiddenModel::createClone()
 {
     rtl::Reference<OHiddenModel> pClone = new OHiddenModel(this, getContext());
     pClone->clonedFrom(this);
@@ -122,7 +122,7 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OHiddenModel::getSupportedServiceNames()
 {
     return cpo::uno::Sequence<OUString>{
         FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_SUN_FORMCOMPONENT,
@@ -130,13 +130,13 @@ cpo::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames()
 }
 
 
-OUString SAL_CALL OHiddenModel::getServiceName()
+OUString OHiddenModel::getServiceName()
 {
     return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // Version
     _rxOutStream->writeShort(0x0002);
@@ -148,7 +148,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
 }
 
 
-void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();

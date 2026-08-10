@@ -97,65 +97,65 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XChild
-    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OGridControlModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XReset
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
-    virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void reset() override;
+    virtual void addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // XSelectionSupplier
-    virtual bool SAL_CALL select(const cpo::uno::Any& aElement) override;
-    virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
-    virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
+    virtual bool select(const cpo::uno::Any& aElement) override;
+    virtual cpo::uno::Any getSelection() override;
+    virtual void addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
+    virtual void removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
 
     // XGridColumnFactory
-    virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getColumnTypes() override;
+    virtual css::uno::Reference< css::beans::XPropertySet> createColumn(const OUString& ColumnType) override;
+    virtual cpo::uno::Sequence<OUString> getColumnTypes() override;
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     // XPropertyState
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // XSQLErrorListener
-    virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& _rEvent ) override;
+    virtual void errorOccured( const css::sdb::SQLErrorEvent& _rEvent ) override;
 
     // XRowSetSupplier
-    virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getRowSet(  ) override;
-    virtual void SAL_CALL setRowSet( const css::uno::Reference< css::sdbc::XRowSet >& xDataSource ) override;
+    virtual css::uno::Reference< css::sdbc::XRowSet > getRowSet(  ) override;
+    virtual void setRowSet( const css::uno::Reference< css::sdbc::XRowSet >& xDataSource ) override;
 
     // XRowSetChangeBroadcaster
-    virtual void SAL_CALL addRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
-    virtual void SAL_CALL removeRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
+    virtual void addRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
+    virtual void removeRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -167,7 +167,7 @@ public:
     using OControlModel::getFastPropertyValue;
 
 private:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     virtual void approveNewElement(
             const css::uno::Reference< css::beans::XPropertySet >& _rxObject,

@@ -107,34 +107,34 @@ namespace frm
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
-        virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+        virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual ::cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual ::cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XPersistObject
-        virtual OUString SAL_CALL getServiceName() override;
+        virtual OUString getServiceName() override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence<sal_Int8> & getUnoTunnelId();
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+        virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
                                             sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+        virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
         virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
         // OControlModel's property handling
@@ -150,7 +150,7 @@ namespace frm
         using OControlModel::getFastPropertyValue;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         // IEngineTextChangeListener
         virtual void potentialTextChange( ) override;

@@ -64,17 +64,17 @@ namespace frm
 
     protected:
         // XWindowListener2
-        virtual void SAL_CALL windowEnabled( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowDisabled( const css::lang::EventObject& e ) override;
+        virtual void windowEnabled( const css::lang::EventObject& e ) override;
+        virtual void windowDisabled( const css::lang::EventObject& e ) override;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) override;
+        virtual void windowResized( const css::awt::WindowEvent& e ) override;
+        virtual void windowMoved( const css::awt::WindowEvent& e ) override;
+        virtual void windowShown( const css::lang::EventObject& e ) override;
+        virtual void windowHidden( const css::lang::EventObject& e ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
         /** ensures that the window's Enabled state matches what is described at the model
@@ -143,43 +143,43 @@ namespace frm
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ )
+    void WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ )
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ )
+    void WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ )
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ )
+    void WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ )
+    void WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ )
+    void WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ )
+    void WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& /*Source*/ )
+    void WindowStateGuard_Impl::disposing( const EventObject& /*Source*/ )
     {
         dispose();
     }

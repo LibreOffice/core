@@ -145,7 +145,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL ONavigationBarModel::queryAggregation( const Type& _rType )
+    Any ONavigationBarModel::queryAggregation( const Type& _rType )
     {
         Any aReturn = ONavigationBarModel_BASE::queryInterface( _rType );
 
@@ -159,7 +159,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarModel, OControlModel, ONavigationBarModel_BASE )
 
 
-    css::uno::Reference< css::util::XCloneable > SAL_CALL ONavigationBarModel::createClone()
+    css::uno::Reference< css::util::XCloneable > ONavigationBarModel::createClone()
 {
     rtl::Reference<ONavigationBarModel> pClone = new ONavigationBarModel(this, getContext());
     pClone->clonedFrom(this);
@@ -167,13 +167,13 @@ using namespace cpo::uno;
 }
 
 
-    OUString SAL_CALL ONavigationBarModel::getImplementationName()
+    OUString ONavigationBarModel::getImplementationName()
     {
         return u"com.sun.star.comp.form.ONavigationBarModel"_ustr;
     }
 
 
-    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()
+    Sequence< OUString > ONavigationBarModel::getSupportedServiceNames()
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
         aSupported.realloc( aSupported.getLength() + 2 );
@@ -184,7 +184,7 @@ using namespace cpo::uno;
         return aSupported;
     }
 
-    OUString SAL_CALL ONavigationBarModel::getServiceName()
+    OUString ONavigationBarModel::getServiceName()
     {
         return FRM_SUN_COMPONENT_NAVTOOLBAR;
     }
@@ -203,7 +203,7 @@ using namespace cpo::uno;
     #define PERSIST_SHOW_FILTERSORT 0x0040
 
 
-    void SAL_CALL ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
+    void ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
     {
         // open a section for compatibility - if we later on write additional members,
         // then older versions can skip them
@@ -276,7 +276,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream )
+    void ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream )
     {
         OStreamSection aEnsureBlockCompat( _rxInStream );
 
@@ -337,7 +337,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void ONavigationBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
         {
@@ -354,7 +354,7 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
+    bool ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
@@ -376,7 +376,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+    void ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         if ( isRegisteredProperty( _nHandle ) )
         {

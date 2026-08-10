@@ -49,22 +49,22 @@ namespace xforms
         ODataTypeRepository( );
 
         // XDataTypeRepository
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) override;
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL cloneDataType( const OUString& sourceName, const OUString& newName ) override;
-        virtual void SAL_CALL revokeDataType( const OUString& typeName ) override;
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getDataType( const OUString& typeName ) override;
+        virtual css::uno::Reference< css::xsd::XDataType > getBasicDataType( sal_Int16 dataTypeClass ) override;
+        virtual css::uno::Reference< css::xsd::XDataType > cloneDataType( const OUString& sourceName, const OUString& newName ) override;
+        virtual void revokeDataType( const OUString& typeName ) override;
+        virtual css::uno::Reference< css::xsd::XDataType > getDataType( const OUString& typeName ) override;
 
         // XEnumerationAccess (base of XDataTypeRepository)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
         // XNameAccess (base of XDataTypeRepository)
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
+        virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess (base of XEnumerationAccess and XNameAccess)
-        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-        virtual bool SAL_CALL hasElements(  ) override;
+        virtual cpo::uno::Type getElementType(  ) override;
+        virtual bool hasElements(  ) override;
 
     private:
         ODataTypeRepository( const ODataTypeRepository& ) = delete;

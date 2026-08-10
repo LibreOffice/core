@@ -72,7 +72,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OReferenceValueComponent::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void OReferenceValueComponent::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         switch ( _nHandle )
         {
@@ -89,7 +89,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OReferenceValueComponent::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+    void OReferenceValueComponent::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         switch ( _nHandle )
         {
@@ -124,7 +124,7 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
         switch ( _nHandle )

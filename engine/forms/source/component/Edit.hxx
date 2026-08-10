@@ -61,27 +61,27 @@ private:
     friend class OFormattedModel;   // temporary
 
 public:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // XPersistObject
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
 
     // XPropertySet
     using OBoundControlModel::getFastPropertyValue;
 
     // XReset
-    virtual void SAL_CALL reset(  ) override;
+    virtual void reset(  ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OEditModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -112,7 +112,7 @@ private:
 
     virtual sal_uInt16 getPersistenceFlags() const override;
 
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     bool    implActsAsRichText( ) const;
 };
@@ -138,33 +138,33 @@ public:
     virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
 
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
 // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OEditControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // css::form::XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
-    virtual void SAL_CALL removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
 
 // css::awt::XFocusListener
-    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
-    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
+    virtual void focusGained( const css::awt::FocusEvent& e ) override;
+    virtual void focusLost( const css::awt::FocusEvent& e ) override;
 
 // css::awt::XKeyListener
-    virtual void SAL_CALL keyPressed(const css::awt::KeyEvent& e) override;
-    virtual void SAL_CALL keyReleased(const css::awt::KeyEvent& e) override;
+    virtual void keyPressed(const css::awt::KeyEvent& e) override;
+    virtual void keyReleased(const css::awt::KeyEvent& e) override;
 
     // XControl
     using OBoundControl::createPeer;

@@ -294,7 +294,7 @@ namespace
 }
 
 
-void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
+void OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // We're writing a document in SO 5.2 format (or even from earlier versions)
     // -> convert the events from the new runtime format to the format of the 5.2 files
@@ -401,7 +401,7 @@ void OInterfaceContainer::transformEvents()
 }
 
 
-void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream>& _rxInStream)
+void OInterfaceContainer::readEvents(const Reference<XObjectInputStream>& _rxInStream)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -433,7 +433,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
 }
 
 
-void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >& _rxOutStream )
+void OInterfaceContainer::write( const Reference< XObjectOutputStream >& _rxOutStream )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     sal_Int32 nLen = m_aItems.size();
@@ -491,7 +491,7 @@ namespace
 }
 
 
-void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream )
+void OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -580,20 +580,20 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
 
 // XContainer
 
-void SAL_CALL OInterfaceContainer::addContainerListener(const Reference<XContainerListener>& _rxListener)
+void OInterfaceContainer::addContainerListener(const Reference<XContainerListener>& _rxListener)
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
 
-void SAL_CALL OInterfaceContainer::removeContainerListener(const Reference<XContainerListener>& _rxListener)
+void OInterfaceContainer::removeContainerListener(const Reference<XContainerListener>& _rxListener)
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
 // XEventListener
 
-void SAL_CALL OInterfaceContainer::disposing(const css::lang::EventObject& _rSource)
+void OInterfaceContainer::disposing(const css::lang::EventObject& _rSource)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -656,20 +656,20 @@ void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt) {
 
 // XElementAccess
 
-bool SAL_CALL OInterfaceContainer::hasElements()
+bool OInterfaceContainer::hasElements()
 {
     return !m_aMap.empty();
 }
 
 
-Type SAL_CALL OInterfaceContainer::getElementType()
+Type OInterfaceContainer::getElementType()
 {
     return m_aElementType;
 }
 
 // XEnumerationAccess
 
-Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration()
+Reference<XEnumeration> OInterfaceContainer::createEnumeration()
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
@@ -677,7 +677,7 @@ Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration()
 
 // XNameAccess
 
-Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName )
+Any OInterfaceContainer::getByName( const OUString& _rName )
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -689,13 +689,13 @@ Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName )
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames()
+cpo::uno::Sequence<OUString> OInterfaceContainer::getElementNames()
 {
     return comphelper::mapKeysToSequence(m_aMap);
 }
 
 
-bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName )
+bool OInterfaceContainer::hasByName( const OUString& _rName )
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -895,7 +895,7 @@ void OInterfaceContainer::impl_replacedElement( const ContainerEvent& _rEvent, :
 
 // XIndexContainer
 
-void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement )
+void OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement )
 {
     Reference< XPropertySet > xElement;
     _rElement >>= xElement;
@@ -986,7 +986,7 @@ void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex )
 }
 
 
-void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element)
+void OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     // check the index
@@ -1039,7 +1039,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
 }
 
 
-void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex)
+void OInterfaceContainer::removeByIndex(sal_Int32 _nIndex)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     // check the index
@@ -1055,7 +1055,7 @@ ElementDescription* OInterfaceContainer::createElementMetaData( )
 }
 
 
-void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const Any& _rElement)
+void OInterfaceContainer::insertByName(const OUString& _rName, const Any& _rElement)
 {
     Reference< XPropertySet > xElementProps;
 
@@ -1087,7 +1087,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
 }
 
 
-void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element)
+void OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1115,7 +1115,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
 }
 
 
-void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name)
+void OInterfaceContainer::removeByName(const OUString& Name)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1130,7 +1130,7 @@ void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name)
 
 // XEventAttacherManager
 
-void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent )
+void OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
@@ -1142,7 +1142,7 @@ void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const 
 }
 
 
-void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents )
+void OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
@@ -1154,35 +1154,35 @@ void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const
 }
 
 
-void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam )
+void OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvent( nIndex, aListenerType, aEventMethod, aRemoveListenerParam );
 }
 
 
-void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex )
+void OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvents( nIndex );
 }
 
 
-void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex )
+void OInterfaceContainer::insertEntry( sal_Int32 nIndex )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->insertEntry( nIndex );
 }
 
 
-void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex )
+void OInterfaceContainer::removeEntry( sal_Int32 nIndex )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->removeEntry( nIndex );
 }
 
 
-Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex )
+Sequence< ScriptEventDescriptor > OInterfaceContainer::getScriptEvents( sal_Int32 nIndex )
 {
     Sequence< ScriptEventDescriptor > aReturn;
     if ( m_xEventAttacher.is() )
@@ -1197,28 +1197,28 @@ Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents(
 }
 
 
-void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper )
+void OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->attach( nIndex, xObject, aHelper );
 }
 
 
-void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject )
+void OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->detach( nIndex, xObject );
 }
 
 
-void SAL_CALL OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener )
+void OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->addScriptListener( xListener );
 }
 
 
-void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener )
+void OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener )
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->removeScriptListener( xListener );
@@ -1228,7 +1228,7 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScrip
 //= OFormComponents
 
 
-Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType)
+Any OFormComponents::queryAggregation(const Type& _rType)
 {
     Any aReturn = OFormComponents_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -1243,7 +1243,7 @@ Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType)
 }
 
 
-Sequence<Type> SAL_CALL OFormComponents::getTypes()
+Sequence<Type> OFormComponents::getTypes()
 {
     return ::comphelper::concatSequences(OInterfaceContainer::getTypes(),  ::cppu::OComponentHelper::getTypes(), OFormComponents_BASE::getTypes());
 }

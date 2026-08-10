@@ -141,23 +141,23 @@ protected:
 public:
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         return cppu::UnoType<T>::get();
     }
 
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
     {
         return hasItems();
     }
 
     // XIndexAccess : XElementAccess
-    virtual sal_Int32 SAL_CALL getCount() override
+    virtual sal_Int32 getCount() override
     {
         return countItems();
     }
 
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override
+    virtual cpo::uno::Any getByIndex( sal_Int32 nIndex ) override
     {
         if( !isValidIndex( nIndex ) )
             throw css::lang::IndexOutOfBoundsException();
@@ -165,7 +165,7 @@ public:
     }
 
     // XIndexReplace : XIndexAccess
-    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
+    virtual void replaceByIndex( sal_Int32 nIndex,
                                           const cpo::uno::Any& aElement ) override
     {
         T t;
@@ -177,20 +177,20 @@ public:
     }
 
     // XEnumerationAccess : XElementAccess
-    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override
+    virtual css::uno::Reference<css::container::XEnumeration> createEnumeration() override
     {
         return new Enumeration( this );
     }
 
 
     // XSet : XEnumerationAccess
-    virtual bool SAL_CALL has( const cpo::uno::Any& aElement ) override
+    virtual bool has( const cpo::uno::Any& aElement ) override
     {
         T t;
         return ( aElement >>= t ) && hasItem( t );
     }
 
-    virtual void SAL_CALL insert( const cpo::uno::Any& aElement ) override
+    virtual void insert( const cpo::uno::Any& aElement ) override
     {
         T t;
         if( !( aElement >>= t )  || !isValid( t ) )
@@ -200,7 +200,7 @@ public:
         addItem( t );
     }
 
-    virtual void SAL_CALL remove( const cpo::uno::Any& aElement ) override
+    virtual void remove( const cpo::uno::Any& aElement ) override
     {
         T t;
         if( !(aElement >>= t) )
@@ -212,7 +212,7 @@ public:
 
 
     // XContainer
-    virtual void SAL_CALL addContainerListener(
+    virtual void addContainerListener(
         const css::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
@@ -221,7 +221,7 @@ public:
             maListeners.push_back( xListener );
     }
 
-    virtual void SAL_CALL removeContainerListener(
+    virtual void removeContainerListener(
         const css::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );

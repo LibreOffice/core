@@ -316,42 +316,42 @@ private:
 
 public:
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getSupportedValueTypes() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getSupportedValueTypes() override;
 
-    virtual bool SAL_CALL supportsType( const cpo::uno::Type& aType ) override;
+    virtual bool supportsType( const cpo::uno::Type& aType ) override;
 
-    virtual cpo::uno::Any SAL_CALL getValue( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any getValue( const cpo::uno::Type& aType ) override;
 
-    virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
+    virtual void setValue( const cpo::uno::Any& aValue ) override;
 
 
     // XListEntrySource
 
 
-    virtual sal_Int32 SAL_CALL getListEntryCount() override;
+    virtual sal_Int32 getListEntryCount() override;
 
-    virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition ) override;
+    virtual OUString getListEntry( sal_Int32 nPosition ) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getAllListEntries() override;
+    virtual cpo::uno::Sequence<OUString> getAllListEntries() override;
 
-    virtual void SAL_CALL addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& ) override;
+    virtual void addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& ) override;
 
-    virtual void SAL_CALL removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&) override;
+    virtual void removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&) override;
 
 
     // XValidator:
 
 
-    virtual bool SAL_CALL isValid(
+    virtual bool isValid(
         const cpo::uno::Any& ) override;
 
-    virtual OUString SAL_CALL explainInvalid(
+    virtual OUString explainInvalid(
         const cpo::uno::Any& ) override;
 
-    virtual void SAL_CALL addValidityConstraintListener(
+    virtual void addValidityConstraintListener(
         const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
 
-    virtual void SAL_CALL removeValidityConstraintListener(
+    virtual void removeValidityConstraintListener(
         const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
 
 
@@ -361,10 +361,10 @@ public:
 
 public:
 
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference<css::util::XModifyListener>& xListener ) override;
 
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference<css::util::XModifyListener>& xListener ) override;
 
 
@@ -374,29 +374,29 @@ public:
 
 public:
 
-    virtual OUString SAL_CALL getName() override;
+    virtual OUString getName() override;
 
-    virtual void SAL_CALL setName( const OUString& ) override;
+    virtual void setName( const OUString& ) override;
 
 
     // xml::dom::event::XEventListener
     //   receive an event if our node changed
 
 
-    virtual void SAL_CALL handleEvent(
+    virtual void handleEvent(
         const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent ) override;
 
 
     // XUnoTunnel
 
 
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence<sal_Int8>& ) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence<sal_Int8>& ) override;
 
 
     // XCloneable
 
 
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 

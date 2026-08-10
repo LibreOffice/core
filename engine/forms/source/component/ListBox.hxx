@@ -130,22 +130,22 @@ public:
     virtual ~OListBoxModel() override;
 
 // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OListBoxModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual bool convertFastPropertyValue(
                 cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 private:
@@ -153,13 +153,13 @@ private:
     static const ::connectivity::ORowSetValue s_aEmptyStringValue;
 
     // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
+    virtual void   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() override;
-    virtual void SAL_CALL
+    virtual OUString    getServiceName() override;
+    virtual void
         write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL
+    virtual void
         read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
@@ -171,7 +171,7 @@ private:
     ) const override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // OPropertyChangeListener
     virtual void    _propertyChanged( const css::beans::PropertyChangeEvent& _rEvt ) override;
@@ -201,7 +201,7 @@ private:
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
     virtual void    refreshInternalEntryList() override;
 
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void init();
     cpo::uno::Any getCurrentSingleValue() const;
@@ -266,54 +266,54 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OListBoxControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // XChangeBroadcaster
-        virtual void SAL_CALL addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
-    virtual void SAL_CALL removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+        virtual void addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
 
 // XFocusListener
-    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& _rEvent) override;
-    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& _rEvent) override;
+    virtual void focusGained(const css::awt::FocusEvent& _rEvent) override;
+    virtual void focusLost(const css::awt::FocusEvent& _rEvent) override;
 
 // XItemListener
-    virtual void SAL_CALL itemStateChanged(const css::awt::ItemEvent& _rEvent) override;
+    virtual void itemStateChanged(const css::awt::ItemEvent& _rEvent) override;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // XListBox
-    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    virtual void SAL_CALL addItem( const OUString& aItem, ::sal_Int16 nPos ) override;
-    virtual void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, ::sal_Int16 nPos ) override;
-    virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) override;
-    virtual ::sal_Int16 SAL_CALL getItemCount(  ) override;
-    virtual OUString SAL_CALL getItem( ::sal_Int16 nPos ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
-    virtual ::sal_Int16 SAL_CALL getSelectedItemPos(  ) override;
-    virtual cpo::uno::Sequence< ::sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
-    virtual OUString SAL_CALL getSelectedItem(  ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
-    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, bool bSelect ) override;
-    virtual void SAL_CALL selectItemsPos( const cpo::uno::Sequence< ::sal_Int16 >& aPositions, bool bSelect ) override;
-    virtual void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
-    virtual bool SAL_CALL isMutipleMode(  ) override;
-    virtual void SAL_CALL setMultipleMode( bool bMulti ) override;
-    virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
-    virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 nLines ) override;
-    virtual void SAL_CALL makeVisible( ::sal_Int16 nEntry ) override;
+    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void addItem( const OUString& aItem, ::sal_Int16 nPos ) override;
+    virtual void addItems( const cpo::uno::Sequence< OUString >& aItems, ::sal_Int16 nPos ) override;
+    virtual void removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) override;
+    virtual ::sal_Int16 getItemCount(  ) override;
+    virtual OUString getItem( ::sal_Int16 nPos ) override;
+    virtual cpo::uno::Sequence< OUString > getItems(  ) override;
+    virtual ::sal_Int16 getSelectedItemPos(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int16 > getSelectedItemsPos(  ) override;
+    virtual OUString getSelectedItem(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSelectedItems(  ) override;
+    virtual void selectItemPos( ::sal_Int16 nPos, bool bSelect ) override;
+    virtual void selectItemsPos( const cpo::uno::Sequence< ::sal_Int16 >& aPositions, bool bSelect ) override;
+    virtual void selectItem( const OUString& aItem, bool bSelect ) override;
+    virtual bool isMutipleMode(  ) override;
+    virtual void setMultipleMode( bool bMulti ) override;
+    virtual ::sal_Int16 getDropDownLineCount(  ) override;
+    virtual void setDropDownLineCount( ::sal_Int16 nLines ) override;
+    virtual void makeVisible( ::sal_Int16 nEntry ) override;
 
 protected:
     // IEventProcessor

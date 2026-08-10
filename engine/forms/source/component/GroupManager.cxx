@@ -249,7 +249,7 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
         _xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
 }
 
-void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
+void OGroupManager::propertyChange(const PropertyChangeEvent& evt)
 {
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
@@ -280,7 +280,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
 }
 
 // XContainerListener
-void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event)
+void OGroupManager::elementInserted(const ContainerEvent& Event)
 {
     Reference< XPropertySet > xProps;
     Event.Element >>= xProps;
@@ -288,7 +288,7 @@ void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event)
         InsertElement( xProps );
 }
 
-void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event)
+void OGroupManager::elementRemoved(const ContainerEvent& Event)
 {
     Reference<XPropertySet> xProps;
     Event.Element >>= xProps;
@@ -296,7 +296,7 @@ void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event)
         RemoveElement( xProps );
 }
 
-void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event)
+void OGroupManager::elementReplaced(const ContainerEvent& Event)
 {
     Reference<XPropertySet> xProps;
     Event.ReplacedElement >>= xProps;

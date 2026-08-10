@@ -43,7 +43,7 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OCheckBoxControl::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -78,7 +78,7 @@ OCheckBoxModel::~OCheckBoxModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OCheckBoxModel::createClone()
+css::uno::Reference< css::util::XCloneable > OCheckBoxModel::createClone()
 {
     rtl::Reference<OCheckBoxModel> pClone = new OCheckBoxModel(this, getContext());
     pClone->clonedFrom(this);
@@ -88,7 +88,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OCheckBoxModel::createClon
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OCheckBoxModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -124,13 +124,13 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 }
 
 
-OUString SAL_CALL OCheckBoxModel::getServiceName()
+OUString OCheckBoxModel::getServiceName()
 {
     return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL OCheckBoxModel::write(const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
+void OCheckBoxModel::write(const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OReferenceValueComponent::write(_rxOutStream);
 
@@ -145,7 +145,7 @@ void SAL_CALL OCheckBoxModel::write(const css::uno::Reference<css::io::XObjectOu
 }
 
 
-void SAL_CALL OCheckBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream)
+void OCheckBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream)
 {
     OReferenceValueComponent::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);

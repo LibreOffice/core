@@ -56,25 +56,25 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel )
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OButtonModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XReset
-    virtual void SAL_CALL reset(  ) override;
-    virtual void SAL_CALL addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
-    virtual void SAL_CALL removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void reset(  ) override;
+    virtual void addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -82,17 +82,17 @@ public:
     ) const override;
 
     // XPropertySet and friends
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual bool convertFastPropertyValue(
                 cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
 private:
     void    impl_resetNoBroadcast_nothrow();
@@ -137,36 +137,36 @@ public:
     virtual ~OButtonControl() override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OButtonControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XActionListener
-    virtual void SAL_CALL actionPerformed(const css::awt::ActionEvent& rEvent) override;
+    virtual void actionPerformed(const css::awt::ActionEvent& rEvent) override;
 
     // XButton
-    virtual void SAL_CALL addActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
-    virtual void SAL_CALL removeActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
-    virtual void SAL_CALL setLabel(const OUString& Label) override;
-    virtual void SAL_CALL setActionCommand(const OUString& _rCommand) override;
+    virtual void addActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
+    virtual void removeActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
+    virtual void setLabel(const OUString& Label) override;
+    virtual void setActionCommand(const OUString& _rCommand) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XControl
-    virtual bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
-    void SAL_CALL setDesignMode(bool bOn) override;
+    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
+    void setDesignMode(bool bOn) override;
 
 protected:
     // OFormNavigationHelper overriables
@@ -176,8 +176,8 @@ protected:
     virtual bool    isEnabled( sal_Int16 _nFeatureId ) const override;
 
     // XDispatchProviderInterception disambiguation
-    virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-    virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+    virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+    virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
 
     // OImageControl overridables
     virtual void    actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& _rEvt ) override;

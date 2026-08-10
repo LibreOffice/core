@@ -72,7 +72,7 @@ Sequence<Type> OComboBoxModel::_getTypes()
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OComboBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OComboBoxModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -97,7 +97,7 @@ cpo::uno::Sequence<OUString> SAL_CALL OComboBoxModel::getSupportedServiceNames()
 }
 
 
-Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType)
+Any OComboBoxModel::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControlModel::queryAggregation( _rType );
     if ( !aReturn.hasValue() )
@@ -145,7 +145,7 @@ OComboBoxModel::~OComboBoxModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OComboBoxModel::createClone()
+css::uno::Reference< css::util::XCloneable > OComboBoxModel::createClone()
 {
     rtl::Reference<OComboBoxModel> pClone = new OComboBoxModel(this, getContext());
     pClone->clonedFrom(this);
@@ -323,13 +323,13 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 }
 
 
-OUString SAL_CALL OComboBoxModel::getServiceName()
+OUString OComboBoxModel::getServiceName()
 {
     return FRM_COMPONENT_COMBOBOX;  // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+void OComboBoxModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -366,7 +366,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
 }
 
 
-void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream)
+void OComboBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream)
 {
     OBoundControlModel::read(_rxInStream);
     ControlModelLock aLock( *this );
@@ -694,7 +694,7 @@ void OComboBoxModel::onDisconnectedDbColumn()
 }
 
 
-void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent )
+void OComboBoxModel::reloaded( const EventObject& aEvent )
 {
     OBoundControlModel::reloaded(aEvent);
 
@@ -844,7 +844,7 @@ void OComboBoxModel::refreshInternalEntryList()
 }
 
 
-void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource )
+void OComboBoxModel::disposing( const EventObject& _rSource )
 {
     if ( !OEntryListHelper::handleDisposing( _rSource ) )
         OBoundControlModel::disposing( _rSource );
@@ -859,7 +859,7 @@ OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContex
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OComboBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OComboBoxControl::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);

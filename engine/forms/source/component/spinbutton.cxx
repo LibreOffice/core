@@ -63,7 +63,7 @@ using namespace cpo::uno;
     {
     }
 
-    OUString SAL_CALL OSpinButtonModel::getImplementationName()
+    OUString OSpinButtonModel::getImplementationName()
     {
         return u"com.sun.star.comp.forms.OSpinButtonModel"_ustr;
     }
@@ -72,7 +72,7 @@ using namespace cpo::uno;
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
         // to benefit from the functionality for binding to spreadsheet cells
-    Sequence< OUString > SAL_CALL OSpinButtonModel::getSupportedServiceNames()
+    Sequence< OUString > OSpinButtonModel::getSupportedServiceNames()
     {
         static constexpr OUString aOwnNames[] { FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE };
 
@@ -85,7 +85,7 @@ using namespace cpo::uno;
         );
     }
 
-    css::uno::Reference< css::util::XCloneable > SAL_CALL OSpinButtonModel::createClone()
+    css::uno::Reference< css::util::XCloneable > OSpinButtonModel::createClone()
 {
     rtl::Reference<OSpinButtonModel> pClone = new OSpinButtonModel(this, getContext());
     pClone->clonedFrom(this);
@@ -192,13 +192,13 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL OSpinButtonModel::getServiceName()
+    OUString OSpinButtonModel::getServiceName()
     {
         return FRM_SUN_COMPONENT_SPINBUTTON;
     }
 
 
-    void SAL_CALL OSpinButtonModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
+    void OSpinButtonModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
     {
         OBoundControlModel::write( _rxOutStream );
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -214,7 +214,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OSpinButtonModel::read( const Reference< XObjectInputStream>& _rxInStream )
+    void OSpinButtonModel::read( const Reference< XObjectInputStream>& _rxInStream )
     {
         OBoundControlModel::read( _rxInStream );
         ::osl::MutexGuard aGuard( m_aMutex );

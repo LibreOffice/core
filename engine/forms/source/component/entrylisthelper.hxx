@@ -86,7 +86,7 @@ namespace frm
         void        disposing( );
 
         // prevent method hiding
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override = 0;
+        virtual void disposing( const css::lang::EventObject& Source ) override = 0;
 
         /** helper for implementing convertFastPropertyValue( StringItemList )
 
@@ -138,19 +138,19 @@ namespace frm
 
     private:
         // XListEntrySink
-        virtual void SAL_CALL setListEntrySource( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource ) override;
-        virtual css::uno::Reference< css::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) override;
+        virtual void setListEntrySource( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource ) override;
+        virtual css::uno::Reference< css::form::binding::XListEntrySource > getListEntrySource(  ) override;
 
         // XListEntryListener
-        virtual void SAL_CALL entryChanged( const css::form::binding::ListEntryEvent& _rSource ) override;
-        virtual void SAL_CALL entryRangeInserted( const css::form::binding::ListEntryEvent& _rSource ) override;
-        virtual void SAL_CALL entryRangeRemoved( const css::form::binding::ListEntryEvent& _rSource ) override;
-        virtual void SAL_CALL allEntriesChanged( const css::lang::EventObject& _rSource ) override;
+        virtual void entryChanged( const css::form::binding::ListEntryEvent& _rSource ) override;
+        virtual void entryRangeInserted( const css::form::binding::ListEntryEvent& _rSource ) override;
+        virtual void entryRangeRemoved( const css::form::binding::ListEntryEvent& _rSource ) override;
+        virtual void allEntriesChanged( const css::lang::EventObject& _rSource ) override;
 
         // XRefreshable
-        virtual void SAL_CALL refresh() override;
-        virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) override;
-        virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) override;
+        virtual void refresh() override;
+        virtual void addRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) override;
+        virtual void removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) override;
 
     private:
         /** disconnects from the active external list source, if present

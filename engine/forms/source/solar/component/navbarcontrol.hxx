@@ -50,24 +50,24 @@ namespace frm
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarControl, UnoControl )
-        virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+        virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
         // XControl
-        virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
+        virtual void createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
         // XVclWindowPeer
-        virtual void SAL_CALL setDesignMode( bool _bOn ) override;
+        virtual void setDesignMode( bool _bOn ) override;
 
         // XDispatchProviderInterception
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
     };
 
     class ONavigationBarPeer final
@@ -87,7 +87,7 @@ namespace frm
         DECLARE_XINTERFACE( )
 
         // XVclWindowPeer
-        virtual void SAL_CALL setDesignMode( bool _bOn ) override;
+        virtual void setDesignMode( bool _bOn ) override;
 
         // XWindow2
         using VCLXWindow::isEnabled;
@@ -102,11 +102,11 @@ namespace frm
         DECLARE_XTYPEPROVIDER( )
 
         // XComponent
-        void SAL_CALL dispose(  ) override;
+        void dispose(  ) override;
 
         // XVclWindowPeer
-        void SAL_CALL setProperty( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
-        cpo::uno::Any SAL_CALL getProperty( const OUString& _rPropertyName ) override;
+        void setProperty( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
+        cpo::uno::Any getProperty( const OUString& _rPropertyName ) override;
 
         // OFormNavigationHelper overriables
         virtual void    interceptorsChanged( ) override;

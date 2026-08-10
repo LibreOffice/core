@@ -57,7 +57,7 @@ OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const
     implInitializeImageURL();
 }
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OImageButtonModel::createClone()
+css::uno::Reference< css::util::XCloneable > OImageButtonModel::createClone()
 {
     rtl::Reference<OImageButtonModel> pClone = new OImageButtonModel(this, getContext());
     pClone->clonedFrom(this);
@@ -184,7 +184,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
 }
 
 // UNO Binding
-Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType)
+Any OImageButtonControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OClickableImageBaseControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -216,15 +216,15 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e)
     }
 }
 
-void SAL_CALL OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/)
+void OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/)
 {
 }
 
-void SAL_CALL OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/)
+void OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/)
 {
 }
 
-void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/)
+void OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/)
 {
 }
 

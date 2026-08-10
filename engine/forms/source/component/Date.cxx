@@ -54,7 +54,7 @@ Sequence<Type> ODateControl::_getTypes()
     return OBoundControl::_getTypes();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ODateControl::getSupportedServiceNames()
 {
     const cpo::uno::Sequence<OUString> vals { FRM_SUN_CONTROL_DATEFIELD, STARDIV_ONE_FORM_CONTROL_DATEFIELD };
     return comphelper::concatSequences(OBoundControl::getSupportedServiceNames(), vals);
@@ -109,7 +109,7 @@ ODateModel::~ODateModel( )
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL ODateModel::createClone()
+css::uno::Reference< css::util::XCloneable > ODateModel::createClone()
 {
     rtl::Reference<ODateModel> pClone = new ODateModel(this, getContext());
     pClone->clonedFrom(this);
@@ -118,7 +118,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ODateModel::createClone()
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ODateModel::getSupportedServiceNames()
 {
     static constexpr OUString vals[] {
        BINDABLE_CONTROL_MODEL,
@@ -136,7 +136,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 }
 
 
-OUString SAL_CALL ODateModel::getServiceName()
+OUString ODateModel::getServiceName()
 {
     return FRM_COMPONENT_DATEFIELD; // old (non-sun) name for compatibility !
 }
@@ -158,7 +158,7 @@ void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 }
 
 
-void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
+void ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch (_nHandle)
     {
@@ -175,7 +175,7 @@ void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 }
 
 
-bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+bool ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue )
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
@@ -185,7 +185,7 @@ bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _
 }
 
 
-void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+void ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

@@ -95,7 +95,7 @@ OFileControlModel::~OFileControlModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OFileControlModel::createClone()
+css::uno::Reference< css::util::XCloneable > OFileControlModel::createClone()
 {
     rtl::Reference<OFileControlModel> pClone = new OFileControlModel(this, getContext());
     pClone->clonedFrom(this);
@@ -103,7 +103,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OFileControlModel::createC
 }
 
 
-Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType)
+Any OFileControlModel::queryAggregation(const Type& _rType)
 {
     Any aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -185,7 +185,7 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL OFileControlModel::getServiceName()
+OUString OFileControlModel::getServiceName()
 {
     return FRM_COMPONENT_FILECONTROL;   // old (non-sun) name for compatibility !
 }
@@ -231,7 +231,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
 }
 
 
-void SAL_CALL OFileControlModel::reset()
+void OFileControlModel::reset()
 {
     ::comphelper::OInterfaceIteratorHelper3 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));

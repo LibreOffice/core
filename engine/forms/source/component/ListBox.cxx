@@ -196,7 +196,7 @@ using namespace cpo::uno;
 
     // XCloneable
 
-    css::uno::Reference< css::util::XCloneable > SAL_CALL OListBoxModel::createClone()
+    css::uno::Reference< css::util::XCloneable > OListBoxModel::createClone()
 {
     rtl::Reference<OListBoxModel> pClone = new OListBoxModel(this, getContext());
     pClone->clonedFrom(this);
@@ -205,7 +205,7 @@ using namespace cpo::uno;
 
     // XServiceInfo
 
-    cpo::uno::Sequence<OUString> SAL_CALL OListBoxModel::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OListBoxModel::getSupportedServiceNames()
     {
         cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -230,7 +230,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OListBoxModel::queryAggregation(const Type& _rType)
+    Any OListBoxModel::queryAggregation(const Type& _rType)
     {
         Any aReturn = OBoundControlModel::queryAggregation( _rType );
         if ( !aReturn.hasValue() )
@@ -460,7 +460,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
+    void OListBoxModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
     {
         // if both SelectedItems and StringItemList are set, care for this
         // #i27024#
@@ -553,13 +553,13 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL OListBoxModel::getServiceName()
+    OUString OListBoxModel::getServiceName()
     {
         return FRM_COMPONENT_LISTBOX;   // old (non-sun) name for compatibility !
     }
 
 
-    void SAL_CALL OListBoxModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+    void OListBoxModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     {
         OBoundControlModel::write(_rxOutStream);
 
@@ -595,7 +595,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxModel::read(const Reference<XObjectInputStream>& _rxInStream)
+    void OListBoxModel::read(const Reference<XObjectInputStream>& _rxInStream)
     {
         // We need to respect dependencies for certain variables.
         // Therefore, we need to set them explicitly via setPropertyValue().
@@ -1303,7 +1303,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxModel::disposing( const EventObject& _rSource )
+    void OListBoxModel::disposing( const EventObject& _rSource )
     {
         if ( !OEntryListHelper::handleDisposing( _rSource ) )
             OBoundControlModel::disposing( _rSource );
@@ -1797,7 +1797,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OListBoxControl::queryAggregation(const Type& _rType)
+    Any OListBoxControl::queryAggregation(const Type& _rType)
     {
         Any aReturn = OListBoxControl_BASE::queryInterface( _rType );
 
@@ -1851,7 +1851,7 @@ using namespace cpo::uno;
     }
 
 
-    cpo::uno::Sequence<OUString> SAL_CALL OListBoxControl::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OListBoxControl::getSupportedServiceNames()
     {
         cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
         aSupported.realloc(aSupported.getLength() + 2);
@@ -1865,7 +1865,7 @@ using namespace cpo::uno;
 
     // XFocusListener
 
-    void SAL_CALL OListBoxControl::focusGained(const FocusEvent& /*_rEvent*/)
+    void OListBoxControl::focusGained(const FocusEvent& /*_rEvent*/)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         if ( m_aChangeListeners.getLength() ) // only if there are listeners
@@ -1880,14 +1880,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxControl::focusLost(const FocusEvent& /*_rEvent*/)
+    void OListBoxControl::focusLost(const FocusEvent& /*_rEvent*/)
     {
         m_aCurrentSelection.clear();
     }
 
     // XItemListener
 
-    void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent)
+    void OListBoxControl::itemStateChanged(const ItemEvent& _rEvent)
     {
         // forward this to our listeners
         Reference< XChild > xChild( getModel(), UNO_QUERY );
@@ -1945,20 +1945,20 @@ using namespace cpo::uno;
 
     // XEventListener
 
-    void SAL_CALL OListBoxControl::disposing(const EventObject& _rSource)
+    void OListBoxControl::disposing(const EventObject& _rSource)
     {
         OBoundControl::disposing(_rSource);
     }
 
     // XChangeBroadcaster
 
-    void SAL_CALL OListBoxControl::addChangeListener(const Reference<XChangeListener>& _rxListener)
+    void OListBoxControl::addChangeListener(const Reference<XChangeListener>& _rxListener)
     {
         m_aChangeListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL OListBoxControl::removeChangeListener(const Reference<XChangeListener>& _rxListener)
+    void OListBoxControl::removeChangeListener(const Reference<XChangeListener>& _rxListener)
     {
         m_aChangeListeners.removeInterface( _rxListener );
     }
@@ -2012,54 +2012,54 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxControl::addItemListener( const Reference< XItemListener >& l )
+    void OListBoxControl::addItemListener( const Reference< XItemListener >& l )
     {
         m_aItemListeners.addInterface( l );
     }
 
 
-    void SAL_CALL OListBoxControl::removeItemListener( const Reference< XItemListener >& l )
+    void OListBoxControl::removeItemListener( const Reference< XItemListener >& l )
     {
         m_aItemListeners.removeInterface( l );
     }
 
 
-    void SAL_CALL OListBoxControl::addActionListener( const Reference< XActionListener >& l )
+    void OListBoxControl::addActionListener( const Reference< XActionListener >& l )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addActionListener( l );
     }
 
 
-    void SAL_CALL OListBoxControl::removeActionListener( const Reference< XActionListener >& l )
+    void OListBoxControl::removeActionListener( const Reference< XActionListener >& l )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->removeActionListener( l );
     }
 
 
-    void SAL_CALL OListBoxControl::addItem( const OUString& aItem, ::sal_Int16 nPos )
+    void OListBoxControl::addItem( const OUString& aItem, ::sal_Int16 nPos )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItem( aItem, nPos );
     }
 
 
-    void SAL_CALL OListBoxControl::addItems( const Sequence< OUString >& aItems, ::sal_Int16 nPos )
+    void OListBoxControl::addItems( const Sequence< OUString >& aItems, ::sal_Int16 nPos )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItems( aItems, nPos );
     }
 
 
-    void SAL_CALL OListBoxControl::removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount )
+    void OListBoxControl::removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->removeItems( nPos, nCount );
     }
 
 
-    ::sal_Int16 SAL_CALL OListBoxControl::getItemCount(  )
+    ::sal_Int16 OListBoxControl::getItemCount(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getItemCount();
@@ -2067,7 +2067,7 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL OListBoxControl::getItem( ::sal_Int16 nPos )
+    OUString OListBoxControl::getItem( ::sal_Int16 nPos )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getItem( nPos );
@@ -2075,7 +2075,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL OListBoxControl::getItems(  )
+    Sequence< OUString > OListBoxControl::getItems(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getItems();
@@ -2083,7 +2083,7 @@ using namespace cpo::uno;
     }
 
 
-    ::sal_Int16 SAL_CALL OListBoxControl::getSelectedItemPos(  )
+    ::sal_Int16 OListBoxControl::getSelectedItemPos(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItemPos();
@@ -2091,7 +2091,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< ::sal_Int16 > SAL_CALL OListBoxControl::getSelectedItemsPos(  )
+    Sequence< ::sal_Int16 > OListBoxControl::getSelectedItemsPos(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItemsPos();
@@ -2099,7 +2099,7 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL OListBoxControl::getSelectedItem(  )
+    OUString OListBoxControl::getSelectedItem(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItem();
@@ -2107,7 +2107,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< OUString > SAL_CALL OListBoxControl::getSelectedItems(  )
+    Sequence< OUString > OListBoxControl::getSelectedItems(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItems();
@@ -2115,28 +2115,28 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, bool bSelect )
+    void OListBoxControl::selectItemPos( ::sal_Int16 nPos, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemPos( nPos, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, bool bSelect )
+    void OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemsPos( aPositions, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, bool bSelect )
+    void OListBoxControl::selectItem( const OUString& aItem, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItem( aItem, bSelect );
     }
 
 
-    bool SAL_CALL OListBoxControl::isMutipleMode(  )
+    bool OListBoxControl::isMutipleMode(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->isMutipleMode();
@@ -2144,14 +2144,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxControl::setMultipleMode( bool bMulti )
+    void OListBoxControl::setMultipleMode( bool bMulti )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setMultipleMode( bMulti );
     }
 
 
-    ::sal_Int16 SAL_CALL OListBoxControl::getDropDownLineCount(  )
+    ::sal_Int16 OListBoxControl::getDropDownLineCount(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getDropDownLineCount();
@@ -2159,14 +2159,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OListBoxControl::setDropDownLineCount( ::sal_Int16 nLines )
+    void OListBoxControl::setDropDownLineCount( ::sal_Int16 nLines )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setDropDownLineCount( nLines );
     }
 
 
-    void SAL_CALL OListBoxControl::makeVisible( ::sal_Int16 nEntry )
+    void OListBoxControl::makeVisible( ::sal_Int16 nEntry )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->makeVisible( nEntry );

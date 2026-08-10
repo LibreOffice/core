@@ -72,24 +72,24 @@ public:
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // css::uno::XInterface
-    cpo::uno::Any   SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    void            SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void            SAL_CALL release() noexcept override  { OWeakObject::release(); }
+    cpo::uno::Any   queryInterface( const cpo::uno::Type & rType ) override;
+    void            acquire() noexcept override  { OWeakObject::acquire(); }
+    void            release() noexcept override  { OWeakObject::release(); }
 
     // MT: ???
     void            setImage( css::uno::Reference< css::io::XInputStream > const & rStmRef );
 
     // css::awt::XImageProducer
-    void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) override;
-    void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) override;
-    void SAL_CALL startProduction(  ) override;
+    void addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) override;
+    void removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) override;
+    void startProduction(  ) override;
 
     // css::lang::XInitialization
-    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(OUString const & ServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 };
 

@@ -69,7 +69,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL )
+    void ORichTextFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL )
     {
         OSL_ENSURE( !m_bDisposed, "ORichTextFeatureDispatcher::addStatusListener: already disposed!" );
         if ( m_bDisposed )
@@ -85,7 +85,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& /*_rURL*/ )
+    void ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& /*_rURL*/ )
     {
         m_aStatusListeners.removeInterface( _rxControl );
     }

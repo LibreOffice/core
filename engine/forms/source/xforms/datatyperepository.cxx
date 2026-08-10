@@ -101,7 +101,7 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass )
+    Reference< XDataType > ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass )
     {
         Reference< XDataType > xReturn;
 
@@ -121,7 +121,7 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName )
+    Reference< XDataType > ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -137,7 +137,7 @@ namespace xforms
     }
 
 
-    void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName )
+    void ODataTypeRepository::revokeDataType( const OUString& typeName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -150,26 +150,26 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName )
+    Reference< XDataType > ODataTypeRepository::getDataType( const OUString& typeName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return implLocate( typeName )->second;
     }
 
 
-    Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  )
+    Reference< XEnumeration > ODataTypeRepository::createEnumeration(  )
     {
         return new ::comphelper::OEnumerationByName( this );
     }
 
 
-    Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName )
+    Any ODataTypeRepository::getByName( const OUString& aName )
     {
         return Any( getDataType( aName ) );
     }
 
 
-    Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  )
+    Sequence< OUString > ODataTypeRepository::getElementNames(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -177,20 +177,20 @@ namespace xforms
     }
 
 
-    bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName )
+    bool ODataTypeRepository::hasByName( const OUString& aName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();
     }
 
 
-    Type SAL_CALL ODataTypeRepository::getElementType(  )
+    Type ODataTypeRepository::getElementType(  )
     {
         return cppu::UnoType<XDataType>::get();
     }
 
 
-    bool SAL_CALL ODataTypeRepository::hasElements(  )
+    bool ODataTypeRepository::hasElements(  )
     {
         return !m_aRepository.empty();
     }

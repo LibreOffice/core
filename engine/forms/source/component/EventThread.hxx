@@ -59,9 +59,9 @@ class OComponentEventThread
 protected:
 
     // XThread
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 
-    virtual void SAL_CALL onTerminated() override;
+    virtual void onTerminated() override;
 
     // Edit an Event:
     // The mutex is not locked, but pCompImpl stays valid in any case.
@@ -77,7 +77,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type& _rType) override;
 
     explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread() override;
@@ -87,7 +87,7 @@ public:
                    bool bFlag = false );
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) override;
+    virtual void disposing(const css::lang::EventObject& _rSource ) override;
 
 private:
     void    impl_clearEventQueue();

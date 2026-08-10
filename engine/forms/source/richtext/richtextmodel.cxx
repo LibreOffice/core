@@ -245,7 +245,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL ORichTextModel::queryAggregation( const Type& _rType )
+    Any ORichTextModel::queryAggregation( const Type& _rType )
     {
         Any aReturn = ORichTextModel_BASE::queryInterface( _rType );
 
@@ -258,12 +258,12 @@ using namespace cpo::uno;
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextModel, OControlModel, ORichTextModel_BASE )
 
-    OUString SAL_CALL ORichTextModel::getImplementationName()
+    OUString ORichTextModel::getImplementationName()
     {
         return u"com.sun.star.comp.forms.ORichTextModel"_ustr;
     }
 
-    Sequence< OUString > SAL_CALL ORichTextModel::getSupportedServiceNames()
+    Sequence< OUString > ORichTextModel::getSupportedServiceNames()
     {
         static constexpr OUString aOwnNames[] {
             FRM_SUN_COMPONENT_RICHTEXTCONTROL,
@@ -283,7 +283,7 @@ using namespace cpo::uno;
         );
     }
 
-    css::uno::Reference< css::util::XCloneable > SAL_CALL ORichTextModel::createClone()
+    css::uno::Reference< css::util::XCloneable > ORichTextModel::createClone()
 {
     rtl::Reference<ORichTextModel> pClone = new ORichTextModel(this, getContext());
     pClone->clonedFrom(this);
@@ -291,7 +291,7 @@ using namespace cpo::uno;
 }
 
 
-    void SAL_CALL ORichTextModel::disposing()
+    void ORichTextModel::disposing()
     {
         m_aModifyListeners.disposeAndClear( EventObject( *this ) );
         OControlModel::disposing();
@@ -353,7 +353,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void ORichTextModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
         {
@@ -370,7 +370,7 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
 
@@ -391,7 +391,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+    void ORichTextModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         if ( isRegisteredProperty( _nHandle ) )
         {
@@ -537,7 +537,7 @@ using namespace cpo::uno;
     }
 
 
-    OUString SAL_CALL ORichTextModel::getServiceName()
+    OUString ORichTextModel::getServiceName()
     {
         return FRM_SUN_COMPONENT_RICHTEXTCONTROL;
     }
@@ -586,7 +586,7 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int64 SAL_CALL ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId )
+    sal_Int64 ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId )
     {
         if (comphelper::isUnoTunnelId<ORichTextModel>(_rId))
             return comphelper::getSomething_cast(m_pEngine.get()); // Note returning a different type
@@ -598,13 +598,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL ORichTextModel::addModifyListener( const Reference< XModifyListener >& _rxListener )
+    void ORichTextModel::addModifyListener( const Reference< XModifyListener >& _rxListener )
     {
         m_aModifyListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL ORichTextModel::removeModifyListener( const Reference< XModifyListener >& _rxListener )
+    void ORichTextModel::removeModifyListener( const Reference< XModifyListener >& _rxListener )
     {
         m_aModifyListeners.removeInterface( _rxListener );
     }

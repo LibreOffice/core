@@ -191,42 +191,42 @@ protected:
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XTypeProvider
-    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   getTypes() override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // XComponent (as base of XControl)
-    virtual void SAL_CALL dispose(  ) override
+    virtual void dispose(  ) override
         { OComponentHelper::dispose(); }
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
         { OComponentHelper::addEventListener(_rxListener); }
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
         { OComponentHelper::removeEventListener(_rxListener); }
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // XServiceInfo
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
-    virtual OUString SAL_CALL    getImplementationName() override = 0;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString>     getSupportedServiceNames() override;
+    virtual OUString    getImplementationName() override = 0;
 
 // XControl
-    virtual void                                        SAL_CALL setContext(const css::uno::Reference<css::uno::XInterface>& Context) override;
-    virtual css::uno::Reference<css::uno::XInterface>   SAL_CALL getContext() override;
-    virtual void                                        SAL_CALL createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) override;
-    virtual css::uno::Reference<css::awt::XWindowPeer>  SAL_CALL getPeer() override;
-    virtual bool                                    SAL_CALL setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
-    virtual css::uno::Reference<css::awt::XControlModel> SAL_CALL getModel() override;
-    virtual css::uno::Reference<css::awt::XView>        SAL_CALL getView() override;
-    virtual void                                        SAL_CALL setDesignMode(bool bOn) override;
-    virtual bool                                    SAL_CALL isDesignMode() override;
-    virtual bool                                    SAL_CALL isTransparent() override;
+    virtual void                                        setContext(const css::uno::Reference<css::uno::XInterface>& Context) override;
+    virtual css::uno::Reference<css::uno::XInterface>   getContext() override;
+    virtual void                                        createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) override;
+    virtual css::uno::Reference<css::awt::XWindowPeer>  getPeer() override;
+    virtual bool                                    setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
+    virtual css::uno::Reference<css::awt::XControlModel> getModel() override;
+    virtual css::uno::Reference<css::awt::XView>        getView() override;
+    virtual void                                        setDesignMode(bool bOn) override;
+    virtual bool                                    isDesignMode() override;
+    virtual bool                                    isTransparent() override;
 
 protected:
     virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes();
@@ -256,21 +256,21 @@ public:
     virtual ~OBoundControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XBoundControl
-    virtual bool SAL_CALL   getLock() override;
-    virtual void SAL_CALL       setLock(bool _bLock) override;
+    virtual bool   getLock() override;
+    virtual void       setLock(bool _bLock) override;
         // default implementation just disables the controls, overwrite _setLock to change this behaviour
 
     // XControl
-    virtual bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 protected:
     virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
@@ -364,47 +364,47 @@ protected:
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XTypeProvider
-    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   getTypes() override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // XNamed
-    virtual OUString SAL_CALL    getName() override;
-    virtual void SAL_CALL               setName(const OUString& aName) override;
+    virtual OUString    getName() override;
+    virtual void               setName(const OUString& aName) override;
 
 // XServiceInfo
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
-    virtual OUString SAL_CALL    getImplementationName() override = 0;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString>     getSupportedServiceNames() override;
+    virtual OUString    getImplementationName() override = 0;
 
 // XServiceInfo - static version(s)
     /// @throws css::uno::RuntimeException
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
 // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() override = 0;
-    virtual void SAL_CALL
+    virtual OUString    getServiceName() override = 0;
+    virtual void
         write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL
+    virtual void
         read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
 // XChild (base of XFormComponent)
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL   getParent() override;
-    virtual void SAL_CALL           setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<css::uno::XInterface>   getParent() override;
+    virtual void           setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual bool convertFastPropertyValue(
                 cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // css::beans::XPropertyState
@@ -413,15 +413,15 @@ public:
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override = 0;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override = 0;
 
 // XPropertyContainer
-    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
-    virtual void SAL_CALL removeProperty( const OUString& Name ) override;
+    virtual void addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
+    virtual void removeProperty( const OUString& Name ) override;
 
 // XPropertyAccess
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues(  ) override;
+    virtual void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
 protected:
     using OPropertySetAggregationHelper::setPropertyValues;
@@ -433,9 +433,9 @@ protected:
 
 protected:
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     // OPropertySetHelper
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     /** describes the properties provided by this class, or its respective
         derived class
@@ -919,83 +919,83 @@ public:
 public:
     // UNO link
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XReset
-    virtual void SAL_CALL reset(  ) override;
-    virtual void SAL_CALL addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
-    virtual void SAL_CALL removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void reset(  ) override;
+    virtual void addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames(  ) override;
 
     // XServiceInfo - static version
     /// @throws css::uno::RuntimeException
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XPersistObject
-    virtual void SAL_CALL write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    virtual void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    virtual void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    virtual void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // XBoundComponent
-    virtual bool SAL_CALL commit() override;
+    virtual bool commit() override;
 
     // XUpdateBroadcaster (base of XBoundComponent)
-    virtual void SAL_CALL addUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
-    virtual void SAL_CALL removeUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
+    virtual void addUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
+    virtual void removeUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual bool convertFastPropertyValue(
                 cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // css::beans::XPropertyState
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
     // XRowSetChangeListener
-    virtual void SAL_CALL onRowSetChanged( const css::lang::EventObject& i_Event ) override;
+    virtual void onRowSetChanged( const css::lang::EventObject& i_Event ) override;
 
 // XLoadListener
-    virtual void SAL_CALL loaded( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL unloading( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL unloaded( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL reloading( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) override;
+    virtual void loaded( const css::lang::EventObject& aEvent ) override;
+    virtual void unloading( const css::lang::EventObject& aEvent ) override;
+    virtual void unloaded( const css::lang::EventObject& aEvent ) override;
+    virtual void reloading( const css::lang::EventObject& aEvent ) override;
+    virtual void reloaded( const css::lang::EventObject& aEvent ) override;
 
 protected:
     // XBindableValue
-    virtual void SAL_CALL setValueBinding( const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding ) override;
-    virtual css::uno::Reference< css::form::binding::XValueBinding > SAL_CALL getValueBinding(  ) override;
+    virtual void setValueBinding( const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding ) override;
+    virtual css::uno::Reference< css::form::binding::XValueBinding > getValueBinding(  ) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& _rEvent ) override;
+    virtual void modified( const css::lang::EventObject& _rEvent ) override;
 
     // XValidatable
-    virtual void SAL_CALL setValidator( const css::uno::Reference< css::form::validation::XValidator >& Validator ) override;
-    virtual css::uno::Reference< css::form::validation::XValidator > SAL_CALL getValidator(  ) override;
+    virtual void setValidator( const css::uno::Reference< css::form::validation::XValidator >& Validator ) override;
+    virtual css::uno::Reference< css::form::validation::XValidator > getValidator(  ) override;
 
     // XValidityConstraintListener
-    virtual void SAL_CALL validityConstraintChanged( const css::lang::EventObject& Source ) override;
+    virtual void validityConstraintChanged( const css::lang::EventObject& Source ) override;
 
     // XValidatableFormComponent
-    virtual bool SAL_CALL isValid(  ) override;
-    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
-    virtual void SAL_CALL addFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
-    virtual void SAL_CALL removeFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
+    virtual bool isValid(  ) override;
+    virtual cpo::uno::Any getCurrentValue(  ) override;
+    virtual void addFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
+    virtual void removeFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
 
 protected:
     // OPropertyChangeListener

@@ -66,7 +66,7 @@ Sequence<Type> OEditControl::_getTypes()
 }
 
 
-Any SAL_CALL OEditControl::queryAggregation(const Type& _rType)
+Any OEditControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -289,7 +289,7 @@ OEditModel::~OEditModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OEditModel::createClone()
+css::uno::Reference< css::util::XCloneable > OEditModel::createClone()
 {
     rtl::Reference<OEditModel> pClone = new OEditModel(this, getContext());
     pClone->clonedFrom(this);
@@ -305,14 +305,14 @@ void OEditModel::disposing()
 
 // XPersistObject
 
-OUString SAL_CALL OEditModel::getServiceName()
+OUString OEditModel::getServiceName()
 {
     return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
 }
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OEditModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -337,7 +337,7 @@ cpo::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames()
 }
 
 // XPropertySet
-void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
+void OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     if ( PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH == nHandle )
     {
@@ -397,7 +397,7 @@ bool OEditModel::implActsAsRichText( ) const
 }
 
 
-void SAL_CALL OEditModel::reset(  )
+void OEditModel::reset(  )
 {
     // no reset if we currently act as rich text control
     if ( implActsAsRichText() )

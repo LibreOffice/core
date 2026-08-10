@@ -67,33 +67,33 @@ public:
     );
     virtual ~OImageControlModel() override;
 
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Any queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OImageControlModel"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() override;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual OUString getServiceName() override;
+    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XImageProducerSupplier
-    virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() override;
+    virtual css::uno::Reference< css::awt::XImageProducer> getImageProducer() override;
 
     // XImageProducer
-    virtual void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
-    virtual void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
-    virtual void SAL_CALL startProduction(  ) override;
+    virtual void addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+    virtual void removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+    virtual void startProduction(  ) override;
 
     // OControlModel's property handling
     virtual void describeAggregateProperties(
@@ -121,7 +121,7 @@ private:
 
     virtual void            resetNoBroadcast() override;
 
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void implConstruct();
 
@@ -156,29 +156,29 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.form.OImageControlControl"_ustr; }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XMouseListener
-    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& e) override;
-    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& e) override;
+    virtual void mousePressed(const css::awt::MouseEvent& e) override;
+    virtual void mouseReleased(const css::awt::MouseEvent& e) override;
+    virtual void mouseEntered(const css::awt::MouseEvent& e) override;
+    virtual void mouseExited(const css::awt::MouseEvent& e) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 private:
     void    implClearGraphics( bool _bForce );

@@ -56,7 +56,7 @@ Sequence<Type> OTimeControl::_getTypes()
 }
 
 
-cpo::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OTimeControl::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -72,7 +72,7 @@ cpo::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OTimeModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -133,7 +133,7 @@ OTimeModel::~OTimeModel( )
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL OTimeModel::createClone()
+css::uno::Reference< css::util::XCloneable > OTimeModel::createClone()
 {
     rtl::Reference<OTimeModel> pClone = new OTimeModel(this, getContext());
     pClone->clonedFrom(this);
@@ -141,7 +141,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OTimeModel::createClone()
 }
 
 
-OUString SAL_CALL OTimeModel::getServiceName()
+OUString OTimeModel::getServiceName()
 {
     return FRM_COMPONENT_TIMEFIELD; // old (non-sun) name for compatibility !
 }
@@ -163,7 +163,7 @@ void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 }
 
 
-void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
+void OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
 {
     switch (_nHandle)
     {
@@ -180,7 +180,7 @@ void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 }
 
 
-bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+bool OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue )
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
@@ -190,7 +190,7 @@ bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _
 }
 
 
-void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+void OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

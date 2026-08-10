@@ -63,32 +63,32 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence<sal_Int8>& _rIdentifier) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence<sal_Int8>& _rIdentifier) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   getTypes() override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
+    virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XPersistObject
     void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
     void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     // XPropertySet
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+    virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     using OPropertySetAggregationHelper::getFastPropertyValue;
 
@@ -96,7 +96,7 @@ public:
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     const OUString& getModelName() const { return m_aModelName; }
 
@@ -132,8 +132,8 @@ public:
     explicit TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit TextFieldColumn(const TextFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -151,8 +151,8 @@ public:
     explicit PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit PatternFieldColumn(const PatternFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -170,8 +170,8 @@ public:
     explicit DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit DateFieldColumn(const DateFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -189,8 +189,8 @@ public:
     explicit TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit TimeFieldColumn(const TimeFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -208,8 +208,8 @@ public:
     explicit NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit NumericFieldColumn(const NumericFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -227,8 +227,8 @@ public:
     explicit CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -246,8 +246,8 @@ public:
     explicit CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit CheckBoxColumn(const CheckBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -265,8 +265,8 @@ public:
     explicit ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit ComboBoxColumn(const ComboBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -284,8 +284,8 @@ public:
     explicit ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit ListBoxColumn(const ListBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
@@ -303,8 +303,8 @@ public:
     explicit FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     explicit FormattedFieldColumn(const FormattedFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
         cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,

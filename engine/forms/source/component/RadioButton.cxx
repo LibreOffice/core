@@ -43,7 +43,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
 
 
-cpo::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ORadioButtonControl::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -85,7 +85,7 @@ ORadioButtonModel::~ORadioButtonModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > SAL_CALL ORadioButtonModel::createClone()
+css::uno::Reference< css::util::XCloneable > ORadioButtonModel::createClone()
 {
     rtl::Reference<ORadioButtonModel> pClone = new ORadioButtonModel(this, getContext());
     pClone->clonedFrom(this);
@@ -94,7 +94,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ORadioButtonModel::createC
 
 // XServiceInfo
 
-cpo::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ORadioButtonModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -253,13 +253,13 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL ORadioButtonModel::getServiceName()
+OUString ORadioButtonModel::getServiceName()
 {
     return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
 }
 
 
-void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OReferenceValueComponent::write(_rxOutStream);
 
@@ -276,7 +276,7 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
 }
 
 
-void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OReferenceValueComponent::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
