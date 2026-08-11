@@ -163,6 +163,23 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 		});
 	});
 
+	it('duplicating a style adds one copy the gallery shows straight away', function() {
+		insertTable();
+
+		// Count every entry, not just the ones on screen: the strip renders only as
+		// many as fit and re-lays out after an update.
+		cy.cGet('#tablestyles_design .ui-iconview-entry').its('length').then(function(nBefore) {
+			cy.cGet('#tablestyles_design .ui-iconview-entry:visible').eq(1).rightclick();
+			cy.cGet('body').contains('Duplicate Style').should('be.visible').click();
+
+			// Exactly one style is added, and it reaches the gallery without a reload.
+			cy.cGet('#tablestyles_design .ui-iconview-entry')
+				.should('have.length', nBefore + 1);
+			cy.cGet('#tablestyles_design').contains('.ui-iconview-separator', 'Custom')
+				.should('exist');
+		});
+	});
+
 	it('the New Table Style entry opens the create dialog', function() {
 		insertTable();
 		cy.getFrameWindow().then(function(win) {
