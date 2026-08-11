@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-06 13:27+0000\n"
+"PO-Revision-Date: 2026-08-12 01:32+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1537,7 +1537,7 @@ msgstr "Widgets bekijken"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
-msgstr "\"Langzame Proxy\""
+msgstr "\"Trage Proxy\""
 
 #: src/control/Control.AboutDialog.ts:220
 msgid "Time zone:"
