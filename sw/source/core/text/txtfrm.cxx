@@ -3940,15 +3940,16 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
                     // iteration to last line
                     pLineLayout = pLineLayout->GetNext();
                 }
-                if ( pLineLayout )
-                {
-                    if (pIDSA->get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
-                    {
-                        // last line's line-spacing gap calculated the same as all other lines...
-                        mnHeightOfLastLine = pLineLayout->GetLineSpacingBaseHeight();
-                        return;
-                    }
+                if (!pLineLayout)
+                    return; // mnHeightOfLastLine is unchanged
 
+                if (pIDSA->get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+                {
+                    // last line's line-spacing gap calculated the same as all other lines...
+                    mnHeightOfLastLine = pLineLayout->GetLineSpacingBaseHeight();
+                }
+                else
+                {
                     SwTwips nAscent, nDescent, nDummy1, nDummy2;
                     // i#47162 - suppress consideration of
                     // fly content portions and the line portion.
