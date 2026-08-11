@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/format \
         starmath/source/mathtype \
         starmath/source/node \
+        starmath/source/OpenTypeNode\
         starmath/source/ooxmlexport \
         starmath/source/ooxmlimport \
         starmath/source/rtfexport \

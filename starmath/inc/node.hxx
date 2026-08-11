@@ -310,6 +310,7 @@ public:
      * @return
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) = 0;
+    virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat);
 
     /**
      * Appends to rText the node text.

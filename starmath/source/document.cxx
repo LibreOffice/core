@@ -278,7 +278,11 @@ void SmDocShell::ArrangeFormula()
     // Numbers should not be converted, for now.
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
-    mpTree->Arrange(*pOutDev, rFormat);
+    if (pOutDev->SupportsOpenTypeMath())
+        mpTree->ArrangeOpenType(*pOutDev, rFormat);
+    else
+        mpTree->Arrange(*pOutDev, rFormat);
+
 
     pOutDev->EnableRTL(bOldRTL);
 
