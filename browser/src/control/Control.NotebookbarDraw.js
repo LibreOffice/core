@@ -573,12 +573,14 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				]
 			},
 			{ type: 'separator', id: 'view-griduse-break', orientation: 'vertical' },
-			{
+			// On Android the app's own settings choose the theme, so the
+			// editor offers no theme toggle of its own.
+			!window.ThisIsTheAndroidApp ? {
 				'id':'toggledarktheme',
 				'type': 'bigcustomtoolitem',
 				'text': _('Dark Mode'),
 				'accessibility': { focusBack: true, combination: 'DT', de: null }
-			},
+			} : {},
 			{
 				'id':'invertbackground',
 				'class': 'unoinvertbackground',

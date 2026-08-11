@@ -49,7 +49,7 @@
         <!-- The main document editing Activity -->
         <activity
             android:name="org.libreoffice.androidlib.LOActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden"
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|uiMode"
             android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>

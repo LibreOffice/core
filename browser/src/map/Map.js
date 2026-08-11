@@ -209,6 +209,12 @@ window.L.Map = window.L.Evented.extend({
 			this.on('hardwarekeyboarddetached', function() {
 				window.keyboard.setHardwareKeyboardAttached(false);
 			});
+			this.on('darkthemeactivated', function() {
+				this.uiManager.applyDarkMode(true, false);
+			});
+			this.on('lightthemeactivated', function() {
+				this.uiManager.applyDarkMode(false, false);
+			});
 		}
 
 		this.showBusy(_('Initializing...'), false);

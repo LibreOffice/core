@@ -161,6 +161,9 @@ public class LOActivity extends AppCompatActivity {
     /// and read on the thread that serves the JavaScript bridge, so it is volatile.
     private volatile boolean mHardwareKeyboardAttached = false;
 
+    /// The theme the loaded document is rendered in: true is dark mode, false is light mode.
+    private boolean mDarkModeApplied = false;
+
     private InputManager mInputManager = null;
     private InputManager.InputDeviceListener mInputDeviceListener = null;
 
@@ -381,6 +384,21 @@ public class LOActivity extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfiguration) {
         super.onConfigurationChanged(newConfiguration);
         updateHardwareKeyboardState();
+        updateDarkMode();
+    }
+
+    /** Retheme the loaded document when the effective dark mode setting has changed. */
+    private void updateDarkMode() {
+        if (!documentLoaded)
+            return;
+
+        boolean darkMode = isDarkMode();
+        if (darkMode == mDarkModeApplied)
+            return;
+
+        mDarkModeApplied = darkMode;
+        callFakeWebsocketOnMessage(darkMode ? "mobile: darkthemeactivated"
+                                            : "mobile: lightthemeactivated");
     }
 
     /** Initialize the app - copy the assets and create the UI. */
@@ -1272,7 +1290,8 @@ public class LOActivity extends AppCompatActivity {
         if (isLargeScreen() && !isChromeOS())
             finalUrlToLoad += "&userinterfacemode=notebookbar";
 
-        if(isDarkMode()) {
+        mDarkModeApplied = isDarkMode();
+        if (mDarkModeApplied) {
             finalUrlToLoad += "&darkTheme=true";
         }
 

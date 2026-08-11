@@ -1652,13 +1652,15 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'layout-showstatusbar-break', orientation: 'vertical' },
-			{
+			// On Android the app's own settings choose the theme, so the
+			// editor offers no theme toggle of its own.
+			!window.ThisIsTheAndroidApp ? {
 				'id':'toggledarktheme',
 				'class': 'unotoggledarktheme',
 				'type': 'bigcustomtoolitem',
 				'text': _('Dark Mode'),
 				'accessibility': { focusBack: true,	combination: 'DT', de: null }
-			},
+			} : {},
 			{
 				'id':'invertbackground',
 				'class': 'unoinvertbackground',
