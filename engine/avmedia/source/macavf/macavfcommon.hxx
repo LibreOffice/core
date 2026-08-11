@@ -45,16 +45,6 @@
 #include <com/sun/star/media/XManager.hpp>
 
 
-#define AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_MacAVF"
-#define AVMEDIA_MACAVF_PLAYER_SERVICENAME "com.sun.star.media.Player_MacAVF"
-
-#define AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_MacAVF"
-#define AVMEDIA_MACAVF_WINDOW_SERVICENAME "com.sun.star.media.Window_MacAVF"
-
-#define AVMEDIA_MACAVF_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_MacAVF"
-#define AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_MacAVF"
-
-
 // MacAVObserver handles the notifications used in the AVFoundation framework
 
 namespace avmedia::macavf { class MacAVObserverHandler; }

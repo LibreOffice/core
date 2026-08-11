@@ -20,6 +20,7 @@
 #include "player.hxx"
 #include "framegrabber.hxx"
 #include "window.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 
 #include <cmath> // for log10()
@@ -343,19 +344,19 @@ uno::Reference< media::XFrameGrabber > Player::createFrameGrabber()
 
 OUString Player::getImplementationName(  )
 {
-    return AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME;
+    return u"com.sun.star.comp.avmedia.Player_MacAVF"_ustr;
 }
 
 
 bool Player::supportsService( const OUString& ServiceName )
 {
-    return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 
 cpo::uno::Sequence< OUString > Player::getSupportedServiceNames(  )
 {
-    return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
+    return { u"com.sun.star.media.Player_MacAVF"_ustr };
 }
 
 } // namespace avmedia::macavf

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "window.hxx"
 #include "player.hxx"
@@ -244,19 +245,19 @@ void Window::removeEventListener( const uno::Reference< lang::XEventListener >& 
 
 OUString Window::getImplementationName(  )
 {
-    return AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME;
+    return u"com.sun.star.comp.avmedia.Window_MacAVF"_ustr;
 }
 
 
 bool Window::supportsService( const OUString& ServiceName )
 {
-    return ServiceName == AVMEDIA_MACAVF_WINDOW_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 
 cpo::uno::Sequence< OUString > Window::getSupportedServiceNames(  )
 {
-    return { AVMEDIA_MACAVF_WINDOW_SERVICENAME };
+    return { u"com.sun.star.media.Window_MacAVF"_ustr };
 }
 
 } // namespace avmedia::macavf
