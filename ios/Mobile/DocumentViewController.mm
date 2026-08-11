@@ -637,11 +637,14 @@ static unsigned sOwnedClipboardDocId = 0;
             return;
         } else if ([message.body isEqualToString:@"PRINT"]) {
 
-            // Create the PDF to print.
+            // Create the PDF to print. Leave form fields and comments out of
+            // the printout, like the browser does when printing to PDF.
 
             std::string printFile = FileUtil::createRandomTmpDir() + "/print.pdf";
             NSURL *printURL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:printFile.c_str()] isDirectory:NO];
-            DocumentData::get(self.document->appDocId).loKitDocument->saveAs([[printURL absoluteString] UTF8String], "pdf", nullptr);
+            DocumentData::get(self.document->appDocId).loKitDocument->saveAs([[printURL absoluteString] UTF8String], "pdf",
+                "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
+                "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}");
 
             UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
             UIPrintInfo *printInfo = [UIPrintInfo printInfo];

@@ -37,7 +37,11 @@ public class PrintAdapter extends PrintDocumentAdapter {
         super.onStart();
         //Will show its own progress bar for the below task
         printDocFile = new File(mainActivity.getCacheDir(), "print.pdf");
-        mainActivity.saveAs(printDocFile.toURI().toString(), "pdf", null);
+        // Leave form fields and comments out of the printout, like the
+        // browser does when printing to PDF.
+        mainActivity.saveAs(printDocFile.toURI().toString(), "pdf",
+                "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
+                + "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}");
     }
 
     @Override

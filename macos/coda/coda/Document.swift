@@ -484,7 +484,11 @@ class Document: NSDocument {
             .appendingPathComponent(UUID().uuidString)
             .appendingPathExtension("pdf")
 
-        COWrapper.saveAs(with: self, url: tmpURL.absoluteString, format: "pdf", filterOptions: nil)
+        // Leave form fields and comments out of the printout, like the
+        // browser does when printing to PDF.
+        COWrapper.saveAs(with: self, url: tmpURL.absoluteString, format: "pdf",
+                         filterOptions: "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
+                             + "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}")
 
         // load the PDF into a PDFView
         guard let pdfDocument = PDFDocument(url: tmpURL) else {

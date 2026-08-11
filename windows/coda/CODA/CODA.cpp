@@ -618,7 +618,12 @@ static void do_print(int appDocId)
     const std::string tempFile = FileUtil::createRandomTmpDir() + "\\p.pdf";
     const std::string tempFileUri = Poco::URI(Poco::Path(tempFile)).toString();
 
-    DocumentData::get(appDocId).loKitDocument->saveAs(tempFileUri.c_str(), "pdf", nullptr);
+    // Leave form fields and comments out of the printout, like the browser does when printing to
+    // PDF.
+    DocumentData::get(appDocId).loKitDocument->saveAs(
+        tempFileUri.c_str(), "pdf",
+        "{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"false\"},"
+        "\"ExportNotes\":{\"type\":\"boolean\",\"value\":\"false\"}}");
 
     STARTUPINFOW startupInfo{ sizeof(STARTUPINFOW) };
     PROCESS_INFORMATION processInformation;
