@@ -220,10 +220,6 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     if ( bValidCurrentRow )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ORowSetMatrix::const_iterator aCacheEnd;
-        ORowSetMatrix::iterator aCurrentRow;
-        aCacheEnd = m_pCache->getEnd();
-        aCurrentRow = m_aCurrentRow;
         ORowSetCacheMap::const_iterator aCacheIter = m_aCurrentRow.getIter();
         ORowSetCacheIterator_Helper aHelper = aCacheIter->second;
         ORowSetMatrix::const_iterator k = aHelper.aIterator;
