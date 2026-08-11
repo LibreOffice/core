@@ -361,6 +361,13 @@ function selectCellsInRange(range) {
 function openAutoFilterMenu(secondColumn) {
 	cy.log('>> openAutoFilterMenu - start');
 
+	// A click still held back by the click timer would merge with the click
+	// below into a double-click, which starts editing the cell instead of
+	// opening the popup.
+	cy.getFrameWindow().then(function(win) {
+		helper.waitForTimers(win, 'clicktimer');
+	});
+
 	// Get canvas container first.
 	// Then get its coordinates relative to window.
 	// Then calculate the position of the autofilter easier.
