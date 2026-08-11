@@ -143,6 +143,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		this.clearNotebookbar();
 		this.setInitialized(false);
 		$(this.container).remove();
+		this.container = null;
 	},
 
 	onUpdatePermission: function(e) {
