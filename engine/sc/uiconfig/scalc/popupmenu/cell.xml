@@ -64,6 +64,8 @@
   <menu:menuitem menu:id=".uno:ShowNote"/>
   <menu:menuitem menu:id=".uno:HideNote"/>
   <menu:menuseparator/>
+  <menu:menu menu:id=".uno:DataTableMenu" menu:style="text"/>
+  <menu:menuseparator/>
   <menu:menu menu:id=".uno:FormatSparklineMenu" menu:style="text"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:CurrentConditionalFormatDialog"/>
