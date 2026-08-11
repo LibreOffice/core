@@ -622,7 +622,7 @@
           <menu:menuitem menu:id=".uno:DeletePivotTable"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:DataTableMenu"/>
+      <menu:menu menu:id=".uno:DataTableMenu" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:CellContentsMenu">
         <menu:menupopup>

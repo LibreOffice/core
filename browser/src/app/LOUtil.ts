@@ -578,6 +578,7 @@ class LOUtil {
 			tabledeletemenu: 'deletetable',
 			insertcalctable: 'inserttable',
 			removecalctable: 'deletetable',
+			tabletotalrow: 'autosum',
 			// TODO: reusing a similar icon for now; needs a dedicated Resize Table icon
 			resizecalctable: 'tabledesign',
 			renamecalctable: 'renametable',
