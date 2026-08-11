@@ -3083,6 +3083,17 @@
                                 <property name="homogeneous">True</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkToolButton" id="btnHomeFontStyleName">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="action_name">.uno:FontStyleName</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
