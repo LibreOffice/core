@@ -40,4 +40,10 @@
             single-instance="true">
         <singleton name="org.libreoffice.embindtest.thePassthrough"/>
     </implementation>
+    <implementation
+            constructor="org_libreoffice_comp_embindtest_MethodToString_get_implementation"
+            name="org.libreoffice.comp.embindtest.theMethodToString"
+            single-instance="true">
+        <singleton name="org.libreoffice.embindtest.theMethodToString"/>
+    </implementation>
 </component>

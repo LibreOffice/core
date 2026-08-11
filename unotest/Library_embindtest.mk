@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,embindtest))
 
 $(eval $(call gb_Library_add_exception_objects,embindtest, \
     unotest/source/embindtest/embindtest \
+    unotest/source/embindtest/methodtostring \
     unotest/source/embindtest/passthrough \
     unotest/source/embindtest/serviceconstructors \
     unotest/source/embindtest/singleton \

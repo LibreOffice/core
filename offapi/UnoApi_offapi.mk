@@ -4402,6 +4402,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
     XPassthrough \
     XStringFactory \
     XTest \
+    theMethodToString \
     thePassthrough \
     theSingleton \
 ))
