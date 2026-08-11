@@ -156,6 +156,9 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
     void            ChangeFly(Move::Direction eDir, Move::Size eDirSize, bool bWeb);
     void            ChangeDrawing(Move::Direction eDir, Move::Size eDirSize);
 
+    // let a drag of the selected object start at rDocPos
+    static void ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos);
+
     bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
     bool            RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode);
 

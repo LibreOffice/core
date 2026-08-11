@@ -2963,6 +2963,15 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
     return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId();
 }
 
+void SwEditWin::ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos)
+{
+    // the mode has to be (re-)entered here: a drag counts from where it was entered
+    rSh.EnterSelFrameMode(&rDocPos);
+    s_nDDStartPosY = rDocPos.Y();
+    s_nDDStartPosX = rDocPos.X();
+    g_bFrameDrag = true;
+}
+
 void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                             const bool bOnlyText, bool bLockView )
 {
@@ -3749,10 +3758,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             else
                             {   if ( rSh.SelectObj( aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP ) )
                                 {
-                                    rSh.EnterSelFrameMode( &aDocPos );
-                                    SwEditWin::s_nDDStartPosY = aDocPos.Y();
-                                    SwEditWin::s_nDDStartPosX = aDocPos.X();
-                                    g_bFrameDrag = true;
+                                    ArmFrameDrag(rSh, aDocPos);
                                     return;
                                 }
                             }
@@ -3792,10 +3798,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             else
                             {   if ( rSh.SelectObj( aDocPos, SW_ENTER_GROUP ) )
                                 {
-                                    rSh.EnterSelFrameMode( &aDocPos );
-                                    SwEditWin::s_nDDStartPosY = aDocPos.Y();
-                                    SwEditWin::s_nDDStartPosX = aDocPos.X();
-                                    g_bFrameDrag = true;
+                                    ArmFrameDrag(rSh, aDocPos);
                                     return;
                                 }
                             }
@@ -3873,10 +3876,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             else
                             {   if ( rSh.SelectObj( aDocPos ) )
                                 {
-                                    rSh.EnterSelFrameMode( &aDocPos );
-                                    SwEditWin::s_nDDStartPosY = aDocPos.Y();
-                                    SwEditWin::s_nDDStartPosX = aDocPos.X();
-                                    g_bFrameDrag = true;
+                                    ArmFrameDrag(rSh, aDocPos);
                                     return;
                                 }
                             }
@@ -3900,10 +3900,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if ( rSh.IsSelFrameMode() &&
                                  rSh.IsInsideSelectedObj( aDocPos ) )
                             {
-                                rSh.EnterSelFrameMode( &aDocPos );
-                                SwEditWin::s_nDDStartPosY = aDocPos.Y();
-                                SwEditWin::s_nDDStartPosX = aDocPos.X();
-                                g_bFrameDrag = true;
+                                ArmFrameDrag(rSh, aDocPos);
                                 return;
                             }
                             if ( rSh.IsSelFrameMode() )
@@ -5712,11 +5709,7 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
             rSh.LeaveSelFrameMode();
         else
         {
-            // a drag that this click starts has to start where this click is
-            rSh.EnterSelFrameMode(&aDocPos);
-            SwEditWin::s_nDDStartPosY = aDocPos.Y();
-            SwEditWin::s_nDDStartPosX = aDocPos.X();
-            g_bFrameDrag = true;
+            ArmFrameDrag(rSh, aDocPos);
         }
         if( bUnLockView )
             rSh.LockView( false );
