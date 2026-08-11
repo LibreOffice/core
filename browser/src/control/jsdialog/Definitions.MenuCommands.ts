@@ -82,7 +82,7 @@ const MenuCommands: MenuCommandsInterface = {
 				  'RecalcPivotTable', 'DataDataPilotRun', 'DeletePivotTable', 'CalculatedFieldRun',
 				  'InsertCalcTable', 'RunInsCalcTable', 'RemoveCalcTable', 'TableTotalRow',
 				  'ResizeCalcTable', 'RenameCalcTable', 'SummarizeWithPivot',
-				  'ConvertCalcTableToRange', 'HandleDuplicateRecords',
+				  'ConvertCalcTableToRange', 'HandleDuplicateRecords', 'RemoveDuplicates',
 				  'DatabaseSettings', 'FormatCellDialog', 'DeleteNote', 'SetAnchorToCell', 'SetAnchorToCellResize',
 				  'FormatSparklineMenu', 'InsertSparkline', 'DeleteSparkline', 'DeleteSparklineGroup',
 				  'EditSparklineGroup', 'EditSparkline', 'GroupSparklines', 'UngroupSparklines', 'AutoFill'],

@@ -129,11 +129,11 @@ class CalcTableTab implements NotebookbarTab {
 									{
 										id: 'handle-duplicates',
 										type: 'toolitem',
-										text: _UNO('.uno:HandleDuplicateRecords', 'spreadsheet'),
-										command: '.uno:HandleDuplicateRecords',
+										text: _UNO('.uno:RemoveDuplicates', 'spreadsheet'),
+										command: '.uno:RemoveDuplicates',
 										accessibility: {
 											focusBack: true,
-											combination: 'HD',
+											combination: 'RD',
 										},
 									},
 								],

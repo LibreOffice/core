@@ -218,6 +218,9 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             case SID_SUMMARIZE_WITH_PIVOT:
                 rViewData.GetDispatcher().Execute(SID_OPENDLG_PIVOTTABLE);
                 break;
+            case SID_REMOVE_DUPLICATES:
+                rViewData.GetDispatcher().Execute(FID_HANDLEDUPLICATERECORDS);
+                break;
             case SID_TABLE_TOTALROW:
             {
                 // Desired value: SfxBoolItem in args if present, else toggle.
@@ -322,6 +325,28 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                     || rViewData.GetDocument().GetChangeTrack() != nullptr
                     || rViewData.IsMultiMarked())
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case SID_REMOVE_DUPLICATES:
+            {
+                // Keep in sync with FID_HANDLEDUPLICATERECORDS in ScTabViewShell::GetState.
+                ScViewData& rViewData = m_pViewShell->GetViewData();
+                ScRange aSel;
+                if (!pDBData || bProtected || rViewData.GetSimpleArea(aSel) != SC_MARK_SIMPLE)
+                {
+                    rSet.DisableItem(nWhich);
+                    break;
+                }
+                for (const ScDBData* pDB : rViewData.GetDocument().GetAllNamedDBsInArea(aSel))
+                {
+                    ScRange aArea;
+                    pDB->GetArea(aArea);
+                    if (!aArea.Contains(aSel))
+                    {
+                        rSet.DisableItem(nWhich);
+                        break;
+                    }
+                }
             }
             break;
             case SID_TABLE_TOTALROW:

@@ -1093,7 +1093,7 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:ResizeCalcTable', 'spreadsheet'), uno: '.uno:ResizeCalcTable'},
 					{name: _UNO('.uno:RenameCalcTable', 'spreadsheet'), uno: '.uno:RenameCalcTable'},
 					{name: _UNO('.uno:SummarizeWithPivot', 'spreadsheet'), uno: '.uno:SummarizeWithPivot'},
-					{name: _UNO('.uno:HandleDuplicateRecords', 'spreadsheet'), uno: '.uno:HandleDuplicateRecords'},
+					{name: _UNO('.uno:RemoveDuplicates', 'spreadsheet'), uno: '.uno:RemoveDuplicates'},
 					{name: _UNO('.uno:ConvertCalcTableToRange', 'spreadsheet'), uno: '.uno:ConvertCalcTableToRange'}]},
 				{type: 'separator'},
 				{name: _UNO('.uno:NamesMenu', 'spreadsheet'), type: 'menu', menu: [
