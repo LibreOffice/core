@@ -226,11 +226,11 @@ static SwTwips wrapStart(const SwLinePortion* pPor)
 // 2) For every portion a DrawRect with subsequent DrawText is done
 //    (objectively slow, subjectively fast)
 // Since the user usually judges subjectively the second method is set as default.
-void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-    const bool bUnderSized,
-    ::std::optional<SwTaggedPDFHelper> & roTaggedLabel,
-    ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph,
-    bool const isPDFTaggingEnabled)
+void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const bool bUnderSized,
+                                 const bool bCutByUpper,
+                                 ::std::optional<SwTaggedPDFHelper>& roTaggedLabel,
+                                 ::std::optional<SwTaggedPDFHelper>& roTaggedParagraph,
+                                 bool const isPDFTaggingEnabled)
 {
     // maybe catch-up adjustment
     GetAdjusted();
@@ -329,6 +329,16 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             rClip.ChgClip( rPaint );
         }
 #endif
+    }
+
+    // A line starting before the rect to paint in reaches out of the frame that holds this one,
+    // over whatever stands to the left of it. The check above cuts it on the screen only, and a
+    // printer and a PDF need it just as much. Where the line ends is looked at in the loop below.
+    if (bCutByUpper && !rClip.IsChg() && pPor && GetInfo().GetPos().X() < rPaint.Left())
+    {
+        bClip = false;
+        rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent().as_twip<sal_Int32>(),
+                      m_pCurr->GetExtraDescent().as_twip<sal_Int32>());
     }
 
     // Alignment
@@ -480,6 +490,15 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             bClip = false;
             rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent().as_twip<sal_Int32>(), m_pCurr->GetExtraDescent().as_twip<sal_Int32>());
+        }
+        else if (bCutByUpper && !rClip.IsChg() && GetInfo().X() + pPor->Width() > nMaxRight)
+        {
+            // The frame that holds this one is narrower than it, so the paint rect ends before the
+            // frame does. A portion reaching past that end would be drawn over what stands beside
+            // that frame, so cut it there. The clip above does this for the screen only, and the
+            // printer and the PDF need it just as much.
+            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent().as_twip<sal_Int32>(),
+                          m_pCurr->GetExtraDescent().as_twip<sal_Int32>());
         }
 
         // Portions, which lay "below" the text like post-its

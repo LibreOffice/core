@@ -742,6 +742,19 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
     SwRect aOldRect( rRect );
 
+    // Whether the rect to paint in ends before the content may reach. It is narrowed by every cell,
+    // fly and column on the way up (SwFrame::GetPaintArea), while the content goes as far as the
+    // union frame - the frame widened by a negative indent. Read before the frame is swapped.
+    bool bCutByUpper;
+    {
+        SwRectFnSet aRectFnSet(*this);
+        const SwRect aPaintArea(GetPaintArea());
+        const SwRect aReach(UnionFrame());
+        bCutByUpper
+            = aRectFnSet.XDiff(aRectFnSet.GetLeft(aPaintArea), aRectFnSet.GetLeft(aReach)) > 0
+              || aRectFnSet.XDiff(aRectFnSet.GetRight(aReach), aRectFnSet.GetRight(aPaintArea)) > 0;
+    }
+
     {
         SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
@@ -777,7 +790,11 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         OutputDevice* pOut = aInf.GetOut();
         const bool bOnWin = pSh->GetWin() != nullptr;
 
-        SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : nullptr );
+        // A cell, a fly or a column can be narrower than this frame, and then the rect to paint in
+        // ends before the frame does (SwFrame::GetPaintArea). Lines reaching past that end have to
+        // be cut, or they are drawn over what stands beside that cell or fly - and the screen is
+        // not the only place where that matters, so allow the clip on a printer and in a PDF too.
+        SwSaveClip aClip(bOnWin || IsUndersized() || bCutByUpper ? pOut : nullptr);
 
         // Output loop: For each Line ... (which is still visible) ...
         //   adapt rRect (Top + 1, Bottom - 1)
@@ -787,7 +804,8 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
         do
         {
-            aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph, isPDFTaggingEnabled);
+            aLine.DrawTextLine(rRect, aClip, IsUndersized(), bCutByUpper, oTaggedLabel,
+                               oTaggedParagraph, isPDFTaggingEnabled);
 
         } while( aLine.Next() && aLine.Y() <= nBottom );
 

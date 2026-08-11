@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <limits>
+
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -14,7 +18,10 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <basegfx/range/b2drange.hxx>
 #include <vcl/event.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/mtfxmldump.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -39,6 +46,7 @@
 #include <rootfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <docsh.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 
@@ -2601,6 +2609,60 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFooterNoWrapObject)
     saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT(!isMSOLayout());
     CPPUNIT_ASSERT(!isFlyAboveText());
+}
+
+/// The width in points of the narrowest path that the line starting with rMarker is clipped to;
+/// infinity when nothing clips it, -1 when there is no such line
+double lcl_getClipWidth(vcl::pdf::PDFiumPage& rPage, std::u16string_view rMarker)
+{
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = rPage.getTextPage();
+    for (int nObject = 0; nObject < rPage.getObjectCount(); ++nObject)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = rPage.getObject(nObject);
+        if (pObject->getType() != vcl::pdf::PDFPageObjectType::Text
+            || !pObject->getText(pTextPage).startsWith(rMarker))
+            continue;
+
+        double fWidth = std::numeric_limits<double>::infinity();
+        std::unique_ptr<vcl::pdf::PDFiumClipPath> pClip = pObject->getClipPath();
+        CPPUNIT_ASSERT(pClip);
+        for (int nPath = 0; nPath < pClip->getPathCount(); ++nPath)
+        {
+            basegfx::B2DRange aRange;
+            for (int nSegment = 0; nSegment < pClip->getPathSegmentCount(nPath); ++nSegment)
+                aRange.expand(pClip->getPathSegment(nPath, nSegment)->getPoint());
+            if (!aRange.isEmpty())
+                fWidth = std::min(fWidth, aRange.getWidth());
+        }
+        return fWidth;
+    }
+    return -1;
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16076_contentOutsideCellAndFrame)
+{
+    // Four ways for content to reach out of the frame that holds it: a table in a cell and a table
+    // in a text frame, each asking for 6cm where it has 4cm, and two cells whose paragraph has a
+    // negative indent, one to the right and one to the left.
+    createSwDoc("Cool16076_contentOutsideCellAndFrame.fodt");
+    save(TestFilter::PDF_WRITER);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
+    if (!pPdf)
+        return;
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
+
+    // What must not happen is painting that content over what stands beside it, so each of the four
+    // lines is clipped to the frame that holds it. Without the fix none of them had a clip of its
+    // own, and the only clip of the page was the page itself, 283 points wide.
+
+    // the cell of the nested table, 2210 twips
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(110.45, lcl_getClipWidth(*pPage, u"n001"), 0.5);
+    // the first cell of the outer table, 2267 twips
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(113.30, lcl_getClipWidth(*pPage, u"i001"), 0.5);
+    // the second cell of the outer table, 2268 twips
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(113.40, lcl_getClipWidth(*pPage, u"L001"), 0.5);
+    // the text frame, 2258 twips
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(112.85, lcl_getClipWidth(*pPage, u"f001"), 0.5);
 }
 
 } // end of anonymous namespace
