@@ -177,8 +177,7 @@ namespace cppcanvas
                                                           const vcl::Font&                rFont,
                                                           const ActionFactoryParameters&  rParms );
             void createActions( GDIMetaFile&                    rMtf,
-                                const ActionFactoryParameters&  rParms,
-                                bool                            bSubsettableActions );
+                                const ActionFactoryParameters&  rParms );
             bool createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
                                       const ActionFactoryParameters&   rParms );
             bool createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
@@ -194,8 +193,7 @@ namespace cppcanvas
             void createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                        const ::Gradient&              rGradient,
                                        const ActionFactoryParameters& rParms,
-                                       bool                           bIsPolygonRectangle,
-                                       bool                           bSubsettableActions );
+                                       bool                           bIsPolygonRectangle );
 
             void createTextAction( const ::Point&                 rStartPoint,
                                    const OUString&                rString,
@@ -203,8 +201,7 @@ namespace cppcanvas
                                    int                            nLength,
                                    KernArraySpan                pCharWidths,
                                    std::span<const bool>          pKashidaArray,
-                                   const ActionFactoryParameters& rParms,
-                                   bool                           bSubsettable );
+                                   const ActionFactoryParameters& rParms );
 
             vclcanvas::Canvas& mrCanvas;
             mutable vclcanvas::ViewState  maViewState;

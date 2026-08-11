@@ -56,12 +56,6 @@ namespace cppcanvas
 
                 @param pDXArray
                 Pointer to array of logical character offsets (or NULL)
-
-                @param bSubsettable
-                When this parameter is set to true, the generated
-                action might consume slightly more memory, but is
-                subsettable (Action::render( Subset ) works on
-                characters)
              */
             std::shared_ptr<Action> createTextAction( const ::Point&                 rStartPoint,
                                                      const ::Size&                  rReliefOffset,
@@ -76,7 +70,6 @@ namespace cppcanvas
                                                      std::span<const bool>          pKashidaArray,
                                                      VirtualDevice&                 rVDev,
                                                      const OutDevState&             rState,
-                                                     bool                           bSubsettable,
                                                      vclcanvas::Canvas& );
         }
 }

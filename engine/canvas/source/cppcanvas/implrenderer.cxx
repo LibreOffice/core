@@ -466,8 +466,7 @@ namespace cppcanvas
         void Renderer::createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                                  const ::Gradient&              rGradient,
                                                  const ActionFactoryParameters& rParms,
-                                                 bool                           bIsPolygonRectangle,
-                                                 bool                           bSubsettableActions )
+                                                 bool                           bIsPolygonRectangle )
         {
             DBG_TESTSOLARMUTEX();
 
@@ -674,7 +673,7 @@ namespace cppcanvas
             Gradient aGradient(rGradient);
             aGradient.AddGradientActions( rPoly.GetBoundRect(), aTmpMtf );
 
-            createActions( aTmpMtf, rParms, bSubsettableActions );
+            createActions( aTmpMtf, rParms );
 
             rParms.mrStates.popState();
         }
@@ -783,8 +782,7 @@ namespace cppcanvas
                                              int                            nLength,
                                              KernArraySpan                pCharWidths,
                                              std::span<const bool>          pKashidaArray,
-                                             const ActionFactoryParameters& rParms,
-                                             bool                           bSubsettableActions )
+                                             const ActionFactoryParameters& rParms )
         {
             ENSURE_OR_THROW( nIndex >= 0 && nLength <= rString.getLength() + nIndex,
                               "Renderer::createTextWithEffectsAction(): Invalid text index" );
@@ -875,7 +873,6 @@ namespace cppcanvas
                     pKashidaArray,
                     rParms.mrVDev,
                     rState,
-                    bSubsettableActions,
                     rParms.mrUnoCanvas ) );
 
             std::shared_ptr<Action> pStrikeoutTextAction;
@@ -933,7 +930,6 @@ namespace cppcanvas
                             pKashidaArray,
                             rParms.mrVDev,
                             rState,
-                            bSubsettableActions,
                             rParms.mrUnoCanvas ) ;
                 }
             }
@@ -1095,8 +1091,7 @@ namespace cppcanvas
         }
 
         void Renderer::createActions( GDIMetaFile&                   rMtf,
-                                          const ActionFactoryParameters& rFactoryParms,
-                                          bool                           bSubsettableActions )
+                                          const ActionFactoryParameters& rFactoryParms )
         {
             /* TODO(P2): interpret mtf-comments
                ================================
@@ -1399,8 +1394,7 @@ namespace cppcanvas
                         createGradientAction( ::tools::PolyPolygon( pGradAct->GetRect() ),
                                               pGradAct->GetGradient(),
                                               rFactoryParms,
-                                              true,
-                                              bSubsettableActions );
+                                              true );
                     }
                     break;
 
@@ -1412,8 +1406,7 @@ namespace cppcanvas
                         rVDev.AddHatchActions( static_cast<MetaHatchAction*>(pCurrAct)->GetPolyPolygon(),
                                                static_cast<MetaHatchAction*>(pCurrAct)->GetHatch(),
                                                aTmpMtf );
-                        createActions( aTmpMtf, rFactoryParms,
-                                       bSubsettableActions );
+                        createActions( aTmpMtf, rFactoryParms );
                     }
                     break;
 
@@ -1452,8 +1445,7 @@ namespace cppcanvas
                                                              static_cast<double>(aSize.Height()) / aMtfSizePix.Height() );
 
                         createActions( const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
-                                       rFactoryParms,
-                                       bSubsettableActions );
+                                       rFactoryParms );
 
                         rVDev.Pop();
                         rStates.popState();
@@ -1495,8 +1487,7 @@ namespace cppcanvas
                                                 createGradientAction( pGradAction->GetPolyPolygon(),
                                                                       pGradAction->GetGradient(),
                                                                       rFactoryParms,
-                                                                      false,
-                                                                      bSubsettableActions );
+                                                                      false );
                                             }
                                         }
                                         break;
@@ -2252,8 +2243,7 @@ namespace cppcanvas
                             nLen,
                             {},
                             {},
-                            rFactoryParms,
-                            bSubsettableActions );
+                            rFactoryParms );
                     }
                     break;
 
@@ -2274,8 +2264,7 @@ namespace cppcanvas
                             nLen,
                             pAct->GetDXArray(),
                             pAct->GetKashidaArray(),
-                            rFactoryParms,
-                            bSubsettableActions );
+                            rFactoryParms );
                     }
                     break;
 
@@ -2326,8 +2315,7 @@ namespace cppcanvas
                                                   aTmpMtf );
 
                         createActions( aTmpMtf,
-                                       rFactoryParms,
-                                       bSubsettableActions );
+                                       rFactoryParms );
 
                         rStates.popState();
 
@@ -2379,8 +2367,7 @@ namespace cppcanvas
                             nLen,
                             aDXArray,
                             {},
-                            rFactoryParms,
-                            bSubsettableActions );
+                            rFactoryParms );
                     }
                     break;
 
@@ -2476,9 +2463,7 @@ namespace cppcanvas
                                                               // action
                                                               // in
                                                               // createActions!
-                           aParms,
-                           true // TODO(P1): make subsettability configurable
-                            );
+                           aParms);
         }
 
         Renderer::~Renderer()

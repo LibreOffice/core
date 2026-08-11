@@ -236,19 +236,6 @@ namespace cppcanvas
 
             }
 
-            double getLineWidth( ::VirtualDevice const &         rVDev,
-                                 const OutDevState&              rState,
-                                 const rendering::StringContext& rStringContext )
-            {
-                // TODO(F2): use correct scale direction
-                const ::basegfx::B2DSize aSize( rVDev.GetTextWidth( rStringContext.Text,
-                                                                    static_cast<sal_uInt16>(rStringContext.StartPosition),
-                                                                    static_cast<sal_uInt16>(rStringContext.Length) ),
-                                    0 );
-
-                return (rState.mapModeTransform * aSize).getWidth();
-            }
-
             /** Interface for renderEffectText functor below.
 
                 This is interface is used from the renderEffectText()
@@ -336,255 +323,6 @@ namespace cppcanvas
                 o_rOverallSize = basegfx::B2DSize(aRange.getX(), aRange.getY());
 
                 o_rTextLines = aPoly;
-            }
-
-
-            class TextAction : public Action
-            {
-            public:
-                TextAction( const ::basegfx::B2DPoint&  rStartPoint,
-                            const OUString&      rString,
-                            sal_Int32                   nStartPos,
-                            sal_Int32                   nLen,
-                            const OutDevState&          rState,
-                            vclcanvas::Canvas& );
-
-                TextAction(const TextAction&) = delete;
-                const TextAction& operator=(const TextAction&) = delete;
-
-                virtual bool render( vclcanvas::Canvas& rCanvas,
-                                     const vclcanvas::ViewState& rViewState,
-                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-
-                virtual sal_Int32 getActionCount() const override;
-
-            private:
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
-
-                rtl::Reference< vclcanvas::CanvasFont >     mxFont;
-                const rendering::StringContext              maStringContext;
-                vclcanvas::RenderState                      maState;
-                const sal_Int8                              maTextDirection;
-            };
-
-            TextAction::TextAction( const ::basegfx::B2DPoint&  rStartPoint,
-                                    const OUString&      rString,
-                                    sal_Int32                   nStartPos,
-                                    sal_Int32                   nLen,
-                                    const OutDevState&          rState,
-                                    vclcanvas::Canvas& rCanvas ) :
-                mxFont( rState.xFont ),
-                maStringContext( rString, nStartPos, nLen ),
-                maTextDirection( rState.textDirection )
-            {
-                init( maState, mxFont,
-                      rStartPoint,
-                      rState, rCanvas );
-
-                ENSURE_OR_THROW( mxFont.is(),
-                                  "::cppcanvas::TextAction(): Invalid font" );
-            }
-
-            bool TextAction::render( vclcanvas::Canvas& rCanvas,
-                                     const vclcanvas::ViewState& rViewState,
-                                     const ::basegfx::B2DHomMatrix& rTransformation ) const
-            {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction: 0x" << std::hex << this );
-
-                vclcanvas::RenderState aLocalState( maState );
-                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
-
-                rCanvas.drawText( maStringContext, mxFont,
-                                    rViewState, aLocalState, maTextDirection );
-
-                return true;
-            }
-
-            sal_Int32 TextAction::getActionCount() const
-            {
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
-                return 1;
-            }
-
-
-            class EffectTextAction :
-                public Action,
-                public TextRenderer
-            {
-            public:
-                EffectTextAction( const ::basegfx::B2DPoint& rStartPoint,
-                                  const ::basegfx::B2DSize&  rReliefOffset,
-                                  const ::Color&             rReliefColor,
-                                  const ::basegfx::B2DSize&  rShadowOffset,
-                                  const ::Color&             rShadowColor,
-                                  const ::Color&             rTextFillColor,
-                                  const OUString&     rText,
-                                  sal_Int32                  nStartPos,
-                                  sal_Int32                  nLen,
-                                  VirtualDevice const &      rVDev,
-                                  const OutDevState&         rState,
-                                  vclcanvas::Canvas& );
-
-                EffectTextAction(const EffectTextAction&) = delete;
-                const EffectTextAction& operator=(const EffectTextAction&) = delete;
-
-                virtual bool render( vclcanvas::Canvas& rCanvas,
-                                     const vclcanvas::ViewState& rViewState,
-                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-
-                virtual sal_Int32 getActionCount() const override;
-
-            private:
-                /// Interface TextRenderer
-                virtual bool operator()( vclcanvas::Canvas& rCanvas,
-                                         const vclcanvas::ViewState& rViewState,
-                                         const vclcanvas::RenderState& rRenderState,
-                                         const ::Color& rTextFillColor, bool bNormalText ) const override;
-
-                geometry::RealRectangle2D queryTextBoundsRect() const;
-                basegfx::B2DPolyPolygon queryTextBoundsPoly() const;
-
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
-
-                rtl::Reference< vclcanvas::CanvasFont >     mxFont;
-                const rendering::StringContext              maStringContext;
-                vclcanvas::RenderState                      maState;
-                const cppcanvastools::TextLineInfo                   maTextLineInfo;
-                ::basegfx::B2DSize                          maLinesOverallSize;
-                basegfx::B2DPolyPolygon                     mxTextLines;
-                const ::basegfx::B2DSize                    maReliefOffset;
-                const ::Color                               maReliefColor;
-                const ::basegfx::B2DSize                    maShadowOffset;
-                const ::Color                               maShadowColor;
-                const ::Color                               maTextFillColor;
-                const sal_Int8                              maTextDirection;
-            };
-
-            EffectTextAction::EffectTextAction( const ::basegfx::B2DPoint& rStartPoint,
-                                                const ::basegfx::B2DSize&  rReliefOffset,
-                                                const ::Color&             rReliefColor,
-                                                const ::basegfx::B2DSize&  rShadowOffset,
-                                                const ::Color&             rShadowColor,
-                                                const ::Color&             rTextFillColor,
-                                                const OUString&     rText,
-                                                sal_Int32                  nStartPos,
-                                                sal_Int32                  nLen,
-                                                VirtualDevice const &      rVDev,
-                                                const OutDevState&         rState,
-                                                vclcanvas::Canvas& rCanvas) :
-                mxFont( rState.xFont ),
-                maStringContext( rText, nStartPos, nLen ),
-                maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
-                maReliefOffset( rReliefOffset ),
-                maReliefColor( rReliefColor ),
-                maShadowOffset( rShadowOffset ),
-                maShadowColor( rShadowColor ),
-                maTextFillColor( rTextFillColor ),
-                maTextDirection( rState.textDirection )
-            {
-                const double nLineWidth(getLineWidth( rVDev, rState, maStringContext ));
-                initEffectLinePolyPolygon( maLinesOverallSize,
-                                           mxTextLines,
-                                           nLineWidth,
-                                           maTextLineInfo );
-
-                init( maState, mxFont,
-                      rStartPoint,
-                      rState, rCanvas );
-
-                ENSURE_OR_THROW( mxFont.is() && mxTextLines.count(),
-                                  "::cppcanvas::EffectTextAction(): Invalid font or lines" );
-            }
-
-            bool EffectTextAction::operator()( vclcanvas::Canvas& xCanvas,
-                                               const vclcanvas::ViewState& rViewState,
-                                               const vclcanvas::RenderState& rRenderState,
-                                               const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
-            {
-                //rhbz#1589029 non-transparent text fill background support
-                if (rTextFillColor != COL_AUTO)
-                {
-                    vclcanvas::RenderState aLocalState( rRenderState );
-                    aLocalState.DeviceColor = rTextFillColor;
-                    auto xTextBounds = queryTextBoundsPoly();
-                    // background of text
-                    xCanvas.fillPolyPolygon(xTextBounds, rViewState, aLocalState);
-                }
-
-                // under/over lines
-                xCanvas.fillPolyPolygon( mxTextLines,
-                                          rViewState,
-                                          rRenderState );
-
-                xCanvas.drawText( maStringContext, mxFont,
-                                   rViewState,
-                                   rRenderState,
-                                   maTextDirection );
-
-                return true;
-            }
-
-            bool EffectTextAction::render( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation ) const
-            {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction: 0x" << std::hex << this );
-
-                vclcanvas::RenderState aLocalState( maState );
-                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
-
-                return renderEffectText( rCanvas, rViewState, *this,
-                                         aLocalState,
-                                         maShadowColor,
-                                         maShadowOffset,
-                                         maReliefColor,
-                                         maReliefOffset,
-                                         maTextFillColor);
-            }
-
-            geometry::RealRectangle2D EffectTextAction::queryTextBoundsRect() const
-            {
-                // create XTextLayout, to have the
-                // XTextLayout::queryTextBounds() method available
-                rtl::Reference< vclcanvas::TextLayout > xTextLayout(
-                    mxFont->createTextLayout(
-                        maStringContext,
-                        maTextDirection,
-                        0 ) );
-
-                return xTextLayout->queryTextBounds();
-            }
-
-            basegfx::B2DPolyPolygon EffectTextAction::queryTextBoundsPoly() const
-            {
-                auto aTextBounds = queryTextBoundsRect();
-                auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
-                auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                return basegfx::B2DPolyPolygon(aTextBoundsPoly);
-            }
-
-            sal_Int32 EffectTextAction::getActionCount() const
-            {
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // subsettable text
-                return 1;
             }
 
 
@@ -1220,7 +958,6 @@ namespace cppcanvas
                                                              std::span<const bool>          pKashidaArray,
                                                              VirtualDevice&                 rVDev,
                                                              const OutDevState&             rState,
-                                                             bool                           bSubsettable,
                                                              vclcanvas::Canvas& rCanvas    )
         {
             const ::Size  aBaselineOffset( cppcanvastools::getBaselineOffset( rState,
@@ -1275,85 +1012,43 @@ namespace cppcanvas
 
             std::shared_ptr<Action> ret;
 
-            // no DX array, and no need to subset - no need to store
-            // DX array, then.
-            if( pDXArray.empty() && !bSubsettable )
+            // DX array necessary - any effects?
+            if( !rState.textOverlineStyle &&
+                !rState.textUnderlineStyle &&
+                !rState.textStrikeoutStyle &&
+                rReliefColor == aEmptyColor &&
+                rShadowColor == aEmptyColor &&
+                rTextFillColor == aEmptyColor )
             {
-                // effects, or not?
-                if( !rState.textOverlineStyle &&
-                    !rState.textUnderlineStyle &&
-                    !rState.textStrikeoutStyle &&
-                    rReliefColor == aEmptyColor &&
-                    rShadowColor == aEmptyColor &&
-                    rTextFillColor == aEmptyColor )
-                {
-                    // nope
-                    ret = std::make_shared<TextAction>(
-                                                aStartPoint,
-                                                rText,
-                                                nStartPos,
-                                                nLen,
-                                                rState,
-                                                rCanvas );
-                }
-                else
-                {
-                    // at least one of the effects requested
-                    ret = std::make_shared<EffectTextAction>(
-                                                aStartPoint,
-                                                aReliefOffset,
-                                                rReliefColor,
-                                                aShadowOffset,
-                                                rShadowColor,
-                                                rTextFillColor,
-                                                rText,
-                                                nStartPos,
-                                                nLen,
-                                                rVDev,
-                                                rState,
-                                                rCanvas );
-                }
+                // nope
+                ret = std::make_shared<TextArrayAction>(
+                                            aStartPoint,
+                                            rText,
+                                            nStartPos,
+                                            nLen,
+                                            aCharWidths,
+                                            aKashidas,
+                                            rState,
+                                            rCanvas );
             }
             else
             {
-                // DX array necessary - any effects?
-                if( !rState.textOverlineStyle &&
-                    !rState.textUnderlineStyle &&
-                    !rState.textStrikeoutStyle &&
-                    rReliefColor == aEmptyColor &&
-                    rShadowColor == aEmptyColor &&
-                    rTextFillColor == aEmptyColor )
-                {
-                    // nope
-                    ret = std::make_shared<TextArrayAction>(
-                                                aStartPoint,
-                                                rText,
-                                                nStartPos,
-                                                nLen,
-                                                aCharWidths,
-                                                aKashidas,
-                                                rState,
-                                                rCanvas );
-                }
-                else
-                {
-                    // at least one of the effects requested
-                    ret = std::make_shared<EffectTextArrayAction>(
-                                                aStartPoint,
-                                                aReliefOffset,
-                                                rReliefColor,
-                                                aShadowOffset,
-                                                rShadowColor,
-                                                rTextFillColor,
-                                                rText,
-                                                nStartPos,
-                                                nLen,
-                                                aCharWidths,
-                                                aKashidas,
-                                                rVDev,
-                                                rState,
-                                                rCanvas );
-                }
+                // at least one of the effects requested
+                ret = std::make_shared<EffectTextArrayAction>(
+                                            aStartPoint,
+                                            aReliefOffset,
+                                            rReliefColor,
+                                            aShadowOffset,
+                                            rShadowColor,
+                                            rTextFillColor,
+                                            rText,
+                                            nStartPos,
+                                            nLen,
+                                            aCharWidths,
+                                            aKashidas,
+                                            rVDev,
+                                            rState,
+                                            rCanvas );
             }
             return ret;
         }
