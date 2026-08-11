@@ -47,7 +47,7 @@ using namespace css::sdbcx;
 using namespace css::io;
 using namespace css::util;
 
-IMPLEMENT_SERVICE_INFO(MacabResultSet, "com.sun.star.sdbc.drivers.MacabResultSet", "com.sun.star.sdbc.ResultSet");
+IMPLEMENT_SERVICE_INFO(MacabResultSet, u"com.sun.star.sdbc.drivers.MacabResultSet"_ustr, u"com.sun.star.sdbc.ResultSet"_ustr);
 
 MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
     : MacabResultSet_BASE(m_aMutex),
@@ -246,7 +246,7 @@ bool MacabResultSet::getBoolean(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBoolean", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getBoolean"_ustr, nullptr);
 
     return false;
 }
@@ -256,7 +256,7 @@ sal_Int8 MacabResultSet::getByte(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getByte", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getByte"_ustr, nullptr);
 
     return 0;
 }
@@ -266,7 +266,7 @@ sal_Int16 MacabResultSet::getShort(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getShort", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getShort"_ustr, nullptr);
 
     return 0;
 }
@@ -392,7 +392,7 @@ Sequence< sal_Int8 > MacabResultSet::getBytes(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBytes", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getBytes"_ustr, nullptr);
 
     return Sequence< sal_Int8 >();
 }
@@ -402,7 +402,7 @@ Date MacabResultSet::getDate(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getDate", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getDate"_ustr, nullptr);
 
     return Date();
 }
@@ -412,7 +412,7 @@ Time MacabResultSet::getTime(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getTime", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getTime"_ustr, nullptr);
 
     return css::util::Time();
 }
@@ -449,7 +449,7 @@ Reference< XInputStream > MacabResultSet::getBinaryStream(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBinaryStream", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getBinaryStream"_ustr, nullptr);
 
     return nullptr;
 }
@@ -459,7 +459,7 @@ Reference< XInputStream > MacabResultSet::getCharacterStream(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getCharacterStream", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getCharacterStream"_ustr, nullptr);
 
     return nullptr;
 }
@@ -469,7 +469,7 @@ Any MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameA
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getObject", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getObject"_ustr, nullptr);
 
     return Any();
 }
@@ -479,7 +479,7 @@ Reference< XRef > MacabResultSet::getRef(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getRef", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getRef"_ustr, nullptr);
 
     return nullptr;
 }
@@ -489,7 +489,7 @@ Reference< XBlob > MacabResultSet::getBlob(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBlob", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getBlob"_ustr, nullptr);
 
     return nullptr;
 }
@@ -499,7 +499,7 @@ Reference< XClob > MacabResultSet::getClob(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getClob", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getClob"_ustr, nullptr);
 
     return nullptr;
 }
@@ -509,7 +509,7 @@ Reference< XArray > MacabResultSet::getArray(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getArray", nullptr);
+    ::dbtools::throwFunctionNotSupportedSQLException(u"getArray"_ustr, nullptr);
 
     return nullptr;
 }

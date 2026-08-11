@@ -305,7 +305,7 @@ void FilterHelper::appendFilterGroup( const cpo::uno::Sequence< css::beans::Stri
     // append the filter
     if (bPrependSeparator) {
         OUStringList emptyList;
-        m_pFilterList->push_back(AquaFilterEntry("-", emptyList));
+        m_pFilterList->push_back(AquaFilterEntry(u"-"_ustr, emptyList));
     }
 
     const css::beans::StringPair* pSubFilters   = aFilters.getConstArray();

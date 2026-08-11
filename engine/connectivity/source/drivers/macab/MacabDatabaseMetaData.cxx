@@ -192,7 +192,7 @@ OUString MacabDatabaseMetaData::getCatalogTerm(  )
 OUString MacabDatabaseMetaData::getIdentifierQuoteString(  )
 {
     // normally this is "
-    return "\"";
+    return u"\""_ustr;
 }
 
 OUString MacabDatabaseMetaData::getExtraNameCharacters(  )
@@ -530,7 +530,7 @@ OUString MacabDatabaseMetaData::getURL(  )
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    return "sdbc:address:macab:";
+    return u"sdbc:address:macab:"_ustr;
 }
 
 OUString MacabDatabaseMetaData::getUserName(  )
@@ -540,7 +540,7 @@ OUString MacabDatabaseMetaData::getUserName(  )
 
 OUString MacabDatabaseMetaData::getDriverName(  )
 {
-    return "macab";
+    return u"macab"_ustr;
 }
 
 OUString MacabDatabaseMetaData::getDriverVersion()
@@ -741,11 +741,10 @@ Reference< XResultSet > MacabDatabaseMetaData::getTableTypes(  )
 
     static ODatabaseMetaDataResultSet::ORows aRows = []
     {
-        static constexpr OUStringLiteral aTable = u"TABLE";
         ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(2);
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(OUString(aTable));
+        aRow[1] = new ORowSetValueDecorator(u"TABLE"_ustr);
         tmp.push_back(aRow);
         return tmp;
     }();
@@ -764,7 +763,7 @@ Reference< XResultSet > MacabDatabaseMetaData::getTypeInfo(  )
 
         // We support four types: char, timestamp, integer, float
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
+        aRow[1] = new ORowSetValueDecorator(u"CHAR"_ustr);
         aRow[2] = new ORowSetValueDecorator(DataType::CHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(254));
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
@@ -785,20 +784,20 @@ Reference< XResultSet > MacabDatabaseMetaData::getTypeInfo(  )
 
         tmp.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+        aRow[1] = new ORowSetValueDecorator(u"TIMESTAMP"_ustr);
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(19));
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
         aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue();
         tmp.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
+        aRow[1] = new ORowSetValueDecorator(u"INTEGER"_ustr);
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(20));
         tmp.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
+        aRow[1] = new ORowSetValueDecorator(u"FLOAT"_ustr);
         aRow[2] = new ORowSetValueDecorator(DataType::FLOAT);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(15));
@@ -860,7 +859,7 @@ Reference< XResultSet > MacabDatabaseMetaData::getColumns(
         aRow[14] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[15] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[16] = new ORowSetValueDecorator(sal_Int32(254));
-        aRow[18] = new ORowSetValueDecorator(OUString("YES"));
+        aRow[18] = new ORowSetValueDecorator(u"YES"_ustr);
 
         sal_Int32 nPosition = 1;
         OUString sName;
@@ -881,24 +880,24 @@ Reference< XResultSet > MacabDatabaseMetaData::getColumns(
                 {
                     case kABStringProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::CHAR);
-                        aRow[6] = new ORowSetValueDecorator(OUString("CHAR"));
+                        aRow[6] = new ORowSetValueDecorator(u"CHAR"_ustr);
                         aRow[7] = new ORowSetValueDecorator(sal_Int32(256));
                         aRows.push_back(aRow);
                         break;
                     case kABDateProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-                        aRow[6] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+                        aRow[6] = new ORowSetValueDecorator(u"TIMESTAMP"_ustr);
                         aRows.push_back(aRow);
                         break;
                     case kABIntegerProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::INTEGER);
-                        aRow[6] = new ORowSetValueDecorator(OUString("INTEGER"));
+                        aRow[6] = new ORowSetValueDecorator(u"INTEGER"_ustr);
                         aRow[7] = new ORowSetValueDecorator(sal_Int32(20));
                         aRows.push_back(aRow);
                         break;
                     case kABRealProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::FLOAT);
-                        aRow[6] = new ORowSetValueDecorator(OUString("FLOAT"));
+                        aRow[6] = new ORowSetValueDecorator(u"FLOAT"_ustr);
                         aRow[7] = new ORowSetValueDecorator(sal_Int32(15));
                         aRows.push_back(aRow);
                         break;
@@ -1005,7 +1004,7 @@ Reference< XResultSet > MacabDatabaseMetaData::getVersionColumns(
         aRow[1] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[2] = new ORowSetValueDecorator(sName);
         aRow[3] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[4] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+        aRow[4] = new ORowSetValueDecorator(u"TIMESTAMP"_ustr);
 
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[6] = ODatabaseMetaDataResultSet::getEmptyValue();

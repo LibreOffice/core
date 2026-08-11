@@ -37,7 +37,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
-IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
+IMPLEMENT_SERVICE_INFO(MacabConnection, u"com.sun.star.sdbc.drivers.MacabConnection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
          : m_pAddressBook(nullptr),

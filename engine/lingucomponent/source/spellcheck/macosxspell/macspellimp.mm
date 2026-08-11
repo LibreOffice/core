@@ -587,7 +587,7 @@ OUString SAL_CALL
     MacSpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return "macOS Spell Checker";
+    return u"macOS Spell Checker"_ustr;
 }
 
 
@@ -655,7 +655,7 @@ void SAL_CALL
 // Service specific part
 OUString SAL_CALL MacSpellChecker::getImplementationName()
 {
-    return "org.openoffice.lingu.MacOSXSpellChecker";
+    return u"org.openoffice.lingu.MacOSXSpellChecker"_ustr;
 }
 
 bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )

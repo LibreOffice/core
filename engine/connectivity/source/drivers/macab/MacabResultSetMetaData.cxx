@@ -44,7 +44,6 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
-    static constexpr OUStringLiteral aName = u"Name";
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 
@@ -63,7 +62,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
         OUString aFieldName;
         sal_uInt32 nFieldNumber;
 
-        rxColumn->getPropertyValue(aName) >>= aFieldName;
+        rxColumn->getPropertyValue(u"Name"_ustr) >>= aFieldName;
         nFieldNumber = aHeader->getColumnNumber(aFieldName);
         m_aMacabFields.push_back(nFieldNumber);
     }

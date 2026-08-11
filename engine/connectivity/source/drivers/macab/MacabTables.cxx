@@ -43,7 +43,7 @@ css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const 
     aSchema = u"%"_ustr;
     aName = _rName;
 
-    Sequence< OUString > aTypes { "%" };
+    Sequence< OUString > aTypes { u"%"_ustr };
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
@@ -59,7 +59,7 @@ css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const 
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
-                    "");
+                    u""_ustr);
         }
     }
     ::comphelper::disposeComponent(xResult);

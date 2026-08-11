@@ -183,7 +183,7 @@ void MacOSXBackend::setPropertyValue(
     OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        "setPropertyValue not supported",
+        u"setPropertyValue not supported"_ustr,
         getXWeak(), -1);
 }
 
@@ -335,7 +335,7 @@ cpo::uno::Any MacOSXBackend::getPropertyValue(
 
 OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 {
-    return "com.sun.star.comp.configuration.backend.MacOSXBackend";
+    return u"com.sun.star.comp.configuration.backend.MacOSXBackend"_ustr;
 }
 
 bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
@@ -345,7 +345,7 @@ bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
 
 cpo::uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
 {
-    return { "com.sun.star.configuration.backend.MacOSXBackend" };
+    return { u"com.sun.star.configuration.backend.MacOSXBackend"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

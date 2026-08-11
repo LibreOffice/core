@@ -64,9 +64,9 @@ namespace
 {
     cpo::uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     {
-        return { "com.sun.star.ui.dialogs.FilePicker",
-                 "com.sun.star.ui.dialogs.SystemFilePicker",
-                 "com.sun.star.ui.dialogs.AquaFilePicker" };
+        return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+                 u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+                 u"com.sun.star.ui.dialogs.AquaFilePicker"_ustr };
     }
 }
 
@@ -172,7 +172,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
 
         default:
             throw uno::RuntimeException(
-                      "The dialog returned with an unknown result!",
+                      u"The dialog returned with an unknown result!"_ustr,
                       static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
             break;
     }
@@ -376,14 +376,14 @@ void SAL_CALL SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::
     // parameter checking
     cpo::uno::Any aAny;
     if( 0 == aArguments.getLength() )
-        throw lang::IllegalArgumentException("no arguments",
+        throw lang::IllegalArgumentException(u"no arguments"_ustr,
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::cppu::UnoType<sal_Int16>::get() ) &&
         (aAny.getValueType() != ::cppu::UnoType<sal_Int8>::get() ) )
-        throw lang::IllegalArgumentException("invalid argument type",
+        throw lang::IllegalArgumentException(u"invalid argument type"_ustr,
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     sal_Int16 templateId = -1;
@@ -437,7 +437,7 @@ void SAL_CALL SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;
         default:
-            throw lang::IllegalArgumentException("Unknown template",
+            throw lang::IllegalArgumentException(u"Unknown template"_ustr,
                                                  static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ),
                                                  1 );
     }
@@ -474,7 +474,7 @@ void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 
 OUString SAL_CALL SalAquaFilePicker::getImplementationName()
 {
-    return "com.sun.star.ui.dialogs.SalAquaFilePicker";
+    return u"com.sun.star.ui.dialogs.SalAquaFilePicker"_ustr;
 }
 
 bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )

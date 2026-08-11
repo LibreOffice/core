@@ -79,7 +79,8 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
         break;
 
     default:
-        throw uno::RuntimeException("The dialog returned with an unknown result!", getXWeak());
+        throw uno::RuntimeException(
+            u"The dialog returned with an unknown result!"_ustr, getXWeak());
         break;
     }
 
@@ -117,7 +118,7 @@ OUString SAL_CALL SalAquaFolderPicker::getDirectory()
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     if (nFiles < 1) {
-        throw uno::RuntimeException("no directory selected", getXWeak());
+        throw uno::RuntimeException(u"no directory selected"_ustr, getXWeak());
     }
 
     OUString aDirectory;
@@ -140,7 +141,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const OUString& rDescription 
 
 OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
-    return "com.sun.star.ui.dialogs.SalAquaFolderPicker";
+    return u"com.sun.star.ui.dialogs.SalAquaFolderPicker"_ustr;
 }
 
 bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
@@ -150,7 +151,7 @@ bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName
 
 cpo::uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.SystemFolderPicker", "com.sun.star.ui.dialogs.AquaFolderPicker" };
+    return { u"com.sun.star.ui.dialogs.SystemFolderPicker"_ustr, u"com.sun.star.ui.dialogs.AquaFolderPicker"_ustr };
 }
 
 // XCancellable

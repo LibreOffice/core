@@ -301,7 +301,7 @@ void call(
                 + ": " + OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8));
         } catch (...) {
             throw css::uno::RuntimeException(
-                "C++ code threw unknown exception");
+                u"C++ code threw unknown exception"_ustr);
         }
     } catch (cpo::uno::Exception &) {
         __cxxabiv1::__cxa_exception * header = reinterpret_cast<__cxxabiv1::__cxa_eh_globals *>(
@@ -451,7 +451,7 @@ void unoInterfaceProxyDispatch(
                     nullptr, atd->pAttributeTypeRef, true, false };
                 typelib_TypeDescriptionReference * rtd = nullptr;
                 typelib_typedescriptionreference_new(
-                    &rtd, typelib_TypeClass_VOID, OUString("void").pData);
+                    &rtd, typelib_TypeClass_VOID, u"void"_ustr.pData);
                 slot.index += 1;
                 call(proxy, slot, rtd, 1, &param, pReturn, pArgs, ppException);
                 typelib_typedescriptionreference_release(rtd);

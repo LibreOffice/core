@@ -56,7 +56,7 @@ namespace connectivity::macab
     }
 }
 
-IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement", "com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(MacabStatement, u"com.sun.star.sdbc.drivers.MacabStatement"_ustr, u"com.sun.star.sdbc.Statement"_ustr);
 
 MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),

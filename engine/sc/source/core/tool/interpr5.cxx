@@ -4060,7 +4060,7 @@ void ScInterpreter::ScInfo()
         PushString(Application::GetOSVersion());
 #elif defined MACOSX
         // TODO tdf#140286 handle MACOSX version to get result compatible to Excel
-        PushString("Windows (32-bit) NT 5.01");
+        PushString(u"Windows (32-bit) NT 5.01"_ustr);
 #else // handle Windows (WNT, WIN_NT, WIN32, _WIN32)
         // TODO tdf#140286 handle Windows version to get a result compatible to Excel
         PushString( "Windows (32-bit) NT 5.01" );

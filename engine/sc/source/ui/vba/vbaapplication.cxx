@@ -1037,7 +1037,7 @@ ScVbaApplication::getOperatingSystem()
 #if   defined(_WIN32)
         return "Windows";
 #elif defined(MACOSX)
-        return "Macintosh";
+        return u"Macintosh"_ustr;
 #elif defined(UNX)
         // M. Office is not available on Unix systems, so it is not documented.
         return u"Unix"_ustr;

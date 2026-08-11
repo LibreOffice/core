@@ -50,7 +50,7 @@ uno::Reference< media::XPlayer > Manager::createPlayer( const OUString& rURL )
 
 OUString Manager::getImplementationName(  )
 {
-    return "com.sun.star.comp.avmedia.Manager_MacAVF";
+    return u"com.sun.star.comp.avmedia.Manager_MacAVF"_ustr;
 }
 
 
@@ -62,7 +62,7 @@ bool Manager::supportsService( const OUString& ServiceName )
 
 cpo::uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.media.Manager_MacAVF" };
+    return { u"com.sun.star.media.Manager_MacAVF"_ustr };
 }
 
 } // namespace avmedia::macavf
