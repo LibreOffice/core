@@ -21,13 +21,13 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/script/CannotConvertException.hpp>
-#include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::script::XInvocation2;
+using com::sun::star::script::XInvocation;
 
 namespace pyuno
 {
@@ -35,7 +35,7 @@ namespace {
 
 struct PyUNO_callable_Internals
 {
-    Reference<XInvocation2> xInvocation;
+    Reference<XInvocation> xInvocation;
     OUString methodName;
 };
 
@@ -254,7 +254,7 @@ static PyTypeObject PyUNO_callable_Type =
 };
 
 PyRef PyUNO_callable_new (
-    const Reference<XInvocation2> &my_inv,
+    const Reference<XInvocation> &my_inv,
     const OUString & methodName )
 {
     PyUNO_callable* self;

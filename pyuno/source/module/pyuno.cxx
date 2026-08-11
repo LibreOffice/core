@@ -58,6 +58,7 @@ using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::XTypeProvider;
 using com::sun::star::lang::XUnoTunnel;
+using com::sun::star::script::XInvocation;
 using com::sun::star::script::XInvocation2;
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XEnumerationAccess;
@@ -468,12 +469,16 @@ PyObject* PyUNO_dir (PyObject* self)
 
     try
     {
-        oo_member_list = me->members->xInvocation->getMemberNames ();
-        member_list = PyList_New (oo_member_list.getLength ());
-        for (int i = 0; i < oo_member_list.getLength (); i++)
+        if (Reference<XInvocation2> xInvocation2(me->members->xInvocation, UNO_QUERY);
+            xInvocation2.is())
         {
-            // setitem steals a reference
-            PyList_SetItem (member_list, i, ustring2PyString(oo_member_list[i]).getAcquired() );
+            oo_member_list = xInvocation2->getMemberNames ();
+            member_list = PyList_New (oo_member_list.getLength ());
+            for (int i = 0; i < oo_member_list.getLength (); i++)
+            {
+                // setitem steals a reference
+                PyList_SetItem (member_list, i, ustring2PyString(oo_member_list[i]).getAcquired() );
+            }
         }
     }
     catch( const RuntimeException &e )
@@ -1722,7 +1727,7 @@ PyRef PyUNO_new (
     const Any &targetInterface,
     const Reference<XSingleServiceFactory> &ssf )
 {
-    Reference<XInvocation2> xInvocation;
+    Reference<XInvocation> xInvocation;
 
     {
         PyThreadDetach antiguard;

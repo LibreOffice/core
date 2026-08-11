@@ -58,7 +58,7 @@ namespace com::sun::star::lang { class XSingleServiceFactory; }
 namespace com::sun::star::reflection { class XIdlReflection; }
 namespace com::sun::star::reflection { class XServiceConstructorDescription; }
 namespace com::sun::star::reflection { class XServiceTypeDescription2; }
-namespace com::sun::star::script { class XInvocation2; }
+namespace com::sun::star::script { class XInvocation; }
 namespace com::sun::star::script { class XInvocationAdapterFactory2; }
 namespace com::sun::star::script { class XTypeConverter; }
 
@@ -130,7 +130,7 @@ PyRef PyUNOStruct_new (
 
 struct PyUNOInternals
 {
-    css::uno::Reference <css::script::XInvocation2> xInvocation;
+    css::uno::Reference <css::script::XInvocation> xInvocation;
     css::uno::Any wrappedObject;
 };
 
@@ -178,7 +178,7 @@ OUString pyString2ustring( PyObject *str );
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
 PyRef PyUNO_callable_new (
-    const css::uno::Reference<css::script::XInvocation2> &xInv,
+    const css::uno::Reference<css::script::XInvocation> &xInv,
     const OUString &methodName );
 
 PyRef PyUNO_service_constructor_new(

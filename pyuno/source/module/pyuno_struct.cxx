@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
-#include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "pyuno_impl.hxx"
@@ -35,7 +35,7 @@ using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
-using com::sun::star::script::XInvocation2;
+using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 
 namespace pyuno
@@ -369,7 +369,7 @@ PyRef PyUNOStruct_new (
     const Any &targetInterface,
     const Reference<XSingleServiceFactory> &ssf )
 {
-    Reference<XInvocation2> xInvocation;
+    Reference<XInvocation> xInvocation;
 
     {
         PyThreadDetach antiguard;
