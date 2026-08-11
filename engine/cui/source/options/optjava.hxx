@@ -51,12 +51,12 @@ private:
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
     std::vector<OUString>   m_parParameters;
     OUString                m_pClassPath;
+    std::vector<std::unique_ptr<JavaInfo>> m_aAddedInfos;
 #endif
+
     OUString                m_sInstallText;
     OUString                m_sAddDialogText;
     Idle                    m_aResetIdle;
-
-    std::vector<std::unique_ptr<JavaInfo>> m_aAddedInfos;
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
