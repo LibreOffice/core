@@ -1354,7 +1354,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	},
 
 	_isStringCloseToURL : function(str) {
-		return str.indexOf('http') !== -1 || str.indexOf('data:') === 0;
+		// Assume anything with a "/" path separator or a URL scheme prefix is a URL that
+		// shall be loaded directly:
+		return str.indexOf('/') !== -1 || /^[a-z][a-z0-9+.-]*:/i.test(str);
 	},
 
 	// TODO: move to jsdialog/Widget.Toolitem.ts
