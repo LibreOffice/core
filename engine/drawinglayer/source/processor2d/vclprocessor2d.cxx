@@ -499,7 +499,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                     {
                         double fPixelVectorFactor(1.0);
                         if (!aDXArray.empty() && !rTextCandidate.getDXArray().empty())
-                            fPixelVectorFactor = static_cast<double>(aDXArray.back())
+                            fPixelVectorFactor = aDXArray.back()
                                                  / rTextCandidate.getDXArray().back();
                         nTextWidth = basegfx::fround<tools::Long>(
                             rTextCandidate.getDXArray()[nTrimmedLen - 1] * fPixelVectorFactor);

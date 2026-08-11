@@ -884,7 +884,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 memcpy(&nValue, pData, nLen);
 
                 if ( m_aScales[i-1] )
-                    d = (nValue / pow(10.0,static_cast<int>(m_aScales[i-1])));
+                    d = (nValue / pow(10.0,m_aScales[i-1]));
                 else
                     d = static_cast<double>(nValue);
             }
@@ -1860,7 +1860,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         {
                             sal_Int64 nValue = 0;
                             if ( m_aScales[i] )
-                                nValue = static_cast<sal_Int64>(d * pow(10.0,static_cast<int>(m_aScales[i])));
+                                nValue = static_cast<sal_Int64>(d * pow(10.0,m_aScales[i]));
                             else
                                 nValue = static_cast<sal_Int64>(d);
                             if (o3tl::make_unsigned(nLen) > sizeof(nValue))

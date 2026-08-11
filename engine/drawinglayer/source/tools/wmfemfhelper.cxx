@@ -1775,7 +1775,7 @@ namespace wmfemfhelper
 
                             for(sal_uInt32 a(0); a < nTextLength; a++)
                             {
-                                aDXArray.push_back(static_cast<double>(rDXArray[a]));
+                                aDXArray.push_back(rDXArray[a]);
                             }
                         }
 

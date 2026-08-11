@@ -1222,7 +1222,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
             for (sal_Int32 i = 0; i < static_cast<sal_Int32>(pKashidaArray.size()); ++i)
             {
                 stJustification.SetKashidaPosition(nJustMinCluster + i,
-                                                   static_cast<bool>(pKashidaArray[i]));
+                                                   pKashidaArray[i]);
             }
         }
 
