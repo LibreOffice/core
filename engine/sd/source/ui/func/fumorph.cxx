@@ -21,8 +21,10 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xfltrit.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
@@ -43,6 +45,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <svx/sdr/properties/properties.hxx>
 
 using namespace com::sun::star;
 
@@ -314,6 +317,38 @@ void FuMorph::ImpAddPolys(
 /**
  * create group object with morphed polygons
  */
+namespace
+{
+    struct FillAndLineProps
+    {
+        drawing::FillStyle eFillStyle;
+        Color aFillColor;
+        sal_uInt16 nFillTransparence = 0;
+        drawing::LineStyle eLineStyle;
+        ::tools::Long nLineWidth = 0;
+        Color aLineColor;
+        sal_uInt16 nLineTransparence = 0;
+    };
+
+void getFillAndLinePropsFromObject(const SdrObject* pObj, FillAndLineProps& rFillAndLineProps)
+{
+    const sdr::properties::BaseProperties& rProps = pObj->GetProperties();
+    rFillAndLineProps.eFillStyle = rProps.GetItem(XATTR_FILLSTYLE).GetValue();
+    if (rFillAndLineProps.eFillStyle == drawing::FillStyle_SOLID)
+    {
+        rFillAndLineProps.aFillColor = rProps.GetItem(XATTR_FILLCOLOR).GetColorValue();
+        rFillAndLineProps.nFillTransparence = rProps.GetItem(XATTR_FILLTRANSPARENCE).GetValue();
+    }
+    rFillAndLineProps.eLineStyle = rProps.GetItem(XATTR_LINESTYLE).GetValue();
+    if (rFillAndLineProps.eLineStyle != drawing::LineStyle_NONE)
+    {
+        rFillAndLineProps.nLineWidth = rProps.GetItem(XATTR_LINEWIDTH).GetValue();
+        rFillAndLineProps.aLineColor = rProps.GetItem(XATTR_LINECOLOR).GetColorValue();
+        rFillAndLineProps.nLineTransparence = rProps.GetItem(XATTR_LINETRANSPARENCE).GetValue();
+    }
+}
+} // end namespace
+
 void FuMorph::ImpInsertPolygons(
     B2DPolyPolygonList_impl& rPolyPolyList3D,
     bool bAttributeFade,
@@ -321,115 +356,142 @@ void FuMorph::ImpInsertPolygons(
     const SdrObject* pObj2
 )
 {
-    Color               aStartFillCol;
-    Color               aEndFillCol;
-    Color               aStartLineCol;
-    Color               aEndLineCol;
-    ::tools::Long                nStartLineWidth = 0;
-    ::tools::Long                nEndLineWidth = 0;
-    SdrPageView*        pPageView = mpView->GetSdrPageView();
+    SdrPageView* pPageView = mpView->GetSdrPageView();
+    if ( !pPageView )
+        return;  // Should not happen. Would be error in caller.
+
+    const size_t nCount = rPolyPolyList3D.size();
+    if (nCount == 0)
+        return;
+
     SfxItemPool &       rPool = pObj1->GetObjectItemPool();
     SfxItemSetFixed<SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END> aSet1( rPool );
     SfxItemSet          aSet2( aSet1 );
-    bool                bLineColor = false;
-    bool                bFillColor = false;
-    bool                bLineWidth = false;
-    bool                bIgnoreLine = false;
-    bool                bIgnoreFill = false;
-
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
 
-    const drawing::LineStyle eLineStyle1 = aSet1.Get(XATTR_LINESTYLE).GetValue();
-    const drawing::LineStyle eLineStyle2 = aSet2.Get(XATTR_LINESTYLE).GetValue();
-    const drawing::FillStyle eFillStyle1 = aSet1.Get(XATTR_FILLSTYLE).GetValue();
-    const drawing::FillStyle eFillStyle2 = aSet2.Get(XATTR_FILLSTYLE).GetValue();
-
+    // Prepare fill and line properties.
+    bool                bIgnoreLine = false;
+    bool                bIgnoreFill = false;
+    FillAndLineProps aStartProps;
+    FillAndLineProps aEndProps;
     if ( bAttributeFade )
     {
-        if ( ( eLineStyle1 != drawing::LineStyle_NONE ) && ( eLineStyle2 != drawing::LineStyle_NONE ) )
-        {
-            bLineWidth = bLineColor = true;
+        getFillAndLinePropsFromObject(pObj1, aStartProps);
+        getFillAndLinePropsFromObject(pObj2, aEndProps);
 
-            aStartLineCol = aSet1.Get(XATTR_LINECOLOR).GetColorValue();
-            aEndLineCol = aSet2.Get(XATTR_LINECOLOR).GetColorValue();
-
-            nStartLineWidth = aSet1.Get(XATTR_LINEWIDTH).GetValue();
-            nEndLineWidth = aSet2.Get(XATTR_LINEWIDTH).GetValue();
-        }
-        else if ( ( eLineStyle1 == drawing::LineStyle_NONE ) && ( eLineStyle2 == drawing::LineStyle_NONE ) )
-            bIgnoreLine = true;
-
-        if ( ( eFillStyle1 == drawing::FillStyle_SOLID ) && ( eFillStyle2 == drawing::FillStyle_SOLID ) )
-        {
-            bFillColor = true;
-            aStartFillCol = aSet1.Get(XATTR_FILLCOLOR).GetColorValue();
-            aEndFillCol = aSet2.Get(XATTR_FILLCOLOR).GetColorValue();
-        }
-        else if ( ( eFillStyle1 == drawing::FillStyle_NONE ) && ( eFillStyle2 == drawing::FillStyle_NONE ) )
+        // Inspect fill properties
+        // The view guarantees that only NONE or SOLID appear for fill. No need to test again.
+        if (aStartProps.eFillStyle == drawing::FillStyle_NONE
+            && aEndProps.eFillStyle == drawing::FillStyle_NONE)
             bIgnoreFill = true;
+        else
+        {
+            // We fake NONE with a solid, transparent fill to get a nice cross-fading.
+            if (aStartProps.eFillStyle == drawing::FillStyle_NONE)
+            {
+                aStartProps.eFillStyle = drawing::FillStyle_SOLID;
+                aStartProps.nFillTransparence = 100;
+                aStartProps.aFillColor = aEndProps.aFillColor;
+            }
+            if (aEndProps.eFillStyle == drawing::FillStyle_NONE)
+            {
+                aEndProps.eFillStyle = drawing::FillStyle_SOLID;
+                aEndProps.nFillTransparence = 100;
+                aEndProps.aFillColor = aEndProps.aFillColor;
+            }
+        }
+
+        // Inspect line properties
+        if (aStartProps.eLineStyle == drawing::LineStyle_NONE
+                && aEndProps.eLineStyle == drawing::LineStyle_NONE)
+            bIgnoreLine = true;
+        else
+        {
+            // We cannot morph any dash style. Instead we use SOLID in between.
+            if (aStartProps.eLineStyle != drawing::LineStyle_NONE)
+                aStartProps.eLineStyle = drawing::LineStyle_SOLID;
+            if (aEndProps.eLineStyle != drawing::LineStyle_NONE)
+                aEndProps.eLineStyle = drawing::LineStyle_SOLID;
+            // Now type for start,end can be NONE,SOLID or SOLID,NONE or SOLID,SOLID.
+            // We fake NONE with a solid, transparent hairline to get a nice cross-fading.
+            if (aStartProps.eLineStyle == drawing::LineStyle_NONE)
+            {
+                aStartProps.eLineStyle = drawing::LineStyle_SOLID;
+                aStartProps.nLineWidth = 0;
+                aStartProps.nLineTransparence = 100;
+                aStartProps.aLineColor = aEndProps.aLineColor;
+            }
+            if (aEndProps.eLineStyle == drawing::LineStyle_NONE)
+            {
+                aEndProps.eLineStyle = drawing::LineStyle_SOLID;
+                aEndProps.nLineWidth = 0;
+                aEndProps.nLineTransparence = 100;
+                aEndProps.aLineColor = aStartProps.aLineColor;
+            }
+        }
     }
 
-    if ( !pPageView )
-        return;
-
-    SfxItemSet      aSet( std::move(aSet1) );
+    // Initialize group object
     rtl::Reference<SdrObjGroup> xObjGroup(new SdrObjGroup(mpView->getSdrModelFromSdrView()));
     SdrObjList*     pObjList = xObjGroup->GetSubList();
-    const size_t    nCount = rPolyPolyList3D.size();
-    const double    fStep = 1. / ( nCount + 1 );
-    const double    fDelta = nEndLineWidth - nStartLineWidth;
-    double          fFactor = fStep;
-
+    pObjList->InsertObject(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()).get());
+    SfxItemSet      aSet( std::move(aSet1) );
     aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
 
+    // Prepair linear interpolation of fill and line properties
+    const double    fStep = 1. / ( nCount + 1 );
+    double          fFactor = fStep;
+
+    // For each intermediate B2DPolyPolygon create a new SdrPathObj, apply interpolated fill and line
+    // properties if applicable, and then add it to the group object.
     for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
     {
+        // create object
         const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
-        rtl::Reference<SdrPathObj> pNewObj = new SdrPathObj(
-            mpView->getSdrModelFromSdrView(),
-            SdrObjKind::Polygon,
-            rPolyPoly3D);
+        rtl::Reference<SdrPathObj> pNewObj
+            = new SdrPathObj(mpView->getSdrModelFromSdrView(), SdrObjKind::Polygon, rPolyPoly3D);
 
-        // line color
-        if ( bLineColor )
+        if (bAttributeFade)
         {
-            const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
-            aSet.Put( XLineColorItem( u""_ustr, Color(aLineColor)));
-        }
-        else if ( bIgnoreLine )
-            aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+            // line color and transparence
+            if (bIgnoreLine)
+                aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+            else
+            {
+                const basegfx::BColor aLineCol(basegfx::interpolate(
+                    aStartProps.aLineColor.getBColor(), aEndProps.aLineColor.getBColor(), fFactor));
+                aSet.Put(XLineColorItem( u""_ustr, Color(aLineCol)));
+                const double fLineTransparence = aEndProps.nLineTransparence * fFactor
+                                             + aStartProps.nLineTransparence * (1.0 - fFactor);
+                aSet.Put(XLineTransparenceItem(static_cast<sal_uInt16>(fLineTransparence + 0.5)));
+                const double fLineWidth
+                    = aEndProps.nLineWidth * fFactor + aStartProps.nLineWidth * (1.0 - fFactor);
+                aSet.Put(XLineWidthItem(static_cast<::tools::Long>(fLineWidth + 0.5)));
+            }
 
-        // fill color
-        if ( bFillColor )
-        {
-            const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
-            aSet.Put( XFillColorItem( u""_ustr, Color(aFillColor)));
+            // fill color and transparence
+            if (bIgnoreFill)
+                aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+            else
+            {
+                const basegfx::BColor aFillCol(basegfx::interpolate(
+                    aStartProps.aFillColor.getBColor(), aEndProps.aFillColor.getBColor(), fFactor));
+                aSet.Put(XFillColorItem( u""_ustr, Color(aFillCol)));
+                const double fFillTransparence = aEndProps.nFillTransparence * fFactor
+                                             + aStartProps.nFillTransparence * (1.0 - fFactor);
+                aSet.Put(XFillTransparenceItem(static_cast<sal_uInt16>(fFillTransparence + 0.5)));
+            }
         }
-        else if ( bIgnoreFill )
-            aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
-
-        // line width
-        if ( bLineWidth )
-            aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<::tools::Long>( fFactor * fDelta + 0.5 ) ) );
 
         pNewObj->SetMergedItemSetAndBroadcast(aSet);
-
         pObjList->InsertObject( pNewObj.get() );
     }
+    pObjList->InsertObject(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()).get());
 
-    if ( nCount )
-    {
-        pObjList->InsertObject(
-            pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()).get(),
-            0 );
-        pObjList->InsertObject(
-            pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()).get() );
-
-        mpView->DeleteMarked();
-        mpView->InsertObjectAtView(xObjGroup.get(), *pPageView, SdrInsertFlags:: SETDEFLAYER);
-    }
+    mpView->DeleteMarked();
+    mpView->InsertObjectAtView(xObjGroup.get(), *pPageView, SdrInsertFlags:: SETDEFLAYER);
 }
 
 /**
