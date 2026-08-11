@@ -826,8 +826,9 @@ void D2DPixelProcessor2D::processPolyPolygonColorPrimitive2D(
         return;
     }
 
-    const bool bDone(drawPolyPolygonColorTransformed(basegfx::B2DHomMatrix(), rPolyPolygon,
-                                                     rPolyPolygonColorPrimitive2D.getBColor()));
+    const bool bDone(drawPolyPolygonColorTransformed(
+        basegfx::B2DHomMatrix(), rPolyPolygon,
+        resolveAutomaticColor(rPolyPolygonColorPrimitive2D.getBColor())));
 
     if (!bDone)
         increaseError();

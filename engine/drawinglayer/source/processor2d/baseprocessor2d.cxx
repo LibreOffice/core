@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <utility>
+#include <tools/color.hxx>
 
 
 namespace drawinglayer::processor2d
@@ -41,6 +42,21 @@ namespace drawinglayer::processor2d
         {
             // use the visitor API to avoid the cost of constructing Primitive2DContainers
             rCandidate.get2DDecomposition(*this, getViewInformation2D());
+        }
+
+        basegfx::BColor BaseProcessor2D::resolveAutomaticColor(const basegfx::BColor& rColor) const
+        {
+            if (!rColor.isAutomatic())
+                return rColor;
+
+            const Color aAutoColor(getViewInformation2D().getAutoColor());
+            if (COL_AUTO != aAutoColor)
+                return aAutoColor.getBColor();
+
+            // Nobody told us what automatic means here, which is the case for output that
+            // is not a view: print, print preview and PDF export. A dark document
+            // background is a property of a view, not something to put on paper.
+            return COL_WHITE.getBColor();
         }
 
         // Primitive2DDecompositionVisitor

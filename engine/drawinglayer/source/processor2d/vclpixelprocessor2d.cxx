@@ -111,12 +111,9 @@ void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
     }
 
     const basegfx::BColor aPolygonColor(
-        maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+        maBColorModifierStack.getModifiedColor(resolveAutomaticColor(rSource.getBColor())));
 
-    if (comphelper::COKit::isActive() && aPolygonColor.isAutomatic())
-        mpOutputDevice->SetFillColor(getViewInformation2D().getAutoColor());
-    else
-        mpOutputDevice->SetFillColor(Color(aPolygonColor));
+    mpOutputDevice->SetFillColor(Color(aPolygonColor));
 
     mpOutputDevice->SetLineColor();
     mpOutputDevice->DrawTransparent(maCurrentTransformation, rSource.getB2DPolyPolygon(),
@@ -511,8 +508,8 @@ void VclPixelProcessor2D::processPolyPolygonColorPrimitive2D(
           && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::Enable)))
         return;
 
-    const basegfx::BColor aPolygonColor(
-        maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
+    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(
+        resolveAutomaticColor(rPolyPolygonColorPrimitive2D.getBColor())));
     sal_uInt32 nCount(aLocalPolyPolygon.count());
 
     if (!nCount)

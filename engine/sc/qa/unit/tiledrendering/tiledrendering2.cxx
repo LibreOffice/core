@@ -34,6 +34,7 @@
 #include <postit.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -804,6 +805,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
     // the shape was edited, turning dark only once text edit ended
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pView->GetTextEditOutliner()->GetEditEngine().GetAutoColor());
     pView->SdrEndTextEdit();
+}
+
+// This lives apart from the other tile tests because rendering a document with a chart
+// leaves a shell of the chart behind, which upsets tests that ask for the render state
+// of the current view afterwards.
+// In dark mode a chart that has no background of its own follows the dark document
+// background, the same as the sheet around it does.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartBackgroundFollowsDarkMode)
+{
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"DarkTest"_ustr);
+    }
+
+    // The chart of this document sits at the top left corner of the sheet and is bigger than
+    // the tile rendered below, so the whole tile is chart
+    ScModelObj* pModelObj = createDoc("chart.ods");
+    ScTestViewCallback aView;
+    const OUString aOldScheme(svtools::EditableColorConfig().GetCurrentSchemeName());
+    comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
+        dispatchCommand(
+            mxComponent, u".uno:ChangeTheme"_ustr,
+            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+    });
+    dispatchCommand(
+        mxComponent, u".uno:ChangeTheme"_ustr,
+        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+
+    // The rest of the test says nothing unless the document background really is dark now
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+
+    Bitmap aBitmap = getTile(pModelObj, 0, 0, 3840, 3840);
+    BitmapScopedReadAccess pAccess(aBitmap);
+
+    // Without the accompanying fix the automatic background of the chart was not resolved for
+    // the rendering view, so the chart stayed light while the sheet around it went dark
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, Color(pAccess->GetPixel(5, 5)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

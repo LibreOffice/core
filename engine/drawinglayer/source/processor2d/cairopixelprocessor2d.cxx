@@ -4533,8 +4533,9 @@ basegfx::BColor CairoPixelProcessor2D::getLineColor(const basegfx::BColor& rColo
     return Application::GetSettings().GetStyleSettings().GetWindowTextColor().getBColor();
 }
 
-basegfx::BColor CairoPixelProcessor2D::getFillColor(const basegfx::BColor& rColor) const
+basegfx::BColor CairoPixelProcessor2D::getFillColor(const basegfx::BColor& rSourceColor) const
 {
+    const basegfx::BColor rColor(resolveAutomaticColor(rSourceColor));
     constexpr DrawModeFlags FILL(DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill
                                  | DrawModeFlags::GrayFill | DrawModeFlags::SettingsFill);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());

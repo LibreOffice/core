@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 
 namespace drawinglayer::processor2d
@@ -171,6 +172,15 @@ namespace drawinglayer::processor2d
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
             void process(const primitive2d::BasePrimitive2D& rCandidate);
+
+            /*  An automatic color has no fixed value, the renderer decides what it means:
+                on screen it is what the theme of the rendering view says (see
+                ViewInformation2D::getAutoColor()), while output that is not a view - print,
+                print preview, PDF export - has no theme and uses white. Returns rColor
+                unchanged when it is not automatic. Resolve before applying the color
+                modifier stack, which does not carry the automatic flag.
+             */
+            basegfx::BColor resolveAutomaticColor(const basegfx::BColor& rColor) const;
 
             // Primitive2DDecompositionVisitor
             virtual void visit(const primitive2d::Primitive2DReference&) override final;

@@ -227,8 +227,18 @@ namespace sdr::contact
             aNewViewInformation2D.setViewport(aViewRange);
             aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(GetSdrPage()));
             aNewViewInformation2D.setViewTime(fCurrentTime);
-            if (const SfxViewShell* pViewShell = SfxViewShell::Current())
-                aNewViewInformation2D.setAutoColor(pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+            // Tell the renderer what an automatic color means for this view, but only when
+            // painting for that view. Print, print preview and PDF export get no document
+            // background color from the theme, so that they do not put it on paper.
+            const bool bToView(!isOutputToPrinter() && !isOutputToPDFFile()
+                               && !static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView())
+                                       .IsPrintPreview());
+            if (bToView)
+            {
+                if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+                    aNewViewInformation2D.setAutoColor(
+                        pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+            }
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
 

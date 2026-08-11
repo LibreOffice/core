@@ -2376,8 +2376,8 @@ void VclMetafileProcessor2D::processPolyPolygonColorPrimitive2D(
     // per polygon. Split polygon until there are less than that
     fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
-    const basegfx::BColor aPolygonColor(
-        maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
+    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(
+        resolveAutomaticColor(rPolygonCandidate.getBColor())));
     aLocalPolyPolygon.transform(maCurrentTransformation);
 
     // set line and fill color
