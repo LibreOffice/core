@@ -10,7 +10,6 @@
 #include <xmloff/xmlictxt.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/util/Color.hpp>
 
 #include <docmodel/theme/ColorSet.hxx>
 
@@ -42,7 +41,6 @@ class XMLThemeColorsContext final : public SvXMLImportContext
 {
     model::Theme& mrTheme;
     std::shared_ptr<model::ColorSet> m_pColorSet;
-    std::vector<css::util::Color> m_aColorScheme;
 
 public:
     XMLThemeColorsContext(SvXMLImport& rImport,
