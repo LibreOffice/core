@@ -91,7 +91,7 @@ void test(std::string v, OString o)
     // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     std::string_view s1(v.c_str());
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to string constructor [loplugin:unnecessarygetstr]}}
-    std::string s2(o.getStr());
+    [[maybe_unused]] std::string s2(o.getStr());
 }
 }
 

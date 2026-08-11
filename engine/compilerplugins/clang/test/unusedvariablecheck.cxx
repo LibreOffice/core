@@ -26,9 +26,16 @@ struct S : std::unique_ptr<int>
 
 int main()
 {
+#if defined _LIBCPP_VERSION
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+#endif
     std::list<int> v1; // expected-error {{unused variable 'v1' [loplugin:unusedvariablecheck]}}
     std::string v2; // expected-error {{unused variable 'v2' [loplugin:unusedvariablecheck]}}
     Vec<int> v3; // expected-error {{unused variable 'v3' [loplugin:unusedvariablecheck]}}
+#if defined _LIBCPP_VERSION
+#pragma clang diagnostic pop
+#endif
     std::unique_ptr<int>
         v4; // expected-error {{unused variable 'v4' [loplugin:unusedvariablecheck]}}
     S v5; // expected-error {{unused variable 'v5' [loplugin:unusedvariablecheck]}}
