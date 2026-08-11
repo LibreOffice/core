@@ -462,18 +462,19 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         final OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
+                // With the generic MIME type, the system file creation dialog saves the file under the name the user types.
                 switch (view.getId()) {
                     case R.id.newWriterFAB:
                     case R.id.writerLayout:
-                        createNewFileInputDialog(getString(R.string.new_textdocument) + FileUtilities.DEFAULT_WRITER_EXTENSION, "application/vnd.oasis.opendocument.text", CREATE_DOCUMENT_REQUEST_CODE);
+                        createNewFileInputDialog(getString(R.string.new_textdocument) + FileUtilities.DEFAULT_WRITER_EXTENSION, "*/*", CREATE_DOCUMENT_REQUEST_CODE);
                         break;
                     case R.id.newCalcFAB:
                     case R.id.calcLayout:
-                        createNewFileInputDialog(getString(R.string.new_spreadsheet) + FileUtilities.DEFAULT_SPREADSHEET_EXTENSION, "application/vnd.oasis.opendocument.spreadsheet", CREATE_SPREADSHEET_REQUEST_CODE);
+                        createNewFileInputDialog(getString(R.string.new_spreadsheet) + FileUtilities.DEFAULT_SPREADSHEET_EXTENSION, "*/*", CREATE_SPREADSHEET_REQUEST_CODE);
                         break;
                     case R.id.newImpressFAB:
                     case R.id.impressLayout:
-                        createNewFileInputDialog(getString(R.string.new_presentation) + FileUtilities.DEFAULT_IMPRESS_EXTENSION, "application/vnd.oasis.opendocument.presentation", CREATE_PRESENTATION_REQUEST_CODE);
+                        createNewFileInputDialog(getString(R.string.new_presentation) + FileUtilities.DEFAULT_IMPRESS_EXTENSION, "*/*", CREATE_PRESENTATION_REQUEST_CODE);
                         break;
                 }
             }
@@ -634,6 +635,53 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         collapseFabMenu();
         // call existing function in LOActivity to avoid having the same code twice
         LOActivity.createNewFileInputDialog(this, defaultFileName, mimeType, requestCode);
+    }
+
+    /** File name extensions for which an empty document template is bundled in the assets. */
+    private static final List<String> TEMPLATE_EXTENSIONS = Arrays.asList("odt", "ods", "odp", "docx", "xlsx", "pptx");
+
+    /** Returns the extension of the given file name when a template exists for it, null otherwise. */
+    private static String getTemplateExtension(final String filename) {
+        if (filename == null)
+            return null;
+
+        int lastDot = filename.lastIndexOf('.');
+        if (lastDot < 0)
+            return null;
+
+        String extension = filename.substring(lastDot + 1).toLowerCase();
+        return TEMPLATE_EXTENSIONS.contains(extension) ? extension : null;
+    }
+
+    /** Renames the document to the given display name. Returns the new Uri, or null on failure. */
+    private Uri renameDocument(final Uri uri, final String displayName) {
+        Uri newUri;
+        try {
+            newUri = DocumentsContract.renameDocument(getContentResolver(), uri, displayName);
+        } catch (Exception e) {
+            Log.e(LOGTAG, "Failed to rename the new document to " + displayName, e);
+            return null;
+        }
+
+        if (newUri == null || newUri.equals(uri))
+            return newUri;
+
+        // The renamed document has a new Uri, apply the same persisted permissions as the old one.
+        final int permissionFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+        try {
+            getContentResolver().takePersistableUriPermission(newUri, permissionFlags);
+        } catch (Exception e) {
+            Log.e(LOGTAG, "Failed to persist the permission for " + newUri, e);
+        }
+
+        // Drop the persisted permission for the old Uri.
+        try {
+            getContentResolver().releasePersistableUriPermission(uri, permissionFlags);
+        } catch (Exception e) {
+            Log.d(LOGTAG, "Could not release the persisted permission for " + uri);
+        }
+
+        return newUri;
     }
 
     /**
@@ -963,7 +1011,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 Uri uri = data.getData();
                 getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                String extension = (requestCode == CREATE_DOCUMENT_REQUEST_CODE) ? "odt" : ((requestCode == CREATE_SPREADSHEET_REQUEST_CODE) ? "ods" : "odp");
+                String filename = RecentFilesAdapter.getUriFilename(this, uri);
+                String extension = getTemplateExtension(filename);
+                if (extension == null) {
+                    // Append the default ODF extension.
+                    extension = (requestCode == CREATE_DOCUMENT_REQUEST_CODE) ? "odt" : ((requestCode == CREATE_SPREADSHEET_REQUEST_CODE) ? "ods" : "odp");
+                    if (filename != null) {
+                        Uri renamedUri = renameDocument(uri, filename + "." + extension);
+                        if (renamedUri != null)
+                            uri = renamedUri;
+                    }
+                }
                 createNewFile(uri, extension);
 
                 open(uri);

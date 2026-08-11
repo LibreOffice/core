@@ -184,7 +184,7 @@ BUNDLE-VERSION
 # android stuff
 /android/lib/src/main/assets/dist
 /android/lib/src/main/assets/hello-world.od*
-/android/lib/src/main/assets/templates/untitled.od*
+/android/lib/src/main/assets/templates/untitled.*
 /android/lib/src/main/cpp/CMakeLists.txt
 
 # gtk fake mobile app

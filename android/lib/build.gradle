@@ -201,7 +201,10 @@ tasks.register('copyBrandTheme', Copy) {
 tasks.register('copyDocTemplates', Copy) {
     from "${rootProject.getRootDir()}/templates/untitled.odp",
             "${rootProject.getRootDir()}/templates/untitled.ods",
-            "${rootProject.getRootDir()}/templates/untitled.odt"
+            "${rootProject.getRootDir()}/templates/untitled.odt",
+            "${rootProject.getRootDir()}/templates/untitled.pptx",
+            "${rootProject.getRootDir()}/templates/untitled.xlsx",
+            "${rootProject.getRootDir()}/templates/untitled.docx"
     into "src/main/assets/templates"
 }
 
