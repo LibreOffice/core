@@ -970,26 +970,8 @@ SearchResult TextSearch::RESrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, 
     const icu::UnicodeString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
                                         searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
-    // search until there is a valid match
-    for(;;)
-    {
-        if (!lcl_findRegex( pRegexMatcher, startPos, endPos, nIcuErr))
-            return aRet;
-
-        // #i118887# ignore zero-length matches e.g. "a*" in "bc"
-        int nStartOfs = pRegexMatcher->start( nIcuErr);
-        int nEndOfs = pRegexMatcher->end( nIcuErr);
-        if( nStartOfs < nEndOfs)
-            break;
-        // If the zero-length match is behind the string, do not match it again
-        // and again until startPos reaches there. A match behind the string is
-        // a "$" anchor.
-        if (nStartOfs == endPos)
-            break;
-        // try at next position if there was a zero-length match
-        if( ++startPos >= endPos)
-            return aRet;
-    }
+    if (!lcl_findRegex( pRegexMatcher, startPos, endPos, nIcuErr))
+        return aRet;
 
     // extract the result of the search
     const int nGroupCount = pRegexMatcher->groupCount();
