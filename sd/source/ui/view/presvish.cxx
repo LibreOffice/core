@@ -39,6 +39,7 @@
 
 #define ShellClass_PresentationViewShell
 using namespace sd;
+#include <editeng/fontvariationsitem.hxx>
 #include <sdslots.hxx>
 
 namespace sd {

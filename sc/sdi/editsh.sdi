@@ -45,6 +45,8 @@ interface TableText
 
     // attributes:
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_FONT_STYLE    [ StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_FONT_VARIATIONS [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_GROW_FONT_SIZE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]

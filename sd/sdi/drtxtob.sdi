@@ -32,6 +32,17 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_CHAR_FONT_STYLE
+    [
+        StateMethod = GetAttrState;
+    ]
+
+    SID_ATTR_CHAR_FONT_VARIATIONS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_CHAR_FONTHEIGHT  // ole : ?, status : ?
     [
         ExecMethod = Execute;
