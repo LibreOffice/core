@@ -4476,11 +4476,14 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
 
         if ( !bDone )
         {
-            // Markdown
+            // Markdown: use it when it's the only option or the user explicitly asked for it.
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::MARKDOWN, aFlavor );
+            datatransfer::DataFlavor aStringFlavor;
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aStringFlavor);
+            const bool bMarkdownOnly = SotClipboardFormatId::NONE == format
+                                       && !rxDataObj->isDataFlavorSupported(aStringFlavor);
             if ( rxDataObj->isDataFlavorSupported( aFlavor )
-                && ( SotClipboardFormatId::NONE == format
-                    || SotClipboardFormatId::MARKDOWN == format ) )
+                && (SotClipboardFormatId::MARKDOWN == format || bMarkdownOnly))
             {
                 try
                 {

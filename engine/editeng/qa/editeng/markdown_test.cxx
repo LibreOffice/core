@@ -11,6 +11,8 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <vcl/wrkwin.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -26,6 +28,7 @@
 #include <sfx2/app.hxx>
 
 #include <editdoc.hxx>
+#include <EditSelection.hxx>
 #include <eeobj.hxx>
 
 using namespace com::sun::star;
@@ -1121,6 +1124,69 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripMixedContent)
     CPPUNIT_ASSERT(aMdOut.find("- **Bold item**") != std::string::npos);
     CPPUNIT_ASSERT(aMdOut.find("- Normal item") != std::string::npos);
     CPPUNIT_ASSERT(aMdOut.find("A paragraph.") != std::string::npos);
+}
+
+/// Transferable that contains both plain text and markdown.
+class TestTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable>
+{
+    datatransfer::DataFlavor m_aMarkdownFlavor;
+    datatransfer::DataFlavor m_aPlainFlavor;
+    OUString m_aMarkdown;
+    OUString m_aPlain;
+
+public:
+    TestTransferable(std::string_view rMarkdown, std::string_view rPlain)
+    {
+        m_aMarkdownFlavor.MimeType = u"text/markdown"_ustr;
+        m_aMarkdownFlavor.HumanPresentableName = u"text/markdown"_ustr;
+        m_aMarkdownFlavor.DataType = cppu::UnoType<OUString>::get();
+        m_aMarkdown = OUString(rMarkdown.data(), rMarkdown.size(), RTL_TEXTENCODING_UTF8);
+
+        m_aPlainFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
+        m_aPlainFlavor.HumanPresentableName = u"text/plain;charset=utf-16"_ustr;
+        m_aPlainFlavor.DataType = cppu::UnoType<OUString>::get();
+        m_aPlain = OUString(rPlain.data(), rPlain.size(), RTL_TEXTENCODING_UTF8);
+    }
+
+    cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override
+    {
+        if (rFlavor.MimeType == m_aMarkdownFlavor.MimeType)
+            return cpo::uno::Any(m_aMarkdown);
+        if (rFlavor.MimeType == m_aPlainFlavor.MimeType)
+            return cpo::uno::Any(m_aPlain);
+        return {};
+    }
+
+    cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    {
+        return { m_aMarkdownFlavor, m_aPlainFlavor };
+    }
+
+    bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
+    {
+        return rFlavor.MimeType == m_aMarkdownFlavor.MimeType
+               || rFlavor.MimeType == m_aPlainFlavor.MimeType;
+    }
+};
+
+CPPUNIT_TEST_FIXTURE(MarkdownTest, testPlainTextPaste)
+{
+    // Given a markdown snippet on the clipboard.
+    EditEngine aEditEngine(mpItemPool.get());
+    uno::Reference<datatransfer::XTransferable> xData(
+        new TestTransferable("foo _bar_ baz", "foo _bar_ baz"));
+
+    // When pasting (not paste special where you select a format explicitly):
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWin.get());
+    aEditView.InsertText(xData, OUString(), /*bUseSpecial=*/true);
+
+    // Then make sure plain text is preferred over markdown:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo _bar_ baz
+    // - Actual  : foo bar baz
+    // i.e. underscores were lost due to the unexpected markdown import.
+    CPPUNIT_ASSERT_EQUAL(u"foo _bar_ baz"_ustr, aEditEngine.GetText(0));
 }
 }
 
