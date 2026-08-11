@@ -1426,6 +1426,27 @@
                                 <property name="homogeneous">True</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkToolButton" id="Table-1FontStyleName">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="action_name">.uno:FontStyleName</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Table-1FontVariations">
+                                <property name="visible">True</property>
+                                <property name="action_name">.uno:FontVariations</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8818,6 +8839,27 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Text-FontStyleName">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="action_name">.uno:FontStyleName</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Text-FontVariations">
+                                <property name="visible">True</property>
+                                <property name="action_name">.uno:FontVariations</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
                               </packing>
                             </child>
                           </object>
