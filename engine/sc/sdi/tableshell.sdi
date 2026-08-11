@@ -20,6 +20,7 @@ interface Table
     SID_CLEAR_TABLE_STYLE    [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_SUMMARIZE_WITH_PIVOT [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_REMOVE_DUPLICATES [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
+    SID_DUPLICATE_TABLE_STYLE [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
 }
 
 shell ScTableShell

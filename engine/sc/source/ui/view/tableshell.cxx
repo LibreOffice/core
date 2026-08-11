@@ -32,6 +32,8 @@
 #include <subtotalparam.hxx>
 #include <tablestyle.hxx>
 #include <scabstdlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 #define ShellClass_ScTableShell
 #include <scslots.hxx>
@@ -144,6 +146,34 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
                 pDlg->disposeOnce();
             });
         }
+        return;
+    }
+
+    if (rReq.GetSlot() == SID_DUPLICATE_TABLE_STYLE)
+    {
+        // Copying a style registers a new document-level style and leaves every table
+        // as it is, so this works whether or not the cursor sits on a table.
+        if (!pSet)
+            return;
+        const SfxPoolItem* pItem = nullptr;
+        if (pSet->GetItemState(SID_DUPLICATE_TABLE_STYLE, true, &pItem) != SfxItemState::SET)
+            return;
+        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+        if (!pStrItem)
+            return;
+
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        ScTableStyles* pStyles = pDocSh->GetDocument().GetTableStyles();
+        if (!pStyles)
+            return;
+        const ScTableStyle* pSource = pStyles->GetTableStyle(pStrItem->GetValue());
+        if (!pSource)
+            return;
+
+        const OUString aUIName
+            = ScResId(STR_TABLE_STYLE_COPY_OF).replaceFirst("%1", pSource->GetUIName());
+        if (!pStyles->DuplicateTableStyle(pStrItem->GetValue(), aUIName).isEmpty())
+            pDocSh->SetDocumentModified();
         return;
     }
 
@@ -368,6 +398,15 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                 ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
                 if (const ScTableStyles* pStyles = rDoc.GetTableStyles())
                     rSet.Put(SfxStringItem(nWhich, pStyles->GetDefaultStyleName()));
+            }
+            break;
+            case SID_DUPLICATE_TABLE_STYLE:
+            {
+                // Copying a style only adds a document-level style, so it needs no
+                // table at the cursor, only somewhere to copy from.
+                ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
+                if (!rDoc.GetTableStyles())
+                    rSet.DisableItem(nWhich);
             }
             break;
             case SID_NEW_TABLE_STYLE:

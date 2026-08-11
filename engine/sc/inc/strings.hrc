@@ -449,6 +449,8 @@
 #define STR_TABLE_STYLE_GROUP_CUSTOM                NC_("STR_TABLE_STYLE_GROUP_CUSTOM", "Custom")
 /* The "clear the table style" entry in the gallery */
 #define STR_TABLE_STYLE_NONE                        NC_("STR_TABLE_STYLE_NONE", "None")
+/* The name given to a style made by copying another one */
+#define STR_TABLE_STYLE_COPY_OF                     NC_("STR_TABLE_STYLE_COPY_OF", "Copy of %1")
 /* Region names in the New Table Style dialog, one per table-style element */
 #define STR_TABLESTYLE_ELEM_WHOLETABLE              NC_("STR_TABLESTYLE_ELEM_WHOLETABLE", "Whole Table")
 #define STR_TABLESTYLE_ELEM_HEADERROW               NC_("STR_TABLESTYLE_ELEM_HEADERROW", "Header Row")

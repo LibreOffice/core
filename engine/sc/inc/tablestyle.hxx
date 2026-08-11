@@ -152,6 +152,22 @@ public:
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return !maTableStyles.empty(); }
 
+    // A programmatic name of the form TableStyleCustom<n> that no style uses yet,
+    // so a style registered under it is classified as Custom.
+    OUString GetUnusedCustomStyleName() const;
+
+    // A name to show the user that no style goes by yet: rBaseName on its own when
+    // it is free, otherwise rBaseName followed by the lowest count that is free.
+    OUString GetUnusedUIName(const OUString& rBaseName) const;
+
+    // Register a copy of the style named rSourceName under a fresh Custom
+    // programmatic name, and return that name. The name shown to the user starts
+    // from rNewUIName and gains a count when a style already goes by it, so two
+    // copies of one style stay apart in the gallery. The copy owns its own
+    // patterns, so later edits to either style leave the other alone. An empty
+    // return means no style is registered under rSourceName and nothing was added.
+    OUString DuplicateTableStyle(const OUString& rSourceName, const OUString& rNewUIName);
+
     // All table styles ordered by programmatic name, giving callers a stable
     // display order over the unordered internal storage.
     std::vector<const ScTableStyle*> GetSortedTableStyles() const;

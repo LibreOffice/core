@@ -1197,6 +1197,53 @@ void ScTableStyles::generateJSON(tools::JsonWriter& rWriter) const
     }
 }
 
+OUString ScTableStyles::GetUnusedCustomStyleName() const
+{
+    for (sal_Int32 nCandidate = 1;; ++nCandidate)
+    {
+        OUString aName = "TableStyleCustom" + OUString::number(nCandidate);
+        if (!GetTableStyle(aName))
+            return aName;
+    }
+}
+
+OUString ScTableStyles::GetUnusedUIName(const OUString& rBaseName) const
+{
+    auto bIsTaken = [this](const OUString& rName) {
+        for (const ScTableStyle* pStyle : GetSortedTableStyles())
+        {
+            if (pStyle->GetUIName() == rName)
+                return true;
+        }
+        return false;
+    };
+
+    if (!bIsTaken(rBaseName))
+        return rBaseName;
+
+    for (sal_Int32 nCandidate = 2;; ++nCandidate)
+    {
+        OUString aName = rBaseName + " (" + OUString::number(nCandidate) + ")";
+        if (!bIsTaken(aName))
+            return aName;
+    }
+}
+
+OUString ScTableStyles::DuplicateTableStyle(const OUString& rSourceName, const OUString& rNewUIName)
+{
+    const ScTableStyle* pSource = GetTableStyle(rSourceName);
+    if (!pSource)
+        return OUString();
+
+    const OUString aNewName = GetUnusedCustomStyleName();
+    auto pCopy = std::make_unique<ScTableStyle>(
+        aNewName, std::optional<OUString>(GetUnusedUIName(rNewUIName)));
+    for (const auto & [ eElement, pPattern ] : pSource->GetSetPatterns())
+        pCopy->SetPattern(eElement, std::make_unique<ScPatternAttr>(*pPattern));
+    AddTableStyle(std::move(pCopy));
+    return aNewName;
+}
+
 ScTableStyleFamily ScGetTableStyleFamily(std::u16string_view rName, bool bIsBuiltin)
 {
     // A style has a built-in family only when it is one of the app's generated

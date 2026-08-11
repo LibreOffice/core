@@ -327,18 +327,7 @@ IMPL_LINK_NOARG(ScTableStyleDlg, OkHdl, weld::Button&, void)
     // A new style gets a fresh programmatic id outside the built-in families so
     // it counts as Custom. The dialog only builds the style here; the caller
     // registers it with the document.
-    OUString aProgrammaticName;
-    for (sal_Int32 n = 1;; ++n)
-    {
-        OUString aCandidate = "TableStyleCustom" + OUString::number(n);
-        if (!pStyles->GetTableStyle(aCandidate))
-        {
-            aProgrammaticName = aCandidate;
-            break;
-        }
-    }
-
-    mxResultStyle = BuildStyle(aProgrammaticName);
+    mxResultStyle = BuildStyle(pStyles->GetUnusedCustomStyleName());
     m_xDialog->response(RET_OK);
 }
 
