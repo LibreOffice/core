@@ -92,9 +92,9 @@ namespace vclcanvastools
             const AntialiasingFlags mnAntiAliasing;
         };
 
-        ::Point mapRealPoint2D( const css::geometry::RealPoint2D&  rPoint,
-                                const ::vclcanvas::ViewState&   rViewState,
-                                const ::vclcanvas::RenderState& rRenderState );
+        ::Point mapB2DPoint( const ::basegfx::B2DPoint&  rPoint,
+                             const ::vclcanvas::ViewState&   rViewState,
+                             const ::vclcanvas::RenderState& rRenderState );
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
                                       const ::vclcanvas::ViewState&     rViewState,

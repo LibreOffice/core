@@ -82,7 +82,7 @@ public:
     void testDrawLine()
     {
         setupCanvas(Size(10, 10));
-        mCanvas->drawLine(geometry::RealPoint2D(1, 1), geometry::RealPoint2D(9, 1), mViewState,
+        mCanvas->drawLine(basegfx::B2DPoint(1, 1), basegfx::B2DPoint(9, 1), mViewState,
                           mRenderState);
         exportDevice(u"test-draw-line.png"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());

@@ -82,10 +82,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
-                rCanvas.drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
-                                    ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
-                                    rViewState,
-                                    aLocalState );
+                rCanvas.drawLine( maStartPoint, maEndPoint, rViewState, aLocalState );
 
                 return true;
             }

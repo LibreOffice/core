@@ -78,8 +78,8 @@ namespace vclcanvas
                               const ::Size&                                 rSz,
                               const GraphicAttr&                            rAttr ) const;
 
-        VCLCANVAS_DLLPUBLIC void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
-                                       const css::geometry::RealPoint2D&  aEndPoint,
+        VCLCANVAS_DLLPUBLIC void drawLine(const ::basegfx::B2DPoint&  aStartPoint,
+                                       const ::basegfx::B2DPoint&  aEndPoint,
                                        const ::vclcanvas::ViewState&   viewState,
                                        const ::vclcanvas::RenderState& renderState);
 

@@ -148,20 +148,20 @@ namespace vclcanvas
                                      rOutDev.GetOutputSizePixel()) );
     }
 
-    void Canvas::drawLine(const css::geometry::RealPoint2D&  aStartRealPoint2D,
-                                   const css::geometry::RealPoint2D&  aEndRealPoint2D,
+    void Canvas::drawLine(const ::basegfx::B2DPoint&  rStartPoint2D,
+                                   const ::basegfx::B2DPoint&  rEndPoint2D,
                                    const ::vclcanvas::ViewState&   viewState,
                                    const ::vclcanvas::RenderState& renderState)
     {
-        canvastools::verifyArgs(aStartRealPoint2D, aEndRealPoint2D, viewState, renderState,
+        canvastools::verifyArgs(rStartPoint2D, rEndPoint2D, viewState, renderState,
                           __func__);
 
         vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
         setupOutDevState( viewState, renderState, LINE_COLOR );
 
-        const Point aStartPoint( vclcanvastools::mapRealPoint2D( aStartRealPoint2D,
+        const Point aStartPoint( vclcanvastools::mapB2DPoint( rStartPoint2D,
                                                         viewState, renderState ) );
-        const Point aEndPoint( vclcanvastools::mapRealPoint2D( aEndRealPoint2D,
+        const Point aEndPoint( vclcanvastools::mapB2DPoint( rEndPoint2D,
                                                       viewState, renderState ) );
         // TODO(F2): alpha
         mxOutDev->DrawLine( aStartPoint, aEndPoint );

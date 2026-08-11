@@ -145,11 +145,11 @@ using namespace vclcanvas;
         // VCL-Canvas related
 
 
-        ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
-                                const vclcanvas::ViewState&     rViewState,
-                                const vclcanvas::RenderState&   rRenderState )
+        ::Point mapB2DPoint( const ::basegfx::B2DPoint&    rPoint,
+                             const vclcanvas::ViewState&     rViewState,
+                             const vclcanvas::RenderState&   rRenderState )
         {
-            ::basegfx::B2DPoint aPoint( ::basegfx::unotools::b2DPointFromRealPoint2D(rPoint) );
+            ::basegfx::B2DPoint aPoint( rPoint );
 
             ::basegfx::B2DHomMatrix aMatrix;
             aPoint *= ::canvastools::mergeViewAndRenderTransform(aMatrix,
