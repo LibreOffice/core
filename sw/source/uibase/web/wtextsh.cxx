@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/objface.hxx>
+#include <editeng/fontvariationsitem.hxx>
 #include <sfx2/toolbarids.hxx>
 
 #include <cmdid.h>

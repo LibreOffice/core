@@ -3022,6 +3022,8 @@ void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxFontVariationsItem -------------------------------------------
 
+SfxPoolItem* SvxFontVariationsItem::CreateDefault() { return new SvxFontVariationsItem(0); }
+
 SvxFontVariationsItem::SvxFontVariationsItem(sal_uInt16 nId)
     : SfxPoolItem(nId)
 {
