@@ -66,20 +66,6 @@ namespace vclcanvastools
         bool isRectangle( const ::tools::PolyPolygon& rPolyPoly );
 
 
-        // Little helper to encapsulate locking into policy class
-        class LocalGuard
-        {
-        public:
-            /// To be compatible with CanvasBase mutex concept
-            explicit LocalGuard( const ::osl::Mutex& ) :
-                aSolarGuard()
-            {
-            }
-
-        private:
-            SolarMutexGuard aSolarGuard;
-        };
-
         class OutDevStateKeeper
         {
         public:

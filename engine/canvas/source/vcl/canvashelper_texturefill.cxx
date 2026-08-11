@@ -586,8 +586,6 @@ namespace vclcanvas
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               __func__);
 
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
         ENSURE_ARG_OR_THROW( !textures.empty(),

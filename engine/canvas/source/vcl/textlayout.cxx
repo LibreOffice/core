@@ -86,36 +86,26 @@ namespace vclcanvas
         assert(mxOutDev);
     }
 
-    // XTextLayout
-
-    cpo::uno::Sequence< double > TextLayout::queryLogicalAdvancements(  )
+    const cpo::uno::Sequence< double > & TextLayout::queryLogicalAdvancements() const
     {
-        SolarMutexGuard aGuard;
-
         return maLogicalAdvancements;
     }
 
     void TextLayout::applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements )
     {
-        SolarMutexGuard aGuard;
-
         ENSURE_ARG_OR_THROW( aAdvancements.getLength() == maText.Length,
                          "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
 
         maLogicalAdvancements = aAdvancements;
     }
 
-    cpo::uno::Sequence< bool > TextLayout::queryKashidaPositions(  )
+    const cpo::uno::Sequence< bool > & TextLayout::queryKashidaPositions() const
     {
-        SolarMutexGuard aGuard;
-
         return maKashidaPositions;
     }
 
     void TextLayout::applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions )
     {
-        SolarMutexGuard aGuard;
-
         ENSURE_ARG_OR_THROW( !aPositions.hasElements() || aPositions.getLength() == maText.Length,
                          "TextLayout::applyKashidaPositions(): mismatching number of positions" );
 
@@ -124,8 +114,6 @@ namespace vclcanvas
 
     geometry::RealRectangle2D TextLayout::queryTextBounds(  )
     {
-        SolarMutexGuard aGuard;
-
         OutputDevice& rOutDev = *mxOutDev;
 
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
@@ -162,14 +150,12 @@ namespace vclcanvas
         return mnTextDirection;
     }
 
-    rtl::Reference< vclcanvas::CanvasFont > TextLayout::getFont(  )
+    const rtl::Reference< vclcanvas::CanvasFont > & TextLayout::getFont() const
     {
-        SolarMutexGuard aGuard;
-
         return mpFont;
     }
 
-    rendering::StringContext TextLayout::getText(  )
+    const rendering::StringContext & TextLayout::getText() const
     {
         return maText;
     }
@@ -179,8 +165,6 @@ namespace vclcanvas
                            const vclcanvas::ViewState&   viewState,
                            const vclcanvas::RenderState& renderState ) const
     {
-        SolarMutexGuard aGuard;
-
 #ifdef _WIN32
         // tdf#147999
         // On Windows we get the wrong font width for fallback fonts unless we setup again here.

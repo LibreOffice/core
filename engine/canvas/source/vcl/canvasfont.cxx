@@ -41,50 +41,48 @@ namespace vclcanvas
                             FontEmphasisMark                                eEmphasisMark,
                             const geometry::Matrix2D&                       rFontMatrix,
                             OutputDevice&                                   rOutDev ) :
-        maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
-                      rFontRequest.FontDescription.StyleName,
-                      Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ) ),
+        maFont( rFontRequest.FontDescription.FamilyName,
+                rFontRequest.FontDescription.StyleName,
+                Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ),
         maFontRequest( rFontRequest ),
         mxOutDev( &rOutDev ),
         maFontMatrix( rFontMatrix )
   {
-        maFont->SetAlignment( ALIGN_BASELINE );
-        maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        maFont->SetVertical( rFontRequest.FontDescription.IsVertical==css::util::TriState_YES );
+        maFont.SetAlignment( ALIGN_BASELINE );
+        maFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        maFont.SetVertical( rFontRequest.FontDescription.IsVertical==css::util::TriState_YES );
 
         // TODO(F2): improve panose->vclenum conversion
-        maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
-        maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
-        maFont->SetPitch(
+        maFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
+        maFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+        maFont.SetPitch(
                 rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                     ? PITCH_FIXED : PITCH_VARIABLE);
 
-        maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
+        maFont.SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
         // adjust to stretched/shrunk font
-        vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDev);
+        vclcanvastools::setupFontWidth(rFontMatrix, maFont, rOutDev);
 
-        maFont->SetEmphasisMark(eEmphasisMark);
+        maFont.SetEmphasisMark(eEmphasisMark);
     }
 
     rtl::Reference< vclcanvas::TextLayout >  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
     {
-        SolarMutexGuard aGuard;
-
         return new TextLayout( aText,
                                nDirection,
                                this,
                                mxOutDev);
     }
 
-    rendering::FontRequest  CanvasFont::getFontRequest(  )
+    const rendering::FontRequest & CanvasFont::getFontRequest() const
     {
         return maFontRequest;
     }
 
     vcl::Font const & CanvasFont::getVCLFont() const
     {
-        return *maFont;
+        return maFont;
     }
 
     const css::geometry::Matrix2D& CanvasFont::getFontMatrix() const

@@ -98,8 +98,6 @@ namespace vclcanvas
 
     Canvas::Canvas( OutputDevice& rOutDev )
     {
-        SolarMutexGuard aGuard;
-
         SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );
 
         mxOutDev = &rOutDev;
@@ -118,8 +116,6 @@ namespace vclcanvas
                           const ::Size&                 rSz,
                           const GraphicAttr&            rAttr ) const
     {
-        SolarMutexGuard aGuard;
-
         ENSURE_OR_RETURN_FALSE( rGrf,
                           "Invalid Graphic" );
 
@@ -134,16 +130,12 @@ namespace vclcanvas
 
     basegfx::B2DPolyPolygon Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
     {
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         // vcl only handles even_odd polygons
         return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points );
     }
 
     void Canvas::clear()
     {
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         OutputDevice& rOutDev( *mxOutDev );
         vclcanvastools::OutDevStateKeeper aStateKeeper( rOutDev );
 
@@ -164,9 +156,6 @@ namespace vclcanvas
         canvastools::verifyArgs(aStartRealPoint2D, aEndRealPoint2D, viewState, renderState,
                           __func__);
 
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-        // nope, render
         vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
         setupOutDevState( viewState, renderState, LINE_COLOR );
 
@@ -183,8 +172,6 @@ namespace vclcanvas
                     const ::vclcanvas::ViewState&                                   viewState,
                     const ::vclcanvas::RenderState&                                 renderState )
     {
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         return implDrawBitmap( rBitmap,
                                viewState,
                                renderState,
@@ -209,8 +196,6 @@ namespace vclcanvas
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                           __func__);
-
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
@@ -323,8 +308,6 @@ namespace vclcanvas
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                           __func__);
 
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
@@ -361,8 +344,6 @@ namespace vclcanvas
                           fontMatrix,
                           __func__);
 
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         // TODO(F2): font properties and font matrix
         return new CanvasFont(fontRequest, eMark, fontMatrix, *mxOutDev);
     }
@@ -380,8 +361,6 @@ namespace vclcanvas
         canvastools::verifyRange( textDirection,
                             css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
                             css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
-
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xFont.is(),
                          "font is NULL");
@@ -428,8 +407,6 @@ namespace vclcanvas
         canvastools::verifyArgs(xLayoutedText, viewState, renderState,
                           __func__);
 
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
@@ -456,8 +433,6 @@ namespace vclcanvas
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                           __func__);
-
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
@@ -492,8 +467,6 @@ namespace vclcanvas
 
     css::geometry::IntegerSize2D Canvas::getSize(  )
     {
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
         return vcl::unotools::integerSize2DFromSize( mxOutDev->GetOutputSizePixel() );
     }
 

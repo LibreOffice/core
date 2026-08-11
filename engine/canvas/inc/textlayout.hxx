@@ -88,7 +88,7 @@ namespace vclcanvas
 
             @see XTextLayout::applyLogicalAdvancements()
          */
-        cpo::uno::Sequence< double > queryLogicalAdvancements(  );
+        const cpo::uno::Sequence< double > & queryLogicalAdvancements() const;
         /** Apply explicit advancements for every character in the layout
             string.<p>
 
@@ -130,7 +130,7 @@ namespace vclcanvas
 
             @see XTextLayout::applyKashidaPositions)
          */
-        cpo::uno::Sequence< bool > queryKashidaPositions(  );
+        const cpo::uno::Sequence< bool > & queryKashidaPositions() const;
         /** Apply Kashida insertion positions for the layout string.<p>
 
             This method applies the specified Kashida insertion positions to every
@@ -170,12 +170,12 @@ namespace vclcanvas
 
             @returns the associated font for this layout.
          */
-        rtl::Reference< vclcanvas::CanvasFont > getFont();
+        const rtl::Reference< vclcanvas::CanvasFont > & getFont() const;
         /** Request the text this layout contains.
 
             @returns the text this layout contains.
          */
-        css::rendering::StringContext getText();
+        const css::rendering::StringContext & getText() const;
 
         void draw( OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,

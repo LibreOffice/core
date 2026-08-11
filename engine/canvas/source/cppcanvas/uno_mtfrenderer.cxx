@@ -50,6 +50,8 @@ public:
 
 sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
+    SolarMutexGuard aGuard;
+
     Size aSize (fScaleX + 1, fScaleY + 1);
     ScopedVclPtrInstance<VirtualDevice> xVDev(*reinterpret_cast<OutputDevice*>(pOutputDevice), DeviceFormat::WITH_ALPHA);
     xVDev->SetOutputSizePixel(aSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);

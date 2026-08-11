@@ -157,7 +157,6 @@ namespace vclcanvas
 
         css::geometry::IntegerSize2D getSize(  );
 
-        mutable osl::Mutex m_aMutex;
         /// For retrieving device info
         VclPtr<OutputDevice> mxOutDev;
     };
