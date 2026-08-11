@@ -193,6 +193,7 @@ item INT16                  SvxKerningItem;
 item INT16                  SvxLanguageItem;
 item BYTE                   SvxOrphansItem;
 item BYTE                   SvxPaperBinItem;
+item String                 SvxFontVariationsItem;   // "wght" 700, "wdth" 75
 item String                 SvxPostItAuthorItem;
 item String                 SvxPostItDateItem;
 item String                 SvxPostItTextItem;

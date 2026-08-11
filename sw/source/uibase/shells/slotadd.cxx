@@ -45,6 +45,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/fontvariationsitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/kernitem.hxx>
