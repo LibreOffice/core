@@ -387,7 +387,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         // get quickstart service
         try
         {
-            css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_QUICKLAUNCHER, xContext), css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.desktop.QuickstartWrapper"_ustr, xContext), css::uno::UNO_QUERY_THROW );
             cpo::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
             bool bState = false;
             if( aVal >>= bState )

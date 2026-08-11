@@ -32,10 +32,6 @@ inline constexpr OUString SERVICENAME_JOB = u"com.sun.star.task.Job"_ustr;
 inline constexpr OUString SERVICENAME_PROTOCOLHANDLER = u"com.sun.star.frame.ProtocolHandler"_ustr;
 inline constexpr OUString SERVICENAME_POPUPMENUCONTROLLER = u"com.sun.star.frame.PopupMenuController"_ustr;
 
-//  used implementationnames by framework
-
-#define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
-
 }       //  namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
