@@ -148,8 +148,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     ReleaseMouse();
     g_bFrameDrag = false;
     g_bExecuteDrag = true;
-    SwEditWin::s_nDDStartPosY = aDocPos.Y();
-    SwEditWin::s_nDDStartPosX = aDocPos.X();
+    s_aDDStartPos = aDocPos;
     m_aMovePos = aDocPos;
     StartExecuteDrag();
     if( bDelSelect )

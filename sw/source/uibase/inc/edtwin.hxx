@@ -73,8 +73,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
 {
     static  QuickHelpData* s_pQuickHlpData;
 
-    static  tools::Long    s_nDDStartPosX;
-    static  tools::Long    s_nDDStartPosY;
+    static Point s_aDDStartPos;
 
     Color m_aWaterCanTextColor;     // text color; for the watering can
     Color m_aWaterCanTextBackColor; // text background; for the watering can
@@ -267,8 +266,7 @@ public:
 
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
-    static tools::Long GetDDStartPosX() { return s_nDDStartPosX; }
-    static tools::Long GetDDStartPosY() { return s_nDDStartPosY; }
+    static const Point& GetDDStartPos() { return s_aDDStartPos; }
 
     static void InitStaticData();
     static void FinitStaticData();

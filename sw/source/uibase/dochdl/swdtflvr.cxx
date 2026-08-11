@@ -541,12 +541,10 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
 
-            Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
-
             bool bSelect = g_bExecuteDrag &&
                             m_pWrtShell->GetView().GetDocShell() &&
                             !m_pWrtShell->GetView().GetDocShell()->IsReadOnly();
-            if( m_pWrtShell->GetContentAtPos( aPos, aContentAtPos, bSelect ) )
+            if (m_pWrtShell->GetContentAtPos(SwEditWin::GetDDStartPos(), aContentAtPos, bSelect))
             {
                 m_oBookmark.emplace(
                         static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue(),
@@ -3783,9 +3781,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     {
         // is only one field - selected?
         SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
-        Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
 
-        if( m_pWrtShell->GetContentAtPos( aPos, aContentAtPos ) )
+        if (m_pWrtShell->GetContentAtPos(SwEditWin::GetDDStartPos(), aContentAtPos))
         {
             AddFormat( SotClipboardFormatId::STRING );
             AddFormat( SotClipboardFormatId::SOLK );
@@ -4332,7 +4329,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     bSttWrd = !bEndWrd && rSh.IsStartWord();
     bSttPara= rSh.IsSttPara();
 
-    Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );
+    Point aSttPt = SwEditWin::GetDDStartPos();
 
     // at first, select InetFields!
     if( TransferBufferType::InetField == m_eBufferType )
