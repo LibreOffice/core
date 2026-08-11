@@ -249,197 +249,6 @@ namespace cppcanvas
                 return (rState.mapModeTransform * aSize).getWidth();
             }
 
-            cpo::uno::Sequence< double >
-                calcSubsetOffsets( vclcanvas::RenderState&                          io_rRenderState,
-                                   double&                                          o_rMinPos,
-                                   double&                                          o_rMaxPos,
-                                   const rtl::Reference< vclcanvas::TextLayout >&   rOrigTextLayout,
-                                   double                                           nLayoutWidth,
-                                   const ::cppcanvas::Action::Subset&     rSubset )
-            {
-                ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
-                                  "::cppcanvas::calcSubsetOffsets(): invalid subset range range" );
-
-                cpo::uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
-                const double*           pOffsets( aOrigOffsets.getConstArray() );
-
-                ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
-                                  "::cppcanvas::calcSubsetOffsets(): invalid subset range range" );
-
-
-                // determine leftmost position in given subset range -
-                // as the DX array contains the output positions
-                // starting with the second character (the first is
-                // assumed to have output position 0), correct begin
-                // iterator.
-                const double nMinPos( rSubset.mnSubsetBegin <= 0 ? 0 :
-                                      *(std::min_element( pOffsets+rSubset.mnSubsetBegin-1,
-                                                            pOffsets+rSubset.mnSubsetEnd )) );
-
-                // determine rightmost position in given subset range
-                // - as the DX array contains the output positions
-                // starting with the second character (the first is
-                // assumed to have output position 0), correct begin
-                // iterator.
-                const double nMaxPos(
-                    *(std::max_element( pOffsets + (rSubset.mnSubsetBegin <= 0 ?
-                                                      0 : rSubset.mnSubsetBegin-1),
-                                          pOffsets + rSubset.mnSubsetEnd )) );
-
-                // Logical advancements always increase in logical text order.
-                // For RTL text, nMaxPos is the distance from the right edge to
-                // the leftmost position in the subset, so we have to convert
-                // it to the offset from the origin (i.e. left edge ).
-                // LTR: |---- min --->|---- max --->|            |
-                // RTL: |             |<--- max ----|<--- min ---|
-                //      |<- nOffset ->|                          |
-                const double nOffset = rOrigTextLayout->getMainTextDirection()
-                    ? nLayoutWidth - nMaxPos : nMinPos;
-
-
-                // adapt render state, to move text output to given offset
-
-
-                // TODO(F1): Strictly speaking, we also have to adapt
-                // the clip here, which normally should _not_ move
-                // with the output offset. Neglected for now, as it
-                // does not matter for drawing layer output
-
-                if (nOffset > 0.0)
-                {
-                    ::basegfx::B2DHomMatrix aTranslation;
-                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical == css::util::TriState_YES )
-                    {
-                        // vertical text -> offset in y direction
-                        aTranslation.translate(0.0, nOffset);
-                    }
-                    else
-                    {
-                        // horizontal text -> offset in x direction
-                        aTranslation.translate(nOffset, 0.0);
-                    }
-
-                    io_rRenderState.AffineTransform *= aTranslation;
-                }
-
-
-                // reduce DX array to given substring
-
-
-                const sal_Int32         nNewElements( rSubset.mnSubsetEnd - rSubset.mnSubsetBegin );
-                cpo::uno::Sequence< double > aAdaptedOffsets( nNewElements );
-                double*                 pAdaptedOffsets( aAdaptedOffsets.getArray() );
-
-                // move to new output position (subtract nMinPos,
-                // which is the new '0' position), copy only the range
-                // as given by rSubset.
-                std::transform( pOffsets + rSubset.mnSubsetBegin,
-                                  pOffsets + rSubset.mnSubsetEnd,
-                                  pAdaptedOffsets,
-                                  [nMinPos](double aPos) { return aPos - nMinPos; } );
-
-                o_rMinPos = nMinPos;
-                o_rMaxPos = nMaxPos;
-
-                return aAdaptedOffsets;
-            }
-
-            rtl::Reference<vclcanvas::TextLayout>
-                createSubsetLayout( const rendering::StringContext&                 rOrigContext,
-                                    const ::cppcanvas::Action::Subset&    rSubset,
-                                    const rtl::Reference<vclcanvas::TextLayout>& rOrigTextLayout )
-            {
-                // create temporary new text layout with subset string
-
-
-                const sal_Int32 nNewStartPos( rOrigContext.StartPosition + std::min(
-                                                  rSubset.mnSubsetBegin, rOrigContext.Length-1 ) );
-                const sal_Int32 nNewLength( std::max(
-                                                std::min(
-                                                    rSubset.mnSubsetEnd - rSubset.mnSubsetBegin,
-                                                    rOrigContext.Length ),
-                                                sal_Int32( 0 ) ) );
-
-                const rendering::StringContext aContext( rOrigContext.Text,
-                                                         nNewStartPos,
-                                                         nNewLength );
-
-                return rOrigTextLayout->getFont()->createTextLayout( aContext,
-                                                                  rOrigTextLayout->getMainTextDirection(),
-                                                                  0 );
-            }
-
-            /** Setup subset text layout
-
-                @param io_rTextLayout
-                Must contain original (full set) text layout on input,
-                will contain subsetted text layout (or empty
-                reference, for empty subsets) on output.
-
-                @param io_rRenderState
-                Must contain original render state on input, will
-                contain shifted render state concatenated with
-                rTransformation on output.
-
-                @param rTransformation
-                Additional transformation, to be prepended to render
-                state
-
-                @param rSubset
-                Subset to prepare
-             */
-            void createSubsetLayout( rtl::Reference<vclcanvas::TextLayout>&  io_rTextLayout,
-                                     double                                     nLayoutWidth,
-                                     vclcanvas::RenderState&                    io_rRenderState,
-                                     double&                                    o_rMinPos,
-                                     double&                                    o_rMaxPos,
-                                     const ::basegfx::B2DHomMatrix&             rTransformation,
-                                     const Action::Subset&                      rSubset )
-            {
-                io_rRenderState.AffineTransform = rTransformation * io_rRenderState.AffineTransform;
-
-                if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
-                {
-                     // empty range, empty layout
-                    io_rTextLayout.clear();
-
-                    return;
-                }
-
-                ENSURE_OR_THROW( io_rTextLayout.is(),
-                                  "createSubsetLayout(): Invalid input layout" );
-
-                const rendering::StringContext aOrigContext( io_rTextLayout->getText() );
-
-                if( rSubset.mnSubsetBegin == 0 &&
-                    rSubset.mnSubsetEnd == aOrigContext.Length )
-                {
-                    // full range, no need for subsetting
-                    return;
-                }
-
-                rtl::Reference<vclcanvas::TextLayout> xTextLayout(
-                    createSubsetLayout( aOrigContext, rSubset, io_rTextLayout ) );
-
-                if( xTextLayout.is() )
-                {
-                    xTextLayout->applyLogicalAdvancements(
-                        calcSubsetOffsets( io_rRenderState,
-                                           o_rMinPos,
-                                           o_rMaxPos,
-                                           io_rTextLayout,
-                                           nLayoutWidth,
-                                           rSubset ) );
-                    cpo::uno::Sequence< bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
-                    cpo::uno::Sequence< bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
-                                                                rSubset.mnSubsetEnd - rSubset.mnSubsetBegin);
-                    xTextLayout->applyKashidaPositions(aKashidaPositions);
-                }
-
-                io_rTextLayout = std::move(xTextLayout);
-            }
-
-
             /** Interface for renderEffectText functor below.
 
                 This is interface is used from the renderEffectText()
@@ -546,10 +355,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -601,20 +406,6 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TextAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  /*rSubset*/ ) const
-            {
-                SAL_WARN( "cppcanvas.emf", "TextAction::renderSubset(): Subset not supported by this object" );
-
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
-                return render( rCanvas, rViewState, rTransformation );
-            }
-
             sal_Int32 TextAction::getActionCount() const
             {
                 // TODO(P1): Retrieve necessary font metric info for
@@ -649,10 +440,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -770,20 +557,6 @@ namespace cppcanvas
                                          maTextFillColor);
             }
 
-            bool EffectTextAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                 const vclcanvas::ViewState& rViewState,
-                                                 const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                 const Subset&                    /*rSubset*/ ) const
-            {
-                SAL_WARN( "cppcanvas.emf", "EffectTextAction::renderSubset(): Subset not supported by this object" );
-
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // subsettable text
-                return render( rCanvas, rViewState, rTransformation );
-            }
-
             geometry::RealRectangle2D EffectTextAction::queryTextBoundsRect() const
             {
                 // create XTextLayout, to have the
@@ -833,10 +606,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -893,36 +662,6 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TextArrayAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                const vclcanvas::ViewState& rViewState,
-                                                const ::basegfx::B2DHomMatrix&    rTransformation,
-                                                const Subset&                     rSubset ) const
-            {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
-
-                vclcanvas::RenderState                      aLocalState( maState );
-                rtl::Reference<vclcanvas::TextLayout>    xTextLayout( mxTextLayout );
-
-                double nDummy0, nDummy1;
-                createSubsetLayout( xTextLayout,
-                                    mnLayoutWidth,
-                                    aLocalState,
-                                    nDummy0,
-                                    nDummy1,
-                                    rTransformation,
-                                    rSubset );
-
-                if( !xTextLayout.is() )
-                    return true; // empty layout, render nothing
-
-                rCanvas.drawTextLayout( xTextLayout,
-                                          rViewState,
-                                          aLocalState );
-
-                return true;
-            }
-
             sal_Int32 TextArrayAction::getActionCount() const
             {
                 const rendering::StringContext aOrigContext( mxTextLayout->getText() );
@@ -957,10 +696,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -1082,113 +817,6 @@ namespace cppcanvas
                                          maTextFillColor);
             }
 
-            class EffectTextArrayRenderHelper : public TextRenderer
-            {
-            public:
-                EffectTextArrayRenderHelper( vclcanvas::Canvas&        rCanvas,
-                                             const rtl::Reference<vclcanvas::TextLayout>&       rTextLayout,
-                                             const TextLinesHelper&                             rTextLinesHelper,
-                                             const vclcanvas::ViewState&                        rViewState ) :
-                    mrCanvas( rCanvas ),
-                    mrTextLayout( rTextLayout ),
-                    mrTextLinesHelper( rTextLinesHelper ),
-                    mrViewState( rViewState )
-                {
-                }
-
-                // TextRenderer interface
-                virtual bool operator()( vclcanvas::Canvas& rCanvas,
-                                         const vclcanvas::ViewState& rViewState,
-                                         const vclcanvas::RenderState& rRenderState,
-                                         const ::Color& rTextFillColor,bool bNormalText) const override
-                {
-                    mrTextLinesHelper.render(rCanvas, rViewState, rRenderState, bNormalText);
-
-                    //rhbz#1589029 non-transparent text fill background support
-                    if (rTextFillColor != COL_AUTO)
-                    {
-                        vclcanvas::RenderState aLocalState(rRenderState);
-                        aLocalState.DeviceColor = rTextFillColor;
-                        auto xTextBounds = queryTextBounds();
-                        // background of text
-                        mrCanvas.fillPolyPolygon(xTextBounds, mrViewState, aLocalState);
-                    }
-
-                    mrCanvas.drawTextLayout( mrTextLayout,
-                                              mrViewState,
-                                              rRenderState );
-
-                    return true;
-                }
-
-            private:
-
-                basegfx::B2DPolyPolygon queryTextBounds() const
-                {
-                    const geometry::RealRectangle2D aTextBounds(mrTextLayout->queryTextBounds());
-                    auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
-                    auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                    return basegfx::B2DPolyPolygon(aTextBoundsPoly);
-                }
-
-                vclcanvas::Canvas&                                  mrCanvas;
-                const rtl::Reference<vclcanvas::TextLayout>&        mrTextLayout;
-                const TextLinesHelper&                              mrTextLinesHelper;
-                const vclcanvas::ViewState&                         mrViewState;
-            };
-
-            bool EffectTextArrayAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                      const vclcanvas::ViewState& rViewState,
-                                                      const ::basegfx::B2DHomMatrix&  rTransformation,
-                                                      const Subset&                   rSubset ) const
-            {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
-
-                vclcanvas::RenderState                   aLocalState( maState );
-                rtl::Reference<vclcanvas::TextLayout>    xTextLayout( mxTextLayout );
-                const geometry::RealRectangle2D          aTextBounds( mxTextLayout->queryTextBounds() );
-
-                double nMinPos(0.0);
-                double nMaxPos(aTextBounds.X2 - aTextBounds.X1);
-
-                createSubsetLayout( xTextLayout,
-                                    mnLayoutWidth,
-                                    aLocalState,
-                                    nMinPos,
-                                    nMaxPos,
-                                    rTransformation,
-                                    rSubset );
-
-                if( !xTextLayout.is() )
-                    return true; // empty layout, render nothing
-
-
-                // create and setup local line polygon
-                // ===================================
-
-                TextLinesHelper aHelper = maTextLinesHelper;
-                aHelper.init(nMaxPos - nMinPos, maTextLineInfo);
-
-
-                // render everything
-                // =================
-
-                return renderEffectText(
-                    rCanvas,
-                    rViewState,
-                    EffectTextArrayRenderHelper( rCanvas,
-                                                 xTextLayout,
-                                                 aHelper,
-                                                 rViewState ),
-                    aLocalState,
-                    maShadowColor,
-                    maShadowOffset,
-                    maReliefColor,
-                    maReliefOffset,
-                    maTextFillColor);
-            }
-
             sal_Int32 EffectTextArrayAction::getActionCount() const
             {
                 const rendering::StringContext aOrigContext( mxTextLayout->getText() );
@@ -1220,10 +848,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -1443,64 +1067,6 @@ namespace cppcanvas
                 const vclcanvas::ViewState&                         mrViewState;
             };
 #endif
-
-            bool OutlineAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                              const vclcanvas::ViewState& rViewState,
-                                              const ::basegfx::B2DHomMatrix&  rTransformation,
-                                              const Subset&                   rSubset ) const
-            {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::OutlineAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::OutlineAction: 0x" << std::hex << this );
-
-                if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
-                    return true; // empty range, render nothing
-
-#if 1
-                // TODO(F3): Subsetting NYI for outline text!
-                return render( rCanvas, rViewState, rTransformation );
-#else
-                const rendering::StringContext rOrigContext( mxTextLayout->getText() );
-
-                if( rSubset.mnSubsetBegin == 0 &&
-                    rSubset.mnSubsetEnd == rOrigContext.Length )
-                {
-                    // full range, no need for subsetting
-                    return render( rTransformation );
-                }
-
-                vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
-
-
-                // create and setup local Text polygon
-                // ===================================
-
-                basegfx::B2DPolyPolygon xTextPolygon();
-
-                // TODO(P3): Provide an API method for that!
-
-                if( !xTextLayout.is() )
-                    return false;
-
-                // render everything
-                // =================
-
-                return renderEffectText(
-                    OutlineTextArrayRenderHelper(
-                        xCanvas,
-                        mnOutlineWidth,
-                        xTextLayout,
-                        xTextLines,
-                        rViewState ),
-                    aLocalState,
-                    rViewState,
-                    xCanvas,
-                    maShadowColor,
-                    maShadowOffset,
-                    maReliefColor,
-                    maReliefOffset );
-#endif
-            }
 
             sal_Int32 OutlineAction::getActionCount() const
             {

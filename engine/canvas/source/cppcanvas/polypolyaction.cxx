@@ -57,11 +57,6 @@ namespace cppcanvas
                                 bool bStroke,
                                 int nTransparency );
 
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -162,23 +157,6 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                               const vclcanvas::ViewState& rViewState,
-                                               const ::basegfx::B2DHomMatrix& rTransformation,
-                                               const Subset&                  rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, fail if subset
-                // requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return false;
-
-                return CachedPrimitiveBase::render( rCanvas, rViewState, rTransformation );
-            }
-
             sal_Int32 PolyPolyAction::getActionCount() const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
@@ -193,11 +171,6 @@ namespace cppcanvas
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const OutDevState&               rState,
                                         const vclcanvas::Texture&        rTexture );
-
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -245,23 +218,6 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TexturedPolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                       const vclcanvas::ViewState& rViewState,
-                                                       const ::basegfx::B2DHomMatrix& rTransformation,
-                                                       const Subset&                  rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, fail if subset
-                // requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return false;
-
-                return CachedPrimitiveBase::render( rCanvas, rViewState, rTransformation );
-            }
-
             sal_Int32 TexturedPolyPolyAction::getActionCount() const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
@@ -276,11 +232,6 @@ namespace cppcanvas
                 StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&     rPoly,
                                        const OutDevState&                   rState,
                                        rendering::StrokeAttributes          aStrokeAttributes );
-
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -323,23 +274,6 @@ namespace cppcanvas
                                             aLocalState,
                                             maStrokeAttributes );
                 return true;
-            }
-
-            bool StrokedPolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                      const vclcanvas::ViewState& rViewState,
-                                                      const ::basegfx::B2DHomMatrix&  rTransformation,
-                                                      const Subset&                   rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, fail if subset
-                // requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return false;
-
-                return CachedPrimitiveBase::render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 StrokedPolyPolyAction::getActionCount() const

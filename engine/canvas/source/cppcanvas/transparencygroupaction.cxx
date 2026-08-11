@@ -94,10 +94,10 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
+                bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
+                                           const Subset&                  rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const override;
 

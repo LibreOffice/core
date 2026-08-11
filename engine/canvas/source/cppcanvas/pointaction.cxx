@@ -56,10 +56,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -100,20 +96,6 @@ namespace cppcanvas
                                      aLocalState );
 
                 return true;
-            }
-
-            bool PointAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                            const vclcanvas::ViewState& rViewState,
-                                            const ::basegfx::B2DHomMatrix&    rTransformation,
-                                            const Subset&                     rSubset ) const
-            {
-                // point only contains a single action, fail if subset
-                // requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return false;
-
-                return render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 PointAction::getActionCount() const

@@ -52,11 +52,6 @@ namespace cppcanvas
                               const ::basegfx::B2DVector& rDstSize,
                               const OutDevState& );
 
-                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -136,20 +131,6 @@ namespace cppcanvas
                                                      aLocalState );
 
                 return true;
-            }
-
-            bool BitmapAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                             const vclcanvas::ViewState& rViewState,
-                                             const ::basegfx::B2DHomMatrix&   rTransformation,
-                                             const Subset&                    rSubset ) const
-            {
-                // bitmap only contains a single action, fail if subset
-                // requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return false;
-
-                return CachedPrimitiveBase::render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 BitmapAction::getActionCount() const

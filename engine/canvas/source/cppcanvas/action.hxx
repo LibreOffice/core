@@ -93,25 +93,6 @@ namespace cppcanvas
                                  const vclcanvas::ViewState& rViewState,
                                  const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
-            /** Render the given part of the action to the associated
-                canvas.
-
-                @param rTransformation
-                Transformation matrix to apply before rendering
-
-                @param rSubset
-                Subset of the action to render. See Subset description
-                for index semantics.
-
-                @return true, if rendering was successful. If the
-                specified subset is invalid for this action, or if
-                rendering failed for other reasons, false is returned.
-             */
-            virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                       const vclcanvas::ViewState& rViewState,
-                                       const ::basegfx::B2DHomMatrix& rTransformation,
-                                       const Subset&                  rSubset ) const = 0;
-
             /** Query action count.
 
                 This method returns the number of subset actions
