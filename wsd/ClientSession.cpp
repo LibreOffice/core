@@ -3456,8 +3456,25 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         const Poco::SharedPtr<Poco::JSON::Object>& statusJsonObject =
             statusJsonVar.extract<Poco::JSON::Object::Ptr>();
 
-        if (statusJsonObject->has("mode"))
-            _clientSelectedMode = std::atoi(statusJsonObject->get("mode").toString().c_str());
+        // A status update carries the selection of the view that produced it,
+        // Taking the part from another view's update would move this view's selection.
+        bool ownUpdate = true;
+        if (statusJsonObject->has("viewid"))
+            ownUpdate =
+                std::atoi(statusJsonObject->get("viewid").toString().c_str()) == _kitViewId;
+
+        if (ownUpdate)
+        {
+            // The normal, master and notes pages of one slide have different
+            // part numbers, so switching view mode changes the selected part
+            // as well as the mode. Both must be tracked together.
+            if (statusJsonObject->has("selectedpart"))
+                _clientSelectedPart =
+                    std::atoi(statusJsonObject->get("selectedpart").toString().c_str());
+
+            if (statusJsonObject->has("mode"))
+                _clientSelectedMode = std::atoi(statusJsonObject->get("mode").toString().c_str());
+        }
     }
     else if (tokens.equals(0, "commandvalues:"))
     {
