@@ -620,8 +620,7 @@ void OServiceManager::disposing()
         MutexGuard aGuard( m_aMutex );
         // erase all members
         m_ServiceMap = HashMultimap_OWString_Interface();
-        aImplMap = m_ImplementationMap;
-        m_ImplementationMap = HashSet_Ref();
+        std::swap(aImplMap, m_ImplementationMap);
         m_ImplementationNameMap = HashMap_OWString_Interface();
         m_SetLoadedFactories= HashSet_Ref();
     }
