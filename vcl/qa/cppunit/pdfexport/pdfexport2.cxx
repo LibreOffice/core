@@ -5435,7 +5435,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFA1CIDSet)
 
     // The charset is identity, so the CIDs are those of the three glyphs of the
     // subset: one byte with the top three bits set, and nothing else.
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aCIDSet.GetSize());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(1), aCIDSet.GetSize());
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xE0), static_cast<const sal_uInt8*>(aCIDSet.GetData())[0]);
 }
 
