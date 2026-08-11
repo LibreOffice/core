@@ -127,9 +127,11 @@ private:
     std::unique_ptr<weld::Label> m_xRegisterFT;
     std::unique_ptr<weld::ComboBox> m_xRegisterLB;
     std::unique_ptr<weld::Label> m_xGutterPositionFT;
-    std::unique_ptr<weld::ComboBox> m_xGutterPositionLB;
-    std::unique_ptr<weld::CheckButton> m_xRtlGutterCB;
+    std::unique_ptr<weld::RadioButton> m_xGutterPositionLeftInner;
+    std::unique_ptr<weld::RadioButton> m_xGutterPositionRightOuter;
+    std::unique_ptr<weld::RadioButton> m_xGutterPositionTop;
     std::unique_ptr<weld::CheckButton> m_xBackgroundFullSizeCB;
+    std::unique_ptr<weld::Label> m_xLabelOptions;
     std::unique_ptr<weld::Label> m_xInsideLbl;
     std::unique_ptr<weld::Label> m_xOutsideLbl;
     std::unique_ptr<weld::Label> m_xPrintRangeQueryText;
@@ -137,7 +139,7 @@ private:
 
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(GutterPositionHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(GutterPositionHdl_Impl, weld::Toggleable&, void );
     DECL_LINK(PaperBinHdl_Impl, weld::Widget&, void);
     DECL_LINK(SwapOrientation_Impl, weld::Toggleable&, void);
     void SwapFirstValues_Impl( bool bSet );

@@ -532,7 +532,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=10 -->
+              <!-- n-columns=2 n-rows=11 -->
               <object class="GtkGrid" id="grid7">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -706,40 +706,16 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="pageformatpage|labelGutterPosition">Gutter position:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">comboGutterPosition</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="rbGutterLeft"/>
+                      <relation type="label-for" target="rbGutterRight"/>
+                      <relation type="label-for" target="rbGutterTop"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="comboGutterPosition">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <items>
-                      <item translatable="yes" context="pageformatpage|liststoreGutterPosition">Left</item>
-                      <item translatable="yes" context="pageformatpage|liststoreGutterPosition">Top</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkRtlGutter">
-                    <property name="label" translatable="yes" context="pageformatpage|checkRtlGutter">Gutter on right side of page</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -751,6 +727,9 @@
                     <property name="tooltip-text" translatable="yes" context="pageformatpage|checkBackgroundFullSize" comments="xdds">Any background will cover margins of the page as well</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbOptions"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkBackgroundFullSize-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkBackgroundFullSize">If enabled, then any background will cover the entire page, including margins. If disabled, any background will cover the page only inside the margins.</property>
@@ -759,7 +738,75 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
+                    <property name="top-attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbGutterLeft">
+                    <property name="label" translatable="yes" context="pageformatpage|radiobuttonLeft">Left</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelGutterPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbGutterRight">
+                    <property name="label" translatable="yes" context="pageformatpage|radiobuttonRight">Right</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">rbGutterLeft</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelGutterPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbGutterTop">
+                    <property name="label" translatable="yes" context="pageformatpage|radiobuttonTop">Top</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">rbGutterLeft</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelGutterPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbOptions">
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="pageformatpage|labelOptions">Options:</property>
+                    <property name="use-underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="checkBackgroundFullSize"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">10</property>
                   </packing>
                 </child>
                 <child>

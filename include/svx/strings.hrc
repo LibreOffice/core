@@ -1837,6 +1837,11 @@
 #define RID_SVXSTR_PAGEDIR_RTL_VERT                         NC_("RID_SVXSTR_PAGEDIR_RTL_VERT", "Right-to-left (vertical)")
 #define RID_SVXSTR_PAGEDIR_LTR_VERT                         NC_("RID_SVXSTR_PAGEDIR_LTR_VERT", "Left-to-right (vertical)")
 #define RID_SVXSTR_PAGEDIR_LTR_BTT_VERT                     NC_("RID_SVXSTR_PAGEDIR_LTR_BTT_VERT", "Bottom-to-top, left-to-right (vertical)")
+// page gutter
+#define RID_SVXSTR_PAGEGUTTER_LEFT                          NC_("RID_SVXSTR_PAGEGUTTER_LEFT", "Left")
+#define RID_SVXSTR_PAGEGUTTER_INNER                         NC_("RID_SVXSTR_PAGEGUTTER_INNER", "Inner")
+#define RID_SVXSTR_PAGEGUTTER_RIGHT                         NC_("RID_SVXSTR_PAGEGUTTER_RIGHT", "Right")
+#define RID_SVXSTR_PAGEGUTTER_OUTER                         NC_("RID_SVXSTR_PAGEGUTTER_OUTER", "Outer")
 
 #define RID_SVXSTR_FONTWORK                                 NC_("RID_SVXSTR_FONTWORK", "Text along Path...")
 

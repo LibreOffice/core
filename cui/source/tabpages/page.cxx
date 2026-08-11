@@ -181,9 +181,11 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xRegisterFT(m_xBuilder->weld_label(u"labelRegisterStyle"_ustr))
     , m_xRegisterLB(m_xBuilder->weld_combo_box(u"comboRegisterStyle"_ustr))
     , m_xGutterPositionFT(m_xBuilder->weld_label(u"labelGutterPosition"_ustr))
-    , m_xGutterPositionLB(m_xBuilder->weld_combo_box(u"comboGutterPosition"_ustr))
-    , m_xRtlGutterCB(m_xBuilder->weld_check_button(u"checkRtlGutter"_ustr))
+    , m_xGutterPositionLeftInner(m_xBuilder->weld_radio_button(u"rbGutterLeft"_ustr))
+    , m_xGutterPositionRightOuter(m_xBuilder->weld_radio_button(u"rbGutterRight"_ustr))
+    , m_xGutterPositionTop(m_xBuilder->weld_radio_button(u"rbGutterTop"_ustr))
     , m_xBackgroundFullSizeCB(m_xBuilder->weld_check_button(u"checkBackgroundFullSize"_ustr))
+    , m_xLabelOptions(m_xBuilder->weld_label(u"lbOptions"_ustr))
     // Strings stored in UI
     , m_xInsideLbl(m_xBuilder->weld_label(u"labelInner"_ustr))
     , m_xOutsideLbl(m_xBuilder->weld_label(u"labelOuter"_ustr))
@@ -313,7 +315,9 @@ void SvxPageDescPage::Init_Impl()
 {
     // adjust the handler
     m_xLayoutBox->connect_changed(LINK(this, SvxPageDescPage, LayoutHdl_Impl));
-    m_xGutterPositionLB->connect_changed(LINK(this, SvxPageDescPage, GutterPositionHdl_Impl));
+    m_xGutterPositionLeftInner->connect_toggled(LINK(this, SvxPageDescPage, GutterPositionHdl_Impl));
+    m_xGutterPositionRightOuter->connect_toggled(LINK(this, SvxPageDescPage, GutterPositionHdl_Impl));
+    m_xGutterPositionTop->connect_toggled(LINK(this, SvxPageDescPage, GutterPositionHdl_Impl));
 
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
@@ -372,20 +376,20 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
         if (bGutterAtTop)
         {
-            m_xGutterPositionLB->set_active(1);
+            m_xGutterPositionTop->set_active(true);
         }
         else
         {
             // Left.
-            m_xGutterPositionLB->set_active(0);
+            m_xGutterPositionLeftInner->set_active(true);
         }
         it = pGragbagItem->GetGrabBag().find(u"RtlGutter"_ustr);
         bool bRtlGutter{};
         if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= bRtlGutter;
-            m_xRtlGutterCB->set_active(bRtlGutter);
-            m_xRtlGutterCB->show();
+            if (bRtlGutter)
+               m_xGutterPositionRightOuter->set_active(true);
         }
         it = pGragbagItem->GetGrabBag().find(u"BackgroundFullSize"_ustr);
         bool isBackgroundFullSize{};
@@ -394,6 +398,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             it->second >>= isBackgroundFullSize;
             m_xBackgroundFullSizeCB->set_active(isBackgroundFullSize);
             m_xBackgroundFullSizeCB->show();
+            m_xLabelOptions->show();
         }
     }
 
@@ -519,7 +524,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             m_xGutterMarginLbl->hide();
             m_xGutterMarginEdit->hide();
             m_xGutterPositionFT->hide();
-            m_xGutterPositionLB->hide();
+            m_xGutterPositionLeftInner->hide();
+            m_xGutterPositionRightOuter->hide();
+            m_xGutterPositionTop->hide();
 
             break;
         }
@@ -539,7 +546,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             m_xGutterMarginLbl->hide();
             m_xGutterMarginEdit->hide();
             m_xGutterPositionFT->hide();
-            m_xGutterPositionLB->hide();
+            m_xGutterPositionLeftInner->hide();
+            m_xGutterPositionRightOuter->hide();
+            m_xGutterPositionTop->hide();
 
             break;
         }
@@ -575,8 +584,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xVertBox->save_state();
     m_xHorzBox->save_state();
     m_xAdaptBox->save_state();
-    m_xGutterPositionLB->save_value();
-    m_xRtlGutterCB->save_state();
+    m_xGutterPositionLeftInner->save_state();
+    m_xGutterPositionRightOuter->save_state();
+    m_xGutterPositionTop->save_state();
     m_xBackgroundFullSizeCB->save_state();
 
     CheckMarginEdits( true );
@@ -670,15 +680,15 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         // Set gutter position.
         const SfxGrabBagItem& rOldGrabBagItem = rOldSet.Get(SID_ATTR_CHAR_GRABBAG);
         std::map<OUString, css::uno::Any> aGrabBagMap = rOldGrabBagItem.GetGrabBag();
-        if (m_xGutterPositionLB->get_value_changed_from_saved())
+        if (m_xGutterPositionTop->get_state_changed_from_saved())
         {
-            bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
+            bool bGutterAtTop = m_xGutterPositionTop->get_active();
             aGrabBagMap[u"GutterAtTop"_ustr] <<= bGutterAtTop;
             bModified = true;
         }
-        if (m_xRtlGutterCB->get_state_changed_from_saved())
+        if (m_xGutterPositionRightOuter->get_state_changed_from_saved())
         {
-            bool const bRtlGutter(m_xRtlGutterCB->get_active());
+            bool const bRtlGutter(m_xGutterPositionRightOuter->get_active());
             aGrabBagMap[u"RtlGutter"_ustr] <<= bRtlGutter;
             bModified = true;
         }
@@ -897,6 +907,11 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBox&, void)
         m_xRightMarginLbl->hide();
         m_xInsideLbl->show();
         m_xOutsideLbl->show();
+        m_xGutterPositionLeftInner->set_label(SvxResId(RID_SVXSTR_PAGEGUTTER_INNER));
+        m_xGutterPositionRightOuter->set_label(SvxResId(RID_SVXSTR_PAGEGUTTER_OUTER));
+        if (m_xGutterPositionTop->get_active())
+            m_xGutterPositionLeftInner->set_active(true);
+        m_xGutterPositionTop->set_sensitive(false);
     }
     else
     {
@@ -904,11 +919,14 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBox&, void)
         m_xRightMarginLbl->show();
         m_xInsideLbl->hide();
         m_xOutsideLbl->hide();
+        m_xGutterPositionLeftInner->set_label(SvxResId(RID_SVXSTR_PAGEGUTTER_LEFT));
+        m_xGutterPositionRightOuter->set_label(SvxResId(RID_SVXSTR_PAGEGUTTER_RIGHT));
+        m_xGutterPositionTop->set_sensitive(true);
     }
     UpdateExample_Impl( true );
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, GutterPositionHdl_Impl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, GutterPositionHdl_Impl, weld::Toggleable&, void)
 {
     UpdateExample_Impl(true);
 }
@@ -1115,7 +1133,7 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
     m_aBspWin.SetSize( aSize );
 
     // Margins
-    bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
+    bool bGutterAtTop = m_xGutterPositionTop->get_active();
     tools::Long nTop = GetCoreValue(*m_xTopMarginEdit, MapUnit::MapTwip);
     if (bGutterAtTop)
     {
