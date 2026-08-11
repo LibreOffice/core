@@ -199,58 +199,6 @@ namespace canvastools
                           const char*                                       pStr,
                           ::sal_Int16                                       nArgPos );
 
-        /** Templatized check for uno::Reference validity.
-
-            @param rRef
-            Reference to check against non-NILness
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws a lang::IllegalArgumentException, if anything is wrong
-         */
-        template< class Interface > void verifyInput(
-            const css::uno::Reference< Interface >&                 rRef,
-            const char*                                             pStr,
-            ::sal_Int16                                             nArgPos )
-        {
-            if( !rRef.is() )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw css::lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) + ": reference is NULL",
-                    nullptr,
-                    nArgPos );
-#else
-                (void)pStr; (void)nArgPos;
-                throw css::lang::IllegalArgumentException();
-#endif
-            }
-        }
-
-        /** Templatized check for content-of-sequence validity.
-
-            @param rSequence
-            Sequence of things to check
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws a lang::IllegalArgumentException, if anything is wrong
-         */
-        template< typename SequenceContent > void verifyInput(
-            const cpo::uno::Sequence< SequenceContent >&                rSequence,
-            const char*                                                 pStr,
-            ::sal_Int16                                                 nArgPos )
-        {
-            for (auto& element : rSequence)
-                verifyInput(element, pStr, nArgPos);
-        }
-
         template< typename SequenceContent > void verifyInput(
             const std::vector< SequenceContent >&                rSequence,
             const char*                                                 pStr,
@@ -308,15 +256,6 @@ namespace canvastools
                 throw css::lang::IllegalArgumentException();
             }
         }
-
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            the size is negative or null
-
-            @param size
-            Size to verify
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyBitmapSize( const css::geometry::IntegerSize2D& size,
-                               const char*                                      pStr );
 
 }
 

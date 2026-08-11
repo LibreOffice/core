@@ -86,22 +86,12 @@ namespace vclcanvas
         assert(mxOutDev);
     }
 
-    const cpo::uno::Sequence< double > & TextLayout::queryLogicalAdvancements() const
-    {
-        return maLogicalAdvancements;
-    }
-
     void TextLayout::applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements )
     {
         ENSURE_ARG_OR_THROW( aAdvancements.getLength() == maText.Length,
                          "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
 
         maLogicalAdvancements = aAdvancements;
-    }
-
-    const cpo::uno::Sequence< bool > & TextLayout::queryKashidaPositions() const
-    {
-        return maKashidaPositions;
     }
 
     void TextLayout::applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions )
@@ -143,11 +133,6 @@ namespace vclcanvas
                                                   ::canvastools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
-    }
-
-    sal_Int8 TextLayout::getMainTextDirection(  )
-    {
-        return mnTextDirection;
     }
 
     const rtl::Reference< vclcanvas::CanvasFont > & TextLayout::getFont() const

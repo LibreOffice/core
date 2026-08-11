@@ -383,38 +383,6 @@ namespace canvastools
             }
         }
 
-        void verifyBitmapSize( const geometry::IntegerSize2D&           size,
-                               const char*                              pStr)
-        {
-            if( size.Width <= 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyBitmapSize(): size has 0 or negative width (value: " +
-                    OUString::number(size.Width) + ")",
-                    nullptr, 0 );
-#else
-                (void)pStr;
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( size.Height > 0 )
-                return;
-
-#if OSL_DEBUG_LEVEL > 0
-            throw lang::IllegalArgumentException(
-                OUString::createFromAscii(pStr) +
-                ": verifyBitmapSize(): size has 0 or negative height (value: " +
-                OUString::number(size.Height) +
-                ")",
-                nullptr, 0 );
-#else
-            throw lang::IllegalArgumentException();
-#endif
-        }
-
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

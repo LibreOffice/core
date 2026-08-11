@@ -73,17 +73,12 @@ namespace vclcanvas
         */
         rtl::Reference< vclcanvas::TextLayout > createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed );
 
-        /** Query the FontRequest that was used to generate this object.
-         */
-        const css::rendering::FontRequest & getFontRequest() const;
-
         vcl::Font const & getVCLFont() const;
       
         const css::geometry::Matrix2D& getFontMatrix() const;
 
     private:
         vcl::Font                                                         maFont;
-        css::rendering::FontRequest                                       maFontRequest;
         VclPtr<OutputDevice>                                              mxOutDev;
         css::geometry::Matrix2D                                           maFontMatrix;
     };

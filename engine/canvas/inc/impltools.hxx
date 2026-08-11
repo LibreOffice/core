@@ -103,7 +103,6 @@ namespace vclcanvastools
         ::Bitmap transformBitmap( const ::Bitmap&                                   rBitmap,
                                   const ::basegfx::B2DHomMatrix&                    rTransform );
 
-        void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

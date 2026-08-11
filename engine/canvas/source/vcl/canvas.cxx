@@ -128,26 +128,6 @@ namespace vclcanvas
         return true;
     }
 
-    basegfx::B2DPolyPolygon Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
-    {
-        // vcl only handles even_odd polygons
-        return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points );
-    }
-
-    void Canvas::clear()
-    {
-        OutputDevice& rOutDev( *mxOutDev );
-        vclcanvastools::OutDevStateKeeper aStateKeeper( rOutDev );
-
-        rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
-        rOutDev.SetLineColor( COL_WHITE );
-        rOutDev.SetFillColor( COL_WHITE );
-        rOutDev.SetClipRegion();
-        rOutDev.DrawRect( ::tools::Rectangle( Point(),
-                                     rOutDev.GetOutputSizePixel()) );
-    }
-
     void Canvas::drawLine(const ::basegfx::B2DPoint&  rStartPoint2D,
                                    const ::basegfx::B2DPoint&  rEndPoint2D,
                                    const ::vclcanvas::ViewState&   viewState,
@@ -350,56 +330,6 @@ namespace vclcanvas
 
 
     void
-        Canvas::drawText(const css::rendering::StringContext&                                     text,
-                 const rtl::Reference< vclcanvas::CanvasFont >&                xFont,
-                 const ::vclcanvas::ViewState&                                         viewState,
-                 const ::vclcanvas::RenderState&                                       renderState,
-                 sal_Int8                                                                 textDirection)
-    {
-        canvastools::verifyArgs(xFont, viewState, renderState,
-                          __func__);
-        canvastools::verifyRange( textDirection,
-                            css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-                            css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
-
-        ENSURE_ARG_OR_THROW( xFont.is(),
-                         "font is NULL");
-
-        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
-
-        ::Point aOutpos;
-        if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
-            return; // no output necessary
-
-        // change text direction and layout mode
-        vcl::text::ComplexTextLayoutFlags nLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
-        switch( textDirection )
-        {
-            case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-            case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
-                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
-                break;
-
-            case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
-                [[fallthrough]];
-            case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
-                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginRight;
-                break;
-        }
-
-        // TODO(F2): alpha
-        mxOutDev->SetLayoutMode( nLayoutMode );
-        mxOutDev->DrawText( aOutpos,
-                            text.Text,
-                            ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
-                            ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
-    }
-
-
-    void
         Canvas::drawTextLayout(const rtl::Reference< vclcanvas::TextLayout >&               xLayoutedText,
                         const ::vclcanvas::ViewState&                                       viewState,
                         const ::vclcanvas::RenderState&                                     renderState)
@@ -464,11 +394,6 @@ namespace vclcanvas
         }
     }
 
-
-    css::geometry::IntegerSize2D Canvas::getSize(  )
-    {
-        return vcl::unotools::integerSize2DFromSize( mxOutDev->GetOutputSizePixel() );
-    }
 
     int Canvas::setupOutDevState( const vclcanvas::ViewState&     viewState,
                                         const vclcanvas::RenderState&   renderState,

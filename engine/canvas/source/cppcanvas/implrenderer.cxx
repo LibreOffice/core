@@ -55,7 +55,6 @@
 #include <tools/poly.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include "renderer.hxx"
-#include "tools.hxx"
 #include "outdevstate.hxx"
 #include "action.hxx"
 #include <sal/log.hxx>

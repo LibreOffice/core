@@ -44,7 +44,6 @@ namespace vclcanvas
         maFont( rFontRequest.FontDescription.FamilyName,
                 rFontRequest.FontDescription.StyleName,
                 Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ),
-        maFontRequest( rFontRequest ),
         mxOutDev( &rOutDev ),
         maFontMatrix( rFontMatrix )
   {
@@ -73,11 +72,6 @@ namespace vclcanvas
                                nDirection,
                                this,
                                mxOutDev);
-    }
-
-    const rendering::FontRequest & CanvasFont::getFontRequest() const
-    {
-        return maFontRequest;
     }
 
     vcl::Font const & CanvasFont::getVCLFont() const

@@ -66,29 +66,6 @@ namespace vclcanvas
                     rtl::Reference<CanvasFont>                    rFont,
                     const VclPtr<OutputDevice> &                  xOutDev );
 
-        /** Query the advancements for every character in the input string.<p>
-
-            This method returns a sequence of advancements, one for each
-            character in the input string (<em>not</em> for every
-            glyph. There might be multiple glyphs per input character, or
-            multiple input characters per glyph).
-
-            An advancement value is the distance of the glyph to the beginning
-            edge, which is left for LTR text and is right for RTL text. The
-            maximum of the advancements can be deemed as the width of the whole
-            text layout.
-
-            This method can be used to query for the layout's default
-            advancements, which can subsequently be changed and applied to
-            the layout via
-            XTextLayout::applyLogicalAdvancements().<p>
-
-            @returns a sequence of double specifying the
-            advancements per character in font coordinate space.
-
-            @see XTextLayout::applyLogicalAdvancements()
-         */
-        const cpo::uno::Sequence< double > & queryLogicalAdvancements() const;
         /** Apply explicit advancements for every character in the layout
             string.<p>
 
@@ -110,27 +87,7 @@ namespace vclcanvas
             characters in the text.
          */
         void applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements );
-        /** Query the Kashida insertion positions in the input string.<p>
 
-            This method returns a sequence of Kashida insertion positions, one for
-            each character in the input string (<em>not</em> for every
-            glyph. There might be multiple glyphs per input character, or
-            multiple input characters per glyph).<p>
-
-            A Kashida insertion position is a boolean indicating if Kashida should
-            inserted after this character.<p>
-
-            This method can be used to query for the layout's default Kashida
-            insertion positions, which can subsequently be changed and applied to
-            the layout via
-            XTextLayout::applyKashidaPositions().<p>
-
-            @returns a sequence of booleans specifying the Kashida insertion
-            positions per character.
-
-            @see XTextLayout::applyKashidaPositions)
-         */
-        const cpo::uno::Sequence< bool > & queryKashidaPositions() const;
         /** Apply Kashida insertion positions for the layout string.<p>
 
             This method applies the specified Kashida insertion positions to every
@@ -158,14 +115,7 @@ namespace vclcanvas
             coordinate space.
          */
         css::geometry::RealRectangle2D queryTextBounds();
-        /** This method returns the main writing direction.<p>
 
-            This method returns the main writing direction of this layout,
-            i.e. either LEFT_TO_RIGHT or RIGHT_TO_LEFT.<p>
-
-            @returns the main text direction of this layout.
-         */
-        sal_Int8 getMainTextDirection();
         /** Request the associated font for this layout.
 
             @returns the associated font for this layout.
