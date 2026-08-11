@@ -89,7 +89,7 @@ std::string readWholeFile(const std::string& path, int maxSize)
 #ifdef __linux__
 int seccompModeFromStatus(std::string_view procSelfStatus)
 {
-    constexpr std::string_view Field = "Seccomp:";
+    static constexpr std::string_view Field = "Seccomp:";
 
     const std::size_t pos = procSelfStatus.find(Field);
     if (pos == std::string_view::npos)
