@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
@@ -2396,6 +2397,15 @@ bool SdDrawDocument::ResolvePageLinks(
     }
     else
     {
+        // Each resolved page arrives in place of the page at its position, so the slides every
+        // section spans stay the same. The insert and the remove that carry out one replacement each
+        // shift a section boundary by themselves, so the section updates are held back over the
+        // whole run.
+        const bool bOldInternalPageMove = mbInternalPageMove;
+        mbInternalPageMove = true;
+        comphelper::ScopeGuard aSectionGuard(
+            [this, bOldInternalPageMove]() { mbInternalPageMove = bOldInternalPageMove; });
+
         // Insert selected pages
         insertSelectedPages(rBookmarkList, aInsertParams, options);
     }
