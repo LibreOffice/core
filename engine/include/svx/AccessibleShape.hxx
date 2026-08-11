@@ -381,7 +381,7 @@ protected:
 
     /** Create a base name string that contains the accessible name.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual OUString
         CreateAccessibleBaseName();
@@ -392,7 +392,7 @@ protected:
     virtual OUString
         CreateAccessibleName() override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString
        GetFullAccessibleName(AccessibleShape *shape);
     virtual OUString GetStyle() const;

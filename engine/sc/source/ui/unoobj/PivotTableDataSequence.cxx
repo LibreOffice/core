@@ -70,7 +70,7 @@ cpo::uno::Sequence<cpo::uno::Any> SAL_CALL PivotTableDataSequence::getData()
     SolarMutexGuard aGuard;
 
     if (!m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence<cpo::uno::Any> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
@@ -94,7 +94,7 @@ cpo::uno::Sequence<double> SAL_CALL PivotTableDataSequence::getNumericalData()
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence<double> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
@@ -114,7 +114,7 @@ cpo::uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence<OUString> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
@@ -138,7 +138,7 @@ cpo::uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::generateLabel(char
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence<OUString> aSeq;
     return aSeq;

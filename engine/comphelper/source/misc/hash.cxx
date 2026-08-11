@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/hash.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>
@@ -101,7 +101,7 @@ struct HashImpl
             {
                 PRErrorCode error = PR_GetError();
                 const char* errorText = PR_ErrorToName(error);
-                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number(static_cast<int>(error)) + ")");
+                throw cpo::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number(static_cast<int>(error)) + ")");
             }
         }
         mpContext = HASH_Create(getNSSType());

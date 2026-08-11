@@ -491,7 +491,7 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     SolarMutexGuard aGuard;
 
     if (!mbValid)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // use cached document if not in use, temporary document otherwise
     //  (deleted in ScTempDocSource dtor)
@@ -676,7 +676,7 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     }
 
     if (bOverflow)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (bArgErr)
         throw lang::IllegalArgumentException();

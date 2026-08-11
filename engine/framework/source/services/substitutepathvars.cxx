@@ -184,12 +184,12 @@ private:
 
     // XStringSubstitution implementation methods
     /// @throws css::container::NoSuchElementException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString impl_substituteVariable( const OUString& aText, bool bSustRequired );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString impl_reSubstituteVariables( const OUString& aText );
     /// @throws css::container::NoSuchElementException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString const & impl_getSubstituteVariableValue( const OUString& variable );
 
 private:

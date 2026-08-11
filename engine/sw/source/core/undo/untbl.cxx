@@ -327,7 +327,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE(pEditShell, "SwUndoInsTable::RedoImpl needs a SwEditShell!");
     if (!pEditShell)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwPosition const aPos(rDoc.GetNodes(), m_nStartNode);

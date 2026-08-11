@@ -78,7 +78,7 @@ private:
 
     SwUnoCursor& GetCursorOrThrow() {
         if(!m_pUnoCursor)
-            throw css::uno::RuntimeException(u"SwXTextCursor: disposed or invalid"_ustr, nullptr);
+            throw cpo::uno::RuntimeException(u"SwXTextCursor: disposed or invalid"_ustr, nullptr);
         return *m_pUnoCursor;
     }
 

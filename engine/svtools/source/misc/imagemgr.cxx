@@ -256,7 +256,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
             }
         }
     }
-    catch( const css::uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw; // don't hide it!
     }
@@ -315,7 +315,7 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
                  ( rContent.getPropertyValue( u"IsFloppy"_ustr ) >>= rVolumeInfo.m_bIsFloppy ) &&
                  ( rContent.getPropertyValue( u"IsCompactDisc"_ustr ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
-    catch( const css::uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw; // don't hide it!
     }
@@ -346,7 +346,7 @@ static SvImageId GetFolderImageId_Impl( const OUString& rURL )
                 nRet = SvImageId::FixedDevice;
         }
     }
-    catch( const css::uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw; // don't hide it!
     }
@@ -362,7 +362,7 @@ static bool isFolder(
 {
     try {
         return ucbhelper::Content(url, env, comphelper::getProcessComponentContext()).isFolder();
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (css::ucb::CommandAbortedException &) {
         assert(false); // this cannot happen
@@ -496,7 +496,7 @@ static TranslateId GetFolderDescriptionId_Impl( const OUString& rURL )
                 pRet = STR_DESCRIPTION_LOCALE_VOLUME;
         }
     }
-    catch( const css::uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw; // don't hide it!
     }

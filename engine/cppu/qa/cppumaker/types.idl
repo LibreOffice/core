@@ -37,7 +37,7 @@ interface XTest {
         get raises
             (cpo::uno::Exception,
              com::sun::star::lang::ClassNotFoundException);
-        set raises (com::sun::star::uno::RuntimeException);
+        set raises (cpo::uno::RuntimeException);
     };
     [attribute, readonly] long A4 {
         get raises (com::sun::star::uno::DeploymentException);
@@ -84,14 +84,14 @@ service S1: XTest {
     create1();
 
     create2([in] any... create2)
-        raises (com::sun::star::uno::RuntimeException,
+        raises (cpo::uno::RuntimeException,
                 com::sun::star::lang::ClassNotFoundException,
                 cpo::uno::Exception,
                 com::sun::star::lang::IllegalAccessException,
                 com::sun::star::uno::DeploymentException);
 
     create3([in] sequence<any> S1)
-        raises (com::sun::star::uno::RuntimeException,
+        raises (cpo::uno::RuntimeException,
                 com::sun::star::lang::ClassNotFoundException,
                 com::sun::star::lang::IllegalAccessException,
                 com::sun::star::uno::DeploymentException);
@@ -670,7 +670,7 @@ struct AlignmentDerivedStruct: AlignmentBaseStruct {
     short member3;
 };
 
-exception TestException1: com::sun::star::uno::RuntimeException {
+exception TestException1: cpo::uno::RuntimeException {
     long m1;
     any m2;
     HelperEnum m3;

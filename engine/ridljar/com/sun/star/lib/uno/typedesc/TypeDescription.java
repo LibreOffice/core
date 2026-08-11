@@ -446,7 +446,7 @@ public final class TypeDescription {
             {
                 TypeDescription[] superTypes
                     = typeName.equals("cpo.uno.Exception")
-                    || typeName.equals("com.sun.star.uno.RuntimeException")
+                    || typeName.equals("cpo.uno.RuntimeException")
                     ? null
                     : new TypeDescription[] {
                             get(new Type(zClass.getSuperclass())) };

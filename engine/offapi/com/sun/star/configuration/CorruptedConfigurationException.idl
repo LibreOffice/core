@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module configuration {
     specialized exceptions from it which identify a concrete
     error case.
  */
-published exception CorruptedConfigurationException : ::com::sun::star::uno::RuntimeException
+published exception CorruptedConfigurationException : ::cpo::uno::RuntimeException
 {
     /** Instead of the message part of an exception, this value
         describe the type of corruption more in detail. */

@@ -207,7 +207,7 @@ public class ScriptSelector {
             client.setLocation(x, y);
 
             client.show();
-        } catch (com.sun.star.uno.RuntimeException rue) {
+        } catch (cpo.uno.RuntimeException rue) {
             rue.printStackTrace();
         } catch (java.lang.Exception e) {
             e.printStackTrace();

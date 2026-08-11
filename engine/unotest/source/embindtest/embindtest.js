@@ -814,14 +814,14 @@ Module.uno_init.then(function() {
         console.assert(false);
     } catch (e) {
         const any = Module.catchUnoException(e);
-        console.assert(any.getType() == 'com.sun.star.uno.RuntimeException');
+        console.assert(any.getType() == 'cpo.uno.RuntimeException');
         const exc = any.get();
         console.assert(exc.Message.startsWith('test'));
         any.delete();
     }
     try {
         const wrapped = new Module.uno_Any(
-            Module.uno_Type.Exception('com.sun.star.uno.RuntimeException'),
+            Module.uno_Type.Exception('cpo.uno.RuntimeException'),
             {Message: 'test', Context: test});
         Module.throwUnoException(
             Module.uno_Type.Exception('com.sun.star.lang.WrappedTargetException'),
@@ -834,7 +834,7 @@ Module.uno_init.then(function() {
         console.assert(exc.Message.startsWith('wrapped'));
         console.assert(Module.sameUnoObject(exc.Context, test));
         const wrappedAny = exc.TargetException;
-        console.assert(wrappedAny.getType() == 'com.sun.star.uno.RuntimeException');
+        console.assert(wrappedAny.getType() == 'cpo.uno.RuntimeException');
         const wrappedExc = wrappedAny.get();
         console.assert(wrappedExc.Message.startsWith('test'));
         console.assert(Module.sameUnoObject(wrappedExc.Context, test));
@@ -1312,7 +1312,7 @@ Module.uno_init.then(function() {
             const any = Module.catchUnoException(e);
             console.assert(any.getType() == 'com.sun.star.reflection.InvocationTargetException');
             const target = any.get().TargetException;
-            console.assert(target.getType() == 'com.sun.star.uno.RuntimeException');
+            console.assert(target.getType() == 'cpo.uno.RuntimeException');
             const exc = target.get();
             console.assert(exc.Message.startsWith('test'));
             any.delete();

@@ -313,7 +313,7 @@ OUString SfxObjectFactory::GetModuleName() const
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(GetDocumentServiceName()) );
         return aPropSet.getUnpackedValueOrDefault(u"ooSetupFactoryUIName"_ustr, OUString());
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }

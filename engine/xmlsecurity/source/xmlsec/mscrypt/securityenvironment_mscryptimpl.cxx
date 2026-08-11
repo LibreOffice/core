@@ -400,7 +400,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
 
     certInfo.Issuer.pbData = static_cast<BYTE*>(malloc( certInfo.Issuer.cbData ));
     if(!certInfo.Issuer.pbData)
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
 
     if( ! ( CertStrToNameW(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
@@ -420,7 +420,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
     if (!cryptSerialNumber.pbData)
     {
         free( certInfo.Issuer.pbData ) ;
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
     for( i = 0; i < cryptSerialNumber.cbData; i ++ )
         cryptSerialNumber.pbData[i] = serialNumber[ cryptSerialNumber.cbData - i - 1 ] ;
@@ -585,7 +585,7 @@ cpo::uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryp
 
     const auto* xcert = dynamic_cast<X509Certificate_MSCryptImpl*>(begin.get());
     if( xcert == nullptr ) {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -807,7 +807,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
 
     const auto* xcert = dynamic_cast<X509Certificate_MSCryptImpl*>(aCert.get());
     if( xcert == nullptr ) {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -971,7 +971,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
 
     const auto* xcert = dynamic_cast<X509Certificate_MSCryptImpl*>(aCert.get());
     if( xcert == nullptr ) {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -1042,7 +1042,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
      */
     xmlSecKeysMngrPtr pKeysMngr = xmlsecurity::MSCryptoAppliedKeysMngrCreate() ;
     if( pKeysMngr == nullptr )
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
 
     /*-
      * Adopt system default certificate store.
@@ -1054,7 +1054,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
                 CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hMySystemStore = nullptr;
-                throw uno::RuntimeException() ;
+                throw cpo::uno::RuntimeException() ;
             }
             m_hMySystemStore = nullptr;
         }
@@ -1065,7 +1065,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
                 CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hRootSystemStore = nullptr;
-                throw uno::RuntimeException() ;
+                throw cpo::uno::RuntimeException() ;
             }
             m_hRootSystemStore = nullptr;
         }
@@ -1076,7 +1076,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
                 CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hTrustSystemStore = nullptr;
-                throw uno::RuntimeException() ;
+                throw cpo::uno::RuntimeException() ;
             }
             m_hTrustSystemStore = nullptr;
         }
@@ -1087,7 +1087,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
                 CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hCaSystemStore = nullptr;
-                throw uno::RuntimeException() ;
+                throw cpo::uno::RuntimeException() ;
             }
             m_hCaSystemStore = nullptr;
         }

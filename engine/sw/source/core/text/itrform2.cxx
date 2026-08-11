@@ -1330,7 +1330,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     {
                         rdf::Statement stmt;
                         if (!(xEnum->nextElement() >>= stmt)) {
-                            throw uno::RuntimeException();
+                            throw cpo::uno::RuntimeException();
                         }
                         const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
                         if (!xObject.is()) continue;

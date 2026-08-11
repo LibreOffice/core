@@ -964,7 +964,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
         xTypeCfg.set(
             xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext), css::uno::UNO_QUERY);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { return EFactory::UNKNOWN_FACTORY; }
@@ -984,7 +984,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
             if (eApp != EFactory::UNKNOWN_FACTORY)
                 return eApp;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { /* do nothing here ... may the following code can help!*/ }
@@ -1016,7 +1016,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
         if (eApp != EFactory::UNKNOWN_FACTORY)
             return eApp;
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { /* do nothing here ... may the following code can help!*/ }

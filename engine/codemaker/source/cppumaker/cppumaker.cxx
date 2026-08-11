@@ -77,7 +77,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             // Reference.hxx, Type.h), so it seems best to always generate those
             // C++ header files:
             produce(
-                u"com.sun.star.uno.RuntimeException"_ustr, typeMgr, generated,
+                u"cpo.uno.RuntimeException"_ustr, typeMgr, generated,
                 options);
             produce(
                 u"cpo.uno.TypeClass"_ustr, typeMgr, generated, options);

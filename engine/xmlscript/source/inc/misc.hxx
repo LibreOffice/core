@@ -29,7 +29,7 @@ inline void extract_throw( T * p, cpo::uno::Any const & a )
 {
     if (! (a >>= *p))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "expected " + cppu::UnoType<T>::get().getTypeName(),
             css::uno::Reference<
             css::uno::XInterface>() );

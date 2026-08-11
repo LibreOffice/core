@@ -23,7 +23,7 @@
 #include <i18nutil/widthfolding.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/character.hxx>
 
 #include <unicode/uchar.h>
@@ -89,7 +89,7 @@ const Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int3
         case 0x0128: return langIs("lt") ? mapping_0128[0] : mapping_0128[1];
         }
         // Should not come here
-        throw RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale const & aLocale, MappingType nMappingType)
@@ -127,7 +127,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
                         }
                     }
                     // Should not come here
-                    throw RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 }
             }
             else

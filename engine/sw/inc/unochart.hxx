@@ -125,10 +125,10 @@ class SwChartDataProvider final :
     SwChartDataProvider & operator = ( const SwChartDataProvider & ) = delete;
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::chart2::data::XDataSource > Impl_createDataSource( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments, bool bTestOnly = false );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::chart2::data::XDataSequence > Impl_createDataSequenceByRangeRepresentation( std::u16string_view aRangeRepresentation, bool bTestOnly = false );
 
     static OUString GetBrokenCellRangeForExport( std::u16string_view rCellRangeRepresentation );

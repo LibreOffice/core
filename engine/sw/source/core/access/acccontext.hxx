@@ -172,7 +172,7 @@ protected:
 
      bool IsEditableState();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::awt::Rectangle
         getBoundsImpl(bool bRelative);
 

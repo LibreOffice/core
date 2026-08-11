@@ -34,7 +34,7 @@ namespace pcr
     class SAL_NO_VTABLE IPropertyExistenceCheck
     {
     public:
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual bool hasPropertyByName( const OUString& _rName ) = 0;
 
     protected:

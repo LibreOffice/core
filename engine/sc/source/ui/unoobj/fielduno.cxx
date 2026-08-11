@@ -452,7 +452,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     uno::Reference<text::XTextRange> xTextRange;
     rtl::Reference<ScHeaderFooterContentObj> xContentObj = mrData.GetContentObj();
     if (!xContentObj.is())
-        throw uno::RuntimeException(u""_ustr);
+        throw cpo::uno::RuntimeException(u""_ustr);
 
     uno::Reference<text::XText> xText;
 
@@ -701,10 +701,10 @@ cpo::uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
             aSelection.start, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"getPropertyValue: Field not found");
         if (!pField)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if (pField->GetClassId() != text::textfield::Type::URL)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
 
@@ -790,7 +790,7 @@ cpo::uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
 
     OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
     if (!pField)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SvxExtFileField* pExtFile = static_cast<const SvxExtFileField*>(pField);
     eFormat = pExtFile->GetFormat();
@@ -903,7 +903,7 @@ cpo::uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
         ScUnoEditEngine aTempEngine(pEditEngine);
         SvxFieldData* pField = aTempEngine.FindByPos(aSelection.start, meType);
         if (!pField)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         switch (meType)
         {
@@ -1142,7 +1142,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( bool bShowCommand )
         {
             if (pField->GetClassId() != text::textfield::Type::URL)
                 // Not a URL field, but URL is expected.
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
             return bShowCommand ? pURL->GetURL() : pURL->GetRepresentation();

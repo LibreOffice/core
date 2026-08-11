@@ -383,7 +383,7 @@ public:
     virtual OUString    getImplementationName() override = 0;
 
 // XServiceInfo - static version(s)
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
 // XPersistObject
@@ -933,7 +933,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames(  ) override;
 
     // XServiceInfo - static version
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild

@@ -48,21 +48,21 @@ namespace sd::colortoolpanel
         );
 
         // XToolPanel
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getWindow(  ) throw (css::uno::RuntimeException);
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL createAccessible( const css::uno::Reference< css::accessibility::XAccessible >& ParentAccessible ) throw (css::uno::RuntimeException);
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getWindow(  ) throw (cpo::uno::RuntimeException);
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL createAccessible( const css::uno::Reference< css::accessibility::XAccessible >& ParentAccessible ) throw (cpo::uno::RuntimeException);
 
         // XView
         // (no methods)
 
         // XResource
-        virtual css::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (css::uno::RuntimeException);
-        virtual bool SAL_CALL isAnchorOnly(  ) throw (css::uno::RuntimeException);
+        virtual css::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (cpo::uno::RuntimeException);
+        virtual bool SAL_CALL isAnchorOnly(  ) throw (cpo::uno::RuntimeException);
 
         // XPaintListener
-        virtual void SAL_CALL windowPaint( const css::awt::PaintEvent& e ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL windowPaint( const css::awt::PaintEvent& e ) throw (cpo::uno::RuntimeException);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (cpo::uno::RuntimeException);
 
         // XComponent equivalents
         virtual void SAL_CALL disposing();

@@ -92,7 +92,7 @@ public class _XTextContent extends MultiMethodTest {
                 ex.printStackTrace(log);
                 tRes.tested("attach()",false);
             }
-        } catch (com.sun.star.uno.RuntimeException re) {
+        } catch (cpo.uno.RuntimeException re) {
             String noAttach = (String) tEnv.getObjRelation("NoAttach");
             if (noAttach != null) {
                 log.println("Exception expected for "+noAttach);

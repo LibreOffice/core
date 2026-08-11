@@ -20,7 +20,7 @@
 #include <bridge.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>
@@ -98,7 +98,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
             ::rtl_uString_acquire( *ppOId );
         }
     }
-    catch (const css::uno::RuntimeException & e)
+    catch (const cpo::uno::RuntimeException & e)
     {
         SAL_WARN("bridges",
             "### RuntimeException occurred during queryInterface(): "

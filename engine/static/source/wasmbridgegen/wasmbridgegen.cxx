@@ -709,7 +709,7 @@ SAL_IMPLEMENT_MAIN()
                   "#include <bit>\n"
                   "#include <string_view>\n"
                   "#include <typeinfo>\n"
-                  "#include <com/sun/star/uno/RuntimeException.hpp>\n"
+                  "#include <cpo/uno/RuntimeException.hpp>\n"
                   "#include <rtl/ustring.hxx>\n"
                   "#include <sal/types.h>\n"
                   "#include <wasm/generated.hxx>\n";
@@ -740,7 +740,7 @@ SAL_IMPLEMENT_MAIN()
                    << "        return;\n"
                    << "    }\n";
         }
-        cppOut << "    throw css::uno::RuntimeException(\"Wasm bridge cannot call virtual function "
+        cppOut << "    throw cpo::uno::RuntimeException(\"Wasm bridge cannot call virtual function "
                   "with signature \" + OUString::fromUtf8(signature));\n"
                   "}\n";
         if (!slotSignatures.empty())
@@ -879,7 +879,7 @@ SAL_IMPLEMENT_MAIN()
                    << ");\n"
                    << "    }\n";
         }
-        cppOut << "    throw css::uno::RuntimeException(\"Wasm bridge cannot fill virtual function "
+        cppOut << "    throw cpo::uno::RuntimeException(\"Wasm bridge cannot fill virtual function "
                   "slot with signature \" + OUString::fromUtf8(signature));\n"
                   "}\n";
         if (!rttis.empty())

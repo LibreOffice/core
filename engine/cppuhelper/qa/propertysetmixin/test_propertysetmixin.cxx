@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -93,7 +93,7 @@ public:
     }
 
     virtual void disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException)
+        throw (cpo::uno::RuntimeException)
     {
         osl::MutexGuard g(m_mutex);
         CPPUNIT_ASSERT(m_count < std::numeric_limits< int >::max());
@@ -102,7 +102,7 @@ public:
 
     virtual void propertyChange(
         css::beans::PropertyChangeEvent const &)
-        throw (css::uno::RuntimeException)
+        throw (cpo::uno::RuntimeException)
     { CPPUNIT_FAIL("BoundListener::propertyChange called"); }
 
 private:
@@ -127,7 +127,7 @@ public:
     }
 
     virtual void disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException)
+        throw (cpo::uno::RuntimeException)
     {
         osl::MutexGuard g(m_mutex);
         CPPUNIT_ASSERT(m_count < std::numeric_limits< int >::max());
@@ -136,7 +136,7 @@ public:
 
     virtual void vetoableChange(
         css::beans::PropertyChangeEvent const &)
-        throw (css::beans::PropertyVetoException, css::uno::RuntimeException)
+        throw (css::beans::PropertyVetoException, cpo::uno::RuntimeException)
     { CPPUNIT_FAIL("VetoListener::vetoableChange called"); }
 
 private:
@@ -342,12 +342,12 @@ void Test::testEmpty2(
         empty2p->addPropertyChangeListener(
             OUString(),
             css::uno::Reference< css::beans::XPropertyChangeListener >());
-    } catch (css::uno::RuntimeException &) {}
+    } catch (cpo::uno::RuntimeException &) {}
     try {
         empty2p->addVetoableChangeListener(
             OUString(),
             css::uno::Reference< css::beans::XVetoableChangeListener >());
-    } catch (css::uno::RuntimeException &) {}
+    } catch (cpo::uno::RuntimeException &) {}
     CPPUNIT_ASSERT_EQUAL(3, boundListener1->count());
     CPPUNIT_ASSERT_EQUAL(1, boundListener2->count());
     CPPUNIT_ASSERT_EQUAL(3, vetoListener1->count());

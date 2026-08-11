@@ -210,17 +210,17 @@ private:
     bool
         impl_isControllerConnected( const css::uno::Reference< css::frame::XController >& xController );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::frame::XController >
         impl_getCurrentController();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
         impl_notifyModifiedListeners();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
         impl_notifyCloseListeners();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
         impl_notifyStorageChangeListeners();
 

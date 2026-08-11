@@ -157,7 +157,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
             SAL_INFO("sd.fwk", __func__ << ":    resource creation failed");
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }
@@ -219,7 +219,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 #endif
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }

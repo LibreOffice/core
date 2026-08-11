@@ -208,7 +208,7 @@ getCurrentDoc( const OUString& sKey )
         aModel = sbxToUnoValue( pCompVar );
         if ( !( aModel >>= xModel ) || !xModel.is() )
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)"_ustr );
         }
         SAL_INFO("vbahelper", "Have model points to url " << xModel->getURL());
@@ -216,7 +216,7 @@ getCurrentDoc( const OUString& sKey )
     else
     {
         SAL_INFO("vbahelper", "Failed to get " << sKey);
-        throw uno::RuntimeException( u"Can't determine the currently selected document"_ustr );
+        throw cpo::uno::RuntimeException( u"Can't determine the currently selected document"_ustr );
     }
     return xModel;
 }
@@ -433,7 +433,7 @@ bool extractBoolFromAny( const cpo::uno::Any& rAny )
             return rAny.get< sal_Int64 >() != 0;
         default:;
     }
-    throw uno::RuntimeException( u"Invalid type, cannot convert to boolean."_ustr , nullptr );
+    throw cpo::uno::RuntimeException( u"Invalid type, cannot convert to boolean."_ustr , nullptr );
 }
 
 OUString extractStringFromAny( const cpo::uno::Any& rAny, bool bUppercaseBool )
@@ -458,7 +458,7 @@ OUString extractStringFromAny( const cpo::uno::Any& rAny, bool bUppercaseBool )
             return OUString::number( rAny.get< sal_Int64 >() );
         default:;
     }
-    throw uno::RuntimeException( u"Invalid type, cannot convert to string."_ustr , nullptr );
+    throw cpo::uno::RuntimeException( u"Invalid type, cannot convert to string."_ustr , nullptr );
 }
 
 OUString extractStringFromAny( const cpo::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool )
@@ -680,7 +680,7 @@ void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::A
         xPropSet.set( xUnoAccess->queryAdapter( cppu::UnoType<beans::XPropertySet>::get()), uno::UNO_QUERY);
 
     if ( !xPropSet.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xPropSet->setPropertyValue( xDflt->getDefaultPropertyName(), aValue );
 }
@@ -751,7 +751,7 @@ UserFormGeometryHelper::UserFormGeometryHelper(
     mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
-        throw uno::RuntimeException( u"No control is provided!"_ustr );
+        throw cpo::uno::RuntimeException( u"No control is provided!"_ustr );
 
     mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
     mxModelProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
@@ -946,7 +946,7 @@ ShapeHelper::ShapeHelper( css::uno::Reference< css::drawing::XShape > _xShape)
     : xShape(std::move( _xShape ))
 {
     if( !xShape.is() )
-        throw css::uno::RuntimeException( u"No valid shape for helper"_ustr );
+        throw cpo::uno::RuntimeException( u"No valid shape for helper"_ustr );
 }
 
 double ShapeHelper::getHeight() const
@@ -1016,7 +1016,7 @@ void DebugHelper::basicexception( const cpo::uno::Exception& ex )
 void DebugHelper::runtimeexception( ErrCode err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::uno::RuntimeException( cpo::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
+    throw cpo::uno::RuntimeException( cpo::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
                                       css::uno::Reference< css::uno::XInterface >() );
 }
 
@@ -1090,7 +1090,7 @@ SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel )
 {
     SfxObjectShell* pFoundShell = comphelper::getFromUnoTunnel<SfxObjectShell>(xModel);
     if ( !pFoundShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return pFoundShell;
 }
 

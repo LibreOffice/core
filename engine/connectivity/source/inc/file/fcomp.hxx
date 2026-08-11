@@ -55,25 +55,25 @@ namespace connectivity
             const css::uno::Reference< css::container::XNameAccess>& getOrigColumns() const { return m_orgColumns; }
         private:
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void execute_COMPARE(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void execute_LIKE(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void execute_BETWEEN(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void execute_ISNULL(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             OOperand* execute_Operand(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void execute_Fold(OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void executeFunction(OSQLParseNode const * pPredicateNode);
         };
 

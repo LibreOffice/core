@@ -69,7 +69,7 @@ int pdfVerify(int nArgc, char** pArgv)
     {
         xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("xmlsecurity.workben",
                              "cppu::defaultBootstrap_InitialComponentContext() failed:");

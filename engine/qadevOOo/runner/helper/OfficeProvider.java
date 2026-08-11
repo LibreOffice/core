@@ -303,13 +303,13 @@ public class OfficeProvider implements AppProvider
      * @param connectStr
      * @return
      * @throws cpo.uno.Exception
-     * @throws com.sun.star.uno.RuntimeException
+     * @throws cpo.uno.RuntimeException
      * @throws com.sun.star.connection.NoConnectException
      * @throws Exception
      */
     private XMultiServiceFactory connect(String connectStr)
             throws cpo.uno.Exception,
-            com.sun.star.uno.RuntimeException,
+            cpo.uno.RuntimeException,
             com.sun.star.connection.NoConnectException,
             Exception
     {

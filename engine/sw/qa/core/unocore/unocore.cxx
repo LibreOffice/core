@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
         = SwXTextRange::CreateXTextRange(*pDoc, *rCursor.GetPoint(), nullptr);
     uno::Reference<text::XTextAppend> xTextAppend(xInsertPosition->getText(), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
-    // An uncaught exception of type com.sun.star.uno.RuntimeException
+    // An uncaught exception of type cpo.uno.RuntimeException
     xTextAppend->insertTextPortion(u"x"_ustr, {}, xInsertPosition);
 
     // Verify that the string is indeed inserted.
@@ -580,7 +580,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testInsertFileInContentControlException)
     xCursor->goLeft(1, false);
     OUString aURL(createFileURL(u"tdf119081.odt"));
     uno::Reference<document::XDocumentInsertable> xInsertable(xCursor, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(aURL, {}), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(aURL, {}), cpo::uno::RuntimeException);
 
     // Accept inserting a document outside the content control:
     xCursor->goRight(1, false);

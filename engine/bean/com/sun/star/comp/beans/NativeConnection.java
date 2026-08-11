@@ -32,19 +32,19 @@ class NativeConnection
         throws com.sun.star.io.IOException;
 
     public native int read(/*OUT*/ byte[][] aReadBytes, /*IN*/ int nBytesToRead)
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     public native void write(/*IN*/ byte[] aData)
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     public native void flush()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     public native void close()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     public synchronized String getDescription()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return Description;
     }

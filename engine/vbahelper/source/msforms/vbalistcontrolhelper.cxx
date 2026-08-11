@@ -52,7 +52,7 @@ ListPropListener::ListPropListener( uno::Reference< beans::XPropertySet > xProps
 void ListPropListener::setValueEvent( const cpo::uno::Any& value )
 {
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
-        throw uno::RuntimeException( u"Bad argument"_ustr );
+        throw cpo::uno::RuntimeException( u"Bad argument"_ustr );
 
     m_xProps->setPropertyValue( u"StringItemList"_ustr, value );
 }
@@ -68,11 +68,11 @@ cpo::uno::Any ListPropListener::getValueEvent()
         sal_Int16 nIndex = -1;
         m_pvargIndex >>= nIndex;
         if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( u"Bad row Index"_ustr );
+            throw cpo::uno::RuntimeException( u"Bad row Index"_ustr );
         aRet <<= sList[ nIndex ];
     }
     else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( u"Bad column Index"_ustr );
+            throw cpo::uno::RuntimeException( u"Bad column Index"_ustr );
     else // List() ( e.g. no args )
     {
         cpo::uno::Sequence< cpo::uno::Sequence< OUString > > sReturnArray( nLength );
@@ -144,7 +144,7 @@ ListControlHelper::removeItem( const cpo::uno::Any& index )
     cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-        throw uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< uno::XInterface > () );
+        throw cpo::uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< uno::XInterface > () );
     if( sList.hasElements() )
     {
         if( sList.getLength() == 1 )

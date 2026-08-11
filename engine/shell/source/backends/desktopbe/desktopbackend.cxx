@@ -32,7 +32,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cpo/uno/XCurrentContext.hpp>
@@ -261,7 +261,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
         return css::uno::Reference< css::lang::XMultiComponentFactory >(
             context->getServiceManager(), css::uno::UNO_SET_THROW)->
             createInstanceWithContext(name, context);
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         // Assuming these exceptions are real errors:
         throw;
     } catch (const cpo::uno::Exception &) {

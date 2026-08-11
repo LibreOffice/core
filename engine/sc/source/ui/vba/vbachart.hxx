@@ -51,11 +51,11 @@ friend class ScVbaAxis;
     void setDefaultChartType() ;
     /// @throws css::script::BasicErrorException
     void setDiagram( const OUString& _sDiagramType);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isStacked();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool is100PercentStacked();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getStackedType( sal_Int32 _nStacked, sal_Int32 _n100PercentStacked, sal_Int32 _nUnStacked );
     /// @throws css::script::BasicErrorException
     sal_Int32 getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _nVerti100PercentStacked, sal_Int32 _nVertiUnStacked, sal_Int32 _nHoriStacked, sal_Int32 _nHori100PercentStacked, sal_Int32 _nHoriUnStacked);
@@ -71,10 +71,10 @@ public:
 
     // Non-interface
     const css::uno::Reference< css::beans::XPropertySet >& xDiagramPropertySet() const { return mxDiagramPropertySet; }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool is3D();
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup);
     // Methods
     virtual OUString SAL_CALL getName() override;

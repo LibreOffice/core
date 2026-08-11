@@ -137,23 +137,23 @@ protected:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState );
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SvxShape( SdrObject* pObj );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SvxShape( SdrObject* pObject, std::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
     virtual ~SvxShape() noexcept override;
 
@@ -169,7 +169,7 @@ public:
     bool HasSdrObject() const { return mxSdrObject.is(); }
 
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any GetBitmap( bool bMetaFile = false ) const;
 
     void notifyPropertyChange(const OUString& rPropName);
@@ -189,34 +189,34 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxShape )
 
     // access methods for master objects
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     rtl::Reference< SfxItemPropertySetInfo > const & _getPropertySetInfo(  );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any _getPropertyValue( const OUString& PropertyName );
 
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::beans::PropertyState _getPropertyState( const OUString& PropertyName );
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _setPropertyToDefault( const OUString& PropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any _getPropertyDefault( const OUString& aPropertyName );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > _getSupportedServiceNames();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Type > const & _getTypes(  );
 
     void setMaster( SvxShapeMaster* pMaster );
@@ -610,7 +610,7 @@ public:
     virtual ~SvxShapePolyPolygon() noexcept override;
 
     // Local support functions
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew);
     basegfx::B2DPolyPolygon GetPolygon() const noexcept;
 };

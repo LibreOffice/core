@@ -64,26 +64,26 @@ namespace connectivity
         java_sql_Connection*                                  m_pConnection;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getResultSetConcurrency() const;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getResultSetType()        const;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getFetchDirection()       const;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getFetchSize()            const;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getCursorName()     const;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setFetchDirection(sal_Int32 _par0);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setFetchSize(sal_Int32 _par0);
     protected:
         // Static data for the class

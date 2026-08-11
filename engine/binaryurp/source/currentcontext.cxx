@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <uno/current_context.h>
 #include <uno/dispatcher.hxx>
@@ -35,7 +35,7 @@ css::uno::UnoInterfaceReference get() {
             reinterpret_cast< void ** >(&cc.m_pUnoI),
             u"" UNO_LB_UNO ""_ustr.pData, nullptr))
     {
-        throw css::uno::RuntimeException(u"uno_getCurrentContext failed"_ustr);
+        throw cpo::uno::RuntimeException(u"uno_getCurrentContext failed"_ustr);
     }
     return cc;
 }
@@ -45,7 +45,7 @@ void set(css::uno::UnoInterfaceReference const & value) {
             value.m_pUnoI,
             u"" UNO_LB_UNO ""_ustr.pData, nullptr))
     {
-        throw css::uno::RuntimeException(u"uno_setCurrentContext failed"_ustr);
+        throw cpo::uno::RuntimeException(u"uno_setCurrentContext failed"_ustr);
     }
 }
 

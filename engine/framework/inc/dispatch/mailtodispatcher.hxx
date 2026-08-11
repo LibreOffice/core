@@ -86,7 +86,7 @@ class MailToDispatcher final : public  ::cppu::WeakImplHelper<
 
     /* internal */
     private:
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool implts_dispatch( const css::util::URL& aURL );
 
 };      //  class MailToDispatcher

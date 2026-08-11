@@ -24,7 +24,7 @@ private:
     sw::mark::DropDownFieldmark& m_rDropDown;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaFormFieldDropDownListEntries(
         const css::uno::Reference<ov::XHelperInterface>& xParent,
         const css::uno::Reference<css::uno::XComponentContext>& xContext,

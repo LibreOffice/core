@@ -164,7 +164,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
     {
         sModuleName = xModuleManager->identify(xFrame);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { sModuleName.clear(); }
@@ -185,7 +185,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
             u"ooSetupFactoryWindowAttributes"_ustr,
             ::comphelper::EConfigurationModes::ReadOnly) >>= sWindowState;
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { sWindowState.clear(); }
@@ -206,7 +206,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
             cpo::uno::Any(sWindowState),
             ::comphelper::EConfigurationModes::Standard);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

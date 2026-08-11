@@ -81,12 +81,12 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     }
 
     public void addStreamListener(XStreamListener aListener )
-            throws com.sun.star.uno.RuntimeException {
+            throws cpo.uno.RuntimeException {
         _listeners.add(aListener);
     }
 
     public void removeStreamListener(XStreamListener aListener )
-            throws com.sun.star.uno.RuntimeException {
+            throws cpo.uno.RuntimeException {
         _listeners.remove(aListener);
     }
 
@@ -118,7 +118,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * @see      com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
-            throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+            throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
         if(_firstRead) {
             _firstRead = false;
 
@@ -169,7 +169,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * @see       com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[]) throws com.sun.star.io.IOException,
-            com.sun.star.uno.RuntimeException {
+            cpo.uno.RuntimeException {
         try {
             _outputStream.write(aData);
         } catch(IOException ioException) {
@@ -188,7 +188,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * @see       com.sun.star.connection.XConnection#flush
      */
     public void flush() throws com.sun.star.io.IOException,
-            com.sun.star.uno.RuntimeException {
+            cpo.uno.RuntimeException {
         try {
             _outputStream.flush();
         } catch(IOException ioException) {
@@ -205,7 +205,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * @see       com.sun.star.connection.XConnection#close
      */
     public void close() throws com.sun.star.io.IOException,
-            com.sun.star.uno.RuntimeException {
+            cpo.uno.RuntimeException {
         try {
             _socket.close();
         } catch(IOException ioException) {
@@ -225,7 +225,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * @return  the description.
      * @see       com.sun.star.connection.XConnection#getDescription
      */
-    public String getDescription() throws com.sun.star.uno.RuntimeException {
+    public String getDescription() throws cpo.uno.RuntimeException {
         return _description;
     }
 

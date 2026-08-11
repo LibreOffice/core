@@ -75,7 +75,7 @@ public:
 
     css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     rtl::Reference<SvxDrawPage> impl_getDrawPage() const;
 
     // ____ chart::XChartDocument ____

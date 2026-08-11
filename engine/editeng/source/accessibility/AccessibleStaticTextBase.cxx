@@ -204,7 +204,7 @@ bool AccessibleStaticTextBase::SetSelection( sal_Int32 nStartPara, sal_Int32 nSt
         SvxEditViewForwarder& rCacheVF = mxTextParagraph->GetEditViewForwarder( true );
         return rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         return false;
     }
@@ -233,7 +233,7 @@ bool AccessibleStaticTextBase::CopyText( sal_Int32 nStartPara, sal_Int32 nStartI
 
         return aRetVal;
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         return false;
     }

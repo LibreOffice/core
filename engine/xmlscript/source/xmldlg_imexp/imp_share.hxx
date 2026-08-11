@@ -479,7 +479,7 @@ public:
         {}
 
     /// @throws css::xml::sax::SAXException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void finish()
     {
         try

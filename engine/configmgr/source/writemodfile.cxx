@@ -25,7 +25,7 @@
 #include <string_view>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.h>
@@ -66,7 +66,7 @@ OString convertToUtf8(std::u16string_view text) {
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"cannot convert to UTF-8"_ustr);
     }
     return s;
@@ -105,17 +105,17 @@ oslFileError TempFile::closeWithoutUnlink() {
 void TempFile::closeAndRename(const OUString &_url) {
     oslFileError e = flush();
     if (e != osl_File_E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot write to " + url);
     }
     e = osl_closeFile(handle);
     closed = true;
     if (e != osl_File_E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot close " + url);
     }
     if (osl::File::replace(url, _url) != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot move " + url);
     }
     handle = nullptr;
@@ -573,7 +573,7 @@ void writeModFile(
              " will be lost"));
         return;
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot create directory " + dir);
     }
     TempFile tmp;
@@ -587,7 +587,7 @@ void writeModFile(
              " will be lost"));
         return;
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot create temporary file in " + dir);
     }
     tmp.writeString(

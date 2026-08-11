@@ -170,8 +170,8 @@ namespace dbaccess
             @throws css::sdb::SQLException
                 if a database-related error occurred
 
-            @throws css::uno::RuntimeException
-                if any of the components involved throws a css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
+                if any of the components involved throws a cpo::uno::RuntimeException
         */
         void        impl_initComposer_throw( OUString& _out_rCommandToExecute );
 
@@ -201,7 +201,7 @@ namespace dbaccess
         void            impl_ensureStatement_throw();
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::sdbc::XConnection >  calcConnection(const css::uno::Reference< css::task::XInteractionHandler >& _rxHandler);
         // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources
         void freeResources( bool _bComplete );
@@ -398,7 +398,7 @@ namespace dbaccess
 
         /** call the RowSetApproveListeners<p/>
             @throws css::sdb::RowSetVetoException if one of the listeners vetoed
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
         */
         void    approveExecution();
 

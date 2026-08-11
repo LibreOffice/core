@@ -36,11 +36,11 @@ class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 private:
     rtl::Reference< SwXTextDocument > mxModel;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getStyleOfFirstPage() const;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const rtl::Reference< SwXTextDocument >& xModel,

@@ -697,7 +697,7 @@ cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::Get
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }

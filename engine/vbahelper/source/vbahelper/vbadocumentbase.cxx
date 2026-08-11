@@ -133,7 +133,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
     {
         if( xStorable->isReadonly() )
         {
-            throw uno::RuntimeException(u"Unable to save to a read only file "_ustr );
+            throw cpo::uno::RuntimeException(u"Unable to save to a read only file "_ustr );
         }
         if( bFileName )
             xStorable->storeAsURL( aFileName, cpo::uno::Sequence< beans::PropertyValue >(0) );
@@ -228,7 +228,7 @@ VbaDocumentBase::Unprotect( const cpo::uno::Any &aPassword )
     OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
     if( !xProt->isProtected() )
-        throw uno::RuntimeException(u"File is already unprotected"_ustr );
+        throw cpo::uno::RuntimeException(u"File is already unprotected"_ustr );
     if( aPassword >>= rPassword )
         xProt->unprotect( rPassword );
     else

@@ -20,7 +20,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -93,7 +93,7 @@ public:
         sal_Int32 badVal = 9999;
         cpo::uno::Any any;
         any.setValue(&badVal, cppu::UnoType<css::beans::PropertyState>::get());
-        CPPUNIT_ASSERT_THROW(render(any), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(render(any), cpo::uno::RuntimeException);
     }
 
     void testAppendSequence()
@@ -135,15 +135,15 @@ public:
         // JSON has no representation for NaN and +/-Inf, so emitting them should throw rather than
         // producing malformed JSON:
         CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<double>::quiet_NaN())),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<double>::infinity())),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(-std::numeric_limits<double>::infinity())),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<float>::quiet_NaN())),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<float>::infinity())),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseScalars()
@@ -166,26 +166,26 @@ public:
     void testParseScalarsOutOfRange()
     {
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"128"_ustr, cppu::UnoType<sal_Int8>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"-129"_ustr, cppu::UnoType<sal_Int8>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"32768"_ustr, cppu::UnoType<sal_Int16>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"-1"_ustr, cppu::UnoType<sal_uInt16>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"4294967296"_ustr, cppu::UnoType<sal_uInt32>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
             comphelper::parseJsonToAny(u"99999999999999999999"_ustr, cppu::UnoType<sal_Int64>::get()),
-            css::uno::RuntimeException);
+            cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"1.5"_ustr, cppu::UnoType<sal_Int32>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"abc"_ustr, cppu::UnoType<sal_Int32>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"abc"_ustr, cppu::UnoType<double>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"yes"_ustr, cppu::UnoType<bool>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseString()
@@ -202,9 +202,9 @@ public:
             u"\x01"_ustr,
             comphelper::parseJsonToAny(u"\"\\u0001\""_ustr, cppu::UnoType<OUString>::get()).get<OUString>());
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"\"unterminated"_ustr, cppu::UnoType<OUString>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"\"bad\\q\""_ustr, cppu::UnoType<OUString>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseChar()
@@ -213,10 +213,10 @@ public:
         comphelper::parseJsonToAny(u"\"X\""_ustr, cppu::UnoType<cppu::UnoCharType>::get()) >>= c;
         CPPUNIT_ASSERT_EQUAL(int('X'), int(c));
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"\"\""_ustr, cppu::UnoType<cppu::UnoCharType>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
             comphelper::parseJsonToAny(u"\"AB\""_ustr, cppu::UnoType<cppu::UnoCharType>::get()),
-            css::uno::RuntimeException);
+            cpo::uno::RuntimeException);
     }
 
     void testParseType()
@@ -226,7 +226,7 @@ public:
                                  .get<cpo::uno::Type>());
         CPPUNIT_ASSERT_THROW(
             comphelper::parseJsonToAny(u"\"no.such.type\""_ustr, cppu::UnoType<cpo::uno::Type>::get()),
-            css::uno::RuntimeException);
+            cpo::uno::RuntimeException);
     }
 
     void testParseEnum()
@@ -237,7 +237,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DIRECT_VALUE, s);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"\"NOT_AN_ENUM_NAME\""_ustr,
                                             cppu::UnoType<css::beans::PropertyState>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseSequence()
@@ -291,7 +291,7 @@ public:
         // Missing member is an error:
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"{\"Name\":\"foo\"}"_ustr,
                                             cppu::UnoType<css::beans::PropertyValue>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseAny()
@@ -302,7 +302,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(42), nested.get<sal_Int32>());
         // Bare value (not the envelope) should fail:
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"42"_ustr, cppu::UnoType<cpo::uno::Any>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseInterface()
@@ -313,7 +313,7 @@ public:
         CPPUNIT_ASSERT(!ref.is());
         // Non-null is not implemented yet:
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"{}"_ustr, cppu::UnoType<css::uno::XInterface>::get()),
-                             css::uno::RuntimeException);
+                             cpo::uno::RuntimeException);
     }
 
     void testParseInferredScalars() {
@@ -357,26 +357,26 @@ public:
 
     void testParseInferredObjectRejected() {
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"{}"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"{}"_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"{\"a\":1}"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"{\"a\":1}"_ustr), cpo::uno::RuntimeException);
     }
 
     void testParseInferredMalformed() {
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u""_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u""_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u" 42"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u" 42"_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"42 "_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"42 "_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"tru"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"tru"_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"\"hä"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"\"hä"_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"[1,2"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"[1,2"_ustr), cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(
-            comphelper::parseJsonToInferredAny(u"foo"_ustr), css::uno::RuntimeException);
+            comphelper::parseJsonToInferredAny(u"foo"_ustr), cpo::uno::RuntimeException);
     }
 
     CPPUNIT_TEST_SUITE(Json);

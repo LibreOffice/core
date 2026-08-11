@@ -49,7 +49,7 @@ namespace tdoc_ucp {
         virtual ~StorageElementFactory() override;
 
         /// @throws cpo::uno::Exception
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         createTemporaryStorage();
 
@@ -57,7 +57,7 @@ namespace tdoc_ucp {
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         createStorage( const OUString & rUri, StorageAccessMode eMode );
 
@@ -66,7 +66,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::io::XInputStream >
         createInputStream( const OUString & rUri,
                            const OUString & rPassword );
@@ -76,7 +76,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::io::XOutputStream >
         createOutputStream( const OUString & rUri,
                             const OUString & rPassword,
@@ -87,7 +87,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::io::XStream >
         createStream( const OUString & rUri,
                       const OUString & rPassword,
@@ -102,7 +102,7 @@ namespace tdoc_ucp {
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
                             StorageAccessMode eMode );
@@ -111,7 +111,7 @@ namespace tdoc_ucp {
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         queryStorage( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
@@ -123,7 +123,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::io::XStream >
         queryStream( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,

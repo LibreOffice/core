@@ -88,7 +88,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     uno::Reference< io::XInputStream > xNewInStream = xStream->getInputStream();
     uno::Reference< io::XOutputStream > xNewOutStream = xStream->getOutputStream();
     if ( !xNewInStream.is() || !xNewOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_Int64 nPos = 0;
     bool bInOpen = false;
@@ -98,7 +98,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     {
         // check that the length is the same
         if ( m_pStreamData->m_xOrigSeekable->getLength() != xNewSeekable->getLength() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // get the current position
         nPos = m_pStreamData->m_xOrigSeekable->getPosition();
@@ -121,7 +121,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     uno::Reference< io::XSeekable > xNewSeekable( xInputStream, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xNewOutStream;
     if ( !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_Int64 nPos = 0;
     bool bInOpen = false;
@@ -131,7 +131,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     {
         // check that the length is the same
         if ( m_pStreamData->m_xOrigSeekable->getLength() != xNewSeekable->getLength() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // get the current position
         nPos = m_pStreamData->m_xOrigSeekable->getPosition();
@@ -171,10 +171,10 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     uno::Reference< io::XInputStream > xTargetInStream = xTargetStream->getInputStream();
     uno::Reference< io::XOutputStream > xTargetOutStream = xTargetStream->getOutputStream();
     if ( !xTargetInStream.is() || !xTargetOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_pStreamData->m_xOrigInStream.is() || !m_pStreamData->m_xOrigSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_Int64 nPos = m_pStreamData->m_xOrigSeekable->getPosition();
     m_pStreamData->m_xOrigSeekable->seek( 0 );
@@ -226,7 +226,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStreamData->m_xOrigInStream->readBytes( aData, nBytesToRead );
 }
@@ -240,7 +240,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStreamData->m_xOrigInStream->readBytes( aData, nMaxBytesToRead );
 }
@@ -254,7 +254,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (m_pStreamData->m_pByteReader)
         return m_pStreamData->m_pByteReader->readSomeBytes( aData, nBytesToRead );
@@ -276,7 +276,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pStreamData->m_xOrigInStream->skipBytes( nBytesToSkip );
 }
@@ -290,7 +290,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStreamData->m_xOrigInStream->available();
 }
@@ -320,7 +320,7 @@ void SAL_CALL SwitchablePersistenceStream::writeBytes( const cpo::uno::Sequence<
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pStreamData->m_xOrigOutStream->writeBytes( aData );
 }
@@ -340,7 +340,7 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pStreamData->m_xOrigOutStream->flush();
 }
@@ -370,7 +370,7 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigTruncate.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pStreamData->m_xOrigTruncate->truncate();
 }
@@ -385,7 +385,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pStreamData->m_xOrigSeekable->seek( location );
 }
@@ -399,7 +399,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStreamData->m_xOrigSeekable->getPosition();
 }
@@ -413,7 +413,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 
     // the original stream data should be provided
     if ( !m_pStreamData->m_xOrigSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStreamData->m_xOrigSeekable->getLength();
 }

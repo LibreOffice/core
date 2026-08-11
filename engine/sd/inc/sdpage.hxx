@@ -314,13 +314,13 @@ public:
 
     /** @return the main animation node
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode();
 
     /** sets the main animation node
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode > const & xNode );
 

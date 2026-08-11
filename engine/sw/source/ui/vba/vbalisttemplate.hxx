@@ -32,11 +32,11 @@ private:
     SwVbaListHelperRef m_pListHelper;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaListTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
     virtual ~SwVbaListTemplate() override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void applyListTemplate( css::uno::Reference< css::beans::XPropertySet > const & xProps );
 
     // Methods

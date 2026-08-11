@@ -833,7 +833,7 @@ UUIInteractionHelper::handleRequest_impl(
         // Not handled.
         return false;
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw;  // allowed to leave here
     }

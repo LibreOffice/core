@@ -57,15 +57,15 @@ private:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const cpo::uno::Any& Index );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::drawing::XShape > createShape( const OUString& service );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
     OUString createName( std::u16string_view sName );
     //TODO helperapi using a writer document
@@ -73,7 +73,7 @@ private:
 
 public:
     VBAHELPER_DLLPUBLIC ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::frame::XModel > xModel );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess

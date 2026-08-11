@@ -233,7 +233,7 @@ cpo::uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
                     : PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         }
         else
-            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
+            throw cpo::uno::RuntimeException( u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -242,7 +242,7 @@ cpo::uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
         if ( !aResult.hasElements() )
-            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
+            throw cpo::uno::RuntimeException( u"No expected key is provided!"_ustr );
     }
     else
         aResult = m_aEncryptionKey;
@@ -643,7 +643,7 @@ bool ZipPackageStream::saveChild(
             {
                 ::rtl::Reference< EncryptionData > xEncData = GetEncryptionData();
                 if ( !xEncData.is() )
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
 
                 pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
                 pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
@@ -834,7 +834,7 @@ bool ZipPackageStream::saveChild(
         {
             ::rtl::Reference< EncryptionData > xEncData = GetEncryptionData();
             if ( !xEncData.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             // very confusing: half the encryption properties are
             // unconditionally added above and the other half conditionally;

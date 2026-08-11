@@ -528,7 +528,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
         catch (const css::beans::PropertyVetoException& )      { throw;    /* allowed to leave */ }
         catch (const css::lang::IllegalArgumentException& )    { throw;    /* allowed to leave */ }
         catch (const css::lang::WrappedTargetException& )      { throw;    /* allowed to leave */ }
-        catch (const css::uno::RuntimeException& )             { throw;    /* allowed to leave */ }
+        catch (const cpo::uno::RuntimeException& )             { throw;    /* allowed to leave */ }
         catch (const cpo::uno::Exception& e )
         {
             // not allowed to leave this method

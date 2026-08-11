@@ -45,7 +45,7 @@ private:
     css::uno::Reference< ov::excel::XFileDialog > m_xFileDialog;
     sal_Int32 m_nDialogType;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getOfficePath( const OUString& sPath );
 
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;

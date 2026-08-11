@@ -44,7 +44,7 @@ static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >
                                      const uno::Reference< io::XSeekable >& xSeekable )
 {
     if ( !xInputStream.is() || !xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( xSeekable->getLength() )
     {

@@ -28,7 +28,7 @@
 #include <com/sun/star/testuno/XTest.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -704,7 +704,7 @@ void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
         test->throwRuntimeException();
         verify(false);
     }
-    catch (css::uno::RuntimeException& e)
+    catch (cpo::uno::RuntimeException& e)
     {
         verify(e.Message.startsWith("test"));
     }
@@ -1419,7 +1419,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 
     void SAL_CALL throwRuntimeException() override
     {
-        throw css::uno::RuntimeException(u"test"_ustr);
+        throw cpo::uno::RuntimeException(u"test"_ustr);
     }
 
     void SAL_CALL passJob(css::uno::Reference<css::task::XJob> const& object) override
@@ -1428,7 +1428,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         {
             object->execute({});
         }
-        catch (css::uno::RuntimeException& e)
+        catch (cpo::uno::RuntimeException& e)
         {
             object->execute({ { u"name"_ustr, cpo::uno::Any(e.Message) } });
         }
@@ -1516,14 +1516,14 @@ private:
         css::uno::Environment envCpp;
         if (!cpp2uno.is())
         {
-            throw css::uno::RuntimeException(u"cannot get C++ to UNO mapping"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot get C++ to UNO mapping"_ustr);
         }
         uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envCpp),
                               envCppOrig.getTypeName().pData, nullptr);
         css::uno::Mapping uno2cpp(envUno.get(), envCpp.get());
         if (!uno2cpp.is())
         {
-            throw css::uno::RuntimeException(u"cannot get UNO to C++ mapping"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot get UNO to C++ mapping"_ustr);
         }
         css::uno::UnoInterfaceReference ifcUno;
         cpp2uno.mapInterface(reinterpret_cast<void**>(&ifcUno.m_pUnoI),
@@ -1531,14 +1531,14 @@ private:
                              cppu::UnoType<css::testuno::XTest>::get());
         if (!ifcUno.is())
         {
-            throw css::uno::RuntimeException(u"cannot map from C++ to UNO"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot map from C++ to UNO"_ustr);
         }
         css::uno::Reference<css::testuno::XTest> ifcCpp;
         uno2cpp.mapInterface(reinterpret_cast<void**>(&ifcCpp), ifcUno.get(),
                              cppu::UnoType<css::testuno::XTest>::get());
         if (!ifcCpp.is())
         {
-            throw css::uno::RuntimeException(u"cannot map from UNO to C++"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot map from UNO to C++"_ustr);
         }
         doExecuteTest(ifcCpp);
         {

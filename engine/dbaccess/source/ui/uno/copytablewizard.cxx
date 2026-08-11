@@ -78,7 +78,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
@@ -197,7 +197,7 @@ namespace dbaui
 
         /** returns our typed dialog
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if we don't have a dialog at the moment the method is called
         */
         OCopyTableWizard&

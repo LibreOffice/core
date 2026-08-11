@@ -33,7 +33,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -59,7 +59,7 @@ class Service: public cppu::WeakImplHelper< css::lang::XMain > {
 public:
     virtual sal_Int32 SAL_CALL
     run(cpo::uno::Sequence< OUString > const & arguments)
-        throw (css::uno::RuntimeException);
+        throw (cpo::uno::RuntimeException);
 
     static OUString getImplementationName();
 
@@ -114,7 +114,7 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 }
 
 sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
-    throw (css::uno::RuntimeException)
+    throw (cpo::uno::RuntimeException)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         m_context->getServiceManager());

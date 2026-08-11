@@ -66,7 +66,7 @@ BasicToolBarFactory::BasicToolBarFactory(const rtl::Reference<::sd::DrawControll
             mxConfigurationController = nullptr;
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         Shutdown();
         throw;

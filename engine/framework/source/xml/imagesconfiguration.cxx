@@ -58,7 +58,7 @@ bool ImagesConfiguration::LoadImages(
         xParser->parseStream(aInputSource);
         return true;
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return false;
     }
@@ -86,7 +86,7 @@ bool ImagesConfiguration::StoreImages(
         aWriteImagesDocumentHandler.WriteImagesDocument();
         return true;
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return false;
     }

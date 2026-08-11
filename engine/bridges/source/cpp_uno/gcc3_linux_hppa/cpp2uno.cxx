@@ -23,7 +23,7 @@
 #include <rtl/alloc.h>
 
 #include <cpo/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cpo/uno/RuntimeException.hpp"
 #include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>

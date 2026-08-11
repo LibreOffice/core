@@ -344,7 +344,7 @@ void SfxObjectShell::CheckOut( )
         if (SfxViewFrame* pViewFrame = GetFrame())
             pViewFrame->RemoveInfoBar( u"checkout" );
     }
-    catch ( const uno::RuntimeException& e )
+    catch ( const cpo::uno::RuntimeException& e )
     {
         if (SfxViewFrame* pFrame = GetFrame())
         {
@@ -366,7 +366,7 @@ void SfxObjectShell::CancelCheckOut( )
         if ( xModifiable.is( ) )
             xModifiable->setModified( false );
     }
-    catch ( const uno::RuntimeException& e )
+    catch ( const cpo::uno::RuntimeException& e )
     {
         if (SfxViewFrame* pFrame = GetFrame())
         {
@@ -395,7 +395,7 @@ void SfxObjectShell::CheckIn( )
             }
         }
     }
-    catch ( const uno::RuntimeException& e )
+    catch ( const cpo::uno::RuntimeException& e )
     {
         if (SfxViewFrame* pFrame = GetFrame())
         {
@@ -413,7 +413,7 @@ cpo::uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) c
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         return xCmisDoc->getAllVersions( );
     }
-    catch ( const uno::RuntimeException& e )
+    catch ( const cpo::uno::RuntimeException& e )
     {
         if (SfxViewFrame* pFrame = GetFrame())
         {

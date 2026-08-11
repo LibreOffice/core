@@ -456,7 +456,7 @@ OUString TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::beans::Pr
             sType = sLastChance;
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -1099,7 +1099,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::SequenceAsHashMap const& r
     {
         xSeek->seek(0);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }

@@ -46,28 +46,28 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
      * fire the events on the dnd listener container of the specified window
      */
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const cpo::uno::Sequence< css::datatransfer::DataFlavor >& aFlavorList );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDragExitEvent( vcl::Window *pWindow );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDropEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDragSource >& xSource,
         const cpo::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction );
 

@@ -33,13 +33,13 @@ namespace {
 
 /** Returns true, if every range of rxInner is contained in any range of rScOuter.
 
-    @throws css::uno::RuntimeException
+    @throws cpo::uno::RuntimeException
 */
 bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRange >& rxInner )
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
     if( rScInner.empty() || rScOuter.empty() )
-        throw uno::RuntimeException(u"Empty range objects"_ustr );
+        throw cpo::uno::RuntimeException(u"Empty range objects"_ustr );
 
     for( size_t nIndex = 0, nCount = rScInner.size(); nIndex < nCount; ++nIndex )
         if( !rScOuter.Contains( rScInner[ nIndex ] ) )
@@ -72,7 +72,7 @@ EqualAnchorFunctor::EqualAnchorFunctor( const uno::Reference< excel::XHyperlink 
             mxAnchorShape.set( rxHlink->getShape(), uno::UNO_SET_THROW );
         break;
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 }
 
@@ -98,7 +98,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
             return xAnchorShape.get() == mxAnchorShape.get();
         }
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 }
 
@@ -245,7 +245,7 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
 void SAL_CALL ScVbaHyperlinks::Delete()
 {
     // FIXME not implemented
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 // XEnumerationAccess ---------------------------------------------------------

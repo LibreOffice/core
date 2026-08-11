@@ -1284,7 +1284,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
     {
         aElementNames = xModuleManager->getElementNames();
     }
-    catch (const css::uno::RuntimeException &)
+    catch (const cpo::uno::RuntimeException &)
     {
     }
     Sequence< PropertyValue > aSeq;

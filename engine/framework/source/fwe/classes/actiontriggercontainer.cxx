@@ -51,7 +51,7 @@ Reference< XInterface > ActionTriggerContainer::createInstance( const OUString& 
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
         return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw css::uno::RuntimeException(u"Unknown service specifier!"_ustr, static_cast<OWeakObject *>(this) );
+        throw cpo::uno::RuntimeException(u"Unknown service specifier!"_ustr, static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )

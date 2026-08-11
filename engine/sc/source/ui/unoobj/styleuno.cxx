@@ -597,7 +597,7 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromDocument( const uno::Reference <
 {
    // Source document docShell
    if ( !aSourceComponent.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
    ScDocShell* pDocShellSrc = dynamic_cast<ScDocShell*> (SfxObjectShell::GetShellFromComponent(aSourceComponent));
 
@@ -1457,7 +1457,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
 
     //  cell styles cannot be modified if any sheet is protected
     if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SfxItemSet& rSet = pStyle->GetItemSet();
     rSet.ClearItem();                               // set all items to default
@@ -1539,7 +1539,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
 
     //  cell styles cannot be modified if any sheet is protected
     if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SfxItemSet& rSet = pStyle->GetItemSet();    // change directly in active Style
     bool bDone = false;

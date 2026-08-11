@@ -113,24 +113,24 @@ class OWriteToolBoxDocumentHandler final
             ~OWriteToolBoxDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteToolBoxDocument();
 
     private:
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, sal_Int16 nStyle, bool bVisible );
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteToolBoxSpace();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteToolBoxBreak();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteToolBoxSeparator();
 
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;

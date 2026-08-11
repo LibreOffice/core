@@ -36,7 +36,7 @@ private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc );
 
     // Methods

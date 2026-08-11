@@ -117,7 +117,7 @@ public:
     static OUString GetTypeFromStorage( const SotStorage& rStg );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static OUString GetTypeFromStorage(
         const css::uno::Reference<css::embed::XStorage>& xStorage );
     bool IsEnabled() const  { return mbEnabled; }

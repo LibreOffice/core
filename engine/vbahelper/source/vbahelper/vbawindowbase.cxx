@@ -158,7 +158,7 @@ uno::Reference< awt::XWindow2 > VbaWindowBase::getWindow2() const
 
 void VbaWindowBase::construct( const uno::Reference< frame::XController >& xController )
 {
-    if( !xController.is() ) throw uno::RuntimeException();
+    if( !xController.is() ) throw cpo::uno::RuntimeException();
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
     m_xController = xController;

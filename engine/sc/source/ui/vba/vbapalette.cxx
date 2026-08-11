@@ -102,7 +102,7 @@ ScVbaPalette::getPalette() const
     uno::Reference< container::XIndexAccess > xIndex;
     uno::Reference< beans::XPropertySet > xProps;
     if ( !m_pShell )
-        throw uno::RuntimeException(u"Can't extract palette, no doc shell"_ustr );
+        throw cpo::uno::RuntimeException(u"Can't extract palette, no doc shell"_ustr );
 
     xProps.set( m_pShell->GetModel(), uno::UNO_QUERY_THROW );
 

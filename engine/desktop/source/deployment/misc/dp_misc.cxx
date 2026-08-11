@@ -432,7 +432,7 @@ OUString readConsole()
         OUString value = OStringToOUString(std::string_view(buf), osl_getThreadTextEncoding());
         return value.trim();
     }
-    throw css::uno::RuntimeException(u"reading from stdin failed"_ustr);
+    throw cpo::uno::RuntimeException(u"reading from stdin failed"_ustr);
 }
 
 void syncRepositories(

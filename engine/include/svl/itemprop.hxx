@@ -106,29 +106,29 @@ public:
                                 m_aMap(pMap) {}
                             ~SfxItemPropertySet();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const SfxItemSet& rSet,
                                           cpo::uno::Any& rAny);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::beans::UnknownPropertyException
     void getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet,
                                             cpo::uno::Any& rAny) const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::beans::UnknownPropertyException
     cpo::uno::Any
         getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet ) const;
     /// @param bIgnoreUnknownProperty if true, dont throw an exception when the property is not one we know about
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     static void setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const cpo::uno::Any& aVal,
                                           SfxItemSet& rSet,
                                   bool bIgnoreUnknownProperty = false);
     /// @param bIgnoreUnknownProperty if true, dont throw an exception when the property is not one we know about
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
     void                  setPropertyValue( const OUString& rPropertyName,

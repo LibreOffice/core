@@ -20,7 +20,7 @@ private:
     css::uno::Reference< ov::XCommandBarControl > m_xCommandBarControl;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaMenu( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< ov::XCommandBarControl > xCommandBarControl );
 
     virtual OUString SAL_CALL getCaption() override;

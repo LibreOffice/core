@@ -130,7 +130,7 @@ cpo::uno::Sequence< OUString > FilterFactory::getAvailableServiceNames()
     {
         lUNOFilters = GetTheFilterCache().getMatchingItemsByProps(FilterCache::E_FILTER, {}, lEProps);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { lUNOFilters.clear(); }
@@ -143,7 +143,7 @@ css::uno::Reference< css::container::XEnumeration > FilterFactory::createSubSetE
 {
     // reject old deprecated queries ...
     if (sQuery.startsWith("_filterquery_"))
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                     u"Use of deprecated and now unsupported query!"_ustr,
                     static_cast< css::container::XContainerQuery* >(this));
 
@@ -306,7 +306,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
             // It match the query ...
             lResult.push_back(filterName);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }
@@ -476,7 +476,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
             return lSortedFilters;
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

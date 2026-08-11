@@ -604,7 +604,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
                     if ( !xCodeStream.is() )
                     {
-                        throw uno::RuntimeException(u"null returned from openStreamElement"_ustr);
+                        throw cpo::uno::RuntimeException(u"null returned from openStreamElement"_ustr);
                     }
                     SvMemoryStream aMemStream;
                     /*bool bStore = */pMod->StoreBinaryData( aMemStream );
@@ -719,7 +719,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                 embed::ElementModes::READWRITE );
                     if ( !xElementRootStorage.is() )
                     {
-                        throw uno::RuntimeException(u"null returned from GetStorageFromURL"_ustr);
+                        throw cpo::uno::RuntimeException(u"null returned from GetStorageFromURL"_ustr);
                     }
                     // Write binary image stream
                     SbModule* pMod = pBasicLib->FindModule( aElementName );
@@ -846,12 +846,12 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr);
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr);
             }
             xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
             if ( !xLibraryStor.is() )
             {
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr);
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr);
             }
         }
         catch(const cpo::uno::Exception& )
@@ -880,7 +880,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                                         embed::ElementModes::READ );
                     if ( !xCodeStream.is() )
                     {
-                        throw uno::RuntimeException(u"null returned from openStreamElement"_ustr);
+                        throw cpo::uno::RuntimeException(u"null returned from openStreamElement"_ustr);
                     }
                     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                     if ( !pStream || pStream->GetError() )
@@ -915,7 +915,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                     pLib->maPassword );
                     if ( !xSourceStream.is() )
                     {
-                        throw uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
+                        throw cpo::uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
                     }
                     // if this point is reached then the password is correct
                     if ( !bVerifyPasswordOnly )
@@ -1026,7 +1026,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                     pLib->maPassword );
                             if ( !xSourceStream.is() )
                             {
-                                throw uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
+                                throw cpo::uno::RuntimeException(u"null returned from openEncryptedStreamElement"_ustr);
                             }
                             if ( !bVerifyPasswordOnly )
                             {

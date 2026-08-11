@@ -63,7 +63,7 @@ private:
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                IsValid();
 
     FrameSelector*      mpFrameSel;
@@ -105,7 +105,7 @@ private:
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                IsValid();
 
     FrameSelector*      mpFrameSel;

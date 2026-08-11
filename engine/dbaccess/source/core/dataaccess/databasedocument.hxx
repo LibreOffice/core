@@ -215,7 +215,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         @param _rGuard
             the instance lock to be released before doing synchronous notifications
         @throws css::io::IOException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void impl_storeAs_throw(
             const OUString& _rURL,
@@ -473,7 +473,7 @@ public:
     }
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::ui::XUIConfigurationManager2 > const & getUIConfigurationManager2();
 
     /** returns whether the model is currently being initialized
@@ -597,7 +597,7 @@ private:
         @throws css::uno::IllegalArgumentException
             if the given storage is <NULL/>.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
             when any of the used operations throws it
 
         @throws css::io::IOException

@@ -44,40 +44,40 @@ protected:
 
 protected:
     // access to context - still waiting to be overwritten
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual css::uno::Reference<css::accessibility::XAccessibleContext> implGetAccessibleContext()
         = 0;
 
     // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool implIsSelected(sal_Int64 nAccessibleChildIndex) = 0;
 
     // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void implSelect(sal_Int64 nAccessibleChildIndex, bool bSelect) = 0;
 
 protected:
     /** non-virtual versions of the methods which can be implemented using <method>implIsSelected</method> and <method>implSelect</method>
 
         @throws css::lang::IndexOutOfBoundsException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void selectAccessibleChild(sal_Int64 nChildIndex);
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isAccessibleChildSelected(sal_Int64 nChildIndex);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void clearAccessibleSelection();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void selectAllAccessibleChildren();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 getSelectedAccessibleChildCount();
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference<css::accessibility::XAccessible>
     getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex);
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void deselectAccessibleChild(sal_Int64 nSelectedChildIndex);
 };
 

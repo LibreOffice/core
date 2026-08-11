@@ -61,7 +61,7 @@ bool SAL_CALL OTempFileService::getRemoveFile()
     if ( !mpTempFile )
     {
         // the stream is already disconnected
-        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
+        throw cpo::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mbRemoveFile;
@@ -73,7 +73,7 @@ void SAL_CALL OTempFileService::setRemoveFile( bool _removefile )
     if ( !mpTempFile )
     {
         // the stream is already disconnected
-        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
+        throw cpo::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     mbRemoveFile = _removefile;
@@ -85,7 +85,7 @@ OUString SAL_CALL OTempFileService::getUri()
 
     if ( !mpTempFile )
     {
-        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
+        throw cpo::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mpTempFile->GetURL();
@@ -97,7 +97,7 @@ OUString SAL_CALL OTempFileService::getResourceName()
 
     if ( !mpTempFile )
     {
-        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
+        throw cpo::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mpTempFile->GetFileName();

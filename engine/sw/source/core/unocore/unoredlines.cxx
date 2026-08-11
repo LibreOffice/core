@@ -121,14 +121,14 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 bool SwXRedlineEnumeration::hasMoreElements()
 {
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() > m_nCurrentIndex;
 }
 
 cpo::uno::Any SwXRedlineEnumeration::nextElement()
 {
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     const SwRedlineTable& rRedTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     if( rRedTable.size() <= m_nCurrentIndex )
         throw container::NoSuchElementException();

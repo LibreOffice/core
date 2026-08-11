@@ -94,7 +94,7 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
     ScCellRangesBase* pScCellRangesBase = dynamic_cast<ScCellRangesBase*>( xRange.get() );
     if ( !pScCellRangesBase )
     {
-        throw uno::RuntimeException(u"Failed to access underlying doc shell uno range object"_ustr );
+        throw cpo::uno::RuntimeException(u"Failed to access underlying doc shell uno range object"_ustr );
     }
     return pScCellRangesBase->GetDocShell();
 }
@@ -550,7 +550,7 @@ void SetDocInfoState(
 
     uno::Reference< util::XModifiable > xModifiable(xModel, uno::UNO_QUERY);
     if (!xModifiable.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bIsModified = xModifiable->isModified();
 

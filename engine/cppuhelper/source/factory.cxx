@@ -127,7 +127,7 @@ protected:
      * in the createInstance and createInstanceWithArguments methods.
      * @return the newly created instance. Do not return a previous (one instance) instance.
      * @throw cpo::uno::Exception
-     * @throw css::uno::RuntimeException
+     * @throw cpo::uno::RuntimeException
      */
     virtual Reference<XInterface >  createInstanceEveryTime(
         Reference< XComponentContext > const & xContext );
@@ -387,7 +387,7 @@ public:
 
 private:
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     Reference< XInterface > createModuleFactory();
 
     /** The registry key of the implementation section */

@@ -34,7 +34,7 @@ public:
     virtual ~TableRows() override;
 
     void dispose();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void throwIfDisposed() const;
 
     // XTableRows

@@ -105,7 +105,7 @@ public:
     OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource );
 
     // late constructor for cloning
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void clonedFrom(const OInterfaceContainer& _cloneSource);
 
 protected:

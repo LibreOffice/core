@@ -68,7 +68,7 @@ namespace connectivity::ado
         void buildTypeInfo();
     public:
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OConnection(ODriver*        _pDriver);
         //  OConnection(const SQLHANDLE _pConnectionHandle);
         ~OConnection() override;

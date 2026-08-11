@@ -184,7 +184,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     catch (const ContentCreationException&)
     {
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
     }
     catch (const cpo::uno::Exception&)

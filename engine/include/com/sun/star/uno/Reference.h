@@ -27,12 +27,12 @@
 #include "rtl/alloc.h"
 
 namespace cpo::uno { class Any; }
+namespace cpo::uno { class RuntimeException; }
 namespace cpo::uno { class Type; }
 
 namespace com::sun::star::uno
 {
 
-class RuntimeException;
 class XInterface;
 
 /** This base class serves as a base class for all template reference classes and

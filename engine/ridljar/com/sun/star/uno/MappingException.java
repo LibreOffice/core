@@ -32,7 +32,7 @@ package com.sun.star.uno;
  * @deprecated since UDK 3.0.2
  */
 @Deprecated
-public class MappingException extends com.sun.star.uno.RuntimeException {
+public class MappingException extends cpo.uno.RuntimeException {
     /**
      * Constructs an empty <code>MappingException</code>.
      */

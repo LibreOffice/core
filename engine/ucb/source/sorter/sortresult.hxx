@@ -116,23 +116,23 @@ class SortedResultSet: public cppu::WeakImplHelper <
 
 private:
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32          FindPos( SortListData const *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd );
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32          Compare( SortListData const *pOne,
                                  SortListData const *pTwo );
     void                BuildSortInfo( const css::uno::Reference< css::sdbc::XResultSet >& aResult,
                                        const cpo::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                        const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32   CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
                                      const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                      SortInfo const * pSortInfo );
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
                                      const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_Int32 nIndexOne, sal_Int32 nIndexTwo );

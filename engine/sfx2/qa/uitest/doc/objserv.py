@@ -22,7 +22,7 @@ class Test(UITestCase):
             # Now use File -> Digital signatures -> Digital signatures.
             with self.ui_test.execute_dialog_through_command(".uno:Signature", close_button="close"):
                 # Without the accompanying fix in place, this test would have failed with:
-                # uno.com.sun.star.uno.RuntimeException: Could not find child with id: close vcl/source/uitest/uiobject.cxx:452
+                # uno.cpo.uno.RuntimeException: Could not find child with id: close vcl/source/uitest/uiobject.cxx:452
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

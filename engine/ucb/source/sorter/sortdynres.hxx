@@ -102,10 +102,10 @@ public:
 
     // own methods:
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void impl_disposing();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void impl_notify( const css::ucb::ListEvent& Changes );
 };
 

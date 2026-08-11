@@ -138,7 +138,7 @@ handleNoSuchFilterRequest_(
             }
             lNames.push_back( aPair );
         }
-        catch(const uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             throw;
         }

@@ -87,7 +87,7 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < XCharacterClassification > xUCI;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference < XCharacterClassification > const & getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
     bool createLocaleSpecificCharacterClassification(const OUString& serviceName, const css::lang::Locale& rLocale);
 

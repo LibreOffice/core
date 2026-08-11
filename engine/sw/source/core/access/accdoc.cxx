@@ -219,7 +219,7 @@ awt::Rectangle SwAccessibleDocumentBase::implGetBounds()
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+            throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
         }
 
         tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ) );
@@ -238,7 +238,7 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     Point aPixPos( pWin->GetWindowExtentsAbsolute().TopLeft() );
@@ -259,7 +259,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+            throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
         }
         if (pWin->isDisposed()) // tdf#147967
             return nullptr;

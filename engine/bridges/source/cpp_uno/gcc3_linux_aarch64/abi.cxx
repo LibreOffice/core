@@ -27,7 +27,7 @@
 
 #include <dlfcn.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.h>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
@@ -294,10 +294,10 @@ void mapException(
     typelib_TypeDescription * td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
     if (td == nullptr) {
-        css::uno::RuntimeException e("exception type not found: " + unoName);
+        cpo::uno::RuntimeException e("exception type not found: " + unoName);
         uno_type_any_constructAndConvert(
             any, &e,
-            cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
+            cppu::UnoType<cpo::uno::RuntimeException>::get().getTypeLibType(),
             mapping);
     } else {
         uno_any_constructAndConvert(any, exception->adjustedPtr, td, mapping);
@@ -309,7 +309,7 @@ void raiseException(uno_Any * any, uno_Mapping * mapping) {
     typelib_TypeDescription * td = nullptr;
     TYPELIB_DANGER_GET(&td, any->pType);
     if (td == nullptr) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no typedescription for " + OUString::unacquired(&any->pType->pTypeName));
     }
     void * exc = __cxxabiv1::__cxa_allocate_exception(td->nSize);

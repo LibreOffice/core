@@ -46,9 +46,9 @@ private:
     Map certTrustMap;
 
     static bool searchMap(const OUString& url, std::u16string_view certificate_name, Map& _certMap);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isTemporaryCertificate(const OUString& url, std::u16string_view certificate_name);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isCertificateTrust(const OUString& url, std::u16string_view certificate_name);
 
 public:

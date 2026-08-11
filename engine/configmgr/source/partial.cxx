@@ -22,7 +22,7 @@
 #include <cassert>
 #include <set>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -50,7 +50,7 @@ bool parseSegment(
             return *index == path.getLength();
         }
     }
-    throw css::uno::RuntimeException("bad path " + path);
+    throw cpo::uno::RuntimeException("bad path " + path);
 }
 
 }

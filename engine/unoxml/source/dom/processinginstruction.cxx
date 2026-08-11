@@ -39,7 +39,7 @@ namespace DOM
 
     void CProcessingInstruction::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
-        if (!i_xHandler.is()) throw RuntimeException();
+        if (!i_xHandler.is()) throw cpo::uno::RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
         if (xExtended.is()) {
             xExtended->processingInstruction(getTarget(), getData());
@@ -96,7 +96,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
 
         OString const data(

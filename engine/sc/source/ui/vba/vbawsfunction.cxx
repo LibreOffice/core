@@ -225,7 +225,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< 
         cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aSequence;
         if( !( ( aRet >>= aSequence ) && ( aSequence.getLength() > 0 ) &&
             ( aSequence[0].getLength() > 0 ) && ( aSequence[0][0] >>= fVal ) ) )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         aRet <<= fVal;
     }
 #endif

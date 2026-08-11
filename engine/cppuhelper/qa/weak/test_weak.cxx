@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XAdapter.hpp>
 #include <cpo/uno/XReference.hpp>
 #include <cpo/uno/XWeak.hpp>
@@ -55,7 +55,7 @@ private:
 class RuntimeExceptionReference: public Reference {
 protected:
     void handleDispose() override {
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 };
 

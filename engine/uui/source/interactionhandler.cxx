@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
@@ -76,28 +76,28 @@ public:
     virtual void SAL_CALL
         addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler addPropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler removePropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         addVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler addVetoableChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         removeVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler removeVetoableChangeListener is not supported"_ustr);
     }
 
@@ -193,7 +193,7 @@ UUIInteractionHandler::handle(
     {
         m_pImpl.handleRequest(rRequest);
     }
-    catch (uno::RuntimeException const & ex)
+    catch (cpo::uno::RuntimeException const & ex)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
@@ -208,7 +208,7 @@ bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
     {
         return m_pImpl.handleRequest( Request );
     }
-    catch (uno::RuntimeException const & ex)
+    catch (cpo::uno::RuntimeException const & ex)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,

@@ -56,7 +56,7 @@ inline void * cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference
                 return pRet;
             }
         }
-        catch (css::uno::RuntimeException &)
+        catch (cpo::uno::RuntimeException &)
         {
         }
     }

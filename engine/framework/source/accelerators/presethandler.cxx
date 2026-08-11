@@ -333,7 +333,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     if (eConfigType == E_DOCUMENT)
     {
         if (!xDocumentRoot.is())
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                     u"There is valid root storage, where the UI configuration can work on."_ustr);
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;
@@ -415,7 +415,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
                 xShare = xUser;
 
             }
-            catch(const css::uno::RuntimeException&)
+            catch(const cpo::uno::RuntimeException&)
                 { throw; }
             catch(const cpo::uno::Exception&)
                 { xShare.clear(); xUser.clear(); }
@@ -700,7 +700,7 @@ void PresetHandler::maybeReopenStorageAsReadWrite() {
             m_xWorkingStorageNoLang = m_xWorkingStorageUser;
 
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { forgetCachedStorages(); }
@@ -721,7 +721,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
         else
             xPath = SharedStorages().get()->m_lStoragesUser.openPath(sPath, eMode);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { xPath.clear(); }
@@ -806,7 +806,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
             if (xFolder->isStorageElement(rName))
                 lSubFolders.push_back(rName);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             {}

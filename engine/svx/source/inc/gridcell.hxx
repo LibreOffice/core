@@ -907,7 +907,7 @@ public:
     // XButton
     virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    //virtual void SAL_CALL setLabel( const OUString& Label ) throw (css::uno::RuntimeException);
+    //virtual void SAL_CALL setLabel( const OUString& Label ) throw (cpo::uno::RuntimeException);
     virtual void SAL_CALL setActionCommand( const OUString& Command ) override;
 };
 

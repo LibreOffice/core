@@ -92,7 +92,7 @@ ScVbaFormat< Ifc... >::setVerticalAlignment( const cpo::uno::Any& _oAlignment)
         cpo::uno::Any aVal;
         sal_Int32 nAlignment = 0;
         if ( !(_oAlignment >>= nAlignment ))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         switch (nAlignment)
         {
             case excel::XlVAlign::xlVAlignBottom :
@@ -165,7 +165,7 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const cpo::uno::Any& HorizontalAl
         cpo::uno::Any aVal;
         sal_Int32 nAlignment = 0;
         if ( !( HorizontalAlignment >>= nAlignment ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         switch ( nAlignment )
         {
             case excel::XlHAlign::xlHAlignJustify:
@@ -243,7 +243,7 @@ ScVbaFormat< Ifc... >::setOrientation( const cpo::uno::Any& _aOrientation )
     {
         sal_Int32 nOrientation = 0;
         if ( !( _aOrientation >>= nOrientation ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         cpo::uno::Any aVal;
         switch( nOrientation )
         {
@@ -283,7 +283,7 @@ ScVbaFormat< Ifc... >::getOrientation(  )
         {
             table::CellOrientation aOrientation = table::CellOrientation_STANDARD;
             if ( !(  mxPropertySet->getPropertyValue( SC_UNONAME_CELLORI ) >>= aOrientation ) )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             switch(aOrientation)
             {
@@ -389,7 +389,7 @@ ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 
             sal_Int32 nFormat = 0;
             if ( ! (mxPropertySet->getPropertyValue( sPropName ) >>= nFormat ) )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             OUString sFormat;
             xNumberFormats->getByKey(nFormat)->getPropertyValue( FORMATSTRING ) >>= sFormat;
@@ -416,7 +416,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const cpo::uno::Any& _oLocalFormatS
         OUString sNumFormat( SC_UNO_DP_NUMBERFO );
         if ( !(_oLocalFormatString >>= sLocalFormatString )
         || !( mxPropertySet->getPropertyValue(sNumFormat) >>= nFormat ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         sLocalFormatString = sLocalFormatString.toAsciiUpperCase();
         initializeNumberFormats();
@@ -442,7 +442,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const cpo::uno::Any& _oFormatString )
     {
         OUString sFormatString;
         if ( !( _oFormatString >>= sFormatString ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         sFormatString = sFormatString.toAsciiUpperCase();
 
@@ -473,12 +473,12 @@ ScVbaFormat< Ifc... >::setIndentLevel( const cpo::uno::Any& _aLevel )
     {
         sal_Int32 nLevel = 0;
         if ( !(_aLevel >>= nLevel ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         table::CellHoriJustify aAPIAlignment = table::CellHoriJustify_STANDARD;
 
         OUString sHoriJust( SC_UNONAME_CELLHJUS );
         if ( !( mxPropertySet->getPropertyValue(sHoriJust) >>= aAPIAlignment ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         if (aAPIAlignment == table::CellHoriJustify_STANDARD)
             mxPropertySet->setPropertyValue( sHoriJust, cpo::uno::Any( table::CellHoriJustify_LEFT) ) ;
         mxPropertySet->setPropertyValue( SC_UNONAME_PINDENT, cpo::uno::Any( sal_Int16(nLevel * 352.8) ) );
@@ -521,7 +521,7 @@ ScVbaFormat< Ifc... >::setLocked( const cpo::uno::Any& _aLocked )
     {
         bool bIsLocked = false;
         if ( !( _aLocked >>= bIsLocked ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         util::CellProtection aCellProtection;
         OUString sCellProt( SC_UNONAME_CELLPRO );
         mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
@@ -662,7 +662,7 @@ ScVbaFormat< Ifc... >::setReadingOrder( const cpo::uno::Any& ReadingOrder )
     {
         sal_Int32 nReadingOrder = 0;
         if ( !(ReadingOrder >>= nReadingOrder ))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         cpo::uno::Any aVal = aNULL();
         switch(nReadingOrder)
         {
@@ -801,7 +801,7 @@ ScVbaFormat< Ifc... >::getCurrentDataSet()
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
-        throw uno::RuntimeException(u"Can't access Itemset for XPropertySet"_ustr );
+        throw cpo::uno::RuntimeException(u"Can't access Itemset for XPropertySet"_ustr );
     return pDataSet;
 }
 

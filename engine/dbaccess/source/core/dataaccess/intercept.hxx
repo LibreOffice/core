@@ -43,7 +43,7 @@ public:
 
     explicit OInterceptor( ODocumentDefinition* _pContentHolder );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void dispose();
 
     //XDispatch

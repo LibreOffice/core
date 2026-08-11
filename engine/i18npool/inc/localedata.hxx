@@ -96,20 +96,20 @@ public:
     virtual cpo::uno::Sequence< css::i18n::Currency2 > getAllCurrencies2( const css::lang::Locale& rLocale ) override;
     virtual cpo::uno::Sequence< css::i18n::FormatElement > getAllFormats( const css::lang::Locale& rLocale ) override;
     virtual cpo::uno::Sequence< css::i18n::Implementation > getCollatorImplementations( const css::lang::Locale& rLocale ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
     virtual cpo::uno::Sequence< OUString > getTransliterations( const css::lang::Locale& rLocale ) override;
     virtual css::i18n::ForbiddenCharacters getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
     virtual cpo::uno::Sequence< OUString > getReservedWord( const css::lang::Locale& rLocale ) override ;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
     virtual cpo::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() override;
 
     virtual cpo::uno::Sequence< OUString > getSearchOptions( const css::lang::Locale& rLocale ) override;
     virtual cpo::uno::Sequence< OUString > getCollationOptions( const css::lang::Locale& rLocale ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
 
     // XLocaleData4
@@ -119,24 +119,24 @@ public:
     virtual css::i18n::LocaleDataItem2 getLocaleItem2( const css::lang::Locale& rLocale ) override;
 
     // following methods are used by indexentry service
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getIndexAlgorithm( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getDefaultIndexAlgorithm( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getIndexKeysByAlgorithm(
         const css::lang::Locale& rLocale, std::u16string_view algorithm );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::i18n::UnicodeScript > getUnicodeScripts( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getFollowPageWords( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool hasPhonetic( const css::lang::Locale& rLocale );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isPhonetic( const css::lang::Locale& rLocale, std::u16string_view algorithm );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getHangingCharacters( const css::lang::Locale& rLocale );
 
     //XServiceInfo
@@ -149,11 +149,11 @@ private:
     css::i18n::Calendar2 ref_cal;
     OUString ref_name;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const char* pFunction );
     OUString const * getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
     OUString const * getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, std::u16string_view rAlgorithm);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::i18n::CalendarItem2 > &
         getCalendarItemByName(const OUString& name,
         const css::lang::Locale& rLocale,
@@ -162,7 +162,7 @@ private:
 
     /// Helper to obtain a sequence of days, months, gmonths or eras.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getCalendarItems(
             OUString const * allCalendars,
             sal_Int16 & rnOffset,

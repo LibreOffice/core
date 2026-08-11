@@ -206,7 +206,7 @@ public class JobQueue {
                     // wait for new job
                     wait(waitTime);
                 } catch(InterruptedException interruptedException) {
-                      throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
+                      throw new cpo.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                 }
 
                 // signal that we have already waited once
@@ -236,7 +236,7 @@ public class JobQueue {
                     try {
                         _async_jobQueue.wait();
                     } catch(InterruptedException interruptedException) {
-                        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
+                        throw new cpo.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                     }
                 }
             }

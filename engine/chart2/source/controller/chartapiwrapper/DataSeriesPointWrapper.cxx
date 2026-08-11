@@ -640,7 +640,7 @@ beans::PropertyState DataSeriesPointWrapper::getPropertyState( const OUString& r
     {
         throw;
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw;
     }

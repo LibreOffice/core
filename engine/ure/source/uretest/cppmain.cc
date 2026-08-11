@@ -45,7 +45,7 @@
 #include "cpo/uno/Exception.hpp"
 #include "cpo/uno/NamingService.hpp"
 #include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cpo/uno/RuntimeException.hpp"
 #include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
@@ -126,15 +126,15 @@ private:
         try {
             instance = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
-        } catch (css::uno::RuntimeException &) {
+        } catch (cpo::uno::RuntimeException &) {
             throw;
         } catch (cpo::uno::Exception &) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 ::rtl::OUString("error creating instance"),
                 static_cast< ::cppu::OWeakObject * >(this));
         }
         if (!instance.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "no instance: " + name,
                 static_cast< ::cppu::OWeakObject * >(this));
         }
@@ -192,7 +192,7 @@ void Service::test(
         ok = true;
     }
     if (!ok) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             (name
              + ::rtl::OUString(".throwException failed")),
             static_cast< ::cppu::OWeakObject * >(this));

@@ -148,7 +148,7 @@ public:
                 // that the spreadsheetdocument is a xmodel is a given
                 rtl::Reference<ScModelObj> xModel = dynamic_cast<ScModelObj*>(xNext.get());
                 if (!xModel)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
 
                 // tdf#126457 - add workbook name to window titles
                 rtl::Reference<ScVbaWorkbook> workbook(new ScVbaWorkbook(

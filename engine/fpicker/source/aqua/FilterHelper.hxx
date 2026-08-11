@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <list>
 #include <string_view>
@@ -82,19 +82,19 @@ public:
 
     //XFilterManager delegates
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void appendFilter( const OUString& aTitle, std::u16string_view aFilter );
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setCurrentFilter( const OUString& aTitle );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getCurrentFilter(  );
 
     //XFilterGroupManager delegates
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void appendFilterGroup( const cpo::uno::Sequence< css::beans::StringPair >& aFilters );
 
 

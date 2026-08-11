@@ -68,13 +68,13 @@ public:
 
 private:
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                updateBuffer();
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OString      readToElementBegin();
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OString      readToElementEnd();
 
 private:

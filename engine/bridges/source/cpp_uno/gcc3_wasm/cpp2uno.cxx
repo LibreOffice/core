@@ -14,7 +14,7 @@
 
 #include <emscripten.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
@@ -167,7 +167,7 @@ void raiseException(uno_Any* any, uno_Mapping* mapping)
     TYPELIB_DANGER_GET(&td, any->pType);
     if (td == nullptr)
     {
-        throw css::uno::RuntimeException("no typedescription for "
+        throw cpo::uno::RuntimeException("no typedescription for "
                                          + OUString::unacquired(&any->pType->pTypeName));
     }
     void* exc = __cxxabiv1::__cxa_allocate_exception(td->nSize);

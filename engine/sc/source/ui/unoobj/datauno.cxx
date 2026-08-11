@@ -569,7 +569,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 
     if (nPos >= MAXSUBTOTAL || aSubTotalColumns.getLength() > SCCOL_MAX)
         // too many fields / columns
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
     auto& group = aParam.aGroups[nPos];
 
     group.bActive = true;
@@ -2229,7 +2229,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
         bDone = aFunc.AddDBRange( aName, aNameRange );
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
@@ -2242,7 +2242,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
         bDone = aFunc.DeleteDBRange( aName );
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 // XEnumerationAccess
@@ -2389,14 +2389,14 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
         bDone = aFunc.AddDBRange( STR_DB_LOCAL_NONAME, aUnnamedRange );
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 cpo::uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( pDocShell->GetDocument().GetTableCount() <= nTab )
         throw lang::IndexOutOfBoundsException();

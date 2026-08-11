@@ -34,7 +34,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <utility>
 

@@ -469,7 +469,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
             xProp->setPropertyValue(u"Persistent"_ustr, a );
         }
     }
-    catch ( css::uno::RuntimeException& )
+    catch ( cpo::uno::RuntimeException& )
     {
         throw;
     }

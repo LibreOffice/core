@@ -121,7 +121,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
@@ -218,7 +218,7 @@ cpo::uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aProp
     SolarMutexGuard aGuard;
 
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Any aRet;
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
@@ -272,7 +272,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
     SolarMutexGuard aGuard;
 
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
@@ -317,7 +317,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
     SolarMutexGuard aGuard;
 
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
@@ -339,7 +339,7 @@ cpo::uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPr
     SolarMutexGuard aGuard;
 
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )

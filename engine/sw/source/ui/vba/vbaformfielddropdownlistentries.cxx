@@ -56,7 +56,7 @@ private:
     sw::mark::DropDownFieldmark& m_rDropDown;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                               uno::Reference<uno::XComponentContext> xContext,
                               sw::mark::DropDownFieldmark& rFormField)

@@ -50,7 +50,7 @@ class SfxMacroLoader final : public cppu::WeakImplHelper<
 
 public:
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SfxMacroLoader(const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override;
@@ -59,7 +59,7 @@ public:
 
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::ucb::ContentCreationException
     static ErrCode loadMacro( const OUString& aURL, cpo::uno::Any& rRetval, SfxObjectShell* pDoc );
 

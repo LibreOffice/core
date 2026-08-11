@@ -64,14 +64,14 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
     if( ApplyTo.hasValue() )
         ApplyTo >>= bApplyTo;
     if( bApplyTo != word::WdListApplyTo::wdListApplyToSelection )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // default behaviour must be wdWord8ListBehavior
     sal_Int32 nDefaultListBehavior = word::WdDefaultListBehavior::wdWord8ListBehavior;
     if( DefaultListBehavior.hasValue() )
         DefaultListBehavior >>= nDefaultListBehavior;
     if( nDefaultListBehavior != word::WdDefaultListBehavior::wdWord8ListBehavior )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxTextRange, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();

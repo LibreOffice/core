@@ -97,7 +97,7 @@ ScVbaFont::setStandardFontSize( const cpo::uno::Any& /*aValue*/ )
 {
 //XXX #TODO# #FIXME#
     //mxFont->setPropertyValue("CharSize", ( cpo::uno::Any )fValue );
-    throw uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"setStandardFontSize not supported"_ustr );
 }
 
@@ -105,7 +105,7 @@ cpo::uno::Any SAL_CALL
 ScVbaFont::getStandardFontSize()
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException( u"getStandardFontSize not supported"_ustr );
+    throw cpo::uno::RuntimeException( u"getStandardFontSize not supported"_ustr );
     // return cpo::uno::Any();
 }
 
@@ -113,14 +113,14 @@ void  SAL_CALL
 ScVbaFont::setStandardFont( const cpo::uno::Any& /*aValue*/ )
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException(u"setStandardFont not supported"_ustr );
+    throw cpo::uno::RuntimeException(u"setStandardFont not supported"_ustr );
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaFont::getStandardFont()
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException(u"getStandardFont not supported"_ustr);
+    throw cpo::uno::RuntimeException(u"getStandardFont not supported"_ustr);
     // return cpo::uno::Any();
 }
 
@@ -212,7 +212,7 @@ ScVbaFont::setUnderline( const cpo::uno::Any& aValue )
             nValue = awt::FontUnderline::DOUBLE;
             break;
         default:
-            throw uno::RuntimeException(u"Unknown value for Underline"_ustr );
+            throw cpo::uno::RuntimeException(u"Unknown value for Underline"_ustr );
     }
 
     mxFont->setPropertyValue(u"CharUnderline"_ustr, cpo::uno::Any(nValue) );
@@ -244,7 +244,7 @@ ScVbaFont::getUnderline()
             nValue = excel::XlUnderlineStyle::xlUnderlineStyleNone;
             break;
         default:
-            throw uno::RuntimeException(u"Unknown value retrieved for Underline"_ustr );
+            throw cpo::uno::RuntimeException(u"Unknown value retrieved for Underline"_ustr );
 
     }
     return cpo::uno::Any( nValue );

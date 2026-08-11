@@ -65,7 +65,7 @@ UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
     {
         return m_pImpl.getStringFromRequest(Request);
     }
-    catch (uno::RuntimeException const & ex)
+    catch (cpo::uno::RuntimeException const & ex)
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,

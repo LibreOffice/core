@@ -63,7 +63,7 @@ void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
     if ( !m_xSeekable.is() )
     {
         SAL_INFO("package.xstor", "No seekable!");
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     m_xSeekable->seek( location );
@@ -81,7 +81,7 @@ sal_Int64 SAL_CALL OInputSeekStream::getPosition()
     if ( !m_xSeekable.is() )
     {
         SAL_INFO("package.xstor", "No seekable!");
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return m_xSeekable->getPosition();
@@ -99,7 +99,7 @@ sal_Int64 SAL_CALL OInputSeekStream::getLength()
     if ( !m_xSeekable.is() )
     {
         SAL_INFO("package.xstor", "No seekable!");
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return m_xSeekable->getLength();

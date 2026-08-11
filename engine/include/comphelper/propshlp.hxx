@@ -79,7 +79,7 @@ public:
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
      */
     static cpo::uno::Sequence<cpo::uno::Type> getTypes();
 
@@ -221,7 +221,7 @@ protected:
        @return true if the value converted.
        @throws css::lang::IllegalArgumentException
        @throws css::beans::UnknownPropertyException
-       @throws css::uno::RuntimeException
+       @throws cpo::uno::RuntimeException
      */
     virtual bool convertFastPropertyValue(std::unique_lock<std::mutex>& rGuard,
                                           cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
@@ -239,7 +239,7 @@ protected:
         -- css::beans::PropertyVetoException
         -- css::lang::IllegalArgumentException
         -- css::lang::WrappedTargetException
-        -- css::uno::RuntimeException
+        -- cpo::uno::RuntimeException
 
         @param nHandle
                handle

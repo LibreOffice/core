@@ -46,7 +46,7 @@ typedef Typedef1 Typedef2;
 published interface XTest1 {
     [optional] interface XBase;
 
-    void f1([out] any p) raises (com::sun::star::uno::RuntimeException);
+    void f1([out] any p) raises (cpo::uno::RuntimeException);
 
     void f2();
 
@@ -55,7 +55,7 @@ published interface XTest1 {
     [attribute] long a2 {
         get raises
             (com::sun::star::lang::WrappedTargetException,
-             com::sun::star::uno::RuntimeException);
+             cpo::uno::RuntimeException);
         set raises
             (cpo::uno::Exception,
              com::sun::star::lang::WrappedTargetException);
@@ -71,7 +71,7 @@ interface XTest2: Typedef2 {};
 published service Service1: XTest1 {
     c1();
 
-    c2([in] any... p) raises (com::sun::star::uno::RuntimeException);
+    c2([in] any... p) raises (cpo::uno::RuntimeException);
 };
 
 service Service2 {

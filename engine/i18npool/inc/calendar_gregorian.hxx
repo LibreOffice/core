@@ -111,14 +111,14 @@ protected:
     sal_Int16 fieldValue[FIELD_INDEX_COUNT];
     sal_Int16 fieldSetValue[FIELD_INDEX_COUNT];
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void mapToGregorian();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void mapFromGregorian();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void getValue();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode );
 
 private:
@@ -126,12 +126,12 @@ private:
 
     /** Submit fieldSetValue array according to fieldSet.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void submitFields();
     /** Set fields internally.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void setValue();
     /** Obtain combined field values for timezone offset (minutes+secondmillis)

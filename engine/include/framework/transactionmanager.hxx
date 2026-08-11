@@ -102,10 +102,10 @@ class TransactionManager
         TransactionManager&        operator=(const TransactionManager&) = delete;
         void               setWorkingMode               ( EWorkingMode eMode                           );
         EWorkingMode       getWorkingMode               (                                              ) const;
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         /// @throws css::lang::DisposedException
         void               registerTransaction          ( EExceptionMode eMode );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         /// @throws css::lang::DisposedException
         void               unregisterTransaction        (                                              );
 

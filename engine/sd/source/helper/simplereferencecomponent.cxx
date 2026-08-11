@@ -19,11 +19,11 @@
 
 #include <helper/simplereferencecomponent.hxx>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
 
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using sd::SimpleReferenceComponent;
 
 SimpleReferenceComponent::SimpleReferenceComponent()

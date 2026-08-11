@@ -93,7 +93,7 @@ void BaseIndex::testBaseIndexProperties()
         {
             xBaseIndex->getPropertyValue(name);
         }
-        catch (css::uno::RuntimeException const& /*ex*/)
+        catch (cpo::uno::RuntimeException const& /*ex*/)
         {
             bOK = true;
         }

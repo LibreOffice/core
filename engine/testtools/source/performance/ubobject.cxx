@@ -73,7 +73,7 @@ public:
         {}
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) throw(css::uno::RuntimeException)
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) throw(cpo::uno::RuntimeException)
     {
         // execution time remains appr. constant any time
         Any aRet;
@@ -105,96 +105,96 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
     // Attributes
-    virtual sal_Int32 SAL_CALL getLong_attr() throw(css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getLong_attr() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setLong_attr( sal_Int32 _attributelong ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setLong_attr( sal_Int32 _attributelong ) throw(cpo::uno::RuntimeException)
         {}
-    virtual sal_Int64 SAL_CALL getHyper_attr() throw(css::uno::RuntimeException)
+    virtual sal_Int64 SAL_CALL getHyper_attr() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setHyper_attr( sal_Int64 _attributehyper ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setHyper_attr( sal_Int64 _attributehyper ) throw(cpo::uno::RuntimeException)
         {}
-    virtual float SAL_CALL getFloat_attr() throw(css::uno::RuntimeException)
+    virtual float SAL_CALL getFloat_attr() throw(cpo::uno::RuntimeException)
         { return 0.0; }
-    virtual void SAL_CALL setFloat_attr( float _attributefloat ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setFloat_attr( float _attributefloat ) throw(cpo::uno::RuntimeException)
         {}
-    virtual double SAL_CALL getDouble_attr() throw(css::uno::RuntimeException)
+    virtual double SAL_CALL getDouble_attr() throw(cpo::uno::RuntimeException)
         { return 0.0; }
-    virtual void SAL_CALL setDouble_attr( double _attributedouble ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setDouble_attr( double _attributedouble ) throw(cpo::uno::RuntimeException)
         {}
-    virtual OUString SAL_CALL getString_attr() throw(css::uno::RuntimeException)
+    virtual OUString SAL_CALL getString_attr() throw(cpo::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString_attr( const OUString& _attributestring ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setString_attr( const OUString& _attributestring ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Reference< XInterface > SAL_CALL getInterface_attr() throw(css::uno::RuntimeException)
+    virtual Reference< XInterface > SAL_CALL getInterface_attr() throw(cpo::uno::RuntimeException)
         { return Reference< XInterface >(); }
-    virtual void SAL_CALL setInterface_attr( const Reference< XInterface >& _attributeinterface ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setInterface_attr( const Reference< XInterface >& _attributeinterface ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Any SAL_CALL getAny_attr() throw(css::uno::RuntimeException)
+    virtual Any SAL_CALL getAny_attr() throw(cpo::uno::RuntimeException)
         { return _aDummyAny; }
-    virtual void SAL_CALL setAny_attr( const Any& _attributeany ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setAny_attr( const Any& _attributeany ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Sequence< Reference< XInterface > > SAL_CALL getSequence_attr() throw(css::uno::RuntimeException)
+    virtual Sequence< Reference< XInterface > > SAL_CALL getSequence_attr() throw(cpo::uno::RuntimeException)
         { return _aDummySequence; }
-    virtual void SAL_CALL setSequence_attr( const Sequence< Reference< XInterface > >& _attributesequence ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setSequence_attr( const Sequence< Reference< XInterface > >& _attributesequence ) throw(cpo::uno::RuntimeException)
         {}
-    virtual ComplexTypes SAL_CALL getStruct_attr() throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL getStruct_attr() throw(cpo::uno::RuntimeException)
         { return _aDummyStruct; }
-    virtual void SAL_CALL setStruct_attr( const css::test::performance::ComplexTypes& _attributestruct ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setStruct_attr( const css::test::performance::ComplexTypes& _attributestruct ) throw(cpo::uno::RuntimeException)
         {}
 
     // Methods
-    virtual sal_Int32 SAL_CALL getLong() throw(css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getLong() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setLong( sal_Int32 _long ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setLong( sal_Int32 _long ) throw(cpo::uno::RuntimeException)
         {}
-    virtual sal_Int64 SAL_CALL getHyper() throw(css::uno::RuntimeException)
+    virtual sal_Int64 SAL_CALL getHyper() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setHyper( sal_Int64 _hyper ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setHyper( sal_Int64 _hyper ) throw(cpo::uno::RuntimeException)
         {}
-    virtual float SAL_CALL getFloat() throw(css::uno::RuntimeException)
+    virtual float SAL_CALL getFloat() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setFloat( float _float ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setFloat( float _float ) throw(cpo::uno::RuntimeException)
         {}
-    virtual double SAL_CALL getDouble() throw(css::uno::RuntimeException)
+    virtual double SAL_CALL getDouble() throw(cpo::uno::RuntimeException)
         { return 0; }
-    virtual void SAL_CALL setDouble( double _double ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setDouble( double _double ) throw(cpo::uno::RuntimeException)
         {}
-    virtual OUString SAL_CALL getString() throw(css::uno::RuntimeException)
+    virtual OUString SAL_CALL getString() throw(cpo::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString( const OUString& _string ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setString( const OUString& _string ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Reference< XInterface > SAL_CALL getInterface() throw(css::uno::RuntimeException)
+    virtual Reference< XInterface > SAL_CALL getInterface() throw(cpo::uno::RuntimeException)
         { return Reference< XInterface >(); }
-    virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Any SAL_CALL getAny() throw(css::uno::RuntimeException)
+    virtual Any SAL_CALL getAny() throw(cpo::uno::RuntimeException)
         { return _aDummyAny; }
-    virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Sequence< Reference< XInterface > > SAL_CALL getSequence() throw(css::uno::RuntimeException)
+    virtual Sequence< Reference< XInterface > > SAL_CALL getSequence() throw(cpo::uno::RuntimeException)
         { return _aDummySequence; }
-    virtual void SAL_CALL setSequence( const Sequence< Reference< XInterface > >& _sequence ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setSequence( const Sequence< Reference< XInterface > >& _sequence ) throw(cpo::uno::RuntimeException)
         {}
-    virtual ComplexTypes SAL_CALL getStruct() throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL getStruct() throw(cpo::uno::RuntimeException)
         { return _aDummyStruct; }
-    virtual void SAL_CALL setStruct( const css::test::performance::ComplexTypes& c ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setStruct( const css::test::performance::ComplexTypes& c ) throw(cpo::uno::RuntimeException)
         {}
 
-    virtual void SAL_CALL async() throw(css::uno::RuntimeException)
+    virtual void SAL_CALL async() throw(cpo::uno::RuntimeException)
         {}
-    virtual void SAL_CALL sync() throw(css::uno::RuntimeException)
+    virtual void SAL_CALL sync() throw(cpo::uno::RuntimeException)
         {}
-    virtual ComplexTypes SAL_CALL complexIn( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL complexIn( const css::test::performance::ComplexTypes& aVal ) throw(cpo::uno::RuntimeException)
         { return aVal; }
-    virtual ComplexTypes SAL_CALL complexInout( css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL complexInout( css::test::performance::ComplexTypes& aVal ) throw(cpo::uno::RuntimeException)
         { return aVal; }
-    virtual void SAL_CALL complexOneway( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL complexOneway( const css::test::performance::ComplexTypes& aVal ) throw(cpo::uno::RuntimeException)
         {}
-    virtual void SAL_CALL complexNoreturn( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL complexNoreturn( const css::test::performance::ComplexTypes& aVal ) throw(cpo::uno::RuntimeException)
         {}
-    virtual Reference< XPerformanceTest > SAL_CALL createObject() throw(css::uno::RuntimeException)
+    virtual Reference< XPerformanceTest > SAL_CALL createObject() throw(cpo::uno::RuntimeException)
         { return new ServiceImpl(); }
-    virtual void SAL_CALL raiseRuntimeException(  ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL raiseRuntimeException(  ) throw(cpo::uno::RuntimeException)
         { throw _aDummyRE; }
 };
 

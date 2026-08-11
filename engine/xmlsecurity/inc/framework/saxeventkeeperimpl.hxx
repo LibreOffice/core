@@ -279,10 +279,10 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 OUString SAXEventKeeperImpl_getImplementationName();
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 cpo::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  );
 
 

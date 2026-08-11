@@ -462,6 +462,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 	XInteractionRetry \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
+	RuntimeException \
 	TypeClass \
 	XAdapter \
 	XNamingService \
@@ -469,7 +470,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	DeploymentException \
-	RuntimeException \
 	SecurityException \
 	XComponentContext \
 	XInterface \

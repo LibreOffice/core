@@ -136,7 +136,7 @@ VbaTextFrame::setMarginRight( float _marginright )
 cpo::uno::Any SAL_CALL
 VbaTextFrame::Characters()
 {
-    throw uno::RuntimeException( u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
 }
 
 OUString

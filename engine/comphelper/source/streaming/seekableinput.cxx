@@ -92,7 +92,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
     if ( !m_xCopyInput.is() )
     {
         if ( !m_xContext.is() )
-            throw uno::RuntimeException(u"no component context"_ustr);
+            throw cpo::uno::RuntimeException(u"no component context"_ustr);
 
         uno::Reference< io::XOutputStream > xTempOut(
                 io::TempFile::create(m_xContext),

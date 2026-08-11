@@ -120,7 +120,7 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void replaceByName(
         const SvMacroItemId nEvent,  /// item ID of event
         const SvxMacro& rMacro)      /// event (will be copied)
@@ -130,7 +130,7 @@ protected:
     ///
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void getByName(
         SvxMacro& rMacro,
         const SvMacroItemId nEvent ) = 0;

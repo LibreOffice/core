@@ -131,7 +131,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
 {
     SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try {
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, cpo::uno::Any( aKey ) );
@@ -147,7 +147,7 @@ cpo::uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPrope
 {
     SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try {
         return xPropertySet->getPropertyValue(STORAGE_ENCRYPTION_KEYS_PROPERTY);
@@ -370,7 +370,7 @@ void OWriteStream_Impl::SetDecrypted()
 {
     SAL_WARN_IF( m_nStorageType != embed::StorageFormats::PACKAGE, "package.xstor", "The encryption is supported only for package storages!" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     GetStreamProperties();
 
@@ -394,10 +394,10 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
 {
     SAL_WARN_IF( m_nStorageType != embed::StorageFormats::PACKAGE, "package.xstor", "The encryption is supported only for package storages!" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( aEncryptionData.empty() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     GetStreamProperties();
 
@@ -426,7 +426,7 @@ void OWriteStream_Impl::DisposeWrappers()
         try {
             m_pAntiImpl->dispose();
         }
-        catch ( const uno::RuntimeException& )
+        catch ( const cpo::uno::RuntimeException& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
         }
@@ -683,7 +683,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     if ( m_bUseCommonEncryption )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
@@ -774,7 +774,7 @@ void OWriteStream_Impl::Commit()
     if ( m_bUseCommonEncryption )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
@@ -785,7 +785,7 @@ void OWriteStream_Impl::Commit()
     else if ( m_bHasCachedEncryptionData )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         cpo::uno::Any( m_aEncryptionData.getAsConstNamedValueList() ) );
@@ -1319,7 +1319,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "The source stream for copying is incomplete!" );
     if ( !m_xPackageStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XInputStream > xDataToCopy;
     if ( IsEncrypted() )
@@ -1355,7 +1355,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "The source stream for copying is incomplete!" );
     if ( !m_xPackageStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !IsEncrypted() )
         throw packages::NoEncryptionException();
@@ -1425,7 +1425,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 "Wrong relation persistence information is provided!" );
 
     if ( !xRelStorage.is() || aOrigStreamName.empty() || aNewStreamName.empty() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
         throw io::IOException(); // TODO:
@@ -1451,7 +1451,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
                 uno::Reference< io::XOutputStream > xOutStream = xRelsStream->getOutputStream();
                 if ( !xOutStream.is() )
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
 
                 ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
 
@@ -1473,7 +1473,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
             uno::Reference< io::XOutputStream > xOutputStream = xRelsStream->getOutputStream();
             if ( !xOutputStream.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             uno::Reference< io::XSeekable > xSeek( m_xNewRelInfoStream, uno::UNO_QUERY_THROW );
             xSeek->seek( 0 );
@@ -1552,7 +1552,7 @@ OWriteStream::~OWriteStream()
         try {
             dispose();
         }
-        catch( const uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
         }
@@ -1605,10 +1605,10 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     CheckInitOnDemand();
 
     if ( !m_xInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY_THROW );
 
@@ -1639,7 +1639,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     {
         // TODO: set the stream in invalid state or dispose
         TOOLS_WARN_EXCEPTION( "package.xstor", "The stream become invalid during copying" );
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     if ( bThrown )
@@ -2096,7 +2096,7 @@ void OWriteStream::CloseOutput_Impl()
     // after the stream is disposed it can be committed
     // so transport correct size property
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     for ( auto& rProp : asNonConstRange(m_pImpl->m_aProps) )
     {
@@ -2127,7 +2127,7 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
     CheckInitOnDemand();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xSeekable->seek( location );
 }
@@ -2139,7 +2139,7 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
     CheckInitOnDemand();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getPosition();
 }
@@ -2151,7 +2151,7 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
     CheckInitOnDemand();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getLength();
 }
@@ -2163,7 +2163,7 @@ void SAL_CALL OWriteStream::truncate()
     CheckInitOnDemand();
 
     if ( !m_xOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XTruncate > xTruncate( m_xOutStream, uno::UNO_QUERY_THROW );
     xTruncate->truncate();
@@ -2318,7 +2318,7 @@ bool SAL_CALL OWriteStream::hasEncryptionData()
         if (!bRet && m_pImpl->m_bUseCommonEncryption && m_pImpl->m_pParent)
             bRet = m_pImpl->m_pParent->m_bHasCommonEncryptionData;
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
@@ -2346,7 +2346,7 @@ bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try
     {
@@ -2372,7 +2372,7 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
@@ -2393,7 +2393,7 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
@@ -2414,7 +2414,7 @@ cpo::uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipBy
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
     const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -2439,7 +2439,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OWriteStr
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
     const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -2465,7 +2465,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OWriteStr
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pImpl->GetAllRelationshipsIfAny();
 }
@@ -2481,7 +2481,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
@@ -2531,7 +2531,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
@@ -2565,7 +2565,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const cpo::uno::Sequence< cpo:
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aIDTag( u"Id"_ustr );
     const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -2618,7 +2618,7 @@ void SAL_CALL OWriteStream::clearRelationships()
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_pImpl->m_aNewRelInfo.realloc( 0 );
     m_pImpl->m_xNewRelInfoStream.clear();
@@ -2796,7 +2796,7 @@ cpo::uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
             bThrow = true;
         }
         if (bThrow || !m_xSeekable.is())
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         return cpo::uno::Any( m_xSeekable->getLength() );
     }
@@ -2922,7 +2922,7 @@ void SAL_CALL OWriteStream::commit()
     }
 
     if ( !m_bTransacted )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
@@ -2950,7 +2950,7 @@ void SAL_CALL OWriteStream::commit()
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
         throw;
@@ -2980,7 +2980,7 @@ void SAL_CALL OWriteStream::revert()
     }
 
     if ( !m_bTransacted )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
 
@@ -3006,7 +3006,7 @@ void SAL_CALL OWriteStream::revert()
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
             throw;
@@ -3037,7 +3037,7 @@ void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed:
     }
 
     if ( !m_bTransacted )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_aListenersContainer.addInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                 aListener );
@@ -3054,7 +3054,7 @@ void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< emb
     }
 
     if ( !m_bTransacted )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_aListenersContainer.removeInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                     aListener );

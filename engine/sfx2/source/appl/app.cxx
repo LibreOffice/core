@@ -425,7 +425,7 @@ bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
             result = true;
         }
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         // ignore, will just return FALSE
     }

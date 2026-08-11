@@ -795,7 +795,7 @@ void SwXTextRange::DeleteAndInsert(
     if (RANGE_IS_TABLE == m_eRangePosition)
     {
         // setString on table not allowed
-        throw uno::RuntimeException(u"not possible for table"_ustr);
+        throw cpo::uno::RuntimeException(u"not possible for table"_ustr);
     }
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
@@ -810,7 +810,7 @@ void SwXTextRange::DeleteAndInsert(
             nullptr;
         if (!pSectionNode)
         {
-            throw uno::RuntimeException(u"disposed?"_ustr);
+            throw cpo::uno::RuntimeException(u"disposed?"_ustr);
         }
         m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
         SwNodeIndex const start(*pSectionNode);
@@ -976,7 +976,7 @@ SwXTextRange::getStart()
     }
     else
     {
-        throw uno::RuntimeException(u"disposed?"_ustr);
+        throw cpo::uno::RuntimeException(u"disposed?"_ustr);
     }
     return xRet;
 }
@@ -1013,7 +1013,7 @@ SwXTextRange::getEnd()
     }
     else
     {
-        throw uno::RuntimeException(u"disposed?"_ustr);
+        throw cpo::uno::RuntimeException(u"disposed?"_ustr);
     }
     return xRet;
 }
@@ -1153,7 +1153,7 @@ void SwXTextRange::GetStartPaM(std::optional<SwPaM>& roPaM)
     }
     else
     {
-        throw uno::RuntimeException(u"disposed?"_ustr);
+        throw cpo::uno::RuntimeException(u"disposed?"_ustr);
     }
 }
 
@@ -1411,18 +1411,18 @@ SwXTextRange::createContentEnumeration(const OUString& rServiceName)
 
     if ( rServiceName != "com.sun.star.text.TextContent" )
     {
-        throw uno::RuntimeException(u"unsupported service"_ustr);
+        throw cpo::uno::RuntimeException(u"unsupported service"_ustr);
     }
 
     if (!m_pMark)
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     const auto pNewCursor(m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException(u"range has no positions"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no positions"_ustr);
     }
 
     return SwXParaFrameEnumeration::Create(*pNewCursor, PARAFRAME_PORTION_TEXTRANGE);
@@ -1435,13 +1435,13 @@ SwXTextRange::createEnumeration()
 
     if (!m_pMark)
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     auto pNewCursor(m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException(u"range has no positions"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no positions"_ustr);
     }
     if (!m_xParentText.is())
     {
@@ -1488,7 +1488,7 @@ SwXTextRange::setPropertyValue(
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1503,7 +1503,7 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1550,7 +1550,7 @@ SwXTextRange::getPropertyState(const OUString& rPropertyName)
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1565,7 +1565,7 @@ SwXTextRange::getPropertyStates(const cpo::uno::Sequence< OUString >& rPropertyN
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1579,7 +1579,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1594,7 +1594,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 
     if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
@@ -1611,7 +1611,7 @@ SwXTextRange::makeRedline(
 
     if (!m_pMark)
     {
-        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
+        throw cpo::uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     SwXTextRange::GetPositions(aPaM);

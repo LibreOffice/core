@@ -15,7 +15,7 @@
 #include <windows.h>
 #include <msiquery.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -320,7 +320,7 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
             ("cannot create temp Windows registry dump (E_ACCES)"));
         return false;
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot create temporary file");
     }
     aFileHandle.url = *pFileURL;

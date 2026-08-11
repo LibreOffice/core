@@ -407,8 +407,8 @@ public class Type {
      *
      * Following the conventions of the Java UNO language binding,
      * cpo.uno.Exception is not considered a supertype of
-     * com.sun.star.uno.RuntimeException or any exception type derived from
-     * com.sun.star.uno.RuntimeException.
+     * cpo.uno.RuntimeException or any exception type derived from
+     * cpo.uno.RuntimeException.
      *
      * @param type some Type
      * @return true if this type is a supertype of the given type
@@ -516,7 +516,7 @@ public class Type {
         } else if (Throwable.class.isAssignableFrom(zClass)) {
             _typeClass
                 = cpo.uno.Exception.class.isAssignableFrom(zClass)
-                || com.sun.star.uno.RuntimeException.class.isAssignableFrom(
+                || cpo.uno.RuntimeException.class.isAssignableFrom(
                     zClass)
                 ? TypeClass.EXCEPTION : TypeClass.UNKNOWN;
             _typeName = zClass.getName();

@@ -76,7 +76,7 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void insertNoCheck(const OUString& aName, const cpo::uno::Any& aElement,
                        std::unique_lock<std::mutex>& guard);
 
@@ -266,7 +266,7 @@ protected:
                         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly,
                                           std::unique_lock<std::mutex>& guard );
@@ -300,7 +300,7 @@ protected:
         OUString& aStorageURL,
         OUString& aUnexpandedStorageURL
     );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString expand_url( const OUString& url );
 
     SfxLibrary* getImplLib( const OUString& rLibraryName );

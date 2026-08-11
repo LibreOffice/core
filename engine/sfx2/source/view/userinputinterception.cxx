@@ -43,7 +43,7 @@ namespace sfx2
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::com::sun::star::awt::MouseEvent;
     using ::com::sun::star::awt::KeyEvent;
     using ::com::sun::star::awt::InputEvent;

@@ -45,21 +45,21 @@ private:
     sal_Int32 mnWrap;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool InRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool InEqualRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange );
     void SetReplace( sal_Int32 type );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetReplaceWith( const OUString& rText );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString GetReplaceWith();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::text::XTextRange > FindOneElement();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool SearchReplace();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                const css::uno::Reference< css::uno::XComponentContext >& rContext,
                rtl::Reference< SwXTextDocument > xModel );

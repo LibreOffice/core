@@ -55,14 +55,14 @@ public class BorderedStream
 
 
     public synchronized XInputStream getInputStream()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return (XInputStream)UnoRuntime.queryInterface( XInputStream.class, this );
     }
 
 
     public synchronized XOutputStream getOutputStream()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return (XOutputStream)UnoRuntime.queryInterface( XOutputStream.class, this );
     }
@@ -73,7 +73,7 @@ public class BorderedStream
 
 
     public synchronized int readBytes( byte[][] aData, int nBytesToRead )
-        throws  com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws  com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         int nRead = 0;
         if ( m_pBytes != null && nBytesToRead > 0 )
@@ -99,14 +99,14 @@ public class BorderedStream
 
 
     public synchronized int readSomeBytes( byte[][] aData, int nMaxBytesToRead )
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         return readBytes( aData, nMaxBytesToRead );
     }
 
 
     public synchronized void skipBytes( int nBytesToSkip  )
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         if ( nBytesToSkip < 0 )
             throw new com.sun.star.io.IOException(); // illegal argument
@@ -119,14 +119,14 @@ public class BorderedStream
 
 
     public synchronized int available()
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         return 0;
     }
 
 
     public synchronized void closeInput()
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         // no need to do anything
     }
@@ -138,7 +138,7 @@ public class BorderedStream
 
 
     public synchronized void writeBytes( byte[] aData  )
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         if ( m_pBytes != null && aData.length > 0 )
         {
@@ -156,14 +156,14 @@ public class BorderedStream
 
 
     public synchronized void flush()
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         // nothing to do
     }
 
 
     public synchronized void closeOutput()
-        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         // nothing to do
     }
@@ -175,7 +175,7 @@ public class BorderedStream
 
 
     public synchronized void truncate()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         m_nCurSize = 0;
         m_nCurPos = 0;
@@ -188,7 +188,7 @@ public class BorderedStream
 
 
     public synchronized void seek( long location )
-        throws com.sun.star.lang.IllegalArgumentException, com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.lang.IllegalArgumentException, com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         if ( location > (long)m_nCurSize )
             throw new com.sun.star.lang.IllegalArgumentException();
@@ -198,14 +198,14 @@ public class BorderedStream
 
 
     public synchronized long getPosition()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         return (long)m_nCurPos;
     }
 
 
     public synchronized long getLength()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         return (long)m_nCurSize;
     }

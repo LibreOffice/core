@@ -32,9 +32,9 @@ void Test::testCatchThrow()
     cpo::uno::Any aSavedException;
     try
     {
-        throw css::uno::RuntimeException(u"RuntimeException"_ustr);
+        throw cpo::uno::RuntimeException(u"RuntimeException"_ustr);
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         aSavedException = cppu::getCaughtException();
     }
@@ -43,7 +43,7 @@ void Test::testCatchThrow()
     {
         cppu::throwException(aSavedException);
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         // the expected case
     }
@@ -60,7 +60,7 @@ void Test::testgetCaughtException()
         aSavedException; /// exception caught during unzipping is saved to be thrown during reading
     try
     {
-        throw css::uno::RuntimeException(u"RuntimeException"_ustr);
+        throw cpo::uno::RuntimeException(u"RuntimeException"_ustr);
     }
     catch (...)
     {
@@ -71,7 +71,7 @@ void Test::testgetCaughtException()
     {
         std::rethrow_exception(aSavedException);
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         // the expected case
         aSavedExceptionAny = cppu::getCaughtException();

@@ -33,7 +33,7 @@ uno::Reference<xml::crypto::XDigestContext> StarOfficeSHA1DigestContext::Create(
     ::rtl::Reference<StarOfficeSHA1DigestContext> xResult = new StarOfficeSHA1DigestContext();
     xResult->m_pDigest = rtl_digest_createSHA1_StarOfficeBug();
     if ( !xResult->m_pDigest )
-        throw uno::RuntimeException(u"Can not create cipher!"_ustr );
+        throw cpo::uno::RuntimeException(u"Can not create cipher!"_ustr );
 
     return xResult;
 }
@@ -58,7 +58,7 @@ void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const cpo::uno::Sequence
         rtl_digest_destroySHA1( m_pDigest );
         m_pDigest = nullptr;
 
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -74,7 +74,7 @@ cpo::uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDig
         rtl_digest_destroySHA1( m_pDigest );
         m_pDigest = nullptr;
 
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     rtl_digest_destroySHA1( m_pDigest );

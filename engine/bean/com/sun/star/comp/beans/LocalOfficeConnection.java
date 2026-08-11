@@ -126,11 +126,11 @@ public class LocalOfficeConnection
         }
         catch ( java.net.MalformedURLException e )
         {
-            throw new com.sun.star.uno.RuntimeException(e);
+            throw new cpo.uno.RuntimeException(e);
         }
         catch ( UnsupportedEncodingException e)
         {
-            throw new com.sun.star.uno.RuntimeException(e);
+            throw new cpo.uno.RuntimeException(e);
         }
     }
 
@@ -352,7 +352,7 @@ public class LocalOfficeConnection
             System.out.println( "uno-url is syntactical illegal ( " + mURL + " )" );
             System.out.println( e.getMessage() );
         }
-        catch( com.sun.star.uno.RuntimeException e )
+        catch( cpo.uno.RuntimeException e )
         {
             System.out.println( "--- RuntimeException:" );
             System.out.println( e.getMessage() );
@@ -366,7 +366,7 @@ public class LocalOfficeConnection
             System.out.println( e );
             e.printStackTrace();
             System.out.println( "--- end." );
-            throw new com.sun.star.uno.RuntimeException(e);
+            throw new cpo.uno.RuntimeException(e);
         }
 
         return null;
@@ -415,7 +415,7 @@ public class LocalOfficeConnection
                     xLocalServiceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", xLocalContext));
         } catch (cpo.uno.Exception e) {
-            throw new com.sun.star.uno.RuntimeException(e);
+            throw new cpo.uno.RuntimeException(e);
         }
         synchronized(this) {
             if(mBridge == null) {
@@ -424,7 +424,7 @@ public class LocalOfficeConnection
                     connector = xLocalServiceManager.createInstanceWithContext(
                             "com.sun.star.connection.Connector", xLocalContext);
                 } catch (cpo.uno.Exception e) {
-                    throw new com.sun.star.uno.RuntimeException(e);
+                    throw new cpo.uno.RuntimeException(e);
                 }
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
                 // connect to the server
@@ -437,7 +437,7 @@ public class LocalOfficeConnection
                 try {
                     mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {
-                    throw new com.sun.star.uno.RuntimeException(e);
+                    throw new cpo.uno.RuntimeException(e);
                 }
             }
             rootObject = mBridge.getInstance(rootOid);
@@ -658,7 +658,7 @@ public class LocalOfficeConnection
             }
             catch (UnsupportedEncodingException e)
             {
-                throw new com.sun.star.uno.RuntimeException(e);
+                throw new cpo.uno.RuntimeException(e);
             }
             return identifier;
         }
@@ -710,7 +710,7 @@ public class LocalOfficeConnection
             // start process
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
-                throw new com.sun.star.uno.RuntimeException( "cannot start soffice: " + Arrays.toString(cmdArray) );
+                throw new cpo.uno.RuntimeException( "cannot start soffice: " + Arrays.toString(cmdArray) );
             new StreamProcessor(mProcess.getInputStream(), System.out);
             new StreamProcessor(mProcess.getErrorStream(), System.err);
         }

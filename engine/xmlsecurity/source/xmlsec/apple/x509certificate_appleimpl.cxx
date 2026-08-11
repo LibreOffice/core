@@ -9,7 +9,7 @@
 
 #include "x509certificate_appleimpl.hxx"
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 
 using namespace css;
@@ -18,16 +18,16 @@ X509Certificate_AppleImpl::X509Certificate_AppleImpl(svl::crypto::CFRef<SecIdent
     : m_aIdentity(std::move(aIdentity))
 {
     if (!m_aIdentity.is())
-        throw uno::RuntimeException(u"X509Certificate_AppleImpl: no identity"_ustr);
+        throw cpo::uno::RuntimeException(u"X509Certificate_AppleImpl: no identity"_ustr);
 
     SecCertificateRef pCertificate = nullptr;
     if (SecIdentityCopyCertificate(m_aIdentity.get(), &pCertificate) != errSecSuccess)
-        throw uno::RuntimeException(u"X509Certificate_AppleImpl: no certificate"_ustr);
+        throw cpo::uno::RuntimeException(u"X509Certificate_AppleImpl: no certificate"_ustr);
     svl::crypto::CFRef<SecCertificateRef> aCertificate(pCertificate);
 
     svl::crypto::CFRef<CFDataRef> aData(SecCertificateCopyData(aCertificate.get()));
     if (!aData.is())
-        throw uno::RuntimeException(u"X509Certificate_AppleImpl: no DER data"_ustr);
+        throw cpo::uno::RuntimeException(u"X509Certificate_AppleImpl: no DER data"_ustr);
 
     cpo::uno::Sequence<sal_Int8> aDer(
         reinterpret_cast<const sal_Int8*>(CFDataGetBytePtr(aData.get())),

@@ -66,9 +66,9 @@ cpo::uno::Any SAL_CALL SwVbaListLevels::Item( const cpo::uno::Any& Index1, const
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
-        throw  uno::RuntimeException(u"Index out of bounds"_ustr );
+        throw  cpo::uno::RuntimeException(u"Index out of bounds"_ustr );
 
     return cpo::uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, m_pListHelper, nIndex - 1 ) ) );
 }

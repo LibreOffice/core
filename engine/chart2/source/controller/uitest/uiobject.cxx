@@ -59,7 +59,7 @@ void ChartUIObject::execute(const OUString& rAction,
 
         auto itr = rParameters.find(u"COMMAND"_ustr);
         if (itr == rParameters.end())
-            throw css::uno::RuntimeException(u"missing COMMAND parameter"_ustr);
+            throw cpo::uno::RuntimeException(u"missing COMMAND parameter"_ustr);
 
         maCommands.emplace_back(new OUString(itr->second));
         OUString* pCommand = maCommands.rbegin()->get();
@@ -131,7 +131,7 @@ void ChartWindowUIObject::execute(const OUString& rAction,
     {
         auto itr = rParameters.find(u"NAME"_ustr);
         if (itr == rParameters.end())
-            throw css::uno::RuntimeException(u"Missing Parameter 'NAME' for action 'SELECT'"_ustr);
+            throw cpo::uno::RuntimeException(u"Missing Parameter 'NAME' for action 'SELECT'"_ustr);
 
 
         const OUString& rName = itr->second;
@@ -150,7 +150,7 @@ std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
     if (chart::ObjectIdentifier::isCID(rID))
         return std::unique_ptr<UIObject>(new ChartUIObject(mxChartWindow, rID));
 
-    throw css::uno::RuntimeException(u"unknown child"_ustr);
+    throw cpo::uno::RuntimeException(u"unknown child"_ustr);
 }
 
 namespace {

@@ -32,7 +32,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>

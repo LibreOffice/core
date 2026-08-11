@@ -256,7 +256,7 @@ css::awt::Rectangle AccessibleCell::implGetBounds()
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
-            throw uno::RuntimeException (u"AccessibleCell has no valid view forwarder"_ustr, getXWeak());
+            throw cpo::uno::RuntimeException (u"AccessibleCell has no valid view forwarder"_ustr, getXWeak());
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));
@@ -459,7 +459,7 @@ void AccessibleCell::UpdateChildren()
 +If this is correct, we also don't need  sdr::table::CellRef getCellRef(), UpdateChildren(), getCellName( sal_Int32 nCol, sal_Int32 nRow ) above
 +
 
-OUString SAL_CALL AccessibleCell::getAccessibleName() throw (css::uno::RuntimeException)
+OUString SAL_CALL AccessibleCell::getAccessibleName() throw (cpo::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     SolarMutexGuard aSolarGuard;

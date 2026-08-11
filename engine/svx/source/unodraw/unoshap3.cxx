@@ -115,7 +115,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
     if(!HasSdrObject() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     rtl::Reference<SdrObject> pSdrShape = mxPage->CreateSdrObject_( xShape );
     if( DynCastE3dObject(pSdrShape.get()) )
@@ -126,7 +126,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     else
     {
         pSdrShape.clear();
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
@@ -137,7 +137,7 @@ void Svx3DSceneObject::addShape( SvxShape& rShape )
     SolarMutexGuard aGuard;
 
     if(!HasSdrObject() || !mxPage.is() || nullptr != rShape.GetSdrObject() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     rtl::Reference<SdrObject> pSdrShape = mxPage->CreateSdrObject_( &rShape );
     if( DynCastE3dObject(pSdrShape.get()) )
@@ -148,7 +148,7 @@ void Svx3DSceneObject::addShape( SvxShape& rShape )
     else
     {
         pSdrShape.clear();
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
@@ -162,7 +162,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 
     if(!HasSdrObject() || !pSdrShape ||
         pSdrShape->getParentSdrObjectFromSdrObject() != GetSdrObject())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SdrObjList& rList = *pSdrShape->getParentSdrObjListFromSdrObject();
 
@@ -203,7 +203,7 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     SolarMutexGuard aGuard;
 
     if( !HasSdrObject() || GetSdrObject()->GetSubList() == nullptr )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if( Index<0 || GetSdrObject()->GetSubList()->GetObjCount() <= o3tl::make_unsigned(Index) )
         throw lang::IndexOutOfBoundsException();

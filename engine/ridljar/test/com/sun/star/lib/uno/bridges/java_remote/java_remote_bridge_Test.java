@@ -58,7 +58,7 @@ public final class java_remote_bridge_Test {
         try {
             bridgeB.getInstance(TestInstanceProvider.NAME_RUNTIME_EXCEPTION);
             fail("throw RuntimeException");
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             assertTrue(
                 e.getMessage().indexOf(
                     TestInstanceProvider.NAME_RUNTIME_EXCEPTION)
@@ -69,7 +69,7 @@ public final class java_remote_bridge_Test {
             bridgeB.getInstance(
                 TestInstanceProvider.NAME_NO_SUCH_ELEMENT_EXCEPTION);
             fail("throw NoSuchElementException");
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             assertTrue(
                 e.getMessage().indexOf(
                     TestInstanceProvider.NAME_NO_SUCH_ELEMENT_EXCEPTION)
@@ -79,7 +79,7 @@ public final class java_remote_bridge_Test {
         try {
             bridgeA.getInstance(TestInstanceProvider.NAME_ANYTHING);
             fail("no instance provider");
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             assertTrue(e.getMessage().startsWith("unknown OID "));
         }
     }
@@ -180,7 +180,7 @@ public final class java_remote_bridge_Test {
             if (name.equals(NAME_NULL)) {
                 return null;
             } else if (name.equals(NAME_RUNTIME_EXCEPTION)) {
-                throw new com.sun.star.uno.RuntimeException(
+                throw new cpo.uno.RuntimeException(
                     getClass().getName() + ", throwing: " + name);
             } else if (name.equals(NAME_NO_SUCH_ELEMENT_EXCEPTION)) {
                 throw new NoSuchElementException(

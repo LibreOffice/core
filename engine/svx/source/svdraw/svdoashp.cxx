@@ -634,7 +634,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
             aRet.push_back( aSdrCustomShapeInteraction );
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
     return aRet;
@@ -1541,7 +1541,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, double rxFact, double ryFa
                 rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
         }
-        catch ( const uno::RuntimeException& )
+        catch ( const cpo::uno::RuntimeException& )
         {
         }
     }
@@ -1871,7 +1871,7 @@ void SdrObjCustomShape::AddToHdlList(SdrHdlList& rHdlList) const
                 pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
                 rHdlList.AddHdl(std::move(pH));
             }
-            catch ( const uno::RuntimeException& )
+            catch ( const cpo::uno::RuntimeException& )
             {
             }
         }
@@ -2014,7 +2014,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                 rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
         }
-        catch ( const uno::RuntimeException& )
+        catch ( const cpo::uno::RuntimeException& )
         {
         }
     }
@@ -2056,7 +2056,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
         }
         aInteractionHandle.xInteraction->setControllerPosition( aPt );
     }
-    catch ( const uno::RuntimeException& )
+    catch ( const cpo::uno::RuntimeException& )
     {
     }
 }
@@ -2136,7 +2136,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
             if ( rInteraction.nMode & CustomShapeHandleModes::CREATE_FIXED )
                 rInteraction.xInteraction->setControllerPosition( awt::Point( rStat.GetStart().X(), rStat.GetStart().Y() ) );
         }
-        catch ( const uno::RuntimeException& )
+        catch ( const cpo::uno::RuntimeException& )
         {
         }
     }
@@ -2485,7 +2485,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
                 if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
             }
-            catch ( const uno::RuntimeException& )
+            catch ( const cpo::uno::RuntimeException& )
             {
             }
         }
@@ -2519,7 +2519,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
                 if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
             }
-            catch ( const uno::RuntimeException& )
+            catch ( const cpo::uno::RuntimeException& )
             {
             }
         }

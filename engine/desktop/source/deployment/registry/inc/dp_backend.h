@@ -277,7 +277,7 @@ public:
 //     virtual void packageRemoved(
 //         OUString const & url, OUString const & mediaType)
 //         throw (css::deployment::DeploymentException,
-//                css::uno::RuntimeException);
+//                cpo::uno::RuntimeException);
 
 };
 

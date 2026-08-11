@@ -1289,7 +1289,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                         rtl::Reference<SwXTextCursor> xParagraph = dynamic_cast<SwXTextCursor*>(
                             rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(rParaProp.m_rEndParagraph.get())).get() );
                         if (!xParagraph)
-                            throw uno::RuntimeException();
+                            throw cpo::uno::RuntimeException();
                         // select paragraph
                         xParagraph->gotoStartOfParagraph( true );
                         oParagraphText = xParagraph->getString();

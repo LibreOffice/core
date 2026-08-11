@@ -76,12 +76,12 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
             pParent = pTunnel->getWidget();
 
         if (!pParent)
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"SmPanelFactory::createUIElement: no ParentWindow"_ustr);
         if (!xFrame)
-            throw css::uno::RuntimeException(u"SmPanelFactory::createUIElement: no Frame"_ustr);
+            throw cpo::uno::RuntimeException(u"SmPanelFactory::createUIElement: no Frame"_ustr);
         if (!pBindings)
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"SmPanelFactory::createUIElement: no SfxBindings"_ustr);
 
         std::unique_ptr<PanelLayout> pPanel;
@@ -102,7 +102,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
             return sfx2::sidebar::SidebarPanelBase::Create(ResourceURL, xFrame, std::move(pPanel),
                                                            aLayoutSize);
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }

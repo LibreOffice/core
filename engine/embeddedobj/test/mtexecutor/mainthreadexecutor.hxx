@@ -61,12 +61,12 @@ public:
     DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );
 
     // XJob
-       virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, cpo::uno::Exception, css::uno::RuntimeException);
+       virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, cpo::uno::Exception, cpo::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString getImplementationName() throw (css::uno::RuntimeException);
-    virtual bool supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString getImplementationName() throw (cpo::uno::RuntimeException);
+    virtual bool supportsService( const OUString& ServiceName ) throw (cpo::uno::RuntimeException);
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() throw (cpo::uno::RuntimeException);
 
 };
 

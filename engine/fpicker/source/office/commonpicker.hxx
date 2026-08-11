@@ -131,9 +131,9 @@ namespace svt
 
         // XExecutableDialog functions
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void           setTitle( const OUString& _rTitle );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual sal_Int16      execute();
 
 

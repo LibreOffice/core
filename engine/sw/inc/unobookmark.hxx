@@ -57,13 +57,13 @@ private:
 
 protected:
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void attachToRangeEx(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
             IDocumentMarkAccess::MarkType eType,
             bool isFieldmarkSeparatorAtStart = false);
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void attachToRange(
             const css::uno::Reference< css::text::XTextRange > & xTextRange);
 
@@ -148,7 +148,7 @@ class SwXFieldmarkParameters final
 {
     private:
         ::sw::mark::Fieldmark* m_pFieldmark;
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         ::sw::mark::Fieldmark::parameter_map_t* getCoreParameters();
     public:
         SwXFieldmarkParameters(::sw::mark::Fieldmark* const pFieldmark)

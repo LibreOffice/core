@@ -132,7 +132,7 @@ namespace pcr
         PropertyId impl_getPropertyId_throwUnknownProperty( const OUString& _rPropertyName ) const;
 
         /** retrieves the property id for a given property name
-            @throw css::uno::RuntimeException
+            @throw cpo::uno::RuntimeException
                 if the property name is not known to our ->m_pInfoService
         */
         PropertyId impl_getPropertyId_throwRuntime( const OUString& _rPropertyName ) const;

@@ -197,7 +197,7 @@ ScVbaUserForm::getIntrospection(  )
 cpo::uno::Any SAL_CALL
 ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
-    throw uno::RuntimeException(); // unsupported operation
+    throw cpo::uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL

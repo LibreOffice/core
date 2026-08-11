@@ -103,7 +103,7 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public java.lang.Object createInstance( String serviceSpecifier )
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         return createInstanceWithContext( serviceSpecifier, m_xDefaultContext );
     }
@@ -120,7 +120,7 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public java.lang.Object createInstanceWithArguments(
         String serviceSpecifier, Object[] args )
-        throws cpo.uno.Exception, com.sun.star.uno.RuntimeException
+        throws cpo.uno.Exception, cpo.uno.RuntimeException
     {
         if (DEBUG) {
             System.err.println("createInstanceWithArguments:" );
@@ -149,7 +149,7 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     private Object queryServiceFactory(String serviceName)
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         DEBUG("queryServiceFactory for name " + serviceName );
         Object factory = null;
@@ -186,13 +186,13 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.container.XContentEnumerationAccess
      */
     public String[] getAvailableServiceNames()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         try{
             return factoriesByServiceNames.keySet().toArray(
                 new String[ factoriesByServiceNames.size() ] );
         } catch(Exception ex) {
-            throw new com.sun.star.uno.RuntimeException(ex);
+            throw new cpo.uno.RuntimeException(ex);
         }
     }
 
@@ -289,7 +289,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see com.sun.star.lang.XComponent
      */
     public void dispose()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         if (eventListener != null) {
             for (XEventListener listener : eventListener) {
@@ -309,19 +309,19 @@ public class ServiceManager implements XMultiServiceFactory,
      * the <code>ServiceManager</code>.</p>
      *
      * <p>If the listener is already registered a
-     * <code>com.sun.star.uno.RuntimeException</code> will be thrown.</p>
+     * <code>cpo.uno.RuntimeException</code> will be thrown.</p>
      *
      * @param   xListener   the new listener which should been added.
      * @see     com.sun.star.lang.XComponent
      */
     public void addEventListener( XEventListener xListener )
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         if (xListener == null)
-            throw new com.sun.star.uno.RuntimeException("Listener must not be null");
+            throw new cpo.uno.RuntimeException("Listener must not be null");
 
           if ( eventListener.contains(xListener) )
-              throw new com.sun.star.uno.RuntimeException("Listener already registered.");
+              throw new cpo.uno.RuntimeException("Listener already registered.");
 
            eventListener.add(xListener);
     }
@@ -329,20 +329,20 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Removes a <code>EventListener</code> from the <code>ServiceManager</code>.
      *
-     * <p>If the listener is not registered a <code>com.sun.star.uno.RuntimeException</code>
+     * <p>If the listener is not registered a <code>cpo.uno.RuntimeException</code>
      * will be thrown.</p>
      *
      * @param   xListener   the new listener which should been removed.
      * @see     com.sun.star.lang.XComponent
      */
     public void removeEventListener( XEventListener xListener )
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         if (xListener == null)
-            throw new com.sun.star.uno.RuntimeException("Listener must not be null");
+            throw new cpo.uno.RuntimeException("Listener must not be null");
 
           if ( !eventListener.contains(xListener) )
-              throw new com.sun.star.uno.RuntimeException("Listener is not registered.");
+              throw new cpo.uno.RuntimeException("Listener is not registered.");
 
         eventListener.remove(xListener);
     }
@@ -360,10 +360,10 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XServiceInfo
      */
     public boolean has( Object object )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         if (object == null)
-            throw new com.sun.star.uno.RuntimeException("The parameter must not been null");
+            throw new cpo.uno.RuntimeException("The parameter must not been null");
 
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, object);
 
@@ -380,7 +380,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public void insert( Object object )
         throws com.sun.star.lang.IllegalArgumentException,
                com.sun.star.container.ElementExistException,
-               com.sun.star.uno.RuntimeException
+               cpo.uno.RuntimeException
     {
         if (object == null) throw new com.sun.star.lang.IllegalArgumentException();
 
@@ -430,7 +430,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public void remove( Object object )
         throws com.sun.star.lang.IllegalArgumentException,
                com.sun.star.container.NoSuchElementException,
-               com.sun.star.uno.RuntimeException
+               cpo.uno.RuntimeException
     {
         if (object == null)
             throw new com.sun.star.lang.IllegalArgumentException(
@@ -483,7 +483,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.container.XEnumerationAccess
      */
     public XEnumeration createEnumeration()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return new ServiceEnumerationImpl( factoriesByImplNames.values().iterator() );
     }
@@ -496,7 +496,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     cpo.uno.TypeClass
      */
     public cpo.uno.Type getElementType()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         if ( UNO_TYPE == null )
             UNO_TYPE = new cpo.uno.Type(ServiceManager.class);
@@ -522,7 +522,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.container.XContentEnumerationAccess
      */
     public XEnumeration createContentEnumeration( String serviceName )
-                throws com.sun.star.uno.RuntimeException
+                throws cpo.uno.RuntimeException
     {
         XEnumeration enumer  ;
 
@@ -543,7 +543,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XServiceInfo
      */
     public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return getClass().getName();
     }
@@ -557,7 +557,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XServiceInfo
      */
     public boolean supportsService( String serviceName )
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         for (String supportedServiceName : supportedServiceNames) {
             if (supportedServiceName.equals(serviceName)) {
@@ -575,7 +575,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.lang.XServiceInfo
      */
     public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return supportedServiceNames;
     }
@@ -625,7 +625,7 @@ public class ServiceManager implements XMultiServiceFactory,
          * @see     com.sun.star.container.XEnumeration
          */
         public boolean hasMoreElements()
-                throws com.sun.star.uno.RuntimeException
+                throws cpo.uno.RuntimeException
         {
             return enumeration != null && enumeration.hasNext();
 
@@ -643,7 +643,7 @@ public class ServiceManager implements XMultiServiceFactory,
         public Object nextElement()
                 throws com.sun.star.container.NoSuchElementException,
                        com.sun.star.lang.WrappedTargetException,
-                       com.sun.star.uno.RuntimeException
+                       cpo.uno.RuntimeException
         {
             if (enumeration == null)
                 throw new com.sun.star.container.NoSuchElementException();

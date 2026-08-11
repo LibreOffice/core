@@ -273,7 +273,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
         // we need this wrapped terminate()-call to terminate even the QuickStarter
         // non-virtual and non-UNO for now
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool terminateQuickstarterToo();
 
         void shutdown();

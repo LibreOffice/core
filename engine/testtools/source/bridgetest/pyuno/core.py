@@ -313,7 +313,7 @@ class TestCase( unittest.TestCase):
           self.assertTrue( wasHere, "wrong attribute test" )
 
           IllegalArgumentException = uno.getClass("com.sun.star.lang.IllegalArgumentException" )
-          RuntimeException = uno.getClass("com.sun.star.uno.RuntimeException" )
+          RuntimeException = uno.getClass("cpo.uno.RuntimeException" )
 
 # TODO: Remove this once it is done
 # wrong number of arguments bug !?

@@ -47,9 +47,9 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons[2];
     bool mbVeryHidden;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getSheetRange();
 
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
@@ -58,13 +58,13 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     cpo::uno::Any getButtons( const cpo::uno::Any &rIndex, bool bOptionButtons );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         css::uno::Reference< css::sheet::XSpreadsheet > xSheet,
         css::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     virtual ~ScVbaWorksheet() override;
@@ -151,7 +151,7 @@ public:
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     // CodeName
     virtual OUString SAL_CALL getCodeName() override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int16 getSheetID() const;
 
     virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName, const cpo::uno::Any& IgnorePrintAreas ) override;

@@ -63,7 +63,7 @@ public:
     virtual OUString getDefaultPropertyName(  ) override;
 
     // Helper method
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setData( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description,
         const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext );
 };
@@ -162,7 +162,7 @@ ErrObject::getDefaultPropertyName(  )
 void ErrObject::setData( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext )
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException(u"Missing Required Parameter"_ustr );
+        throw cpo::uno::RuntimeException(u"Missing Required Parameter"_ustr );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;

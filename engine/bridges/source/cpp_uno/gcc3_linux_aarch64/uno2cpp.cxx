@@ -29,7 +29,7 @@
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
@@ -295,12 +295,12 @@ void call(
         } catch (cpo::uno::Exception &) {
             throw;
         } catch (std::exception & e) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "C++ code threw "
                 + OStringToOUString(typeid(e).name(), RTL_TEXTENCODING_UTF8)
                 + ": " + OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8));
         } catch (...) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"C++ code threw unknown exception"_ustr);
         }
     } catch (cpo::uno::Exception &) {

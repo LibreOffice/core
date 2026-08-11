@@ -229,7 +229,7 @@ void ModuleManager::replaceByName(const OUString& sName ,
     xModules->getByName(sName) >>= xModule;
     if (!xModule.is())
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Was not able to get write access to the requested module entry inside configuration."_ustr,
                 static_cast< cppu::OWeakObject * >(this));
     }
@@ -252,7 +252,7 @@ cpo::uno::Any ModuleManager::getByName(const OUString& sName)
         m_xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Was not able to get write access to the requested module entry inside configuration."_ustr,
                 static_cast< cppu::OWeakObject * >(this));
     }

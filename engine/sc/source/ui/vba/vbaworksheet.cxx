@@ -290,7 +290,7 @@ ScVbaWorksheet::setVisible( sal_Int32 nVisible )
             mbVeryHidden = true;
         break;
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
     xProps->setPropertyValue( u"IsVisible"_ustr, cpo::uno::Any( bVisible ) );
@@ -308,7 +308,7 @@ ScVbaWorksheet::getEnableSelection()
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
-        throw uno::RuntimeException(u"Sheet Name does not exist."_ustr );
+        throw cpo::uno::RuntimeException(u"Sheet Name does not exist."_ustr );
 
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -343,7 +343,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
-        throw uno::RuntimeException(u"Sheet Name does not exist."_ustr );
+        throw cpo::uno::RuntimeException(u"Sheet Name does not exist."_ustr );
 
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -683,7 +683,7 @@ ScVbaWorksheet::Cells( const ::cpo::uno::Any &nRow, const ::cpo::uno::Any &nCol 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     if(ScDocShell* pShell = excel::getDocShell( xModel ))
         return ScVbaRange::CellsHelper(pShell->GetDocument(), this, mxContext, xRange, nRow, nCol );
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 uno::Reference< excel::XRange >
@@ -818,31 +818,31 @@ ScVbaWorksheet::Buttons( const cpo::uno::Any& rIndex )
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::CheckBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::DropDowns( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::GroupBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::Labels( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::ListBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
@@ -854,13 +854,13 @@ ScVbaWorksheet::OptionButtons( const cpo::uno::Any& rIndex )
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::ScrollBars( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::Spinners( const cpo::uno::Any& /*rIndex*/ )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 void SAL_CALL
@@ -895,7 +895,7 @@ ScVbaWorksheet::getIntrospection(  )
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
-    throw uno::RuntimeException(u"Unsupported"_ustr); // unsupported operation
+    throw cpo::uno::RuntimeException(u"Unsupported"_ustr); // unsupported operation
 }
 
 void SAL_CALL

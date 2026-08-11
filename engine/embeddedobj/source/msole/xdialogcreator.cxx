@@ -62,7 +62,7 @@ public:
     InitializedOleGuard()
     {
         if ( !SUCCEEDED( OleInitialize( nullptr ) ) )
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 
     ~InitializedOleGuard()
@@ -187,7 +187,7 @@ embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceByDialog(
         OUString aFileName(o3tl::toU(szFile));
         OUString aFileURL;
         if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         cpo::uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue("URL",
                                                                                          aFileURL) };
@@ -202,7 +202,7 @@ embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceByDialog(
             xEmbCreator = embed::OLEEmbeddedObjectFactory::create( m_xContext );
 
         if ( !xEmbCreator.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference<task::XStatusIndicator> xProgress;
         OUString aProgressText;
@@ -263,7 +263,7 @@ embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceByDialog(
 
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!" );
     if ( !aObjectInfo.Object.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return aObjectInfo;
 #else
@@ -306,7 +306,7 @@ embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceInitFromClipbo
 
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!" );
     if ( !aObjectInfo.Object.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return aObjectInfo;
 #else

@@ -461,7 +461,7 @@ void SampleAddIn::setPosition( const awt::Point& aPos )
 }
 
 // XShapeDescriptor ( ::XShape ::XDiagram )
-OUString SampleAddIn::getShapeType() throw( css::uno::RuntimeException )
+OUString SampleAddIn::getShapeType() throw( cpo::uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddinShape";
 }

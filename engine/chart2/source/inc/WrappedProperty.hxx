@@ -48,25 +48,25 @@ public:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
 protected:

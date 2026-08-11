@@ -58,7 +58,7 @@ class RevisionCollectionHelper : public ::cppu::WeakImplHelper< container::XInde
 {
     RevisionMap mRevisionMap;
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     RevisionCollectionHelper( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextRange >& xTextRange );
 
     // XElementAccess
@@ -179,7 +179,7 @@ void SAL_CALL SwVbaRevisions::AcceptAll(  )
 
 void SAL_CALL SwVbaRevisions::RejectAll(  )
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 OUString

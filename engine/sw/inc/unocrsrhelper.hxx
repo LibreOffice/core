@@ -96,7 +96,7 @@ namespace SwUnoCursorHelper
     void                        resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam);
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                        InsertFile(SwUnoCursor* pUnoCursor,
                                     const OUString& rURL,
                                     const cpo::uno::Sequence< css::beans::PropertyValue >& rOptions);
@@ -118,17 +118,17 @@ namespace SwUnoCursorHelper
                     const SwPaM &rNewCursor, std::u16string_view aText,
                     const bool bForceExpandHints );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void    makeRedline( SwPaM const & rPaM, std::u16string_view RedlineType,
             const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void    makeTableRowRedline( SwTableLine& rTableLine, std::u16string_view RedlineType,
             const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, std::u16string_view RedlineType,
             const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
@@ -155,7 +155,7 @@ namespace SwUnoCursorHelper
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -166,7 +166,7 @@ namespace SwUnoCursorHelper
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetPropertyValues(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -180,13 +180,13 @@ namespace SwUnoCursorHelper
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             std::u16string_view rPropertyName);
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::beans::PropertyState > GetPropertyStates(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -195,20 +195,20 @@ namespace SwUnoCursorHelper
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT);
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::beans::PropertyState GetPropertyState(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName);
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetPropertyToDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
             std::u16string_view rPropertyName);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any  GetPropertyDefault(
             SwPaM const & rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -218,10 +218,10 @@ namespace SwUnoCursorHelper
             const cpo::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetTextFormatColl(const cpo::uno::Any & rAny, SwPaM & rPaM);
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::uno::DeploymentException
     bool SetCursorPropertyValue(
             SfxItemPropertyMapEntry const& rEntry,

@@ -302,7 +302,7 @@ namespace pcr
             respective tab pages into our view
             @precond
                 m_aPageIds is empty
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if one of the callees of this method throws this exception
         */
         void
@@ -338,8 +338,8 @@ namespace pcr
             Effectively, this means that the method simply checks the IsReadOnly attribute of the model.
             If there is no model, <FALSE/> is returned.
 
-            @throws css::uno::RuntimeException
-                in case asking the model for its IsReadOnly attribute throws a css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
+                in case asking the model for its IsReadOnly attribute throws a cpo::uno::RuntimeException
                 itself.
         */
         bool    impl_isReadOnlyModel_throw() const;

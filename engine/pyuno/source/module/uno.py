@@ -67,7 +67,7 @@ def getConstantByName(constant):
 def getTypeByName(typeName):
     """Returns a `uno.Type` instance of the type given by typeName.
 
-    If the type does not exist, a `com.sun.star.uno.RuntimeException` is raised.
+    If the type does not exist, a `cpo.uno.RuntimeException` is raised.
     """
 
     return pyuno.getTypeByName(typeName)
@@ -402,7 +402,7 @@ def _uno_import(name, *optargs, **kwargs):
 
     for class_name in fromlist:
         if class_name not in d:
-            RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
+            RuntimeException = pyuno.getClass("cpo.uno.RuntimeException")
             clazz = _uno_try_import(RuntimeException, name, class_name)
             # Since we moved most of the UNO types from com::sun::star to cpo,
             # attempt to allow importing using the old names.
@@ -509,7 +509,7 @@ def _uno_struct__init__(self, *args, **kwargs):
 
         for kwarg in kwargs.keys():
             if not used.get(kwarg):
-                RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
+                RuntimeException = pyuno.getClass("cpo.uno.RuntimeException")
                 raise RuntimeException("_uno_struct__init__: unused keyword argument '%s'." % kwarg, None)
 
         self.__dict__["value"] = struct

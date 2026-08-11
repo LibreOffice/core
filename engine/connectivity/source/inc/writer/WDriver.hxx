@@ -31,7 +31,7 @@ public:
     {
     }
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getImplementationName() override;
 
     // XDriver

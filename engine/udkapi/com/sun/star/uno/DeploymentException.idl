@@ -24,7 +24,7 @@
 
 /** Exception signalling a deployment error.
 */
-published exception DeploymentException : com::sun::star::uno::RuntimeException
+published exception DeploymentException : cpo::uno::RuntimeException
 {
 };
 

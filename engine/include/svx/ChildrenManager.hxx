@@ -132,7 +132,7 @@ public:
     */
     rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
 
     /** Update the child manager.  Take care of a modified set of children

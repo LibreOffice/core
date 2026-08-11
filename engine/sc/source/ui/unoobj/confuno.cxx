@@ -138,7 +138,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
     SolarMutexGuard aGuard;
 
     if(!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     bool bUpdateHeights = false;
@@ -220,7 +220,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         {
             SfxPrinter* pPrinter = pDocShell->GetPrinter();
             if (!pPrinter)
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             if (pPrinter->GetName() != sPrinterName)
             {
@@ -450,7 +450,7 @@ cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString
     cpo::uno::Any aRet;
 
     if(!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     const ScViewOptions& aViewOpt = rDoc.GetViewOptions();

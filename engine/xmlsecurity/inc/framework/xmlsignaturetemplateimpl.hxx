@@ -84,11 +84,11 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
         //Helper for XServiceInfo
         static cpo::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static OUString impl_getImplementationName() ;
 
         //Helper for registry
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 };
 

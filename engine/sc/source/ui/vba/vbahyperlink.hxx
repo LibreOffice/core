@@ -33,12 +33,12 @@ class ScVbaHyperlink : public HyperlinkImpl_BASE
 {
 public:
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
         const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -68,11 +68,11 @@ public:
 private:
     typedef ::std::pair< OUString, OUString > UrlComponents;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void ensureTextField();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     UrlComponents getUrlComponents();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setUrlComponents( const UrlComponents& rUrlComp );
 
 private:

@@ -110,7 +110,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         else
             xStream = rxStore->cloneStreamElement( sName );
         if ( !xStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         xInStream = xStream->getInputStream();
     }
     else

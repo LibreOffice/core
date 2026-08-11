@@ -21,7 +21,7 @@ typedef CollTestImplHelper<ooo::vba::word::XContentControls> SwVbaContentControl
 class SwVbaContentControls : public SwVbaContentControls_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaContentControls(const css::uno::Reference<ov::XHelperInterface>& xParent,
                          const css::uno::Reference<css::uno::XComponentContext>& xContext,
                          const rtl::Reference<SwXTextDocument>& xTextDocument, const OUString& rTag,

@@ -86,7 +86,7 @@ void BaseContainer::impl_initFlushMode(std::unique_lock<std::mutex>& /*rGuard*/)
     if (!m_pFlushCache)
         m_pFlushCache = GetTheFilterCache().clone();
     if (!m_pFlushCache)
-        throw css::uno::RuntimeException( u"Can not create write copy of internal used cache on demand."_ustr,
+        throw cpo::uno::RuntimeException( u"Can not create write copy of internal used cache on demand."_ustr,
                 getXWeak());
 }
 

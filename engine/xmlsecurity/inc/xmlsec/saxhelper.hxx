@@ -47,34 +47,34 @@ class SAXHelper final
         xmlDocPtr getDocument() { return m_pParserCtxt->myDoc;}
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void startDocument() ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void endDocument() ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void startElement(
             std::u16string_view aName ,
             const cpo::uno::Sequence<
                 css::xml::csax::XMLAttribute >& aAttributes ) ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void endElement( std::u16string_view aName ) ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void characters( std::u16string_view aChars ) ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void ignorableWhitespace( std::u16string_view aWhitespaces ) ;
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void processingInstruction(
             std::u16string_view aTarget ,
             std::u16string_view aData ) ;

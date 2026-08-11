@@ -94,7 +94,7 @@ void GCThread::execute()
             Py_XDECREF( mPyObject );
         }
     }
-    catch( const css::uno::RuntimeException & e )
+    catch( const cpo::uno::RuntimeException & e )
     {
         OString msg = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
         fprintf( stderr, "Leaking python objects bridged to UNO for reason %s\n",msg.getStr());

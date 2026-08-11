@@ -128,7 +128,7 @@ namespace connectivity::dbase
         void throwInvalidDbaseFormat();
         /// @throws css::sdbc::SQLException
         /// @throws css::container::ElementExistException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void renameImpl( const OUString& newName );
         void throwInvalidColumnType(TranslateId pErrorId, const OUString& _sColumnName);
 

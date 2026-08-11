@@ -32,7 +32,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -123,7 +123,7 @@ cpo::uno::Any Content::execute(
 {
     if ( command.Name != "getCasePreservingURL" )
     {
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     // If any non-empty segment starts with anything but '0', '1', or '2', fail;
     // otherwise, if the last non-empty segment starts with '1', add a final

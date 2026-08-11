@@ -105,7 +105,7 @@ public class ConstantInstanceProvider implements XInstanceProvider {
      * @return  the desired instance
      * @param   sInstanceName   the name of the desired instance
      */
-    public Object getInstance(String sInstanceName) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
+    public Object getInstance(String sInstanceName) throws com.sun.star.container.NoSuchElementException, cpo.uno.RuntimeException {
         Object result = sInstanceName.equals(_serviceName) ? _instance : null;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".getInstance(" + sInstanceName + "):" + result);

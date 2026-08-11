@@ -78,7 +78,7 @@ using NamedShapePairs = std::unordered_map<OUString, ShapePairs>;
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit            XmlFilterBase(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 

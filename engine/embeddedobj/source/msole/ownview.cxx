@@ -72,7 +72,7 @@ OwnView_Impl::OwnView_Impl( const uno::Reference< uno::XComponentContext >& xCon
 , m_bUseNative( false )
 {
     if ( !xContext.is() || !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_aTempFileURL = GetNewFilledTempFile_Impl( xInputStream, m_xContext );
 }
@@ -176,7 +176,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {
     if ( !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
             xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
@@ -246,7 +246,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
     uno::Reference < io::XOutputStream > xNativeOutTemp = xNativeTempFile->getOutputStream();
     uno::Reference < io::XInputStream > xNativeInTemp = xNativeTempFile->getInputStream();
     if ( !xNativeOutTemp.is() || !xNativeInTemp.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try {
         xNativeTempFile->setRemoveFile( false );
@@ -390,7 +390,7 @@ void OwnView_Impl::CreateNative()
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );
         if ( !xInStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInStream) };
         uno::Reference< container::XNameAccess > xNameAccess(

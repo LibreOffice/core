@@ -53,7 +53,7 @@ namespace svxform
                 if <arg>_rxManager</arg> is <NULL/>
             @throws css::lang::DisposedException
                 if the instance is already disposed
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if attaching as script listener to the manager fails with a RuntimeException itself
         */
         void registerEventAttacherManager(
@@ -68,7 +68,7 @@ namespace svxform
                 if <arg>_rxManager</arg> is <NULL/>
             @throws css::lang::DisposedException
                 if the instance is already disposed
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if removing as script listener from the manager fails with a RuntimeException itself
         */
         void revokeEventAttacherManager(

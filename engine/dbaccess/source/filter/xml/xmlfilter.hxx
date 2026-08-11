@@ -75,7 +75,7 @@ public:
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static OUString getImplementationName_Static();
 
     // helper class

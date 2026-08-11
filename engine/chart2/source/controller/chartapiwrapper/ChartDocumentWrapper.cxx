@@ -1026,7 +1026,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

@@ -126,7 +126,7 @@ protected:
            @short Notifies any
            <code>css::beans::XPropertyChangeListener</code>s.
 
-           May throw <code>css::uno::RuntimeException</code>
+           May throw <code>cpo::uno::RuntimeException</code>
            and <code>std::bad_alloc</code>.
 
            See <code>cppu::PropertySetMixinImpl::prepareSet</code>
@@ -168,7 +168,7 @@ protected:
 
        May throw
        <code>css::beans::PropertyVetoException</code>,
-       <code>css::uno::RuntimeException</code> (and
+       <code>cpo::uno::RuntimeException</code> (and
        <code>css::lang::DisposedException</code> in particular), and
        <code>std::bad_alloc</code>.
 
@@ -220,7 +220,7 @@ protected:
        notified of the disposing source.  Any subsequent calls to this function
        are ignored.
 
-       May throw <code>css::uno::RuntimeException</code> and
+       May throw <code>cpo::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
      */
     void dispose();
@@ -344,7 +344,7 @@ protected:
     /**
        @short The constructor.
 
-       May throw <code>css::uno::RuntimeException</code> and
+       May throw <code>cpo::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
 
        @param context  the component context used by this class template; must

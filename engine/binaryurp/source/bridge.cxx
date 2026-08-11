@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
@@ -191,10 +191,10 @@ Bridge::Bridge(
 {
     assert(factory.is() && connection.is());
     if (!binaryUno_.is()) {
-        throw css::uno::RuntimeException(u"URP: no binary UNO environment"_ustr);
+        throw cpo::uno::RuntimeException(u"URP: no binary UNO environment"_ustr);
     }
     if (!(cppToBinaryMapping_.is() && binaryToCppMapping_.is())) {
-        throw css::uno::RuntimeException(u"URP: no C++ UNO mapping"_ustr);
+        throw cpo::uno::RuntimeException(u"URP: no C++ UNO mapping"_ustr);
     }
     passive_.set();
     // coverity[uninit_member] - random_ is set in due course by the reader_ thread's state machine
@@ -328,7 +328,7 @@ void Bridge::terminate(bool final) {
                 listener->disposing(
                     css::lang::EventObject(
                         getXWeak()));
-            } catch (const css::uno::RuntimeException & e) {
+            } catch (const cpo::uno::RuntimeException & e) {
                 SAL_WARN("binaryurp", "caught " << e);
             }
         }
@@ -442,7 +442,7 @@ OUString Bridge::registerOutgoingInterface(
         } else {
             assert(stub != &newStub);
             if (j->second.references == SAL_MAX_UINT32) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"URP: stub reference count overflow"_ustr);
             }
             ++j->second.references;
@@ -484,11 +484,11 @@ void Bridge::releaseStub(
         std::lock_guard g(mutex_);
         Stubs::iterator i(stubs_.find(oid));
         if (i == stubs_.end()) {
-            throw css::uno::RuntimeException(u"URP: release unknown stub"_ustr);
+            throw cpo::uno::RuntimeException(u"URP: release unknown stub"_ustr);
         }
         Stub::iterator j(i->second.find(type));
         if (j == i->second.end()) {
-            throw css::uno::RuntimeException(u"URP: release unknown stub"_ustr);
+            throw cpo::uno::RuntimeException(u"URP: release unknown stub"_ustr);
         }
         assert(j->second.references > 0);
         --j->second.references;
@@ -527,7 +527,7 @@ void Bridge::revokeProxy(Proxy & proxy) {
 void Bridge::freeProxy(Proxy & proxy) {
     try {
         makeReleaseCall(proxy.getOid(), proxy.getType());
-    } catch (const css::uno::RuntimeException & e) {
+    } catch (const cpo::uno::RuntimeException & e) {
         SAL_INFO(
             "binaryurp", "caught runtime exception '" << e << '\'');
     } catch (const std::exception & e) {
@@ -631,7 +631,7 @@ void Bridge::handleRequestChangeReply(
 {
     try {
         throwException(exception, returnValue);
-    } catch (css::uno::RuntimeException & e) {
+    } catch (cpo::uno::RuntimeException & e) {
         // Before OOo 2.2, Java URP would throw a RuntimeException when
         // receiving a requestChange message (see i#35277 "Java URP: Support
         // Manipulation of Protocol Properties"):
@@ -668,7 +668,7 @@ void Bridge::handleRequestChangeReply(
         break;
     }
     if (n != exp) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"URP: requestChange reply with unexpected return value received"_ustr,
             getXWeak());
     }
@@ -751,7 +751,7 @@ void Bridge::handleRequestChangeRequest(
             break;
         }
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"URP: unexpected requestChange request received"_ustr,
             getXWeak());
     }
@@ -802,7 +802,7 @@ void Bridge::handleCommitChangeRequest(
         mode_ = MODE_NORMAL;
         break;
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"URP: unexpected commitChange request received"_ustr,
             getXWeak());
     }
@@ -847,13 +847,13 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     OUString const & sInstanceName)
 {
     if (sInstanceName.isEmpty()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"XBridge::getInstance sInstanceName must be non-empty"_ustr,
             getXWeak());
     }
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"XBridge::getInstance sInstanceName contains non-ASCII"
                 " character"_ustr);
         }
@@ -877,13 +877,13 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
         return {};
     }
     if (!t.equals(ifc)) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "initial object queryInterface for OID \"" + sInstanceName + "\" returned ANY of type "
             + OUString::unacquired(&t.get()->pTypeName));
     }
     auto const val = *static_cast< uno_Interface ** >(ret.getValue(ifc));
     if (val == nullptr) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "initial object queryInterface for OID \"" + sInstanceName
             + "\" returned null css.uno.XInterface ANY");
     }

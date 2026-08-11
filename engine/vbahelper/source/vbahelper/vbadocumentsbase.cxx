@@ -254,7 +254,7 @@ cpo::uno::Any VbaDocumentsBase::createDocument()
     else if( meDocType == EXCEL_DOCUMENT )
         sURL = u"private:factory/scalc"_ustr;
     else
-        throw uno::RuntimeException( u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
 
     // prepare the media descriptor
     comphelper::SequenceAsHashMap aMediaDesc;

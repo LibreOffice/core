@@ -15,7 +15,7 @@
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
             exec->execute(msURI, OUString(), flags);
         } catch (css::security::AccessControlException & e) {
             if (e.LackingPermission.hasValue() || flags == 0) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "unexpected AccessControlException: " + e.Message);
             }
             SolarMutexGuard g;
@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
             }
         } catch (css::lang::IllegalArgumentException & e) {
             if (e.ArgumentPosition != 0) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "unexpected IllegalArgumentException: " + e.Message);
             }
             SolarMutexGuard g;

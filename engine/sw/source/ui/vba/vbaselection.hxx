@@ -42,24 +42,24 @@ private:
 
 private:
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection );
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::text::XTextRange > GetSelectedRange();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void GetSelectedCellRange( OUString& sTLName, OUString& sBRName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     rtl::Reference< SwXTextTable > GetXTextTable() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool IsInTable() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool HasSelection();
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaSelection() override;
 

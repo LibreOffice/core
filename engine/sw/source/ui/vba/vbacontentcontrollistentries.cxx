@@ -51,7 +51,7 @@ private:
     std::shared_ptr<SwContentControl> m_pCC;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ContentControlListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                                             uno::Reference<uno::XComponentContext> xContext,
                                             std::shared_ptr<SwContentControl> pCC)

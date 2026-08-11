@@ -431,7 +431,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
         {
             maData = xResult->getResults();
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             mbResultsError = true;
         }

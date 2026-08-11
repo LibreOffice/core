@@ -132,7 +132,7 @@ public:
     virtual void resetStyles2(
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void applyStyles(
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 

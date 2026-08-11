@@ -201,7 +201,7 @@ XMLSignature_AppleImpl::generate(const uno::Reference<XXMLSignatureTemplate>& aT
                                  const uno::Reference<XSecurityEnvironment>& aEnvironment)
 {
     if (!aTemplate.is() || !aEnvironment.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SecurityEnvironment_AppleImpl* pSecEnv
         = dynamic_cast<SecurityEnvironment_AppleImpl*>(aEnvironment.get());
@@ -213,17 +213,17 @@ XMLSignature_AppleImpl::generate(const uno::Reference<XXMLSignatureTemplate>& aT
 
     CFRef<SecKeyRef> aPrivateKey = pSecEnv->getAppleSigningCertificate()->copyPrivateKey();
     if (!aPrivateKey.is())
-        throw uno::RuntimeException(u"Failed to access the Keychain private key"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to access the Keychain private key"_ustr);
 
     //Get the xml node
     uno::Reference<XXMLElementWrapper> xElement = aTemplate->getTemplate();
     if (!xElement.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     XMLElementWrapper_XmlSecImpl* pElement
         = dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xElement.get());
     if (!pElement)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xmlNodePtr pNode = pElement->getNativeElement();
 
@@ -233,7 +233,7 @@ XMLSignature_AppleImpl::generate(const uno::Reference<XXMLSignatureTemplate>& aT
     {
         //Register the stream input callbacks into libxml2
         if (xmlRegisterStreamInputCallbacks(xUriBinding) < 0)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 
     setErrorRecorder();

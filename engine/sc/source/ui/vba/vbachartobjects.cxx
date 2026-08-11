@@ -66,7 +66,7 @@ public:
         {
             throw;
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -106,10 +106,10 @@ ScVbaChartObjects::getChartObjectNames() const
         ScCellRangesBase* pUno = dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = nullptr;
         if ( !pUno )
-            throw uno::RuntimeException(u"Failed to obtain the impl class from the drawpage"_ustr );
+            throw cpo::uno::RuntimeException(u"Failed to obtain the impl class from the drawpage"_ustr );
         pDocShell = pUno->GetDocShell();
         if ( !pDocShell )
-            throw uno::RuntimeException(u"Failed to obtain the docshell implclass"_ustr );
+            throw cpo::uno::RuntimeException(u"Failed to obtain the docshell implclass"_ustr );
 
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = pDocShell->GetModel()->getSheets();
         std::vector< OUString > aChartNamesVector;

@@ -61,7 +61,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool nameExists( const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab );
 };
 

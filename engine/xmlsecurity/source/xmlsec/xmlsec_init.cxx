@@ -12,7 +12,7 @@
 #include <xmlsec/xmlsec_init.hxx>
 
 #include <xmlsec/xmlsec.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <xmlsec/xmlstreamio.hxx>
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
 #include <xmlsec/mscng/crypto.h>
@@ -27,20 +27,20 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
-        throw RuntimeException(u"Failed to initialize XML Security (xmlsec) library"_ustr) ;
+        throw cpo::uno::RuntimeException(u"Failed to initialize XML Security (xmlsec) library"_ustr) ;
     }
 
     //Init xmlsec crypto engine library
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
     if( xmlSecMSCngInit() < 0 ) {
         xmlSecShutdown();
-        throw RuntimeException("Failed to initialize XML Security (xmlsec) for Microsoft crypto engine library");
+        throw cpo::uno::RuntimeException("Failed to initialize XML Security (xmlsec) for Microsoft crypto engine library");
     }
 #endif
 #ifdef XMLSEC_CRYPTO_NSS
     if( xmlSecNssInit() < 0 ) {
         xmlSecShutdown();
-        throw RuntimeException(u"Failed to Initialize XML Security (xmlsec) NSS crypto engine library"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to Initialize XML Security (xmlsec) NSS crypto engine library"_ustr);
     }
 #endif
 
@@ -53,7 +53,7 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
         xmlSecNssShutdown();
 #endif
         xmlSecShutdown() ;
-        throw RuntimeException(u"Failed to Initialize XML Security (xmlsec) NSS crypto engine library"_ustr) ;
+        throw cpo::uno::RuntimeException(u"Failed to Initialize XML Security (xmlsec) NSS crypto engine library"_ustr) ;
     }
 }
 

@@ -267,7 +267,7 @@ class FieldCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAc
     rtl::Reference< SwXTextDocument > mxModel;
     rtl::Reference< SwXTextFieldTypes > mxEnumerationAccess;
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     FieldCollectionHelper( uno::Reference< XHelperInterface > xParent,
                            uno::Reference< uno::XComponentContext > xContext,
                            const rtl::Reference< SwXTextDocument >& xModel )
@@ -352,7 +352,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException(u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     SwVbaRange& rVbaRange = dynamic_cast<SwVbaRange&>(*Range);
@@ -458,7 +458,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     SAL_INFO("sw.vba", "SwVbaFields::Create_Field_DocProperty, the document property name is " << aDocProperty );
     if( aDocProperty.isEmpty() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     bool bCustom = true;
@@ -481,7 +481,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException(u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     uno::Reference< text::XTextField > xTextField( mxModel->createInstance( sFieldService ), uno::UNO_QUERY_THROW );

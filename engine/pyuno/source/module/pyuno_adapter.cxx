@@ -36,7 +36,7 @@ using com::sun::star::beans::XIntrospectionAccess;
 using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using cpo::uno::Sequence;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using com::sun::star::uno::XInterface;
 using cpo::uno::Type;
 using com::sun::star::lang::XUnoTunnel;

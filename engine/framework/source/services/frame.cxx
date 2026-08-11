@@ -752,7 +752,7 @@ void XFrameImpl::initialize( const css::uno::Reference< css::awt::XWindow >& xWi
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                     u"XFrameImpl::initialize() called without a valid container window reference."_ustr,
                     static_cast< css::frame::XFrame* >(this));
 
@@ -764,7 +764,7 @@ void XFrameImpl::initialize( const css::uno::Reference< css::awt::XWindow >& xWi
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
     if ( m_xContainerWindow.is() )
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"XFrameImpl::initialized() is called more than once, which is not useful nor allowed."_ustr,
                 static_cast< css::frame::XFrame* >(this));
 
@@ -1676,7 +1676,7 @@ void XFrameImpl::close( bool bDeliverOwnership )
             {
                 static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
             }
-            catch( const css::uno::RuntimeException& )
+            catch( const cpo::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -1710,7 +1710,7 @@ void XFrameImpl::close( bool bDeliverOwnership )
             {
                 static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
             }
-            catch( const css::uno::RuntimeException& )
+            catch( const cpo::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -2866,7 +2866,7 @@ bool XFrameImpl::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
         {
             pListener.next()->vetoableChange(aEvent);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { pListener.remove(); }
         catch(const css::beans::PropertyVetoException&)
             { return true; }
@@ -2892,7 +2892,7 @@ void XFrameImpl::impl_notifyChangeListener(const css::beans::PropertyChangeEvent
         {
             pListener.next()->propertyChange(aEvent);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { pListener.remove(); }
     }
 }
@@ -2944,7 +2944,7 @@ void XFrameImpl::implts_sendFrameActionEvent( const css::frame::FrameAction& aAc
         {
             static_cast<css::frame::XFrameActionListener*>(aIterator.next())->frameAction( aFrameActionEvent );
         }
-        catch( const css::uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             aIterator.remove();
         }
@@ -3214,7 +3214,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
         xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, cpo::uno::Any(bState));
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

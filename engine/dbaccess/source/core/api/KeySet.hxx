@@ -140,7 +140,7 @@ namespace dbaccess
                                        sal_Int32 _nScale );
         OUStringBuffer createKeyFilter( );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool doTryRefetch_throw();
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow, const ORowSetRow& _rOriginalRow, const OUString& i_sSQL, std::u16string_view i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions = std::vector<sal_Int32>());
@@ -199,7 +199,7 @@ namespace dbaccess
         virtual bool absolute( sal_Int32 row ) override;
         virtual bool previous(  ) override;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void ensureRowForData(  );
         virtual void refreshRow(  ) override;
         // css::sdbcx::XRowLocate

@@ -844,7 +844,7 @@ bool UniversalContentBroker::getContentProviderData(
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION( "ucb", "" );
         return false;

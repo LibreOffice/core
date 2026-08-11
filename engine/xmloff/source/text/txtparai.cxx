@@ -1913,7 +1913,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         xTxtImport->GetText()->insertTextContent(
                             xAttrCursor, xContent, true );
                     }
-                    catch (uno::RuntimeException const&)
+                    catch (cpo::uno::RuntimeException const&)
                     {
                         TOOLS_INFO_EXCEPTION("xmloff.text", "could not insert index mark, presumably in editengine text");
                     }

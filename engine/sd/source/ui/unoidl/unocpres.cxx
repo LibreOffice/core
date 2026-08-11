@@ -311,7 +311,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
 
     // no list, no cookies
     if( nullptr == pList)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // do we have a container::XIndexContainer?
     SdXCustomPresentation* pXShow = nullptr;

@@ -187,7 +187,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     const cpo::uno::Sequence< beans::PropertyValue >& aArgs)
 {
     if(!m_pView)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 #if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) aArgs;
     if (false)
@@ -246,7 +246,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         }
     }
     else
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
 }
 
@@ -254,7 +254,7 @@ void SwXDispatch::addStatusListener(
     const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL )
 {
     if(!m_pView)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     ShellMode eMode = m_pView->GetShellMode();
     bool bEnable = ShellMode::Text == eMode  ||
                        ShellMode::ListText == eMode  ||

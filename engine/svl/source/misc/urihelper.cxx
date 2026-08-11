@@ -36,7 +36,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -153,7 +153,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
                        css::uno::Reference< css::ucb::XCommandEnvironment >())
                >>= *normalized);
         OSL_ASSERT(ok);
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (css::ucb::UnsupportedCommandException &) {
         return Result::GeneralFailure;

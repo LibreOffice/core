@@ -26,7 +26,7 @@
 #include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <rtl/byteseq.hxx>
@@ -396,7 +396,7 @@ sal_uInt64 Unmarshal::read64() {
 OUString Unmarshal::readString() {
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"binaryurp::Unmarshal: string size too large"_ustr);
     }
     check(static_cast< sal_Int32 >(n));
@@ -419,7 +419,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     assert(type.is() && type.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"binaryurp::Unmarshal: sequence size too large"_ustr);
     }
     if (n == 0) {
@@ -447,7 +447,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
         static_cast< sal_uInt64 >(ctd.get()->nSize);
         // sal_uInt32 * sal_Int32 -> sal_uInt64 cannot overflow
     if (size > SAL_MAX_SIZE - SAL_SEQUENCE_HEADER_SIZE) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"binaryurp::Unmarshal: sequence size too large"_ustr);
     }
     void * buf = allocate(

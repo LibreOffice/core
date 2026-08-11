@@ -41,7 +41,7 @@ public:
     virtual ~TableColumn() override;
 
     void dispose();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void throwIfDisposed() const;
 
     TableColumn& operator=( const TableColumn& );

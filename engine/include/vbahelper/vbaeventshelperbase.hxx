@@ -132,7 +132,7 @@ protected:
     /** Derived classes do additional preparations and return whether the
         event handler has to be called.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual bool implPrepareEvent(
         EventQueue& rEventQueue,
@@ -142,7 +142,7 @@ protected:
     /** Derived classes have to return the argument list for the specified VBA event handler.
 
         @throws css::lang::IllegalArgumentException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual cpo::uno::Sequence< cpo::uno::Any > implBuildArgumentList(
         const EventHandlerInfo& rInfo,
@@ -151,7 +151,7 @@ protected:
     /** Derived classes may do additional postprocessing. Called even if the
         event handler does not exist, or if an error occurred during execution.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual void implPostProcessEvent(
         EventQueue& rEventQueue,
@@ -161,7 +161,7 @@ protected:
     /** Derived classes have to return the name of the Basic document module.
 
         @throws css::lang::IllegalArgumentException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual OUString implGetDocumentModuleName(
         const EventHandlerInfo& rInfo,
@@ -186,7 +186,7 @@ private:
 
 
         @throws css::lang::IllegalArgumentException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     OUString getEventHandlerPath(
         const EventHandlerInfo& rInfo,
@@ -194,19 +194,19 @@ private:
 
     /** On first call, accesses the Basic library containing the VBA source code.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void ensureVBALibrary();
 
     /** Returns the type of the Basic module with the specified name.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     sal_Int32 getModuleType( const OUString& rModuleName );
 
     /** Updates the map containing paths to event handlers for a Basic module.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     ModulePathMap& updateModulePathMap( const OUString& rModuleName );
 

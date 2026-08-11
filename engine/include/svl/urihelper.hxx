@@ -80,7 +80,7 @@ SVL_DLLPUBLIC Link<OUString *, bool> const & GetMaybeFileHdl();
 
    @exception std::bad_alloc if an out-of-memory condition occurs
 
-   @exception css::uno::RuntimeException if any error occurs
+   @exception cpo::uno::RuntimeException if any error occurs
  */
 SVL_DLLPUBLIC css::uno::Reference< css::uri::XUriReference >
 normalizedMakeRelative(
@@ -105,7 +105,7 @@ normalizedMakeRelative(
 
    @exception std::bad_alloc if an out-of-memory condition occurs
 
-   @exception css::uno::RuntimeException if any error occurs
+   @exception cpo::uno::RuntimeException if any error occurs
 
    @deprecated
    No code should rely on the default component context.

@@ -50,9 +50,9 @@ namespace comphelper
     public:
         OAccessibleKeyBindingHelper();
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void AddKeyBinding( const cpo::uno::Sequence< css::awt::KeyStroke >& rKeyBinding );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void AddKeyBinding( const css::awt::KeyStroke& rKeyStroke );
 
         // XAccessibleKeyBinding

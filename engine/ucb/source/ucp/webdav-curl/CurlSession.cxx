@@ -1258,7 +1258,7 @@ auto CurlProcessor::ProcessRequest(
     if (HostFilter::isForbidden(rURI.GetHost()))
     {
         SAL_WARN("ucb.ucp.webdav.curl", "Access denied to host: " << rURI.GetHost());
-        throw uno::RuntimeException(u"access to host denied"_ustr);
+        throw cpo::uno::RuntimeException(u"access to host denied"_ustr);
     }
 
     if (pEnv)
@@ -1272,7 +1272,7 @@ auto CurlProcessor::ProcessRequest(
                 curl_slist_append(pRequestHeaderList.release(), utf8Header.getStr()));
             if (!pRequestHeaderList)
             {
-                throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+                throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
             }
         }
     }
@@ -1286,7 +1286,7 @@ auto CurlProcessor::ProcessRequest(
             auto const len(xSeekable->getLength() - xSeekable->getPosition());
             if ((**pxInStream).readBytes(data, len) != len)
             {
-                throw uno::RuntimeException(u"short readBytes"_ustr);
+                throw cpo::uno::RuntimeException(u"short readBytes"_ustr);
             }
         }
         else
@@ -1555,7 +1555,7 @@ auto CurlProcessor::ProcessRequest(
                             pRequestHeaderList.release(), "X-FORMS_BASED_AUTH_ACCEPTED: f"));
                         if (!pRequestHeaderList)
                         {
-                            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+                            throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
                         }
                     }
                         [[fallthrough]]; // SP, no cookie, or cookie failed: try NTLM/Negotiate
@@ -1798,7 +1798,7 @@ auto CurlProcessor::PropFind(
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString depth;
     switch (nDepth)
@@ -1818,7 +1818,7 @@ auto CurlProcessor::PropFind(
     pList.reset(curl_slist_append(pList.release(), depth.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
@@ -1960,7 +1960,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     // generate XML document for PROPPATCH
@@ -2158,7 +2158,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
     uno::Reference<io::XSeekable> const xSeekable(rxInStream, uno::UNO_QUERY);
     if (!xSeekable.is())
     {
-        throw uno::RuntimeException(u"TODO: not seekable"_ustr);
+        throw cpo::uno::RuntimeException(u"TODO: not seekable"_ustr);
     }
     curl_off_t const len(xSeekable->getLength() - xSeekable->getPosition());
 
@@ -2178,7 +2178,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
-            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+            throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
         }
     }
 
@@ -2207,20 +2207,20 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8ContentType("Content-Type: "
                                   + OUStringToOString(rContentType, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8ContentType.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Referer("Referer: " + OUStringToOString(rReferer, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8Referer.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
@@ -2255,20 +2255,20 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8ContentType("Content-Type: "
                                   + OUStringToOString(rContentType, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8ContentType.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Referer("Referer: " + OUStringToOString(rReferer, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8Referer.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
@@ -2303,13 +2303,13 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, std::u16string_view rSourc
         curl_slist_append(nullptr, utf8Destination.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Overwrite(OString::Concat("Overwrite: ") + (isOverwrite ? "T" : "F"));
     pList.reset(curl_slist_append(pList.release(), utf8Overwrite.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
@@ -2485,7 +2485,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString depth;
     switch (rLock.Depth)
@@ -2505,7 +2505,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), depth.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString timeout;
     switch (rLock.Timeout)
@@ -2524,7 +2524,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), timeout.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     auto const acquiredLocks
@@ -2553,7 +2553,7 @@ auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
         curl_slist_append(nullptr, utf8LockToken.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+        throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "UNLOCK",
@@ -2596,7 +2596,7 @@ auto CurlSession::NonInteractive_LOCK(OUString const& rURI, ::std::u16string_vie
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
-            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
+            throw cpo::uno::RuntimeException(u"curl_slist_append failed"_ustr);
         }
 
         auto const acquiredLocks

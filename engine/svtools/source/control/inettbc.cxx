@@ -499,7 +499,7 @@ void SvtMatchContext_Impl::doExecute()
                                 if (proc2.is()) {
                                     try {
                                         proc2->releaseCommandIdentifier(id);
-                                    } catch (css::uno::RuntimeException &) {
+                                    } catch (cpo::uno::RuntimeException &) {
                                         TOOLS_WARN_EXCEPTION("svtools.control", "ignoring");
                                     }
                                 }

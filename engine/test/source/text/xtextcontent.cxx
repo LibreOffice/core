@@ -45,7 +45,7 @@ void XTextContent::testAttach()
         if (bAttachSupported)
             CPPUNIT_ASSERT(false);
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         bool bAttachSupported = isAttachSupported();
         if (bAttachSupported)

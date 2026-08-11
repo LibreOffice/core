@@ -947,7 +947,7 @@ void ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
                 {
                     aListenerArray[i]->functionExecute( aToolbarName, aCommand );
                 }
-                catch (const uno::RuntimeException&)
+                catch (const cpo::uno::RuntimeException&)
                 {
                     throw;
                 }
@@ -1258,7 +1258,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -1339,7 +1339,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 // possible that all elements have been disposed!
                 xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
             }
-            catch (const uno::RuntimeException&)
+            catch (const cpo::uno::RuntimeException&)
             {
                 throw;
             }

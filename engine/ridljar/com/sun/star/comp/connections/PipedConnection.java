@@ -89,7 +89,7 @@ public class PipedConnection implements XConnection {
      *
      * @param    args   Another side could be in index 0.
      */
-    public PipedConnection(Object args[]) throws com.sun.star.uno.RuntimeException {
+    public PipedConnection(Object args[]) throws cpo.uno.RuntimeException {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - instantiated");
 
         _otherSide = (args.length == 1) ? (PipedConnection)args[0] : null;
@@ -158,7 +158,7 @@ public class PipedConnection implements XConnection {
      *
      * @see     com.sun.star.connection.XConnection#read
      */
-    public synchronized int read(/*OUT*/byte[][] aReadBytes, int nBytesToRead) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public synchronized int read(/*OUT*/byte[][] aReadBytes, int nBytesToRead) throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
         aReadBytes[0] = new byte[nBytesToRead];
 
         if(DEBUG) System.err.println("##### PipedConnection.read - bytes:" + nBytesToRead + " at:" + _in);
@@ -212,7 +212,7 @@ public class PipedConnection implements XConnection {
      * @param   aData the bytes to write.
      * @see     com.sun.star.connection.XConnection#write
      */
-    public void write(byte aData[]) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public void write(byte aData[]) throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
         _otherSide.receive(aData);
     }
 
@@ -222,7 +222,7 @@ public class PipedConnection implements XConnection {
      *
      * @see     com.sun.star.connection.XConnection#flush
      */
-    public void flush() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public void flush() throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
         synchronized(_otherSide) {
             _otherSide.notify();
         }
@@ -233,7 +233,7 @@ public class PipedConnection implements XConnection {
      *
      * @see     com.sun.star.connection.XConnection#close()
      */
-    public synchronized void close() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public synchronized void close() throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
         if(!_closed) {
             _closed = true;
 
@@ -249,7 +249,7 @@ public class PipedConnection implements XConnection {
      * @return  the description.
      * @see     com.sun.star.connection.XConnection#getDescription
      */
-    public String getDescription() throws com.sun.star.uno.RuntimeException {
+    public String getDescription() throws cpo.uno.RuntimeException {
         return getClass().getName();
     }
 

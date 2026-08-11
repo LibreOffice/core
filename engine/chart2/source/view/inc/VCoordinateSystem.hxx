@@ -52,7 +52,7 @@ public:
     static std::unique_ptr<VCoordinateSystem> createCoordinateSystem( const rtl::Reference<
                                 ::chart::BaseCoordinateSystem >& xCooSysModel );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void initPlottingTargets(
                   const rtl::Reference< SvxShapeGroupAnyD >& xLogicTarget
                 , const rtl::Reference< SvxShapeGroupAnyD >& xFinalTarget

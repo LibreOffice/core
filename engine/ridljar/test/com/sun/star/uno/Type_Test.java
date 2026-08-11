@@ -59,8 +59,8 @@ public final class Type_Test {
             new Type("cpo.uno.Exception", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "exception RuntimeException",
-            com.sun.star.uno.RuntimeException.class,
-            new Type("com.sun.star.uno.RuntimeException", TypeClass.EXCEPTION).getZClass());
+            cpo.uno.RuntimeException.class,
+            new Type("cpo.uno.RuntimeException", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "exception DeploymentException", DeploymentException.class,
             new Type("com.sun.star.uno.DeploymentException", TypeClass.EXCEPTION).getZClass());
@@ -84,7 +84,7 @@ public final class Type_Test {
     @Test public void testIsSupertypeOf() {
         Type ifc = new Type(com.sun.star.uno.XInterface.class);
         Type ctx = new Type(com.sun.star.uno.XComponentContext.class);
-        Type exc = new Type(com.sun.star.uno.RuntimeException.class);
+        Type exc = new Type(cpo.uno.RuntimeException.class);
         assertTrue("LONG :> LONG", Type.LONG.isSupertypeOf(Type.LONG));
         assertFalse("not ANY :> XInterface", Type.ANY.isSupertypeOf(ifc));
         assertTrue("ANY :> ANY", Type.ANY.isSupertypeOf(Type.ANY));

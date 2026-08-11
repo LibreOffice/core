@@ -29,7 +29,7 @@ class WordPerfectImportFilter
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxDoc;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool importImpl(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:

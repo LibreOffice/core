@@ -100,7 +100,7 @@ private:
 
     void    SetPositions(SwPaM const& rPam);
     //TODO: new exception type for protected content
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void    DeleteAndInsert(
                 std::u16string_view aText, ::sw::DeleteAndInsertMode eMode);
     void    Invalidate();

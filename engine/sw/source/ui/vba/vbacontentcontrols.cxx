@@ -133,7 +133,7 @@ private:
     std::shared_ptr<SwContentControl> m_pCache;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ContentControlCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                                    uno::Reference<uno::XComponentContext> xContext,
                                    rtl::Reference<SwXTextDocument> xTextDocument,

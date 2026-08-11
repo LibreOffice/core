@@ -27,7 +27,7 @@ private:
     std::shared_ptr<SwContentControl> m_pCC;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaContentControl(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                         const css::uno::Reference<css::uno::XComponentContext>& rContext,
                         const rtl::Reference<SwXTextDocument>& xTextDocument,

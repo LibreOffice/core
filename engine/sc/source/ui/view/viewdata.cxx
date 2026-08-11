@@ -3883,7 +3883,7 @@ void ScViewData::WriteUserDataSequence(cpo::uno::Sequence <beans::PropertyValue>
             {
                 OSL_FAIL("seems there are two tables with the same name");
             }
-            catch ( uno::RuntimeException& )
+            catch ( cpo::uno::RuntimeException& )
             {
                 OSL_FAIL("something went wrong");
             }

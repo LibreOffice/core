@@ -127,7 +127,7 @@ Reference<css::ui::XUIElement> ChartPanelFactory::createUIElement (
                 std::move(xPanel),
                 css::ui::LayoutSize(-1,-1,-1));
     }
-    catch (const css::uno::RuntimeException &)
+    catch (const cpo::uno::RuntimeException &)
     {
         throw;
     }

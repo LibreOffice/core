@@ -135,20 +135,20 @@ protected:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetPropertyValues_Impl(
         const cpo::uno::Sequence< OUString >& aPropertyNames,
         const cpo::uno::Sequence< cpo::uno::Any >& aValues );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl(
         const cpo::uno::Sequence< OUString >& aPropertyNames );
 
     void GetPropertyValue( cpo::uno::Any &rVal,
                 const SfxItemPropertyMapEntry& rEntry, SwUnoCursor *pUnoCursor, std::unique_ptr<SfxItemSet> &pSet );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> GetPropertyValuesTolerant_Impl(
         const cpo::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly );
 

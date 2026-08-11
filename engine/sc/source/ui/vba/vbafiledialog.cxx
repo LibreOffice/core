@@ -146,7 +146,7 @@ sal_Int32 ScVbaFileDialog::Show()
             }
             break;
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 
     m_xItems = css::uno::Reference< ov::excel::XFileDialogSelectedItems >(

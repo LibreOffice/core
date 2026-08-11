@@ -645,12 +645,12 @@ SfxDocumentMetaData::getURLProperties(
 
 // return the text of the (hopefully unique, i.e., normalize first!) text
 // node _below_ the given node
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 OUString
 getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
 {
     if (!i_xNode.is())
-        throw css::uno::RuntimeException(u"SfxDocumentMetaData::getNodeText: argument is null"_ustr, i_xNode);
+        throw cpo::uno::RuntimeException(u"SfxDocumentMetaData::getNodeText: argument is null"_ustr, i_xNode);
     for (css::uno::Reference<css::xml::dom::XNode> c = i_xNode->getFirstChild();
             c.is();
             c = c->getNextSibling()) {
@@ -667,7 +667,7 @@ getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
 
 OUString
 SfxDocumentMetaData::getMetaText(std::unique_lock<std::mutex>& rGuard, const char* i_name) const
-//        throw (css::uno::RuntimeException)
+//        throw (cpo::uno::RuntimeException)
 {
     checkInit(rGuard);
 
@@ -680,7 +680,7 @@ SfxDocumentMetaData::getMetaText(std::unique_lock<std::mutex>& rGuard, const cha
 bool
 SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUString& name,
         const OUString & i_rValue)
-    // throw (css::uno::RuntimeException)
+    // throw (cpo::uno::RuntimeException)
 {
     checkInit(rGuard);
 
@@ -734,7 +734,7 @@ SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUS
 void
 SfxDocumentMetaData::setMetaTextAndNotify(const OUString & i_name,
         const OUString & i_rValue)
-    // throw (css::uno::RuntimeException)
+    // throw (cpo::uno::RuntimeException)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaText(g, i_name, i_rValue)) {
@@ -745,7 +745,7 @@ SfxDocumentMetaData::setMetaTextAndNotify(const OUString & i_name,
 
 OUString
 SfxDocumentMetaData::getMetaAttr(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& name, const OUString& i_attr) const
-//        throw (css::uno::RuntimeException)
+//        throw (cpo::uno::RuntimeException)
 {
     assert(m_meta.find(name) != m_meta.end());
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
@@ -761,7 +761,7 @@ SfxDocumentMetaData::getMetaAttr(std::unique_lock<std::mutex>& /*rGuard*/, const
 
 cpo::uno::Sequence< OUString>
 SfxDocumentMetaData::getMetaList(std::unique_lock<std::mutex>& rGuard, const char* i_name) const
-//        throw (css::uno::RuntimeException)
+//        throw (cpo::uno::RuntimeException)
 {
     checkInit(rGuard);
     OUString name = OUString::createFromAscii(i_name);
@@ -778,7 +778,7 @@ bool
 SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUString& name,
         const cpo::uno::Sequence<OUString> & i_rValue,
         AttrVector const* i_pAttrs)
-    // throw (css::uno::RuntimeException)
+    // throw (cpo::uno::RuntimeException)
 {
     checkInit(rGuard);
     assert((i_pAttrs == nullptr) ||
@@ -1053,22 +1053,22 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes(std::unique_lock<std::m
 
 // create empty DOM tree (XDocument)
 css::uno::Reference<css::xml::dom::XDocument>
-SfxDocumentMetaData::createDOM() const // throw (css::uno::RuntimeException)
+SfxDocumentMetaData::createDOM() const // throw (cpo::uno::RuntimeException)
 {
     css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder( css::xml::dom::DocumentBuilder::create(m_xContext) );
     css::uno::Reference<css::xml::dom::XDocument> xDoc = xBuilder->newDocument();
     if (!xDoc.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"SfxDocumentMetaData::createDOM: cannot create new document"_ustr,
                 *const_cast<SfxDocumentMetaData*>(this));
     return xDoc;
 }
 
 void
-SfxDocumentMetaData::checkInit(std::unique_lock<std::mutex>& /*rGuard*/) const // throw (css::uno::RuntimeException)
+SfxDocumentMetaData::checkInit(std::unique_lock<std::mutex>& /*rGuard*/) const // throw (cpo::uno::RuntimeException)
 {
     if (!m_isInitialized) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"SfxDocumentMetaData::checkInit: not initialized"_ustr,
                 *const_cast<SfxDocumentMetaData*>(this));
     }
@@ -1140,7 +1140,7 @@ void SfxDocumentMetaData::init(
         const css::uno::Reference<css::xml::dom::XDocument>& i_xDoc)
 {
     if (!i_xDoc.is())
-        throw css::uno::RuntimeException(u"SfxDocumentMetaData::init: no DOM tree given"_ustr, *this);
+        throw cpo::uno::RuntimeException(u"SfxDocumentMetaData::init: no DOM tree given"_ustr, *this);
 
     m_isInitialized = false;
     m_xDoc = i_xDoc;
@@ -1912,10 +1912,10 @@ SfxDocumentMetaData::loadFromStorage(
         xStorage->openStreamElement(
             s_meta,
             css::embed::ElementModes::READ) );
-    if (!xStream.is()) throw css::uno::RuntimeException();
+    if (!xStream.is()) throw cpo::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
         xStream->getInputStream();
-    if (!xInStream.is()) throw css::uno::RuntimeException();
+    if (!xInStream.is()) throw cpo::uno::RuntimeException();
 
     // create DOM parser service
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
@@ -1990,7 +1990,7 @@ SfxDocumentMetaData::storeToStorage(
         xStorage->openStreamElement(s_meta,
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
-    if (!xStream.is()) throw css::uno::RuntimeException();
+    if (!xStream.is()) throw cpo::uno::RuntimeException();
     css::uno::Reference< css::beans::XPropertySet > xStreamProps(xStream,
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
@@ -2004,7 +2004,7 @@ SfxDocumentMetaData::storeToStorage(
         cpo::uno::Any(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
-    if (!xOutStream.is()) throw css::uno::RuntimeException();
+    if (!xOutStream.is()) throw cpo::uno::RuntimeException();
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
     css::uno::Reference<css::xml::sax::XWriter> xSaxWriter(
@@ -2065,7 +2065,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
             xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                             URL, css::embed::ElementModes::READ, m_xContext);
         }
-    } catch (const css::uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (const css::io::IOException &) {
         throw;
@@ -2077,7 +2077,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
                 anyEx);
     }
     if (!xStorage.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"SfxDocumentMetaData::loadFromMedium: cannot get Storage"_ustr,
                 *this);
     }
@@ -2098,7 +2098,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 
 
     if (!xStorage.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"SfxDocumentMetaData::storeToMedium: cannot get Storage"_ustr,
                 *this);
     }
@@ -2184,7 +2184,7 @@ SfxDocumentMetaData::createClone()
         g.unlock();
         std::unique_lock g2(pNew->m_aMutex);
         pNew->init(g2, xDoc);
-    } catch (const css::uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -2226,7 +2226,7 @@ void SfxDocumentMetaData::setModified( bool bModified )
             std::unique_lock g(m_aMutex);
             m_NotifyListeners.notifyEach(g, &css::util::XModifyListener::modified,
                 event);
-        } catch (const css::uno::RuntimeException &) {
+        } catch (const cpo::uno::RuntimeException &) {
             throw;
         } catch (const cpo::uno::Exception &) {
             // ignore

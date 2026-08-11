@@ -126,11 +126,11 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
     {
         auto itrNX = rParameters.find(u"X"_ustr);
         if (itrNX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter X"_ustr);
 
         auto itrNY = rParameters.find(u"Y"_ustr);
         if (itrNY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter Y"_ustr);
 
         tools::Long nX = itrNX->second.toInt32();
         tools::Long nY = itrNY->second.toInt32();
@@ -141,11 +141,11 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
     {
         auto itrNX = rParameters.find(u"X"_ustr);
         if (itrNX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter X"_ustr);
 
         auto itrNY = rParameters.find(u"Y"_ustr);
         if (itrNY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter Y"_ustr);
 
         tools::Long nX = itrNX->second.toInt32();
         tools::Long nY = itrNY->second.toInt32();
@@ -153,12 +153,12 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
 
         auto itrFracX = rParameters.find(u"FRAC_X"_ustr);
         if (itrFracX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
         double nFracX = itrFracX->second.toDouble();
 
         auto itrFracY = rParameters.find(u"FRAC_Y"_ustr);
         if (itrFracY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
         double nFracY = itrFracY->second.toDouble();
         pObj->Resize(aPos, nFracX, nFracY);
     }
@@ -168,11 +168,11 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
         // anymore, see comment at SdrObject::NbcCrop
         auto itrNX = rParameters.find(u"X"_ustr);
         if (itrNX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter X"_ustr);
 
         auto itrNY = rParameters.find(u"Y"_ustr);
         if (itrNY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter Y"_ustr);
 
         const double fX(itrNX->second.toDouble());
         const double fY(itrNY->second.toDouble());
@@ -180,12 +180,12 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
 
         auto itrFracX = rParameters.find(u"FRAC_X"_ustr);
         if (itrFracX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
         const double fFracX(itrFracX->second.toDouble());
 
         auto itrFracY = rParameters.find(u"FRAC_Y"_ustr);
         if (itrFracY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
         const double fFracY(itrFracY->second.toDouble());
 
         pObj->Crop(aPos, fFracX, fFracY);
@@ -194,11 +194,11 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
     {
         auto itrNX = rParameters.find(u"X"_ustr);
         if (itrNX == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter X"_ustr);
 
         auto itrNY = rParameters.find(u"Y"_ustr);
         if (itrNY == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter Y"_ustr);
 
         tools::Long nX = itrNX->second.toInt32();
         tools::Long nY = itrNY->second.toInt32();
@@ -206,7 +206,7 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
 
         auto itrAngle = rParameters.find(u"ANGLE"_ustr);
         if (itrAngle == rParameters.end())
-            throw css::uno::RuntimeException(u"missing parameter ANGLE"_ustr);
+            throw cpo::uno::RuntimeException(u"missing parameter ANGLE"_ustr);
 
         double nAngle = itrAngle->second.toDouble();
         pObj->Rotate(aPos, Degree100(sal_Int32(nAngle)), 0, 0);

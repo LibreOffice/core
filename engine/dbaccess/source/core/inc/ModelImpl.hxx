@@ -278,7 +278,7 @@ public:
         );
 
     // XEventListener
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void disposing( const css::lang::EventObject& Source );
 
     void setModified( bool bModified );

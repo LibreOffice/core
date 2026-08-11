@@ -53,7 +53,7 @@ public:
         connected to the mail server otherwise errors occur
         during the delivery of mail messages.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
         on errors during construction of an instance of this class.
     */
     MailDispatcher(css::uno::Reference<css::mail::XSmtpService> xMailService);

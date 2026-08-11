@@ -60,7 +60,7 @@ namespace connectivity::macab
 
         /** initializes the implementation module.
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if the module could be loaded, but required symbols are missing
             @throws css::sdbc::SQLException
                 if no Mac OS was found at all
@@ -74,7 +74,7 @@ namespace connectivity::macab
         /** creates a new connection
             @precond
                 <member>init</member> has been called before
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if no connection object could be created (which is a severe error, normally impossible)
         */
         MacabConnection*  createConnection( MacabDriver* _pDriver ) const;
@@ -86,7 +86,7 @@ namespace connectivity::macab
 
             @return <TRUE/> if the module could be loaded successfully.
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if the module could be loaded, but required symbols are missing
         */
         bool    impl_loadModule();

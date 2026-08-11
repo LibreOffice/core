@@ -27,7 +27,7 @@ import ast
 import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
 
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command

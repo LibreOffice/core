@@ -91,7 +91,7 @@ public:
     SwFormatFootnote const& GetFootnoteFormatOrThrow() const {
         SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
-            throw uno::RuntimeException(u"SwXFootnote: disposed or invalid"_ustr, nullptr);
+            throw cpo::uno::RuntimeException(u"SwXFootnote: disposed or invalid"_ustr, nullptr);
         }
         return *pFootnote;
     }
@@ -240,7 +240,7 @@ OUString SAL_CALL SwXFootnote::getLabel()
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return sRet;
 }
@@ -271,7 +271,7 @@ SwXFootnote::setLabel(const OUString& aLabel)
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -282,7 +282,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
@@ -413,7 +413,7 @@ SwXFootnote::createXTextCursorByRange(
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return createXTextCursorByRangeImpl(aPam);
 }
@@ -429,7 +429,7 @@ rtl::Reference< SwXTextCursor > SwXFootnote::createXTextCursorByRangeImpl(
     const SwNode* pStart = rPam.GetPointNode().FindFootnoteStartNode();
     if (pStart != pFootnoteStartNode)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     const rtl::Reference< SwXTextCursor > xRet =

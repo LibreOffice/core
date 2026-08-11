@@ -71,7 +71,7 @@ void SwVbaListHelper::Init()
         }
         default:
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     msStyleName += OUString::number( mnTemplateType );
@@ -121,7 +121,7 @@ void SwVbaListHelper::CreateListTemplate()
         }
         default:
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
 }
@@ -176,7 +176,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
         default:
         {
             // we only support 7 types template now
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     setOrAppendPropertyValue( aPropertyValues, UNO_NAME_BULLET_CHAR, cpo::uno::Any( aBulletChar ) );
@@ -240,7 +240,7 @@ void SwVbaListHelper::CreateNumberListTemplate()
         default:
         {
             // we only support 7 types template now
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, cpo::uno::Any( nNumberingType ) );
@@ -291,7 +291,7 @@ void SwVbaListHelper::CreateOutlineNumberListTemplate()
         default:
         {
             // we only support 7 types template now
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
 }

@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
         css::uno::Reference<css::beans::XPropertySet> xProps(xShape, css::uno::UNO_QUERY_THROW);
 
         // Without the fix in place, this would have failed with:
-        //   An uncaught exception of type com.sun.star.uno.RuntimeException
+        //   An uncaught exception of type cpo.uno.RuntimeException
         //   - unsatisfied query for interface of type com.sun.star.text.XTextColumns!
         css::uno::Reference<css::text::XTextColumns> xCols(
             xProps->getPropertyValue(u"TextColumns"_ustr), css::uno::UNO_QUERY_THROW);

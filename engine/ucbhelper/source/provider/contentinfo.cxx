@@ -70,7 +70,7 @@ const cpo::uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl
     {
         m_xProps = m_pContent->getProperties( m_xEnv );
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -201,7 +201,7 @@ const cpo::uno::Sequence< css::ucb::CommandInfo > & CommandProcessorInfo::getCom
     {
         m_xCommands = m_pContent->getCommands( m_xEnv );
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }

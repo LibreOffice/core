@@ -172,7 +172,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>

@@ -109,7 +109,7 @@ public:
     // XEventListener
 
     using cppu::WeakComponentImplHelperBase::disposing;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void disposing( const css::lang::EventObject& aEvent );
 
     // XServiceInfo

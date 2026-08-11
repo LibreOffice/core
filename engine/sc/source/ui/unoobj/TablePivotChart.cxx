@@ -71,7 +71,7 @@ OUString SAL_CALL TablePivotChart::getName()
 
 void SAL_CALL TablePivotChart::setName(OUString const & /* aName */)
 {
-    throw uno::RuntimeException(); // name cannot be changed
+    throw cpo::uno::RuntimeException(); // name cannot be changed
 }
 
 // XTablePivotChart

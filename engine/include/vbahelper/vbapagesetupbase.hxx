@@ -45,7 +45,7 @@ protected:
     sal_Int32 mnOrientLandscape;
     sal_Int32 mnOrientPortrait;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
 public:
@@ -59,13 +59,13 @@ public:
     virtual void SAL_CALL setRightMargin( double margin ) override;
     virtual double SAL_CALL getLeftMargin() override;
     virtual void SAL_CALL setLeftMargin( double margin ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual double SAL_CALL getHeaderMargin();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void SAL_CALL setHeaderMargin( double margin );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual double SAL_CALL getFooterMargin();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void SAL_CALL setFooterMargin( double margin );
     virtual sal_Int32 SAL_CALL getOrientation() override;
     virtual void SAL_CALL setOrientation( sal_Int32 orientation ) override;

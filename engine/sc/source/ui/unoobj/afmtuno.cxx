@@ -219,7 +219,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const cpo::
             else
             {
                 OSL_FAIL("AutoFormat could not be inserted");
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
         }
     }
@@ -427,7 +427,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
         lcl_FindAutoFormatIndex( *pFormats, aNewName, nDummy ))
     {
         //  not inserted or name exists
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     ScAutoFormat::iterator it = pFormats->begin();

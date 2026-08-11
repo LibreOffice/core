@@ -140,7 +140,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const c
 
     SwVbaRange* pVbaRange = dynamic_cast<SwVbaRange*>( Range.get() );
     if( !pVbaRange )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
     uno::Reference< text::XText > xText = pVbaRange->getXText();

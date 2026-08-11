@@ -104,7 +104,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::ElementExistException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent );
 
     ZipContentInfo& doGetByName( std::u16string_view aName );
@@ -120,7 +120,7 @@ public:
                             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) override;
 
     // Recursive functions
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void saveContents(
             const OUString &rPath,
             std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList,

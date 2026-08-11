@@ -92,7 +92,7 @@ ContentProvider::queryContent(
     }
 
     if( !m_pDatabases )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // Check, if a content with given id already exists...
     rtl::Reference< ucbhelper::ContentImplHelper > xContent

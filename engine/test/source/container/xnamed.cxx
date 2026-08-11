@@ -11,7 +11,7 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -58,7 +58,7 @@ void XNamed::testSetNameThrowsException()
 {
     uno::Reference<container::XNamed> xNamed(init(), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_THROW(xNamed->setName(u"NewName"_ustr), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xNamed->setName(u"NewName"_ustr), cpo::uno::RuntimeException);
 }
 }
 

@@ -595,7 +595,7 @@ sal_Int32 SwFmDrawPage::getCount()
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return 0;
     else
@@ -606,7 +606,7 @@ cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         throw lang::IndexOutOfBoundsException();
 
@@ -622,7 +622,7 @@ bool SwFmDrawPage::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return false;
     return SvxDrawPage::hasElements();
@@ -632,14 +632,14 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShape, uno::UNO_QUERY);
     SwXShape* pShape = comphelper::getFromUnoTunnel<SwXShape>(xShapeTunnel);
     SvxShape* pSvxShape = comphelper::getFromUnoTunnel<SvxShape>(xShapeTunnel);
 
     // this is not a writer shape
     if(!pShape)
-        throw uno::RuntimeException(u"illegal object"_ustr,
+        throw cpo::uno::RuntimeException(u"illegal object"_ustr,
                                     getXWeak() );
 
     // we're already registered in the model / SwXDrawPage::add() already called
@@ -738,7 +738,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         pInternalPam.reset(new SwUnoInternalPaM(*m_pDoc));
         if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() &&
                             !pInternalPam->GetPointNode().FindFlyStartNode())
@@ -800,7 +800,7 @@ void SwFmDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     // tdf#41466 remove TextFrame too which is belonged to the actual shape
     auto xTextFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
     if (xTextFrame)
@@ -818,7 +818,7 @@ uno::Reference< drawing::XShapeGroup >  SwFmDrawPage::group(const uno::Reference
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc || !xShapes.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference< drawing::XShapeGroup >  xRet;
     // mark and return MarkList
     const SdrMarkList& rMarkList = PreGroup(xShapes);
@@ -857,7 +857,7 @@ void SwFmDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShape
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     PreUnGroup(rShapeGroup);
     UnoActionContext aContext(m_pDoc);
@@ -1138,7 +1138,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
                 aValue >>= xRg;
                 if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
                 {
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 }
 
                 if (SwStartNode const*const pFly{pInternalPam->GetPoint()->GetNode().FindFlyStartNode()})
@@ -1475,7 +1475,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
         auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
             aPSet);
         if(!xPrSet)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         // #i31698# - setting the caption point of a
         // caption object doesn't have to change the object position.
         // Thus, keep the position, before the caption point is set and
@@ -1823,7 +1823,7 @@ cpo::uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
     auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(aPSet);
     if ( !xPrSet )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     aRet = (*xPrSet)->getPropertyValue( _rPropertyName );
 
@@ -1845,7 +1845,7 @@ cpo::uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     SwFrameFormat*   pFormat = GetFrameFormat();
     cpo::uno::Sequence< beans::PropertyState > aRet(aPropertyNames.getLength());
     if(!m_xShapeAgg.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SvxShape* pSvxShape = GetSvxShape();
     bool bGroupMember = false;
@@ -1944,7 +1944,7 @@ cpo::uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                 auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
                     aPState);
                 if(!ps)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 xShapePrState = *ps;
             }
             pRet[nProperty] = xShapePrState->getPropertyState(pNames[nProperty]);
@@ -1959,13 +1959,13 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
     if(!m_xShapeAgg.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException("Property is read-only: " + rPropertyName, getXWeak() );
+            throw cpo::uno::RuntimeException("Property is read-only: " + rPropertyName, getXWeak() );
         if(pFormat)
         {
             const SfxItemSet& rSet = pFormat->GetAttrSet();
@@ -2009,7 +2009,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
         if(!xShapePrState)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         (*xShapePrState)->setPropertyToDefault( rPropertyName );
     }
 
@@ -2021,13 +2021,13 @@ cpo::uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     SwFrameFormat*   pFormat = GetFrameFormat();
     cpo::uno::Any aRet;
     if(!m_xShapeAgg.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if(pEntry)
     {
         if(!(pEntry->nWID < RES_FRMATR_END && pFormat))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         const SfxPoolItem& rDefItem =
             pFormat->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
@@ -2041,7 +2041,7 @@ cpo::uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
         if(!xShapePrState)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         (*xShapePrState)->getPropertyDefault( rPropertyName );
     }
 
@@ -2053,7 +2053,7 @@ void SwXShape::addPropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & _listener )
 {
     if ( !m_xShapeAgg.is() )
-        throw uno::RuntimeException(u"no shape aggregate"_ustr, *this );
+        throw cpo::uno::RuntimeException(u"no shape aggregate"_ustr, *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2066,7 +2066,7 @@ void SwXShape::removePropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & _listener)
 {
     if ( !m_xShapeAgg.is() )
-        throw uno::RuntimeException(u"no shape aggregate"_ustr, *this );
+        throw cpo::uno::RuntimeException(u"no shape aggregate"_ustr, *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2108,7 +2108,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         pDoc = &pParagraph->GetTextNode()->GetDoc();
 
     if(!pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     const SwDocShell* pDocSh = pDoc->GetDocShell();
     if (!pDocSh)
         return;
@@ -2782,7 +2782,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
     SvxShape* pSvxShape = GetSvxShape();
     SwFrameFormat* pFormat = GetFrameFormat();
     if(!(pSvxShape && pFormat))
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference<XShapes> xShapes;
     if( m_xShapeAgg.is() )
@@ -2792,7 +2792,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
         aAgg >>= xShapes;
     }
     if(!xShapes.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xShapes->add(xShape);
 
@@ -2837,7 +2837,7 @@ void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )
         aAgg >>= xShapes;
     }
     if(!xShapes.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     xShapes->remove(xShape);
 }
 
@@ -2852,7 +2852,7 @@ sal_Int32 SwXGroupShape::getCount()
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return xAcc->getCount();
 }
 
@@ -2867,7 +2867,7 @@ cpo::uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return xAcc->getByIndex(nIndex);
 }
 
@@ -2882,7 +2882,7 @@ cpo::uno::Type SwXGroupShape::getElementType(  )
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return xAcc->getElementType();
 }
 
@@ -2897,7 +2897,7 @@ bool SwXGroupShape::hasElements(  )
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return xAcc->hasElements();
 }
 

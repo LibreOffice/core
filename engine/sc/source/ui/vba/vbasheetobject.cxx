@@ -187,7 +187,7 @@ double SAL_CALL ScVbaSheetObjectBase::getLeft()
 void SAL_CALL ScVbaSheetObjectBase::setLeft( double fLeft )
 {
     if( fLeft < 0.0 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     mxShape->setPosition( awt::Point( PointsToHmm( fLeft ), mxShape->getPosition().Y ) );
 }
 
@@ -199,7 +199,7 @@ double SAL_CALL ScVbaSheetObjectBase::getTop()
 void SAL_CALL ScVbaSheetObjectBase::setTop( double fTop )
 {
     if( fTop < 0.0 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     mxShape->setPosition( awt::Point( mxShape->getPosition().X, PointsToHmm( fTop ) ) );
 }
 
@@ -211,7 +211,7 @@ double SAL_CALL ScVbaSheetObjectBase::getWidth()
 void SAL_CALL ScVbaSheetObjectBase::setWidth( double fWidth )
 {
     if( fWidth <= 0.0 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     mxShape->setSize( awt::Size( PointsToHmm( fWidth ), mxShape->getSize().Height ) );
 }
 
@@ -223,7 +223,7 @@ double SAL_CALL ScVbaSheetObjectBase::getHeight()
 void SAL_CALL ScVbaSheetObjectBase::setHeight( double fHeight )
 {
     if( fHeight <= 0.0 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     mxShape->setSize( awt::Size( mxShape->getSize().Width, PointsToHmm( fHeight ) ) );
 }
 
@@ -367,7 +367,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
 
     MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
     if( !aResolvedMacro.mbFound )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     script::ScriptEventDescriptor aDescriptor;
     aDescriptor.ListenerType = gaListenerType;
     aDescriptor.EventMethod = gaEventMethod;
@@ -410,7 +410,7 @@ sal_Int32 ScVbaControlObjectBase::getModelIndexInForm() const
         if( mxControlProps.get() == xProps.get() )
             return nIndex;
     }
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 ScVbaButton::ScVbaButton(

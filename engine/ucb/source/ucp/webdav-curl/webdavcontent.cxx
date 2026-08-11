@@ -306,7 +306,7 @@ cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
 
             return isFolder( xCmdEnv ) ? aRet : cpo::uno::Any();
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }
@@ -334,7 +334,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
         bFolder
             = isFolder( uno::Reference< ucb::XCommandEnvironment >() );
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -408,7 +408,7 @@ OUString SAL_CALL Content::getContentType()
         bFolder
             = isFolder( uno::Reference< ucb::XCommandEnvironment >() );
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }

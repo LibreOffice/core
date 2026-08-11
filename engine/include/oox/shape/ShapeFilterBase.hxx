@@ -42,7 +42,7 @@ class OOX_DLLPUBLIC ShapeFilterBase final : public core::XmlFilterBase
 public:
     typedef rtl::Reference<ShapeFilterBase> Pointer_t;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit            ShapeFilterBase(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 

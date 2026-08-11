@@ -85,12 +85,12 @@ public:
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) = 0;
     //Add this method to support Form Controls
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet*){return nullptr;};
 
     //Return a raw pointer here rather than a reference, so that subclasses can override and return a subtype pointer.
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual css::accessibility::XAccessible*
         GetAccessibleCaption (const css::uno::Reference<
             css::drawing::XShape>&){return nullptr;};

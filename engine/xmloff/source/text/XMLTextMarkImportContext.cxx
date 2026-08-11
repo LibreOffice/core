@@ -212,7 +212,7 @@ static auto InsertFieldmark(SvXMLImport & rImport,
     assert(xFormField.is());
     try {
         xFormField->setFieldType(fieldmarkTypeName);
-    } catch (uno::RuntimeException const&) {
+    } catch (cpo::uno::RuntimeException const&) {
         // tdf#140437 somehow old documents had the field code in the type
         // attribute instead of field:param
         SAL_INFO("xmloff.text", "invalid fieldmark type, converting to param");

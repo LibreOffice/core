@@ -117,7 +117,7 @@ protected:
     // This method performs a closest match search, at least the language must match
     LocaleItem* getClosestMatchItemForLocale( const css::lang::Locale& locale );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implSetCurrentLocale( std::unique_lock<std::mutex>& rGuard, const css::lang::Locale& locale,
         bool FindClosestMatch, bool bUseDefaultIfNoMatch );
 
@@ -196,7 +196,7 @@ protected:
     OUString                                                             m_aComment;
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // Scan locale properties files
@@ -225,7 +225,7 @@ protected:
     void implWriteLocaleBinary( LocaleItem* pLocaleItem, BinaryOutput& rOut );
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implStoreAtStorage
     (
         std::unique_lock<std::mutex>& rGuard,
@@ -237,7 +237,7 @@ protected:
     );
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implKillRemovedLocaleFiles
     (
         std::u16string_view Location,
@@ -246,7 +246,7 @@ protected:
     );
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implKillChangedDefaultFiles
     (
         std::u16string_view Location,
@@ -255,7 +255,7 @@ protected:
     );
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implStoreAtLocation
     (
         std::unique_lock<std::mutex>& rGuard,

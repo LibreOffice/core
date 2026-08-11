@@ -132,7 +132,7 @@ private:
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void configureUcb();
 
     bool getContentProviderData(

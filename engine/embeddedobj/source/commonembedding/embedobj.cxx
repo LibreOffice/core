@@ -496,7 +496,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         else
         {
             SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
-            throw uno::RuntimeException(u"invalid next state, only RUNNING state allowed"_ustr); // TODO
+            throw cpo::uno::RuntimeException(u"invalid next state, only RUNNING state allowed"_ustr); // TODO
         }
     }
     else if ( m_nObjectState == embed::EmbedStates::RUNNING )
@@ -531,7 +531,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             else
             {
                 SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
-                throw uno::RuntimeException(u"invalid next state,only LOADED/INPLACE_ACTIVE/ACTIVE allowed"_ustr); // TODO
+                throw cpo::uno::RuntimeException(u"invalid next state,only LOADED/INPLACE_ACTIVE/ACTIVE allowed"_ustr); // TODO
             }
         }
     }
@@ -599,7 +599,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         else
         {
             SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
-            throw uno::RuntimeException(u"invalid next state,only RUNNING/UI_ACTIVE allowed"_ustr); // TODO
+            throw cpo::uno::RuntimeException(u"invalid next state,only RUNNING/UI_ACTIVE allowed"_ustr); // TODO
         }
     }
     else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
@@ -612,7 +612,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         else
         {
             SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
-            throw uno::RuntimeException(u"invalid next state, only RUNNING state allowed"_ustr); // TODO
+            throw cpo::uno::RuntimeException(u"invalid next state, only RUNNING state allowed"_ustr); // TODO
         }
     }
     else if ( m_nObjectState == embed::EmbedStates::UI_ACTIVE )

@@ -1061,7 +1061,7 @@ void DomainMapper_Impl::PopSdt()
     {
         xCursor = xText->createTextCursorByRange(xStart);
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::DomainMapper_Impl::PopSdt: createTextCursorByRange() failed");
         // We redline form controls and that gets us confused when
@@ -1880,7 +1880,7 @@ static void lcl_AddRange(
     rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
         xTextAppend->createTextCursorByRange( rAppendContext.xCursor.is() ? static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()) : xTextAppend->getEnd()).get() );
     if (!xParaCursor)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
     xParaCursor->gotoStartOfParagraph( false );
 
@@ -2542,7 +2542,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                 rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
                     (xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
                 if (!xParaCursor)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
                 xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
@@ -2887,7 +2887,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                         rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
                             xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
                         if (!xParaCursor)
-                            throw uno::RuntimeException();
+                            throw cpo::uno::RuntimeException();
                         //select paragraph
                         xParaCursor->gotoStartOfParagraph( true );
 
@@ -3072,7 +3072,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                     rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
                             (xTextRange->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(xCur.get())).get());
                     if (!xParaCursor)
-                        throw uno::RuntimeException();
+                        throw cpo::uno::RuntimeException();
                     xParaCursor->gotoStartOfParagraph(false);
                     if (0 < m_StreamStateStack.top().nTableDepth)
                     {
@@ -5278,7 +5278,7 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
         {
             xEmbedded->setName(name);
         }
-        catch (uno::RuntimeException const&)
+        catch (cpo::uno::RuntimeException const&)
         {
             // ignore - document may contain duplicates (testchartoleobjectembeddings.docx)
         }
@@ -5309,7 +5309,7 @@ void DomainMapper_Impl::PopShapeContext()
     {
         appendTextContent( xObj, cpo::uno::Sequence< beans::PropertyValue >() );
     }
-    catch ( const uno::RuntimeException& )
+    catch ( const cpo::uno::RuntimeException& )
     {
         // this is normal: the shape is already attached
     }
@@ -5337,7 +5337,7 @@ void DomainMapper_Impl::PopShapeContext()
     {
         aShapeSize = xShape->getSize();
     }
-    catch (const css::uno::RuntimeException& e)
+    catch (const cpo::uno::RuntimeException& e)
     {
         // May happen e.g. when text frame has no frame format
         // See sw/qa/extras/ooxmlimport/data/n779627.docx
@@ -6416,7 +6416,7 @@ rtl::Reference<SwXFieldMaster> DomainMapper_Impl::FindOrCreateFieldMaster(const 
 {
     // query master, create if not available
     if (!m_xTextDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = m_xTextDocument->getSwXTextFieldMasters();
     rtl::Reference< SwXFieldMaster > xMaster;
     OUString sFieldMasterService( OUString::createFromAscii(pFieldMasterService) );
@@ -9890,7 +9890,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn )
 {
     if (!m_xTextDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if( !m_bLineNumberingSet )
     {
         try

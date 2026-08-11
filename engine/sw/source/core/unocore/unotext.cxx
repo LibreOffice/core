@@ -121,7 +121,7 @@ uno::Reference< text::XTextCursor > SAL_CALL SwXText::createTextCursor()
     SolarMutexGuard aGuard;
     rtl::Reference<SwXTextCursor> xCursor = createXTextCursor();
     if (!xCursor.is())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
     return static_cast<text::XWordCursor*>(xCursor.get());
 }
 
@@ -244,18 +244,18 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
 
     if (!xTextRange.is())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     if (!GetDoc())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     if ((!pRange  || &pRange ->GetDoc() != GetDoc()) &&
         (!pCursor || pCursor->GetDoc() != GetDoc()))
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     const SwStartNode *const pOwnStartNode = GetStartNode();
@@ -274,7 +274,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     }
     if (!pPam)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     const SwStartNode* pTmp(pPam->GetPointNode().StartOfSectionNode());
@@ -284,7 +284,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     }
     if (!pOwnStartNode || (pOwnStartNode != pTmp))
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     bool bForceExpandHints( false );
@@ -352,13 +352,13 @@ SwXText::insertControlCharacter(
     }
     if (!GetDoc())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextRange))
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
@@ -459,7 +459,7 @@ SwXText::insertTextContent(
     if (!xContent.is())
         throw lang::IllegalArgumentException(u"second parameter invalid"_ustr, nullptr, 1);
     if (!GetDoc())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xRange))
@@ -497,7 +497,7 @@ SwXText::insertTextContent(
     }
     // this checks if (this) and xRange are in the same text::XText interface
     if (pOwnStartNode != pTmp)
-        throw uno::RuntimeException(u"text interface and cursor not related"_ustr);
+        throw cpo::uno::RuntimeException(u"text interface and cursor not related"_ustr);
 
     const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
@@ -555,7 +555,7 @@ SwXText::insertTextContentBefore(
     SolarMutexGuard aGuard;
 
     if(!GetDoc())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     SwXParagraph *const pPara = dynamic_cast<SwXParagraph*>(xNewContent.get());
     if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
@@ -605,7 +605,7 @@ SwXText::insertTextContentAfter(
 
     if(!GetDoc())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwXParagraph *const pPara = dynamic_cast<SwXParagraph*>(xNewContent.get());
@@ -653,7 +653,7 @@ SwXText::removeTextContentBefore(
     SolarMutexGuard aGuard;
 
     if(!GetDoc())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     bool bRet = false;
     SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xSuccessor.get());
@@ -697,7 +697,7 @@ SwXText::removeTextContentAfter(
     SolarMutexGuard aGuard;
 
     if(!GetDoc())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     bool bRet = false;
     SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xPredecessor.get());
@@ -741,7 +741,7 @@ SwXText::removeTextContent(
 {
     // forward: need no solar mutex here
     if(!xContent.is())
-        throw uno::RuntimeException(u"first parameter invalid"_ustr);
+        throw cpo::uno::RuntimeException(u"first parameter invalid"_ustr);
     xContent->dispose();
 }
 
@@ -762,7 +762,7 @@ SwXText::getStart()
 
     const rtl::Reference< SwXTextCursor > xRef = createXTextCursor();
     if(!xRef.is())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
     xRef->gotoStart(false);
     return static_cast<text::XWordCursor*>(xRef.get());
 }
@@ -779,7 +779,7 @@ SwXText::getEndImpl(SolarMutexGuard& /*rGuard*/)
 {
     const rtl::Reference< SwXTextCursor > xRef = createXTextCursor();
     if(!xRef.is())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
     xRef->gotoEnd(false);
     return xRef;
 }
@@ -804,12 +804,12 @@ SwXText::setString(const OUString& rString)
     SolarMutexGuard aGuard;
 
     if (!GetDoc())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     const SwStartNode* pStartNode = GetStartNode();
     if (!pStartNode)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
@@ -850,7 +850,7 @@ SwXText::setString(const OUString& rString)
     if(!xRet.is())
     {
         GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
     }
     xRet->gotoEnd(true);
     xRet->setString(rString);
@@ -1005,7 +1005,7 @@ SwXText::getPropertyValue(
 
     if(!IsValid())
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     SfxItemPropertyMapEntry const*const pEntry =
@@ -1165,13 +1165,13 @@ SwXText::finishOrAppendParagraph(
 {
     if (!m_bIsValid)
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     const SwStartNode* pStartNode = GetStartNode();
     if(!pStartNode)
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     rtl::Reference<SwXParagraph> xRet;
@@ -1231,7 +1231,7 @@ SwXText::finishOrAppendParagraph(
         sMessage = rIllegal.Message;
         bIllegalException = true;
     }
-    catch (const uno::RuntimeException& rRuntime)
+    catch (const cpo::uno::RuntimeException& rRuntime)
     {
         sMessage = rRuntime.Message;
         bRuntimeException = true;
@@ -1252,7 +1252,7 @@ SwXText::finishOrAppendParagraph(
         }
         else
         {
-            throw uno::RuntimeException(sMessage);
+            throw cpo::uno::RuntimeException(sMessage);
         }
     }
     SwTextNode *const pTextNode( aPam.Start()->GetNode().GetTextNode() );
@@ -1276,7 +1276,7 @@ SwXText::insertTextPortion(
 
     if(!IsValid())
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     const rtl::Reference<SwXTextCursor> xTextCursor = createXTextCursorByRange(xInsertPosition);
@@ -1321,7 +1321,7 @@ SwXText::insertTextPortionImpl(
         sMessage = rIllegal.Message;
         bIllegalException = true;
     }
-    catch (const uno::RuntimeException& rRuntime)
+    catch (const cpo::uno::RuntimeException& rRuntime)
     {
         sMessage = rRuntime.Message;
         bRuntimeException = true;
@@ -1336,7 +1336,7 @@ SwXText::insertTextPortionImpl(
         }
         else
         {
-            throw uno::RuntimeException(sMessage);
+            throw cpo::uno::RuntimeException(sMessage);
         }
     }
     rtl::Reference< SwXTextRange > xRet = new SwXTextRange(rCursor, this);
@@ -1370,7 +1370,7 @@ SwXText::insertTextContentWithProperties(
 
     if (!IsValid())
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     SwUnoInternalPaM aPam(*GetDoc());
@@ -1495,7 +1495,7 @@ SwXText::convertToSwTextFrame(
 
     if(!IsValid())
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
     // tdf#143384 recognize dummy property, that was set to make createTextCursor
     // to not ignore tables.
@@ -1763,7 +1763,7 @@ SwXText::convertToSwTextFrame(
         sMessage = rIllegal.Message;
         bIllegalException = true;
     }
-    catch (const uno::RuntimeException& rRuntime)
+    catch (const cpo::uno::RuntimeException& rRuntime)
     {
         sMessage = rRuntime.Message;
         bRuntimeException = true;
@@ -1803,7 +1803,7 @@ SwXText::convertToSwTextFrame(
         }
         else
         {
-            throw uno::RuntimeException(sMessage);
+            throw cpo::uno::RuntimeException(sMessage);
         }
     }
     return xNewFrame;
@@ -2218,13 +2218,13 @@ SwXText::convertToSwTable(
 
     if(!IsValid())
     {
-        throw  uno::RuntimeException();
+        throw  cpo::uno::RuntimeException();
     }
 
     IDocumentRedlineAccess & rIDRA(m_pDoc->getIDocumentRedlineAccess());
     if (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags()))
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"cannot convertToTable if tracked changes are hidden!"_ustr);
     }
 
@@ -2374,7 +2374,7 @@ SwXText::copyText(
 
     SwXText* const pSource(dynamic_cast<SwXText*>(xSource.get()));
     if (!pSource)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     rtl::Reference< SwXTextCursor > const xCursor = pSource->createXTextCursor();
     xCursor->gotoEnd( true );
@@ -2485,7 +2485,7 @@ SwXBodyText::createXTextCursorByRange(
 {
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return createXTextCursorByRangeImpl(aPam);
 }
 
@@ -2493,10 +2493,10 @@ rtl::Reference< SwXTextCursor > SwXBodyText::createXTextCursorByRangeImpl(
         SwUnoInternalPaM& rPam)
 {
     if(!IsValid())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     if ( !rPam.GetPointNode().GetTextNode() )
-        throw uno::RuntimeException(u"Invalid text range"_ustr );
+        throw cpo::uno::RuntimeException(u"Invalid text range"_ustr );
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
@@ -2509,7 +2509,7 @@ rtl::Reference< SwXTextCursor > SwXBodyText::createXTextCursorByRangeImpl(
     SwStartNode *const p2 = rNode.StartOfSectionNode();
 
     if(p1 != p2)
-        throw uno::RuntimeException( u"End of content node doesn't have the proper start node"_ustr,
+        throw cpo::uno::RuntimeException( u"End of content node doesn't have the proper start node"_ustr,
                uno::Reference< uno::XInterface >( *this ) );
 
     rtl::Reference< SwXTextCursor > xRef = new SwXTextCursor(*GetDoc(), this, CursorType::Body,
@@ -2529,7 +2529,7 @@ SwXBodyText::createParagraphEnumeration()
     SolarMutexGuard aGuard;
 
     if (!IsValid())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
@@ -2550,7 +2550,7 @@ SwXBodyText::hasElements()
     SolarMutexGuard aGuard;
 
     if (!IsValid())
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
 
     return true;
 }
@@ -2575,7 +2575,7 @@ class SwXHeadFootText::Impl
 
         SwFrameFormat& GetHeadFootFormatOrThrow() {
             if (!m_pHeadFootFormat) {
-                throw uno::RuntimeException(u"SwXHeadFootText: disposed or invalid"_ustr, nullptr);
+                throw cpo::uno::RuntimeException(u"SwXHeadFootText: disposed or invalid"_ustr, nullptr);
             }
             return *m_pHeadFootFormat;
         }
@@ -2697,7 +2697,7 @@ rtl::Reference<SwXTextCursor> SwXHeadFootText::CreateTextCursor(const bool bIgno
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {
-        throw uno::RuntimeException(u"no text available"_ustr);
+        throw cpo::uno::RuntimeException(u"no text available"_ustr);
     }
     return pXCursor;
 }
@@ -2714,7 +2714,7 @@ rtl::Reference<SwXTextCursor> SwXHeadFootText::createXTextCursorByRange(
     SwUnoInternalPaM aPam(*GetDoc());
     if (!sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
-        throw uno::RuntimeException(cInvalidObject);
+        throw cpo::uno::RuntimeException(cInvalidObject);
     }
     return createXTextCursorByRangeImpl(aPam);
 }

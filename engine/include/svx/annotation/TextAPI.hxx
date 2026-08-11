@@ -37,7 +37,7 @@ public:
 
     virtual ~TextApiObject() noexcept override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void dispose();
 
     std::optional<OutlinerParaObject> CreateText();

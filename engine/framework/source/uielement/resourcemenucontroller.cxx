@@ -155,7 +155,7 @@ void ResourceMenuController::updatePopupMenu()
             css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY_THROW );
             xConfig->addConfigurationListener( this );
         }
-        catch( const css::uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {}
     }
 
@@ -173,7 +173,7 @@ void ResourceMenuController::updatePopupMenu()
         {
             SAL_WARN( "fwk.uielement", "Invalid module identifier: " << m_aModuleName );
         }
-        catch( const css::uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {}
     }
 

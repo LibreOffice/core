@@ -82,7 +82,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(
 {
     if( !aSecurityEnvironment.is() )
     {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     m_vSecurityEnvironments.push_back( aSecurityEnvironment );
@@ -100,7 +100,7 @@ uno::Reference< xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
 {
     if (index < 0 || o3tl::make_unsigned(index) >= m_vSecurityEnvironments.size())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnvironment = m_vSecurityEnvironments[index];
     return xSecurityEnvironment;
@@ -110,7 +110,7 @@ uno::Reference< xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
 {
     if (m_nDefaultEnvIndex < 0 || o3tl::make_unsigned(m_nDefaultEnvIndex) >= m_vSecurityEnvironments.size())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
 }

@@ -239,7 +239,7 @@ public:
         {}
 
         if ( bReadOnly && !m_bReadOnlySupported )
-            throw uno::RuntimeException(); // the user could provide the data, so it must be stored
+            throw cpo::uno::RuntimeException(); // the user could provide the data, so it must be stored
     }
 
     ~DocumentSettingsGuard()
@@ -372,7 +372,7 @@ void ModelData_Impl::FreeDocumentProps()
 uno::Reference< frame::XModel2 > const & ModelData_Impl::GetModel() const
 {
     if ( !m_xModel.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xModel;
 }
@@ -415,7 +415,7 @@ OUString const & ModelData_Impl::GetModuleName()
         m_aModuleName = m_pOwner->GetModuleManager()->identify(
                                                 uno::Reference< uno::XInterface >( m_xModel, uno::UNO_QUERY ) );
         if ( m_aModuleName.isEmpty() )
-            throw uno::RuntimeException(); // TODO:
+            throw cpo::uno::RuntimeException(); // TODO:
     }
     return m_aModuleName;
 }
@@ -428,7 +428,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
         cpo::uno::Sequence< beans::PropertyValue > aModuleProps;
         m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
         if ( !aModuleProps.hasElements() )
-            throw uno::RuntimeException(); // TODO;
+            throw cpo::uno::RuntimeException(); // TODO;
         m_pModulePropsHM.reset( new ::comphelper::SequenceAsHashMap( aModuleProps ) );
     }
 
@@ -1960,7 +1960,7 @@ void SfxStoringHelper::SetDocInfoState(
 
     uno::Reference< util::XModifiable > xModifiable( xModel, uno::UNO_QUERY );
     if ( !xModifiable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bIsModified = xModifiable->isModified();
 

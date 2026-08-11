@@ -81,7 +81,7 @@ protected:
     static void getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const cpo::uno::Any& rValue );
 
 private:

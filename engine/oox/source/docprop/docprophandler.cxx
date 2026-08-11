@@ -51,7 +51,7 @@ OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentC
     , m_CustomStringPropertyState(NONE)
 {
     if ( !xContext.is() || !rDocProp.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 OOXMLDocPropHandler::~OOXMLDocPropHandler()
@@ -76,7 +76,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const cpo::uno::Any& aAny )
     const uno::Reference< beans::XPropertyContainer > xUserProps =
         m_xDocProp->getUserDefinedProperties();
     if ( !xUserProps.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try
     {
@@ -327,7 +327,7 @@ void OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const uno::Ref
     }
 
     if ( m_nInBlock == SAL_MAX_INT32 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_nInBlock++;
 }
@@ -337,7 +337,7 @@ void OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const
     SAL_WARN("oox", "Unknown element " << aNamespace << ":" << aName);
 
     if ( m_nInBlock == SAL_MAX_INT32 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_nInBlock++;
 }
@@ -692,7 +692,7 @@ void OOXMLDocPropHandler::characters( const OUString& aChars )
             }
         }
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         throw;
     }

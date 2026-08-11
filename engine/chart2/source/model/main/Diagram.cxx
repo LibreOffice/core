@@ -1130,7 +1130,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                         catch( const util::CloseVetoException& )
                         {
                         }
-                        catch( const uno::RuntimeException& )
+                        catch( const cpo::uno::RuntimeException& )
                         {
                         }
                     }
@@ -1142,7 +1142,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
     catch( const util::CloseVetoException& )
     {
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
     return bMovedOrMoveAllowed;

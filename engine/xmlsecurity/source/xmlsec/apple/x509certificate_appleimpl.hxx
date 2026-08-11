@@ -24,7 +24,7 @@
 class X509Certificate_AppleImpl : public X509Certificate_NssImpl
 {
 public:
-    /// Takes ownership of the (retained) identity; throws css::uno::RuntimeException on failure.
+    /// Takes ownership of the (retained) identity; throws cpo::uno::RuntimeException on failure.
     explicit X509Certificate_AppleImpl(svl::crypto::CFRef<SecIdentityRef> aIdentity);
     virtual ~X509Certificate_AppleImpl() override;
 

@@ -680,7 +680,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
         }
         if (!pType2)
         {
-            throw uno::RuntimeException(u"no field type found!"_ustr, *this);
+            throw cpo::uno::RuntimeException(u"no field type found!"_ustr, *this);
         }
         m_pImpl->SetFieldType(pType2);
     }
@@ -948,7 +948,7 @@ void SAL_CALL SwXFieldMaster::dispose()
     SolarMutexGuard aGuard;
     SwFieldType *const pFieldType = GetFieldType(true);
     if (!pFieldType)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     size_t nTypeIdx = SIZE_MAX;
     const SwFieldTypes* pTypes = m_pImpl->m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
     for( size_t i = 0; i < pTypes->size(); i++ )
@@ -1150,7 +1150,7 @@ public:
     SwFieldType* GetFieldType() const
     {
         if(!m_pDoc && !IsDescriptor())
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         else if (IsDescriptor())
             return m_pFieldType;
 
@@ -1306,7 +1306,7 @@ void SAL_CALL SwXTextField::attachTextFieldMaster(
     SolarMutexGuard aGuard;
 
     if (!m_pImpl->IsDescriptor())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SwXFieldMaster* pMaster = dynamic_cast<SwXFieldMaster*>(xFieldMaster.get());
 
     SwFieldType* pFieldType = pMaster ? pMaster->GetFieldType() : nullptr;
@@ -1339,7 +1339,7 @@ OUString SAL_CALL SwXTextField::getPresentation(bool bShowCommand)
     SwField const*const pField = m_pImpl->GetField();
     if (!pField)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return bShowCommand ? pField->GetFieldName() : pField->ExpandField(true, nullptr);
 }
@@ -1612,7 +1612,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType =
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 SwUserType nUserSubType = (m_pImpl->m_pProps->bBool1)
                     ? SwUserType::Invisible : SwUserType::None;
                 if (m_pImpl->m_pProps->bBool2)
@@ -1664,7 +1664,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType =
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 xField.reset(new SwDDEField( static_cast<SwDDEFieldType*>(pFieldType) ));
             }
             break;
@@ -1733,7 +1733,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType =
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName.toString(), false);
                 if (!pFieldType)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
                         m_pImpl->m_pProps->nFormat));
                 static_cast<SwDBField*>(xField.get())->InitContent(m_pImpl->m_pProps->sPar1);
@@ -1750,7 +1750,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType =
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 // detect the field type's sub type and set an appropriate number format
                 if (m_pImpl->m_pProps->bFormatIsDefault &&
                     SwGetSetExpType::String == static_cast<SwSetExpFieldType*>(pFieldType)->GetType())
@@ -1832,7 +1832,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType =
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 SwInputFieldSubType nInpSubType =
                         SwServiceType::FieldTypeInputUser == m_pImpl->m_nServiceId
                             ? SwInputFieldSubType::User : SwInputFieldSubType::Text;
@@ -1950,7 +1950,7 @@ void SAL_CALL SwXTextField::attach(
         }
 
         if (!xField)
-            throw uno::RuntimeException(u"no SwField created?"_ustr);
+            throw cpo::uno::RuntimeException(u"no SwField created?"_ustr);
 
         xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
         SwFormatField aFormat(*xField);
@@ -1985,7 +1985,7 @@ void SAL_CALL SwXTextField::attach(
 
         // What about updating the fields? (see fldmgr.cxx)
         if (!pTextAttr)
-            throw uno::RuntimeException(u"no SwTextAttr inserted?"_ustr);  // could theoretically happen, if paragraph is full
+            throw cpo::uno::RuntimeException(u"no SwTextAttr inserted?"_ustr);  // could theoretically happen, if paragraph is full
 
         m_pImpl->ClearFieldType();
         const SwFormatField& rField = pTextAttr->GetFormatField();
@@ -2082,7 +2082,7 @@ SwXTextField::getAnchor()
 
     const SwTextField* pTextField = m_pImpl->GetFormatField()->GetTextField();
     if (!pTextField)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     std::shared_ptr< SwPaM > pPamForTextField;
     SwTextField::GetPamForTextField(*pTextField, pPamForTextField);
@@ -2150,7 +2150,7 @@ SwXTextField::getPropertySetInfo()
     uno::Reference< beans::XPropertySetInfo >  aRef;
     if (m_pImpl->m_nServiceId == SwServiceType::Invalid)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(
                     lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
@@ -2198,7 +2198,7 @@ SwXTextField::setPropertyValue(
             assert(pDoc);
             const SwTextField* pTextField = m_pImpl->GetFormatField()->GetTextField();
             if(!pTextField)
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
             pDoc->getIDocumentFieldsAccess().PutValueToField( aPosition, rValue, pEntry->nWID);
         }
@@ -2325,7 +2325,7 @@ SwXTextField::setPropertyValue(
         }
     }
     else
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
@@ -2385,7 +2385,7 @@ cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyN
                 else if (pViewShell) // a page preview has no SwEditShell it should only have a view shell
                     pViewShell->CalcLayout();
                 else
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
 
                 // get text node for the text field
                 const SwFormatField *pFieldFormat =
@@ -2393,7 +2393,7 @@ cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyN
                 const SwTextField* pTextField = pFieldFormat
                     ? m_pImpl->GetFormatField()->GetTextField() : nullptr;
                 if(!pTextField)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 const SwTextNode& rTextNode = pTextField->GetTextNode();
 
                 // skip fields that are currently not in the document
@@ -2517,7 +2517,7 @@ cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyN
             }
         }
         else
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     return aRet;
 }
@@ -2859,7 +2859,7 @@ bool SwXTextFieldMasters::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return true;
 }
 
@@ -2925,7 +2925,7 @@ bool SwXTextFieldTypes::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return true; // they always exist
 }
 
@@ -3000,7 +3000,7 @@ cpo::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
 
 void SAL_CALL SwXTextFieldTypes::removeByUniqueID(const OUString& /*ID*/)
 {
-    throw uno::RuntimeException(u"unsupported"_ustr);
+    throw cpo::uno::RuntimeException(u"unsupported"_ustr);
 }
 
 class SwXFieldEnumeration::Impl

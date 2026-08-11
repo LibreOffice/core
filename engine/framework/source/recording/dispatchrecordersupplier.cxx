@@ -125,10 +125,10 @@ void DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&         
 
     // clear unspecific situations
     if (!xDispatcher.is())
-        throw css::uno::RuntimeException(u"specification violation: dispatcher is NULL"_ustr, static_cast< ::cppu::OWeakObject* >(this));
+        throw cpo::uno::RuntimeException(u"specification violation: dispatcher is NULL"_ustr, static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xRecorder.is())
-        throw css::uno::RuntimeException(u"specification violation: no valid dispatch recorder available"_ustr, static_cast< ::cppu::OWeakObject* >(this));
+        throw cpo::uno::RuntimeException(u"specification violation: no valid dispatch recorder available"_ustr, static_cast< ::cppu::OWeakObject* >(this));
 
     // check, if given dispatch supports record functionality by itself ...
     // or must be wrapped.

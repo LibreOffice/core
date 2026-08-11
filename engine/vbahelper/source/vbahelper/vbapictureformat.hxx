@@ -35,11 +35,11 @@ protected:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void checkParameterRangeInDouble( double nRange, double nMin, double nMax );
 public:
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape );
 
     // Attributes

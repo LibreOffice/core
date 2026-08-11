@@ -40,7 +40,7 @@ void XSpreadsheets::testInsertNewByNameBadName()
 
     CPPUNIT_ASSERT_THROW_MESSAGE("No exception thrown",
                                  xSpreadsheets->insertNewByName(u"$%#/?\\"_ustr, 0),
-                                 uno::RuntimeException);
+                                 cpo::uno::RuntimeException);
 }
 
 void XSpreadsheets::testMoveByName()

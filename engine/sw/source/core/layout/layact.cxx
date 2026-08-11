@@ -2206,7 +2206,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob, IdleJo
                     m_bPageValid = m_bPageValid && !pTextNode->IsSmartTagDirty();
                     if ( aRepaint.HasArea() )
                         m_pImp->GetShell().InvalidateWindows( aRepaint );
-                } catch( const css::uno::RuntimeException&) {
+                } catch( const cpo::uno::RuntimeException&) {
                     // handle smarttag problems gracefully and provide diagnostics
                     TOOLS_WARN_EXCEPTION( "sw.core", "SMART_TAGS");
                 }

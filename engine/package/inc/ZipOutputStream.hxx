@@ -51,17 +51,17 @@ public:
     void addDeflatingThreadTask( ZipOutputEntryInThread *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
 
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt = false);
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void rawWrite( const cpo::uno::Sequence< sal_Int8 >& rBuffer );
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void rawCloseEntry( bool bEncrypt = false );
 
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void finish();
     const css::uno::Reference< css::io::XOutputStream >& getStream() const;
 
@@ -70,13 +70,13 @@ public:
 
 private:
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength);
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void writeCEN( const ZipEntry &rEntry );
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void writeDataDescriptor( const ZipEntry &rEntry );
     void writeExtraFields(const ZipEntry& rEntry, bool isLOCWithDD);
 

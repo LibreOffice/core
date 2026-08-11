@@ -60,7 +60,7 @@
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -228,7 +228,7 @@ void Data::initProperties(
                             t, css::uno::UNO_QUERY_THROW)->
                         getTypeArguments());
                 if (args.getLength() != 1) {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         u"inconsistent UNO type registry"_ustr);
                 }
                 t = args[0];
@@ -236,7 +236,7 @@ void Data::initProperties(
             std::vector< OUString >::size_type handles
                 = handleNames->size();
             if (handles > SAL_MAX_INT32) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"interface type has too many attributes"_ustr);
             }
             OUString name(m->getMemberName());
@@ -252,7 +252,7 @@ void Data::initProperties(
                              == absentOptional.end()))).
                 second)
             {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"inconsistent UNO type registry"_ustr);
             }
             handleNames->push_back(name);
@@ -609,7 +609,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isAmbiguous))
                 {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         (u"unexpected type of com.sun.star.beans.Ambiguous"
                          " IsAmbiguous member"_ustr),
                         object);
@@ -638,7 +638,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isDefaulted))
                 {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         (u"unexpected type of com.sun.star.beans.Defaulted"
                          " IsDefaulted member"_ustr),
                         object);
@@ -667,7 +667,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= present))
                 {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         (u"unexpected type of com.sun.star.beans.Optional"
                          " IsPresent member"_ustr),
                         object);
@@ -688,7 +688,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
             }
             undoOptional = false;
         } else {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "unexpected type of attribute " + name, object);
         }
     }
@@ -818,7 +818,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         return strct;
     }
     if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"unexpected type of attribute"_ustr, object);
     }
     return value;

@@ -28,7 +28,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     underlying Drag and Drop system is not in the appropriate state.</p>
 */
 
-published exception InvalidDNDOperationException: com::sun::star::uno::RuntimeException
+published exception InvalidDNDOperationException: cpo::uno::RuntimeException
 {
 };
 

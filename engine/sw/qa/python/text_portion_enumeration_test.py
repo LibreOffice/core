@@ -22,7 +22,7 @@ import unittest
 import os.path
 from org.libreoffice.unotest import UnoInProcess
 from tempfile import TemporaryDirectory
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException, NoSupportException
 from com.sun.star.beans import StringPair
 from com.sun.star.rdf.URIs import ODF_PREFIX, ODF_SUFFIX

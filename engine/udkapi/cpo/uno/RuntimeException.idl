@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 
 /** This exception or a subclass can occur at every interface method.
@@ -35,6 +35,6 @@ published exception RuntimeException: cpo::uno::Exception
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

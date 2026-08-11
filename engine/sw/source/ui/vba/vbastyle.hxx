@@ -40,17 +40,17 @@ private:
     css::uno::Reference< css::style::XStyle > mxStyle;
 public:
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent,
                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
                 rtl::Reference< SwXTextDocument > xModel,
                 const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const cpo::uno::Any& xStyle );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static LanguageType getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, LanguageType _languageid );
 
     // Attributes

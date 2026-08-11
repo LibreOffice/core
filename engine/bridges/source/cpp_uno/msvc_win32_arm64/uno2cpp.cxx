@@ -29,7 +29,7 @@
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>

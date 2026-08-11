@@ -250,7 +250,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        throw uno::RuntimeException(u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
 };
 
@@ -351,7 +351,7 @@ SwVbaStyles::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 )
                 else
                 {
                     SAL_WARN("sw.vba", "the builtin style type is not implemented");
-                    throw uno::RuntimeException(u"Not implemented"_ustr );
+                    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
                 }
             }
         }

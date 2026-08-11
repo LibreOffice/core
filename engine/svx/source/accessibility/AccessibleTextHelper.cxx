@@ -251,15 +251,15 @@ AccessibleTextHelper_Impl::~AccessibleTextHelper_Impl()
 SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr);
+        throw cpo::uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxTextForwarder* pTextForwarder = maEditSource.GetTextForwarder();
 
     if( !pTextForwarder )
-        throw uno::RuntimeException(u"Unable to fetch text forwarder, model might be dead"_ustr);
+        throw cpo::uno::RuntimeException(u"Unable to fetch text forwarder, model might be dead"_ustr);
 
     if( !pTextForwarder->IsValid() )
-        throw uno::RuntimeException(u"Text forwarder is invalid, model might be dead"_ustr);
+        throw cpo::uno::RuntimeException(u"Text forwarder is invalid, model might be dead"_ustr);
 
     return *pTextForwarder;
 }
@@ -267,15 +267,15 @@ SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const
 SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr);
+        throw cpo::uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxViewForwarder* pViewForwarder = maEditSource.GetViewForwarder();
 
     if( !pViewForwarder )
-        throw uno::RuntimeException(u"Unable to fetch view forwarder, model might be dead"_ustr);
+        throw cpo::uno::RuntimeException(u"Unable to fetch view forwarder, model might be dead"_ustr);
 
     if( !pViewForwarder->IsValid() )
-        throw uno::RuntimeException(u"View forwarder is invalid, model might be dead"_ustr);
+        throw cpo::uno::RuntimeException(u"View forwarder is invalid, model might be dead"_ustr);
 
     return *pViewForwarder;
 }
@@ -283,18 +283,18 @@ SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const
 SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr);
+        throw cpo::uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder();
 
     if( !pViewForwarder )
     {
-        throw uno::RuntimeException(u"No edit view forwarder, object not in edit mode"_ustr);
+        throw cpo::uno::RuntimeException(u"No edit view forwarder, object not in edit mode"_ustr);
     }
 
     if( !pViewForwarder->IsValid() )
     {
-        throw uno::RuntimeException(u"View forwarder is invalid, object not in edit mode"_ustr);
+        throw cpo::uno::RuntimeException(u"View forwarder is invalid, object not in edit mode"_ustr);
     }
 
     return *pViewForwarder;
@@ -303,7 +303,7 @@ SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
 SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"AccessibleTextHelper_Impl::GetEditSource: no edit source"_ustr);
     return maEditSource;
 }
@@ -475,7 +475,7 @@ bool AccessibleTextHelper_Impl::IsActive() const
         }
         return pViewForwarder->IsValid();
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         return false;
     }
@@ -676,7 +676,7 @@ void AccessibleTextHelper_Impl::UpdateSelection()
         maLastSelection = aSelection;
     }
     // no selection? no update actions
-    catch( const uno::RuntimeException& ) {}
+    catch( const cpo::uno::RuntimeException& ) {}
 }
 
 void AccessibleTextHelper_Impl::ShutdownEditSource()
@@ -1468,7 +1468,7 @@ AccessibleTextHelper_Impl::getAccessibleAtPoint(const awt::Point& _aPoint)
 {
     // make given position relative
     if (!mpFrontEnd.is())
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid"_ustr);
 
     // #103862# No longer need to make given position relative

@@ -47,22 +47,22 @@ class ProviderCache
 {
 
 public:
-     /// @throws css::uno::RuntimeException
+     /// @throws cpo::uno::RuntimeException
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext );
-     /// @throws css::uno::RuntimeException
+     /// @throws cpo::uno::RuntimeException
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext,
         const cpo::uno::Sequence< OUString >& denyList );
     ~ProviderCache();
      css::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const OUString& providerName );
-     /// @throws css::uno::RuntimeException
+     /// @throws cpo::uno::RuntimeException
      cpo::uno::Sequence < css::uno::Reference< css::script::provider::XScriptProvider > >
          getAllProviders();
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void populateCache();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details );
     bool isInDenyList( const OUString& serviceName ) const;

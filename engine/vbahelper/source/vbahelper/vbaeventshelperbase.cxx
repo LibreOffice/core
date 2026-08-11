@@ -82,7 +82,7 @@ bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const cp
             disposed (this may have happened at any time during execution of
             the last event handler). */
         if( !mxModel.is() || !mpShell )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // get info for next event
         const EventHandlerInfo& rInfo = getEventHandlerInfo( aEventQueue.front().mnEventId );
@@ -284,7 +284,7 @@ OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo
         break;
 
         default:
-            throw uno::RuntimeException(u"This module type is unsupported"_ustr); // unsupported module type
+            throw cpo::uno::RuntimeException(u"This module type is unsupported"_ustr); // unsupported module type
     }
 
     /*  Performance improvement: Check the list of existing event handlers
@@ -302,7 +302,7 @@ void VbaEventsHelperBase::ensureVBALibrary()
     {
         maLibraryName = getDefaultProjectName( mpShell );
         if( maLibraryName.isEmpty() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
             u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
@@ -323,7 +323,7 @@ void VbaEventsHelperBase::ensureVBALibrary()
     {
         // error accessing the Basic library, so this object is useless
         stopListening();
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -361,7 +361,7 @@ sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName )
     catch( cpo::uno::Exception& )
     {
     }
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const OUString& rModuleName )

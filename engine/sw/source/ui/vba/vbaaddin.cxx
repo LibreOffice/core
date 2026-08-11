@@ -44,7 +44,7 @@ OUString SAL_CALL SwVbaAddin::getName()
 void SAL_CALL
 SwVbaAddin::setName( const OUString& )
 {
-    throw uno::RuntimeException(u" Fail to set name"_ustr );
+    throw cpo::uno::RuntimeException(u" Fail to set name"_ustr );
 }
 
 OUString SAL_CALL SwVbaAddin::getPath()

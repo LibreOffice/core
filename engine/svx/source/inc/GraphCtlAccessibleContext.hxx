@@ -120,7 +120,7 @@ private:
 
     virtual void SAL_CALL disposing() final override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int64 nIndex );
 

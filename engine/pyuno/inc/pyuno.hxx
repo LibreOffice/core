@@ -202,7 +202,7 @@ public:
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
      */
     static bool isInitialized();
 
@@ -214,7 +214,7 @@ public:
 
         @throws css::script::CannotConvertException
         @throws css::lang::IllegalArgumentException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     PyRef any2PyObject (const cpo::uno::Any &source ) const;
 
@@ -224,7 +224,7 @@ public:
         the global interpreter lock is held and pyuno
         has been initialized
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     cpo::uno::Any pyObject2Any ( const PyRef & source ) const;
 
@@ -276,7 +276,7 @@ public:
         precondition: The current thread MUST NOT hold the global interpreter lock.
         postcondition: The global interpreter lock is acquired
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
              in case no pythread state could be created
      */
     PyThreadAttach( PyInterpreterState *interp);
@@ -304,7 +304,7 @@ public:
        precondition: The current thread MUST hold the global interpreter lock.
        postcondition: The current thread does not hold the global interpreter lock anymore.
 
-       @throws css::uno::RuntimeException
+       @throws cpo::uno::RuntimeException
     */
     PyThreadDetach();
     /** Acquires the global interpreter lock again

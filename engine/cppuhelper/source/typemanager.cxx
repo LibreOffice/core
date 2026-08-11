@@ -41,7 +41,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -1940,7 +1940,7 @@ cpo::uno::Type cppuhelper::TypeManager::getElementType()
 
 bool cppuhelper::TypeManager::hasElements()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"TypeManager hasElements: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
@@ -1948,14 +1948,14 @@ bool cppuhelper::TypeManager::hasElements()
 css::uno::Reference< css::container::XEnumeration >
 cppuhelper::TypeManager::createEnumeration()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"TypeManager createEnumeration: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
 bool cppuhelper::TypeManager::has(cpo::uno::Any const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"TypeManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }

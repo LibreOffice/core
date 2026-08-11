@@ -21,7 +21,7 @@ private:
     css::uno::Reference< ov::XCommandBars > m_xCommandBars;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaMenuBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBars > xCommandBars );
     virtual ~ScVbaMenuBars() override;
 

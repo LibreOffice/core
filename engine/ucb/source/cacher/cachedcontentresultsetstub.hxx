@@ -47,7 +47,7 @@ private:
     const OUString     m_aPropertyNameForFetchDirection;
 
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
     impl_getCurrentRowContent(
         std::unique_lock<std::mutex>& rGuard,
@@ -57,28 +57,28 @@ private:
     sal_Int32
     impl_getColumnCount(std::unique_lock<std::mutex>&);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void
     impl_getCurrentContentIdentifierString(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void
     impl_getCurrentContentIdentifier(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void
     impl_getCurrentContent(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
     impl_propagateFetchSizeAndDirection( std::unique_lock<std::mutex>& rGuard, sal_Int32 nFetchSize, bool bFetchDirection );
 

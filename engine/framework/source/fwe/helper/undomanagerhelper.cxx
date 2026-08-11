@@ -51,7 +51,7 @@ namespace framework
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::document::XUndoManagerListener;

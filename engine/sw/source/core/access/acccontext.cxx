@@ -727,7 +727,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
@@ -784,11 +784,11 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
 
     if (!pParent)
     {
-        throw uno::RuntimeException(u"no Parent"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"no Parent"_ustr, getXWeak());
     }
     if (!pWin)
     {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip relative to document root
@@ -830,7 +830,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     AbsoluteScreenPixelPoint aPixPosAbs = pWin->OutputToAbsoluteScreenPixel(aPixPos);

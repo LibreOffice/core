@@ -99,7 +99,7 @@ cpo::uno::Sequence< css::frame::DispatchInformation > DispatchInformationProvide
                     lInfos[rInfo.Command] = rInfo;
             }
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }

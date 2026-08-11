@@ -90,7 +90,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void loadStylesFromDocShell( ScDocShell* pSource,
                               const cpo::uno::Sequence< css::beans::PropertyValue>& aOptions );
 };
@@ -170,18 +170,18 @@ private:
 
     const SfxItemSet*       GetStyleItemSet_Impl( std::u16string_view rPropName, const SfxItemPropertyMapEntry*& rpEntry );
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::beans::PropertyState getPropertyState_Impl( std::u16string_view PropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any           getPropertyDefault_Impl( std::u16string_view aPropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any           getPropertyValue_Impl( std::u16string_view aPropertyName );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                    setPropertyValue_Impl( std::u16string_view rPropertyName,
                                                  const SfxItemPropertyMapEntry* pEntry,
                                                  const cpo::uno::Any* pValue );

@@ -104,7 +104,7 @@ protected:
      * Any derived class will implement this method respectively.
      */
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void tryToPerform( ){};
 
     /*
@@ -122,7 +122,7 @@ protected:
      * Any derived class will implement this method respectively.
          */
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void notifyResultListener() const
         {};
 

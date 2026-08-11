@@ -34,7 +34,7 @@ private:
     bool        m_bIsMenu;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
 
     // Attributes
@@ -60,7 +60,7 @@ public:
 class VbaDummyCommandBar : public CommandBar_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     VbaDummyCommandBar(
             const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,

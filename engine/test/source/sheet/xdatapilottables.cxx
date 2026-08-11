@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -38,7 +38,7 @@ void XDataPilotTables::testXDataPilotTables()
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "No exception thrown, when inserting element with existing name",
         xDPT->insertNewByName(u"XDataPilotTables"_ustr, table::CellAddress(0, 7, 7), xDPD),
-        css::uno::RuntimeException);
+        cpo::uno::RuntimeException);
 
     xDPT->removeByName(u"XDataPilotTables"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove DataPilotTable", u""_ustr,
@@ -46,7 +46,7 @@ void XDataPilotTables::testXDataPilotTables()
 
     CPPUNIT_ASSERT_THROW_MESSAGE("No exception, when removing no existing element",
                                  xDPT->removeByName(u"XDataPilotTables"_ustr),
-                                 css::uno::RuntimeException);
+                                 cpo::uno::RuntimeException);
 }
 }
 

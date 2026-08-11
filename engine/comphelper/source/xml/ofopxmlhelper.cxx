@@ -134,7 +134,7 @@ void WriteRelationsInfoSequence(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
-        throw uno::RuntimeException(u"Invalid output stream"_ustr);
+        throw cpo::uno::RuntimeException(u"Invalid output stream"_ustr);
 
     uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
@@ -187,7 +187,7 @@ void WriteContentSequence(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
-        throw uno::RuntimeException(u"Invalid output stream"_ustr);
+        throw cpo::uno::RuntimeException(u"Invalid output stream"_ustr);
 
     uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
@@ -242,7 +242,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadSequence_Impl(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !rContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
-        throw uno::RuntimeException(u"Invalid input stream or context"_ustr);
+        throw cpo::uno::RuntimeException(u"Invalid input stream or context"_ustr);
 
 
     uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create( rContext );
@@ -277,7 +277,7 @@ OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > const & OFOPXMLHelper_Impl::GetParsingResult() const
 {
     if ( !m_aElementsSeq.empty() )
-        throw uno::RuntimeException(); // the parsing has still not finished!
+        throw cpo::uno::RuntimeException(); // the parsing has still not finished!
 
     return m_aResultSeq;
 }
@@ -385,7 +385,7 @@ void OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Referen
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )
-                throw uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
+                throw cpo::uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
 
             auto pResultSeq = m_aResultSeq.getArray();
 
@@ -416,7 +416,7 @@ void OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Referen
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )
-                throw uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
+                throw cpo::uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
 
             auto pResultSeq = m_aResultSeq.getArray();
 

@@ -70,7 +70,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
             aSrvMgr, uno::UNO_QUERY_THROW )->
             setPropertyValue( u"DefaultContext"_ustr, cpo::uno::Any( mxContext ) );
     }
-    catch ( uno::RuntimeException & )
+    catch ( cpo::uno::RuntimeException & )
     {
         throw;
     }

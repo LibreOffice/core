@@ -32,7 +32,7 @@ private:
     OUString maVariableName;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         css::uno::Reference< css::beans::XPropertyAccess > xUserDefined, OUString aName );
     virtual ~SwVbaVariable() override;

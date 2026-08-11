@@ -51,7 +51,7 @@ std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequ
 void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext >& xContext )
 {
     if ( !xOutStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< xml::sax::XWriter > xWriterHandler(
         xml::sax::Writer::create(xContext) );
@@ -89,7 +89,7 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
 std::vector< beans::StringPair > DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext >& xContext )
 {
     if ( !xContext.is() || !xInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
@@ -118,7 +118,7 @@ DocTemplLocaleHelper::~DocTemplLocaleHelper()
 std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult() const
 {
     if ( !m_aElementsSeq.empty() )
-        throw uno::RuntimeException(u"The parsing has still not finished!"_ustr);
+        throw cpo::uno::RuntimeException(u"The parsing has still not finished!"_ustr);
 
     return m_aResultSeq;
 }

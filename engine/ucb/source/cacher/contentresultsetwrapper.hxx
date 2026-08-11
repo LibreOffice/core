@@ -118,7 +118,7 @@ protected:
     virtual void impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard); //helping XPropertySet
 
     /// @throws css::lang::DisposedException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
     impl_EnsureNotDisposed(std::unique_lock<std::mutex>& rGuard);
 
@@ -128,7 +128,7 @@ protected:
             const css::beans::PropertyChangeEvent& rEvt );
 
     /// @throws css::beans::PropertyVetoException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
     impl_notifyVetoableChangeListeners(
             std::unique_lock<std::mutex>& rGuard,
@@ -205,16 +205,16 @@ public:
 
     // own methods
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void
         impl_disposing( const css::lang::EventObject& Source );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void
     impl_propertyChange( const css::beans::PropertyChangeEvent& evt );
 
     /// @throws css::beans::PropertyVetoException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void
     impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent );
 

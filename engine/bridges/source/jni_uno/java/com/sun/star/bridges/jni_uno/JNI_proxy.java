@@ -211,7 +211,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             }
         }
 
-        throw new com.sun.star.uno.RuntimeException(
+        throw new cpo.uno.RuntimeException(
             "[jni_uno bridge error] unexpected call on proxy " +
             proxy.toString() + ": " + method.toString() );
     }

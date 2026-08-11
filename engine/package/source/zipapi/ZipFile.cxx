@@ -945,7 +945,7 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
     aGrabber.seek(nPos);
     std::array<sal_Int8, 30> aHeader;
     if (aGrabber.readBytes(aHeader.data(), 30) != 30)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     MemoryByteGrabber headerMemGrabber(aHeader.data(), 30);
 
     sal_Int32 nTestSig = headerMemGrabber.ReadInt32();
@@ -1211,7 +1211,7 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
             aGrabber.seek(nEndPos - 20);
             std::array<sal_Int8, 20> aZip64EndLocator;
             if (20 != aGrabber.readBytes(aZip64EndLocator.data(), 20))
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             MemoryByteGrabber loc64Grabber(aZip64EndLocator.data(), 20);
             if (loc64Grabber.ReadUInt8() == 'P'
                 && loc64Grabber.ReadUInt8() == 'K'

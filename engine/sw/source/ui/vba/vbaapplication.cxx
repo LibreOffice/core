@@ -158,7 +158,7 @@ SwVbaApplication::CommandBars( const cpo::uno::Any& aIndex )
     {
         return VbaApplicationBase::CommandBars( aIndex );
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return cpo::uno::Any();
     }
@@ -261,7 +261,7 @@ void SAL_CALL SwVbaApplication::setWindowState( sal_Int32 _windowstate )
             xWindow->setWindowState( aState );
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
     }
 }

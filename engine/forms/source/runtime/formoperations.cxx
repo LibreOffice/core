@@ -70,7 +70,7 @@ namespace frm
     using ::dbtools::SQLExceptionInfo;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;

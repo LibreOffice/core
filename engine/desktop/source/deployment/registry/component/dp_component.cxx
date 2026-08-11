@@ -1081,7 +1081,7 @@ Reference<XComponentContext> raise_uno_process(
         OUStringBuffer sMsg = "error starting process: " + url;
         for(const auto& arg : args)
             sMsg.append(" " + arg);
-        throw uno::RuntimeException(sMsg.makeStringAndClear());
+        throw cpo::uno::RuntimeException(sMsg.makeStringAndClear());
     }
     try {
         return Reference<XComponentContext>(
@@ -1383,7 +1383,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                 TOOLS_INFO_EXCEPTION("desktop.deployment", "caught");
                 try {
                     impreg->revokeImplementation(url, rdb);
-                } catch (css::uno::RuntimeException &) {
+                } catch (cpo::uno::RuntimeException &) {
                     TOOLS_WARN_EXCEPTION("desktop.deployment", "ignored");
                 }
                 throw;

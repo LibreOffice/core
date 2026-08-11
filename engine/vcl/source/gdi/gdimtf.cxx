@@ -407,7 +407,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
             return true;
         }
     }
-    catch (const uno::RuntimeException& )
+    catch (const cpo::uno::RuntimeException& )
     {
         throw; // runtime errors are fatal
     }

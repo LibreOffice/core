@@ -469,7 +469,7 @@ namespace svxform
         void addToEventAttacher(const css::uno::Reference< css::awt::XControl>& xControl);
         void removeFromEventAttacher(const css::uno::Reference< css::awt::XControl>& xControl);
         void toggleAutoFields(bool bAutoFields);
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void unload();
         void removeBoundFieldListener();
 

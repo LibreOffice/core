@@ -93,11 +93,11 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         }
     }
 
-    public void addStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
+    public void addStreamListener(XStreamListener aListener ) throws cpo.uno.RuntimeException {
         _aListeners.add(aListener);
     }
 
-    public void removeStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
+    public void removeStreamListener(XStreamListener aListener ) throws cpo.uno.RuntimeException {
         _aListeners.remove(aListener);
     }
 
@@ -121,23 +121,23 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     // JNI implementation to create the pipe
     private native int createJNI( String name )
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     // JNI implementation to read from the pipe
     private native int readJNI(/*OUT*/byte[][] bytes, int nBytesToRead)
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     // JNI implementation to write to the pipe
     private native void writeJNI(byte aData[])
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     // JNI implementation to flush the pipe
     private native void flushJNI()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     // JNI implementation to close the pipe
     private native void closeJNI()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException;
 
     /**
      * Read the required number of bytes.
@@ -149,7 +149,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @see      com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         if(_bFirstRead) {
             _bFirstRead = false;
@@ -167,7 +167,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @see      com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[])
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         writeJNI( aData );
     }
@@ -178,7 +178,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @see      com.sun.star.connection.XConnection#flush
      */
     public void flush()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         flushJNI();
     }
@@ -189,7 +189,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @see       com.sun.star.connection.XConnection#close
      */
     public void close()
-        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
+        throws com.sun.star.io.IOException, cpo.uno.RuntimeException
     {
         if (DEBUG) System.out.print( "PipeConnection::close() " );
         closeJNI();
@@ -203,7 +203,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * @return  the description.
      * @see     com.sun.star.connection.XConnection#getDescription
      */
-    public String getDescription() throws com.sun.star.uno.RuntimeException {
+    public String getDescription() throws cpo.uno.RuntimeException {
         return _aDescription;
     }
 

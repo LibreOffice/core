@@ -19,7 +19,7 @@ import uno
 import unohelper
 
 from com.sun.star.lang import IllegalArgumentException,XServiceInfo
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.beans import UnknownPropertyException
 from test.testtools.bridgetest import TestData,XRecursiveCall,XBridgeTestBase
 

@@ -66,7 +66,7 @@ IdleState IdleDetection::CheckSlideShowRunning()
             if (xFrame.is() && xFrame->isActive())
                 bIgnoreFrame = false;
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
         }
         if (bIgnoreFrame)

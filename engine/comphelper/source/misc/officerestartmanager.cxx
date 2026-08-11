@@ -36,7 +36,7 @@ namespace comphelper
 void OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
 {
     if ( !m_xContext.is() )
-        throw uno::RuntimeException(u"no component context"_ustr);
+        throw cpo::uno::RuntimeException(u"no component context"_ustr);
 
     {
         std::unique_lock aGuard( m_aMutex );

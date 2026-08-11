@@ -27,7 +27,7 @@ private:
     sw::mark::Fieldmark& m_rFormField;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaFormField(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                    const css::uno::Reference<css::uno::XComponentContext>& rContext,
                    const rtl::Reference<SwXTextDocument>& xTextDocument,

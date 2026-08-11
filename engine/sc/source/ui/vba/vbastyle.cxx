@@ -32,7 +32,7 @@ uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const rtl::Reference<ScModelObj>& xModel )
 {
     if (!xModel)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference< container::XNameAccess > xStylesAccess( xModel->getStyleFamilies()->getByName(u"CellStyles"_ustr), uno::UNO_QUERY_THROW );
     return xStylesAccess;
 }

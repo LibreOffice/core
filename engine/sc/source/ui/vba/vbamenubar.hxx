@@ -20,7 +20,7 @@ private:
     css::uno::Reference< ov::XCommandBar > m_xCommandBar;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaMenuBar( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< ov::XCommandBar > xCommandBar );
 
     virtual cpo::uno::Any SAL_CALL Menus( const cpo::uno::Any& aIndex ) override;

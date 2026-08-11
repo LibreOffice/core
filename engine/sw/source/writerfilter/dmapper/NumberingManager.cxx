@@ -649,7 +649,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         TOOLS_WARN_EXCEPTION( "writerfilter", "" );
         assert( !"Incorrect argument to UNO call" );
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "" );
         assert( !"Incorrect argument to UNO call" );

@@ -65,7 +65,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -331,7 +331,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 
             xInteractionHandler.set( css::task::InteractionHandler::createWithParent(i_rxContext, xDialogParent), css::uno::UNO_QUERY_THROW );
         }
-        catch(const css::uno::RuntimeException&) {throw;}
+        catch(const cpo::uno::RuntimeException&) {throw;}
         catch(const cpo::uno::Exception&       ) {      }
     }
     // hidden mode
@@ -895,7 +895,7 @@ bool LoadEnv::impl_handleContent()
             if (!xHandler.is())
                 continue;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }
@@ -1200,7 +1200,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         {
             return css::frame::OfficeFrameLoader::create(m_xContext);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             {}
@@ -1237,7 +1237,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             if (xLoader.is())
                 return xLoader;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }
@@ -1407,7 +1407,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Break search.
             break;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }
@@ -1813,7 +1813,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             // <- SOLAR SAFE
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

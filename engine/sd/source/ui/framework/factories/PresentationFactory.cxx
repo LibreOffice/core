@@ -111,7 +111,7 @@ void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rx
                 gsPresentationViewURL,
                 new PresentationFactory(rxController));
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }

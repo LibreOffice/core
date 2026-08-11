@@ -96,7 +96,7 @@ DocumentContentFactory::createDocumentContent(
     if ( xDocFac.is() )
         return xDocFac->createDocumentContent( Model );
 
-    throw uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"Unable to obtain document content factory!"_ustr,
         getXWeak() );
 }

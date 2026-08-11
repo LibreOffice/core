@@ -27,7 +27,7 @@
 class VbaNewFont : public cppu::WeakImplHelper<ov::msforms::XNewFont>
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit VbaNewFont(const css::uno::Reference<css::beans::XPropertySet>& rxModelProps);
 
     // XNewFont attributes

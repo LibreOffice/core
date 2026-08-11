@@ -558,7 +558,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_xTextHelper)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         return m_xTextHelper->GetAt(rPoint);
     }
@@ -566,7 +566,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override
     {
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         const Point aOutPos;
         const Size aOutSize(m_pController->GetOutputSizePixel());
@@ -584,7 +584,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         css::awt::Point aScreenLoc(0, 0);
 
@@ -604,7 +604,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         Color nCol = m_pEditEngine->GetAutoColor();
         return static_cast<sal_Int32>(nCol);
@@ -614,7 +614,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         Color nCol = m_pEditEngine->GetBackgroundColor();
         return static_cast<sal_Int32>(nCol);
@@ -641,7 +641,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         return m_pController->GetDrawingArea()->get_accessible_parent();
     }
@@ -650,7 +650,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // -1 for child not found/no parent (according to specification)
         sal_Int64 nRet = -1;
@@ -733,7 +733,7 @@ public:
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         return m_pController->GetDrawingArea()->get_accessible_relation_set();
     }

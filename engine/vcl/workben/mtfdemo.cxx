@@ -10,7 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <vcl/vclmain.hxx>
 #include <vcl/gdimtf.hxx>
@@ -160,12 +160,12 @@ private:
                 rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
                 if (rc != osl::FileBase::E_None)
                 {
-                    throw css::uno::RuntimeException("Can not make absolute: " + aFilename);
+                    throw cpo::uno::RuntimeException("Can not make absolute: " + aFilename);
                 }
             }
             else
             {
-                throw css::uno::RuntimeException("Can not get file url from system path: " + aFilename);
+                throw cpo::uno::RuntimeException("Can not get file url from system path: " + aFilename);
             }
 
             uno::Reference<uno::XComponentContext> xComponentContext
@@ -187,7 +187,7 @@ private:
                 }
                 else
                 {
-                    throw css::uno::RuntimeException("Can't read metafile " + aFileStream.GetFileName());
+                    throw cpo::uno::RuntimeException("Can't read metafile " + aFileStream.GetFileName());
                 }
 
                 OUString sAbsoluteDumpUrl, sDumpUrl;
@@ -197,12 +197,12 @@ private:
                     rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
                     if (rc != osl::FileBase::E_None)
                     {
-                        throw css::uno::RuntimeException(u"Can not make absolute: metadump.xml"_ustr);
+                        throw cpo::uno::RuntimeException(u"Can not make absolute: metadump.xml"_ustr);
                     }
                 }
                 else
                 {
-                    throw css::uno::RuntimeException(u"Can not get file url from system path: metadump.xml"_ustr);
+                    throw cpo::uno::RuntimeException(u"Can not get file url from system path: metadump.xml"_ustr);
                 }
 
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());

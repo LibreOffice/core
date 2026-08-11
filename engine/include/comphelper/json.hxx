@@ -32,13 +32,13 @@ namespace comphelper {
 COMPHELPER_DLLPUBLIC
 void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const* value);
 
-// Decode the JSON value `json` into an `Any` of type `type`; throws css::uno::RuntimeException
+// Decode the JSON value `json` into an `Any` of type `type`; throws cpo::uno::RuntimeException
 // on malformed input or on a type whose decoder is not implemented yet:
 COMPHELPER_DLLPUBLIC
 cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type);
 
 // Decode the JSON value `json` into an `Any` of inferred type (`VOID`, `BOOLEAN`, `DOUBLE`,
-// `STRING`, or sequence of `ANY`); throws css::uno::RuntimeException on malformed input and on JSON
+// `STRING`, or sequence of `ANY`); throws cpo::uno::RuntimeException on malformed input and on JSON
 // object representations:
 COMPHELPER_DLLPUBLIC cpo::uno::Any parseJsonToInferredAny(OUString const & json);
 

@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
@@ -179,7 +179,7 @@ template< typename T > cpo::uno::Any parseSingleValue(
 {
     T val;
     if (!parseValue(text, &val)) {
-        throw css::uno::RuntimeException(u"invalid value"_ustr);
+        throw cpo::uno::RuntimeException(u"invalid value"_ustr);
     }
     return cpo::uno::Any(val);
 }
@@ -215,7 +215,7 @@ template< typename T > cpo::uno::Any parseListValue(
             if (!parseValue(
                     xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
             {
-                throw css::uno::RuntimeException(u"invalid value"_ustr);
+                throw cpo::uno::RuntimeException(u"invalid value"_ustr);
             }
             seq.push_back(val);
             if (i < 0) {
@@ -233,7 +233,7 @@ cpo::uno::Any parseValue(
 {
     switch (type) {
     case TYPE_ANY:
-        throw css::uno::RuntimeException(u"invalid value of type any"_ustr);
+        throw cpo::uno::RuntimeException(u"invalid value of type any"_ustr);
     case TYPE_BOOLEAN:
         return parseSingleValue< bool >(text);
     case TYPE_SHORT:
@@ -265,7 +265,7 @@ cpo::uno::Any parseValue(
             separator, text);
     default:
         assert(false);
-        throw css::uno::RuntimeException(u"this cannot happen"_ustr);
+        throw cpo::uno::RuntimeException(u"this cannot happen"_ustr);
     }
 }
 
@@ -346,7 +346,7 @@ bool ValueParser::startElement(
             } else if (scalar == 0xFFFF) {
                 pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "bad unicode scalar attribute in " + reader.getUrl());
             }
             state_ = state_ == State::Text ? State::TextUnicode : State::ITUnicode;
@@ -356,7 +356,7 @@ bool ValueParser::startElement(
     default:
         break;
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
 }
 

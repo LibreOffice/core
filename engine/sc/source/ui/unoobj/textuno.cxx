@@ -300,7 +300,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
 
     rtl::Reference<ScHeaderFooterContentObj> xContentObj = aTextData.GetContentObj();
     if (!xContentObj.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"ScHeaderFooterTextObj::getString: no ContentObj"_ustr);
 
     switch ( aTextData.GetPart() )

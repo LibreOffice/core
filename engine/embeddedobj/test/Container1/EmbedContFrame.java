@@ -102,7 +102,7 @@ public class EmbedContFrame extends Frame
 
     public static XMultiServiceFactory connectOfficeGetServiceFactory()
     throws cpo.uno.Exception,
-    com.sun.star.uno.RuntimeException,
+    cpo.uno.RuntimeException,
     Exception
     {
         String sConnectionString = "uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService";

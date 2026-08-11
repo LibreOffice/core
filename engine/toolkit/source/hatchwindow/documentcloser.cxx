@@ -146,7 +146,7 @@ ODocumentCloser::ODocumentCloser(const cpo::uno::Sequence< cpo::uno::Any >& aArg
 {
     std::unique_lock aGuard( m_aMutex );
     if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
+        throw cpo::uno::RuntimeException(); // the object must be refcounted already!
 
     sal_Int32 nLen = aArguments.getLength();
     if ( nLen != 1 )

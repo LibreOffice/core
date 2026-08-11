@@ -82,7 +82,7 @@ BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& 
         // Register the factory for its supported views.
         mxConfigurationController = rxController->getConfigurationController();
         if ( ! mxConfigurationController.is())
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         mxConfigurationController->addResourceFactory(FrameworkHelper::msImpressViewURL, this);
         mxConfigurationController->addResourceFactory(FrameworkHelper::msDrawViewURL, this);
         mxConfigurationController->addResourceFactory(FrameworkHelper::msOutlineViewURL, this);
@@ -92,7 +92,7 @@ BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& 
         mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
         mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesPanelViewURL, this);
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         mpBase = nullptr;
         if (mxConfigurationController.is())

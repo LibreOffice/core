@@ -24,7 +24,7 @@ module com { module sun { module star { module lang {
 /** is thrown when a component is attempted to be used before it was
     completely constructed.
 */
-published exception NotInitializedException : com::sun::star::uno::RuntimeException
+published exception NotInitializedException : cpo::uno::RuntimeException
 {
 };
 

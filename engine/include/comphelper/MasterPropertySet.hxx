@@ -75,7 +75,7 @@ namespace comphelper
         /// @throws css::beans::PropertyVetoException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::lang::WrappedTargetException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue ) = 0;
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::beans::PropertyVetoException
@@ -90,7 +90,7 @@ namespace comphelper
         virtual void _preGetValues () = 0;
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::lang::WrappedTargetException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue ) = 0;
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::beans::PropertyVetoException

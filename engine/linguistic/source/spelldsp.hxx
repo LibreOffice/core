@@ -63,12 +63,12 @@ class SpellCheckerDispatcher :
     inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
             GetDicList();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
                     const css::beans::PropertyValues& aProperties, bool& rConvertApostrophe);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     css::uno::Reference<
         css::linguistic2::XSpellAlternatives >

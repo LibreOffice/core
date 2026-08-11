@@ -25,7 +25,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 
 
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::TypeDescription;
 

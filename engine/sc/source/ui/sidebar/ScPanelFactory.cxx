@@ -108,7 +108,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 std::move(xPanel),
                 ui::LayoutSize(nMinimumSize,-1,-1));
     }
-    catch (const uno::RuntimeException &)
+    catch (const cpo::uno::RuntimeException &)
     {
         throw;
     }

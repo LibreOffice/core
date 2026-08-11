@@ -36,7 +36,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
@@ -205,7 +205,7 @@ void Components::WriteThread::execute() {
         try {
             try {
                 writeModFile(components_, url_, data_);
-            } catch (css::uno::RuntimeException &) {
+            } catch (cpo::uno::RuntimeException &) {
                 // Ignore write errors, instead of aborting:
                 TOOLS_WARN_EXCEPTION("configmgr", "error writing modifications");
             }
@@ -343,7 +343,7 @@ void Components::insertExtensionXcsFile(
     try {
         parseXcsFile(fileUri, layer, data_, nullptr, nullptr, nullptr);
     } catch (css::container::NoSuchElementException & e) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "insertExtensionXcsFile does not exist: " + e.Message);
     }
 }
@@ -358,7 +358,7 @@ void Components::insertExtensionXcuFile(
         parseXcuFile(fileUri, layer, data_, nullptr, modifications, adds);
     } catch (css::container::NoSuchElementException & e) {
         data_.removeExtensionXcuAdditions(fileUri);
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "insertExtensionXcuFile does not exist: " + e.Message);
     }
 }
@@ -440,7 +440,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
 {
     size_t i = descriptor.find(' ');
     if (i == 0 || i == std::u16string_view::npos) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             OUString::Concat("bad external value descriptor ") + descriptor);
     }
     //TODO: Do not make calls with mutex locked:
@@ -451,7 +451,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
         try {
             service = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
-        } catch (const css::uno::RuntimeException &) {
+        } catch (const cpo::uno::RuntimeException &) {
             // Assuming these exceptions are real errors:
             throw;
         } catch (const cpo::uno::Exception &)  {
@@ -473,11 +473,11 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
             if (!(j->second->getPropertyValue(OUString(descriptor.substr(i + 1))) >>=
                   value))
             {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     OUString::Concat("cannot obtain external value through ") + descriptor);
             }
         } catch (css::beans::UnknownPropertyException & e) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "unknown external value descriptor ID: " + e.Message);
         } catch (css::lang::WrappedTargetException & e) {
             cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -510,14 +510,14 @@ Components::Components(
             break;
         }
         if (modificationTarget_ != ModificationTarget::None) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"CONFIGURATION_LAYERS: modification target layer followed by"
                 " further layers"_ustr);
         }
         sal_Int32 c = i;
         for (;; ++c) {
             if (c == conf.getLength() || conf[c] == ' ') {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: missing ':' in \"" + conf + "\"");
             }
             if (conf[c] == ':') {
@@ -540,7 +540,7 @@ Components::Components(
             layer += 2;
         } else if (type == "sharedext") {
             if (sharedExtensionLayer_ != -1) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"CONFIGURATION_LAYERS: multiple \"sharedext\" layers"_ustr);
             }
             sharedExtensionLayer_ = layer;
@@ -548,7 +548,7 @@ Components::Components(
             layer += 2;
         } else if (type == "userext") {
             if (userExtensionLayer_ != -1) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"CONFIGURATION_LAYERS: multiple \"userext\" layers"_ustr);
             }
             userExtensionLayer_ = layer;
@@ -567,7 +567,7 @@ Components::Components(
             } else if (url == "*") {
                 dconf::readLayer(data_, layer);
             } else {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
                     + "\"");
             }
@@ -581,7 +581,7 @@ Components::Components(
             } else if (url == "CURRENT_USER") {
                 eType = WinRegType::CURRENT_USER;
             } else {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: unknown \"winreg\" kind \"" + url
                     + "\"");
             }
@@ -603,7 +603,7 @@ Components::Components(
                 write = true; // for backwards compatibility
             }
             if (url.isEmpty()) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"CONFIGURATION_LAYERS: empty \"user\" URL"_ustr);
             }
             bool ignore = false;
@@ -632,7 +632,7 @@ Components::Components(
             }
             ++layer;
         } else {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
         }
         i = n;
@@ -684,7 +684,7 @@ void Components::parseFiles(
         }
         [[fallthrough]];
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot open directory " + url);
     }
     for (;;) {
@@ -694,14 +694,14 @@ void Components::parseFiles(
             break;
         }
         if (rc != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "cannot iterate directory " + url);
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "cannot stat in directory " + url);
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
@@ -717,7 +717,7 @@ void Components::parseFiles(
                         SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
                         continue;
                     }
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
                 }
             }
@@ -759,7 +759,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
     case osl::FileBase::E_NOENT:
         return;
     default:
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "cannot open directory " + url);
     }
     UnresolvedVector unres;
@@ -772,14 +772,14 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
             break;
         }
         if (rc != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "cannot iterate directory " + url);
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "cannot stat in directory " + url);
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
@@ -797,7 +797,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                         SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
                         continue;
                     }
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
                 }
                 if (manager->parse(nullptr)) {
@@ -820,7 +820,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
             }
         }
         if (!resolved) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "xcd: unresolved dependencies in " + url);
         }
     }
@@ -893,7 +893,7 @@ void Components::parseModificationLayer(int layer, OUString const & url) {
 int Components::getExtensionLayer(bool shared) const {
     int layer = shared ? sharedExtensionLayer_ : userExtensionLayer_;
     if (layer == -1) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"insert extension xcs/xcu file into undefined layer"_ustr);
     }
     return layer;

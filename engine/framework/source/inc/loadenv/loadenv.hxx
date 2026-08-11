@@ -214,7 +214,7 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                              const css::uno::Reference< css::uno::XComponentContext >&     xContext,
                                                                              const OUString&                                        sURL   ,

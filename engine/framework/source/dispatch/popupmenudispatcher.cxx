@@ -248,7 +248,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
             m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
         }
     }
-    catch ( const css::uno::RuntimeException& )
+    catch ( const cpo::uno::RuntimeException& )
     {
         throw;
     }

@@ -32,7 +32,7 @@ using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::TypeClass;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using cpo::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::script::XInvocation2;
@@ -268,7 +268,7 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
             }
         }
     }
-    catch( const css::uno::RuntimeException & e)
+    catch( const cpo::uno::RuntimeException & e)
     {
         raisePyExceptionWithAny( Any( e ) );
     }

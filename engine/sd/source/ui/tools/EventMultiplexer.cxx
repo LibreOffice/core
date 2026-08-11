@@ -150,7 +150,7 @@ EventMultiplexer::~EventMultiplexer()
     {
         mpImpl->dispose();
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
     }
     catch (const cpo::uno::Exception&)

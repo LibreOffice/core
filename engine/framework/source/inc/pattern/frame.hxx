@@ -65,7 +65,7 @@ inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource
         { return false; }
     catch(const css::lang::DisposedException&)
         {} // disposed is closed is ...
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; } // should not be suppressed!
     catch(const cpo::uno::Exception&)
         { return false;  } // ??? We defined to return a boolean value instead of throwing exceptions...

@@ -956,7 +956,7 @@ namespace xforms
         {
             aTypedValue = Convert::get().toAny( value, getCppuType() );
         }
-        catch (css::uno::RuntimeException)
+        catch (cpo::uno::RuntimeException)
         {
             return false;
         }

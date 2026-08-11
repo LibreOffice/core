@@ -311,7 +311,7 @@ void ControllerState::update(
                 xEquationProperties->getPropertyValue( u"MayHaveCorrelationCoefficient"_ustr ) >>= bMayHaveR2;
             }
         }
-        catch(const uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }

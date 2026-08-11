@@ -82,188 +82,188 @@ public class TestComponent {
         private ComplexTypes _complexTypes = new ComplexTypes();
 
         // Attributes
-        public int getLong_attr() throws com.sun.star.uno.RuntimeException {
+        public int getLong_attr() throws cpo.uno.RuntimeException {
             return _long;
         }
 
-        public void setLong_attr( int _long_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setLong_attr( int _long_attr ) throws cpo.uno.RuntimeException {
             _long = _long_attr;
         }
 
-        public long getHyper_attr() throws com.sun.star.uno.RuntimeException {
+        public long getHyper_attr() throws cpo.uno.RuntimeException {
             return _hyper;
         }
 
-        public void setHyper_attr( long _hyper_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setHyper_attr( long _hyper_attr ) throws cpo.uno.RuntimeException {
             _hyper = _hyper_attr;
         }
 
-        public float getFloat_attr() throws com.sun.star.uno.RuntimeException {
+        public float getFloat_attr() throws cpo.uno.RuntimeException {
             return _float;
         }
 
-        public void setFloat_attr( float _float_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setFloat_attr( float _float_attr ) throws cpo.uno.RuntimeException {
             _float = _float_attr;
         }
 
-        public double getDouble_attr() throws com.sun.star.uno.RuntimeException {
+        public double getDouble_attr() throws cpo.uno.RuntimeException {
             return _double;
         }
 
-        public void setDouble_attr( double _double_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setDouble_attr( double _double_attr ) throws cpo.uno.RuntimeException {
             _double = _double_attr;
         }
 
-        public String getString_attr() throws com.sun.star.uno.RuntimeException {
+        public String getString_attr() throws cpo.uno.RuntimeException {
             return _string;
         }
 
-        public void setString_attr( String _string_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setString_attr( String _string_attr ) throws cpo.uno.RuntimeException {
             _string = _string_attr;
         }
 
-        public Object getInterface_attr() throws com.sun.star.uno.RuntimeException {
+        public Object getInterface_attr() throws cpo.uno.RuntimeException {
             return _xInterface;
         }
 
-        public void setInterface_attr( java.lang.Object _interface_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setInterface_attr( java.lang.Object _interface_attr ) throws cpo.uno.RuntimeException {
             _xInterface = _interface_attr;
         }
 
-        public Object getAny_attr() throws com.sun.star.uno.RuntimeException {
+        public Object getAny_attr() throws cpo.uno.RuntimeException {
             return _any;
         }
 
-        public void setAny_attr(Object _any_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setAny_attr(Object _any_attr ) throws cpo.uno.RuntimeException {
             _any = _any_attr;
         }
 
-        public Object[] getSequence_attr() throws com.sun.star.uno.RuntimeException {
+        public Object[] getSequence_attr() throws cpo.uno.RuntimeException {
             return _interface_sequence;
         }
 
-        public void setSequence_attr(Object[] _sequence_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setSequence_attr(Object[] _sequence_attr ) throws cpo.uno.RuntimeException {
             _interface_sequence = _sequence_attr;
         }
 
-        public ComplexTypes getStruct_attr() throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes getStruct_attr() throws cpo.uno.RuntimeException {
             return _complexTypes;
         }
 
-        public void setStruct_attr( ComplexTypes _struct_attr ) throws com.sun.star.uno.RuntimeException {
+        public void setStruct_attr( ComplexTypes _struct_attr ) throws cpo.uno.RuntimeException {
             _complexTypes = _struct_attr;
         }
 
 
         // Methods
-        public void async() throws com.sun.star.uno.RuntimeException {
+        public void async() throws cpo.uno.RuntimeException {
         }
 
-        public void sync(  ) throws com.sun.star.uno.RuntimeException {
+        public void sync(  ) throws cpo.uno.RuntimeException {
         }
 
-        public ComplexTypes complexIn( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes complexIn( /*IN*/ComplexTypes aVal ) throws cpo.uno.RuntimeException {
             return aVal;
         }
 
-        public ComplexTypes complexInout( /*INOUT*/ComplexTypes[] aVal ) throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes complexInout( /*INOUT*/ComplexTypes[] aVal ) throws cpo.uno.RuntimeException {
             return aVal[0];
         }
 
-        public void complexOneway( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public void complexOneway( /*IN*/ComplexTypes aVal ) throws cpo.uno.RuntimeException {
         }
 
-        public void complexNoreturn( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public void complexNoreturn( /*IN*/ComplexTypes aVal ) throws cpo.uno.RuntimeException {
         }
 
-        public XPerformanceTest createObject(  ) throws com.sun.star.uno.RuntimeException {
+        public XPerformanceTest createObject(  ) throws cpo.uno.RuntimeException {
             return new _PerformancTestObject();
         }
 
-        public int getLong() throws com.sun.star.uno.RuntimeException {
+        public int getLong() throws cpo.uno.RuntimeException {
             return _long;
         }
 
-        public void setLong(/*IN*/int n) throws com.sun.star.uno.RuntimeException {
+        public void setLong(/*IN*/int n) throws cpo.uno.RuntimeException {
             _long = n;
         }
 
-        public long getHyper() throws com.sun.star.uno.RuntimeException {
+        public long getHyper() throws cpo.uno.RuntimeException {
             return _hyper;
         }
 
-        public void setHyper(/*IN*/long n) throws com.sun.star.uno.RuntimeException {
+        public void setHyper(/*IN*/long n) throws cpo.uno.RuntimeException {
             _hyper = n;
         }
 
-        public float getFloat() throws com.sun.star.uno.RuntimeException {
+        public float getFloat() throws cpo.uno.RuntimeException {
             return _float;
         }
 
-        public void setFloat( /*IN*/float f ) throws com.sun.star.uno.RuntimeException {
+        public void setFloat( /*IN*/float f ) throws cpo.uno.RuntimeException {
             _float = f;
         }
 
-        public double getDouble(  ) throws com.sun.star.uno.RuntimeException {
+        public double getDouble(  ) throws cpo.uno.RuntimeException {
             return _double;
         }
 
-        public void setDouble( /*IN*/double f ) throws com.sun.star.uno.RuntimeException {
+        public void setDouble( /*IN*/double f ) throws cpo.uno.RuntimeException {
             _double = f;
         }
 
-        public String getString(  ) throws com.sun.star.uno.RuntimeException {
+        public String getString(  ) throws cpo.uno.RuntimeException {
             return _string;
         }
 
-        public void setString( /*IN*/String s ) throws com.sun.star.uno.RuntimeException {
+        public void setString( /*IN*/String s ) throws cpo.uno.RuntimeException {
             _string = s;
         }
 
-        public Object getInterface(  ) throws com.sun.star.uno.RuntimeException {
+        public Object getInterface(  ) throws cpo.uno.RuntimeException {
             return _xInterface;
         }
 
-        public void setInterface( /*IN*/Object x ) throws com.sun.star.uno.RuntimeException {
+        public void setInterface( /*IN*/Object x ) throws cpo.uno.RuntimeException {
             _xInterface = x;
         }
 
-        public Object getAny(  ) throws com.sun.star.uno.RuntimeException {
+        public Object getAny(  ) throws cpo.uno.RuntimeException {
             return _any;
         }
 
-        public void setAny( /*IN*/java.lang.Object a ) throws com.sun.star.uno.RuntimeException {
+        public void setAny( /*IN*/java.lang.Object a ) throws cpo.uno.RuntimeException {
             _any = a;
         }
 
-        public Object[] getSequence(  ) throws com.sun.star.uno.RuntimeException {
+        public Object[] getSequence(  ) throws cpo.uno.RuntimeException {
             return _interface_sequence;
         }
 
-        public void setSequence( /*IN*/Object[] seq ) throws com.sun.star.uno.RuntimeException {
+        public void setSequence( /*IN*/Object[] seq ) throws cpo.uno.RuntimeException {
             if(DEBUG) System.err.println("#### " + getClass().getName() + ".setSequence:" + seq);
 
             _interface_sequence = seq;
         }
 
-        public ComplexTypes getStruct(  ) throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes getStruct(  ) throws cpo.uno.RuntimeException {
             return _complexTypes;
         }
 
-        public void setStruct( /*IN*/ComplexTypes c ) throws com.sun.star.uno.RuntimeException {
+        public void setStruct( /*IN*/ComplexTypes c ) throws cpo.uno.RuntimeException {
             _complexTypes = c;
         }
 
-        public void raiseRuntimeException(  ) throws com.sun.star.uno.RuntimeException {
-            throw new com.sun.star.uno.RuntimeException();
+        public void raiseRuntimeException(  ) throws cpo.uno.RuntimeException {
+            throw new cpo.uno.RuntimeException();
         }
 
         // XServiceInfo
-        public String getImplementationName() throws com.sun.star.uno.RuntimeException {
+        public String getImplementationName() throws cpo.uno.RuntimeException {
             return __serviceName;
         }
 
-        public boolean supportsService(String rServiceName) throws com.sun.star.uno.RuntimeException {
+        public boolean supportsService(String rServiceName) throws cpo.uno.RuntimeException {
             String rSNL[] = getSupportedServiceNames();
 
             for(int nPos = rSNL.length; (nPos--) != 0;) {
@@ -274,21 +274,21 @@ public class TestComponent {
             return false;
         }
 
-        public String [] getSupportedServiceNames() throws com.sun.star.uno.RuntimeException {
+        public String [] getSupportedServiceNames() throws cpo.uno.RuntimeException {
             return new String[]{__serviceName};
         }
 
         // XTypeProvider
-        public Type[] getTypes() throws com.sun.star.uno.RuntimeException {
+        public Type[] getTypes() throws cpo.uno.RuntimeException {
             try {
                 return new Type[]{new Type(XPerformanceTest.class), new Type(XServiceInfo.class), new Type(XTypeProvider.class)};
             }
             catch(Exception exception) {
-                throw new com.sun.star.uno.RuntimeException(exception);
+                throw new cpo.uno.RuntimeException(exception);
             }
         }
 
-        public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
+        public byte[] getImplementationId() throws cpo.uno.RuntimeException {
             return new byte[0];
         }
     }
@@ -364,7 +364,7 @@ public class TestComponent {
                               Object           xInterface,
                               Object           any,
                               TestElement      testElements[],
-                              TestDataElements testDataElements) throws com.sun.star.uno.RuntimeException
+                              TestDataElements testDataElements) throws cpo.uno.RuntimeException
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setValues:" + any);
 
@@ -409,7 +409,7 @@ public class TestComponent {
                                            /*INOUT*/Object[]           io_xInterface,
                                            /*INOUT*/Object[]           io_any,
                                            /*INOUT*/TestElement[][]    io_testElements,
-                                           /*INOUT*/TestDataElements[] io_testDataElements) throws com.sun.star.uno.RuntimeException
+                                           /*INOUT*/TestDataElements[] io_testDataElements) throws cpo.uno.RuntimeException
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setValues2:" + io_any[0]);
 
@@ -457,7 +457,7 @@ public class TestComponent {
                                           /*OUT*/Object[]           o_xInterface,
                                           /*OUT*/Object[]           o_any,
                                           /*OUT*/TestElement[][]    o_testElements,
-                                          /*OUT*/TestDataElements[] o_testDataElements) throws com.sun.star.uno.RuntimeException
+                                          /*OUT*/TestDataElements[] o_testDataElements) throws cpo.uno.RuntimeException
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".getValues:" + _any);
 
@@ -484,53 +484,53 @@ public class TestComponent {
             return _testDataElements;
         }
 
-        public SmallStruct echoSmallStruct( SmallStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+        public SmallStruct echoSmallStruct( SmallStruct i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public MediumStruct echoMediumStruct( MediumStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+        public MediumStruct echoMediumStruct( MediumStruct i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public BigStruct echoBigStruct( BigStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+        public BigStruct echoBigStruct( BigStruct i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public TwoFloats echoTwoFloats( TwoFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+        public TwoFloats echoTwoFloats( TwoFloats i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public FourFloats echoFourFloats( FourFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+        public FourFloats echoFourFloats( FourFloats i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public MixedFloatAndInteger echoMixedFloatAndInteger( MixedFloatAndInteger i_Struct) throws com.sun.star.uno.RuntimeException {
+        public MixedFloatAndInteger echoMixedFloatAndInteger( MixedFloatAndInteger i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public DoubleHyper echoDoubleHyper(DoubleHyper s) throws com.sun.star.uno.RuntimeException {
+        public DoubleHyper echoDoubleHyper(DoubleHyper s) throws cpo.uno.RuntimeException {
             return s;
         }
 
-        public HyperDouble echoHyperDouble(HyperDouble s) throws com.sun.star.uno.RuntimeException {
+        public HyperDouble echoHyperDouble(HyperDouble s) throws cpo.uno.RuntimeException {
             return s;
         }
 
         public FloatFloatLongByte echoFloatFloatLongByte(FloatFloatLongByte s)
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
         {
             return s;
         }
 
-        public ThreeByteStruct echoThreeByteStruct( ThreeByteStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+        public ThreeByteStruct echoThreeByteStruct( ThreeByteStruct i_Struct) throws cpo.uno.RuntimeException {
             return i_Struct;
         }
 
-        public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws com.sun.star.uno.RuntimeException {
+        public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws cpo.uno.RuntimeException {
             return i2;
         }
 
-        public int testPPC64Alignment( double d1, double d2, double d3, int i1 ) throws com.sun.star.uno.RuntimeException {
+        public int testPPC64Alignment( double d1, double d2, double d3, int i1 ) throws cpo.uno.RuntimeException {
             return i1;
         }
 
@@ -539,164 +539,164 @@ public class TestComponent {
         }
 
         // Attributes
-        public boolean getBool() throws com.sun.star.uno.RuntimeException {
+        public boolean getBool() throws cpo.uno.RuntimeException {
             return _bool;
         }
 
-        public void setBool(boolean bool) throws com.sun.star.uno.RuntimeException {
+        public void setBool(boolean bool) throws cpo.uno.RuntimeException {
             _bool = bool;
         }
 
-        public byte getByte() throws com.sun.star.uno.RuntimeException {
+        public byte getByte() throws cpo.uno.RuntimeException {
             return _byte;
         }
 
-        public void setByte(byte zbyte) throws com.sun.star.uno.RuntimeException {
+        public void setByte(byte zbyte) throws cpo.uno.RuntimeException {
             _byte = zbyte;
         }
 
-        public char getChar() throws com.sun.star.uno.RuntimeException {
+        public char getChar() throws cpo.uno.RuntimeException {
             return _char;
         }
 
-        public void setChar(char zchar) throws com.sun.star.uno.RuntimeException {
+        public void setChar(char zchar) throws cpo.uno.RuntimeException {
             _char = zchar;
         }
 
-        public short getShort() throws com.sun.star.uno.RuntimeException {
+        public short getShort() throws cpo.uno.RuntimeException {
             return _short;
         }
 
-        public void setShort(short zshort) throws com.sun.star.uno.RuntimeException {
+        public void setShort(short zshort) throws cpo.uno.RuntimeException {
             _short = zshort;
         }
 
-        public short getUShort() throws com.sun.star.uno.RuntimeException {
+        public short getUShort() throws cpo.uno.RuntimeException {
             return _ushort;
         }
 
-        public void setUShort(short ushort) throws com.sun.star.uno.RuntimeException {
+        public void setUShort(short ushort) throws cpo.uno.RuntimeException {
             _ushort = ushort;
         }
 
-        public int getLong() throws com.sun.star.uno.RuntimeException {
+        public int getLong() throws cpo.uno.RuntimeException {
             return _long;
         }
 
-        public void setLong(int zint) throws com.sun.star.uno.RuntimeException {
+        public void setLong(int zint) throws cpo.uno.RuntimeException {
             _long = zint;
         }
 
-        public int getULong() throws com.sun.star.uno.RuntimeException {
+        public int getULong() throws cpo.uno.RuntimeException {
             return _ulong;
         }
 
-        public void setULong(int uint) throws com.sun.star.uno.RuntimeException {
+        public void setULong(int uint) throws cpo.uno.RuntimeException {
             _ulong = uint;
         }
 
-        public long getHyper() throws com.sun.star.uno.RuntimeException {
+        public long getHyper() throws cpo.uno.RuntimeException {
             return _hyper;
         }
 
-        public void setHyper(long hyper) throws com.sun.star.uno.RuntimeException {
+        public void setHyper(long hyper) throws cpo.uno.RuntimeException {
             _hyper = hyper;
         }
 
-        public long getUHyper() throws com.sun.star.uno.RuntimeException {
+        public long getUHyper() throws cpo.uno.RuntimeException {
             return _uhyper;
         }
 
-        public void setUHyper(long uhyper) throws com.sun.star.uno.RuntimeException {
+        public void setUHyper(long uhyper) throws cpo.uno.RuntimeException {
             _uhyper = uhyper;
         }
 
-        public float getFloat() throws com.sun.star.uno.RuntimeException {
+        public float getFloat() throws cpo.uno.RuntimeException {
             return _float;
         }
 
-        public void setFloat(float zfloat) throws com.sun.star.uno.RuntimeException {
+        public void setFloat(float zfloat) throws cpo.uno.RuntimeException {
             _float = zfloat;
         }
 
-        public double getDouble() throws com.sun.star.uno.RuntimeException {
+        public double getDouble() throws cpo.uno.RuntimeException {
             return _double;
         }
 
-        public void setDouble(double zdouble) throws com.sun.star.uno.RuntimeException {
+        public void setDouble(double zdouble) throws cpo.uno.RuntimeException {
             _double = zdouble;
         }
 
-        public TestEnum getEnum() throws com.sun.star.uno.RuntimeException {
+        public TestEnum getEnum() throws cpo.uno.RuntimeException {
             return _testEnum;
         }
 
-        public void setEnum(TestEnum testEnum) throws com.sun.star.uno.RuntimeException {
+        public void setEnum(TestEnum testEnum) throws cpo.uno.RuntimeException {
             _testEnum = testEnum;
         }
 
-        public String getString() throws com.sun.star.uno.RuntimeException {
+        public String getString() throws cpo.uno.RuntimeException {
             return _string;
         }
 
-        public void setString(String string) throws com.sun.star.uno.RuntimeException {
+        public void setString(String string) throws cpo.uno.RuntimeException {
             _string = string;
         }
 
-        public byte getByte2() throws com.sun.star.uno.RuntimeException {
+        public byte getByte2() throws cpo.uno.RuntimeException {
             return _byte2;
         }
 
-        public void setByte2(byte zbyte) throws com.sun.star.uno.RuntimeException {
+        public void setByte2(byte zbyte) throws cpo.uno.RuntimeException {
             _byte2 = zbyte;
         }
 
-        public short getShort2() throws com.sun.star.uno.RuntimeException {
+        public short getShort2() throws cpo.uno.RuntimeException {
             return _short2;
         }
 
-        public void setShort2(short zshort) throws com.sun.star.uno.RuntimeException {
+        public void setShort2(short zshort) throws cpo.uno.RuntimeException {
             _short2 = zshort;
         }
 
-        public Object getInterface() throws com.sun.star.uno.RuntimeException {
+        public Object getInterface() throws cpo.uno.RuntimeException {
             return _xInterface;
         }
 
-        public void setInterface(Object zinterface) throws com.sun.star.uno.RuntimeException {
+        public void setInterface(Object zinterface) throws cpo.uno.RuntimeException {
             _xInterface = zinterface;
         }
 
-        public Object getAny() throws com.sun.star.uno.RuntimeException {
+        public Object getAny() throws cpo.uno.RuntimeException {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setAny:" + _any);
 
             return _any;
         }
 
-        public void setAny(Object any) throws com.sun.star.uno.RuntimeException {
+        public void setAny(Object any) throws cpo.uno.RuntimeException {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setAny:" + any);
 
             _any = any;
         }
 
-        public TestElement[] getSequence() throws com.sun.star.uno.RuntimeException {
+        public TestElement[] getSequence() throws cpo.uno.RuntimeException {
             return _testElements;
         }
 
-        public void setSequence(TestElement testElements[]) throws com.sun.star.uno.RuntimeException {
+        public void setSequence(TestElement testElements[]) throws cpo.uno.RuntimeException {
             _testElements = testElements;
         }
 
-        public TestDataElements getStruct() throws com.sun.star.uno.RuntimeException {
+        public TestDataElements getStruct() throws cpo.uno.RuntimeException {
             return _testDataElements;
         }
 
-        public void setStruct(TestDataElements testDataElements) throws com.sun.star.uno.RuntimeException {
+        public void setStruct(TestDataElements testDataElements) throws cpo.uno.RuntimeException {
             _testDataElements = testDataElements;
         }
 
         public int getRaiseAttr1() {
-            throw new com.sun.star.uno.RuntimeException();
+            throw new cpo.uno.RuntimeException();
         }
 
         public void setRaiseAttr1(int n) throws IllegalArgumentException {
@@ -759,16 +759,16 @@ public class TestComponent {
             return new TestPolyStruct();
         }
 
-        public Object transportAny(Object value) throws com.sun.star.uno.RuntimeException {
+        public Object transportAny(Object value) throws cpo.uno.RuntimeException {
             return value;
         }
 
-        public void call(int nCallId , int nWaitMUSEC) throws com.sun.star.uno.RuntimeException {
+        public void call(int nCallId , int nWaitMUSEC) throws cpo.uno.RuntimeException {
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
             catch(InterruptedException interruptedException) {
-                throw new com.sun.star.uno.RuntimeException(interruptedException);
+                throw new cpo.uno.RuntimeException(interruptedException);
             }
 
             if(_bFirstCall)
@@ -780,23 +780,23 @@ public class TestComponent {
             _nLastCallId = nCallId;
         }
 
-        public void callOneway( int nCallId , int nWaitMUSEC )  throws com.sun.star.uno.RuntimeException {
+        public void callOneway( int nCallId , int nWaitMUSEC )  throws cpo.uno.RuntimeException {
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
             catch(InterruptedException interruptedException) {
-                throw new com.sun.star.uno.RuntimeException(interruptedException);
+                throw new cpo.uno.RuntimeException(interruptedException);
             }
 
             _bSequenceOfCallTestPassed = _bSequenceOfCallTestPassed && (nCallId > _nLastCallId);
             _nLastCallId = nCallId;
         }
 
-        public boolean sequenceOfCallTestPassed()  throws com.sun.star.uno.RuntimeException {
+        public boolean sequenceOfCallTestPassed()  throws cpo.uno.RuntimeException {
             return _bSequenceOfCallTestPassed;
         }
 
-        public synchronized void callRecursivly(XRecursiveCall xCall,   int nToCall) throws com.sun.star.uno.RuntimeException {
+        public synchronized void callRecursivly(XRecursiveCall xCall,   int nToCall) throws cpo.uno.RuntimeException {
             if(nToCall != 0)
             {
                 nToCall --;
@@ -804,7 +804,7 @@ public class TestComponent {
             }
         }
 
-        public synchronized void  startRecursiveCall(XRecursiveCall xCall, int nToCall) throws com.sun.star.uno.RuntimeException {
+        public synchronized void  startRecursiveCall(XRecursiveCall xCall, int nToCall) throws cpo.uno.RuntimeException {
             if(nToCall != 0)
             {
                 nToCall --;
@@ -947,40 +947,40 @@ public class TestComponent {
         // XBridgeTest
         public TestDataElements raiseException(short nArgumentPos, String rMsg, Object xContext)
             throws com.sun.star.lang.IllegalArgumentException,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
         {
             throw new com.sun.star.lang.IllegalArgumentException(rMsg, xContext, nArgumentPos);
         }
 
-        public void raiseRuntimeExceptionOneway(String rMsg, Object xContext) throws com.sun.star.uno.RuntimeException {
-            throw new com.sun.star.uno.RuntimeException(rMsg, xContext);
+        public void raiseRuntimeExceptionOneway(String rMsg, Object xContext) throws cpo.uno.RuntimeException {
+            throw new cpo.uno.RuntimeException(rMsg, xContext);
         }
 
-        private void dothrow( com.sun.star.uno.RuntimeException t )
-            throws com.sun.star.uno.RuntimeException
+        private void dothrow( cpo.uno.RuntimeException t )
+            throws cpo.uno.RuntimeException
         {
             throw t;
         }
         public int getRuntimeException()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
         {
-            dothrow( new com.sun.star.uno.RuntimeException(
+            dothrow( new cpo.uno.RuntimeException(
                          _string, _xInterface ) );
             return 0; // dummy
         }
 
-        public void setRuntimeException(int _runtimeexception) throws com.sun.star.uno.RuntimeException {
-            throw new com.sun.star.uno.RuntimeException(_string, _xInterface);
+        public void setRuntimeException(int _runtimeexception) throws cpo.uno.RuntimeException {
+            throw new cpo.uno.RuntimeException(_string, _xInterface);
         }
 
 
 
         // XServiceInfo
-        public String getImplementationName() throws com.sun.star.uno.RuntimeException {
+        public String getImplementationName() throws cpo.uno.RuntimeException {
             return __serviceName;
         }
 
-        public boolean supportsService(String rServiceName) throws com.sun.star.uno.RuntimeException {
+        public boolean supportsService(String rServiceName) throws cpo.uno.RuntimeException {
             String rSNL[] = getSupportedServiceNames();
 
             for(int nPos = rSNL.length; (nPos--) != 0;) {
@@ -991,21 +991,21 @@ public class TestComponent {
             return false;
         }
 
-        public String [] getSupportedServiceNames() throws com.sun.star.uno.RuntimeException {
+        public String [] getSupportedServiceNames() throws cpo.uno.RuntimeException {
             return new String[]{__serviceName};
         }
 
         // XTypeProvider
-        public Type[] getTypes() throws com.sun.star.uno.RuntimeException {
+        public Type[] getTypes() throws cpo.uno.RuntimeException {
             try {
                 return new Type[]{new Type(XBridgeTest.class), new Type(XRecursiveCall.class), new Type(XServiceInfo.class), new Type(XTypeProvider.class)};
             }
             catch(Exception exception) {
-                throw new com.sun.star.uno.RuntimeException(exception);
+                throw new cpo.uno.RuntimeException(exception);
             }
         }
 
-        public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
+        public byte[] getImplementationId() throws cpo.uno.RuntimeException {
             return new byte[0];
         }
 

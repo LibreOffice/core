@@ -54,7 +54,7 @@ private:
     static OUString getLanguagePath(const OUString& rLanguagePart);
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit ScriptingFrameworkURIHelper(
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 

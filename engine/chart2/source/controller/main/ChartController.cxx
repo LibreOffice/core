@@ -1648,7 +1648,7 @@ void ChartController::executeDispatch_ManageThemes(bool bSelectOnly)
                 }
             });
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "");
     }

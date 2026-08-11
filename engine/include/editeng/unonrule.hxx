@@ -68,9 +68,9 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // internal
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence<css::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     void setNumberingRuleByIndex(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
 

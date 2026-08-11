@@ -93,7 +93,7 @@ void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, c
 
     mxTextCursor = SwVbaRangeHelper::initCursor( rStart, mxText );
     if( !mxTextCursor.is() )
-        throw uno::RuntimeException(u"Fails to create text cursor"_ustr );
+        throw cpo::uno::RuntimeException(u"Fails to create text cursor"_ustr );
     mxTextCursor->collapseToStart();
 
     if( rEnd.is() )
@@ -271,7 +271,7 @@ SwVbaRange::getParagraphFormat()
 void SAL_CALL
 SwVbaRange::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& /*rParagraphFormat*/ )
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType )
@@ -388,7 +388,7 @@ bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRang
 {
     SwVbaRange* pRange = dynamic_cast< SwVbaRange* >( Range.get() );
     if( !pRange )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference< text::XTextRange > xTextRange = pRange->getXTextRange();
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextCursor->getText(), uno::UNO_QUERY_THROW );
     if( xTRC->compareRegionStarts( xTextRange, getXTextRange() ) >= 0 && xTRC->compareRegionEnds( xTextRange, getXTextRange() ) <= 0 )

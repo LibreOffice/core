@@ -40,7 +40,7 @@ namespace connectivity::file
         OFileTable*         m_pTable;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void checkColumnIndex(sal_Int32 column);
     protected:
         virtual ~OResultSetMetaData() override;

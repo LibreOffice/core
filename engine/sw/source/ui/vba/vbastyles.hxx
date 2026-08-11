@@ -32,7 +32,7 @@ class SwVbaStyles: public SwVbaStyles_BASE
     rtl::Reference< SwXTextDocument > mxModel;
 public:
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent,
                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel );

@@ -195,7 +195,7 @@ protected:
         <p>The mutex of the BroadcastHelper passed to the instance's ctor is <em>not</em> locked when calling
         into this method</p>
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) = 0;
 

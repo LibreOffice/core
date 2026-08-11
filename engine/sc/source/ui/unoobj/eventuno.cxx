@@ -68,7 +68,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const cpo:
 {
     SolarMutexGuard aGuard;
     if (!mpDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
     if (nEvent == ScSheetEventId::NOTFOUND)

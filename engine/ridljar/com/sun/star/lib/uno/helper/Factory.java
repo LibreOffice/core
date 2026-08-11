@@ -53,7 +53,7 @@ public class Factory
     */
     public static XSingleComponentFactory createComponentFactory(
         Class impl_class, String impl_name, String supported_services [] )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return new Factory( impl_class, impl_name, supported_services );
     }
@@ -73,7 +73,7 @@ public class Factory
     */
     public static XSingleComponentFactory createComponentFactory(
         Class impl_class, String supported_services [] )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return createComponentFactory(
             impl_class, impl_class.getName(), supported_services );
@@ -222,8 +222,8 @@ public class Factory
             Throwable targetException = exc.getTargetException();
             if (targetException instanceof java.lang.RuntimeException)
                 throw (java.lang.RuntimeException)targetException;
-            else if (targetException instanceof com.sun.star.uno.RuntimeException)
-                throw (com.sun.star.uno.RuntimeException)targetException;
+            else if (targetException instanceof cpo.uno.RuntimeException)
+                throw (cpo.uno.RuntimeException)targetException;
             else if (targetException instanceof cpo.uno.Exception)
                 throw (cpo.uno.Exception)targetException;
             else
@@ -231,11 +231,11 @@ public class Factory
         }
         catch (IllegalAccessException exc)
         {
-            throw new com.sun.star.uno.RuntimeException( exc, exc.getMessage(), this);
+            throw new cpo.uno.RuntimeException( exc, exc.getMessage(), this);
         }
         catch (InstantiationException exc)
         {
-            throw new com.sun.star.uno.RuntimeException( exc, exc.getMessage(), this);
+            throw new cpo.uno.RuntimeException( exc, exc.getMessage(), this);
         }
     }
     // XSingleComponentFactory impl

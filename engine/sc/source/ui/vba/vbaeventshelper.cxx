@@ -638,7 +638,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 {
     // document and document shell are needed during event processing
     if( !mpShell || !mpDoc )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     /*  For document events: check if events are enabled via the
         Application.EnableEvents symbol (this is an Excel-only attribute).

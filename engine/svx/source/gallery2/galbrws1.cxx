@@ -238,7 +238,7 @@ void GalleryBrowser::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData
     catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
     catch( const cpo::uno::Exception& )

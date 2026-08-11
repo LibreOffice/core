@@ -24,12 +24,12 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XIndexAccess;
 using cpo::uno::Any;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 
 Enumeration::Enumeration(XIndexAccess* pContainer)
     : mxContainer(pContainer)

@@ -58,7 +58,7 @@ bool StatusBarConfiguration::LoadStatusBar(
         xParser->parseStream( aInputSource );
         return true;
     }
-    catch ( const RuntimeException& )
+    catch ( const cpo::uno::RuntimeException& )
     {
         return false;
     }
@@ -86,7 +86,7 @@ bool StatusBarConfiguration::StoreStatusBar(
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
         return true;
     }
-    catch ( const RuntimeException& )
+    catch ( const cpo::uno::RuntimeException& )
     {
         return false;
     }

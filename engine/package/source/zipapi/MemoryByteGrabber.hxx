@@ -49,7 +49,7 @@ public:
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void skipBytes( sal_Int32 nBytesToSkip )
     {
         mnCurrent += nBytesToSkip;

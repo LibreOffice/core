@@ -681,7 +681,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
     OSL_ENSURE(pEditShell, "sw::UndoManager needs a SwEditShell!");
     if (!pEditShell)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     // in case the model has controllers locked, the Undo should not

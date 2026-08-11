@@ -91,7 +91,7 @@ public:
     /// @throws css::io::IOException
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 readAndConvert( cpo::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead );
 
 private:

@@ -53,7 +53,7 @@ private:
 
     sca::analysis::ScaAnyConverter aAnyConv;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString                    GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex);
     void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
@@ -61,7 +61,7 @@ private:
 
                                 /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
                                 ///
-                                /// @throws css::uno::RuntimeException
+                                /// @throws cpo::uno::RuntimeException
                                 /// @throws css::lang::IllegalArgumentException
     sal_Int32                   getDateMode(
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
@@ -75,7 +75,7 @@ public:
 
     virtual                     ~AnalysisAddIn() override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     double                      FactDouble( sal_Int32 nNum );
 
@@ -106,7 +106,7 @@ public:
     //  methods from own interfaces start here
 
                             // XAnalysis
-//    virtual double SAL_CALL       get_Test( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nMode, double f1, double f2, double f3 ) throw( css::uno::RuntimeException );
+//    virtual double SAL_CALL       get_Test( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nMode, double f1, double f2, double f3 ) throw( cpo::uno::RuntimeException );
 
     virtual sal_Int32 SAL_CALL  getWorkday( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nDays, const cpo::uno::Any& aHDay ) override;
     virtual double SAL_CALL     getYearfrac( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const cpo::uno::Any& aMode ) override;

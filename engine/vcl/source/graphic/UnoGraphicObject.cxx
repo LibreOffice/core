@@ -74,7 +74,7 @@ uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
     std::scoped_lock aGuard(m_aMutex);
 
     if (!mpGraphicObject)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return mpGraphicObject->GetGraphic().GetXGraphic();
 }
 
@@ -83,7 +83,7 @@ void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> co
     std::scoped_lock aGuard(m_aMutex);
 
     if (!mpGraphicObject)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     Graphic aGraphic(rxGraphic);
     mpGraphicObject->SetGraphic(aGraphic);
 }

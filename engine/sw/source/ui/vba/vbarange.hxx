@@ -42,26 +42,26 @@ private:
 
 private:
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void GetStyleInfo(OUString& aStyleName, OUString& aStyleType );
 public:
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                 const css::uno::Reference< css::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,
                 const css::uno::Reference< css::text::XTextRange >& rStart);
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                 const css::uno::Reference< css::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,
                 const css::uno::Reference< css::text::XTextRange >& rStart,
                 const css::uno::Reference< css::text::XTextRange >& rEnd );
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                 const css::uno::Reference< css::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,

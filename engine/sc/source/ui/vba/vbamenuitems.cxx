@@ -101,7 +101,7 @@ ScVbaMenuItems::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex
         return cpo::uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
     else if( xCommandBarControl->getType() == office::MsoControlType::msoControlButton )
         return cpo::uno::Any( uno::Reference< excel::XMenuItem > ( new ScVbaMenuItem( this, mxContext, xCommandBarControl ) ) );
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString& Caption, const cpo::uno::Any& OnAction, const cpo::uno::Any& /*ShortcutKey*/, const cpo::uno::Any& Before, const cpo::uno::Any& Restore, const cpo::uno::Any& /*StatusBar*/, const cpo::uno::Any& /*HelpFile*/, const cpo::uno::Any& /*HelpContextID*/ )

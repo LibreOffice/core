@@ -138,7 +138,7 @@ uno::Reference< frame::XModel > SwDrawModel::createUnoModel()
             xModel = pShell->GetModel();
         }
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         OSL_FAIL( "<SwDrawModel::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
     }

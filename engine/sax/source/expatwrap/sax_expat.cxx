@@ -82,7 +82,7 @@ namespace {
                                             pThis->rDocumentLocator->getColumnNumber()\
                                      ) );\
         }\
-        catch( const css::uno::RuntimeException &e ) {\
+        catch( const cpo::uno::RuntimeException &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = e; \
@@ -170,7 +170,7 @@ public: // module scope
     // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
     // therefore the exception must be saved somewhere.
     SAXParseException   exception;
-    css::uno::RuntimeException    rtexception;
+    cpo::uno::RuntimeException    rtexception;
     bool                bExceptionWasThrown;
     bool                bRTExceptionWasThrown;
 
@@ -857,7 +857,7 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
             pImpl->exception.WrappedException <<= e;
             bOK = false;
         }
-        catch( const css::uno::RuntimeException &e )
+        catch( const cpo::uno::RuntimeException &e )
         {
             pImpl->exception.WrappedException <<=e;
             bOK = false;

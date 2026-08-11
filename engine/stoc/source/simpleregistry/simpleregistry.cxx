@@ -32,7 +32,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
@@ -408,7 +408,7 @@ void Key::setAsciiValue(OUString const & value)
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"com.sun.star.registry.SimpleRegistry key setAsciiValue:"
             " value not UTF-16"_ustr,
             getXWeak());
@@ -490,7 +490,7 @@ void Key::setAsciiListValue(
                 (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"com.sun.star.registry.SimpleRegistry key"
                 " setAsciiListValue: value not UTF-16"_ustr,
                 getXWeak());
@@ -916,7 +916,7 @@ bool SimpleRegistry::isReadOnly()
 void SimpleRegistry::mergeKey(
     OUString const &, OUString const &)
 {
-    throw css::uno::RuntimeException(u"css.registry.SimpleRegistry::mergeKey: not implemented"_ustr);
+    throw cpo::uno::RuntimeException(u"css.registry.SimpleRegistry::mergeKey: not implemented"_ustr);
 }
 
 }

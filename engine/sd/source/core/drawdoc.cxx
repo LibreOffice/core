@@ -1614,7 +1614,7 @@ uno::Reference< frame::XModel > SdDrawDocument::createUnoModel()
         if ( mpDocSh )
             xModel = mpDocSh->GetModel();
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
     }
 

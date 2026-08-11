@@ -571,7 +571,7 @@ void OOXMLDocument::resolve(Stream & rStream)
         if (!rShell || !rShell->IsContinueImportOnFilterExceptions())
             throw;
     }
-    catch (uno::RuntimeException const&)
+    catch (cpo::uno::RuntimeException const&)
     {
         throw;
     }

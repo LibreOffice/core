@@ -109,7 +109,7 @@ public class java_remote_bridge
                             if (_xInstanceProvider == null) {
                                 sendReply(
                                     true, msg.getThreadId(),
-                                    new com.sun.star.uno.RuntimeException(
+                                    new cpo.uno.RuntimeException(
                                         "unknown OID " + oid));
                                 continue;
                             } else {
@@ -117,13 +117,13 @@ public class java_remote_bridge
                                     msg.getCurrentContext());
                                 try {
                                     obj = _xInstanceProvider.getInstance(oid);
-                                } catch (com.sun.star.uno.RuntimeException e) {
+                                } catch (cpo.uno.RuntimeException e) {
                                     sendReply(true, msg.getThreadId(), e);
                                     continue;
                                 } catch (Exception e) {
                                     sendReply(
                                         true, msg.getThreadId(),
-                                        new com.sun.star.uno.RuntimeException(
+                                        new cpo.uno.RuntimeException(
                                             e.toString()));
                                     continue;
                                 } finally {
@@ -342,7 +342,7 @@ public class java_remote_bridge
             try {
                 xEventListener.disposing(eventObject);
             }
-            catch(com.sun.star.uno.RuntimeException runtimeException) {
+            catch(cpo.uno.RuntimeException runtimeException) {
                 // we are here not interested in any exceptions
             }
         }

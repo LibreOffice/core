@@ -637,7 +637,7 @@ cpo::uno::Type SAL_CALL SwXStyleFamily::getElementType()
 bool SAL_CALL SwXStyleFamily::hasElements()
 {
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return true;
 }
 
@@ -709,7 +709,7 @@ rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByName(const OUString&
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     auto& entries(lcl_GetStyleFamilyEntries());
     const auto pEntry = std::find_if(entries.begin(), entries.end(),
         [&Name] (const StyleFamilyEntry& e) { return e.name() == Name; });
@@ -771,7 +771,7 @@ rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByIndex(sal_Int32 nInd
     if(nIndex < 0 || o3tl::make_unsigned(nIndex) >= entries.size())
         throw lang::IndexOutOfBoundsException();
     if(!IsValid())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     auto eFamily = entries[nIndex].family();
     assert(eFamily != SfxStyleFamily::All);
     auto& rxFamily = m_vFamilies[eFamily];
@@ -793,7 +793,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 {
     SolarMutexGuard aGuard;
     if(!IsValid() || rURL.isEmpty())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SwgReaderOption aOpt;
     aOpt.SetFrameFormats(true);
     aOpt.SetTextFormats(true);
@@ -919,7 +919,7 @@ cpo::uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
     if(nIndex < 0)
         throw lang::IndexOutOfBoundsException();
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ProgName sStyleProgName;
     try
@@ -971,7 +971,7 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rPro
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sStyleName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName.toString(), m_rEntry.family());
@@ -1013,7 +1013,7 @@ cpo::uno::Sequence<OUString> SwXStyleFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     std::vector<OUString> vRet;
     std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.family());
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
@@ -1029,7 +1029,7 @@ bool SwXStyleFamily::hasByName(const OUString& rProgName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sStyleName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName.toString(), m_rEntry.family());
@@ -1040,7 +1040,7 @@ void SwXStyleFamily::insertStyleByName(const OUString& rProgName, const rtl::Ref
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sStyleName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName.toString(), m_rEntry.family());
@@ -1053,7 +1053,7 @@ void SwXStyleFamily::insertByName(const OUString& rProgName, const cpo::uno::Any
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sStyleName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName.toString(), m_rEntry.family());
@@ -1116,7 +1116,7 @@ void SwXStyleFamily::replaceByName(const OUString& rProgName, const cpo::uno::An
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sStyleName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName.toString(), m_rEntry.family());
@@ -1177,7 +1177,7 @@ void SwXStyleFamily::removeByName(const OUString& rProgName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sName;
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sName.toString(), m_rEntry.family());
@@ -1406,7 +1406,7 @@ OUString SwXStyle::getName()
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     ProgName aString;
     SwStyleNameMapper::FillProgName(UIName(pBase->GetName()), aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.family()));
     return aString.toString();
@@ -1425,13 +1425,13 @@ void SwXStyle::setName(const OUString& rProgName)
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase || !pBase->IsUserDefined())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     UIName sUIName;
     // conversion should actually be irrelevant due to IsUserDefined() check
     SwStyleNameMapper::FillUIName(ProgName(rProgName), sUIName, m_rEntry.poolId());
     rtl::Reference<SwDocStyleSheet> xTmp(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     if (!xTmp->SetName(sUIName.toString()))
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     m_sStyleUIName = std::move(sUIName);
 }
 
@@ -1439,7 +1439,7 @@ bool SwXStyle::isUserDefined()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
     //if it is not found it must be non user defined
     return pBase && pBase->IsUserDefined();
@@ -1449,7 +1449,7 @@ bool SwXStyle::isInUse()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family(), SfxStyleSearchBits::Used);
     return pBase && pBase->IsUsed();
 }
@@ -1461,7 +1461,7 @@ OUString SwXStyle::getParentStyle()
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         SwStyleNameMapper::FillProgName(m_sParentStyleUIName, ret, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
         return ret.toString();
     }
@@ -1481,7 +1481,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyleProgName)
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         m_sParentStyleUIName = sParentStyle;
         try
         {
@@ -1494,14 +1494,14 @@ void SwXStyle::setParentStyle(const OUString& rParentStyleProgName)
     }
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     //make it a 'real' style - necessary for pooled styles
     xBase->GetItemSet();
     if(xBase->GetParent() != sParentStyle)
     {
         if(!xBase->SetParent(sParentStyle.toString()))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 }
 
@@ -2068,7 +2068,7 @@ void SwXStyle::SetPropertyValues(std::span<const OUString> rPropertyNames, std::
 void SwXStyle::SetPropertyValues_Impl(std::span<const OUString> rPropertyNames, std::span<const cpo::uno::Any> rValues, bool bIgnoreUnknown)
 {
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
@@ -2081,11 +2081,11 @@ void SwXStyle::SetPropertyValues_Impl(std::span<const OUString> rPropertyNames, 
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
         SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
         if(!pBase)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     }
     if(!aBaseImpl.getNewBase().is() && !m_bIsDescriptor)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     for(size_t nProp = 0; nProp < rPropertyNames.size(); ++nProp)
     {
@@ -2141,7 +2141,7 @@ void SwXStyle::PrepareStyleBase(SwStyleBase_Impl& rBase)
     {
         SfxStyleSheetBase* pBase(GetStyleSheetBase());
         if(!pBase)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         rBase.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     }
 }
@@ -2431,7 +2431,7 @@ cpo::uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet
     switch(m_rEntry.family())
     {
         case SfxStyleFamily::Pseudo:
-            throw uno::RuntimeException("No default value for: " + rPropertyName);
+            throw cpo::uno::RuntimeException("No default value for: " + rPropertyName);
         break;
         case SfxStyleFamily::Para:
         case SfxStyleFamily::Page:
@@ -2441,7 +2441,7 @@ cpo::uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet
         case SfxStyleFamily::Frame:
         {
             if(pEntry->nWID < POOLATTR_BEGIN || pEntry->nWID >= RES_UNKNOWNATR_END)
-                throw uno::RuntimeException("No default value for: " + rPropertyName);
+                throw cpo::uno::RuntimeException("No default value for: " + rPropertyName);
             SwFormat* pFormat;
             if(m_rEntry.family() == SfxStyleFamily::Char)
                 pFormat = m_pDoc->GetDfltCharFormat();
@@ -2475,9 +2475,9 @@ cpo::uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(!m_pBasePool && !m_bIsDescriptor)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleUIName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
@@ -2564,9 +2564,9 @@ cpo::uno::Sequence<cpo::uno::Any> SwXStyle::getPropertyValues(const cpo::uno::Se
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(!m_pBasePool && !m_bIsDescriptor)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleUIName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
@@ -2639,12 +2639,12 @@ cpo::uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const cpo::
     beans::PropertyState* pStates = aRet.getArray();
 
     if(!m_pBasePool)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleUIName.toString(), m_rEntry.family());
 
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const OUString* pNames = rPropertyNames.getConstArray();
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
@@ -2793,9 +2793,9 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const cpo::uno::Sequence<OUString
             throw beans::UnknownPropertyException("Unknown property: " + rName, getXWeak());
         if (pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_LINK_STYLE
             || pEntry->nWID == FN_UNO_NUM_RULES)
-            throw uno::RuntimeException("Cannot reset: " + rName, getXWeak());
+            throw cpo::uno::RuntimeException("Cannot reset: " + rName, getXWeak());
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + rName, getXWeak());
+            throw cpo::uno::RuntimeException("setPropertiesToDefault: property is read-only: " + rName, getXWeak());
         if(pEntry->nWID == RES_PARATR_OUTLINELEVEL)
         {
             static_cast<SwTextFormatColl*>(pTargetFormat)->DeleteAssignmentToListLevelOfOutlineStyle();
@@ -2822,13 +2822,13 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         m_pPropertiesImpl->ClearAllProperties();
         return;
     }
     const rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(GetStyleSheetBase())));
     if(!xStyle.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(SfxStyleFamily::Page == m_rEntry.family())
     {
         size_t nPgDscPos(0);
@@ -2914,7 +2914,7 @@ cpo::uno::Sequence<cpo::uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const c
     auto pRet = aRet.getArray();
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     const sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
@@ -3013,7 +3013,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
 void SwXPageStyle::SetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& rPropertyNames, const cpo::uno::Sequence<cpo::uno::Any>& rValues)
 {
     if(!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if(rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
@@ -3024,7 +3024,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& rP
     if(!m_pBasePool)
     {
         if(!IsDescriptor())
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
             if(!m_pPropertiesImpl->SetProperty(rPropertyNames[nProp], rValues[nProp]))
                 throw lang::IllegalArgumentException();
@@ -3032,7 +3032,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& rP
     }
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
@@ -3261,7 +3261,7 @@ cpo::uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const cpo
     SolarMutexGuard aGuard;
 
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_Int32 nLength = rPropertyNames.getLength();
     cpo::uno::Sequence<cpo::uno::Any> aRet (nLength);
@@ -3269,7 +3269,7 @@ cpo::uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const cpo
     if(!m_pBasePool)
     {
         if(!IsDescriptor())
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
         {
             const cpo::uno::Any* pAny = nullptr;
@@ -3286,7 +3286,7 @@ cpo::uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const cpo
     SwStyleBase_Impl aBase(*GetDoc(), GetStyleUIName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); // add pDfltFrameFormat as parent
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     for(sal_Int32 nProp = 0; nProp < nLength; ++nProp)
     {
         const OUString& rPropName = rPropertyNames[nProp];
@@ -3594,7 +3594,7 @@ cpo::uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
     if(nIndex < 0 || nIndex >= AUTOSTYLE_FAMILY_COUNT)
         throw lang::IndexOutOfBoundsException();
     if(!IsValid())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< style::XAutoStyleFamily >  aRef;
     IStyleAccess::SwAutoStyleFamily nType = aAutoStyleByIndex[nIndex];
@@ -3717,7 +3717,7 @@ PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamil
     }
 
     if( !pPropSet)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == eFamily);
 
@@ -3899,7 +3899,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 {
     if (!m_pDocShell)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     WhichRangesContainer pRange;
@@ -3921,7 +3921,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         break;
     }
     default:
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwAttrSet aEmptySet(m_pDocShell->GetDoc()->GetAttrPool(), pRange);
@@ -3935,7 +3935,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(  )
 {
     if( !m_pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return uno::Reference< container::XEnumeration >
         (new SwXAutoStylesEnumerator( *m_pDocShell->GetDoc(), m_eFamily ));
 }
@@ -4013,14 +4013,14 @@ void SwXAutoStylesEnumerator::Notify( const SfxHint& rHint)
 bool SwXAutoStylesEnumerator::hasMoreElements(  )
 {
     if( !m_pImpl )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return m_pImpl->hasMoreElements();
 }
 
 cpo::uno::Any SwXAutoStylesEnumerator::nextElement(  )
 {
     if( !m_pImpl )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     cpo::uno::Any aRet;
     if( m_pImpl->hasMoreElements() )
     {
@@ -4134,7 +4134,7 @@ cpo::uno::Sequence< cpo::uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
     if (!mpSet)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     // query_item
@@ -4317,7 +4317,7 @@ cpo::uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
 {
     if (!mpSet)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SolarMutexGuard aGuard;
@@ -4414,7 +4414,7 @@ cpo::uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyDefaults(
 cpo::uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 {
     if( !mpSet )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SolarMutexGuard aGuard;
     std::vector< beans::PropertyValue > aPropertyVector;
 
@@ -5197,7 +5197,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
             }
             default:
                 SAL_WARN("sw.uno", "SwXTextCellStyle unknown nWID");
-                throw css::uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
     }
 
@@ -5362,7 +5362,7 @@ cpo::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
             }
             default:
                 SAL_WARN("sw.uno", "SwXTextCellStyle unknown nWID");
-                throw css::uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
     }
 

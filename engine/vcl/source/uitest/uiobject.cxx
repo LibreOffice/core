@@ -475,7 +475,7 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
     }
 
     if (!pWindow)
-        throw css::uno::RuntimeException("Could not find child with id: " + rID + " children were " + std::u16string_view(debug));
+        throw cpo::uno::RuntimeException("Could not find child with id: " + rID + " children were " + std::u16string_view(debug));
 
     FactoryFunction aFunction = pWindow->GetUITestFactory();
     return aFunction(pWindow);
@@ -494,7 +494,7 @@ std::unique_ptr<UIObject> WindowUIObject::get_visible_child(const OUString& rID)
     }
 
     if (!pWindow)
-        throw css::uno::RuntimeException("Could not find child with id: " + rID);
+        throw cpo::uno::RuntimeException("Could not find child with id: " + rID);
 
     FactoryFunction aFunction = pWindow->GetUITestFactory();
     return aFunction(pWindow);

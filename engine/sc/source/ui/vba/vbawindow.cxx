@@ -106,14 +106,14 @@ public:
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( xModel.get() );
         if ( !pModel )
-            throw uno::RuntimeException(u"Cannot obtain current document"_ustr );
+            throw cpo::uno::RuntimeException(u"Cannot obtain current document"_ustr );
         m_xModel = pModel;
         ScDocShell* pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if ( !pDocShell )
-            throw uno::RuntimeException(u"Cannot obtain docshell"_ustr );
+            throw cpo::uno::RuntimeException(u"Cannot obtain docshell"_ustr );
         ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
         if ( !pViewShell )
-            throw uno::RuntimeException(u"Cannot obtain view shell"_ustr );
+            throw cpo::uno::RuntimeException(u"Cannot obtain view shell"_ustr );
 
         SCTAB nTabCount = pDocShell->GetDocument().GetTableCount();
         SCTAB nIndex = 0;
@@ -249,7 +249,7 @@ void
 ScVbaWindow::Scroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft, bool bLargeScroll )
 {
     if( !m_xPane.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if( bLargeScroll )
         m_xPane->LargeScroll( Down, Up, ToRight, ToLeft );
     else
@@ -290,7 +290,7 @@ ScVbaWindow::ScrollWorkbookTabs( const cpo::uno::Any& /*Sheets*/, const cpo::uno
 /*
     sal_Int32 nSheets = 0;
     sal_Int32 nPosition = 0;
-    throw uno::RuntimeException("No Implemented" );
+    throw cpo::uno::RuntimeException("No Implemented" );
     bool bSheets = ( Sheets >>= nSheets );
     bool bPosition = ( Position >>= nPosition );
     if ( bSheets || bPosition ) // at least one param specified
@@ -416,7 +416,7 @@ ScVbaWindow::setWindowState( const cpo::uno::Any& _windowstate )
             else if (nwindowState == xlNormal)
                 pWork -> Restore();
             else
-                throw uno::RuntimeException(u"Invalid Parameter"_ustr );
+                throw cpo::uno::RuntimeException(u"Invalid Parameter"_ustr );
         }
     }
 }
@@ -733,7 +733,7 @@ void SAL_CALL ScVbaWindow::setZoom(const cpo::uno::Any& _zoom)
     uno::Reference< excel::XWorksheet > xActiveSheet = ActiveSheet();
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists (xSpreadDoc, xActiveSheet->getName(), nTab) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     std::vector< SCTAB > vTabs { nTab };
     excel::implSetZoom( m_xModel, nZoom, vTabs );
 }

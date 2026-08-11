@@ -22,7 +22,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
 #include "filstr.hxx"
 #include "filerror.hxx"
@@ -71,7 +71,7 @@ XStream_impl::~XStream_impl()
     {
         OSL_FAIL("unexpected situation");
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         OSL_FAIL("unexpected situation");
     }

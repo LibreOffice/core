@@ -344,7 +344,7 @@ bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     {
         uno::Reference< embed::XEmbeddedObject > xObject = mpObj->GetObjRef();
         if ( !xObject.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         // we don't want to switch directly from outplace to inplace mode
         bRet = ( xObject->getCurrentState() != embed::EmbedStates::ACTIVE && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON );
     } // if ( mpObj )
@@ -442,7 +442,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     tools::Rectangle aLogicRect = impl_getScaledRect_nothrow();
     MapUnit aContainerMapUnit( MapUnit::Map100thMM );
@@ -471,7 +471,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< embed::XInplaceObject > xInplace( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
 
@@ -525,7 +525,7 @@ uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference< frame::XFrame> xFrame(lcl_getFrame_throw(mpObj),uno::UNO_QUERY_THROW);
     return xFrame->getComponentWindow();
 }

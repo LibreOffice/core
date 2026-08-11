@@ -32,7 +32,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -386,7 +386,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             try {
                 service = factory->createInstanceWithContext(
                     serviceName, m_context);
-            } catch (css::uno::RuntimeException &) {
+            } catch (cpo::uno::RuntimeException &) {
                 throw;
             } catch (const cpo::uno::Exception &) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();

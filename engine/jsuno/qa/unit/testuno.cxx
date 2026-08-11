@@ -787,20 +787,20 @@ try {
     test.throwRuntimeException();
     console.assert(false);
 } catch (e) {
-    console.assert(e instanceof uno.idl.com.sun.star.uno.RuntimeException);
+    console.assert(e instanceof uno.idl.cpo.uno.RuntimeException);
     console.assert(e.Message.startsWith('test'));
 }
 try {
     throw new uno.idl.com.sun.star.lang.WrappedTargetException(
         {Message: 'wrapped', Context: test,
-         TargetException: new uno.idl.com.sun.star.uno.RuntimeException({
+         TargetException: new uno.idl.cpo.uno.RuntimeException({
              Message: 'test', Context: test})});
         console.assert(false);
 } catch (e) {
     console.assert(e instanceof uno.idl.com.sun.star.lang.WrappedTargetException);
     console.assert(e.Message.startsWith('wrapped'));
     console.assert(uno.sameUnoObject(e.Context, test));
-    console.assert(e.TargetException instanceof uno.idl.com.sun.star.uno.RuntimeException);
+    console.assert(e.TargetException instanceof uno.idl.cpo.uno.RuntimeException);
     console.assert(e.TargetException.Message.startsWith('test'));
     console.assert(uno.sameUnoObject(e.TargetException.Context, test));
 }

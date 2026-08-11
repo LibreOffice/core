@@ -25,7 +25,7 @@
 #include <cstddef>
 #include <memory>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <utility>
@@ -768,7 +768,7 @@ void UNO_proxy_dispatch(
         }
         buf.append( ": " + err.m_message );
         // binary identical struct
-        css::uno::RuntimeException exc(
+        cpo::uno::RuntimeException exc(
             buf.makeStringAndClear(),
             css::uno::Reference<
               css::uno::XInterface >() );
@@ -779,7 +779,7 @@ void UNO_proxy_dispatch(
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         // binary identical struct
-        css::uno::RuntimeException exc(
+        cpo::uno::RuntimeException exc(
             u"[jni_uno bridge error] attaching current thread to java failed!"_ustr,
             css::uno::Reference<
               css::uno::XInterface >() );

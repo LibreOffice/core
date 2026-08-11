@@ -105,16 +105,16 @@ class OWriteImagesDocumentHandler final
         ~OWriteImagesDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteImagesDocument();
 
     private:
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteImageList( const ImageItemDescriptorList* );
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteImage( const ImageItemDescriptor* );
 
         const ImageItemDescriptorList&                            m_rImageItemList;

@@ -39,7 +39,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
@@ -84,7 +84,7 @@ EmptyNodeList::EmptyNodeList() {}
 
 css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
 {
-    throw css::uno::RuntimeException(u"bad EmptyNodeList com.sun.star.xml.dom.XNodeList.item call"_ustr,
+    throw cpo::uno::RuntimeException(u"bad EmptyNodeList com.sun.star.xml.dom.XNodeList.item call"_ustr,
         static_cast< ::cppu::OWeakObject * >(this));
 }
 
@@ -115,7 +115,7 @@ public:
         or any other error occurred. Therefore it should only be used with
         new extensions.
 
-        Throws css::uno::RuntimeException,
+        Throws cpo::uno::RuntimeException,
         css::deployment::DeploymentException,
         dp_registry::backend::bundle::NoDescriptionException.
      */
@@ -232,7 +232,7 @@ ExtensionDescription::ExtensionDescription(
         {
             throw cpo::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", nullptr);
         }
-    } catch (const css::uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (const css::deployment::DeploymentException &) {
         throw;

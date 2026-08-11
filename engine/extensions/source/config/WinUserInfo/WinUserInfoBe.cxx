@@ -219,12 +219,12 @@ private:
     void GetCachedData()
     {
         if (m_sUserDN.isEmpty())
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         OUString sCache = officecfg::UserProfile::WinUserInfo::Cache::get();
 
         if (sCache.isEmpty())
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         {
             cpo::uno::Sequence<sal_Int8> seqCachedData;
@@ -251,7 +251,7 @@ private:
         } while (nIndex >= 0);
 
         if (sUserDN != m_sUserDN)
-            throw css::uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         m_aMap = std::move(aMap);
     }
 
@@ -269,13 +269,13 @@ public:
             ULONG nSize = 0;
             GetUserNameExW(NameDisplay, nullptr, &nSize);
             if (GetLastError() != ERROR_MORE_DATA)
-                throw css::uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             auto pNameBuf(std::make_unique<wchar_t[]>(nSize));
             if (!GetUserNameExW(NameDisplay, pNameBuf.get(), &nSize))
-                throw css::uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             m_sName = o3tl::toU(pNameBuf.get());
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
             // GetUserNameEx may fail in some cases (e.g., for built-in AD domain
             // administrator account on non-DC systems), where GetUserName will
@@ -283,7 +283,7 @@ public:
             DWORD nSize = UNLEN + 1;
             auto pNameBuf(std::make_unique<wchar_t[]>(nSize));
             if (!GetUserNameW(pNameBuf.get(), &nSize))
-                throw css::uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             m_sName = o3tl::toU(pNameBuf.get());
         }
     }
@@ -309,7 +309,7 @@ WinUserInfoBe::WinUserInfoBe()
     {
         m_pImpl.reset(new ADsUserAccess());
     }
-    catch (css::uno::RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         m_pImpl.reset(new SysInfoUserAccess);
     }

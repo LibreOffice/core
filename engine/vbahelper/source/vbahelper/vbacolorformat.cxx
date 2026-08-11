@@ -47,7 +47,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
     {
         uno::Reference< ov::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
         m_pFillFormat = static_cast<ScVbaFillFormat*>( xFillFormat.get() );
-    }catch ( uno::RuntimeException& )
+    }catch ( cpo::uno::RuntimeException& )
     {
         m_pFillFormat = nullptr;
     }
@@ -74,7 +74,7 @@ ScVbaColorFormat::getRGB()
         nRGB = m_nFillFormatBackColor;
         break;
     default:
-        throw uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
+        throw cpo::uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
     }
     nRGB = OORGBToXLRGB( Color(ColorTransparency, nRGB) );
     return nRGB;
@@ -107,7 +107,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb )
         }
         break;
     default:
-        throw uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
+        throw cpo::uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
     }
 }
 

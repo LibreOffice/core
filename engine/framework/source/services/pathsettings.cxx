@@ -319,10 +319,10 @@ private:
     /** read all configured paths and create all needed internal structures. */
     void impl_readAll(std::unique_lock<std::mutex>&);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getStringProperty(const OUString& p1);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setStringProperty(const OUString& p1, const OUString& p2);
 
     /** read a path info using the old cfg schema.
@@ -519,7 +519,7 @@ void PathSettings::impl_readAll(std::unique_lock<std::mutex>& g)
             impl_updatePath(g, sPath, false);
         }
     }
-    catch(const css::uno::RuntimeException& )
+    catch(const cpo::uno::RuntimeException& )
     {
     }
 
@@ -712,7 +712,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(g, aPath, false);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const css::container::NoSuchElementException&)
         { eOp = PathSettings::E_REMOVED; }
@@ -731,7 +731,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
         impl_subst(lOldVals, fa_getSubstitution(g), false);
         impl_mergeOldUserPaths(aPath, lOldVals);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     // Normal(!) exceptions can be ignored!
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation

@@ -28,7 +28,7 @@ class WorkbookGlobals;
 class ExcelFilter final : public ::oox::core::XmlFilterBase
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit            ExcelFilter(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual             ~ExcelFilter() override;

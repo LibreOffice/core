@@ -844,7 +844,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = getXWeak(SwXContentControl::CreateXContentControl(rDoc).get());
         break;
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     return xRet;
 }
@@ -1046,7 +1046,7 @@ namespace
             case FLYCNTTYPE_OLE:
                 return lcl_UnoWrapFrame<FLYCNTTYPE_OLE>(pFormat);
             default:
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
     }
 
@@ -1165,7 +1165,7 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration()
             return uno::Reference< container::XEnumeration >(
                 new SwXFrameEnumeration<FLYCNTTYPE_OLE>(GetDoc()));
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 }
 
@@ -1474,7 +1474,7 @@ bool SwXTextSections::hasByName(const OUString& rName)
     {
         // special handling for dbg_ methods
         if( !rName.startsWith("dbg_"))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     return bRet;
 }
@@ -1836,7 +1836,7 @@ SwDoc& SwUnoCollection::GetDoc() const
 {
     DBG_TESTSOLARMUTEX();
     if (!m_pDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return *m_pDoc;
 }
 

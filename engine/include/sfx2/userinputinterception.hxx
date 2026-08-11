@@ -54,13 +54,13 @@ namespace sfx2
         UserInputInterception& operator=( const UserInputInterception& ) = delete;
 
         // delegator functions for your XUserInputInterception implementation
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void    addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void    removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void    addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void    removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
 
         // state

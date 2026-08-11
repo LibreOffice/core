@@ -239,21 +239,21 @@ public:
     // XFastParser
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void parseStream( const css::xml::sax::InputSource& aInputSource );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString const & getNamespaceURL( std::u16string_view rPrefix );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     // Fake DTD file
     void setCustomEntityNames(

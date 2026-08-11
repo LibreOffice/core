@@ -470,7 +470,7 @@ void LayoutMenu::Fill()
                 sCenterPaneViewName = xView->getResourceId()->getResourceURL();
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {}
 
     std::span<const snew_slide_value_info> pInfo;

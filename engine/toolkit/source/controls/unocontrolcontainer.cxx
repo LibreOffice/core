@@ -146,13 +146,13 @@ private:
     );
 
     /** finds a free identifier
-        @throw uno::RuntimeException
+        @throw cpo::uno::RuntimeException
             if no free identifier can be found
     */
     ControlIdentifier impl_getFreeIdentifier_throw();
 
     /** finds a free name
-        @throw uno::RuntimeException
+        @throw cpo::uno::RuntimeException
             if no free name can be found
     */
     OUString impl_getFreeName_throw();
@@ -268,7 +268,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( existent == maControls.end() )
             return candidateId;
     }
-    throw uno::RuntimeException(u"out of identifiers"_ustr );
+    throw cpo::uno::RuntimeException(u"out of identifiers"_ustr );
 }
 
 
@@ -281,7 +281,7 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
                 [&candidateName](const ControlMap::value_type& rEntry) { return rEntry.second->getName() == candidateName; }) )
             return candidateName;
     }
-    throw uno::RuntimeException(u"out of identifiers"_ustr );
+    throw cpo::uno::RuntimeException(u"out of identifiers"_ustr );
 }
 
 //  Function to set the controls' visibility according

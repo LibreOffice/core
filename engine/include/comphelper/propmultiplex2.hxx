@@ -49,7 +49,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyChangeListener2
 public:
     virtual ~OPropertyChangeListener2();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) = 0;
 
 protected:

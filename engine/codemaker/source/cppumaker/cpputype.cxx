@@ -125,7 +125,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.registry.XRegistryKey",
         "com.sun.star.registry.XSimpleRegistry",
         "com.sun.star.uno.DeploymentException",
-        "com.sun.star.uno.RuntimeException",
+        "cpo.uno.RuntimeException",
         "cpo.uno.TypeClass",
         "com.sun.star.uno.Uik",
         "cpo.uno.XAdapter",
@@ -1341,8 +1341,8 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
         << indent() << "bInitStarted = true;\n";
     std::set< OUString > seen;
     // Type for RuntimeException is always needed:
-    seen.insert(u"com.sun.star.uno.RuntimeException"_ustr);
-    dumpCppuGetType(out, u"com.sun.star.uno.RuntimeException");
+    seen.insert(u"cpo.uno.RuntimeException"_ustr);
+    dumpCppuGetType(out, u"cpo.uno.RuntimeException");
     dumpAttributesCppuDecl(out, &seen);
     dumpMethodsCppuDecl(out, &seen);
     if (count != 0) {
@@ -1399,11 +1399,11 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
 {
     // The comprehensive getCppuType method always includes a line
-    // "getCppuType( (const ::css::uno::RuntimeException*)0 );":
+    // "getCppuType( (const ::cpo::uno::RuntimeException*)0 );":
     includes.addCppuUnotypeHxx();
     includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
     includes.addOslMutexHxx();
-    includes.add("com.sun.star.uno.RuntimeException"_ostr);
+    includes.add("cpo.uno.RuntimeException"_ostr);
 }
 
 void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
@@ -1569,13 +1569,13 @@ sal_Int32 InterfaceType::dumpExceptionTypeNames(
 {
     sal_Int32 count = 0;
     for (const OUString& ex : exceptions) {
-        if (ex != "com.sun.star.uno.RuntimeException") {
+        if (ex != "cpo.uno.RuntimeException") {
             dumpExceptionTypeName(out, prefix, count++, ex);
         }
     }
     if (runtimeException) {
         dumpExceptionTypeName(
-            out, prefix, count++, u"com.sun.star.uno.RuntimeException");
+            out, prefix, count++, u"cpo.uno.RuntimeException");
     }
     if (count != 0) {
         out << indent() << "rtl_uString * the_" << prefix << "Exceptions[] = {";
@@ -3451,7 +3451,7 @@ void ServiceType::dumpHppFile(
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : entity_->getConstructors()) {
             if (cons.defaultConstructor) {
                 includes.add("cpo.uno.Exception"_ostr);
-                includes.add("com.sun.star.uno.RuntimeException"_ostr);
+                includes.add("cpo.uno.RuntimeException"_ostr);
             } else {
                 if (!hasRestParameter(cons)) {
                     includes.addAny();
@@ -3473,7 +3473,7 @@ void ServiceType::dumpHppFile(
                 }
                 if (!tree.getRoot().present) {
                     includes.add("cpo.uno.Exception"_ostr);
-                    includes.add("com.sun.star.uno.RuntimeException"_ostr);
+                    includes.add("cpo.uno.RuntimeException"_ostr);
                     includeExceptions(includes, &tree.getRoot());
                 }
             }
@@ -3548,7 +3548,7 @@ void ServiceType::dumpHppFile(
                   << "\", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
-                  << "} catch (const ::css::uno::RuntimeException &) {\n";
+                  << "} catch (const ::cpo::uno::RuntimeException &) {\n";
                 inc();
                 o << indent() << "throw;\n";
                 dec();
@@ -3699,7 +3699,7 @@ void ServiceType::dumpHppFile(
                 if (!tree.getRoot().present) {
                     dec();
                     o << indent()
-                      << "} catch (const ::css::uno::RuntimeException &) {\n";
+                      << "} catch (const ::cpo::uno::RuntimeException &) {\n";
                     inc();
                     o << indent() << "throw;\n";
                     dec();

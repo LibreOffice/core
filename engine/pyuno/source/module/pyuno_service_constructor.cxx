@@ -175,7 +175,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
     {
         raisePyExceptionWithAny(cpo::uno::Any(e));
     }
-    catch (const css::uno::RuntimeException& e)
+    catch (const cpo::uno::RuntimeException& e)
     {
         raisePyExceptionWithAny(cpo::uno::Any(e));
     }

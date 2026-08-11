@@ -223,7 +223,7 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
     Modify_Impl( &aNewStr, nullptr, nullptr, nullptr, nullptr,formula::FormulaGrammar::GRAM_API );
 
     if ( aName != aNewStr )                 // some error occurred...
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 OUString SAL_CALL ScNamedRangeObj::getContent()
@@ -467,12 +467,12 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
         switch (ScRangeData::IsNameValid(aName, rDoc))
         {
             case ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF:
-                throw uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"Invalid name. Reference to a cell, or a range of cells not allowed"_ustr,
                     getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING:
-                throw uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"Invalid name. It must start with a letter (excluding c, C, r, or R followed by a number) or underscore.\nOnly letters, numbers, and underscores are permitted."_ustr,
                     getXWeak());
                 break;
@@ -495,7 +495,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     }
 
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress& aSource,
@@ -543,7 +543,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
     }
 
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPosition )
@@ -1087,7 +1087,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         }
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 // container::XEnumerationAccess

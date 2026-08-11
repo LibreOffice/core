@@ -52,7 +52,7 @@ public class Factory_Test
     {
         if (null == xContext.getValueByName( "/singletons/com.sun.star.lang.theServiceManager" ))
         {
-            throw new com.sun.star.uno.RuntimeException(
+            throw new cpo.uno.RuntimeException(
                 "bad component context given!", this );
         }
     }

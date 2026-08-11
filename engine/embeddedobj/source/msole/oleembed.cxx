@@ -139,7 +139,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         m_xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
                     }
-                    catch( const uno::RuntimeException& )
+                    catch( const cpo::uno::RuntimeException& )
                     {
                         pIterator.remove();
                     }
@@ -163,7 +163,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         m_xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
                     }
-                    catch( const uno::RuntimeException& )
+                    catch( const cpo::uno::RuntimeException& )
                     {
                         pIterator.remove();
                     }
@@ -187,7 +187,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         m_xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
                     }
-                    catch( const uno::RuntimeException& )
+                    catch( const cpo::uno::RuntimeException& )
                     {
                         pIterator.remove();
                     }
@@ -217,7 +217,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
     if ( !xResult.is() )
     {
         o_aStorageName.clear();
-        throw uno::RuntimeException(u"Failed to create temporary storage for OLE embed object"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to create temporary storage for OLE embed object"_ustr);
     }
 
     return xResult;
@@ -238,7 +238,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException(u"Failed to rename temporary storage for OLE embed object"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to rename temporary storage for OLE embed object"_ustr);
 
     return aResult;
 }
@@ -329,7 +329,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
                 if ( aEmbedFactory.isEmpty() )
-                    throw uno::RuntimeException(u"Failed to get OLE embedded object factory"_ustr);
+                    throw cpo::uno::RuntimeException(u"Failed to get OLE embedded object factory"_ustr);
 
                 uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
 
@@ -864,7 +864,7 @@ void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
         try {
             if ( !m_pOleComponent )
-                throw uno::RuntimeException("Null reference to OLE component");
+                throw cpo::uno::RuntimeException("Null reference to OLE component");
 
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();
@@ -928,7 +928,7 @@ void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 m_xOwnView = new OwnView_Impl( m_xContext, m_xObjectStream->getInputStream() );
             }
-            catch( uno::RuntimeException& )
+            catch( cpo::uno::RuntimeException& )
             {
                 throw;
             }

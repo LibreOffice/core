@@ -287,7 +287,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException(u"Footnote's document is not set."_ustr);
+        throw cpo::uno::RuntimeException(u"Footnote's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -408,7 +408,7 @@ cpo::uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyN
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;
     if(!m_pDoc)
-        throw uno::RuntimeException(u"Footnote's document is not set."_ustr);
+        throw cpo::uno::RuntimeException(u"Footnote's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -771,7 +771,7 @@ void SwXLineNumberingProperties::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException(u"Numbering's document is not set."_ustr);
+        throw cpo::uno::RuntimeException(u"Numbering's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -885,7 +885,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     Any aRet;
     if(!m_pDoc)
-        throw uno::RuntimeException(u"Numbering's document is not set."_ustr);
+        throw cpo::uno::RuntimeException(u"Numbering's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -1056,7 +1056,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_bOwnNumRuleCreated(false)
 {
     if (!m_pDocShell->GetDoc())
-        throw uno::RuntimeException(u"Uninitialized shell passed to SwXNumberingRules constructor"_ustr);
+        throw cpo::uno::RuntimeException(u"Uninitialized shell passed to SwXNumberingRules constructor"_ustr);
     m_pImpl->StartListening(GetPageDescNotifier(m_pDocShell->GetDoc()));
 }
 
@@ -1149,7 +1149,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const cpo::uno::Any& rE
         pRule->Validate(*m_pDoc);
     }
     else
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 sal_Int32 SwXNumberingRules::getCount()
@@ -1169,7 +1169,7 @@ cpo::uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUSt
     if (!pRule && m_pDocShell)
         pRule = m_pDocShell->GetDoc()->GetOutlineNumRule();
     if (!pRule)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return GetNumberingRuleByIndex(*pRule, nIndex, rPropName);
 }
 
@@ -1200,7 +1200,7 @@ cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_I
         return GetNumberingRuleByIndex(*m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
     }
     else
-        throw uno::RuntimeException(u"Could not get numbering rule."_ustr);
+        throw cpo::uno::RuntimeException(u"Could not get numbering rule."_ustr);
 }
 
 cpo::uno::Type SwXNumberingRules::getElementType()

@@ -2155,7 +2155,7 @@ void SAL_CALL SdXImpressDocument::release() noexcept
         {
             dispose();
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             // don't break throw ()
             TOOLS_WARN_EXCEPTION( "sd", "" );

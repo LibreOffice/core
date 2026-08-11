@@ -85,7 +85,7 @@ using ::com::sun::star::task::XInteractionHandler2;
 using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;

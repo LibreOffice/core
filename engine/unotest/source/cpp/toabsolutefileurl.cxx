@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
@@ -31,14 +31,14 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
     OUString cwd;
     oslProcessError e1 = osl_getProcessWorkingDir(&cwd.pData);
     if (e1 != osl_Process_E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "osl_getProcessWorkingDir failed with " + OUString::number(e1));
     }
     OUString url;
     osl::FileBase::RC e2 = osl::FileBase::getFileURLFromSystemPath(
         relativePathname, url);
     if (e2 != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "osl::FileBase::getFileURLFromSystemPath(" +
             relativePathname +
             ") failed with " +
@@ -47,7 +47,7 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
     OUString absUrl;
     e2 = osl::FileBase::getAbsoluteFileURL(cwd, url, absUrl);
     if (e2 != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "osl::FileBase::getAbsoluteFileURL(" +
             cwd + ", " + url +
             ") failed with " +

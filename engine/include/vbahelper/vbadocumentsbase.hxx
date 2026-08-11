@@ -55,7 +55,7 @@ private:
     DOCUMENT_TYPE meDocType;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
 
     // XEnumerationAccess
@@ -66,9 +66,9 @@ public:
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override = 0;
 
 protected:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any createDocument();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any openDocument( const OUString& Filename, const cpo::uno::Any& ReadOnly, const cpo::uno::Sequence< css::beans::PropertyValue >& rProps );
 };
 

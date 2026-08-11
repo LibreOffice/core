@@ -54,7 +54,7 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;

@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <config_options.h>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>

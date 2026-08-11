@@ -323,11 +323,11 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
                                         sVerName,
                                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
         if ( !xVerStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
         if ( !xOut.is() )
-            throw uno::RuntimeException(u"The stream was successfully opened for writing already!"_ustr);
+            throw cpo::uno::RuntimeException(u"The stream was successfully opened for writing already!"_ustr);
 
         xWriter->setOutputStream(xOut);
 
@@ -371,13 +371,13 @@ cpo::uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load
                                                             sDocName,
                                                             embed::ElementModes::READ );
             if ( !xDocStream.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             OSL_ENSURE( aParserInput.aInputStream.is(),
                         "The stream was successfully opened for reading, the input part must be accessible!" );
             if ( !aParserInput.aInputStream.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             // get filter
             rtl::Reference< XMLVersionListImport > xImport = new XMLVersionListImport( xContext, aVersions );

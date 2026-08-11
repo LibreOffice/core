@@ -22,7 +22,7 @@ private:
     sw::mark::DropDownFieldmark* m_pDropDown;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaFormFieldDropDown(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                            const css::uno::Reference<css::uno::XComponentContext>& rContext,
                            sw::mark::Fieldmark& rFormField);

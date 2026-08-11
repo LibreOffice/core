@@ -334,7 +334,7 @@ cpo::uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 
     SdrObject* pObj = mpPage->GetObj( Index );
     if( pObj == nullptr )
-        throw uno::RuntimeException("Runtime exception thrown while getting a ref to the SdrObject at index: "
+        throw cpo::uno::RuntimeException("Runtime exception thrown while getting a ref to the SdrObject at index: "
                                     + OUString::number(Index));
 
 

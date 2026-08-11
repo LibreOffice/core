@@ -684,7 +684,7 @@ rtl::Reference<DNDListenerContainer> Window::GetDropTarget()
                             mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = true;
 
                     }
-                    catch (const RuntimeException&)
+                    catch (const cpo::uno::RuntimeException&)
                     {
                         // release all instances
                         mpWindowImpl->mpFrameData->mxDropTarget.clear();

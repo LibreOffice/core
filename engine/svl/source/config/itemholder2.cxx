@@ -37,7 +37,7 @@ ItemHolder2::ItemHolder2()
         css::uno::Reference< css::lang::XComponent > xCfg( css::configuration::theDefaultProvider::get(xContext), css::uno::UNO_QUERY_THROW );
         xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }

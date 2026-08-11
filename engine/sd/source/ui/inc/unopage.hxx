@@ -91,7 +91,7 @@ protected:
     cpo::uno::Any getNavigationOrder();
     void setNavigationOrder( const cpo::uno::Any& rValue );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void throwIfDisposed() const;
 
 public:

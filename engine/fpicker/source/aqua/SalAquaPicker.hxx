@@ -25,7 +25,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include "ControlHelper.hxx"
 
 #include <premac.h>
@@ -65,14 +65,14 @@ protected:
 
     NavigationServices_DialogType m_nDialogType;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implsetTitle(const OUString& aTitle);
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void implsetDisplayDirectory(const OUString& rDirectory);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString const& implgetDisplayDirectory();
 
     void implInitialize();

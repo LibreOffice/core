@@ -73,9 +73,9 @@ ScVbaFileDialogSelectedItems::createCollectionObject( const cpo::uno::Any& aSour
 {
     sal_Int32 nPosition = -1;
     if (!(aSource >>= nPosition))
-        throw uno::RuntimeException(u"not an sal_Int32"_ustr);
+        throw cpo::uno::RuntimeException(u"not an sal_Int32"_ustr);
     if (nPosition < 0 || o3tl::make_unsigned(nPosition) >= m_sItems.size())
-        throw uno::RuntimeException(u"out of range"_ustr);
+        throw cpo::uno::RuntimeException(u"out of range"_ustr);
 
     OUString sPath = m_sItems[nPosition];
     return cpo::uno::Any( sPath );
@@ -92,7 +92,7 @@ ScVbaFileDialogSelectedItems::Item( const cpo::uno::Any& aIndex, const cpo::uno:
 
     if( nPosition < 0 || nPosition >= getCount() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return createCollectionObject( cpo::uno::Any( nPosition ) );

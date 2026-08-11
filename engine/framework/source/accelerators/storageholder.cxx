@@ -113,7 +113,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
             {
                 xChild = StorageHolder::openSubStorageWithFallback(xParent, lFolder, nOpenMode); // TODO think about delegating fallback decision to our own caller!
             }
-            catch(const css::uno::RuntimeException&)
+            catch(const cpo::uno::RuntimeException&)
                 { throw; }
             catch(const cpo::uno::Exception&)
                 {
@@ -378,7 +378,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
         if (xSubStorage.is())
             return xSubStorage;
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }

@@ -88,14 +88,14 @@ protected:
 private:
     virtual bool IsEditable(sal_Int64 nParentStates);
 protected:
-    /// @throw css::uno::RuntimeException
+    /// @throw cpo::uno::RuntimeException
     OUString GetNote() const;
 
-    /// @throw css::uno::RuntimeException
+    /// @throw cpo::uno::RuntimeException
     OUString GetAllDisplayNote() const;
-    /// @throw css::uno::RuntimeException
+    /// @throw cpo::uno::RuntimeException
     OUString getShadowAttrs() const;
-    /// @throw css::uno::RuntimeException
+    /// @throw cpo::uno::RuntimeException
     OUString getBorderAttrs();
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }

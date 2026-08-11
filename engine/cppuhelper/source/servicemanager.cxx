@@ -645,7 +645,7 @@ ImplementationWrapper::getSupportedServiceNames()
     if (impl->services.size()
         > o3tl::make_unsigned(SAL_MAX_INT32))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             ("Implementation " + impl->name
              + " supports too many services"),
             static_cast< cppu::OWeakObject * >(this));
@@ -916,7 +916,7 @@ void cppuhelper::ServiceManager::disposing(std::unique_lock<std::mutex>& rGuard)
     {
         try {
             rxSngl->dispose();
-        } catch (css::uno::RuntimeException & e) {
+        } catch (cpo::uno::RuntimeException & e) {
             SAL_WARN("cppuhelper", "Ignoring " << e << " while disposing singleton");
         }
     }
@@ -985,7 +985,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
         return cpo::uno::Sequence< OUString >();
     }
     if (data_.services.size() > o3tl::make_unsigned(SAL_MAX_INT32)) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"getAvailableServiceNames: too many services"_ustr,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1031,14 +1031,14 @@ bool cppuhelper::ServiceManager::hasElements()
 css::uno::Reference< css::container::XEnumeration >
 cppuhelper::ServiceManager::createEnumeration()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"ServiceManager createEnumeration: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
 bool cppuhelper::ServiceManager::has(cpo::uno::Any const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"ServiceManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
@@ -1296,7 +1296,7 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
     assert(component.is());
     try {
         component->removeEventListener(this);
-    } catch (css::uno::RuntimeException & e) {
+    } catch (cpo::uno::RuntimeException & e) {
         SAL_INFO(
             "cppuhelper",
             "Ignored removeEventListener RuntimeException " + e.Message);
@@ -1368,7 +1368,7 @@ void cppuhelper::ServiceManager::readRdbFile(
                 "InvalidRegistryException: " + e.Message,
                 static_cast< cppu::OWeakObject * >(this));
         }
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         if (!readLegacyRdbFile(uri)) {
             throw;
         }

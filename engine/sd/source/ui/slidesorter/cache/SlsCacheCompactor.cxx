@@ -131,7 +131,7 @@ IMPL_LINK_NOARG(CacheCompactor, CompactionCallback, Timer *, void)
     {
         Run();
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
     }
     catch (const cpo::uno::Exception&)

@@ -83,7 +83,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::awt::XWindow;
@@ -1449,7 +1449,7 @@ void SfxBaseController::appendInfobar(const OUString& sId, const OUString& sPrim
         = pViewFrame->AppendInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
                                     static_cast<InfobarType>(aInfobarType), bShowCloseButton);
     if (!pInfoBar)
-        throw uno::RuntimeException(u"Could not create Infobar"_ustr);
+        throw cpo::uno::RuntimeException(u"Could not create Infobar"_ustr);
 
     for (const StringPair& actionButton : actionButtons)
     {

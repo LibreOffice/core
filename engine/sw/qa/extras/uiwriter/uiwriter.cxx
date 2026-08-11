@@ -551,7 +551,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
     xCursor->goLeft(1, false);
     // try to insert some random file
     // inserting even asserts in debug builds - document model goes invalid with input field split across 2 nodes
-    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(createFileURL(u"fdo75110.odt"), {}), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(createFileURL(u"fdo75110.odt"), {}), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)

@@ -46,7 +46,7 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
 , m_bOwnContent( false )
 {
     if ( !rxContext.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 OZipFileAccess::~OZipFileAccess()
@@ -165,7 +165,7 @@ void SAL_CALL OZipFileAccess::initialize( const cpo::uno::Sequence< cpo::uno::An
         throw lang::DisposedException();
 
     if ( m_pZipFile )
-        throw uno::RuntimeException(); // initialization is allowed only one time
+        throw cpo::uno::RuntimeException(); // initialization is allowed only one time
 
     if ( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
@@ -250,7 +250,7 @@ cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     if ( !m_pZipFile )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
     if ( aIter == m_pZipFile->GetEntryHash().end() )
@@ -272,7 +272,7 @@ cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     {
         throw;
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -284,7 +284,7 @@ cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     }
 
     if ( !xEntryStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return cpo::uno::Any ( xEntryStream );
 }
@@ -297,7 +297,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
         throw lang::DisposedException();
 
     if ( !m_pZipFile )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
     auto pNames = aNames.getArray();
@@ -332,7 +332,7 @@ bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
         throw lang::DisposedException();
 
     if ( !m_pZipFile )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
 
@@ -347,7 +347,7 @@ cpo::uno::Type SAL_CALL OZipFileAccess::getElementType()
         throw lang::DisposedException();
 
     if ( !m_pZipFile )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return cppu::UnoType<io::XInputStream>::get();
 }
@@ -360,7 +360,7 @@ bool SAL_CALL OZipFileAccess::hasElements()
         throw lang::DisposedException();
 
     if ( !m_pZipFile )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return ( !m_pZipFile->GetEntryHash().empty() );
 }
@@ -389,7 +389,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
                                                                                     m_aMutexHolder ) );
 
         if ( !xEntryStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         return xEntryStream;
     }
 

@@ -69,24 +69,24 @@ namespace comphelper
         /** non-virtual versions of the methods
 
             @throws css::lang::IndexOutOfBoundsException
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
         */
         OUString getSelectedText();
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getSelectionStart();
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getSelectionEnd();
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::accessibility::TextSegment getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::accessibility::TextSegment getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::accessibility::TextSegment getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType );
 
     public:

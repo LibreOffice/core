@@ -263,7 +263,7 @@ SdrModel::~SdrModel()
         {
             xComponent->dispose();
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
         mxStyleSheetPool.clear();

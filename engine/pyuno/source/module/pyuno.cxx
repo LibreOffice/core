@@ -52,7 +52,7 @@ using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Type;
 using cpo::uno::TypeClass;
 using com::sun::star::uno::TypeDescription;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using cpo::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XServiceInfo;
@@ -430,7 +430,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch (const css::uno::RuntimeException &e)
+    catch (const cpo::uno::RuntimeException &e)
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -523,7 +523,7 @@ static int PyUNO_bool( PyObject* self )
         // Anything which doesn't have members is a scalar object and therefore true
         return 1;
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -543,7 +543,7 @@ static Py_ssize_t PyUNO_len( PyObject* self )
 
         PyErr_SetString( PyExc_TypeError, "object has no len()" );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -863,7 +863,7 @@ static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -892,7 +892,7 @@ static int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue 
         {
             aValue = runtime.pyObject2Any( pValue );
         }
-        catch ( const css::uno::RuntimeException & )
+        catch ( const cpo::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1013,7 +1013,7 @@ static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue 
                 {
                     aItem = runtime.pyObject2Any( rItem.get() );
                 }
-                catch ( const css::uno::RuntimeException & )
+                catch ( const cpo::uno::RuntimeException & )
                 {
                     // TODO pyObject2Any can't convert e.g. dicts but only throws
                     // RuntimeException on failure. Fixing this will require an audit of
@@ -1072,7 +1072,7 @@ static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue
         {
             aValue = runtime.pyObject2Any( pValue );
         }
-        catch( const css::uno::RuntimeException & )
+        catch( const cpo::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1174,7 +1174,7 @@ static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -1250,7 +1250,7 @@ static PyObject* PyUNO_iter( PyObject *self )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -1271,7 +1271,7 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
         {
             aValue = runtime.pyObject2Any( pKey );
         }
-        catch( const css::uno::RuntimeException & )
+        catch( const cpo::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1339,7 +1339,7 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -1532,7 +1532,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
             }
         }
     }
-    catch( const css::uno::RuntimeException & e)
+    catch( const cpo::uno::RuntimeException & e)
     {
         raisePyExceptionWithAny( Any( e ) );
     }

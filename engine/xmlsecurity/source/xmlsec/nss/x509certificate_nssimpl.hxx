@@ -84,7 +84,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         void setCert( CERTCertificate* cert ) ;
         const CERTCertificate* getNssCert() const ;
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setRawCert( const cpo::uno::Sequence< sal_Int8 >& rawCert ) ;
         SECKEYPrivateKey* getPrivateKey();
 

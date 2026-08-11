@@ -534,7 +534,7 @@ using namespace cpo::uno;
                     // to find a better place for more targeted flush.
                     xControlText = xControlText->getText();
                 }
-                catch (css::uno::RuntimeException const&)
+                catch (cpo::uno::RuntimeException const&)
                 {
                     // just in case if we would hit something here
                 }

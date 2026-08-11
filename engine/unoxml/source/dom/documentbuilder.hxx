@@ -101,7 +101,7 @@ namespace DOM
         */
         virtual void SAL_CALL setEntityResolver(const css::uno::Reference< css::xml::sax::XEntityResolver >& er) override;
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::xml::sax::XEntityResolver > getEntityResolver();
 
         /**

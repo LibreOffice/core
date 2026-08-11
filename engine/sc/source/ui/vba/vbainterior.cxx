@@ -129,7 +129,7 @@ uno::Reference< container::XIndexAccess >
 ScVbaInterior::getPalette() const
 {
     if ( !m_pScDoc )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     ScDocShell* pShell = m_pScDoc->GetDocumentShell();
     ScVbaPalette aPalette( pShell );
     return aPalette.getPalette();
@@ -294,7 +294,7 @@ void SAL_CALL
 ScVbaInterior::setPattern( const cpo::uno::Any& _pattern )
 {
     if( !(_pattern >>= m_nPattern) )
-        throw uno::RuntimeException(u"Invalid Pattern index"_ustr );
+        throw cpo::uno::RuntimeException(u"Invalid Pattern index"_ustr );
 
     SetUserDefinedAttributes( PATTERN, SetAttributeData( m_nPattern ) );
     SetMixedColor();
@@ -340,7 +340,7 @@ ScVbaInterior::setPatternColor( const cpo::uno::Any& _patterncolor )
 {
     sal_Int32 nPattColor = 0;
     if( !(_patterncolor >>= nPattColor) )
-        throw uno::RuntimeException(u"Invalid Pattern Color"_ustr );
+        throw cpo::uno::RuntimeException(u"Invalid Pattern Color"_ustr );
 
     SetUserDefinedAttributes( PATTERNCOLOR, SetAttributeData( XLRGBToOORGB( nPattColor ) ) );
     SetMixedColor();
@@ -359,7 +359,7 @@ ScVbaInterior::setPatternColorIndex( const cpo::uno::Any& _patterncolorindex )
 {
     sal_Int32 nColorIndex = 0;
     if( !(_patterncolorindex >>= nColorIndex) )
-        throw uno::RuntimeException(u"Invalid Pattern Color"_ustr );
+        throw cpo::uno::RuntimeException(u"Invalid Pattern Color"_ustr );
 
     if( nColorIndex == 0 )
         return;

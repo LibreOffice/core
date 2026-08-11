@@ -159,7 +159,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     if ( !aName.isEmpty() && pModel->GetNamedObject( aName, SdrObjKind::OLE2, nDummy ) )
     {
         //  object exists - only RuntimeException is specified
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     ScRangeList* pList = new ScRangeList;
@@ -709,7 +709,7 @@ OUString SAL_CALL ScChartObj::getName()
 
 void SAL_CALL ScChartObj::setName( const OUString& /* aName */ )
 {
-    throw uno::RuntimeException();      // name cannot be changed
+    throw cpo::uno::RuntimeException();      // name cannot be changed
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

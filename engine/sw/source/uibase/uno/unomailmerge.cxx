@@ -123,7 +123,7 @@ static CloseResult CloseModelAndDocSh(
             //! currently being printed will never be deleted. :-(
             eResult = eVetoed;
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             eResult = eFailed;
         }

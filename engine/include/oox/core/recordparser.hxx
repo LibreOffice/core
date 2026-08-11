@@ -55,7 +55,7 @@ public:
 
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                parseStream( const RecordInputSource& rInputSource );
 
     const RecordInputSource& getInputSource() const { return maSource; }

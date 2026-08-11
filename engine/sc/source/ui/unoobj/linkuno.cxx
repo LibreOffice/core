@@ -50,7 +50,7 @@ using namespace formula;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 
 //  used for sheet- and area link:
 static std::span<const SfxItemPropertyMapEntry> lcl_GetSheetLinkMap()
@@ -1040,7 +1040,7 @@ OUString SAL_CALL ScDDELinkObj::getName()
 void SAL_CALL ScDDELinkObj::setName( const OUString& /* aName */ )
 {
     //  name can't be changed (formulas wouldn't find the link)
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 // XDDELink
@@ -1136,7 +1136,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > ScDDELinkObj::getResul
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"ScDDELinkObj::getResults: failed to get results!"_ustr );
     }
 
@@ -1161,7 +1161,7 @@ void ScDDELinkObj::setResults( const cpo::uno::Sequence< cpo::uno::Sequence< cpo
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"ScDDELinkObj::setResults: failed to set results!"_ustr );
     }
 }
@@ -1365,7 +1365,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
 
     if ( !xLink.is() )
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"ScDDELinksObj::addDDELink: cannot add DDE link!"_ustr );
     }
 

@@ -221,7 +221,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
             return true;
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -415,7 +415,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 
         TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -553,7 +553,7 @@ bool HierarchyEntry::move(
                 return false;
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -808,7 +808,7 @@ bool HierarchyEntry::remove()
             }
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -879,7 +879,7 @@ bool HierarchyEntry::first( iterator & it )
                 it.officeDirs = m_xOfficeInstDirs;
             }
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }
@@ -997,7 +997,7 @@ HierarchyEntry::getRootReadAccess()
                             uno::UNO_QUERY );
                 }
             }
-            catch ( uno::RuntimeException const & )
+            catch ( cpo::uno::RuntimeException const & )
             {
                 throw;
             }

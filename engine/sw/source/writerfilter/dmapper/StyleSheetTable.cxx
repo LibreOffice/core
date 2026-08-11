@@ -1032,7 +1032,7 @@ void StyleSheetTable::ApplyClonedTOCStyles()
     // ignore header / footer, irrelevant for ToX
     // text frames
     if (!m_xTextDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     rtl::Reference<SwXTextFrames> const xFrames(m_xTextDocument->getSwTextFrames());
     uno::Reference<container::XEnumeration> const xFramesEnum(xFrames->createEnumeration());
     while (xFramesEnum->hasMoreElements())
@@ -1173,7 +1173,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                     xStyle->setParentStyle( sParentStyleName );
                             }
                         }
-                        catch( const uno::RuntimeException& )
+                        catch( const cpo::uno::RuntimeException& )
                         {
                             OSL_FAIL( "Styles parent could not be set");
                         }
@@ -2215,7 +2215,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCh
     const rtl::Reference< SwXStyleFamily >& xCharStyles = m_rDMapper.GetCharacterStyles();
     OUString sListLabel = m_rDMapper.GetUnusedCharacterStyleName();
     if (!m_xTextDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     try
     {
         rtl::Reference< SwXStyle > xStyle = m_xTextDocument->createCharacterStyle();

@@ -1425,7 +1425,7 @@ ScChart2DataProvider::createDataSource(
 {
     SolarMutexGuard aGuard;
     if ( ! m_pDocument )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< chart2::data::XDataSource> xResult;
     bool bLabel = true;
@@ -3019,7 +3019,7 @@ cpo::uno::Sequence< cpo::uno::Any> SAL_CALL ScChart2DataSequence::getData()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     BuildDataCache();
 
@@ -3056,7 +3056,7 @@ cpo::uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     BuildDataCache();
 
@@ -3079,7 +3079,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     SolarMutexGuard aGuard;
     cpo::uno::Sequence<OUString> aSeq;
     if ( !m_pDocument )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     BuildDataCache();
 
@@ -3212,7 +3212,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(char
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // Determine the total size of all ranges.
     AccumulateRangeSize func(m_pDocument);

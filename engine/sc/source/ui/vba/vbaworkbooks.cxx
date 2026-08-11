@@ -138,7 +138,7 @@ ScVbaWorkbooks::Add( const cpo::uno::Any& Template )
     else
     {
         // illegal argument
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     // need to set up the document modules ( and vba mode ) here
@@ -227,7 +227,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLi
             Format >>= nFormat; // val of nFormat overwritten if extracted
             // validate param
             if ( nFormat < 1 || nFormat > 6 )
-                throw uno::RuntimeException(u"Illegal value for Format"_ustr );
+                throw cpo::uno::RuntimeException(u"Illegal value for Format"_ustr );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
@@ -240,11 +240,11 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLi
         {
             // Need to check Delimiter param
             if ( !Delimiter.hasValue() )
-                throw uno::RuntimeException(u"Expected value for Delimiter"_ustr );
+                throw cpo::uno::RuntimeException(u"Expected value for Delimiter"_ustr );
             OUString sStr;
             Delimiter >>= sStr;
             if ( sStr.isEmpty() )
-                throw uno::RuntimeException(u"Incorrect value for Delimiter"_ustr );
+                throw cpo::uno::RuntimeException(u"Incorrect value for Delimiter"_ustr );
 
             nDelim = sStr[0];
 
@@ -262,7 +262,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLi
                        u"DocumentService"_ustr, u"com.sun.star.sheet.SpreadsheetDocument"_ustr) };
     }
     else if ( !isSpreadSheetFile( sType ) )
-        throw uno::RuntimeException(u"Bad Format"_ustr );
+        throw cpo::uno::RuntimeException(u"Bad Format"_ustr );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     cpo::uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );

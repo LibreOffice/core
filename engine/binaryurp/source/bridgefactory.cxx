@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -128,13 +128,13 @@ cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
 BridgeFactory::getExistingBridges() {
     osl::MutexGuard g(m_aMutex);
     if (unnamed_.size() > SAL_MAX_INT32) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"BridgeFactory::getExistingBridges: too many"_ustr,
             getXWeak());
     }
     sal_Int32 n = static_cast< sal_Int32 >(unnamed_.size());
     if (named_.size() > o3tl::make_unsigned(SAL_MAX_INT32 - n)) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"BridgeFactory::getExistingBridges: too many"_ustr,
             getXWeak());
     }

@@ -298,7 +298,7 @@ cpo::uno::Any SAL_CALL SwVbaParagraphFormat::getTabStops()
 
 void SAL_CALL SwVbaParagraphFormat::setTabStops( const cpo::uno::Any& /*_tabstops*/ )
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 cpo::uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl()

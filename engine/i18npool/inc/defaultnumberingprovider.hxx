@@ -81,9 +81,9 @@ private:
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
     std::map<OUString, const Supported_NumberingType*> maSupportedTypesCache;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString makeNumberingIdentifier( sal_Int16 index );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isScriptFlagEnabled(const OUString& aName );
 };
 

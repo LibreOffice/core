@@ -188,7 +188,7 @@ public final class socketAcceptor implements XAcceptor {
             serv.close();
         }
         catch (IOException e) {
-            throw new com.sun.star.uno.RuntimeException(e);
+            throw new cpo.uno.RuntimeException(e);
         }
     }
 

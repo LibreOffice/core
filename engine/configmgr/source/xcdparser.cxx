@@ -23,7 +23,7 @@
 #include <climits>
 #include <set>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -93,12 +93,12 @@ bool XcdParser::startElement(
                     }
                 }
                 if (!attrFile.is()) {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "no dependency file attribute in " + reader.getUrl());
                 }
                 dependencyFile_ = attrFile.convertFromUtf8();
                 if (dependencyFile_.isEmpty()) {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "bad dependency file attribute in " + reader.getUrl());
                 }
             }
@@ -138,7 +138,7 @@ bool XcdParser::startElement(
         assert(false); // this cannot happen
         break;
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
 }
 

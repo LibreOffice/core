@@ -72,7 +72,7 @@ const SwFormatLineBreak& SwXLineBreak::Impl::GetLineBreakFormatOrThrow() const
     const SwFormatLineBreak* pLineBreak(GetLineBreakFormat());
     if (!pLineBreak)
     {
-        throw uno::RuntimeException(u"SwXLineBreak: disposed or invalid"_ustr, nullptr);
+        throw cpo::uno::RuntimeException(u"SwXLineBreak: disposed or invalid"_ustr, nullptr);
     }
 
     return *pLineBreak;
@@ -141,7 +141,7 @@ void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xText
     SolarMutexGuard aGuard;
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     auto pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());

@@ -35,7 +35,7 @@
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -65,7 +65,7 @@ sal_Int32 pointsToHundredthMm(double points)
     auto const hundredthMm = std::round(points * 2540.0 / 72.0);
     if (!(hundredthMm >= SAL_MIN_INT32 && hundredthMm <= SAL_MAX_INT32))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"expected a length in points that fits the page coordinate range, got "_ustr
             + OUString::number(points));
     }
@@ -78,7 +78,7 @@ sal_Int32 extentToHundredthMm(double points)
 {
     if (!(points >= 0))
     {
-        throw css::uno::RuntimeException(u"expected a non-negative size in points, got "_ustr
+        throw cpo::uno::RuntimeException(u"expected a non-negative size in points, got "_ustr
                                          + OUString::number(points));
     }
     return pointsToHundredthMm(points);
@@ -123,7 +123,7 @@ sal_Int32 parseHexColor(OUString const& hexColor)
     }
     if (!valid)
     {
-        throw css::uno::RuntimeException(u"expected a color in \"#rrggbb\" form, got "_ustr
+        throw cpo::uno::RuntimeException(u"expected a color in \"#rrggbb\" form, got "_ustr
                                          + hexColor);
     }
     return static_cast<sal_Int32>(o3tl::toUInt32(hexColor.subView(1), 16));
@@ -302,14 +302,14 @@ public:
     {
         if (range_.is())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"appendText: only the shape's whole text range can append"_ustr);
         }
         css::uno::Reference<css::text::XTextPortionAppend> const append(text_,
                                                                         css::uno::UNO_QUERY);
         if (!append.is())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"appendText: the text cannot take appended runs"_ustr);
         }
         // The engine returns a range covering exactly the appended run, with any character
@@ -317,7 +317,7 @@ public:
         auto const run = append->appendTextPortion(text, {});
         if (!run.is())
         {
-            throw css::uno::RuntimeException(u"appendText: appending failed"_ustr);
+            throw cpo::uno::RuntimeException(u"appendText: appending failed"_ustr);
         }
         return new TextRangeImpl(text_, run);
     }
@@ -327,14 +327,14 @@ public:
     {
         if (range_.is())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"appendParagraph: only the shape's whole text range can append"_ustr);
         }
         css::uno::Reference<css::text::XParagraphAppend> const append(text_,
                                                                       css::uno::UNO_QUERY);
         if (!append.is())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"appendParagraph: the text cannot take appended paragraphs"_ustr);
         }
         // finishParagraph reports the paragraph it closed; the interesting one is the new empty
@@ -359,7 +359,7 @@ public:
     {
         if (level < -1 || level > 9)
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"setBulletLevel: the level must be between -1 (no bullet) and 9"_ustr);
         }
         // NumberingLevel drives the outliner depth of every paragraph the underlying cursor
@@ -377,7 +377,7 @@ public:
         // Character formatting lives on the text runs, so an empty range holds none to style.
         if (asString().isEmpty())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"getTextStyle: the range is empty and has no characters to style"_ustr);
         }
         return new TextStyleImpl(text_, range_);
@@ -405,7 +405,7 @@ public:
         css::uno::Reference<css::text::XText> const text(shape_, css::uno::UNO_QUERY);
         if (!text.is())
         {
-            throw css::uno::RuntimeException(u"getText: shape cannot hold text"_ustr);
+            throw cpo::uno::RuntimeException(u"getText: shape cannot hold text"_ustr);
         }
         return new TextRangeImpl(text);
     }
@@ -506,7 +506,7 @@ public:
                                                                            css::uno::UNO_QUERY);
         if (!factory.is())
         {
-            throw css::uno::RuntimeException(u"insertTextBox: no shape factory"_ustr);
+            throw cpo::uno::RuntimeException(u"insertTextBox: no shape factory"_ustr);
         }
         css::uno::Reference<css::drawing::XShape> const shape(
             factory->createInstance(u"com.sun.star.drawing.TextShape"_ustr),
@@ -535,7 +535,7 @@ public:
                                                                            css::uno::UNO_QUERY);
         if (!factory.is())
         {
-            throw css::uno::RuntimeException(u"setBackgroundColor: no background factory"_ustr);
+            throw cpo::uno::RuntimeException(u"setBackgroundColor: no background factory"_ustr);
         }
         // The page's Background property takes a property set created by the document model.  A
         // solid fill stored on the slide itself wins over whatever the master slide would paint.
@@ -560,7 +560,7 @@ public:
         // rather than a silent no-op:
         if (pages->getCount() <= 1)
         {
-            throw css::uno::RuntimeException(u"remove: cannot remove the only slide"_ustr);
+            throw cpo::uno::RuntimeException(u"remove: cannot remove the only slide"_ustr);
         }
         pages->remove(page_);
     }
@@ -588,7 +588,7 @@ public:
         // master page is not:
         if (!isSlide(model_, page_))
         {
-            throw css::uno::RuntimeException(u"asSlide: the page is not a slide"_ustr);
+            throw cpo::uno::RuntimeException(u"asSlide: the page is not a slide"_ustr);
         }
         return new SlideImpl(model_, page_);
     }
@@ -611,7 +611,7 @@ public:
         auto const controller = model_->getCurrentController();
         if (!controller.is())
         {
-            throw css::uno::RuntimeException(u"getuno: the presentation has no view"_ustr);
+            throw cpo::uno::RuntimeException(u"getuno: the presentation has no view"_ustr);
         }
         return controller;
     }

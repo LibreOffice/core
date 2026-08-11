@@ -111,7 +111,7 @@ private:
     sw::mark::Fieldmark* m_pCache;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     FormFieldCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                               uno::Reference<uno::XComponentContext> xContext,
                               rtl::Reference<SwXTextDocument> xTextDocument)

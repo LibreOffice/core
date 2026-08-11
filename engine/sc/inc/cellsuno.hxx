@@ -224,11 +224,11 @@ protected:
     SC_DLLPUBLIC virtual const SfxItemPropertyMap& GetItemPropertyMap();
     css::beans::PropertyState GetOnePropertyState(
                                 sal_uInt16 nItemWhich, const SfxItemPropertyMapEntry* pEntry );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SC_DLLPUBLIC virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 cpo::uno::Any& );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SC_DLLPUBLIC virtual void SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const cpo::uno::Any& aValue );
 
@@ -492,11 +492,11 @@ protected:
                                                 const cpo::uno::Any& aValue ) override;
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     rtl::Reference< ScCellObj >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow );
 
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void            SetArrayFormula_Impl( const OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar eGrammar );
 
@@ -608,7 +608,7 @@ public:
                                 sal_Int32 nRight, sal_Int32 nBottom ) override;
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByName( const OUString& aRange ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::table::XCellRange >
                             getCellRangeByName( const OUString& aRange,  const ScAddress::Details& rDetails );
 

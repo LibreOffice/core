@@ -2122,7 +2122,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 {
                     xShapePropertySet->getPropertyValue(sPropRelativeWidth) >>= nPercent;
                 }
-                catch (const css::uno::RuntimeException& e)
+                catch (const cpo::uno::RuntimeException& e)
                 {
                     // May happen e.g. when text frame has no frame format
                     // See sw/qa/extras/ooxmlimport/data/n779627.docx

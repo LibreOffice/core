@@ -210,7 +210,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
     else if (sElement == u"http://openoffice.org/2001/accel^item")
         eElement = E_ELEMENT_ITEM;
     else
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Unknown XML element detected!"_ustr,
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
 
@@ -234,7 +234,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
     else if (sAttribute == u"http://www.w3.org/1999/xlink^href")
         eAttribute = E_ATTRIBUTE_URL;
     else
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Unknown XML attribute detected!"_ustr,
                 css::uno::Reference< css::xml::sax::XDocumentHandler >());
 

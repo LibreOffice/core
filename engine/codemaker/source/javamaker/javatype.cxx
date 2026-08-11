@@ -1570,7 +1570,7 @@ void handleExceptionType(
     if (className == "cpo/uno/Exception") {
         baseException = true;
         superClass = "java/lang/Exception"_ostr;
-    } else if (className == "com/sun/star/uno/RuntimeException") {
+    } else if (className == "cpo/uno/RuntimeException") {
         baseRuntimeException = true;
         superClass = "java/lang/RuntimeException"_ostr;
     } else {

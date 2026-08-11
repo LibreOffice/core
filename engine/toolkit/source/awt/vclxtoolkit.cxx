@@ -1926,7 +1926,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             {
                 pChildWindow.reset( VclPtr<WorkWindow>::Create( &aParentData ) );
             }
-            catch ( const css::uno::RuntimeException & )
+            catch ( const cpo::uno::RuntimeException & )
             {
                 // system child window could not be created
                 DBG_UNHANDLED_EXCEPTION("toolkit");
@@ -2320,7 +2320,7 @@ void VCLXToolkit::callTopWindowListeners(
             {
                 (xListener.get()->*pFn)(aAwtEvent);
             }
-            catch (const css::uno::RuntimeException &)
+            catch (const cpo::uno::RuntimeException &)
             {
                 DBG_UNHANDLED_EXCEPTION("toolkit");
             }
@@ -2363,7 +2363,7 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                              : pL->keyReleased(aAwtEvent))
                     return true;
             }
-            catch (const css::uno::RuntimeException &)
+            catch (const cpo::uno::RuntimeException &)
             {
                 DBG_UNHANDLED_EXCEPTION("toolkit");
             }
@@ -2409,7 +2409,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 bGained ? xListener->focusGained(aAwtEvent)
                     : xListener->focusLost(aAwtEvent);
             }
-            catch (const css::uno::RuntimeException &)
+            catch (const cpo::uno::RuntimeException &)
             {
                 DBG_UNHANDLED_EXCEPTION("toolkit");
             }
@@ -2495,7 +2495,7 @@ void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( u"invalid event source"_ustr );
+        throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
     ::Application::PostKeyEvent( VclEventId::WindowKeyInput, pWindow, &aVCLKeyEvent );
@@ -2506,7 +2506,7 @@ void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( u"invalid event source"_ustr );
+        throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
     ::Application::PostKeyEvent( VclEventId::WindowKeyUp, pWindow, &aVCLKeyEvent );
@@ -2518,7 +2518,7 @@ void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent 
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( u"invalid event source"_ustr );
+        throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseButtonDown, pWindow, &aVCLMouseEvent );
@@ -2529,7 +2529,7 @@ void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEven
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( u"invalid event source"_ustr );
+        throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseButtonUp, pWindow, &aVCLMouseEvent );
@@ -2540,7 +2540,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( u"invalid event source"_ustr );
+        throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseMove, pWindow, &aVCLMouseEvent );

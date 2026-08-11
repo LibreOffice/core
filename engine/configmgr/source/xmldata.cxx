@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -98,7 +98,7 @@ Type parseType(
             break;
         }
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         "invalid type " + text.convertFromUtf8());
 }
 
@@ -110,7 +110,7 @@ bool parseBoolean(xmlreader::Span const & text) {
     if (text == "false") {
         return false;
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         "invalid boolean " + text.convertFromUtf8());
 }
 
@@ -122,7 +122,7 @@ OUString parseTemplateReference(
         if (defaultTemplateName != nullptr) {
             return *defaultTemplateName;
         }
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"missing node-type attribute"_ustr);
     }
     return Data::fullTemplateName(component, nodeType);

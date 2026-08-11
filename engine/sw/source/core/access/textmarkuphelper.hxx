@@ -43,19 +43,19 @@ class SwTextMarkupHelper
                             const SwWrongList& rTextMarkupList ); // #i108125#
 
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType );
 
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::accessibility::TextSegment getTextMarkup(
                                             const sal_Int32 nTextMarkupIndex,
                                             const sal_Int32 nTextMarkupType );
 
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Sequence< css::accessibility::TextSegment >
                 getTextMarkupAtIndex( const sal_Int32 nCharIndex,
                                       const sal_Int32 nTextMarkupType );

@@ -186,7 +186,7 @@ namespace pcr
 
         static css::uno::Reference< css::uno::XInterface > getContextDocument( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > getContextDocument_throw( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
 
         /** gets the window of the ObjectInspector in which a property handler lives

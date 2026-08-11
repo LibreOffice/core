@@ -471,7 +471,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::callNoBroadcast(Func&& fn)
     {
         throw;
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -778,7 +778,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::fire(std::unique_lock<std::mutex>& 
                     throw;
             }
         }
-        catch (css::uno::RuntimeException& exc)
+        catch (cpo::uno::RuntimeException& exc)
         {
             SAL_INFO("comphelper", "caught RuntimeException while firing listeners: " << exc);
             if (!bIgnoreRuntimeExceptionsWhileFiring)
@@ -824,7 +824,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::fireListeners(
                     throw;
             }
         }
-        catch (css::uno::RuntimeException& exc)
+        catch (cpo::uno::RuntimeException& exc)
         {
             SAL_INFO("comphelper", "caught RuntimeException while firing listeners: " << exc);
             if (!m_bIgnoreRuntimeExceptionsWhileFiring)

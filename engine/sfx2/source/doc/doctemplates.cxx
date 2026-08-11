@@ -68,7 +68,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 
@@ -442,7 +442,7 @@ void SfxDocTplService::init_Impl()
         try {
             m_xDocProps.set(document::DocumentProperties::create(
                         ::comphelper::getProcessComponentContext()));
-        } catch (uno::RuntimeException const&) {
+        } catch (cpo::uno::RuntimeException const&) {
             TOOLS_WARN_EXCEPTION("sfx.doc", "SfxDocTplService_Impl::init_Impl: cannot create DocumentProperties service:");
         }
 
@@ -1281,7 +1281,7 @@ bool SfxDocTplService::WriteUINamesForTemplateDir_Impl( std::u16string_view aUse
 
         uno::Reference< io::XOutputStream > xOutStream = xTempFile->getOutputStream();
         if ( !xOutStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxContext);
         try {
@@ -1712,7 +1712,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
         const OUString sDocServiceName {xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) )};
         if ( sDocServiceName.isEmpty() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // get the actual filter name
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
@@ -1731,12 +1731,12 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         uno::Reference< container::XNameAccess > xApplConfig;
         xSOFConfig->getByName( sDocServiceName ) >>= xApplConfig;
         if ( !xApplConfig.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         OUString aFilterName;
         xApplConfig->getByName(u"ooSetupFactoryActualTemplateFilter"_ustr) >>= aFilterName;
         if ( aFilterName.isEmpty() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // find the related type name
         uno::Reference< container::XNameAccess > xFilterFactory(
@@ -1751,7 +1751,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
                 rProp.Value >>= aTypeName;
 
         if ( aTypeName.isEmpty() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // find the mediatype and extension
         uno::Reference< container::XNameAccess > xTypeDetection =
@@ -1765,13 +1765,13 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         cpo::uno::Sequence< OUString > aAllExt =
             aTypeProps.getUnpackedValueOrDefault(u"Extensions"_ustr, Sequence< OUString >() );
         if ( !aAllExt.hasElements() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault(u"MediaType"_ustr, OUString() )};
         const OUString& aExt {aAllExt[0]};
 
         if ( aMediaType.isEmpty() || aExt.isEmpty() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         // construct destination url
         if ( aGroupTargetURL.isEmpty() )
@@ -1779,7 +1779,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             aGroupTargetURL = CreateNewGroupFsys( rGroupName, aGroup );
 
             if ( aGroupTargetURL.isEmpty() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
 
         OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, rTemplateName, aExt );
@@ -1788,7 +1788,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, u"UserTemplate"_ustr, aExt );
 
             if ( aNewTemplateTargetURL.isEmpty() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
 
         // store template

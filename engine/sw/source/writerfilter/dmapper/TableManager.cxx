@@ -540,7 +540,7 @@ void TableManager::endLevel()
                             xCursor->goLeft(1, false);
                         }
                     }
-                    catch (const uno::RuntimeException&)
+                    catch (const cpo::uno::RuntimeException&)
                     {
                         TOOLS_WARN_EXCEPTION(
                             "writerfilter",
@@ -583,7 +583,7 @@ void TableManager::endLevel()
                 xCursor->goRight(1, false);
                 pTableData->SetCellStart(xCursor->getStart());
             }
-            catch (const uno::RuntimeException&)
+            catch (const cpo::uno::RuntimeException&)
             {
                 TOOLS_WARN_EXCEPTION("writerfilter", "TableManager::endLevel: goRight() failed");
             }
@@ -765,7 +765,7 @@ bool CellData::IsValid() const
     {
         mStart->getStart();
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return false;
     }

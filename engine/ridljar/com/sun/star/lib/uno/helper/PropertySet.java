@@ -153,7 +153,7 @@ XMultiPropertySet
      *  a TypeClass.SHORT then the member must be a short or java.lang.Short.
      *  The handle for the property is generated.<br>
      *  If there is no member with the specified name or if the member has an incompatible type
-     *  then a com.sun.star.uno.RuntimeException is thrown.
+     *  then a cpo.uno.RuntimeException is thrown.
      *  @param propertyName The name of the property.
      *  @param memberName The name of the member variable that holds the value of the property.
      *  @param attributes The property attributes.
@@ -167,7 +167,7 @@ XMultiPropertySet
         }
         catch (NoSuchFieldException e)
         {
-            throw new com.sun.star.uno.RuntimeException(e, "there is no member variable: " + memberName);
+            throw new cpo.uno.RuntimeException(e, "there is no member variable: " + memberName);
         }
         Class cl= propField.getType();
         Type t= new Type(cl);
@@ -177,7 +177,7 @@ XMultiPropertySet
             registerProperty(p,memberName);
         }
         else
-            throw new com.sun.star.uno.RuntimeException("the member has an unknown type: " + memberName);
+            throw new cpo.uno.RuntimeException("the member has an unknown type: " + memberName);
     }
 
     /** Registers a property with this class.

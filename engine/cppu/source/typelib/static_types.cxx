@@ -214,7 +214,7 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     // another static ref:
                     ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
                     // RuntimeException
-                    OUString sTypeName2(u"com.sun.star.uno.RuntimeException"_ustr);
+                    OUString sTypeName2(u"cpo.uno.RuntimeException"_ustr);
                     ::typelib_typedescription_new(
                         &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, nullptr );
                     ::typelib_typedescription_register( &pTD1 );
@@ -231,7 +231,7 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     aParameters[0].bIn = true;
                     aParameters[0].bOut = false;
                     rtl_uString * pExceptions[1];
-                    OUString sExceptionName0(u"com.sun.star.uno.RuntimeException"_ustr);
+                    OUString sExceptionName0(u"cpo.uno.RuntimeException"_ustr);
                     pExceptions[0] = sExceptionName0.pData;
                     OUString sReturnType0(u"any"_ustr);
                     typelib_typedescription_newInterfaceMethod(

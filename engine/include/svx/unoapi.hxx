@@ -38,7 +38,7 @@ enum class SdrObjKind  : sal_uInt16;
  * Creates a StarOffice API wrapper with the given type and inventor
  * Deprecated: This will be replaced with a function returning XShape.
  *
- * @throws css::uno::RuntimeException
+ * @throws cpo::uno::RuntimeException
  */
 SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(SdrObjKind nType, SdrInventor nInventor, OUString const & referer);
 

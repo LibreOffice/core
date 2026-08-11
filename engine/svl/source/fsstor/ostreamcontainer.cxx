@@ -34,7 +34,7 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
     {
         m_xStream = xStream;
         if ( !m_xStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         m_xSeekable.set( xStream, uno::UNO_QUERY );
         m_xInputStream = xStream->getInputStream();
@@ -174,7 +174,7 @@ uno::Reference< io::XInputStream > OFSStreamContainer::getInputStream()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_xInputStream.is() )
         return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ) );
@@ -190,7 +190,7 @@ uno::Reference< io::XOutputStream > OFSStreamContainer::getOutputStream()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_xOutputStream.is() )
         return uno::Reference< io::XOutputStream >( static_cast< io::XOutputStream* >( this ) );
@@ -207,7 +207,7 @@ void OFSStreamContainer::dispose()
         return;
 
     if ( !m_xStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_xInputStream.is() && !m_bInputClosed )
     {
@@ -256,7 +256,7 @@ void OFSStreamContainer::seek( sal_Int64 location )
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xSeekable->seek( location );
 }
@@ -269,7 +269,7 @@ sal_Int64 OFSStreamContainer::getPosition()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getPosition();
 }
@@ -282,7 +282,7 @@ sal_Int64 OFSStreamContainer::getLength()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getLength();
 }
@@ -297,7 +297,7 @@ sal_Int32 OFSStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, 
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
@@ -310,7 +310,7 @@ sal_Int32 OFSStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aDa
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
@@ -323,7 +323,7 @@ void OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xInputStream->skipBytes( nBytesToSkip );
 }
@@ -336,7 +336,7 @@ sal_Int32 OFSStreamContainer::available()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->available();
 }
@@ -350,7 +350,7 @@ void OFSStreamContainer::closeInput()
             throw lang::DisposedException();
 
         if ( !m_xStream.is() || !m_xInputStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if ( m_xInputStream.is() )
         {
@@ -373,7 +373,7 @@ void OFSStreamContainer::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xOutputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xOutputStream->writeBytes( aData );
 }
@@ -386,7 +386,7 @@ void OFSStreamContainer::flush()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xOutputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xOutputStream->flush();
 }
@@ -400,7 +400,7 @@ void OFSStreamContainer::closeOutput()
             throw lang::DisposedException();
 
         if ( !m_xStream.is() || !m_xOutputStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if ( m_xOutputStream.is() )
         {
@@ -423,7 +423,7 @@ void OFSStreamContainer::truncate()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xTruncate.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xTruncate->truncate();
 }
@@ -438,7 +438,7 @@ void OFSStreamContainer::waitForCompletion()
         throw lang::DisposedException();
 
     if ( !m_xStream.is() || !m_xAsyncOutputMonitor.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xAsyncOutputMonitor->waitForCompletion();
 }

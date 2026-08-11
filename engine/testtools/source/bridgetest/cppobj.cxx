@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 
 #include <test/testtools/bridgetest/Constructors.hpp>

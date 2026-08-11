@@ -38,7 +38,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
@@ -89,7 +89,7 @@ std::vector<OUString> getContents(OUString const & url) {
             cs.push_back(acc->queryContentIdentifierString());
         }
         return cs;
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -131,7 +131,7 @@ css::uno::Reference< css::ucb::XCommandEnvironment > utl::UCBContentHelper::getD
 bool utl::UCBContentHelper::IsDocument(OUString const & url) {
     try {
         return content(url).isDocument();
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -147,7 +147,7 @@ cpo::uno::Any utl::UCBContentHelper::GetProperty(
 {
     try {
         return content(url).getPropertyValue(property);
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -161,7 +161,7 @@ cpo::uno::Any utl::UCBContentHelper::GetProperty(
 bool utl::UCBContentHelper::IsFolder(OUString const & url) {
     try {
         return content(url).isFolder();
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -178,7 +178,7 @@ bool utl::UCBContentHelper::GetTitle(
     assert(title != nullptr);
     try {
         return content(url).getPropertyValue(u"Title"_ustr) >>= *title;
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -195,7 +195,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
             u"delete"_ustr,
             cpo::uno::Any(true));
         return true;
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -241,7 +241,7 @@ bool utl::UCBContentHelper::MakeFolder(
         }
     } catch (css::ucb::NameClashException const &) {
         exists = true;
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -274,7 +274,7 @@ bool utl::UCBContentHelper::IsYounger(
                 content(older).getPropertyValue(
                     u"DateModified"_ustr).
                 get<css::util::DateTime>());
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");
@@ -356,7 +356,7 @@ bool utl::UCBContentHelper::IsSubPath(
                  && candidate != tmp);
             // INetURLObject::removeSegment sometimes returns true without
             // modifying the URL, e.g., in case of "file:///"
-    } catch (css::uno::RuntimeException const &) {
+    } catch (cpo::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
         assert(false && "this cannot happen");

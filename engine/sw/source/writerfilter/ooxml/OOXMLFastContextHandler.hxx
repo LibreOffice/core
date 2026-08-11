@@ -87,7 +87,7 @@ public:
 
     virtual ResourceEnum_t getResource() const { return STREAM; }
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual void attributes(const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
@@ -214,19 +214,19 @@ protected:
     // the table depth of this context
     unsigned int mnTableDepth;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual void lcl_endFastElement(Token_t Element);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > lcl_createFastChildContext(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual void lcl_characters(const OUString & aChars);
 

@@ -93,7 +93,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     public XBridge createBridge(String sName, String sProtocol, XConnection aConnection, XInstanceProvider anInstanceProvider) throws
         BridgeExistsException,
         com.sun.star.lang.IllegalArgumentException,
-        com.sun.star.uno.RuntimeException
+        cpo.uno.RuntimeException
     {
         boolean hasName = sName.length() != 0;
         Object context = hasName ? sName : new UniqueToken();
@@ -138,7 +138,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @return   the bridge.
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
-    public XBridge getBridge(String sName) throws com.sun.star.uno.RuntimeException {
+    public XBridge getBridge(String sName) throws cpo.uno.RuntimeException {
         XBridge xBridge = null;
 
         IBridge iBridges[] = UnoRuntime.getBridges();
@@ -166,7 +166,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @return   the bridges.
      * @see      com.sun.star.bridge.XBridgeFactory
      */
-    public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
+    public synchronized XBridge[] getExistingBridges() throws cpo.uno.RuntimeException {
         ArrayList<XBridge> vector = new ArrayList<XBridge>();
 
         IBridge iBridges[] = UnoRuntime.getBridges();

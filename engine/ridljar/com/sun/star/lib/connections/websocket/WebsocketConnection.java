@@ -93,12 +93,12 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
     }
 
     public void addStreamListener(XStreamListener aListener )
-    throws com.sun.star.uno.RuntimeException {
+    throws cpo.uno.RuntimeException {
         _listeners.add(aListener);
     }
 
     public void removeStreamListener(XStreamListener aListener )
-    throws com.sun.star.uno.RuntimeException {
+    throws cpo.uno.RuntimeException {
         _listeners.remove(aListener);
     }
 
@@ -130,7 +130,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      * @see      com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
-    throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    throws com.sun.star.io.IOException, cpo.uno.RuntimeException {
 
         String errMessage = null;
 
@@ -178,7 +178,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      * @see       com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[]) throws com.sun.star.io.IOException,
-        com.sun.star.uno.RuntimeException {
+        cpo.uno.RuntimeException {
         try {
             _outputStream.write(aData);
         } catch(IOException ioException) {
@@ -200,7 +200,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      * @see       com.sun.star.connection.XConnection#flush
      */
     public void flush() throws com.sun.star.io.IOException,
-        com.sun.star.uno.RuntimeException {
+        cpo.uno.RuntimeException {
 
         byte[] accumulatedBytes = _outputStream.toByteArray();
         _outputStream.reset();
@@ -219,7 +219,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      *
      * @see       com.sun.star.connection.XConnection#close
      */
-    public void close() throws com.sun.star.uno.RuntimeException {
+    public void close() throws cpo.uno.RuntimeException {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - socket closed");
         super.close();
     }
@@ -230,7 +230,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      * @return  the description.
      * @see       com.sun.star.connection.XConnection#getDescription
      */
-    public String getDescription() throws com.sun.star.uno.RuntimeException {
+    public String getDescription() throws cpo.uno.RuntimeException {
         return _description;
     }
 

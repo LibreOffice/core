@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module lang {
     passed an illegal or inappropriate argument.
  */
 published exception IllegalArgumentException
-    : com::sun::star::uno::RuntimeException
+    : cpo::uno::RuntimeException
 {
     /** identifies the position of the illegal argument.
 

@@ -37,20 +37,20 @@ public:
     explicit DocumentFocusListener(AquaA11yFocusTracker& rTracker);
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
@@ -58,20 +58,20 @@ public:
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
@@ -79,7 +79,7 @@ public:
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::accessibility::XAccessible > getAccessible(const css::lang::EventObject& aEvent );
 
     // XEventListener

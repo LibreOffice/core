@@ -623,7 +623,7 @@ rtl::Reference< Axis > AxisHelper::getParallelAxis( const rtl::Reference< Axis >
             return getAxis( nDimensionIndex, nParallelAxisIndex, getCoordinateSystemByIndex( xDiagram, nCooSysIndex ) );
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
     return nullptr;

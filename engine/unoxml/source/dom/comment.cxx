@@ -35,7 +35,7 @@ namespace DOM
 
     void CComment::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
-        if (!i_xHandler.is()) throw RuntimeException();
+        if (!i_xHandler.is()) throw cpo::uno::RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
         if (xExtended.is()) {
             xExtended->comment(getData());

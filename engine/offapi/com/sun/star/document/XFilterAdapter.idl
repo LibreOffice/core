@@ -24,7 +24,7 @@ module com {   module sun {   module star {   module document {
       /** This is an interface that can be used to link a filter to the
         FilterAdapter
 
-        @throws com::sun::star::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
       */
 published interface XFilterAdapter : com::sun::star::uno::XInterface
       {
@@ -34,7 +34,7 @@ published interface XFilterAdapter : com::sun::star::uno::XInterface
            [in] boolean convertToOffice,
          [in] string pluginUrl,
            [in] string fileName);
-          /*raises( com::sun::star::uno::RuntimeException );*/
+          /*raises( cpo::uno::RuntimeException );*/
 
        };
       };

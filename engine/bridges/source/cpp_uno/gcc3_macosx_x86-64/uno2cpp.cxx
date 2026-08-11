@@ -25,7 +25,7 @@
 #include <rtl/alloc.h>
 
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
@@ -427,7 +427,7 @@ void unoInterfaceProxyDispatch(
     }
     default:
     {
-        ::com::sun::star::uno::RuntimeException aExc(
+        ::cpo::uno::RuntimeException aExc(
             "illegal member type description!",
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 

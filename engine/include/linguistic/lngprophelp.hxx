@@ -223,10 +223,10 @@ public:
     bool    IsSpellWithDigits() const;
     bool    IsSpellClosedCompound() const;
     bool    IsSpellHyphenatedCompound() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
 };
@@ -301,10 +301,10 @@ public:
     sal_Int16   GetCompoundMinLeading() const;
     sal_Int16   GetMinWordLength() const;
     bool IsNoHyphenateCaps() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
 };

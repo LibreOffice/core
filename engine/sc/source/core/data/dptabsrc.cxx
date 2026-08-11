@@ -362,7 +362,7 @@ cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource:
     if (mbResultOverflow) // set in CreateRes_Impl
     {
         //  no results available
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     sal_Int32 nColCount = mpColumnResultRoot->GetSize(mpResultData->GetColStartMeasure());

@@ -100,10 +100,10 @@ void Proxy::do_dispatch(
         try {
             do_dispatch_throw(member, returnValue, arguments, exception);
         } catch (const std::exception & e) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "caught C++ exception: " + o3tl::runtimeToOUString(e.what()));
         }
-    } catch (const css::uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         cpo::uno::Any exc(cppu::getCaughtException());
         uno_copyAndConvertData(
             *exception, &exc,

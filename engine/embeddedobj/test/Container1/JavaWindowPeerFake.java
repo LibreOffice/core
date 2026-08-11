@@ -45,7 +45,7 @@ class JavaWindowPeerFake implements XSystemDependentWindowPeer,
      * This method is called back from the Office toolkit to retrieve the system data.
      */
     public java.lang.Object getWindowHandle( byte[] aProcessId, short aSystem )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         Object aReturn = null;
         if( aSystem == maView.maSystem )
@@ -57,43 +57,43 @@ class JavaWindowPeerFake implements XSystemDependentWindowPeer,
     /** not really needed.
      */
     public XToolkit getToolkit()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
         return null;
     }
 
     public void setPointer( XPointer xPointer )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void setBackground( int nColor )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void invalidate( short nFlags )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void invalidateRect( com.sun.star.awt.Rectangle aRect,short nFlags )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void dispose()
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void addEventListener( XEventListener xListener )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 
     public void removeEventListener( XEventListener xListener )
-        throws com.sun.star.uno.RuntimeException
+        throws cpo.uno.RuntimeException
     {
     }
 }

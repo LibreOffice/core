@@ -591,7 +591,7 @@ public final class AnyConverter_Test {
         assertEquals(
             exc,
             AnyConverter.toObject(
-                new Type(com.sun.star.uno.RuntimeException.class), any_exc));
+                new Type(cpo.uno.RuntimeException.class), any_exc));
         try {
             AnyConverter.toObject(
                 new Type(cpo.uno.Exception.class), any_exc);
@@ -607,7 +607,7 @@ public final class AnyConverter_Test {
         assertEquals(
             exc,
             AnyConverter.toObject(
-                new Type(com.sun.star.uno.RuntimeException.class), any_exc));
+                new Type(cpo.uno.RuntimeException.class), any_exc));
         try {
             AnyConverter.toObject(
                 new Type(cpo.uno.Exception.class), any_exc);

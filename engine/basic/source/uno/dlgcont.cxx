@@ -385,12 +385,12 @@ Reference< css::resource::XStringResourcePersistence >
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibrariesStor.is() )
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
             xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibraryStor.is() )
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
         }
         catch(const cpo::uno::Exception& )
         {
@@ -433,12 +433,12 @@ void SfxDialogLibraryContainer::onNewRootStorage()
             try {
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
                 if ( !xLibrariesStor.is() )
-                    throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                    throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
                 OUString aLibName = pDialogLibrary->getName();
                 xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READWRITE );
                 if ( !xLibraryStor.is() )
-                    throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                    throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
 
                 Reference< resource::XStringResourceWithStorage >
                     xStringResourceWithStorage( xStringResourcePersistence, UNO_QUERY );

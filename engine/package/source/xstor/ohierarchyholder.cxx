@@ -45,7 +45,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
     uno::Reference< embed::XExtendedStorageStream > xResult =
         m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
     if ( !xResult.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xResult;
 }
@@ -83,7 +83,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
         throw io::IOException(u"invalid storage/stream mode combo"_ustr);
 
     if ( aListPath.empty() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aNextName = *(aListPath.begin());
     aListPath.erase( aListPath.begin() );
@@ -93,7 +93,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     rtl::Reference< OStorage > xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
                 : m_xWeakOwnStorage.get();
     if (!xOwnStor)
-        throw uno::RuntimeException(u"no own storage"_ustr);
+        throw cpo::uno::RuntimeException(u"no own storage"_ustr);
 
     if ( aListPath.empty() )
     {
@@ -131,14 +131,14 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             bNewElement = true;
             rtl::Reference< OStorage > xChildStorage = xOwnStor->openStorageElement2( aNextName, nStorageMode );
             if ( !xChildStorage.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             aElement = new OHierarchyElement_Impl( xChildStorage );
         }
 
         xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
         if ( !xResult.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if ( bNewElement )
         {
@@ -158,7 +158,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
     std::unique_lock aGuard( m_aMutex );
 
     if ( aListPath.empty() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aNextName = *(aListPath.begin());
     aListPath.erase( aListPath.begin() );
@@ -166,7 +166,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
     rtl::Reference< OStorage > xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
                 : m_xWeakOwnStorage.get();
     if (!xOwnStor)
-        throw uno::RuntimeException(u"no own storage"_ustr);
+        throw cpo::uno::RuntimeException(u"no own storage"_ustr);
 
     if ( aListPath.empty() )
     {
@@ -184,7 +184,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
             rtl::Reference< OStorage > xChildStorage = xOwnStor->openStorageElement2( aNextName,
                                                                                             embed::ElementModes::READWRITE );
             if ( !xChildStorage.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             aElement = new OHierarchyElement_Impl( xChildStorage );
         }

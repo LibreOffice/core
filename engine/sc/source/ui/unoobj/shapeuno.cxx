@@ -1259,7 +1259,7 @@ void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& 
 
     uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
     if ( !xAggSimpleText.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xAggSimpleText->insertString( xRange, aString, bAbsorb );
 }
@@ -1271,7 +1271,7 @@ void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTe
 
     uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
     if ( !xAggSimpleText.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xAggSimpleText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
@@ -1290,7 +1290,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getStart()
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( !xAggTextRange.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xAggTextRange->getStart();
 }
@@ -1301,7 +1301,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd()
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( !xAggTextRange.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xAggTextRange->getEnd();
 }
@@ -1312,7 +1312,7 @@ OUString SAL_CALL ScShapeObj::getString()
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( !xAggTextRange.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xAggTextRange->getString();
 }
@@ -1323,7 +1323,7 @@ void SAL_CALL ScShapeObj::setString( const OUString& aText )
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
     if ( !xAggTextRange.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     xAggTextRange->setString( aText );
 }

@@ -41,7 +41,7 @@ namespace DOM
 
     void CText::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
-        if (!i_xHandler.is()) throw RuntimeException();
+        if (!i_xHandler.is()) throw cpo::uno::RuntimeException();
         i_xHandler->characters(getData());
     }
 

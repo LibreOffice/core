@@ -43,7 +43,7 @@ private:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetStyleSheet( const cpo::uno::Any& rAny );
     /// @throws css::beans::UnknownPropertyException
     cpo::uno::Any GetStyleSheet() const;

@@ -317,7 +317,7 @@ void SdrCustomShapeGeometryItem::SetPropSeq( const cpo::uno::Sequence< css::bean
         assert(ret.second); // serious bug: duplicate xml attribute exported
         if (!ret.second)
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "CustomShapeGeometry has duplicate property " + rPropVal.Name);
         }
         if (auto rPropSeq = o3tl::tryAccess<cpo::uno::Sequence<beans::PropertyValue>>(

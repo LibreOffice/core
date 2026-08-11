@@ -447,7 +447,7 @@ void OPropertySetHelper::setFastPropertyValueImpl(std::unique_lock<std::mutex>& 
     {
         throw; /* allowed to leave */
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw; /* allowed to leave */
     }

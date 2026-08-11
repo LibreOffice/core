@@ -162,7 +162,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CElementListImpl::item(sal_Int32 index)
     {
-        if (index < 0) throw RuntimeException();
+        if (index < 0) throw cpo::uno::RuntimeException();
 
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -170,7 +170,7 @@ namespace DOM
 
         buildlist(m_pElement->GetNodePtr());
         if (m_nodevector.size() <= o3tl::make_unsigned(index)) {
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         return m_pElement->GetOwnerDocument().GetCNode(m_nodevector[index]);
     }

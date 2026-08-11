@@ -219,7 +219,7 @@ public class Map
             case 7: valueClass = XIdentifierAccess.class; break;
             case 8: valueClass = XElementAccess.class; break;
             case 9: valueClass = cpo.uno.Exception.class; break;
-            case 10: valueClass = com.sun.star.uno.RuntimeException.class; break;
+            case 10: valueClass = cpo.uno.RuntimeException.class; break;
             case 11: valueClass = EventObject.class; break;
             case 12: valueClass = ContainerEvent.class; break;
             case 13: valueClass = Object.class; break;
@@ -244,7 +244,7 @@ public class Map
             case 7: someValue = UnoRuntime.queryInterface( XIdentifierAccess.class, new DummyIdentifierAccess() ); break;
             case 8: someValue = UnoRuntime.queryInterface( XElementAccess.class, new DummyElementAccess() ); break;
             case 9: someValue = new cpo.uno.Exception(); break;
-            case 10: someValue = new com.sun.star.uno.RuntimeException(); break;
+            case 10: someValue = new cpo.uno.RuntimeException(); break;
             case 11: someValue = new EventObject(); break;
             case 12: someValue = new ContainerEvent(); break;
             case 13: someValue = new Locale(); break;   // just use *any* value which does not conflict with the others

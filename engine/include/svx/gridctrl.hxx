@@ -357,7 +357,7 @@ protected:
     */
     virtual void PostExecuteRowContextMenu(const OUString& rExecutionResult);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt);
 
     void FieldValueChanged(sal_uInt16 _nId);

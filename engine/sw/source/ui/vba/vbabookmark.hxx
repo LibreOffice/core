@@ -37,11 +37,11 @@ private:
     bool mbValid;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void checkVality();
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaBookmark(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                   const css::uno::Reference<css::uno::XComponentContext>& rContext,
                   rtl::Reference<SwXTextDocument> xModel, OUString aName);

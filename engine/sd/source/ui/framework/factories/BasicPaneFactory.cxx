@@ -132,7 +132,7 @@ BasicPaneFactory::BasicPaneFactory(
                 ConfigurationChangeEventType::ConfigurationUpdateEnd);
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         rtl::Reference<ConfigurationController> xCC (mxConfigurationControllerWeak);
         if (xCC.is())

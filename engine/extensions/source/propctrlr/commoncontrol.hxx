@@ -70,15 +70,15 @@ namespace pcr
         virtual void editChanged();
 
         // XPropertyControl
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         ::sal_Int16 getControlType() const { return m_nControlType; }
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() const { return m_xContext; }
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool isModified(  ) const { return m_bModified; }
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void notifyModifiedValue(  );
 
         virtual weld::Widget* getWidget() = 0;

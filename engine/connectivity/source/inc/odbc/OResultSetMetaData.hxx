@@ -45,10 +45,10 @@ namespace connectivity::odbc
         bool        m_bUseODBC2Types;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident);
     public:
         // A ctor that is needed for returning the object
@@ -69,7 +69,7 @@ namespace connectivity::odbc
 
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static SQLLEN getNumColAttrib(OConnection const * _pConnection
                                           ,SQLHANDLE _aStatementHandle
                                           ,const css::uno::Reference< css::uno::XInterface >& _xInterface
@@ -77,7 +77,7 @@ namespace connectivity::odbc
                                           ,sal_Int32 ident);
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static SQLSMALLINT getColumnODBCType(OConnection const * _pConnection
                                           ,SQLHANDLE _aStatementHandle
                                           ,const css::uno::Reference< css::uno::XInterface >& _xInterface

@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
@@ -40,7 +40,7 @@ OUString Span::convertFromUtf8() const {
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"cannot convert from UTF-8"_ustr);
     }
     return OUString(s, SAL_NO_ACQUIRE);

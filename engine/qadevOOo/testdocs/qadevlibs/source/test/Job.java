@@ -42,17 +42,17 @@ public class Job {
 
         // XServiceInfo
         public String getImplementationName()
-                throws com.sun.star.uno.RuntimeException {
+                throws cpo.uno.RuntimeException {
             return getClass().getName();
         }
 
         public boolean supportsService(String serviceName)
-                throws com.sun.star.uno.RuntimeException {
+                throws cpo.uno.RuntimeException {
             return __serviceName.equals(serviceName);
         }
 
         public String[] getSupportedServiceNames()
-                throws com.sun.star.uno.RuntimeException {
+                throws cpo.uno.RuntimeException {
             return new String[] { __serviceName };
         }
 

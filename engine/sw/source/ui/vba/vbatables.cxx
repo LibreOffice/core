@@ -175,9 +175,9 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const cpo::uno::A
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
     // Preconditions
     if ( !( pVbaRange && ( NumRows >>= nRows ) && ( NumColumns >>= nCols ) ) )
-        throw uno::RuntimeException(); // #FIXME better exception??
+        throw cpo::uno::RuntimeException(); // #FIXME better exception??
     if ( nCols <= 0 || nRows <= 0 )
-        throw uno::RuntimeException(); // #FIXME better exception??
+        throw cpo::uno::RuntimeException(); // #FIXME better exception??
 
     rtl::Reference< SwXTextDocument > xModel( pVbaRange->getDocument() );
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();

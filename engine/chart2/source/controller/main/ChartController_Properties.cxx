@@ -792,7 +792,7 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
     catch( const util::CloseVetoException& )
     {
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
 }

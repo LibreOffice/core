@@ -37,7 +37,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -61,7 +61,7 @@ class Service: public cppu::WeakImplHelper< css::lang::XMain > {
 public:
     virtual sal_Int32 SAL_CALL
     run(cpo::uno::Sequence< OUString > const & arguments)
-        throw (css::uno::RuntimeException);
+        throw (cpo::uno::RuntimeException);
 
     static OUString getImplementationName();
 
@@ -116,7 +116,7 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 }
 
 sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
-    throw (css::uno::RuntimeException)
+    throw (cpo::uno::RuntimeException)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         m_context->getServiceManager());
@@ -161,10 +161,10 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     assertFalse(exception->getBaseType().is());
     exception.set(
             provider->getByHierarchicalName(
-                OUString( "com.sun.star.uno.RuntimeException")),
+                OUString( "cpo.uno.RuntimeException")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_EXCEPTION, exception->getTypeClass());
-    assertEqual( OUString( "com.sun.star.uno.RuntimeException"),
+    assertEqual( OUString( "cpo.uno.RuntimeException"),
         exception->getName());
     assertEqual( OUString( "cpo.uno.Exception"),
         exception->getBaseType()->getName());
@@ -327,7 +327,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
         OUString( "com.sun.star.lang.WrappedTargetException"),
         getExceptions[0]->getName());
     assertEqual(
-        OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "cpo.uno.RuntimeException"),
         getExceptions[1]->getName());
     setExceptions = attribute->getSetExceptions();
     assertEqual< sal_Int32 >(2, setExceptions.getLength());
@@ -384,7 +384,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     assertEqual< sal_Int32 >(0, method->getParameters()[0]->getPosition());
     assertEqual< sal_Int32 >(1, method->getExceptions().getLength());
     assertEqual(
-        OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "cpo.uno.RuntimeException"),
         method->getExceptions()[0]->getName());
 
     method.set( members[4], css::uno::UNO_QUERY_THROW);
@@ -466,7 +466,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     assertEqual< sal_Int32 >(
         1, service->getConstructors()[1]->getExceptions().getLength());
     assertEqual(
-        OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "cpo.uno.RuntimeException"),
         service->getConstructors()[1]->getExceptions()[0]->getName());
 
     service.set(

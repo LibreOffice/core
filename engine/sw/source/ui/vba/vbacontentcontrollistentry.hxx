@@ -25,7 +25,7 @@ private:
     size_t m_nZIndex;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaContentControlListEntry(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                                  const css::uno::Reference<css::uno::XComponentContext>& rContext,
                                  std::shared_ptr<SwContentControl> pCC, size_t nZIndex);

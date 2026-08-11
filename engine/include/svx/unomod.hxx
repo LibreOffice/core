@@ -52,7 +52,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > createTextField( std::u16string_view aServiceSpecifier );
 
     /** fills the given EventObject from the given SdrHint.

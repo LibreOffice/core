@@ -90,56 +90,56 @@ namespace framework
 
             void dispose();
             void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener );
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener );
 
             // XImageManager
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             /// @throws css::lang::IllegalAccessException
             void reset();
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             cpo::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType );
             /// @throws css::lang::IllegalArgumentException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL );
             /// @throws css::lang::IllegalArgumentException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void removeImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aResourceURLSequence );
             /// @throws css::container::ElementExistException
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence );
 
             // XUIConfiguration
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener );
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener );
 
             // XUIConfigurationPersistence
             /// @throws cpo::uno::Exception
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void reload();
             /// @throws cpo::uno::Exception
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void store();
             /// @throws cpo::uno::Exception
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             bool isModified() const;
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             bool isReadOnly() const;
 
             void clear();

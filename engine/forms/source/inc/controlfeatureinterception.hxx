@@ -58,9 +58,9 @@ namespace frm
         ControlFeatureInterception( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
 
         // XComponent

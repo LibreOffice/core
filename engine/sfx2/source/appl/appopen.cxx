@@ -365,12 +365,12 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
 
         uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
         if( !xTempStorage.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         xDoc->GetStorage()->copyToStorage( xTempStorage );
 
         if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, OUString() ) ) )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     catch( cpo::uno::Exception& )
     {

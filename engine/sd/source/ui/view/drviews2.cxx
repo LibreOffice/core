@@ -4505,7 +4505,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
                 xDialog->execute();
             }
-            catch( css::uno::RuntimeException& )
+            catch( cpo::uno::RuntimeException& )
             {
                 DBG_UNHANDLED_EXCEPTION("sd.view");
             }

@@ -75,7 +75,7 @@ void XNamedRanges::testAddNewByName()
     // tdf#119457 - check for a valid range name
     OUString aName6(u"type_INVALID_BAD_STRING.+:"_ustr);
     CPPUNIT_ASSERT_THROW(xNamedRanges->addNewByName(aName6, u"D6"_ustr, aBaseAddress, 0),
-                         uno::RuntimeException);
+                         cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_MESSAGE("Created Namedrange with invalid name",
                            !xNamedRanges->hasByName(aName6));
 }

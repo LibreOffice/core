@@ -122,7 +122,7 @@ private:
                           ContentProperties& rProps );
     /// @throws css::ucb::CommandFailedException
     /// @throws css::task::DocumentPasswordRequest
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool storeData( const css::uno::Reference< css::io::XInputStream >& xData,
                     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
     void renameData( const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
@@ -183,13 +183,13 @@ private:
 
     /// @throws css::ucb::CommandFailedException
     /// @throws css::task::DocumentPasswordRequest
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XInputStream >
     getInputStream( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::ucb::CommandFailedException
     /// @throws css::task::DocumentPasswordRequest
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XOutputStream >
     getTruncatedOutputStream(
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
@@ -199,7 +199,7 @@ private:
 
     /// @throws css::ucb::CommandFailedException
     /// @throws css::task::DocumentPasswordRequest
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XStream >
     getStream( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 

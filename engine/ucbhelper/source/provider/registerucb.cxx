@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/ContentProviderProxyFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <osl/diagnose.h>
 
@@ -77,7 +77,7 @@ registerAtUcb(
                     rxContext->getServiceManager()->createInstanceWithContext(rName, rxContext),
                     uno::UNO_QUERY);
             }
-            catch (uno::RuntimeException const &) { throw; }
+            catch (cpo::uno::RuntimeException const &) { throw; }
             catch (cpo::uno::Exception const &) {}
     }
 
@@ -127,7 +127,7 @@ registerAtUcb(
                                                        aProviderArguments);
                 }
                 catch (lang::IllegalArgumentException const &) {}
-                catch (uno::RuntimeException const &) {}
+                catch (cpo::uno::RuntimeException const &) {}
             throw;
         }
     }

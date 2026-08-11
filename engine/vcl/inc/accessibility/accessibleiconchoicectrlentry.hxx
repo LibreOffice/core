@@ -52,7 +52,7 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     bool                IsShowing_Impl() const;
 
     /// @throws css::lang::DisposedException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     AbsoluteScreenPixelRectangle   GetBoundingBoxOnScreen();
     /// @throws css::lang::DisposedException
     void                    EnsureIsAlive() const;

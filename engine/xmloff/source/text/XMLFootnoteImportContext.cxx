@@ -116,7 +116,7 @@ void XMLFootnoteImportContext::startFastElement(
         // May fail e.g. for a nested footnote, which is formally a valid ODF, but is not supported
         rHelper.SetCursor(xText->createTextCursor());
     }
-    catch (css::uno::RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.text", "skipping the footnote: caught");
         mbIsValid = false;

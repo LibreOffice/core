@@ -167,7 +167,7 @@ ScVbaCommandBarControl::Controls( const cpo::uno::Any& aIndex )
     uno::Reference< container::XIndexAccess > xSubMenu;
     getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
     if( !xSubMenu.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, xSubMenu, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )

@@ -56,10 +56,10 @@ class XmlFilterAdaptor final : public cppu::WeakImplHelper
     OUString msTemplateName;
     FilterType meType;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool exportImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool importImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
 

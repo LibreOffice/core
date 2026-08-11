@@ -201,11 +201,11 @@ class OWriteMenuDocumentHandler final
         ~OWriteMenuDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteMenuDocument();
     private:
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteMenu( const css::uno::Reference< css::container::XIndexAccess >& rSubMenuContainer );
 
         void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle );

@@ -39,7 +39,7 @@ namespace dbaccess
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::WeakReference;
     using ::com::sun::star::uno::XComponentContext;

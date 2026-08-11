@@ -52,14 +52,14 @@ class ScSpreadsheetSettings final : public cppu::WeakImplHelper<
 private:
     SfxItemPropertySet      aPropSet;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool getPropertyBool(const OUString& aPropertyName);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int16 getPropertyInt16(const OUString& aPropertyName);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, bool p1)
         { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, sal_Int16 p1)
         { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
 public:

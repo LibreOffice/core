@@ -35,17 +35,17 @@ class ScVbaComment : public ScVbaComment_BASE
     css::uno::Reference< css::table::XCellRange > mxRange;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::sheet::XSheetAnnotation > getAnnotation();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::sheet::XSheetAnnotations > getAnnotations() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getAnnotationIndex();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XComment > getCommentByIndex( sal_Int32 Index );
 public:
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaComment(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,

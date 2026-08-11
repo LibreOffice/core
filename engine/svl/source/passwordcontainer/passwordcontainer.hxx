@@ -247,7 +247,7 @@ private:
 
     static OUString createIV();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
                                         const ::std::vector< NamePasswordRecord >& original,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
@@ -257,12 +257,12 @@ private:
                                         bool& io_bTryToDecode,
                                         const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::task::UserRecord > FindUsr(
                                         const ::std::vector< NamePasswordRecord >& userlist,
                                         std::u16string_view name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool createUrlRecord(
         const PasswordMap::iterator & rIter,
         bool bName,
@@ -270,7 +270,7 @@ private:
         const css::uno::Reference< css::task::XInteractionHandler >& aHandler,
         css::task::UrlRecord & rRec  );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::task::UrlRecord find(
         const OUString& aURL,
         std::u16string_view aName,
@@ -283,23 +283,23 @@ private:
                     css::task::PasswordRequestMode aRMode,
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString const & GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void UpdateVector( const OUString& url, ::std::vector< NamePasswordRecord >& toUpdate, NamePasswordRecord const & rec, bool writeFile );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void PrivateAdd( const OUString& aUrl,
                               const OUString& aUserName,
                               const cpo::uno::Sequence< OUString >& aPasswords,
                               char  aMode,
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static ::std::vector< OUString > DecodePasswords( std::u16string_view aLine, std::u16string_view aIV, std::u16string_view aMasterPassword, css::task::PasswordRequestMode mode );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static OUString EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPassword );
 
 public:

@@ -97,10 +97,10 @@ private:
     // lang::Locale Data
     css::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,
         const OUString& rSortAlgorithm);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void loadCachedCollator(const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 };
 

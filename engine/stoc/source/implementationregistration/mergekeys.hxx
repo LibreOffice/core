@@ -31,7 +31,7 @@ namespace stoc_impreg {
 
 // throws css::registry::InvalidRegistryException,
 // css::registry::MergeConflictException,
-// css::uno::RuntimeException:
+// cpo::uno::RuntimeException:
 void mergeKeys(
     css::uno::Reference< css::registry::XRegistryKey >
         const & xDest,

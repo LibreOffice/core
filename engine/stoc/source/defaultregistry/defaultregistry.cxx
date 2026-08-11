@@ -1171,7 +1171,7 @@ bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
 
 void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 {
-    throw css::uno::RuntimeException(u"css.registry.NestedRegistry::mergeKey: not implemented"_ustr);
+    throw cpo::uno::RuntimeException(u"css.registry.NestedRegistry::mergeKey: not implemented"_ustr);
 }
 
 } // namespace

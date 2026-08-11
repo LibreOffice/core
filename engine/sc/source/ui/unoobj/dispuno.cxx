@@ -218,7 +218,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
     // cURLDocDataSource is never dispatched
 
     if (!bDone)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& rParam )
@@ -254,7 +254,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     SolarMutexGuard aGuard;
 
     if (!pViewShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     //  initial state
     frame::FeatureStateEvent aEvent;

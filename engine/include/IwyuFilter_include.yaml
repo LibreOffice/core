@@ -235,7 +235,7 @@ excludelist:
     include/comphelper/diagnose_ex.hxx:
     # Needed for macros
     - com/sun/star/lang/IllegalArgumentException.hpp
-    - com/sun/star/uno/RuntimeException.hpp
+    - cpo/uno/RuntimeException.hpp
     - rtl/ustring.hxx
     include/tools/long.hxx:
     # Needed on _WIN64

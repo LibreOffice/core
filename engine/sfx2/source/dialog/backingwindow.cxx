@@ -746,7 +746,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
                 pDisp.release();
         }
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }

@@ -115,7 +115,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const cpo::uno::Sequence< beans::Na
 {
     OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!" );
     if ( !m_xContext.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xDocHolder = new embeddedobj::DocumentHolder( m_xContext, this );
 
@@ -136,7 +136,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const cpo::uno::Sequence< beans::Na
     }
 
     if ( m_aClassID.getLength() != 16 /*|| !m_aDocServiceName.getLength()*/ )
-        throw uno::RuntimeException(); // something goes really wrong
+        throw cpo::uno::RuntimeException(); // something goes really wrong
 
     // verbs table
     for (auto const& verb : m_aObjectVerbs)
@@ -339,7 +339,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
         {
             static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
         }
-        catch( const uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             aIt.remove();
         }
@@ -569,7 +569,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw uno::RuntimeException( u"Can't store object without persistence!"_ustr,
+        throw cpo::uno::RuntimeException( u"Can't store object without persistence!"_ustr,
                                      static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -623,7 +623,7 @@ void OCommonEmbeddedObject::close( bool bDeliverOwnership )
                 {
                     static_cast<util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const cpo::uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -641,7 +641,7 @@ void OCommonEmbeddedObject::close( bool bDeliverOwnership )
                 {
                     static_cast<util::XCloseListener*>(pCloseIterator.next())->notifyClosing( aSource );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const cpo::uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }

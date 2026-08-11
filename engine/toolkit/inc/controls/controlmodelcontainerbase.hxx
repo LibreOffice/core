@@ -99,7 +99,7 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::ElementExistException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void updateUserFormChildren(  const css::uno::Reference< css::container::XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation,  const css::uno::Reference< css::awt::XControlModel >& xTarget );
 public:
                         ControlModelContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );

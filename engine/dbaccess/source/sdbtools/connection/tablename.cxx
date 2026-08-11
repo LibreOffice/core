@@ -33,7 +33,7 @@ namespace sdbtools
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::container::NoSuchElementException;

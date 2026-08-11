@@ -124,7 +124,7 @@ void SvNumberFormatterServiceObj::attachNumberFormatsSupplier( const uno::Refere
 
         SvNumberFormatsSupplierObj* pNew = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( _xSupplier );
         if (!pNew)
-            throw uno::RuntimeException(); // wrong object
+            throw cpo::uno::RuntimeException(); // wrong object
 
         xAutoReleaseOld = xSupplier;
 
@@ -146,7 +146,7 @@ sal_Int32 SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nKey, const
 
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_uInt32 nUKey = nKey;
     double fValue = 0.0;
@@ -162,7 +162,7 @@ double SvNumberFormatterServiceObj::convertStringToNumber( sal_Int32 nKey, const
 
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_uInt32 nUKey = nKey;
     double fValue = 0.0;
@@ -179,7 +179,7 @@ OUString SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 nKey, dou
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const Color* pColor = nullptr;
     pFormatter->GetOutputString(fValue, nKey, aRet, &pColor);
@@ -196,7 +196,7 @@ sal_Int32 SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
     util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aStr;
     const Color* pColor = nullptr;
@@ -217,7 +217,7 @@ OUString SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     const Color* pColor = nullptr;
@@ -236,7 +236,7 @@ sal_Int32 SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     OUString aStr;
@@ -257,7 +257,7 @@ OUString SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, double fVa
 
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return pFormatter->GetInputLineString(fValue, nKey);
 }
@@ -274,7 +274,7 @@ OUString SvNumberFormatterServiceObj::convertNumberToPreviewString( const OUStri
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     const Color* pColor = nullptr;
@@ -302,7 +302,7 @@ sal_Int32 SvNumberFormatterServiceObj::queryPreviewColorForNumber( const OUStrin
     util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aOutString;
     LanguageType eLang = lcl_GetLanguage( nLocale );
@@ -360,7 +360,7 @@ uno::Reference<beans::XPropertySet> SvNumberFormatsObj::getByKey( sal_Int32 nKey
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return new SvNumberFormatObj( *m_xSupplier, nKey, m_aMutex );
 }
@@ -373,7 +373,7 @@ cpo::uno::Sequence<sal_Int32> SvNumberFormatsObj::queryKeys( sal_Int16 nType,
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if ( !pFormatter )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_uInt32 nIndex = 0;
     LanguageType eLang = lcl_GetLanguage( nLocale );
@@ -400,7 +400,7 @@ sal_Int32 SvNumberFormatsObj::queryKey( const OUString& aFormat,
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     if (bScan)
@@ -466,7 +466,7 @@ sal_Int32 SvNumberFormatsObj::addNew( const OUString& aFormat,
     sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aFormStr = aFormat;
     LanguageType eLang = lcl_GetLanguage( nLocale );
@@ -489,7 +489,7 @@ sal_Int32 SvNumberFormatsObj::addNew( const OUString& aFormat,
         nRet = nKey;
     }
     else
-        throw uno::RuntimeException(); // Other error (e.g. already added)
+        throw cpo::uno::RuntimeException(); // Other error (e.g. already added)
 
     return nRet;
 }
@@ -503,7 +503,7 @@ sal_Int32 SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
     sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aFormStr = aFormat;
     LanguageType eLang = lcl_GetLanguage( nLocale );
@@ -521,7 +521,7 @@ sal_Int32 SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
         throw util::MalformedNumberFormatException();       // Invalid format
     }
     else
-        throw uno::RuntimeException(); // Other error (e.g. already added)
+        throw cpo::uno::RuntimeException(); // Other error (e.g. already added)
 
     return nRet;
 }
@@ -547,7 +547,7 @@ OUString SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     OUString aRet = pFormatter->GenerateFormat(nBaseKey, eLang, bThousands, bRed, nDecimals, nLeading);
@@ -562,7 +562,7 @@ sal_Int32 SvNumberFormatsObj::getStandardIndex( const lang::Locale& nLocale )
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     sal_Int32 nRet = pFormatter->GetStandardIndex(eLang);
@@ -575,7 +575,7 @@ sal_Int32 SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const lang::Lo
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     // Mask out "defined" bit, so type from an existing number format
@@ -592,7 +592,7 @@ sal_Int32 SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const lang::Loca
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     sal_Int32 nRet = pFormatter->GetFormatIndex( static_cast<NfIndexTableOffset>(nIndex), eLang );
@@ -612,7 +612,7 @@ sal_Int32 SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const lang::Lo
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
     sal_Int32 nRet = pFormatter->GetFormatForLanguageIfBuiltIn(nKey, eLang);
@@ -670,7 +670,7 @@ cpo::uno::Any SvNumberFormatObj::getPropertyValue( const OUString& aPropertyName
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bThousand, bRed;
     sal_uInt16 nDecimals, nLeading;
@@ -784,7 +784,7 @@ cpo::uno::Sequence<beans::PropertyValue> SvNumberFormatObj::getPropertyValues()
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aSymbol, aExt;
     OUString aAbb;
@@ -872,7 +872,7 @@ void SvNumberFormatSettingsObj::setPropertyValue( const OUString& aPropertyName,
 
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (aPropertyName == PROPERTYNAME_NOZERO)
     {
@@ -910,7 +910,7 @@ cpo::uno::Any SvNumberFormatSettingsObj::getPropertyValue( const OUString& aProp
     cpo::uno::Any aRet;
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (aPropertyName == PROPERTYNAME_NOZERO)
     {

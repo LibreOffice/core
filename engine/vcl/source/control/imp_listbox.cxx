@@ -209,7 +209,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                 }
             }
         }
-        catch (uno::RuntimeException& )
+        catch (cpo::uno::RuntimeException& )
         {
             // XXX this is arguable, if the exception occurred because pNewEntry is
             // garbage you wouldn't insert it. If the exception occurred because the

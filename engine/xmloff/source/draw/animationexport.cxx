@@ -86,7 +86,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
@@ -495,7 +495,7 @@ static void lcl_CopyStream(
     OUString dir;
     OUString rest;
     if (!splitPath(rPath, dir, rest))
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (dir.getLength() == 0)
         xSource->copyElementTo(rPath, xTarget, rPath);
@@ -1422,7 +1422,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLUnitConverter::convertEnum( sTmp, nCommand, aAnimations_EnumMap_Command );
         mxExport->AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
-    // todo virtual cpo::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
+    // todo virtual cpo::uno::Any SAL_CALL getParameter() throw (cpo::uno::RuntimeException) = 0;
 
         SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 

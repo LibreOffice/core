@@ -33,7 +33,7 @@ class ScVbaPageSetup : public ScVbaPageSetup_BASE
     bool mbIsLandscape;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaPageSetup(const css::uno::Reference<ov::XHelperInterface>& xParent,
                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
                    css::uno::Reference<css::sheet::XSpreadsheet> xSheet,

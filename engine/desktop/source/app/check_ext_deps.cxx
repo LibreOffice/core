@@ -242,7 +242,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                     else
                         bRegistered = false;
                 }
-                catch ( const uno::RuntimeException & ) { throw; }
+                catch ( const cpo::uno::RuntimeException & ) { throw; }
                 catch (const cpo::uno::Exception & ) {
                    TOOLS_WARN_EXCEPTION( "desktop.app", "" );
                 }

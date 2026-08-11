@@ -55,7 +55,7 @@ inline constexpr OUString GIO_FOLDER_TYPE = u"application/vnd.sun.staroffice.gio
 cpo::uno::Any convertToException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
 /// @throws css::io::IOException
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 void convertToIOException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext);
 
@@ -174,7 +174,7 @@ public:
     virtual css::uno::Reference< css::ucb::XContent >
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);

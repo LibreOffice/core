@@ -238,10 +238,10 @@ ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( SC_UNONAME_TYPE )  >>= nValType;
     if ( nValType  != sheet::ValidationType_ANY  )
-        throw uno::RuntimeException(u"validation object already exists"_ustr );
+        throw cpo::uno::RuntimeException(u"validation object already exists"_ustr );
     sal_Int32 nType = -1;
     if ( !Type.hasValue()  || !( Type >>= nType ) )
-        throw uno::RuntimeException(u"missing required param"_ustr );
+        throw cpo::uno::RuntimeException(u"missing required param"_ustr );
 
     Delete(); // set up defaults
     OUString sFormula1;
@@ -255,7 +255,7 @@ ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle
                 // for validate list
                 // at least formula1 is required
                 if ( !Formula1.hasValue() )
-                    throw uno::RuntimeException(u"missing param"_ustr );
+                    throw cpo::uno::RuntimeException(u"missing param"_ustr );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( SC_UNONAME_TYPE, cpo::uno::Any(nValType ));
                 // #TODO validate required params
@@ -267,7 +267,7 @@ ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle
             xProps->setPropertyValue( SC_UNONAME_TYPE, cpo::uno::Any(nValType ));
             break;
         default:
-            throw uno::RuntimeException(u"unsupported operation..."_ustr );
+            throw cpo::uno::RuntimeException(u"unsupported operation..."_ustr );
     }
 
     sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
@@ -288,7 +288,7 @@ ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle
                 eStyle = sheet::ValidationAlertStyle_INFO;
                 break;
             default:
-            throw uno::RuntimeException(u"bad param..."_ustr );
+            throw cpo::uno::RuntimeException(u"bad param..."_ustr );
 
         }
     }

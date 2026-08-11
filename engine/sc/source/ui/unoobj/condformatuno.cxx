@@ -392,11 +392,11 @@ sal_Int32 ScCondFormatsObj::getLength()
 ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
 {
     if (!mpDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScConditionalFormatList* pList = mpDocShell->GetDocument().GetCondFormList(mnTab);
     if (!pList)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return pList;
 }
@@ -455,7 +455,7 @@ ScConditionalFormat* ScCondFormatObj::getCoreObject()
     ScConditionalFormatList* pList = mxCondFormatList->getCoreObject();
     ScConditionalFormat* pFormat = pList->GetFormat(mnKey);
     if (!pFormat)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return pFormat;
 }

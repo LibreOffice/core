@@ -199,13 +199,13 @@ private:
     /// @throws css::beans::PropertyExistException
     /// @throws css::beans::IllegalTypeException
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
                       const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     /// @throws css::beans::PropertyExistException
     /// @throws css::beans::NotRemoveableException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void removeProperty( const OUString& Name,
                          const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 public:

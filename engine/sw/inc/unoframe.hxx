@@ -147,7 +147,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void attachToRange(css::uno::Reference<css::text::XTextRange> const& xTextRange,
             SwPaM const* pCopySource = nullptr);
 

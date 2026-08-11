@@ -1018,7 +1018,7 @@ void GrammarCheckingIterator::processLinguServiceEvent(
                 &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
                 aEvent);
     }
-    catch (uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
          throw;
     }

@@ -199,7 +199,7 @@ public class ParcelContainer implements XNameAccess {
                     name =  decodedUrl.substring(indexOfSlash + 1);
                 }
             } catch (UnsupportedEncodingException e) {
-                throw new com.sun.star.uno.RuntimeException(e);
+                throw new cpo.uno.RuntimeException(e);
             }
         } else {
             name =  "document";

@@ -11,7 +11,7 @@
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -34,7 +34,7 @@ void XTableRows::testInsertByIndex()
     xTableRows->insertByIndex(0, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15.0, xCellRange->getCellByPosition(0, 1)->getValue(), 0.1);
 
-    CPPUNIT_ASSERT_THROW(xTableRows->insertByIndex(-1, 1), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xTableRows->insertByIndex(-1, 1), cpo::uno::RuntimeException);
 }
 
 void XTableRows::testRemoveByIndex()
@@ -47,7 +47,7 @@ void XTableRows::testRemoveByIndex()
     xTableRows->removeByIndex(0, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15.0, xCellRange->getCellByPosition(0, 0)->getValue(), 0.1);
 
-    CPPUNIT_ASSERT_THROW(xTableRows->removeByIndex(-1, 1), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xTableRows->removeByIndex(-1, 1), cpo::uno::RuntimeException);
 }
 
 } // namespace apitest

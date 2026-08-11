@@ -310,7 +310,7 @@ uno::Reference< text::XTextRange > SvxUnoTextRangeBase::getStart()
     SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
     if(pText == nullptr)
-        throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
     rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
 
@@ -334,7 +334,7 @@ uno::Reference< text::XTextRange > SvxUnoTextRangeBase::getEnd()
     SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
     if(pText == nullptr)
-        throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
+        throw cpo::uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
     rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
 
@@ -697,12 +697,12 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         {
             SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET );
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
-                throw uno::RuntimeException(u"Invalid item state for paragraph numbering/bullet. Expected SET or DEFAULT."_ustr);
+                throw cpo::uno::RuntimeException(u"Invalid item state for paragraph numbering/bullet. Expected SET or DEFAULT."_ustr);
 
             const SvxNumBulletItem* pBulletItem = rSet.GetItem( EE_PARA_NUMBULLET );
 
             if( pBulletItem == nullptr )
-                throw uno::RuntimeException(u"Unable to retrieve paragraph numbering/bullet item."_ustr);
+                throw cpo::uno::RuntimeException(u"Unable to retrieve paragraph numbering/bullet item."_ustr);
 
             aAny <<= SvxCreateNumRule( pBulletItem->GetNumRule() );
         }
@@ -2015,7 +2015,7 @@ static void SvxPropertyValuesToItemSet(
 
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             // should be PropertyVetoException which is not yet defined for the new import API's functions
-            throw uno::RuntimeException("Property is read-only: " + rProp.Name );
+            throw cpo::uno::RuntimeException("Property is read-only: " + rProp.Name );
             //throw PropertyVetoException ("Property is read-only: " + rProp.Name );
 
         if (pEntry->nWID == WID_FONTDESC)

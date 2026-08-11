@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
 {
     if( !aSecurityEnvironment.is() )
     {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     m_xSecurityEnvironment = aSecurityEnvironment;
@@ -107,7 +107,7 @@ css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
 {
     if (index != 0)
     {
-        throw uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
     return m_xSecurityEnvironment;
 }

@@ -71,7 +71,7 @@ public:
                 xConfig->addConfigurationListener( this );
             }
         }
-        catch( const css::uno::RuntimeException& ) {}
+        catch( const cpo::uno::RuntimeException& ) {}
     }
 
     // XUIConfigurationListener
@@ -113,7 +113,7 @@ public:
                 xConfig->removeConfigurationListener( this );
             }
         }
-        catch( const css::uno::RuntimeException& ) {}
+        catch( const cpo::uno::RuntimeException& ) {}
 
         m_pParent.reset();
     }

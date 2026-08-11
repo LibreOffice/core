@@ -13,7 +13,7 @@
 #include <typeinfo>
 
 #include <bridges/emscriptencxxabi/cxxabi.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 #include <typelib/typeclass.h>
@@ -75,9 +75,9 @@ void abi_wasm::mapException(__cxxabiv1::__cxa_exception* exception, std::type_in
     typelib_typedescription_getByName(&td, unoName.pData);
     if (td == nullptr)
     {
-        css::uno::RuntimeException e("exception type not found: " + unoName);
+        cpo::uno::RuntimeException e("exception type not found: " + unoName);
         uno_type_any_constructAndConvert(
-            any, &e, cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(), mapping);
+            any, &e, cppu::UnoType<cpo::uno::RuntimeException>::get().getTypeLibType(), mapping);
     }
     else
     {

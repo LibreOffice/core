@@ -31,7 +31,7 @@ namespace
 using ::cpo::uno::Type;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_SET_THROW;
 
 class Foo: public Interface1

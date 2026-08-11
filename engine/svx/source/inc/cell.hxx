@@ -185,7 +185,7 @@ private:
     SVX_DLLPRIVATE static cpo::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap );
     SVX_DLLPRIVATE void setPropertyValueImpl( const OUString& aPropertyName, const cpo::uno::Any& aValue, SfxItemSet& rSet );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );
     SVX_DLLPRIVATE virtual ~Cell() override;
 

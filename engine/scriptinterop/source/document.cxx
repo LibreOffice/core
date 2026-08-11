@@ -31,7 +31,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -209,7 +209,7 @@ public:
         auto const xgraphic = gp->queryGraphic(loaderArgs);
         if (!xgraphic.is())
         {
-            throw css::uno::RuntimeException(u"insertImage: failed to load graphic"_ustr);
+            throw cpo::uno::RuntimeException(u"insertImage: failed to load graphic"_ustr);
         }
         css::uno::Reference<css::lang::XMultiServiceFactory> const docFactory(doc,
                                                                               css::uno::UNO_QUERY);
@@ -221,7 +221,7 @@ public:
         css::uno::Reference<css::beans::XPropertySet> const props(graphic, css::uno::UNO_QUERY);
         if (!props.is())
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"insertImage: failed to create TextGraphicObject"_ustr);
         }
         props->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xgraphic));
@@ -239,7 +239,7 @@ public:
                                 : css::uno::Reference<css::text::XTextViewCursor>());
         if (!cursor.is())
         {
-            throw css::uno::RuntimeException(u"insertImage: no view cursor"_ustr);
+            throw cpo::uno::RuntimeException(u"insertImage: no view cursor"_ustr);
         }
         doc->getText()->insertTextContent(cursor, graphic, false);
     }

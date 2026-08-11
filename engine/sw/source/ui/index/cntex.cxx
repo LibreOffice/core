@@ -148,7 +148,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         {
              bInitialCreate = true;
              if(!m_vTypeData[nTOXIndex].m_oIndexSections->xContainerSection.is())
-                 throw uno::RuntimeException();
+                 throw cpo::uno::RuntimeException();
              uno::Reference< text::XTextRange >  xAnchor = m_vTypeData[nTOXIndex].m_oIndexSections->xContainerSection->getAnchor();
              xAnchor = xAnchor->getStart();
              uno::Reference< text::XTextCursor >  xCursor = xAnchor->getText()->createTextCursorByRange(xAnchor);

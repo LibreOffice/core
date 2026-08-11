@@ -16,7 +16,7 @@
 // curl is built with --with-secure-transport on macOS and iOS so doesn't need these
 // certs. Windows doesn't need them either, but let's assume everything else does
 #if !defined(SYSTEM_OPENSSL) && !defined(_WIN32) && !defined(MACOSX) && !defined(IOS)
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #define LO_CURL_NEEDS_CA_BUNDLE
 #include "opensslinit.hxx"
@@ -37,7 +37,7 @@ static void InitCurl_easy(CURL* const pCURL)
     {
         SAL_WARN("ucb.ucp.webdav.curl", "no OpenSSL CA certificate bundle found");
 #if !defined(__EMSCRIPTEN__)
-        throw css::uno::RuntimeException(u"no OpenSSL CA certificate bundle found"_ustr);
+        throw cpo::uno::RuntimeException(u"no OpenSSL CA certificate bundle found"_ustr);
 #endif
     }
     else
@@ -45,7 +45,7 @@ static void InitCurl_easy(CURL* const pCURL)
         rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
         if (rc != CURLE_OK) // only if OOM?
         {
-            throw css::uno::RuntimeException(u"CURLOPT_CAINFO failed"_ustr);
+            throw cpo::uno::RuntimeException(u"CURLOPT_CAINFO failed"_ustr);
         }
     }
 #endif
@@ -58,7 +58,7 @@ static void InitCurl_easy(CURL* const pCURL)
         rc = curl_easy_setopt(pCURL, CURLOPT_CAPATH, capath);
         if (rc != CURLE_OK)
         {
-            throw css::uno::RuntimeException(u"CURLOPT_CAPATH failed"_ustr);
+            throw cpo::uno::RuntimeException(u"CURLOPT_CAPATH failed"_ustr);
         }
     }
 

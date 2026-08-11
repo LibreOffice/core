@@ -93,7 +93,7 @@ public class JavaLoader implements XImplementationLoader,
                     UnoRuntime.queryInterface(
                         XPropertySet.class, multiServiceFactory );
                 if (xProps == null) {
-                    throw new com.sun.star.uno.RuntimeException(
+                    throw new cpo.uno.RuntimeException(
                         "service manager does not support XPropertySet!",
                         this );
                 }
@@ -121,10 +121,10 @@ public class JavaLoader implements XImplementationLoader,
             }
             return ret;
         } catch (cpo.uno.Exception exc) {
-            throw new com.sun.star.uno.RuntimeException(exc,
+            throw new cpo.uno.RuntimeException(exc,
                 exc.getMessage(), this );
         } catch (java.lang.Exception exc) {
-            throw new com.sun.star.uno.RuntimeException(exc,
+            throw new cpo.uno.RuntimeException(exc,
                 exc.getMessage(), this );
         }
     }
@@ -165,7 +165,7 @@ public class JavaLoader implements XImplementationLoader,
      */
     public void initialize( java.lang.Object[] args )
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         if (args.length == 0)
             throw new com.sun.star.lang.IllegalArgumentException("No arguments specified");
@@ -186,7 +186,7 @@ public class JavaLoader implements XImplementationLoader,
      * @see         com.sun.star.lang.XServiceInfo
      */
     public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return getClass().getName();
     }
@@ -200,7 +200,7 @@ public class JavaLoader implements XImplementationLoader,
      * @see         com.sun.star.lang.XServiceInfo
      */
     public boolean supportsService(String serviceName)
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         for (String supportedService : supportedServices) {
             if (supportedService.equals(serviceName)) {
@@ -217,7 +217,7 @@ public class JavaLoader implements XImplementationLoader,
      * @see         com.sun.star.lang.XServiceInfo
      */
     public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return supportedServices;
     }
@@ -246,7 +246,7 @@ public class JavaLoader implements XImplementationLoader,
                                       String locationUrl,
                                       XRegistryKey xKey )
         throws CannotActivateFactoryException,
-               com.sun.star.uno.RuntimeException
+               cpo.uno.RuntimeException
     {
         locationUrl = expand_url( locationUrl );
 
@@ -364,7 +364,7 @@ public class JavaLoader implements XImplementationLoader,
                                       String implementationLoaderUrl,
                                       String locationUrl )
             throws CannotRegisterImplementationException,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         locationUrl = expand_url( locationUrl );
 

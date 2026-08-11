@@ -161,7 +161,7 @@ OUString StorageFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& r
             aMediaDesc >> rDescriptor;
         }
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         throw;
     }

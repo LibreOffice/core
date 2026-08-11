@@ -233,7 +233,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     if (!pTextAttr)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"SwXReferenceMark::InsertRefMark(): cannot insert attribute"_ustr, nullptr);
     }
 
@@ -248,7 +248,7 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
@@ -354,7 +354,7 @@ OUString SAL_CALL SwXReferenceMark::getName()
     if (!m_pImpl->IsValid() ||
         !m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName))
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return m_pImpl->m_sMarkName.toString();
 }
@@ -372,7 +372,7 @@ void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
             || !m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName)
             || m_pImpl->m_pDoc->GetRefMark(SwMarkName(rName)))
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         SwFormatRefMark const*const pCurMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
@@ -885,7 +885,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     }
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"SwXMeta::attach(): already attached"_ustr,
             getXWeak());
     }
@@ -937,7 +937,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     if (!pTextAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"SwXMeta::attach(): cannot create meta"_ustr,
             getXWeak());
     }
@@ -970,7 +970,7 @@ SwXMeta::getAnchor()
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"SwXMeta::getAnchor(): not inserted"_ustr,
                 getXWeak());
     }
@@ -1128,7 +1128,7 @@ SwXMeta::createEnumeration()
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"createEnumeration(): not inserted"_ustr,
                 getXWeak());
     }
@@ -1396,7 +1396,7 @@ lcl_getPrefixOrSuffix(
     while (xEnum->hasMoreElements()) {
         rdf::Statement stmt;
         if (!(xEnum->nextElement() >>= stmt)) {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         const uno::Reference<rdf::XLiteral> xObject(stmt.Object,
             uno::UNO_QUERY);
@@ -1434,7 +1434,7 @@ getPrefixAndSuffix(
         {
             *o_pShadingColor = lcl_getPrefixOrSuffix(xRepo, xMeta, lcl_getURI(rdf::URIs::LO_EXT_SHADING));
         }
-    } catch (uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (const cpo::uno::Exception &) {
         cpo::uno::Any anyEx = cppu::getCaughtException();

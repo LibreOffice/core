@@ -133,7 +133,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 //      in other parts of the office.
 //      xmlCleanupParser() ;
 //      and neither can we call xsltCleanupGlobals()
-        throw css::uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 
     xmlSAXVersion(m_pParserCtxt->sax, 1);
@@ -152,7 +152,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 //      xmlCleanupParser() ;
 //      and neither can we call xsltCleanupGlobals()
         m_pParserCtxt = nullptr ;
-        throw css::uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
     else
     {
@@ -223,7 +223,7 @@ void SAXHelper::startDocument()
 {
     if( m_pParserCtxt == nullptr)
     {
-        throw css::uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
     /*
      * Adjust inputTab
@@ -242,7 +242,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if( m_pParserCtxt->myDoc == nullptr )
     {
-        throw css::uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
     }
 }
 

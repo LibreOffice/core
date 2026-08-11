@@ -42,7 +42,7 @@ public:
     PlotterBase( sal_Int32 nDimension );
     virtual ~PlotterBase();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void initPlotter(
           const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
         , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget

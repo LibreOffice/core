@@ -65,7 +65,7 @@ static void checkInterface(cpo::uno::Type const& rType)
     {
         OUString msg("querying for interface \"" + rType.getTypeName() + "\": no interface type!");
         SAL_WARN("cppuhelper", msg);
-        throw css::uno::RuntimeException(msg);
+        throw cpo::uno::RuntimeException(msg);
     }
 }
 
@@ -166,7 +166,7 @@ static void* queryDeepNoXInterface(typelib_TypeDescriptionReference const* pDema
             OUString msg("cannot get type description for type \""
                          + OUString::unacquired(&pEntries[n].m_type.typeRef->pTypeName) + "\"!");
             SAL_WARN("cppuhelper", msg);
-            throw css::uno::RuntimeException(msg);
+            throw cpo::uno::RuntimeException(msg);
         }
     }
     return nullptr;

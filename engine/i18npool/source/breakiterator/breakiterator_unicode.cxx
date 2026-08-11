@@ -149,7 +149,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 status = U_ZERO_ERROR;
                 udata_setAppData("OpenOffice", OpenOffice_dat, &status);
                 if ( !U_SUCCESS(status) )
-                    throw uno::RuntimeException("udata_setAppData returned error " + OUString::createFromAscii(u_errorName(status)));
+                    throw cpo::uno::RuntimeException("udata_setAppData returned error " + OUString::createFromAscii(u_errorName(status)));
 
                 std::shared_ptr<OOoRuleBasedBreakIterator> rbi;
 
@@ -279,14 +279,14 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                         break;
                 }
                 if ( !U_SUCCESS(status) || !pBI ) {
-                    throw uno::RuntimeException("Failed to create ICU BreakIterator: error " + OUString::createFromAscii(u_errorName(status)));
+                    throw cpo::uno::RuntimeException("Failed to create ICU BreakIterator: error " + OUString::createFromAscii(u_errorName(status)));
                 }
                 icuBI->mpValue = std::make_shared<BI_ValueData>();
                 icuBI->mpValue->mpBreakIterator = std::move(pBI);
                 theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
             } while (false);
         if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) {
-            throw uno::RuntimeException(u"ICU BreakIterator is not properly initialized"_ustr);
+            throw cpo::uno::RuntimeException(u"ICU BreakIterator is not properly initialized"_ustr);
         }
         OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
         icuBI->maBIMapKey = aBIMapGlobalKeyStr;
@@ -304,12 +304,12 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     icuBI->mpValue->mpUt = utext_openUChars(icuBI->mpValue->mpUt, pText, rText.getLength(), &status);
 
     if (!U_SUCCESS(status))
-        throw uno::RuntimeException("utext_openUChars returned error " + OUString::createFromAscii(u_errorName(status)));
+        throw cpo::uno::RuntimeException("utext_openUChars returned error " + OUString::createFromAscii(u_errorName(status)));
 
     icuBI->mpValue->mpBreakIterator->setText(icuBI->mpValue->mpUt, status);
 
     if (!U_SUCCESS(status))
-        throw uno::RuntimeException("Failed to set text for ICU BreakIterator: error " + OUString::createFromAscii(u_errorName(status)));
+        throw cpo::uno::RuntimeException("Failed to set text for ICU BreakIterator: error " + OUString::createFromAscii(u_errorName(status)));
 
     icuBI->mpValue->maICUText = rText;
 }

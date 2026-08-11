@@ -27,7 +27,7 @@
 
 using cpo::uno::Sequence;
 using cpo::uno::Any;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 
 namespace pyuno
 {

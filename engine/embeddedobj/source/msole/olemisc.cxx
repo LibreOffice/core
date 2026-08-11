@@ -178,7 +178,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
         {
             throw; // forEach handles this
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
         }
     };
@@ -386,7 +386,7 @@ uno::Reference< util::XCloseable > OleEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw uno::RuntimeException( u"The object is not loaded!"_ustr,
+        throw cpo::uno::RuntimeException( u"The object is not loaded!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
@@ -400,7 +400,7 @@ uno::Reference< util::XCloseable > OleEmbeddedObject::getComponent()
     assert(!m_pOleComponent.is());
     // TODO/LATER: Is it correct???
     return uno::Reference< util::XCloseable >();
-    // throw uno::RuntimeException(); // TODO
+    // throw cpo::uno::RuntimeException(); // TODO
 }
 
 
@@ -478,7 +478,7 @@ void OleEmbeddedObject::close( bool bDeliverOwnership )
                 {
                     static_cast<util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const cpo::uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -496,7 +496,7 @@ void OleEmbeddedObject::close( bool bDeliverOwnership )
                 {
                     static_cast<util::XCloseListener*>(pCloseIterator.next())->notifyClosing( aSource );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const cpo::uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }

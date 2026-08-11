@@ -253,7 +253,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     SdrObject* pSdrShape = SdrObject::getSdrObjectFromXShape( xShape );
 
     if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentSdrObjectFromSdrObject() != GetSdrObject() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SdrObjList& rList = *pSdrShape->getParentSdrObjListFromSdrObject();
 
@@ -314,7 +314,7 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount()
     ::SolarMutexGuard aGuard;
 
     if(!HasSdrObject() || !GetSdrObject()->GetSubList())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     sal_Int32 nRetval = GetSdrObject()->GetSubList()->GetObjCount();
     return nRetval;
@@ -326,7 +326,7 @@ cpo::uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     ::SolarMutexGuard aGuard;
 
     if( !HasSdrObject() || GetSdrObject()->GetSubList() == nullptr )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if( Index<0 || GetSdrObject()->GetSubList()->GetObjCount() <= o3tl::make_unsigned(Index) )
         throw lang::IndexOutOfBoundsException();

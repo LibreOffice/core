@@ -20,7 +20,7 @@ package ifc.registry;
 
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
-import com.sun.star.uno.RuntimeException;
+import cpo.uno.RuntimeException;
 import lib.MultiMethodTest;
 import util.RegistryTools;
 import util.utils;

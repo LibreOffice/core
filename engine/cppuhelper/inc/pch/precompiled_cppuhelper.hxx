@@ -80,7 +80,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>

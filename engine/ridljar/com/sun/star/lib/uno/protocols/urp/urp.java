@@ -246,7 +246,7 @@ public final class urp implements IProtocol {
                     default:
                         writeReply(
                             true, message.getThreadId(),
-                            new com.sun.star.uno.RuntimeException(
+                            new cpo.uno.RuntimeException(
                                 "read URP protocol properties requestChange"
                                 + " request in illegal state"));
                         break;
@@ -291,7 +291,7 @@ public final class urp implements IProtocol {
                     } else {
                         writeReply(
                             true, message.getThreadId(),
-                            new com.sun.star.uno.RuntimeException(
+                            new cpo.uno.RuntimeException(
                                 "read URP protocol properties commitChange"
                                 + " request in illegal state"));
                     }

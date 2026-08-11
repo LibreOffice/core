@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -33,7 +33,7 @@ namespace configmgr {
 
 NodeMap & Node::getMembers() {
     assert(false);
-    throw css::uno::RuntimeException(u"this cannot happen"_ustr);
+    throw cpo::uno::RuntimeException(u"this cannot happen"_ustr);
 }
 
 OUString Node::getTemplateName() const {

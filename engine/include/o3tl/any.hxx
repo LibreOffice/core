@@ -19,7 +19,7 @@
 #include <optional>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
@@ -270,7 +270,7 @@ template<typename T> typename detail::Optional<T>::type tryAccess(
     @return a positive proxy for the value of the specified type obtained from
     the given Any.  See tryAccess for details.
 
-    @throws css::uno::RuntimeException  when a value of the requested type
+    @throws cpo::uno::RuntimeException  when a value of the requested type
     cannot be obtained.
 */
 template<typename T> inline typename detail::Optional<T>::type doAccess(
@@ -278,7 +278,7 @@ template<typename T> inline typename detail::Optional<T>::type doAccess(
 {
     auto opt = tryAccess<T>(any);
     if (!opt) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             OUString(
                 cppu_Any_extraction_failure_msg(
                     &any, cppu::UnoType<T>::get().getTypeLibType()),

@@ -35,13 +35,13 @@ private:
     sal_Int32 mnEndColumnIndex;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ooo::vba::word::XColumn > getColumnAtIndex( sal_Int32 index );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol );
 
     virtual sal_Int32 SAL_CALL getWidth(  ) override;

@@ -78,94 +78,94 @@ class ScVbaRange : public ScVbaRange_BASE
     bool mbIsRows;
     bool mbIsColumns;
     rtl::Reference< ScVbaValidation > m_xValidation;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     double getCalcColWidth(const css::table::CellRangeAddress&);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     double getCalcRowHeight(const css::table::CellRangeAddress&);
     void visitArray( ArrayVisitor& visitor );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void ClearContents( sal_Int32 nFlags, bool bFireEvent );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any getValue( ValueGetter& rValueGetter );
     cpo::uno::Any DoGetValue( RangeValueType eValueType );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setValue( const cpo::uno::Any& aValue, ValueSetter& setter );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setFormulaValue( const cpo::uno::Any& aValue, formula::FormulaGrammar::Grammar );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScCellRangeObj* getCellRangeObj( );
     css::uno::Reference< ov::XCollection >& getBorders();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void groupUnGroup( bool bUnGroup );
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );
      /// @throws css::script::BasicErrorException
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const cpo::uno::Any& _oValue);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::awt::Point getPosition() const;
 
     /** Fires a Worksheet_Change event for this range or range list. */
     void fireChangeEvent();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScRange obtainRangeEvenIfRangeListIsEmpty( const ScRangeList& rCellRanges ) const;
 
 protected:
     virtual ScCellRangesBase* getCellRangesBase() override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SfxItemSet* getCurrentDataSet();
 public:
     /// @throws css::lang::IllegalArgumentException
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false );
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaRange( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScDocument& getScDocument();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScDocShell* getScDocShell();
 
     /** Returns the ScVbaRange implementation object for the passed VBA Range object. */
     static ScVbaRange* getImplementation( const css::uno::Reference< ov::excel::XRange >& rxRange );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::frame::XModel > getUnoModel();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::frame::XModel > getUnoModel( const css::uno::Reference< ov::excel::XRange >& rxRange );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const ScRangeList& getScRangeList();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static const ScRangeList& getScRangeList( const css::uno::Reference< ov::excel::XRange >& rxRange );
 
     virtual ~ScVbaRange() override;
      virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; }
     bool isSingleCellRange() const;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv  );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > CellsHelper(
         const ScDocument& rDoc,
         const css::uno::Reference< ov::XHelperInterface >& xParent,
@@ -250,10 +250,10 @@ public:
     virtual css::uno::Reference< ov::excel::XFont > SAL_CALL Font() override;
     virtual css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) override ;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > Range( const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2, bool bForceUseInpuRangeTab );
     virtual cpo::uno::Any SAL_CALL getCellRange(  ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static cpo::uno::Any getCellRange( const css::uno::Reference< ov::excel::XRange >& rxRange );
     virtual void SAL_CALL PasteSpecial( const cpo::uno::Any& Paste, const cpo::uno::Any& Operation, const cpo::uno::Any& SkipBlanks, const cpo::uno::Any& Transpose ) override;
     virtual bool SAL_CALL Replace( const OUString& What, const OUString& Replacement, const cpo::uno::Any& LookAt, const cpo::uno::Any& SearchOrder, const cpo::uno::Any& MatchCase, const cpo::uno::Any& MatchByte, const cpo::uno::Any& SearchFormat, const cpo::uno::Any& ReplaceFormat ) override;
@@ -313,7 +313,7 @@ public:
 //     * or a list of address ( multi-area )
 //     * object should be a lightweight as possible
 //     * we shouldn't need hacks like this below
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 );
     static bool getCellRangesForAddress(ScRefFlags &rResFlags, std::u16string_view sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter );
     virtual bool SAL_CALL GoalSeek( const cpo::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) override;
@@ -325,7 +325,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const ScRange& refRange,
                                ScRangeList& aCellRanges,
                                formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 );

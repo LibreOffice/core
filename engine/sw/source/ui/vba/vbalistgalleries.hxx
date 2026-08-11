@@ -31,7 +31,7 @@ private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaListGalleries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;

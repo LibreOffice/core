@@ -321,7 +321,7 @@ public:
             auto pStat = std::find_if(stats.begin(), stats.end(),
                 [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
             if (pStat == stats.end())
-                throw uno::RuntimeException(); // bad Property
+                throw cpo::uno::RuntimeException(); // bad Property
 
             aReturn = pStat->Value;
         }
@@ -545,7 +545,7 @@ void SAL_CALL
 SwVbaBuiltInDocumentProperty::Delete(  )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 OUString SAL_CALL
@@ -558,7 +558,7 @@ void SAL_CALL
 SwVbaBuiltInDocumentProperty::setName( const OUString& )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 ::sal_Int8 SAL_CALL
@@ -571,7 +571,7 @@ void SAL_CALL
 SwVbaBuiltInDocumentProperty::setType( ::sal_Int8 /*Type*/ )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 bool SAL_CALL
@@ -584,7 +584,7 @@ void SAL_CALL
 SwVbaBuiltInDocumentProperty::setLinkToContent( bool /*LinkToContent*/ )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SAL_CALL
@@ -592,7 +592,7 @@ SwVbaBuiltInDocumentProperty::getValue(  )
 {
     cpo::uno::Any aRet = mPropInfo.getValue();
     if ( !aRet.hasValue() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return aRet;
 }
 
@@ -606,14 +606,14 @@ OUString SAL_CALL
 SwVbaBuiltInDocumentProperty::getLinkSource(  )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 void SAL_CALL
 SwVbaBuiltInDocumentProperty::setLinkSource( const OUString& /*LinkSource*/ )
 {
     // not valid for Builtin
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 OUString
@@ -752,7 +752,7 @@ SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties(
 uno::Reference< XDocumentProperty > SAL_CALL
 SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const cpo::uno::Any& /*value*/, const cpo::uno::Any& /*LinkSource*/ )
 {
-    throw uno::RuntimeException( u"not supported for Builtin properties"_ustr );
+    throw cpo::uno::RuntimeException( u"not supported for Builtin properties"_ustr );
 }
 
 // XEnumerationAccess

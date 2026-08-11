@@ -55,7 +55,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
     if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
-        throw uno::RuntimeException(u"Cannot get address"_ustr );
+        throw cpo::uno::RuntimeException(u"Cannot get address"_ustr );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
     rTextToDisplay >>= aTextToDisplay;
@@ -98,7 +98,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         uno::Reference< msforms::XShape > xAnchorShape( rxAnchor, uno::UNO_QUERY_THROW );
         mnType = office::MsoHyperlinkType::msoHyperlinkShape;
         // FIXME: insert hyperlink into shape
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -186,7 +186,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange()
         return xAnchorRange;
     }
     // error if called at a shape Hyperlink object
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 uno::Reference< msforms::XShape > SAL_CALL ScVbaHyperlink::getShape()
@@ -202,7 +202,7 @@ VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlink, u"ooo.vba.excel.Hyperlink"_ustr
 void ScVbaHyperlink::ensureTextField()
 {
     if( !mxTextField.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 ScVbaHyperlink::UrlComponents ScVbaHyperlink::getUrlComponents()

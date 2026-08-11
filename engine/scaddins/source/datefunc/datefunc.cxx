@@ -432,7 +432,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
     }
 
     // no null date available -> no calculations possible
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 }

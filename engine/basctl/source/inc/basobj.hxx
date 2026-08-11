@@ -75,7 +75,7 @@ namespace basctl
     { return ChooseMacro(pParent, rLimitToDocument, css::uno::Reference< css::frame::XFrame >(), false/*bChooseOnly*/); }
 
     /// @throws css::container::NoSuchElementException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
 
@@ -90,7 +90,7 @@ namespace basctl
 
         @throws css::container::ElementExistException
         @throws css::container::NoSuchElementException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     bool            RenameDialog(weld::Widget* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName);
 

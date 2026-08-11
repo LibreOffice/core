@@ -131,7 +131,7 @@ class BackendImpl : public ImplBaseT
             Reference<ucb::XCommandEnvironment > const &
                 environment,
             DescriptionInfoset const & description);
-            // throws css::uno::RuntimeException,
+            // throws cpo::uno::RuntimeException,
             // css::deployment::DeploymentException
 
         /// @throws deployment::DeploymentException
@@ -671,7 +671,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         throw;
     } catch (const css::deployment::DeploymentException&) {
         throw;
-    } catch (const css::uno::RuntimeException&) {
+    } catch (const cpo::uno::RuntimeException&) {
         throw;
     } catch (const cpo::uno::Exception&) {
         Any anyExc = cppu::getCaughtException();

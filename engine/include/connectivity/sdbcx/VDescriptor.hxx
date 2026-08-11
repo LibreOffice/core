@@ -61,7 +61,7 @@ namespace connectivity::sdbcx
 
         virtual void construct();
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  );
     };
 

@@ -74,7 +74,7 @@ SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElemen
     if (nElement == XML_ELEMENT( OFFICE, XML_DOCUMENT_META ))
     {
         if (!mxDocProps.is()) {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"XMLMetaImportComponent::CreateFastContext: setTargetDocument "
                 "has not been called"_ustr, *this);
         }

@@ -42,7 +42,7 @@ namespace connectivity
         class OPreparedStatement : public OPreparedStatement_BASE
         {
             /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType, sal_Int32 _nSize,const OLEVariant& Val);
             void replaceParameterNodeName(  OSQLParseNode const * _pNode,
                                             const OUString& _sDefaultName,

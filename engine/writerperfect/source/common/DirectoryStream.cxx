@@ -82,7 +82,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, std::u
             }
         } while (xResultSet->next());
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         // ignore
     }

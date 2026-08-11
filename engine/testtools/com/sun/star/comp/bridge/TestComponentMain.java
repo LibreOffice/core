@@ -47,7 +47,7 @@ public class TestComponentMain
         }
 
         public Object getInstance( /*IN*/String sInstanceName )
-            throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException
+            throws com.sun.star.container.NoSuchElementException, cpo.uno.RuntimeException
         {
             Object o =null;
             try

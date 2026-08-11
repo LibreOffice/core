@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/json.hxx>
@@ -485,7 +485,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
             auto const v = *static_cast<float const*>(value);
             if (!std::isfinite(v))
             {
-                throw css::uno::RuntimeException(u"appendUnoAsJson: non-finite "_ustr
+                throw cpo::uno::RuntimeException(u"appendUnoAsJson: non-finite "_ustr
                                                  + type.getTypeName()
                                                  + u" cannot be converted to JSON"_ustr);
             }
@@ -497,7 +497,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
             auto const v = *static_cast<double const*>(value);
             if (!std::isfinite(v))
             {
-                throw css::uno::RuntimeException(u"appendUnoAsJson: non-finite "_ustr
+                throw cpo::uno::RuntimeException(u"appendUnoAsJson: non-finite "_ustr
                                                  + type.getTypeName()
                                                  + u" cannot be converted to JSON"_ustr);
             }
@@ -557,7 +557,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
                     return;
                 }
             }
-            throw css::uno::RuntimeException(u"appendUnoAsJson: invalid value "_ustr
+            throw cpo::uno::RuntimeException(u"appendUnoAsJson: invalid value "_ustr
                                              + OUString::number(val) + u" for UNO enum "_ustr
                                              + type.getTypeName());
         }
@@ -628,7 +628,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             {
                 return cpo::uno::Any(false);
             }
-            throw css::uno::RuntimeException(u"JSON value "_ustr + json
+            throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                              + u" does not parse as UNO type "_ustr
                                              + type.getTypeName());
         }
@@ -637,7 +637,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_Int8>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -648,7 +648,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_Int16>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -659,7 +659,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_uInt16>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -670,7 +670,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_Int32>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -681,7 +681,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_uInt32>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -692,7 +692,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_Int64>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -703,7 +703,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<sal_uInt64>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -714,7 +714,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<float>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -725,7 +725,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const v = parseJsonNumberAs<double>(json);
             if (!v)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -736,7 +736,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const decoded = parseJsonStringValue(json);
             if (!decoded || decoded->getLength() != 1)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -747,7 +747,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const decoded = parseJsonStringValue(json);
             if (!decoded)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -758,14 +758,14 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const name = parseJsonStringValue(json);
             if (!name)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
             css::uno::TypeDescription tdesc(*name);
             if (!tdesc.is())
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -780,7 +780,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             std::map<OUString, OUString> obj;
             if (!splitJsonObject(json, obj))
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -788,21 +788,21 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             auto const itVal = obj.find(u"val"_ustr);
             if (itType == obj.end() || itVal == obj.end())
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
             auto const tname = parseJsonStringValue(itType->second);
             if (!tname)
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
             css::uno::TypeDescription tdesc(*tname);
             if (!tdesc.is())
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -813,7 +813,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             std::vector<OUString> elems;
             if (!splitJsonArray(json, elems))
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -849,7 +849,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                     }
                 }
             }
-            throw css::uno::RuntimeException(u"JSON value "_ustr + json
+            throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                              + u" does not parse as UNO type "_ustr
                                              + type.getTypeName());
         }
@@ -859,7 +859,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             std::map<OUString, OUString> obj;
             if (!splitJsonObject(json, obj))
             {
-                throw css::uno::RuntimeException(u"JSON value "_ustr + json
+                throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
@@ -874,7 +874,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                     auto const it = obj.find(name);
                     if (it == obj.end())
                     {
-                        throw css::uno::RuntimeException(
+                        throw cpo::uno::RuntimeException(
                             u"JSON object "_ustr + json + u" is missing member \""_ustr + name
                             + u"\" of UNO type "_ustr + type.getTypeName());
                     }
@@ -922,7 +922,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             }
             //TODO: non-null interface references need a JSContext-based path that can
             // round-trip a wrapped UNO object identity from kit→iframe→kit.
-            throw css::uno::RuntimeException(u"parseJsonToAny: non-null "_ustr + type.getTypeName()
+            throw cpo::uno::RuntimeException(u"parseJsonToAny: non-null "_ustr + type.getTypeName()
                                              + u" not yet implemented"_ustr);
         }
         default:
@@ -948,7 +948,7 @@ cpo::uno::Any comphelper::parseJsonToInferredAny(OUString const & json) {
             return cpo::uno::Any(s);
         }
     } else if (json.startsWith("{")) {
-        throw css::uno::RuntimeException(u"parseJsonToInferredAny cannot parse JSON objects"_ustr);
+        throw cpo::uno::RuntimeException(u"parseJsonToInferredAny cannot parse JSON objects"_ustr);
     } else if (json.startsWith("\"")) {
         if (auto const v = parseJsonStringValue(json)) {
             return cpo::uno::Any(*v);
@@ -956,7 +956,7 @@ cpo::uno::Any comphelper::parseJsonToInferredAny(OUString const & json) {
     } else if (auto const v = parseJsonNumberAs<double>(json)) {
         return cpo::uno::Any(*v);
     }
-    throw css::uno::RuntimeException("malformed parseJsonToInferredAny input: " + json);
+    throw cpo::uno::RuntimeException("malformed parseJsonToInferredAny input: " + json);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

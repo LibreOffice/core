@@ -393,7 +393,7 @@ public:
         , maSupportedServiceNames(sSupportedServiceNames)
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
-        if (!mxComponentContext.is()) throw uno::RuntimeException();
+        if (!mxComponentContext.is()) throw cpo::uno::RuntimeException();
         if (!maSupportedServiceNames.hasElements())
             maSupportedServiceNames = { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.xml.XMLImportFilter"_ustr };
     }
@@ -590,11 +590,11 @@ namespace {
         virtual void SAL_CALL clear() override { maMap.clear(); }
         virtual bool SAL_CALL containsKey( const Any& ) override
         {
-            throw css::uno::RuntimeException(u"not implemented"_ustr);
+            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
         }
         virtual bool SAL_CALL containsValue( const Any& ) override
         {
-            throw css::uno::RuntimeException(u"not implemented"_ustr);
+            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
         }
 
         static OUString cleanDomain(const OUString &str)
@@ -619,17 +619,17 @@ namespace {
         }
         virtual Any SAL_CALL put( const Any&, const Any& ) override
         {
-            throw css::uno::RuntimeException(u"not implemented"_ustr);
+            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
         }
         virtual Any SAL_CALL remove( const Any& ) override
         {
-            throw css::uno::RuntimeException(u"not implemented"_ustr);
+            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
         }
 
         // XElementAccess (base)
         virtual Type SAL_CALL getElementType() override
         {
-            throw css::uno::RuntimeException(u"not implemented"_ustr);
+            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
         }
         virtual bool SAL_CALL hasElements() override
         {

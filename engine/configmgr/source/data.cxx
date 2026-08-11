@@ -23,7 +23,7 @@
 #include <cassert>
 #include <cstddef>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
@@ -155,7 +155,7 @@ OUString Data::fullTemplateName(
     std::u16string_view component, std::u16string_view name)
 {
     if (component.find(':') != std::u16string_view::npos || name.find(':') != std::u16string_view::npos) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             OUString::Concat("bad component/name pair containing colon ") + component + "/" +
             name);
     }
@@ -186,7 +186,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     const
 {
     if (pathRepresentation.isEmpty() || pathRepresentation[0] != '/') {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "bad path " + pathRepresentation);
     }
     if (path != nullptr) {
@@ -207,7 +207,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     sal_Int32 n = parseSegment(pathRepresentation, 1, &seg, &setElement, nullptr);
     if (n == -1 || setElement)
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "bad path " + pathRepresentation);
     }
     NodeMap const & components = getComponents();
@@ -229,7 +229,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         if (n != pathRepresentation.getLength() &&
             pathRepresentation[n++] != '/')
         {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "bad path " + pathRepresentation);
         }
         // for backwards compatibility, ignore a final slash
@@ -247,7 +247,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         n = parseSegment(
             pathRepresentation, n, &seg, &setElement, &templateName);
         if (n == -1) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "bad path " + pathRepresentation);
         }
         // For backwards compatibility, allow set members to be accessed with
@@ -257,7 +257,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             switch (parent->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (!templateName.isEmpty()) {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "bad path " + pathRepresentation);
                 }
                 break;
@@ -266,18 +266,18 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                     !static_cast< SetNode * >(parent.get())->isValidTemplate(
                         templateName))
                 {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "bad path " + pathRepresentation);
                 }
                 break;
             default:
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "bad path " + pathRepresentation);
             }
             if (!templateName.isEmpty() && p != nullptr) {
                 assert(!p->getTemplateName().isEmpty());
                 if (!equalTemplateNames(templateName, p->getTemplateName())) {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "bad path " + pathRepresentation);
                 }
             }
@@ -303,7 +303,7 @@ Additions * Data::addExtensionXcuAdditions(
         extensionXcuAdditions_.emplace(
                 url, rtl::Reference< ExtensionXcu >()).first);
     if (i->second.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "already added extension xcu " + url);
     }
     i->second = item;

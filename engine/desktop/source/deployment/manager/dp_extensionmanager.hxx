@@ -203,7 +203,7 @@ private:
         std::u16string_view repository);
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference<css::deployment::XPackageManager>
     getPackageManager(std::u16string_view repository);
 
@@ -211,7 +211,7 @@ private:
     /// @throws css::ucb::CommandFailedException
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool doChecksForAddExtension(
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,

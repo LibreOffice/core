@@ -34,7 +34,7 @@ class ScVbaStyles: public ScVbaStyles_BASE
 public:
     /// @throws css::script::BasicErrorException
     ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, ScModelObj* pModel );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getStyleNames();
     /// @throws css::script::BasicErrorException
     void Delete(const OUString& _sStyleName);

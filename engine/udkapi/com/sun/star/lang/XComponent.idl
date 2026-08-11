@@ -58,7 +58,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         in case it can comply with its specification (for instance addEventListener()).
         Often the object can't fulfill its specification anymore,
         in this case it must throw the DisposedException
-        (which is derived from com::sun::star::uno::RuntimeException)
+        (which is derived from cpo::uno::RuntimeException)
         when it gets called.</p>
 
         <p>For some objects no real owner can be identified, thus it can be

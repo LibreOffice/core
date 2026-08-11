@@ -53,7 +53,7 @@ public:
         virtual sal_Unicode
         transliterateChar2Char( sal_Unicode inChar) override;
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static cpo::uno::Sequence< OUString >
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 );
 

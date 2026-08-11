@@ -35,7 +35,7 @@ class SfxItemPropertySet;
 class SvxFieldData;
 
 /// @throws cpo::uno::Exception
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
     std::u16string_view ServiceSpecifier );
 

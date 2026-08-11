@@ -111,7 +111,7 @@ public:
     virtual void
     fillExtraControls(const rtl::Reference<::chart::ChartModel>& xChartModel,
                       const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void setTemplateProperties(
         const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const;
 

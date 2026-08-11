@@ -18,7 +18,7 @@
  */
 
 #include <Scaling.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cmath>
@@ -160,7 +160,7 @@ uno::Reference< XScaling >
 {
     // ToDo: ApproxEqual ?
     if( m_fSlope == 0 )
-        throw uno::RuntimeException(u"Divide by zero exception"_ustr);
+        throw cpo::uno::RuntimeException(u"Divide by zero exception"_ustr);
 
     return new LinearScaling( 1.0 / m_fSlope, m_fOffset / m_fSlope );
 }
@@ -208,7 +208,7 @@ uno::Reference< XScaling >
 {
     // ToDo: ApproxEqual ?
     if( m_fExponent == 0 )
-        throw uno::RuntimeException(u"Divide by zero exception"_ustr);
+        throw cpo::uno::RuntimeException(u"Divide by zero exception"_ustr);
 
     return new PowerScaling( 1.0 / m_fExponent );
 }

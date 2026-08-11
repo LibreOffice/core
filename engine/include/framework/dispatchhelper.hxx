@@ -83,7 +83,7 @@ public:
                     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
 
     // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const cpo::uno::Any&
     executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                     const css::util::URL& aURL, bool SyncronFlag,

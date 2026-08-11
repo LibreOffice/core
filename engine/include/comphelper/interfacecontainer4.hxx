@@ -493,7 +493,7 @@ void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std
             {
                 aIt.next()->disposing(rEvt);
             }
-            catch (css::uno::RuntimeException&)
+            catch (cpo::uno::RuntimeException&)
             {
                 // be robust, if e.g. a remote bridge has disposed already.
                 // there is no way to delegate the error to the caller :o(.

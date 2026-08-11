@@ -43,7 +43,7 @@ SwVbaVariable::getName()
 void SAL_CALL
 SwVbaVariable::setName( const OUString& )
 {
-    throw uno::RuntimeException(u" Fail to set name"_ustr );
+    throw cpo::uno::RuntimeException(u" Fail to set name"_ustr );
 }
 
 cpo::uno::Any SAL_CALL

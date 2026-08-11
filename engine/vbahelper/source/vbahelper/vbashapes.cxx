@@ -138,7 +138,7 @@ css::uno::Reference< css::container::XIndexAccess >
 ScVbaShapes::getShapesByArrayIndices( const cpo::uno::Any& Index  )
 {
     if ( Index.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
     cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Any >>::get() );
@@ -342,7 +342,7 @@ ScVbaShapes::AddTextbox( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int3
     {
         return AddTextboxInWriter( _nLeft, _nTop, _nWidth, _nHeight );
     }
-    throw uno::RuntimeException( u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
 }
 
 cpo::uno::Any

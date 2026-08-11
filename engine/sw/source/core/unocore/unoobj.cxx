@@ -784,14 +784,14 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
     SwXMeta const * const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
     OSL_ENSURE(pXMeta, "no parent?");
     if (!pXMeta)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SwTextNode * pTextNode;
     sal_Int32 nStart;
     sal_Int32 nEnd;
     const bool bSuccess( pXMeta->SetContentRange(pTextNode, nStart, nEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     // force the cursor back into the meta if it has moved outside
     SwPosition start(*pTextNode, nStart);
     SwPosition end(*pTextNode, nEnd);
@@ -829,7 +829,7 @@ bool lcl_ForceIntoContentControl(SwPaM& rCursor, const uno::Reference<text::XTex
     if (!pXContentControl)
     {
         SAL_WARN("sw.core", "lcl_ForceIntoContentControl: no parent text");
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwTextNode* pTextNode;
@@ -839,7 +839,7 @@ bool lcl_ForceIntoContentControl(SwPaM& rCursor, const uno::Reference<text::XTex
     if (!bSuccess)
     {
         SAL_WARN("sw.core", "lcl_ForceIntoContentControl: SetContentRange() failed");
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     // Force the cursor back into the content control if it has moved outside.
@@ -1141,13 +1141,13 @@ SwXTextCursor::gotoRange(
     SolarMutexGuard aGuard;
     if (!xRange.is())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
     if (!pRange && !pCursor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     gotoRangeImpl(pRange, pCursor, bExpand);
@@ -1180,7 +1180,7 @@ SwXTextCursor::gotoRangeImpl(
 
     if (!pPam)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     {
@@ -1217,19 +1217,19 @@ SwXTextCursor::gotoRangeImpl(
         {
             if (!pOwnStartNode || !pTmp)
             {
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
 
             if ( pOwnStartNode->FindTableNode() != pTmp->FindTableNode() )
             {
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
         }
         else
         {
             if ( pOwnStartNode != pTmp )
             {
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
         }
     }
@@ -1241,7 +1241,7 @@ SwXTextCursor::gotoRangeImpl(
                     CopyPam, m_xParentText, META_CHECK_BOTH) );
         if (!bNotForced)
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"gotoRange: parameter range not contained in nesting"
                     " text content for which this cursor was created"_ustr,
                 static_cast<text::XWordCursor*>(this));
@@ -1252,7 +1252,7 @@ SwXTextCursor::gotoRangeImpl(
         SwPaM aPaM(*pPam->GetMark(), *pPam->GetPoint());
         if (!lcl_ForceIntoContentControl(aPaM, m_xParentText, CONTENT_CONTROL_CHECK_BOTH))
         {
-            throw uno::RuntimeException(u"gotoRange: xRange is out of bounds of the content control"_ustr,
+            throw cpo::uno::RuntimeException(u"gotoRange: xRange is out of bounds of the content control"_ustr,
                                         static_cast<text::XWordCursor*>(this));
         }
     }
@@ -2161,7 +2161,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 OUString::Concat("setPropertyToDefault: property is read-only: ")
                 + rPropertyName, nullptr);
     }
@@ -2585,7 +2585,7 @@ SwXTextCursor::setPropertiesToDefault(
         }
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "setPropertiesToDefault: property is read-only: " + rName,
                 getXWeak());
         }
@@ -3038,7 +3038,7 @@ SwXTextCursor::sort(const cpo::uno::Sequence< beans::PropertyValue >& rDescripto
     SwSortOptions aSortOpt;
     if (!SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
-        throw uno::RuntimeException(u"Bad sort properties"_ustr);
+        throw cpo::uno::RuntimeException(u"Bad sort properties"_ustr);
     }
     UnoActionContext aContext( &rUnoCursor.GetDoc() );
 
@@ -3074,7 +3074,7 @@ SwXTextCursor::createContentEnumeration(const OUString& rServiceName)
 {
     SolarMutexGuard g;
     if (rServiceName != "com.sun.star.text.TextContent")
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     SwUnoCursor& rUnoCursor( GetCursorOrThrow() );
     return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_TEXTRANGE);
 }
@@ -3090,7 +3090,7 @@ SwXTextCursor::createEnumeration()
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     auto pNewCursor(rUnoCursor.GetDoc().CreateUnoCursor(*rUnoCursor.GetPoint()) );

@@ -143,7 +143,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
             xDocProps->getAutoloadURL()));
         SvXMLMetaDocumentContext::setBuildId(
             xDocProps->getGenerator(), rImport.getImportInfo());
-    } catch (const uno::RuntimeException&) {
+    } catch (const cpo::uno::RuntimeException&) {
         throw;
     } catch (const cpo::uno::Exception&) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -171,7 +171,7 @@ lcl_initGenerator(SvXMLImport & rImport,
             uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
         SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());
-    } catch (const uno::RuntimeException&) {
+    } catch (const cpo::uno::RuntimeException&) {
         throw;
     } catch (const cpo::uno::Exception&) {
         cpo::uno::Any anyEx = cppu::getCaughtException();

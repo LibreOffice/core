@@ -106,19 +106,19 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void replaceByName( const OUString& aName, const cpo::uno::Any& aElement );
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence < css::beans::PropertyValue > getByName( const OUString& aName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getElementNames(  );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool hasByName( const OUString& aName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static cpo::uno::Type const & getElementType(  );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool hasElements() const;
     OUString const & GetEventName( GlobalEventId nID ) const;
 };

@@ -60,7 +60,7 @@ using osl::Module;
 using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::container::NoSuchElementException;
@@ -319,7 +319,7 @@ static PyObject* getComponentContext(
     {
         raisePySystemException( "CannotConvertException", e.Message );
     }
-    catch (const css::uno::RuntimeException & e)
+    catch (const cpo::uno::RuntimeException & e)
     {
         raisePySystemException( "RuntimeException", e.Message );
     }
@@ -496,7 +496,7 @@ static PyObject *createUnoStructHelper(
             PyErr_SetString (PyExc_AttributeError, "pyuno._createUnoStructHelper: expects exactly two non-keyword arguments:\n\tStructure Name\n\tinitialiser tuple; may be the empty tuple");
         }
     }
-    catch( const css::uno::RuntimeException & e )
+    catch( const cpo::uno::RuntimeException & e )
     {
         raisePyExceptionWithAny( Any( e ) );
     }

@@ -31,7 +31,7 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -360,7 +360,7 @@ bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, B
             if (doLoadImage(aParameters))
                 return true;
         }
-        catch (uno::RuntimeException &)
+        catch (cpo::uno::RuntimeException &)
         {}
 
         aCurrentStyle = fallbackStyle(aCurrentStyle);
@@ -443,7 +443,7 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     {
         bFound = findImage(aPaths, rParameters);
     }
-    catch (uno::RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -711,7 +711,7 @@ bool ImplImageTree::checkPathAccess()
         else
             rNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rIconSet.maURL);
     }
-    catch (const uno::RuntimeException &)
+    catch (const cpo::uno::RuntimeException &)
     {
         throw;
     }

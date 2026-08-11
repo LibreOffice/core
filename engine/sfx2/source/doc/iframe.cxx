@@ -70,7 +70,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 
 public:
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override

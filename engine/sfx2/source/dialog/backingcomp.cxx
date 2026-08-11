@@ -313,7 +313,7 @@ cpo::uno::Sequence< OUString > BackingComp::getSupportedServiceNames()
     @param  xFrame
                 reference to our new target frame
 
-    @throw  css::uno::RuntimeException
+    @throw  cpo::uno::RuntimeException
                 if the given frame reference is wrong or component window couldn't be created
                 successfully.
                 We throw it too, if we already attached to a frame. Because we don't support
@@ -327,12 +327,12 @@ void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFr
 
     // check some required states
     if (m_xFrame.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"already attached"_ustr,
                 getXWeak());
 
     if (!xFrame.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"invalid frame reference"_ustr,
                 getXWeak());
 
@@ -498,7 +498,7 @@ bool BackingComp::suspend( /*IN*/ bool )
     @param  aEvent
                 describe the broadcaster of this callback
 
-    @throw css::uno::RuntimeException
+    @throw cpo::uno::RuntimeException
                 if the broadcaster doesn't represent the expected window reference.
 */
 
@@ -511,7 +511,7 @@ void BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
     SolarMutexGuard aGuard;
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"unexpected source or called twice"_ustr,
                 getXWeak());
 
@@ -566,14 +566,14 @@ void BackingComp::dispose()
     @param  xListener
                 not used.
 
-    @throw  css::uno::RuntimeException
+    @throw  cpo::uno::RuntimeException
                 because the listener expect to be held alive by this container.
                 We must inform it about this unsupported feature.
  */
 
 void BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
             u"not supported"_ustr,
             getXWeak());
 }
@@ -605,7 +605,7 @@ void BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::la
     @param  lArgs
                 currently not used
 
-    @throw  css::uno::RuntimeException
+    @throw  cpo::uno::RuntimeException
                 if some resources are missing
                 Means if may be attachedFrame() wasn't called before.
  */
@@ -638,7 +638,7 @@ void BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno::Any >& 
     m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
     if (!m_xWindow.is())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"couldn't create component window"_ustr,
                 getXWeak());
 

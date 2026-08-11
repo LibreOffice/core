@@ -105,12 +105,12 @@ class OWriteStatusBarDocumentHandler final
         ~OWriteStatusBarDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteStatusBarDocument();
 
     private:
         /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void WriteStatusBarItem(
             const OUString& rCommandURL,
             sal_Int16            nOffset,

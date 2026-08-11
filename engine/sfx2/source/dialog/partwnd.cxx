@@ -107,7 +107,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 
         xLMPropSet->setPropertyValue( u"AutomaticToolbars"_ustr, cpo::uno::Any( false ));
     }
-    catch( css::uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         throw;
     }

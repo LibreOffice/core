@@ -90,17 +90,17 @@ private:
     css::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool loadModuleByName( std::u16string_view implName,
         css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale);
 
     void clear();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void loadBody( OUString const &implName,
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getRange(
         const cpo::uno::Sequence< OUString > &inStrs,
         sal_Int32 length, const sal_Int16 _nCascade);

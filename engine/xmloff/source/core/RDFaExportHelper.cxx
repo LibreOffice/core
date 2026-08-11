@@ -49,11 +49,11 @@ makeCURIE(SvXMLExport * i_pExport,
     uno::Reference<rdf::XURI> const & i_xURI)
 {
     OSL_ENSURE(i_xURI.is(), "makeCURIE: null URI");
-    if (!i_xURI.is()) throw uno::RuntimeException();
+    if (!i_xURI.is()) throw cpo::uno::RuntimeException();
 
     const OUString Namespace( i_xURI->getNamespace() );
     OSL_ENSURE(!Namespace.isEmpty(), "makeCURIE: no namespace");
-    if (Namespace.isEmpty()) throw uno::RuntimeException();
+    if (Namespace.isEmpty()) throw cpo::uno::RuntimeException();
 
     // N.B.: empty LocalName is valid!
     return i_pExport->EnsureNamespace(Namespace) + ":" + i_xURI->getLocalName();
@@ -98,7 +98,7 @@ RDFaExportHelper::LookupBlankNode(
     uno::Reference<rdf::XBlankNode> const & i_xBlankNode)
 {
     OSL_ENSURE(i_xBlankNode.is(), "null BlankNode?");
-    if (!i_xBlankNode.is()) throw uno::RuntimeException();
+    if (!i_xBlankNode.is()) throw cpo::uno::RuntimeException();
     OUString & rEntry(
         m_BlankNodeMap[ i_xBlankNode->getStringValue() ] );
     if (rEntry.isEmpty())
@@ -131,7 +131,7 @@ RDFaExportHelper::AddRDFa(
             rStatements[0].Subject, uno::UNO_QUERY);
         if (!xSubjectURI.is() && !xSubjectBNode.is())
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         const OUString about( xSubjectURI.is()
             ?   getRelativeReference(m_rExport, xSubjectURI->getStringValue())

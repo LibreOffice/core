@@ -2018,7 +2018,7 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
 
         return sType;
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -2213,7 +2213,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                 aModule = xModuleManager->identify( xFrame );
             }
-            catch (const css::uno::RuntimeException&)
+            catch (const cpo::uno::RuntimeException&)
             {
                 throw;
             }

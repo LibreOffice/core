@@ -61,9 +61,9 @@ cpo::uno::Any SAL_CALL SwVbaListTemplates::Item( const cpo::uno::Any& Index1, co
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
-        throw  uno::RuntimeException(u"Index out of bounds"_ustr );
+        throw  cpo::uno::RuntimeException(u"Index out of bounds"_ustr );
 
     return cpo::uno::Any( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
 }

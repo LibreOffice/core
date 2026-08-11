@@ -99,7 +99,7 @@ private:
 class OOX_DLLPUBLIC FilterDetect final : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit            FilterDetect( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual             ~FilterDetect() override;
 

@@ -278,7 +278,7 @@ void convertToIOException(GError *pError, const css::uno::Reference< css::uno::X
     {
         throw;
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }

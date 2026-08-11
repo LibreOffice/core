@@ -38,7 +38,7 @@ private:
     css::uno::Reference< css::text::XTextRange > mxTextRange;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                     const css::uno::Reference< css::uno::XComponentContext >& rContext,
                     rtl::Reference< SwXTextDocument > xDocument,
@@ -64,7 +64,7 @@ class SwVbaParagraphs : public SwVbaParagraphs_BASE
 private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext > & xContext,
                     const rtl::Reference< SwXTextDocument >& xDocument );

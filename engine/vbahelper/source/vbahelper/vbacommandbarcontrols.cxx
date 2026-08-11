@@ -149,7 +149,7 @@ ScVbaCommandBarControls::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any&
 
     if( nPosition < 0 || nPosition >= getCount() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return createCollectionObject( cpo::uno::Any( nPosition ) );
@@ -172,11 +172,11 @@ ScVbaCommandBarControls::Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id
 
     if( nType != office::MsoControlType::msoControlButton &&
         nType != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException( u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
 
     if( Id.hasValue() || Parameter.hasValue( ) )
     {
-        throw uno::RuntimeException( u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
     }
 
     if( Before.hasValue() )

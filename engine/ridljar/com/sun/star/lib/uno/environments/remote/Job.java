@@ -104,11 +104,11 @@ public class Job {
                     // about their types:
                     if (!(exception instanceof cpo.uno.Exception)
                         && !(exception instanceof
-                             com.sun.star.uno.RuntimeException))
+                             cpo.uno.RuntimeException))
                     {
                         StringWriter writer = new StringWriter();
                         exception.printStackTrace(new PrintWriter(writer));
-                        exception = new com.sun.star.uno.RuntimeException(
+                        exception = new cpo.uno.RuntimeException(
                             "Java exception: <" + writer + ">", null);
                     }
                     _iReceiver.sendReply(

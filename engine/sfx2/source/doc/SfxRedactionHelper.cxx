@@ -289,7 +289,7 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
         xLayoutManager->createElement(u"private:resource/toolbar/redactionbar"_ustr);
         xLayoutManager->showElement(u"private:resource/toolbar/redactionbar"_ustr);
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }

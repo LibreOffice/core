@@ -28,7 +28,7 @@
 #include <cxxabi.h>
 #include <dlfcn.h>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cpo/uno/RuntimeException.hpp"
 #include "cpo/uno/genfunc.hxx"
 #include <sal/log.hxx>
 #include "osl/mutex.hxx"

@@ -50,7 +50,7 @@
 #include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 ScriptsListBox::ScriptsListBox(std::unique_ptr<weld::TreeView> xTreeView)
     : m_xTreeView(std::move(xTreeView))
@@ -500,7 +500,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
                 }
             }
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
             // do nothing, the entry will not be displayed in the UI
         }

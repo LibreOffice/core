@@ -932,13 +932,13 @@ uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
         librdf_new_node_from_blank_identifier(m_pWorld.get(), nullptr),
         safe_librdf_free_node);
     if (!pNode) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::createBlankNode: "
             "librdf_new_node_from_blank_identifier failed"_ustr, *this);
     }
     const unsigned char * id (librdf_node_get_blank_identifier(pNode.get()));
     if (!id) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::createBlankNode: "
             "librdf_node_get_blank_identifier failed"_ustr, *this);
     }
@@ -1018,7 +1018,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::importGraph: librdf_new_node_from_uri_string failed"_ustr, *this);
     }
 
@@ -1029,14 +1029,14 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
     if (!pBaseURI) {
-        throw uno::RuntimeException( u"librdf_Repository::importGraph: librdf_new_uri failed"_ustr, *this);
+        throw cpo::uno::RuntimeException( u"librdf_Repository::importGraph: librdf_new_uri failed"_ustr, *this);
     }
 
     const std::shared_ptr<librdf_parser> pParser(
         librdf_new_parser(m_pWorld.get(), "rdfxml", nullptr, nullptr),
         safe_librdf_free_parser);
     if (!pParser) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"librdf_Repository::importGraph: "
                 "librdf_new_parser failed"_ustr, *this);
     }
@@ -1162,7 +1162,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_new_node_from_uri_string failed"_ustr, *this);
     }
@@ -1173,7 +1173,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
     if (!pBaseURI) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_new_uri failed"_ustr, *this);
     }
@@ -1193,7 +1193,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
         librdf_new_serializer(m_pWorld.get(), format, nullptr, nullptr),
         safe_librdf_free_serializer);
     if (!pSerializer) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_new_serializer failed"_ustr, *this);
     }
@@ -1215,7 +1215,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
             reinterpret_cast<const unsigned char*> ("1"), nullptr, 0),
         safe_librdf_free_node);
     if (!pWriteBaseURI || !pRelativeURI || !p0 || !p1) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_new_uri or librdf_new_node_from_literal failed"_ustr, *this);
     }
@@ -1224,7 +1224,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
     if (librdf_serializer_set_feature(pSerializer.get(),
         pRelativeURI.get(), p1.get()))
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_serializer_set_feature relativeURIs failed"_ustr, *this);
     }
@@ -1232,7 +1232,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
     if (librdf_serializer_set_feature(pSerializer.get(),
         pWriteBaseURI.get(), p0.get()))
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::exportGraph: "
             "librdf_serializer_set_feature writeBaseURI failed"_ustr, *this);
     }
@@ -1538,7 +1538,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     i_xObject->ensureMetadataReference();
     const beans::StringPair mdref( i_xObject->getMetadataReference() );
     if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"librdf_Repository::setStatementRDFa: "
                 "ensureMetadataReference did not"_ustr, *this);
     }
@@ -1773,7 +1773,7 @@ NamedGraphMap_t::iterator librdf_Repository::clearGraph_Lock(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::clearGraph: "
             "librdf_new_node_from_uri_string failed"_ustr, *this);
     }
@@ -1839,7 +1839,7 @@ void librdf_Repository::addStatementGraph_Lock(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::addStatement: "
             "librdf_new_node_from_uri_string failed"_ustr, *this);
     }
@@ -1903,7 +1903,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::removeStatements: "
             "librdf_new_node_from_uri_string failed"_ustr, *this);
     }
@@ -1984,7 +1984,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_Repository::getStatements: "
             "librdf_new_node_from_uri_string failed"_ustr, *this);
     }
@@ -2052,7 +2052,7 @@ librdf_world *librdf_TypeConverter::createWorld_Lock() const
     // create and initialize world
     librdf_world *pWorld( librdf_new_world() );
     if (!pWorld) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::createWorld: librdf_new_world failed"_ustr,
             m_rRep);
     }
@@ -2078,7 +2078,7 @@ librdf_TypeConverter::createStorage_Lock(librdf_world *i_pWorld) const
         librdf_new_storage(i_pWorld, "hashes", nullptr,
             "contexts='yes',hash-type='memory'") );
     if (!pStorage) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::createStorage: librdf_new_storage failed"_ustr,
             m_rRep);
     }
@@ -2090,7 +2090,7 @@ librdf_model *librdf_TypeConverter::createModel_Lock(
 {
     librdf_model *pRepository( librdf_new_model(i_pWorld, i_pStorage, nullptr) );
     if (!pRepository) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::createModel: librdf_new_model failed"_ustr,
             m_rRep);
     }
@@ -2119,7 +2119,7 @@ librdf_uri* librdf_TypeConverter::mkURI_Lock( librdf_world* i_pWorld,
     librdf_uri *pURI( librdf_new_uri(i_pWorld,
         reinterpret_cast<const unsigned char *>(i_rURI.getStr())));
     if (!pURI) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::mkURI: librdf_new_uri failed"_ustr, nullptr);
     }
     return pURI;
@@ -2175,7 +2175,7 @@ librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
                 reinterpret_cast<const unsigned char*>(
                     pBlankNode->value.getStr())));
         if (!pNode) {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"librdf_TypeConverter::mkResource: "
                 "librdf_new_node_from_blank_identifier failed"_ustr, nullptr);
         }
@@ -2187,7 +2187,7 @@ librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
             librdf_new_node_from_uri_string(i_pWorld,
                 reinterpret_cast<const unsigned char*>(pURI->value.getStr())));
         if (!pNode) {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"librdf_TypeConverter::mkResource: "
                 "librdf_new_node_from_uri_string failed"_ustr, nullptr);
         }
@@ -2291,7 +2291,7 @@ librdf_node* librdf_TypeConverter::mkNode_Lock( librdf_world* i_pWorld,
         }
     }
     if (!ret) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::mkNode: librdf_new_node_from_literal failed"_ustr, nullptr);
     }
     return ret;
@@ -2334,7 +2334,7 @@ librdf_statement* librdf_TypeConverter::mkStatement_Lock(librdf_world* i_pWorld,
     librdf_statement* pStatement( librdf_new_statement_from_nodes(i_pWorld,
         pSubject, pPredicate, pObject) );
     if (!pStatement) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::mkStatement: "
             "librdf_new_statement_from_nodes failed"_ustr, nullptr);
     }
@@ -2347,7 +2347,7 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
     if (!i_pURI) return nullptr;
     const unsigned char* uri( librdf_uri_as_string(i_pURI) );
     if (!uri) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::convertToXURI: "
             "librdf_uri_as_string failed"_ustr, m_rRep);
     }
@@ -2371,7 +2371,7 @@ librdf_TypeConverter::convertToXURI(librdf_node* i_pNode) const
     if (librdf_node_is_resource(i_pNode)) {
         librdf_uri* pURI( librdf_node_get_uri(i_pNode) );
         if (!pURI) {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"librdf_TypeConverter::convertToXURI: "
                 "resource has no uri"_ustr, m_rRep);
         }
@@ -2389,7 +2389,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
     if (librdf_node_is_blank(i_pNode)) {
         const unsigned char* label( librdf_node_get_blank_identifier(i_pNode) );
         if (!label) {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"librdf_TypeConverter::convertToXResource: "
                 "blank node has no label"_ustr, m_rRep);
         }
@@ -2418,7 +2418,7 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
     }
     const unsigned char* value( librdf_node_get_literal_value(i_pNode) );
     if (!value) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"librdf_TypeConverter::convertToXNode: "
             "literal has no value"_ustr, m_rRep);
     }
@@ -2448,7 +2448,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
     librdf_node* i_pContext) const
 {
     if (!i_pStmt) {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return rdf::Statement(
         convertToXResource(librdf_statement_get_subject(i_pStmt)),

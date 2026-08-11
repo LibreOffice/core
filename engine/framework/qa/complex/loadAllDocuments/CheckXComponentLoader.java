@@ -443,7 +443,7 @@ public class CheckXComponentLoader
             nResult = RESULT_ILLEGALARGUMENTEXCEPTION;
         } catch (com.sun.star.io.IOException exIO) {
             nResult = RESULT_IOEXCEPTION;
-        } catch (com.sun.star.uno.RuntimeException exRuntime) {
+        } catch (cpo.uno.RuntimeException exRuntime) {
             nResult = RESULT_RUNTIMEEXCEPTION;
         } catch (Exception e) {
             nResult = RESULT_EXCEPTION;
@@ -454,7 +454,7 @@ public class CheckXComponentLoader
                 xDoc.dispose();
                 xDoc = null;
             }
-        } catch (com.sun.star.uno.RuntimeException exClosing) {
+        } catch (cpo.uno.RuntimeException exClosing) {
             System.out.println("exception during disposing of a document found!" +
                         " Doesn't influence test - but should be checked.");
         }

@@ -1642,7 +1642,7 @@ void DocumentStateManager::YrsInitAcceptor()
                         auto const len(xSeekable->getLength() - xSeekable->getPosition());
                         if (xInStream->readBytes(data, len) != len)
                         {
-                            throw uno::RuntimeException(u"short readBytes"_ustr);
+                            throw cpo::uno::RuntimeException(u"short readBytes"_ustr);
                         }
                     }
                     else

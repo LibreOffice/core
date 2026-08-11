@@ -74,7 +74,7 @@ public final class Dispatch extends WeakBase implements XServiceInfo, XDispatch
                     "passive", "java");
             box.execute();
             UnoRuntime.queryInterface(XComponent.class, box).dispose();
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             throw e;
         } catch (cpo.uno.Exception e) {
             throw new WrappedTargetRuntimeException(e,

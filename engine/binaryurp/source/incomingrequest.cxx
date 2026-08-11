@@ -78,11 +78,11 @@ void IncomingRequest::execute() const {
             try {
                 isExc = !execute_throw(&ret, &outArgs);
             } catch (const std::exception & e) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "caught C++ exception: "
                     + o3tl::runtimeToOUString(e.what()));
             }
-        } catch (const css::uno::RuntimeException &) {
+        } catch (const cpo::uno::RuntimeException &) {
             cpo::uno::Any exc(cppu::getCaughtException());
             ret = bridge_->mapCppToBinaryAny(exc);
             isExc = true;
@@ -90,7 +90,7 @@ void IncomingRequest::execute() const {
         if (resetCc) {
             current_context::set(oldCc);
         }
-    } catch (const css::uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         cpo::uno::Any exc(cppu::getCaughtException());
         ret = bridge_->mapCppToBinaryAny(exc);
         isExc = true;
@@ -101,7 +101,7 @@ void IncomingRequest::execute() const {
             bridge_->getWriter()->queueReply(
                 tid_, member_, setter_, isExc, ret, std::move(outArgs), false);
             return;
-        } catch (const css::uno::RuntimeException & e) {
+        } catch (const cpo::uno::RuntimeException & e) {
             SAL_INFO("binaryurp", "caught " << e);
         } catch (const std::exception & e) {
             SAL_INFO("binaryurp", "caught C++ exception " << e.what());

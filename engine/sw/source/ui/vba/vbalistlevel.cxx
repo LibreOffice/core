@@ -58,7 +58,7 @@ SwVbaListLevel::~SwVbaListLevel()
         }
         default:
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     return nAlignment;
@@ -86,7 +86,7 @@ void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment )
         }
         default:
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     m_pListHelper->setPropertyValueWithNameAndLevel( mnLevel, u"Adjust"_ustr, cpo::uno::Any( nAlignment ) );
@@ -94,12 +94,12 @@ void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment )
 
 uno::Reference< ::ooo::vba::word::XFont > SAL_CALL SwVbaListLevel::getFont()
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::XFont >& /*_font*/ )
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 ::sal_Int32 SAL_CALL SwVbaListLevel::getIndex()
@@ -211,7 +211,7 @@ void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition )
         }
         default:
         {
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
     return nNumberingType;
@@ -284,7 +284,7 @@ void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle )
         }
         default:
         {
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 

@@ -133,7 +133,7 @@ public abstract class ScriptProvider implements
 
         } catch (Exception e) {
             LogUtils.DEBUG(LogUtils.getTrace(e));
-            throw new com.sun.star.uno.RuntimeException(
+            throw new cpo.uno.RuntimeException(
                 e, "Error constructing  ScriptProvider: " + e);
         }
 
@@ -232,7 +232,7 @@ public abstract class ScriptProvider implements
                     }
                 }
             } else {
-                throw new com.sun.star.uno.RuntimeException(
+                throw new cpo.uno.RuntimeException(
                     "ScriptProvider created with invalid argument");
             }
 
@@ -321,7 +321,7 @@ public abstract class ScriptProvider implements
     }
 
     public abstract XScript getScript(/*IN*/String scriptURI) throws
-        com.sun.star.uno.RuntimeException, ScriptFrameworkErrorException;
+        cpo.uno.RuntimeException, ScriptFrameworkErrorException;
 
     // TODO need to encapsulate this better,
     // Some factory concept for creating/accessing Editor
@@ -510,12 +510,12 @@ public abstract class ScriptProvider implements
         com.sun.star.lang.WrappedTargetException {
 
         // TODO needs implementing?
-        throw new com.sun.star.uno.RuntimeException("getByName not implemented");
+        throw new cpo.uno.RuntimeException("getByName not implemented");
     }
 
     public String[] getElementNames() {
         // TODO needs implementing?
-        throw new com.sun.star.uno.RuntimeException("getElementNames not implemented");
+        throw new cpo.uno.RuntimeException("getElementNames not implemented");
     }
 
     // Performs the getRegStatus functionality for the PkgMgr
@@ -531,7 +531,7 @@ public abstract class ScriptProvider implements
 
     public boolean hasElements() {
         // TODO needs implementing?
-        throw new com.sun.star.uno.RuntimeException("hasElements not implemented");
+        throw new cpo.uno.RuntimeException("hasElements not implemented");
     }
     public void replaceByName(String aName, java.lang.Object aElement) throws
         com.sun.star.lang.IllegalArgumentException,
@@ -539,7 +539,7 @@ public abstract class ScriptProvider implements
         com.sun.star.lang.WrappedTargetException {
 
         // TODO needs implementing
-        throw new com.sun.star.uno.RuntimeException("replaceByName not implemented");
+        throw new cpo.uno.RuntimeException("replaceByName not implemented");
     }
 
     public void insertByName(String aName, java.lang.Object aElement) throws
@@ -616,7 +616,7 @@ public abstract class ScriptProvider implements
         }
 
         if (factory == null)
-            throw new com.sun.star.uno.RuntimeException(
+            throw new cpo.uno.RuntimeException(
                 "ScriptProvider: unable to create a TDOC context factory.", this);
 
         try {

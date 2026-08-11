@@ -19,7 +19,7 @@ from com.sun.star.testuno import XTest
 from com.sun.star.testuno.Enum import E3
 from com.sun.star.testuno.Enum import E_10
 from com.sun.star.testuno.Enum import E_2
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 
 class Test(unohelper.Base, XTest):
     def getBoolean(self):

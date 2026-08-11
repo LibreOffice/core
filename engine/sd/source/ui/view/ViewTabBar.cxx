@@ -169,7 +169,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
             if (xCC.is())
                 xPane = dynamic_cast<framework::AbstractPane*>(xCC->getResource(rxViewTabBarId->getAnchor()).get());
         }
-        catch (const RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
         }
 
@@ -179,7 +179,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
             if (auto pPane = dynamic_cast<framework::Pane*>(xPane.get()))
                 pWindow = pPane->GetWindow()->GetParent();
         }
-        catch (const RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
         }
     }
@@ -245,7 +245,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
         rtl::Reference<framework::ConfigurationController> xConfigurationController (
             mxController->getConfigurationController());
         if ( ! xConfigurationController.is())
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         rtl::Reference<sd::framework::AbstractView> xView;
         try
         {
@@ -272,7 +272,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
             return true;
         }
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd.view");
     }

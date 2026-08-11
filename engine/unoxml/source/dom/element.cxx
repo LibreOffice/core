@@ -56,7 +56,7 @@ namespace DOM
 
     void CElement::saxify(const Reference< XDocumentHandler >& i_xHandler)
     {
-        if (!i_xHandler.is()) throw RuntimeException();
+        if (!i_xHandler.is()) throw cpo::uno::RuntimeException();
         rtl::Reference<comphelper::AttributeList> pAttrs =
             new comphelper::AttributeList();
         // add namespace definitions to attributes
@@ -104,7 +104,7 @@ namespace DOM
 
     void CElement::fastSaxify( Context& i_rContext )
     {
-        if (!i_rContext.mxDocHandler.is()) throw RuntimeException();
+        if (!i_rContext.mxDocHandler.is()) throw cpo::uno::RuntimeException();
         pushContext(i_rContext);
         addNamespaces(i_rContext,m_aNodePtr);
 
@@ -472,11 +472,11 @@ namespace DOM
 
         ::rtl::Reference<CNode> const pCNode(
             dynamic_cast<CNode*>(oldAttr.get()));
-        if (!pCNode.is()) { throw RuntimeException(); }
+        if (!pCNode.is()) { throw cpo::uno::RuntimeException(); }
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
         xmlAttrPtr const pAttr = reinterpret_cast<xmlAttrPtr>(pNode);
-        if (!pAttr) { throw RuntimeException(); }
+        if (!pAttr) { throw cpo::uno::RuntimeException(); }
 
         if (pAttr->parent != m_aNodePtr)
         {
@@ -526,15 +526,15 @@ namespace DOM
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
 
         // get the implementation
         CAttr *const pCAttr = dynamic_cast<CAttr*>(xNewAttr.get());
-        if (!pCAttr) { throw RuntimeException(); }
+        if (!pCAttr) { throw cpo::uno::RuntimeException(); }
         xmlAttrPtr const pAttr =
             reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
-        if (!pAttr) { throw RuntimeException(); }
+        if (!pAttr) { throw cpo::uno::RuntimeException(); }
 
         // check whether the attribute is not in use by another element
         if (pAttr->parent) {
@@ -607,7 +607,7 @@ namespace DOM
         xmlChar const *pValue = reinterpret_cast<xmlChar const *>(o2.getStr());
 
         if (nullptr == m_aNodePtr) {
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         OUString oldValue;
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
@@ -648,7 +648,7 @@ namespace DOM
     CElement::setAttributeNS(OUString const& namespaceURI,
             OUString const& qualifiedName, OUString const& value)
     {
-        if (namespaceURI.isEmpty()) throw RuntimeException();
+        if (namespaceURI.isEmpty()) throw cpo::uno::RuntimeException();
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -678,7 +678,7 @@ namespace DOM
         xmlChar const *pValue = reinterpret_cast<xmlChar const *>(o5.getStr());
 
         if (nullptr == m_aNodePtr) {
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
 
         //find the right namespace
@@ -690,7 +690,7 @@ namespace DOM
 
         if (strcmp(reinterpret_cast<char const *>(pNs->href), reinterpret_cast<char const *>(pURI)) != 0) {
             // ambiguous ns prefix
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
 
         // found namespace matches

@@ -89,7 +89,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     if (!aName.isEmpty() && pModel->GetNamedObject(aName, SdrObjKind::OLE2, nDummy))
     {
         //  object exists - only RuntimeException is specified
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     uno::Reference<embed::XEmbeddedObject> xObject;

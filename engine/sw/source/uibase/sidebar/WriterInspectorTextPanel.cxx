@@ -583,7 +583,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     rtl::Reference<SwXTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
     if (!xRange)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     std::unordered_map<OUString, bool> aIsDefined;
 
     const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,

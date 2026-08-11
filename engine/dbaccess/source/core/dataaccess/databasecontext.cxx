@@ -138,7 +138,7 @@ namespace dbaccess
                 {
                     const rtl::Reference< ODatabaseDocument > xMod( pCopy->getModel_noCreate() );
                     if (!xMod)
-                        throw uno::RuntimeException();
+                        throw cpo::uno::RuntimeException();
                     if( !xMod->getControllers()->hasMoreElements() )
                         xMod->close( false );
                 }

@@ -98,7 +98,7 @@ void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ )
 {
     // #TODO #FIXME needs implementation, or can't be done?
-    throw uno::RuntimeException(u"Not Implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not Implemented"_ustr );
 }
 
 // Methods

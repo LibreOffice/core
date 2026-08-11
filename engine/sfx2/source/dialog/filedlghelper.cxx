@@ -630,7 +630,7 @@ void FileDialogHelper_Impl::updateVersions()
 
                 DBG_ASSERT( xStorage.is(), "The method must return the storage or throw exception!" );
                 if ( !xStorage.is() )
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
 
                 const cpo::uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 

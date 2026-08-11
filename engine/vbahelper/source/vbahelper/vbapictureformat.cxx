@@ -36,11 +36,11 @@ ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, dou
 {
     if( nRange < nMin )
     {
-        throw uno::RuntimeException( u"Parameter out of range, value is too small."_ustr );
+        throw cpo::uno::RuntimeException( u"Parameter out of range, value is too small."_ustr );
     }
     if( nRange > nMax )
     {
-        throw uno::RuntimeException( u"Parameter out of range, value is too high."_ustr );
+        throw cpo::uno::RuntimeException( u"Parameter out of range, value is too high."_ustr );
     }
 }
 

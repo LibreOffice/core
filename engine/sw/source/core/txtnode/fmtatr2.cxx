@@ -765,7 +765,7 @@ void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
     // document, which means it has a pointer to its text node
     OSL_ENSURE(pTextNode, "ERROR: GetRegistry: no text node?");
     if (!pTextNode)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return pTextNode->GetRegistry();
 }
 

@@ -91,7 +91,7 @@ protected:
      * for a SignatureVerifier, verification operation is performed.
      */
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>&)
         {};
 

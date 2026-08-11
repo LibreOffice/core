@@ -63,13 +63,13 @@ public:
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getNativeNumberString(const OUString& rNumberString,
                                        const css::lang::Locale& rLocale,
                                        sal_Int16 nNativeNumberMode,
                                        cpo::uno::Sequence<sal_Int32>* pOffset,
                                        std::u16string_view rNativeNumberParams = std::u16string_view());
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) ;
 

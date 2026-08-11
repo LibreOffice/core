@@ -67,7 +67,7 @@ public:
     virtual void SAL_CALL cancel(  ) override;
 
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void Initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // css::xml::sax::XDocumentHandler

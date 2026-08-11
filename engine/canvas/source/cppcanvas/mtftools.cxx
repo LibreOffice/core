@@ -67,7 +67,7 @@ namespace cppcanvastools
                                    -aMetric.GetDescent() );
 
                 default:
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                                       u"tools::getBaselineOffset(): Unexpected TextAlign value"_ustr );
             }
         }

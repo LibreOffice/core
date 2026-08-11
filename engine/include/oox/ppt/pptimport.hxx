@@ -46,7 +46,7 @@ namespace oox::ppt {
 class PowerPointImport final : public oox::core::XmlFilterBase
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~PowerPointImport() override;
 

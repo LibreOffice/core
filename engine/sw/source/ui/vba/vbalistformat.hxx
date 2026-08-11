@@ -32,7 +32,7 @@ private:
     css::uno::Reference< css::text::XTextRange > mxTextRange;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaListFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextRange >  xTextRange );
     virtual ~SwVbaListFormat() override;
 

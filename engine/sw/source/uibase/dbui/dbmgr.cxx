@@ -739,7 +739,7 @@ void SwDBManager::ImplDestroy()
             if(xComp.is())
                 xComp->dispose();
         }
-        catch(const uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             //may be disposed already since multiple entries may have used the same connection
         }
@@ -3012,7 +3012,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                     if(xComp.is())
                         xComp->dispose();
                 }
-                catch(const uno::RuntimeException&)
+                catch(const cpo::uno::RuntimeException&)
                 {
                     //may be disposed already since multiple entries may have used the same connection
                 }

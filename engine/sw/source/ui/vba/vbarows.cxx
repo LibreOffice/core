@@ -86,7 +86,7 @@ SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent,
 : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mxTableRows( xTableRows ), mnStartRowIndex( nStarIndex ), mnEndRowIndex( nEndIndex )
 {
     if( mnEndRowIndex < mnStartRowIndex )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 /**
@@ -270,7 +270,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     sal_Int32 nNewWidth = nWidth - indent;
     if ((nNewWidth <= 0) || (nWidth <= 0))
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
             "(nNewWidth <= 0) || (nWidth <= 0)"_ustr
         );
@@ -336,7 +336,7 @@ cpo::uno::Any SAL_CALL SwVbaRows::Item( const cpo::uno::Any& Index1, const cpo::
         }
         return cpo::uno::Any( uno::Reference< word::XRow >( new SwVbaRow( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
+    throw  cpo::uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess

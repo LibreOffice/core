@@ -39,11 +39,11 @@ public:
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void WriteBytes( const cpo::uno::Sequence< sal_Int8 >& aData );
 
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 GetPosition();
 
     void WriteInt16(sal_Int16 nInt16)

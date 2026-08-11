@@ -155,7 +155,7 @@ public:
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     TabPage*  getTabPage() const;
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -194,7 +194,7 @@ public:
     virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) override;
     virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) override;
     // C++
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     TabControl*  getTabControl() const;
     sal_uInt16 insertTab( TabPage*, OUString const & sTitle );
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
@@ -372,9 +372,9 @@ class MetricField;
 class VCLXMetricField final :
     public cppu::ImplInheritanceHelper<VCLXFormattedSpinField, css::awt::XMetricField>
 {
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     MetricFormatter *GetMetricFormatter();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     MetricField     *GetMetricField();
     void CallListeners();
 public:

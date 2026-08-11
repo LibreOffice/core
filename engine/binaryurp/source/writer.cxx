@@ -242,7 +242,7 @@ void Writer::sendRequest(
     }
     assert(functionId >= 0);
     if (functionId > SAL_MAX_UINT16) {
-        throw css::uno::RuntimeException(u"function ID too large for URP"_ustr);
+        throw cpo::uno::RuntimeException(u"function ID too large for URP"_ustr);
     }
     std::vector< unsigned char > buf;
     bool newType = !(lastType_.is() && t.equals(lastType_));
@@ -409,7 +409,7 @@ void Writer::sendReply(
 void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     std::vector< unsigned char > header;
     if (buffer.size() > SAL_MAX_UINT32) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"message too large for URP"_ustr);
     }
     Marshal::write32(&header, static_cast< sal_uInt32 >(buffer.size()));

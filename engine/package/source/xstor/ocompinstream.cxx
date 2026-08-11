@@ -45,7 +45,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 {
     OSL_ENSURE( m_pImpl->m_xMutex.is(), "No mutex is provided!" );
     if ( !m_pImpl->m_xMutex.is() )
-        throw uno::RuntimeException(); // just a disaster
+        throw cpo::uno::RuntimeException(); // just a disaster
 
     assert(m_xStream.is());
     assert(m_pByteReader);
@@ -284,7 +284,7 @@ bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     try
     {
@@ -319,7 +319,7 @@ OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
@@ -340,7 +340,7 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
@@ -361,7 +361,7 @@ cpo::uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationsh
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
     const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -386,7 +386,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OInputCom
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
     const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -412,7 +412,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OInputCom
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
     auto pProp = std::find_if(std::cbegin(m_aProperties), std::cend(m_aProperties),
@@ -438,7 +438,7 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
 }
@@ -454,7 +454,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
 }
@@ -470,7 +470,7 @@ void SAL_CALL OInputCompStream::insertRelationships(  const cpo::uno::Sequence< 
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
 }
@@ -486,7 +486,7 @@ void SAL_CALL OInputCompStream::clearRelationships()
     }
 
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
 }

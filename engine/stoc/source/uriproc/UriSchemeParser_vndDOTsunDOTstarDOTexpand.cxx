@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
@@ -127,7 +127,7 @@ OUString UrlReference::expand(
     css::uno::Reference< css::util::XMacroExpander > const & expander)
 {
     if (!expander.is()) {
-        throw css::uno::RuntimeException(u"null expander passed to XVndSunStarExpandUrl.expand"_ustr);
+        throw cpo::uno::RuntimeException(u"null expander passed to XVndSunStarExpandUrl.expand"_ustr);
     }
     return expander->expandMacros(
         ::rtl::Uri::decode(

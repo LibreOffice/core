@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <comphelper/kit.hxx>

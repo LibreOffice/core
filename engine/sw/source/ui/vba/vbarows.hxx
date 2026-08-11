@@ -39,19 +39,19 @@ private:
     sal_Int32 mnEndRowIndex;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setIndentWithAdjustNone( sal_Int32 indent );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setIndentWithAdjustFirstColumn( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setIndentWithAdjustProportional( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setIndentWithAdjustSameWidth( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
 
     // Attributes

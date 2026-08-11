@@ -75,7 +75,7 @@ namespace frm
         virtual ~OFormNavigationHelper();
 
         // XComponent
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void dispose(  );
 
         // XDispatchProviderInterception

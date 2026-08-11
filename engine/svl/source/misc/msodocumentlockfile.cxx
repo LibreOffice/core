@@ -195,7 +195,7 @@ LockFileEntry MSODocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>&
     LockFileEntry aResult;
     css::uno::Reference<css::io::XInputStream> xInput = OpenStream(rGuard);
     if (!xInput.is())
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const sal_Int32 nBufLen = 256;
     cpo::uno::Sequence<sal_Int8> aBuf(nBufLen);

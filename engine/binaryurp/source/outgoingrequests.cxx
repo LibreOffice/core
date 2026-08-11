@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/byteseq.hxx>
 
 #include "lessoperators.hxx"
@@ -45,7 +45,7 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
     std::scoped_lock g(mutex_);
     Map::iterator i(map_.find(tid));
     if (i == map_.end()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"URP: reply for unknown TID"_ustr);
     }
     assert(!i->second.empty());

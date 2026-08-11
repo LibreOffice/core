@@ -107,7 +107,7 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
     {
         // carry on, empty value will be returned
     }
-    catch ( css::uno::RuntimeException& )
+    catch ( cpo::uno::RuntimeException& )
     {
         // carry on, empty value will be returned
     }

@@ -420,7 +420,7 @@ class XResultSet_impl :
 
         // Methods
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool OneMore(std::unique_lock<std::mutex>&);
 
         void rowCountChanged(std::unique_lock<std::mutex>&);

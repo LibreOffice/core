@@ -416,8 +416,8 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     }
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(u"SwXContentControl::AttachImpl(): already attached"_ustr,
-                                    getXWeak());
+        throw cpo::uno::RuntimeException(u"SwXContentControl::AttachImpl(): already attached"_ustr,
+                                         getXWeak());
     }
 
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
@@ -489,7 +489,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     if (!pTextAttr)
     {
         SAL_WARN("sw.core", "content control inserted, but has no text attribute?");
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"SwXContentControl::AttachImpl(): cannot create content control"_ustr, getXWeak());
     }
 
@@ -519,8 +519,8 @@ uno::Reference<text::XTextRange> SAL_CALL SwXContentControl::getAnchor()
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(u"SwXContentControl::getAnchor(): not inserted"_ustr,
-                                    getXWeak());
+        throw cpo::uno::RuntimeException(u"SwXContentControl::getAnchor(): not inserted"_ustr,
+                                         getXWeak());
     }
 
     SwTextNode* pTextNode;
@@ -1400,7 +1400,7 @@ uno::Reference<container::XEnumeration> SAL_CALL SwXContentControl::createEnumer
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException(u"createEnumeration(): not inserted"_ustr, getXWeak());
+        throw cpo::uno::RuntimeException(u"createEnumeration(): not inserted"_ustr, getXWeak());
     }
 
     SwTextNode* pTextNode;

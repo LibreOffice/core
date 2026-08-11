@@ -149,7 +149,7 @@ public:
     nAxisIndex must be greater than 0. nAxisIndex==1 refers to the first secondary axis.
     )
 
-    @throws css::uno::RuntimeException
+    @throws cpo::uno::RuntimeException
     */
 
     void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex );

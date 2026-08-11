@@ -289,11 +289,11 @@ void ZipPackageFolder::saveContents(
         }
         catch ( ZipException& )
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
         catch ( IOException& )
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
 
@@ -309,7 +309,7 @@ void ZipPackageFolder::saveContents(
             if (!aIter->second.pStream->saveChild(rPath + aIter->first, rManList, rZipOut,
                     rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
             {
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
         }
     }
@@ -323,7 +323,7 @@ void ZipPackageFolder::saveContents(
                 if (!rInfo.pFolder->saveChild(rPath + rShortName, rManList, rZipOut,
                         rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
                 {
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 }
             }
             else
@@ -331,7 +331,7 @@ void ZipPackageFolder::saveContents(
                 if (!rInfo.pStream->saveChild(rPath + rShortName, rManList, rZipOut,
                         rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
                 {
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 }
             }
         }

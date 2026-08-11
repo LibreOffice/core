@@ -26,7 +26,7 @@
 #include <cppuhelper/detail/XExceptionThrower.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -208,7 +208,7 @@ void lo_mobile_throwException(cpo::uno::Any const& aException)
 
     tryThrow<css::ucb::InteractiveAugmentedIOException>(aException);
     tryThrow<css::ucb::NameClashException>(aException);
-    tryThrow<css::uno::RuntimeException>(aException);
+    tryThrow<cpo::uno::RuntimeException>(aException);
 
     SAL_WARN("cppuhelper", "lo_mobile_throwException: Unhandled exception type: " << aException.getValueTypeName());
 

@@ -130,7 +130,7 @@ private:
     const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
     void                        InitData();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString             GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex);
 
 public:

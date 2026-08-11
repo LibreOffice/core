@@ -125,9 +125,9 @@ private:
 
     static OUString getEntryString( const cpo::uno::Any& rValue );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     UnoTreeListBoxImpl& getTreeListBoxOrThrow() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     void ChangeNodesSelection( const cpo::uno::Any& rSelection, bool bSelect, bool bSetSelection );
 

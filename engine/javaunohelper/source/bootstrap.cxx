@@ -88,7 +88,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                 if (jni_env->ExceptionCheck())
                 {
                     jni_env->ExceptionClear();
-                    throw RuntimeException( u"index out of bounds?!"_ustr );
+                    throw cpo::uno::RuntimeException( u"index out of bounds?!"_ustr );
                 }
                 if (nullptr != jstr)
                 {
@@ -98,7 +98,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     if (jni_env->ExceptionCheck())
                     {
                         jni_env->ExceptionClear();
-                        throw RuntimeException( u"index out of bounds?!"_ustr );
+                        throw cpo::uno::RuntimeException( u"index out of bounds?!"_ustr );
                     }
                     if (nullptr != jstr)
                     {
@@ -144,7 +144,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
             if (xComp.is())
                 xComp->dispose();
-            throw RuntimeException(u"cannot get mapping C++ <-> Java!"_ustr );
+            throw cpo::uno::RuntimeException(u"cannot get mapping C++ <-> Java!"_ustr );
         }
 
         jobject jret = static_cast<jobject>(mapping.mapInterface( xContext.get(), cppu::UnoType<decltype(xContext)>::get() ));
@@ -153,9 +153,9 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
 
         return jlocal;
     }
-    catch (const RuntimeException & exc)
+    catch (const cpo::uno::RuntimeException & exc)
     {
-        jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
+        jclass c = jni_env->FindClass( "cpo/uno/RuntimeException" );
         if (nullptr != c)
         {
             SAL_WARN("javaunohelper", "forwarding RuntimeException: " << exc );

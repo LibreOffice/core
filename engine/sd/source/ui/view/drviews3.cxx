@@ -391,12 +391,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     {
                         xConfigurationController = pDrawController2->getConfigurationController();
                         if ( ! xConfigurationController.is())
-                            throw RuntimeException();
+                            throw cpo::uno::RuntimeException();
                         xConfigurationController->restoreConfiguration(xConfiguration);
                     }
                 }
             }
-            catch (RuntimeException&)
+            catch (cpo::uno::RuntimeException&)
             {
                 DBG_UNHANDLED_EXCEPTION("sd.view");
             }

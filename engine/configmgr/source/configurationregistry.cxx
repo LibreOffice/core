@@ -38,7 +38,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -219,7 +219,7 @@ Service::Service(
             context->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.configuration.DefaultProvider"_ustr, context),
             css::uno::UNO_QUERY_THROW);
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (cpo::uno::Exception & e) {
         throw css::uno::DeploymentException(
@@ -251,7 +251,7 @@ void Service::open(OUString const & rURL, bool bReadOnly, bool)
              ? u"com.sun.star.configuration.ConfigurationAccess"_ustr
              : u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr),
             args);
-    } catch (css::uno::RuntimeException &) {
+    } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (cpo::uno::Exception & e) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -278,7 +278,7 @@ void Service::close()
 
 void Service::destroy()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -298,14 +298,14 @@ bool Service::isReadOnly() {
 
 void Service::mergeKey(OUString const &, OUString const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
 void Service::flush()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -313,7 +313,7 @@ void Service::flush()
 void Service::addFlushListener(
     css::uno::Reference< css::util::XFlushListener > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -321,7 +321,7 @@ void Service::addFlushListener(
 void Service::removeFlushListener(
     css::uno::Reference< css::util::XFlushListener > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -336,7 +336,7 @@ void Service::checkValid() {
 
 void Service::checkValid_RuntimeException() {
     if (!access_.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"com.sun.star.configuration.ConfigurationRegistry: not valid"_ustr,
             getXWeak());
     }
@@ -353,7 +353,7 @@ OUString RegistryKey::getKeyName() {
     if (value_ >>= named) {
         return named->getName();
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -422,7 +422,7 @@ sal_Int32 RegistryKey::getLongValue()
 
 void RegistryKey::setLongValue(sal_Int32)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -442,7 +442,7 @@ cpo::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
 
 void RegistryKey::setLongListValue(cpo::uno::Sequence< sal_Int32 > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -462,7 +462,7 @@ OUString RegistryKey::getAsciiValue()
 
 void RegistryKey::setAsciiValue(OUString const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -482,7 +482,7 @@ cpo::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
 
 void RegistryKey::setAsciiListValue(cpo::uno::Sequence< OUString > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -502,7 +502,7 @@ OUString RegistryKey::getStringValue()
 
 void RegistryKey::setStringValue(OUString const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -523,7 +523,7 @@ cpo::uno::Sequence< OUString > RegistryKey::getStringListValue()
 void RegistryKey::setStringListValue(
     cpo::uno::Sequence< OUString > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -543,7 +543,7 @@ cpo::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
 
 void RegistryKey::setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -566,7 +566,7 @@ css::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
 css::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
     OUString const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -579,7 +579,7 @@ void RegistryKey::closeKey()
 
 void RegistryKey::deleteKey(OUString const &)
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
@@ -587,14 +587,14 @@ void RegistryKey::deleteKey(OUString const &)
 cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
 RegistryKey::openKeys()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
 cpo::uno::Sequence< OUString > RegistryKey::getKeyNames()
 {
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }

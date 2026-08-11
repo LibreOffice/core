@@ -39,7 +39,7 @@ void VCLXWindow::SetSystemParent_Impl(const cpo::uno::Any& rHandle)
     VclPtr<vcl::Window> pWindow = GetWindow();
     if (pWindow->GetType() != WindowType::WORKWINDOW)
     {
-        throw css::uno::RuntimeException(u"not a work window"_ustr);
+        throw cpo::uno::RuntimeException(u"not a work window"_ustr);
     }
 
     // use sal_Int64 here to accommodate all int types
@@ -65,7 +65,7 @@ void VCLXWindow::SetSystemParent_Impl(const cpo::uno::Any& rHandle)
     }
     if (bThrow)
     {
-        throw css::uno::RuntimeException(u"incorrect window handle type"_ustr);
+        throw cpo::uno::RuntimeException(u"incorrect window handle type"_ustr);
     }
     // create system parent data
     SystemParentData aSysParentData;

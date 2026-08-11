@@ -193,7 +193,7 @@ namespace comphelper
             @throws css::lang::WrappedTargetException
                 if the XMultiPropertySet::setPropertyValues call does so
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if the XMultiPropertySet::setPropertyValues call does so
 
             @throws css::beans::UnknownPropertyException

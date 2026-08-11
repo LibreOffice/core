@@ -344,7 +344,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
             catch( const ucb::ContentCreationException& )
             {
             }
-            catch( const uno::RuntimeException& )
+            catch( const cpo::uno::RuntimeException& )
             {
             }
             catch( const cpo::uno::Exception& )
@@ -381,7 +381,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                             {
                                 aThmCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                             }
-                            catch( const uno::RuntimeException& )
+                            catch( const cpo::uno::RuntimeException& )
                             {
                             }
                             catch( const cpo::uno::Exception& )
@@ -396,7 +396,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                 {
                                     aThmCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                 }
-                                catch( const uno::RuntimeException& )
+                                catch( const cpo::uno::RuntimeException& )
                                 {
                                 }
                                 catch( const cpo::uno::Exception& )
@@ -409,7 +409,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     {
                                         aSdgCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
-                                    catch( const css::uno::RuntimeException& )
+                                    catch( const cpo::uno::RuntimeException& )
                                     {
                                     }
                                     catch( const cpo::uno::Exception& )
@@ -422,7 +422,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                         {
                                             aSdgCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
-                                        catch( const uno::RuntimeException& )
+                                        catch( const cpo::uno::RuntimeException& )
                                         {
                                         }
                                         catch( const cpo::uno::Exception& )
@@ -437,7 +437,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     {
                                         aSdvCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
-                                    catch( const css::uno::RuntimeException& )
+                                    catch( const cpo::uno::RuntimeException& )
                                     {
                                     }
                                     catch( const cpo::uno::Exception& )
@@ -450,7 +450,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                         {
                                             aSdvCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
-                                        catch( const uno::RuntimeException& )
+                                        catch( const cpo::uno::RuntimeException& )
                                         {
                                         }
                                         catch( const cpo::uno::Exception& )
@@ -468,7 +468,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                         catch( const ucb::ContentCreationException& )
                         {
                         }
-                        catch( const uno::RuntimeException& )
+                        catch( const cpo::uno::RuntimeException& )
                         {
                         }
                         catch( const cpo::uno::Exception& )
@@ -482,7 +482,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
     catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
     catch( const cpo::uno::Exception& )

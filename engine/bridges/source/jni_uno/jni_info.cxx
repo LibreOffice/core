@@ -23,7 +23,7 @@
 
 #include "jni_helper.h"
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <rtl/string.hxx>
@@ -469,7 +469,7 @@ JNI_info::JNI_info(
                 cppu::UnoType<css::uno::XInterface>::get())
             .get())->ppMembers[ 0 ] ) ),
       m_Exception_type(cppu::UnoType<cpo::uno::Exception>::get()),
-      m_RuntimeException_type(cppu::UnoType<css::uno::RuntimeException>::get()),
+      m_RuntimeException_type(cppu::UnoType<cpo::uno::RuntimeException>::get()),
       m_void_type(cppu::UnoType<void>::get()),
       m_XInterface_type_info( nullptr )
 {
@@ -501,7 +501,7 @@ JNI_info::JNI_info(
     JLocalAutoRef jo_String(
         jni, find_class( jni, "java.lang.String" ) );
     JLocalAutoRef jo_RuntimeException(
-        jni, find_class( jni, "com.sun.star.uno.RuntimeException" ) );
+        jni, find_class( jni, "cpo.uno.RuntimeException" ) );
     JLocalAutoRef jo_UnoRuntime(
         jni, find_class( jni, "com.sun.star.uno.UnoRuntime" ) );
     JLocalAutoRef jo_Any(

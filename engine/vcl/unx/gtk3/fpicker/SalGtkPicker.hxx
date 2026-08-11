@@ -58,14 +58,14 @@ class SalGtkPicker
         GtkWidget  *m_pParentWidget;
         GtkWidget  *m_pDialog;
     protected:
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void implsetTitle( std::u16string_view aTitle );
 
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void implsetDisplayDirectory( const OUString& rDirectory );
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString implgetDisplayDirectory(  );
         OUString uritounicode(const gchar *pIn) const;
         OString unicodetouri(const OUString &rURL) const;

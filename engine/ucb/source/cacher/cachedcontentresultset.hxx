@@ -56,7 +56,7 @@ class CachedContentResultSet
 
     private:
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Any&
         getRowAny( sal_Int32 nRow );
 
@@ -88,19 +88,19 @@ class CachedContentResultSet
         hasKnownLast() const;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         const cpo::uno::Any&
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex );
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString const &
         getContentIdentifierString( sal_Int32 nRow );
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::ucb::XContentIdentifier >
         getContentIdentifier( sal_Int32 nRow );
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::ucb::XContent >
         getContent( sal_Int32 nRow );
     };
@@ -153,11 +153,11 @@ private:
     virtual void impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard) override;
 
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool
     applyPositionToOrigin( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void
     impl_fetchData( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow, sal_Int32 nCount
                     , sal_Int32 nFetchDirection );

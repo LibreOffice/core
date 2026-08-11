@@ -86,7 +86,7 @@ void Communicator::execute()
 //                                      Transmitter::PRIORITY_HIGH );
 //        }
     }
-    catch (uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
     }
 

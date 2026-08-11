@@ -207,7 +207,7 @@ class PresetHandler
                     will work in default mode - means "no locale" - automatically.
                     e.g. "/default.xml"
 
-            @throw  css::uno::RuntimeException(!)
+            @throw  cpo::uno::RuntimeException(!)
                     if the specified resource couldn't be located.
          */
         void connectToResource(      EConfigType                                  eConfigType   ,

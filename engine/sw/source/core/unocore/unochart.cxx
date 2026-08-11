@@ -523,7 +523,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         throw lang::DisposedException();
 
     if (!m_pDoc)
-        throw uno::RuntimeException(u"Not connected to a document."_ustr);
+        throw cpo::uno::RuntimeException(u"Not connected to a document."_ustr);
 
     // get arguments
     OUString aRangeRepresentation;
@@ -1635,7 +1635,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             throw lang::IllegalArgumentException();
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if  (pTable->IsTableComplex())
-            throw uno::RuntimeException(u"Table too complex."_ustr);
+            throw cpo::uno::RuntimeException(u"Table too complex."_ustr);
 
         // check that there is only one table used in all ranges
         if (!pFirstFoundTable)
@@ -1652,7 +1652,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         sal_Int32 nCol, nRow;
         SwXTextTable::GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
-            throw uno::RuntimeException(u"Cell not found."_ustr);
+            throw cpo::uno::RuntimeException(u"Cell not found."_ustr);
 
         //!! following objects/functions are implemented in XMLRangeHelper.?xx
         //!! which is a copy of the respective file from chart2 !!
@@ -1665,7 +1665,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         {
             SwXTextTable::GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
-                throw uno::RuntimeException(u"Cell not found."_ustr);
+                throw cpo::uno::RuntimeException(u"Cell not found."_ustr);
 
             aCellRange.aLowerRight.nColumn   = nCol;
             aCellRange.aLowerRight.nRow      = nRow;
@@ -1787,7 +1787,7 @@ SwChartDataSequence::SwChartDataSequence(
             OSL_FAIL( "table missing" );
         }
     }
-    catch (uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         // TODO: shouldn't there be a call to release() here?
         throw;
@@ -1833,7 +1833,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
             OSL_FAIL( "table missing" );
         }
     }
-    catch (uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         // TODO: shouldn't there be a call to release() here?
         throw;
@@ -1886,12 +1886,12 @@ cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         bool bOk = false;
         SwFrameFormat* pTableFormat = GetFrameFormat();
         if (!pTableFormat)
-            throw uno::RuntimeException(u"No table format found."_ustr);
+            throw cpo::uno::RuntimeException(u"No table format found."_ustr);
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if (!pTable)
-            throw uno::RuntimeException(u"No table found."_ustr);
+            throw cpo::uno::RuntimeException(u"No table found."_ustr);
         if (pTable->IsTableComplex())
-            throw uno::RuntimeException(u"Table too complex."_ustr);
+            throw cpo::uno::RuntimeException(u"Table too complex."_ustr);
 
         const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
         OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );

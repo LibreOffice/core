@@ -134,10 +134,10 @@ namespace connectivity::file
         void checkIndex(sal_Int32 columnIndex );
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         const ORowSetValue& getValue(sal_Int32 columnIndex);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void updateValue(sal_Int32 columnIndex,const ORowSetValue& x );
         // clear insert row
         void clearInsertRow();

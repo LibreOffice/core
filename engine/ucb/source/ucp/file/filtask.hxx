@@ -281,7 +281,7 @@ namespace fileaccess
          *
          *  @throws css::beans::PropertyExistException
          *  @throws css::beans::IllegalTypeException
-         *  @throws css::uno::RuntimeException
+         *  @throws cpo::uno::RuntimeException
          */
 
         void associate( const OUString& UnqPath,
@@ -291,7 +291,7 @@ namespace fileaccess
 
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::beans::NotRemoveableException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void deassociate( const OUString& UnqPath,
                                    const OUString& PropertyName );
 

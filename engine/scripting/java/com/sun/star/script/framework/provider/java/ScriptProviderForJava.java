@@ -59,7 +59,7 @@ public class ScriptProviderForJava {
 
         @Override
         public XScript getScript(/*IN*/String scriptURI) throws
-            com.sun.star.uno.RuntimeException, ScriptFrameworkErrorException {
+            cpo.uno.RuntimeException, ScriptFrameworkErrorException {
 
             ScriptMetaData scriptData = getScriptData(scriptURI);
 
@@ -70,7 +70,7 @@ public class ScriptProviderForJava {
                                    m_xInvocContext);
 
                 return script;
-            } catch (com.sun.star.uno.RuntimeException re) {
+            } catch (cpo.uno.RuntimeException re) {
                 ScriptFrameworkErrorException e2 = new ScriptFrameworkErrorException(
                     "Failed to create script object: " + re, null,
                     scriptData.getLanguageName(), language,
@@ -134,7 +134,7 @@ class ScriptImpl implements XScript {
 
     ScriptImpl(XComponentContext ctx, Resolver resolver, ScriptMetaData metaData,
                XModel xModel, XScriptInvocationContext xInvocContext) throws
-        com.sun.star.uno.RuntimeException {
+        cpo.uno.RuntimeException {
 
         this.metaData = metaData;
         this.m_xContext = ctx;
@@ -146,7 +146,7 @@ class ScriptImpl implements XScript {
             this.m_xMultiComponentFactory = m_xContext.getServiceManager();
         } catch (Exception e) {
             LogUtils.DEBUG(LogUtils.getTrace(e));
-            throw new com.sun.star.uno.RuntimeException(
+            throw new cpo.uno.RuntimeException(
                 e, "Error constructing ScriptProvider: " + e);
         }
 

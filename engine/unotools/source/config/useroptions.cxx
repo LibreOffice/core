@@ -150,7 +150,7 @@ SvtUserOptions::Impl::Impl() :
         {
             xChgNot->addChangesListener(m_xChangeListener);
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
     }

@@ -676,7 +676,7 @@ void SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const cpo
     SolarMutexGuard aGuard;
 
     if( mpImpl == nullptr )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (aPropertyName == UNO_TC_PROP_ANCHOR)
     {

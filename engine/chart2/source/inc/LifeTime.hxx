@@ -42,7 +42,7 @@ public:
     virtual ~LifeTimeManager();
 
     bool        impl_isDisposed( bool bAssert=true );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool    dispose();
 
     mutable std::mutex                    m_aAccessMutex;
@@ -92,7 +92,7 @@ public:
     void    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );
     void    g_close_endTryClose();
     void    g_close_endTryClose_doClose();
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
     void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
 
 private:

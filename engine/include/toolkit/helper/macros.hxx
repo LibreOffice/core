@@ -105,7 +105,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
                 aIt.remove(g2); \
             } \
         } \
-        catch(const css::uno::RuntimeException&) \
+        catch(const cpo::uno::RuntimeException&) \
         { \
             DISPLAY_EXCEPTION( ClassName, MethodName ) \
         } \
@@ -135,7 +135,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
                 aIt.remove(g2); \
             } \
         } \
-        catch(const css::uno::RuntimeException&) \
+        catch(const cpo::uno::RuntimeException&) \
         { \
             DISPLAY_EXCEPTION( ClassName, MethodName ) \
         } \

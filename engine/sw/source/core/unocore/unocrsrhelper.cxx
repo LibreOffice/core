@@ -1032,13 +1032,13 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                 RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent))
         {
-            throw uno::RuntimeException(u"cannot insert file inside input field"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot insert file inside input field"_ustr);
         }
 
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                 RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent))
         {
-            throw uno::RuntimeException(u"cannot insert file inside content controls"_ustr);
+            throw cpo::uno::RuntimeException(u"cannot insert file inside content controls"_ustr);
         }
     }
 

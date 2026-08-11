@@ -63,7 +63,7 @@ public:
     DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
             queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties );
 

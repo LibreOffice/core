@@ -466,7 +466,7 @@ void ConfigurationController::ThrowIfDisposed () const
     if (mpImplementation == nullptr)
     {
         OSL_ASSERT(mpImplementation != nullptr);
-        throw RuntimeException(u"ConfigurationController not initialized"_ustr,
+        throw cpo::uno::RuntimeException(u"ConfigurationController not initialized"_ustr,
             const_cast<cpo::uno::XWeak*>(static_cast<const cpo::uno::XWeak*>(this)));
     }
 }

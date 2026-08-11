@@ -12,7 +12,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>

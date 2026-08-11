@@ -80,7 +80,7 @@ private:
     /// Check that m_xStream implements io::XSeekable and return it
     css::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
     /// get raw data using unbuffered stream
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XInputStream > getRawData();
 
 public:

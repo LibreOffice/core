@@ -225,7 +225,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
                     pFrameworkHelper->GetViewShell(aPaneURLs[i]).get());
             }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {}
 
     return pViewShell;

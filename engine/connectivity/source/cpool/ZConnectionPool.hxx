@@ -132,7 +132,7 @@ namespace connectivity
         // delete all refs
         void clear(bool _bDispose);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info );
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;

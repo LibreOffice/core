@@ -165,7 +165,7 @@ namespace connectivity::odbc
         void allocBuffer();
         void releaseBuffer();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void const * _pValue);
         void fillNeededData(SQLRETURN _nRet);
         bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset);
@@ -179,28 +179,28 @@ namespace connectivity::odbc
         template < typename T > T impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType );
         // these cases need some special treatment
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool impl_getBoolean( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Sequence< sal_Int8 > impl_getBytes( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::util::Date impl_getDate( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::util::Time impl_getTime( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::util::DateTime impl_getTimestamp( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int64 impl_getLong( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString impl_getString( sal_Int32 columnIndex );
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Sequence<sal_Int8> impl_getBookmark(  );
 
 

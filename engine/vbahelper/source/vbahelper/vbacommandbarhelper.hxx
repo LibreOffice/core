@@ -56,35 +56,35 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xWindowState;
     OUString maModuleId;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void Init();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool hasToolbar( const OUString& sResourceUrl, std::u16string_view sName );
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     VbaCommandBarHelper( css::uno::Reference< css::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel > xModel );
 
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const css::uno::Reference< css::container::XNameAccess >& getPersistentWindowState() const
     {
         return m_xWindowState;
     }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void removeSettings( const OUString& sResourceUrl );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings);
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
     const OUString& getModuleId() const { return maModuleId; }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu );
     static OUString generateCustomURL();
 };

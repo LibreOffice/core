@@ -102,7 +102,7 @@ Dependencies::Dependencies(
             if (!(ent2->getDirectAttributes().empty()
                   && ent2->getDirectMethods().empty()))
             {
-                insert(u"com.sun.star.uno.RuntimeException", KIND_EXCEPTION);
+                insert(u"cpo.uno.RuntimeException", KIND_EXCEPTION);
             }
             for (const unoidl::InterfaceTypeEntity::Attribute& attr : ent2->getDirectAttributes())
             {

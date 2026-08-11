@@ -90,7 +90,7 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
 
     /* internal */
     private:
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::uno::XInterface > implts_dispatch( const css::util::URL& aURL );
 
 };      //  class ServiceHandler

@@ -83,7 +83,7 @@ namespace framework
             virtual bool isReadOnly() override;
 
             // Non-UNO methods
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
 
         private:

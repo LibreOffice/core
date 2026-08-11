@@ -39,14 +39,14 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
 
     public java.lang.Object createInstance()
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         return new JavaLoader(multiServiceFactory);
     }
 
     public java.lang.Object createInstanceWithArguments( java.lang.Object[] args )
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
     {
         JavaLoader loader = new JavaLoader();
         loader.initialize(args);
@@ -58,7 +58,7 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
      * Implements the XServiceInfo interface.
      */
     public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return JavaLoader.class.getName();
     }
@@ -67,7 +67,7 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
      * Implements the XServiceInfo interface.
      */
     public boolean supportsService(String serviceName)
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         for (String supportedService : supportedServices) {
             if (supportedService.equals(serviceName)) {
@@ -81,7 +81,7 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
      * Implements the XServiceInfo interface.
      */
     public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
+            throws cpo.uno.RuntimeException
     {
         return supportedServices;
     }

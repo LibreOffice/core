@@ -279,7 +279,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt )
     }
 
     // no null date available -> no calculations possible
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 
@@ -1079,7 +1079,7 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     // If you change this to not unconditionally throw, the
     // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
     // financial.cxx can be removed.
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 
@@ -1165,7 +1165,7 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     // If you change this to not unconditionally throw, the
     // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
     // financial.cxx can be removed.
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 

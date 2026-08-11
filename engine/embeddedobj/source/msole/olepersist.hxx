@@ -32,7 +32,7 @@ namespace com::sun::star {
 OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
 /// @throws css::io::IOException
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 OUString GetNewFilledTempFile_Impl(
     css::uno::Reference<css::io::XInputStream > const & xInStream,
     css::uno::Reference<css::uno::XComponentContext> const & xContext);

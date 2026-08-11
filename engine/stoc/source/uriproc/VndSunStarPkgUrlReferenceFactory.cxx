@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -89,7 +89,7 @@ Factory::createVndSunStarPkgUrlReference(
     css::uno::Reference< css::uri::XUriReference > const & authority)
 {
     if (!authority.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"null authority passed to"
             " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference"_ustr);
     }

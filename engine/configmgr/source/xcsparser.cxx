@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -287,7 +287,7 @@ bool XcsParser::startElement(
             break;
         }
     }
-    throw css::uno::RuntimeException(
+    throw cpo::uno::RuntimeException(
         "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
 }
 
@@ -340,14 +340,14 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                     break;
                 default:
                     assert(false);
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         u"this cannot happen"_ustr);
                 }
             } else {
                 if (!elements_.top().node->getMembers().insert(
                         NodeMap::value_type(top.name, top.node)).second)
                 {
-                    throw css::uno::RuntimeException(
+                    throw cpo::uno::RuntimeException(
                         "duplicate " + top.name + " in " + reader.getUrl());
                 }
             }
@@ -363,7 +363,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
             state_ = STATE_TEMPLATES_DONE;
             break;
         case STATE_TEMPLATES_DONE:
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "no component element in " + reader.getUrl());
         case STATE_COMPONENT_DONE:
             break;
@@ -397,7 +397,7 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "package")
         {
             if (hasPackage) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "multiple component-schema package attributes in " +
                     reader.getUrl());
             }
@@ -408,7 +408,7 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
                    attrLn == "name")
         {
             if (hasName) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "multiple component-schema name attributes in " +
                     reader.getUrl());
             }
@@ -418,11 +418,11 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
         }
     }
     if (!hasPackage) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no component-schema package attribute in " + reader.getUrl());
     }
     if (!hasName) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no component-schema name attribute in " + reader.getUrl());
     }
     componentName_ = xmlreader::Span(buf.getStr(), buf.getLength()).
@@ -456,7 +456,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
         }
     }
     if (!hasName) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no node-ref name attribute in " + reader.getUrl());
     }
     rtl::Reference< Node > tmpl(
@@ -467,7 +467,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
     if (!tmpl.is()) {
         //TODO: this can erroneously happen as long as import/uses attributes
         // are not correctly processed
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "unknown node-ref " + name + " in " + reader.getUrl());
     }
     rtl::Reference< Node > node(tmpl->clone(false));
@@ -506,11 +506,11 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
         }
     }
     if (!hasName) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no prop name attribute in " + reader.getUrl());
     }
     if (valueParser_.type_ == TYPE_ERROR) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no prop type attribute in " + reader.getUrl());
     }
     elements_.push(
@@ -541,7 +541,7 @@ void XcsParser::handlePropValue(
         {
             attrSeparator = reader.getAttributeValue(false);
             if (attrSeparator.length == 0) {
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     "bad oor:separator attribute in " + reader.getUrl());
             }
         }
@@ -571,7 +571,7 @@ void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
         }
     }
     if (!hasName) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no group name attribute in " + reader.getUrl());
     }
     if (isTemplate) {
@@ -612,7 +612,7 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
         }
     }
     if (!hasName) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "no set name attribute in " + reader.getUrl());
     }
     if (isTemplate) {

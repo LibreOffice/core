@@ -143,7 +143,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         /// @throws css::io::NotConnectedException
         /// @throws css::io::IOException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void
         closeStream();
 

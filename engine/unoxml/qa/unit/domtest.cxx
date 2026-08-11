@@ -289,7 +289,7 @@ public:
             mxDomBuilder->parse(nullptr);
             CPPUNIT_FAIL("XDocumentBuilder.parse(null)");
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -398,7 +398,7 @@ public:
             xXPathAPI->eval(nullptr, u"child::foo"_ustr);
             CPPUNIT_FAIL("XXPathAPI.eval(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -407,7 +407,7 @@ public:
             xXPathAPI->evalNS(nullptr, u"child::foo"_ustr, xRoot);
             CPPUNIT_FAIL("XXPathAPI.evalNS(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -416,7 +416,7 @@ public:
             xXPathAPI->selectNodeList(nullptr, u"child::foo"_ustr);
             CPPUNIT_FAIL("XXPathAPI.selectNodeList(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -425,7 +425,7 @@ public:
             xXPathAPI->selectNodeListNS(nullptr, u"child::foo"_ustr, xRoot);
             CPPUNIT_FAIL("XXPathAPI.selectNodeListNS(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -434,7 +434,7 @@ public:
             xXPathAPI->selectSingleNode(nullptr, u"child::foo"_ustr);
             CPPUNIT_FAIL("XXPathAPI.selectSingleNode(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -443,7 +443,7 @@ public:
             xXPathAPI->selectSingleNodeNS(nullptr, u"child::foo"_ustr, xRoot);
             CPPUNIT_FAIL("XXPathAPI.selectSingleNodeNS(null)");
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -688,7 +688,7 @@ public:
             xText->appendChild(nullptr);
             CPPUNIT_FAIL("XText.appendChild(null)");
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -725,7 +725,7 @@ public:
             xText->removeChild(nullptr);
             CPPUNIT_FAIL("XText.removeChild(null)");
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -806,7 +806,7 @@ public:
             xPI->appendChild(nullptr);
             CPPUNIT_FAIL("XProcessingInstruction.appendChild(null)");
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 
@@ -843,7 +843,7 @@ public:
             xPI->removeChild(nullptr);
             CPPUNIT_FAIL("XProcessingInstruction.removeChild(null)");
         }
-        catch (css::uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
         }
 

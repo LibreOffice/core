@@ -21,7 +21,7 @@ excludelist:
     # Keep for platform-independent alloca.h abstraction
     - sal/alloca.h
     # Safer to keep for use in cppu::UnoType template
-    - com/sun/star/uno/RuntimeException.hpp
+    - cpo/uno/RuntimeException.hpp
     stoc/source/invocation_adapterfactory/iafactory.cxx:
     # Safer to keep for use in cppu::UnoType template
     - com/sun/star/script/XInvocation.hpp

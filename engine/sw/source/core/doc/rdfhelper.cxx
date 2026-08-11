@@ -34,7 +34,7 @@ cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNam
     {
         return xModel->getMetadataGraphsWithType(xType);
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return cpo::uno::Sequence<uno::Reference<rdf::XURI>>();
     }

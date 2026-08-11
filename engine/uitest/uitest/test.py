@@ -12,7 +12,7 @@ import tempfile
 from contextlib import contextmanager
 from uitest.uihelper.common import get_state_as_dict, select_by_text
 
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.awt import Toolkit
 
 from libreoffice.uno.eventlistener import EventListener

@@ -206,10 +206,10 @@ private:
         );
 
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password , bool _bIsolated);
     /// @throws css::sdbc::SQLException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated);
 
 protected:

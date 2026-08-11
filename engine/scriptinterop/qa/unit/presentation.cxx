@@ -23,7 +23,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
 #include <rtl/ustring.hxx>
@@ -172,9 +172,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendTextRunStyling)
     CPPUNIT_ASSERT_EQUAL(100.0f, fWeight);
     // Appending an empty string produces an empty range, which has no characters to style.
     CPPUNIT_ASSERT_THROW(xText->appendText(u""_ustr)->getTextStyle(),
-                         css::uno::RuntimeException);
+                         cpo::uno::RuntimeException);
     // Only the shape's whole text range can append runs.
-    CPPUNIT_ASSERT_THROW(xBold->appendText(u"x"_ustr), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xBold->appendText(u"x"_ustr), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(!xParaProps->getPropertyValue(u"NumberingLevel"_ustr).hasValue());
     // Levels outside -1..9 are rejected.
-    CPPUNIT_ASSERT_THROW(xText->setBulletLevel(10), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xText->setBulletLevel(10), cpo::uno::RuntimeException);
     // Setting the level on the whole text puts every paragraph on that depth.
     xText->setBulletLevel(2);
     xEnum = xParagraphs->createEnumeration();
@@ -246,16 +246,16 @@ CPPUNIT_TEST_FIXTURE(Test, testGeometryValidation)
     auto const xShape = xSlide->insertTextBox(u"x"_ustr, 36, 36, 288, 72);
     // A geometry value must be a finite number that fits the page coordinate range.
     CPPUNIT_ASSERT_THROW(xShape->setLeft(std::numeric_limits<double>::quiet_NaN()),
-                         css::uno::RuntimeException);
+                         cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_THROW(xShape->setTop(std::numeric_limits<double>::infinity()),
-                         css::uno::RuntimeException);
-    CPPUNIT_ASSERT_THROW(xShape->setLeft(1e12), css::uno::RuntimeException);
+                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xShape->setLeft(1e12), cpo::uno::RuntimeException);
     // A width or height must not be negative.
-    CPPUNIT_ASSERT_THROW(xShape->setWidth(-1), css::uno::RuntimeException);
-    CPPUNIT_ASSERT_THROW(xShape->setHeight(-1), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xShape->setWidth(-1), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xShape->setHeight(-1), cpo::uno::RuntimeException);
     // A rejected insertTextBox leaves the slide without the new shape.
     CPPUNIT_ASSERT_THROW(xSlide->insertTextBox(u"x"_ustr, 0, 0, -10, 10),
-                         css::uno::RuntimeException);
+                         cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSlide->getShapes().getLength());
     // A rejected setter leaves the shape's geometry untouched.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, xShape->getLeft(), 0.05);
@@ -273,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageAndRemove)
     xNewSlide->remove();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPresentation->getSlides().getLength());
     // The last slide cannot be removed.
-    CPPUNIT_ASSERT_THROW(xPresentation->getSlides()[0]->remove(), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xPresentation->getSlides()[0]->remove(), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPageSize)
@@ -300,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSlideBackgroundColor)
     xBackground->getPropertyValue(u"FillColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2a6099), nColor);
     // A malformed color string is rejected.
-    CPPUNIT_ASSERT_THROW(xSlide->setBackgroundColor(u"blue"_ustr), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xSlide->setBackgroundColor(u"blue"_ustr), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)
     dispatchCommand(mxComponent, u".uno:NotesMode"_ustr, {});
     auto const xNotesPage = xPresentation->getSelection()->getCurrentPage();
     CPPUNIT_ASSERT(xNotesPage.is());
-    CPPUNIT_ASSERT_THROW(xNotesPage->asSlide(), css::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xNotesPage->asSlide(), cpo::uno::RuntimeException);
     // Back in the normal drawing view the slide is current again.
     dispatchCommand(mxComponent, u".uno:DrawingMode"_ustr, {});
     CPPUNIT_ASSERT(xPresentation->getSelection()->getCurrentPage()->asSlide().is());

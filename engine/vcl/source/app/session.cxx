@@ -400,7 +400,7 @@ void VCLSession::disposing(std::unique_lock<std::mutex>& rGuard) {
         try {
             listener.m_xListener->disposing(src);
             SAL_INFO("vcl.se.debug", "  call Listener disposing");
-        } catch (css::uno::RuntimeException &) {
+        } catch (cpo::uno::RuntimeException &) {
             TOOLS_WARN_EXCEPTION("vcl.se", "ignoring");
         }
         rGuard.lock();

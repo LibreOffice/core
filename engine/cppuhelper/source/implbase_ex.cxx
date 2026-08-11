@@ -24,7 +24,7 @@
 
 #include "type_entries.hxx"
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <mutex>
 

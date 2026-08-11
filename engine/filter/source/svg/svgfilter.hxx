@@ -219,7 +219,7 @@ private:
     Link<EditFieldInfo*,void>           maOldFieldHdl;
     Link<EditFieldInfo*,void>           maNewFieldHdl;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool                            implExport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
     bool                            implExportImpressOrDraw( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
     bool                            implExportWriterOrCalc( const css::uno::Reference< css::io::XOutputStream >& rxOStm );

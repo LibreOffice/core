@@ -110,7 +110,7 @@ void OPackageStructureCreator::convertToPackage( const OUString& aFolderUrl,
                 }
             }
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );

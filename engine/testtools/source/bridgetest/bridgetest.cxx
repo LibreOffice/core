@@ -44,7 +44,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 
 #include <test/testtools/bridgetest/BadConstructorArguments.hpp>

@@ -1216,7 +1216,7 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
         {
             mnTextSize = xXText->getString().getLength();
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             TOOLS_WARN_EXCEPTION("filter.ms", "ImplGetText");
         }

@@ -116,7 +116,7 @@ public:
     */
     sal_Int64 GetChildCount() const noexcept;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
     const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
     /** Return the requested accessible child or throw and
@@ -144,7 +144,7 @@ public:
             Returns a reference to the requested accessible child.  This
             reference is empty if it has not been possible to create the
             accessible object of the corresponding shape.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     rtl::Reference<comphelper::OAccessible> GetChild(ChildDescriptor& aChildDescriptor,
                                                      sal_Int32 _nIndex);

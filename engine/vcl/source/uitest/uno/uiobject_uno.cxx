@@ -58,7 +58,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
     SAL_WARN_IF(!pObj, "vcl", "child " << rID << " of parent " << mpObj->dumpState() << " does not exist");
     if (!pObj)
-        throw css::uno::RuntimeException("getChild with id " + rID + " did not find a child");
+        throw cpo::uno::RuntimeException("getChild with id " + rID + " did not find a child");
     return new UIObjectUnoObj(std::move(pObj));
 }
 

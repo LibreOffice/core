@@ -79,9 +79,9 @@ public:
 private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificIndexEntrySupplier(std::u16string_view name);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & getLocaleSpecificIndexEntrySupplier(
         const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 

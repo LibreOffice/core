@@ -48,10 +48,10 @@ protected:
     virtual ~ScAccessibleContextBase() override;
 public:
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isShowing();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool isVisible();
 
     ///=====  SfxListener  =====================================================
@@ -105,24 +105,24 @@ public:
 protected:
     /// Return this object's description.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual OUString
         createAccessibleDescription();
 
     /// Return the object's current name.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual OUString
         createAccessibleName();
 
     /// Return the object's current bounding box relative to the desktop.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() = 0;
 
     /// Return the object's current bounding box relative to the parent object.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual tools::Rectangle GetBoundingBox() = 0;
 
 public:

@@ -167,7 +167,7 @@ public:
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
             return cpo::uno::Any( OORGBToXLRGB( Color(ColorTransparency, aBorderLine.Color) ) );
-        throw uno::RuntimeException(u"No Implementation available"_ustr );
+        throw cpo::uno::RuntimeException(u"No Implementation available"_ustr );
     }
     void SAL_CALL setColor( const cpo::uno::Any& _color ) override
     {
@@ -175,7 +175,7 @@ public:
         _color >>= nColor;
         table::BorderLine aBorderLine;
         if ( !getBorderLine( aBorderLine ) )
-            throw uno::RuntimeException(u"No Implementation available"_ustr );
+            throw cpo::uno::RuntimeException(u"No Implementation available"_ustr );
 
         aBorderLine.Color = XLRGBToOORGB( nColor );
         setBorderLine( aBorderLine );
@@ -230,7 +230,7 @@ public:
                     break;
             }
         }
-        throw uno::RuntimeException(u"Method failed"_ustr );
+        throw cpo::uno::RuntimeException(u"Method failed"_ustr );
     }
     void SAL_CALL setWeight( const cpo::uno::Any& _weight ) override
     {
@@ -238,7 +238,7 @@ public:
         _weight >>= nWeight;
         table::BorderLine aBorderLine;
         if ( !getBorderLine( aBorderLine ) )
-                    throw uno::RuntimeException(u"Method failed"_ustr );
+                    throw cpo::uno::RuntimeException(u"Method failed"_ustr );
 
         switch ( nWeight )
         {
@@ -255,7 +255,7 @@ public:
                 aBorderLine.OuterLineWidth = OOLineHairline;
                 break;
             default:
-                throw uno::RuntimeException(u"Bad param"_ustr );
+                throw cpo::uno::RuntimeException(u"Bad param"_ustr );
         }
         setBorderLine( aBorderLine );
 
@@ -284,7 +284,7 @@ public:
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
         if ( !getBorderLine( aBorderLine ) )
-            throw uno::RuntimeException(u"Method failed"_ustr );
+            throw cpo::uno::RuntimeException(u"Method failed"_ustr );
 
         switch ( nLineStyle )
         {
@@ -298,7 +298,7 @@ public:
             case XlLineStyle::xlSlantDashDot:
                 break;
             default:
-                throw uno::RuntimeException(u"Bad param"_ustr );
+                throw cpo::uno::RuntimeException(u"Bad param"_ustr );
         }
         setBorderLine( aBorderLine );
 

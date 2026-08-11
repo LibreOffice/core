@@ -34,7 +34,7 @@ typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::word::XWindow > WindowIm
 class SwVbaWindow : public WindowImpl_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,

@@ -90,7 +90,7 @@ private:
     /** Make the specified object the active layer.
         @param rxLayer
             The new layer object.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void setActiveLayer (const css::uno::Reference< css::drawing::XLayer>& rxLayer);
 

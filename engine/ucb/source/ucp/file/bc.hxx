@@ -211,15 +211,15 @@ namespace fileaccess {
 
 
         // Private Methods
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::ucb::XCommandInfo >
         getCommandInfo();
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo();
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,

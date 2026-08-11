@@ -127,7 +127,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument*)
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
         pPage = nullptr;

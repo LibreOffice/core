@@ -92,7 +92,7 @@ ScVbaMenus::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ 
 {
     uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     if( xCommandBarControl->getType() != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return cpo::uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
 }
 

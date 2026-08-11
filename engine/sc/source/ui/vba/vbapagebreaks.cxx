@@ -48,7 +48,7 @@ public:
     {
     }
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getAPIStartofRange( const uno::Reference< excel::XRange >& xRange )
     {
         if( m_bColumn )
@@ -87,7 +87,7 @@ public:
     /// @throws uno::RuntimeException
     sheet::TablePageBreakData getTablePageBreakData( sal_Int32 nAPIItemIndex );
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any Add( const cpo::uno::Any& Before );
 
     // XIndexAccess

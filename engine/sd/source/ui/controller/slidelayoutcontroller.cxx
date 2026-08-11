@@ -280,7 +280,7 @@ void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
 }
 
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 static OUString SlideLayoutController_getImplementationName()
 {
     return u"com.sun.star.comp.sd.SlideLayoutController"_ustr;
@@ -293,7 +293,7 @@ static Sequence< OUString >  SlideLayoutController_getSupportedServiceNames()
     return aSNS;
 }
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 static OUString InsertSlideController_getImplementationName()
 {
     return u"com.sun.star.comp.sd.InsertSlideController"_ustr;

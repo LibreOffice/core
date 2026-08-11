@@ -104,7 +104,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException(u"Cannot create tempfile."_ustr);
+        throw cpo::uno::RuntimeException(u"Cannot create tempfile."_ustr);
 
     return aResult;
 }
@@ -141,7 +141,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
             KillFile_Impl( aResult, xContext );
             throw;
         }
-        catch( const uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             KillFile_Impl( aResult, xContext );
             throw;
@@ -173,7 +173,7 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
         xTempFile->setRemoveFile( false );
         aResult = xTempFile->getUri();
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         throw;
     }
@@ -278,11 +278,11 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
 {
     // TODO/LATER: Actually this should be done by a centralized component ( may be a graphical filter )
     if ( !m_xContext.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XInputStream > xInStream = xStream->getInputStream();
     if ( !xInStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
     xSeek->seek( 0 );
@@ -340,7 +340,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         uno::Reference < io::XOutputStream > xResultOut = xResult->getOutputStream();
         uno::Reference < io::XInputStream > xResultIn = xResult->getInputStream();
         if ( !xResultOut.is() || !xResultIn.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         xSeek->seek( nHeaderOffset ); // header size for these formats
         ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xResultOut );
@@ -362,7 +362,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!" );
 
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
                                      cpo::uno::Any(true) }; // do not create copy
@@ -389,7 +389,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // TODO/LATER: might need to be extended in future (actually makes sense only for SO7 format)
     uno::Reference< io::XInputStream > xInCacheStream = xCachedVisualRepresentation->getInputStream();
     if ( !xInCacheStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // write 0xFFFFFFFF at the beginning
     cpo::uno::Sequence< sal_Int8 > aData( 4 );
@@ -502,7 +502,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
 {
     OSL_ENSURE( xTargetStream.is(), "Invalid argument!" );
     if ( !xTargetStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
                                      cpo::uno::Any(true) }; // do not create copy
@@ -972,7 +972,7 @@ void OleEmbeddedObject::CreateOleComponent_Impl(
             catch (const sal::systools::ComError& e)
             {
                 // Callers expect a UNO exception where an in-process server cannot be instantiated
-                throw uno::RuntimeException(o3tl::runtimeToOUString(e.what()));
+                throw cpo::uno::RuntimeException(o3tl::runtimeToOUString(e.what()));
             }
         }
 
@@ -990,7 +990,7 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl(
     if ( !m_pOleComponent )
     {
         if ( !m_xObjectStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         CreateOleComponent_Impl( pOleComponent );
 
@@ -999,7 +999,7 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl(
 
         GetTempURL_Impl();
         if ( m_aTempURL.isEmpty() )
-            throw uno::RuntimeException(); // TODO
+            throw cpo::uno::RuntimeException(); // TODO
 
         m_pOleComponent->LoadEmbeddedObject( m_aTempURL );
     }
@@ -1011,7 +1011,7 @@ void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOle
     if ( !m_pOleComponent )
     {
         if ( !m_xObjectStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         CreateOleComponent_Impl( pOleComponent );
 
@@ -1025,7 +1025,7 @@ void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOle
 uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 {
     if ( !m_xObjectStream.is() )
-        throw uno::RuntimeException(); //TODO:
+        throw cpo::uno::RuntimeException(); //TODO:
 
     uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
     if ( !xOutStream.is() )
@@ -1047,7 +1047,7 @@ void OleEmbeddedObject::StoreObjectToStream(uno::Reference<io::XOutputStream> co
 
     // now all the changes should be in temporary location
     if ( m_aTempURL.isEmpty() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // open temporary file for reading
     uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
@@ -1576,7 +1576,7 @@ void OleEmbeddedObject::saveCompleted( bool bUseNew )
 
     OSL_ENSURE( m_xNewObjectStream.is() && m_xNewParentStorage.is() , "Internal object information is broken!" );
     if ( !m_xNewObjectStream.is() || !m_xNewParentStorage.is() )
-        throw uno::RuntimeException(); // TODO: broken internal information
+        throw cpo::uno::RuntimeException(); // TODO: broken internal information
 
     if ( bUseNew )
     {

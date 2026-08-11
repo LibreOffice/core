@@ -165,12 +165,12 @@ public final class Protocol_Test {
         // send an exception as reply
         iReceiver.writeReply(
             true, new ThreadId(new byte[] { 0, 1 }),
-            new com.sun.star.uno.RuntimeException("test the exception"));
+            new cpo.uno.RuntimeException("test the exception"));
         Message iMessage = iSender.readMessage();
 
         Object result = iMessage.getResult();
 
-        assertTrue(result instanceof com.sun.star.uno.RuntimeException);
+        assertTrue(result instanceof cpo.uno.RuntimeException);
     }
 
     public void testCallWithIn_Out_InOut_Paramters_and_result(

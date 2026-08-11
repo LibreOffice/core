@@ -84,15 +84,15 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
 
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their own Shapes (e.g. Controls).
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static rtl::Reference<SvxShape> CreateShapeByTypeAndInventor( SdrObjKind nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
 
     // The following method is called if a SvxShape object is to be created.
     // Derived classes can create a derivation or an SvxShape aggregating object.
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )

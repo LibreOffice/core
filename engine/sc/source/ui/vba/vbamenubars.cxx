@@ -96,7 +96,7 @@ ScVbaMenuBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2
         return cpo::uno::Any( xMenuBar );
     }
 
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 // XHelperInterface

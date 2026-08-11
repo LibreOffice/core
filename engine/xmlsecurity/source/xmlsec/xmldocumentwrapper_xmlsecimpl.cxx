@@ -373,7 +373,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const uno::Reference< cs
             = dynamic_cast<XMLElementWrapper_XmlSecImpl*>(xXMLElement.get());
 
         if( pElement == nullptr ) {
-            throw uno::RuntimeException() ;
+            throw cpo::uno::RuntimeException() ;
         }
 
         rc = pElement->getNativeElement();
@@ -446,7 +446,7 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
                 removeNode(pChild);
                 break;
             default:
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
 
             pChild = pNextSibling;
@@ -745,7 +745,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
             sendNode(xHandler, xEventKeeperHandler, m_pCurrentElement);
             break;
         default:
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
 
         if (xSAXEventKeeper->isBlocking())

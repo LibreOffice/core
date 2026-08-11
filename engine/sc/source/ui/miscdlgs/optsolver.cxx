@@ -1132,7 +1132,7 @@ void ScOptSolverDlg::CallSolver()
         xSolver->solve();
         bSuccess = xSolver->getSuccess();
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         bEngineError = true;
     }

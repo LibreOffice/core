@@ -4376,18 +4376,18 @@ void ScModelObj::disableAutomaticDeviceSelection()
 void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
 {
     if(nPlatform < 0 || nDevice < 0)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
 #if !HAVE_FEATURE_OPENCL
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 #else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
     if(o3tl::make_unsigned(nPlatform) >= aPlatformInfo.size())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if(o3tl::make_unsigned(nDevice) >= aPlatformInfo[nPlatform].maDevices.size())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     OUString aDeviceString = aPlatformInfo[nPlatform].maVendor + " " + aPlatformInfo[nPlatform].maDevices[nDevice].maName;
     sc::FormulaGroupInterpreter::switchOpenCLDevice(aDeviceString, false);
@@ -4450,7 +4450,7 @@ cpo::uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatfor
 
 namespace {
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 void setOpcodeSubsetTest(bool bFlag)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -4647,7 +4647,7 @@ void SAL_CALL ScTableSheetsObj::insertNewByName( const OUString& aName, sal_Int1
         bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName, true, true );
     }
     if (!bDone)
-        throw uno::RuntimeException(u"ScTableSheetsObj::insertNewByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
+        throw cpo::uno::RuntimeException(u"ScTableSheetsObj::insertNewByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
 }
 
 void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDestination )
@@ -4661,7 +4661,7 @@ void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDe
             bDone = pDocShell->MoveTable( nSource, nDestination, false, true );
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
@@ -4689,7 +4689,7 @@ void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
         }
     }
     if (!bDone)
-        throw uno::RuntimeException(u"ScTableSheetsObj::copyByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
+        throw cpo::uno::RuntimeException(u"ScTableSheetsObj::copyByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
 }
 
 void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
@@ -4734,7 +4734,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const cpo::
         if (bIllArg)
             throw lang::IllegalArgumentException();
         else
-            throw uno::RuntimeException();      // ElementExistException is handled above
+            throw cpo::uno::RuntimeException();      // ElementExistException is handled above
     }
 }
 
@@ -4782,7 +4782,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const cpo:
         if (bIllArg)
             throw lang::IllegalArgumentException();
         else
-            throw uno::RuntimeException();      // NoSuchElementException is handled above
+            throw cpo::uno::RuntimeException();      // NoSuchElementException is handled above
     }
 }
 
@@ -4799,7 +4799,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const OUString& aName )
     }
 
     if (!bDone)
-        throw uno::RuntimeException();      // NoSuchElementException is handled above
+        throw cpo::uno::RuntimeException();      // NoSuchElementException is handled above
 }
 
 sal_Int32 ScTableSheetsObj::importSheet(
@@ -4811,7 +4811,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
 
     // Source document docShell
     if ( !xDocSrc.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     ScModelObj* pObj = comphelper::getFromUnoTunnel<ScModelObj>(xDocSrc);
     ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
 
@@ -5036,7 +5036,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
         }
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
@@ -5055,7 +5055,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
         }
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 // XEnumerationAccess
@@ -5147,7 +5147,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(nStartCol,nEndCol));
     ScDocFunc& rFunc = pDocShell->GetDocFunc();
@@ -5190,7 +5190,7 @@ cpo::uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aPro
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     cpo::uno::Any aAny;
@@ -5285,7 +5285,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
         }
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
@@ -5301,7 +5301,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
         bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Rows, true );
     }
     if (!bDone)
-        throw uno::RuntimeException();      // no other exceptions specified
+        throw cpo::uno::RuntimeException();      // no other exceptions specified
 }
 
 // XEnumerationAccess
@@ -5360,7 +5360,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocFunc& rFunc = pDocShell->GetDocFunc();
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -5462,7 +5462,7 @@ cpo::uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aProper
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     cpo::uno::Any aAny;

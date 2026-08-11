@@ -236,7 +236,7 @@ struct OStorage_Impl
     /// @throws css::container::NoSuchElementException
     /// @throws css::io::IOException
     /// @throws css::embed::StorageWrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void CloneStreamElement(
                     const OUString& aStreamName,
                     bool bPassProvided,

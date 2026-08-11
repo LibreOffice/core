@@ -121,7 +121,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
         if (anyEx.hasValue())
             throw css::lang::WrappedTargetRuntimeException( u""_ustr, nullptr, anyEx );
         else
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
 
     uno::Reference< embed::XStorage > xTempStorage(
@@ -194,7 +194,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
 {
     uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(context)->openFileRead( aURL );
     if ( !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xInputStream;
 }

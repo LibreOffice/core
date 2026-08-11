@@ -82,7 +82,7 @@ OUString removeFragment(OUString const & uri) {
     @return TRUE if the stream could be added successfully.
             Note: If FALSE is returned, the error was already handled inside!
 
-    @throw  [css::uno::RuntimeException]
+    @throw  [cpo::uno::RuntimeException]
             if the MediaDescriptor seems to be invalid!
  */
 bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, const OUString& sURL,
@@ -123,7 +123,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         aContent = ucbhelper::Content(sURL, xCommandEnv, comphelper::getProcessComponentContext());
         xContent = aContent.get();
     }
-    catch (const css::uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -163,7 +163,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
             if (xStream.is())
                 xInputStream = xStream->getInputStream();
         }
-        catch (const css::uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -216,7 +216,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
                     return false; // the document is explicitly requested with WRITABLE mode
             }
         }
-        catch (const css::uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -237,7 +237,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
             else
                 xInputStream = aContent.openStreamNoLock();
         }
-        catch (const css::uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -273,7 +273,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
     @return TRUE if the stream could be added successfully.
             Note: If FALSE is returned, the error was already handled inside!
 
-    @throw  [css::uno::RuntimeException]
+    @throw  [cpo::uno::RuntimeException]
             if the MediaDescriptor seems to be invalid!
 
     @throw  [css::lang::IllegalArgumentException]
@@ -448,7 +448,7 @@ bool isStreamReadOnly(const comphelper::SequenceAsHashMap& rMediaDescriptor)
             }
         }
     }
-    catch(const css::uno::RuntimeException& )
+    catch(const cpo::uno::RuntimeException& )
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

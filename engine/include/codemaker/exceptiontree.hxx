@@ -68,7 +68,7 @@ private:
    from the given set S, the hierarchy from cpo.uno.Exception to the
    first supertype E' of E which is itself a member of S is represented (i.e.,
    subtypes that are hidden by supertypes are pruned from the hierarchy).  The
-   exception com.sun.star.uno.RuntimeException and its subtypes are pruned
+   exception cpo.uno.RuntimeException and its subtypes are pruned
    completely from the hierarchy.  Each node of the hierarchy is represented by
    an instance of ExceptionTreeNode, where `name` gives the name of the UNO
    exception type, `present` is true iff the given exception type is a member of

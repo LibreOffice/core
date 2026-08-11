@@ -35,7 +35,7 @@ private:
     sal_Int32 mnIndex;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaColumn( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nIndex );
     virtual ~SwVbaColumn() override;
 
@@ -44,7 +44,7 @@ public:
     virtual void SAL_CALL setWidth( sal_Int32 _width ) override;
     virtual void SAL_CALL Select(  ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void SelectColumn( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn );
 
     // XHelperInterface

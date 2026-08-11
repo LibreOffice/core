@@ -37,7 +37,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XCharacters > ScVbaButtonCh
 class ScVbaButtonCharacters : public ScVbaButtonCharacters_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit ScVbaButtonCharacters(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -64,9 +64,9 @@ public:
     VBAHELPER_DECL_XHELPERINTERFACE
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     OUString getFullString() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setFullString( const OUString& rString );
 
 private:
@@ -82,7 +82,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XSheetObject > ScVbaSheetOb
 class ScVbaSheetObjectBase : public ScVbaSheetObject_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit ScVbaSheetObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -107,7 +107,7 @@ public:
 
     /** Sets default properties after a new object has been created.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void setDefaultProperties( sal_Int32 nIndex );
 
@@ -116,7 +116,7 @@ protected:
     virtual OUString implGetBaseName() const = 0;
     /** Derived classes set default properties for new drawing objects.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual void implSetDefaultProperties();
 
@@ -132,7 +132,7 @@ typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectBase, ov::excel::XControl
 class ScVbaControlObjectBase : public ScVbaControlObject_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit ScVbaControlObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -156,7 +156,7 @@ public:
     void NotifyMacroEventRead();
 
 protected:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getModelIndexInForm() const;
 
 protected:
@@ -170,7 +170,7 @@ typedef ::cppu::ImplInheritanceHelper< ScVbaControlObjectBase, ov::excel::XButto
 class ScVbaButton : public ScVbaButton_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit ScVbaButton(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,

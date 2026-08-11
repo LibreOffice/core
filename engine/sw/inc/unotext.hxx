@@ -58,7 +58,7 @@ private:
             css::uno::Reference< css::text::XTextRange > & xRange,
             SwPaM const & rPam);
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual bool CheckForOwnMemberMeta(
             const SwPaM & rPam, const bool bAbsorb);
     bool CheckForOwnMember(const SwPaM & rPaM);

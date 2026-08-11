@@ -707,7 +707,7 @@ void ChildrenManagerImpl::impl_dispose()
             xSelectionSupplier->removeSelectionChangeListener(this);
         }
     }
-    catch( uno::RuntimeException&)
+    catch( cpo::uno::RuntimeException&)
     {}
 
     try
@@ -716,7 +716,7 @@ void ChildrenManagerImpl::impl_dispose()
             xController->removeEventListener(
                 static_cast<document::XEventListener*>(this));
     }
-    catch( uno::RuntimeException&)
+    catch( cpo::uno::RuntimeException&)
     {}
 
     maShapeTreeInfo.SetController (nullptr);
@@ -729,7 +729,7 @@ void ChildrenManagerImpl::impl_dispose()
                 static_cast<document::XEventListener*>(this));
         maShapeTreeInfo.SetModelBroadcaster (nullptr);
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {}
 
     ClearAccessibleShapeList ();

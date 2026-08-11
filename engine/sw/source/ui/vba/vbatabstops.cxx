@@ -79,7 +79,7 @@ private:
     sal_Int32 mnTabStops;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     TabStopCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
     {
     }

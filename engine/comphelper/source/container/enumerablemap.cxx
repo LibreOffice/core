@@ -49,7 +49,7 @@ namespace comphelper
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Type;

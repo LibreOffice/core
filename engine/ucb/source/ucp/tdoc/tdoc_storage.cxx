@@ -72,7 +72,7 @@ StorageElementFactory::createTemporaryStorage()
         xStorage.set( xStorageFac->createInstance(), uno::UNO_QUERY );
 
     if ( !xStorage.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xStorage;
 }
@@ -419,7 +419,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                 OSL_FAIL(
                     "Bug! Value of property OpenMode has wrong type!" );
 
-                throw uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                         u"Bug! Value of property OpenMode has wrong type!"_ustr );
             }
         }

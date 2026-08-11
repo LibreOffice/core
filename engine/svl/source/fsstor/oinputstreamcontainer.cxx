@@ -98,7 +98,7 @@ sal_Int32 OFSInputStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aD
         throw lang::DisposedException();
 
     if ( !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
@@ -111,7 +111,7 @@ sal_Int32 OFSInputStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >
         throw lang::DisposedException();
 
     if ( !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
@@ -124,7 +124,7 @@ void OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
         throw lang::DisposedException();
 
     if ( !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xInputStream->skipBytes( nBytesToSkip );
 }
@@ -137,7 +137,7 @@ sal_Int32 OFSInputStreamContainer::available(  )
         throw lang::DisposedException();
 
     if ( !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xInputStream->available();
 }
@@ -151,7 +151,7 @@ void OFSInputStreamContainer::closeInput(  )
             throw lang::DisposedException();
 
         if ( !m_xInputStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
     dispose();
 }
@@ -187,7 +187,7 @@ void OFSInputStreamContainer::seek( sal_Int64 location )
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xSeekable->seek( location );
 }
@@ -200,7 +200,7 @@ sal_Int64 OFSInputStreamContainer::getPosition()
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getPosition();
 }
@@ -213,7 +213,7 @@ sal_Int64 OFSInputStreamContainer::getLength()
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_xSeekable->getLength();
 }
@@ -226,7 +226,7 @@ void OFSInputStreamContainer::dispose(  )
         return;
 
     if ( !m_xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     m_xInputStream->closeInput();
 

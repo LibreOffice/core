@@ -476,7 +476,7 @@ cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sa
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( !pFuncList )
-        throw uno::RuntimeException();                  // should not happen
+        throw cpo::uno::RuntimeException();                  // should not happen
 
     sal_uInt16 nCount = static_cast<sal_uInt16>(pFuncList->GetCount());
     for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
@@ -500,7 +500,7 @@ cpo::uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( !pFuncList )
-        throw uno::RuntimeException();                  // should not happen
+        throw cpo::uno::RuntimeException();                  // should not happen
 
     sal_uInt16 nCount = static_cast<sal_uInt16>(pFuncList->GetCount());
     for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
@@ -535,7 +535,7 @@ cpo::uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( !pFuncList )
-        throw uno::RuntimeException();                  // should not happen
+        throw cpo::uno::RuntimeException();                  // should not happen
 
     if ( nIndex >= 0 && o3tl::make_unsigned(nIndex) < pFuncList->GetCount() )
     {

@@ -152,7 +152,7 @@ private:
     /// check whether object is live, and throw suitable exception if not
     /// (to be used be API methods before acting on the object)
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void liveCheck();
 
 protected:

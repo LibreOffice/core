@@ -35,7 +35,7 @@
 namespace toolkit
 {
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::FontDescriptor;

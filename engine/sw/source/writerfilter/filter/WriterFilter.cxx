@@ -139,7 +139,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
             xIfc.set(xMSF->createInstance(u"com.sun.star.comp.Writer.DocxExport"_ustr),
                      uno::UNO_SET_THROW);
         }
-        catch (uno::RuntimeException&)
+        catch (cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -222,7 +222,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
             throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), cpo::uno::Any(wfe));
         }
-        catch (uno::RuntimeException const&)
+        catch (cpo::uno::RuntimeException const&)
         {
             throw;
         }

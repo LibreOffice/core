@@ -3246,7 +3246,7 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
             {
                 xCursor->gotoRange(xPrevField->getAnchor(), true);
             }
-            catch (const uno::RuntimeException&)
+            catch (const cpo::uno::RuntimeException&)
             {
                 // Losing the start of the anchor is better than not opening the document at
                 // all.

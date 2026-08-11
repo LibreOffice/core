@@ -585,7 +585,7 @@ public class _XPropertySet {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             System.out.println("'" + name + "' throws exception '" + e + "'");
             e.printStackTrace();
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             System.out.println("'" + name + "' throws exception '" + e + "'");
             e.printStackTrace();
         } catch (java.lang.ArrayIndexOutOfBoundsException e) {

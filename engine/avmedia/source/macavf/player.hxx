@@ -46,9 +46,9 @@ public:
     virtual double getDuration() override;
     virtual void setMediaTime( double fTime ) override;
     virtual double getMediaTime() override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void setStopTime( double fTime );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual double getStopTime();
     virtual void setPlaybackLoop( bool bSet ) override;
     virtual bool isPlaybackLoop() override;

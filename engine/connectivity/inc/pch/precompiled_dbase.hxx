@@ -132,7 +132,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XCancellable.hpp>

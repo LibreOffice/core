@@ -71,7 +71,7 @@ protected:
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void AttachImpl(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
             const sal_uInt16 nWhich);
@@ -104,7 +104,7 @@ public:
     css::uno::Reference< SwXText > const & GetParentText() const;
 
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb);
 
     // MetadatableMixin

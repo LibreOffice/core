@@ -84,19 +84,19 @@ class LinguProps :
 
     void    launchEvent( const css::beans::PropertyChangeEvent &rEvt ) const;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool getPropertyBool(const OUString& aPropertyName);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int16 getPropertyInt16(const OUString& aPropertyName);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::lang::Locale getPropertyLocale(const OUString& aPropertyName);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, bool p1)
         { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, sal_Int16 p1)
         { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, css::lang::Locale p1)
         { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
 

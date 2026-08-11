@@ -452,7 +452,7 @@ bool setTitle(
             return false;
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -830,7 +830,7 @@ uno::Reference< io::XInputStream > getInputStream(
         xCommandProcessorS->execute( aOpenCommand, 0, rContext.xEnv );
         xInputStream = xSink->getInputStream();
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -865,7 +865,7 @@ uno::Reference< io::XInputStream > getInputStream(
 
             xInputStream.set( xOutputStream, uno::UNO_QUERY );
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }
@@ -904,7 +904,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
         if ( xSet.is() )
             xResultSet = xSet->getStaticResultSet();
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }
@@ -1053,7 +1053,7 @@ void handleNameClashRename(
             // Success!
             bContinue = false;
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }

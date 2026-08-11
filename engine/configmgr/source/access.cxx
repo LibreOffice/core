@@ -60,7 +60,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -289,7 +289,7 @@ void Access::dispose() {
         osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (getParentAccess().is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr dispose inappropriate Access"_ustr,
                 getXWeak());
         }
@@ -311,7 +311,7 @@ void Access::addEventListener(
         osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"null listener"_ustr, getXWeak());
         }
         if (!disposed_) {
@@ -355,7 +355,7 @@ cpo::uno::Type Access::getElementType() {
         return cppu::UnoType<void>::get(); //TODO: correct?
     default:
         assert(false);
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"this cannot happen"_ustr, getXWeak());
     }
 }
@@ -565,7 +565,7 @@ void Access::addContainerListener(
         osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"null listener"_ustr, getXWeak());
         }
         if (!disposed_) {
@@ -703,7 +703,7 @@ void Access::setName(OUString const & aName)
                             !(other.is() && other->isFinalized()))
                         {
                             if (!isValidName(aName, true)) {
-                                throw css::uno::RuntimeException(
+                                throw cpo::uno::RuntimeException(
                                     "invalid element name " + aName);
                             }
                             rtl::Reference< RootAccess > root(getRootAccess());
@@ -733,7 +733,7 @@ void Access::setName(OUString const & aName)
         case Node::KIND_LOCALIZED_PROPERTY:
             // renaming a property could only work for an extension property,
             // but a localized property is never an extension property
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr setName inappropriate node"_ustr,
                 getXWeak());
         default:
@@ -767,7 +767,7 @@ void Access::setPropertyValue(
     {
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr setPropertyValue on non-update access"_ustr,
                 getXWeak());
         }
@@ -802,7 +802,7 @@ void Access::addPropertyChangeListener(
     {
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"null listener"_ustr, getXWeak());
         }
         checkKnownProperty(aPropertyName);
@@ -847,7 +847,7 @@ void Access::addVetoableChangeListener(
     {
         osl::MutexGuard g(*lock_);
         if (!aListener.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"null listener"_ustr, getXWeak());
         }
         checkKnownProperty(PropertyName);
@@ -893,7 +893,7 @@ void Access::setPropertyValues(
     {
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr setPropertyValues on non-update access"_ustr,
                 getXWeak());
         }
@@ -926,7 +926,7 @@ cpo::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
     for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i)
     {
         if (!getByNameFast(aPropertyNames[i], aValsRange[i]))
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr getPropertyValues inappropriate property name"_ustr,
                 getXWeak());
     }
@@ -943,7 +943,7 @@ void Access::addPropertiesChangeListener(
     {
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"null listener"_ustr, getXWeak());
         }
         if (!disposed_) {
@@ -1002,7 +1002,7 @@ void Access::setHierarchicalPropertyValue(
     {
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr setHierarchicalPropertyName on non-update access"_ustr,
                 getXWeak());
         }
@@ -1044,7 +1044,7 @@ void Access::setHierarchicalPropertyValues(
     {
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 u"configmgr setPropertyValues on non-update access"_ustr,
                 getXWeak());
         }
@@ -1425,7 +1425,7 @@ void Access::checkLocalizedPropertyAccess() {
     if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY &&
         !Components::allLocales(getRootAccess()->getLocale()))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"configmgr Access to specialized LocalizedPropertyNode"_ustr,
             getXWeak());
     }

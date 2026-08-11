@@ -25,7 +25,7 @@
 #include <typeinfo>
 
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
@@ -394,11 +394,11 @@ namespace
       } catch (cpo::uno::Exception &) {
           throw;
       } catch (std::exception & e) {
-          throw css::uno::RuntimeException(
+          throw cpo::uno::RuntimeException(
               "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name()) + ": "
               + o3tl::runtimeToOUString(e.what()));
       } catch (...) {
-          throw css::uno::RuntimeException("C++ code threw unknown exception");
+          throw cpo::uno::RuntimeException("C++ code threw unknown exception");
       }
       // NO exception occurred...
       *ppUnoExc = 0;
@@ -576,7 +576,7 @@ void unoInterfaceProxyDispatch(
       }
     default:
       {
-        ::com::sun::star::uno::RuntimeException aExc(
+        ::cpo::uno::RuntimeException aExc(
             "illegal member type description!",
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 

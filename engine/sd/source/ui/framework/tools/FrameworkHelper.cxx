@@ -387,7 +387,7 @@ rtl::Reference<AbstractView> FrameworkHelper::GetView (const rtl::Reference<Reso
     {
         Dispose();
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
     }
 
@@ -418,7 +418,7 @@ rtl::Reference<ResourceId> FrameworkHelper::RequestView (
         Dispose();
         xViewId = nullptr;
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         xViewId = nullptr;
     }
@@ -508,7 +508,7 @@ void FrameworkHelper::HandleModeChangeSlot (
     try
     {
         if ( ! mxConfigurationController.is())
-            throw RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         rtl::Reference<ResourceId> xPaneId (
             new ::sd::framework::ResourceId(framework::FrameworkHelper::msCenterPaneURL));
@@ -566,7 +566,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             updateEditMode(xView, eEMode, false);
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }
@@ -678,7 +678,7 @@ void FrameworkHelper::UpdateConfiguration()
     {
         Dispose();
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }
@@ -768,7 +768,7 @@ CallbackCaller::CallbackCaller (
             }
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }
@@ -785,7 +785,7 @@ void CallbackCaller::disposing(std::unique_lock<std::mutex>&)
             xCC->removeConfigurationChangeListener(this);
         }
     }
-    catch (RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }

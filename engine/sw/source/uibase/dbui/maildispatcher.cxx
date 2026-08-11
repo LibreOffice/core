@@ -78,7 +78,7 @@ MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     m_aRunCondition.reset();
 
     if (!create())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // wait until the mail dispatcher thread is really alive
     // and has acquired a reference to this instance of the
@@ -186,7 +186,7 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
         std::for_each( aClonedListenerVector.begin(), aClonedListenerVector.end(),
                        MailDeliveryErrorNotifier(this, message, ex.Message) );
     }
-    catch (const uno::RuntimeException& ex)
+    catch (const cpo::uno::RuntimeException& ex)
     {
         MailDispatcherListenerContainer_t aClonedListenerVector(cloneListener());
         std::for_each( aClonedListenerVector.begin(), aClonedListenerVector.end(),

@@ -23,7 +23,7 @@
 #include <uno/environment.h>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -191,7 +191,7 @@ Reference<XComponentContext> raise_uno_process(
         for (const auto& arg : args) {
             sMsg.append(" " + arg);
         }
-        throw css::uno::RuntimeException(sMsg.makeStringAndClear());
+        throw cpo::uno::RuntimeException(sMsg.makeStringAndClear());
     }
     try {
         // from desktop/source/deployment/misc/dp_misc.cxx
@@ -247,7 +247,7 @@ class JavaComponentLoader
     /** The returned Reference contains a null pointer if the office is not configured
         to run java.
 
-        @exception css::uno::RuntimeException
+        @exception cpo::uno::RuntimeException
         If the Java implementation of the loader could not be obtained, for reasons other
         then that java was not configured the RuntimeException is thrown.
      */

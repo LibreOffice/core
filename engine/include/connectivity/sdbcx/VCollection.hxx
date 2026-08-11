@@ -94,7 +94,7 @@ namespace connectivity::sdbcx
         bool                                    m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
 
         // the implementing class should refresh their elements
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void impl_refresh() = 0;
 
         // will be called when an object was requested by one of the accessing methods like getByIndex

@@ -123,7 +123,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             auto aIter = std::find_if(rMasterPageList.begin(), rMasterPageList.end(),
                 [&xMasterPage](const MasterPageEntity& rEntity) { return rEntity.xMasterPage == xMasterPage; });
             if ( aIter == rMasterPageList.end() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             aIter->bUsed = true;
         }
     }

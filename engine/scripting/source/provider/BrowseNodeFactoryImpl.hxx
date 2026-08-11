@@ -59,7 +59,7 @@ public:
     virtual css::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
         createView( sal_Int16 viewType ) override;
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::script::browse::XBrowseNode >
         getOrganizerHierarchy() const;
 };

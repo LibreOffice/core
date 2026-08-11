@@ -475,7 +475,7 @@ namespace cmis
                                     ucb::IOErrorCode_ABORT,
                                     cpo::uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv );
-                throw uno::RuntimeException( );
+                throw cpo::uno::RuntimeException( );
             }
         }
     }
@@ -541,7 +541,7 @@ namespace cmis
             if ( !getSession( xEnv ) )
                 return m_pObject;
         }
-        catch ( uno::RuntimeException& )
+        catch ( cpo::uno::RuntimeException& )
         {
             return m_pObject;
         }
@@ -1336,7 +1336,7 @@ namespace cmis
         if ( it == m_pObjectProps.end( ) )
         {
             ucbhelper::cancelCommandExecution( cpo::uno::Any
-                ( uno::RuntimeException( u"Missing name property"_ustr,
+                ( cpo::uno::RuntimeException( u"Missing name property"_ustr,
                     getXWeak() ) ),
                 xEnv );
         }
@@ -1363,7 +1363,7 @@ namespace cmis
             if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
             {
                 ucbhelper::cancelCommandExecution( cpo::uno::Any
-                    ( uno::RuntimeException( u"Can't change a folder into a document and vice-versa."_ustr,
+                    ( cpo::uno::RuntimeException( u"Can't change a folder into a document and vice-versa."_ustr,
                         getXWeak() ) ),
                     xEnv );
             }
@@ -1382,7 +1382,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( cpo::uno::Any
-                        ( uno::RuntimeException( u"Error when setting document content"_ustr,
+                        ( cpo::uno::RuntimeException( u"Error when setting document content"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1404,7 +1404,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( cpo::uno::Any
-                        ( uno::RuntimeException( u"Error when creating folder"_ustr,
+                        ( cpo::uno::RuntimeException( u"Error when creating folder"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1422,7 +1422,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( cpo::uno::Any
-                        ( uno::RuntimeException( u"Error when creating document"_ustr,
+                        ( cpo::uno::RuntimeException( u"Error when creating document"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1770,7 +1770,7 @@ namespace cmis
             else
                 sRet = CMIS_FILE_TYPE;
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -1974,7 +1974,7 @@ namespace cmis
                 return s_aFolderCollection.getTypes();
             }
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -2036,7 +2036,7 @@ namespace cmis
                 };
             }
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }

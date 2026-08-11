@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module lang {
     specify the appropriate exceptions (so using this exception
     should in general be avoided).
  */
-published exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException
+published exception WrappedTargetRuntimeException: ::cpo::uno::RuntimeException
 {
     /** The exception is thrown by the target.
      */

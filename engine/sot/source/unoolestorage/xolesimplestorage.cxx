@@ -91,7 +91,7 @@ OLESimpleStorage::OLESimpleStorage(
         uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
         uno::Reference< io::XOutputStream > xTempOut = xTempFile->getOutputStream();
         if ( !xTempOut.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if ( xInputStream.is() )
         {
@@ -120,7 +120,7 @@ OLESimpleStorage::OLESimpleStorage(
             xSeek->seek( 0 );
             uno::Reference< io::XInputStream > xInpStream = xStream->getInputStream();
             if ( !xInpStream.is() || !xStream->getOutputStream().is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             ::comphelper::OStorageHelper::CopyInputToOutput( xInpStream, xTempOut );
             xTempOut->flush();
@@ -162,7 +162,7 @@ void OLESimpleStorage::UpdateOriginal_Impl()
     uno::Reference< io::XInputStream > xTempInp = m_xTempStream->getInputStream();
     uno::Reference< io::XOutputStream > xOutputStream = m_xStream->getOutputStream();
     if ( !xTempInp.is() || !xOutputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XTruncate > xTrunc( xOutputStream, uno::UNO_QUERY_THROW );
     xTrunc->truncate();
@@ -176,7 +176,7 @@ void OLESimpleStorage::UpdateOriginal_Impl()
 void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const uno::Reference< io::XInputStream >& xInputStream )
 {
     if ( !pStorage || aName.isEmpty() || !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( pStorage->IsContained( aName ) )
         throw container::ElementExistException(); // TODO:
@@ -215,7 +215,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
 void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const uno::Reference< container::XNameAccess >& xNameAccess )
 {
     if ( !pStorage || aName.isEmpty() || !xNameAccess.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( pStorage->IsContained( aName ) )
         throw container::ElementExistException(); // TODO:
@@ -263,7 +263,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XInputStream > xInputStream;
@@ -284,9 +284,9 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::
         else if ( xNameAccess.is() )
             InsertNameAccessToStorage_Impl( m_pStorage.get(), aName, xNameAccess );
         else
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
     }
-    catch( uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         throw;
     }
@@ -312,7 +312,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw lang::WrappedTargetException(); // io::IOException(); // TODO
@@ -362,7 +362,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_pStorage->IsContained( aName ) )
         throw container::NoSuchElementException(); // TODO:
@@ -374,7 +374,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
     uno::Reference< io::XOutputStream > xOutputStream = xTempFile->getOutputStream();
     uno::Reference< io::XInputStream > xInputStream = xTempFile->getInputStream();
     if ( !xOutputStream.is() || !xInputStream.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_pStorage->IsStorage( aName ) )
     {
@@ -385,7 +385,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
         std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, false ); // do not close the original stream
         if ( !pStream )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         std::unique_ptr<BaseStorage> pNewStor(new Storage( *pStream, false ));
         bool bSuccess = ( pStrg->CopyTo( *pNewStor ) && pNewStor->Commit() &&
@@ -396,7 +396,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         pStream.reset();
 
         if ( !bSuccess )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference< container::XNameContainer > xResultNameContainer(
             css::embed::OLESimpleStorage::createFromInputStream(m_xContext, xInputStream, true),
@@ -435,7 +435,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
             xOutputStream->closeOutput();
             xSeekable->seek( 0 );
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             throw;
         }
@@ -463,7 +463,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SvStorageInfoList aList;
     m_pStorage->FillInfoList( &aList );
@@ -471,7 +471,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
     if ( m_pStorage->GetError() )
     {
         m_pStorage->ResetError();
-        throw uno::RuntimeException(); // TODO:
+        throw cpo::uno::RuntimeException(); // TODO:
     }
 
     cpo::uno::Sequence< OUString > aSeq( aList.size() );
@@ -491,14 +491,14 @@ bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bResult = m_pStorage->IsContained( aName );
 
     if ( m_pStorage->GetError() )
     {
         m_pStorage->ResetError();
-        throw uno::RuntimeException(); // TODO:
+        throw cpo::uno::RuntimeException(); // TODO:
     }
 
     return bResult;
@@ -524,7 +524,7 @@ bool SAL_CALL OLESimpleStorage::hasElements()
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SvStorageInfoList aList;
     m_pStorage->FillInfoList( &aList );
@@ -532,7 +532,7 @@ bool SAL_CALL OLESimpleStorage::hasElements()
     if ( m_pStorage->GetError() )
     {
         m_pStorage->ResetError();
-        throw uno::RuntimeException(); // TODO:
+        throw cpo::uno::RuntimeException(); // TODO:
     }
 
     return !aList.empty();
@@ -600,7 +600,7 @@ void SAL_CALL OLESimpleStorage::commit()
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw io::IOException(); // TODO
@@ -623,7 +623,7 @@ void SAL_CALL OLESimpleStorage::revert()
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( !m_bNoTemporaryCopy && !m_xStream.is() )
         throw io::IOException(); // TODO
@@ -649,7 +649,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
         throw lang::DisposedException();
 
     if ( !m_pStorage )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pStorage->GetClassName().GetByteSequence();
 }

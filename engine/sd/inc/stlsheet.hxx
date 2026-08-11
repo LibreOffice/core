@@ -135,7 +135,7 @@ public:
     void notifyModifyListener();
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static const SfxItemPropertyMapEntry* getPropertyMapEntry( std::u16string_view rPropertyName );
 
     void setPropertyValue_Impl(const OUString& aPropertyName, const cpo::uno::Any& aValue);
@@ -144,7 +144,7 @@ private:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual             ~SdStyleSheet() override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void throwIfDisposed();
 
     void disposing();

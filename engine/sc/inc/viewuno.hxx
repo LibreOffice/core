@@ -185,9 +185,9 @@ public:
     // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
     void                    SheetChanged( bool bSameTabButMoved );
     bool                    IsMouseListening() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool                    MousePressed( const css::awt::MouseEvent& e );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool                    MouseReleased( const css::awt::MouseEvent& e );
 
     void                    RangeSelDone( const OUString& rText );

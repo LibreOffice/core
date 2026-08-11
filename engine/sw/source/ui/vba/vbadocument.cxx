@@ -159,7 +159,7 @@ SwVbaDocument::Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd )
     uno::Reference< text::XTextRange > xEnd;
 
     if( nStart > nEnd)
-       throw uno::RuntimeException();
+       throw cpo::uno::RuntimeException();
 
     if( nEnd != 0)
     {
@@ -396,7 +396,7 @@ SwVbaDocument::setAttachedTemplate( const cpo::uno::Any& _attachedtemplate )
     OUString sTemplate;
     if( !( _attachedtemplate >>= sTemplate ) )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     OUString aURL;
     INetURLObject aObj;
@@ -651,13 +651,13 @@ cpo::uno::Any SAL_CALL
 SwVbaDocument::invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     SAL_INFO("sw.vba", "** will barf " << aFunctionName );
-    throw uno::RuntimeException(); // unsupported operation
+    throw cpo::uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL
 SwVbaDocument::setValue( const OUString& /*aPropertyName*/, const cpo::uno::Any& /*aValue*/ )
 {
-    throw uno::RuntimeException(); // unsupported operation
+    throw cpo::uno::RuntimeException(); // unsupported operation
 }
 cpo::uno::Any SAL_CALL
 SwVbaDocument::getValue( const OUString& aPropertyName )

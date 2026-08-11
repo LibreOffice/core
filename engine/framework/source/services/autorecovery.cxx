@@ -585,7 +585,7 @@ private:
                 m_xCFG, open it on demand and cache it
                 afterwards.
 
-        @throw  [com.sun.star.uno.RuntimeException]
+        @throw  [cpo.uno.RuntimeException]
                 if config could not be opened successfully!
 
         @threadsafe
@@ -599,7 +599,7 @@ private:
                 - which time interval has to be used
                 - which recovery entries may already exists
 
-        @throw  [com.sun.star.uno.RuntimeException]
+        @throw  [cpo.uno.RuntimeException]
                 if config could not be opened or read successfully!
 
         @threadsafe
@@ -612,7 +612,7 @@ private:
                 Means: State and Timer interval.
                 E.g. the recovery list is not addressed here.
 
-        @throw  [com.sun.star.uno.RuntimeException]
+        @throw  [cpo.uno.RuntimeException]
                 if config could not be opened or read successfully!
 
         @threadsafe
@@ -649,7 +649,7 @@ private:
                 timer variables (e.g. AutoSaveEnabled, AutoSaveTimeIntervall,
                 TimerType etcpp.)
 
-        @throw  [com.sun.star.uno.RuntimeException]
+        @throw  [cpo.uno.RuntimeException]
                 if timer could not be stopped or started!
 
         @threadsafe
@@ -661,7 +661,7 @@ private:
         @descr  Double calls will be ignored - means we do
                 nothing here, if the timer is already disabled.
 
-        @throw  [com.sun.star.uno.RuntimeException]
+        @throw  [cpo.uno.RuntimeException]
                 if timer could not be stopped!
 
         @threadsafe
@@ -1175,7 +1175,7 @@ void CacheLockGuard::lock(bool bLockForAddRemoveVectorItems)
     if ( (m_rCacheLock > 0) && bLockForAddRemoveVectorItems )
     {
         OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."_ustr,
                 m_xOwner);
     }
@@ -1199,7 +1199,7 @@ void CacheLockGuard::unlock()
     if (m_rCacheLock < 0)
     {
         OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)"_ustr,
                 m_xOwner);
     }
@@ -1484,7 +1484,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             )
             implts_cleanUpWorkingEntry(aParams);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -1521,7 +1521,7 @@ void AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XSta
                                               const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
+        throw cpo::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -1549,7 +1549,7 @@ void AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::X
                                                  const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
+        throw cpo::uno::RuntimeException(u"Invalid listener reference."_ustr, static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
@@ -1876,7 +1876,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 {
     if (rInfo.AppModule.isEmpty())
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"Can not find out the default filter and its extension, if no application module is known!"_ustr,
                 static_cast< css::frame::XDispatch* >(this));
     }
@@ -2063,7 +2063,7 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
                 xModify->insertByName(sID, cpo::uno::Any(xSet));
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -3505,7 +3505,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
         rInfo.Document = xModel.get();
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }
@@ -3581,7 +3581,7 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
         {
             pIt.next()->statusChanged(aEvent);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             pIt.remove();
         }
@@ -4087,7 +4087,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             implts_registerDocument(xModel);
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
     {
         throw;
     }

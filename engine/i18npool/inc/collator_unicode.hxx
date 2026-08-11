@@ -49,11 +49,11 @@ public:
 
 
     // following 4 methods are implemented in collatorImpl.
-    sal_Int32 loadDefaultCollator( const css::lang::Locale&,  sal_Int32) override {throw css::uno::RuntimeException();}
+    sal_Int32 loadDefaultCollator( const css::lang::Locale&,  sal_Int32) override {throw cpo::uno::RuntimeException();}
     void loadCollatorAlgorithmWithEndUserOption( const OUString&, const css::lang::Locale&,
-        const cpo::uno::Sequence< sal_Int32 >&) override {throw css::uno::RuntimeException();}
-    cpo::uno::Sequence< OUString > listCollatorAlgorithms( const css::lang::Locale&) override {throw css::uno::RuntimeException();}
-    cpo::uno::Sequence< sal_Int32 > listCollatorOptions( const OUString& ) override {throw css::uno::RuntimeException();}
+        const cpo::uno::Sequence< sal_Int32 >&) override {throw cpo::uno::RuntimeException();}
+    cpo::uno::Sequence< OUString > listCollatorAlgorithms( const css::lang::Locale&) override {throw cpo::uno::RuntimeException();}
+    cpo::uno::Sequence< sal_Int32 > listCollatorOptions( const OUString& ) override {throw cpo::uno::RuntimeException();}
 
     //XServiceInfo
     virtual OUString getImplementationName() override;

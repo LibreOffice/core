@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module document {
 /** This exception is thrown in case the global filter configuration
     does not exists or contains corrupted data.
  */
-published exception CorruptedFilterConfigurationException : ::com::sun::star::uno::RuntimeException
+published exception CorruptedFilterConfigurationException : ::cpo::uno::RuntimeException
 {
     /** Instead of the message part of an exception, this value
         describe the type of corruption more in detail. */

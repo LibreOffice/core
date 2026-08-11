@@ -72,7 +72,7 @@ public:
 
     /// Called from the weak object if the reference count goes to zero.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void dispose();
 
 private:

@@ -36,7 +36,7 @@ private:
     bool bReplace;
 public:
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, css::uno::Reference< css::text::XSimpleText > xRange, const cpo::uno::Any& Start, const cpo::uno::Any& Length, bool bReplace = false  );
 
     // Attributes

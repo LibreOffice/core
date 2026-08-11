@@ -192,7 +192,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
             {
                 aIter.next()->notifyEvent( aEvent );
             }
-            catch( uno::RuntimeException const & )
+            catch( cpo::uno::RuntimeException const & )
             {
                 TOOLS_WARN_EXCEPTION("sw.a11y", "Runtime exception caught while notifying shape");
             }

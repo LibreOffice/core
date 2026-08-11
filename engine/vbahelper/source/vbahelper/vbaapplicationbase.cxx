@@ -95,7 +95,7 @@ public:
     void Start( const ::rtl::Reference< VbaApplicationBase >& xBase, const OUString& aFunction, double nFrom, double nTo )
     {
         if ( !xBase.is() || aFunction.isEmpty() )
-            throw uno::RuntimeException( u"Unexpected arguments!"_ustr );
+            throw cpo::uno::RuntimeException( u"Unexpected arguments!"_ustr );
 
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
@@ -348,7 +348,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const
     MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
     if( !aMacroInfo.mbFound )
     {
-        throw uno::RuntimeException( u"The macro doesn't exist"_ustr );
+        throw cpo::uno::RuntimeException( u"The macro doesn't exist"_ustr );
     }
 
     // handle the arguments
@@ -379,7 +379,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const
 void SAL_CALL VbaApplicationBase::OnTime( const cpo::uno::Any& aEarliestTime, const OUString& aFunction, const cpo::uno::Any& aLatestTime, const cpo::uno::Any& aSchedule )
 {
     if ( aFunction.isEmpty() )
-        throw uno::RuntimeException( u"Unexpected function name!"_ustr );
+        throw cpo::uno::RuntimeException( u"Unexpected function name!"_ustr );
 
     auto getTime = [](const cpo::uno::Any& aTime)
     {
@@ -387,7 +387,7 @@ void SAL_CALL VbaApplicationBase::OnTime( const cpo::uno::Any& aEarliestTime, co
             return nTime;
         if (css::bridge::oleautomation::Date date; aTime >>= date)
             return date.Value;
-        throw uno::RuntimeException(u"Invalid type of argument"_ustr);
+        throw cpo::uno::RuntimeException(u"Invalid type of argument"_ustr);
     };
 
     double nEarliestTime = getTime(aEarliestTime);

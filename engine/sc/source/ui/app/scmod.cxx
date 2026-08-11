@@ -532,7 +532,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext());
                 (void)xDialog->execute();
             }
-            catch( css::uno::RuntimeException& )
+            catch( cpo::uno::RuntimeException& )
             {
                 DBG_UNHANDLED_EXCEPTION("sc.ui");
             }

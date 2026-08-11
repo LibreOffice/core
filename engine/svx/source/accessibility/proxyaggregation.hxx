@@ -103,9 +103,9 @@ namespace accessibility
         );
 
         // XInterface and XTypeProvider
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  );
 
     private:
@@ -165,7 +165,7 @@ namespace accessibility
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void SAL_CALL dispose() = 0;
 
     private:

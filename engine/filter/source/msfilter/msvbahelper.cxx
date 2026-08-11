@@ -557,17 +557,17 @@ void VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rA
 {
     OSL_ENSURE( rArgs.getLength() > 1, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // first argument: document model
     mxModel.set( rArgs[ 0 ], uno::UNO_QUERY_THROW );
     mpObjShell = comphelper::getFromUnoTunnel<SfxObjectShell>(mxModel);
     if( !mpObjShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // second argument: VBA project name
     if( !(rArgs[ 1 ] >>= maProjectName) || (maProjectName.isEmpty()) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 // com.sun.star.script.vba.XVBAMacroResolver interface ------------------------
@@ -575,7 +575,7 @@ void VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rA
 OUString VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
 {
     if( !mpObjShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // the name may be enclosed in apostrophs
     OUString aMacroName( trimMacroName( rVBAMacroName ) );
@@ -606,7 +606,7 @@ OUString VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacro
 OUString VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& /*rScriptURL*/ )
 {
     OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 static bool getModifier( sal_Unicode c, sal_uInt16& mod )
@@ -642,7 +642,7 @@ static sal_uInt16 parseChar( sal_Unicode c )
     else if ( c == ' ' ) // special case
         nVclKey = KEY_SPACE;
     else // I guess we have a problem ( but not sure if locale specific keys might come into play here )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return nVclKey;
 }
 
@@ -713,7 +713,7 @@ awt::KeyEvent parseKeyEvent( std::u16string_view Key )
     else // key should be enclosed in '{}'
     {
         if ( sKeyCode.size() < 3 || sKeyCode[0] != '{' || sKeyCode[sKeyCode.size() - 1 ] != '}' )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         sKeyCode = sKeyCode.substr(1, sKeyCode.size() - 2 );
 
@@ -723,7 +723,7 @@ awt::KeyEvent parseKeyEvent( std::u16string_view Key )
         {
             auto it = s_KeyCodes.find(sKeyCode);
             if ( it == s_KeyCodes.end() ) // unknown or unsupported
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             nVclKey |= it->second;
         }
     }
@@ -745,11 +745,11 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         {
             pShell = comphelper::getFromUnoTunnel<SfxObjectShell>(rxModel);
             if ( !pShell )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
         MacroResolvedInfo aMacroInfo = resolveVBAMacro( pShell, aMacroName );
         if( !aMacroInfo.mbFound )
-            throw uno::RuntimeException( u"The procedure doesn't exist"_ustr );
+            throw cpo::uno::RuntimeException( u"The procedure doesn't exist"_ustr );
         MacroName = aMacroInfo.msResolvedMacro;
     }
     uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);

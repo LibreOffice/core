@@ -60,7 +60,7 @@ ScVbaListBox::getValue()
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= sSelection;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( getMultiSelect() )
-        throw uno::RuntimeException( u"Attribute use invalid."_ustr );
+        throw cpo::uno::RuntimeException( u"Attribute use invalid."_ustr );
     cpo::uno::Any aRet;
     if ( sSelection.hasElements() )
         aRet <<= sItems[ sSelection[ 0 ] ];
@@ -72,14 +72,14 @@ ScVbaListBox::setValue( const cpo::uno::Any& _value )
 {
     if( getMultiSelect() )
     {
-        throw uno::RuntimeException( u"Attribute use invalid."_ustr );
+        throw cpo::uno::RuntimeException( u"Attribute use invalid."_ustr );
     }
     OUString sValue = getAnyAsString( _value );
     cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     sal_Int16 nValue = static_cast<sal_Int16>(comphelper::findValue(sList, sValue));
     if( nValue == -1 )
-        throw uno::RuntimeException( u"Attribute use invalid."_ustr );
+        throw cpo::uno::RuntimeException( u"Attribute use invalid."_ustr );
 
     cpo::uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
     cpo::uno::Sequence< sal_Int16 > nOldSelectedIndices;
@@ -143,7 +143,7 @@ ScVbaListBox::Selected( sal_Int32 index )
     // the indices are but sal_Int16
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
-        throw uno::RuntimeException( u"Error Number."_ustr );
+        throw cpo::uno::RuntimeException( u"Error Number."_ustr );
     m_nIndex = nIndex;
     return cpo::uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
@@ -176,7 +176,7 @@ ScVbaListBox::setValueEvent( const cpo::uno::Any& value )
 {
     bool bValue = false;
     if( !(value >>= bValue) )
-        throw uno::RuntimeException( u"Invalid type. need boolean."_ustr );
+        throw cpo::uno::RuntimeException( u"Invalid type. need boolean."_ustr );
     cpo::uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );

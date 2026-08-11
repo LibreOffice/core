@@ -43,7 +43,7 @@ namespace dbtools::param
     using ::com::sun::star::sdbc::XParameters;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::XWeak;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XFastPropertySet;

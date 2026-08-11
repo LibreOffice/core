@@ -362,7 +362,7 @@ static NSString* getCurrentSelection()
                 {
                     aStr = xTextRange->getString();
                 }
-                catch (css::uno::RuntimeException &)
+                catch (cpo::uno::RuntimeException &)
                 {
                     TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
                 }
@@ -395,7 +395,7 @@ static NSString* getCurrentSelection()
         {
             aStr = xTextRange->getString();
         }
-        catch (css::uno::RuntimeException &)
+        catch (cpo::uno::RuntimeException &)
         {
             TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
         }

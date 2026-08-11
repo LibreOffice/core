@@ -195,7 +195,7 @@ embed::VisualRepresentation OCommonEmbeddedObject::getPreferredVisualRepresentat
                 cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
 
         if( !xTransferable->isDataFlavorSupported( aDataFlavor ))
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
         aVisualRepresentation.Flavor = std::move(aDataFlavor);
     }

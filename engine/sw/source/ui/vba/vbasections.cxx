@@ -178,7 +178,7 @@ SwVbaSections::PageSetup( )
         uno::Reference< word::XSection > xSection( m_xIndexAccess->getByIndex( 0 ), uno::UNO_QUERY_THROW );
         return xSection->PageSetup();
     }
-    throw uno::RuntimeException(u"There is no section"_ustr );
+    throw cpo::uno::RuntimeException(u"There is no section"_ustr );
 }
 
 // XEnumerationAccess

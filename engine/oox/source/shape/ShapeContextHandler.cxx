@@ -622,7 +622,7 @@ void ShapeContextHandler::setDrawPage(const css::uno::Reference< css::drawing::X
 void ShapeContextHandler::setModel(const css::uno::Reference< css::frame::XModel > & the_value)
 {
     if( !mxShapeFilterBase.is() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     uno::Reference<lang::XComponent> xComp(the_value, uno::UNO_QUERY_THROW);
     mxShapeFilterBase->setTargetDocument(xComp);
 }

@@ -29,7 +29,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") Certif
 public:
     /// Returns the SHA-256 thumbprint.
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
 
     /// Same as getSubjectPublicKeyAlgorithm(), but returns an ID, not a string.

@@ -81,7 +81,7 @@ class SdUnoSearchReplaceDescriptor final : public ::cppu::WeakImplHelper< css::u
     OUString maReplaceStr;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SdUnoSearchReplaceDescriptor();
     virtual ~SdUnoSearchReplaceDescriptor() noexcept override;
 

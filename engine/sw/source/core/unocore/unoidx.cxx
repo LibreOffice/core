@@ -341,7 +341,7 @@ public:
                 : nullptr));
         if (!pTOXSection)
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                     u"SwXDocumentIndex: disposed or invalid"_ustr, nullptr);
         }
         return *pTOXSection;
@@ -877,7 +877,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     // TODO: is this the best approach to tell API clients about the change?
     if (pEntry->nWID == RES_BACKGROUND && pEntry->nMemberId == MID_GRAPHIC_URL)
     {
-        throw uno::RuntimeException(u"Getting GraphicURL property is not supported"_ustr);
+        throw cpo::uno::RuntimeException(u"Getting GraphicURL property is not supported"_ustr);
     }
 
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
@@ -1269,7 +1269,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
             static_cast<SwTOXBaseSection*>(pFormat->GetSection()) : nullptr;
         if (!pTOXBase)
         {
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                     u"SwXDocumentIndex::refresh: must be in attached state"_ustr,
                      getXWeak());
         }
@@ -1313,7 +1313,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     SwXTextRange *const pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
@@ -1373,7 +1373,7 @@ SwXDocumentIndex::getAnchor()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (!pSectionFormat)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     rtl::Reference<SwXTextRange> xRet;
@@ -1434,7 +1434,7 @@ OUString SAL_CALL SwXDocumentIndex::getName()
 
     if(!pSectionFormat)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return pSectionFormat->GetSection()->GetSectionName().toString();
@@ -1447,7 +1447,7 @@ SwXDocumentIndex::setName(const OUString& rName)
 
     if (rName.isEmpty())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
@@ -1461,12 +1461,12 @@ SwXDocumentIndex::setName(const OUString& rName)
             *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()), UIName(rName));
         if (!bSuccess)
         {
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
         }
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -1724,7 +1724,7 @@ SwXDocumentIndexMark::getMarkEntry()
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return m_pImpl->m_sAltText;
@@ -1759,7 +1759,7 @@ SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -1771,7 +1771,7 @@ SwXDocumentIndexMark::attach(
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwXTextRange *const pRange =
@@ -1938,7 +1938,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 
     if (!pNewTextAttr)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute"_ustr,
             nullptr);
     }
@@ -1958,11 +1958,11 @@ SwXDocumentIndexMark::getAnchor()
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (!pType || !m_pImpl->m_pTOXMark)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     if (!m_pImpl->m_pTOXMark->GetTextTOXMark())
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     const SwTextTOXMark* pTextMark = m_pImpl->m_pTOXMark->GetTextTOXMark();
     SwPaM aPam(pTextMark->GetTextNode(), pTextMark->GetStart());
@@ -2167,7 +2167,7 @@ SwXDocumentIndexMark::setPropertyValue(
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -2273,7 +2273,7 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return aRet;
 }

@@ -43,22 +43,22 @@ protected:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) = 0;
 
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, css::beans::PropertyState* pStates );
     /// @throws css::beans::UnknownPropertyException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry );
 
 public:
@@ -75,7 +75,7 @@ public:
     virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-//  virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+//  virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) throw(cpo::uno::RuntimeException);
     virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
     virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;

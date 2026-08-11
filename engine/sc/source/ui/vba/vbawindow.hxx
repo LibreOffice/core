@@ -38,28 +38,28 @@ private:
     css::uno::Reference< ov::excel::XPane > m_xPane;
 
     void init();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getControllerProps() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getFrameProps() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::awt::XDevice > getDevice() const;
 
 protected:
     void SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void Scroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft, bool bLargeScroll );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const rtl::Reference< ScModelObj >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
         const cpo::uno::Sequence< cpo::uno::Any >& aArgs,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );

@@ -56,7 +56,7 @@ using cpo::uno::Sequence;
 using cpo::uno::Type;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Exception;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::WrappedTargetRuntimeException;
 using com::sun::star::lang::XSingleServiceFactory;
@@ -152,7 +152,7 @@ static PyTypeObject RuntimeImpl_Type =
 /*----------------------------------------------------------------------
   Runtime implementation
  -----------------------------------------------------------------------*/
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 {
     PyThreadState * state = PyThreadState_Get();

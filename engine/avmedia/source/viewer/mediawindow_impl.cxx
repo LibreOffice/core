@@ -457,7 +457,7 @@ void MediaWindowImpl::onURLChanged()
         {
             xPlayerWindow = mxPlayer->createPlayerWindow( aArgs );
         }
-        catch( const uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             // happens eg, on MacOSX where Java frames cannot be created from X11 window handles
         }

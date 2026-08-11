@@ -175,7 +175,7 @@ public:
 
     // XEventListener
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void disposing( const css::lang::EventObject& aEvent );
 
 

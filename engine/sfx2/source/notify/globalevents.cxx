@@ -270,7 +270,7 @@ void SfxGlobalEvents_Impl::addEventListener(
     css::uno::Reference<css::lang::XEventListener> const & xListener)
 {
     if (!xListener.is()) {
-        throw css::uno::RuntimeException(u"null listener"_ustr);
+        throw cpo::uno::RuntimeException(u"null listener"_ustr);
     }
     {
         std::scoped_lock g(m_aLock);
@@ -440,7 +440,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject
     {
         listener->notifyEvent(aEvent);
     }
-    catch(const uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}
@@ -465,7 +465,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
             SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }

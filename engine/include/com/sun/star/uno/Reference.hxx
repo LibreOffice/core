@@ -24,7 +24,7 @@
 #include <ostream>
 
 #include "com/sun/star/uno/Reference.h"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cpo/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cpo/uno/Any.hxx"
 #include "cppu/cppudllapi.h"
@@ -69,7 +69,7 @@ inline XInterface * BaseReference::iquery_throw(
     XInterface * pQueried = iquery( pInterface, rType );
     if (pQueried)
         return pQueried;
-    throw RuntimeException(
+    throw cpo::uno::RuntimeException(
         ::rtl::OUString( cppu_unsatisfied_iquery_msg( rType.getTypeLibType() ), SAL_NO_ACQUIRE ),
         Reference< XInterface >( pInterface ) );
 }
@@ -91,7 +91,7 @@ inline interface_type * Reference< interface_type >::iset_throw(
         castToXInterface(pInterface)->acquire();
         return pInterface;
     }
-    throw RuntimeException(
+    throw cpo::uno::RuntimeException(
         ::rtl::OUString( cppu_unsatisfied_iset_msg( interface_type::static_type().getTypeLibType() ), SAL_NO_ACQUIRE ),
         NULL );
 }
@@ -381,7 +381,7 @@ inline bool BaseReference::operator == ( XInterface * pInterface ) const
         Reference< XInterface > x2( pInterface, UNO_QUERY );
         return (x1._pInterface == x2._pInterface);
     }
-    catch (RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         return false;
     }
@@ -400,7 +400,7 @@ inline bool BaseReference::operator < (
         Reference< XInterface > x2( rRef, UNO_QUERY );
         return (x1._pInterface < x2._pInterface);
     }
-    catch (RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         return false;
     }

@@ -2611,7 +2611,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     {
         rValue = GetBitmap();
         if(!rValue.hasValue())
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         break;
     }

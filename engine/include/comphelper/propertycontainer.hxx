@@ -51,7 +51,7 @@ protected:
 
     /// for scripting : the types of the interfaces supported by this class
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Type > getBaseTypes();
 
 // OPropertySetHelper overridables

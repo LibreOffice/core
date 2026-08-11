@@ -69,7 +69,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using cpo::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 
 namespace pyuno_loader
 {

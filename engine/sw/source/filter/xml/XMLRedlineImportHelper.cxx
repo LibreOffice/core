@@ -363,7 +363,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         else
             m_xImportInfoPropertySet->setPropertyValue( g_sRedlineProtectionKey, aAny);
     }
-    catch (const uno::RuntimeException &) // fdo#65882
+    catch (const cpo::uno::RuntimeException &) // fdo#65882
     {
         SAL_WARN( "sw", "potentially benign ordering issue during shutdown" );
     }

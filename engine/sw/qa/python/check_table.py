@@ -13,7 +13,7 @@ import unittest
 
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.beans import PropertyValue
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.table import BorderLine
 from com.sun.star.table import BorderLine2
 from com.sun.star.table.BorderLineStyle import (DOUBLE, SOLID, EMBOSSED,

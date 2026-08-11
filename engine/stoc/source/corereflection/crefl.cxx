@@ -24,7 +24,7 @@
 
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/any.hxx>
 #include <uno/lbnames.h>

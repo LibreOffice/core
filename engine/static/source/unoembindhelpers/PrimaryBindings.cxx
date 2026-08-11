@@ -15,7 +15,7 @@
 #include <bridges/emscriptencxxabi/cxxabi.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -434,9 +434,9 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         typelib_typedescription_getByName(&td, unoName.pData);
         if (td == nullptr)
         {
-            css::uno::RuntimeException e("exception type not found: " + unoName);
+            cpo::uno::RuntimeException e("exception type not found: " + unoName);
             uno_type_any_construct(
-                &exc, &e, cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
+                &exc, &e, cppu::UnoType<cpo::uno::RuntimeException>::get().getTypeLibType(),
                 cpp_acquire);
         }
         else

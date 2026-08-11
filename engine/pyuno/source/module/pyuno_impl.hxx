@@ -174,7 +174,7 @@ PyRef ustring2PyString( std::u16string_view source );
 OUString pyString2ustring( PyObject *str );
 
 /// @throws css::reflection::InvocationTargetException
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
 PyRef PyUNO_callable_new (
@@ -200,17 +200,17 @@ PyRef getClass( const OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 cpo::uno::Any PyEnum2Enum( PyObject *obj );
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 sal_Unicode PyChar2Unicode( PyObject *o );
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 cpo::uno::Type PyType2Type( PyObject * o );
 
 void raisePyExceptionWithAny( const cpo::uno::Any &a );
 const char *typeClassToString( cpo::uno::TypeClass t );
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object );
 
 bool isInterfaceClass( const Runtime &, PyObject *obj );
@@ -245,7 +245,7 @@ struct stRuntimeImpl
 public:
     static void del( PyObject *self );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static PyRef create(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
 };

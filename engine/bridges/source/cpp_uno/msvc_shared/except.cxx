@@ -311,7 +311,7 @@ int msvc_filterCppException(EXCEPTION_POINTERS* pPointers, uno_Any* pUnoExc, uno
                     OUString sMsg = "[mscx_uno bridge error] UNO type of C++ exception unknown: \""
                                     + aUNOname + "\", RTTI-name=\"" + aRTTIname + "\"!";
 
-                    uno::RuntimeException exc(sMsg);
+                    cpo::uno::RuntimeException exc(sMsg);
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(),
                         pCpp2Uno);
@@ -332,7 +332,7 @@ int msvc_filterCppException(EXCEPTION_POINTERS* pPointers, uno_Any* pUnoExc, uno
 
     // though this unknown exception leaks now, no user-defined exception
     // is ever thrown through the binary C-UNO dispatcher call stack.
-    uno::RuntimeException exc("[mscx_uno bridge error] unexpected C++ exception occurred!");
+    cpo::uno::RuntimeException exc("[mscx_uno bridge error] unexpected C++ exception occurred!");
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), pCpp2Uno);
     return EXCEPTION_EXECUTE_HANDLER;

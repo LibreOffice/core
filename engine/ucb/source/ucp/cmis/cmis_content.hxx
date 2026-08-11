@@ -198,13 +198,13 @@ public:
     virtual css::uno::Reference< css::ucb::XContent >
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::ucb::CommandFailedException
     /// @throws libcmis::Exception
     libcmis::ObjectPtr const & getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );

@@ -72,26 +72,26 @@ namespace connectivity::ado
         bool                            m_bOnFirstAfterOpen;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static sal_Int32 getResultSetConcurrency();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static sal_Int32 getResultSetType();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static sal_Int32 getFetchDirection();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getFetchSize()            const;
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         static OUString getCursorName();
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setFetchDirection(sal_Int32 _par0);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setFetchSize(sal_Int32 _par0);
 
 
@@ -99,7 +99,7 @@ namespace connectivity::ado
         /// @throws css::sdbc::SQLException
         void checkRecordSet();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OLEVariant getValue(sal_Int32 columnIndex );
 
     protected:

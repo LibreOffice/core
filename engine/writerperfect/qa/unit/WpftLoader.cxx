@@ -113,7 +113,7 @@ bool WpftLoader::impl_load()
     }
 
     if (!m_xFrame.is() || !xModel.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // try to import the document (and load it into the prepared frame)
     try

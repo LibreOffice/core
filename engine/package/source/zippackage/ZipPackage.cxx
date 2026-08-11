@@ -594,7 +594,7 @@ void ZipPackage::getZipFileContents()
                     rtl::Reference<ZipPackageFolder> pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                     try {
                         pPkgFolder->setName( OUString(sTemp) );
-                    } catch (uno::RuntimeException const& e) {
+                    } catch (cpo::uno::RuntimeException const& e) {
                         throw css::packages::zip::ZipIOException(e.Message);
                     }
                     pPkgFolder->doSetParent( pCurrent );
@@ -1023,7 +1023,7 @@ bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
             }
         }
     }
-    catch (const uno::RuntimeException &)
+    catch (const cpo::uno::RuntimeException &)
     {
         throw;
     }
@@ -1678,7 +1678,7 @@ cpo::uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         else if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA1 )
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         else
-            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
+            throw cpo::uno::RuntimeException( u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -1686,7 +1686,7 @@ cpo::uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 
         if (!aResult.hasElements() && m_aStorageEncryptionKeys.hasElements())
         {   // tdf#159519 sanity check
-            throw uno::RuntimeException(u"Expected key is missing!"_ustr);
+            throw cpo::uno::RuntimeException(u"Expected key is missing!"_ustr);
         }
     }
     else

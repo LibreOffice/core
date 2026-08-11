@@ -64,7 +64,7 @@ namespace dbtools
                 are <NULL/>
             @throws css::sdbc::SQLException
                 if obtaining the meta data from the connection throws an SQLException
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
                 if obtaining the meta data from the connection throws a RuntimeException
         */
         DatabaseMetaData(

@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
@@ -54,7 +54,7 @@ Type elementType(Type type) {
         return TYPE_HEXBINARY;
     default:
         assert(false);
-        throw css::uno::RuntimeException(u"this cannot happen"_ustr);
+        throw cpo::uno::RuntimeException(u"this cannot happen"_ustr);
     }
 }
 
@@ -93,7 +93,7 @@ cpo::uno::Type const & mapType(Type type) {
             cpo::uno::Sequence< cpo::uno::Sequence< sal_Int8 > > >::get();
     default:
         assert(false);
-        throw css::uno::RuntimeException(u"this cannot happen"_ustr);
+        throw cpo::uno::RuntimeException(u"this cannot happen"_ustr);
     }
 }
 

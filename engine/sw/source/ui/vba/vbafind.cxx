@@ -218,7 +218,7 @@ cpo::uno::Any SAL_CALL SwVbaFind::getReplacement()
 
 void SAL_CALL SwVbaFind::setReplacement( const cpo::uno::Any& /*_replacement */ )
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 bool SAL_CALL SwVbaFind::getForward()
@@ -323,12 +323,12 @@ void SAL_CALL SwVbaFind::setMatchAllWordForms( bool _matchallwordforms )
 
 cpo::uno::Any SAL_CALL SwVbaFind::getStyle()
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 void SAL_CALL SwVbaFind::setStyle( const cpo::uno::Any& /*_style */ )
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 bool SAL_CALL

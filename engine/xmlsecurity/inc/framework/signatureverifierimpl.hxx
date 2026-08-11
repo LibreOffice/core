@@ -76,10 +76,10 @@ public:
                           const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }
 };
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 OUString SignatureVerifierImpl_getImplementationName();
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 cpo::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  );
 
 

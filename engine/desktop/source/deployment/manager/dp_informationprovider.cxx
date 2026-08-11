@@ -124,7 +124,7 @@ OUString PackageInformationProvider::getPackageLocation(
                     break;
                 }
             }
-            catch ( uno::RuntimeException & ) {}
+            catch ( cpo::uno::RuntimeException & ) {}
         }
     }
 

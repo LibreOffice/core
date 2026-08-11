@@ -209,7 +209,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                         uno::UNO_QUERY );
             }
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }

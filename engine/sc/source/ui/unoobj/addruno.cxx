@@ -129,7 +129,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
 void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bSuccess = false;
     if ( aPropertyName == SC_UNONAME_ADDRESS )
@@ -211,7 +211,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
 cpo::uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
 {
     if ( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     cpo::uno::Any aRet;

@@ -139,7 +139,7 @@ protected:
 protected:
     /// implements the calculation of the bounding rectangle - still waiting to be overwritten
     ///
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual css::awt::Rectangle implGetBounds(  ) = 0;
 
 
@@ -150,7 +150,7 @@ public:
     /* note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
        which itself implements XAccessibleComponent
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual css::awt::Point getLocationOnScreen(  ) override;
     virtual css::awt::Size getSize(  ) override final;

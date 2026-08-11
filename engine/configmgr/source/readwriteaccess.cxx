@@ -16,7 +16,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -112,7 +112,7 @@ void Service::initialize(cpo::uno::Sequence< cpo::uno::Any > const & aArguments)
     }
     std::unique_lock g1(mutex_);
     if (root_.is()) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"already initialized"_ustr, getXWeak());
     }
     osl::MutexGuard g2(*lock());

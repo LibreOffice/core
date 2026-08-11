@@ -38,7 +38,7 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     css::uno::Reference<css::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();
-    } catch (css::uno::RuntimeException &) {}
+    } catch (cpo::uno::RuntimeException &) {}
 
     if (!context)
         return;

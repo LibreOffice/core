@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 using namespace ::osl;
 using namespace ::com::sun::star;

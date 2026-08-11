@@ -732,7 +732,7 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     }
 
-    throw css::uno::RuntimeException(u"unknown sub container requested."_ustr,
+    throw cpo::uno::RuntimeException(u"unknown sub container requested."_ustr,
                                             css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
@@ -751,7 +751,7 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 
     }
 
-    throw css::uno::RuntimeException(u"unknown sub container requested."_ustr,
+    throw cpo::uno::RuntimeException(u"unknown sub container requested."_ustr,
                                             css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
@@ -807,7 +807,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::RuntimeException(u"These configuration node is not supported here for open!"_ustr, nullptr);
+        default : throw cpo::uno::RuntimeException(u"These configuration node is not supported here for open!"_ustr, nullptr);
     }
 
     {
@@ -867,7 +867,7 @@ cpo::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
     {
         aValue = xAccess->getByName(sKey);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {
@@ -1234,7 +1234,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                 pList = &m_lChangedContentHandlers;
                 break;
 
-        default : throw css::uno::RuntimeException(u"unsupported item type"_ustr, nullptr);
+        default : throw cpo::uno::RuntimeException(u"unsupported item type"_ustr, nullptr);
     }
 
     auto pItem = ::std::find(pList->cbegin(), pList->cend(), sItem);
@@ -1561,7 +1561,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     cpo::uno::Any aVal = xSet->getByName(sItem);
     if (!(aVal >>= xItem) || !xItem.is())
     {
-        throw css::uno::RuntimeException("found corrupted item \"" + sItem + "\".",
+        throw cpo::uno::RuntimeException("found corrupted item \"" + sItem + "\".",
                                          css::uno::Reference< css::uno::XInterface >());
     }
 

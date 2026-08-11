@@ -103,7 +103,7 @@ namespace connectivity::file
         virtual void initializeResultSet(OResultSet* _pResult);
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void closeResultSet();
 
         void disposeResultSet();
@@ -133,13 +133,13 @@ namespace connectivity::file
         using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void construct(const OUString& sql);
 
         // OComponentHelper
         virtual void disposing() override;
         // XInterface
-        //      virtual void release() throw(css::uno::RuntimeException) = 0;
+        //      virtual void release() throw(cpo::uno::RuntimeException) = 0;
         virtual void acquire() noexcept override;
         // XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;

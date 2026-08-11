@@ -93,7 +93,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
       if (mPasteboard == nil)
       {
-            throw uno::RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
+            throw cpo::uno::RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
                 static_cast<XClipboardEx*>(this));
       }
     }
@@ -106,7 +106,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
     {
         [mPasteboard release];
 
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "AquaClipboard: Cannot create pasteboard change listener",
             static_cast<XClipboardEx*>(this));
     }
@@ -274,7 +274,7 @@ void AquaClipboard::fireClipboardChangedEvent()
             {
                 rListener->changedContents(aEvent);
             }
-            catch (uno::RuntimeException& )
+            catch (cpo::uno::RuntimeException& )
             {}
         }
     }
@@ -290,7 +290,7 @@ void AquaClipboard::fireLostClipboardOwnershipEvent(
     {
         rOldOwner->lostOwnership(static_cast<XClipboardEx*>(this), rOldContent);
     }
-    catch(uno::RuntimeException&)
+    catch(cpo::uno::RuntimeException&)
     {}
 }
 

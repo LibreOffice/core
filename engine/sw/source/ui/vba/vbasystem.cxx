@@ -113,7 +113,7 @@ cpo::uno::Any PrivateProfileStringListener::getValueEvent()
             }
         }
 #else
-        throw uno::RuntimeException(u"Only support on Windows"_ustr );
+        throw cpo::uno::RuntimeException(u"Only support on Windows"_ustr );
 #endif
     }
 
@@ -155,7 +155,7 @@ void PrivateProfileStringListener::setValueEvent( const cpo::uno::Any& value )
         }
         return;
 #else
-        throw uno::RuntimeException(u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 #endif
     }
 
@@ -225,7 +225,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
                 break;
             }
             default:
-                throw uno::RuntimeException(u"Unknown value for Cursor pointer"_ustr );
+                throw cpo::uno::RuntimeException(u"Unknown value for Cursor pointer"_ustr );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }

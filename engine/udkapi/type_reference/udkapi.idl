@@ -13,6 +13,8 @@ module cpo {
      string Message;
      ::com::sun::star::uno::XInterface Context;
     };
+    published exception RuntimeException: ::cpo::uno::Exception {
+    };
     published enum TypeClass {
      VOID = 0,
      CHAR = 1,
@@ -133,12 +135,8 @@ module com {
     published exception UnknownPropertyException: ::cpo::uno::Exception {
     };
    };
-   module uno {
-    published exception RuntimeException: ::cpo::uno::Exception {
-    };
-   };
    module lang {
-    published exception IllegalArgumentException: ::com::sun::star::uno::RuntimeException {
+    published exception IllegalArgumentException: ::cpo::uno::RuntimeException {
      short ArgumentPosition;
     };
     published exception WrappedTargetException: ::cpo::uno::Exception {
@@ -938,7 +936,7 @@ module com {
     };
    };
    module uno {
-    published exception DeploymentException: ::com::sun::star::uno::RuntimeException {
+    published exception DeploymentException: ::cpo::uno::RuntimeException {
     };
    };
    module java {
@@ -978,7 +976,7 @@ module com {
     };
     published exception ClassNotFoundException: ::cpo::uno::Exception {
     };
-    published exception DisposedException: ::com::sun::star::uno::RuntimeException {
+    published exception DisposedException: ::cpo::uno::RuntimeException {
     };
     published exception IllegalAccessException: ::cpo::uno::Exception {
     };
@@ -1008,7 +1006,7 @@ module com {
     };
     published exception NoSuchFieldException: ::cpo::uno::Exception {
     };
-    published exception NotInitializedException: ::com::sun::star::uno::RuntimeException {
+    published exception NotInitializedException: ::cpo::uno::RuntimeException {
     };
     published exception NullPointerException: ::cpo::uno::Exception {
     };
@@ -1043,7 +1041,7 @@ module com {
      const short SYSTEM_WIN32 = 1;
      const short SYSTEM_XWINDOW = 6;
     };
-    published exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException {
+    published exception WrappedTargetRuntimeException: ::cpo::uno::RuntimeException {
      any TargetException;
     };
     published interface XConnectionPointContainer;
@@ -1598,7 +1596,7 @@ module com {
     };
    };
    module uno {
-    published exception SecurityException: ::com::sun::star::uno::RuntimeException {
+    published exception SecurityException: ::cpo::uno::RuntimeException {
     };
    };
    module security {

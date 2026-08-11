@@ -209,7 +209,7 @@ private:
     void setfnt(fonts fnt,bool mustwrite);
     void wrtfnt();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool importImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:

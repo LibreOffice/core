@@ -124,7 +124,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                     SwXTextRange::CreateXTextRange(*(rView.GetDocShell()->GetDoc()),
                                                    aPos, &aPos));
         if (!xRange)
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         SwContentFrame* pContentFrame = aPos.GetContentNode()->GetTextNode()->getLayoutFrame(
                             rSh.GetLayout());
@@ -514,7 +514,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             sText = sStrBuffer.makeStringAndClear() + "\n" + sText;
                         }
                     }
-                    catch (uno::RuntimeException&)
+                    catch (cpo::uno::RuntimeException&)
                     {
                         DBG_UNHANDLED_EXCEPTION("sw.ui", "failed to retrieve hyperlink name");
                     }

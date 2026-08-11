@@ -22,7 +22,7 @@
 using namespace css;
 using namespace ::sfx2::sidebar;
 
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 
 SfxUnoSidebar::SfxUnoSidebar(uno::Reference<frame::XFrame> _xFrame)
     : xFrame(std::move(_xFrame))
@@ -78,7 +78,7 @@ uno::Reference<frame::XFrame> SfxUnoSidebar::getFrame()
     SolarMutexGuard aGuard;
 
     if (!xFrame.is())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return xFrame;
 }

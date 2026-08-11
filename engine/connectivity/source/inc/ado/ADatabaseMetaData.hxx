@@ -51,13 +51,13 @@ namespace connectivity::ado
 
         // get info out of properties
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getStringProperty(const OUString& _aProperty);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32       getInt32Property(const OUString& _aProperty);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool            getBoolProperty(const OUString& _aProperty);
 
         virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;

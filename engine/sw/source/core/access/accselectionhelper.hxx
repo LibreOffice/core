@@ -45,25 +45,25 @@ public:
     // XAccessibleSelection
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void selectAccessibleChild(
         sal_Int64 nChildIndex );
 
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool isAccessibleChildSelected(
         sal_Int64 nChildIndex );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void selectAllAccessibleChildren(  );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 getSelectedAccessibleChildCount(  );
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex );
     // index has to be treated as global child index.
     /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void deselectAccessibleChild(
         sal_Int64 nChildIndex );
 };

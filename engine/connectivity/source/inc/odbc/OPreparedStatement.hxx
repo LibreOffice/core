@@ -56,10 +56,10 @@ namespace connectivity::odbc
 
         void FreeParams();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void putParamData (sal_Int32 index);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setStream (sal_Int32 ParameterIndex,const css::uno::Reference< css::io::XInputStream>& x,
                                                     SQLLEN length,sal_Int32 SQLtype);
         SQLLEN* getLengthBuf (sal_Int32 index);

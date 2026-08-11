@@ -90,7 +90,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
             if (rException.Context == cppu::getXWeak(rListener.get()))
                 RemoveListener(rListener);
         }
-        catch (const RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             DBG_UNHANDLED_EXCEPTION("sd");
         }
@@ -157,7 +157,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear()
                     RemoveListener(xListener);
                     xListener->disposing(aEvent);
                 }
-                catch (const RuntimeException&)
+                catch (const cpo::uno::RuntimeException&)
                 {
                     DBG_UNHANDLED_EXCEPTION("sd");
                 }

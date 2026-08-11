@@ -45,7 +45,7 @@ MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< uno::XComponen
 : m_xContext(std::move( xContext ))
 {
     if ( !m_xContext.is() )
-        throw uno::RuntimeException(u"MimeConfigurationHelper:: empty component context"_ustr);
+        throw cpo::uno::RuntimeException(u"MimeConfigurationHelper:: empty component context"_ustr);
 }
 
 
@@ -298,12 +298,12 @@ cpo::uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFrom
                 {
                     cpo::uno::Sequence< OUString > aVerbShortcuts;
                     if ( !(xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts) )
-                        throw uno::RuntimeException(u"Failed to get verb shortcuts from object properties"_ustr);
+                        throw cpo::uno::RuntimeException(u"Failed to get verb shortcuts from object properties"_ustr);
                     cpo::uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
                     auto aVerbDescriptorsRange = asNonConstRange(aVerbDescriptors);
                     for ( sal_Int32 nVerbI = 0; nVerbI < aVerbShortcuts.getLength(); nVerbI++ )
                         if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptorsRange[nVerbI] ) )
-                            throw uno::RuntimeException(u"Failed to get verb descriptor by shortcut"_ustr);
+                            throw cpo::uno::RuntimeException(u"Failed to get verb descriptor by shortcut"_ustr);
 
                     pResult[nInd+1].Value <<= aVerbDescriptors;
                 }

@@ -91,12 +91,12 @@ css::uno::Reference<css::xml::dom::XDocument> const & BackendDb::getDocument()
             save();
         }
         else
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "Extension manager could not access database file:"
                 + m_urlDb, nullptr);
 
         if (!m_doc.is())
-            throw css::uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                 "Extension manager could not get root node of data base file: "
                       + m_urlDb, nullptr);
     }

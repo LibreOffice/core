@@ -55,9 +55,9 @@ namespace comphelper
     public:
         virtual ~OPropertyChangeListener();
 
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) = 0;
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         virtual void _disposing(const css::lang::EventObject& _rSource);
 
     protected:

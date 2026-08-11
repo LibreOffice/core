@@ -507,7 +507,7 @@ void ListFonts::Init()
         osl::File aFile(maFilename);
 
         if (!aFile.open(osl_File_OpenFlag_Create))
-            throw css::uno::RuntimeException("Can not create file: " + aArg);
+            throw cpo::uno::RuntimeException("Can not create file: " + aArg);
 
         aFile.close();
     }

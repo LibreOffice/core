@@ -108,9 +108,9 @@ private:
     css::uno::Reference < XBreakIterator >              xBI;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificBreakIterator( const OUString& aLocaleName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const css::uno::Reference < XBreakIterator > & getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
 
 };

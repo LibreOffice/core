@@ -3708,7 +3708,7 @@ SfxMedium::SfxMedium( const cpo::uno::Sequence<beans::PropertyValue>& aArgs ) :
             // that must be copied here
 
             const SfxStringItem* pFileNameItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_FILE_NAME, false);
-            if (!pFileNameItem) throw uno::RuntimeException();
+            if (!pFileNameItem) throw cpo::uno::RuntimeException();
             OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
             if ( !aNewTempFileURL.isEmpty() )
             {
@@ -3729,7 +3729,7 @@ SfxMedium::SfxMedium( const cpo::uno::Sequence<beans::PropertyValue>& aArgs ) :
         pImpl->m_bOriginallyLoadedReadOnly = true;
 
     const SfxStringItem* pFileNameItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_FILE_NAME, false);
-    if (!pFileNameItem) throw uno::RuntimeException();
+    if (!pFileNameItem) throw cpo::uno::RuntimeException();
     pImpl->m_aLogicName = pFileNameItem->GetValue();
     pImpl->m_nStorOpenMode = pImpl->m_bOriginallyLoadedReadOnly
         ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
@@ -4323,7 +4323,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
     try
     {
         if ( !pImpl->xStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         bool bODF = GetFilter()->IsOwnFormat();
         try
@@ -4339,7 +4339,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
         }
 
         if ( !xWriteableZipStor.is() && bODF )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
         if (xWriteableZipStor.is() && xWriteableZipStor->hasByName(u"META-INF"_ustr))
@@ -4348,7 +4348,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
                                             u"META-INF"_ustr,
                                             embed::ElementModes::READWRITE );
             if ( !xMetaInf.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
 
         if (xMetaInf.is())
@@ -4461,7 +4461,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
     try
     {
         if ( !pImpl->xStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         bool bODF = GetFilter()->IsOwnFormat();
         try
@@ -4488,7 +4488,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         }
 
         if ( !xWriteableZipStor.is() && bODF )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
         if (xWriteableZipStor.is() && xWriteableZipStor->hasByName(u"META-INF"_ustr))
@@ -4497,7 +4497,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                                             u"META-INF"_ustr,
                                             embed::ElementModes::READWRITE );
             if ( !xMetaInf.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
         }
 
         auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());

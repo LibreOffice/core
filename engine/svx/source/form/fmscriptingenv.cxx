@@ -58,7 +58,7 @@ namespace svxform
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::uno::RuntimeException;
+    using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::awt::XControl;

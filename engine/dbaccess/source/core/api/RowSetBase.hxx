@@ -170,7 +170,7 @@ namespace dbaccess
         // sets the current and the bookmark
         void setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void checkPositioningAllowed();
         // checks  if the cache is null
         void checkCache();

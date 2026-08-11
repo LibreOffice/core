@@ -33,7 +33,7 @@ sal_Unicode
 ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
 {
     if (!m_transliterator)
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     icu::UnicodeString aChar(nInChar);
     m_transliterator->transliterate(aChar);
@@ -52,10 +52,10 @@ ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
     sal_Int32 nCount, cpo::uno::Sequence<sal_Int32>* pOffset)
 {
     if (!m_transliterator)
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (nStartPos < 0 || nStartPos + nCount > rInStr.getLength())
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if (pOffset)
     {

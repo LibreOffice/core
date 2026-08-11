@@ -119,7 +119,7 @@ SvTreeListEntry* TreeListEntryUIObject::getEntry() const
     {
         pEntry = mxTreeList->GetEntry(pEntry, nID);
         if (!pEntry)
-            throw css::uno::RuntimeException("Could not find child with id: " + OUString::number(nID));
+            throw cpo::uno::RuntimeException("Could not find child with id: " + OUString::number(nID));
     }
     return pEntry;
 }

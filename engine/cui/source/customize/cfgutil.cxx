@@ -32,7 +32,7 @@
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 
 #include <tools/urlobj.hxx>
@@ -145,7 +145,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         if (xStyle.is())
             xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { aStyle.sLabel.clear(); }
@@ -187,7 +187,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
             else
                 xFamilyInfo->getPropertyValue(STYLEPROP_UINAME) >>= aFamilyInfo.sLabel;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { return std::vector< SfxStyleInfo_Impl >(); }
@@ -209,7 +209,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
         xFamilies->getByName(sFamily) >>= xStyleSet;
         lStyleNames = xStyleSet->getElementNames();
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { return std::vector< SfxStyleInfo_Impl >(); }
@@ -232,7 +232,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
                 continue;
             xStyle->getPropertyValue(u"DisplayName"_ustr) >>= aStyleInfo.sLabel;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             { continue; }
@@ -496,7 +496,7 @@ sal_Int32 CuiConfigGroupListBox::InitModule()
         }
         return nAddedGroups;
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}
@@ -814,7 +814,7 @@ OUString CuiConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
             sUIName = lProps.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(cpo::uno::Exception&)
         { sUIName.clear(); }

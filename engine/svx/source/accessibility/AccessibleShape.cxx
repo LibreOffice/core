@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 
 namespace accessibility {
 
@@ -528,7 +528,7 @@ awt::Rectangle AccessibleShape::implGetBounds()
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
-            throw uno::RuntimeException (
+            throw cpo::uno::RuntimeException (
                 u"AccessibleShape has no valid view forwarder"_ustr,
                 getXWeak());
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
@@ -831,7 +831,7 @@ void AccessibleShape::disposing (const lang::EventObject& aEvent)
         }
 
     }
-    catch (uno::RuntimeException const&)
+    catch (cpo::uno::RuntimeException const&)
     {
         TOOLS_WARN_EXCEPTION("svx", "caught exception while disposing");
     }
@@ -1006,7 +1006,7 @@ void AccessibleShape::UpdateNameAndDescription()
         if (!sString.isEmpty())
             SetAccessibleDescription(sString, AccessibleContextBase::FromShape);
     }
-    catch (uno::RuntimeException&)
+    catch (cpo::uno::RuntimeException&)
     {
     }
 }

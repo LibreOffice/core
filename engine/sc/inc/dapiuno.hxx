@@ -547,9 +547,9 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // implementation
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScFieldGroup&       getFieldGroup( const OUString& rName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void                renameFieldGroup( const OUString& rOldName, const OUString& rNewName );
 
 private:

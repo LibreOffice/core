@@ -2597,7 +2597,7 @@ void LayoutManager::implts_notifyListeners(short nEvent, const cpo::uno::Any& rI
         {
             static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent(aSource, nEvent, rInfoParam);
         }
-        catch( const uno::RuntimeException& )
+        catch( const cpo::uno::RuntimeException& )
         {
             pIterator.remove();
         }

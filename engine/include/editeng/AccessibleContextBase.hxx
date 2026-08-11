@@ -74,7 +74,7 @@ public:
             whether the given description overrules the existing one.  An
             origin with a lower numerical value overrides one with a higher
             value.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void SetAccessibleDescription (
         const OUString& rsDescription,
@@ -88,7 +88,7 @@ public:
             The origin of the name.  This is used to determine whether the
             given name overrules the existing one.  An origin with a lower
             numerical value overrides one with a higher value.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void SetAccessibleName (
         const OUString& rsName,
@@ -135,7 +135,7 @@ public:
         @param rRelationSet
             The new relation set that replaces the old one.
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void SetRelationSet (
         const rtl::Reference< utl::AccessibleRelationSetHelper>& rxRelationSet);
@@ -239,7 +239,7 @@ protected:
         @return
             The returned string is a unique (among the accessible object's
             siblings) name.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     virtual OUString CreateAccessibleName();
 

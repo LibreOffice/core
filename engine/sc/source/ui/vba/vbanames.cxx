@@ -79,7 +79,7 @@ ScVbaNames::getScDocument()
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_SET_THROW );
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
-        throw uno::RuntimeException( u"No ViewShell available"_ustr );
+        throw cpo::uno::RuntimeException( u"No ViewShell available"_ustr );
     ScViewData& rViewData = pTabViewShell->GetViewData();
     return rViewData.GetDocument();
 }
@@ -113,7 +113,7 @@ ScVbaNames::Add( const cpo::uno::Any& Name ,
                 sName = sName.copy(nIndex+1);
             if (ScRangeData::IsNameValid(sName, getScDocument())
                 != ScRangeData::IsNameValidType::NAME_VALID)
-                throw uno::RuntimeException( u"This Name is not valid ."_ustr );
+                throw cpo::uno::RuntimeException( u"This Name is not valid ."_ustr );
         }
     }
     rtl::Reference< ScCellRangeObj > xUnoRange;

@@ -90,32 +90,32 @@ public:
 
     // XEventListener
     virtual void disposing( const css::lang::EventObject& Source )
-        throw(css::uno::RuntimeException);
+        throw(cpo::uno::RuntimeException);
 
     // XFilePickerListener
     virtual void fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-        throw(css::uno::RuntimeException);
+        throw(cpo::uno::RuntimeException);
 
     virtual void directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-        throw(css::uno::RuntimeException);
+        throw(cpo::uno::RuntimeException);
 
     virtual OUString helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
-        throw(css::uno::RuntimeException);
+        throw(cpo::uno::RuntimeException);
 
     virtual void controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-        throw(css::uno::RuntimeException);
+        throw(cpo::uno::RuntimeException);
 
     virtual void dialogSizeChanged(  )
-        throw (css::uno::RuntimeException);
+        throw (cpo::uno::RuntimeException);
 };
 
 void FilePickerListener::disposing( const css::lang::EventObject& Source )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
 }
 
 void FilePickerListener::fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
     try
     {
@@ -182,19 +182,19 @@ void FilePickerListener::fileSelectionChanged( const css::ui::dialogs::FilePicke
 }
 
 void FilePickerListener::directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
     Reference< XFilePickerControlAccess > rFilePickerCtrlAccess( aEvent.Source, UNO_QUERY );
 }
 
 OUString FilePickerListener::helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
     return OUString( );
 }
 
 void FilePickerListener::controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
     try
     {
@@ -228,7 +228,7 @@ void FilePickerListener::controlStateChanged( const css::ui::dialogs::FilePicker
 }
 
 void FilePickerListener::dialogSizeChanged( )
-    throw(css::uno::RuntimeException)
+    throw(cpo::uno::RuntimeException)
 {
 }
 

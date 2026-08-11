@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -584,7 +584,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
 
             // This is not very nice, but it should help fail earlier if we never catch the dialog
             // yet we're in a sub-loop and waitEndDialog() didn't have a chance to run yet.
-            throw new css::uno::RuntimeException(u"Timeout waiting for dialog"_ustr);
+            throw new cpo::uno::RuntimeException(u"Timeout waiting for dialog"_ustr);
         }
 
         class MyTopWindowListener : public ::cppu::WeakImplHelper<awt::XTopWindowListener>
@@ -647,7 +647,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
              * that will not run after the current one -- deadlock style) */
             if (msName != mxDialog->getWindow()->GetText())
             {
-                mpException = std::make_exception_ptr(css::uno::RuntimeException(
+                mpException = std::make_exception_ptr(cpo::uno::RuntimeException(
                     "Unexpected dialog '" + mxDialog->getWindow()->GetText()
                     + "' opened instead of the expected '" + msName + "'"));
             }

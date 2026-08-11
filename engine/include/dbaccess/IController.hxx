@@ -63,7 +63,7 @@ namespace dbaui
             This must be the same model as returned by XController::getModel, and might be <NULL/> when
             the controller does not have an own model.
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
         */
         virtual css::uno::Reference< css::frame::XController >
                 getXController() = 0;

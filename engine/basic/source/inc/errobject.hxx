@@ -33,7 +33,7 @@ public:
     static SbxVariableRef const& getErrObject();
     static css::uno::Reference<ooo::vba::XErrObject> const& getUnoErrObject();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setNumberAndDescription(::sal_Int32 _number, const OUString& _description);
 };
 

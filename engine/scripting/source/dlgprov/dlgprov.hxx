@@ -103,7 +103,7 @@ namespace dlgprov
 
         // XDialogProvider / XDialogProvider2 impl method
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         css::uno::Reference < css::awt::XControl > createDialogImpl(
             const OUString& URL,
             const css::uno::Reference< css::uno::XInterface >& xHandler,

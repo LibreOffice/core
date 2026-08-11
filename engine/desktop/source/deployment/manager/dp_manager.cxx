@@ -1519,7 +1519,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (...) {
         cpo::uno::Any excOccurred = ::cppu::getCaughtException();

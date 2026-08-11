@@ -64,7 +64,7 @@ public:
     virtual void SAL_CALL Close( const cpo::uno::Any &bSaveChanges,
                                  const cpo::uno::Any &aFileName,
                                  const cpo::uno::Any &bRouteWorkbook ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void SAL_CALL Protect( const cpo::uno::Any &aPassword );
     virtual void SAL_CALL Unprotect( const cpo::uno::Any &aPassword ) override;
     virtual void SAL_CALL Save() override;

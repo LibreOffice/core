@@ -211,7 +211,7 @@ public:
             specifies the URL of the folder whose content is to be displayed.<br/>
             If the URL doesn't denote a valid (existent and accessible) folder, the
             request is silently dropped.
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
             if the invocation of any of the file picker or UCB methods throws a RuntimeException.
     */
     void                     SetDisplayFolder( const OUString& _rURL );

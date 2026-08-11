@@ -84,7 +84,7 @@ protected:
     css::lang::Locale  aLocale;
     OUString           aAlgorithm;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     const OUString& getEntry( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) const;
 };

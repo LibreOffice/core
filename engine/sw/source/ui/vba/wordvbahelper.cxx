@@ -132,7 +132,7 @@ uno::Reference< text::XText > getCurrentXText( const rtl::Reference< SwXTextDocu
     {
         xText = xTextRange->getText();
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         //catch exception "no text selection"
     }
@@ -144,7 +144,7 @@ uno::Reference< text::XText > getCurrentXText( const rtl::Reference< SwXTextDocu
     }
 
     if( !xText.is() )
-        throw  uno::RuntimeException(u"no text selection"_ustr );
+        throw  cpo::uno::RuntimeException(u"no text selection"_ustr );
 
     return xText;
 }

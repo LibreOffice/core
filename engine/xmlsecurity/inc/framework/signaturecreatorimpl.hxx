@@ -85,10 +85,10 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 OUString SignatureCreatorImpl_getImplementationName();
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 cpo::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  );
 
 

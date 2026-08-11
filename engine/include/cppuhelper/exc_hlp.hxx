@@ -42,7 +42,7 @@ CPPUHELPER_DLLPUBLIC void throwException(const cpo::uno::Any& rExc);
     {
         ...
     }
-    catch (css::uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         // you ought not handle RuntimeExceptions:
         throw;

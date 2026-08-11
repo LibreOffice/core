@@ -63,7 +63,7 @@ XInputStream_impl::~XInputStream_impl()
     {
         OSL_FAIL("unexpected situation");
     }
-    catch (uno::RuntimeException const &)
+    catch (cpo::uno::RuntimeException const &)
     {
         OSL_FAIL("unexpected situation");
     }

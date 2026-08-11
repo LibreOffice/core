@@ -22,7 +22,7 @@
 #include <cassert>
 #include <vector>
 
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <rtl/byteseq.hxx>
@@ -77,7 +77,7 @@ void writeString(
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"UNO string contains invalid UTF-16 sequence"_ustr);
     }
     writeCompressed(buffer, static_cast< sal_uInt32 >(v.getLength()));

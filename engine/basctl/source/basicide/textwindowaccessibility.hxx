@@ -440,7 +440,7 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked:
-    // Throws css::uno::RuntimeException.
+    // Throws cpo::uno::RuntimeException.
     css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(Paragraphs::iterator const & rIt);
 

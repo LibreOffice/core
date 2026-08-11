@@ -165,7 +165,7 @@ public class SharedLibraryLoader {
                 com.sun.star.registry.XRegistryKey regKey )
 
             throws  com.sun.star.registry.InvalidRegistryException,
-                    com.sun.star.uno.RuntimeException
+                    cpo.uno.RuntimeException
     {
         return component_writeInfo(
             libName, smgr, regKey, SharedLibraryLoader.class.getClassLoader() );

@@ -72,7 +72,7 @@ namespace frm
 
         void     getFastPropertyValue            ( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         /// @throws css::lang::IllegalArgumentException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool     convertFastPropertyValue        ( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue );
         /// @throws cpo::uno::Exception
         void     setFastPropertyValue_NoBroadcast_impl(

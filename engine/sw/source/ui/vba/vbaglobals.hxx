@@ -35,7 +35,7 @@ class SwVbaGlobals : public SwVbaGlobals_BASE
 private:
     css::uno::Reference<ooo::vba::word::XApplication> mxApplication;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
 
 public:

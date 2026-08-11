@@ -30,7 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 using namespace ::com::sun::star;
 
@@ -682,7 +682,7 @@ void ValueSetAcc::ThrowIfDisposed()
     if (!mpValueSet)
     {
         assert(false && "ValueSetAcc not disposed but mpValueSet  == NULL");
-        throw css::uno::RuntimeException(u"ValueSetAcc not disposed but mpValueSet == NULL"_ustr);
+        throw cpo::uno::RuntimeException(u"ValueSetAcc not disposed but mpValueSet == NULL"_ustr);
     }
 }
 

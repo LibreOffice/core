@@ -217,7 +217,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
             }
         }
     }
-    catch( css::uno::RuntimeException& )
+    catch( cpo::uno::RuntimeException& )
     {
         throw;
     }
@@ -249,7 +249,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     {
          aModule = xModuleManager->identify( xFrameOrModel );
     }
-    catch ( css::uno::RuntimeException& )
+    catch ( cpo::uno::RuntimeException& )
     {
         throw;
     }
@@ -501,7 +501,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         }
                     }
                 }
-                catch ( css::uno::RuntimeException& )
+                catch ( cpo::uno::RuntimeException& )
                 {
                     throw;
                 }
@@ -522,7 +522,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                             cpo::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
                             xPrepareDispatch->dispatch( aPrepareURL, aDispatchArgs );
                         }
-                        catch ( css::uno::RuntimeException& )
+                        catch ( cpo::uno::RuntimeException& )
                         {
                             throw;
                         }
@@ -564,7 +564,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                                     cpo::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
                                     xDispatch->dispatch( aURL, aDispatchArgs );
                                 }
-                                catch ( css::uno::RuntimeException& )
+                                catch ( cpo::uno::RuntimeException& )
                                 {
                                     throw;
                                 }

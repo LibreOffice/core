@@ -166,7 +166,7 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const cpo::uno::Sequence< c
                 aIt.remove(g2);
             }
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             DISPLAY_EXCEPTION( TabListenerMultiplexer, changed )
         }

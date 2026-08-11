@@ -52,7 +52,7 @@ public:
     void AddStatusListener(const OUString& rCommandURL);
 
     // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event);
     virtual void GrabFocus() = 0;
 };

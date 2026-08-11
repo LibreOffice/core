@@ -382,7 +382,7 @@ rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursor()
         // We have gone too far and have left our own redline. This means that
         // no content node outside of a table could be found, and therefore we
         // except.
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"No content node found that is inside this change section "
             "but outside of a table"_ustr);
     }
@@ -564,7 +564,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const cpo::uno
 {
     SolarMutexGuard aGuard;
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
     {
         OSL_FAIL("currently not available");
@@ -603,7 +603,7 @@ cpo::uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     cpo::uno::Any aRet;
     bool bStart = rPropertyName == UNO_NAME_REDLINE_START;
     if(bStart ||
@@ -704,7 +704,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
 {
     SolarMutexGuard aGuard;
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
     if(!pNodeIndex)
@@ -723,19 +723,19 @@ cpo::uno::Type SwXRedline::getElementType(  )
 bool SwXRedline::hasElements(  )
 {
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return nullptr != m_pRedline->GetContentIdx();
 }
 
 rtl::Reference< SwXTextCursor >  SwXRedline::createXTextCursor()
 {
     if (!GetDoc())
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     const SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
     if(!pNodeIndex)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwPosition aPos(*pNodeIndex);
@@ -759,7 +759,7 @@ rtl::Reference< SwXTextCursor >  SwXRedline::createXTextCursor()
 rtl::Reference< SwXTextCursor > SwXRedline::createXTextCursorByRange(
     const uno::Reference< text::XTextRange > & /*aTextPosition*/)
 {
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 cpo::uno::Any SwXRedline::queryInterface( const cpo::uno::Type& rType )

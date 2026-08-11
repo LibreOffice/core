@@ -37,7 +37,7 @@ private:
     sal_Int32 mnIndex;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
                        const css::uno::Reference< css::uno::XComponentContext >& rContext,
                        rtl::Reference< SwXTextDocument > xModel,

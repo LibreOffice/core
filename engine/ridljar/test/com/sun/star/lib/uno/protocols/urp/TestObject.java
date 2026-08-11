@@ -21,41 +21,41 @@ package com.sun.star.lib.uno.protocols.urp;
 
 
 class TestObject implements TestXInterface {
-    public void method1( /*IN*/java.lang.Object itf ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void method1( /*IN*/java.lang.Object itf ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public void method2( /*OUT*/java.lang.Object[] itf ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void method2( /*OUT*/java.lang.Object[] itf ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public void method3( /*INOUT*/java.lang.Object[] itf ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void method3( /*INOUT*/java.lang.Object[] itf ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public Object method4(  ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public Object method4(  ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
         return null;
     }
 
-    public Object returnAny(  ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public Object returnAny(  ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
         return null;
     }
 
 
-    public void method() throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void method() throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public void methodWithInParameter( /*IN*/String text ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void methodWithInParameter( /*IN*/String text ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public void methodWithOutParameter( /*OUT*/String[] text ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void methodWithOutParameter( /*OUT*/String[] text ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public void methodWithInOutParameter( /*INOUT*/String[] text ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public void methodWithInOutParameter( /*INOUT*/String[] text ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
     }
 
-    public String methodWithResult(  ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public String methodWithResult(  ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
         return "TestObject_resultString";
     }
 
-    public String MethodWithIn_Out_InOut_Paramters_and_result( /*IN*/String text, /*OUT*/String[] outtext, /*INOUT*/String[] inouttext ) throws cpo.uno.Exception, com.sun.star.uno.RuntimeException {
+    public String MethodWithIn_Out_InOut_Paramters_and_result( /*IN*/String text, /*OUT*/String[] outtext, /*INOUT*/String[] inouttext ) throws cpo.uno.Exception, cpo.uno.RuntimeException {
         return "TestObject_resultString";
     }
 }

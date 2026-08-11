@@ -339,7 +339,7 @@ ScVbaWorksheets::setVisible( const cpo::uno::Any& _visible )
 {
     bool bState = false;
     if ( !(_visible >>= bState) )
-        throw uno::RuntimeException(u"Visible property doesn't support non boolean #FIXME"_ustr );
+        throw cpo::uno::RuntimeException(u"Visible property doesn't support non boolean #FIXME"_ustr );
 
     uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_SET_THROW );
     while ( xEnum->hasMoreElements() )
@@ -355,7 +355,7 @@ ScVbaWorksheets::Select( const cpo::uno::Any& Replace )
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
-        throw uno::RuntimeException(u"Cannot obtain view shell"_ustr );
+        throw cpo::uno::RuntimeException(u"Cannot obtain view shell"_ustr );
 
     ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
     bool bReplace = true;

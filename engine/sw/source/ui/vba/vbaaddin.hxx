@@ -31,7 +31,7 @@ private:
     bool mbInstalled;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaAddin(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                const css::uno::Reference<css::uno::XComponentContext>& rContext, OUString aFileURL);
     virtual ~SwVbaAddin() override;

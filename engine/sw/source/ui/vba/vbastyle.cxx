@@ -117,7 +117,7 @@ void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaPro
         return;
     }
 
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 OUString SAL_CALL SwVbaStyle::getNameLocal()
@@ -136,7 +136,7 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
 {
     if( word::WdStyleType::wdStyleTypeParagraph != getType() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, mxStyleProps ) );
@@ -161,7 +161,7 @@ cpo::uno::Any SAL_CALL SwVbaStyle::getBaseStyle()
     mxStyleProps->getPropertyValue(u"ParentStyle"_ustr) >>= sBaseStyle;
     if( sBaseStyle.isEmpty() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
@@ -174,7 +174,7 @@ void SAL_CALL SwVbaStyle::setBaseStyle( const cpo::uno::Any& _basestyle )
     _basestyle >>= xStyle;
     if( !xStyle.is() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     OUString sBaseStyle = xStyle->getName();
@@ -188,7 +188,7 @@ cpo::uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
     mxStyleProps->getPropertyValue(u"FollowStyle"_ustr) >>= sFollowStyle;
     if( sFollowStyle.isEmpty() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
@@ -201,7 +201,7 @@ void SAL_CALL SwVbaStyle::setNextParagraphStyle( const cpo::uno::Any& _nextparag
     _nextparagraphstyle >>= xStyle;
     if( !xStyle.is() )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     OUString sFollowStyle = xStyle->getName();

@@ -281,7 +281,7 @@ ScVbaApplication::getSelection()
 
     if (!aSelection.is())
     {
-        throw uno::RuntimeException( u"failed to obtain current selection"_ustr );
+        throw cpo::uno::RuntimeException( u"failed to obtain current selection"_ustr );
     }
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( aSelection, uno::UNO_QUERY_THROW );
@@ -334,7 +334,7 @@ ScVbaApplication::getSelection()
     }
     else
     {
-        throw uno::RuntimeException( sImplementationName + " not supported" );
+        throw cpo::uno::RuntimeException( sImplementationName + " not supported" );
     }
 }
 
@@ -345,7 +345,7 @@ ScVbaApplication::getActiveCell()
     uno::Reference< table::XCellRange > xRange( xView->getActiveSheet(), ::uno::UNO_QUERY_THROW);
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell(mxContext);
     if ( !pViewShell )
-        throw uno::RuntimeException(u"No ViewShell available"_ustr );
+        throw cpo::uno::RuntimeException(u"No ViewShell available"_ustr );
     ScViewData& rTabView = pViewShell->GetViewData();
 
     sal_Int32 nCursorX = rTabView.GetCurX();
@@ -377,7 +377,7 @@ ScVbaApplication::GetOpenFilename(const cpo::uno::Any& /*aFileFilter*/, const cp
 
     // Check, if the implementation of XFileDialogSelectedItems is what we expect
     if (!pItems)
-        throw uno::RuntimeException(u"Unexpected XFileDialogSelectedItems implementation"_ustr);
+        throw cpo::uno::RuntimeException(u"Unexpected XFileDialogSelectedItems implementation"_ustr);
 
     auto const & rItemVector = pItems->getItems();
 
@@ -529,7 +529,7 @@ ScVbaApplication::setStatusBar( const cpo::uno::Any& _statusbar )
         }
     }
     else
-        throw uno::RuntimeException(u"Invalid parameter. It should be a string or False"_ustr );
+        throw cpo::uno::RuntimeException(u"Invalid parameter. It should be a string or False"_ustr );
 }
 
 ::sal_Int32 SAL_CALL
@@ -628,7 +628,7 @@ ScVbaApplication::getActiveSheet()
     if ( !result.is() )
     {
         // Fixme - check if this is reasonable/desired behavior
-        throw uno::RuntimeException(u"No activeSheet available"_ustr );
+        throw cpo::uno::RuntimeException(u"No activeSheet available"_ustr );
     }
     return result;
 
@@ -655,7 +655,7 @@ ScVbaApplication::GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scr
     {
         bool aScroll = false;
         if( !(Scroll >>= aScroll) )
-            throw uno::RuntimeException(u"second parameter should be boolean"_ustr );
+            throw cpo::uno::RuntimeException(u"second parameter should be boolean"_ustr );
 
         bScroll = aScroll;
 
@@ -697,7 +697,7 @@ ScVbaApplication::GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scr
                 gridWindow->GrabFocus();
             }
         }
-        catch (const uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             //maybe this should be a procedure name
             //TODO for procedure name
@@ -705,7 +705,7 @@ ScVbaApplication::GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scr
             //and the createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) to get a root browse::XBrowseNode.
             //for query XInvocation interface.
             //but how to directly get the XInvocation?
-            throw uno::RuntimeException(u"invalid reference for range name, it should be procedure name"_ustr );
+            throw cpo::uno::RuntimeException(u"invalid reference for range name, it should be procedure name"_ustr );
         }
         return;
     }
@@ -742,7 +742,7 @@ ScVbaApplication::GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scr
         }
         return;
     }
-    throw uno::RuntimeException(u"invalid reference or name"_ustr );
+    throw cpo::uno::RuntimeException(u"invalid reference or name"_ustr );
 }
 
 sal_Int32 SAL_CALL
@@ -792,7 +792,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
                 break;
             }
             default:
-                throw uno::RuntimeException(u"Unknown value for Cursor pointer"_ustr );
+                throw cpo::uno::RuntimeException(u"Unknown value for Cursor pointer"_ustr );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }
@@ -1210,7 +1210,7 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
 {
     ScDocShell* pDocShell = excel::getDocShell( rxModel );
     if( !pDocShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     ScRangeList aCellRanges;
     for( const auto& rItem : rList )

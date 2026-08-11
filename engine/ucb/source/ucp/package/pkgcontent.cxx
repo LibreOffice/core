@@ -2409,7 +2409,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             OSL_FAIL( "Content::storeData - insertByName failed!" );
             return false;
         }
-        catch ( uno::RuntimeException const & )
+        catch ( cpo::uno::RuntimeException const & )
         {
             throw;
         }

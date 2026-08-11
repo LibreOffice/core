@@ -56,15 +56,15 @@ namespace connectivity::mozab
     public:
         ~ProfileAccess();
         ProfileAccess();
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         OUString getDefaultProfile( css::mozilla::MozillaProductType product );
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
     private:
         ProductStruct m_ProductProfileList[4];

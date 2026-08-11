@@ -670,7 +670,7 @@ static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xProperty
 void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
 {
     if (!xDoc)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     rtl::Reference<SwXDocumentSettings> xDocumentSettings(xDoc->createDocumentSettings());
 
     // Shared between DOCX and RTF, unconditional flags.

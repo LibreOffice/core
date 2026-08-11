@@ -193,7 +193,7 @@ uno::Reference<chart2::data::XDataSource> SAL_CALL
     SolarMutexGuard aGuard;
 
     if (!m_pDocument)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     bool bOrientCol = true;
     OUString aRangeRepresentation;

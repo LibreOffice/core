@@ -234,14 +234,14 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
         DBG_ASSERT( xVersion.is(),
                 "The method must throw an exception if the storage can not be opened!" );
         if ( !xVersion.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference< io::XStream > xVerStream = xVersion->openStreamElement(
                                                                 aStreamName,
                                                                 embed::ElementModes::READWRITE );
         DBG_ASSERT( xVerStream.is(), "The method must throw an exception if the storage can not be opened!" );
         if ( !xVerStream.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xOutStream = xVerStream->getOutputStream();
         uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY_THROW );
@@ -541,7 +541,7 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
             ::comphelper::OStorageHelper::GetStorageFromStream( xStream );
 
         if ( !xStorage.is() )
-            throw uno::RuntimeException();
+            throw cpo::uno::RuntimeException();
 
         if ( !pMedium )
             pMedium = new SfxMedium( xStorage, OUString() );
@@ -1277,7 +1277,7 @@ bool SfxObjectShell::DoSave()
                     uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
                     DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
                     if ( !xTmpStorage.is() )
-                        throw uno::RuntimeException();
+                        throw cpo::uno::RuntimeException();
 
                     static constexpr OUString aBasicStorageName( u"Basic"_ustr  );
                     static constexpr OUString aDialogsStorageName( u"Dialogs"_ustr  );
@@ -1785,7 +1785,7 @@ bool SfxObjectShell::SaveTo_Impl
                                                         aVersionsName,
                                                         embed::ElementModes::READ );
                         if ( !xNewVerStor.is() || !xOldVerStor.is() )
-                            throw uno::RuntimeException();
+                            throw cpo::uno::RuntimeException();
 
                         for ( const auto& rVersion : aVersions )
                         {
@@ -1926,13 +1926,13 @@ bool SfxObjectShell::SaveTo_Impl
                     }
 
                     if ( !xReadOrig.is() )
-                        throw uno::RuntimeException();
+                        throw cpo::uno::RuntimeException();
                     uno::Reference< embed::XStorage > xMetaInf = xReadOrig->openStorageElement(
                                 u"META-INF"_ustr,
                                 embed::ElementModes::READ );
 
                     if ( !xTarget.is() )
-                        throw uno::RuntimeException();
+                        throw cpo::uno::RuntimeException();
                     uno::Reference< embed::XStorage > xTargetMetaInf = xTarget->openStorageElement(
                                 u"META-INF"_ustr,
                                 embed::ElementModes::READWRITE );
@@ -2195,7 +2195,7 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
 
             DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
             if ( !xTmpStorage.is() )
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
 
             // TODO/LATER: may be it should be done in SwitchPersistence also
             // TODO/LATER: find faster way to copy storage; perhaps sharing with backup?!
@@ -2742,7 +2742,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
         return xFilter->filter(aNewArgs.getAsConstPropertyValueList());
         }
-        catch (const css::uno::RuntimeException&)
+        catch (const cpo::uno::RuntimeException&)
         {
             cpo::uno::Any ex(cppu::getCaughtException());
             TOOLS_INFO_EXCEPTION("sfx.doc", "exception: " << exceptionToString(ex));

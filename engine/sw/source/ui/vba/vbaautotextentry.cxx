@@ -60,7 +60,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
             // check if it is a blank paragraph
             rtl::Reference< SwXTextCursor > xParaCursor = dynamic_cast<SwXTextCursor*>( xTC.get() );
             if (!xParaCursor)
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             if( xParaCursor->isStartOfParagraph() && xParaCursor->isEndOfParagraph() )
             {
                 //remove the blank paragraph
@@ -108,7 +108,7 @@ SwVbaAutoTextEntries::getElementType()
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration()
 {
-    throw uno::RuntimeException(u"Not implemented"_ustr );
+    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 cpo::uno::Any

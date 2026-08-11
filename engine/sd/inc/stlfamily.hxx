@@ -98,7 +98,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const css::uno::Reference<css::beans::XVetoableChangeListener>&aListener ) override;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void throwIfDisposed() const;
     /// @throws css::lang::IllegalArgumentException
     SdStyleSheet* GetValidNewSheet( const cpo::uno::Any& rElement );

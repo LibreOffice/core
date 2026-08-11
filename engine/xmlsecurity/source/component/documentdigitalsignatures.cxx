@@ -83,17 +83,17 @@ private:
     /// Indicates if the document already contains a document signature
     bool m_bHasDocumentSignature;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                             const css::uno::Reference<css::io::XStream>& xSignStream,
                             DocumentSignatureMode eMode, bool bReadOnly,
                             SfxViewShell* pViewShell,
                             const std::function<void(bool)>& rCallback);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                             const css::uno::Reference<css::io::XInputStream>& xSignStream,
                             DocumentSignatureMode eMode, bool bReadOnly);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence<css::security::DocumentSignatureInformation>
     ImplVerifySignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                          const css::uno::Reference<css::io::XInputStream>& xSignStream,

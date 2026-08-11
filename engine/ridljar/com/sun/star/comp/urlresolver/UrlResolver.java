@@ -56,7 +56,7 @@ public class UrlResolver {
             _xMultiServiceFactory = xMultiServiceFactory;
         }
 
-        public Object resolve(/*IN*/String dcp) throws NoConnectException, ConnectionSetupException, IllegalArgumentException, com.sun.star.uno.RuntimeException {
+        public Object resolve(/*IN*/String dcp) throws NoConnectException, ConnectionSetupException, IllegalArgumentException, cpo.uno.RuntimeException {
             String conDcp  ;
             String protDcp  ;
             String rootOid  ;
@@ -87,7 +87,7 @@ public class UrlResolver {
                 xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
             } catch (cpo.uno.Exception e) {
-                throw new com.sun.star.uno.RuntimeException(e);
+                throw new cpo.uno.RuntimeException(e);
             }
             XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
 
@@ -96,7 +96,7 @@ public class UrlResolver {
                 try {
                     connector = _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector");
                 } catch (cpo.uno.Exception e) {
-                        throw new com.sun.star.uno.RuntimeException(e);
+                        throw new cpo.uno.RuntimeException(e);
                 }
 
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
@@ -106,7 +106,7 @@ public class UrlResolver {
                 try {
                     xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {
-                    throw new com.sun.star.uno.RuntimeException(e);
+                    throw new cpo.uno.RuntimeException(e);
                 }
             }
             rootObject = xBridge.getInstance(rootOid);

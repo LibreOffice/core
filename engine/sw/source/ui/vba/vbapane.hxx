@@ -33,7 +33,7 @@ private:
     rtl::Reference<SwXTextDocument> mxModel;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaPane(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
               const css::uno::Reference<css::uno::XComponentContext>& rContext,
               rtl::Reference<SwXTextDocument> xModel);

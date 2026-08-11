@@ -40,7 +40,7 @@ class ScVbaFont : public ScVbaFont_BASE
     SfxItemSet* GetDataSet();
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaFont(const css::uno::Reference<ov::XHelperInterface>& xParent,
               const css::uno::Reference<css::uno::XComponentContext>& xContext,
               const ScVbaPalette& dPalette,

@@ -47,7 +47,7 @@ published interface XCellRangeFormula: com::sun::star::uno::XInterface
         com::sun::star::table::XCell::setFormula()
         call for the corresponding cell.</p>
 
-        @throws com::sun::star::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
             If the size of the array is different from the current size.
      */
     void setFormulaArray( [in] sequence< sequence< string > > aArray );

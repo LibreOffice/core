@@ -67,7 +67,7 @@ cpo::uno::Any SAL_CALL SwVbaListGalleries::Item( const cpo::uno::Any& Index1, co
             || nIndex == word::WdListGalleryType::wdOutlineNumberGallery )
             return cpo::uno::Any( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
     }
-    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
+    throw  cpo::uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess

@@ -163,7 +163,7 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode )
             // Help programmer to find out, why this exception is thrown!
             SAL_WARN( "fwk", "TransactionManager...: Owner instance not correctly initialized yet. Call was rejected! Normally it's an algorithm error ... wrong use of class!" );
             //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
-            // throw css::uno::RuntimeException( "TransactionManager.: Owner instance not right initialized yet. Call was rejected! Normally it's an algorithm error... wrong using of class!\n", css::uno::Reference< css::uno::XInterface >() );
+            // throw cpo::uno::RuntimeException( "TransactionManager.: Owner instance not right initialized yet. Call was rejected! Normally it's an algorithm error... wrong using of class!\n", css::uno::Reference< css::uno::XInterface >() );
         }
         break;
     case E_WORK:

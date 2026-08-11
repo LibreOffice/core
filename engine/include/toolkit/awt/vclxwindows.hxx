@@ -324,9 +324,9 @@ public:
     sal_Int32 SAL_CALL getOrientation(  ) override;
 
     // why isn't this part of the XScrollbar?
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setMinimum( sal_Int32 n );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getMinimum(  ) const;
 
     // css::awt::VclWindowPeer
@@ -335,7 +335,7 @@ public:
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::awt::Size implGetMinimumSize( vcl::Window const * p );
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );

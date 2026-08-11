@@ -41,7 +41,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     if (!xResult->m_pSlot)
     {
         SAL_WARN("xmlsecurity.nss", "PK11_GetBestSlot failed");
-        throw uno::RuntimeException(u"PK11_GetBestSlot failed"_ustr);
+        throw cpo::uno::RuntimeException(u"PK11_GetBestSlot failed"_ustr);
     }
 
     SECItem aKeyItem = { siBuffer,
@@ -52,7 +52,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     if (!xResult->m_pSymKey)
     {
         SAL_WARN("xmlsecurity.nss", "PK11_ImportSymKey failed");
-        throw uno::RuntimeException(u"PK11_ImportSymKey failed"_ustr);
+        throw cpo::uno::RuntimeException(u"PK11_ImportSymKey failed"_ustr);
     }
 
     if (nNSSCipherID == CKM_AES_GCM)
@@ -68,7 +68,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
         if (!xResult->m_pSecParam)
         {
             SAL_WARN("xmlsecurity.nss", "SECITEM_AllocItem failed");
-            throw uno::RuntimeException(u"SECITEM_AllocItem failed"_ustr);
+            throw cpo::uno::RuntimeException(u"SECITEM_AllocItem failed"_ustr);
         }
         assert(aInitializationVector.getLength() == nAESGCMIVSize);
         xResult->m_AESGCMIV = aInitializationVector;
@@ -92,14 +92,14 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
         if (!xResult->m_pSecParam)
         {
             SAL_WARN("xmlsecurity.nss", "PK11_ParamFromIV failed");
-            throw uno::RuntimeException(u"PK11_ParamFromIV failed"_ustr);
+            throw cpo::uno::RuntimeException(u"PK11_ParamFromIV failed"_ustr);
         }
 
         xResult->m_pContext = PK11_CreateContextBySymKey( nNSSCipherID, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, xResult->m_pSymKey, xResult->m_pSecParam);
         if (!xResult->m_pContext)
         {
             SAL_WARN("xmlsecurity.nss", "PK11_CreateContextBySymKey failed");
-            throw uno::RuntimeException(u"PK11_CreateContextBySymKey failed"_ustr);
+            throw cpo::uno::RuntimeException(u"PK11_CreateContextBySymKey failed"_ustr);
         }
     }
 
@@ -111,7 +111,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     if (SAL_MAX_INT8 < xResult->m_nBlockSize)
     {
         SAL_WARN("xmlsecurity.nss", "PK11_GetBlockSize unexpected result");
-        throw uno::RuntimeException(u"PK11_GetBlockSize unexpected result"_ustr);
+        throw cpo::uno::RuntimeException(u"PK11_GetBlockSize unexpected result"_ustr);
     }
     return xResult;
 }
@@ -150,7 +150,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherConte
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -160,7 +160,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherConte
         if (SAL_MAX_INT32 - nAESGCMIVSize - nAESGCMTagSize <= static_cast<size_t>(m_aLastBlock.getLength()) + static_cast<size_t>(aData.getLength()))
         {
             m_bBroken = true;
-            throw uno::RuntimeException(u"overflow"_ustr);
+            throw cpo::uno::RuntimeException(u"overflow"_ustr);
         }
         m_aLastBlock.realloc(m_aLastBlock.getLength() + aData.getLength());
         memcpy(m_aLastBlock.getArray() + m_aLastBlock.getLength() - aData.getLength(), aData.getConstArray(), aData.getLength());
@@ -228,7 +228,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherConte
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException(u"PK11_CipherOp failed"_ustr);
+            throw cpo::uno::RuntimeException(u"PK11_CipherOp failed"_ustr);
         }
 
         m_nConverted += aToConvert.getLength();
@@ -243,7 +243,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -268,7 +268,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
             {
                 m_bBroken = true;
                 Dispose();
-                throw uno::RuntimeException(u"PK11_Encrypt failed"_ustr);
+                throw cpo::uno::RuntimeException(u"PK11_Encrypt failed"_ustr);
             }
             assert(outLen == sal::static_int_cast<unsigned>(aResult.getLength() - nAESGCMIVSize));
         }
@@ -278,7 +278,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
             {
                 m_bBroken = true;
                 Dispose();
-                throw uno::RuntimeException(u"inconsistent IV"_ustr);
+                throw cpo::uno::RuntimeException(u"inconsistent IV"_ustr);
             }
             aResult.realloc(m_aLastBlock.getLength() - nAESGCMIVSize - nAESGCMTagSize);
             if (PK11_Decrypt(m_pSymKey, CKM_AES_GCM, m_pSecParam,
@@ -289,7 +289,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
             {
                 m_bBroken = true;
                 Dispose();
-                throw uno::RuntimeException(u"PK11_Decrypt failed"_ustr);
+                throw cpo::uno::RuntimeException(u"PK11_Decrypt failed"_ustr);
             }
             assert(outLen == sal::static_int_cast<unsigned>(aResult.getLength()));
         }
@@ -297,7 +297,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException(u"incorrect size of input"_ustr);
+            throw cpo::uno::RuntimeException(u"incorrect size of input"_ustr);
         }
         Dispose();
         return aResult;
@@ -309,7 +309,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
 
     // if it is decryption, the amount of data should be rounded to the block size even in case of padding
     if ( ( !m_bPadding || !m_bEncryption ) && nSizeForPadding )
-        throw uno::RuntimeException(u"The data should contain complete blocks only."_ustr );
+        throw cpo::uno::RuntimeException(u"The data should contain complete blocks only."_ustr );
 
     if ( m_bW3CPadding && m_bEncryption )
     {
@@ -342,7 +342,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException(u"PK11_CipherOp failed"_ustr);
+            throw cpo::uno::RuntimeException(u"PK11_CipherOp failed"_ustr);
         }
 
         aResult.realloc( nPrefResLen );
@@ -356,7 +356,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
     {
         m_bBroken = true;
         Dispose();
-        throw uno::RuntimeException(u"PK11_DigestFinal failed"_ustr);
+        throw cpo::uno::RuntimeException(u"PK11_DigestFinal failed"_ustr);
     }
 
     aResult.realloc( nPrefixLen + nFinalLen );
@@ -373,7 +373,7 @@ cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextA
         {
             m_bBroken = true;
             Dispose();
-            throw uno::RuntimeException(u"incorrect size of padding"_ustr);
+            throw cpo::uno::RuntimeException(u"incorrect size of padding"_ustr);
         }
 
         aResult.realloc(aResult.getLength() - aResult[aResult.getLength()-1]);

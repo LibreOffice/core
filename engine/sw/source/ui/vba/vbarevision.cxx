@@ -62,7 +62,7 @@ sal_Int32 SwVbaRevision::GetPosition()
         }
     }
     if( nPos == -1 )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return nPos;
 }

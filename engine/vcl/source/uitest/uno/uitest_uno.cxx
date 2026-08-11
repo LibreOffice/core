@@ -99,7 +99,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     if (!pObj)
-        throw css::uno::RuntimeException(u"UITest::getFocusTopWindow did not find a window"_ustr);
+        throw cpo::uno::RuntimeException(u"UITest::getFocusTopWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 
@@ -108,7 +108,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFocusWin
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusWindow();
     if (!pObj)
-        throw css::uno::RuntimeException(u"UITest::getFocusWindow did not find a window"_ustr);
+        throw cpo::uno::RuntimeException(u"UITest::getFocusWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 
@@ -117,7 +117,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFloatWin
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFloatWindow();
     if (!pObj)
-        throw css::uno::RuntimeException(u"UITest::getFloatWindow did not find a window"_ustr);
+        throw cpo::uno::RuntimeException(u"UITest::getFloatWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 

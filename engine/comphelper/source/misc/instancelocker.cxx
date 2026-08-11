@@ -57,7 +57,7 @@ OInstanceLocker::~OInstanceLocker()
         try {
             dispose();
         }
-        catch ( uno::RuntimeException& )
+        catch ( cpo::uno::RuntimeException& )
         {}
     }
 }
@@ -113,7 +113,7 @@ void OInstanceLocker::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aAr
         throw lang::DisposedException(); // TODO
 
     if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
+        throw cpo::uno::RuntimeException(); // the object must be refcounted already!
 
     uno::Reference< uno::XInterface > xInstance;
     uno::Reference< embed::XActionsApproval > xApproval;

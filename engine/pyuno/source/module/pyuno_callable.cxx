@@ -26,7 +26,7 @@
 using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 using com::sun::star::script::XInvocation2;
 
 namespace pyuno
@@ -162,7 +162,7 @@ static PyObject* PyUNO_callable_call(
         }
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch (const css::uno::RuntimeException &e)
+    catch (const cpo::uno::RuntimeException &e)
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {

@@ -104,7 +104,7 @@ private:
         catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
         }
 
@@ -145,7 +145,7 @@ private:
         catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
         }
 
@@ -170,7 +170,7 @@ private:
         catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
         }
 
@@ -211,7 +211,7 @@ private:
         catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
         }
 

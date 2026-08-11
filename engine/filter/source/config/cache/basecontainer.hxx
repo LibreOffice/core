@@ -164,7 +164,7 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
             @descr  If no exception occurs, its guaranteed, that the member m_rFlushCache
                     was initialized right and can be used further.
 
-            @throws css::uno::RuntimeException
+            @throws cpo::uno::RuntimeException
          */
         void impl_initFlushMode(std::unique_lock<std::mutex>& rGuard);
 

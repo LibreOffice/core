@@ -26,16 +26,16 @@
 class SwVbaRangeHelper
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::text::XTextRange > getRangeByPosition( const css::uno::Reference< css::text::XText >& rText, sal_Int32 _position );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static void insertString( css::uno::Reference< css::text::XTextRange > const & rTextRange, css::uno::Reference< css::text::XText > const & rText, std::u16string_view aStr, bool _bAbsorb );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
     static css::uno::Reference< css::text::XTextCursor > initCursor( const css::uno::Reference< css::text::XTextRange >& rTextRange, const css::uno::Reference< css::text::XText >& rText );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 getPosition( const css::uno::Reference< css::text::XText >& rText, const css::uno::Reference< css::text::XTextRange >& rTextRange );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::text::XTextContent > findBookmarkByPosition( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, const css::uno::Reference< css::text::XTextRange >& xTextRange );
 
 };

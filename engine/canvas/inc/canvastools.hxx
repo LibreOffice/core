@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -186,7 +186,7 @@ namespace canvastools
 # if OSL_DEBUG_LEVEL > 2
                 SAL_WARN("canvas", "numeric_cast detected data loss");
 #endif
-                throw css::uno::RuntimeException(
+                throw cpo::uno::RuntimeException(
                     u"numeric_cast detected data loss"_ustr,
                     nullptr );
             }

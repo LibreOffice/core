@@ -20,7 +20,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 
 #include <rtl/math.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -353,7 +353,7 @@ uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPos
 ScAddress lcl_cellAddress(const ScDocument& rDocument, const table::CellAddress& rPosition)
 {
     if (rPosition.Sheet < 0 || rPosition.Sheet >= rDocument.GetTableCount())
-        throw uno::RuntimeException(u"solver: cell address is outside the document"_ustr);
+        throw cpo::uno::RuntimeException(u"solver: cell address is outside the document"_ustr);
     return ScAddress(static_cast<SCCOL>(rPosition.Column), static_cast<SCROW>(rPosition.Row),
                      static_cast<SCTAB>(rPosition.Sheet));
 }

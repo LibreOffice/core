@@ -37,7 +37,7 @@ using namespace com::sun::star;
 // helper functions
 namespace {
     /// @throws css::lang::IllegalArgumentException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwWrongList const* (SwTextNode::*
         getTextMarkupFunc(const sal_Int32 nTextMarkupType))() const
     {

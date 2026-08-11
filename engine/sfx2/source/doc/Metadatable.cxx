@@ -1560,7 +1560,7 @@ MetadatableMixin::getMetadataReference()
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"MetadatableMixin: cannot get core object; not inserted?"_ustr,
             *this);
     }
@@ -1576,7 +1576,7 @@ MetadatableMixin::setMetadataReference(
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"MetadatableMixin: cannot get core object; not inserted?"_ustr,
             *this);
     }
@@ -1590,7 +1590,7 @@ void MetadatableMixin::ensureMetadataReference()
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"MetadatableMixin: cannot get core object; not inserted?"_ustr,
             *this);
     }

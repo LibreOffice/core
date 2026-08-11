@@ -90,7 +90,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange()
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
     if( !xServiceInfo->supportsService(u"com.sun.star.text.TextRanges"_ustr) )
     {
-        throw uno::RuntimeException(u"Not implemented"_ustr );
+        throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
@@ -159,7 +159,7 @@ SwVbaSelection::HomeKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _exten
         }
         default:
         {
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -194,7 +194,7 @@ SwVbaSelection::EndKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend
         }
         default:
         {
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -220,7 +220,7 @@ SwVbaSelection::Delete( const cpo::uno::Any& _unit, const cpo::uno::Any& _count 
             }
             default:
             {
-                throw uno::RuntimeException(u"Not implemented"_ustr );
+                throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
             }
         }
     }
@@ -262,7 +262,7 @@ SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, c
         {
             if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
             {
-                throw uno::RuntimeException(u"Not implemented"_ustr );
+                throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
             }
             uno::Reference< view::XViewCursor > xViewCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             if( eDirection == word::MOVE_UP )
@@ -275,7 +275,7 @@ SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, c
         {
             if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
             {
-                throw uno::RuntimeException(u"Not implemented"_ustr );
+                throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
             }
             if( word::gotoSelectedObjectAnchor( mxModel ) )
             {
@@ -315,11 +315,11 @@ SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, c
             {
                 if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
                 {
-                    throw uno::RuntimeException(u"Not implemented"_ustr );
+                    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
                 }
                 rtl::Reference< SwXTextCursor > xParagraphCursor = dynamic_cast<SwXTextCursor*>( xTextCursor.get() );
                 if (!xParagraphCursor)
-                    throw uno::RuntimeException();
+                    throw cpo::uno::RuntimeException();
                 for( sal_Int32 i=0; i<nCount; i++ )
                 {
                     if( ( eDirection == word::MOVE_UP ) && !xParagraphCursor->gotoPreviousParagraph( bExpand ) )
@@ -332,7 +332,7 @@ SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, c
             {
                 if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
                 {
-                    throw uno::RuntimeException(u"Not implemented"_ustr );
+                    throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
                 }
                 uno::Reference< text::XWordCursor > xWordCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -349,7 +349,7 @@ SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, c
         }
         default:
         {
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -660,12 +660,12 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const cpo::uno::An
                }
             }
             if( nPage == 0 )
-                throw uno::RuntimeException(u"Not implemented"_ustr );
+                throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
             xPageCursor->jumpToPage( static_cast<sal_Int16>(nPage) );
             break;
         }
         default:
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
     return getRange();
 }
@@ -774,7 +774,7 @@ cpo::uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
             break;
         }
         default:
-            throw uno::RuntimeException(u"Not implemented"_ustr );
+            throw cpo::uno::RuntimeException(u"Not implemented"_ustr );
     }
     return result;
 }
@@ -790,7 +790,7 @@ SwVbaSelection::Tables( const cpo::uno::Any& aIndex )
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single table
     if ( !aIndex.hasValue() ) // currently we can't support multiple tables in a selection
-       throw uno::RuntimeException();
+       throw cpo::uno::RuntimeException();
 
     sal_Int32 nIndex = 0;
     aIndex >>= nIndex;
@@ -798,7 +798,7 @@ SwVbaSelection::Tables( const cpo::uno::Any& aIndex )
     cpo::uno::Any aRet;
 
     if ( nIndex != 1 )
-       throw uno::RuntimeException();
+       throw cpo::uno::RuntimeException();
 
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
@@ -988,7 +988,7 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     uno::Reference< text::XTextTable > xTextTable;
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( !xTextTable.is() )
-        throw uno::RuntimeException( );
+        throw cpo::uno::RuntimeException( );
 
     uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
     if( xTextTableCursor.is() )
@@ -1007,7 +1007,7 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
         xCursorProps->getPropertyValue(u"Cell"_ustr) >>= xCell;
         if( !xCell.is() )
         {
-            throw uno::RuntimeException( );
+            throw cpo::uno::RuntimeException( );
         }
         uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
         xCellProps->getPropertyValue(u"CellName"_ustr) >>= sTLName;
@@ -1086,7 +1086,7 @@ void SAL_CALL SwVbaSelection::Collapse( const cpo::uno::Any& Direction )
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -1122,7 +1122,7 @@ bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::X
 void SAL_CALL SwVbaSelection::SplitTable()
 {
     if( !IsInTable() )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     SwDocShell* pDocShell = mxModel->GetDocShell();
     if( pDocShell )
@@ -1138,7 +1138,7 @@ SwVbaSelection::Paragraphs( const cpo::uno::Any& aIndex )
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single paragraph
     if ( !aIndex.hasValue() ) // currently we can't support multiple paragraphs in a selection
-       throw uno::RuntimeException();
+       throw cpo::uno::RuntimeException();
 
     sal_Int32 nIndex = 0;
     aIndex >>= nIndex;
@@ -1146,13 +1146,13 @@ SwVbaSelection::Paragraphs( const cpo::uno::Any& aIndex )
     cpo::uno::Any aRet;
 
     if ( nIndex != 1 )
-       throw uno::RuntimeException();
+       throw cpo::uno::RuntimeException();
 
     uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
     uno::Reference< text::XText > xText = xTextRange->getText();
     rtl::Reference< SwXTextCursor > xParaCursor = dynamic_cast<SwXTextCursor*>( xText->createTextCursor().get() );
     if (!xParaCursor)
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     xParaCursor->gotoStartOfParagraph( false );
     xParaCursor->gotoStartOfParagraph( true );
 

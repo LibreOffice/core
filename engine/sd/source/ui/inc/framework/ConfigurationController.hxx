@@ -178,7 +178,7 @@ private:
         an exception and does not return.
 
         @throws css::lang::DisposedException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     void ThrowIfDisposed () const;
 };

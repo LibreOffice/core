@@ -515,8 +515,8 @@ public class _XFrame extends MultiMethodTest {
      * Test calls the method. <p>
      * Has <b> OK </b> status if the method successfully returns.
      * In case a frame should initialised twice, a
-     * <CODE>com.sun.star.uno.RuntimeException</CODE> was thrown. This is ok. But since
-     * a com.sun.star.uno.RuntimeException could thrown in any state the message of
+     * <CODE>cpo.uno.RuntimeException</CODE> was thrown. This is ok. But since
+     * a cpo.uno.RuntimeException could thrown in any state the message of
      * the exception must contain a defined string. In this case the test get an
      * <CODE>OK</CODE> status.
      * The following method tests are to be completed successfully before :
@@ -531,7 +531,7 @@ public class _XFrame extends MultiMethodTest {
         boolean bOK = true;
         try {
             oObj.initialize(win) ;
-        } catch (com.sun.star.uno.RuntimeException e){
+        } catch (cpo.uno.RuntimeException e){
             String message="Frame::initialized() is called more than once, which is not useful nor allowed.";
             if (e.toString().indexOf(message) != -1){
                 log.println(e.toString());

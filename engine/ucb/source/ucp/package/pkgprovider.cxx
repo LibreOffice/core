@@ -219,7 +219,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
                 aArguments, m_xContext ),
             css::uno::UNO_QUERY_THROW );
     }
-    catch ( uno::RuntimeException const & )
+    catch ( cpo::uno::RuntimeException const & )
     {
         throw;
     }

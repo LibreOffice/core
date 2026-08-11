@@ -299,7 +299,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 
             doRequest(rRequest);
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
         {
             pIterator.remove();
         }

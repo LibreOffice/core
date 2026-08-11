@@ -36,7 +36,7 @@ class ScVbaAxis : public ScVbaAxis_BASE
     ov::ShapeHelper maShapeHelper;
 
     bool bCrossesAreCustomized;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaChart* getChartPtr();
     /// @throws css::script::BasicErrorException
     bool isValueAxis();

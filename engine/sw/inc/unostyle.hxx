@@ -191,7 +191,7 @@ private:
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl( const cpo::uno::Sequence< OUString >& aPropertyNames );
 
 public:

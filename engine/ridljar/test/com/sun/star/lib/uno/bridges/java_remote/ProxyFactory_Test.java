@@ -50,7 +50,7 @@ public final class ProxyFactory_Test {
                                        new Class[] { Type.class }),
             proxy, new Object[] { new Type(XInterface.class) },
             new Class[] { null, MappingException.class,
-                          com.sun.star.uno.RuntimeException.class,
+                          cpo.uno.RuntimeException.class,
                           UndeclaredThrowableException.class,
                           NullPointerException.class,
                           UndeclaredThrowableException.class });
@@ -60,7 +60,7 @@ public final class ProxyFactory_Test {
                                        new Class[] { String.class }),
             proxy, new Object[] { "TestName" },
             new Class[] { null, MappingException.class,
-                          com.sun.star.uno.RuntimeException.class,
+                          cpo.uno.RuntimeException.class,
                           cpo.uno.Exception.class,
                           NullPointerException.class, Exception.class });
     }
@@ -107,7 +107,7 @@ public final class ProxyFactory_Test {
                 // MappingException, good for?
                 throw new MappingException();
             case 2:
-                throw new com.sun.star.uno.RuntimeException();
+                throw new cpo.uno.RuntimeException();
             case 3:
                 throw new cpo.uno.Exception();
             case 4:

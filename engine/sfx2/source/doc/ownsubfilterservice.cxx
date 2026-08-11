@@ -42,7 +42,7 @@ class OwnSubFilterService : public cppu::WeakImplHelper < document::XFilter
 
 public:
     /// @throws cpo::uno::Exception
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit OwnSubFilterService(const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     // XFilter
@@ -77,7 +77,7 @@ OwnSubFilterService::OwnSubFilterService(const cpo::uno::Sequence< cpo::uno::Any
 bool OwnSubFilterService::filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor )
 {
     if ( !m_pObjectShell )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     return m_pObjectShell->ImportFromGeneratedStream_Impl( m_xStream, aDescriptor );
 }

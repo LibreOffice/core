@@ -44,18 +44,18 @@ public:
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 readBytes( sal_Int8* aData, sal_Int32 nBytesToRead );
     // XSeekable
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void seek( sal_Int64 location );
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 getPosition(  );
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 getLength(  );
 
     sal_uInt16 ReadUInt16();

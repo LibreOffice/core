@@ -116,7 +116,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 SwTextNode& SwXParagraph::GetTextNodeOrThrow()
 {
     if (!m_pTextNode) {
-        throw uno::RuntimeException(u"SwXParagraph: disposed or invalid"_ustr, nullptr);
+        throw cpo::uno::RuntimeException(u"SwXParagraph: disposed or invalid"_ustr, nullptr);
     }
     return *m_pTextNode;
 }
@@ -1062,7 +1062,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "Property is read-only: " + rPropertyName,
             getXWeak());
     }
@@ -1162,7 +1162,7 @@ SwXParagraph::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
     // SwXParagraph will only created in order to be inserted by
     // 'insertTextContentBefore' or 'insertTextContentAfter' therefore
     // they cannot be attached
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1348,7 +1348,7 @@ void SAL_CALL SwXParagraph::setString(const OUString& aString)
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 
@@ -1359,7 +1359,7 @@ SwXParagraph::createContentEnumeration(const OUString& rServiceName)
 
     if ( rServiceName != "com.sun.star.text.TextContent" )
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwTextNode & rTextNode(GetTextNodeOrThrow());

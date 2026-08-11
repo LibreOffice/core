@@ -34,7 +34,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxTocProps;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaTableOfContents( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xDoc, css::uno::Reference< css::text::XDocumentIndex >  xDocumentIndex );
     virtual ~SwVbaTableOfContents() override;
 

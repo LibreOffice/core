@@ -185,7 +185,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const cpo::uno::Sequence< css::be
     {
         sModuleId = xModuleManager->identify(xDoc);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { sModuleId.clear(); }
@@ -226,7 +226,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
         if (xHelpContent.is())
             sCurrentHelpURL = xHelpContent->getURL();
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { sCurrentHelpURL.clear(); }
@@ -265,7 +265,7 @@ bool HelpOnStartup::its_isHelpUrlADefaultOne(std::u16string_view sHelpURL)
             if (sHelpURL == sHelpURLForModule)
                 return true;
         }
-        catch(const css::uno::RuntimeException&)
+        catch(const cpo::uno::RuntimeException&)
             { throw; }
         catch(const cpo::uno::Exception&)
             {}
@@ -303,7 +303,7 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
             sHelpURL = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
         }
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         { sHelpURL.clear(); }

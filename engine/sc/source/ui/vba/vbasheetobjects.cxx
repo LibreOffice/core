@@ -230,7 +230,7 @@ cpo::uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex
         [&rIndex, this](const ShapeVector::value_type& rxShape) { return rIndex == implGetShapeName( rxShape ); });
     if (aIt != maShapes.end())
         return createCollectionObject( cpo::uno::Any( *aIt ) );
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 // XIndexAccess
@@ -356,7 +356,7 @@ cpo::uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const cpo::uno::Any& rLeft,
     awt::Size aSize( lclPointsToHmm( rWidth ), lclPointsToHmm( rHeight ) );
     // TODO: translate coordinates for RTL sheets
     if( (aPos.X < 0) || (aPos.Y < 0) || (aSize.Width <= 0) || (aSize.Height <= 0) )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 
     // create the UNO shape
     uno::Reference< drawing::XShape > xShape( mxContainer->createShape( aPos, aSize ), uno::UNO_SET_THROW );

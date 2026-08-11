@@ -89,7 +89,7 @@ ScVbaLineFormat::convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadSt
         case office::MsoArrowheadStyle::msoArrowheadTriangle:
             return u"Arrow"_ustr;
         default:
-            throw uno::RuntimeException( u"Invalid Arrow Style!"_ustr );
+            throw cpo::uno::RuntimeException( u"Invalid Arrow Style!"_ustr );
     }
 }
 
@@ -126,7 +126,7 @@ ScVbaLineFormat::getBeginArrowheadLength()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
@@ -134,7 +134,7 @@ ScVbaLineFormat::setBeginArrowheadLength( sal_Int32 /*_beginarrowheadlength*/ )
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
@@ -142,7 +142,7 @@ ScVbaLineFormat::getBeginArrowheadWidth()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
@@ -150,7 +150,7 @@ ScVbaLineFormat::setBeginArrowheadWidth( sal_Int32 /*_beginarrowheadwidth*/ )
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
@@ -171,28 +171,28 @@ ScVbaLineFormat::getEndArrowheadLength()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadLength( sal_Int32 /*_endarrowheadlength*/ )
 {
     // #STUB
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
 ScVbaLineFormat::getEndArrowheadWidth()
 {
     // #STUB
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadWidth( sal_Int32 /*_endarrowheadwidth*/ )
 {
     // #STUB
-    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
+    throw cpo::uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 double SAL_CALL
@@ -208,7 +208,7 @@ void SAL_CALL
 ScVbaLineFormat::setWeight( double _weight )
 {
     if( _weight < 0 )
-        throw uno::RuntimeException( u"Parameter: Must be positive."_ustr );
+        throw cpo::uno::RuntimeException( u"Parameter: Must be positive."_ustr );
     if( _weight == 0 )
         _weight = 0.5;
     m_nLineWeight = _weight;
@@ -403,7 +403,7 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle )
             aLineDash.Distance = nPixel;
             break;
         default:
-            throw uno::RuntimeException( u"this MsoLineDashStyle is not supported."_ustr );
+            throw cpo::uno::RuntimeException( u"this MsoLineDashStyle is not supported."_ustr );
         }
         m_xPropertySet->setPropertyValue( u"LineDash"_ustr , cpo::uno::Any( aLineDash ) );
     }

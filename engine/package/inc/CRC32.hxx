@@ -31,16 +31,16 @@ class CRC32 final
 public:
     CRC32();
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int64 updateStream (css::uno::Reference < css::io::XInputStream > const & xStream);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void updateSegment(const cpo::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
     void updateSegment(const sal_Int8* b, sal_Int32 len);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void update(const cpo::uno::Sequence< sal_Int8 > &b);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getValue() const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void reset();
 };
 

@@ -61,9 +61,9 @@ MSFILTER_DLLPUBLIC OUString resolveVBAMacro(SfxObjectShell const* pShell, const 
                                             const OUString& sSkipModule);
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
 MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, cpo::uno::Sequence< cpo::uno::Any >& aArgs, cpo::uno::Any& aRet, const cpo::uno::Any& aCaller );
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( std::u16string_view sKey );
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const css::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro );
 
 

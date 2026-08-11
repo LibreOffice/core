@@ -24,7 +24,7 @@
 
 /** Base exception for all security related exceptions.
 */
-published exception SecurityException : com::sun::star::uno::RuntimeException
+published exception SecurityException : cpo::uno::RuntimeException
 {
 };
 

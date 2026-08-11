@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -78,7 +78,7 @@ void XCellRangeData::testGetDataArrayOnTableSheet()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_THROW_MESSAGE("No RuntimeException thrown", xCellRangeData->getDataArray(),
-                                 css::uno::RuntimeException);
+                                 cpo::uno::RuntimeException);
 }
 
 void XCellRangeData::testSetDataArrayOnTableSheet()
@@ -89,7 +89,7 @@ void XCellRangeData::testSetDataArrayOnTableSheet()
     aColRow.realloc(4);
     setValues(aColRow, 1);
     CPPUNIT_ASSERT_THROW_MESSAGE("No RuntimeException thrown", xCellRangeData->setDataArray(aColRow),
-                                 css::uno::RuntimeException);
+                                 cpo::uno::RuntimeException);
 }
 }
 

@@ -25,7 +25,7 @@ private:
     const sal_Int32 m_nZIndex;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaFormFieldDropDownListEntry(
         const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
         const css::uno::Reference<css::uno::XComponentContext>& rContext,

@@ -58,7 +58,7 @@ bool ToolBoxConfiguration::LoadToolBox(
         xParser->parseStream(aInputSource);
         return true;
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return false;
     }
@@ -87,7 +87,7 @@ bool ToolBoxConfiguration::StoreToolBox(
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
         return true;
     }
-    catch (const RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         return false;
     }

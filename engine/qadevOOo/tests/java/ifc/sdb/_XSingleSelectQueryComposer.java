@@ -188,7 +188,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             tRes.tested("appendFilterByColumn()", false);
             ok = false;
         }
-        catch (com.sun.star.uno.RuntimeException e)
+        catch (cpo.uno.RuntimeException e)
         {
             log.println("expected Exception: " + e.toString());
             ok = ok && true;
@@ -400,7 +400,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             ok = false;
 
         }
-        catch (com.sun.star.uno.RuntimeException e)
+        catch (cpo.uno.RuntimeException e)
         {
             log.println("expected Exception: " + e.toString());
             ok = ok && true;

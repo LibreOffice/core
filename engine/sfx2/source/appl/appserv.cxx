@@ -886,7 +886,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         Any aValue = xPropSet->getPropertyValue( u"LayoutManager"_ustr );
                         aValue >>= xLayoutManager;
                     }
-                    catch ( const css::uno::RuntimeException& )
+                    catch ( const cpo::uno::RuntimeException& )
                     {
                         throw;
                     }
@@ -1068,7 +1068,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                         aValue >>= xLayoutManager;
                     }
-                    catch ( const css::uno::RuntimeException& )
+                    catch ( const cpo::uno::RuntimeException& )
                     {
                         throw;
                     }
@@ -1298,7 +1298,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                             Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                             aValue >>= xLayoutManager;
                         }
-                        catch ( const css::uno::RuntimeException& )
+                        catch ( const cpo::uno::RuntimeException& )
                         {
                             throw;
                         }

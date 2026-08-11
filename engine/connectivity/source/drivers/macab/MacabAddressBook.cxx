@@ -86,7 +86,7 @@ MacabAddressBook::MacabAddressBook( )
     {
         // TODO: tell the user to reset the permission via "tccutil reset AddressBook"
         // or the system preferences and try again, this time granting the access
-        throw RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"failed to access the macOS address book - permission not granted?"_ustr );
     }
 }

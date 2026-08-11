@@ -40,7 +40,7 @@ public:
 
     using SbxValue::GetObject;
     SbxVariable* GetObject();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetUnoObject( const cpo::uno::Any& aObj ) ;
 };
 

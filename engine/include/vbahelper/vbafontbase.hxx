@@ -73,7 +73,7 @@ public:
     // specifies a height of normal font
     static const short NORMALHEIGHT = 100;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     VbaFontBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,

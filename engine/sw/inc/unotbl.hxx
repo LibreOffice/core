@@ -102,7 +102,7 @@ public:
     virtual OUString SAL_CALL getFormula(  ) override;
     virtual void SAL_CALL setFormula( const OUString& aFormula ) override;
     virtual double SAL_CALL getValue(  ) override;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     double getValue(  ) const
         { return const_cast<SwXCell*>(this)->getValue(); };
     virtual void SAL_CALL setValue( double nValue ) override;

@@ -275,7 +275,7 @@ void OInterfaceContainerHelper2::disposeAndClear( const EventObject & rEvt )
             if( xLst.is() )
                 xLst->disposing( rEvt );
         }
-        catch ( RuntimeException & )
+        catch ( cpo::uno::RuntimeException & )
         {
             // be robust, if e.g. a remote bridge has disposed already.
             // there is no way to delegate the error to the caller :o(.

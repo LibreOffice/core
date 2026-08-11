@@ -28,21 +28,21 @@ class SwXTextDocument;
 class HeaderFooterHelper
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isHeaderFooter(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isHeaderFooter(const css::uno::Reference<css::text::XText>& xText);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isHeader(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isFirstPageHeader(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isEvenPagesHeader(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isFooter(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isFirstPageFooter(const rtl::Reference<SwXTextDocument>& xModel);
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static bool isEvenPagesFooter(const rtl::Reference<SwXTextDocument>& xModel);
 };
 

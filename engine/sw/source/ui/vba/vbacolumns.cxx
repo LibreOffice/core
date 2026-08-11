@@ -70,7 +70,7 @@ SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, c
 SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mnStartColumnIndex( nStartCol ), mnEndColumnIndex( nEndCol )
 {
     if( mnEndColumnIndex < mnStartColumnIndex )
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
 }
 
 uno::Reference< word::XColumn > SwVbaColumns::getColumnAtIndex( sal_Int32 index )
@@ -112,7 +112,7 @@ cpo::uno::Any SAL_CALL SwVbaColumns::Item( const cpo::uno::Any& Index1, const cp
         }
         return cpo::uno::Any( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
+    throw  cpo::uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess

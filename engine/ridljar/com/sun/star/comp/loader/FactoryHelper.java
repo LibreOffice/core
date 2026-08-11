@@ -136,7 +136,7 @@ public class FactoryHelper {
             }
 
             if(_constructor == null) // have not found a usable constructor
-                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " can not find a usable constructor");
+                throw new cpo.uno.RuntimeException(getClass().getName() + " can not find a usable constructor");
         }
 
         private final XMultiServiceFactory getSMgr( XComponentContext xContext )
@@ -202,8 +202,8 @@ public class FactoryHelper {
                     throw (java.lang.RuntimeException)targetException;
                 else if (targetException instanceof cpo.uno.Exception)
                     throw (cpo.uno.Exception)targetException;
-                else if (targetException instanceof com.sun.star.uno.RuntimeException)
-                    throw (com.sun.star.uno.RuntimeException)targetException;
+                else if (targetException instanceof cpo.uno.RuntimeException)
+                    throw (cpo.uno.RuntimeException)targetException;
                 else
                     throw new cpo.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
@@ -278,8 +278,8 @@ public class FactoryHelper {
                     throw (java.lang.RuntimeException)targetException;
                 else if (targetException instanceof cpo.uno.Exception)
                     throw (cpo.uno.Exception)targetException;
-                else if (targetException instanceof com.sun.star.uno.RuntimeException)
-                    throw (com.sun.star.uno.RuntimeException)targetException;
+                else if (targetException instanceof cpo.uno.RuntimeException)
+                    throw (cpo.uno.RuntimeException)targetException;
                 else
                     throw new cpo.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
@@ -297,7 +297,7 @@ public class FactoryHelper {
          */
         public Object createInstance()
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
         {
             return createInstanceWithContext( null );
         }
@@ -312,7 +312,7 @@ public class FactoryHelper {
          */
         public Object createInstanceWithArguments(Object[] args)
             throws cpo.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+                   cpo.uno.RuntimeException
         {
             return createInstanceWithArgumentsAndContext( args, null );
         }
@@ -323,7 +323,7 @@ public class FactoryHelper {
          * @return  returns an array of supported services.
          * @see     com.sun.star.lang.XServiceInfo
          */
-        public String[] getSupportedServiceNames() throws com.sun.star.uno.RuntimeException {
+        public String[] getSupportedServiceNames() throws cpo.uno.RuntimeException {
             return new String[]{_serviceName};
         }
 
@@ -333,7 +333,7 @@ public class FactoryHelper {
          * @return  returns the implementation name.
          * @see     com.sun.star.lang.XServiceInfo
          */
-        public String getImplementationName() throws com.sun.star.uno.RuntimeException {
+        public String getImplementationName() throws cpo.uno.RuntimeException {
             return _implName;
         }
 
@@ -343,7 +343,7 @@ public class FactoryHelper {
          * @return  returns true if the given service is supported.
          * @see     com.sun.star.lang.XServiceInfo
          */
-        public boolean supportsService(String serviceName) throws com.sun.star.uno.RuntimeException {
+        public boolean supportsService(String serviceName) throws cpo.uno.RuntimeException {
             String services[] = getSupportedServiceNames();
 
             boolean found = false;

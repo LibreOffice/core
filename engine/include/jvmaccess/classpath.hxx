@@ -75,7 +75,7 @@ namespace ClassPath
    all the URI references in the given classPath.  If null, a (still pending)
    JNI exception occurred.
 
-   @throws com::sun::star::uno::RuntimeException
+   @throws cpo::uno::RuntimeException
  */
 JVMACCESS_DLLPUBLIC jobjectArray
 translateToUrls(css::uno::Reference<css::uno::XComponentContext> const& context,

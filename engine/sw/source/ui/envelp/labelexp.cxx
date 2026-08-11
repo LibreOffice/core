@@ -91,7 +91,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > const & xM
             }
         }
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
 
     }

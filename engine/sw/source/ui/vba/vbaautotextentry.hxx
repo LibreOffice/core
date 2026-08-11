@@ -34,7 +34,7 @@ private:
     css::uno::Reference< css::text::XAutoTextEntry > mxEntry;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XAutoTextEntry > xEntry );
     virtual ~SwVbaAutoTextEntry() override;
 
@@ -51,7 +51,7 @@ typedef CollTestImplHelper< ooo::vba::word::XAutoTextEntries > SwVbaAutoTextEntr
 class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess

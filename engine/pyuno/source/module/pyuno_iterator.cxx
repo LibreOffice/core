@@ -33,7 +33,7 @@ using com::sun::star::lang::IndexOutOfBoundsException;
 using com::sun::star::lang::WrappedTargetException;
 using cpo::uno::Any;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
+using cpo::uno::RuntimeException;
 
 
 namespace pyuno
@@ -102,7 +102,7 @@ static PyObject* PyUNO_iterator_next( PyObject *self )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
@@ -254,7 +254,7 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
-    catch( const css::uno::RuntimeException &e )
+    catch( const cpo::uno::RuntimeException &e )
     {
         raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }

@@ -155,7 +155,7 @@ void SvxXTextColumns::setColumnCount(sal_Int16 nColumns)
 {
     SolarMutexGuard aGuard;
     if (nColumns <= 0)
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     m_bIsAutomaticWidth = true;
     m_aTextColumns.realloc(nColumns);
     css::text::TextColumn* pCols = m_aTextColumns.getArray();

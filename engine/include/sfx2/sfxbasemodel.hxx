@@ -659,7 +659,7 @@ public:
     virtual bool canCancelCheckOut( ) override;
     virtual bool canCheckIn( ) override;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName );
 
 
@@ -709,7 +709,7 @@ protected:
 
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2();
     void impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );

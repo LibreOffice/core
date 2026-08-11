@@ -39,7 +39,7 @@ uno::Reference< uno::XInterface > FSStorageFactory::createInstance()
 {
     OUString aTempURL = ::utl::CreateTempURL( nullptr, true );
     if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException(u"Cannot create tempfile."_ustr);
+        throw cpo::uno::RuntimeException(u"Cannot create tempfile."_ustr);
 
     ::ucbhelper::Content aResultContent(
         aTempURL, uno::Reference< ucb::XCommandEnvironment >(),

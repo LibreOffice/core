@@ -33,7 +33,7 @@
 #include "cpo/uno/Type.hxx"
 #include "com/sun/star/uno/Reference.h"
 #include "cpo/uno/genfunc.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cpo/uno/RuntimeException.hpp"
 #include "cppu/cppudllapi.h"
 #include "cppu/unotype.hxx"
 
@@ -580,7 +580,7 @@ T Any::get() const
 {
     T value = T();
     if (! (*this >>= value)) {
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             ::rtl::OUString(
                 cppu_Any_extraction_failure_msg(
                     this,

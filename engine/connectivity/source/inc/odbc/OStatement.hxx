@@ -101,19 +101,19 @@ namespace connectivity::odbc
         void setUsingBookmarks(bool _bUseBookmark)  ;
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void reset();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void clearMyResultSet();
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         void setWarning (const css::sdbc::SQLWarning &ex);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         bool lockIfNecessary (const OUString& sql);
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         sal_Int32 getColumnCount();
 
 
@@ -122,7 +122,7 @@ namespace connectivity::odbc
         // returns NULL if the current result is not a ResultSet.
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         rtl::Reference<OResultSet> getResultSet(bool checkCount);
         /**
             creates the driver specific resultset (factory)
@@ -130,7 +130,7 @@ namespace connectivity::odbc
         virtual rtl::Reference<OResultSet> createResultSet();
 
         /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
+        /// @throws cpo::uno::RuntimeException
         SQLLEN getRowCount();
 
 

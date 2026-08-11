@@ -65,11 +65,11 @@ private:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setPropertyValue( tScaleProperty eScaleProperty, const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     cpo::uno::Any getPropertyValue( tScaleProperty eScaleProperty, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

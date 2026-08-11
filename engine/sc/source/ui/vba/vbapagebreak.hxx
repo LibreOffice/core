@@ -35,7 +35,7 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > mxRowColPropertySet;
     css::sheet::TablePageBreakData maTablePageBreakData;
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::beans::XPropertySet > xProps,
@@ -53,7 +53,7 @@ typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;
 class ScVbaHPageBreak :  public ScVbaHPageBreak_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaHPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::beans::XPropertySet >& xProps,
@@ -71,7 +71,7 @@ typedef ScVbaPageBreak < ov::excel::XVPageBreak > ScVbaVPageBreak_BASE;
 class ScVbaVPageBreak :  public ScVbaVPageBreak_BASE
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                      const css::uno::Reference< css::uno::XComponentContext >& xContext,
                      const css::uno::Reference< css::beans::XPropertySet >& xProps,

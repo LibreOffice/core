@@ -302,7 +302,7 @@ void X509Certificate_NssImpl::setRawCert( const cpo::uno::Sequence< sal_Int8 >& 
 
     cert = CERT_DecodeDERCertificate( &certItem, PR_TRUE, nullptr ) ;
     if( cert == nullptr )
-        throw css::uno::RuntimeException() ;
+        throw cpo::uno::RuntimeException() ;
 
     if( m_pCert != nullptr ) {
         CERT_DestroyCertificate( m_pCert ) ;

@@ -32,7 +32,7 @@ private:
     sal_Int32 mnGalleryType;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaListTemplates( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc, sal_Int32 nType );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;

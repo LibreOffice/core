@@ -66,7 +66,7 @@
 
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
+using ::cpo::uno::RuntimeException;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::ItemListEvent;
 using ::com::sun::star::awt::XItemList;
@@ -2488,7 +2488,7 @@ TabControl *VCLXMultiPage::getTabControl() const
     VclPtr<TabControl> pTabControl = GetAsDynamic< TabControl >();
     if ( pTabControl )
         return pTabControl;
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 sal_Int32 SAL_CALL VCLXMultiPage::insertTab()
 {
@@ -2707,7 +2707,7 @@ TabPage *VCLXTabPage::getTabPage() const
     VclPtr< TabPage > pTabPage = GetAsDynamic< TabPage >();
     if ( pTabPage )
         return pTabPage;
-    throw uno::RuntimeException();
+    throw cpo::uno::RuntimeException();
 }
 
 
@@ -5516,7 +5516,7 @@ MetricFormatter *VCLXMetricField::GetMetricFormatter()
 {
     MetricFormatter *pFormatter = static_cast<MetricFormatter *>(GetFormatter());
     if (!pFormatter)
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return pFormatter;
 }
 
@@ -5524,7 +5524,7 @@ MetricField *VCLXMetricField::GetMetricField()
 {
     VclPtr< MetricField > pField = GetAs< MetricField >();
     if (!pField)
-        throw css::uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     return pField;
 }
 

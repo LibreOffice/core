@@ -178,7 +178,7 @@ public:
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
         if ( !getBorderLine( aBorderLine ) )
-            throw uno::RuntimeException(u"Method failed"_ustr );
+            throw cpo::uno::RuntimeException(u"Method failed"_ustr );
 
         switch ( nLineStyle )
         {
@@ -218,7 +218,7 @@ public:
                 break;
             }
             default:
-                throw uno::RuntimeException(u"Bad param"_ustr );
+                throw cpo::uno::RuntimeException(u"Bad param"_ustr );
         }
         setBorderLine( aBorderLine );
 

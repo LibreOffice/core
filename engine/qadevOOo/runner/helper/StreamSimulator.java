@@ -134,7 +134,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
 
         return nRead;
@@ -163,7 +163,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
 
         return nRead;
@@ -190,7 +190,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
     }
 
@@ -213,7 +213,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException           exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException     exRuntime) {
+        catch (cpo.uno.RuntimeException     exRuntime) {
         }
 
         return nAvailable;
@@ -237,7 +237,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException           exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException     exRuntime) {
+        catch (cpo.uno.RuntimeException     exRuntime) {
         }
     }
 
@@ -267,7 +267,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
     }
 
@@ -292,7 +292,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
     }
 
@@ -317,7 +317,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) {
+        catch (cpo.uno.RuntimeException           exRuntime) {
         }
     }
 
@@ -344,7 +344,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException                exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException          exRuntime) {
+        catch (cpo.uno.RuntimeException          exRuntime) {
         }
     }
 
@@ -364,7 +364,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException       exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException exRuntime) {
+        catch (cpo.uno.RuntimeException exRuntime) {
         }
 
         return nPos;
@@ -386,7 +386,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.io.IOException       exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException exRuntime) {
+        catch (cpo.uno.RuntimeException exRuntime) {
         }
 
         return nLen;

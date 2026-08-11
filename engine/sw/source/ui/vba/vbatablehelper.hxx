@@ -30,34 +30,34 @@ private:
     SwTable* m_pTable;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwTableBox* GetTabBox( sal_Int32 nCol, sal_Int32 nRow );
     void    InitTabCols( SwTabCols& rCols, const SwTableBox *pStart );
     static sal_Int32 GetRightSeparator( SwTabCols const & rCols, sal_Int32 nNum);
     static sal_Int32 GetColCount( SwTabCols const & rCols );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static sal_Int32 GetColWidth( SwTabCols& rCols, sal_Int32 nNum );
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     explicit SwVbaTableHelper( css::uno::Reference< css::text::XTextTable > xTextTable );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getTabColumnsCount( sal_Int32 nRowIndex );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getTabColumnsMaxCount( );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getTabRowIndex( const OUString& sCellName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getTabColIndex( const OUString& sCellName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 getTableWidth( ) const;
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0 );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     static SwTable* GetSwTable( const css::uno::Reference< css::text::XTextTable >& xTextTable );
     static OUString getColumnStr( sal_Int32 nCol );
 };

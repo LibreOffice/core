@@ -34,11 +34,11 @@ private:
     sal_Int32 mnSide;
 
 private:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void makeWrap();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     float getDistance( const OUString& sName );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void setDistance( const OUString& sName, float _distance );
 
 public:

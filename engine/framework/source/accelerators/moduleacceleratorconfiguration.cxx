@@ -102,7 +102,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
     }
 
     if (m_sModule.isEmpty())
-        throw css::uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
                 u"The module dependent accelerator configuration service was initialized with an empty module identifier!"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this));
 }
@@ -133,7 +133,7 @@ void ModuleAcceleratorConfiguration::fillCache()
         m_xCfgListener = new WeakChangesListener(this);
         xBroadcaster->addChangesListener(m_xCfgListener);
     }
-    catch(const css::uno::RuntimeException&)
+    catch(const cpo::uno::RuntimeException&)
         { throw; }
     catch(const cpo::uno::Exception&)
         {}

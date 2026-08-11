@@ -116,21 +116,21 @@ public:
 
     virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
     /// @throws css::container::NoSuchElementException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void NameChange( const  css::beans::PropertyChangeEvent& evt );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void TabIndexChange( const  css::beans::PropertyChangeEvent& evt );
 
     // PropertyChangeListener
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _propertyChange(const css::beans::PropertyChangeEvent& evt);
 
     // ContainerListener
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _elementInserted();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _elementReplaced();
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void _elementRemoved();
 
     virtual void SetLayer(SdrLayerID nLayer) override;

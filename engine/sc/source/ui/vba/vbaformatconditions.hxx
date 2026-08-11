@@ -43,7 +43,7 @@ public:
     /// @throws css::script::BasicErrorException
     void notifyRange();
     /// @throws css::script::BasicErrorException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     rtl::Reference< ScVbaFormatCondition > Add( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
     /// @throws css::script::BasicErrorException
     static OUString getA1Formula(const cpo::uno::Any& _aFormula);

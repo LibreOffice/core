@@ -93,20 +93,20 @@ public:
     queryStorageClone( const OUString & rUri ) const;
 
     /// @throws css::packages::WrongPasswordException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XInputStream >
     queryInputStream( const OUString & rUri,
                       const OUString & rPassword ) const;
 
     /// @throws css::packages::WrongPasswordException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XOutputStream >
     queryOutputStream( const OUString & rUri,
                        const OUString & rPassword,
                        bool bTruncate ) const;
 
     /// @throws css::packages::WrongPasswordException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XStream >
     queryStream( const OUString & rUri,
                  const OUString & rPassword,

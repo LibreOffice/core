@@ -374,7 +374,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder(sal_Int64 relativeHeight, bool bOldSty
         if( it->second->getPropertyValue(getPropertyName( PROP_Z_ORDER )) >>= itemZOrder )
             return itemZOrder + itemZOrderOffset;
     }
-    catch (const uno::RuntimeException&) {
+    catch (const cpo::uno::RuntimeException&) {
         TOOLS_WARN_EXCEPTION("writerfilter", "Exception when getting item z-order");
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );

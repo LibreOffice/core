@@ -3124,7 +3124,7 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const IterString&, rIterString, bool)
             m_bEditing = false;
             return true;
         }
-        catch (const uno::RuntimeException)
+        catch (const cpo::uno::RuntimeException)
         {
             OSL_FAIL("Couldn't rename");
         }

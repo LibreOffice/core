@@ -341,7 +341,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
     {
         throw;
     }
-    catch (css::uno::RuntimeException &)
+    catch (cpo::uno::RuntimeException &)
     {
         throw;
     }
@@ -589,7 +589,7 @@ bool ExtensionManager::doChecksForAddExtension(
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (const cpo::uno::Exception &) {
         cpo::uno::Any excOccurred = ::cppu::getCaughtException();
@@ -598,7 +598,7 @@ bool ExtensionManager::doChecksForAddExtension(
             static_cast<OWeakObject*>(this), excOccurred);
         throw exc;
     } catch (...) {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             u"Extension Manager: unexpected exception in doChecksForAddExtension"_ustr,
             static_cast<OWeakObject*>(this));
     }
@@ -739,7 +739,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                         throw;
                     } catch (const lang::IllegalArgumentException &) {
                         throw;
-                    } catch (const uno::RuntimeException &) {
+                    } catch (const cpo::uno::RuntimeException &) {
                         throw;
                     } catch (const cpo::uno::Exception &) {
                         cpo::uno::Any excOccurred = ::cppu::getCaughtException();
@@ -749,7 +749,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                             static_cast<OWeakObject*>(this), excOccurred);
                         throw exc;
                     } catch (...) {
-                        throw uno::RuntimeException(
+                        throw cpo::uno::RuntimeException(
                             u"Extension Manager: RuntimeException on fireModified() "
                             "in the scope of 'if (failedPrereq == 0)'"_ustr,
                             static_cast<OWeakObject*>(this));
@@ -775,7 +775,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                 excOccurred2 = ::cppu::getCaughtException();
             } catch (const lang::IllegalArgumentException &) {
                 excOccurred2 = ::cppu::getCaughtException();
-            } catch (const uno::RuntimeException &) {
+            } catch (const cpo::uno::RuntimeException &) {
                 excOccurred2 = ::cppu::getCaughtException();
             } catch (...) {
                 excOccurred2 = ::cppu::getCaughtException();
@@ -863,7 +863,7 @@ void ExtensionManager::removeExtension(
         excOccurred1 = ::cppu::getCaughtException();
     } catch (const lang::IllegalArgumentException &) {
         excOccurred1 = ::cppu::getCaughtException();
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         excOccurred1 = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred1 = ::cppu::getCaughtException();
@@ -943,7 +943,7 @@ void ExtensionManager::enableExtension(
         excOccurred = ::cppu::getCaughtException();
     } catch (const lang::IllegalArgumentException &) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         excOccurred = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
@@ -1001,7 +1001,7 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (...) {
         cpo::uno::Any excOccurred = ::cppu::getCaughtException();
@@ -1044,7 +1044,7 @@ void ExtensionManager::disableExtension(
         excOccurred = ::cppu::getCaughtException();
     } catch (const lang::IllegalArgumentException &) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         excOccurred = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
@@ -1139,7 +1139,7 @@ cpo::uno::Sequence< cpo::uno::Sequence<Reference<css::deployment::XPackage> > >
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (...) {
         cpo::uno::Any exc = ::cppu::getCaughtException();
@@ -1218,7 +1218,7 @@ void ExtensionManager::reinstallDeployedExtensions(
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (...) {
         cpo::uno::Any exc = ::cppu::getCaughtException();
@@ -1285,7 +1285,7 @@ bool ExtensionManager::synchronize(
         throw;
     } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (const uno::RuntimeException &) {
+    } catch (const cpo::uno::RuntimeException &) {
         throw;
     } catch (...) {
         cpo::uno::Any exc = ::cppu::getCaughtException();

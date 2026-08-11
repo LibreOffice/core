@@ -1381,7 +1381,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 uno::Reference< io::XStream > xElementStream = xStorage->openStreamElement(
                                                                     aStreamName,
                                                                     embed::ElementModes::READWRITE );
-                //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
+                //    throw cpo::uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
                 SAL_WARN_IF(
@@ -1522,7 +1522,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             xInfoStream = xStorage->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             SAL_WARN_IF(!xInfoStream.is(), "basic", "No stream!");
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
-            //    throw uno::RuntimeException(); // TODO
+            //    throw cpo::uno::RuntimeException(); // TODO
 
             if ( xProps.is() )
             {
@@ -2300,7 +2300,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
             }
 
             xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
@@ -2310,7 +2310,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
+                throw cpo::uno::RuntimeException(u"null returned from openStorageElement"_ustr,getXWeak());
             }
 #if OSL_DEBUG_LEVEL > 0
         }

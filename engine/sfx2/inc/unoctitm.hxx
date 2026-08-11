@@ -134,12 +134,12 @@ public:
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pServ );
     virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void       dispatch( const css::util::URL& aURL,
                                   const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
                                   const css::uno::Reference< css::frame::XDispatchResultListener >& rListener );
 
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     void       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL);
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();

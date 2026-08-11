@@ -23,7 +23,7 @@ import sys
 import types
 import os
 from cpo.uno import Exception
-from com.sun.star.uno import RuntimeException
+from cpo.uno import RuntimeException
 from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
 

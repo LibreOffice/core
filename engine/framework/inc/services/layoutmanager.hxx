@@ -211,10 +211,10 @@ namespace framework
             void        implts_backupProgressBarWrapper();
             void        implts_setOffset( const sal_Int32 nBottomOffset );
 
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void    implts_setInplaceMenuBar(
                         const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar );
-            /// @throws css::uno::RuntimeException
+            /// @throws cpo::uno::RuntimeException
             void    implts_resetInplaceMenuBar();
 
             void    implts_setVisibleState( bool bShow );

@@ -621,7 +621,7 @@ public class _XPropertySet extends MultiMethodTest {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("'" + name + "' throws exception '" + e + "'");
             e.printStackTrace(log);
-        } catch (com.sun.star.uno.RuntimeException e) {
+        } catch (cpo.uno.RuntimeException e) {
             log.println("'" + name + "' throws exception '" + e + "'");
             e.printStackTrace(log);
         } catch (java.lang.ArrayIndexOutOfBoundsException e) {

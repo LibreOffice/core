@@ -217,7 +217,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
         const css::uno::Reference< css::uno::XInterface >& _rxContext
     );
 
-/// @throws css::uno::RuntimeException
+/// @throws cpo::uno::RuntimeException
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
         const OUString& _rFunctionName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
@@ -284,7 +284,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
         name is built from the name of the interface plus its method, for instance "XParameters::updateBinaryStream"
     @param _rxContext
         the context of the exception
-    @throws css::uno::RuntimeException
+    @throws cpo::uno::RuntimeException
 */
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
         const OUString& _rFeatureName,

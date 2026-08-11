@@ -171,7 +171,7 @@ sal_Int16 SalAquaFilePicker::execute()
             break;
 
         default:
-            throw uno::RuntimeException(
+            throw cpo::uno::RuntimeException(
                       u"The dialog returned with an unknown result!"_ustr,
                       static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
             break;

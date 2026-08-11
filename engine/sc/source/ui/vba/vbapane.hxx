@@ -27,7 +27,7 @@
 class ScVbaPane final : public cppu::WeakImplHelper< ov::excel::XPane >
 {
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& rParent,
         css::uno::Reference< css::uno::XComponentContext > xContext,

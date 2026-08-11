@@ -2046,7 +2046,7 @@ bool SfxObjectShell::isEditDocLocked() const
     {
         return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockEditDoc"_ustr } ), u"LockEditDoc", false);
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("sfx.appl", "unexpected RuntimeException");
     }
@@ -2062,7 +2062,7 @@ bool SfxObjectShell::isContentExtractionLocked() const
     {
         return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockContentExtraction"_ustr } ), u"LockContentExtraction", false);
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("sfx.appl", "unexpected RuntimeException");
     }
@@ -2078,7 +2078,7 @@ bool SfxObjectShell::isExportLocked() const
     {
         return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockExport"_ustr } ), u"LockExport", false);
     }
-    catch (const uno::RuntimeException&)
+    catch (const cpo::uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("sfx.appl", "unexpected RuntimeException");
     }

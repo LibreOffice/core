@@ -4441,7 +4441,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             }
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
         TOOLS_WARN_EXCEPTION("writerfilter", "");
     }
@@ -4986,7 +4986,7 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
         }
         m_pImpl->SetIsFirstRun(false);
     }
-    catch( const uno::RuntimeException& )
+    catch( const cpo::uno::RuntimeException& )
     {
     }
 }

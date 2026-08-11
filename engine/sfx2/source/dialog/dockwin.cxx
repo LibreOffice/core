@@ -187,7 +187,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     catch ( beans::UnknownPropertyException& )
     {
     }
-    catch ( uno::RuntimeException& )
+    catch ( cpo::uno::RuntimeException& )
     {
     }
     catch ( cpo::uno::Exception& )

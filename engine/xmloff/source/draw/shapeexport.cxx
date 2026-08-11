@@ -338,7 +338,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 // point it would make sense to find a better place for more targeted flush.
                 xText = xText->getText();
             }
-            catch (uno::RuntimeException const&)
+            catch (cpo::uno::RuntimeException const&)
             {
                 // E.g., SwXTextFrame that contains only a table will throw; this is not an error
             }
@@ -854,7 +854,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                     {
                         xClose->close(true);
                     }
-                    catch (const uno::RuntimeException& e)
+                    catch (const cpo::uno::RuntimeException& e)
                     {
                         SAL_WARN("xmloff", "Couldn't close PDF replacement model: " << e.Message);
                     }

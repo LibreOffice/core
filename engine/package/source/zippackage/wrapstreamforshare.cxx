@@ -37,7 +37,7 @@ WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInSt
     if ( !m_xMutex.is() || !m_xInStream.is() )
     {
         OSL_FAIL( "Wrong initialization of wrapping stream!" );
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     m_xSeekable.set( m_xInStream, uno::UNO_QUERY_THROW );
     mpByteReader = dynamic_cast<comphelper::ByteReader*>(m_xInStream.get());

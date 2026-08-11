@@ -209,7 +209,7 @@ private:
 
     /** loads the XConnectionTools implementation which we forward the respective functionality to
 
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
             if the implementation cannot be loaded
 
         @postcond

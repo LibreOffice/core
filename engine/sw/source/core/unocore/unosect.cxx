@@ -148,7 +148,7 @@ public:
     SwSectionFormat & GetSectionFormatOrThrow() const {
         SwSectionFormat *const pFormat( GetSectionFormat() );
         if (!pFormat) {
-            throw uno::RuntimeException(u"SwXTextSection: disposed or invalid"_ustr, nullptr);
+            throw cpo::uno::RuntimeException(u"SwXTextSection: disposed or invalid"_ustr, nullptr);
         }
         return *pFormat;
     }
@@ -267,7 +267,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (!m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
@@ -564,7 +564,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     std::unique_ptr<SwSectionData> const pSectionData(
@@ -951,7 +951,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
     {
-        throw uno::RuntimeException( u"non-descriptor section without format"_ustr);
+        throw cpo::uno::RuntimeException( u"non-descriptor section without format"_ustr);
     }
 
     cpo::uno::Sequence< cpo::uno::Any > aRet(rPropertyNames.getLength());
@@ -1355,7 +1355,7 @@ SwXTextSection::getPropertyStates(
     SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
     if (!pFormat && !m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     cpo::uno::Sequence< beans::PropertyState > aStates(rPropertyNames.getLength());
@@ -1436,7 +1436,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
     SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
     if (!pFormat && !m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 
     SfxItemPropertyMapEntry const*const pEntry =
@@ -1449,7 +1449,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(
+        throw cpo::uno::RuntimeException(
             "Property is read-only: " + rPropertyName,
             getXWeak());
     }
@@ -1641,7 +1641,7 @@ OUString SAL_CALL SwXTextSection::getName()
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
     return sRet;
 }
@@ -1667,7 +1667,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
             }
             else if (rName == rFormats[i]->GetSection()->GetSectionName())
             {
-                throw uno::RuntimeException();
+                throw cpo::uno::RuntimeException();
             }
         }
         if (nApplyPos != SIZE_MAX)
@@ -1689,7 +1689,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
     }
     else
     {
-        throw uno::RuntimeException();
+        throw cpo::uno::RuntimeException();
     }
 }
 

@@ -191,7 +191,7 @@ public:
 
     cpo::uno::Sequence< css::beans::PropertyValue>
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
                 const cpo::uno::Sequence< css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);

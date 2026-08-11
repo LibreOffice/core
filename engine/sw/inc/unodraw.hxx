@@ -189,7 +189,7 @@ class SwXShape : public SwXShapeBaseClass
 
         @throws css::beans::UnknownPropertyException
         @throws css::lang::WrappedTargetException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
     */
     cpo::uno::Any _getPropAtAggrObj( const OUString& _rPropertyName );
 

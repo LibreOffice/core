@@ -211,7 +211,7 @@ protected:
                                     const css::uno::Reference< css::io::XStream >& xStream );
 
     /// @throws css::io::IOException
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::io::XStream > GetNewFilledTempStream_Impl(
                                     const css::uno::Reference< css::io::XInputStream >& xInStream );
 #ifdef _WIN32

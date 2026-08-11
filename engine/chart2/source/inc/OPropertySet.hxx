@@ -64,7 +64,7 @@ protected:
         any and then assigning to via a return value.
 
         @throws css::beans::UnknownPropertyException
-        @throws css::uno::RuntimeException
+        @throws cpo::uno::RuntimeException
      */
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const = 0;
 
@@ -118,7 +118,7 @@ protected:
         -- css::beans::PropertyVetoException
         -- css::lang::IllegalArgumentException
         -- css::lang::WrappedTargetException
-        -- css::uno::RuntimeException
+        -- cpo::uno::RuntimeException
 
         @param nHandle handle
         @param rValue  value

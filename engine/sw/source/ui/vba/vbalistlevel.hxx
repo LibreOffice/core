@@ -32,7 +32,7 @@ private:
     sal_Int32 mnLevel;
 
 public:
-    /// @throws css::uno::RuntimeException
+    /// @throws cpo::uno::RuntimeException
     SwVbaListLevel( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel );
     virtual ~SwVbaListLevel() override;
 

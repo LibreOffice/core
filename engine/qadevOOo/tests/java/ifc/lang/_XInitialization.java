@@ -70,8 +70,8 @@ public class _XInitialization extends MultiMethodTest {
                 } catch (cpo.uno.Exception e) {
                     log.println("Expected Exception 'cpo.uno.Exception' occurred -> OK") ;
                     result = true ;
-                } catch (com.sun.star.uno.RuntimeException e) {
-                    log.println("Expected Exception 'com.sun.star.uno.RuntimeException' occurred -> OK") ;
+                } catch (cpo.uno.RuntimeException e) {
+                    log.println("Expected Exception 'cpo.uno.RuntimeException' occurred -> OK") ;
                     result = true ;
                 } catch (Exception e) {
                     log.println("Un-Expected Exception occurred -> FALSE") ;
