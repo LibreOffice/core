@@ -40,7 +40,6 @@ namespace vclcanvas
                                 const vclcanvas::ViewState&                 rUsedViewState,
                                 vclcanvas::RenderState                      aUsedRenderState,
                                 vclcanvas::Canvas& rTarget ) :
-        CachedBitmap_Base(),
         maUsedViewState( rUsedViewState ),
         mrTarget( rTarget ),
         mpGraphicObject(std::move( xGraphicObject )),
@@ -49,11 +48,6 @@ namespace vclcanvas
         maSize( rSize ),
         maAttributes( rAttr )
     {
-    }
-
-    void CachedBitmap::disposing(std::unique_lock<std::mutex>& )
-    {
-        mpGraphicObject.reset();
     }
 
     sal_Int8 CachedBitmap::redraw( const vclcanvas::ViewState& aState )

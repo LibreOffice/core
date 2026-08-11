@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <comphelper/compbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
@@ -39,14 +39,11 @@ namespace vclcanvas
     class Canvas;
     class TextLayout;
 
-    typedef ::comphelper::WeakComponentImplHelper<> CanvasFont_Base;
-
-
     /** This interface provides access to a specific, XCanvas-dependent
         font incarnation. This font is not universally usable, but belongs
         to the XCanvas it was queried from.
      */
-    class CanvasFont : public CanvasFont_Base
+    class CanvasFont : public salhelper::SimpleReferenceObject
     {
     public:
         /// make noncopyable
@@ -57,9 +54,6 @@ namespace vclcanvas
                     FontEmphasisMark                                                       eMark,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
                     OutputDevice&                                                          rOutDevProvider );
-
-        /// Dispose all internal references
-        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         /** Create a text layout interface.<p>
 

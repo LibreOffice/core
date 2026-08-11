@@ -84,17 +84,6 @@ namespace vclcanvas
         mnTextDirection( nDirection )
     {}
 
-    void TextLayout::disposing(std::unique_lock<std::mutex>& rGuard)
-    {
-        rGuard.unlock();
-        {
-            SolarMutexGuard aGuard;
-            mxOutDev.reset();
-            mpFont.clear();
-        }
-        rGuard.lock();
-    }
-
     // XTextLayout
 
     cpo::uno::Sequence< double > TextLayout::queryLogicalAdvancements(  )

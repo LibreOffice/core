@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "RenderState.hxx"
 #include "ViewState.hxx"
-#include <comphelper/compbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
@@ -35,8 +35,7 @@ namespace vclcanvas
 
     typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
-    typedef comphelper::WeakComponentImplHelper<> CachedBitmap_Base;
-    class CachedBitmap : public CachedBitmap_Base
+    class CachedBitmap : public salhelper::SimpleReferenceObject
     {
     public:
 
@@ -49,9 +48,6 @@ namespace vclcanvas
                       const ::vclcanvas::ViewState&                rUsedViewState,
                       ::vclcanvas::RenderState                     aUsedRenderState,
                       vclcanvas::Canvas&                           rTarget );
-
-        /// Dispose all internal references
-        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         ::sal_Int8 redraw( const ::vclcanvas::ViewState& aState );
 

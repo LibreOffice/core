@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <comphelper/compbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/StringContext.hpp>
@@ -32,8 +32,6 @@
 
 namespace vclcanvas
 {
-    typedef ::comphelper::WeakComponentImplHelper<> TextLayout_Base;
-
     /** This is the central interface for text layouting.<p>
 
         This is the central interface for text-related tasks more
@@ -56,7 +54,7 @@ namespace vclcanvas
         might be off by up to one device pixel from the transformed
         metrics.<p>
      */
-    class TextLayout : public TextLayout_Base
+    class TextLayout : public salhelper::SimpleReferenceObject
     {
     public:
         /// make noncopyable
@@ -67,9 +65,6 @@ namespace vclcanvas
                     sal_Int8                                      nDirection,
                     rtl::Reference<CanvasFont>                    rFont,
                     const VclPtr<OutputDevice> &                  xOutDev );
-
-        /// Dispose all internal references
-        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         /** Query the advancements for every character in the input string.<p>
 
