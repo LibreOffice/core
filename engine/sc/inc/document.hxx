@@ -1267,6 +1267,11 @@ public:
     bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
     SAL_RET_MAYBENULL SfxBindings*  GetViewBindings();
+
+    /** Invalidates a slot in every view of this document, for state that belongs to
+        the document as a whole rather than to one view's cursor or selection. */
+    void                            InvalidateSlotInAllViews( sal_uInt16 nSlotId );
+
     ScDocShell*                     GetDocumentShell() const    { return mpShell; }
     SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer.get();  }
     SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer.get();  }

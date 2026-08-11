@@ -11,7 +11,6 @@
 #include <sc.hrc>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
-#include <sfx2/bindings.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKit.hxx>
 #include <editeng/colritem.hxx>
@@ -1008,8 +1007,9 @@ void ScTableStyles::InvalidateBindings()
 {
     if (!mpDoc)
         return;
-    if (SfxBindings* pBindings = mpDoc->GetViewBindings())
-        pBindings->Invalidate(SID_TABLE_STYLES);
+    // The style list belongs to the document, so every view of it is told, not just
+    // the view the change came from.
+    mpDoc->InvalidateSlotInAllViews(SID_TABLE_STYLES);
 }
 
 namespace

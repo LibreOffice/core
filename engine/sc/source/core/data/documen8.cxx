@@ -1205,6 +1205,18 @@ SfxBindings* ScDocument::GetViewBindings()
         return nullptr;
 }
 
+void ScDocument::InvalidateSlotInAllViews( sal_uInt16 nSlotId )
+{
+    if ( !mpShell )
+        return;                // no ObjShell -> no view
+
+    for ( SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( mpShell ); pViewFrame;
+          pViewFrame = SfxViewFrame::GetNext( *pViewFrame, mpShell ) )
+    {
+        pViewFrame->GetBindings().Invalidate( nSlotId );
+    }
+}
+
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, TransliterationFlags nType )
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
