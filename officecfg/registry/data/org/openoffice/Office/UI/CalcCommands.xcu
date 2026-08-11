@@ -2191,8 +2191,8 @@
       </node>
       <node oor:name=".uno:AutoOutline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <!-- To translators: Outline refers to an automatic grouping of cells -->
           <value xml:lang="en-US">~AutoOutline</value>
+          <value xml:lang="x-comment">Outline refers to an automatic grouping of cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2793,8 +2793,8 @@
       </node>
       <node oor:name=".uno:GroupOutlineMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <!-- To translators: Outline refers to an automatic grouping of cells -->
           <value xml:lang="en-US">~Group and Outline</value>
+          <value xml:lang="x-comment">Outline refers to an automatic grouping of cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
