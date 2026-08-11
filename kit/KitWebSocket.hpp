@@ -112,7 +112,7 @@ protected:
 
     // interpret internal save result and report it
     void handleBgSaveResult(Poco::JSON::Object::Ptr& object,
-                          const StringVector tokens);
+                          const StringVector & tokens);
 
     // something weird happened, cleanup & report save failure
     void terminateSave(const std::string &reason);

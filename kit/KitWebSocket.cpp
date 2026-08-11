@@ -386,7 +386,7 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
 }
 
 void BgSaveParentWebSocketHandler::handleBgSaveResult(Poco::JSON::Object::Ptr& object,
-                                                    const StringVector tokens)
+                                                    const StringVector & tokens)
 {
     LOG_DBG("Handling background save .uno:Save result");
 
