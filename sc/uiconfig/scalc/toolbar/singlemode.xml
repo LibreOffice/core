@@ -43,6 +43,7 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontStyleName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
