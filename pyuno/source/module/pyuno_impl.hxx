@@ -216,6 +216,8 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object );
 bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
 
+PyObject* PyUNO_dir(PyObject* self);
+
 struct RuntimeCargo
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;

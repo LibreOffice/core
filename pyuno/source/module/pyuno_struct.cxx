@@ -93,30 +93,6 @@ static PyObject *PyUNOStruct_repr( PyObject *self )
     return ret;
 }
 
-static PyObject* PyUNOStruct_dir( PyObject *self )
-{
-    PyUNO *me = reinterpret_cast<PyUNO*>( self );
-
-    PyObject* member_list = nullptr;
-
-    try
-    {
-        member_list = PyList_New( 0 );
-        const css::uno::Sequence<OUString> aMemberNames = me->members->xInvocation->getMemberNames();
-        for( const auto& aMember : aMemberNames )
-        {
-            // setitem steals a reference
-            PyList_Append( member_list, ustring2PyString( aMember ).getAcquired() );
-        }
-    }
-    catch( const RuntimeException &e )
-    {
-        raisePyExceptionWithAny( Any(e) );
-    }
-
-    return member_list;
-}
-
 static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
@@ -290,7 +266,7 @@ static PyMethodDef PyUNOStructMethods[] =
 #pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
 #endif
 #endif
-    {"__dir__",    reinterpret_cast<PyCFunction>(PyUNOStruct_dir),    METH_NOARGS,  nullptr},
+    {"__dir__",    reinterpret_cast<PyCFunction>(PyUNO_dir),    METH_NOARGS,  nullptr},
 #if defined __clang__
 #if __has_warning("-Wcast-function-type-mismatch")
 #pragma clang diagnostic pop

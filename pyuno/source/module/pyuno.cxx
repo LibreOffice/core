@@ -459,7 +459,7 @@ PyObject *PyUNO_str( PyObject * self )
     return PyUnicode_FromString( buf.getStr() );
 }
 
-static PyObject* PyUNO_dir (PyObject* self)
+PyObject* PyUNO_dir (PyObject* self)
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
