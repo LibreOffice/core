@@ -1854,9 +1854,10 @@ libo_FUZZ_ARG_ENABLE(dbus,
 ,test "${enable_dbus+set}" = set || enable_dbus=yes)
 
 libo_FUZZ_ARG_ENABLE(sdremote,
-    AS_HELP_STRING([--disable-sdremote],
-        [Determines whether to enable Impress remote control (i.e. the server component).]),
-,test "${enable_sdremote+set}" = set || enable_sdremote=yes)
+    AS_HELP_STRING([--enable-sdremote],
+        [Enable Impress remote control (i.e. the server component).
+         Disabled by default.]),
+,enable_sdremote=no)
 
 libo_FUZZ_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--enable-sdremote-bluetooth],
