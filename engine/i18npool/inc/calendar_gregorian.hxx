@@ -20,12 +20,15 @@
 
 #include "calendarImpl.hxx"
 
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-
 #include <unicode/calendar.h>
 #include <rtl/ref.hxx>
 
 #include <memory>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 namespace i18npool { class NativeNumberSupplierService; }
 

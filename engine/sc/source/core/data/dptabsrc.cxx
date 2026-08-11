@@ -54,6 +54,10 @@
 #include <com/sun/star/sheet/TableFilterField.hpp>
 
 #include <unotools/calendarwrapper.hxx>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;

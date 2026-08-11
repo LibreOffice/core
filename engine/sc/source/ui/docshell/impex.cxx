@@ -22,7 +22,6 @@
 #include <i18nutil/unicode.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/module.hxx>
@@ -75,6 +74,11 @@
 #include <unicode/uchar.h>
 
 #include <osl/file.hxx>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns

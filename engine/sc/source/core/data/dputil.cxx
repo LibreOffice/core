@@ -24,6 +24,10 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;

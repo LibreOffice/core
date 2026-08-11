@@ -37,7 +37,6 @@
 #include <svdata.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/CalendarFieldIndex.hdl>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -45,6 +44,11 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/duration.hxx>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarFieldIndex.hdl>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;

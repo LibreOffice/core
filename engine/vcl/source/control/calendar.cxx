@@ -26,13 +26,17 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <com/sun/star/i18n/Weekdays.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include <calendar.hxx>
 #include <svdata.hxx>
 #include <strings.hrc>
 #include <memory>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 constexpr tools::Long DAY_OFFX = 4;
 constexpr tools::Long DAY_OFFY = 2;

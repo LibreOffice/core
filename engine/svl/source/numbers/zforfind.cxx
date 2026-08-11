@@ -29,7 +29,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 #include <comphelper/sequence.hxx>
@@ -51,6 +50,11 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/XCalendar4.hpp>
 #endif
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 
 const sal_uInt8 ImpSvNumberInputScan::nMatchedEndString    = 0x01;

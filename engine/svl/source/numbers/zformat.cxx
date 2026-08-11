@@ -32,8 +32,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/AmPmValue.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
@@ -49,6 +47,12 @@
 
 #include <cmath>
 #include <array>
+
+#if defined ERA // from POSIX <langinfo.h>
+#undef ERA
+#endif
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace svt;
 
