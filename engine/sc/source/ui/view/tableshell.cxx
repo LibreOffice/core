@@ -12,6 +12,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
@@ -214,6 +215,9 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             case SID_CONVERT_CALCTABLE_TO_RANGE:
                 m_pViewShell->ConvertCalcTableToRange();
                 break;
+            case SID_SUMMARIZE_WITH_PIVOT:
+                rViewData.GetDispatcher().Execute(SID_OPENDLG_PIVOTTABLE);
+                break;
             case SID_TABLE_TOTALROW:
             {
                 // Desired value: SfxBoolItem in args if present, else toggle.
@@ -310,6 +314,16 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                 if (bProtected)
                     rSet.DisableItem(nWhich);
                 break;
+            case SID_SUMMARIZE_WITH_PIVOT:
+            {
+                // Keep in sync with SID_OPENDLG_PIVOTTABLE in ScCellShell::GetDBState.
+                ScViewData& rViewData = m_pViewShell->GetViewData();
+                if (!pDBData || bProtected || rViewData.GetDocShell()->IsReadOnly()
+                    || rViewData.GetDocument().GetChangeTrack() != nullptr
+                    || rViewData.IsMultiMarked())
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             case SID_TABLE_TOTALROW:
             {
                 if (!pDBData || bProtected)

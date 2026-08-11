@@ -18,6 +18,7 @@ interface Table
     SID_SET_DEFAULT_TABLE_STYLE [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_NEW_TABLE_STYLE      [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_CLEAR_TABLE_STYLE    [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
+    SID_SUMMARIZE_WITH_PIVOT [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
 }
 
 shell ScTableShell

@@ -653,6 +653,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_SET_DEFAULT_TABLE_STYLE (SID_NEW_SLOTS+127)
 #define SID_NEW_TABLE_STYLE         (SID_NEW_SLOTS+128)
 #define SID_CLEAR_TABLE_STYLE       (SID_NEW_SLOTS+129)
+#define SID_SUMMARIZE_WITH_PIVOT    (SID_NEW_SLOTS+130)
 
 // idl parameter
 

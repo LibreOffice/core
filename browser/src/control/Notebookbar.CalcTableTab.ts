@@ -114,11 +114,11 @@ class CalcTableTab implements NotebookbarTab {
 									{
 										id: 'summarize-with-pivottable',
 										type: 'toolitem',
-										text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
-										command: '.uno:DataDataPilotRun',
+										text: _UNO('.uno:SummarizeWithPivot', 'spreadsheet'),
+										command: '.uno:SummarizeWithPivot',
 										accessibility: {
 											focusBack: true,
-											combination: 'PV',
+											combination: 'SP',
 										},
 									},
 								],

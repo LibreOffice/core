@@ -586,6 +586,7 @@ class LOUtil {
 			convertcalctabletorange: 'tabledesign',
 			// TODO: reusing a similar icon for now; needs a dedicated "Handle Duplicate" icon
 			handleduplicaterecords: 'tabledesign',
+			summarizewithpivot: 'datadatapilotrun',
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',
