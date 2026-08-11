@@ -85,6 +85,14 @@ protected:
 
     void calcLayout(bool bRecalc = false);
 
+    /**
+     * Does to the layout what its first paint would: restores the portions that the lines lost to
+     * the text cache, and carries out the adjustment of justified, centered and right-aligned
+     * lines. Call it before reading those from a layout dump, which reports the lines as it finds
+     * them, and so depends on what has read the layout before.
+     */
+    void adjustLayoutLines();
+
     /// Get the body text of the whole document.
     OUString getBodyText() const;
 

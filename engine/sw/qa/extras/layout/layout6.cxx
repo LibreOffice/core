@@ -217,6 +217,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf106234)
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
+    // The glue portions asserted below are only there once the lines are adjusted
+    adjustLayoutLines();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In justified paragraphs, there is justification between left tabulators and manual line breaks

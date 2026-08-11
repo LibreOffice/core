@@ -419,6 +419,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162109)
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
+    // The glue portion asserted below is only there once the line is adjusted
+    adjustLayoutLines();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // There was no SwGluePortion, because of missing justification of the last paragraph line,
@@ -433,6 +435,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162220)
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
+    // The glue portion asserted below is only there once the line is adjusted
+    adjustLayoutLines();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // There was no SwGluePortion, because of missing justification of the last paragraph line,
@@ -485,6 +489,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
+    // The glue portion asserted below is only there once the line is adjusted
+    adjustLayoutLines();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // There was no SwGluePortion, because of missing justification of the last paragraph line,
@@ -574,6 +580,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164905)
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
+    // The glue portions counted below only appear once the lines are adjusted
+    adjustLayoutLines();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // The ToC is there, so that the count below cannot pass by matching nothing

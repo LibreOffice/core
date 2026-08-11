@@ -2132,51 +2132,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"         "); // All the trailing blanks
 
-    // This paragraph is centered, and the next one is right-aligned, so their lines also carry
-    // the margin portions that adjustment adds
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*", 6);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*", 4);
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]", "type",
-                u"PortionType::Margin");
+                u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                u"TEST ");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]", "portion",
-                u"TEST ");
+                u"   ");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]", "portion",
-                u"   ");
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "type",
-                u"PortionType::Text");
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"   T");
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "type",
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "type",
                 u"PortionType::Hole");
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"         "); // All the trailing blanks
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[6]", "type",
-                u"PortionType::Margin");
 
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*", 6);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*", 4);
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]", "type",
-                u"PortionType::Margin");
+                u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                u"TEST ");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]", "portion",
-                u"TEST ");
+                u"   ");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]", "portion",
-                u"   ");
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "type",
-                u"PortionType::Text");
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"   T");
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "type",
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "type",
                 u"PortionType::Hole");
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"         "); // All the trailing blanks
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[6]", "type",
-                u"PortionType::Margin");
 
     // The option is false in settings.xml
     createSwDoc("MsWordCompTrailingBlanksFalse.odt");
@@ -2211,58 +2201,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
                 u"   "); // third colored trailing blank span here
 
-    // Centered and right-aligned as above, so their lines carry the margin portions too
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*", 7);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*", 5);
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]", "type",
-                u"PortionType::Margin");
+                u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                u"TEST ");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[2]", "portion",
-                u"TEST ");
+                u"   ");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[3]", "portion",
-                u"   ");
+                u"   T   "); // first colored trailing blank span here
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
-                u"   T   "); // first colored trailing blank span here
+                u"   "); // second colored trailing blank span here
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
-                u"   "); // second colored trailing blank span here
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[6]", "type",
-                u"PortionType::Text");
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[6]", "portion",
                 u"   "); // third colored trailing blank span here
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/child::*[7]", "type",
-                u"PortionType::Margin");
 
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*", 7);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*", 5);
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]", "type",
-                u"PortionType::Margin");
+                u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                u"TEST ");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[2]", "portion",
-                u"TEST ");
+                u"   ");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[3]", "portion",
-                u"   ");
+                u"   T   "); // first colored trailing blank span here
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
-                u"   T   "); // first colored trailing blank span here
+                u"   "); // second colored trailing blank span here
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
-                u"   "); // second colored trailing blank span here
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[6]", "type",
-                u"PortionType::Text");
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[6]", "portion",
                 u"   "); // third colored trailing blank span here
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[7]", "type",
-                u"PortionType::Margin");
 
     // MsWordCompTrailingBlanks option should be false by default in new documents
     createSwDoc();

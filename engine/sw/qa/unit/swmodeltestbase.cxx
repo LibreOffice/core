@@ -26,9 +26,13 @@
 #include <comphelper/configuration.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
+#include <anchoredobject.hxx>
 #include <docsh.hxx>
 #include <COKit/COKit.hxx>
+#include <flyfrm.hxx>
 #include <rootfrm.hxx>
+#include <sortedobjs.hxx>
+#include <txtfrm.hxx>
 #include <unotxdoc.hxx>
 #include <view.hxx>
 #include <viewsh.hxx>
@@ -90,6 +94,41 @@ void SwModelTestBase::calcLayout(bool bRecalc)
     if (bRecalc)
         getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
     getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
+namespace
+{
+// Walks the frames the layout dump walks: the lowers, and the flys anchored to them
+void adjustLinesOfFrames(SwFrame* pFrame)
+{
+    for (; pFrame; pFrame = pFrame->GetNext())
+    {
+        SwTextFrame* pTextFrame = pFrame->DynCastTextFrame();
+        // A frame that is formatting right now keeps what it has: both of these reenter the
+        // formatter
+        if (pTextFrame && !pTextFrame->IsLocked())
+        {
+            pTextFrame->GetFormatted();
+            pTextFrame->AdjustFormattedLines();
+        }
+
+        if (const SwSortedObjs* pObjs = pFrame->GetDrawObjs())
+            for (SwAnchoredObject* pObject : *pObjs)
+                if (SwFlyFrame* pFly = pObject->DynCastFlyFrame())
+                    adjustLinesOfFrames(pFly->GetLower());
+
+        adjustLinesOfFrames(pFrame->GetLower());
+    }
+}
+}
+
+void SwModelTestBase::adjustLayoutLines()
+{
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    CPPUNIT_ASSERT(pLayout);
+    // Formatting and adjustment both measure, which needs the shell's output device
+    CPPUNIT_ASSERT(pLayout->GetCurrShell());
+    adjustLinesOfFrames(pLayout->GetLower());
 }
 
 OUString SwModelTestBase::getBodyText() const
