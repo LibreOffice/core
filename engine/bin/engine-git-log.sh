@@ -35,6 +35,6 @@ else
     color=
 fi
 {
-    git -P log $color "$@" --follow merge-engine..HEAD -- "$new"
-    git -P log $color "$@" --follow merge-engine^2     -- "$old"
+    git -P log $color "$@" merge-engine..HEAD -- "$new"
+    git -P log $color "$@" merge-engine^2     -- "$old"
 } | LESS=${LESS-FRX} LV=${LV--c} $pager
