@@ -84,7 +84,7 @@ namespace vclcanvas
 
         return new TextLayout( aText,
                                nDirection,
-                               Reference( this ),
+                               this,
                                mxOutDev);
     }
 

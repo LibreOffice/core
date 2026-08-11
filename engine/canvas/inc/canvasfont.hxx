@@ -49,8 +49,6 @@ namespace vclcanvas
     class CanvasFont : public CanvasFont_Base
     {
     public:
-        typedef rtl::Reference<CanvasFont> Reference;
-
         /// make noncopyable
         CanvasFont(const CanvasFont&) = delete;
         const CanvasFont& operator=(const CanvasFont&) = delete;
