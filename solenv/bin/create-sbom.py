@@ -14,6 +14,19 @@ import xml.etree.ElementTree as ET
 import json
 from datetime import datetime, timezone
 import uuid
+import hashlib
+import zipfile
+
+SRCDIR = os.environ.get('SRC_ROOT')
+sys.path.insert(0, SRCDIR + "/external/pip-wheels/altgraph-0.17.5-py2.py3-none-any.whl")
+sys.path.insert(0, SRCDIR + "/external/pip-wheels/dnfile-0.18.0-py3-none-any.whl")
+sys.path.insert(0, SRCDIR + "/external/pip-wheels/macholib-1.16.4-py2.py3-none-any.whl")
+sys.path.insert(0, SRCDIR + "/external/pip-wheels/pefile-2024.8.26-py3-none-any.whl")
+sys.path.insert(0, SRCDIR + "/external/pip-wheels/pyelftools-0.33-py3-none-any.whl")
+import elftools.elf.elffile
+import dnfile
+import pefile
+
 
 sbom_data = {}
 root_gids = set()
@@ -765,6 +778,202 @@ def filter_files(files_by_package):
         files_by_package[package] = [file for file in files_by_package[package] if bool(file["flags"])]
 
 
+def add_dependencies(files_by_package):
+    """Add required checksum and dependencies to files."""
+
+    def get_sha512(abspath):
+        digest = hashlib.sha512()
+        with open(abspath, "rb") as f:
+            while True:
+                chunk = f.read(1<<20)
+                if not chunk:
+                    break
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    def find_dep(dep, instpath=None):
+        found = None
+        for package in files_by_package:
+            for file in files_by_package[package]:
+                if os.path.basename(file["instpath"]) == dep if sys.platform == "win32" \
+                        else os.path.basename(file["instpath"]).lower() == dep.lower():
+                    if found is None:
+                        found = file
+                    else:
+                        # special case for Python `_ssl` on Windows...
+                        if dep.lower() in ("libcrypto-3.dll", "libssl-3.dll"):
+                            if instpath and os.path.dirname(instpath).lower() == os.path.dirname(found["instpath"]).lower():
+                                continue
+                            elif instpath and os.path.dirname(instpath).lower() == os.path.dirname(file["instpath"]).lower():
+                                found = file
+                                continue
+                        raise Exception(f"ambiguous dependency {dep}")
+        return found
+
+    def get_jar_deps(abspath):
+        with open(abspath, "rb") as f:
+            if not zipfile.is_zipfile(f):
+                raise Exception(f"cannot parse jar: {abspath}")
+            with zipfile.ZipFile(f) as archive:
+                try:
+                    text = archive.read("META-INF/MANIFEST.MF").decode("utf-8", "replace")
+                except KeyError: # some .jars are help content ...
+                    return (None, set())
+
+                headers = {}
+                name = None
+                for line in text.splitlines():
+                    if not line.strip():
+                        break
+                    if line.startswith(" ") and name is not None:
+                        headers[name] += line[1:]
+                    elif ":" in line:
+                        name, _, value = line.partition(":")
+                        name = name.strip()
+                        headers[name] = value.strip()
+                deps = [item for item in headers.get("Class-Path", "").split()
+                        if item != "../" and item != ".."]
+                for dep in deps:
+                    if not(find_dep(dep)): # expect all jars to exist
+                        raise Exception(f"cannot find jar dependency: {dep}")
+                return ("JVM", set(deps))
+
+    def get_elf_deps(abspath):
+        with open(abspath, "rb") as f:
+            elf = elftools.elf.elffile.ELFFile(f)
+            needed = set()
+            dynamic = next(elf.iter_segments(type="PT_DYNAMIC"), None)
+            if dynamic is not None:
+                for tag in dynamic.iter_tags():
+                    if tag.entry.d_tag == "DT_NEEDED":
+                        needed.add(tag.needed)
+            return needed
+
+    def get_pe_deps(abspath):
+        result = set()
+        pe = pefile.PE(abspath, fast_load=True)
+        pe.parse_data_directories(
+            directories = [
+                pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"],
+                pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT"],
+            ])
+        for entry in getattr(pe, "DIRECTORY_ENTRY_IMPORT", []):
+            result.add(entry.dll.decode("ascii", "replace"))
+        for entry in getattr(pe, "DIRECTORY_ENTRY_DELAY_IMPORT", []):
+            result.add(entry.dll.decode("ascii", "replace"))
+        pe.close()
+
+        # Managed metadata only appears once data directories have been parsed
+        managed = dnfile.dnPE(abspath)
+        net = getattr(managed, "net", None)
+        if net is not None:
+            tables = net.mdtables
+            if tables.AssemblyRef:
+                for row in tables.AssemblyRef.rows:
+                    name = str(row.Name)
+                    if "." in name:
+                        raise Exception(f"AssemblyRef not expected to have suffix: {name} in {abspath}")
+                    result.add(name + ".dll")
+            # Managed code may call unmanaged code: these are delayed imports
+            if tables.ModuleRef:
+                for row in tables.ModuleRef.rows:
+                    name = str(row.Name)
+                    if name and name not in result:
+                        result.add(name)
+        managed.close()
+        return result
+
+    MACH_O_MAGIC = (
+        b"\xfe\xed\xfa\xce",
+        b"\xce\xfa\xed\xfe",
+        b"\xfe\xed\xfa\xcf",
+        b"\xcf\xfa\xed\xfe",
+    )
+
+    def get_deps(abspath):
+        (basename, ext) = os.path.splitext(abspath)
+        # first, check scripts with known interpreters
+        if ext == ".jar":
+            return get_jar_deps(abspath)
+        elif ext in (".class", ".java", ".bsh", ".js"):
+            return ("JVM", set())
+        elif ext in (".py", ".pyi"):
+            if sys.platform == "win32":
+                return ("program/python.exe", set())
+            elif sys.platform == "linux":
+                return ("program/python.bin", set())
+            elif sys.platform == "darwin":
+                return ("Contents/Resources/python", set())
+            else:
+                raise Exception("unexpected Python file on mobile platform")
+        elif ext in (".xba", ".xdl"):
+            if sys.platform == "win32" or sys.platform == "linux":
+                return ("program/soffice.bin", set())
+            elif sys.platform == "darwin":
+                return ("Contents/MacOS/soffice", set())
+            else:
+                raise Exception("unexpected Basic file on mobile platform")
+        elif ext == ".xsl":
+            if sys.platform == "win32" or sys.platform == "linux":
+                return ("program/soffice.bin", set())
+            elif sys.platform == "darwin":
+                return ("Contents/MacOS/soffice", set())
+            else:
+                raise Exception("TODO mobile platform")
+        elif ext == ".glsl":
+            return ("OpenGL", set())
+        elif ext == ".PS":
+            return ("Printer", set())
+        # just try everything; executables do not have extensions, Python
+        # libraries are named ".so" on macOS...
+        else:
+            with open(abspath, "rb") as f:
+                header = f.read(4096)
+                if header.startswith(b"\x7fELF"):
+                    return (None, get_elf_deps(abspath))
+                # no Universal Binaries are used so only check simple ones
+                elif header in MACH_O_MAGIC:
+                    return (None, get_mach_o_deps(abspath))
+                elif header.startswith(b"MZ") and len(header) > 0x40 \
+                    and f.seek(int.from_bytes(header[0x3C:0x40], "little")) \
+                    and f.read(4) == b"PE\0\0":
+                        return (None, get_pe_deps(abspath))
+                else: # all kinds of script files
+                    if header.startswith(b"#!"):
+                        return (header[2:].split()[0].decode("ascii", "replace"), set())
+                    # at the moment there are only /bin/sh scripts
+                    raise Exception(f"Unknown interpreter: {abspath}")
+
+    SYSDEPS = set() # just for debugging
+
+    for package in files_by_package:
+        for file in files_by_package[package]:
+            abspath = file["abspath"]
+            file["sha512"] = get_sha512(abspath)
+            if bool(file["flags"] & FileFlags.EXECUTABLE):
+                deps = []
+                sysdeps = []
+                temp = get_deps(abspath)
+                assert isinstance(temp, tuple)
+                (interpreter, alldeps) = temp
+                if interpreter is not None:
+                    if interpreter.find("/") == -1 or interpreter[0] == '/':
+                        sysdeps.append(interpreter)
+                    else: # bundled interpreters have relative paths
+                        deps.append(interpreter)
+                for dep in alldeps:
+                    depfile = find_dep(dep, file["instpath"])
+                    if depfile is None:
+                        sysdeps.append(dep)
+                    else:
+                        deps.append(depfile["instpath"])
+                file["deps"] = deps
+                file["sysdeps"] = sysdeps
+                SYSDEPS = SYSDEPS.union(sysdeps)
+
+#    print(f"SYSDEPS: {SYSDEPS}")
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 13:
         print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
@@ -790,6 +999,7 @@ if __name__ == "__main__":
         assign_externals(files_by_package, externalfiles)
         files = locate_files(files_by_package, languages, ziplist)
         filter_files(files)
+        add_dependencies(files)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

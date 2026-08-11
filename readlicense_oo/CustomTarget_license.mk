@@ -90,7 +90,10 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
-		$(call gb_ExternalExecutable_get_dependencies,python)
+		$(call gb_ExternalExecutable_get_dependencies,python) \
+		| $(call gb_Postprocess_get_target,AllLibraries) \
+		  $(call gb_Postprocess_get_target,AllExecutables) \
+		  $(call gb_Postprocess_get_target,AllPackages)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
 	$(foreach v, \
