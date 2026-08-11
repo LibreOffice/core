@@ -704,8 +704,6 @@ public:
 
 class JSToolbar final : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
-    std::map<sal_uInt16, weld::Widget*> m_pPopovers;
-
 public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
