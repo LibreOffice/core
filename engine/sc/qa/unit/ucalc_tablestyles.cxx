@@ -2392,5 +2392,171 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testDefaultTableStyleName)
     m_pDoc->DeleteTab(0);
 }
 
+namespace
+{
+// The background colour a style sets on one of its regions, or COL_AUTO when that
+// region carries no fill.
+Color regionBackground(const ScTableStyle& rStyle, ScTableStyleElement eElement)
+{
+    const std::map<ScTableStyleElement, const ScPatternAttr*> aPatterns = rStyle.GetSetPatterns();
+    const auto it = aPatterns.find(eElement);
+    if (it == aPatterns.end())
+        return COL_AUTO;
+    const SvxBrushItem* pBrush = it->second->GetItemSet().GetItemIfSet(ATTR_BACKGROUND, false);
+    return pBrush ? pBrush->GetColor() : COL_AUTO;
+}
+}
+
+// Copying a style makes a Custom style that carries the formatting of the style it
+// was copied from, under the name it was given.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleCopiesFormatting)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Duplicate"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    const ScTableStyle* pSource = pStyles->GetTableStyle(u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pSource);
+    const Color aSourceHeader = regionBackground(*pSource, ScTableStyleElement::HeaderRow);
+
+    const OUString aNewName
+        = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, u"Copy of Medium 2"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleCustom1"_ustr, aNewName);
+
+    const ScTableStyle* pCopy = pStyles->GetTableStyle(aNewName);
+    CPPUNIT_ASSERT(pCopy);
+    CPPUNIT_ASSERT_EQUAL(u"Copy of Medium 2"_ustr, pCopy->GetUIName());
+    CPPUNIT_ASSERT_EQUAL(aSourceHeader, regionBackground(*pCopy, ScTableStyleElement::HeaderRow));
+    // The copy is the user's own style, so it is not one of the generated built-ins
+    // and is grouped as Custom.
+    CPPUNIT_ASSERT(!pCopy->IsOOXMLDefault());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Copying a name no style is registered under changes nothing.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleUnknownSource)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"DuplicateMissing"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    const size_t nBefore = pStyles->GetSortedTableStyles().size();
+    const OUString aNewName
+        = pStyles->DuplicateTableStyle(u"NoSuchStyle"_ustr, u"Copy of nothing"_ustr);
+
+    CPPUNIT_ASSERT(aNewName.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(nBefore, pStyles->GetSortedTableStyles().size());
+    CPPUNIT_ASSERT(!pStyles->GetTableStyle(u"TableStyleCustom1"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Each copy gets a name of its own, and copying a copy is allowed.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleNamesEachCopy)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"DuplicateTwice"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    CPPUNIT_ASSERT_EQUAL(
+        u"TableStyleCustom1"_ustr,
+        pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, u"First"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"TableStyleCustom2"_ustr,
+        pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, u"Second"_ustr));
+    // A copy can itself be copied.
+    CPPUNIT_ASSERT_EQUAL(
+        u"TableStyleCustom3"_ustr,
+        pStyles->DuplicateTableStyle(u"TableStyleCustom1"_ustr, u"Third"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr,
+                         pStyles->GetTableStyle(u"TableStyleCustom1"_ustr)->GetUIName());
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr,
+                         pStyles->GetTableStyle(u"TableStyleCustom3"_ustr)->GetUIName());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// A copy holds its own formatting, so changing one style leaves the other alone.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleIsIndependent)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"DuplicateOwn"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    auto pPattern = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pPattern->GetItemSetWritable().Put(SvxBrushItem(COL_LIGHTRED, ATTR_BACKGROUND));
+    auto pOriginal = std::make_unique<ScTableStyle>(u"TableStyleCustom1"_ustr,
+                                                   std::optional<OUString>(u"Original"_ustr));
+    pOriginal->SetPattern(ScTableStyleElement::WholeTable, std::move(pPattern));
+    pStyles->AddTableStyle(std::move(pOriginal));
+
+    const OUString aCopyName
+        = pStyles->DuplicateTableStyle(u"TableStyleCustom1"_ustr, u"Copy"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleCustom2"_ustr, aCopyName);
+
+    // Recolour the original; the copy keeps the colour it was made with.
+    auto pRecolour = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pRecolour->GetItemSetWritable().Put(SvxBrushItem(COL_LIGHTBLUE, ATTR_BACKGROUND));
+    const_cast<ScTableStyle*>(pStyles->GetTableStyle(u"TableStyleCustom1"_ustr))
+        ->SetPattern(ScTableStyleElement::WholeTable, std::move(pRecolour));
+
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE,
+                         regionBackground(*pStyles->GetTableStyle(u"TableStyleCustom1"_ustr),
+                                          ScTableStyleElement::WholeTable));
+    CPPUNIT_ASSERT_EQUAL(
+        COL_LIGHTRED,
+        regionBackground(*pStyles->GetTableStyle(aCopyName), ScTableStyleElement::WholeTable));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleUINameStaysApart)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"DuplicateNaming"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    // Copying one style repeatedly asks for the same name every time, which is what
+    // the command does, so each copy has to end up under a name of its own.
+    const OUString aRequested = u"Copy of Medium 2"_ustr;
+    const OUString aFirst = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, aRequested);
+    const OUString aSecond = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, aRequested);
+    const OUString aThird = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, aRequested);
+
+    CPPUNIT_ASSERT_EQUAL(aRequested, pStyles->GetTableStyle(aFirst)->GetUIName());
+    CPPUNIT_ASSERT_EQUAL(u"Copy of Medium 2 (2)"_ustr, pStyles->GetTableStyle(aSecond)->GetUIName());
+    CPPUNIT_ASSERT_EQUAL(u"Copy of Medium 2 (3)"_ustr, pStyles->GetTableStyle(aThird)->GetUIName());
+
+    // A name already taken by a style the user made is avoided the same way.
+    pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, u"Taken"_ustr);
+    const OUString aAfterTaken
+        = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, u"Taken"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Taken (2)"_ustr, pStyles->GetTableStyle(aAfterTaken)->GetUIName());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
