@@ -1511,6 +1511,7 @@ callback (gpointer pData)
     case COKitCallbackType::CLIPBOARD_MIMETYPES:
     case COKitCallbackType::SHAPE_DRAG_PREVIEW:
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
+    case COKitCallbackType::PRESENTATION_INFO:
     {
         // TODO: Implement me
         break;
