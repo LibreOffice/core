@@ -46,38 +46,6 @@ namespace cppcanvas
         class Action
         {
         public:
-            /** Used for rendering action subsets
-
-                There are several cases where an Action might have
-                subsettable content, e.g. text, or referenced
-                metafiles, like the transparent action.
-
-                Generally, at the metafile renderer, all actions are
-                'flattened' out, i.e. a meta action rendering the
-                string "Hello" counts five indices, and a transparent
-                action containing a metafile with 100 actions counts
-                at least 100 indices (contained transparency or text
-                actions recursively add to this value). From the
-                outside, the subset to render is referenced via this
-                flat index range
-             */
-            struct Subset
-            {
-                /** Denotes start of the subset.
-
-                    The index given here specifies the first subaction
-                    to render.
-                 */
-                sal_Int32   mnSubsetBegin;
-
-                /** Denotes end of the subset
-
-                    The index given here specifies the first subaction
-                    <em>not<em> to render, i.e. one action behind the
-                    subset to be rendered
-                 */
-                sal_Int32   mnSubsetEnd;
-            };
 
             virtual ~Action() {}
 
