@@ -285,6 +285,19 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_CHAR_FONT_STYLE
+    [
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_FONT_VARIATIONS
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_CHAR_FONTHEIGHT // status()
     [
         ExecMethod = Exec;

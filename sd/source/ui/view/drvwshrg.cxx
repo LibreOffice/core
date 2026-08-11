@@ -44,6 +44,7 @@
 
 using namespace sd;
 #define ShellClass_DrawViewShell
+#include <editeng/fontvariationsitem.hxx>
 #include <sdslots.hxx>
 #define ShellClass_GraphicViewShell
 #include <sdgslots.hxx>
