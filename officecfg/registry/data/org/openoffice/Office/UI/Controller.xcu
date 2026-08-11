@@ -1690,6 +1690,17 @@
           <value>com.sun.star.comp.svx.CharacterSpacingToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="FontVariationsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontVariations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontVariationsToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="InsertSymbolToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:CharmapControl</value>

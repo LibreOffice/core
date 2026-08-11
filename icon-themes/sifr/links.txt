@@ -2759,3 +2759,5 @@ cmd/sc_objecttitledescription-oleobjects.png cmd/sc_objecttitledescription.png
 cmd/lc_objecttitledescription-oleobjects.png cmd/lc_objecttitledescription.png
 cmd/sc_objecttitledescription-drawingobjects.png cmd/sc_objecttitledescription.png
 cmd/lc_objecttitledescription-drawingobjects.png cmd/lc_objecttitledescription.png
+cmd/lc_fontvariations.png cmd/lc_fontdialog.png
+cmd/sc_fontvariations.png cmd/sc_fontdialog.png
