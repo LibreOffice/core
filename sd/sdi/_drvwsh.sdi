@@ -2810,6 +2810,15 @@ interface DrawView
         ExecMethod = ExecChar ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_CHAR_FONT_STYLE
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_CHAR_FONT_VARIATIONS
+    [
+        ExecMethod = ExecChar ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_CHAR_FONTHEIGHT
     [
         ExecMethod = ExecChar ;
