@@ -355,6 +355,12 @@ class TableStylesService {
 				text: _('Set as Default'),
 				pos: 0,
 			},
+			{
+				id: 'duplicate-table-style',
+				type: 'comboboxentry',
+				text: _('Duplicate Style'),
+				pos: 1,
+			},
 		];
 
 		const anchor = this.getMenuAnchor();
@@ -369,8 +375,13 @@ class TableStylesService {
 			entry,
 		) => {
 			if (eventType !== 'selected') return false;
-			if ((entry as MenuDefinition).id === 'set-default-table-style') {
+			const id = (entry as MenuDefinition).id;
+			if (id === 'set-default-table-style') {
 				app.map.sendUnoCommand('.uno:SetDefaultTableStyle', {
+					StyleName: { type: 'string', value: styleName },
+				});
+			} else if (id === 'duplicate-table-style') {
+				app.map.sendUnoCommand('.uno:DuplicateTableStyle', {
 					StyleName: { type: 'string', value: styleName },
 				});
 			}
