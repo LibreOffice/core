@@ -4286,7 +4286,7 @@ void lokit_main(
         if (queryVersion)
         {
             LOKitHelper::ScopedString versionInfo(coKit->getVersionInfo());
-            if (!versionInfo.get())
+            if (!versionInfo)
             {
                 // A matching office library always hands back a version string. A null
                 // means the call landed on some other COKit member, i.e. the library
