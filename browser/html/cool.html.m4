@@ -281,6 +281,7 @@ m4_ifelse(MOBILEAPP, [true],
       )
       data-mobile-app-name='MOBILEAPPNAME'
       data-copyright-year='_YEAR_'
+      data-enable-experimental-features='ENABLE_EXPERIMENTAL'
       data-vendor='VENDOR'
       />
       ],

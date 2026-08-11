@@ -526,6 +526,7 @@ class MobileAppInitializer extends InitializerBase {
 
 		window.canvasSlideshowEnabled = true;
 		window.enableAccessibility = true;
+		window.enableExperimentalFeatures = element.dataset.enableExperimentalFeatures === 'true';
 	}
 }
 
