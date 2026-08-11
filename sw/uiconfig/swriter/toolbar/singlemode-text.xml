@@ -27,6 +27,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbaritem xlink:href=".uno:FontStyleName"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontVariations"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>

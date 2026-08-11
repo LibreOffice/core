@@ -224,6 +224,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/SelectionAnalyzer \
     svx/source/sidebar/SelectionChangeHandler \
     svx/source/sidebar/text/TextCharacterSpacingControl \
+    svx/source/sidebar/text/FontVariationsToolBoxControl \
     svx/source/sidebar/text/TextCharacterSpacingPopup \
     svx/source/sidebar/text/TextUnderlineControl \
     svx/source/sidebar/text/TextUnderlinePopup \

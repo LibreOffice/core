@@ -55,6 +55,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/filternavigator \
 	svx/uiconfig/ui/findbox \
 	svx/uiconfig/ui/fontstylebox \
+	svx/uiconfig/ui/fontvariationscontrol \
 	svx/uiconfig/ui/fontvariationfragment \
 	svx/uiconfig/ui/fontvariationspopover \
 	svx/uiconfig/ui/findreplacedialog \
