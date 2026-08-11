@@ -19,6 +19,8 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontStyleName"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontVariations"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbaritem xlink:href=".uno:Grow"/>
