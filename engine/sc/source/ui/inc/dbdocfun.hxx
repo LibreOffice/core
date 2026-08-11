@@ -103,7 +103,7 @@ public:
     SC_DLLPUBLIC void ModifyDBData( const ScDBData& rNewData );  // Name unchanged
     // Resize an existing styled Table to rNewArea: relocates the Total Row when the row
     // span changes, otherwise a plain ModifyDBData. Returns false when refused (overlap).
-    SC_DLLPUBLIC bool ResizeTable( const ScDBData& rOldData, const ScRange& rNewArea );
+    SC_DLLPUBLIC bool ResizeTable( const ScDBData& rOldData, const ScRange& rNewArea, bool bApi = false );
 
     // Bake the table style into cell attributes, then drop the database range and its autofilter.
     // One undo action.

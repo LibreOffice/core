@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsOverlapRefusedNoHalfA
     // A1:C11 -> A1:E26 grows columns (into Table2) AND rows on a Total-Row table. The column
     // grow overlaps, so the whole resize must be refused up front: no columns extended, no
     // undo entry - not a half-applied column change that the Total-Row step then backs out of.
-    CPPUNIT_ASSERT(!ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 4, 25, 0)));
+    CPPUNIT_ASSERT(!ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 4, 25, 0), /*bApi*/true));
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
     CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
 }

@@ -959,7 +959,7 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     aModificator.SetDocumentModified();
 }
 
-bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea)
+bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea, bool bApi)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
@@ -976,7 +976,8 @@ bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea)
     // Refuse growing over another structure up front, before any change is applied.
     if (rOldData.WouldResizeOverlap(rDoc, aNewRange))
     {
-        rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
+        if (!bApi)
+            rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
         return false;
     }
 
@@ -1026,7 +1027,7 @@ bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea)
             aRowData.SetSubTotalParam(aSubTotalParam);
             aSubTotalParam.bRemoveOnly = false;
             aSubTotalParam.bReplace = true;
-            bOk = DoTableSubTotals(aRowData.GetTab(), aRowData, aSubTotalParam, true, false);
+            bOk = DoTableSubTotals(aRowData.GetTab(), aRowData, aSubTotalParam, true, bApi);
         }
 
         if (bGroup)
