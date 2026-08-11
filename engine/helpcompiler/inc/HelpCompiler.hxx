@@ -184,7 +184,6 @@ public:
                 fs::path in_resCompactStylesheet,
                 fs::path in_resEmbStylesheet,
                 std::string in_module,
-                std::string in_lang,
                 bool in_bExtensionMode);
     /// @throws HelpProcessingException
     /// @throws BasicCodeTagger::TaggerException
@@ -197,7 +196,7 @@ private:
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);
     StreamTable &streamTable;
     const fs::path inputFile, src, zipdir;
-    const std::string module, lang;
+    const std::string module;
     const fs::path resCompactStylesheet;
     const fs::path resEmbStylesheet;
     bool bExtensionMode;

@@ -346,7 +346,7 @@ void HelpLinker::link()
             }
 
             HelpCompiler hc( streamTable, std::move(xhpFile), std::move(langsourceRoot), zipdir,
-                compactStylesheet, embeddStylesheet, module, lang, bExtensionMode );
+                compactStylesheet, embeddStylesheet, module, bExtensionMode );
 
             HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
             hc.compile();

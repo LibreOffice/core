@@ -33,10 +33,10 @@
 
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, fs::path in_inputFile,
     fs::path in_src, fs::path in_zipdir, fs::path in_resCompactStylesheet,
-    fs::path in_resEmbStylesheet, std::string in_module, std::string in_lang,
+    fs::path in_resEmbStylesheet, std::string in_module,
     bool in_bExtensionMode)
     : streamTable(in_streamTable), inputFile(std::move(in_inputFile)),
-    src(std::move(in_src)), zipdir(std::move(in_zipdir)), module(std::move(in_module)), lang(std::move(in_lang)), resCompactStylesheet(std::move(in_resCompactStylesheet)),
+    src(std::move(in_src)), zipdir(std::move(in_zipdir)), module(std::move(in_module)), resCompactStylesheet(std::move(in_resCompactStylesheet)),
     resEmbStylesheet(std::move(in_resEmbStylesheet)), bExtensionMode( in_bExtensionMode )
 {
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
