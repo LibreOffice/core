@@ -94,10 +94,6 @@ namespace cppcanvas
                 virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                bool renderSubset( vclcanvas::Canvas& rCanvas,
-                                           const vclcanvas::ViewState& rViewState,
-                                           const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const override;
 
@@ -109,7 +105,6 @@ namespace cppcanvas
 
                 mutable ::Bitmap                                    maBufferBitmap; // contains last rendered version
                 mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains last active transformation
-                mutable Subset                                      maLastSubset; // contains last effective subset
 
                 // transformation for
                 // mxBufferBitmap content
@@ -149,9 +144,6 @@ namespace cppcanvas
                                    rDstPoint,
                                    nullptr,
                                    nullptr );
-
-                maLastSubset.mnSubsetBegin = 0;
-                maLastSubset.mnSubsetEnd = -1;
             }
 
             // TODO(P3): The whole float transparency handling is a mess,
@@ -161,10 +153,9 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::renderSubset( vclcanvas::Canvas& rCanvas,
-                                                        const vclcanvas::ViewState& rViewState,
-                                                        const ::basegfx::B2DHomMatrix&    rTransformation,
-                                                        const Subset&                     rSubset ) const
+            bool TransparencyGroupAction::render( vclcanvas::Canvas& rCanvas,
+                                                  const vclcanvas::ViewState& rViewState,
+                                                  const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TransparencyGroupAction::renderSubset()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TransparencyGroupAction: 0x" << std::hex << this );
@@ -202,9 +193,7 @@ namespace cppcanvas
                 // total transformation changes, we've got to
                 // re-render the bitmap
                 if( maBufferBitmap.IsEmpty() ||
-                    aTotalTransform != maLastTransformation ||
-                    rSubset.mnSubsetBegin != maLastSubset.mnSubsetBegin ||
-                    rSubset.mnSubsetEnd != maLastSubset.mnSubsetEnd )
+                    aTotalTransform != maLastTransformation )
                 {
                     DBG_TESTSOLARMUTEX();
 
@@ -217,10 +206,9 @@ namespace cppcanvas
                     // bounds.
                     bool        bHasTextActions = false;
                     MetaAction* pCurrAct;
-                    int         nCurrActionIndex;
-                    for( nCurrActionIndex=0, pCurrAct=mpGroupMtf->FirstAction();
+                    for( pCurrAct=mpGroupMtf->FirstAction();
                          pCurrAct && !bHasTextActions;
-                         ++nCurrActionIndex, pCurrAct = mpGroupMtf->NextAction() )
+                         pCurrAct = mpGroupMtf->NextAction() )
                     {
                         switch( pCurrAct->GetType() )
                         {
@@ -228,8 +216,7 @@ namespace cppcanvas
                             case MetaActionType::TEXTARRAY:
                             case MetaActionType::STRETCHTEXT:
                             case MetaActionType::TEXTRECT:
-                                if( ( rSubset.mnSubsetBegin == 0 && rSubset.mnSubsetEnd == -1 ) || ( rSubset.mnSubsetBegin <= nCurrActionIndex && rSubset.mnSubsetEnd > nCurrActionIndex ) )
-                                    bHasTextActions = true;
+                                bHasTextActions = true;
                                 break;
                             default:
                                 break;
@@ -269,114 +256,18 @@ namespace cppcanvas
                     aVDev->SetOutputSizePixel( aBitmapSizePixel, true, true );
                     aVDev->SetMapMode();
 
-                    if( rSubset.mnSubsetBegin != 0 ||
-                        rSubset.mnSubsetEnd != -1 )
-                    {
-                        // true subset - extract referenced
-                        // metaactions from mpGroupMtf
-                        GDIMetaFile aMtf;
-
-                        // extract subset actions
-                        for( nCurrActionIndex=0,
-                                 pCurrAct=mpGroupMtf->FirstAction();
-                             pCurrAct;
-                             ++nCurrActionIndex, pCurrAct = mpGroupMtf->NextAction() )
-                        {
-                            switch( pCurrAct->GetType() )
-                            {
-                                case MetaActionType::PUSH:
-                                case MetaActionType::POP:
-                                case MetaActionType::CLIPREGION:
-                                case MetaActionType::ISECTRECTCLIPREGION:
-                                case MetaActionType::ISECTREGIONCLIPREGION:
-                                case MetaActionType::MOVECLIPREGION:
-                                case MetaActionType::LINECOLOR:
-                                case MetaActionType::FILLCOLOR:
-                                case MetaActionType::TEXTCOLOR:
-                                case MetaActionType::TEXTFILLCOLOR:
-                                case MetaActionType::TEXTLINECOLOR:
-                                case MetaActionType::TEXTALIGN:
-                                case MetaActionType::FONT:
-                                case MetaActionType::RASTEROP:
-                                case MetaActionType::REFPOINT:
-                                case MetaActionType::LAYOUTMODE:
-                                    // state-changing action - copy as-is
-                                    aMtf.AddAction( pCurrAct->Clone() );
-                                    break;
-
-                                case MetaActionType::GRADIENT:
-                                case MetaActionType::HATCH:
-                                case MetaActionType::EPS:
-                                case MetaActionType::COMMENT:
-                                case MetaActionType::POINT:
-                                case MetaActionType::PIXEL:
-                                case MetaActionType::LINE:
-                                case MetaActionType::RECT:
-                                case MetaActionType::ROUNDRECT:
-                                case MetaActionType::ELLIPSE:
-                                case MetaActionType::ARC:
-                                case MetaActionType::PIE:
-                                case MetaActionType::CHORD:
-                                case MetaActionType::POLYLINE:
-                                case MetaActionType::POLYGON:
-                                case MetaActionType::POLYPOLYGON:
-                                case MetaActionType::BMP:
-                                case MetaActionType::BMPSCALE:
-                                case MetaActionType::BMPSCALEPART:
-                                case MetaActionType::BMPEX:
-                                case MetaActionType::BMPEXSCALE:
-                                case MetaActionType::BMPEXSCALEPART:
-                                case MetaActionType::MASK:
-                                case MetaActionType::MASKSCALE:
-                                case MetaActionType::MASKSCALEPART:
-                                case MetaActionType::GRADIENTEX:
-                                case MetaActionType::WALLPAPER:
-                                case MetaActionType::Transparent:
-                                case MetaActionType::FLOATTRANSPARENT:
-                                case MetaActionType::TEXT:
-                                case MetaActionType::TEXTARRAY:
-                                case MetaActionType::TEXTLINE:
-                                case MetaActionType::TEXTRECT:
-                                case MetaActionType::STRETCHTEXT:
-                                    // output-generating action - only
-                                    // copy, if we're within the
-                                    // requested subset
-                                    if( rSubset.mnSubsetBegin <= nCurrActionIndex &&
-                                        rSubset.mnSubsetEnd > nCurrActionIndex )
-                                    {
-                                        aMtf.AddAction( pCurrAct->Clone() );
-                                    }
-                                    break;
-
-                                default:
-                                    SAL_WARN( "cppcanvas.emf", "Unknown meta action type encountered" );
-                                    break;
-                            }
-                        }
-
-                        aVDev->DrawTransparent( aMtf,
-                                               aBitmapPoint,
-                                               aBitmapSizePixel,
-                                               aMtfOffsetPoint,
-                                               aOutputSizePixel,
-                                               *mpAlphaGradient );
-                    }
-                    else
-                    {
-                        // no subsetting - render whole mtf
-                        aVDev->DrawTransparent( *mpGroupMtf,
-                                               aBitmapPoint,
-                                               aBitmapSizePixel,
-                                               aMtfOffsetPoint,
-                                               aOutputSizePixel,
-                                               *mpAlphaGradient );
-                    }
+                    // no subsetting - render whole mtf
+                    aVDev->DrawTransparent( *mpGroupMtf,
+                                           aBitmapPoint,
+                                           aBitmapSizePixel,
+                                           aMtfOffsetPoint,
+                                           aOutputSizePixel,
+                                           *mpAlphaGradient );
 
 
                     // update buffered bitmap and transformation
                     maBufferBitmap = aVDev->GetBitmap(aBitmapPoint, aBitmapSizePixel);
                     maLastTransformation = aTotalTransform;
-                    maLastSubset = rSubset;
                 }
 
                 // determine target transformation (we can't simply pass
@@ -427,25 +318,6 @@ namespace cppcanvas
                                       rViewState,
                                       aLocalState );
                 return true;
-            }
-
-            // TODO(P3): The whole float transparency handling is a mess,
-            // this should be refactored. What's more, the old idea of
-            // having only internal 'metaactions', and not the original
-            // GDIMetaFile now looks a lot less attractive. Try to move
-            // into the direction of having a direct GDIMetaFile2XCanvas
-            // renderer, and maybe a separate metafile XCanvas
-            // implementation.
-            bool TransparencyGroupAction::render( vclcanvas::Canvas& rCanvas,
-                                                  const vclcanvas::ViewState& rViewState,
-                                                  const ::basegfx::B2DHomMatrix& rTransformation ) const
-            {
-                Subset aSubset;
-
-                aSubset.mnSubsetBegin = 0;
-                aSubset.mnSubsetEnd   = -1;
-
-                return renderSubset( rCanvas, rViewState, rTransformation, aSubset );
             }
 
             sal_Int32 TransparencyGroupAction::getActionCount() const
