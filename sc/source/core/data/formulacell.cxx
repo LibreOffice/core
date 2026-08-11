@@ -2702,7 +2702,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
     }
 #endif
 
-    if( !pCode->GetCodeLen() )
+    if( !pCode || !pCode->GetCodeLen() )
         return;
 
     if ( !pCode->IsRecalcModeAlways() )
