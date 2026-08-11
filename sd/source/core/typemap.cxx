@@ -30,6 +30,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fontvariationsitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/lspcitem.hxx>

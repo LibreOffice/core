@@ -742,6 +742,19 @@ interface TextDrawFont
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_CHAR_FONT_STYLE
+    [
+        StateMethod = GetDrawTextCtrlState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_FONT_VARIATIONS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTextCtrlState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_CHAR_FONTHEIGHT // status()
     [
         ExecMethod = Execute ;

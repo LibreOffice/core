@@ -24,6 +24,7 @@
 #include <sfx2/msg.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fontvariationsitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/postattr.hxx>
