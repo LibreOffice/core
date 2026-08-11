@@ -24,6 +24,8 @@
 #include <common/MobileApp.hpp>
 #include <qt/qt.hpp>
 
+#include <o3tl/unreachable.hxx>
+
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
@@ -74,6 +76,37 @@ std::vector<WebView*> WebView::s_instances;
 
 namespace
 {
+class LoggingWebEnginePage: public QWebEnginePage {
+public:
+    using QWebEnginePage::QWebEnginePage;
+
+private:
+#if ENABLE_DEBUG
+    void javaScriptConsoleMessage(
+        JavaScriptConsoleMessageLevel level, QString const & message, int lineNumber,
+        QString const & sourceID) override
+    {
+        char const * tag;
+        switch (level) {
+        case InfoMessageLevel:
+            tag = "info";
+            break;
+        case WarningMessageLevel:
+            tag = "warn";
+            break;
+        case ErrorMessageLevel:
+            tag = "error";
+            break;
+        default:
+            O3TL_UNREACHABLE;
+        }
+        LOG_TRC(
+            "JS console [" << tag << "] " << sourceID.toStdString() << ":" << lineNumber << ": "
+            << message.toStdString());
+    }
+#endif
+};
+
 std::string getUILanguage()
 {
     const char* envVars[] = {"LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE"};
@@ -729,7 +762,7 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
         _mainWindow->setMinimumSize(minWidth, minHeight);
     }
 
-    QWebEnginePage* page = new QWebEnginePage(profile, _webView.get());
+    QWebEnginePage* page = new LoggingWebEnginePage(profile, _webView.get());
     _webView->setPage(page);
 
     page->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
