@@ -55,12 +55,15 @@ enum class SdrInsertFlags
 {
     NONE        = 0x0000,
     DONTMARK    = 0x0001, /* object will not be marked (the actual marking remains) */
+    /* the paste position was worked out from the document, rather than from the client visible
+       area, which the kit does not always know */
+    POSITIONFROMDOCUMENT = 0x0002,
     SETDEFATTR  = 0x0004, /* actual attributes (+StyleSheet) are assigned to the object */
     SETDEFLAYER = 0x0008, /* actual layer is assigned to the object */
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x0d> {};
+    template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x0f> {};
 }
 
 class SVXCORE_DLLPUBLIC SdrEditView : public SdrMarkView

@@ -46,6 +46,10 @@
 #include <editeng/flditem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <vcl/virdev.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+#include <drwlayer.hxx>
+#include <drawview.hxx>
 
 using namespace com::sun::star;
 
@@ -849,6 +853,51 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartBackgroundFollowsDarkMode)
     // Without the accompanying fix the automatic background of the chart was not resolved for
     // the rendering view, so the chart stayed light while the sheet around it went dark
     CPPUNIT_ASSERT_EQUAL(aDarkColor, Color(pAccess->GetPixel(5, 5)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteShapeAtCellCursor)
+{
+    // A shape copied and then pasted with the cell cursor further down the sheet lands at the
+    // cursor, not back on top of the shape it was copied from.
+    ScModelObj* pModelObj = createDoc("shape-paste-position.fods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    const tools::Rectangle aSourceRectangle = pPage->GetObj(0)->GetSnapRect();
+
+    ScDrawView* pDrawView = pView->GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    pDrawView->MarkObj(pPage->GetObj(0), pDrawView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // The shape is left behind and the cell cursor goes to A100, far enough down that a paste
+    // ignoring the cursor is easy to tell apart from one honouring it.
+    pDrawView->UnmarkAllObj();
+    const SCROW nTargetRow = 99;
+    pView->SetCursor(0, nTargetRow);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+    const tools::Rectangle aPastedRectangle = pPage->GetObj(1)->GetSnapRect();
+
+    // The copy is clear of the original, which it used to sit exactly on top of.
+    CPPUNIT_ASSERT_GREATER(aSourceRectangle.Bottom(), aPastedRectangle.Top());
+
+    // It sits on the cursor row. A pasted object is centred on the paste point, so it reaches
+    // half its own height above the top of that row.
+    const tools::Rectangle aTargetCell = pDoc->GetMMRect(0, nTargetRow, 0, nTargetRow, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Top()), double(aPastedRectangle.Center().Y()),
+                                 double(aSourceRectangle.GetHeight()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
