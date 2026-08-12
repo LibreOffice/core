@@ -84,6 +84,7 @@ class SlideShowHandler {
 	private bIsFirstAutoEffectRunning: boolean = false;
 	private static readonly A11Y_TRANSITION_DELAY: number = 1000;
 	private static readonly A11Y_SLIDE_CONTENT_DELAY: number = 2000;
+	private aPendingA11yTimeouts: number[] = [];
 	private transitionsWithMipMapEnabled = new Set([
 		TransitionSubType.CORNERSOUT,
 		TransitionSubType.TOPTOBOTTOM,
@@ -239,6 +240,28 @@ class SlideShowHandler {
 	}
 
 	addA11yString(a11yString: string) {
+		this.clearPendingA11yStrings();
+		this.writeA11yString(a11yString);
+	}
+
+	addA11yStringDelayed(a11yString: string, nDelay: number) {
+		const nTimeout = window.setTimeout(() => {
+			this.aPendingA11yTimeouts = this.aPendingA11yTimeouts.filter(
+				(nPending: number) => nPending !== nTimeout,
+			);
+			this.writeA11yString(a11yString);
+		}, nDelay);
+		this.aPendingA11yTimeouts.push(nTimeout);
+	}
+
+	clearPendingA11yStrings() {
+		this.aPendingA11yTimeouts.forEach((nTimeout: number) =>
+			clearTimeout(nTimeout),
+		);
+		this.aPendingA11yTimeouts = [];
+	}
+
+	private writeA11yString(a11yString: string) {
 		if (this.presenter._enableA11y) {
 			const canvas = this.getContext()._canvas;
 			if (canvas) {
@@ -314,11 +337,8 @@ class SlideShowHandler {
 			aAnimatedElementMap.forEach((aAnimatedElement: AnimatedElement) => {
 				aAnimatedElement.notifyNextEffectStart(currentEffect);
 				if (effect === currentEffect) {
-					setTimeout(
-						this.addA11yString.bind(
-							this,
-							_('Animation Start: ') + aAnimatedElement.getTitle(),
-						),
+					this.addA11yStringDelayed(
+						_('Animation Start: ') + aAnimatedElement.getTitle(),
 						500,
 					);
 				}
@@ -416,11 +436,8 @@ class SlideShowHandler {
 
 		const slideInfo = this.getSlideInfo(nNewSlideIndex);
 		if (slideInfo.transitionLabel) {
-			setTimeout(
-				this.addA11yString.bind(
-					this,
-					_('Transition: {0}').replace('{0}', slideInfo.transitionLabel),
-				),
+			this.addA11yStringDelayed(
+				_('Transition: {0}').replace('{0}', slideInfo.transitionLabel),
 				SlideShowHandler.A11Y_TRANSITION_DELAY,
 			);
 		}
@@ -635,7 +652,7 @@ class SlideShowHandler {
 	 *      False if there is no more effect to skip, true otherwise.
 	 */
 	skipPlayingOrNextEffect() {
-		setTimeout(this.addA11yString.bind(this, this._labelMap['skip']), 600);
+		this.addA11yStringDelayed(this._labelMap['skip'], 600);
 
 		if (this.isTransitionPlaying()) {
 			this.skipTransition();
@@ -886,6 +903,7 @@ class SlideShowHandler {
 			this.exitSlideShow();
 		}
 
+		this.clearPendingA11yStrings();
 		if (this.theMetaPres.numberOfSlides - 1 == nNewSlide) {
 			this.addA11yString(this._labelMap['lastPage']);
 		} else if (nNewSlide == 0) {
@@ -1066,8 +1084,8 @@ class SlideShowHandler {
 	private presentSlide(nSlideIndex: number) {
 		const slideInfo = this.getSlideInfo(nSlideIndex);
 		if (slideInfo.a11y) {
-			setTimeout(
-				this.addA11yString.bind(this, slideInfo.a11y),
+			this.addA11yStringDelayed(
+				slideInfo.a11y,
 				SlideShowHandler.A11Y_SLIDE_CONTENT_DELAY,
 			);
 		}
