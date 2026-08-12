@@ -30,6 +30,7 @@ shared_sources = \
                  ../common/FileUtil-unix.cpp \
                  ../common/FileUtil.cpp \
                  ../common/JailUtil.cpp \
+                 ../common/Landlock.cpp \
                  ../common/Log-common.cpp \
                  ../common/Log-poco.cpp \
                  ../common/MobileApp.cpp \
