@@ -635,7 +635,7 @@ class SlideShowHandler {
 	 *      False if there is no more effect to skip, true otherwise.
 	 */
 	skipPlayingOrNextEffect() {
-		this.addA11yString(this._labelMap['skip']);
+		setTimeout(this.addA11yString.bind(this, this._labelMap['skip']), 600);
 
 		if (this.isTransitionPlaying()) {
 			this.skipTransition();
