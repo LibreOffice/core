@@ -3328,6 +3328,9 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_FONT_VARIATIONS */    OutHTML_CSS1Attr,
 /* RES_CHRATR_CJK_FONT_VARIATIONS */ OutHTML_CSS1Attr,
 /* RES_CHRATR_CTL_FONT_VARIATIONS */ OutHTML_CSS1Attr,
+/* RES_CHRATR_FONT_FEATURES */      nullptr,
+/* RES_CHRATR_CJK_FONT_FEATURES */  nullptr,
+/* RES_CHRATR_CTL_FONT_FEATURES */  nullptr,
 
 /* RES_TXTATR_REFMARK */            nullptr,
 /* RES_TXTATR_TOXMARK */            nullptr,
