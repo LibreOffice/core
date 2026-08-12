@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#define NUM_DEFAULT_VALUES 44
+#define NUM_DEFAULT_VALUES 47
 
 #include "swfont.hxx"
 
