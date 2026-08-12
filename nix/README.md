@@ -31,6 +31,8 @@ nix-shell . -A shells.ios --pure
 
 ## All shells
 
-| Shell | Description                                     |
-| ----- | ----------------------------------------------- |
-| ios   | Used for building the Collabora Office iOS apps |
+| Shell          | Description                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| ios            | Used for building the Collabora Office iOS apps                                                                                       |
+| android        | Used for building the architecture-universal Collabora Office Android apps                                                            |
+| android-{arch} | Used for building the Collabora Office Android apps for a specific Android architecture (`arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) |
