@@ -9,6 +9,8 @@
  */
 
 #include <utility>
+#include <o3tl/string_view.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/font/Feature.hxx>
 #include <svdata.hxx>
 
@@ -55,6 +57,70 @@ FeatureSetting::FeatureSetting(const OString& feature)
         m_nStart = aFeat.start;
         m_nEnd = aFeat.end;
     }
+}
+
+std::vector<FeatureSetting> FeaturesFromString(std::u16string_view rString)
+{
+    std::vector<FeatureSetting> aFeatures;
+
+    // Tokenize on commas: "smcp" 1, "onum" 0
+    std::size_t nTokenPos = 0;
+    do
+    {
+        std::u16string_view aToken = o3tl::trim(o3tl::getToken(rString, u',', nTokenPos));
+        if (aToken.size() < 6)
+            continue;
+
+        sal_Unicode cQuote = aToken[0];
+        if ((cQuote != '"' && cQuote != '\'') || aToken[5] != cQuote)
+            continue;
+
+        // Feature tags are four ASCII letters, digits or spaces
+        bool bValidTag = true;
+        for (int j = 1; j <= 4; ++j)
+        {
+            if (!rtl::isAsciiAlphanumeric(aToken[j]) && aToken[j] != ' ')
+            {
+                bValidTag = false;
+                break;
+            }
+        }
+        if (!bValidTag)
+            continue;
+
+        const char aTag[] = { static_cast<char>(aToken[1]), static_cast<char>(aToken[2]),
+                              static_cast<char>(aToken[3]), static_cast<char>(aToken[4]) };
+
+        std::u16string_view aValue = o3tl::trim(aToken.substr(6));
+        uint32_t nValue = 1;
+        if (aValue == u"off")
+            nValue = 0;
+        else if (!aValue.empty() && aValue != u"on")
+        {
+            if (!rtl::isAsciiDigit(aValue[0]))
+                continue;
+            nValue = static_cast<uint32_t>(o3tl::toInt32(aValue));
+        }
+
+        aFeatures.push_back({ featureCode(aTag), nValue });
+    } while (nTokenPos != std::u16string_view::npos);
+
+    return aFeatures;
+}
+
+OUString FeaturesToString(const std::vector<FeatureSetting>& rFeatures)
+{
+    OUStringBuffer aBuf;
+    for (size_t i = 0; i < rFeatures.size(); ++i)
+    {
+        if (i > 0)
+            aBuf.append(", ");
+
+        const FeatureSetting& rFeature = rFeatures[i];
+        aBuf.append("\"" + featureCodeAsString(rFeature.m_nTag) + "\" "
+                    + OUString::number(rFeature.m_nValue));
+    }
+    return aBuf.makeStringAndClear();
 }
 
 // FeatureParameter

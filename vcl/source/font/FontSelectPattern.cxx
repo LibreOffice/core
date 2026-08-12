@@ -46,6 +46,7 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     , mbNonAntialiased(bNonAntialias)
     , mbOpticalSizing(rFont.GetOpticalSizing())
     , maVariations(rFont.GetVariations())
+    , maFeatures(rFont.GetFeatures())
     , mbEmbolden( false )
 {
     maTargetName = GetFamilyName();
@@ -119,6 +120,11 @@ size_t FontSelectPattern::hashCode() const
         nHash += 67 * rVar.nTag;
         nHash += 71 * std::hash<float>{}(rVar.fValue);
     }
+    for (const auto& rFeature : maFeatures)
+    {
+        nHash += 73 * rFeature.m_nTag;
+        nHash += 79 * rFeature.m_nValue;
+    }
     return nHash;
 }
 
@@ -155,6 +161,9 @@ bool FontSelectPattern::operator==(const FontSelectPattern& rOther) const
         return false;
 
     if (mbOpticalSizing != rOther.mbOpticalSizing)
+        return false;
+
+    if (maFeatures != rOther.maFeatures)
         return false;
 
     if (maVariations != rOther.maVariations)

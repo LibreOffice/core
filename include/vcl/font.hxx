@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
+#include <vcl/font/Feature.hxx>
 #include <vcl/font/Variation.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
@@ -142,6 +143,9 @@ public:
 
     void                SetVariations( const std::vector<vcl::font::Variation>& rVariations );
     const std::vector<vcl::font::Variation>& GetVariations() const;
+
+    void                SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures );
+    const std::vector<vcl::font::FeatureSetting>& GetFeatures() const;
 
     void                SetOutline( bool bOutline );
     bool                IsOutline() const;
