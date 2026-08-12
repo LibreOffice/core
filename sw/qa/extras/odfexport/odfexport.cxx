@@ -1718,6 +1718,52 @@ CPPUNIT_TEST_FIXTURE(Test, testFontFeatureSettings)
                          getProperty<OUString>(xRun, u"CharFontFeatures"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontFeatureSettingsPerScript)
+{
+    createSwDoc();
+
+    // Each script's font takes its own features
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xCursor->setPropertyValue(u"CharFontFeaturesAsian"_ustr, uno::Any(u"\"vert\" 1"_ustr));
+    xCursor->setPropertyValue(u"CharFontFeaturesComplex"_ustr, uno::Any(u"\"calt\" 0"_ustr));
+
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "//style:style/style:text-properties[@loext:font-feature-settings-asian='\"vert\" 1']",
+                1);
+
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"\"vert\" 1"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontFeaturesAsian"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"calt\" 0"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontFeaturesComplex"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontFeaturesFromFontName)
+{
+    createSwDoc();
+
+    // Features used to be stored by appending them to the font name, and each
+    // script's font carried its own
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xCursor->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"Liberation Serif:smcp=1&onum=0"_ustr));
+    xCursor->setPropertyValue(u"CharFontNameComplex"_ustr, uno::Any(u"Liberation Serif:calt=0"_ustr));
+
+    // On load they become the attribute, and the name is just a name again
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"smcp\" 1, \"onum\" 0"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontFeatures"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontNameComplex"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"calt\" 0"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontFeaturesComplex"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
