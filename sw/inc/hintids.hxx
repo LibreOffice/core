@@ -66,6 +66,7 @@ class SvxEscapementItem;
 class SvxFontHeightItem;
 class SvxFontItem;
 class SvxFontVariationsItem;
+class SvxFontFeaturesItem;
 class SvxForbiddenRuleItem;
 class SvxFormatBreakItem;
 class SvxFormatKeepItem;
@@ -255,7 +256,12 @@ inline constexpr TypedWhichId<SvxFontVariationsItem> RES_CHRATR_CJK_FONT_VARIATI
                                                                                     + 48);
 inline constexpr TypedWhichId<SvxFontVariationsItem> RES_CHRATR_CTL_FONT_VARIATIONS(RES_CHRATR_BEGIN
                                                                                     + 49);
-inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 50);
+inline constexpr TypedWhichId<SvxFontFeaturesItem> RES_CHRATR_FONT_FEATURES(RES_CHRATR_BEGIN + 50);
+inline constexpr TypedWhichId<SvxFontFeaturesItem> RES_CHRATR_CJK_FONT_FEATURES(RES_CHRATR_BEGIN
+                                                                                + 51);
+inline constexpr TypedWhichId<SvxFontFeaturesItem> RES_CHRATR_CTL_FONT_FEATURES(RES_CHRATR_BEGIN
+                                                                                + 52);
+inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 53);
 
 // this Attribute used only in a TextNodes SwpAttr-Array
 inline constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);

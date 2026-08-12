@@ -1695,6 +1695,29 @@ CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettingsWesternOnly)
                          getProperty<OUString>(xRun, u"CharFontVariationsComplex"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontFeatureSettings)
+{
+    createSwDoc();
+
+    // Set font-feature-settings via UNO
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xCursor->setPropertyValue(u"CharFontFeatures"_ustr, uno::Any(u"\"smcp\" 1, \"onum\" 0"_ustr));
+
+    // Save and check the ODF export
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "//style:style/style:text-properties[@loext:font-feature-settings='\"smcp\" 1, "
+                "\"onum\" 0']",
+                1);
+
+    // Round-trip: reload and verify
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"\"smcp\" 1, \"onum\" 0"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontFeatures"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
