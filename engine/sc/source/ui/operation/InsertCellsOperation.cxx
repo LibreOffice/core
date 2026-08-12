@@ -174,6 +174,11 @@ OperationType InsertCellsOperation::toOperationType(InsCellCmd eCmd)
 
 bool InsertCellsOperation::canRunTheOperation() const
 {
+    // Inserting whole columns leaves every row where it is, so the row order and the filter a
+    // sheet view holds still describe the same rows afterwards.
+    if (meCmd == INS_INSCOLS_BEFORE || meCmd == INS_INSCOLS_AFTER)
+        return true;
+
     return !isInputOnSheetViewAutoFilter(maRange);
 }
 

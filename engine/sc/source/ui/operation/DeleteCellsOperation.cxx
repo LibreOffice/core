@@ -145,6 +145,11 @@ OperationType DeleteCellsOperation::toOperationType(DelCellCmd eCmd)
 
 bool DeleteCellsOperation::canRunTheOperation() const
 {
+    // Deleting whole columns leaves every row where it is, so the row order and the filter a
+    // sheet view holds still describe the same rows afterwards.
+    if (meCmd == DelCellCmd::Cols)
+        return true;
+
     return !isInputOnSheetViewAutoFilter(maRange);
 }
 

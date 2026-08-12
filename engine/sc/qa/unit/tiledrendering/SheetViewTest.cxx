@@ -771,9 +771,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterColumnShiftsOnColumnInsert)
     CPPUNIT_ASSERT(rDocument.RowFiltered(2, nSheetViewTab));
     CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
 
-    // Insert a column before column A on the default view. A sheet view refuses an
-    // insert that reaches into its own auto-filter, so the default view is where
-    // this comes from.
+    // Insert a column before column A on the default view.
     switchToDefaultView();
     selectColumn(0);
     dispatchCommand(mxComponent, u".uno:InsertColumnsBefore"_ustr, {});
@@ -849,6 +847,180 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterColumnShiftsOnColumnDelete)
     CPPUNIT_ASSERT(rDocument.RowFiltered(3, nSheetViewTab));
     CPPUNIT_ASSERT(rDocument.RowFiltered(4, nSheetViewTab));
 
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testInsertColumnInsideAutoFilterOnSheetView)
+{
+    // A column can be inserted inside an auto-filter range while the view sits on a sheet view.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Insert a column before column C, the last of the three columns the auto-filter covers.
+    selectColumn(2);
+    dispatchCommand(mxComponent, u".uno:InsertColumnsBefore"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The End column moved to D and left C empty, on both tables.
+    CPPUNIT_ASSERT_EQUAL(u"Num"_ustr, rDocument.GetString(ScAddress(0, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"Mid"_ustr, rDocument.GetString(ScAddress(1, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_MESSAGE("The column insert on the sheet view was refused",
+                           rDocument.GetString(ScAddress(2, 0, nDefaultViewTab)).isEmpty());
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(3, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"e1"_ustr, rDocument.GetString(ScAddress(3, 1, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(3, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"e1"_ustr, rDocument.GetString(ScAddress(3, 1, nSheetViewTab)));
+
+    // The auto-filter grew from A1:C5 to A1:D5 on both tables.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 3, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 3, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+
+    // Undo brings the End column back to C.
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(2, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 2, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testInsertColumnAfterAutoFilterOnSheetView)
+{
+    // A column can be inserted right after an auto-filter range while the view sits on a sheet
+    // view.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // The new column lands on D, outside the filtered block, so D1 carries the text that makes
+    // the shift visible.
+    rDocument.SetString(ScAddress(3, 0, 0), u"Mark"_ustr);
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    selectColumn(2);
+    dispatchCommand(mxComponent, u".uno:InsertColumnsAfter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The text moved from D1 to E1 on both tables, and the End column stayed in C.
+    CPPUNIT_ASSERT_MESSAGE("The column insert on the sheet view was refused",
+                           rDocument.GetString(ScAddress(3, 0, nDefaultViewTab)).isEmpty());
+    CPPUNIT_ASSERT_EQUAL(u"Mark"_ustr, rDocument.GetString(ScAddress(4, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(2, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(3, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"Mark"_ustr, rDocument.GetString(ScAddress(4, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteColumnInsideAutoFilterOnSheetView)
+{
+    // A column can be deleted inside an auto-filter range while the view sits on a sheet view.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Delete column B, the middle column of the auto-filter.
+    selectColumn(1);
+    dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The End column moved into B on both tables.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The column delete on the sheet view was refused", u"End"_ustr,
+                                 rDocument.GetString(ScAddress(1, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"e1"_ustr, rDocument.GetString(ScAddress(1, 1, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, rDocument.GetString(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"e1"_ustr, rDocument.GetString(ScAddress(1, 1, nSheetViewTab)));
+
+    // The auto-filter shrank from A1:C5 to A1:B5 on both tables.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 1, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 1, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterColumnShiftsOnColumnInsertFromSheetView)
+{
+    // A filter applied only inside a sheet view keeps hiding the same rows when a column is
+    // inserted from that same sheet view.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Filter the sheet view to the rows where column B (Mid) equals m1.
+    filterOnColumn(rDocument, mpTabViewSheetView, 1, u"m1");
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(1, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nSheetViewTab));
+
+    // Insert a column before column A, staying on the sheet view that holds the filter.
+    selectColumn(0);
+    dispatchCommand(mxComponent, u".uno:InsertColumnsBefore"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The auto-filter range moved to B1:D5 on both tables.
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 0, nDefaultViewTab, 3, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 0, nSheetViewTab, 3, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(u"m1"_ustr, rDocument.GetString(ScAddress(2, 1, nSheetViewTab)));
+
+    // The filter tests the column its values moved to.
+    CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), getFilterColumn(rDocument, nSheetViewTab));
+
+    // The same rows as before are the hidden ones.
+    CPPUNIT_ASSERT_MESSAGE("The row the sheet view filter kept visible was hidden by the column "
+                           "insert",
+                           !rDocument.RowFiltered(1, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(4, nSheetViewTab));
+
+    // The default view is still unfiltered.
     CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
 }
 
