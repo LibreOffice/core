@@ -643,9 +643,8 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj const * pTableObje
             sal_Int32 nCellIndex = nRow * nColCount + nCol;
             SdrText* pText = pTableObject->getText(nCellIndex);
 
-            if (pText == nullptr)
-                continue;
-            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), false);
+            if (pText != nullptr)
+                WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), false);
             aStr.append("    </td>\r\n");
         }
         aStr.append("  </tr>\r\n");
