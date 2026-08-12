@@ -34,7 +34,7 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName )
+bool FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -48,20 +48,20 @@ FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 {
 }
 
-::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeExternal()
+::sal_Int32 FormulaOpCodeMapperObj::getOpCodeExternal()
 {
     return ocExternal;
 }
 
 
-::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeUnknown()
+::sal_Int32 FormulaOpCodeMapperObj::getOpCodeUnknown()
 {
     return FormulaCompiler::OpCodeMap::getOpCodeUnknown();
 }
 
 
 cpo::uno::Sequence< css::sheet::FormulaToken >
-SAL_CALL FormulaOpCodeMapperObj::getMappings(
+FormulaOpCodeMapperObj::getMappings(
         const cpo::uno::Sequence< OUString >& rNames,
         sal_Int32 nLanguage )
 {
@@ -73,7 +73,7 @@ SAL_CALL FormulaOpCodeMapperObj::getMappings(
 
 
 cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
-SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
+FormulaOpCodeMapperObj::getAvailableMappings(
         sal_Int32 nLanguage, sal_Int32 nGroups )
 {
     FormulaCompiler::OpCodeMapPtr xMap = m_pCompiler->GetOpCodeMap( nLanguage);
@@ -82,12 +82,12 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
     return xMap->createSequenceOfAvailableMappings( *m_pCompiler,nGroups);
 }
 
-OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  )
+OUString FormulaOpCodeMapperObj::getImplementationName(  )
 {
     return u"simple.formula.FormulaOpCodeMapperObj"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > FormulaOpCodeMapperObj::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sheet.FormulaOpCodeMapper"_ustr };
 }

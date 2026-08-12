@@ -46,19 +46,19 @@ public:
 private:
                             // XFormulaOpCodeMapper
                             // Attributes
-    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() override;
-    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() override;
+    virtual ::sal_Int32 getOpCodeExternal() override;
+    virtual ::sal_Int32 getOpCodeUnknown() override;
                             // Methods
-    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getMappings(
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken > getMappings(
                                     const cpo::uno::Sequence< OUString >& rNames,
                                     sal_Int32 nLanguage ) override;
-    virtual cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
+    virtual cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > getAvailableMappings(
                                     sal_Int32 nLanguage, sal_Int32 nGroups ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 };
 
