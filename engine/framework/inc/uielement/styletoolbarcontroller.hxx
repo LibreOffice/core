@@ -38,15 +38,15 @@ public:
                      const css::util::URL& rURL );
 
     // XDispatch
-    void SAL_CALL dispatch( const css::util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments ) override;
-    void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
-    void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
+    void dispatch( const css::util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments ) override;
+    void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
+    void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
 
     // XStatusListener
-    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XEventListener
-    void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;
+    void disposing( const css::lang::EventObject& rSource ) override;
 
 private:
     OUString m_aStyleName, m_aCommand, m_aStatusCommand;
@@ -66,10 +66,10 @@ public:
                             const OUString& rCommand );
 
     // XUpdatable
-    void SAL_CALL update() override;
+    void update() override;
 
     // XStatusListener
-    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // WeakComponentImplHelperBase
     using svt::ToolboxController::disposing;

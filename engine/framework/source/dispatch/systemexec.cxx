@@ -34,17 +34,17 @@ constexpr OUString PROTOCOL_VALUE = u"systemexecute:"_ustr;
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL SystemExec::getImplementationName()
+OUString SystemExec::getImplementationName()
 {
     return u"com.sun.star.comp.framework.SystemExecute"_ustr;
 }
 
-bool SAL_CALL SystemExec::supportsService( const OUString& sServiceName )
+bool SystemExec::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SystemExec::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SystemExec::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
@@ -58,7 +58,7 @@ SystemExec::~SystemExec()
 {
 }
 
-css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
+css::uno::Reference< css::frame::XDispatch > SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
                                                                                        sal_Int32 )
 {
@@ -68,7 +68,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
     return xDispatcher;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SystemExec::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
     cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
@@ -83,13 +83,13 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
     return lDispatcher;
 }
 
-void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
+void SystemExec::dispatch( const css::util::URL&                                  aURL       ,
                                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
+void SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -121,13 +121,13 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         }
 }
 
-void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+void SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                              const css::util::URL& )
 {
     // not supported yet
 }
 
-void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+void SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                                 const css::util::URL& )
 {
     // not supported yet

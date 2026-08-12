@@ -36,13 +36,13 @@ namespace framework
             void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
 
             // XNameAccess
-            virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-            virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+            virtual cpo::uno::Any getByName( const OUString& aName ) override;
+            virtual cpo::uno::Sequence< OUString > getElementNames() override;
+            virtual bool hasByName( const OUString& aName ) override;
 
             // XElementAccess
-            virtual bool SAL_CALL hasElements() override;
-            virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
+            virtual bool hasElements() override;
+            virtual cpo::uno::Type getElementType(  ) override;
 
         private:
             typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;

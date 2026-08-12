@@ -49,7 +49,7 @@ PersistentWindowState::~PersistentWindowState()
 {
 }
 
-void SAL_CALL PersistentWindowState::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+void PersistentWindowState::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -75,7 +75,7 @@ void SAL_CALL PersistentWindowState::initialize(const cpo::uno::Sequence< cpo::u
     xFrame->addFrameActionListener(this);
 }
 
-void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
+void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
     // We don't want to do this stuff when being used through COKit
     if( comphelper::COKit::isActive() )
@@ -143,7 +143,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     }
 }
 
-void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
+void PersistentWindowState::disposing(const css::lang::EventObject&)
 {
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (xFrame.is())

@@ -90,7 +90,7 @@ DispatchProvider::~DispatchProvider()
 
     @threadsafe yes
 */
-css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
+css::uno::Reference< css::frame::XDispatch > DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
                                                                                        const OUString& sTargetFrameName ,
                                                                                              sal_Int32        nSearchFlags     )
 {
@@ -123,7 +123,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
 
     @threadsafe yes
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > DispatchProvider::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
 {
     // Create return list - which must have the same size as the given descriptor.
     // It's not allowed to pack it!

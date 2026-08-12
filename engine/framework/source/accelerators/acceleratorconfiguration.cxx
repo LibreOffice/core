@@ -92,7 +92,7 @@ XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
     SAL_WARN_IF(m_pWriteCache, "fwk.accelerators", "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration(): Changes not flushed. Ignore it ...");
 }
 
-cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
+cpo::uno::Sequence< css::awt::KeyEvent > XMLBasedAcceleratorConfiguration::getAllKeyEvents()
 {
     SolarMutexGuard g;
     AcceleratorCache&          rCache = impl_getCFG();
@@ -100,7 +100,7 @@ cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+OUString XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
 {
     SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG();
@@ -111,7 +111,7 @@ OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
     return rCache.getCommandByKey(aKeyEvent);
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
+void XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
                                                     const OUString&    sCommand )
 {
     if (
@@ -136,7 +136,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+void XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
 {
     SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG(true); // true => force using of a writeable cache
@@ -147,7 +147,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     rCache.removeKey(aKeyEvent);
 }
 
-cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
+cpo::uno::Sequence< css::awt::KeyEvent > XMLBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -166,7 +166,7 @@ cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
+cpo::uno::Sequence< cpo::uno::Any > XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
@@ -199,7 +199,7 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
     return lPreferredOnes;
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const OUString& sCommand)
+void XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -216,7 +216,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
     rCache.removeCommand(sCommand);
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
+void XMLBasedAcceleratorConfiguration::reload()
 {
     css::uno::Reference< css::io::XStream > xStream;
     css::uno::Reference< css::io::XStream > xStreamNoLang;
@@ -257,7 +257,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     }
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::store()
+void XMLBasedAcceleratorConfiguration::store()
 {
     css::uno::Reference< css::io::XStream > xStream;
     {
@@ -283,7 +283,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     m_aPresetHandler.commitUserChanges();
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // no fallback from read/write to readonly!
     css::uno::Reference< css::io::XStream > xStream = xStorage->openStreamElement(TARGET_CURRENT, css::embed::ElementModes::READWRITE);
@@ -302,39 +302,39 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     // TODO inform listener about success, so it can flush the root and sub storage of this stream!
 }
 
-bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
+bool XMLBasedAcceleratorConfiguration::isModified()
 {
     SolarMutexGuard g;
     return (m_pWriteCache != nullptr);
 }
 
-bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
+bool XMLBasedAcceleratorConfiguration::isReadOnly()
 {
     return m_aPresetHandler.isReadOnly();
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
+void XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
-bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
+bool XMLBasedAcceleratorConfiguration::hasStorage()
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return false;
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
+void XMLBasedAcceleratorConfiguration::reset()
 {
     {
         SolarMutexGuard g;
@@ -344,12 +344,12 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
     reload();
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
-void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
@@ -482,7 +482,7 @@ XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
 {
 }
 
-cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
+cpo::uno::Sequence< css::awt::KeyEvent > XCUBasedAcceleratorConfiguration::getAllKeyEvents()
 {
     SolarMutexGuard g;
 
@@ -495,7 +495,7 @@ cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+OUString XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
 {
     SolarMutexGuard g;
 
@@ -513,7 +513,7 @@ OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
         return rSecondaryCache.getCommandByKey(aKeyEvent);
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
+void XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
                                                     const OUString&    sCommand )
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::setKeyEvent" );
@@ -593,7 +593,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     }
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+void XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
 {
     SolarMutexGuard g;
 
@@ -629,7 +629,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     }
 }
 
-cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
+cpo::uno::Sequence< css::awt::KeyEvent > XCUBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -661,7 +661,7 @@ static AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Acce
         return !::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey).GetName().isEmpty(); });
 }
 
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
+cpo::uno::Sequence< cpo::uno::Any > XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
@@ -698,7 +698,7 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     return lPreferredOnes;
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const OUString& sCommand)
+void XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -722,7 +722,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
         rSecondaryCache.removeCommand(sCommand);
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
+void XCUBasedAcceleratorConfiguration::reload()
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::reload()" );
 
@@ -744,7 +744,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     impl_ts_load(bPreferred, xAccess); // load the secondary keys
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::store()
+void XCUBasedAcceleratorConfiguration::store()
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::store()" );
 
@@ -763,7 +763,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     impl_ts_save(bPreferred);
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...
     if (!xStorage.is())
@@ -824,38 +824,38 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     aWriter.flush();
 }
 
-bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
+bool XCUBasedAcceleratorConfiguration::isModified()
 {
     return false;
 }
 
-bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
+bool XCUBasedAcceleratorConfiguration::isReadOnly()
 {
     return false;
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
+void XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
-bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
+bool XCUBasedAcceleratorConfiguration::hasStorage()
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return false;
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
+void XCUBasedAcceleratorConfiguration::reset()
 {
     css::uno::Reference< css::container::XNamed > xNamed(m_xCfg, css::uno::UNO_QUERY);
     OUString sConfig = xNamed->getName();
@@ -875,17 +875,17 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     }
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aReceivedEvents)
+void XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aReceivedEvents)
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
@@ -932,7 +932,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
     }
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /*aSource*/)
+void XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /*aSource*/)
 {
 }
 

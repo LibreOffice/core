@@ -252,19 +252,19 @@ void ProgressBarWrapper::reset()
 }
 
 // XInitialization
-void SAL_CALL ProgressBarWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
+void ProgressBarWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     // dummy - do nothing
 }
 
 // XUpdatable
-void SAL_CALL ProgressBarWrapper::update()
+void ProgressBarWrapper::update()
 {
     // dummy - do nothing
 }
 
 // XComponent
-void SAL_CALL ProgressBarWrapper::dispose()
+void ProgressBarWrapper::dispose()
 {
     uno::Reference< lang::XComponent > xThis(this);
 
@@ -298,7 +298,7 @@ void SAL_CALL ProgressBarWrapper::dispose()
 }
 
 // XUIElement
-uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface()
+uno::Reference< uno::XInterface > ProgressBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 

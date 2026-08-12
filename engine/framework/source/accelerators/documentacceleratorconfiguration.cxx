@@ -62,25 +62,25 @@ public:
 
     virtual ~DocumentAcceleratorConfiguration() override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.DocumentAcceleratorConfiguration"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.DocumentAcceleratorConfiguration"_ustr};
     }
 
     // XUIConfigurationStorage
-    virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+    virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-    virtual bool SAL_CALL hasStorage() override;
+    virtual bool hasStorage() override;
 
     /** read all data into the cache. */
     void fillCache();
@@ -111,7 +111,7 @@ DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
     m_aPresetHandler.removeStorageListener(this);
 }
 
-void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
@@ -130,7 +130,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
         fillCache();
 }
 
-bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
+bool DocumentAcceleratorConfiguration::hasStorage()
 {
     SolarMutexGuard g;
     return m_xDocumentRoot.is();

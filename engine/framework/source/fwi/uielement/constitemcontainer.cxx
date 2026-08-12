@@ -159,18 +159,18 @@ rtl::Reference< ConstItemContainer > ConstItemContainer::deepCopyContainer( cons
 }
 
 // XElementAccess
-bool SAL_CALL ConstItemContainer::hasElements()
+bool ConstItemContainer::hasElements()
 {
     return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL ConstItemContainer::getCount()
+sal_Int32 ConstItemContainer::getCount()
 {
     return m_aItemVector.size();
 }
 
-Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
+Any ConstItemContainer::getByIndex( sal_Int32 Index )
 {
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
@@ -189,7 +189,7 @@ namespace
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
+Reference< XPropertySetInfo > ConstItemContainer::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
@@ -199,11 +199,11 @@ Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
     return xInfo;
 }
 
-void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& )
+void ConstItemContainer::setPropertyValue( const OUString&, const Any& )
 {
 }
 
-Any SAL_CALL ConstItemContainer::getPropertyValue( const OUString& PropertyName )
+Any ConstItemContainer::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName == PROPNAME_UINAME )
         return Any( m_aUIName );
@@ -211,31 +211,31 @@ Any SAL_CALL ConstItemContainer::getPropertyValue( const OUString& PropertyName 
     throw UnknownPropertyException(PropertyName);
 }
 
-void SAL_CALL ConstItemContainer::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+void ConstItemContainer::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
 {
 }
 
-void SAL_CALL ConstItemContainer::removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
-{
-    // Only read-only properties - do nothing
-}
-
-void SAL_CALL ConstItemContainer::addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+void ConstItemContainer::removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
 {
     // Only read-only properties - do nothing
 }
 
-void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+void ConstItemContainer::addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+{
+    // Only read-only properties - do nothing
+}
+
+void ConstItemContainer::removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
 {
     // Only read-only properties - do nothing
 }
 
 // XFastPropertySet
-void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const cpo::uno::Any& )
+void ConstItemContainer::setFastPropertyValue( sal_Int32, const cpo::uno::Any& )
 {
 }
 
-Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
+Any ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
 {
     if ( nHandle == PROPHANDLE_UINAME )
         return Any( m_aUIName );

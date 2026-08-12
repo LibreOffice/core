@@ -41,25 +41,25 @@ private:
 public:
     explicit TaskCreatorService(css::uno::Reference<css::uno::XComponentContext> xContext);
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.TaskCreator"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const& ServiceName) override
+    virtual bool supportsService(OUString const& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.frame.TaskCreator"_ustr };
     }
 
     // XSingleServiceFactory
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override;
+    virtual css::uno::Reference<css::uno::XInterface> createInstance() override;
 
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
+    virtual css::uno::Reference<css::uno::XInterface>
     createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& lArguments) override;
 
 private:

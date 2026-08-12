@@ -61,7 +61,7 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     return aArgs;
 }
 
-uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
+uno::Reference< awt::XWindow > ToggleButtonToolbarController::createPopupWindow()
 {
     uno::Reference< awt::XWindow > xWindow;
 

@@ -57,7 +57,7 @@ OFrames::~OFrames()
 }
 
 //  XFrames
-void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame )
+void OFrames::append( const css::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -80,7 +80,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame )
 }
 
 //  XFrames
-void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
+void OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -104,7 +104,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
 }
 
 //  XFrames
-Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags )
+Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearchFlags )
 {
     SolarMutexGuard g;
 
@@ -200,7 +200,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 }
 
 //  XIndexAccess
-sal_Int32 SAL_CALL OFrames::getCount()
+sal_Int32 OFrames::getCount()
 {
     SolarMutexGuard g;
 
@@ -222,7 +222,7 @@ sal_Int32 SAL_CALL OFrames::getCount()
 
 //  XIndexAccess
 
-Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex )
+Any OFrames::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard g;
 
@@ -249,14 +249,14 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex )
 }
 
 //  XElementAccess
-Type SAL_CALL OFrames::getElementType()
+Type OFrames::getElementType()
 {
     // This "container" support XFrame-interfaces only!
     return cppu::UnoType<XFrame>::get();
 }
 
 //  XElementAccess
-bool SAL_CALL OFrames::hasElements()
+bool OFrames::hasElements()
 {
     SolarMutexGuard g;
 

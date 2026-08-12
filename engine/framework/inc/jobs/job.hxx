@@ -181,20 +181,20 @@ class Job final : public  ::cppu::WeakImplHelper<
     public:
 
         // XJobListener
-        virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
+        virtual void jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
                                            const cpo::uno::Any&                               aResult ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void queryTermination ( const css::lang::EventObject& aEvent ) override;
+        virtual void notifyTermination( const css::lang::EventObject& aEvent ) override;
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aEvent         ,
+        virtual void queryClosing ( const css::lang::EventObject& aEvent         ,
                                                    bool                bGetsOwnership ) override;
-        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) override;
+        virtual void notifyClosing( const css::lang::EventObject& aEvent         ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& aEvent ) override;
 };
 
 } // namespace framework

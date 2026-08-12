@@ -124,17 +124,17 @@ struct ToolBarInfo
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL ToolbarsMenuController::getImplementationName()
+OUString ToolbarsMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.ToolBarsMenuController"_ustr;
 }
 
-bool SAL_CALL ToolbarsMenuController::supportsService( const OUString& sServiceName )
+bool ToolbarsMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ToolbarsMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -443,7 +443,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 }
 
 // XEventListener
-void SAL_CALL ToolbarsMenuController::disposing( const EventObject& )
+void ToolbarsMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -460,7 +460,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Event )
+void ToolbarsMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
@@ -506,7 +506,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XMenuListener
-void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+void ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     rtl::Reference< VCLXPopupMenu >     xPopupMenu;
     Reference< XComponentContext >      xContext;
@@ -654,7 +654,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
     }
 }
 
-void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& )
+void ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     std::vector< OUString >   aCmdVector;
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -695,7 +695,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
 }
 
 // XPopupMenuController
-void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
+void ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
     std::unique_lock aLock( m_aMutex );
 

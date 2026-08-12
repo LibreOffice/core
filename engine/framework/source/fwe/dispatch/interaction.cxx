@@ -57,8 +57,8 @@ class ContinuationFilterSelect : public comphelper::OInteraction< css::document:
 
     // uno interface
     public:
-        virtual void            SAL_CALL setFilter( const OUString& sFilter ) override;
-        virtual OUString SAL_CALL getFilter(                                ) override;
+        virtual void            setFilter( const OUString& sFilter ) override;
+        virtual OUString getFilter(                                ) override;
 
     // member
     private:
@@ -76,14 +76,14 @@ ContinuationFilterSelect::ContinuationFilterSelect()
 
 // handler should use it after selection to set user specified filter for transport
 
-void SAL_CALL ContinuationFilterSelect::setFilter( const OUString& sFilter )
+void ContinuationFilterSelect::setFilter( const OUString& sFilter )
 {
     m_sFilter = sFilter;
 }
 
 // read access to transported filter
 
-OUString SAL_CALL ContinuationFilterSelect::getFilter()
+OUString ContinuationFilterSelect::getFilter()
 {
     return m_sFilter;
 }
@@ -96,8 +96,8 @@ public:
     OUString getFilter() const;
 
 public:
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                                                                       m_aRequest;
@@ -139,7 +139,7 @@ OUString RequestFilterSelect_Impl::getFilter() const
 // handler call it to get type of request
 // Is hard coded to "please select filter" here. see ctor for further information.
 
-cpo::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
+cpo::uno::Any RequestFilterSelect_Impl::getRequest()
 {
     return m_aRequest;
 }
@@ -149,7 +149,7 @@ cpo::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
 // After interaction we support read access on these continuations on our c++ interface to
 // return user decision.
 
-cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations()
+cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > RequestFilterSelect_Impl::getContinuations()
 {
     return { m_xAbort, m_xFilter };
 }
@@ -198,18 +198,18 @@ public:
     {
     }
 
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > getContinuations() override;
 };
 
 }
 
-cpo::uno::Any SAL_CALL InteractionRequest_Impl::getRequest()
+cpo::uno::Any InteractionRequest_Impl::getRequest()
 {
     return m_aRequest;
 }
 
-cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL InteractionRequest_Impl::getContinuations()
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > InteractionRequest_Impl::getContinuations()
 {
     return m_lContinuations;
 }

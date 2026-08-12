@@ -53,7 +53,7 @@ AddonsToolBarWrapper::~AddonsToolBarWrapper()
 }
 
 // XComponent
-void SAL_CALL AddonsToolBarWrapper::dispose()
+void AddonsToolBarWrapper::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -70,7 +70,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose()
 }
 
 // XInitialization
-void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments )
+void AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -132,7 +132,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface()
+Reference< XInterface > AddonsToolBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 

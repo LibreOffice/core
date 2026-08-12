@@ -67,7 +67,7 @@ ActionTriggerPropertySet::~ActionTriggerPropertySet()
 }
 
 // XInterface
-Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
+Any ActionTriggerPropertySet::queryInterface( const Type& aType )
 {
     Any a = ::cppu::queryInterface(
                 aType,
@@ -87,35 +87,35 @@ Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
     return OWeakObject::queryInterface( aType );
 }
 
-void SAL_CALL ActionTriggerPropertySet::acquire() noexcept
+void ActionTriggerPropertySet::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ActionTriggerPropertySet::release() noexcept
+void ActionTriggerPropertySet::release() noexcept
 {
     OWeakObject::release();
 }
 
 // XServiceInfo
-OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
+OUString ActionTriggerPropertySet::getImplementationName()
 {
     return IMPLEMENTATIONNAME_ACTIONTRIGGER;
 }
 
-bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
+bool ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
+Sequence< OUString > ActionTriggerPropertySet::getSupportedServiceNames()
 {
     Sequence<OUString> seqServiceNames { SERVICENAME_ACTIONTRIGGER };
     return seqServiceNames;
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes()
+Sequence< Type > ActionTriggerPropertySet::getTypes()
 {
     // Create a static typecollection ...
     static ::cppu::OTypeCollection ourTypeCollection(
@@ -129,12 +129,12 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes()
     return ourTypeCollection.getTypes();
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId()
+Sequence< sal_Int8 > ActionTriggerPropertySet::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
+bool ActionTriggerPropertySet::convertFastPropertyValue(
     Any&        aConvertedValue,
     Any&        aOldValue,
     sal_Int32   nHandle,
@@ -174,7 +174,7 @@ bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
     return bReturn;
 }
 
-void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
+void ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -204,7 +204,7 @@ void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     }
 }
 
-void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
+void ActionTriggerPropertySet::getFastPropertyValue(
     Any& aValue, sal_Int32 nHandle ) const
 {
     SolarMutexGuard aGuard;
@@ -234,7 +234,7 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
     }
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL ActionTriggerPropertySet::getInfoHelper()
+::cppu::IPropertyArrayHelper& ActionTriggerPropertySet::getInfoHelper()
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -244,7 +244,7 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
     return ourInfoHelper;
 }
 
-Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetInfo()
+Reference< XPropertySetInfo > ActionTriggerPropertySet::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)

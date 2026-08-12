@@ -43,15 +43,15 @@ SaxNamespaceFilter::~SaxNamespaceFilter()
 }
 
 // XDocumentHandler
-void SAL_CALL SaxNamespaceFilter::startDocument()
+void SaxNamespaceFilter::startDocument()
 {
 }
 
-void SAL_CALL SaxNamespaceFilter::endDocument()
+void SaxNamespaceFilter::endDocument()
 {
 }
 
-void SAL_CALL SaxNamespaceFilter::startElement(
+void SaxNamespaceFilter::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttribs )
 {
     XMLNamespaces aXMLNamespaces;
@@ -108,7 +108,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     xDocumentHandler->startElement( aNamespaceElementName, pNewList );
 }
 
-void SAL_CALL SaxNamespaceFilter::endElement(const OUString& aName)
+void SaxNamespaceFilter::endElement(const OUString& aName)
 {
     XMLNamespaces& aXMLNamespaces = m_aNamespaceStack.top();
     OUString aNamespaceElementName;
@@ -127,23 +127,23 @@ void SAL_CALL SaxNamespaceFilter::endElement(const OUString& aName)
     m_aNamespaceStack.pop();
 }
 
-void SAL_CALL SaxNamespaceFilter::characters(const OUString& aChars)
+void SaxNamespaceFilter::characters(const OUString& aChars)
 {
     xDocumentHandler->characters( aChars );
 }
 
-void SAL_CALL SaxNamespaceFilter::ignorableWhitespace(const OUString& aWhitespaces)
+void SaxNamespaceFilter::ignorableWhitespace(const OUString& aWhitespaces)
 {
     xDocumentHandler->ignorableWhitespace( aWhitespaces );
 }
 
-void SAL_CALL SaxNamespaceFilter::processingInstruction(
+void SaxNamespaceFilter::processingInstruction(
     const OUString& aTarget, const OUString& aData)
 {
     xDocumentHandler->processingInstruction( aTarget, aData );
 }
 
-void SAL_CALL SaxNamespaceFilter::setDocumentLocator(
+void SaxNamespaceFilter::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
     m_xLocator = xLocator;

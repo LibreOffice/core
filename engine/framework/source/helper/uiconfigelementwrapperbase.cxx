@@ -74,7 +74,7 @@ UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
 {
 }
 
-Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType )
+Any UIConfigElementWrapperBase::queryInterface( const Type& _rType )
 {
     Any aRet = UIConfigElementWrapperBase_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -82,7 +82,7 @@ Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  )
+Sequence< Type > UIConfigElementWrapperBase::getTypes(  )
 {
     return comphelper::concatSequences(
         UIConfigElementWrapperBase_BASE::getTypes(),
@@ -91,24 +91,24 @@ Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  )
 }
 
 // XComponent
-void SAL_CALL UIConfigElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIConfigElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void UIConfigElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), aListener );
 }
 
 // XEventListener
-void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& )
+void UIConfigElementWrapperBase::disposing( const EventObject& )
 {
     SolarMutexGuard g;
     m_xConfigSource.clear();
 }
 
-void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
+void UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -141,28 +141,28 @@ void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aAr
 }
 
 // XUpdatable
-void SAL_CALL UIConfigElementWrapperBase::update()
+void UIConfigElementWrapperBase::update()
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementInserted( const css::ui::ConfigurationEvent& )
+void UIConfigElementWrapperBase::elementInserted( const css::ui::ConfigurationEvent& )
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const css::ui::ConfigurationEvent& )
+void UIConfigElementWrapperBase::elementRemoved( const css::ui::ConfigurationEvent& )
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const css::ui::ConfigurationEvent& )
+void UIConfigElementWrapperBase::elementReplaced( const css::ui::ConfigurationEvent& )
 {
     // can be implemented by derived class
 }
 
 // XPropertySet helper
-bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
+bool UIConfigElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
                                                                         Any&       aOldValue       ,
                                                                         sal_Int32  nHandle         ,
                                                                         const Any& aValue             )
@@ -245,7 +245,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
     return bReturn;
 }
 
-void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
+void UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
                                                                         const cpo::uno::Any&    aValue  )
 {
     switch( nHandle )
@@ -334,7 +334,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
     }
 }
 
-void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
+void UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                                 sal_Int32                 nHandle   ) const
 {
     switch( nHandle )
@@ -369,7 +369,7 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& a
     }
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL UIConfigElementWrapperBase::getInfoHelper()
+::cppu::IPropertyArrayHelper& UIConfigElementWrapperBase::getInfoHelper()
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -379,7 +379,7 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& a
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrapperBase::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo > UIConfigElementWrapperBase::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
@@ -410,7 +410,7 @@ cpo::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getS
     };
 }
 
-void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings )
+void UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings )
 {
     SolarMutexClearableGuard aLock;
 
@@ -448,7 +448,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 void UIConfigElementWrapperBase::impl_fillNewData()
 {
 }
-Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( bool bWriteable )
+Reference< XIndexAccess > UIConfigElementWrapperBase::getSettings( bool bWriteable )
 {
     SolarMutexGuard g;
 
@@ -458,20 +458,20 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( bool
     return m_xConfigData;
 }
 
-Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame()
+Reference< XFrame > UIConfigElementWrapperBase::getFrame()
 {
     SolarMutexGuard g;
     Reference< XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
-OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL()
+OUString UIConfigElementWrapperBase::getResourceURL()
 {
     SolarMutexGuard g;
     return m_aResourceURL;
 }
 
-::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType()
+::sal_Int16 UIConfigElementWrapperBase::getType()
 {
     SolarMutexGuard g;
     return m_nType;

@@ -82,17 +82,17 @@ void StatusbarItem::disposing(std::unique_lock<std::mutex>&)
     m_pStatusBar = nullptr;
 }
 
-OUString SAL_CALL StatusbarItem::getCommand()
+OUString StatusbarItem::getCommand()
 {
     return m_aCommand;
 }
 
-::sal_uInt16 SAL_CALL StatusbarItem::getItemId()
+::sal_uInt16 StatusbarItem::getItemId()
 {
     return m_nId;
 }
 
-::sal_uInt32 SAL_CALL StatusbarItem::getWidth()
+::sal_uInt32 StatusbarItem::getWidth()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -101,13 +101,13 @@ OUString SAL_CALL StatusbarItem::getCommand()
     return ::sal_uInt32(0);
 }
 
-::sal_uInt16 SAL_CALL StatusbarItem::getStyle()
+::sal_uInt16 StatusbarItem::getStyle()
 {
     std::unique_lock aGuard( m_aMutex );
     return m_nStyle;
 }
 
-::sal_Int32 SAL_CALL StatusbarItem::getOffset()
+::sal_Int32 StatusbarItem::getOffset()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -116,7 +116,7 @@ OUString SAL_CALL StatusbarItem::getCommand()
     return 0;
 }
 
-css::awt::Rectangle SAL_CALL StatusbarItem::getItemRect()
+css::awt::Rectangle StatusbarItem::getItemRect()
 {
     SolarMutexGuard aGuard;
     css::awt::Rectangle aAWTRect;
@@ -132,7 +132,7 @@ css::awt::Rectangle SAL_CALL StatusbarItem::getItemRect()
     return aAWTRect;
 }
 
-OUString SAL_CALL StatusbarItem::getText()
+OUString StatusbarItem::getText()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -141,14 +141,14 @@ OUString SAL_CALL StatusbarItem::getText()
     return OUString();
 }
 
-void SAL_CALL StatusbarItem::setText( const OUString& rText )
+void StatusbarItem::setText( const OUString& rText )
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
         m_pStatusBar->SetItemText( m_nId, rText );
 }
 
-OUString SAL_CALL StatusbarItem::getHelpText()
+OUString StatusbarItem::getHelpText()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -157,14 +157,14 @@ OUString SAL_CALL StatusbarItem::getHelpText()
     return OUString();
 }
 
-void SAL_CALL StatusbarItem::setHelpText( const OUString& rHelpText )
+void StatusbarItem::setHelpText( const OUString& rHelpText )
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
         m_pStatusBar->SetHelpText( m_nId, rHelpText );
 }
 
-OUString SAL_CALL StatusbarItem::getQuickHelpText()
+OUString StatusbarItem::getQuickHelpText()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -173,14 +173,14 @@ OUString SAL_CALL StatusbarItem::getQuickHelpText()
     return OUString();
 }
 
-void SAL_CALL StatusbarItem::setQuickHelpText( const OUString& rQuickHelpText )
+void StatusbarItem::setQuickHelpText( const OUString& rQuickHelpText )
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
         m_pStatusBar->SetQuickHelpText( m_nId, rQuickHelpText );
 }
 
-OUString SAL_CALL StatusbarItem::getAccessibleName()
+OUString StatusbarItem::getAccessibleName()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -189,14 +189,14 @@ OUString SAL_CALL StatusbarItem::getAccessibleName()
     return OUString();
 }
 
-void SAL_CALL StatusbarItem::setAccessibleName( const OUString& rAccessibleName )
+void StatusbarItem::setAccessibleName( const OUString& rAccessibleName )
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
         m_pStatusBar->SetAccessibleName( m_nId, rAccessibleName );
 }
 
-bool SAL_CALL StatusbarItem::getVisible()
+bool StatusbarItem::getVisible()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -205,7 +205,7 @@ bool SAL_CALL StatusbarItem::getVisible()
     return false;
 }
 
-void SAL_CALL StatusbarItem::setVisible( bool bVisible )
+void StatusbarItem::setVisible( bool bVisible )
 {
     SolarMutexGuard aGuard;
     if ( !m_pStatusBar )
@@ -220,7 +220,7 @@ void SAL_CALL StatusbarItem::setVisible( bool bVisible )
     }
 }
 
-void SAL_CALL StatusbarItem::repaint(  )
+void StatusbarItem::repaint(  )
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )

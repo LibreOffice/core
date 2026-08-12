@@ -45,26 +45,26 @@ public:
                             const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() override;
+    virtual void updatePopupMenu() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& rEvent ) override;
 
     // XUIConfigurationListener
-    virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& rEvent ) override;
-    virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& rEvent ) override;
-    virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& rEvent ) override;
+    virtual void elementInserted( const css::ui::ConfigurationEvent& rEvent ) override;
+    virtual void elementRemoved( const css::ui::ConfigurationEvent& rEvent ) override;
+    virtual void elementReplaced( const css::ui::ConfigurationEvent& rEvent ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
-    virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+    virtual void itemActivated( const css::awt::MenuEvent& rEvent ) override;
+    virtual void itemSelected( const css::awt::MenuEvent& rEvent ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     OUString m_aMenuURL;
@@ -371,7 +371,7 @@ public:
                           const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
 private:
     virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
@@ -416,11 +416,11 @@ public:
         : ResourceMenuController(rxContext, rxArgs, false) {}
 
     // XMenuListener
-    void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
-    void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+    void itemActivated( const css::awt::MenuEvent& rEvent ) override;
+    void itemSelected( const css::awt::MenuEvent& rEvent ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
 private:
     void impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/) override;

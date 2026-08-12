@@ -158,7 +158,7 @@ void StatusBarManager::frameAction( const frame::FrameActionEvent& Action )
         UpdateControllers();
 }
 
-void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source )
+void StatusBarManager::disposing( const lang::EventObject& Source )
 {
     SolarMutexGuard g;
 
@@ -174,7 +174,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source )
 }
 
 // XComponent
-void SAL_CALL StatusBarManager::dispose()
+void StatusBarManager::dispose()
 {
     uno::Reference< lang::XComponent > xThis(this );
 
@@ -218,7 +218,7 @@ void SAL_CALL StatusBarManager::dispose()
     }
 }
 
-void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     SolarMutexGuard g;
 
@@ -230,14 +230,14 @@ void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XE
     m_aListenerContainer.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard(m_mutex);
     m_aListenerContainer.removeInterface( aGuard, xListener );
 }
 
 // XUIConfigurationListener
-void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& )
+void StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& )
 {
     SolarMutexGuard g;
 
@@ -245,7 +245,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
         return;
 }
 
-void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& )
+void StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& )
 {
     SolarMutexGuard g;
 
@@ -253,7 +253,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
         return;
 }
 
-void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& )
+void StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& )
 {
     SolarMutexGuard g;
 
@@ -557,7 +557,7 @@ void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseMove);
 }
 
-void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&))
+void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,bool ( frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&))
 {
     SolarMutexGuard g;
 

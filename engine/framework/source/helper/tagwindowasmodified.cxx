@@ -38,7 +38,7 @@ TagWindowAsModified::~TagWindowAsModified()
 {
 }
 
-void SAL_CALL TagWindowAsModified::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+void TagWindowAsModified::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -53,7 +53,7 @@ void SAL_CALL TagWindowAsModified::initialize(const cpo::uno::Sequence< cpo::uno
     impl_update (xFrame);
 }
 
-void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
+void TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
 {
     if (!m_xModel || !m_xWindow || aEvent.Source != m_xModel)
         return;
@@ -73,7 +73,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     // <- SYNCHRONIZED
 }
 
-void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEvent& aEvent)
+void TagWindowAsModified::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
     if (
         (aEvent.Action != css::frame::FrameAction_COMPONENT_REATTACHED) &&
@@ -87,7 +87,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
     impl_update (m_xFrame);
 }
 
-void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
+void TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
 {
     SolarMutexGuard g;
 

@@ -38,49 +38,49 @@ namespace framework
             ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bForModule );
             virtual ~ImageManager() override;
 
-            virtual OUString SAL_CALL getImplementationName() override
+            virtual OUString getImplementationName() override
             {
                 return u"com.sun.star.comp.framework.ImageManager"_ustr;
             }
 
-            virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+            virtual bool supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
             {
                 cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.ui.ImageManager"_ustr };
                 return aSeq;
             }
 
             // XComponent
-            virtual void SAL_CALL dispose() override;
-            virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-            virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+            virtual void dispose() override;
+            virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+            virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             // XImageManager
-            virtual void SAL_CALL reset() override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getAllImageNames( ::sal_Int16 nImageType ) override;
-            virtual bool SAL_CALL hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) override;
-            virtual cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > SAL_CALL getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence ) override;
-            virtual void SAL_CALL replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) override;
-            virtual void SAL_CALL removeImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aResourceURLSequence ) override;
-            virtual void SAL_CALL insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) override;
+            virtual void reset() override;
+            virtual cpo::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) override;
+            virtual bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) override;
+            virtual cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence ) override;
+            virtual void replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) override;
+            virtual void removeImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aResourceURLSequence ) override;
+            virtual void insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) override;
 
             // XUIConfiguration
-            virtual void SAL_CALL addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-            virtual void SAL_CALL removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+            virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+            virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
             // XUIConfigurationPersistence
-            virtual void SAL_CALL reload() override;
-            virtual void SAL_CALL store() override;
-            virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-            virtual bool SAL_CALL isModified() override;
-            virtual bool SAL_CALL isReadOnly() override;
+            virtual void reload() override;
+            virtual void store() override;
+            virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+            virtual bool isModified() override;
+            virtual bool isReadOnly() override;
 
             // Non-UNO methods
             /// @throws css::uno::RuntimeException

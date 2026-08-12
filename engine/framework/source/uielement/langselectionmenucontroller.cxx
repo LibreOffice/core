@@ -55,17 +55,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL LanguageSelectionMenuController::getImplementationName()
+OUString LanguageSelectionMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.LanguageSelectionMenuController"_ustr;
 }
 
-bool SAL_CALL LanguageSelectionMenuController::supportsService( const OUString& sServiceName )
+bool LanguageSelectionMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LanguageSelectionMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LanguageSelectionMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -84,7 +84,7 @@ LanguageSelectionMenuController::~LanguageSelectionMenuController()
 }
 
 // XEventListener
-void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& )
+void LanguageSelectionMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -99,7 +99,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureStateEvent& Event )
+void LanguageSelectionMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -227,7 +227,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     rPopupMenu->setCommand(nItemId, aCmd_Dialog);
 }
 
-void SAL_CALL LanguageSelectionMenuController::updatePopupMenu()
+void LanguageSelectionMenuController::updatePopupMenu()
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 

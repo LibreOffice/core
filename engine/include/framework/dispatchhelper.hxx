@@ -72,12 +72,12 @@ public:
     virtual ~DispatchHelper() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& sServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XDispatchHelper
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     executeDispatch(const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
                     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
                     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
@@ -90,10 +90,10 @@ public:
                     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments);
 
     // XDispatchResultListener
-    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aResult) override;
+    virtual void dispatchFinished(const css::frame::DispatchResultEvent& aResult) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& aEvent) override;
 };
 }
 

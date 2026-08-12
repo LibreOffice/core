@@ -65,17 +65,17 @@ public:
     LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XStatusbarController
-    virtual void SAL_CALL command( const css::awt::Point& aPos,
+    virtual void command( const css::awt::Point& aPos,
                                    ::sal_Int32 nCommand,
                                    bool bMouseEvent,
                                    const cpo::uno::Any& aData ) override;
-    virtual void SAL_CALL click( const css::awt::Point& aPos ) override;
+    virtual void click( const css::awt::Point& aPos ) override;
 
 private:
     virtual ~LangSelectionStatusbarController() override {}
@@ -99,7 +99,7 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
 {
 }
 
-void SAL_CALL LangSelectionStatusbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void LangSelectionStatusbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -272,7 +272,7 @@ void LangSelectionStatusbarController::LangMenu(
     execute( aBuff.makeStringAndClear(), aDummyArgs );
 }
 
-void SAL_CALL LangSelectionStatusbarController::command(
+void LangSelectionStatusbarController::command(
     const css::awt::Point& aPos,
     ::sal_Int32 nCommand,
     bool /*bMouseEvent*/,
@@ -284,14 +284,14 @@ void SAL_CALL LangSelectionStatusbarController::command(
     }
 }
 
-void SAL_CALL LangSelectionStatusbarController::click(
+void LangSelectionStatusbarController::click(
     const css::awt::Point& aPos )
 {
     LangMenu( aPos );
 }
 
 // XStatusListener
-void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& Event )
+void LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& Event )
 {
     // This function will be called when observed data changes,
     // for example the selection or keyboard language.

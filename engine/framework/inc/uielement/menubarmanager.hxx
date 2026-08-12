@@ -78,21 +78,21 @@ class MenuBarManager final :
         virtual ~MenuBarManager() override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
+        virtual void frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XSystemDependentMenuPeer
-        virtual cpo::uno::Any SAL_CALL getMenuHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+        virtual cpo::uno::Any getMenuHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
         DECL_LINK( Select, Menu *, bool );
 

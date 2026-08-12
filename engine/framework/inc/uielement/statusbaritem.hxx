@@ -41,25 +41,25 @@ public:
     void disposing(std::unique_lock<std::mutex>&) override;
 
     // css::ui::XStatusbarItem Attributes
-    virtual OUString SAL_CALL getCommand() override;
-    virtual ::sal_uInt16 SAL_CALL getItemId() override;
-    virtual ::sal_uInt32 SAL_CALL getWidth() override;
-    virtual ::sal_uInt16 SAL_CALL getStyle() override;
-    virtual ::sal_Int32 SAL_CALL getOffset() override;
-    virtual css::awt::Rectangle SAL_CALL getItemRect() override;
-    virtual OUString SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const OUString& rText ) override;
-    virtual OUString SAL_CALL getHelpText() override;
-    virtual void SAL_CALL setHelpText( const OUString& rHelpText ) override;
-    virtual OUString SAL_CALL getQuickHelpText() override;
-    virtual void SAL_CALL setQuickHelpText( const OUString& rQuickHelpText ) override;
-    virtual OUString SAL_CALL getAccessibleName() override;
-    virtual void SAL_CALL setAccessibleName( const OUString& rAccessibleName ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool bVisible ) override;
+    virtual OUString getCommand() override;
+    virtual ::sal_uInt16 getItemId() override;
+    virtual ::sal_uInt32 getWidth() override;
+    virtual ::sal_uInt16 getStyle() override;
+    virtual ::sal_Int32 getOffset() override;
+    virtual css::awt::Rectangle getItemRect() override;
+    virtual OUString getText() override;
+    virtual void setText( const OUString& rText ) override;
+    virtual OUString getHelpText() override;
+    virtual void setHelpText( const OUString& rHelpText ) override;
+    virtual OUString getQuickHelpText() override;
+    virtual void setQuickHelpText( const OUString& rQuickHelpText ) override;
+    virtual OUString getAccessibleName() override;
+    virtual void setAccessibleName( const OUString& rAccessibleName ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool bVisible ) override;
 
     // css::ui::XStatusbarItem Methods
-    virtual void SAL_CALL repaint(  ) override;
+    virtual void repaint(  ) override;
 
 private:
     VclPtr<StatusBar>       m_pStatusBar;

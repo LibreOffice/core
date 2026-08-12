@@ -52,17 +52,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL HeaderMenuController::getImplementationName()
+OUString HeaderMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.HeaderMenuController"_ustr;
 }
 
-bool SAL_CALL HeaderMenuController::supportsService( const OUString& sServiceName )
+bool HeaderMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL HeaderMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > HeaderMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -177,7 +177,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
 }
 
 // XEventListener
-void SAL_CALL HeaderMenuController::disposing( const EventObject& )
+void HeaderMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -191,7 +191,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Event )
+void HeaderMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     Reference< css::frame::XModel > xModel;
 
@@ -205,7 +205,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL HeaderMenuController::updatePopupMenu()
+void HeaderMenuController::updatePopupMenu()
 {
     std::unique_lock aLock( m_aMutex );
 

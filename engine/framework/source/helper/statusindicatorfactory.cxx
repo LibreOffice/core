@@ -58,7 +58,7 @@ StatusIndicatorFactory::~StatusIndicatorFactory()
     impl_stopWakeUpThread();
 }
 
-void SAL_CALL StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+void StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     if (lArguments.hasElements()) {
         std::scoped_lock g(m_mutex);
@@ -94,12 +94,12 @@ void SAL_CALL StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::
     impl_createProgress();
 }
 
-css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFactory::createStatusIndicator()
+css::uno::Reference< css::task::XStatusIndicator > StatusIndicatorFactory::createStatusIndicator()
 {
     return new StatusIndicator(this);
 }
 
-void SAL_CALL StatusIndicatorFactory::update()
+void StatusIndicatorFactory::update()
 {
     std::scoped_lock g(m_mutex);
     m_bAllowReschedule = true;

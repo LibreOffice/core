@@ -39,25 +39,25 @@ class PropertySetContainer : public comphelper::WeakImplHelper<css::container::X
         virtual ~PropertySetContainer() override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
-        virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+        virtual void removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type getElementType() override
         {
             return cppu::UnoType<css::beans::XPropertySet>::get();
         }
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
     private:
         typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;

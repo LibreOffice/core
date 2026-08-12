@@ -52,7 +52,7 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 }
 
 // XMultiServiceFactory
-Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
+Reference< XInterface > RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
         return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
@@ -64,12 +64,12 @@ Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( con
         throw css::uno::RuntimeException(u"Unknown service specifier!"_ustr, static_cast<OWeakObject *>(this) );
 }
 
-Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
+Reference< XInterface > RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNames()
+Sequence< OUString > RootActionTriggerContainer::getAvailableServiceNames()
 {
     Sequence< OUString > aSeq{ SERVICENAME_ACTIONTRIGGER,
                                SERVICENAME_ACTIONTRIGGERCONTAINER,
@@ -78,7 +78,7 @@ Sequence< OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNam
 }
 
 // XIndexContainer
-void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
+void RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
 {
     SolarMutexGuard g;
 
@@ -88,7 +88,7 @@ void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const 
     PropertySetContainer::insertByIndex( Index, Element );
 }
 
-void SAL_CALL RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
+void RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
 {
     SolarMutexGuard g;
 
@@ -99,7 +99,7 @@ void SAL_CALL RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
 }
 
 // XIndexReplace
-void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
+void RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
 {
     SolarMutexGuard g;
 
@@ -110,7 +110,7 @@ void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
+sal_Int32 RootActionTriggerContainer::getCount()
 {
     SolarMutexGuard g;
 
@@ -127,7 +127,7 @@ sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
     }
 }
 
-Any SAL_CALL RootActionTriggerContainer::getByIndex( sal_Int32 Index )
+Any RootActionTriggerContainer::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard g;
 
@@ -138,12 +138,12 @@ Any SAL_CALL RootActionTriggerContainer::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-Type SAL_CALL RootActionTriggerContainer::getElementType()
+Type RootActionTriggerContainer::getElementType()
 {
     return cppu::UnoType<XPropertySet>::get();
 }
 
-bool SAL_CALL RootActionTriggerContainer::hasElements()
+bool RootActionTriggerContainer::hasElements()
 {
     if (m_xMenu)
         return m_xMenu->getItemCount() > 0;
@@ -151,17 +151,17 @@ bool SAL_CALL RootActionTriggerContainer::hasElements()
 }
 
 // XServiceInfo
-OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
+OUString RootActionTriggerContainer::getImplementationName()
 {
     return IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER;
 }
 
-bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
+bool RootActionTriggerContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
+Sequence< OUString > RootActionTriggerContainer::getSupportedServiceNames()
 {
     return { SERVICENAME_ACTIONTRIGGERCONTAINER };
 }

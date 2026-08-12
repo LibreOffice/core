@@ -42,7 +42,7 @@ ActionTriggerContainer::~ActionTriggerContainer()
 }
 
 // XMultiServiceFactory
-Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
+Reference< XInterface > ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
         return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
@@ -54,12 +54,12 @@ Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const O
         throw css::uno::RuntimeException(u"Unknown service specifier!"_ustr, static_cast<OWeakObject *>(this) );
 }
 
-Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
+Reference< XInterface > ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
+Sequence< OUString > ActionTriggerContainer::getAvailableServiceNames()
 {
     Sequence< OUString > aSeq{ SERVICENAME_ACTIONTRIGGER,
                                SERVICENAME_ACTIONTRIGGERCONTAINER,
@@ -69,17 +69,17 @@ Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
 }
 
 // XServiceInfo
-OUString SAL_CALL ActionTriggerContainer::getImplementationName()
+OUString ActionTriggerContainer::getImplementationName()
 {
     return IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER;
 }
 
-bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
+bool ActionTriggerContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
+Sequence< OUString > ActionTriggerContainer::getSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames { SERVICENAME_ACTIONTRIGGERCONTAINER };
     return seqServiceNames;

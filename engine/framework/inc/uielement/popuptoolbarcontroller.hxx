@@ -38,11 +38,11 @@ public:
     using svt::ToolboxController::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
 protected:
     PopupMenuToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -68,17 +68,17 @@ public:
                                   const cpo::uno::Sequence<cpo::uno::Any>& rxArgs);
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rxArgs) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rxArgs) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const& rServiceName) override;
+    virtual bool supportsService(OUString const& rServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
     bool m_bSplitButton, m_bReplaceWithLast;

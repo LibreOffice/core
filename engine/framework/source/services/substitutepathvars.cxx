@@ -145,28 +145,28 @@ class SubstitutePathVariables : public SubstitutePathVariables_BASE
 public:
     explicit SubstitutePathVariables();
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.PathSubstitution"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.util.PathSubstitution"_ustr};
     }
 
     // XStringSubstitution
-    virtual OUString SAL_CALL substituteVariables( const OUString& aText, bool bSubstRequired ) override;
-    virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
-    virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
+    virtual OUString substituteVariables( const OUString& aText, bool bSubstRequired ) override;
+    virtual OUString reSubstituteVariables( const OUString& aText ) override;
+    virtual OUString getSubstituteVariableValue( const OUString& variable ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
 
 private:
     void            impl_initialize();
@@ -238,26 +238,26 @@ void SubstitutePathVariables::impl_initialize()
     sort(m_aReSubstFixedVarOrder.begin(),m_aReSubstFixedVarOrder.end());
 }
 
-void SAL_CALL SubstitutePathVariables::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
+void SubstitutePathVariables::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     std::unique_lock g(m_aMutex);
     impl_initialize();
 }
 
 // XStringSubstitution
-OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, bool bSubstRequired )
+OUString SubstitutePathVariables::substituteVariables( const OUString& aText, bool bSubstRequired )
 {
     std::unique_lock g(m_aMutex);
     return impl_substituteVariable( aText, bSubstRequired );
 }
 
-OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
+OUString SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
 {
     std::unique_lock g(m_aMutex);
     return impl_reSubstituteVariables( aText );
 }
 
-OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
+OUString SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
 {
     std::unique_lock g(m_aMutex);
     return impl_getSubstituteVariableValue( aVariable );

@@ -53,7 +53,7 @@ StatusBarWrapper::~StatusBarWrapper()
 {
 }
 
-void SAL_CALL StatusBarWrapper::dispose()
+void StatusBarWrapper::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -76,7 +76,7 @@ void SAL_CALL StatusBarWrapper::dispose()
 }
 
 // XInitialization
-void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
+void StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -124,7 +124,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
 }
 
 // XUIElementSettings
-void SAL_CALL StatusBarWrapper::updateSettings()
+void StatusBarWrapper::updateSettings()
 {
     SolarMutexGuard g;
 
@@ -147,7 +147,7 @@ void SAL_CALL StatusBarWrapper::updateSettings()
     }
 }
 
-Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface()
+Reference< XInterface > StatusBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 

@@ -74,16 +74,16 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
         // XInterface, XTypeProvider
 
         // XInitialization
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
+        virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XTitleChangeListener
-        virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent) override;
+        virtual void titleChanged(const css::frame::TitleChangedEvent& aEvent) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
     // helper
 

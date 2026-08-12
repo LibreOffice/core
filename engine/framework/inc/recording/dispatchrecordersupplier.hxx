@@ -57,15 +57,15 @@ class DispatchRecorderSupplier final : public  ::cppu::WeakImplHelper<
     public:
 
         /* interface XServiceInfo */
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XDispatchRecorderSupplier
 
-        virtual void                                                 SAL_CALL setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) override;
-        virtual css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL getDispatchRecorder(                                                                         ) override;
-        virtual void                                                 SAL_CALL dispatchAndRecord  ( const css::util::URL&                                       aURL        ,
+        virtual void                                                 setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) override;
+        virtual css::uno::Reference< css::frame::XDispatchRecorder > getDispatchRecorder(                                                                         ) override;
+        virtual void                                                 dispatchAndRecord  ( const css::util::URL&                                       aURL        ,
                                                                                                    const cpo::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
                                                                                                    const css::uno::Reference< css::frame::XDispatch >&         xDispatcher ) override;
 

@@ -40,17 +40,17 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL ShellJob::getImplementationName()
+OUString ShellJob::getImplementationName()
 {
     return u"com.sun.star.comp.framework.ShellJob"_ustr;
 }
 
-bool SAL_CALL ShellJob::supportsService( const OUString& sServiceName )
+bool ShellJob::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ShellJob::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ShellJob::getSupportedServiceNames()
 {
     return { SERVICENAME_JOB };
 }
@@ -65,7 +65,7 @@ ShellJob::~ShellJob()
 {
 }
 
-cpo::uno::Any SAL_CALL ShellJob::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lJobArguments)
+cpo::uno::Any ShellJob::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lJobArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     /** address job configuration inside argument set provided on method execute(). */

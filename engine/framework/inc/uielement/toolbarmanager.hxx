@@ -122,20 +122,20 @@ class ToolBarManager final : public ToolbarManager_Base
         ToolBox* GetToolBar() const;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
+        virtual void frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XComponent
-        void SAL_CALL dispose() override;
-        void SAL_CALL addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
-        void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void dispose() override;
+        void addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
 
         void CheckAndUpdateImages();
         void RequestImages();

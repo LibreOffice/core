@@ -40,7 +40,7 @@ DispatchInformationProvider::~DispatchInformationProvider()
 {
 }
 
-cpo::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > DispatchInformationProvider::getSupportedCommandGroups()
 {
     cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
@@ -71,7 +71,7 @@ cpo::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     return ::comphelper::containerToSequence(lGroups);
 }
 
-cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+cpo::uno::Sequence< css::frame::DispatchInformation > DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
 {
     cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();

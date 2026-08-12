@@ -42,36 +42,36 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
         virtual ~RootActionTriggerContainer() override;
 
         // XMultiServiceFactory
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+        virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
-        virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+        virtual void removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XNamed
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual void SAL_CALL setName( const OUString& aName ) override;
+        virtual OUString getName(  ) override;
+        virtual void setName( const OUString& aName ) override;
 
     private:
         void FillContainer();

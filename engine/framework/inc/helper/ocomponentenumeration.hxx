@@ -76,7 +76,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @param      "aEvent" describe the source of this event.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
         //  XEnumeration
 
@@ -93,7 +93,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
                         (List is empty and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual bool SAL_CALL hasMoreElements() override;
+        virtual bool hasMoreElements() override;
 
         /*-****************************************************************************************************
             @short      give the next element, if some exist
@@ -105,7 +105,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual cpo::uno::Any SAL_CALL nextElement() override;
+        virtual cpo::uno::Any nextElement() override;
 
     //  protected methods
 

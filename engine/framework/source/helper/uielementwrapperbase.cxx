@@ -54,7 +54,7 @@ UIElementWrapperBase::~UIElementWrapperBase()
 {
 }
 
-Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType )
+Any UIElementWrapperBase::queryInterface( const Type& _rType )
 {
     Any aRet = UIElementWrapperBase_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -62,7 +62,7 @@ Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  )
+Sequence< Type > UIElementWrapperBase::getTypes(  )
 {
     return comphelper::concatSequences(
         UIElementWrapperBase_BASE::getTypes(),
@@ -70,17 +70,17 @@ Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  )
     );
 }
 
-void SAL_CALL UIElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void SAL_CALL UIElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
+void UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -107,30 +107,30 @@ void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArgument
 }
 
 // XUIElement
-css::uno::Reference< css::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame()
+css::uno::Reference< css::frame::XFrame > UIElementWrapperBase::getFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
-OUString SAL_CALL UIElementWrapperBase::getResourceURL()
+OUString UIElementWrapperBase::getResourceURL()
 {
     return m_aResourceURL;
 }
 
-::sal_Int16 SAL_CALL UIElementWrapperBase::getType()
+::sal_Int16 UIElementWrapperBase::getType()
 {
     return m_nType;
 }
 
 // XUpdatable
-void SAL_CALL UIElementWrapperBase::update()
+void UIElementWrapperBase::update()
 {
     // can be implemented by derived class
 }
 
 // XPropertySet helper
-bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
+bool UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
                                                                   Any&       /*aOldValue*/       ,
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             )
@@ -140,12 +140,12 @@ bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConv
     return false;
 }
 
-void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
+void UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
                                                                         const cpo::uno::Any&    /*aValue*/  )
 {
 }
 
-void SAL_CALL UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
+void UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                           sal_Int32      nHandle                ) const
 {
     switch( nHandle )
@@ -163,7 +163,7 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue 
     }
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL UIElementWrapperBase::getInfoHelper()
+::cppu::IPropertyArrayHelper& UIElementWrapperBase::getInfoHelper()
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -173,7 +173,7 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue 
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo > UIElementWrapperBase::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)

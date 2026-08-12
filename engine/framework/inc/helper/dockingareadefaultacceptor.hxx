@@ -51,9 +51,9 @@ class DockingAreaDefaultAcceptor final : public ::cppu::WeakImplHelper< css::ui:
 
         //  XDockingAreaAcceptor
 
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() override;
-        virtual bool SAL_CALL requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) override;
-        virtual void SAL_CALL setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) override;
+        virtual css::uno::Reference< css::awt::XWindow > getContainerWindow() override;
+        virtual bool requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) override;
+        virtual void setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) override;
 
     //  variables
     //  (should be private everyway!)

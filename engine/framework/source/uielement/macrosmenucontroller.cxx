@@ -41,17 +41,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL MacrosMenuController::getImplementationName()
+OUString MacrosMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.MacrosMenuController"_ustr;
 }
 
-bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceName )
+bool MacrosMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL MacrosMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MacrosMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -89,7 +89,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > cons
 }
 
 // XEventListener
-void SAL_CALL MacrosMenuController::disposing( const EventObject& )
+void MacrosMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -106,7 +106,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& )
+void MacrosMenuController::statusChanged( const FeatureStateEvent& )
 {
     std::unique_lock aLock( m_aMutex );
     if ( m_xPopupMenu.is() )

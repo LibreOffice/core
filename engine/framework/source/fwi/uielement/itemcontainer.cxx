@@ -134,20 +134,20 @@ rtl::Reference< ItemContainer > ItemContainer::deepCopyContainer( const Referenc
 }
 
 // XElementAccess
-bool SAL_CALL ItemContainer::hasElements()
+bool ItemContainer::hasElements()
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL ItemContainer::getCount()
+sal_Int32 ItemContainer::getCount()
 {
     ShareGuard aLock( m_aShareMutex );
     return m_aItemVector.size();
 }
 
-Any SAL_CALL ItemContainer::getByIndex( sal_Int32 Index )
+Any ItemContainer::getByIndex( sal_Int32 Index )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( sal_Int32( m_aItemVector.size()) <= Index )
@@ -157,7 +157,7 @@ Any SAL_CALL ItemContainer::getByIndex( sal_Int32 Index )
 }
 
 // XIndexContainer
-void SAL_CALL ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
+void ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
     if ( !(aItem >>= aSeq) )
@@ -177,7 +177,7 @@ void SAL_CALL ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
-void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
+void ItemContainer::removeByIndex( sal_Int32 nIndex )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( static_cast<sal_Int32>(m_aItemVector.size()) <= nIndex )
@@ -186,7 +186,7 @@ void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
     m_aItemVector.erase(m_aItemVector.begin() + nIndex);
 }
 
-void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
+void ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
     if ( !(aItem >>= aSeq) )

@@ -91,7 +91,7 @@ Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyMo
     return aArgs;
 }
 
-void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
+void ComplexToolbarController::execute( sal_Int16 KeyModifier )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;

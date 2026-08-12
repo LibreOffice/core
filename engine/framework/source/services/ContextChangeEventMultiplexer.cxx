@@ -58,26 +58,26 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XContextChangeEventMultiplexer
-    virtual void SAL_CALL addContextChangeEventListener (
+    virtual void addContextChangeEventListener (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
         const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
-    virtual void SAL_CALL removeContextChangeEventListener (
+    virtual void removeContextChangeEventListener (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
         const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
-    virtual void SAL_CALL removeAllContextChangeEventListeners (
+    virtual void removeAllContextChangeEventListeners (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener) override;
-    virtual void SAL_CALL broadcastContextChangeEvent (
+    virtual void broadcastContextChangeEvent (
         const css::ui::ContextChangeEventObject& rContextChangeEventObject,
         const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService  (
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService  (
         const OUString& rsServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString> getSupportedServiceNames() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing (
+    virtual void disposing (
         const css::lang::EventObject& rEvent) override;
 
     typedef ::std::vector<css::uno::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
@@ -137,7 +137,7 @@ void ContextChangeEventMultiplexer::disposing(std::unique_lock<std::mutex>& rGua
 }
 
 // XContextChangeEventMultiplexer
-void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
+void ContextChangeEventMultiplexer::addContextChangeEventListener (
     const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
     const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
@@ -172,7 +172,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     rxListener->notifyContextChangeEvent(aEvent);
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
+void ContextChangeEventMultiplexer::removeContextChangeEventListener (
     const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
     const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
@@ -198,7 +198,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
 
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListeners (
+void ContextChangeEventMultiplexer::removeAllContextChangeEventListeners (
     const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener)
 {
     if ( ! rxListener.is())
@@ -220,7 +220,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
     }
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
+void ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     const css::ui::ContextChangeEventObject& rEventObject,
     const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
@@ -280,23 +280,23 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
         return nullptr;
 }
 
-OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
+OUString ContextChangeEventMultiplexer::getImplementationName()
 {
     return u"org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"_ustr;
 }
 
-bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)
+bool ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)
 {
     return cppu::supportsService(this, rsServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ContextChangeEventMultiplexer::getSupportedServiceNames()
 {
     // it's a singleton, not a service
     return cpo::uno::Sequence<OUString>();
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventObject& rEvent)
+void ContextChangeEventMultiplexer::disposing ( const css::lang::EventObject& rEvent)
 {
     ListenerMap::iterator iDescriptor (maListeners.find(rEvent.Source));
 

@@ -55,26 +55,26 @@ class DispatchRecorder final
         virtual ~DispatchRecorder() override;
 
         /* interface XServiceInfo */
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XDispatchRecorder
-        virtual void SAL_CALL            startRecording         ( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-        virtual void SAL_CALL            recordDispatch         ( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
-        virtual void SAL_CALL            recordDispatchAsComment( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
-        virtual void SAL_CALL            endRecording           () override;
-        virtual OUString SAL_CALL getRecordedMacro       () override;
+        virtual void            startRecording         ( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void            recordDispatch         ( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+        virtual void            recordDispatchAsComment( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+        virtual void            endRecording           () override;
+        virtual OUString getRecordedMacro       () override;
 
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
-        virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32) override;
+        virtual cpo::uno::Any getByIndex(sal_Int32) override;
 
-        virtual void SAL_CALL replaceByIndex(sal_Int32, const cpo::uno::Any&) override;
+        virtual void replaceByIndex(sal_Int32, const cpo::uno::Any&) override;
 
     // private functions
     private:

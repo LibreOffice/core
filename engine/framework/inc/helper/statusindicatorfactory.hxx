@@ -174,29 +174,29 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
     public:
         StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext > xContext);
 
-        virtual OUString SAL_CALL getImplementationName() override
+        virtual OUString getImplementationName() override
         {
             return u"com.sun.star.comp.framework.StatusIndicatorFactory"_ustr;
         }
 
-        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+        virtual bool supportsService(OUString const & ServiceName) override
         {
             return cppu::supportsService(this, ServiceName);
         }
 
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
         {
            return { u"com.sun.star.task.StatusIndicatorFactory"_ustr };
         }
 
         // XInitialization
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
+        virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XStatusIndicatorFactory
-        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() override;
+        virtual css::uno::Reference< css::task::XStatusIndicator > createStatusIndicator() override;
 
         // XUpdatable
-        virtual void SAL_CALL update() override;
+        virtual void update() override;
 
         // similar (XStatusIndicator)
         void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,

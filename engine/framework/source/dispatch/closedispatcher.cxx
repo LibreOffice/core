@@ -85,18 +85,18 @@ CloseDispatcher::~CloseDispatcher()
     m_pSysWindow.reset();
 }
 
-void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
+void CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-cpo::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > CloseDispatcher::getSupportedCommandGroups()
 {
     return  cpo::uno::Sequence< sal_Int16 >{css::frame::CommandGroup::VIEW, css::frame::CommandGroup::DOCUMENT};
 }
 
-cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+cpo::uno::Sequence< css::frame::DispatchInformation > CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
@@ -119,17 +119,17 @@ cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
     return cpo::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                  const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                     const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
+void CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {

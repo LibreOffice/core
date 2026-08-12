@@ -50,10 +50,10 @@ class ComplexToolbarController : public svt::ToolboxController
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+        virtual void execute( sal_Int16 KeyModifier ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
         DECL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, void*, void );
         DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, void*, void);

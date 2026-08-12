@@ -30,17 +30,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL UriAbbreviation::getImplementationName()
+OUString UriAbbreviation::getImplementationName()
 {
     return u"com.sun.star.comp.framework.UriAbbreviation"_ustr;
 }
 
-bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName )
+bool UriAbbreviation::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UriAbbreviation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UriAbbreviation::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.UriAbbreviation"_ustr };
 }
@@ -50,7 +50,7 @@ UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContex
 }
 
 // css::util::XStringAbbreviation:
-OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString)
+OUString UriAbbreviation::abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString)
 {
     OUString aResult( aString );
     if ( xStringWidth.is() )

@@ -106,7 +106,7 @@ RootItemContainer::~RootItemContainer()
 {
 }
 
-Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType )
+Any RootItemContainer::queryInterface( const Type& _rType )
 {
     Any aRet = RootItemContainer_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -114,7 +114,7 @@ Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL RootItemContainer::getTypes(  )
+Sequence< Type > RootItemContainer::getTypes(  )
 {
     return comphelper::concatSequences(
         RootItemContainer_BASE::getTypes(),
@@ -138,20 +138,20 @@ rtl::Reference< ItemContainer > RootItemContainer::deepCopyContainer( const Refe
 }
 
 // XElementAccess
-bool SAL_CALL RootItemContainer::hasElements()
+bool RootItemContainer::hasElements()
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL RootItemContainer::getCount()
+sal_Int32 RootItemContainer::getCount()
 {
     ShareGuard aLock( m_aShareMutex );
     return m_aItemVector.size();
 }
 
-Any SAL_CALL RootItemContainer::getByIndex( sal_Int32 Index )
+Any RootItemContainer::getByIndex( sal_Int32 Index )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( sal_Int32( m_aItemVector.size()) <= Index )
@@ -161,7 +161,7 @@ Any SAL_CALL RootItemContainer::getByIndex( sal_Int32 Index )
 }
 
 // XIndexContainer
-void SAL_CALL RootItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
+void RootItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
     if ( !(aItem >>= aSeq) )
@@ -180,7 +180,7 @@ void SAL_CALL RootItemContainer::insertByIndex( sal_Int32 Index, const Any& aIte
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
-void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
+void RootItemContainer::removeByIndex( sal_Int32 nIndex )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( static_cast<sal_Int32>(m_aItemVector.size()) <= nIndex )
@@ -189,7 +189,7 @@ void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
     m_aItemVector.erase(m_aItemVector.begin() + nIndex);
 }
 
-void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
+void RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
     if ( !(aItem >>= aSeq) )
@@ -202,18 +202,18 @@ void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aIt
     m_aItemVector[Index] = std::move(aSeq);
 }
 
-Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )
+Reference< XInterface > RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )
 {
     return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
 
-Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >&, const Reference< XComponentContext >& )
+Reference< XInterface > RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >&, const Reference< XComponentContext >& )
 {
     return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
 
 // XPropertySet helper
-bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConvertedValue ,
+bool RootItemContainer::convertFastPropertyValue( Any&       aConvertedValue ,
                                                                Any&       aOldValue       ,
                                                                sal_Int32  nHandle         ,
                                                                const Any& aValue             )
@@ -237,7 +237,7 @@ bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConverted
     return bReturn;
 }
 
-void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32               nHandle ,
+void RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32               nHandle ,
                                                                    const cpo::uno::Any&    aValue  )
 {
     switch( nHandle )
@@ -248,7 +248,7 @@ void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32    
     }
 }
 
-void SAL_CALL RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
+void RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                        sal_Int32                 nHandle                ) const
 {
     switch( nHandle )
@@ -259,7 +259,7 @@ void SAL_CALL RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
     }
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL RootItemContainer::getInfoHelper()
+::cppu::IPropertyArrayHelper& RootItemContainer::getInfoHelper()
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -269,7 +269,7 @@ void SAL_CALL RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL RootItemContainer::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo > RootItemContainer::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)

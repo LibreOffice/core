@@ -165,11 +165,11 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadStatusBarDocumentHandler::startDocument()
+void OReadStatusBarDocumentHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
+void OReadStatusBarDocumentHandler::endDocument()
 {
     if ( m_bStatusBarStartFound )
     {
@@ -178,7 +178,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::startElement(
+void OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
     auto pStatusBarEntry = m_aStatusBarMap.find( aName );
@@ -375,7 +375,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
+void OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 {
     auto pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry == m_aStatusBarMap.end() )
@@ -411,20 +411,20 @@ void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString&)
+void OReadStatusBarDocumentHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
+void OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
+void OReadStatusBarDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
+void OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
     m_xLocator = xLocator;

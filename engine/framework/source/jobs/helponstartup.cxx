@@ -42,17 +42,17 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL HelpOnStartup::getImplementationName()
+OUString HelpOnStartup::getImplementationName()
 {
     return u"com.sun.star.comp.framework.HelpOnStartup"_ustr;
 }
 
-bool SAL_CALL HelpOnStartup::supportsService( const OUString& sServiceName )
+bool HelpOnStartup::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL HelpOnStartup::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > HelpOnStartup::getSupportedServiceNames()
 {
     return { SERVICENAME_JOB };
 }
@@ -89,7 +89,7 @@ HelpOnStartup::~HelpOnStartup()
 }
 
 // css.task.XJob
-cpo::uno::Any SAL_CALL HelpOnStartup::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments)
+cpo::uno::Any HelpOnStartup::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     // Analyze the given arguments; try to locate a model there and
     // classify it's used application module.
@@ -132,7 +132,7 @@ cpo::uno::Any SAL_CALL HelpOnStartup::execute(const cpo::uno::Sequence< css::bea
     return cpo::uno::Any();
 }
 
-void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
+void HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 {
     std::unique_lock g(m_mutex);
     if (aEvent.Source == m_xModuleManager)

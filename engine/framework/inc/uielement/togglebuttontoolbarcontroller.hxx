@@ -56,7 +56,7 @@ class ToggleButtonToolbarController final : public ComplexToolbarController
         virtual ~ToggleButtonToolbarController() override;
 
         // XToolbarController
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
 
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;

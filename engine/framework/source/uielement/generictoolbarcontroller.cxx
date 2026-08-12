@@ -129,7 +129,7 @@ void GenericToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
     m_nID = ToolBoxItemId(0);
 }
 
-void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
+void GenericToolbarController::execute( sal_Int16 KeyModifier )
 {
     Reference< XDispatch >       xDispatch;
     OUString                     aCommandURL;

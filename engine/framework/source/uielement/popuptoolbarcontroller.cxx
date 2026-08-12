@@ -89,7 +89,7 @@ void PopupMenuToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
     }
 }
 
-void SAL_CALL PopupMenuToolbarController::initialize(
+void PopupMenuToolbarController::initialize(
     const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ToolboxController::initialize( aArguments );
@@ -131,7 +131,7 @@ void SAL_CALL PopupMenuToolbarController::initialize(
 
 }
 
-void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+void PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     if ( m_bResourceURL )
         return;
@@ -148,7 +148,7 @@ void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::Featu
     }
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL
+css::uno::Reference< css::awt::XWindow >
 PopupMenuToolbarController::createPopupWindow()
 {
     css::uno::Reference< css::awt::XWindow > xRet;
@@ -358,31 +358,31 @@ public:
     explicit SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
-    virtual bool SAL_CALL opensSubToolbar() override;
-    virtual OUString SAL_CALL getSubToolbarName() override;
-    virtual void SAL_CALL functionSelected( const OUString& aCommand ) override;
-    virtual void SAL_CALL updateImage() override;
+    virtual bool opensSubToolbar() override;
+    virtual OUString getSubToolbarName() override;
+    virtual void functionSelected( const OUString& aCommand ) override;
+    virtual void updateImage() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) override;
+    virtual void modified( const css::lang::EventObject& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& rEvent ) override;
 
     // WeakComponentImplHelperBase
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( OUString const & rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( OUString const & rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     bool m_bReadOnly;
@@ -559,25 +559,25 @@ public:
     explicit NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
+    virtual bool supportsService(OUString const & rServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
-    bool SAL_CALL opensSubToolbar() override { return true; }
-    OUString SAL_CALL getSubToolbarName() override { return OUString(); }
-    void SAL_CALL functionSelected( const OUString& ) override {}
-    void SAL_CALL updateImage() override;
+    bool opensSubToolbar() override { return true; }
+    OUString getSubToolbarName() override { return OUString(); }
+    void functionSelected( const OUString& ) override {}
+    void updateImage() override;
 
 private:
     void functionExecuted( const OUString &rCommand ) override;
-    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-    void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+    void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    void execute( sal_Int16 KeyModifier ) override;
     sal_uInt16 getMenuIdForCommand( std::u16string_view rCommand );
 
     sal_uInt16 m_nMenuId;
@@ -607,7 +607,7 @@ cpo::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
-void SAL_CALL NewToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void NewToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     PopupMenuToolbarController::initialize( aArguments );
 
@@ -615,7 +615,7 @@ void SAL_CALL NewToolbarController::initialize( const cpo::uno::Sequence< cpo::u
     createPopupMenuController();
 }
 
-void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+void NewToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     if ( rEvent.IsEnabled )
     {
@@ -638,7 +638,7 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
     enable( rEvent.IsEnabled );
 }
 
-void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
+void NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -694,7 +694,7 @@ sal_uInt16 NewToolbarController::getMenuIdForCommand( std::u16string_view rComma
     return 0;
 }
 
-void SAL_CALL NewToolbarController::updateImage()
+void NewToolbarController::updateImage()
 {
     SolarMutexGuard aSolarLock;
     VclPtr< ToolBox> pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );

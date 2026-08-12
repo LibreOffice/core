@@ -51,17 +51,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL ToolbarModeMenuController::getImplementationName()
+OUString ToolbarModeMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.ToolbarModeMenuController"_ustr;
 }
 
-bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServiceName )
+bool ToolbarModeMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ToolbarModeMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ToolbarModeMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -151,7 +151,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 }
 
 // XEventListener
-void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& )
+void ToolbarModeMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -165,7 +165,7 @@ void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent& Event )
+void ToolbarModeMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
@@ -211,13 +211,13 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
 }
 
 // XMenuListener
-void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+void ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     auto aArgs(comphelper::InitPropertySequence({{"Mode", Any(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
     dispatchCommand(m_aCommandURL, aArgs);
 }
 
-void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEvent& )
+void ToolbarModeMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( m_xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
@@ -264,7 +264,7 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
 }
 
 // XPopupMenuController
-void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
+void ToolbarModeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
     std::unique_lock aLock( m_aMutex );
 

@@ -39,24 +39,24 @@ class SaxNamespaceFilter final : public SaxNamespaceFilter_Base
         virtual ~SaxNamespaceFilter() override;
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument() override;
+        virtual void startDocument() override;
 
-        virtual void SAL_CALL endDocument() override;
+        virtual void endDocument() override;
 
-        virtual void SAL_CALL startElement(
+        virtual void startElement(
             const OUString& aName,
             const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
-        virtual void SAL_CALL endElement(const OUString& aName) override;
+        virtual void endElement(const OUString& aName) override;
 
-        virtual void SAL_CALL characters(const OUString& aChars) override;
+        virtual void characters(const OUString& aChars) override;
 
-        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
+        virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
 
-        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+        virtual void processingInstruction(const OUString& aTarget,
                                                     const OUString& aData) override;
 
-        virtual void SAL_CALL setDocumentLocator(
+        virtual void setDocumentLocator(
             const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:

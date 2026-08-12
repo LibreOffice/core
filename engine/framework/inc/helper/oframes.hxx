@@ -67,7 +67,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to append.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void append( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      remove frame from container
@@ -79,7 +79,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to remove.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      return list of all applicable frames for given flags
@@ -89,7 +89,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    An empty list is returned.
         */
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > queryFrames( sal_Int32 nSearchFlags ) override;
 
         //  XIndexAccess
 
@@ -104,7 +104,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    If a lock is set, we return 0 for prevent further access!
         */
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
         /**
             @short      get specified container item by index
@@ -120,7 +120,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @onerror    If a lock is set, we return an empty Any!
             @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
         */
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 nIndex ) override;
 
         //  XElementAccess
 
@@ -130,7 +130,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
                         (container-lock is ignored)
             @return     A uno-type descriptor.
         */
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
         /**
             @short      get fill state of current container
@@ -141,7 +141,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    We return false.
         */
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
     private:
 

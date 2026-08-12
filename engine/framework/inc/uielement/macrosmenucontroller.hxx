@@ -34,15 +34,15 @@ namespace framework
             virtual ~MacrosMenuController() override;
 
             /* interface XServiceInfo */
-            virtual OUString SAL_CALL getImplementationName() override;
-            virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual OUString getImplementationName() override;
+            virtual bool supportsService( const OUString& sServiceName ) override;
+            virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+            virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+            virtual void disposing( const css::lang::EventObject& Source ) override;
 
         private:
             void fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu);

@@ -59,7 +59,7 @@ MenuBarWrapper::~MenuBarWrapper()
 {
 }
 
-void SAL_CALL MenuBarWrapper::dispose()
+void MenuBarWrapper::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -78,7 +78,7 @@ void SAL_CALL MenuBarWrapper::dispose()
 }
 
 // XInitialization
-void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
+void MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -162,7 +162,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
 }
 
 // XUIElementSettings
-void SAL_CALL MenuBarWrapper::updateSettings()
+void MenuBarWrapper::updateSettings()
 {
     SolarMutexGuard g;
 
@@ -208,12 +208,12 @@ void MenuBarWrapper::fillPopupControllerCache()
 }
 
 // XElementAccess
-Type SAL_CALL MenuBarWrapper::getElementType()
+Type MenuBarWrapper::getElementType()
 {
     return cppu::UnoType<XDispatchProvider>::get();
 }
 
-bool SAL_CALL MenuBarWrapper::hasElements()
+bool MenuBarWrapper::hasElements()
 {
     SolarMutexGuard g;
 
@@ -225,7 +225,7 @@ bool SAL_CALL MenuBarWrapper::hasElements()
 }
 
 // XNameAccess
-Any SAL_CALL MenuBarWrapper::getByName(
+Any MenuBarWrapper::getByName(
     const OUString& aName )
 {
     SolarMutexGuard g;
@@ -243,7 +243,7 @@ Any SAL_CALL MenuBarWrapper::getByName(
     return cpo::uno::Any( xDispatchProvider );
 }
 
-Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
+Sequence< OUString > MenuBarWrapper::getElementNames()
 {
     SolarMutexGuard g;
 
@@ -255,7 +255,7 @@ Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
     return comphelper::mapKeysToSequence( m_aPopupControllerCache );
 }
 
-bool SAL_CALL MenuBarWrapper::hasByName(
+bool MenuBarWrapper::hasByName(
     const OUString& aName )
 {
     SolarMutexGuard g;
@@ -273,7 +273,7 @@ bool SAL_CALL MenuBarWrapper::hasByName(
 }
 
 // XUIElement
-Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface()
+Reference< XInterface > MenuBarWrapper::getRealInterface()
 {
     if ( m_bDisposed )
         throw DisposedException();

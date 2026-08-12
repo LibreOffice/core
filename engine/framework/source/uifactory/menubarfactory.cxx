@@ -52,7 +52,7 @@ MenuBarFactory::~MenuBarFactory()
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
+Reference< XUIElement > MenuBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {

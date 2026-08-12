@@ -51,24 +51,24 @@ class WindowContentFactoryManager : public WindowContentFactoryManager_BASE
 public:
     explicit WindowContentFactoryManager( css::uno::Reference< css::uno::XComponentContext> xContext );
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.WindowContentFactoryManager"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.WindowContentFactoryManager"_ustr};
     }
 
     // XSingleComponentFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -93,14 +93,14 @@ void WindowContentFactoryManager::disposing(std::unique_lock<std::mutex>&)
 }
 
 // XSingleComponentFactory
-uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithContext(
+uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithContext(
     const uno::Reference< uno::XComponentContext >& /*xContext*/ )
 {
     uno::Reference< uno::XInterface > xWindow;
     return xWindow;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
+uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
     const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context )
 {
     uno::Reference< uno::XInterface > xWindow;

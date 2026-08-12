@@ -41,17 +41,17 @@ MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL MediaTypeDetectionHelper::getImplementationName()
+OUString MediaTypeDetectionHelper::getImplementationName()
 {
     return u"com.sun.star.comp.framework.MediaTypeDetectionHelper"_ustr;
 }
 
-bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sServiceName )
+bool MediaTypeDetectionHelper::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MediaTypeDetectionHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.MediaTypeDetectionHelper"_ustr };
 }
@@ -59,7 +59,7 @@ cpo::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedSe
 
 //   XStringMapping
 
-bool SAL_CALL MediaTypeDetectionHelper::mapStrings(cpo::uno::Sequence< OUString >& rSeq)
+bool MediaTypeDetectionHelper::mapStrings(cpo::uno::Sequence< OUString >& rSeq)
 {
     bool bModified = false;
     auto rSeqRange = asNonConstRange(rSeq);

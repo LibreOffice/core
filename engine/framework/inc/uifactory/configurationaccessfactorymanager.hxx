@@ -54,12 +54,12 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
         cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >   getFactoriesDescription() const;
 
         // container.XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+    virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     // lang.XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
 

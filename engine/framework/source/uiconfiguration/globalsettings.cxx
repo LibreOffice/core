@@ -52,12 +52,12 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         explicit GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext );
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void dispose() override;
+        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // settings access
         bool HasToolbarStatesInfo();
@@ -91,23 +91,23 @@ GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< css::uno::XCo
 }
 
 // XComponent
-void SAL_CALL GlobalSettings_Access::dispose()
+void GlobalSettings_Access::dispose()
 {
     std::unique_lock g(m_mutex);
     m_xConfigAccess.clear();
     m_bDisposed = true;
 }
 
-void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
-void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
 // XEventListener
-void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
+void GlobalSettings_Access::disposing( const css::lang::EventObject& )
 {
     std::unique_lock g(m_mutex);
     m_xConfigAccess.clear();

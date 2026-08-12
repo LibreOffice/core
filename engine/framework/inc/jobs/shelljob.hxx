@@ -68,12 +68,12 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
     public:
 
         /* interface XServiceInfo */
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // css.task.XJob
-        virtual cpo::uno::Any SAL_CALL execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments) override;
+        virtual cpo::uno::Any execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments) override;
 
     // helper
     private:

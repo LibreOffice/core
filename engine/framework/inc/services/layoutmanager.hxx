@@ -68,81 +68,81 @@ namespace framework
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
             DECLARE_XINTERFACE()
             DECLARE_XTYPEPROVIDER()
-            virtual OUString SAL_CALL getImplementationName() override
+            virtual OUString getImplementationName() override
             {
                 return u"com.sun.star.comp.framework.LayoutManager"_ustr;
             }
 
-            virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+            virtual bool supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
             {
                 cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.LayoutManager"_ustr };
                 return aSeq;
             }
 
             // XLayoutManager
-            virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& Frame ) override;
-            virtual void SAL_CALL reset() override;
-            virtual css::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) override;
-            virtual css::uno::Reference< css::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() override;
-            virtual void SAL_CALL setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
-            virtual void SAL_CALL createElement( const OUString& aName ) override;
-            virtual void SAL_CALL destroyElement( const OUString& aName ) override;
-            virtual bool SAL_CALL requestElement( const OUString& ResourceURL ) override;
-            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) override;
-            virtual cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) override;
-            virtual bool SAL_CALL showElement( const OUString& aName ) override;
-            virtual bool SAL_CALL hideElement( const OUString& aName ) override;
-            virtual bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
-            virtual bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) override;
-            virtual bool SAL_CALL floatWindow( const OUString& aName ) override;
-            virtual bool SAL_CALL lockWindow( const OUString& ResourceURL ) override;
-            virtual bool SAL_CALL unlockWindow( const OUString& ResourceURL ) override;
-            virtual void SAL_CALL setElementSize( const OUString& aName, const css::awt::Size& aSize ) override;
-            virtual void SAL_CALL setElementPos( const OUString& aName, const css::awt::Point& aPos ) override;
-            virtual void SAL_CALL setElementPosSize( const OUString& aName, const css::awt::Point& aPos, const css::awt::Size& aSize ) override;
-            virtual bool SAL_CALL isElementVisible( const OUString& aName ) override;
-            virtual bool SAL_CALL isElementFloating( const OUString& aName ) override;
-            virtual bool SAL_CALL isElementDocked( const OUString& aName ) override;
-            virtual bool SAL_CALL isElementLocked( const OUString& ResourceURL ) override;
-            virtual css::awt::Size SAL_CALL getElementSize( const OUString& aName ) override;
-            virtual css::awt::Point SAL_CALL getElementPos( const OUString& aName ) override;
-            virtual void SAL_CALL lock(  ) override;
-            virtual void SAL_CALL unlock(  ) override;
-            virtual void SAL_CALL doLayout(  ) override;
-            virtual void SAL_CALL setVisible( bool bVisible ) override;
-            virtual bool SAL_CALL isVisible() override;
+            virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& Frame ) override;
+            virtual void reset() override;
+            virtual css::awt::Rectangle getCurrentDockingArea(  ) override;
+            virtual css::uno::Reference< css::ui::XDockingAreaAcceptor > getDockingAreaAcceptor() override;
+            virtual void setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
+            virtual void createElement( const OUString& aName ) override;
+            virtual void destroyElement( const OUString& aName ) override;
+            virtual bool requestElement( const OUString& ResourceURL ) override;
+            virtual css::uno::Reference< css::ui::XUIElement > getElement( const OUString& aName ) override;
+            virtual cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getElements(  ) override;
+            virtual bool showElement( const OUString& aName ) override;
+            virtual bool hideElement( const OUString& aName ) override;
+            virtual bool dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
+            virtual bool dockAllWindows( ::sal_Int16 nElementType ) override;
+            virtual bool floatWindow( const OUString& aName ) override;
+            virtual bool lockWindow( const OUString& ResourceURL ) override;
+            virtual bool unlockWindow( const OUString& ResourceURL ) override;
+            virtual void setElementSize( const OUString& aName, const css::awt::Size& aSize ) override;
+            virtual void setElementPos( const OUString& aName, const css::awt::Point& aPos ) override;
+            virtual void setElementPosSize( const OUString& aName, const css::awt::Point& aPos, const css::awt::Size& aSize ) override;
+            virtual bool isElementVisible( const OUString& aName ) override;
+            virtual bool isElementFloating( const OUString& aName ) override;
+            virtual bool isElementDocked( const OUString& aName ) override;
+            virtual bool isElementLocked( const OUString& ResourceURL ) override;
+            virtual css::awt::Size getElementSize( const OUString& aName ) override;
+            virtual css::awt::Point getElementPos( const OUString& aName ) override;
+            virtual void lock(  ) override;
+            virtual void unlock(  ) override;
+            virtual void doLayout(  ) override;
+            virtual void setVisible( bool bVisible ) override;
+            virtual bool isVisible() override;
 
             // XMenuBarMergingAcceptor
 
-            virtual bool SAL_CALL setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
-            virtual void SAL_CALL removeMergedMenuBar(  ) override;
+            virtual bool setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
+            virtual void removeMergedMenuBar(  ) override;
 
             //  XWindowListener
-            virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) override;
-            virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) override;
-            virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
-            virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
+            virtual void windowResized( const css::awt::WindowEvent& aEvent ) override;
+            virtual void windowMoved( const css::awt::WindowEvent& aEvent ) override;
+            virtual void windowShown( const css::lang::EventObject& aEvent ) override;
+            virtual void windowHidden( const css::lang::EventObject& aEvent ) override;
 
             //   XFrameActionListener
-            virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) override;
+            virtual void frameAction( const css::frame::FrameActionEvent& aEvent ) override;
 
             //  XEventListener
             using cppu::OPropertySetHelper::disposing;
-            virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+            virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
             //  XUIConfigurationListener
-            virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-            virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-            virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+            virtual void elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+            virtual void elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+            virtual void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
             //  XLayoutManagerEventBroadcaster
-            virtual void SAL_CALL addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
-            virtual void SAL_CALL removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
+            virtual void addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
+            virtual void removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
 
             DECL_LINK( MenuBarClose, void *, void);
             DECL_LINK( WindowEventListener, VclWindowEvent&, void );
@@ -224,10 +224,10 @@ namespace framework
 
             //  OPropertySetHelper
 
-            virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+            virtual void                                                setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                 const cpo::uno::Any&  aValue          ) override;
-            virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+            virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
             css::uno::Reference< css::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;

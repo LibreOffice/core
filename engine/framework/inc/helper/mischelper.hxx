@@ -149,7 +149,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
         }
 
         // container.XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) override
+        virtual void elementInserted(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -157,7 +157,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
                 xOwner->elementInserted(rEvent);
         }
 
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override
+        virtual void elementRemoved(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -165,7 +165,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
                 xOwner->elementRemoved(rEvent);
         }
 
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override
+        virtual void elementReplaced(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -174,7 +174,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        virtual void disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -196,7 +196,7 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
         }
 
         // util.XChangesListener
-        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& rEvent) override
+        virtual void changesOccurred(const css::util::ChangesEvent& rEvent) override
         {
             css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -205,7 +205,7 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        virtual void disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -226,7 +226,7 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
         {
         }
 
-        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& rEvent) override
+        virtual void documentEventOccured(const css::document::DocumentEvent& rEvent) override
         {
             css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -236,7 +236,7 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        virtual void disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);

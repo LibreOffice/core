@@ -23,7 +23,7 @@ DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext 
 }
 
 // XInitialization
-void SAL_CALL DispatchDisabler::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void DispatchDisabler::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     cpo::uno::Sequence< OUString > aDisabledURLs;
     if( aArguments.hasElements() &&
@@ -35,7 +35,7 @@ void SAL_CALL DispatchDisabler::initialize( const cpo::uno::Sequence< cpo::uno::
 }
 
 // XDispatchProvider
-uno::Reference< frame::XDispatch > SAL_CALL
+uno::Reference< frame::XDispatch >
 DispatchDisabler::queryDispatch( const util::URL& rURL,
                                  const OUString& rTargetFrameName,
                                  ::sal_Int32 nSearchFlags )
@@ -48,7 +48,7 @@ DispatchDisabler::queryDispatch( const util::URL& rURL,
         return mxSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
 }
 
-cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > >
 DispatchDisabler::queryDispatches( const cpo::uno::Sequence< frame::DispatchDescriptor >& rRequests )
 {
     cpo::uno::Sequence< uno::Reference< frame::XDispatch > > aResult(rRequests.getLength());
@@ -61,30 +61,30 @@ DispatchDisabler::queryDispatches( const cpo::uno::Sequence< frame::DispatchDesc
 }
 
 // XDispatchProviderInterceptor
-uno::Reference< frame::XDispatchProvider > SAL_CALL
+uno::Reference< frame::XDispatchProvider >
 DispatchDisabler::getSlaveDispatchProvider()
 {
     return mxSlave;
 }
 
-void SAL_CALL DispatchDisabler::setSlaveDispatchProvider( const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider )
+void DispatchDisabler::setSlaveDispatchProvider( const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider )
 {
     mxSlave = xNewDispatchProvider;
 }
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL
+uno::Reference< frame::XDispatchProvider >
 DispatchDisabler::getMasterDispatchProvider()
 {
     return mxMaster;
 }
-void SAL_CALL
+void
 DispatchDisabler::setMasterDispatchProvider( const uno::Reference< frame::XDispatchProvider >& xNewSupplier )
 {
     mxMaster = xNewSupplier;
 }
 
 // XInterceptorInfo
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
     DispatchDisabler::getInterceptedURLs()
 {
     cpo::uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
@@ -96,35 +96,35 @@ cpo::uno::Sequence< OUString > SAL_CALL
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL DispatchDisabler::getElementType()
+cpo::uno::Type DispatchDisabler::getElementType()
 {
     cpo::uno::Type aModuleType = cppu::UnoType<OUString>::get();
     return aModuleType;
 }
 
-bool SAL_CALL DispatchDisabler::hasElements()
+bool DispatchDisabler::hasElements()
 {
     return !maDisabledURLs.empty();
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL DispatchDisabler::getByName( const OUString& )
+cpo::uno::Any DispatchDisabler::getByName( const OUString& )
 {
     return cpo::uno::Any();
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
+cpo::uno::Sequence< OUString > DispatchDisabler::getElementNames()
 {
     return getInterceptedURLs();
 }
 
-bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
+bool DispatchDisabler::hasByName( const OUString& rName )
 {
     return maDisabledURLs.find(rName) != maDisabledURLs.end();
 }
 
 // XNameReplace
-void SAL_CALL DispatchDisabler::replaceByName( const OUString& rName, const cpo::uno::Any& aElement )
+void DispatchDisabler::replaceByName( const OUString& rName, const cpo::uno::Any& aElement )
 {
     removeByName( rName );
     insertByName( rName, aElement );
@@ -145,17 +145,17 @@ void DispatchDisabler::removeByName( const OUString& rName )
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL DispatchDisabler::getImplementationName()
+OUString DispatchDisabler::getImplementationName()
 {
     return u"com.sun.star.comp.framework.services.DispatchDisabler"_ustr;
 }
 
-bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
+bool DispatchDisabler::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DispatchDisabler::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchDisabler"_ustr };
 }

@@ -55,24 +55,24 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         virtual                   ~ConfigurationAccess_UICategory() override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
+        virtual void     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
+        virtual void disposing( const EventObject& aEvent ) override;
 
     protected:
         Any                       getUINameFromID( const OUString& rId );
@@ -121,7 +121,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 }
 
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
+Any ConfigurationAccess_UICategory::getByName( const OUString& rId )
 {
     std::unique_lock g(aMutex);
     if ( !m_bConfigAccessInitialized )
@@ -140,23 +140,23 @@ Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
     return a;
 }
 
-Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
+Sequence< OUString > ConfigurationAccess_UICategory::getElementNames()
 {
     return getAllIds();
 }
 
-bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
+bool ConfigurationAccess_UICategory::hasByName( const OUString& rId )
 {
     return getByName( rId ).hasValue();
 }
 
 // XElementAccess
-Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
+Type ConfigurationAccess_UICategory::getElementType()
 {
     return cppu::UnoType<OUString>::get();
 }
 
-bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
+bool ConfigurationAccess_UICategory::hasElements()
 {
     // There must be global categories!
     return true;
@@ -310,20 +310,20 @@ void ConfigurationAccess_UICategory::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& )
+void ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& )
+void ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& )
+void ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& )
 {
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent )
+void ConfigurationAccess_UICategory::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -340,17 +340,17 @@ class UICategoryDescription :  public UICommandDescription
 public:
     explicit UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.UICategoryDescription"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.UICategoryDescription"_ustr};
     }

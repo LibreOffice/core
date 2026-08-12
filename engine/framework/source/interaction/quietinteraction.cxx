@@ -37,7 +37,7 @@ QuietInteraction::QuietInteraction()
 {
 }
 
-void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+void QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     // safe the request for outside analyzing every time!
     cpo::uno::Any aRequest = xRequest->getRequest();

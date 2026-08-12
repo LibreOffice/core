@@ -67,36 +67,36 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         PopupMenuDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext );
 
         /* interface XServiceInfo */
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(
             const css::util::URL&  aURL        ,
             const OUString& sTarget     ,
             sal_Int32              nFlags      ) override;
 
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches(
             const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
 
         //  XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL&                                  aURL,
+        virtual void dispatch( const css::util::URL&                                  aURL,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& seqProperties ) override;
 
-        virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
                                                  const css::util::URL&                                     aURL ) override;
 
-        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
                                                     const css::util::URL&                                     aURL  ) override;
 
         //   XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) override;
+        virtual void frameAction( const css::frame::FrameActionEvent& aEvent ) override;
 
         //   XEventListener
-        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        void disposing( const css::lang::EventObject& aEvent ) override;
 
     private:
         virtual ~PopupMenuDispatcher() override;

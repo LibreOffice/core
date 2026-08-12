@@ -39,25 +39,25 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         MenuBarManager* GetMenuBarManager() const { return m_xMenuBarManager.get(); }
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
+        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings(  ) override;
+        virtual void updateSettings(  ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
-        virtual bool SAL_CALL hasElements() override;
+        virtual cpo::uno::Type getElementType() override;
+        virtual bool hasElements() override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
+        virtual bool hasByName( const OUString& aName ) override;
 
     private:
         virtual void impl_fillNewData() override;

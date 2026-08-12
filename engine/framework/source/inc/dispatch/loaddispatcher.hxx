@@ -91,22 +91,22 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
     public:
 
         // XNotifyingDispatch
-        virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
+        virtual void dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
+        virtual void dispatch(const css::util::URL&                                  aURL      ,
                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL&                                     aURL     ) override;
 
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                    const css::util::URL&                                     aURL     ) override;
 
         // XSynchronousDispatch
-        virtual cpo::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
+        virtual cpo::uno::Any dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
                                                                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     private:

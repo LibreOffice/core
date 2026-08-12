@@ -71,16 +71,16 @@ class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
         // XInterface, XTypeProvider
 
         // XInitialization
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
+        virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
+        virtual void modified(const css::lang::EventObject& aEvent) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
     private:
 

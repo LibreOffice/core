@@ -159,11 +159,11 @@ OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadToolBoxDocumentHandler::startDocument()
+void OReadToolBoxDocumentHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
+void OReadToolBoxDocumentHandler::endDocument()
 {
     if ( m_bToolBarStartFound )
     {
@@ -172,7 +172,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
     }
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::startElement(
+void OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
     auto pToolBoxEntry = m_aToolBoxMap.find( aName );
@@ -439,7 +439,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     }
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
+void OReadToolBoxDocumentHandler::endElement(const OUString& aName)
 {
     auto pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry == m_aToolBoxMap.end() )
@@ -511,20 +511,20 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
     }
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::characters(const OUString&)
+void OReadToolBoxDocumentHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::ignorableWhitespace(const OUString&)
+void OReadToolBoxDocumentHandler::ignorableWhitespace(const OUString&)
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::processingInstruction(
+void OReadToolBoxDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
+void OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
     m_xLocator = xLocator;

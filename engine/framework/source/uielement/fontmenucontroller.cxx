@@ -54,17 +54,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL FontMenuController::getImplementationName()
+OUString FontMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.FontMenuController"_ustr;
 }
 
-bool SAL_CALL FontMenuController::supportsService( const OUString& sServiceName )
+bool FontMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FontMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > FontMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -106,7 +106,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
 }
 
 // XEventListener
-void SAL_CALL FontMenuController::disposing( const EventObject& )
+void FontMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -121,7 +121,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event )
+void FontMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     css::awt::FontDescriptor aFontDescriptor;
     Sequence< OUString >           aFontNameSeq;
@@ -140,7 +140,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 }
 
 // XMenuListener
-void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
+void FontMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     std::unique_lock aLock( m_aMutex );
 
@@ -188,7 +188,7 @@ void FontMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuar
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontMenuController::updatePopupMenu()
+void FontMenuController::updatePopupMenu()
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 

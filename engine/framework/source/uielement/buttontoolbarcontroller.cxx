@@ -61,7 +61,7 @@ ButtonToolbarController::~ButtonToolbarController()
 }
 
         // XInterface
-cpo::uno::Any SAL_CALL ButtonToolbarController::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any ButtonToolbarController::queryInterface( const cpo::uno::Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -77,18 +77,18 @@ cpo::uno::Any SAL_CALL ButtonToolbarController::queryInterface( const cpo::uno::
     return cppu::OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ButtonToolbarController::acquire() noexcept
+void ButtonToolbarController::acquire() noexcept
 {
     cppu::OWeakObject::acquire();
 }
 
-void SAL_CALL ButtonToolbarController::release() noexcept
+void ButtonToolbarController::release() noexcept
 {
     cppu::OWeakObject::release();
 }
 
 // XInitialization
-void SAL_CALL ButtonToolbarController::initialize(
+void ButtonToolbarController::initialize(
     const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
@@ -120,7 +120,7 @@ void SAL_CALL ButtonToolbarController::initialize(
 }
 
 // XComponent
-void SAL_CALL ButtonToolbarController::dispose()
+void ButtonToolbarController::dispose()
 {
     Reference< XComponent > xThis = this;
 
@@ -137,20 +137,20 @@ void SAL_CALL ButtonToolbarController::dispose()
     }
 }
 
-void SAL_CALL ButtonToolbarController::addEventListener(
+void ButtonToolbarController::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing
 }
 
-void SAL_CALL ButtonToolbarController::removeEventListener(
+void ButtonToolbarController::removeEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing
 }
 
 // XUpdatable
-void SAL_CALL ButtonToolbarController::update()
+void ButtonToolbarController::update()
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
@@ -158,7 +158,7 @@ void SAL_CALL ButtonToolbarController::update()
 }
 
 // XEventListener
-void SAL_CALL ButtonToolbarController::disposing(
+void ButtonToolbarController::disposing(
     const css::lang::EventObject& Source )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
@@ -173,7 +173,7 @@ void SAL_CALL ButtonToolbarController::disposing(
         m_xFrame.clear();
 }
 
-void SAL_CALL ButtonToolbarController::statusChanged( const css::frame::FeatureStateEvent& )
+void ButtonToolbarController::statusChanged( const css::frame::FeatureStateEvent& )
 {
     // do nothing
     if ( m_bDisposed )
@@ -181,7 +181,7 @@ void SAL_CALL ButtonToolbarController::statusChanged( const css::frame::FeatureS
 }
 
 // XToolbarController
-void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
+void ButtonToolbarController::execute( sal_Int16 KeyModifier )
 {
     uno::Reference< frame::XDispatch >      xDispatch;
     uno::Reference< frame::XFrame >         xFrame;
@@ -234,7 +234,7 @@ void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
     }
 }
 
-void SAL_CALL ButtonToolbarController::click()
+void ButtonToolbarController::click()
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -245,14 +245,14 @@ void SAL_CALL ButtonToolbarController::click()
     execute( nKeyModifier );
 }
 
-void SAL_CALL ButtonToolbarController::doubleClick()
+void ButtonToolbarController::doubleClick()
 {
     // do nothing
     if ( m_bDisposed )
         throw DisposedException();
 }
 
-uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createPopupWindow()
+uno::Reference< awt::XWindow > ButtonToolbarController::createPopupWindow()
 {
     if ( m_bDisposed )
         throw DisposedException();
@@ -260,7 +260,7 @@ uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createPopupWind
     return uno::Reference< awt::XWindow >();
 }
 
-uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createItemWindow(
+uno::Reference< awt::XWindow > ButtonToolbarController::createItemWindow(
     const css::uno::Reference< css::awt::XWindow >& )
 {
     if ( m_bDisposed )

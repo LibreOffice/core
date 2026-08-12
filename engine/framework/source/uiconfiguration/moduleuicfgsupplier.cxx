@@ -57,23 +57,23 @@ public:
     explicit ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ModuleUIConfigurationManagerSupplier() override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.ModuleUIConfigurationManagerSupplier"_ustr};
     }
 
     // XModuleUIConfigurationManagerSupplier
-    virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const OUString& ModuleIdentifier ) override;
+    virtual css::uno::Reference< css::ui::XUIConfigurationManager > getUIConfigurationManager( const OUString& ModuleIdentifier ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) final override;
@@ -124,7 +124,7 @@ void ModuleUIConfigurationManagerSupplier::disposing(std::unique_lock<std::mutex
 }
 
 // XModuleUIConfigurationManagerSupplier
-Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& sModuleIdentifier )
+Reference< XUIConfigurationManager > ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& sModuleIdentifier )
 {
     std::unique_lock g(m_aMutex);
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */

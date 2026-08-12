@@ -41,31 +41,31 @@ LoadDispatcher::~LoadDispatcher()
 {
 }
 
-void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
+void LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     impl_dispatch( aURL, lArguments, xListener );
 }
 
-void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
+void LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
-cpo::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
+cpo::uno::Any LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
                                                                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                 const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                    const css::util::URL&                                     /*aURL*/     )
 {
 }

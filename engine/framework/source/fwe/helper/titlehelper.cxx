@@ -76,7 +76,7 @@ TitleHelper::~TitleHelper()
 {
 }
 
-OUString SAL_CALL TitleHelper::getTitle()
+OUString TitleHelper::getTitle()
 {
     // SYNCHRONIZED ->
     std::unique_lock aLock(m_aMutex);
@@ -100,7 +100,7 @@ OUString SAL_CALL TitleHelper::getTitle()
     // <- SYNCHRONIZED
 }
 
-void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
+void TitleHelper::setTitle(const OUString& sTitle)
 {
     // SYNCHRONIZED ->
     {
@@ -114,19 +114,19 @@ void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
     impl_sendTitleChangedEvent ();
 }
 
-void SAL_CALL TitleHelper::addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+void TitleHelper::addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
 {
     std::unique_lock aLock(m_aMutex);
     m_aTitleChangeListeners.addInterface( aLock, xListener );
 }
 
-void SAL_CALL TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+void TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
 {
     std::unique_lock aLock(m_aMutex);
     m_aTitleChangeListeners.removeInterface( aLock, xListener );
 }
 
-void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
+void TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
 {
     css::uno::Reference< css::frame::XTitle > xSubTitle;
     // SYNCHRONIZED ->
@@ -143,7 +143,7 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
     impl_updateTitle ();
 }
 
-void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEvent& aEvent)
+void TitleHelper::documentEventOccured(const css::document::DocumentEvent& aEvent)
 {
     if ( ! aEvent.EventName.equalsIgnoreAsciiCase("OnSaveAsDone")
       && ! aEvent.EventName.equalsIgnoreAsciiCase("OnModeChanged")
@@ -170,7 +170,7 @@ void SAL_CALL TitleHelper::documentEventOccured(const css::document::DocumentEve
     impl_updateTitle ();
 }
 
-void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
+void TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
     css::uno::Reference< css::frame::XFrame > xOwner;
     // SYNCHRONIZED ->
@@ -197,7 +197,7 @@ void SAL_CALL TitleHelper::frameAction(const css::frame::FrameActionEvent& aEven
     }
 }
 
-void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
+void TitleHelper::disposing(const css::lang::EventObject& aEvent)
 {
     css::uno::Reference< css::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;

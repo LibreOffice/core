@@ -101,7 +101,7 @@ MenuBarManager::MenuBarManager(
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete );
 }
 
-Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+Any MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -189,7 +189,7 @@ void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
     m_xContext.clear();
 }
 
-void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
+void MenuBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
 {
     SolarMutexGuard g;
 
@@ -202,18 +202,18 @@ void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent
         RequestImages();
 }
 
-void SAL_CALL MenuBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
+void MenuBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
 {
     elementInserted(Event);
 }
 
-void SAL_CALL MenuBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
+void MenuBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
 {
     elementInserted(Event);
 }
 
 // XFrameActionListener
-void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
+void MenuBarManager::frameAction( const FrameActionEvent& Action )
 {
     SolarMutexGuard g;
 
@@ -239,7 +239,7 @@ void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 }
 
 // XStatusListener
-void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
+void MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 {
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
@@ -454,7 +454,7 @@ void MenuBarManager::RemoveListener()
     m_xFrame = nullptr;
 }
 
-void SAL_CALL MenuBarManager::disposing( const EventObject& Source )
+void MenuBarManager::disposing( const EventObject& Source )
 {
     MenuItemHandler* pMenuItemDisposing = nullptr;
 
@@ -533,7 +533,7 @@ public:
 private:
     virtual ~QuietInteractionContext() override {}
 
-    virtual cpo::uno::Any SAL_CALL getValueByName(
+    virtual cpo::uno::Any getValueByName(
         OUString const & Name) override
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()

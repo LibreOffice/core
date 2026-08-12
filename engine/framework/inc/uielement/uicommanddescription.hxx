@@ -42,17 +42,17 @@ class UICommandDescription : public UICommandDescription_BASE
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription() override;
 
-        virtual OUString SAL_CALL getImplementationName() override
+        virtual OUString getImplementationName() override
         {
             return u"com.sun.star.comp.framework.UICommandDescription"_ustr;
         }
 
-        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+        virtual bool supportsService(OUString const & ServiceName) override
         {
             return cppu::supportsService(this, ServiceName);
         }
 
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
         {
             cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.UICommandDescription"_ustr };
             return aSeq;
@@ -60,15 +60,15 @@ class UICommandDescription : public UICommandDescription_BASE
 
 private:
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
-        virtual bool SAL_CALL hasElements() override;
+        virtual cpo::uno::Type getElementType() override;
+        virtual bool hasElements() override;
 
 public:
         typedef std::unordered_map< OUString,

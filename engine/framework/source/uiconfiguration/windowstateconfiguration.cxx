@@ -112,32 +112,32 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         virtual                   ~ConfigurationAccess_WindowState() override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XNameContainer
-        virtual void SAL_CALL removeByName( const OUString& sName ) override;
+        virtual void removeByName( const OUString& sName ) override;
 
-        virtual void SAL_CALL insertByName( const OUString& sName, const cpo::uno::Any&   aPropertySet ) override;
+        virtual void insertByName( const OUString& sName, const cpo::uno::Any&   aPropertySet ) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& sName, const cpo::uno::Any& aPropertySet ) override;
+        virtual void replaceByName( const OUString& sName, const cpo::uno::Any& aPropertySet ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
+        virtual void     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
+        virtual void disposing( const EventObject& aEvent ) override;
 
     protected:
         enum // WindowStateMask
@@ -240,7 +240,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
 }
 
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResourceURL )
+Any ConfigurationAccess_WindowState::getByName( const OUString& rResourceURL )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -257,7 +257,7 @@ Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResour
     }
 }
 
-Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
+Sequence< OUString > ConfigurationAccess_WindowState::getElementNames()
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -274,7 +274,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
         return Sequence< OUString > ();
 }
 
-bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
+bool ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -293,12 +293,12 @@ bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResou
 }
 
 // XElementAccess
-Type SAL_CALL ConfigurationAccess_WindowState::getElementType()
+Type ConfigurationAccess_WindowState::getElementType()
 {
     return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
-bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
+bool ConfigurationAccess_WindowState::hasElements()
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -316,7 +316,7 @@ bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 }
 
 // XNameContainer
-void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rResourceURL )
+void ConfigurationAccess_WindowState::removeByName( const OUString& rResourceURL )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -350,7 +350,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
     }
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
+void ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -408,7 +408,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
 }
 
 // XNameReplace
-void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
+void ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -477,21 +477,21 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& )
+void ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& )
 {
     // do nothing - next time someone wants to retrieve this node we will find it in the configuration
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& )
+void ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& )
+void ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& )
 {
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_WindowState::disposing( const EventObject& aEvent )
+void ConfigurationAccess_WindowState::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -1235,31 +1235,31 @@ public:
     explicit WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~WindowStateConfiguration() override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.WindowStateConfiguration"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.WindowStateConfiguration"_ustr};
     }
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     typedef std::unordered_map< OUString,
                                 OUString > ModuleToWindowStateFileMap;
@@ -1324,7 +1324,7 @@ WindowStateConfiguration::~WindowStateConfiguration()
     m_aModuleToWindowStateHashMap.clear();
 }
 
-Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentifier )
+Any WindowStateConfiguration::getByName( const OUString& aModuleIdentifier )
 {
     std::unique_lock g(m_aMutex);
 
@@ -1353,14 +1353,14 @@ Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentif
     throw NoSuchElementException();
 }
 
-Sequence< OUString > SAL_CALL WindowStateConfiguration::getElementNames()
+Sequence< OUString > WindowStateConfiguration::getElementNames()
 {
     std::unique_lock g(m_aMutex);
 
     return comphelper::mapKeysToSequence( m_aModuleToFileHashMap );
 }
 
-bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
+bool WindowStateConfiguration::hasByName( const OUString& aName )
 {
     std::unique_lock g(m_aMutex);
 
@@ -1369,12 +1369,12 @@ bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-Type SAL_CALL WindowStateConfiguration::getElementType()
+Type WindowStateConfiguration::getElementType()
 {
     return cppu::UnoType<XNameAccess>::get();
 }
 
-bool SAL_CALL WindowStateConfiguration::hasElements()
+bool WindowStateConfiguration::hasElements()
 {
     // We always have at least one module. So it is valid to return true!
     return true;

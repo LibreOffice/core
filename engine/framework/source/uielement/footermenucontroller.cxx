@@ -34,17 +34,17 @@ namespace framework
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL FooterMenuController::getImplementationName()
+OUString FooterMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.FooterMenuController"_ustr;
 }
 
-bool SAL_CALL FooterMenuController::supportsService( const OUString& sServiceName )
+bool FooterMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FooterMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > FooterMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }

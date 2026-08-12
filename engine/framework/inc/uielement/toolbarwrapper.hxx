@@ -48,32 +48,32 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual ~ToolBarWrapper() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
+        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
 
         // XUpdatable
-        virtual void SAL_CALL update() override;
+        virtual void update() override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings() override;
+        virtual void updateSettings() override;
 
         // XUIFunctionListener
-        virtual void SAL_CALL functionExecute( const OUString& aUIElementName, const OUString& aCommand ) override;
+        virtual void functionExecute( const OUString& aUIElementName, const OUString& aCommand ) override;
 
         // XContextChangeEventListener
-        virtual void SAL_CALL notifyContextChangeEvent( const css::ui::ContextChangeEventObject& aEvent ) override;
+        virtual void notifyContextChangeEvent( const css::ui::ContextChangeEventObject& aEvent ) override;
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
     private:
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue ) override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue ) override;
         virtual void impl_fillNewData() override;
 
         rtl::Reference< ToolBarManager >                        m_xToolBarManager;

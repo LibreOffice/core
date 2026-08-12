@@ -46,7 +46,7 @@ OComponentEnumeration::~OComponentEnumeration()
 }
 
 //  XEventListener
-void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent )
+void OComponentEnumeration::disposing( const EventObject& aEvent )
 {
     SolarMutexGuard g;
 
@@ -59,7 +59,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent )
 }
 
 //  XEnumeration
-bool SAL_CALL OComponentEnumeration::hasMoreElements()
+bool OComponentEnumeration::hasMoreElements()
 {
     SolarMutexGuard g;
 
@@ -72,7 +72,7 @@ bool SAL_CALL OComponentEnumeration::hasMoreElements()
 
 //  XEnumeration
 
-Any SAL_CALL OComponentEnumeration::nextElement()
+Any OComponentEnumeration::nextElement()
 {
     SolarMutexGuard g;
 

@@ -52,20 +52,20 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
         StatusBar* GetStatusBar() const;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
+        virtual void frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XComponent
-        void SAL_CALL dispose() override;
-        void SAL_CALL addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
-        void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void dispose() override;
+        void addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
 
         void FillStatusBar( const css::uno::Reference< css::container::XIndexAccess >& rStatusBarData );
 
@@ -82,7 +82,7 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
         void RemoveControllers();
         void CreateControllers();
         void UpdateControllers();
-        void MouseButton( const MouseEvent& rMEvt ,bool ( SAL_CALL css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
+        void MouseButton( const MouseEvent& rMEvt ,bool ( css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
 
         typedef std::map< sal_uInt16, css::uno::Reference< css::frame::XStatusbarController > > StatusBarControllerMap;
 

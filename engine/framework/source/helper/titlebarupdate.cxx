@@ -51,7 +51,7 @@ TitleBarUpdate::~TitleBarUpdate()
 {
 }
 
-void SAL_CALL TitleBarUpdate::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+void TitleBarUpdate::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -82,7 +82,7 @@ void SAL_CALL TitleBarUpdate::initialize(const cpo::uno::Sequence< cpo::uno::Any
         xBroadcaster->addTitleChangeListener (this);
 }
 
-void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aEvent)
+void TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
     // we are interested on events only, which must trigger a title bar update
     // because component was changed.
@@ -96,12 +96,12 @@ void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aE
     }
 }
 
-void SAL_CALL TitleBarUpdate::titleChanged(const css::frame::TitleChangedEvent& /* aEvent */)
+void TitleBarUpdate::titleChanged(const css::frame::TitleChangedEvent& /* aEvent */)
 {
     impl_forceUpdate ();
 }
 
-void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
+void TitleBarUpdate::disposing(const css::lang::EventObject&)
 {
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (xFrame.is())

@@ -28,17 +28,17 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL DispatchRecorderSupplier::getImplementationName()
+OUString DispatchRecorderSupplier::getImplementationName()
 {
     return u"com.sun.star.comp.framework.DispatchRecorderSupplier"_ustr;
 }
 
-bool SAL_CALL DispatchRecorderSupplier::supportsService( const OUString& sServiceName )
+bool DispatchRecorderSupplier::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DispatchRecorderSupplier::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DispatchRecorderSupplier::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchRecorderSupplier"_ustr };
 }
@@ -76,7 +76,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 
     @change     09.04.2002 by Andreas Schluens
  */
-void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder )
+void DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder )
 {
     SolarMutexGuard g;
     m_xDispatchRecorder=xRecorder;
@@ -96,7 +96,7 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
 
     @change     09.04.2002 by Andreas Schluens
  */
-css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder()
+css::uno::Reference< css::frame::XDispatchRecorder > DispatchRecorderSupplier::getDispatchRecorder()
 {
     SolarMutexGuard g;
     return m_xDispatchRecorder;
@@ -115,7 +115,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
 
     @change     09.04.2002 by Andreas Schluens
  */
-void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&                                  aURL        ,
+void DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&                                  aURL        ,
                                                            const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
                                                            const css::uno::Reference< css::frame::XDispatch >&    xDispatcher )
 {

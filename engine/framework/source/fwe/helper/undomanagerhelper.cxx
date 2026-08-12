@@ -300,9 +300,9 @@ namespace framework
 
         void impl_notifyModified();
         void notify(    OUString const& i_title,
-                        void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& )
+                        void ( XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& )
                     );
-        void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
+        void notify( void ( XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
 
     private:
         /// adds a function to be called to the request processor's queue
@@ -349,7 +349,7 @@ namespace framework
     }
 
     void UndoManagerHelper_Impl::notify( OUString const& i_title,
-        void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
+        void ( XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
         const UndoManagerEvent aEvent( buildEvent( i_title ) );
 
@@ -366,7 +366,7 @@ namespace framework
         impl_notifyModified();
     }
 
-    void UndoManagerHelper_Impl::notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) )
+    void UndoManagerHelper_Impl::notify( void ( XUndoManagerListener::*i_notificationMethod )( const EventObject& ) )
     {
         const EventObject aEvent( getXUndoManager() );
 
@@ -589,7 +589,7 @@ namespace framework
         const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( SfxUndoManager::TopLevel ) > 0 );
 
         // prepare notification
-        void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = nullptr;
+        void ( XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = nullptr;
 
         UndoManagerEvent aContextEvent( buildEvent( OUString() ) );
         const EventObject aClearedEvent( getXUndoManager() );

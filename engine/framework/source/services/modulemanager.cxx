@@ -68,37 +68,37 @@ public:
     ModuleManager& operator=(const ModuleManager&) = delete;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(
+    virtual bool supportsService(
         OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     // XModuleManager
-    virtual OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule) override;
+    virtual OUString identify(const css::uno::Reference< css::uno::XInterface >& xModule) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName(const OUString& sName ,
+    virtual void replaceByName(const OUString& sName ,
                                         const cpo::uno::Any&   aValue) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName(const OUString& sName) override;
+    virtual cpo::uno::Any getByName(const OUString& sName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-    virtual bool SAL_CALL hasByName(const OUString& sName) override;
+    virtual bool hasByName(const OUString& sName) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
     // XContainerQuery
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
 
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
 
 private:
 
@@ -152,7 +152,7 @@ cpo::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     return { u"com.sun.star.frame.ModuleManager"_ustr };
 }
 
-OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
+OUString ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
 {
     // valid parameter?
     css::uno::Reference< css::frame::XFrame >      xFrame     (xModule, css::uno::UNO_QUERY);
@@ -202,7 +202,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
     return sModule;
 }
 
-void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
+void ModuleManager::replaceByName(const OUString& sName ,
                                            const cpo::uno::Any&   aValue)
 {
     ::comphelper::SequenceAsHashMap lProps(aValue);
@@ -244,7 +244,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
-cpo::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
+cpo::uno::Any ModuleManager::getByName(const OUString& sName)
 {
     // get access to the element
     css::uno::Reference< css::container::XNameAccess > xModule;
@@ -270,32 +270,32 @@ cpo::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     return cpo::uno::Any(lProps.getAsConstPropertyValueList());
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
+cpo::uno::Sequence< OUString > ModuleManager::getElementNames()
 {
     return m_xCFG ? m_xCFG->getElementNames() : cpo::uno::Sequence<OUString>();
 }
 
-bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
+bool ModuleManager::hasByName(const OUString& sName)
 {
     return m_xCFG && m_xCFG->hasByName(sName);
 }
 
-cpo::uno::Type SAL_CALL ModuleManager::getElementType()
+cpo::uno::Type ModuleManager::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
 }
 
-bool SAL_CALL ModuleManager::hasElements()
+bool ModuleManager::hasElements()
 {
     return m_xCFG && m_xCFG->hasElements();
 }
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const OUString&)
+css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByQuery(const OUString&)
 {
     return css::uno::Reference< css::container::XEnumeration >();
 }
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
+css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
     ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
     const cpo::uno::Sequence< OUString > lModules = getElementNames();

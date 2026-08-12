@@ -58,7 +58,7 @@ ToolBarWrapper::~ToolBarWrapper()
 }
 
 // XComponent
-void SAL_CALL ToolBarWrapper::dispose()
+void ToolBarWrapper::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -91,7 +91,7 @@ void SAL_CALL ToolBarWrapper::dispose()
 }
 
 // XInitialization
-void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
+void ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -202,14 +202,14 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 }
 
 // XEventListener
-void SAL_CALL ToolBarWrapper::disposing( const css::lang::EventObject& aEvent )
+void ToolBarWrapper::disposing( const css::lang::EventObject& aEvent )
 {
     if ( aEvent.Source == m_xSubElement )
         m_xSubElement.clear();
 }
 
 // XUpdatable
-void SAL_CALL ToolBarWrapper::update()
+void ToolBarWrapper::update()
 {
     SolarMutexGuard g;
 
@@ -221,7 +221,7 @@ void SAL_CALL ToolBarWrapper::update()
 }
 
 // XUIElementSettings
-void SAL_CALL ToolBarWrapper::updateSettings()
+void ToolBarWrapper::updateSettings()
 {
     SolarMutexGuard g;
 
@@ -262,7 +262,7 @@ void ToolBarWrapper::impl_fillNewData()
 }
 
 //XContextChangeEventListener
-void SAL_CALL ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEventObject& aEvent )
+void ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEventObject& aEvent )
 {
     SolarMutexGuard g;
 
@@ -303,7 +303,7 @@ void SAL_CALL ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEvent
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  )
+Reference< XInterface > ToolBarWrapper::getRealInterface(  )
 {
     SolarMutexGuard g;
 
@@ -317,7 +317,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  )
 }
 
 //XUIFunctionExecute
-void SAL_CALL ToolBarWrapper::functionExecute(
+void ToolBarWrapper::functionExecute(
     const OUString& aUIElementName,
     const OUString& aCommand )
 {
@@ -327,7 +327,7 @@ void SAL_CALL ToolBarWrapper::functionExecute(
         m_xToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
 }
 
-void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue )
+void ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue )
 {
     SolarMutexResettableGuard aLock;
     bool bNoClose( m_bNoClose );

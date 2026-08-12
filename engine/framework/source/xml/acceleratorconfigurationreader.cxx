@@ -58,11 +58,11 @@ AcceleratorConfigurationReader::~AcceleratorConfigurationReader()
 {
 }
 
-void SAL_CALL AcceleratorConfigurationReader::startDocument()
+void AcceleratorConfigurationReader::startDocument()
 {
 }
 
-void SAL_CALL AcceleratorConfigurationReader::endDocument()
+void AcceleratorConfigurationReader::endDocument()
 {
     // The xml file seems to be corrupted.
     // Because we found no end-tags ... at least for
@@ -73,7 +73,7 @@ void SAL_CALL AcceleratorConfigurationReader::endDocument()
     }
 }
 
-void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
+void AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
                                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
@@ -162,7 +162,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     }
 }
 
-void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElement)
+void AcceleratorConfigurationReader::endElement(const OUString& sElement)
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
@@ -183,20 +183,20 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElemen
     }
 }
 
-void SAL_CALL AcceleratorConfigurationReader::characters(const OUString&)
+void AcceleratorConfigurationReader::characters(const OUString&)
 {
 }
 
-void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const OUString&)
+void AcceleratorConfigurationReader::ignorableWhitespace(const OUString&)
 {
 }
 
-void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTarget*/,
+void AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTarget*/,
                                                                     const OUString& /*sData*/  )
 {
 }
 
-void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
+void AcceleratorConfigurationReader::setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
 {
     m_xLocator = xLocator;
 }

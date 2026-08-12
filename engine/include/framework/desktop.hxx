@@ -111,21 +111,21 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         void constructorInit();
 
         //  XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
+        virtual OUString getImplementationName() override;
 
-        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+        virtual bool supportsService(OUString const & ServiceName) override;
 
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XInterface
-        virtual void SAL_CALL acquire() noexcept override
+        virtual void acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() noexcept override
+        virtual void release() noexcept override
             { OWeakObject::release(); }
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& type) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         /**
             @interface  XDesktop
@@ -155,7 +155,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
             @onerror    False will be returned.
             @threadsafe yes
          */
-        virtual bool SAL_CALL terminate() override;
+        virtual bool terminate() override;
 
         /**
             @interface  XDesktop
@@ -176,7 +176,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @threadsafe yes
          */
-        virtual void SAL_CALL addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
+        virtual void addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
 
         /**
             @interface  XDesktop
@@ -196,80 +196,80 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @threadsafe yes
          */
-        virtual void SAL_CALL removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
+        virtual void removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
 
-        virtual css::uno::Reference< css::container::XEnumerationAccess >           SAL_CALL getComponents              (                                                                                 ) override;
-        virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL getCurrentComponent        (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL getCurrentFrame            (                                                                                 ) override;
+        virtual css::uno::Reference< css::container::XEnumerationAccess >           getComponents              (                                                                                 ) override;
+        virtual css::uno::Reference< css::lang::XComponent >                        getCurrentComponent        (                                                                                 ) override;
+        virtual css::uno::Reference< css::frame::XFrame >                           getCurrentFrame            (                                                                                 ) override;
 
         //  XComponentLoader
-        virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL loadComponentFromURL       ( const OUString&                                         sURL             ,
+        virtual css::uno::Reference< css::lang::XComponent >                        loadComponentFromURL       ( const OUString&                                         sURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ,
                                                                                                                           const cpo::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) override;
 
         //  XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >                        SAL_CALL queryDispatch              ( const css::util::URL&                                          aURL             ,
+        virtual css::uno::Reference< css::frame::XDispatch >                        queryDispatch              ( const css::util::URL&                                          aURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const cpo::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  queryDispatches            ( const cpo::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
 
         // XDispatchProviderInterception
-        virtual void                                                                SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
-        virtual void                                                                SAL_CALL releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void                                                                registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void                                                                releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
         //  XFramesSupplier
-        virtual css::uno::Reference< css::frame::XFrames >                          SAL_CALL getFrames                  (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL getActiveFrame             (                                                                                 ) override;
-        virtual void                                                                SAL_CALL setActiveFrame             ( const css::uno::Reference< css::frame::XFrame >&               xFrame           ) override;
+        virtual css::uno::Reference< css::frame::XFrames >                          getFrames                  (                                                                                 ) override;
+        virtual css::uno::Reference< css::frame::XFrame >                           getActiveFrame             (                                                                                 ) override;
+        virtual void                                                                setActiveFrame             ( const css::uno::Reference< css::frame::XFrame >&               xFrame           ) override;
 
         //   XFrame
         //  Attention: findFrame() is implemented only! Other methods make no sense for our desktop!
-        virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL findFrame                  ( const OUString&                                         sTargetFrameName ,
+        virtual css::uno::Reference< css::frame::XFrame >                           findFrame                  ( const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
-        virtual void                                                                SAL_CALL initialize                 ( const css::uno::Reference< css::awt::XWindow >&                xWindow          ) override;
-        virtual css::uno::Reference< css::awt::XWindow >                            SAL_CALL getContainerWindow         (                                                                                 ) override;
-        virtual void                                                                SAL_CALL setCreator                 ( const css::uno::Reference< css::frame::XFramesSupplier >&      xCreator         ) override;
-        virtual css::uno::Reference< css::frame::XFramesSupplier >                  SAL_CALL getCreator                 (                                                                                 ) override;
-        virtual OUString                                                     SAL_CALL getName                    (                                                                                 ) override;
-        virtual void                                                                SAL_CALL setName                    ( const OUString&                                         sName            ) override;
-        virtual bool                                                            SAL_CALL isTop                      (                                                                                 ) override;
-        virtual void                                                                SAL_CALL activate                   (                                                                                 ) override;
-        virtual void                                                                SAL_CALL deactivate                 (                                                                                 ) override;
-        virtual bool                                                            SAL_CALL isActive                   (                                                                                 ) override;
-        virtual bool                                                            SAL_CALL setComponent               ( const css::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
+        virtual void                                                                initialize                 ( const css::uno::Reference< css::awt::XWindow >&                xWindow          ) override;
+        virtual css::uno::Reference< css::awt::XWindow >                            getContainerWindow         (                                                                                 ) override;
+        virtual void                                                                setCreator                 ( const css::uno::Reference< css::frame::XFramesSupplier >&      xCreator         ) override;
+        virtual css::uno::Reference< css::frame::XFramesSupplier >                  getCreator                 (                                                                                 ) override;
+        virtual OUString                                                     getName                    (                                                                                 ) override;
+        virtual void                                                                setName                    ( const OUString&                                         sName            ) override;
+        virtual bool                                                            isTop                      (                                                                                 ) override;
+        virtual void                                                                activate                   (                                                                                 ) override;
+        virtual void                                                                deactivate                 (                                                                                 ) override;
+        virtual bool                                                            isActive                   (                                                                                 ) override;
+        virtual bool                                                            setComponent               ( const css::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
                                                                                                                           const css::uno::Reference< css::frame::XController >&          xController      ) override;
-        virtual css::uno::Reference< css::awt::XWindow >                            SAL_CALL getComponentWindow         (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XController >                      SAL_CALL getController              (                                                                                 ) override;
-        virtual void                                                                SAL_CALL contextChanged             (                                                                                 ) override;
-        virtual void                                                                SAL_CALL addFrameActionListener     ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
-        virtual void                                                                SAL_CALL removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
+        virtual css::uno::Reference< css::awt::XWindow >                            getComponentWindow         (                                                                                 ) override;
+        virtual css::uno::Reference< css::frame::XController >                      getController              (                                                                                 ) override;
+        virtual void                                                                contextChanged             (                                                                                 ) override;
+        virtual void                                                                addFrameActionListener     ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
+        virtual void                                                                removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
 
         //   XComponent
-        virtual void SAL_CALL disposing() override;
-        virtual void                                                                SAL_CALL addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
-        virtual void                                                                SAL_CALL removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
+        virtual void disposing() override;
+        virtual void                                                                addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
+        virtual void                                                                removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
 
         //   XDispatchResultListener
-        virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) override;
+        virtual void dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) override;
 
         //   XEventListener
-        virtual void                                                                SAL_CALL disposing                  ( const css::lang::EventObject&                                  aSource          ) override;
+        virtual void                                                                disposing                  ( const css::lang::EventObject&                                  aSource          ) override;
 
         //   XInteractionHandler
-        virtual void                                                                SAL_CALL handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) override;
+        virtual void                                                                handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) override;
 
         // css.frame.XUntitledNumbers
-        virtual ::sal_Int32 SAL_CALL leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+        virtual ::sal_Int32 leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
-        virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) override;
+        virtual void releaseNumber( ::sal_Int32 nNumber ) override;
 
         // css.frame.XUntitledNumbers
-        virtual void SAL_CALL releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+        virtual void releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
-        virtual OUString SAL_CALL getUntitledPrefix() override;
+        virtual OUString getUntitledPrefix() override;
 
         // we need this wrapped terminate()-call to terminate even the QuickStarter
         // non-virtual and non-UNO for now
@@ -280,17 +280,17 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
     private:
         //  OPropertySetHelper
-        virtual bool                                            SAL_CALL convertFastPropertyValue        (       cpo::uno::Any&  aConvertedValue ,
+        virtual bool                                            convertFastPropertyValue        (       cpo::uno::Any&  aConvertedValue ,
                                                                                                                      cpo::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
-        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
+        virtual void                                                setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void                                                SAL_CALL getFastPropertyValue            (       cpo::uno::Any&  aValue          ,
+        virtual void                                                getFastPropertyValue            (       cpo::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const override;
-        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       ) override;
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) override;
+        virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper                   (                                       ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo              (                                       ) override;
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
 

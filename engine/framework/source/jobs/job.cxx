@@ -642,7 +642,7 @@ void Job::impl_stopListening()
     @param  aResult
                 its results
 */
-void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
+void Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
                                 /*IN*/ const cpo::uno::Any&                               aResult )
 {
     SolarMutexGuard g;
@@ -681,7 +681,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     @throw  TerminateVetoException
                 if our internal wrapped job is still running.
  */
-void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& )
+void Job::queryTermination( /*IN*/ const css::lang::EventObject& )
 {
     SolarMutexGuard g;
 
@@ -717,7 +717,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& )
     @param  aEvent
                 describes the broadcaster and must be the desktop instance
  */
-void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
+void Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
 {
     die();
     // Do nothing else here. Our internal resources was released ...
@@ -741,7 +741,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
     @throw  CloseVetoException
                 if our internal wrapped job is still running.
  */
-void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
+void Job::queryClosing( const css::lang::EventObject& aEvent         ,
                                        bool                bGetsOwnership )
 {
     SolarMutexGuard g;
@@ -810,7 +810,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     @param  aEvent
             describes the broadcaster and must be the frame or model instance we know
  */
-void SAL_CALL Job::notifyClosing( const css::lang::EventObject& )
+void Job::notifyClosing( const css::lang::EventObject& )
 {
     die();
     // Do nothing else here. Our internal resources was released ...
@@ -824,7 +824,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& )
     @param      aEvent
                 describe the broadcaster
 */
-void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent )
+void Job::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     {

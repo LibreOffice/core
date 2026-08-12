@@ -79,37 +79,37 @@ public:
     explicit JobExecutor(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~JobExecutor() override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.JobExecutor"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.task.JobExecutor"_ustr};
     }
 
     // task.XJobExecutor
-    virtual void SAL_CALL trigger( const OUString& sEvent ) override;
+    virtual void trigger( const OUString& sEvent ) override;
 
     /// Initialization function after having acquire()'d.
     void initListeners();
 
     // document.XEventListener
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) override;
+    virtual void notifyEvent( const css::document::EventObject& aEvent ) override;
 
     // container.XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& aEvent ) override;
-    virtual void SAL_CALL elementRemoved ( const css::container::ContainerEvent& aEvent ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& aEvent ) override;
+    virtual void elementInserted( const css::container::ContainerEvent& aEvent ) override;
+    virtual void elementRemoved ( const css::container::ContainerEvent& aEvent ) override;
+    virtual void elementReplaced( const css::container::ContainerEvent& aEvent ) override;
 
     // lang.XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override;
 };
 
 /**
@@ -187,7 +187,7 @@ void JobExecutor::disposing(std::unique_lock<std::mutex>& /*rGuard*/) {
     @param  sEvent
                 is used to locate registered jobs
  */
-void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
+void JobExecutor::trigger( const OUString& sEvent )
 {
     SAL_INFO( "fwk", "JobExecutor::trigger()");
 
@@ -228,7 +228,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
     }
 }
 
-void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent )
+void JobExecutor::notifyEvent( const css::document::EventObject& aEvent )
 {
     static constexpr OUString EVENT_ON_DOCUMENT_OPENED(u"onDocumentOpened"_ustr);   // Job UI  event : OnNew    or OnLoad
     static constexpr OUString EVENT_ON_DOCUMENT_ADDED(u"onDocumentAdded"_ustr);     // Job API event : OnCreate or OnLoadFinished
@@ -305,7 +305,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     }
 }
 
-void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent )
+void JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent )
 {
     OUString sValue;
     if (aEvent.Accessor >>= sValue)
@@ -320,7 +320,7 @@ void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent
     }
 }
 
-void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent& aEvent )
+void JobExecutor::elementRemoved ( const css::container::ContainerEvent& aEvent )
 {
     OUString sValue;
     if (aEvent.Accessor >>= sValue)
@@ -335,7 +335,7 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
     }
 }
 
-void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent& )
+void JobExecutor::elementReplaced( const css::container::ContainerEvent& )
 {
     // I'm not interested on changed items :-)
 }
@@ -354,7 +354,7 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
                 reference... SOLUTION => check the given event source and react only, if it's our internal
                 hold configuration object!
  */
-void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent )
+void JobExecutor::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     std::unique_lock g(m_aMutex);

@@ -52,17 +52,17 @@ using namespace com::sun::star::view;
 namespace framework
 {
 
-OUString SAL_CALL FontSizeMenuController::getImplementationName()
+OUString FontSizeMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.FontSizeMenuController"_ustr;
 }
 
-bool SAL_CALL FontSizeMenuController::supportsService( const OUString& sServiceName )
+bool FontSizeMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FontSizeMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > FontSizeMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -205,7 +205,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 }
 
 // XEventListener
-void SAL_CALL FontSizeMenuController::disposing( const EventObject& )
+void FontSizeMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -219,7 +219,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event )
+void FontSizeMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     css::awt::FontDescriptor                 aFontDescriptor;
     css::frame::status::FontHeight   aFontHeight;
@@ -255,7 +255,7 @@ void FontSizeMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*r
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontSizeMenuController::updatePopupMenu()
+void FontSizeMenuController::updatePopupMenu()
 {
     std::unique_lock aLock( m_aMutex );
 

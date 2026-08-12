@@ -55,16 +55,16 @@ class ProgressBarWrapper final : public UIElementWrapperBase
 
         // UNO interfaces
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() override;
+        virtual void update() override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
+        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
 
     //  variables
     //  (should be private everyway!)

@@ -92,15 +92,15 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
     public:
 
         /* interface XServiceInfo */
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // css.task.XJob
-        virtual cpo::uno::Any SAL_CALL execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments) override;
+        virtual cpo::uno::Any execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments) override;
 
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
     // helper
     private:

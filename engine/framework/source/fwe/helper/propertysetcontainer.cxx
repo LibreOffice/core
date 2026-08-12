@@ -44,7 +44,7 @@ PropertySetContainer::~PropertySetContainer()
 }
 
 // XIndexContainer
-void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
+void PropertySetContainer::insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock g(m_aMutex);
 
@@ -72,7 +72,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const cpo::u
     }
 }
 
-void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
+void PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 {
     std::unique_lock g(m_aMutex);
 
@@ -83,7 +83,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
+void PropertySetContainer::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock g(m_aMutex);
 
@@ -103,14 +103,14 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const cpo::
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL PropertySetContainer::getCount()
+sal_Int32 PropertySetContainer::getCount()
 {
     std::unique_lock g(m_aMutex);
 
     return m_aPropertySetVector.size();
 }
 
-Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
+Any PropertySetContainer::getByIndex( sal_Int32 Index )
 {
     std::unique_lock g(m_aMutex);
 
@@ -121,7 +121,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-bool SAL_CALL PropertySetContainer::hasElements()
+bool PropertySetContainer::hasElements()
 {
     std::unique_lock g(m_aMutex);
 

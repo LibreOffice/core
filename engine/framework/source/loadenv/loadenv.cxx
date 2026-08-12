@@ -119,15 +119,15 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
         }
 
         // frame.XLoadEventListener
-        virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
+        virtual void loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
-        virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
+        virtual void loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
         // frame.XDispatchResultListener
-        virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent) override;
+        virtual void dispatchFinished(const css::frame::DispatchResultEvent& aEvent) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 };
 
 }
@@ -473,7 +473,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
     return xModel;
 }
 
-void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
+void LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
 {
     std::unique_lock g(m_mutex);
     if (m_bWaitingResult)
@@ -481,7 +481,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
     m_bWaitingResult = false;
 }
 
-void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
+void LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
 {
     std::unique_lock g(m_mutex);
     if (m_bWaitingResult)
@@ -489,7 +489,7 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
     m_bWaitingResult = false;
 }
 
-void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
+void LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
 {
     std::unique_lock g(m_mutex);
 
@@ -513,7 +513,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     m_bWaitingResult = false;
 }
 
-void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
+void LoadEnvListener::disposing(const css::lang::EventObject&)
 {
     std::unique_lock g(m_mutex);
     if (m_bWaitingResult)

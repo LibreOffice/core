@@ -35,13 +35,13 @@ class AddonsToolBarWrapper final : public UIElementWrapperBase
         virtual ~AddonsToolBarWrapper() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
+        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
 
         // cf. ToolbarLayoutManager
         void populateImages();

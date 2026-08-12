@@ -152,17 +152,17 @@ ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase()
 {
 }
 
-void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
+void ReadMenuDocumentHandlerBase::ignorableWhitespace(
     const OUString& )
 {
 }
 
-void SAL_CALL ReadMenuDocumentHandlerBase::processingInstruction(
+void ReadMenuDocumentHandlerBase::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
-void SAL_CALL ReadMenuDocumentHandlerBase::setDocumentLocator(
+void ReadMenuDocumentHandlerBase::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
     m_xLocator = xLocator;
@@ -211,11 +211,11 @@ OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 {
 }
 
-void SAL_CALL OReadMenuDocumentHandler::startDocument()
+void OReadMenuDocumentHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadMenuDocumentHandler::endDocument()
+void OReadMenuDocumentHandler::endDocument()
 {
     if ( m_nElementDepth > 0 )
     {
@@ -225,7 +225,7 @@ void SAL_CALL OReadMenuDocumentHandler::endDocument()
     }
 }
 
-void SAL_CALL OReadMenuDocumentHandler::startElement(
+void OReadMenuDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
 {
     if ( m_eReaderMode != ReaderMode::None )
@@ -250,11 +250,11 @@ void SAL_CALL OReadMenuDocumentHandler::startElement(
     }
 }
 
-void SAL_CALL OReadMenuDocumentHandler::characters(const OUString&)
+void OReadMenuDocumentHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
+void OReadMenuDocumentHandler::endElement( const OUString& aName )
 {
     if ( m_eReaderMode == ReaderMode::None )
         return;
@@ -295,15 +295,15 @@ OReadMenuBarHandler::~OReadMenuBarHandler()
 {
 }
 
-void SAL_CALL OReadMenuBarHandler::startDocument()
+void OReadMenuBarHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadMenuBarHandler::endDocument()
+void OReadMenuBarHandler::endDocument()
 {
 }
 
-void SAL_CALL OReadMenuBarHandler::startElement(
+void OReadMenuBarHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
 {
     if ( m_bMenuMode )
@@ -390,7 +390,7 @@ void SAL_CALL OReadMenuBarHandler::startElement(
     }
 }
 
-void SAL_CALL OReadMenuBarHandler::characters(const OUString&)
+void OReadMenuBarHandler::characters(const OUString&)
 {
 }
 
@@ -430,15 +430,15 @@ OReadMenuHandler::~OReadMenuHandler()
 {
 }
 
-void SAL_CALL OReadMenuHandler::startDocument()
+void OReadMenuHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadMenuHandler::endDocument()
+void OReadMenuHandler::endDocument()
 {
 }
 
-void SAL_CALL OReadMenuHandler::startElement(
+void OReadMenuHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
 {
     if ( m_bMenuPopupMode )
@@ -461,11 +461,11 @@ void SAL_CALL OReadMenuHandler::startElement(
     }
 }
 
-void SAL_CALL OReadMenuHandler::characters(const OUString&)
+void OReadMenuHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
+void OReadMenuHandler::endElement( const OUString& aName )
 {
     if ( !m_bMenuPopupMode )
         return;
@@ -503,15 +503,15 @@ OReadMenuPopupHandler::~OReadMenuPopupHandler()
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::startDocument()
+void OReadMenuPopupHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::endDocument()
+void OReadMenuPopupHandler::endDocument()
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::startElement(
+void OReadMenuPopupHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
 {
     ++m_nElementDepth;
@@ -648,11 +648,11 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
     }
 }
 
-void SAL_CALL OReadMenuPopupHandler::characters(const OUString&)
+void OReadMenuPopupHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
+void OReadMenuPopupHandler::endElement( const OUString& aName )
 {
     --m_nElementDepth;
     if ( m_bMenuMode )

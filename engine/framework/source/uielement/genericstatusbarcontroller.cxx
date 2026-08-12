@@ -63,7 +63,7 @@ GenericStatusbarController::~GenericStatusbarController()
 {
 }
 
-void SAL_CALL GenericStatusbarController::dispose()
+void GenericStatusbarController::dispose()
 {
     svt::StatusbarController::dispose();
 
@@ -74,7 +74,7 @@ void SAL_CALL GenericStatusbarController::dispose()
 
 }
 
-void SAL_CALL GenericStatusbarController::statusChanged(
+void GenericStatusbarController::statusChanged(
     const FeatureStateEvent& rEvent)
 {
     SolarMutexGuard aGuard;
@@ -112,7 +112,7 @@ void SAL_CALL GenericStatusbarController::statusChanged(
     }
 }
 
-void SAL_CALL GenericStatusbarController::paint(
+void GenericStatusbarController::paint(
     const Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
     ::sal_Int32 /*nStyle*/ )

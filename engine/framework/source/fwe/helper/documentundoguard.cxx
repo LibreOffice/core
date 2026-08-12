@@ -76,20 +76,20 @@ namespace framework
         }
 
         // XUndoManagerListener
-        virtual void SAL_CALL undoActionAdded( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL actionUndone( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL actionRedone( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL allActionsCleared( const EventObject& i_event ) override;
-        virtual void SAL_CALL redoActionsCleared( const EventObject& i_event ) override;
-        virtual void SAL_CALL resetAll( const EventObject& i_event ) override;
-        virtual void SAL_CALL enteredContext( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL enteredHiddenContext( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL leftContext( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL leftHiddenContext( const UndoManagerEvent& i_event ) override;
-        virtual void SAL_CALL cancelledContext( const UndoManagerEvent& i_event ) override;
+        virtual void undoActionAdded( const UndoManagerEvent& i_event ) override;
+        virtual void actionUndone( const UndoManagerEvent& i_event ) override;
+        virtual void actionRedone( const UndoManagerEvent& i_event ) override;
+        virtual void allActionsCleared( const EventObject& i_event ) override;
+        virtual void redoActionsCleared( const EventObject& i_event ) override;
+        virtual void resetAll( const EventObject& i_event ) override;
+        virtual void enteredContext( const UndoManagerEvent& i_event ) override;
+        virtual void enteredHiddenContext( const UndoManagerEvent& i_event ) override;
+        virtual void leftContext( const UndoManagerEvent& i_event ) override;
+        virtual void leftHiddenContext( const UndoManagerEvent& i_event ) override;
+        virtual void cancelledContext( const UndoManagerEvent& i_event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& i_event ) override;
+        virtual void disposing( const EventObject& i_event ) override;
 
     private:
         Reference< XUndoManager > const m_xUndoManager;
@@ -97,62 +97,62 @@ namespace framework
         bool                            m_documentDisposed;
     };
 
-    void SAL_CALL UndoManagerContextListener::undoActionAdded( const UndoManagerEvent& )
+    void UndoManagerContextListener::undoActionAdded( const UndoManagerEvent& )
     {
         // not interested in
     }
 
-    void SAL_CALL UndoManagerContextListener::actionUndone( const UndoManagerEvent& )
+    void UndoManagerContextListener::actionUndone( const UndoManagerEvent& )
     {
         // not interested in
     }
 
-    void SAL_CALL UndoManagerContextListener::actionRedone( const UndoManagerEvent& )
+    void UndoManagerContextListener::actionRedone( const UndoManagerEvent& )
     {
         // not interested in
     }
 
-    void SAL_CALL UndoManagerContextListener::allActionsCleared( const EventObject& )
+    void UndoManagerContextListener::allActionsCleared( const EventObject& )
     {
         // not interested in
     }
 
-    void SAL_CALL UndoManagerContextListener::redoActionsCleared( const EventObject& )
+    void UndoManagerContextListener::redoActionsCleared( const EventObject& )
     {
         // not interested in
     }
 
-    void SAL_CALL UndoManagerContextListener::resetAll( const EventObject& )
+    void UndoManagerContextListener::resetAll( const EventObject& )
     {
         m_nRelativeContextDepth = 0;
     }
 
-    void SAL_CALL UndoManagerContextListener::enteredContext( const UndoManagerEvent& )
+    void UndoManagerContextListener::enteredContext( const UndoManagerEvent& )
     {
         osl_atomic_increment( &m_nRelativeContextDepth );
     }
 
-    void SAL_CALL UndoManagerContextListener::enteredHiddenContext( const UndoManagerEvent& )
+    void UndoManagerContextListener::enteredHiddenContext( const UndoManagerEvent& )
     {
         osl_atomic_increment( &m_nRelativeContextDepth );
     }
 
-    void SAL_CALL UndoManagerContextListener::leftContext( const UndoManagerEvent& )
+    void UndoManagerContextListener::leftContext( const UndoManagerEvent& )
     {
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
-    void SAL_CALL UndoManagerContextListener::leftHiddenContext( const UndoManagerEvent& )
+    void UndoManagerContextListener::leftHiddenContext( const UndoManagerEvent& )
     {
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
-    void SAL_CALL UndoManagerContextListener::cancelledContext( const UndoManagerEvent& )
+    void UndoManagerContextListener::cancelledContext( const UndoManagerEvent& )
     {
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
-    void SAL_CALL UndoManagerContextListener::disposing( const EventObject& )
+    void UndoManagerContextListener::disposing( const EventObject& )
     {
         m_documentDisposed = true;
     }

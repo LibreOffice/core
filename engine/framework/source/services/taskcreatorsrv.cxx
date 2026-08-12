@@ -46,12 +46,12 @@ TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponent
 {
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
+css::uno::Reference< css::uno::XInterface > TaskCreatorService::createInstance()
 {
     return createInstanceWithArguments(cpo::uno::Sequence< cpo::uno::Any >());
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+css::uno::Reference< css::uno::XInterface > TaskCreatorService::createInstanceWithArguments(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 

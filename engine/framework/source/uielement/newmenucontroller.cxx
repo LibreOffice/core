@@ -68,13 +68,13 @@ public:
 
 private:
     // XStatusListener
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& state) override
+    void statusChanged(const css::frame::FeatureStateEvent& state) override
     {
         m_bEnabled = state.IsEnabled;
     }
 
     // XEventListener
-    void SAL_CALL disposing(const css::lang::EventObject&) override {} // unused
+    void disposing(const css::lang::EventObject&) override {} // unused
 
     bool m_bEnabled = false;
 };
@@ -105,17 +105,17 @@ bool isSlotActive(const OUString& slot, const css::uno::Reference<css::frame::XF
 namespace framework
 {
 
-OUString SAL_CALL NewMenuController::getImplementationName()
+OUString NewMenuController::getImplementationName()
 {
     return u"com.sun.star.comp.framework.NewMenuController"_ustr;
 }
 
-bool SAL_CALL NewMenuController::supportsService( const OUString& sServiceName )
+bool NewMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL NewMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > NewMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -375,7 +375,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
 }
 
 // XEventListener
-void SAL_CALL NewMenuController::disposing( const EventObject& )
+void NewMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -390,13 +390,13 @@ void SAL_CALL NewMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& Event )
+void NewMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     Event.State >>= m_aEmptyDocURL;
 }
 
 // XMenuListener
-void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+void NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     rtl::Reference< VCLXPopupMenu > xPopupMenu;
     Reference< XComponentContext >    xContext;
@@ -432,7 +432,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     dispatchCommand( aURL, aArgsList, aTargetFrame );
 }
 
-void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
+void NewMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( !(m_xFrame.is() && m_xPopupMenu.is()) )

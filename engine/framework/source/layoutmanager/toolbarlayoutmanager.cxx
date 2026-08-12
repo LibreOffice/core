@@ -81,17 +81,17 @@ ToolbarLayoutManager::~ToolbarLayoutManager()
 
 //  XInterface
 
-void SAL_CALL ToolbarLayoutManager::acquire() noexcept
+void ToolbarLayoutManager::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ToolbarLayoutManager::release() noexcept
+void ToolbarLayoutManager::release() noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ToolbarLayoutManager::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any a = ::cppu::queryInterface( rType,
         static_cast< awt::XDockableWindowListener* >(this),
@@ -104,7 +104,7 @@ cpo::uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const cpo::uno::Typ
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ToolbarLayoutManager::disposing( const lang::EventObject& aEvent )
+void ToolbarLayoutManager::disposing( const lang::EventObject& aEvent )
 {
     if ( aEvent.Source == m_xFrame )
     {
@@ -3171,7 +3171,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
 
 //  XWindowListener
 
-void SAL_CALL ToolbarLayoutManager::windowResized( const awt::WindowEvent& aEvent )
+void ToolbarLayoutManager::windowResized( const awt::WindowEvent& aEvent )
 {
     SolarMutexClearableGuard aWriteLock;
     bool bLocked( m_bDockingInProgress );
@@ -3220,21 +3220,21 @@ void SAL_CALL ToolbarLayoutManager::windowResized( const awt::WindowEvent& aEven
         m_pParentLayouter->requestLayout();
 }
 
-void SAL_CALL ToolbarLayoutManager::windowMoved( const awt::WindowEvent& /*aEvent*/ )
+void ToolbarLayoutManager::windowMoved( const awt::WindowEvent& /*aEvent*/ )
 {
 }
 
-void SAL_CALL ToolbarLayoutManager::windowShown( const lang::EventObject& /*aEvent*/ )
+void ToolbarLayoutManager::windowShown( const lang::EventObject& /*aEvent*/ )
 {
 }
 
-void SAL_CALL ToolbarLayoutManager::windowHidden( const lang::EventObject& /*aEvent*/ )
+void ToolbarLayoutManager::windowHidden( const lang::EventObject& /*aEvent*/ )
 {
 }
 
 //  XDockableWindowListener
 
-void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
+void ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
 {
     bool bWinFound( false );
 
@@ -3274,7 +3274,7 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
     m_aDockUIElement.m_bUserActive = true;
 }
 
-awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent& e )
+awt::DockingData ToolbarLayoutManager::docking( const awt::DockingEvent& e )
 {
     constexpr sal_Int32 MAGNETIC_DISTANCE_UNDOCK = 25;
     constexpr sal_Int32 MAGNETIC_DISTANCE_DOCK   = 20;
@@ -3449,7 +3449,7 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
     return aDockingData;
 }
 
-void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
+void ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
 {
     if (e.bCancelled)
         return;
@@ -3547,7 +3547,7 @@ void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
         m_pParentLayouter->requestLayout();
 }
 
-bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
+bool ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
 {
     SolarMutexClearableGuard aReadLock;
     bool bDockingInProgress = m_bDockingInProgress;
@@ -3588,7 +3588,7 @@ bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::Event
     return true;
 }
 
-void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject& e )
+void ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject& e )
 {
     UIElement aUIDockingElement;
 
@@ -3718,7 +3718,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
     }
 }
 
-void SAL_CALL ToolbarLayoutManager::closed( const lang::EventObject& e )
+void ToolbarLayoutManager::closed( const lang::EventObject& e )
 {
     OUString aName;
     UIElement     aUIElement;
@@ -3765,13 +3765,13 @@ void SAL_CALL ToolbarLayoutManager::closed( const lang::EventObject& e )
         pParentLayouter->requestLayout();
 }
 
-void SAL_CALL ToolbarLayoutManager::endPopupMode( const awt::EndPopupModeEvent& /*e*/ )
+void ToolbarLayoutManager::endPopupMode( const awt::EndPopupModeEvent& /*e*/ )
 {
 }
 
 //  XUIConfigurationListener
 
-void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEvent& rEvent )
+void ToolbarLayoutManager::elementInserted( const ui::ConfigurationEvent& rEvent )
 {
     UIElement aUIElement = implts_findToolbar( rEvent.ResourceURL );
 
@@ -3833,7 +3833,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
     }
 }
 
-void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent )
+void ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent )
 {
     SolarMutexClearableGuard aReadLock;
     uno::Reference< awt::XWindow > xContainerWindow = m_xContainerWindow;
@@ -3880,7 +3880,7 @@ void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent
         destroyToolbar( rEvent.ResourceURL );
 }
 
-void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEvent& rEvent )
+void ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEvent& rEvent )
 {
     UIElement aUIElement = implts_findToolbar( rEvent.ResourceURL );
 

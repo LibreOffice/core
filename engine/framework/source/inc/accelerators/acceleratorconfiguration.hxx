@@ -90,49 +90,49 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
     public:
 
         // XAcceleratorConfiguration
-        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > getAllKeyEvents() override;
 
-        virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
+        virtual OUString getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual void SAL_CALL setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
+        virtual void setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
             const OUString&    sCommand ) override;
 
-        virtual void SAL_CALL removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
+        virtual void removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
 
-        virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
+        virtual void removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 
         // XUIConfigurationPersistence
-        virtual void SAL_CALL reload() override;
+        virtual void reload() override;
 
-        virtual void SAL_CALL store() override;
+        virtual void store() override;
 
-        virtual void SAL_CALL storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual bool SAL_CALL isModified() override;
+        virtual bool isModified() override;
 
-        virtual bool SAL_CALL isReadOnly() override;
+        virtual bool isReadOnly() override;
 
         // XUIConfigurationStorage
-        virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual bool SAL_CALL hasStorage() override;
+        virtual bool hasStorage() override;
 
         // XUIConfiguration
-        virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
-        virtual void SAL_CALL removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
         // XReset
         // TODO use XPresetHandler instead if available
-        virtual void SAL_CALL reset() override;
+        virtual void reset() override;
 
-        virtual void SAL_CALL addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
 
-        virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
 
         // called when changes occurred in the storage
         void changesOccurred();
@@ -228,55 +228,55 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
     public:
 
         // XAcceleratorConfiguration
-        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > getAllKeyEvents() override;
 
-        virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
+        virtual OUString getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual void SAL_CALL setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
+        virtual void setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
             const OUString&    sCommand ) override;
 
-        virtual void SAL_CALL removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
+        virtual void removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
 
-        virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
+        virtual void removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 
         // XUIConfigurationPersistence
-        virtual void SAL_CALL reload() override;
+        virtual void reload() override;
 
-        virtual void SAL_CALL store() override;
+        virtual void store() override;
 
-        virtual void SAL_CALL storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual bool SAL_CALL isModified() override;
+        virtual bool isModified() override;
 
-        virtual bool SAL_CALL isReadOnly() override;
+        virtual bool isReadOnly() override;
 
         // XUIConfigurationStorage
-        virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual bool SAL_CALL hasStorage() override;
+        virtual bool hasStorage() override;
 
         // XUIConfiguration
-        virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
-        virtual void SAL_CALL removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
         // XReset
         // TODO use XPresetHandler instead if available
-        virtual void SAL_CALL reset() override;
+        virtual void reset() override;
 
-        virtual void SAL_CALL addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
 
-        virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
 
         // css.util.XChangesListener
-        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) override;
+        virtual void changesOccurred(const css::util::ChangesEvent& aEvent) override;
 
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
         // helper for derived classes
 

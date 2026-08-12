@@ -84,35 +84,35 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
 
 
         /** @see XTitle */
-        virtual OUString SAL_CALL getTitle() override;
+        virtual OUString getTitle() override;
 
 
         /** @see XTitle */
-        virtual void SAL_CALL setTitle(const OUString& sTitle) override;
+        virtual void setTitle(const OUString& sTitle) override;
 
 
         /** @see XTitleChangeBroadcaster */
-        virtual void SAL_CALL addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
+        virtual void addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
 
 
         /** @see XTitleChangeBroadcaster */
-        virtual void SAL_CALL removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
+        virtual void removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
 
 
         /** @see XTitleChangeListener */
-        virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent) override;
+        virtual void titleChanged(const css::frame::TitleChangedEvent& aEvent) override;
 
 
         /** @see css.document.XDocumentEventListener */
-        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent) override;
+        virtual void documentEventOccured(const css::document::DocumentEvent& aEvent) override;
 
 
         /** @see css.lang.XEventListener */
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
 
         /** @see css.frame.XFrameActionListener */
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
 
     // internal

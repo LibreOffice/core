@@ -47,17 +47,17 @@ ImageManager::~ImageManager()
 }
 
 // XComponent
-void SAL_CALL ImageManager::dispose()
+void ImageManager::dispose()
 {
     m_pImpl->dispose();
 }
 
-void SAL_CALL ImageManager::addEventListener( const uno::Reference< XEventListener >& xListener )
+void ImageManager::addEventListener( const uno::Reference< XEventListener >& xListener )
 {
     m_pImpl->addEventListener(xListener);
 }
 
-void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener )
+void ImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->removeEventListener(xListener);
@@ -73,36 +73,36 @@ void ImageManager::setStorage( const uno::Reference< XStorage >& Storage )
 }
 
 // XInitialization
-void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments )
+void ImageManager::initialize( const Sequence< Any >& aArguments )
 {
     m_pImpl->initialize(aArguments);
 }
 
 // XImageManager
-void SAL_CALL ImageManager::reset()
+void ImageManager::reset()
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->reset();
 }
 
-Sequence< OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImageType )
+Sequence< OUString > ImageManager::getAllImageNames( ::sal_Int16 nImageType )
 {
     return m_pImpl->getAllImageNames( nImageType );
 }
 
-bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
+bool ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);
 }
 
-Sequence< uno::Reference< XGraphic > > SAL_CALL ImageManager::getImages(
+Sequence< uno::Reference< XGraphic > > ImageManager::getImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence )
 {
     return m_pImpl->getImages(nImageType,aCommandURLSequence);
 }
 
-void SAL_CALL ImageManager::replaceImages(
+void ImageManager::replaceImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
@@ -110,50 +110,50 @@ void SAL_CALL ImageManager::replaceImages(
     m_pImpl->replaceImages(nImageType,aCommandURLSequence,aGraphicsSequence);
 }
 
-void SAL_CALL ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
+void ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 {
     m_pImpl->removeImages(nImageType,aCommandURLSequence);
 }
 
-void SAL_CALL ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
+void ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
 {
     m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 // XUIConfiguration
-void SAL_CALL ImageManager::addConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
+void ImageManager::addConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     m_pImpl->addConfigurationListener(xListener);
 }
 
-void SAL_CALL ImageManager::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
+void ImageManager::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->removeConfigurationListener(xListener);
 }
 
 // XUIConfigurationPersistence
-void SAL_CALL ImageManager::reload()
+void ImageManager::reload()
 {
     m_pImpl->reload();
 }
 
-void SAL_CALL ImageManager::store()
+void ImageManager::store()
 {
     m_pImpl->store();
 }
 
-void SAL_CALL ImageManager::storeToStorage( const uno::Reference< XStorage >& Storage )
+void ImageManager::storeToStorage( const uno::Reference< XStorage >& Storage )
 {
     m_pImpl->storeToStorage(Storage);
 }
 
-bool SAL_CALL ImageManager::isModified()
+bool ImageManager::isModified()
 {
     return m_pImpl->isModified();
 }
 
-bool SAL_CALL ImageManager::isReadOnly()
+bool ImageManager::isReadOnly()
 {
     return m_pImpl->isReadOnly();
 }

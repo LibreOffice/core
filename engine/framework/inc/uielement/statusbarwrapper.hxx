@@ -36,16 +36,16 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
         virtual ~StatusBarWrapper() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
+        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings() override;
+        virtual void updateSettings() override;
 
     private:
         rtl::Reference< StatusBarManager >                       m_xStatusBarManager;

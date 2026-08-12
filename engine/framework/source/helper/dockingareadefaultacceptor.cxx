@@ -45,7 +45,7 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 }
 
 //  XDockingAreaAcceptor
-css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow()
+css::uno::Reference< css::awt::XWindow > DockingAreaDefaultAcceptor::getContainerWindow()
 {
     SolarMutexGuard g;
 
@@ -57,7 +57,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
     return xContainerWindow;
 }
 
-bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
+bool DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
 {
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner );
@@ -88,7 +88,7 @@ bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::aw
     return true;
 }
 
-void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
+void DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
 {
     SolarMutexGuard g;
 

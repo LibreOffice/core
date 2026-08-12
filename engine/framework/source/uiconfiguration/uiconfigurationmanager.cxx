@@ -77,17 +77,17 @@ class UIConfigurationManager :   public ::cppu::WeakImplHelper<
                                         css::ui::XUIConfigurationManager2 >
 {
 public:
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.UIConfigurationManager"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.UIConfigurationManager"_ustr};
     }
@@ -95,38 +95,38 @@ public:
     explicit UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext );
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XUIConfiguration
-    virtual void SAL_CALL addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-    virtual void SAL_CALL removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
     // XUIConfigurationManager
-    virtual void SAL_CALL reset() override;
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
-    virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
-    virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
-    virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) override;
-    virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getImageManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL createShortCutManager() override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() override;
+    virtual void reset() override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getUIElementsInfo( sal_Int16 ElementType ) override;
+    virtual css::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
+    virtual bool hasSettings( const OUString& ResourceURL ) override;
+    virtual css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
+    virtual void replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual void removeSettings( const OUString& ResourceURL ) override;
+    virtual void insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getImageManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
+    virtual css::uno::Reference< css::uno::XInterface > getEventsManager() override;
 
     // XUIConfigurationPersistence
-    virtual void SAL_CALL reload() override;
-    virtual void SAL_CALL store() override;
-    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual bool SAL_CALL isModified() override;
-    virtual bool SAL_CALL isReadOnly() override;
+    virtual void reload() override;
+    virtual void store() override;
+    virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual bool isModified() override;
+    virtual bool isReadOnly() override;
 
     // XUIConfigurationStorage
-    virtual void SAL_CALL setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual bool SAL_CALL hasStorage() override;
+    virtual void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual bool hasStorage() override;
 
 private:
     // private data types
@@ -686,7 +686,7 @@ UIConfigurationManager::UIConfigurationManager( css::uno::Reference< css::uno::X
 }
 
 // XComponent
-void SAL_CALL UIConfigurationManager::dispose()
+void UIConfigurationManager::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -719,7 +719,7 @@ void SAL_CALL UIConfigurationManager::dispose()
     }
 }
 
-void SAL_CALL UIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener )
+void UIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener )
 {
     {
         SolarMutexGuard g;
@@ -733,7 +733,7 @@ void SAL_CALL UIConfigurationManager::addEventListener( const Reference< XEventL
     m_aEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
+void UIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
@@ -741,7 +741,7 @@ void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEve
 }
 
 // XUIConfigurationManager
-void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
+void UIConfigurationManager::addConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     {
         SolarMutexGuard g;
@@ -755,14 +755,14 @@ void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference<
     m_aConfigListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
+void UIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
     m_aConfigListeners.removeInterface( aGuard, xListener );
 }
 
-void SAL_CALL UIConfigurationManager::reset()
+void UIConfigurationManager::reset()
 {
     SolarMutexClearableGuard aGuard;
 
@@ -846,7 +846,7 @@ void SAL_CALL UIConfigurationManager::reset()
     }
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
+Sequence< Sequence< PropertyValue > > UIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
 {
     if (( ElementType < 0 ) || ( ElementType >= css::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
@@ -880,7 +880,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElem
     return comphelper::containerToSequence(aElementInfoSeq);
 }
 
-Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings()
+Reference< XIndexContainer > UIConfigurationManager::createSettings()
 {
     SolarMutexGuard g;
 
@@ -891,7 +891,7 @@ Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings()
     return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
-bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
+bool UIConfigurationManager::hasSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -905,7 +905,7 @@ bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
     return false;
 }
 
-Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
+Reference< XIndexAccess > UIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -931,7 +931,7 @@ Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OU
     throw NoSuchElementException();
 }
 
-void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< css::container::XIndexAccess >& aNewData )
+void UIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< css::container::XIndexAccess >& aNewData )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -985,7 +985,7 @@ void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceU
     }
 }
 
-void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceURL )
+void UIConfigurationManager::removeSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1045,7 +1045,7 @@ void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceUR
     }
 }
 
-void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
+void UIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
 
@@ -1117,7 +1117,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
     }
 }
 
-Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
+Reference< XInterface > UIConfigurationManager::getImageManager()
 {
     if ( m_bDisposed )
         throw DisposedException();
@@ -1138,12 +1138,12 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
     return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xImageManager.get()), UNO_QUERY );
 }
 
-Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::createShortCutManager()
+Reference< XAcceleratorConfiguration > UIConfigurationManager::createShortCutManager()
 {
     return DocumentAcceleratorConfiguration::createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
 }
 
-Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()
+Reference< XAcceleratorConfiguration > UIConfigurationManager::getShortCutManager()
 {
     // SAFE ->
     SolarMutexGuard g;
@@ -1162,13 +1162,13 @@ Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShort
     return m_xAccConfig;
 }
 
-Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager()
+Reference< XInterface > UIConfigurationManager::getEventsManager()
 {
     return Reference< XInterface >();
 }
 
 // XUIConfigurationStorage
-void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& Storage )
+void UIConfigurationManager::setStorage( const Reference< XStorage >& Storage )
 {
     SolarMutexGuard g;
 
@@ -1221,7 +1221,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     impl_Initialize();
 }
 
-bool SAL_CALL UIConfigurationManager::hasStorage()
+bool UIConfigurationManager::hasStorage()
 {
     SolarMutexGuard g;
 
@@ -1232,7 +1232,7 @@ bool SAL_CALL UIConfigurationManager::hasStorage()
 }
 
 // XUIConfigurationPersistence
-void SAL_CALL UIConfigurationManager::reload()
+void UIConfigurationManager::reload()
 {
     SolarMutexClearableGuard aGuard;
 
@@ -1271,7 +1271,7 @@ void SAL_CALL UIConfigurationManager::reload()
         implts_notifyContainerListener( k, NotifyOp_Replace );
 }
 
-void SAL_CALL UIConfigurationManager::store()
+void UIConfigurationManager::store()
 {
     SolarMutexGuard g;
 
@@ -1325,7 +1325,7 @@ void SAL_CALL UIConfigurationManager::store()
         xTransactedObject->commit();
 }
 
-void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage )
+void UIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage )
 {
     SolarMutexGuard g;
 
@@ -1358,14 +1358,14 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
         xTransactedObject->commit();
 }
 
-bool SAL_CALL UIConfigurationManager::isModified()
+bool UIConfigurationManager::isModified()
 {
     SolarMutexGuard g;
 
     return m_bModified;
 }
 
-bool SAL_CALL UIConfigurationManager::isReadOnly()
+bool UIConfigurationManager::isReadOnly()
 {
     SolarMutexGuard g;
 

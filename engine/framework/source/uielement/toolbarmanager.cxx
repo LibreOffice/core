@@ -770,7 +770,7 @@ void ToolBarManager::frameAction( const FrameActionEvent& Action )
     }
 }
 
-void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
+void ToolBarManager::disposing( const EventObject& Source )
 {
     SolarMutexGuard g;
 
@@ -813,7 +813,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
 }
 
 // XComponent
-void SAL_CALL ToolBarManager::dispose()
+void ToolBarManager::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -889,7 +889,7 @@ void SAL_CALL ToolBarManager::dispose()
     }
 }
 
-void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener )
+void ToolBarManager::addEventListener( const Reference< XEventListener >& xListener )
 {
     SolarMutexGuard g;
 
@@ -901,19 +901,19 @@ void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener 
     m_aListenerContainer.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener )
+void ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard(m_mutex);
     m_aListenerContainer.removeInterface( aGuard, xListener );
 }
 
 // XUIConfigurationListener
-void SAL_CALL ToolBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
+void ToolBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(false,Event);
 }
 
-void SAL_CALL ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
+void ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(true,Event);
 }
@@ -986,7 +986,7 @@ void ToolBarManager::setToolBarImage(const Image& rImage,
     }
 }
 
-void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
+void ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(false,Event);
 }

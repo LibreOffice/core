@@ -112,11 +112,11 @@ OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 }
 
 // XDocumentHandler
-void SAL_CALL OReadImagesDocumentHandler::startDocument()
+void OReadImagesDocumentHandler::startDocument()
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::endDocument()
+void OReadImagesDocumentHandler::endDocument()
 {
     if (m_bImageContainerStartFound != m_bImageContainerEndFound)
     {
@@ -125,7 +125,7 @@ void SAL_CALL OReadImagesDocumentHandler::endDocument()
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::startElement(
+void OReadImagesDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
     auto pImageEntry = m_aImageMap.find( aName );
@@ -213,7 +213,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
+void OReadImagesDocumentHandler::endElement(const OUString& aName)
 {
     auto pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry == m_aImageMap.end() )
@@ -237,20 +237,20 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::characters(const OUString&)
+void OReadImagesDocumentHandler::characters(const OUString&)
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const OUString&)
+void OReadImagesDocumentHandler::ignorableWhitespace(const OUString&)
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
+void OReadImagesDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
+void OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
     m_xLocator = xLocator;

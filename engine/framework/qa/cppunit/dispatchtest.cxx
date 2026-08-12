@@ -41,22 +41,22 @@ public:
     int getUnexpected();
 
     // frame::XInterceptorInfo
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getInterceptedURLs() override;
+    virtual cpo::uno::Sequence<OUString> getInterceptedURLs() override;
 
     // frame::XDispatchProviderInterceptor
-    virtual void SAL_CALL setMasterDispatchProvider(
+    virtual void setMasterDispatchProvider(
         const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
-    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getMasterDispatchProvider() override;
-    virtual void SAL_CALL
+    virtual uno::Reference<frame::XDispatchProvider> getMasterDispatchProvider() override;
+    virtual void
     setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
-    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() override;
+    virtual uno::Reference<frame::XDispatchProvider> getSlaveDispatchProvider() override;
 
     // frame::XDispatchProvider
-    virtual cpo::uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
+    virtual cpo::uno::Sequence<uno::Reference<frame::XDispatch>>
     queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
-    virtual uno::Reference<frame::XDispatch>
-        SAL_CALL queryDispatch(const util::URL& rURL, const OUString& rTargetFrameName,
-                               sal_Int32 SearchFlags) override;
+    virtual uno::Reference<frame::XDispatch> queryDispatch(const util::URL& rURL,
+                                                           const OUString& rTargetFrameName,
+                                                           sal_Int32 SearchFlags) override;
 };
 
 MyInterceptor::MyInterceptor()

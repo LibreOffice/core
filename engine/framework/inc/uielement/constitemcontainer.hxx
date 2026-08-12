@@ -50,30 +50,30 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         virtual ~ConstItemContainer() override;
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type getElementType() override
         {
             return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-        virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+        virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         // XFastPropertySet
-        virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
-        virtual cpo::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
+        virtual void setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Any getFastPropertyValue( sal_Int32 nHandle ) override;
 
     private:
         static ::cppu::IPropertyArrayHelper& getInfoHelper();

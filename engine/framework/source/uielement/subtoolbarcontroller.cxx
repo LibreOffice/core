@@ -58,43 +58,43 @@ public:
     void PopoverDestroyed();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rxArgs ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rxArgs ) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 nKeyModifier ) override;
+    virtual void execute( sal_Int16 nKeyModifier ) override;
 
     // PopupWindowController
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
-    virtual bool SAL_CALL opensSubToolbar() override;
-    virtual OUString SAL_CALL getSubToolbarName() override;
-    virtual void SAL_CALL functionSelected( const OUString& rCommand ) override;
-    virtual void SAL_CALL updateImage() override;
+    virtual bool opensSubToolbar() override;
+    virtual OUString getSubToolbarName() override;
+    virtual void functionSelected( const OUString& rCommand ) override;
+    virtual void updateImage() override;
 
     //  XDockableWindowListener
-    virtual void SAL_CALL startDocking( const css::awt::DockingEvent& e ) override;
-    virtual css::awt::DockingData SAL_CALL docking( const css::awt::DockingEvent& e ) override;
-    virtual void SAL_CALL endDocking( const css::awt::EndDockingEvent& e ) override;
-    virtual bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL toggleFloatingMode( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL closed( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL endPopupMode( const css::awt::EndPopupModeEvent& e ) override;
+    virtual void startDocking( const css::awt::DockingEvent& e ) override;
+    virtual css::awt::DockingData docking( const css::awt::DockingEvent& e ) override;
+    virtual void endDocking( const css::awt::EndDockingEvent& e ) override;
+    virtual bool prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
+    virtual void toggleFloatingMode( const css::lang::EventObject& e ) override;
+    virtual void closed( const css::lang::EventObject& e ) override;
+    virtual void endPopupMode( const css::awt::EndPopupModeEvent& e ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& e ) override;
+    virtual void disposing( const css::lang::EventObject& e ) override;
 
     // WeakComponentImplHelperBase
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 }

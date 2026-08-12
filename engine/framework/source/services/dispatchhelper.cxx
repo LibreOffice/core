@@ -33,17 +33,17 @@ namespace framework
 {
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL DispatchHelper::getImplementationName()
+OUString DispatchHelper::getImplementationName()
 {
     return u"com.sun.star.comp.framework.services.DispatchHelper"_ustr;
 }
 
-bool SAL_CALL DispatchHelper::supportsService(const OUString& sServiceName)
+bool DispatchHelper::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> DispatchHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchHelper"_ustr };
 }
@@ -81,7 +81,7 @@ DispatchHelper::~DispatchHelper() {}
 
     @return An Any which capsulate a possible result of the internal wrapped dispatch.
  */
-cpo::uno::Any SAL_CALL DispatchHelper::executeDispatch(
+cpo::uno::Any DispatchHelper::executeDispatch(
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
@@ -185,7 +185,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
     @param  aResult
                 describes the result of the dispatch operation
  */
-void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultEvent& aResult)
+void DispatchHelper::dispatchFinished(const css::frame::DispatchResultEvent& aResult)
 {
     std::scoped_lock g(m_mutex);
     m_aResult <<= aResult;
@@ -199,7 +199,7 @@ void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultE
     @param aEvent
                 describe the source of this event and MUST be our save broadcaster!
  */
-void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
+void DispatchHelper::disposing(const css::lang::EventObject&)
 {
     std::scoped_lock g(m_mutex);
     m_aResult.clear();

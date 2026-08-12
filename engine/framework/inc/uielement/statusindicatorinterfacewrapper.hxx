@@ -39,12 +39,12 @@ class StatusIndicatorInterfaceWrapper final : public ::cppu::WeakImplHelper< css
 
         //  XStatusIndicator
 
-        virtual void SAL_CALL start   ( const OUString& sText  ,
+        virtual void start   ( const OUString& sText  ,
                                               sal_Int32        nRange ) override;
-        virtual void SAL_CALL end     (                               ) override;
-        virtual void SAL_CALL reset   (                               ) override;
-        virtual void SAL_CALL setText ( const OUString& sText  ) override;
-        virtual void SAL_CALL setValue(       sal_Int32        nValue ) override;
+        virtual void end     (                               ) override;
+        virtual void reset   (                               ) override;
+        virtual void setText ( const OUString& sText  ) override;
+        virtual void setValue(       sal_Int32        nValue ) override;
 
     private:
         unotools::WeakReference< ProgressBarWrapper > m_xStatusIndicatorImpl;

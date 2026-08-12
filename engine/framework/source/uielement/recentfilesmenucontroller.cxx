@@ -66,36 +66,36 @@ public:
                                const cpo::uno::Sequence< cpo::uno::Any >& args );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.RecentFilesMenuController"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.PopupMenuController"_ustr};
     }
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const frame::FeatureStateEvent& Event ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) override;
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) override;
+    virtual void itemSelected( const awt::MenuEvent& rEvent ) override;
+    virtual void itemActivated( const awt::MenuEvent& rEvent ) override;
 
     // XDispatchProvider
-    virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
+    virtual uno::Reference< frame::XDispatch > queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& seqProperties ) override;
+    virtual void dispatch( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& seqProperties ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 private:
     virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
@@ -369,7 +369,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 }
 
 // XEventListener
-void SAL_CALL RecentFilesMenuController::disposing( const EventObject& )
+void RecentFilesMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -383,13 +383,13 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event )
+void RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     std::unique_lock aLock( m_aMutex );
     m_bDisabled = !Event.IsEnabled;
 }
 
-void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+void RecentFilesMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     rtl::Reference< VCLXPopupMenu > xPopupMenu;
 
@@ -457,7 +457,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
         executeEntry( rEvent.MenuId-1 );
 }
 
-void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& )
+void RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     std::unique_lock aLock( m_aMutex );
     impl_setPopupMenu(aLock);
@@ -471,7 +471,7 @@ void RecentFilesMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& 
 }
 
 // XDispatchProvider
-Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
+Reference< XDispatch > RecentFilesMenuController::queryDispatch(
     const URL& aURL,
     const OUString& /*sTarget*/,
     sal_Int32 /*nFlags*/ )
@@ -487,7 +487,7 @@ Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
 }
 
 // XDispatch
-void SAL_CALL RecentFilesMenuController::dispatch(
+void RecentFilesMenuController::dispatch(
     const URL& aURL,
     const Sequence< PropertyValue >& /*seqProperties*/ )
 {

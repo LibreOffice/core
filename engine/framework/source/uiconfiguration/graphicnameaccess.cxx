@@ -40,7 +40,7 @@ void GraphicNameAccess::addElement( const OUString& rName, const uno::Reference<
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
+cpo::uno::Any GraphicNameAccess::getByName( const OUString& aName )
 {
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );
     if ( pIter == m_aNameToElementMap.end() )
@@ -48,7 +48,7 @@ cpo::uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
     return cpo::uno::Any( pIter->second );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
+cpo::uno::Sequence< OUString > GraphicNameAccess::getElementNames()
 {
     if ( !m_aSeq.hasElements() )
     {
@@ -58,19 +58,19 @@ cpo::uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
     return m_aSeq;
 }
 
-bool SAL_CALL GraphicNameAccess::hasByName( const OUString& aName )
+bool GraphicNameAccess::hasByName( const OUString& aName )
 {
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );
     return ( pIter != m_aNameToElementMap.end() );
 }
 
 // XElementAccess
-bool SAL_CALL GraphicNameAccess::hasElements()
+bool GraphicNameAccess::hasElements()
 {
     return ( !m_aNameToElementMap.empty() );
 }
 
-cpo::uno::Type SAL_CALL GraphicNameAccess::getElementType()
+cpo::uno::Type GraphicNameAccess::getElementType()
 {
     return cppu::UnoType<graphic::XGraphic>::get();
 }

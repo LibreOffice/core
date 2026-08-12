@@ -42,7 +42,7 @@ InterceptionHelper::~InterceptionHelper()
 {
 }
 
-css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
+css::uno::Reference< css::frame::XDispatch > InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
                                                                                         const OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
 {
@@ -88,7 +88,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     return xReturn;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > InterceptionHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
     std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatches.getArray(),
@@ -98,7 +98,7 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Inte
     return lDispatches;
 }
 
-void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject incorrect calls of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
@@ -158,7 +158,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         xOwner->contextChanged();
 }
 
-void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject wrong calling of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
@@ -216,7 +216,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 }
 
 #define FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
-void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
+void InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
 {
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
     // SAFE ->

@@ -45,50 +45,50 @@ public:
              DispatchDisabler(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::cpo::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const ::cpo::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;
 
     // XDispatchProvider
-    virtual ::css::uno::Reference< ::css::frame::XDispatch > SAL_CALL
+    virtual ::css::uno::Reference< ::css::frame::XDispatch >
         queryDispatch( const ::css::util::URL& URL,
                const OUString& TargetFrameName,
                ::sal_Int32 SearchFlags ) override;
-    virtual ::cpo::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > > SAL_CALL
+    virtual ::cpo::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > >
         queryDispatches( const ::cpo::uno::Sequence< ::css::frame::DispatchDescriptor >& Requests ) override;
 
     // XDispatchProviderInterceptor
-    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider > SAL_CALL
+    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider >
         getSlaveDispatchProvider() override;
-    virtual void SAL_CALL
+    virtual void
         setSlaveDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewDispatchProvider ) override;
-    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider > SAL_CALL
+    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider >
         getMasterDispatchProvider() override;
-    virtual void SAL_CALL
+    virtual void
         setMasterDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewSupplier ) override;
 
     // XInterceptorInfo
-    virtual ::cpo::uno::Sequence< OUString > SAL_CALL
+    virtual ::cpo::uno::Sequence< OUString >
         getInterceptedURLs() override;
 
     // XElementAccess
-    virtual ::cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual ::cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XNameAccess
-    virtual ::cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual ::cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual ::cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual ::cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const ::cpo::uno::Any& aElement ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const ::cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     /* interface XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& sServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 } // namespace framework

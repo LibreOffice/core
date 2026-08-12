@@ -44,26 +44,26 @@ public:
     explicit ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.ObjectMenuController"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.PopupMenuController"_ustr};
     }
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 private:
     void fillPopupMenu( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
@@ -94,7 +94,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
 }
 
 // XEventListener
-void SAL_CALL ObjectMenuController::disposing( const EventObject& )
+void ObjectMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -108,7 +108,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Event )
+void ObjectMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     Sequence < css::embed::VerbDescriptor > aVerbCommandSeq;
     if ( Event.State >>= aVerbCommandSeq )

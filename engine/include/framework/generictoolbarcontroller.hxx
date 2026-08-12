@@ -45,10 +45,10 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+        virtual void execute( sal_Int16 KeyModifier ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
         DECL_DLLPRIVATE_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, void );
 
@@ -81,7 +81,7 @@ public:
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 private:

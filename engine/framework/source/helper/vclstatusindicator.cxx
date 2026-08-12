@@ -41,7 +41,7 @@ VCLStatusIndicator::~VCLStatusIndicator()
 {
 }
 
-void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
+void VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
 {
     SolarMutexGuard aSolarGuard;
@@ -65,7 +65,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     m_nValue = 0;
 }
 
-void SAL_CALL VCLStatusIndicator::reset()
+void VCLStatusIndicator::reset()
 {
     SolarMutexGuard aSolarGuard;
     if (m_pStatusBar)
@@ -75,7 +75,7 @@ void SAL_CALL VCLStatusIndicator::reset()
     }
 }
 
-void SAL_CALL VCLStatusIndicator::end()
+void VCLStatusIndicator::end()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -91,14 +91,14 @@ void SAL_CALL VCLStatusIndicator::end()
     }
 }
 
-void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
+void VCLStatusIndicator::setText(const OUString& sText)
 {
     SolarMutexGuard aSolarGuard;
     if (m_pStatusBar)
         m_pStatusBar->SetText(sText);
 }
 
-void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
+void VCLStatusIndicator::setValue(sal_Int32 nValue)
 {
     SolarMutexGuard aSolarGuard;
 

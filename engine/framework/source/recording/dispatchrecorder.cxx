@@ -39,17 +39,17 @@ constexpr OUString REM_AS_COMMENT = u"rem "_ustr;
 
 //  XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL DispatchRecorder::getImplementationName()
+OUString DispatchRecorder::getImplementationName()
 {
     return u"com.sun.star.comp.framework.DispatchRecorder"_ustr;
 }
 
-bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
+bool DispatchRecorder::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DispatchRecorder::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DispatchRecorder::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchRecorder"_ustr };
 }
@@ -108,32 +108,32 @@ DispatchRecorder::~DispatchRecorder()
 }
 
 // generate header
-void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& )
+void DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& )
 {
     /* SAFE{ */
     /* } */
 }
 
-void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
+void DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, false);
 }
 
-void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
+void  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     // last parameter must be set to true -> it's a comment
     m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, true);
 }
 
-void SAL_CALL DispatchRecorder::endRecording()
+void DispatchRecorder::endRecording()
 {
     SolarMutexGuard g;
     m_aStatements.clear();
 }
 
-OUString SAL_CALL DispatchRecorder::getRecordedMacro()
+OUString DispatchRecorder::getRecordedMacro()
 {
     SolarMutexGuard g;
 
@@ -370,22 +370,22 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
     /* } */
 }
 
-cpo::uno::Type SAL_CALL DispatchRecorder::getElementType()
+cpo::uno::Type DispatchRecorder::getElementType()
 {
     return cppu::UnoType<css::frame::DispatchStatement>::get();
 }
 
-bool SAL_CALL DispatchRecorder::hasElements()
+bool DispatchRecorder::hasElements()
 {
     return (! m_aStatements.empty());
 }
 
-sal_Int32 SAL_CALL DispatchRecorder::getCount()
+sal_Int32 DispatchRecorder::getCount()
 {
     return m_aStatements.size();
 }
 
-cpo::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
+cpo::uno::Any DispatchRecorder::getByIndex(sal_Int32 idx)
 {
     if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
         throw css::lang::IndexOutOfBoundsException( u"Dispatch recorder out of bounds"_ustr  );
@@ -396,7 +396,7 @@ cpo::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
     return element;
 }
 
-void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const cpo::uno::Any& element)
+void DispatchRecorder::replaceByIndex(sal_Int32 idx, const cpo::uno::Any& element)
 {
     if (element.getValueType() !=
         cppu::UnoType<css::frame::DispatchStatement>::get()) {

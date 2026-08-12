@@ -77,13 +77,13 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
         virtual ~PersistentWindowState(                                                                   ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
+        virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
         // Helper to explicitly save the state of rFrame's window to the config
         static void SaveWindowStateToConfig(const css::uno::Reference<css::uno::XComponentContext>& rContext,

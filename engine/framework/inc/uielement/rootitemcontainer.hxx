@@ -56,53 +56,53 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual ~RootItemContainer() override;
 
         // XInterface
-        virtual void SAL_CALL acquire() noexcept override
+        virtual void acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() noexcept override
+        virtual void release() noexcept override
             { OWeakObject::release(); }
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& type) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
-        virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+        virtual void removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+        virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual sal_Int32 getCount() override;
 
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type getElementType() override
         {
             return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // XSingleComponentFactory
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
     private:
         //  OPropertySetHelper
-        virtual bool                                            SAL_CALL convertFastPropertyValue        ( cpo::uno::Any&        aConvertedValue ,
+        virtual bool                                            convertFastPropertyValue        ( cpo::uno::Any&        aConvertedValue ,
                                                                                                                cpo::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
-        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+        virtual void                                                setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void                                                SAL_CALL getFastPropertyValue( cpo::uno::Any&    aValue          ,
+        virtual void                                                getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
-        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 

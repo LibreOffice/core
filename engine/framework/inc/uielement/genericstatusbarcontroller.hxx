@@ -37,11 +37,11 @@ class GenericStatusbarController final : public svt::StatusbarController
         virtual ~GenericStatusbarController() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
-        virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+        virtual void paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
                                      const css::awt::Rectangle& rOutputRectangle,
                                      ::sal_Int32 nStyle ) override;
 

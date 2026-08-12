@@ -79,24 +79,24 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual                   ~ConfigurationAccess_UICommand() override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type getElementType() override;
 
-        virtual bool SAL_CALL hasElements() override;
+        virtual bool hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
+        virtual void     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
+        virtual void disposing( const EventObject& aEvent ) override;
 
     protected:
         cpo::uno::Any getByNameImpl( const OUString& aName );
@@ -220,7 +220,7 @@ Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
     }
 }
 
-Any SAL_CALL ConfigurationAccess_UICommand::getByName( const OUString& rCommandURL )
+Any ConfigurationAccess_UICommand::getByName( const OUString& rCommandURL )
 {
     Any aRet( getByNameImpl( rCommandURL ) );
     if( !aRet.hasValue() )
@@ -229,23 +229,23 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByName( const OUString& rCommandU
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
+Sequence< OUString > ConfigurationAccess_UICommand::getElementNames()
 {
     return getAllCommands();
 }
 
-bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
+bool ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
 {
     return getByNameImpl( rCommandURL ).hasValue();
 }
 
 // XElementAccess
-Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
+Type ConfigurationAccess_UICommand::getElementType()
 {
     return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
-bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
+bool ConfigurationAccess_UICommand::hasElements()
 {
     // There must are global commands!
     return true;
@@ -517,21 +517,21 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& )
+void ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& )
 {
     std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& )
+void ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& )
 {
     std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& )
+void ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& )
 {
     std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
@@ -539,7 +539,7 @@ void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEve
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent )
+void ConfigurationAccess_UICommand::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -632,7 +632,7 @@ void UICommandDescription::impl_fillElements(const char* _pName)
     } // for ( sal_Int32 i = 0; i < aElementNames.(); i++ )
 }
 
-Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
+Any UICommandDescription::getByName( const OUString& aName )
 {
     SvtSysLocale aSysLocale;
     const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
@@ -681,14 +681,14 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
     return a;
 }
 
-Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
+Sequence< OUString > UICommandDescription::getElementNames()
 {
     std::unique_lock g(m_aMutex);
 
     return comphelper::mapKeysToSequence( m_aModuleToCommandFileMap );
 }
 
-bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
+bool UICommandDescription::hasByName( const OUString& aName )
 {
     std::unique_lock g(m_aMutex);
 
@@ -697,12 +697,12 @@ bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-Type SAL_CALL UICommandDescription::getElementType()
+Type UICommandDescription::getElementType()
 {
     return cppu::UnoType<XNameAccess>::get();
 }
 
-bool SAL_CALL UICommandDescription::hasElements()
+bool UICommandDescription::hasElements()
 {
     // generic UI commands are always available!
     return true;

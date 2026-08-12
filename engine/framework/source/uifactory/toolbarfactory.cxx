@@ -36,23 +36,23 @@ class ToolBarFactory :  public MenuBarFactory
 public:
     explicit ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.ToolBarFactory"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.ToolBarFactory"_ustr};
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement(
+    virtual css::uno::Reference< css::ui::XUIElement > createUIElement(
             const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
@@ -62,7 +62,7 @@ ToolBarFactory::ToolBarFactory( const css::uno::Reference< css::uno::XComponentC
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
+Reference< XUIElement > ToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {

@@ -37,7 +37,7 @@ StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
 {
 }
 
-void SAL_CALL StatusIndicatorInterfaceWrapper::start(
+void StatusIndicatorInterfaceWrapper::start(
     const OUString& sText,
     sal_Int32 nRange )
 {
@@ -46,21 +46,21 @@ void SAL_CALL StatusIndicatorInterfaceWrapper::start(
         xProgressBar->start( sText, nRange );
 }
 
-void SAL_CALL StatusIndicatorInterfaceWrapper::end()
+void StatusIndicatorInterfaceWrapper::end()
 {
     rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
     if ( xProgressBar.is() )
         xProgressBar->end();
 }
 
-void SAL_CALL StatusIndicatorInterfaceWrapper::reset()
+void StatusIndicatorInterfaceWrapper::reset()
 {
     rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
     if ( xProgressBar.is() )
         xProgressBar->reset();
 }
 
-void SAL_CALL StatusIndicatorInterfaceWrapper::setText(
+void StatusIndicatorInterfaceWrapper::setText(
     const OUString& sText )
 {
     rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
@@ -68,7 +68,7 @@ void SAL_CALL StatusIndicatorInterfaceWrapper::setText(
         xProgressBar->setText( sText );
 }
 
-void SAL_CALL StatusIndicatorInterfaceWrapper::setValue(
+void StatusIndicatorInterfaceWrapper::setValue(
     sal_Int32 nValue )
 {
     rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );

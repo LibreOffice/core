@@ -31,7 +31,7 @@ StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
 
 StatusIndicator::~StatusIndicator() {}
 
-void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
+void StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 {
     if (comphelper::COKit::isActive())
     {
@@ -49,7 +49,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 #endif
 }
 
-void SAL_CALL StatusIndicator::end()
+void StatusIndicator::end()
 {
     if (comphelper::COKit::isActive())
     {
@@ -62,7 +62,7 @@ void SAL_CALL StatusIndicator::end()
 #endif
 }
 
-void SAL_CALL StatusIndicator::reset()
+void StatusIndicator::reset()
 {
     if (comphelper::COKit::isActive())
         return;
@@ -73,7 +73,7 @@ void SAL_CALL StatusIndicator::reset()
 #endif
 }
 
-void SAL_CALL StatusIndicator::setText(const OUString& sText)
+void StatusIndicator::setText(const OUString& sText)
 {
     if (comphelper::COKit::isActive())
         return;
@@ -86,7 +86,7 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
 #endif
 }
 
-void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
+void StatusIndicator::setValue(sal_Int32 nValue)
 {
     if (comphelper::COKit::isActive())
     {

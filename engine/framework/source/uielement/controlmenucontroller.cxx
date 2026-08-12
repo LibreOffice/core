@@ -127,32 +127,32 @@ public:
     explicit ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.ControlMenuController"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.PopupMenuController"_ustr};
     }
 
     // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() override;
+    virtual void updatePopupMenu() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const frame::FeatureStateEvent& Event ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) override;
+    virtual void itemActivated( const awt::MenuEvent& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
+    virtual void disposing( const lang::EventObject& Source ) override;
 
 private:
     // XInitialization
@@ -224,7 +224,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > con
 }
 
 // XEventListener
-void SAL_CALL ControlMenuController::disposing( const EventObject& )
+void ControlMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
@@ -238,7 +238,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event )
+void ControlMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     std::unique_lock aLock( m_aMutex );
 
@@ -262,7 +262,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 }
 
 // XMenuListener
-void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
+void ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     std::unique_lock aLock( m_aMutex );
 
@@ -280,7 +280,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 }
 
 // XPopupMenuController
-void SAL_CALL ControlMenuController::updatePopupMenu()
+void ControlMenuController::updatePopupMenu()
 {
     std::unique_lock aLock( m_aMutex );
 

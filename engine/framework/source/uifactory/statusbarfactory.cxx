@@ -36,23 +36,23 @@ class StatusBarFactory :  public MenuBarFactory
 public:
     explicit StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.StatusBarFactory"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.StatusBarFactory"_ustr};
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+    virtual css::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
 StatusBarFactory::StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
@@ -61,7 +61,7 @@ StatusBarFactory::StatusBarFactory( const css::uno::Reference< css::uno::XCompon
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
+Reference< XUIElement > StatusBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {

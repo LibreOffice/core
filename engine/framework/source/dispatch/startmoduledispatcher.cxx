@@ -46,13 +46,13 @@ StartModuleDispatcher::~StartModuleDispatcher()
 {
 }
 
-void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
+void StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                               const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
+void StartModuleDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                               const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -70,22 +70,22 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
     implts_notifyResultListener(xListener, nResult, cpo::uno::Any());
 }
 
-cpo::uno::Sequence< ::sal_Int16 > SAL_CALL StartModuleDispatcher::getSupportedCommandGroups()
+cpo::uno::Sequence< ::sal_Int16 > StartModuleDispatcher::getSupportedCommandGroups()
 {
     return cpo::uno::Sequence< ::sal_Int16 >();
 }
 
-cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/)
+cpo::uno::Sequence< css::frame::DispatchInformation > StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/)
 {
     return cpo::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-void SAL_CALL StartModuleDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void StartModuleDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                        const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void StartModuleDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                           const css::util::URL&                                     /*aURL*/     )
 {
 }

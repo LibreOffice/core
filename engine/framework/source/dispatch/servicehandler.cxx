@@ -34,17 +34,17 @@ constexpr OUString PROTOCOL_VALUE = u"service:"_ustr;
 
 // XInterface, XTypeProvider, XServiceInfo
 
-OUString SAL_CALL ServiceHandler::getImplementationName()
+OUString ServiceHandler::getImplementationName()
 {
     return u"com.sun.star.comp.framework.ServiceHandler"_ustr;
 }
 
-bool SAL_CALL ServiceHandler::supportsService( const OUString& sServiceName )
+bool ServiceHandler::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ServiceHandler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ServiceHandler::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
@@ -78,7 +78,7 @@ ServiceHandler::~ServiceHandler()
                 We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 */
-css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
+css::uno::Reference< css::frame::XDispatch > ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
                                                                                      const OUString& /*sTarget*/ ,
                                                                                            sal_Int32        /*nFlags*/  )
 {
@@ -91,7 +91,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > ServiceHandler::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
     cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
@@ -116,7 +116,7 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
     @param      lArguments
                     list of optional arguments for this request
 */
-void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
+void ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ )
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
@@ -138,7 +138,7 @@ void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                   
     @param      xListener
                     optional listener for state events
 */
-void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&                                             aURL      ,
+void ServiceHandler::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -235,13 +235,13 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     @param      aURL
                     URL about listener will be informed, if something occurred
 */
-void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                  const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet
 }
 
-void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet

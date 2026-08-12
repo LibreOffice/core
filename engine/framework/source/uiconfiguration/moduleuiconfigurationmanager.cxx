@@ -86,54 +86,54 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
             const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.ModuleUIConfigurationManager"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.ModuleUIConfigurationManager"_ustr};
     }
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XUIConfiguration
-    virtual void SAL_CALL addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-    virtual void SAL_CALL removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
     // XUIConfigurationManager
-    virtual void SAL_CALL reset() override;
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
-    virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
-    virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
-    virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) override;
-    virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getImageManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL createShortCutManager() override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() override;
+    virtual void reset() override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getUIElementsInfo( sal_Int16 ElementType ) override;
+    virtual css::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
+    virtual bool hasSettings( const OUString& ResourceURL ) override;
+    virtual css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
+    virtual void replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual void removeSettings( const OUString& ResourceURL ) override;
+    virtual void insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getImageManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
+    virtual css::uno::Reference< css::uno::XInterface > getEventsManager() override;
 
     // XModuleUIConfigurationManager
-    virtual bool SAL_CALL isDefaultSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getDefaultSettings( const OUString& ResourceURL ) override;
+    virtual bool isDefaultSettings( const OUString& ResourceURL ) override;
+    virtual css::uno::Reference< css::container::XIndexAccess > getDefaultSettings( const OUString& ResourceURL ) override;
 
     // XUIConfigurationPersistence
-    virtual void SAL_CALL reload() override;
-    virtual void SAL_CALL store() override;
-    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual bool SAL_CALL isModified() override;
-    virtual bool SAL_CALL isReadOnly() override;
+    virtual void reload() override;
+    virtual void store() override;
+    virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual bool isModified() override;
+    virtual bool isReadOnly() override;
 
 private:
     // private data types
@@ -892,7 +892,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 }
 
 // XComponent
-void SAL_CALL ModuleUIConfigurationManager::dispose()
+void ModuleUIConfigurationManager::dispose()
 {
     Reference< XComponent > xThis(this);
 
@@ -930,7 +930,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
     }
 }
 
-void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener )
+void ModuleUIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener )
 {
     {
         SolarMutexGuard g;
@@ -944,7 +944,7 @@ void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< X
     m_aEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
+void ModuleUIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
@@ -952,7 +952,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference
 }
 
 // XUIConfiguration
-void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
+void ModuleUIConfigurationManager::addConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     {
         SolarMutexGuard g;
@@ -966,7 +966,7 @@ void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Refe
     m_aConfigListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
+void ModuleUIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
@@ -974,7 +974,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const R
 }
 
 // XUIConfigurationManager
-void SAL_CALL ModuleUIConfigurationManager::reset()
+void ModuleUIConfigurationManager::reset()
 {
     SolarMutexClearableGuard aGuard;
 
@@ -1059,7 +1059,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
     }
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
+Sequence< Sequence< PropertyValue > > ModuleUIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
 {
     if (( ElementType < 0 ) || ( ElementType >= css::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
@@ -1093,7 +1093,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     return comphelper::containerToSequence(aElementInfoSeq);
 }
 
-Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettings()
+Reference< XIndexContainer > ModuleUIConfigurationManager::createSettings()
 {
     SolarMutexGuard g;
 
@@ -1104,7 +1104,7 @@ Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettin
     return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
-bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
+bool ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1124,7 +1124,7 @@ bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& Resourc
     return false;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
+Reference< XIndexAccess > ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1150,7 +1150,7 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( co
     throw NoSuchElementException();
 }
 
-void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< css::container::XIndexAccess >& aNewData )
+void ModuleUIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< css::container::XIndexAccess >& aNewData )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1253,7 +1253,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
     }
 }
 
-void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& ResourceURL )
+void ModuleUIConfigurationManager::removeSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1334,7 +1334,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
     }
 }
 
-void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
+void ModuleUIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
 
@@ -1392,7 +1392,7 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
     }
 }
 
-Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
+Reference< XInterface > ModuleUIConfigurationManager::getImageManager()
 {
     SolarMutexGuard g;
 
@@ -1415,12 +1415,12 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xModuleImageManager.get()), UNO_QUERY );
 }
 
-Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::createShortCutManager()
+Reference< ui::XAcceleratorConfiguration > ModuleUIConfigurationManager::createShortCutManager()
 {
     return ui::ModuleAcceleratorConfiguration::createWithModuleIdentifier(m_xContext, m_aModuleIdentifier);
 }
 
-Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager()
+Reference< ui::XAcceleratorConfiguration > ModuleUIConfigurationManager::getShortCutManager()
 {
     SolarMutexGuard g;
 
@@ -1441,13 +1441,13 @@ Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager
     return m_xModuleAcceleratorManager;
 }
 
-Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getEventsManager()
+Reference< XInterface > ModuleUIConfigurationManager::getEventsManager()
 {
     return Reference< XInterface >();
 }
 
 // XModuleUIConfigurationManager
-bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUString& ResourceURL )
+bool ModuleUIConfigurationManager::isDefaultSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1467,7 +1467,7 @@ bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUString& R
     return false;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const OUString& ResourceURL )
+Reference< XIndexAccess > ModuleUIConfigurationManager::getDefaultSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1498,7 +1498,7 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSetti
 }
 
 // XUIConfigurationPersistence
-void SAL_CALL ModuleUIConfigurationManager::reload()
+void ModuleUIConfigurationManager::reload()
 {
     SolarMutexClearableGuard aGuard;
 
@@ -1541,7 +1541,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
         implts_notifyContainerListener( k, NotifyOp_Replace );
 }
 
-void SAL_CALL ModuleUIConfigurationManager::store()
+void ModuleUIConfigurationManager::store()
 {
     SolarMutexGuard g;
 
@@ -1573,7 +1573,7 @@ void SAL_CALL ModuleUIConfigurationManager::store()
     m_bModified = false;
 }
 
-void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage )
+void ModuleUIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage )
 {
     SolarMutexGuard g;
 
@@ -1606,14 +1606,14 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
         xTransactedObject->commit();
 }
 
-bool SAL_CALL ModuleUIConfigurationManager::isModified()
+bool ModuleUIConfigurationManager::isModified()
 {
     SolarMutexGuard g;
 
     return m_bModified;
 }
 
-bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
+bool ModuleUIConfigurationManager::isReadOnly()
 {
     SolarMutexGuard g;
 
@@ -1623,7 +1623,7 @@ bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    using ListenerMethodType = void (SAL_CALL css::ui::XUIConfigurationListener::*)(const ui::ConfigurationEvent&);
+    using ListenerMethodType = void (css::ui::XUIConfigurationListener::*)(const ui::ConfigurationEvent&);
     ListenerMethodType aListenerMethod {};
     switch ( eOp )
     {

@@ -60,62 +60,62 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         virtual  ~UIConfigElementWrapperBase() override;
 
         //  XInterface
-        virtual void SAL_CALL acquire() noexcept override
+        virtual void acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() noexcept override
+        virtual void release() noexcept override
             { OWeakObject::release(); }
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& type) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XComponent
-        virtual  void SAL_CALL dispose() override = 0;
-        virtual  void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual  void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual  void dispose() override = 0;
+        virtual  void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual  void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XInitialization
-        virtual  void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual  void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElementSettings
-        virtual  void SAL_CALL updateSettings() override = 0;
-        virtual  css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( bool bWriteable ) override;
-        virtual  void SAL_CALL setSettings( const css::uno::Reference< css::container::XIndexAccess >& UISettings ) override;
+        virtual  void updateSettings() override = 0;
+        virtual  css::uno::Reference< css::container::XIndexAccess > getSettings( bool bWriteable ) override;
+        virtual  void setSettings( const css::uno::Reference< css::container::XIndexAccess >& UISettings ) override;
 
         // XUIElement
-        virtual  css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() override;
-        virtual  OUString SAL_CALL getResourceURL() override;
-        virtual  ::sal_Int16 SAL_CALL getType() override;
-        virtual  css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override = 0;
+        virtual  css::uno::Reference< css::frame::XFrame > getFrame() override;
+        virtual  OUString getResourceURL() override;
+        virtual  ::sal_Int16 getType() override;
+        virtual  css::uno::Reference< css::uno::XInterface > getRealInterface() override = 0;
 
         // XUpdatable
-        virtual  void SAL_CALL update() override;
+        virtual  void update() override;
 
         //  XUIConfigurationListener
-        virtual  void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-        virtual  void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-        virtual  void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+        virtual  void elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual  void elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual  void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
-        virtual  void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        virtual  void disposing( const css::lang::EventObject& aEvent ) override;
 
     //  protected methods
 
     protected:
 
         //  OPropertySetHelper
-        virtual  bool                                            SAL_CALL convertFastPropertyValue        ( cpo::uno::Any&        aConvertedValue ,
+        virtual  bool                                            convertFastPropertyValue        ( cpo::uno::Any&        aConvertedValue ,
                                                                                                                cpo::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
-        virtual  void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+        virtual  void                                                setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                const cpo::uno::Any&  aValue          ) override;
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual  void                                                SAL_CALL getFastPropertyValue( cpo::uno::Any&    aValue          ,
+        virtual  void                                                getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
-        virtual  ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-        virtual  css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+        virtual  ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
+        virtual  css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         virtual  void impl_fillNewData();
 

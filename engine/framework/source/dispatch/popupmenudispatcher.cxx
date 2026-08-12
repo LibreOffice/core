@@ -60,22 +60,22 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
     // and a dtor isn't the best place to do that!
 }
 
-OUString SAL_CALL PopupMenuDispatcher::getImplementationName()
+OUString PopupMenuDispatcher::getImplementationName()
 {
     return u"com.sun.star.comp.framework.PopupMenuControllerDispatcher"_ustr;
 }
 
-bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
+bool PopupMenuDispatcher::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PopupMenuDispatcher::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
 
-void SAL_CALL PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments )
+void PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments )
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -95,7 +95,7 @@ void SAL_CALL PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::un
 }
 
 css::uno::Reference< css::frame::XDispatch >
-SAL_CALL PopupMenuDispatcher::queryDispatch(
+PopupMenuDispatcher::queryDispatch(
     const css::util::URL&  rURL    ,
     const OUString& sTarget ,
     sal_Int32              nFlags  )
@@ -155,7 +155,7 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     return xDispatch;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
 PopupMenuDispatcher::queryDispatches(
     const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
@@ -172,21 +172,21 @@ PopupMenuDispatcher::queryDispatches(
     return lDispatcher;
 }
 
-void SAL_CALL PopupMenuDispatcher::dispatch( const URL& /*aURL*/, const Sequence< PropertyValue >& /*seqProperties*/ )
+void PopupMenuDispatcher::dispatch( const URL& /*aURL*/, const Sequence< PropertyValue >& /*seqProperties*/ )
 {
 }
 
-void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
+void PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
                                                       const URL& /*aURL*/ )
 {
 }
 
-void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
+void PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
                                                          const URL& /*aURL*/ )
 {
 }
 
-void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
+void PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
 {
     SolarMutexGuard g;
     if (( aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING ) ||
@@ -197,7 +197,7 @@ void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
     }
 }
 
-void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& )
+void PopupMenuDispatcher::disposing( const EventObject& )
 {
     SolarMutexGuard g;
     // Safe impossible cases

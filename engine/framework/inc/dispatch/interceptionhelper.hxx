@@ -188,7 +188,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
             @return A valid dispatch object, if any interceptor or at least our slave is interested on the given URL;
                     or NULL otherwise.
          */
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL&  aURL            ,
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(const css::util::URL&  aURL            ,
                                                                                     const OUString& sTargetFrameName,
                                                                                           sal_Int32        nSearchFlags    ) override;
 
@@ -205,7 +205,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @return A list of dispatch objects.
          */
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
 
         // XDispatchProviderInterception
 
@@ -222,7 +222,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @throw      A RuntimeException if the given reference is NULL!
          */
-        virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
         // XDispatchProviderInterception
 
@@ -236,7 +236,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @throw      A RuntimeException if the given reference is NULL!
          */
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) override;
 
         // XEventListener
 
@@ -245,7 +245,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
             @descr      We have to release all references to him then.
                         Normally we will die by ref count too...
          */
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
         const rtl::Reference<DispatchProvider> & GetSlave() const { return m_xSlave; }
 

@@ -496,42 +496,42 @@ public:
     explicit AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  xContext);
     virtual ~AutoRecovery(                                                                   ) override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.framework.AutoRecovery"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.AutoRecovery"_ustr};
     }
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override
+    virtual void acquire() noexcept override
         { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
         { OWeakObject::release(); }
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& type) override;
 
     /// Initialization function after having acquire()'d.
     void initListeners();
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
     // css.frame.XDispatch
-    virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
+    virtual void dispatch(const css::util::URL&                                  aURL      ,
                                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
-    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                             const css::util::URL&                                     aURL     ) override;
 
-    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                const css::util::URL&                                     aURL     ) override;
 
     // css.document.XDocumentEventListener
@@ -544,38 +544,38 @@ public:
         @param  aEvent
                 points to the new created/opened document.
      */
-    virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent) override;
+    virtual void documentEventOccured(const css::document::DocumentEvent& aEvent) override;
 
     // css.util.XChangesListener
-    virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) override;
+    virtual void changesOccurred(const css::util::ChangesEvent& aEvent) override;
 
     // css.util.XModifyListener
-    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
+    virtual void modified(const css::lang::EventObject& aEvent) override;
 
     // css.lang.XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& aEvent) override;
 
 protected:
 
     // OPropertySetHelper
 
-    virtual bool SAL_CALL convertFastPropertyValue(      cpo::uno::Any& aConvertedValue,
+    virtual bool convertFastPropertyValue(      cpo::uno::Any& aConvertedValue,
                                                              cpo::uno::Any& aOldValue      ,
                                                              sal_Int32      nHandle        ,
                                                        const cpo::uno::Any& aValue         ) override;
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
+    virtual void setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
                                                            const cpo::uno::Any& aValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& aValue ,
+    virtual void getFastPropertyValue(cpo::uno::Any& aValue ,
                                                sal_Int32      nHandle) const override;
 
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
 private:
-    virtual void SAL_CALL disposing() final override;
+    virtual void disposing() final override;
 
     /** @short  open the underlying configuration.
 
@@ -1271,7 +1271,7 @@ void AutoRecovery::disposing()
     m_xAsyncDispatcher.reset();
 }
 
-Any SAL_CALL AutoRecovery::queryInterface( const cpo::uno::Type& _rType )
+Any AutoRecovery::queryInterface( const cpo::uno::Type& _rType )
 {
     Any aRet = AutoRecovery_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -1279,7 +1279,7 @@ Any SAL_CALL AutoRecovery::queryInterface( const cpo::uno::Type& _rType )
     return aRet;
 }
 
-Sequence< cpo::uno::Type > SAL_CALL AutoRecovery::getTypes(  )
+Sequence< cpo::uno::Type > AutoRecovery::getTypes(  )
 {
     return comphelper::concatSequences(
         AutoRecovery_BASE::getTypes(),
@@ -1287,7 +1287,7 @@ Sequence< cpo::uno::Type > SAL_CALL AutoRecovery::getTypes(  )
     );
 }
 
-void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                                  aURL      ,
+void AutoRecovery::dispatch(const css::util::URL&                                  aURL      ,
                                      const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << aURL.Complete);
@@ -1517,7 +1517,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         implts_startListening();
 }
 
-void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+void AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                               const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
@@ -1545,7 +1545,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     } /* SAFE */
 }
 
-void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+void AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                  const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
@@ -1554,7 +1554,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
 
-void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
+void AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
 {
     css::uno::Reference< css::frame::XModel3 > xDocument(aEvent.Source, css::uno::UNO_QUERY);
 
@@ -1622,7 +1622,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     }
 }
 
-void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
+void AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1676,7 +1676,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     implts_updateTimer();
 }
 
-void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
+void AutoRecovery::modified(const css::lang::EventObject& aEvent)
 {
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (! xDocument.is())
@@ -1685,7 +1685,7 @@ void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
     implts_markDocumentModifiedAgainstLastBackup(xDocument);
 }
 
-void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
+void AutoRecovery::disposing(const css::lang::EventObject& aEvent)
 {
     /* SAFE */
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -3957,7 +3957,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     return AutoRecovery::E_COPIED;
 }
 
-bool SAL_CALL AutoRecovery::convertFastPropertyValue(      cpo::uno::Any& /*aConvertedValue*/,
+bool AutoRecovery::convertFastPropertyValue(      cpo::uno::Any& /*aConvertedValue*/,
                                                                cpo::uno::Any& /*aOldValue*/      ,
                                                                sal_Int32      /*nHandle*/        ,
                                                          const cpo::uno::Any& /*aValue*/         )
@@ -3966,13 +3966,13 @@ bool SAL_CALL AutoRecovery::convertFastPropertyValue(      cpo::uno::Any& /*aCon
     return false;
 }
 
-void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
+void AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
                                                              const cpo::uno::Any& /*aValue*/ )
 {
     // not needed currently
 }
 
-void SAL_CALL AutoRecovery::getFastPropertyValue(cpo::uno::Any& aValue ,
+void AutoRecovery::getFastPropertyValue(cpo::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
 {
     switch(nHandle)
@@ -4011,14 +4011,14 @@ cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
     };
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL AutoRecovery::getInfoHelper()
+::cppu::IPropertyArrayHelper& AutoRecovery::getInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper ourInfoHelper(impl_getStaticPropertyDescriptor(), true);
 
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo > AutoRecovery::getPropertySetInfo()
 {
     static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
                     ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
