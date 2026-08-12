@@ -322,6 +322,9 @@ inline constexpr OUString UNO_NAME_EDIT_CHAR_WEIGHT = u"CharWeight"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTVARIATIONS = u"CharFontVariations"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTVARIATIONS_ASIAN = u"CharFontVariationsAsian"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTVARIATIONS_COMPLEX = u"CharFontVariationsComplex"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTFEATURES = u"CharFontFeatures"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTFEATURES_ASIAN = u"CharFontFeaturesAsian"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTFEATURES_COMPLEX = u"CharFontFeaturesComplex"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_OPTICALSIZING = u"CharOpticalSizing"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_LOCALE = u"CharLocale"_ustr;
 

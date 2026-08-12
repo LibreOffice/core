@@ -37,6 +37,7 @@
 #include <svl/voiditem.hxx>
 #include <tools/stream.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <vcl/font/Feature.hxx>
@@ -143,6 +144,8 @@ public:
     void testTdf157037PasteTextAutoDirection();
     void testFontVariationsItem();
     void testFontVariationsScript();
+    void testFontFeaturesItem();
+    void testFontFeaturesScript();
     void testEscapementNotPreservedOnParaBreak();
     void testAutoDirNotPreservedOnParaBreak();
     void testFontTypographicConversion();
@@ -183,6 +186,8 @@ public:
     CPPUNIT_TEST(testTdf157037PasteTextAutoDirection);
     CPPUNIT_TEST(testFontVariationsItem);
     CPPUNIT_TEST(testFontVariationsScript);
+    CPPUNIT_TEST(testFontFeaturesItem);
+    CPPUNIT_TEST(testFontFeaturesScript);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
     CPPUNIT_TEST(testAutoDirNotPreservedOnParaBreak);
     CPPUNIT_TEST(testFontTypographicConversion);
@@ -2624,6 +2629,61 @@ void Test::testFontTypographicConversion()
     CPPUNIT_ASSERT_EQUAL(u"DejaVu Sans"_ustr, rStored.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL(u"Condensed"_ustr, rStored.GetStyleName());
 #endif
+}
+
+void Test::testFontFeaturesScript()
+{
+    // Each script's font carries its own features, so the attribute for one
+    // script must not be applied to text of another.
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTFEATURES, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES, i18n::ScriptType::COMPLEX));
+
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES_CJK, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTFEATURES_CJK, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES_CJK, i18n::ScriptType::COMPLEX));
+
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES_CTL, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTFEATURES_CTL, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTFEATURES_CTL, i18n::ScriptType::COMPLEX));
+
+    // and the base which resolves to the script's own, so a font built from an
+    // item set gets the features of its own script
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_FONTFEATURES_CJK),
+                         GetScriptItemId(EE_CHAR_FONTFEATURES, SvtScriptType::ASIAN));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_FONTFEATURES_CTL),
+                         GetScriptItemId(EE_CHAR_FONTFEATURES, SvtScriptType::COMPLEX));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_FONTFEATURES),
+                         GetScriptItemId(EE_CHAR_FONTFEATURES, SvtScriptType::LATIN));
+}
+
+void Test::testFontFeaturesItem()
+{
+    SvxFontFeaturesItem aEmpty(EE_CHAR_FONTFEATURES);
+    CPPUNIT_ASSERT(aEmpty.GetFeatures().empty());
+
+    std::vector<vcl::font::FeatureSetting> aFeatures{
+        { vcl::font::featureCode("smcp"), 1 },
+        { vcl::font::featureCode("onum"), 0 },
+    };
+    SvxFontFeaturesItem aItem(aFeatures, EE_CHAR_FONTFEATURES);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aItem.GetFeatures().size());
+
+    SvxFontFeaturesItem aSame(aFeatures, EE_CHAR_FONTFEATURES);
+    CPPUNIT_ASSERT(aItem == aSame);
+    CPPUNIT_ASSERT_EQUAL(aItem.hashCode(), aSame.hashCode());
+    CPPUNIT_ASSERT(!(aItem == aEmpty));
+
+    // The item travels as the CSS font-feature-settings string
+    css::uno::Any aAny;
+    aItem.QueryValue(aAny);
+    OUString sValue;
+    CPPUNIT_ASSERT(aAny >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(u"\"smcp\" 1, \"onum\" 0"_ustr, sValue);
+
+    SvxFontFeaturesItem aRoundTrip(EE_CHAR_FONTFEATURES);
+    CPPUNIT_ASSERT(aRoundTrip.PutValue(aAny, 0));
+    CPPUNIT_ASSERT(aItem == aRoundTrip);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

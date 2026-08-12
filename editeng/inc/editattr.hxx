@@ -414,6 +414,15 @@ public:
 };
 
 
+class EditCharAttribFontFeatures final : public EditCharAttrib
+{
+public:
+    EditCharAttribFontFeatures(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd);
+
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
+};
+
+
 
 class EditCharAttribGrabBag final : public EditCharAttrib
 {
