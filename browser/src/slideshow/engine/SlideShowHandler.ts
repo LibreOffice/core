@@ -82,6 +82,8 @@ class SlideShowHandler {
 	private enteringSlideTexture: WebGLTexture | ImageBitmap;
 	public isStarting: boolean;
 	private bIsFirstAutoEffectRunning: boolean = false;
+	private static readonly A11Y_TRANSITION_DELAY: number = 1000;
+	private static readonly A11Y_SLIDE_CONTENT_DELAY: number = 2000;
 	private transitionsWithMipMapEnabled = new Set([
 		TransitionSubType.CORNERSOUT,
 		TransitionSubType.TOPTOBOTTOM,
@@ -417,9 +419,9 @@ class SlideShowHandler {
 			setTimeout(
 				this.addA11yString.bind(
 					this,
-					_('Transition Start: ') + slideInfo.transitionLabel,
+					_('Transition: {0}').replace('{0}', slideInfo.transitionLabel),
 				),
-				500,
+				SlideShowHandler.A11Y_TRANSITION_DELAY,
 			);
 		}
 	}
@@ -433,11 +435,6 @@ class SlideShowHandler {
 				', this.bIsRewinding: ' +
 				this.bIsRewinding,
 		);
-
-		const slideInfo = this.getSlideInfo(nNewSlide);
-		if (slideInfo.transitionLabel) {
-			this.addA11yString(_('Transition End: '));
-		}
 
 		this.bIsTransitionRunning = false;
 		if (!this.presenter._checkAlreadyPresenting()) return;
@@ -1069,7 +1066,10 @@ class SlideShowHandler {
 	private presentSlide(nSlideIndex: number) {
 		const slideInfo = this.getSlideInfo(nSlideIndex);
 		if (slideInfo.a11y) {
-			setTimeout(this.addA11yString.bind(this, slideInfo.a11y), 500);
+			setTimeout(
+				this.addA11yString.bind(this, slideInfo.a11y),
+				SlideShowHandler.A11Y_SLIDE_CONTENT_DELAY,
+			);
 		}
 
 		let slideTexture = this.enteringSlideTexture;
