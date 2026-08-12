@@ -20,10 +20,12 @@ using namespace css;
 
 namespace cui
 {
-FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName)
+FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName,
+                                       std::vector<vcl::font::FeatureSetting> aFeatures)
     : GenericDialogController(pParent, u"cui/ui/fontfeaturesdialog.ui"_ustr,
                               u"FontFeaturesDialog"_ustr)
     , m_sFontName(std::move(aFontName))
+    , m_aExistingFeatures(std::move(aFeatures))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
     , m_xContentBox(m_xBuilder->weld_container(u"contentBox"_ustr))
     , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
@@ -93,8 +95,9 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 {
     int nRowHeight(0);
 
-    vcl::font::FeatureParser aParser(m_sFontName);
-    auto aExistingFeatures = aParser.getFeaturesMap();
+    std::unordered_map<uint32_t, int32_t> aExistingFeatures;
+    for (auto const& rFeature : m_aExistingFeatures)
+        aExistingFeatures.emplace(rFeature.m_nTag, rFeature.m_nValue);
 
     sal_Int32 nIdx, nStylisticSets(0), nCharacterVariants(0), nOtherFeatures(0);
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
@@ -193,11 +196,11 @@ void FontFeaturesDialog::updateFontPreview()
     vcl::Font rPreviewFontCJK = m_aPreviewWindow.GetCJKFont();
     vcl::Font rPreviewFontCTL = m_aPreviewWindow.GetCTLFont();
 
-    OUString sNewFontName = createFontNameWithFeatures();
+    const std::vector<vcl::font::FeatureSetting> aFeatures = getFeatures();
 
-    rPreviewFont.SetFamilyName(sNewFontName);
-    rPreviewFontCJK.SetFamilyName(sNewFontName);
-    rPreviewFontCTL.SetFamilyName(sNewFontName);
+    rPreviewFont.SetFeatures(aFeatures);
+    rPreviewFontCJK.SetFeatures(aFeatures);
+    rPreviewFontCTL.SetFeatures(aFeatures);
 
     m_aPreviewWindow.SetFont(rPreviewFont, rPreviewFontCJK, rPreviewFontCTL);
 }
@@ -219,11 +222,9 @@ IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, weld::ComboBox&, void)
     updateFontPreview();
 }
 
-OUString FontFeaturesDialog::createFontNameWithFeatures() const
+std::vector<vcl::font::FeatureSetting> FontFeaturesDialog::getFeatures() const
 {
-    OUString sResultFontName;
-    OUStringBuffer sNameSuffix;
-    bool bFirst = true;
+    std::vector<vcl::font::FeatureSetting> aFeatures;
 
     for (const auto& rEntry : m_aFeatureItems)
     {
@@ -231,36 +232,18 @@ OUString FontFeaturesDialog::createFontNameWithFeatures() const
         if (rItem.m_xCheck->get_visible())
         {
             if (rItem.m_xCheck->get_state() != TRISTATE_INDET)
-            {
-                if (!bFirst)
-                    sNameSuffix.append(vcl::font::FeatureSeparator);
-                else
-                    bFirst = false;
-
-                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
-                if (rItem.m_xCheck->get_state() == TRISTATE_FALSE)
-                    sNameSuffix.append("=0");
-            }
+                aFeatures.push_back({ rItem.m_aFeatureCode,
+                                      rItem.m_xCheck->get_state() == TRISTATE_FALSE ? 0u : 1u });
         }
         else if (rItem.m_xCombo->get_visible() && rItem.m_xText->get_visible())
         {
             sal_Int32 nSelection = rItem.m_xCombo->get_active_id().toInt32();
             if (nSelection != int(rItem.m_nDefault))
-            {
-                if (!bFirst)
-                    sNameSuffix.append(vcl::font::FeatureSeparator);
-                else
-                    bFirst = false;
-
-                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode) + "="
-                                   + OUString::number(nSelection));
-            }
+                aFeatures.push_back({ rItem.m_aFeatureCode, static_cast<uint32_t>(nSelection) });
         }
     }
-    sResultFontName = vcl::font::trimFontNameFeatures(m_sFontName);
-    if (!sNameSuffix.isEmpty())
-        sResultFontName += OUStringChar(vcl::font::FeaturePrefix) + sNameSuffix;
-    return sResultFontName;
+
+    return aFeatures;
 }
 
 } // end svx namespace
