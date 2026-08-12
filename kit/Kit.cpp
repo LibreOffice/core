@@ -194,6 +194,8 @@ bool isURPEnabled() { return EnableWebsocketURP; }
 /// system root, not the jail.
 static std::string JailRoot;
 
+std::string getJailRoot() { return JailRoot; }
+
 #if !MOBILEAPP
 static int URPtoLoFDs[2] { -1, -1 };
 static int URPfromLoFDs[2] { -1, -1 };

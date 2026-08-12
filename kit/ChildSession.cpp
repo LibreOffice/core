@@ -561,7 +561,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "addconfig"))
     {
-        Poco::Path presetsPath(JAILED_CONFIG_ROOT);
+        const Poco::Path presetsPath(getJailRoot() + JAILED_CONFIG_ROOT);
         getLOKit()->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
     }
     else if (tokens.equals(0, "userpersistence"))

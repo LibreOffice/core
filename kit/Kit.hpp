@@ -54,6 +54,8 @@ void lokit_main(
 #endif
     std::size_t numericIdentifier);
 
+std::string getJailRoot();
+
 bool globalPreinit(const std::string& loTemplate);
 /// Wrapper around private Document::ViewCallback().
 void documentViewCallback(COKitCallbackType eType, const char* p, void* data);
