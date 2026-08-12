@@ -151,6 +151,7 @@ private:
 
     SAL_DLLPRIVATE bool HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 
+    SAL_DLLPRIVATE void SetFeatures(const std::vector<vcl::font::FeatureSetting>& rFeatures);
     SAL_DLLPRIVATE void ParseFeatures(std::u16string_view name);
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;

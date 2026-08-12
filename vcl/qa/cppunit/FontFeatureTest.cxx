@@ -28,12 +28,14 @@ public:
     void testGetFontFeaturesOpenType();
     void testGetFontFeaturesOpenTypeEnum();
     void testParseFeature();
+    void testFeatureSettingsString();
 
     CPPUNIT_TEST_SUITE(FontFeatureTest);
     CPPUNIT_TEST(testGetFontFeaturesGraphite);
     CPPUNIT_TEST(testGetFontFeaturesOpenType);
     CPPUNIT_TEST(testGetFontFeaturesOpenTypeEnum);
     CPPUNIT_TEST(testParseFeature);
+    CPPUNIT_TEST(testFeatureSettingsString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -431,6 +433,45 @@ void FontFeatureTest::testParseFeature()
 
         CPPUNIT_ASSERT_EQUAL(u"slo"_ustr, aParser.getLanguage());
     }
+}
+
+void FontFeatureTest::testFeatureSettingsString()
+{
+    // The CSS font-feature-settings syntax, which is what the attribute stores
+    {
+        auto aFeatures = vcl::font::FeaturesFromString(u"\"smcp\" 1, \"onum\" 0");
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aFeatures.size());
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("smcp"), aFeatures[0].m_nTag);
+        CPPUNIT_ASSERT_EQUAL(uint32_t(1), aFeatures[0].m_nValue);
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("onum"), aFeatures[1].m_nTag);
+        CPPUNIT_ASSERT_EQUAL(uint32_t(0), aFeatures[1].m_nValue);
+    }
+
+    // A setting with no value is on, and "on"/"off" are accepted as in CSS
+    {
+        auto aFeatures = vcl::font::FeaturesFromString(u"\"liga\", \"dlig\" on, \"hlig\" off");
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aFeatures.size());
+        CPPUNIT_ASSERT_EQUAL(uint32_t(1), aFeatures[0].m_nValue);
+        CPPUNIT_ASSERT_EQUAL(uint32_t(1), aFeatures[1].m_nValue);
+        CPPUNIT_ASSERT_EQUAL(uint32_t(0), aFeatures[2].m_nValue);
+    }
+
+    // A stylistic set takes the number its value carries
+    {
+        auto aFeatures = vcl::font::FeaturesFromString(u"\"ss01\" 1, \"cv01\" 3");
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aFeatures.size());
+        CPPUNIT_ASSERT_EQUAL(uint32_t(3), aFeatures[1].m_nValue);
+    }
+
+    // Nothing usable is nothing, not a bogus tag
+    CPPUNIT_ASSERT(vcl::font::FeaturesFromString(u"").empty());
+    CPPUNIT_ASSERT(vcl::font::FeaturesFromString(u"smcp 1").empty());
+    CPPUNIT_ASSERT(vcl::font::FeaturesFromString(u"\"toolong\" 1").empty());
+
+    // And back out the way it came
+    OUString sSettings(u"\"smcp\" 1, \"onum\" 0"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sSettings,
+                         vcl::font::FeaturesToString(vcl::font::FeaturesFromString(sSettings)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FontFeatureTest);
