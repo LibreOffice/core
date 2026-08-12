@@ -514,16 +514,19 @@ if ENABLE_FUZZERS
 all-local:
 else
 all-local: unittest unithttplib clienttest
-	@echo
-	@echo "Running build-time unit tests.  For more thorough testing, please run 'make check'."
-	@echo "Test output is in `pwd`/test.log and is displayed on failure."
-	@echo
-	@fc-cache "@LO_PATH@"/share/fonts/truetype
-	@UNITTEST=1 ${top_builddir}/test/clienttest --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
-	@UNITTEST=1 ${top_builddir}/test/unittest --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
-	@UNITTEST=1 ${top_builddir}/test/unithttplib --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
-	@echo "Done test all-local"
-	@$(CLEANUP_COMMAND)
+	@if [ -n "$${COOL_SKIP_UNITTESTS}" ]; then \
+	    exit 0; \
+	fi; \
+	echo; \
+	echo "Running build-time unit tests.  For more thorough testing, please run 'make check'."; \
+	echo "Test output is in `pwd`/test.log and is displayed on failure."; \
+	echo; \
+	fc-cache "@LO_PATH@"/share/fonts/truetype; \
+	UNITTEST=1 ${top_builddir}/test/clienttest --cert-path ${abs_top_srcdir}/etc 2> test.log || { cat test.log; exit 1; }; \
+	UNITTEST=1 ${top_builddir}/test/unittest --cert-path ${abs_top_srcdir}/etc 2> test.log || { cat test.log; exit 1; }; \
+	UNITTEST=1 ${top_builddir}/test/unithttplib --cert-path ${abs_top_srcdir}/etc 2> test.log || { cat test.log; exit 1; }; \
+	echo "Done test all-local"; \
+	$(CLEANUP_COMMAND)
 endif
 
 distclean-local:
