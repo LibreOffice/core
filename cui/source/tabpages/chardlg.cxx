@@ -65,6 +65,7 @@
 #include <FontFeatures.hxx>
 #include <FontFeaturesDialog.hxx>
 #include <svx/FontVariationsPopup.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -86,7 +87,9 @@ const WhichRangesContainer SvxCharNamePage::pNameRanges(svl::Items<
     SID_ATTR_CHAR_CJK_FONT, SID_ATTR_CHAR_CJK_WEIGHT,
     SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT,
     SID_ATTR_CHAR_OPTICAL_SIZING, SID_ATTR_CHAR_OPTICAL_SIZING,
-    SID_ATTR_CHAR_FONT_VARIATIONS, SID_ATTR_CHAR_FONT_VARIATIONS
+    SID_ATTR_CHAR_FONT_VARIATIONS, SID_ATTR_CHAR_FONT_VARIATIONS,
+    SID_ATTR_CHAR_FONT_FEATURES, SID_ATTR_CHAR_FONT_FEATURES,
+    SID_ATTR_CHAR_CJK_FONT_FEATURES, SID_ATTR_CHAR_CTL_FONT_FEATURES
 >);
 
 const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(svl::Items<
@@ -491,6 +494,10 @@ void SvxCharNamePage::UpdatePreview_Impl()
     rFont.SetVariations(m_oFontVariations.value_or(std::vector<vcl::font::Variation>()));
     rCJKFont.SetVariations(m_oCJKFontVariations.value_or(std::vector<vcl::font::Variation>()));
     rCTLFont.SetVariations(m_oCTLFontVariations.value_or(std::vector<vcl::font::Variation>()));
+
+    rFont.SetFeatures(m_oFontFeatures.value_or(std::vector<vcl::font::FeatureSetting>()));
+    rCJKFont.SetFeatures(m_oCJKFontFeatures.value_or(std::vector<vcl::font::FeatureSetting>()));
+    rCTLFont.SetFeatures(m_oCTLFontFeatures.value_or(std::vector<vcl::font::FeatureSetting>()));
 
     m_aPreviewWin.Invalidate();
 }
@@ -1215,30 +1222,32 @@ IMPL_LINK(SvxCharNamePage, FontStyleModifyHdl_Impl, weld::ComboBox&, rBox, void)
 IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, void)
 {
     OUString sFontName;
-    weld::ComboBox* pNameBox = nullptr;
+    std::optional<std::vector<vcl::font::FeatureSetting>>* pFeatures = nullptr;
 
     if (&rButton == m_xWestFontFeaturesButton.get())
     {
-        pNameBox = m_xWestFontNameLB.get();
+        pFeatures = &m_oFontFeatures;
         sFontName = GetPreviewFont().GetFamilyName();
     }
     else if (&rButton == m_xEastFontFeaturesButton.get())
     {
-        pNameBox = m_xEastFontNameLB.get();
+        pFeatures = &m_oCJKFontFeatures;
         sFontName = GetPreviewCJKFont().GetFamilyName();
     }
     else if (&rButton == m_xCTLFontFeaturesButton.get())
     {
-        pNameBox = m_xCTLFontNameLB.get();
+        pFeatures = &m_oCTLFontFeatures;
         sFontName = GetPreviewCTLFont().GetFamilyName();
     }
 
-    if (!sFontName.isEmpty() && pNameBox)
+    if (!sFontName.isEmpty() && pFeatures)
     {
-        auto xDlg = std::make_shared<cui::FontFeaturesDialog>(GetFrameWeld(), sFontName);
-        weld::GenericDialogController::runAsync(xDlg, [xDlg, pNameBox, this](sal_Int32 nResult){
+        auto xDlg = std::make_shared<cui::FontFeaturesDialog>(
+            GetFrameWeld(), sFontName,
+            pFeatures->value_or(std::vector<vcl::font::FeatureSetting>()));
+        weld::GenericDialogController::runAsync(xDlg, [xDlg, pFeatures, this](sal_Int32 nResult){
             if (nResult == RET_OK) {
-                pNameBox->set_entry_text(xDlg->createFontNameWithFeatures());
+                *pFeatures = xDlg->getFeatures();
                 UpdatePreview_Impl();
             }
         });
@@ -1388,6 +1397,19 @@ void SvxCharNamePage::Reset( const SfxItemSet* rSet )
     resetVariations(SID_ATTR_CHAR_CJK_FONT_VARIATIONS, m_oCJKFontVariations);
     resetVariations(SID_ATTR_CHAR_CTL_FONT_VARIATIONS, m_oCTLFontVariations);
 
+    auto resetFeatures = [this, rSet](TypedWhichId<SvxFontFeaturesItem> nSlot,
+                                      std::optional<std::vector<vcl::font::FeatureSetting>>& rDest) {
+        const sal_uInt16 nWhichId = GetWhich(nSlot);
+        if (rSet->GetItemState(nWhichId) < SfxItemState::DEFAULT)
+            return;
+        const auto& rItem = static_cast<const SvxFontFeaturesItem&>(rSet->Get(nWhichId));
+        if (!rItem.GetFeatures().empty())
+            rDest = rItem.GetFeatures();
+    };
+    resetFeatures(SID_ATTR_CHAR_FONT_FEATURES, m_oFontFeatures);
+    resetFeatures(SID_ATTR_CHAR_CJK_FONT_FEATURES, m_oCJKFontFeatures);
+    resetFeatures(SID_ATTR_CHAR_CTL_FONT_FEATURES, m_oCTLFontFeatures);
+
     SetPrevFontWidthScale( *rSet );
     UpdatePreview_Impl();
 }
@@ -1430,6 +1452,23 @@ bool SvxCharNamePage::FillItemSet( SfxItemSet* rSet )
     fillVariations(SID_ATTR_CHAR_FONT_VARIATIONS, m_oFontVariations);
     fillVariations(SID_ATTR_CHAR_CJK_FONT_VARIATIONS, m_oCJKFontVariations);
     fillVariations(SID_ATTR_CHAR_CTL_FONT_VARIATIONS, m_oCTLFontVariations);
+
+    auto fillFeatures = [this, rSet, &bModified](
+                            TypedWhichId<SvxFontFeaturesItem> nSlot,
+                            const std::optional<std::vector<vcl::font::FeatureSetting>>& rFeatures) {
+        if (!rFeatures)
+            return;
+        SvxFontFeaturesItem aItem(*rFeatures, GetWhich(nSlot));
+        const SfxPoolItem* pOld = GetOldItem(*rSet, nSlot);
+        if (pOld ? aItem != *pOld : !rFeatures->empty())
+        {
+            rSet->Put(aItem);
+            bModified = true;
+        }
+    };
+    fillFeatures(SID_ATTR_CHAR_FONT_FEATURES, m_oFontFeatures);
+    fillFeatures(SID_ATTR_CHAR_CJK_FONT_FEATURES, m_oCJKFontFeatures);
+    fillFeatures(SID_ATTR_CHAR_CTL_FONT_FEATURES, m_oCTLFontFeatures);
 
     return bModified;
 }
