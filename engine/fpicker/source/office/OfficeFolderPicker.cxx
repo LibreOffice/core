@@ -40,22 +40,22 @@ SvtFolderPicker::~SvtFolderPicker()
 {
 }
 
-void SAL_CALL SvtFolderPicker::setTitle( const OUString& _rTitle )
+void SvtFolderPicker::setTitle( const OUString& _rTitle )
 {
     OCommonPicker::setTitle( _rTitle );
 }
 
-sal_Int16 SAL_CALL SvtFolderPicker::execute(  )
+sal_Int16 SvtFolderPicker::execute(  )
 {
     return OCommonPicker::execute();
 }
 
-void SAL_CALL SvtFolderPicker::setDialogTitle( const OUString& _rTitle)
+void SvtFolderPicker::setDialogTitle( const OUString& _rTitle)
 {
     setTitle( _rTitle );
 }
 
-void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
+void SvtFolderPicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
 {
     m_xListener = xListener;
     prepareDialog();
@@ -107,12 +107,12 @@ void SvtFolderPicker::DialogClosedHdl(sal_Int32 nResult)
     }
 }
 
-void SAL_CALL SvtFolderPicker::setDisplayDirectory( const OUString& aDirectory )
+void SvtFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     m_aDisplayDirectory = aDirectory;
 }
 
-OUString SAL_CALL SvtFolderPicker::getDisplayDirectory()
+OUString SvtFolderPicker::getDisplayDirectory()
 {
     if (!m_xDlg)
         return m_aDisplayDirectory;
@@ -125,7 +125,7 @@ OUString SAL_CALL SvtFolderPicker::getDisplayDirectory()
     return OUString();
 }
 
-OUString SAL_CALL SvtFolderPicker::getDirectory()
+OUString SvtFolderPicker::getDirectory()
 {
     if (!m_xDlg)
         return m_aDisplayDirectory;
@@ -138,7 +138,7 @@ OUString SAL_CALL SvtFolderPicker::getDirectory()
     return OUString();
 }
 
-void SAL_CALL SvtFolderPicker::setDescription( const OUString& )
+void SvtFolderPicker::setDescription( const OUString& )
 {
 }
 
@@ -148,19 +148,19 @@ void SvtFolderPicker::cancel()
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SvtFolderPicker::getImplementationName()
+OUString SvtFolderPicker::getImplementationName()
 {
     return u"com.sun.star.svtools.OfficeFolderPicker"_ustr;
 }
 
 /* XServiceInfo */
-bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName )
+bool SvtFolderPicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
+Sequence< OUString > SvtFolderPicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.OfficeFolderPicker"_ustr };
 }

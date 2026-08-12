@@ -89,32 +89,32 @@ class FilePickerListener : public WeakImplHelper< XFilePickerListener >
 public:
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+    virtual void disposing( const css::lang::EventObject& Source )
         throw(css::uno::RuntimeException);
 
     // XFilePickerListener
-    virtual void SAL_CALL fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    virtual void fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
         throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    virtual void directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
         throw(css::uno::RuntimeException);
 
-    virtual OUString SAL_CALL helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
+    virtual OUString helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
         throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    virtual void controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
         throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL dialogSizeChanged(  )
+    virtual void dialogSizeChanged(  )
         throw (css::uno::RuntimeException);
 };
 
-void SAL_CALL FilePickerListener::disposing( const css::lang::EventObject& Source )
+void FilePickerListener::disposing( const css::lang::EventObject& Source )
     throw(css::uno::RuntimeException)
 {
 }
 
-void SAL_CALL FilePickerListener::fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+void FilePickerListener::fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
     throw(css::uno::RuntimeException)
 {
     try
@@ -181,19 +181,19 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const css::ui::dialogs::
     }
 }
 
-void SAL_CALL FilePickerListener::directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+void FilePickerListener::directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
     throw(css::uno::RuntimeException)
 {
     Reference< XFilePickerControlAccess > rFilePickerCtrlAccess( aEvent.Source, UNO_QUERY );
 }
 
-OUString SAL_CALL FilePickerListener::helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
+OUString FilePickerListener::helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
     throw(css::uno::RuntimeException)
 {
     return OUString( );
 }
 
-void SAL_CALL FilePickerListener::controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+void FilePickerListener::controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
     throw(css::uno::RuntimeException)
 {
     try
@@ -227,7 +227,7 @@ void SAL_CALL FilePickerListener::controlStateChanged( const css::ui::dialogs::F
     }
 }
 
-void SAL_CALL FilePickerListener::dialogSizeChanged( )
+void FilePickerListener::dialogSizeChanged( )
     throw(css::uno::RuntimeException)
 {
 }
@@ -236,7 +236,7 @@ void SAL_CALL FilePickerListener::dialogSizeChanged( )
 //  main
 
 
-int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
+int main(int nArgc, char* Argv[], char* Env[]  )
 {
     printf("Starting test of FPS-Service\n");
 

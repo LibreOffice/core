@@ -111,7 +111,7 @@ namespace svt
     }
 
 
-    void SAL_CALL OCommonPicker::disposing()
+    void OCommonPicker::disposing()
     {
         SolarMutexGuard aGuard;
 
@@ -139,7 +139,7 @@ namespace svt
     }
 
     // XEventListener
-    void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource )
+    void OCommonPicker::disposing( const EventObject& _rSource )
     {
         SolarMutexGuard aGuard;
         bool bDialogDying = _rSource.Source == m_xWindow;
@@ -176,17 +176,17 @@ namespace svt
         return new cppu::OPropertyArrayHelper( aProps );
     }
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL OCommonPicker::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& OCommonPicker::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    Reference< XPropertySetInfo > SAL_CALL OCommonPicker::getPropertySetInfo(  )
+    Reference< XPropertySetInfo > OCommonPicker::getPropertySetInfo(  )
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
     }
 
-    void SAL_CALL OCommonPicker::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
+    void OCommonPicker::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 
@@ -250,7 +250,7 @@ namespace svt
     }
 
     // XControlAccess functions
-    void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue )
+    void OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue )
     {
         checkAlive();
 
@@ -262,7 +262,7 @@ namespace svt
         }
     }
 
-    Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty )
+    Any OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty )
     {
         checkAlive();
 
@@ -277,7 +277,7 @@ namespace svt
     }
 
     // XControlInformation functions
-    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  )
+    Sequence< OUString > OCommonPicker::getSupportedControls(  )
     {
         checkAlive();
 
@@ -291,7 +291,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName )
+    bool OCommonPicker::isControlSupported( const OUString& aControlName )
     {
         checkAlive();
 
@@ -304,7 +304,7 @@ namespace svt
         return false;
     }
 
-    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName )
+    Sequence< OUString > OCommonPicker::getSupportedControlProperties( const OUString& aControlName )
     {
         checkAlive();
 
@@ -318,7 +318,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
+    bool OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
     {
         checkAlive();
 
@@ -364,7 +364,7 @@ namespace svt
 
     // XCancellable functions
 
-    void SAL_CALL OCommonPicker::cancel(  )
+    void OCommonPicker::cancel(  )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -405,7 +405,7 @@ namespace svt
     }
 
     // XInitialization functions
-    void SAL_CALL OCommonPicker::initialize( const Sequence< Any >& _rArguments )
+    void OCommonPicker::initialize( const Sequence< Any >& _rArguments )
     {
         checkAlive();
 

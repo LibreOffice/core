@@ -86,7 +86,7 @@ protected:
 private:
     // prevent copy and assignment
     CFilterContainer( const CFilterContainer& );
-    CFilterContainer& SAL_CALL operator=( const CFilterContainer& );
+    CFilterContainer& operator=( const CFilterContainer& );
 
     sal_Int32 getFilterTagPos( const OUString& aName ) const;
 

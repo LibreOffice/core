@@ -50,7 +50,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
+    void OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
     {
         if (!_rxRequest.is())
             return;

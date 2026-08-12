@@ -49,43 +49,43 @@ public:
     // XExecutableDialog functions
 
 
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+    virtual void setTitle( const OUString& aTitle ) override;
 
-    virtual sal_Int16 SAL_CALL execute(  ) override;
+    virtual sal_Int16 execute(  ) override;
 
 
     // XFolderPicker functions
 
 
-    virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory ) override;
+    virtual void setDisplayDirectory( const OUString& rDirectory ) override;
 
-    virtual OUString SAL_CALL getDisplayDirectory(  ) override;
+    virtual OUString getDisplayDirectory(  ) override;
 
-    virtual OUString SAL_CALL getDirectory( ) override;
+    virtual OUString getDirectory( ) override;
 
-    virtual void SAL_CALL setDescription( const OUString& rDescription ) override;
+    virtual void setDescription( const OUString& rDescription ) override;
 
 
     // XServiceInfo
 
 
-    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual OUString getImplementationName(  ) override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 
     // XCancellable
 
 
-    virtual void SAL_CALL cancel( ) override;
+    virtual void cancel( ) override;
 
 
     // XEventListener
 
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
 private:
     SalAquaFolderPicker( const SalAquaFolderPicker& ) = delete;

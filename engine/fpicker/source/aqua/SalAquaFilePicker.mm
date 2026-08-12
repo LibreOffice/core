@@ -91,13 +91,13 @@ SalAquaFilePicker::~SalAquaFilePicker()
 
 #pragma mark XFilePickerNotifier
 
-void SAL_CALL SalAquaFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
+void SalAquaFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
 {
     SolarMutexGuard aGuard;
     m_xListener = xListener;
 }
 
-void SAL_CALL SalAquaFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
+void SalAquaFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
 {
     SolarMutexGuard aGuard;
     m_xListener.clear();
@@ -105,13 +105,13 @@ void SAL_CALL SalAquaFilePicker::removeFilePickerListener( const uno::Reference<
 
 #pragma mark XAsynchronousExecutableDialog
 
-void SAL_CALL SalAquaFilePicker::setTitle( const OUString& aTitle )
+void SalAquaFilePicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
     implsetTitle(aTitle);
 }
 
-sal_Int16 SAL_CALL SalAquaFilePicker::execute()
+sal_Int16 SalAquaFilePicker::execute()
 {
     SolarMutexGuard aGuard;
 
@@ -183,7 +183,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
 
 #pragma mark XFilePicker
 
-void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( bool /* bMode */ )
+void SalAquaFilePicker::setMultiSelectionMode( bool /* bMode */ )
 {
     SolarMutexGuard aGuard;
 
@@ -192,28 +192,28 @@ void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( bool /* bMode */ )
     }
 }
 
-void SAL_CALL SalAquaFilePicker::setDefaultName( const OUString& aName )
+void SalAquaFilePicker::setDefaultName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
     m_sSaveFileName = aName;
 }
 
-void SAL_CALL SalAquaFilePicker::setDisplayDirectory( const OUString& rDirectory )
+void SalAquaFilePicker::setDisplayDirectory( const OUString& rDirectory )
 {
     SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(rDirectory);
 }
 
-OUString SAL_CALL SalAquaFilePicker::getDisplayDirectory()
+OUString SalAquaFilePicker::getDisplayDirectory()
 {
     OUString retVal = implgetDisplayDirectory();
 
     return retVal;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
+cpo::uno::Sequence<OUString> SalAquaFilePicker::getFiles()
 {
     cpo::uno::Sequence< OUString > aSelectedFiles = getSelectedFiles();
     // multiselection doesn't really work with getFiles
@@ -224,7 +224,7 @@ cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
     return aSelectedFiles;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SalAquaFilePicker::getSelectedFiles()
 {
     SolarMutexGuard aGuard;
 
@@ -289,7 +289,7 @@ cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
 
 #pragma mark XFilterManager
 
-void SAL_CALL SalAquaFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
+void SalAquaFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
 {
     SolarMutexGuard aGuard;
 
@@ -298,7 +298,7 @@ void SAL_CALL SalAquaFilePicker::appendFilter( const OUString& aTitle, const OUS
     m_pControlHelper->setFilterControlNeeded(true);
 }
 
-void SAL_CALL SalAquaFilePicker::setCurrentFilter( const OUString& aTitle )
+void SalAquaFilePicker::setCurrentFilter( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
 
@@ -309,7 +309,7 @@ void SAL_CALL SalAquaFilePicker::setCurrentFilter( const OUString& aTitle )
     updateSaveFileNameExtension();
 }
 
-OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
+OUString SalAquaFilePicker::getCurrentFilter()
 {
     SolarMutexGuard aGuard;
 
@@ -320,7 +320,7 @@ OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
 
 #pragma mark XFilterGroupManager
 
-void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const cpo::uno::Sequence<beans::StringPair>& aFilters )
+void SalAquaFilePicker::appendFilterGroup( const OUString&, const cpo::uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard aGuard;
 
@@ -331,7 +331,7 @@ void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const cpo::
 
 #pragma mark XFilePickerControlAccess
 
-void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
+void SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -342,19 +342,19 @@ void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nCont
     }
 }
 
-cpo::uno::Any SAL_CALL SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
+cpo::uno::Any SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
 {
     cpo::uno::Any aValue = m_pControlHelper->getValue(nControlId, nControlAction);
 
     return aValue;
 }
 
-void SAL_CALL SalAquaFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
+void SalAquaFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
 {
     m_pControlHelper->enableControl(nControlId, bEnable);
 }
 
-void SAL_CALL SalAquaFilePicker::setLabel( sal_Int16 nControlId, const OUString& aLabel )
+void SalAquaFilePicker::setLabel( sal_Int16 nControlId, const OUString& aLabel )
 {
     SolarMutexGuard aGuard;
 
@@ -362,14 +362,14 @@ void SAL_CALL SalAquaFilePicker::setLabel( sal_Int16 nControlId, const OUString&
     m_pControlHelper->setLabel( nControlId, sLabel ) ;
 }
 
-OUString SAL_CALL SalAquaFilePicker::getLabel( sal_Int16 nControlId )
+OUString SalAquaFilePicker::getLabel( sal_Int16 nControlId )
 {
     return m_pControlHelper->getLabel(nControlId);
 }
 
 #pragma mark XInitialization
 
-void SAL_CALL SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
+void SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SolarMutexGuard aGuard;
 
@@ -449,7 +449,7 @@ void SAL_CALL SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::
 
 #pragma mark XCancellable
 
-void SAL_CALL SalAquaFilePicker::cancel()
+void SalAquaFilePicker::cancel()
 {
     SolarMutexGuard aGuard;
 
@@ -472,17 +472,17 @@ void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 
 #pragma mark XServiceInfo
 
-OUString SAL_CALL SalAquaFilePicker::getImplementationName()
+OUString SalAquaFilePicker::getImplementationName()
 {
     return u"com.sun.star.ui.dialogs.SalAquaFilePicker"_ustr;
 }
 
-bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
+bool SalAquaFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SalAquaFilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }

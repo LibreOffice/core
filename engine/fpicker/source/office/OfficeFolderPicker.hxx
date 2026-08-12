@@ -47,33 +47,33 @@ public:
 
     // XFolderPicker2 functions
 
-    virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) override;
-    virtual OUString SAL_CALL       getDisplayDirectory() override;
-    virtual OUString SAL_CALL       getDirectory() override;
-    virtual void SAL_CALL           setDescription( const OUString& aDescription ) override;
+    virtual void           setDisplayDirectory( const OUString& aDirectory ) override;
+    virtual OUString       getDisplayDirectory() override;
+    virtual OUString       getDirectory() override;
+    virtual void           setDescription( const OUString& aDescription ) override;
 
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 
 
     // XExecutableDialog functions
 
-    virtual void SAL_CALL setTitle( const OUString& _rTitle ) override;
-    virtual sal_Int16 SAL_CALL execute(  ) override;
+    virtual void setTitle( const OUString& _rTitle ) override;
+    virtual sal_Int16 execute(  ) override;
 
 
     // XAsynchronousExecutableDialog functions
 
-    virtual void SAL_CALL       setDialogTitle( const OUString& _rTitle ) override;
-    virtual void SAL_CALL       startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) override;
+    virtual void       setDialogTitle( const OUString& _rTitle ) override;
+    virtual void       startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) override;
 
 
     // XServiceInfo functions
 
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL    getImplementationName() override;
-    virtual bool SAL_CALL       supportsService( const OUString& sServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual OUString    getImplementationName() override;
+    virtual bool       supportsService( const OUString& sServiceName ) override;
+    virtual cpo::uno::Sequence< OUString >
                                     getSupportedServiceNames() override;
 
 protected:

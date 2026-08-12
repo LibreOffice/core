@@ -53,14 +53,14 @@ SalAquaFolderPicker::SalAquaFolderPicker()
 
 // XExecutableDialog
 
-void SAL_CALL SalAquaFolderPicker::setTitle( const OUString& aTitle )
+void SalAquaFolderPicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard aGuard;
 
     implsetTitle(aTitle);
 }
 
-sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
+sal_Int16 SalAquaFolderPicker::execute()
 {
     SolarMutexGuard aGuard;
 
@@ -89,14 +89,14 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
 
 // XFolderPicker
 
-void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
+void SalAquaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(aDirectory);
 }
 
-OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
+OUString SalAquaFolderPicker::getDisplayDirectory()
 {
     SolarMutexGuard aGuard;
 
@@ -105,7 +105,7 @@ OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
     return aDirectory;
 }
 
-OUString SAL_CALL SalAquaFolderPicker::getDirectory()
+OUString SalAquaFolderPicker::getDirectory()
 {
     SolarMutexGuard aGuard;
 
@@ -132,31 +132,31 @@ OUString SAL_CALL SalAquaFolderPicker::getDirectory()
     return aDirectory;
 }
 
-void SAL_CALL SalAquaFolderPicker::setDescription( const OUString& rDescription )
+void SalAquaFolderPicker::setDescription( const OUString& rDescription )
 {
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 }
 
 // XServiceInfo
 
-OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
+OUString SalAquaFolderPicker::getImplementationName()
 {
     return u"com.sun.star.ui.dialogs.SalAquaFolderPicker"_ustr;
 }
 
-bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
+bool SalAquaFolderPicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SalAquaFolderPicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.SystemFolderPicker"_ustr, u"com.sun.star.ui.dialogs.AquaFolderPicker"_ustr };
 }
 
 // XCancellable
 
-void SAL_CALL SalAquaFolderPicker::cancel()
+void SalAquaFolderPicker::cancel()
 {
     SolarMutexGuard aGuard;
 
@@ -165,7 +165,7 @@ void SAL_CALL SalAquaFolderPicker::cancel()
 
 // XEventListener
 
-void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
+void SalAquaFolderPicker::disposing( const lang::EventObject& )
 {
 }
 

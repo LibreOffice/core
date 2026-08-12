@@ -106,60 +106,60 @@ namespace svt
 
         // ComponentHelper/XComponent
 
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
 
         // XEventListener
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
 
         // property set related methods
 
 
         // XPropertySet pure methods
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // OPropertySetHelper pure methods
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         // OPropertyArrayUsageHelper pure methods
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OPropertySetHelper overridden methods
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                 sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 
         // XExecutableDialog functions
 
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL           setTitle( const OUString& _rTitle );
+        virtual void           setTitle( const OUString& _rTitle );
         /// @throws css::uno::RuntimeException
-        virtual sal_Int16 SAL_CALL      execute();
+        virtual sal_Int16      execute();
 
 
         // XControlAccess functions
 
-        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const cpo::uno::Any& aValue ) override;
-        virtual cpo::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) override;
+        virtual void setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Any getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
         // XControlInformation functions
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) override;
-        virtual bool SAL_CALL isControlSupported( const OUString& aControlName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) override;
-        virtual bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedControls(  ) override;
+        virtual bool isControlSupported( const OUString& aControlName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedControlProperties( const OUString& aControlName ) override;
+        virtual bool isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
         // XCancellable functions
 
-        virtual void SAL_CALL cancel(  ) override;
+        virtual void cancel(  ) override;
 
 
         // XInitialization functions
 
 
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
         // misc

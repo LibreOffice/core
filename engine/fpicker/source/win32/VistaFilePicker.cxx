@@ -53,7 +53,7 @@ VistaFilePicker::~VistaFilePicker()
 {
 }
 
-void SAL_CALL VistaFilePicker::addFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener)
+void VistaFilePicker::addFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener)
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_ADD_PICKER_LISTENER);
@@ -62,7 +62,7 @@ void SAL_CALL VistaFilePicker::addFilePickerListener(const css::uno::Reference< 
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::removeFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+void VistaFilePicker::removeFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_REMOVE_PICKER_LISTENER);
@@ -75,7 +75,7 @@ void VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*/)
 {
 }
 
-void SAL_CALL VistaFilePicker::setMultiSelectionMode(bool bMode)
+void VistaFilePicker::setMultiSelectionMode(bool bMode)
 {
     ensureInit();
 
@@ -86,7 +86,7 @@ void SAL_CALL VistaFilePicker::setMultiSelectionMode(bool bMode)
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
+void VistaFilePicker::setTitle(const OUString& sTitle)
 {
     ensureInit();
 
@@ -97,7 +97,7 @@ void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
+void VistaFilePicker::appendFilter(const OUString& sTitle ,
                                             const OUString& sFilter)
 {
     Request rRequest;
@@ -108,7 +108,7 @@ void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
+void VistaFilePicker::setCurrentFilter(const OUString& sTitle)
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_SET_CURRENT_FILTER);
@@ -117,7 +117,7 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
     m_rDialog.doRequest(rRequest);
 }
 
-OUString SAL_CALL VistaFilePicker::getCurrentFilter()
+OUString VistaFilePicker::getCurrentFilter()
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_GET_CURRENT_FILTER);
@@ -128,7 +128,7 @@ OUString SAL_CALL VistaFilePicker::getCurrentFilter()
     return sTitle;
 }
 
-void SAL_CALL VistaFilePicker::appendFilterGroup(const OUString&                              /*sGroupTitle*/,
+void VistaFilePicker::appendFilterGroup(const OUString&                              /*sGroupTitle*/,
                                                  const cpo::uno::Sequence< css::beans::StringPair >& rFilters   )
 {
     Request rRequest;
@@ -138,7 +138,7 @@ void SAL_CALL VistaFilePicker::appendFilterGroup(const OUString&                
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::setDefaultName(const OUString& sName )
+void VistaFilePicker::setDefaultName(const OUString& sName )
 {
     ensureInit();
 
@@ -149,7 +149,7 @@ void SAL_CALL VistaFilePicker::setDefaultName(const OUString& sName )
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
+void VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
 {
     ensureInit();
 
@@ -160,7 +160,7 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
     m_rDialog.doRequest(rRequest);
 }
 
-OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
+OUString VistaFilePicker::getDisplayDirectory()
 {
     ensureInit();
 
@@ -173,7 +173,7 @@ OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
 }
 
 // @deprecated can't be supported any longer ... see IDL description for further details
-cpo::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
+cpo::uno::Sequence< OUString > VistaFilePicker::getFiles()
 {
     cpo::uno::Sequence< OUString > lFiles = getSelectedFiles();
     // multiselection doesn't really work
@@ -184,7 +184,7 @@ cpo::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
     return lFiles;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
+cpo::uno::Sequence< OUString > VistaFilePicker::getSelectedFiles()
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_GET_SELECTED_FILES);
@@ -214,7 +214,7 @@ void VistaFilePicker::ensureInit()
     }
 }
 
-::sal_Int16 SAL_CALL VistaFilePicker::execute()
+::sal_Int16 VistaFilePicker::execute()
 {
     ensureInit();
 
@@ -235,7 +235,7 @@ void VistaFilePicker::ensureInit()
 
 // XFilePicker
 
-void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
+void VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
                                               ::sal_Int16    nControlAction,
                                         const cpo::uno::Any& aValue        )
 {
@@ -248,7 +248,7 @@ void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
     m_rDialog.doRequest(rRequest);
 }
 
-cpo::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
+cpo::uno::Any VistaFilePicker::getValue(::sal_Int16 nControlId    ,
                                                  ::sal_Int16 nControlAction)
 {
     Request rRequest;
@@ -260,7 +260,7 @@ cpo::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
     return rRequest.getValue(PROP_CONTROL_VALUE);
 }
 
-void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
+void VistaFilePicker::enableControl(::sal_Int16 nControlId,
                                              bool  bEnable   )
 {
     Request rRequest;
@@ -271,7 +271,7 @@ void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
     m_rDialog.doRequest(rRequest);
 }
 
-void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
+void VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
                                          const OUString& sLabel    )
 {
     Request rRequest;
@@ -282,7 +282,7 @@ void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
     m_rDialog.doRequest(rRequest);
 }
 
-OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
+OUString VistaFilePicker::getLabel(::sal_Int16 nControlId)
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_GET_CONTROL_LABEL);
@@ -293,42 +293,42 @@ OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
     return sLabel;
 }
 
-cpo::uno::Sequence< ::sal_Int16 > SAL_CALL VistaFilePicker::getSupportedImageFormats()
+cpo::uno::Sequence< ::sal_Int16 > VistaFilePicker::getSupportedImageFormats()
 {
     return cpo::uno::Sequence< sal_Int16 >();
 }
 
-sal_Int32 SAL_CALL VistaFilePicker::getTargetColorDepth()
+sal_Int32 VistaFilePicker::getTargetColorDepth()
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL VistaFilePicker::getAvailableWidth()
+sal_Int32 VistaFilePicker::getAvailableWidth()
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL VistaFilePicker::getAvailableHeight()
+sal_Int32 VistaFilePicker::getAvailableHeight()
 {
     return 0;
 }
 
-void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
+void VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
                                          const cpo::uno::Any& /*aImage      */)
 {
 }
 
-bool SAL_CALL VistaFilePicker::setShowState(bool /*bShowState*/)
+bool VistaFilePicker::setShowState(bool /*bShowState*/)
 {
     return false;
 }
 
-bool SAL_CALL VistaFilePicker::getShowState()
+bool VistaFilePicker::getShowState()
 {
     return false;
 }
 
-void SAL_CALL VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+void VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
@@ -485,11 +485,11 @@ void SAL_CALL VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::An
     m_bInitialized = true;
 }
 
-void SAL_CALL VistaFilePicker::cancel()
+void VistaFilePicker::cancel()
 {
 }
 
-OUString SAL_CALL VistaFilePicker::getDirectory()
+OUString VistaFilePicker::getDirectory()
 {
     ensureInit();
     cpo::uno::Sequence< OUString > aFileSeq = getSelectedFiles();
@@ -497,14 +497,14 @@ OUString SAL_CALL VistaFilePicker::getDirectory()
     return aFileSeq.getLength() ? aFileSeq[0] : OUString();
 }
 
-void SAL_CALL VistaFilePicker::setDescription( const OUString& aDescription )
+void VistaFilePicker::setDescription( const OUString& aDescription )
 {
     setTitle(aDescription);
 }
 
 // XServiceInfo
 
-OUString SAL_CALL VistaFilePicker::getImplementationName()
+OUString VistaFilePicker::getImplementationName()
 {
     if (m_bFolderPicker)
         return "com.sun.star.ui.dialogs.Win32FolderPicker";
@@ -512,12 +512,12 @@ OUString SAL_CALL VistaFilePicker::getImplementationName()
         return "com.sun.star.ui.dialogs.Win32FilePicker";
 }
 
-bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
+bool VistaFilePicker::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > VistaFilePicker::getSupportedServiceNames()
 {
         return {
             "com.sun.star.ui.dialogs.FilePicker",

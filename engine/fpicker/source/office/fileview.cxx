@@ -113,7 +113,7 @@ namespace
         explicit CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
 
     protected:
-        virtual void SAL_CALL onShot() override;
+        virtual void onShot() override;
     };
 
 class ViewTabListBox_Impl
@@ -1783,7 +1783,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, std::u16string_view 
 }
 
 namespace {
-    void SAL_CALL CallbackTimer::onShot()
+    void CallbackTimer::onShot()
     {
         OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
         SvtFileView_Impl* pHandler( m_pTimeoutHandler );

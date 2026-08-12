@@ -425,23 +425,23 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
 // XExecutableDialog functions
 
 
-void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle )
+void SvtFilePicker::setTitle( const OUString& _rTitle )
 {
     OCommonPicker::setTitle( _rTitle );
 }
 
-sal_Int16 SAL_CALL SvtFilePicker::execute(  )
+sal_Int16 SvtFilePicker::execute(  )
 {
     return OCommonPicker::execute();
 }
 
 // XAsynchronousExecutableDialog functions
-void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle )
+void SvtFilePicker::setDialogTitle( const OUString& _rTitle )
 {
     setTitle( _rTitle );
 }
 
-void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
+void SvtFilePicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
 {
     m_xDlgClosedListener = xListener;
     prepareDialog();
@@ -455,7 +455,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialog
 }
 
 // XFilePicker functions
-void SAL_CALL SvtFilePicker::setMultiSelectionMode( bool bMode )
+void SvtFilePicker::setMultiSelectionMode( bool bMode )
 {
     checkAlive();
 
@@ -463,7 +463,7 @@ void SAL_CALL SvtFilePicker::setMultiSelectionMode( bool bMode )
     m_bMultiSelection = bMode;
 }
 
-void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName )
+void SvtFilePicker::setDefaultName( const OUString& aName )
 {
     checkAlive();
 
@@ -471,7 +471,7 @@ void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName )
     m_aDefaultName = aName;
 }
 
-void SAL_CALL SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
+void SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
 {
     checkAlive();
 
@@ -479,7 +479,7 @@ void SAL_CALL SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
     m_aDisplayDirectory = aDirectory;
 }
 
-OUString SAL_CALL SvtFilePicker::getDisplayDirectory()
+OUString SvtFilePicker::getDisplayDirectory()
 {
     checkAlive();
 
@@ -505,7 +505,7 @@ OUString SAL_CALL SvtFilePicker::getDisplayDirectory()
         return m_aDisplayDirectory;
 }
 
-Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles()
+Sequence< OUString > SvtFilePicker::getSelectedFiles()
 {
     checkAlive();
 
@@ -519,7 +519,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles()
     return comphelper::containerToSequence(m_xDlg->GetPathList());
 }
 
-Sequence< OUString > SAL_CALL SvtFilePicker::getFiles()
+Sequence< OUString > SvtFilePicker::getFiles()
 {
     Sequence< OUString > aFiles = getSelectedFiles();
     if (aFiles.getLength() > 1)
@@ -531,7 +531,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getFiles()
 // XFilePickerControlAccess functions
 
 
-void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
+void SvtFilePicker::setValue( sal_Int16 nElementID,
                                        sal_Int16 nControlAction,
                                        const Any& rValue )
 {
@@ -572,7 +572,7 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
 }
 
 
-Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAction )
+Any SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAction )
 {
     checkAlive();
 
@@ -603,7 +603,7 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
 }
 
 
-void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValue )
+void SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValue )
 {
     checkAlive();
 
@@ -639,7 +639,7 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
 }
 
 
-OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
+OUString SvtFilePicker::getLabel( sal_Int16 nLabelID )
 {
     checkAlive();
 
@@ -668,7 +668,7 @@ OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
 }
 
 
-void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, bool bEnable )
+void SvtFilePicker::enableControl( sal_Int16 nElementID, bool bEnable )
 {
     checkAlive();
 
@@ -707,7 +707,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, bool bEnable )
 // XFilePickerNotifier functions
 
 
-void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePickerListener >& xListener )
+void SvtFilePicker::addFilePickerListener( const Reference< XFilePickerListener >& xListener )
 {
     checkAlive();
 
@@ -716,7 +716,7 @@ void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePicker
 }
 
 
-void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& )
+void SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& )
 {
     checkAlive();
 
@@ -725,19 +725,19 @@ void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePic
 }
 
 // XFilePreview functions
-Sequence< sal_Int16 > SAL_CALL SvtFilePicker::getSupportedImageFormats()
+Sequence< sal_Int16 > SvtFilePicker::getSupportedImageFormats()
 {
     checkAlive();
 
     return { FilePreviewImageFormats::BITMAP };
 }
 
-sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth()
+sal_Int32 SvtFilePicker::getTargetColorDepth()
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth()
+sal_Int32 SvtFilePicker::getAvailableWidth()
 {
     checkAlive();
 
@@ -750,7 +750,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth()
     return nWidth;
 }
 
-sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight()
+sal_Int32 SvtFilePicker::getAvailableHeight()
 {
     checkAlive();
 
@@ -763,7 +763,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight()
     return nHeight;
 }
 
-void SAL_CALL SvtFilePicker::setImage(sal_Int16 /*aImageFormat*/, const Any& rImage)
+void SvtFilePicker::setImage(sal_Int16 /*aImageFormat*/, const Any& rImage)
 {
     checkAlive();
 
@@ -772,7 +772,7 @@ void SAL_CALL SvtFilePicker::setImage(sal_Int16 /*aImageFormat*/, const Any& rIm
         m_xDlg->setImage(rImage);
 }
 
-bool SAL_CALL SvtFilePicker::setShowState( bool )
+bool SvtFilePicker::setShowState( bool )
 {
     checkAlive();
 
@@ -800,7 +800,7 @@ bool SAL_CALL SvtFilePicker::setShowState( bool )
 }
 
 
-bool SAL_CALL SvtFilePicker::getShowState()
+bool SvtFilePicker::getShowState()
 {
     checkAlive();
 
@@ -817,7 +817,7 @@ bool SAL_CALL SvtFilePicker::getShowState()
 // XFilterGroupManager functions
 
 
-void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
+void SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
                                                 const Sequence< StringPair >& aFilters )
 {
     checkAlive();
@@ -844,7 +844,7 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
 // XFilterManager functions
 
 
-void SAL_CALL SvtFilePicker::appendFilter( const OUString& aTitle,
+void SvtFilePicker::appendFilter( const OUString& aTitle,
                                            const OUString& aFilter )
 {
     checkAlive();
@@ -863,7 +863,7 @@ void SAL_CALL SvtFilePicker::appendFilter( const OUString& aTitle,
 }
 
 
-void SAL_CALL SvtFilePicker::setCurrentFilter( const OUString& aTitle )
+void SvtFilePicker::setCurrentFilter( const OUString& aTitle )
 {
     checkAlive();
 
@@ -878,7 +878,7 @@ void SAL_CALL SvtFilePicker::setCurrentFilter( const OUString& aTitle )
 }
 
 
-OUString SAL_CALL SvtFilePicker::getCurrentFilter()
+OUString SvtFilePicker::getCurrentFilter()
 {
     checkAlive();
 
@@ -892,7 +892,7 @@ OUString SAL_CALL SvtFilePicker::getCurrentFilter()
 // XInitialization functions
 
 
-void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
+void SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 {
     checkAlive();
 
@@ -958,19 +958,19 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
 
 
 /* XServiceInfo */
-OUString SAL_CALL SvtFilePicker::getImplementationName()
+OUString SvtFilePicker::getImplementationName()
 {
     return u"com.sun.star.svtools.OfficeFilePicker"_ustr;
 }
 
 /* XServiceInfo */
-bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
+bool SvtFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames()
+Sequence< OUString > SvtFilePicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr };
 }
@@ -1003,19 +1003,19 @@ std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::
 
 
 /* XServiceInfo */
-OUString SAL_CALL SvtRemoteFilePicker::getImplementationName()
+OUString SvtRemoteFilePicker::getImplementationName()
 {
     return u"com.sun.star.svtools.RemoteFilePicker"_ustr;
 }
 
 /* XServiceInfo */
-bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName )
+bool SvtRemoteFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames()
+Sequence< OUString > SvtRemoteFilePicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.RemoteFilePicker"_ustr };
 }
