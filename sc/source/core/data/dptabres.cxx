@@ -79,21 +79,25 @@ const TranslateId aFuncStrIds[] =     // matching enum ScSubTotalFunc
     {}                              // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
-bool lcl_SearchMember( const std::vector<std::unique_ptr<ScDPResultMember>>& list, SCROW nOrder, SCROW& rIndex)
+// binary search over the span returning the location found in rIndex.
+// The comparison is between nOrder and the result of rGetter which must return a SCROW value.
+template <typename M, typename F>
+bool lcl_SearchMemberCore(const std::span<M>& list, SCROW nOrder, SCROW& rIndex, const F& rGetter)
 {
     bool bFound = false;
     SCROW  nLo = 0;
     SCROW nHi = list.size() - 1;
     SCROW nIndex;
+
     while (nLo <= nHi)
     {
         nIndex = (nLo + nHi) / 2;
-        if ( list[nIndex]->GetOrder() < nOrder )
+        if (rGetter(list[nIndex]) < nOrder)
             nLo = nIndex + 1;
         else
         {
             nHi = nIndex - 1;
-            if ( list[nIndex]->GetOrder() == nOrder )
+            if (rGetter(list[nIndex]) == nOrder)
             {
                 bFound = true;
                 nLo = nIndex;
@@ -102,6 +106,13 @@ bool lcl_SearchMember( const std::vector<std::unique_ptr<ScDPResultMember>>& lis
     }
     rIndex = nLo;
     return bFound;
+}
+
+bool lcl_SearchMember(const std::vector<std::unique_ptr<ScDPResultMember>>& list, SCROW nOrder,
+                      SCROW& rIndex)
+{
+    return lcl_SearchMemberCore(std::span{ list }, nOrder, rIndex,
+                                [](const auto& m) { return m->GetOrder(); });
 }
 
 class FilterStack
