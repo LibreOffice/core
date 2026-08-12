@@ -338,7 +338,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             {
                 pDlg->SaveImportOptions();
                 pDlg->GetImportOptions( aOptions );
-                save_CharSet( aOptions.eCharSet, bExport );
+                save_CharSet( aOptions.eEncoding, bExport );
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
             }
         }

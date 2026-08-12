@@ -1289,11 +1289,11 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 //  default for lotus import (from API without options):
                 //  IBM_437 encoding
-                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
+                sItStr = ScGlobal::GetEncodingString( RTL_TEXTENCODING_IBM_437 );
             }
 
             ErrCode eError = ScFormatFilter::Get().ScImportLotus123( rMedium, *m_pDocument,
-                                                ScGlobal::GetCharsetValue(sItStr));
+                                                ScGlobal::GetEncodingValue(sItStr));
             if (eError != ERRCODE_NONE)
             {
                 if (!GetErrorIgnoreWarning())
@@ -1363,7 +1363,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 //  default for ascii import (from API without options):
                 //  UTF-8 encoding, comma, double quotes
 
-                aOptions.SetCharSet(RTL_TEXTENCODING_UTF8);
+                aOptions.SetEncoding(RTL_TEXTENCODING_UTF8);
                 aOptions.SetFieldSeps( OUString(',') );
                 aOptions.SetTextSep( '"' );
             }
@@ -1380,7 +1380,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SvStream* pInStream = rMedium.GetInStream();
                 if (pInStream)
                 {
-                    pInStream->SetStreamEncoding( aOptions.GetCharSet() );
+                    pInStream->SetStreamEncoding( aOptions.GetEncoding() );
                     // tdf#169591 in case of RTL_TEXTENCODING_UCS2, we need to know endianness too.
                     // For this, we'll have to call a second time DetectEncoding.
                     // An alternative would be to save the endianness in ScFilterOptionsObj::aFilterOptions
@@ -1468,12 +1468,12 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 //  default for dBase import (from API without options):
                 //  IBM_850 encoding
 
-                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
+                sItStr = ScGlobal::GetEncodingString( RTL_TEXTENCODING_IBM_850 );
             }
 
             ScDocRowHeightUpdater::TabRanges aRecalcRanges(0, m_pDocument->MaxRow());
             ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
-                    ScGlobal::GetCharsetValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
+                    ScGlobal::GetEncodingValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
             aRecalcRowRangesArray.push_back(std::move(aRecalcRanges));
 
             if (eError != ERRCODE_NONE)
@@ -1507,11 +1507,11 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     //  default for DIF import (from API without options):
                     //  ISO8859-1/MS_1252 encoding
 
-                    sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
+                    sItStr = ScGlobal::GetEncodingString( RTL_TEXTENCODING_MS_1252 );
                 }
 
                 eError = ScFormatFilter::Get().ScImportDif( *pStream, m_pDocument.get(), ScAddress(0,0,0),
-                                    ScGlobal::GetCharsetValue(sItStr));
+                                    ScGlobal::GetEncodingValue(sItStr));
                 if (eError != ERRCODE_NONE)
                 {
                     if (!GetErrorIgnoreWarning())
@@ -2034,7 +2034,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 {
     sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
-    rtl_TextEncoding eCharSet      = rAsciiOpt.eCharSet;
+    rtl_TextEncoding eEncoding = rAsciiOpt.eEncoding;
     bool bFixedWidth      = rAsciiOpt.bFixedWidth;
     bool bSaveNumberAsSuch = rAsciiOpt.bSaveNumberAsSuch;
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
@@ -2042,15 +2042,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     bool bIncludeBOM      = rAsciiOpt.bIncludeBOM;
     SvStreamEndian nEndianness = rAsciiOpt.nEndianness;
 
-    rtl_TextEncoding eOldCharSet = rStream.GetStreamEncoding();
-    rStream.SetStreamEncoding( eCharSet );
+    rtl_TextEncoding eOldEncoding = rStream.GetStreamEncoding();
+    rStream.SetStreamEncoding( eEncoding );
     SvStreamEndian nOldNumberFormatInt = rStream.GetEndian();
     OString aStrDelimEncoded;    // only used if not Unicode
     OUString aStrDelimDecoded;     // only used if context encoding
     OString aDelimEncoded;
     OUString aDelimDecoded;
     bool bContextOrNotAsciiEncoding;
-    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+    if ( eEncoding == RTL_TEXTENCODING_UNICODE )
     {
         rStream.StartWritingUnicodeText();
         bContextOrNotAsciiEncoding = false;
@@ -2058,23 +2058,23 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     else
     {
         // tdf#82254 - check whether to include a byte-order-mark in the output
-        if (bIncludeBOM && eCharSet == RTL_TEXTENCODING_UTF8)
+        if (bIncludeBOM && eEncoding == RTL_TEXTENCODING_UTF8)
             rStream.WriteUChar(0xEF).WriteUChar(0xBB).WriteUChar(0xBF);
         if (nEndianness == SvStreamEndian::BIG)
             rStream.SetEndian(SvStreamEndian::BIG);
-        aStrDelimEncoded = OString(&cStrDelim, 1, eCharSet);
-        aDelimEncoded = OString(&cDelim, 1, eCharSet);
+        aStrDelimEncoded = OString(&cStrDelim, 1, eEncoding);
+        aDelimEncoded = OString(&cDelim, 1, eEncoding);
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
-        if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
+        if ( rtl_getTextEncodingInfo( eEncoding, &aInfo ) )
         {
             bContextOrNotAsciiEncoding =
                 (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
             {
-                aStrDelimDecoded = OStringToOUString(aStrDelimEncoded, eCharSet);
-                aDelimDecoded = OStringToOUString(aDelimEncoded, eCharSet);
+                aStrDelimDecoded = OStringToOUString(aStrDelimEncoded, eEncoding);
+                aDelimDecoded = OStringToOUString(aDelimEncoded, eEncoding);
             }
         }
         else
@@ -2119,7 +2119,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     aString = "sep=" + OUStringChar(cDelim);
                     if (cStrDelim != 0)
                         rStream.WriteUniOrByteChar( '"');
-                    rStream.WriteUnicodeOrByteText(aString, eCharSet);
+                    rStream.WriteUnicodeOrByteText(aString, eEncoding);
                     if (cStrDelim != 0)
                         rStream.WriteUniOrByteChar( '"');
                     endlub( rStream );
@@ -2323,7 +2323,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
             {
                 if ( cStrDelim != 0 ) //@ BugId 55355
                 {
-                    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+                    if ( eEncoding == RTL_TEXTENCODING_UNICODE )
                     {
                         bool bNeedQuotes = false;
                         sal_Int32 nPos = getTextSepPos(aUniString, rAsciiOpt, cStrDelim, cDelim, bNeedQuotes);
@@ -2336,7 +2336,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
                         if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim );
-                        rStream.WriteUnicodeOrByteText(aUniString, eCharSet);
+                        rStream.WriteUnicodeOrByteText(aUniString, eEncoding);
                         if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim );
                     }
@@ -2359,9 +2359,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                         if ( bContextOrNotAsciiEncoding )
                         {
                             // to byte encoding
-                            OString aStrEnc = OUStringToOString(aUniString, eCharSet);
+                            OString aStrEnc = OUStringToOString(aUniString, eEncoding);
                             // back to Unicode
-                            OUString aStrDec = OStringToOUString(aStrEnc, eCharSet);
+                            OUString aStrDec = OStringToOUString(aStrEnc, eEncoding);
 
                             // search on re-decoded string
                             bool bNeedQuotes = false;
@@ -2375,13 +2375,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                             // write byte re-encoded
                             if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim );
-                            rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
+                            rStream.WriteUnicodeOrByteText( aStrDec, eEncoding );
                             if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim );
                         }
                         else
                         {
-                            OString aStrEnc = OUStringToOString(aUniString, eCharSet);
+                            OString aStrEnc = OUStringToOString(aUniString, eEncoding);
 
                             // search on encoded string
                             bool bNeedQuotes = false;
@@ -2449,7 +2449,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         endlub( rStream );
     }
 
-    rStream.SetStreamEncoding( eOldCharSet );
+    rStream.SetStreamEncoding( eOldEncoding );
     rStream.SetEndian( nOldNumberFormatInt );
 }
 
@@ -2657,18 +2657,18 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName == SC_DBASE_FILTER_NAME)
     {
-        OUString sCharSet;
+        OUString sEncoding;
         if ( const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
         {
-            sCharSet = pOptionsItem->GetValue();
+            sEncoding = pOptionsItem->GetValue();
         }
 
-        if (sCharSet.isEmpty())
+        if (sEncoding.isEmpty())
         {
             //  default for dBase export (from API without options):
             //  IBM_850 encoding
 
-            sCharSet = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
+            sEncoding = ScGlobal::GetEncodingString( RTL_TEXTENCODING_IBM_850 );
         }
 
         weld::WaitObject aWait( GetActiveDialogParent() );
@@ -2677,7 +2677,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         bool bHasMemo = false;
 
         ErrCodeMsg eError = DBaseExport(
-            rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
+            rMed.GetPhysicalName(), ScGlobal::GetEncodingValue(sEncoding), bHasMemo);
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
         if ( bHasMemo )
@@ -2740,12 +2740,12 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 //  default for DIF export (from API without options):
                 //  ISO8859-1/MS_1252 encoding
 
-                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
+                sItStr = ScGlobal::GetEncodingString( RTL_TEXTENCODING_MS_1252 );
             }
 
             weld::WaitObject aWait( GetActiveDialogParent() );
             ScFormatFilter::Get().ScExportDif( *pStream, *m_pDocument, ScAddress(0,0,0),
-                ScGlobal::GetCharsetValue(sItStr) );
+                ScGlobal::GetEncodingValue(sItStr) );
             bRet = true;
 
             if (m_pDocument->GetTableCount() > 1)

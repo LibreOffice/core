@@ -44,9 +44,9 @@ ScAsciiOptions::ScAsciiOptions() :
     bIncludeBOM(false),
     nEndianness(SvStreamEndian::LITTLE),
     cTextSep        ( cDefaultTextSep ),
-    eCharSet        ( osl_getThreadTextEncoding() ),
+    eEncoding       ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
-    bCharSetSystem  ( false ),
+    bEncodingSystem ( false ),
     nStartRow       ( 1 )
 {
 }
@@ -122,18 +122,18 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString, SvStream* pStr
     if ( nPos >= 0 )
     {
         const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
-        bool bDetectCharSet = aToken == pStrDet;
-        if ( bDetectCharSet && pStream4Detect )
+        bool bDetectEncoding = aToken == pStrDet;
+        if ( bDetectEncoding && pStream4Detect )
         {
             pStream4Detect->DetectEncoding();
-            eCharSet = pStream4Detect->GetStreamEncoding();
+            eEncoding = pStream4Detect->GetStreamEncoding();
         }
-        else if (!bDetectCharSet)
-            eCharSet = ScGlobal::GetCharsetValue( aToken );
+        else if (!bDetectEncoding)
+            eEncoding = ScGlobal::GetEncodingValue( aToken );
     }
 
     if (bDetectSep && pStream4Detect)
-        SfxObjectShell::DetectCsvSeparators(*pStream4Detect, eCharSet, aFieldSeps, cTextSep);
+        SfxObjectShell::DetectCsvSeparators(*pStream4Detect, eEncoding, aFieldSeps, cTextSep);
 
     // Token 3: Number of start row.
     if ( nPos >= 0 )
@@ -262,10 +262,10 @@ OUString ScAsciiOptions::WriteToString() const
     aOutStr.append("," + OUString::number(cTextSep) + ",");
 
     //Token 2: Text encoding.
-    if ( bCharSetSystem )           // force "SYSTEM"
-        aOutStr.append(ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW ));
+    if ( bEncodingSystem )           // force "SYSTEM"
+        aOutStr.append(ScGlobal::GetEncodingString( RTL_TEXTENCODING_DONTKNOW ));
     else
-        aOutStr.append(ScGlobal::GetCharsetString( eCharSet ));
+        aOutStr.append(ScGlobal::GetEncodingString( eEncoding ));
 
     //Token 3: Number of start row.
     aOutStr.append("," + OUString::number(nStartRow) + ",");

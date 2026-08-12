@@ -42,9 +42,9 @@ private:
     bool        bIncludeBOM;
     SvStreamEndian nEndianness;
     sal_Unicode cTextSep;
-    rtl_TextEncoding eCharSet;
+    rtl_TextEncoding eEncoding;
     LanguageType eLang;
-    bool        bCharSetSystem;
+    bool        bEncodingSystem;
     sal_Int32   nStartRow;
     std::vector<sal_Int32> mvColStart;
     std::vector<sal_uInt8> mvColFormat;
@@ -57,7 +57,7 @@ public:
     void            ReadFromString( std::u16string_view rString, SvStream* pStream4Detect = nullptr );
     OUString        WriteToString() const;
 
-    rtl_TextEncoding    GetCharSet() const      { return eCharSet; }
+    rtl_TextEncoding    GetEncoding() const      { return eEncoding; }
     const OUString&     GetFieldSeps() const    { return aFieldSeps; }
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsRemoveSpace() const   { return bRemoveSpace; }
@@ -76,8 +76,8 @@ public:
     sal_Int32           GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
-    void    SetCharSet( rtl_TextEncoding eNew ) { eCharSet = eNew; }
-    void    SetCharSetSystem( bool bSet )       { bCharSetSystem = bSet; }
+    void    SetEncoding( rtl_TextEncoding eNew ) { eEncoding = eNew; }
+    void    SetEncodingSystem( bool bSet )       { bEncodingSystem = bSet; }
     void    SetFixedLen( bool bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const OUString& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( bool bSet )           { bMergeFieldSeps = bSet; }

@@ -423,7 +423,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     mxLbEncoding->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, ScResId( SCSTR_ENCODING_USER ) );
-    // Insert one for detecting charset.
+    // Insert one for detecting encoding.
     mxLbEncoding->InsertTextEncoding( RTL_TEXTENCODING_USER_DETECTED, "- " + ScResId( SCSTR_AUTOMATIC ) + " -" );
 
     // Clipboard is always Unicode, and TextToColumns doesn't use encoding.
@@ -595,8 +595,8 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
 
 void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
-    rOpt.SetCharSet( meEncoding );
-    rOpt.SetCharSetSystem( mbEncodingSystem );
+    rOpt.SetEncoding( meEncoding );
+    rOpt.SetEncodingSystem( mbEncodingSystem );
     rOpt.SetLanguage(mxLbCustomLang->get_active_id());
     rOpt.SetFixedLen( mxRbFixed->get_active() );
     rOpt.SetStartRow( mxNfRow->get_value() );

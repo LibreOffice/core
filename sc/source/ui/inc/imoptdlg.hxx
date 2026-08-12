@@ -46,7 +46,7 @@ public:
     sal_Unicode nFieldSepCode;
     sal_Unicode nTextSepCode;
     OUString    aStrFont;
-    rtl_TextEncoding eCharSet;
+    rtl_TextEncoding eEncoding;
     bool        bFixedWidth;
     bool        bSaveAsShown;
     bool        bQuoteAllText;

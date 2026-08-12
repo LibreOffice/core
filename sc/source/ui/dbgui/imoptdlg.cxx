@@ -39,7 +39,7 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
     bFixedWidth = false;
     nFieldSepCode = 0;
     nTextSepCode = 0;
-    eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    eEncoding = RTL_TEXTENCODING_DONTKNOW;
     bSaveAsShown = true;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
     bSaveNumberAsSuch = true;
@@ -62,7 +62,7 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
         nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
     nTextSepCode  = static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rStr, 0, ',', nIdx)));
     aStrFont      = o3tl::getToken(rStr, 0, ',', nIdx);
-    eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
+    eEncoding     = ScGlobal::GetEncodingValue(aStrFont);
 
     if ( nTokenCount == 4 )
     {
@@ -137,9 +137,9 @@ OUString ScImportOptions::BuildString() const
 
 void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {
-    eCharSet = (nEnc == RTL_TEXTENCODING_DONTKNOW ?
+    eEncoding = (nEnc == RTL_TEXTENCODING_DONTKNOW ?
         osl_getThreadTextEncoding() : nEnc);
-    aStrFont = ScGlobal::GetCharsetString( nEnc );
+    aStrFont = ScGlobal::GetEncodingString( nEnc );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

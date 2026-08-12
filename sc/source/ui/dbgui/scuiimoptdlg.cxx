@@ -240,7 +240,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         if (strTextSeparator.getLength() > 0)
             m_xEdTextSep->set_entry_text(strTextSeparator);
         if (nCharSet < 0 || nCharSet == RTL_TEXTENCODING_DONTKNOW )
-            m_xLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
+            m_xLbCharset->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
         else
             m_xLbCharset->SelectTextEncoding(nCharSet);
     }
@@ -258,7 +258,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         m_xCbFormulas->hide();
         m_xTvCharset->grab_focus();
         m_xTvCharset->connect_item_activated(LINK(this, ScImportOptionsDlg, DoubleClickHdl));
-        m_xTvCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
+        m_xTvCharset->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
     }
 
     // optional title:
