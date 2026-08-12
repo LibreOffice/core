@@ -123,6 +123,9 @@ private:
     std::optional<std::vector<vcl::font::Variation>> m_oCTLFontVariations;
     /// the list the open popover writes to, one of the three above
     std::optional<std::vector<vcl::font::Variation>>* m_pFontVariations = nullptr;
+    std::optional<std::vector<vcl::font::FeatureSetting>> m_oFontFeatures;
+    std::optional<std::vector<vcl::font::FeatureSetting>> m_oCJKFontFeatures;
+    std::optional<std::vector<vcl::font::FeatureSetting>> m_oCTLFontFeatures;
     std::unique_ptr<svx::FontVariationsPopup> m_xFontVariationsPopup;
     // the font the open variations popover belongs to
     OUString m_sFontVariationsFontName;

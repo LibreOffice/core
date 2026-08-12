@@ -30,10 +30,6 @@
 namespace vcl::font
 {
 
-// These mustn't conflict with font name lists which use ; and ,
-const char FontSelectPattern::FEAT_PREFIX = ':';
-const char FontSelectPattern::FEAT_SEPARATOR = '&';
-
 FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     OUString aSearchName, const Size& rSize, float fExactHeight, bool bNonAntialias)
     : maSearchName(std::move( aSearchName ))
@@ -94,17 +90,7 @@ FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
 size_t FontSelectPattern::hashCode() const
 {
     // TODO: does it pay off to improve this hash function?
-    size_t nHash;
-    // check for features and generate a unique hash if necessary
-    if (maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
-        != -1)
-    {
-        nHash = maTargetName.hashCode();
-    }
-    else
-    {
-        nHash = maSearchName.hashCode();
-    }
+    size_t nHash = maSearchName.hashCode();
     nHash += 11U * mnHeight;
     nHash += 19 * GetWeight();
     nHash += 29 * GetItalic();

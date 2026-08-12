@@ -61,6 +61,7 @@ class FontFeaturesDialog : public weld::GenericDialogController
 private:
     std::vector<std::unique_ptr<FontFeatureItem>> m_aFeatureItems;
     OUString m_sFontName;
+    std::vector<vcl::font::FeatureSetting> m_aExistingFeatures;
 
     SvxFontPrevWindow m_aPreviewWindow;
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
@@ -81,10 +82,11 @@ private:
     DECL_LINK(CheckBoxToggledHdl, weld::Toggleable&, void);
 
 public:
-    FontFeaturesDialog(weld::Window* pParent, OUString aFontName);
+    FontFeaturesDialog(weld::Window* pParent, OUString aFontName,
+                       std::vector<vcl::font::FeatureSetting> aFeatures);
     ~FontFeaturesDialog() override;
 
-    OUString createFontNameWithFeatures() const;
+    std::vector<vcl::font::FeatureSetting> getFeatures() const;
 
     void updateFontPreview();
 };

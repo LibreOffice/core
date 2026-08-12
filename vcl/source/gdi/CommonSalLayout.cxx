@@ -26,7 +26,6 @@
 #include <vcl/glyphitem.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
-#include <vcl/font/FeatureParser.hxx>
 #include <vcl/svapp.hxx>
 
 #include <ImplLayoutArgs.hxx>
@@ -64,23 +63,6 @@ void GenericSalLayout::SetFeatures(const std::vector<vcl::font::FeatureSetting>&
 {
     for (auto const& rFeat : rFeatures)
         maFeatures.push_back({ rFeat.m_nTag, rFeat.m_nValue, rFeat.m_nStart, rFeat.m_nEnd });
-}
-
-// The features a font name carries, which is how they were stored before they
-// became an attribute of their own. Kept so that a name typed by hand still
-// works, and for documents not yet converted.
-void GenericSalLayout::ParseFeatures(std::u16string_view aName)
-{
-    vcl::font::FeatureParser aParser(aName);
-    const OUString& sLanguage = aParser.getLanguage();
-    if (!sLanguage.isEmpty())
-        msLanguage = OUStringToOString(sLanguage, RTL_TEXTENCODING_ASCII_US);
-
-    for (auto const &rFeat : aParser.getFeatures())
-    {
-        hb_feature_t aFeature { rFeat.m_nTag, rFeat.m_nValue, rFeat.m_nStart, rFeat.m_nEnd };
-        maFeatures.push_back(aFeature);
-    }
 }
 
 namespace {
@@ -470,7 +452,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     }
 
     SetFeatures(rFontSelData.maFeatures);
-    ParseFeatures(rFontSelData.maTargetName);
 
     double nXScale = 0;
     double nYScale = 0;
