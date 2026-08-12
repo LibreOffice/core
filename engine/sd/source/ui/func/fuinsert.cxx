@@ -247,7 +247,11 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     pDlg->Insert( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, OUString() );
 
     //TODO/MBA: testing
-    nFormatId = pDlg->GetFormat( aDataHelper );
+    pDlg->PreGetFormat(aDataHelper);
+    if (pDlg->Execute() != RET_OK)
+        return;
+
+    nFormatId = pDlg->GetFormatOnly();
     if( nFormatId == SotClipboardFormatId::NONE || !aDataHelper.GetTransferable().is() )
         return;
 
