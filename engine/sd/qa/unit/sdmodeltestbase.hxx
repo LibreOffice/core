@@ -101,6 +101,28 @@ public:
         return xShape;
     }
 
+    /** The exported slide layout carrying this name, whatever number its part got
+
+        A layout's part number is its position in the master's list, and that moves as soon as a
+        document gains, loses or reorders one; the name says what the layout is for.
+    */
+    xmlDocUniquePtr parseExportedLayoutNamed(std::u16string_view aName)
+    {
+        xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+        const int nLayouts
+            = countXPathNodes(pMaster, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId");
+        xmlDocUniquePtr pFound;
+        for (int i = 1; i <= nLayouts && !pFound; ++i)
+        {
+            xmlDocUniquePtr pLayout
+                = parseExport("ppt/slideLayouts/slideLayout" + OUString::number(i) + ".xml");
+            if (getXPath(pLayout, "/p:sldLayout/p:cSld", "name") == aName)
+                pFound = std::move(pLayout);
+        }
+        CPPUNIT_ASSERT_MESSAGE("no exported slide layout of that name", pFound);
+        return pFound;
+    }
+
     // very confusing ... UNO index-based access to pages is 0-based. This one is 1-based
     const SdrPage* GetPage(int nPage)
     {

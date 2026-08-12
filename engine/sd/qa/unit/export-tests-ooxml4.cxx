@@ -908,16 +908,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
         aPosBefore = xShape->getPosition();
     }
 
-    // The picture placeholder must round-trip with its size and position (inherited from the layout
-    // via an empty <p:spPr/>), and must remain visible.
+    // The picture placeholder must round-trip with its size and position, and must remain visible.
     saveAndReload(TestFilter::PPTX);
 
     {
-        // After reload, the saved markup should be <p:sp> with <p:ph type="pic"/>
-        // and an empty <p:spPr/>.
+        // After reload, the saved markup should be <p:sp> with <p:ph type="pic"/> and its own
+        // geometry. Relying on the layout to supply the geometry instead left the placeholder
+        // 0x0 whenever the slide's layout placeholder could not be resolved on reimport.
         xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
         assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph", "type", u"pic");
-        assertXPathChildren(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr", 0);
+        assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:ext", "cx", u"6635520");
 
         uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
         bool bEmpty = false;
@@ -935,6 +935,40 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(aPosBefore.X, aPosAfter.X, 1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(aPosBefore.Y, aPosAfter.Y, 1);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNoPicPlaceholderOnSlideMaster)
+{
+    // Given a deck whose only layout carries a picture placeholder, so on import the placeholder
+    // lands on the Impress master page:
+    createSdImpressDoc("pptx/tdfpictureplaceholder.pptx");
+    save(TestFilter::PPTX);
+
+    // A slide master takes only title, body, dt, ftr and sldNum placeholders. Without the
+    // accompanying fix the master carried <p:ph type="pic"/> and PowerPoint refused to open the
+    // saved file at all, reporting it as corrupted and unreadable.
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='pic']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicPlaceholderMovedToLayout)
+{
+    // Given a deck of one master and one layout, so the master page's own shapes go into the
+    // p:sldMaster part and the layout gets none of them:
+    createSdImpressDoc("pptx/picture-placeholder-one-layout.pptx");
+    save(TestFilter::PPTX);
+
+    // The picture placeholder still goes on the layout, which is where a slide resolves what it
+    // inherits. Without the accompanying fix it had nowhere to go but the slide master, which may
+    // not carry one, and PowerPoint refused to open the file.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Picture placeholder");
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='pic']", 1);
+
+    xmlDocUniquePtr pMaster2 = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster2, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='pic']", 0);
+
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlide, "/p:sld/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='pic']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
