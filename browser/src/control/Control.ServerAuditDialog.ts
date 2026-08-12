@@ -69,7 +69,7 @@ class ServerAuditDialog {
 				priority: 2,
 				uncontained: [
 					_(
-						'Documents are not effectively contained: missing capabilities or namespaces.',
+						'Documents are not effectively contained: missing capabilities, namespaces and landlock.',
 					),
 					'SDK: nocaps',
 					'',

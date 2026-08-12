@@ -24,6 +24,7 @@
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Seccomp.hpp>
+#include <common/Landlock.hpp>
 #include <common/SigUtil.hpp>
 #include <common/Simd.hpp>
 #include <common/Unit.hpp>
@@ -967,7 +968,8 @@ int forkit_main(int argc, char** argv)
         // we are running in a lower-privilege mode - with no chroot
         else if (std::strstr(cmd, "--nocaps") == cmd)
         {
-            LOG_ERR("Security: Running without the capability to enter a chroot jail is ill advised.");
+            if (!Landlock::isSupported())
+                LOG_ERR("Security: Running without the chroot/namespaces/landlock for document isolation is ill advised.");
             NoCapsForKit = true;
         }
 

@@ -50,6 +50,7 @@
 #include <common/HexUtil.hpp>
 #include <common/JailUtil.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/Landlock.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
 #include <common/NumUtil.hpp>
@@ -2123,8 +2124,16 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         // chroot without capabilities, but the richdocumentscode AppImage layout isn't
         // compatible with the systemplate expectations for setting up the chroot so
         // disable MountNamespaces in NoCapsForKit mode for now.
-        LOG_WRN("MountNamespaces is not compatible with NoCapsForKit. Disabling.");
+        if (!Landlock::isSupported())
+            LOG_WRN("MountNamespaces is not compatible with NoCapsForKit. Disabling.");
         UseMountNamespaces = false;
+    }
+
+    if (NoCapsForKit && IsBindMountingEnabled)
+    {
+        // With NoCapsForKit there is no jail tree to bind-mount into.
+        LOG_INF("Bind-mounting is not used with NoCapsForKit. Disabling.");
+        IsBindMountingEnabled = false;
     }
 
     LOG_INF("Creating childroot: [" << ChildRoot << "] with" << (UseMountNamespaces ? "" : "out")
@@ -3685,8 +3694,10 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << " prisoner " << MasterLocation
        << "\n  SSL: " << (ConfigUtil::isSslEnabled() ? "https" : "http")
        << "\n  SSL-Termination: " << (ConfigUtil::isSSLTermination() ? "yes" : "no")
-       << "\n  Security " << (COOLWSD::NoCapsForKit ? "no" : "") << " chroot, "
-       << (COOLWSD::NoSeccomp ? "no" : "") << " api lockdown"
+       << "\n  Security: "
+       << (COOLWSD::NoCapsForKit ? (Landlock::isSupported() ? "landlock" : "no")
+                                 : (COOLWSD::EnableMountNamespaces ? "namespace" : "chroot"))
+       << " containment, " << (COOLWSD::NoSeccomp ? "no " : "") << "api lockdown"
           "\n  Admin: " << (COOLWSD::AdminEnabled ? "enabled" : "disabled")
        << "\n  RouteToken: " << COOLWSD::RouteToken
 #endif

@@ -146,7 +146,7 @@ bool addPerm(int rulesetFd, const Permission& perm)
 
 bool isSupported()
 {
-    const int abi = landlockCreateRuleset(nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION);
+    static int abi = landlockCreateRuleset(nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION);
     return abi >= 1;
 }
 
@@ -193,15 +193,8 @@ bool lock(const std::vector<Permission>& perms)
     // fonts and fontconfig cache
     success = success && addPerm(rulesetFd, Permission("/var", Access::ReadOnlyDir));
 
-#if 0
-    // No device nodes or /proc pieces are needed - we patch libraries
-    // internally to avoid these.
-
-    // device and process special files: /dev/null, /dev/urandom, /proc/self views
-    success = success && addPerm(rulesetFd, Permission("/dev", Access::ReadWrite));
-    success = success && addPerm(rulesetFd, Permission("/proc", Access::ReadOnlyDir));
-    success = success && addPerm(rulesetFd, Permission("/sys", Access::ReadOnlyDir));
-#endif
+    // NB. no /dev device nodes or /sys or /proc pieces are needed - we
+    // patch libraries internally to avoid needing these.
 
     for (const auto& perm : perms)
         success = success && addPerm(rulesetFd, perm);

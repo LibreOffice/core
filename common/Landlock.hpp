@@ -23,7 +23,7 @@ namespace Landlock
     struct Permission {
         std::string _path;
         Access _access;
-        Permission(std::string path, Access access) :
+        Permission(const std::string &path, Access access) :
             _path(path), _access(access) {}
     };
 
