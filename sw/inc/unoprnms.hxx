@@ -156,6 +156,9 @@ inline constexpr OUString UNO_NAME_CHAR_OPTICAL_SIZING = u"CharOpticalSizing"_us
 inline constexpr OUString UNO_NAME_CHAR_FONT_VARIATIONS = u"CharFontVariations"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_CJK_FONT_VARIATIONS = u"CharFontVariationsAsian"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_CTL_FONT_VARIATIONS = u"CharFontVariationsComplex"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_FONT_FEATURES = u"CharFontFeatures"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_FONT_FEATURES_ASIAN = u"CharFontFeaturesAsian"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_FONT_FEATURES_COMPLEX = u"CharFontFeaturesComplex"_ustr;
 inline constexpr OUString UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS
     = u"HideTabLeaderAndPageNumber"_ustr;
 inline constexpr OUString UNO_NAME_TAB_IN_TOC = u"TabInTOC"_ustr;

@@ -44,6 +44,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -338,6 +339,9 @@ std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes()
             { RES_CHRATR_FONT_VARIATIONS, new SvxFontVariationsItem( RES_CHRATR_FONT_VARIATIONS ), SID_ATTR_CHAR_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
             { RES_CHRATR_CJK_FONT_VARIATIONS, new SvxFontVariationsItem( RES_CHRATR_CJK_FONT_VARIATIONS ), SID_ATTR_CHAR_CJK_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
             { RES_CHRATR_CTL_FONT_VARIATIONS, new SvxFontVariationsItem( RES_CHRATR_CTL_FONT_VARIATIONS ), SID_ATTR_CHAR_CTL_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_FONT_FEATURES, new SvxFontFeaturesItem( RES_CHRATR_FONT_FEATURES ), SID_ATTR_CHAR_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CJK_FONT_FEATURES, new SvxFontFeaturesItem( RES_CHRATR_CJK_FONT_FEATURES ), SID_ATTR_CHAR_CJK_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CTL_FONT_FEATURES, new SvxFontFeaturesItem( RES_CHRATR_CTL_FONT_FEATURES ), SID_ATTR_CHAR_CTL_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
 
             { RES_TXTATR_REFMARK, new SwFormatRefMark( SwMarkName() ),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_TOXMARK, createSwTOXMarkForItemInfoPackage(),  0, SFX_ITEMINFOFLAG_NONE },
