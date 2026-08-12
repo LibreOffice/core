@@ -99,6 +99,9 @@
 #include <docpool.hxx>
 #include <config_features.h>
 #include <tablestyle.hxx>
+#include <docuno.hxx>
+#include <comphelper/kit.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace com::sun::star;
 
@@ -828,6 +831,14 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             if (mpDrawLayer)
                 mpDrawLayer->ScMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
+            // The sheet leaves one position and takes another, and the sheets between the two
+            // shift by one, so those positions hold different content now.
+            if (comphelper::COKit::isActive() && GetDocumentShell())
+            {
+                ScModelObj* pModel = GetDocumentShell()->GetModel();
+                KitHelper::notifyDocumentSizeChangedAllViews(pModel);
+            }
+
             bValid = true;
         }
     }
@@ -987,6 +998,14 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         sc::StartListeningContext aSLCxt(*this);
         maTabs[nOldPos]->StartListeners(aSLCxt, true);
         maTabs[nNewPos]->StartListeners(aSLCxt, true);
+
+        // The copy takes a position that another sheet held, and every sheet after it moves up
+        // one, so from here on those positions hold different content.
+        if (comphelper::COKit::isActive() && GetDocumentShell())
+        {
+            ScModelObj* pModel = GetDocumentShell()->GetModel();
+            KitHelper::notifyDocumentSizeChangedAllViews(pModel);
+        }
     }
 
     return bValid;
