@@ -58,8 +58,11 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     if (mbIsImpressDoc)
+    {
+        m_xDialog->set_title(SdResId(STR_TITLE_SLIDE_PROPERTIES));
         AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_SLIDE.aLabel),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_SLIDE.sIconName);
+    }
     else
         AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_PAGE.aLabel),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);

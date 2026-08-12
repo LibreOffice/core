@@ -224,6 +224,7 @@
 #define STR_DESC_RENAMESLIDE                            NC_("STR_DESC_RENAMESLIDE", "Name")
 #define STR_TITLE_RENAMEMASTERSLIDE                     NC_("STR_TITLE_RENAMEMASTERSLIDE", "Rename Master Slide")
 #define STR_TITLE_RENAMEMASTERPAGE                      NC_("STR_TITLE_RENAMEMASTERPAGE", "Rename Master Page")
+#define STR_TITLE_SLIDE_PROPERTIES                      NC_("STR_TITLE_SLIDE_PROPERTIES", "Slide Properties")
 #define STR_PLACEHOLDER_DESCRIPTION_TITLE               NC_("STR_PLACEHOLDER_DESCRIPTION_TITLE", "Title Area for AutoLayouts" )
 #define STR_PLACEHOLDER_DESCRIPTION_OUTLINE             NC_("STR_PLACEHOLDER_DESCRIPTION_OUTLINE", "Object Area for AutoLayouts" )
 #define STR_PLACEHOLDER_DESCRIPTION_FOOTER              NC_("STR_PLACEHOLDER_DESCRIPTION_FOOTER", "Footer Area" )
