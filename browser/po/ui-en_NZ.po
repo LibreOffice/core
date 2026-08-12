@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-16 14:01+0000\n"
+"PO-Revision-Date: 2026-08-12 22:54+0000\n"
 "Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/en_NZ/>\n"
-"Language: \n"
+"Language: en_NZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -447,6 +447,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Some clients connected with the old WebSocket URL form, which is planned for "
+"removal. Check that your proxy passes the compact form through."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3782
@@ -456,7 +458,7 @@ msgstr "Error"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Learn more"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -557,7 +559,7 @@ msgstr "Show Ruler"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Show Formatting Marks"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 #: src/control/Control.NotebookbarWriter.js:2313
@@ -647,11 +649,11 @@ msgstr "Content"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Display"
-msgstr ""
+msgstr "Display"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Show Boundaries"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 #: src/control/Control.BackstageView.ts:824
@@ -859,14 +861,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Upload a packaged extension as a .zip; its contents (manifest.json, ...) are "
+"unpacked on the server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Upload Extension"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Settings are only available to signed-in users."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -893,10 +897,12 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"When on, Writer fits the document to the viewport width on open. When off, "
+"the document opens at the Default Zoom level set below."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1459
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "No settings available for {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1471
 msgid "Select a tab to browser settings."
@@ -974,7 +980,7 @@ msgstr "Zotero account API settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2180
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero Settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2212
 #: admin/src/integrator/AdminIntegratorSettings.ts:3393
@@ -991,7 +997,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2237
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Document Signing Settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2275
 #: admin/src/integrator/AdminIntegratorSettings.ts:2292
@@ -1027,7 +1033,7 @@ msgstr "e.g."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Leave empty if your server does not require one"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1087,7 +1093,7 @@ msgstr "Fetch models to select"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "API quota exceeded - check your plan and billing details"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1104,7 +1110,7 @@ msgstr "Upload Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3596
 msgid "Enter {0}"
-msgstr ""
+msgstr "Enter {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3654
 msgid "Reset"
@@ -1112,15 +1118,15 @@ msgstr "Reset"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3655
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Reset to default {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3659
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Are you sure you want to reset {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3675
 msgid "Save {0}"
-msgstr ""
+msgstr "Save {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1425,7 +1431,7 @@ msgstr "Current Version"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n more"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1531,7 +1537,7 @@ msgstr "cell address"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Name Box"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
@@ -1539,7 +1545,7 @@ msgstr "Make the following text more concise"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Make it more concise"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
@@ -1547,7 +1553,7 @@ msgstr "Summarise the key points of this text"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Summarise this text"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
@@ -1555,7 +1561,7 @@ msgstr "Expand and add more detail to this text"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Expand this text"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1563,7 +1569,7 @@ msgstr "Fix grammar, spelling, and punctuation errors"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Fix grammar & spelling"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
@@ -1591,7 +1597,7 @@ msgstr "Casual"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Best"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1600,7 +1606,7 @@ msgstr "Good"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Poor"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
@@ -1878,7 +1884,7 @@ msgstr "See more"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Design template choice cancelled."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
@@ -1897,6 +1903,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"The request timed out. You can increase the request timeout in the AI "
+"section of the settings."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -1998,23 +2006,23 @@ msgstr "Failed to parse selection content"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Pick a design for your deck, or continue without one:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "No template"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Continue without a design template"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Design template: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Continuing without a design template."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
@@ -2269,7 +2277,7 @@ msgstr "Don’t show this again"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "A {0} error occurred while processing the {1} command."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -2487,104 +2495,104 @@ msgstr "More Property Info"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Open a document from your computer or a cloud location."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Open File from Computer"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Add Cloud +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Edit account"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Add new account"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Server URL"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Enter server URL"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Display name"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Enter display name"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Name displayed in your cloud list (max. 40 characters)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Save changes"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Add Account"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Remove account"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Disconnects this cloud"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "New account successfully added"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "You can now access your files from this cloud."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Open Files"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Remove this account?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "You'll be disconnected from this cloud account."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Drop file to open"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "This mobile view is not fully accessible."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Accessibility statement"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3284,7 +3292,7 @@ msgstr "Repair"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:704 src/control/Control.Menubar.ts:886
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -3569,7 +3577,7 @@ msgstr "Local Multimedia..."
 #: src/control/Control.NotebookbarImpress.js:2730
 #: src/control/Control.NotebookbarImpress.js:3124
 msgid "Distribute"
-msgstr ""
+msgstr "Distribute"
 
 #: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:1280
 #: src/control/Control.PresentationBar.js:128
@@ -3820,11 +3828,11 @@ msgstr "Results"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maximise to grid"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Find and Replace"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4023,7 +4031,7 @@ msgstr "Animations"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Unsaved changes. Save"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4063,7 +4071,7 @@ msgstr "Image (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Unsaved changes."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -4429,7 +4437,7 @@ msgstr "Insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1819
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Select an editable cell range to insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1828
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4798,7 +4806,7 @@ msgstr "Remove Section"
 
 #: src/control/Control.PartsPreview.js:994
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Remove Section & Slides"
 
 #: src/control/Control.PartsPreview.js:1003
 msgid "Move Section Up"
@@ -4818,7 +4826,7 @@ msgstr "Expand All Sections"
 
 #: src/control/Control.PartsPreview.js:1064
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Delete section \"%1\" and its %2 slide(s)?"
 
 #: src/control/Control.PartsPreview.js:1112
 msgid "Enter new section name:"
@@ -4869,10 +4877,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Connected with the old WebSocket URL form, which is planned for removal. "
+"Check that your proxy passes the compact form through."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Connected with the compact WebSocket URL form"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4986,6 +4996,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Fit the page to the window width. Smart Zoom on open can be toggled in "
+"Options under File tab."
 
 #: src/control/Control.StatusBar.js:290
 msgid "Status Bar Menu"
@@ -5049,7 +5061,7 @@ msgstr "Copy Sheet..."
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, protected"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5111,26 +5123,28 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"An embedded script uses the legacy com.sun.star UNO API, which may be "
+"removed in future releases."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
-msgstr ""
+msgstr "Copy error details"
 
 #: src/control/Control.UIManager.ts:2916
 msgid "Show technical details"
-msgstr ""
+msgstr "Show technical details"
 
 #: src/control/Control.UIManager.ts:2930
 msgid "Technical Details:"
-msgstr ""
+msgstr "Technical Details:"
 
 #: src/control/Control.UIManager.ts:2934
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Error details copied to clipboard"
 
 #: src/control/Control.UIManager.ts:2944
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Failed to copy error details"
 
 #: src/control/Control.UserList.ts:57
 msgid "{user} has joined"
@@ -5344,17 +5358,16 @@ msgstr ""
 "and bibliography in this document."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "First Slide"
+msgstr "First line"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Before"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
-msgstr ""
+msgstr "Double-click to insert a tab stop. Right-click for more options."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5398,64 +5411,67 @@ msgstr "Enter a file name"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "How would you like to edit?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Other users are viewing this document. Choose how you'd like to continue:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Edit locally"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Changes sync when you save"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Collaborative editing"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Edit together in real-time"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Keep viewing local copy"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Continue with your version"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Join collaborative editing"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Waiting for changes to be saved..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Other users are editing this document. Choose how you'd like to continue:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "started editing"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 started editing"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Someone else is now editing this document. Choose how you'd like to continue:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5575,19 +5591,19 @@ msgstr "Title, Vertical Text, Clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standard selection"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Extending selection"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Adding selection"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Block selection"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5604,7 +5620,7 @@ msgstr "Renaming..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Unable to share"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6163,11 +6179,11 @@ msgstr "Table Cell Functions"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Size of selected shape"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Shape Size"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6267,7 +6283,7 @@ msgstr ""
 
 #: src/app/Socket.ts:640
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "The connection to the document has been lost."
 
 #: src/app/Socket.ts:641
 msgid "The server has been disconnected."
@@ -6335,7 +6351,7 @@ msgstr "Wrong server, reconnecting..."
 
 #: src/app/Socket.ts:1963
 msgid "Unsupported version."
-msgstr ""
+msgstr "Unsupported version."
 
 #: src/app/Socket.ts:1964
 msgid "Unsupported server version."
@@ -6394,11 +6410,9 @@ msgid "Server is shutting down"
 msgstr "Server is shutting down"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
-msgstr ""
-"AI is not configured. Go to File > Options > View Settings to set it up."
+msgstr "AI is not configured. Go to File > Options > AI Assistant to set it up."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6430,7 +6444,7 @@ msgstr "{0} tab selected"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "No disk space left."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6763,7 +6777,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Copying from the document has been disabled by your administrator"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -6775,7 +6789,7 @@ msgstr "Failed to download clipboard, please re-copy"
 
 #: src/map/Clipboard.js:390
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Failed to upload the clipboard"
 
 #: src/map/Clipboard.js:1482
 msgid ""
@@ -6842,10 +6856,8 @@ msgid "Please send us your feedback"
 msgstr "Please send us your feedback"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"The file of type: {0} cannot be uploaded to server since the file has no name"
+msgstr "The file of type: {0} cannot be inserted since the file has no name"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6856,10 +6868,8 @@ msgstr ""
 "The file of type: {0} cannot be uploaded to server since the file has no name"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"The file of type: {0} cannot be uploaded to server since the file is empty"
+msgstr "The file of type: {0} cannot be inserted since the file is empty"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6919,7 +6929,7 @@ msgstr "Windowed Presentation: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Presenting in another window"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -6988,7 +6998,7 @@ msgstr "Welcome Dialogue"
 
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Settings saved. Add an API key to use the AI assistant."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7070,9 +7080,8 @@ msgid "Present to all"
 msgstr "Present to all"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Edit"
+msgstr "Exit"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
@@ -7088,11 +7097,11 @@ msgstr "Zoom Out"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Preview of the current slide"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Preview of the next slide"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7100,11 +7109,11 @@ msgstr "Preview Slide {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "You are leaving the presentation."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "The link is not valid."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7270,11 +7279,11 @@ msgstr "Yellow Idea"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Welcome to Spreadsheet"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Welcome to Presentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
