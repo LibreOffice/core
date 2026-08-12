@@ -22,8 +22,6 @@
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/idle.hxx>
 #include <tools/json_writer.hxx>
 
 #define PROGRESSBAR_OFFSET          3
@@ -174,31 +172,11 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 {
     SAL_WARN_IF( nNewPercent > 100, "vcl", "StatusBar::SetProgressValue(): nPercent > 100" );
 
-    if ( nNewPercent < mnPercent )
-    {
-        mbCalcNew = true;
-        mnPercent = nNewPercent;
-        if ( IsReallyVisible() )
-        {
-            Invalidate();
-            PaintImmediately();
-        }
-    }
-    else if ( mnPercent != nNewPercent )
-    {
-        mnPercent = nNewPercent;
-        Invalidate();
+    if ( mnPercent == nNewPercent )
+        return;
 
-        // Make sure the progressbar is actually painted even if the caller is busy with its task,
-        // so the main loop would not be invoked.
-        Idle aIdle("ProgressBar::SetValue aIdle");
-        aIdle.SetPriority(TaskPriority::POST_PAINT);
-        aIdle.Start();
-        while (aIdle.IsActive() && !Application::IsQuit())
-        {
-            Application::Yield();
-        }
-    }
+    mnPercent = nNewPercent;
+    Invalidate();
 }
 
 void ProgressBar::StateChanged( StateChangedType nType )
