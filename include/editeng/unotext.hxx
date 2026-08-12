@@ -141,7 +141,10 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_OPTICALSIZING,       EE_CHAR_OPTICALSIZING,  ::cppu::UnoType<bool>::get(), 0, 0 }, \
     { UNO_NAME_EDIT_CHAR_FONTVARIATIONS,      EE_CHAR_FONTVARIATIONS, ::cppu::UnoType<OUString>::get(), 0, 0 }, \
     { UNO_NAME_EDIT_CHAR_FONTVARIATIONS_ASIAN,   EE_CHAR_FONTVARIATIONS_CJK, ::cppu::UnoType<OUString>::get(), 0, 0 }, \
-    { UNO_NAME_EDIT_CHAR_FONTVARIATIONS_COMPLEX, EE_CHAR_FONTVARIATIONS_CTL, ::cppu::UnoType<OUString>::get(), 0, 0 }
+    { UNO_NAME_EDIT_CHAR_FONTVARIATIONS_COMPLEX, EE_CHAR_FONTVARIATIONS_CTL, ::cppu::UnoType<OUString>::get(), 0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_FONTFEATURES,        EE_CHAR_FONTFEATURES, ::cppu::UnoType<OUString>::get(), 0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_FONTFEATURES_ASIAN,  EE_CHAR_FONTFEATURES_CJK, ::cppu::UnoType<OUString>::get(), 0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_FONTFEATURES_COMPLEX, EE_CHAR_FONTFEATURES_CTL, ::cppu::UnoType<OUString>::get(), 0, 0 }
 
 
 #define SVX_UNOEDIT_FONT_PROPERTIES \
