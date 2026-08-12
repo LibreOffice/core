@@ -10,14 +10,15 @@
 $(eval $(call gb_CustomTarget_CustomTarget,rust_uno/rustmaker))
 
 $(call gb_CustomTarget_get_target,rust_uno/rustmaker): \
-        $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp
+        $(gb_CustomTarget_workdir)/rust_uno/rustmaker/generate.done
 
-$(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp: \
+$(gb_CustomTarget_workdir)/rust_uno/rustmaker/generate.done: \
         $(call gb_Executable_get_target,rustmaker) \
         $(call gb_Executable_get_runtime_dependencies,rustmaker) \
         $(call gb_UnoApi_get_target,offapi) \
         $(call gb_UnoApi_get_target,udkapi) \
         | $(gb_CustomTarget_workdir)/rust_uno/rustmaker/.dir
+	rm -f $@
 	rm -fr $(SRCDIR)/rust_uno/src/generated
 	mkdir $(SRCDIR)/rust_uno/src/generated
 	rm -fr $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp

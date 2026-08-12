@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,rust_uno/cargo))
 .PHONY: $(call gb_CustomTarget_get_target,rust_uno/cargo)
 $(call gb_CustomTarget_get_target,rust_uno/cargo): \
         $(call gb_Library_get_target,rust_uno-cpp) \
-        $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp
+        $(call gb_CustomTarget_get_target,rust_uno/rustmaker)
 	cd $(SRCDIR)/rust_uno && cargo build $(if $(verbose),--verbose,) --release
 
 #TODO: Add to the general pattern rule from solenv/gbuild/CustomTarget.mk, instead of having to
