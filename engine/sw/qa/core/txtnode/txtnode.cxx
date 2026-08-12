@@ -523,6 +523,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     auto pText2 = pText1->GetNext()->DynCastTextFrame();
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pText2->GetText());
 
+    adjustLayoutLines();
+
     // Also test that the new follow anchor text frame still has a fly portion, otherwise the anchor
     // text and the floating table would overlap:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
