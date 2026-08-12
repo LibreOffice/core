@@ -816,6 +816,9 @@ font-style-complex
 font-style-name
 font-style-name-asian
 font-style-name-complex
+font-feature-settings
+font-feature-settings-asian
+font-feature-settings-complex
 font-variation-settings
 font-variation-settings-asian
 font-variation-settings-complex
