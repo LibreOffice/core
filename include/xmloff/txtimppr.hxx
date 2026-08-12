@@ -47,6 +47,11 @@ class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLTextImportPropertyMapper final 
                 std::optional<XMLPropertyState>* ppNewFontPitch,
                 std::optional<XMLPropertyState>* ppNewFontCharSet ) const;
 
+    void FontFeaturesCheck(
+            XMLPropertyState* pFontFamilyName,
+            sal_Int16 nContextId,
+            std::optional<XMLPropertyState>* ppNewFontFeatures ) const;
+
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
