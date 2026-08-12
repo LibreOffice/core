@@ -74,10 +74,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const vcl::font::FontSelectPattern& r
     }
 
     // check for features
-    if ((rA.maTargetName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX)
-         != -1 ||
-         rB.maTargetName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX)
-         != -1) && rA.maTargetName != rB.maTargetName)
+    if (rA.maFeatures != rB.maFeatures)
         return false;
 
     if (rA.mbEmbolden != rB.mbEmbolden)
