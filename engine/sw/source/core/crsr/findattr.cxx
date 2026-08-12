@@ -1395,7 +1395,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             // TODO: searching for attributes in Outliner text?!
 
             // continue search in correct section (pTextRegion)
-            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_bFindAll, m_pLayout, xSearchItem) &&
+            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_bFindAll, m_pLayout, /*MustStartWithCurrentNode=*/true, xSearchItem) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )
                 break; // found
             else if( !pSet->Count() )
