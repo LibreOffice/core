@@ -46,100 +46,19 @@ class B2DPolygonPrinter(object):
     def __init__(self, typename, value):
         self.typename = typename
         self.value = value
-        # inject children() func dynamically
-        if not self._isEmpty():
-            self.children = self._children
+        self.children = self._children
 
     def to_string(self):
-        if self._isEmpty():
-            return "empty %s" % (self.typename)
-        else:
-            return "%s %s" % ('bezier curve' if self._hasCurves() else 'straight line',
-                              self.typename)
-
-    def _count(self):
-        # It's a call into the inferior (being debugged) process.
-        # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
-            return 0
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
-
-    def _isEmpty(self):
-        return self._count() == 0
-
-    def _hasCurves(self):
-        # It's a call into the inferior (being debugged) process.
-        # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
-            return False
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
+        return self.typename
 
     def _children(self):
-        if self._hasCurves():
-            return self._bezierIterator(self._count(), self.value)
-        else:
-            return self._plainIterator(self._count(), self.value)
-
-    class _plainIterator(six.Iterator):
-        def __init__(self, count, value):
-            self.count = count
-            self.value = value
-            self.index = 0
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.index >= self.count:
-                raise StopIteration()
-            points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
-            currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
-            # doesn't work?
-            #currPoint = gdb.parse_and_eval(
-            #        '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-            #          self.value.address, self.index))
-            self.index += 1
-            return ('point %d' % (self.index-1),
-                    '(%15f, %15f)' % (currPoint['mnX'], currPoint['mnY']))
-
-    class _bezierIterator(six.Iterator):
-        def __init__(self, count, value):
-            self.count = count
-            self.value = value
-            self.index = 0
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.value.__str__() == "<unavailable>":
-                raise StopIteration()
-            if self.index >= self.count:
-                raise StopIteration()
-            points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
-            currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
-            #currPoint = gdb.parse_and_eval(
-            #        '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-            #          self.value.address, self.index))
-
-            # It's a call into the inferior (being debugged) process.
-            # Will not work with core dumps and can cause a deadlock.
-            prevControl = gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->getPrevControlPoint({:d})".format(self.value.address, self.index))
-            # It's a call into the inferior (being debugged) process.
-            # Will not work with core dumps and can cause a deadlock.
-            nextControl = gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->getNextControlPoint({:d})".format(self.value.address, self.index))
-            self.index += 1
-            return ('point %d' % (self.index-1),
-                    'p: (%15f, %15f) c-1: (%15f, %15f) c1: (%15f, %15f)' %
-                    (currPoint['mnX'],   currPoint['mnY'],
-                     prevControl['mnX'], prevControl['mnY'],
-                     nextControl['mnX'], nextControl['mnY']))
+        if self.value['mpPolygon']['m_pimpl'].type.code in (gdb.TYPE_CODE_PTR, gdb.TYPE_CODE_MEMBERPTR):
+            try:
+                vector = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
+                import libstdcxx.v6.printers as std
+                return std.StdVectorPrinter("std::vector", vector).children()
+            except RuntimeError:
+                gdb.write("Cannot access memory at address " + str(self.value['mpPolygon']['m_pimpl'].address))
 
 class B2DPolyPolygonPrinter(object):
     '''Prints a B2DPolyPolygon object.'''
@@ -147,37 +66,12 @@ class B2DPolyPolygonPrinter(object):
     def __init__(self, typename, value):
         self.typename = typename
         self.value = value
+        self.children = self._children
 
     def to_string(self):
-        if self._isEmpty():
-            return "empty %s" % (self.typename)
-        else:
-            return "%s %s with %d sub-polygon(s)" % ('closed' if self._isClosed() else 'open',
-                                                     self.typename,
-                                                     self._count())
+        return self.typename
 
-    def _count(self):
-        # It's a call into the inferior (being debugged) process.
-        # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
-            return 0
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
-
-    def _isClosed(self):
-        # It's a call into the inferior (being debugged) process.
-        # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
-            return True
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
-
-    def _isEmpty(self):
-        return self._count() == 0
-
-    def children(self):
+    def _children(self):
         if self.value['mpPolyPolygon']['m_pimpl'].type.code in (gdb.TYPE_CODE_PTR, gdb.TYPE_CODE_MEMBERPTR):
             if self.value['mpPolyPolygon']['m_pimpl']:
                 try:
