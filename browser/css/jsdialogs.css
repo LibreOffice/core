@@ -751,6 +751,7 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	box-sizing: border-box;
 	width: var(--cool-vertical-rail-width);
 	min-height: 0;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -2219,6 +2220,7 @@ img.ui-combobox-value-preview {
 	max-height: calc(0.4 * var(--dialog-available-height));
 	gap: var(--spacing-xs);
 	padding: var(--spacing-xs);
+	width: max-content;
 }
 
 .ui-iconview.mobile-wizard {

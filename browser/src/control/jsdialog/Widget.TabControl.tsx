@@ -23,11 +23,18 @@
  * vertical rail also leaves more height for the panel content. The
  * threshold is the largest tab count that still reads comfortably as a
  * horizontal row.
+ *
+ * A dialog holding the empty None fill page gets the rail at any tab count,
+ * and tabs inside a tab page stay a row.
  */
 
 declare var JSDialog: any;
 
 const VERTICAL_TABS_THRESHOLD = 4;
+
+// The None fill type of the Area page, which is an empty page. Every dialog showing fill
+// types builds it from cui/uiconfig/ui/areatabpage.ui, and no dialog drops that page.
+const EMPTY_FILL_PAGE_ID = 'gdNone';
 
 interface TabControlItem {
   id: string | number;
@@ -43,6 +50,8 @@ interface TabControlData {
   selected?: string | number;
   vertical?: boolean;
   noCoreEvents?: boolean;
+  tabControlDepth?: number;
+  hasEmptyTabPage?: boolean;
 }
 
 // A tabpage child is the content of one tab. The vertical flag asks us to
@@ -52,6 +61,19 @@ interface TabControlData {
 function isTabContent(child: WidgetJSON, data: TabControlData): boolean {
   return child.type === 'tabpage' || !!data.vertical;
 }
+
+// True when the empty None fill page sits somewhere below this widget, so a panel of this
+// dialog comes up blank.
+JSDialog.tabControlHasEmptyPage = function (widget: WidgetJSON): boolean {
+  if (widget.id === EMPTY_FILL_PAGE_ID) return true;
+
+  const children = widget.children;
+  for (let i = 0; children && i < children.length; i++) {
+    if (JSDialog.tabControlHasEmptyPage(children[i])) return true;
+  }
+
+  return false;
+};
 
 JSDialog.tabControl = function (
   parentContainer: HTMLElement,
@@ -69,7 +91,9 @@ JSDialog.tabControl = function (
   }
   const isMultiTabJSON = contentTabs > 1;
 
-  const useVerticalRail = data.tabs.length > VERTICAL_TABS_THRESHOLD;
+  const useVerticalRail =
+    !data.tabControlDepth &&
+    (data.tabs.length > VERTICAL_TABS_THRESHOLD || !!data.hasEmptyTabPage);
 
   const tabs: HTMLButtonElement[] = [];
   const tabIds: string[] = [];

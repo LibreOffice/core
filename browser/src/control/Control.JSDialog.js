@@ -1401,8 +1401,20 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (!dialog)
 			return;
 
-		if (this.dialogs[data.id].model)
-			this.dialogs[data.id].model.applyUpdate(data);
+		const model = this.dialogs[data.id].model;
+
+		// An update carries one widget and none of its ancestors, so a tabcontrol cannot work
+		// out its own layout again. Take what the previous build left in the model.
+		const previousData = model && data.control ? model.getById(data.control.id) : null;
+		if (previousData) {
+			if (data.control.tabControlDepth === undefined)
+				data.control.tabControlDepth = previousData.tabControlDepth;
+			if (data.control.hasEmptyTabPage === undefined)
+				data.control.hasEmptyTabPage = previousData.hasEmptyTabPage;
+		}
+
+		if (model)
+			model.applyUpdate(data);
 
 		var builder = new window.L.control.jsDialogBuilder({windowId: data.id,
 			mobileWizard: this,

@@ -186,6 +186,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		this._currentDepth = 0;
 		this._expanderDepth = 0;
+		this._tabControlDepth = 0;
 
 		app.localeService.initializeNumberFormatting();
 	},
@@ -2565,6 +2566,17 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 			var handler = this._controlHandlers[childType];
 
+			const savedTabControlDepth = this._tabControlDepth;
+			if (childType === 'tabcontrol') {
+				if (childData.tabControlDepth === undefined)
+					childData.tabControlDepth = savedTabControlDepth;
+				// Only the first-level tabs choose between a rail and a row, and only a
+				// build that has the pages in hand can tell whether one of them is empty.
+				if (childData.tabControlDepth === 0 && childData.children)
+					childData.hasEmptyTabPage = JSDialog.tabControlHasEmptyPage(childData);
+				this._tabControlDepth = childData.tabControlDepth + 1;
+			}
+
 			if (handler) {
 				if (this.requiresOverwriting(this, childData))
 					processChildren = this.overwriteHandler(childObject, childData, this);
@@ -2579,6 +2591,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			else if (childData.visible && (childData.visible === false || childData.visible === 'false')) {
 				$('#' + childData.id).addClass('hidden-from-event');
 			}
+
+			this._tabControlDepth = savedTabControlDepth;
 		}
 	}
 });
