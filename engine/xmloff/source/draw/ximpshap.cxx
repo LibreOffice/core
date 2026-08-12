@@ -3604,24 +3604,27 @@ void SdXMLCustomShapeContext::startFastElement (sal_Int32 nElement,
     // set pos, size, shear and rotate
     SetTransformation();
 
-    try
+    if ( !maCustomShapeEngine.isEmpty() )
     {
-        uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
-        if( xPropSet.is() )
+        try
         {
-            if ( !maCustomShapeEngine.isEmpty() )
+            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
             {
-                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), Any(maCustomShapeEngine) );
-            }
-            if ( !maCustomShapeData.isEmpty() )
-            {
-                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), Any(maCustomShapeData) );
+                if ( !maCustomShapeEngine.isEmpty() )
+                {
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), Any(maCustomShapeEngine) );
+                }
+                if ( !maCustomShapeData.isEmpty() )
+                {
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), Any(maCustomShapeData) );
+                }
             }
         }
-    }
-    catch(const cpo::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
+        catch(const cpo::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
+        }
     }
     SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }

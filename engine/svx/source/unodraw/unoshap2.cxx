@@ -1779,6 +1779,57 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     }
 }
 
+bool SvxCustomShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
+{
+    switch( pProperty->nWID )
+    {
+    case SDRATTR_CUSTOMSHAPE_ENGINE:
+    {
+        // need to check for this if we are in 'SmartArt' mode
+        OUString sEngine;
+        if (rValue >>= sEngine)
+        {
+            if (sEngine == u"coext:SmartArt"_ustr)
+            {
+                // set flag that we are in 'SmartArt' import mode at target object
+                // NOTE: I tried to set SDRATTR_CUSTOMSHAPE_ENGINE SfxStringItem and use below,
+                //       but when this stays set CustomShapeEngine will not work.
+                static_cast<SdrObjCustomShape*>(GetSdrObject())->setImportingSmartArtMember(true);
+
+                // also do *not* call SvxShapeText::setPropertyValueImpl
+                return true;
+            }
+        }
+
+        // standard behaviour
+        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
+    }
+    case SDRATTR_CUSTOMSHAPE_DATA:
+    {
+        // need to check for this if we are in 'SmartArt' mode
+        if (static_cast<SdrObjCustomShape*>(GetSdrObject())->getImportingSmartArtMember())
+        {
+            OUString sData;
+            if (rValue >>= sData)
+            {
+                if (SdrObject::isDiagramModelID(sData))
+                {
+                    // if we are in SmartArt mode and data is a DiagramModelID, use for
+                    // that purpose and do *not* call SvxShapeText::setPropertyValueImpl
+                    GetSdrObject()->setDiagramDataModelID(sData);
+                    return true;
+                }
+            }
+        }
+
+        // standard behaviour
+        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
+    }
+    default:
+        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
+    }
+}
+
 bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
@@ -1790,9 +1841,35 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
         rValue <<= static_cast<sal_Int32>(fAngle);
         return true;
     }
-    default:
-        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
+    case SDRATTR_CUSTOMSHAPE_ENGINE:
+    {
+        const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(GetSdrObject()->getDiagramHelper());
+
+        if (rDiagramHelper)
+        {
+            // if we are a Diagram xShape, return engine string for that purpose
+            rValue <<= u"coext:SmartArt"_ustr;
+            return true;
+        }
+        break;
     }
+    case SDRATTR_CUSTOMSHAPE_DATA:
+    {
+        const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(GetSdrObject()->getDiagramHelper());
+
+        if (rDiagramHelper)
+        {
+            // if we are a Diagram xShape, return DiagramDataModelID
+            // NOTE: That may still be an empty string for the BGShape
+            rValue <<= GetSdrObject()->getDiagramDataModelID();
+            return true;
+        }
+        break;
+    }
+    default: break;
+    }
+
+    return SvxShapeText::getPropertyValueImpl( rName, pProperty, rValue );
 }
 
 void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType )

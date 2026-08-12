@@ -869,13 +869,21 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
     // properties available in UNO. Without fix, the shape names were identical.
     OUString sName;
     uno::Reference<beans::XPropertySet> xConnAProps(getChildShape(xSmartArt,2), uno::UNO_QUERY);
-    xConnAProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    xConnAProps->getPropertyValue(u"CustomShapeEngine"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"coext:SmartArt"_ustr, sName);
+    xConnAProps->getPropertyValue(u"CustomShapeData"_ustr) >>= sName;
     CPPUNIT_ASSERT_EQUAL(u"{06F924E1-8519-4DEB-B576-001BD7EEDCA2}"_ustr, sName);
+
     uno::Reference<beans::XPropertySet> xConnBProps(getChildShape(xSmartArt,4), uno::UNO_QUERY);
-    xConnBProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    xConnBProps->getPropertyValue(u"CustomShapeEngine"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"coext:SmartArt"_ustr, sName);
+    xConnBProps->getPropertyValue(u"CustomShapeData"_ustr) >>= sName;
     CPPUNIT_ASSERT_EQUAL(u"{6B4132B0-E8B4-435F-9A22-55740C4BDF51}"_ustr, sName);
+
     uno::Reference<beans::XPropertySet> xConnCProps(getChildShape(xSmartArt,6), uno::UNO_QUERY);
-    xConnCProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    xConnCProps->getPropertyValue(u"CustomShapeEngine"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"coext:SmartArt"_ustr, sName);
+    xConnCProps->getPropertyValue(u"CustomShapeData"_ustr) >>= sName;
     CPPUNIT_ASSERT_EQUAL(u"{55B8016A-A755-4069-A179-DFC2070CA8C9}"_ustr, sName);
 }
 

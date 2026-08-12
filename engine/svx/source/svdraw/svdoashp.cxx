@@ -782,10 +782,22 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrObjCustomShape::CreateObject
     return std::make_unique<sdr::properties::CustomShapeProperties>(*this);
 }
 
+void SdrObjCustomShape::setDiagramDataModelID(const OUString& rID)
+{
+    m_aDiagramModelID = rID;
+}
+
+const OUString& SdrObjCustomShape::getDiagramDataModelID() const
+{
+    return m_aDiagramModelID;
+}
+
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
     , m_fObjectRotation(0.0)
-    , mbAdjustingTextFrameWidthAndHeight(false)
+    , m_aDiagramModelID()
+    , m_bAdjustingTextFrameWidthAndHeight(false)
+    , m_bImportingSmartArtMember(false)
 {
     m_bClosedObj = true; // custom shapes may be filled
     mbTextFrame = true;
@@ -793,15 +805,15 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
-    , m_fObjectRotation(0.0)
-    , mbAdjustingTextFrameWidthAndHeight(false)
+    , m_fObjectRotation(rSource.m_fObjectRotation)
+    , m_aDiagramModelID(rSource.getDiagramDataModelID())
+    , m_bAdjustingTextFrameWidthAndHeight(rSource.m_bAdjustingTextFrameWidthAndHeight)
+    , m_bImportingSmartArtMember(false)
 {
     m_bClosedObj = true; // custom shapes may be filled
     mbTextFrame = true;
 
-    m_fObjectRotation = rSource.m_fObjectRotation;
-    mbAdjustingTextFrameWidthAndHeight = rSource.mbAdjustingTextFrameWidthAndHeight;
-    assert(!mbAdjustingTextFrameWidthAndHeight);
+    assert(!m_bAdjustingTextFrameWidthAndHeight);
     InvalidateRenderGeometry();
 }
 
@@ -2455,9 +2467,9 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     tools::Rectangle aNewTextRect = ImpCalculateTextFrame(bHgt, bWdt);
     const bool bRet = !aNewTextRect.IsEmpty() && aNewTextRect != getRectangle();
-    if (bRet && !mbAdjustingTextFrameWidthAndHeight)
+    if (bRet && !m_bAdjustingTextFrameWidthAndHeight)
     {
-        mbAdjustingTextFrameWidthAndHeight = true;
+        m_bAdjustingTextFrameWidthAndHeight = true;
 
         // taking care of handles that should not been changed
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
@@ -2479,7 +2491,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         }
         InvalidateRenderGeometry();
 
-        mbAdjustingTextFrameWidthAndHeight = false;
+        m_bAdjustingTextFrameWidthAndHeight = false;
     }
     return bRet;
 }
