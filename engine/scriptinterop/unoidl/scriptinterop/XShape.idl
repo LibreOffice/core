@@ -11,17 +11,27 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+interface XShape : XBase
 {
-    sequence<XSlide> getSlides();
+    XTextRange getText();
 
-    XSlide appendSlide();
+    double getLeft();
 
-    double getPageWidth();
+    double getTop();
 
-    double getPageHeight();
+    double getWidth();
 
-    XSlideSelection getSelection();
+    double getHeight();
+
+    XShape setLeft([in] double points);
+
+    XShape setTop([in] double points);
+
+    XShape setWidth([in] double points);
+
+    XShape setHeight([in] double points);
+
+    void remove();
 };
 
 };

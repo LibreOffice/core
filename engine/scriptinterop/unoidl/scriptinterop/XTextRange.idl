@@ -11,17 +11,23 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+// Forward declaration: appendParagraph returns a paragraph, and the paragraph's getRange returns
+// a range, so the two interfaces refer to each other.
+interface XTextParagraph;
+
+interface XTextRange : XBase
 {
-    sequence<XSlide> getSlides();
+    string asString();
 
-    XSlide appendSlide();
+    XTextRange setText([in] string newText);
 
-    double getPageWidth();
+    XTextRange appendText([in] string text);
 
-    double getPageHeight();
+    XTextParagraph appendParagraph([in] string text);
 
-    XSlideSelection getSelection();
+    XTextRange setBulletLevel([in] long level);
+
+    XTextStyle getTextStyle();
 };
 
 };

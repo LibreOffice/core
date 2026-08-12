@@ -11,17 +11,17 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+interface XTextStyle : XBase
 {
-    sequence<XSlide> getSlides();
+    XTextStyle setBold([in] boolean bold);
 
-    XSlide appendSlide();
+    XTextStyle setItalic([in] boolean italic);
 
-    double getPageWidth();
+    XTextStyle setStrikethrough([in] boolean strikethrough);
 
-    double getPageHeight();
+    XTextStyle setFontSize([in] double points);
 
-    XSlideSelection getSelection();
+    XTextStyle setForegroundColor([in] string hexColor);
 };
 
 };

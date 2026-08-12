@@ -31,10 +31,17 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XDocument \
     XDrawing \
     XFactory \
+    XPage \
     XParagraph \
     XPresentation \
     XSelection \
+    XShape \
+    XSlide \
+    XSlideSelection \
     XSpreadsheet \
+    XTextParagraph \
+    XTextRange \
+    XTextStyle \
 ))
 
 # vim: set noet sw=4 ts=4:

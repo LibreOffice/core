@@ -11,17 +11,9 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+interface XSlideSelection : XBase
 {
-    sequence<XSlide> getSlides();
-
-    XSlide appendSlide();
-
-    double getPageWidth();
-
-    double getPageHeight();
-
-    XSlideSelection getSelection();
+    XPage getCurrentPage();
 };
 
 };

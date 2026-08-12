@@ -16,4 +16,8 @@ $(eval $(call gb_Module_add_targets,scriptinterop,\
     UnoApi_scriptinterop \
 ))
 
+$(eval $(call gb_Module_add_check_targets,scriptinterop,\
+    CppunitTest_scriptinterop_presentation \
+))
+
 # vim: set noet sw=4 ts=4:

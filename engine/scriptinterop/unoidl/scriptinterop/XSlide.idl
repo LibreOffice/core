@@ -11,17 +11,16 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+interface XSlide : XBase
 {
-    sequence<XSlide> getSlides();
+    sequence<XShape> getShapes();
 
-    XSlide appendSlide();
+    XShape insertTextBox([in] string text, [in] double left, [in] double top,
+                         [in] double width, [in] double height);
 
-    double getPageWidth();
+    XSlide setBackgroundColor([in] string hexColor);
 
-    double getPageHeight();
-
-    XSlideSelection getSelection();
+    void remove();
 };
 
 };

@@ -11,17 +11,9 @@
 
 module scriptinterop {
 
-interface XPresentation : XBase
+interface XTextParagraph : XBase
 {
-    sequence<XSlide> getSlides();
-
-    XSlide appendSlide();
-
-    double getPageWidth();
-
-    double getPageHeight();
-
-    XSlideSelection getSelection();
+    XTextRange getRange();
 };
 
 };
