@@ -249,9 +249,24 @@ common_sources = \
 
 globals_sources = ../common/Globals.cpp
 
+# The engine's static Poco no longer bundles zlib, so PocoFoundation and
+# PocoZip reference the system one and must precede it on the link line.
+# libtool moves every -l flag after the object files but keeps their relative
+# order, so the $(ZLIB_LIBS) in AM_LDFLAGS ends up ahead of the Poco libraries
+# and ld.bfd, which with --as-needed drops a libz.so that nothing needs yet at
+# that point, then has nothing left to resolve Poco's deflate/zError against.
+# Repeating $(ZLIB_LIBS) after $(POCO_LIBS) is what makes the link work.
+#
+# This deliberately stays out of AM_LDFLAGS: that is shared with the
+# check_LTLIBRARIES below, and those dlopen'ed unit-test modules take Poco from
+# the coolwsd process that loads them.  Linking a second, static copy into each
+# module would be the ODR violation that configure.ac keeps POCO_LIBS out of
+# the global LIBS to avoid.
+poco_and_zlib_libs = $(POCO_LIBS) $(ZLIB_LIBS)
+
 unithttplib_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 unithttplib_SOURCES = $(common_sources) $(globals_sources) test.cpp HttpRequestTests.cpp
-unithttplib_LDADD = $(CPPUNIT_LIBS) $(POCO_LIBS)
+unithttplib_LDADD = $(CPPUNIT_LIBS) $(poco_and_zlib_libs)
 
 unittest_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 unittest_SOURCES = \
@@ -268,7 +283,7 @@ unittest_SOURCES = \
 	../wsd/TileCache.cpp \
 	test.cpp
 
-unittest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(POCO_LIBS)
+unittest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(poco_and_zlib_libs)
 
 clienttest_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 
@@ -281,7 +296,7 @@ clienttest_SOURCES = \
 	XcuScrubWhiteBoxTests.cpp \
 	test.cpp
 
-clienttest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(POCO_LIBS)
+clienttest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(poco_and_zlib_libs)
 
 # Add SSL dependencies if needed.
 if ENABLE_SSL
@@ -300,7 +315,7 @@ else
 
 fakesockettest_CPPFLAGS = -g
 fakesockettest_SOURCES = fakesockettest.cpp  ../net/FakeSocket.cpp ../common/DummyTraceEventEmitter.cpp ../common/Log-common.cpp ../common/Log-poco.cpp ../common/ProcUtil.cpp ../common/Util.cpp ../common/Util-server.cpp $(util_platform_cpp) ../common/Util-unix.cpp ../common/Globals.cpp
-fakesockettest_LDADD = $(CPPUNIT_LIBS) $(POCO_LIBS)
+fakesockettest_LDADD = $(CPPUNIT_LIBS) $(poco_and_zlib_libs)
 
 # old-style unit tests - bootstrapped via UnitClient
 unit_tiletest_la_SOURCES = UnitClient.cpp TileCacheTests.cpp KitPidHelpers.cpp
