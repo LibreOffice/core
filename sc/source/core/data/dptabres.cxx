@@ -3038,19 +3038,16 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 
     if (lcl_SearchMember(maMemberArray, iData, nIndex))
     {
-        // I *think* this is always true, but check for sanity
         ScDPResultMember* pResultMember = maMemberArray[nIndex].get();
         if (pResultMember->IsNamedItem(iData))
             return pResultMember;
     }
 
-    unsigned int i;
-    unsigned int nCount = maMemberArray.size();
-    for( i = 0; i < nCount ; i++ )
+    auto pResultIter = std::ranges::find_if(
+        maMemberArray, [iData](const auto& m) { return m->IsNamedItem(iData); });
+    if (pResultIter != maMemberArray.end())
     {
-        ScDPResultMember* pResultMember = maMemberArray[i].get();
-        if ( pResultMember->IsNamedItem( iData ) )
-            return pResultMember;
+        return pResultIter->get();
     }
     return nullptr;
 }
