@@ -303,11 +303,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::TitleText);
             pSdrObj->SetApplyEffects(true);
-
-            if (mbMaster)
-            {
-                pSdrObj->SetNotVisibleAsMaster(true);
-            }
         }
         break;
 
@@ -315,22 +310,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::OutlineText);
             pSdrObj->SetApplyEffects(true);
-
-            if (mbMaster)
-            {
-                pSdrObj->SetNotVisibleAsMaster(true);
-            }
         }
         break;
 
         case PresObjKind::Notes:
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::Text);
-
-            if (mbMaster)
-            {
-                pSdrObj->SetNotVisibleAsMaster(true);
-            }
         }
         break;
 
@@ -466,6 +451,24 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
     if (pSdrObj)
     {
+        // On a master page these are templates for the instances the slides carry themselves, so
+        // painting them on a slide too would show two placeholders where the user expects one.
+        // Everything else stays visible from the master, the footer and slide number above all.
+        if (mbMaster)
+        {
+            switch (eObjKind)
+            {
+                case PresObjKind::Title:
+                case PresObjKind::Outline:
+                case PresObjKind::Notes:
+                case PresObjKind::Graphic:
+                    pSdrObj->SetNotVisibleAsMaster(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         pSdrObj->SetEmptyPresObj(bEmptyPresObj);
         pSdrObj->SetLogicRect(rRect);
 

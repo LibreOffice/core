@@ -22,6 +22,7 @@
 
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <xmloff/autolayout.hxx>
@@ -90,6 +91,41 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testMasterBackgroundColor)
     xmlDocUniquePtr pLayout1 = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
     assertXPath(pLayout1, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:spPr/a:solidFill/a:schemeClr",
                 "val", u"bg1");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testGraphicPlaceholderHiddenAsMaster)
+{
+    // A layout's picture placeholder is imported onto a master page, where it is a template for
+    // the instances the slides carry themselves. It must not paint on them, or a slide shows two
+    // placeholders - the slide's own, movable one, and the layout's immovable one behind it.
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
+
+    // Only title, outline and notes placeholders used to be hidden this way. A layout's
+    // <p:ph type="pic"/> became an outline shape once, which is why it behaved before.
+    bool bFoundGraphicPresObj = false;
+    for (sal_uInt16 nMaster = 0; nMaster < pDoc->GetMasterSdPageCount(PageKind::Standard);
+         ++nMaster)
+    {
+        SdPage* pMasterPage = pDoc->GetMasterSdPage(nMaster, PageKind::Standard);
+        for (size_t nObj = 0; nObj < pMasterPage->GetObjCount(); ++nObj)
+        {
+            // A picture placeholder is an empty SdrGrafObj; a graphic the document actually
+            // contains is not an empty presentation object.
+            SdrObject* pObj = pMasterPage->GetObj(nObj);
+            if (dynamic_cast<SdrGrafObj*>(pObj) == nullptr || !pObj->IsEmptyPresObj())
+                continue;
+
+            bFoundGraphicPresObj = true;
+            CPPUNIT_ASSERT_MESSAGE("a master's picture placeholder would paint onto the slides",
+                                   pObj->IsNotVisibleAsMaster());
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("no picture placeholder on any master page", bFoundGraphicPresObj);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLayoutClrMapOvr)
