@@ -44,6 +44,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
 #include <viewopt.hxx>
@@ -122,17 +123,20 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     41, // RES_CHRATR_FONT_VARIATIONS            // 47
     42, // RES_CHRATR_CJK_FONT_VARIATIONS        // 48
     43, // RES_CHRATR_CTL_FONT_VARIATIONS        // 49
-    44, // RES_TXTATR_REFMARK,                   // 50
-    45, // RES_TXTATR_TOXMARK,                   // 51
-    46, // RES_TXTATR_META,                      // 52
-    46, // RES_TXTATR_METAFIELD,                 // 53
-     0, // RES_TXTATR_AUTOFMT,                   // 54
-     0, // RES_TXTATR_INETFMT                    // 55
-     0, // RES_TXTATR_CHARFMT,                   // 56
-    47, // RES_TXTATR_CJK_RUBY,                  // 57
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 58
-    48, // RES_TXTATR_INPUTFIELD                 // 59
-    49, // RES_TXTATR_CONTENTCONTROL             // 60
+    44, // RES_CHRATR_FONT_FEATURES              // 50
+    45, // RES_CHRATR_CJK_FONT_FEATURES          // 51
+    46, // RES_CHRATR_CTL_FONT_FEATURES          // 52
+    47, // RES_TXTATR_REFMARK,                   // 53
+    48, // RES_TXTATR_TOXMARK,                   // 54
+    49, // RES_TXTATR_META,                      // 55
+    49, // RES_TXTATR_METAFIELD,                 // 56
+     0, // RES_TXTATR_AUTOFMT,                   // 57
+     0, // RES_TXTATR_INETFMT                    // 58
+     0, // RES_TXTATR_CHARFMT,                   // 59
+    50, // RES_TXTATR_CJK_RUBY,                  // 60
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 61
+    51, // RES_TXTATR_INPUTFIELD                 // 62
+    52, // RES_TXTATR_CONTENTCONTROL             // 63
 };
 
 namespace CharFormat
@@ -851,6 +855,18 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
         case RES_CHRATR_CTL_FONT_VARIATIONS :
             rFnt.SetVariations( rItem.StaticWhichCast(RES_CHRATR_CTL_FONT_VARIATIONS).GetVariations(),
                                 SwFontScript::CTL );
+            break;
+        case RES_CHRATR_FONT_FEATURES :
+            rFnt.SetFeatures( rItem.StaticWhichCast(RES_CHRATR_FONT_FEATURES).GetFeatures(),
+                              SwFontScript::Latin );
+            break;
+        case RES_CHRATR_CJK_FONT_FEATURES :
+            rFnt.SetFeatures( rItem.StaticWhichCast(RES_CHRATR_CJK_FONT_FEATURES).GetFeatures(),
+                              SwFontScript::CJK );
+            break;
+        case RES_CHRATR_CTL_FONT_FEATURES :
+            rFnt.SetFeatures( rItem.StaticWhichCast(RES_CHRATR_CTL_FONT_FEATURES).GetFeatures(),
+                              SwFontScript::CTL );
             break;
         case RES_TXTATR_CJK_RUBY :
             rFnt.SetVertical( 0_deg10, m_bVertLayout );
