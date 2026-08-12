@@ -2669,33 +2669,41 @@
       <node oor:name=".uno:TogglePrintGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Grid Lines</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Print grid lines</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
       </node>
       <node oor:name=".uno:TogglePrintColRowHeader" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Col/Row Header</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Print column and row header</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
       </node>
       <node oor:name=".uno:TogglePrintComments" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comments</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Print comments</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
       </node>
       <node oor:name=".uno:TogglePrintZeroValues" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Zero Values</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Print zero values</value>
+          <value xml:lang="x-comment">Used in the print tab of the Calc tabbed UI when looking at a print preview</value>
         </prop>
       </node>
     </node>
