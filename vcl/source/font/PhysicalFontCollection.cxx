@@ -1067,18 +1067,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
         rFSD.maSearchName = rFSD.maTargetName;
 
-        // Until features are properly supported, they are appended to the
-        // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = rFSD.maSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
-        OUString aBaseFontName
-            = rFSD.maSearchName.copy(0, (nFeat != -1) ? nFeat : rFSD.maSearchName.getLength());
-
-        if (nFeat != -1)
-        {
-            rFSD.maSearchName = aBaseFontName;
-            rFSD.maTargetName = aBaseFontName;
-        }
+        OUString aBaseFontName = rFSD.maSearchName;
 
         rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maSearchName);
         ImplFontSubstitute(rFSD.maSearchName);
