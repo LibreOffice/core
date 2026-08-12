@@ -82,12 +82,12 @@ cat $DEBUGSRC | awk '
 
  # create source file list
  #
- # An rpm %files entry is one whitespace-delimited field, so a path holding a
- # space cannot be named in it: rpmbuild reads each word as a file of its own
- # and rejects the lot with 'File must begin with "/"'. Only bundled test
- # corpora carry such names, and no backtrace ever resolves against those.
+ # Keep only what an rpm %files entry can name and rpmbuild can read: an entry
+ # is a single whitespace-delimited field, so no path holding a space (bundled
+ # test corpora have them), and a name that resolves to a file that is really
+ # there, so no dangling symlink.
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
+ find $BUILD_PATH \( -name '*[.][hc]xx' -o -name '*[.][hc]' \) -xtype f | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
 
  # list all directories for complete rpm remove
 
@@ -151,11 +151,12 @@ cat $DEBUGSRC | awk '
 
  # create source file list
  #
- # An epm list file names the destination and the source of a file as two
- # whitespace-separated fields on one line, so a path holding a space cannot be
- # named there either, and epm gives up with 'Packaging failed!'.
+ # Keep only what an epm list file can name and epm can open: a line gives the
+ # destination and the source as two whitespace-separated fields, so no path
+ # holding a space, and epm reads every file it is handed, so no dangling
+ # symlink. Either one is fatal, and epm only says 'Packaging failed!'.
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
+ find $BUILD_PATH \( -name '*[.][hc]xx' -o -name '*[.][hc]' \) -xtype f | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
 
  # list all directories
 
