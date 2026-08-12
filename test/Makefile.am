@@ -126,7 +126,11 @@ endif
 check_LTLIBRARIES = ${all_la_unit_tests}
 
 MAGIC_TO_FORCE_SHLIB_CREATION = -rpath /dummy
-AM_LDFLAGS = -module $(MAGIC_TO_FORCE_SHLIB_CREATION) $(ZLIB_LIBS) $(ZSTD_LIBS) ${PNG_LIBS}
+# In the server build ${PNG_LIBS} / $(ZSTD_LIBS) are the engine's static
+# liblibpng.a / libzstd.a (system shared libraries in the Flatpak and Snap
+# builds).  The static libpng pulls in zlib symbols, so it must precede
+# $(ZLIB_LIBS) on the link line for the linker to resolve them.
+AM_LDFLAGS = -module $(MAGIC_TO_FORCE_SHLIB_CREATION) ${PNG_LIBS} $(ZSTD_LIBS) $(ZLIB_LIBS)
 
 # Clang's linker doesn't like -pthread.
 if !HAVE_CLANG
