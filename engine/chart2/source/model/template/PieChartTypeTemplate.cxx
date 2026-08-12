@@ -512,7 +512,6 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
     if( xDiagram.is())
     {
         const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq( xDiagram->getBaseCoordinateSystems());
-        ChartTypeTemplate::createAxes( aCooSysSeq );
 
         //reset scale orientation
         for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )

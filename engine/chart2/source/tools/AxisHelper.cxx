@@ -317,6 +317,8 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 rtl::Reference< Axis > AxisHelper::createAxis(
           sal_Int32 nDimensionIndex
         , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
+        , sal_Int32 nAxisId
+        , bool bCatNotVal
         , const rtl::Reference< BaseCoordinateSystem >& xCooSys
         , const Reference< cpo::uno::XComponentContext > & xContext
         , ReferenceSizeProvider * pRefSizeProvider )
@@ -358,6 +360,11 @@ rtl::Reference< Axis > AxisHelper::createAxis(
         xAxis->setPropertyValue(u"CrossoverPosition"_ustr, cpo::uno::Any(eNewAxisPos) );
     }
 
+    if (nAxisId >= 0) {
+        xAxis->setPropertyValue(u"AxisId"_ustr, cpo::uno::Any(nAxisId));
+        xAxis->setPropertyValue(u"CatNotVal"_ustr, cpo::uno::Any(bCatNotVal));
+    }
+
     try
     {
         // set correct initial AutoScale
@@ -381,11 +388,12 @@ rtl::Reference< Axis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool b
         return nullptr;
 
     sal_Int32 nAxisIndex = bMainAxis ? MAIN_AXIS_INDEX : SECONDARY_AXIS_INDEX;
+    const bool bCatNotVal = (nDimensionIndex == 0);
     rtl::Reference< BaseCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 );
 
     // create axis
     return AxisHelper::createAxis(
-        nDimensionIndex, nAxisIndex, xCooSys, xContext, pRefSizeProvider );
+        nDimensionIndex, nAxisIndex, -1, bCatNotVal, xCooSys, xContext, pRefSizeProvider );
 }
 
 void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis

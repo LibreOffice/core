@@ -68,6 +68,8 @@ public:
         createAxis(
             sal_Int32 nDimensionIndex
             , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
+            , sal_Int32 nAxisId
+            , bool bCatNotVal
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext
             , ReferenceSizeProvider * pRefSizeProvider = nullptr );

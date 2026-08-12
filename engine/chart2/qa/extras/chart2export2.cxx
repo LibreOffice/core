@@ -9,9 +9,15 @@
 
 #include "charttest.hxx"
 
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -537,6 +543,75 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxisIdPerSeries)
     assertXPath(pXmlDoc,
                 "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:axisId", 0);
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testFunnelFromUIAxesXLSX)
+{
+    // Test axis round-trip for chartex created in the UI
+    loadFromURL(u"private:factory/scalc"_ustr);
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+    const std::pair<OUString, double> aData[] = {
+        { u"apple"_ustr, 100 },
+        { u"pear"_ustr, 60 },
+        { u"kumquat"_ustr, 30 },
+        { u"lychee"_ustr, 50 },
+    };
+    for (size_t i = 0; i < std::size(aData); ++i)
+    {
+        const sal_Int32 nRow = static_cast<sal_Int32>(i);
+        xSheet->getCellByPosition(0, nRow)->setFormula(aData[i].first);
+        xSheet->getCellByPosition(1, nRow)->setValue(aData[i].second);
+    }
+
+    uno::Reference<table::XTableChartsSupplier> xChartsSupplier(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableCharts> xCharts = xChartsSupplier->getCharts();
+    table::CellRangeAddress aDataRange(0, 0, 0, 1, 3);
+    xCharts->addNewByName(u"fruity_funnel"_ustr, awt::Rectangle(0, 0, 15000, 9000), { aDataRange },
+                          false, true);
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<lang::XMultiServiceFactory> xTemplateManager(xChartDoc->getChartTypeManager(),
+                                                                uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartTypeTemplate> xTemplate(
+        xTemplateManager->createInstance(u"com.sun.star.chart2.template.Funnel"_ustr),
+        uno::UNO_QUERY_THROW);
+    xTemplate->changeDiagram(xChartDoc->getFirstDiagram());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"funnel");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
+
+    // default for hidden is false/0, so handle all cases
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[cx:catScaling]"
+                "[not(@hidden) or @hidden='false' or @hidden='0']",
+                1);
+
+    // value axis should be hidden
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[cx:valScaling]", "hidden",
+                u"true");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testHistogramAxesXLSX)
+{
+    loadFromFile(u"xlsx/SimpleHistogram.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis"
+                "[not(@hidden) or @hidden='false' or @hidden='0']",
+                2);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)

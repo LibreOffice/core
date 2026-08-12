@@ -701,8 +701,11 @@ void ChartTypeTemplate::adaptDiagram( const rtl::Reference< ::chart::Diagram > &
 }
 
 void ChartTypeTemplate::createAxes(
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
+    std::vector<sal_Int32>& raAxisIdSeq )
 {
+    raAxisIdSeq.clear();
+
     //create missing axes
     if( rCoordSys.empty() )
         return;
@@ -714,6 +717,7 @@ void ChartTypeTemplate::createAxes(
     //create main axis in first coordinate system
     sal_Int32 nDimCount = xCooSys->getDimension();
     sal_Int32 nDim=0;
+    sal_Int32 nAxisId = 0;
     for( nDim=0; nDim<nDimCount; ++nDim )
     {
         sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
@@ -723,11 +727,27 @@ void ChartTypeTemplate::createAxes(
         for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
         {
             rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
-            if( !xAxis.is())
-            {
+            if( xAxis.is()) {
+                // Get the id if there is one, otherwise set one
+                sal_Int32 nExistingAxisId;
+                if (xAxis->getPropertyValue( u"AxisId"_ustr ) >>= nExistingAxisId) {
+                    raAxisIdSeq.push_back(nExistingAxisId);
+                } else {
+                    xAxis->setPropertyValue(u"AxisId"_ustr, cpo::uno::Any(nAxisId));
+                    raAxisIdSeq.push_back(nAxisId);
+                    ++nAxisId;
+                }
+                // Assume the first dimension always has the category axis. Is
+                // this correct?
+                const bool bCatNotVal = (nDim == 0);
+                xAxis->setPropertyValue(u"CatNotVal"_ustr, cpo::uno::Any(bCatNotVal));
+            } else {
                 // create and add axis
+                const bool bCatNotVal = (nAxisIndex == 0); // is this always right?
                 xAxis = AxisHelper::createAxis(
-                               nDim, nAxisIndex, xCooSys, GetComponentContext() );
+                               nDim, nAxisIndex, nAxisId, bCatNotVal, xCooSys, GetComponentContext() );
+                raAxisIdSeq.push_back(nAxisId);
+                ++nAxisId;
             }
         }
     }
@@ -789,9 +809,22 @@ void ChartTypeTemplate::FillDiagram(
         // create coordinate systems and scales
         createCoordinateSystems( xDiagram );
         std::vector< rtl::Reference< BaseCoordinateSystem > > aCoordinateSystems( xDiagram->getBaseCoordinateSystems());
-        createAxes( aCoordinateSystems );
+        std::vector<sal_Int32> aAxisIdSeq;
+        createAxes( aCoordinateSystems, aAxisIdSeq );
         adaptAxes( aCoordinateSystems );
         adaptScales( aCoordinateSystems, xCategories );
+
+        // Set the same axis ids for each series. TODO: This may not be correct
+        // if we fully support combo charts, especially combo charts that
+        // include chartex.
+        for (const auto& aSeriesVec : aSeriesSeq) {
+            for (const rtl::Reference< DataSeries>& aSeries : aSeriesVec) {
+                cpo::uno::Sequence<sal_Int32> aCurAxIdSeq;
+                if (!(aSeries->getPropertyValue(u"ChartexAxisIds"_ustr) >>= aCurAxIdSeq)) {
+                    aSeries->setPropertyValue(u"ChartexAxisIds"_ustr, cpo::uno::Any(comphelper::containerToSequence(aAxisIdSeq)));
+                }
+            }
+        }
 
         // chart types
         createChartTypes( aSeriesSeq, aCoordinateSystems, aOldChartTypesSeq );
@@ -806,7 +839,7 @@ void ChartTypeTemplate::FillDiagram(
 void ChartTypeTemplate::createChartTypes(
     const std::vector< std::vector< rtl::Reference< DataSeries > > > & aSeriesSeq,
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
-    const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
+    const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq)
 {
     if( rCoordSys.empty() )
         return;

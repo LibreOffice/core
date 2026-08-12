@@ -95,6 +95,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         m_nDimensionCount( nDimensionCount )
  {
     m_aAllAxis.resize( m_nDimensionCount );
+    sal_Int32 nAxisId = 0;
     for( sal_Int32 nN=0; nN<m_nDimensionCount; nN++ )
     {
         m_aAllAxis[nN].resize( 1 );
@@ -116,6 +117,11 @@ BaseCoordinateSystem::BaseCoordinateSystem(
             aScaleData.AxisType = chart2::AxisType::SERIES;
         }
         xAxis->setScaleData( aScaleData );
+
+        sal_Int32 nCurAxId;
+        if (!(xAxis->getPropertyValue(u"AxisId"_ustr) >>= nCurAxId)) {
+            xAxis->setPropertyValue(u"AxisId"_ustr, cpo::uno::Any(nAxisId++));
+        }
     }
 
     setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, cpo::uno::Any( false ));

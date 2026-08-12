@@ -227,7 +227,8 @@ public:
             );
 
     /** create axes and add them to the given container. If there are already
-        compatible axes in the container these should be maintained.
+        compatible axes in the container these should be maintained. Put the
+        complete set of axis ids in raAxisIdSeq.
 
         <p>As default, this method creates as many axes as there are dimensions
         in the given first coordinate system.  Each of the axis
@@ -235,7 +236,8 @@ public:
         requesting a secondary axes a secondary y axes is added</p>
      */
     void createAxes(
-        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys,
+        std::vector<sal_Int32>& raAxisIdSeq );
 
     /** Give the number of requested axis per dimension here.  Default is one
         axis for each dimension

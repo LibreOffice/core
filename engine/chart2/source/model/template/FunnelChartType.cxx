@@ -129,11 +129,10 @@ FunnelChartType::createCoordinateSystem2(sal_Int32 DimensionCount)
 
         if (i == 0) // X-axis
         {
-            // Set up X-axis specifically for histogram bins
             aScaleData.AxisType = chart2::AxisType::CATEGORY;
             aScaleData.AutoDateAxis = false;
             aScaleData.ShiftedCategoryPosition = true;
-            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+            aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
 
             // Clear any existing scaling/categories
             AxisHelper::removeExplicitScaling(aScaleData);
@@ -145,6 +144,16 @@ FunnelChartType::createCoordinateSystem2(sal_Int32 DimensionCount)
             aScaleData.ShiftedCategoryPosition = false;
             aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
             aScaleData.Scaling = AxisHelper::createLinearScaling();
+
+            // The horizontal axis (which is the value axis) isn't displayed in
+            // MSO rendering. Theoretically we could allow displaying the axis,
+            // with the origin in the middle and positive values at half-scale
+            // on each side. E.g., a funnel bar of width 2, along with the
+            // horizontal axis, would look like
+            //           ===============
+            //       ----|------|------|----
+            //           1      0      1
+            xAxis->setPropertyValue(u"Show"_ustr, cpo::uno::Any(false));
         }
 
         xAxis->setScaleData(aScaleData);

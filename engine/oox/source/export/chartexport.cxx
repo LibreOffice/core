@@ -5395,7 +5395,18 @@ void ChartExport::exportOneAxis_chartex(
     const AxisIdPair& rAxisIdPair)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_cx, XML_axis), XML_id, OString::number(rAxisIdPair.nAxisId));
+
+    bool bShow = false;
+    if( xAxisProp.is() )
+    {
+        xAxisProp->getPropertyValue(u"Show"_ustr) >>= bShow;
+    }
+    if (bShow) {
+        pFS->startElement(FSNS(XML_cx, XML_axis), XML_id, OString::number(rAxisIdPair.nAxisId));
+    } else {
+        pFS->startElement(FSNS(XML_cx, XML_axis), XML_id,
+                OString::number(rAxisIdPair.nAxisId), XML_hidden, "true");
+    }
 
     // The following is in the 2010 chart code above:
     //    bool bVisible = true;
