@@ -38,7 +38,7 @@
     <string name="owncloud_settings">Cloud server settings</string>
     <string name="storage_provider_settings">Storage provider settings</string>
     <string name="otg_missing_error">Invalid root file. Check your OTG device and/or configuration.</string>
-    <string name="ext_document_provider_error">Invalid root file. Check your sd card configuration.</string>
+    <string name="ext_document_provider_error">Invalid root file. Check your SD card configuration.</string>
     <string name="owncloud_unspecified_error">Unspecified error connecting to the cloud server. Check your configuration and/or try later.</string>
     <string name="owncloud_unauthorized">Cannot log in to the cloud server. Check your configuration.</string>
     <string name="owncloud_wrong_connection">Cannot connect to the cloud server. Check your configuration.</string>
