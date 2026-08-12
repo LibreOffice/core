@@ -45,6 +45,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
 #if ENABLE_YRS
@@ -114,6 +115,9 @@ sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType )
             case EE_CHAR_FONTVARIATIONS:
                 nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_FONTVARIATIONS_CJK : EE_CHAR_FONTVARIATIONS_CTL;
             break;
+            case EE_CHAR_FONTFEATURES:
+                nId = ( nScriptType == SvtScriptType::ASIAN ) ? EE_CHAR_FONTFEATURES_CJK : EE_CHAR_FONTFEATURES_CTL;
+            break;
         }
     }
 
@@ -178,6 +182,15 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
             bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_FONTVARIATIONS_CTL:
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
+        break;
+        case EE_CHAR_FONTFEATURES:
+            bValid = nScriptType == i18n::ScriptType::LATIN;
+        break;
+        case EE_CHAR_FONTFEATURES_CJK:
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_FONTFEATURES_CTL:
             bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
     }
@@ -345,6 +358,13 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         case EE_CHAR_FONTVARIATIONS_CTL:
         {
             return new EditCharAttribFontVariations(rPool, rAttr, nS, nE );
+        }
+        break;
+        case EE_CHAR_FONTFEATURES:
+        case EE_CHAR_FONTFEATURES_CJK:
+        case EE_CHAR_FONTFEATURES_CTL:
+        {
+            return new EditCharAttribFontFeatures(rPool, rAttr, nS, nE );
         }
         break;
         default:
@@ -1270,6 +1290,14 @@ void YrsInsertAttribImplImpl(YrsWrite const& yw, SfxPoolItem const& rItm,
                                                              : "EE_CHAR_FONTVARIATIONS_CTL";
             break;
         }
+        case EE_CHAR_FONTFEATURES:
+        {
+            SvxFontFeaturesItem const& rItem{static_cast<SvxFontFeaturesItem const&>(rItm)};
+            OUString aStr = vcl::font::FeaturesToString(rItem.GetFeatures());
+            attr = yinput_str(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
+            attrName = "EE_CHAR_FONTFEATURES";
+            break;
+        }
         default:
             assert(false);
     }
@@ -1634,6 +1662,8 @@ char const* YrsWhichToAttrName(sal_Int16 const nWhich)
             return "EE_CHAR_FONTVARIATIONS_CJK";
         case EE_CHAR_FONTVARIATIONS_CTL:
             return "EE_CHAR_FONTVARIATIONS_CTL";
+        case EE_CHAR_FONTFEATURES:
+            return "EE_CHAR_FONTFEATURES";
         default:
             assert(false);
             abort();
@@ -1891,6 +1921,10 @@ void YrsImplInsertAttr(SfxItemSet & rSet, ::std::vector<sal_uInt16> *const pRemo
     else if (strcmp(pKey, "EE_CHAR_FONTVARIATIONS_CTL") == 0)
     {
         nWhich = EE_CHAR_FONTVARIATIONS_CTL;
+    }
+    else if (strcmp(pKey, "EE_CHAR_FONTFEATURES") == 0)
+    {
+        nWhich = EE_CHAR_FONTFEATURES;
     }
     else if (pKey[0] == 'E' && pKey[1] == 'E' && pKey[2] == '_')
     {
@@ -3312,6 +3346,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     sal_uInt16 nWhich_Weight = GetScriptItemId( EE_CHAR_WEIGHT, nScriptType );
     sal_uInt16 nWhich_Italic = GetScriptItemId( EE_CHAR_ITALIC, nScriptType );
     sal_uInt16 nWhich_FontVariations = GetScriptItemId( EE_CHAR_FONTVARIATIONS, nScriptType );
+    sal_uInt16 nWhich_FontFeatures = GetScriptItemId( EE_CHAR_FONTFEATURES, nScriptType );
 
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontInfo ) == SfxItemState::SET ) )
     {
@@ -3374,6 +3409,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         rFont.SetOpticalSizing( rSet.Get( EE_CHAR_OPTICALSIZING ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontVariations ) == SfxItemState::SET ) )
         rFont.SetVariations( static_cast<const SvxFontVariationsItem&>(rSet.Get( nWhich_FontVariations )).GetVariations() );
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontFeatures ) == SfxItemState::SET ) )
+        rFont.SetFeatures( static_cast<const SvxFontFeaturesItem&>(rSet.Get( nWhich_FontFeatures )).GetFeatures() );
 
     // Operator == compares the individual members of the font if the impl pointer is
     // not equal. If all members are the same, this assignment makes

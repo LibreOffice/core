@@ -67,6 +67,7 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
 #include <tools/mapunit.hxx>
@@ -166,6 +167,9 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_CHAR_FONTVARIATIONS, new SvxFontVariationsItem( EE_CHAR_FONTVARIATIONS ), SID_ATTR_CHAR_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
             { EE_CHAR_FONTVARIATIONS_CJK, new SvxFontVariationsItem( EE_CHAR_FONTVARIATIONS_CJK ), SID_ATTR_CHAR_CJK_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
             { EE_CHAR_FONTVARIATIONS_CTL, new SvxFontVariationsItem( EE_CHAR_FONTVARIATIONS_CTL ), SID_ATTR_CHAR_CTL_FONT_VARIATIONS, SFX_ITEMINFOFLAG_NONE },
+            { EE_CHAR_FONTFEATURES, new SvxFontFeaturesItem( EE_CHAR_FONTFEATURES ), SID_ATTR_CHAR_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
+            { EE_CHAR_FONTFEATURES_CJK, new SvxFontFeaturesItem( EE_CHAR_FONTFEATURES_CJK ), SID_ATTR_CHAR_CJK_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
+            { EE_CHAR_FONTFEATURES_CTL, new SvxFontFeaturesItem( EE_CHAR_FONTFEATURES_CTL ), SID_ATTR_CHAR_CTL_FONT_FEATURES, SFX_ITEMINFOFLAG_NONE },
             { EE_FEATURE_TAB, new SfxVoidItem( EE_FEATURE_TAB ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_LINEBR, new SfxVoidItem( EE_FEATURE_LINEBR ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_NOTCONV, new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV ), SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE  },
