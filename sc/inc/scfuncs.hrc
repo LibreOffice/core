@@ -1597,11 +1597,11 @@ const TranslateId ocBYCOL_ARY[] =
 // -=*# Resources for function BYROW #*=-
 const TranslateId ocBYROW_ARY[] =
 {
-    NC_("ocBYCOL", "Applies a function to each row of an array. Returns an single-column array of the same height."),
-    NC_("ocBYCOL", "Array"),
-    NC_("ocBYCOL", "An array to calculate."),
-    NC_("ocBYCOL", "Function"),
-    NC_("ocBYCOL", "A function (LAMBDA or otherwise) that will be called on each row of the array.")
+    NC_("ocBYROW", "Applies a function to each row of an array. Returns an single-column array of the same height."),
+    NC_("ocBYROW", "Array"),
+    NC_("ocBYROW", "An array to calculate."),
+    NC_("ocBYROW", "Function"),
+    NC_("ocBYROW", "A function (LAMBDA or otherwise) that will be called on each row of the array.")
 };
 
 // -=*# Resource for function MAKEARRAY #*=-
