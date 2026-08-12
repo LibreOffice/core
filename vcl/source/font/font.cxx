@@ -262,6 +262,17 @@ const std::vector<vcl::font::Variation>& Font::GetVariations() const
     return mpImplFont->maVariations;
 }
 
+void Font::SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures )
+{
+    if (GetFeatures() != rFeatures)
+        mpImplFont->maFeatures = rFeatures;
+}
+
+const std::vector<vcl::font::FeatureSetting>& Font::GetFeatures() const
+{
+    return mpImplFont->maFeatures;
+}
+
 void Font::SetWidthType( FontWidth eWidth )
 {
     if (std::as_const(mpImplFont)->GetWidthTypeNoAsk() != eWidth)
@@ -426,6 +437,9 @@ void Font::Merge( const vcl::Font& rFont )
     SetOpticalSizing( rFont.GetOpticalSizing() );
     if ( !rFont.GetVariations().empty() )
         SetVariations( rFont.GetVariations() );
+
+    if ( !rFont.GetFeatures().empty() )
+        SetFeatures( rFont.GetFeatures() );
     SetRelief( rFont.GetRelief() );
 }
 
