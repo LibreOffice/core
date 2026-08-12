@@ -64,6 +64,7 @@ class SvxVerJustifyItem;
 class SvxRubyItem;
 class SvxScriptHintItem;
 class SvxFontVariationsItem;
+class SvxFontFeaturesItem;
 class SvxOpticalSizingItem;
 
 /*
@@ -139,8 +140,11 @@ inline constexpr TypedWhichId<SvxOpticalSizingItem>   EE_CHAR_OPTICALSIZING  (EE
 inline constexpr TypedWhichId<SvxFontVariationsItem>  EE_CHAR_FONTVARIATIONS (EE_CHAR_START+35);
 inline constexpr TypedWhichId<SvxFontVariationsItem>  EE_CHAR_FONTVARIATIONS_CJK (EE_CHAR_START+36);
 inline constexpr TypedWhichId<SvxFontVariationsItem>  EE_CHAR_FONTVARIATIONS_CTL (EE_CHAR_START+37);
+inline constexpr TypedWhichId<SvxFontFeaturesItem>    EE_CHAR_FONTFEATURES   (EE_CHAR_START+38);
+inline constexpr TypedWhichId<SvxFontFeaturesItem>    EE_CHAR_FONTFEATURES_CJK (EE_CHAR_START+39);
+inline constexpr TypedWhichId<SvxFontFeaturesItem>    EE_CHAR_FONTFEATURES_CTL (EE_CHAR_START+40);
 
-inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 37);
+inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 40);
 
 inline constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
 inline constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);

@@ -82,6 +82,7 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/scripthintitem.hxx>
 #include <editeng/eerdll.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -3023,6 +3024,7 @@ void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxFontVariationsItem -------------------------------------------
 
 SfxPoolItem* SvxFontVariationsItem::CreateDefault() { return new SvxFontVariationsItem(0); }
+SfxPoolItem* SvxFontFeaturesItem::CreateDefault() { return new SvxFontFeaturesItem(0); }
 
 SvxFontVariationsItem::SvxFontVariationsItem(sal_uInt16 nId)
     : SfxPoolItem(nId)
@@ -3078,6 +3080,67 @@ bool SvxFontVariationsItem::PutValue(const css::uno::Any& rVal, sal_uInt8 /*nMem
     if (rVal >>= aStr)
     {
         maVariations = vcl::font::VariationsFromString(aStr);
+        return true;
+    }
+    return false;
+}
+
+// class SvxFontFeaturesItem ---------------------------------------------
+
+SvxFontFeaturesItem::SvxFontFeaturesItem(sal_uInt16 nId)
+    : SfxPoolItem(nId)
+{
+}
+
+SvxFontFeaturesItem::SvxFontFeaturesItem(std::vector<vcl::font::FeatureSetting> aFeatures,
+                                         sal_uInt16 nId)
+    : SfxPoolItem(nId)
+    , maFeatures(std::move(aFeatures))
+{
+}
+
+bool SvxFontFeaturesItem::operator==(const SfxPoolItem& rItem) const
+{
+    assert(SfxPoolItem::operator==(rItem));
+    return maFeatures == static_cast<const SvxFontFeaturesItem&>(rItem).maFeatures;
+}
+
+size_t SvxFontFeaturesItem::hashCode() const
+{
+    size_t hash = 0;
+    for (const auto& rFeature : maFeatures)
+    {
+        o3tl::hash_combine(hash, rFeature.m_nTag);
+        o3tl::hash_combine(hash, rFeature.m_nValue);
+    }
+    return hash;
+}
+
+SvxFontFeaturesItem* SvxFontFeaturesItem::Clone(SfxItemPool*) const
+{
+    return new SvxFontFeaturesItem(*this);
+}
+
+bool SvxFontFeaturesItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,
+                                          MapUnit /*ePresUnit*/, OUString& rText,
+                                          const IntlWrapper& /*rIntl*/) const
+{
+    rText = vcl::font::FeaturesToString(maFeatures);
+    return true;
+}
+
+bool SvxFontFeaturesItem::QueryValue(css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+{
+    rVal <<= vcl::font::FeaturesToString(maFeatures);
+    return true;
+}
+
+bool SvxFontFeaturesItem::PutValue(const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+{
+    OUString aStr;
+    if (rVal >>= aStr)
+    {
+        maFeatures = vcl::font::FeaturesFromString(aStr);
         return true;
     }
     return false;

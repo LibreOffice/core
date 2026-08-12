@@ -69,6 +69,7 @@ class SvxWordLineModeItem;
 class SvxScriptHintItem;
 class SvxFontListItem;
 class SvxOpticalSizingItem;
+class SvxFontFeaturesItem;
 
 /*
   These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
@@ -194,6 +195,9 @@ class SvxOpticalSizingItem;
 #define SID_ATTR_CHAR_FONT_VARIATIONS                   TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 82 )
 #define SID_ATTR_CHAR_CJK_FONT_VARIATIONS               TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 83 )
 #define SID_ATTR_CHAR_CTL_FONT_VARIATIONS               TypedWhichId<SvxFontVariationsItem>( SID_EDIT_START + 84 )
+#define SID_ATTR_CHAR_FONT_FEATURES                     TypedWhichId<SvxFontFeaturesItem>( SID_EDIT_START + 86 )
+#define SID_ATTR_CHAR_CJK_FONT_FEATURES                 TypedWhichId<SvxFontFeaturesItem>( SID_EDIT_START + 87 )
+#define SID_ATTR_CHAR_CTL_FONT_FEATURES                 TypedWhichId<SvxFontFeaturesItem>( SID_EDIT_START + 88 )
 // Status only, the box applies the style through SID_ATTR_CHAR_FONT/WEIGHT/POSTURE
 #define SID_ATTR_CHAR_FONT_STYLE                        TypedWhichId<SvxFontItem>( SID_EDIT_START + 85 )
 
