@@ -29,6 +29,8 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <vcl/font/Feature.hxx>
+#include <vcl/font/FeatureParser.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimppr.hxx>
 #include <xmloff/maptype.hxx>
@@ -347,6 +349,37 @@ void lcl_SeparateBorder(
 
 }
 
+/** Features used to be stored by appending them to the font name, which is how
+    documents written before they became an attribute of their own carry them.
+    Convert once, on load, so nothing downstream has to know about the old form.
+ */
+void XMLTextImportPropertyMapper::FontFeaturesCheck(
+                                        XMLPropertyState* pFontFamilyName,
+                                        sal_Int16 nContextId,
+                                        std::optional<XMLPropertyState>* ppNewFontFeatures ) const
+{
+    if( !pFontFamilyName )
+        return;
+
+    OUString sName;
+    if( !(pFontFamilyName->maValue >>= sName) )
+        return;
+
+    const OUString sTrimmed = vcl::font::trimFontNameFeatures( sName );
+    if( sTrimmed == sName )
+        return;
+
+    const sal_Int32 nIndex = getPropertySetMapper()->FindEntryIndex( nContextId );
+    if( nIndex == -1 )
+        return;
+
+    pFontFamilyName->maValue <<= sTrimmed;
+
+    vcl::font::FeatureParser aParser( sName );
+    ppNewFontFeatures->emplace( nIndex,
+                                Any( vcl::font::FeaturesToString( aParser.getFeatures() ) ) );
+}
+
 void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
@@ -361,6 +394,9 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pFontFamily = nullptr;
     XMLPropertyState* pFontPitch = nullptr;
     XMLPropertyState* pFontCharSet = nullptr;
+    std::optional<XMLPropertyState> pNewFontFeatures;
+    std::optional<XMLPropertyState> pNewFontFeaturesCJK;
+    std::optional<XMLPropertyState> pNewFontFeaturesCTL;
     std::optional<XMLPropertyState> pNewFontStyleName;
     std::optional<XMLPropertyState> pNewFontFamily;
     std::optional<XMLPropertyState> pNewFontPitch;
@@ -644,6 +680,11 @@ void XMLTextImportPropertyMapper::finished(
         pVertOrientRelAsChar->mnIndex = -1;
     }
 
+    // Each script's font carries its own features, as it carries its own name
+    FontFeaturesCheck( pFontFamilyName, CTF_CHARFONTFEATURES, &pNewFontFeatures );
+    FontFeaturesCheck( pFontFamilyNameCJK, CTF_CHARFONTFEATURES_CJK, &pNewFontFeaturesCJK );
+    FontFeaturesCheck( pFontFamilyNameCTL, CTF_CHARFONTFEATURES_CTL, &pNewFontFeaturesCTL );
+
     FontDefaultsCheck( pFontFamilyName,
                        pFontStyleName, pFontFamily, pFontPitch, pFontCharSet,
                        &pNewFontStyleName, &pNewFontFamily, &pNewFontPitch, &pNewFontCharSet );
@@ -676,6 +717,24 @@ void XMLTextImportPropertyMapper::finished(
     // insert newly created properties. This invalidates all iterators!
     // Most of the pXXX variables in this method are iterators and will be
     // invalidated!!!
+
+    if( pNewFontFeatures )
+    {
+        rProperties.push_back( *pNewFontFeatures );
+        pNewFontFeatures.reset();
+    }
+
+    if( pNewFontFeaturesCJK )
+    {
+        rProperties.push_back( *pNewFontFeaturesCJK );
+        pNewFontFeaturesCJK.reset();
+    }
+
+    if( pNewFontFeaturesCTL )
+    {
+        rProperties.push_back( *pNewFontFeaturesCTL );
+        pNewFontFeaturesCTL.reset();
+    }
 
     if( pNewFontStyleName )
     {
