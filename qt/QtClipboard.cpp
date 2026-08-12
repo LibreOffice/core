@@ -22,11 +22,14 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QClipboard>
+#include <QFile>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QHash>
 #include <QLatin1String>
 #include <QMimeData>
 #include <QString>
+#include <QUrl>
 
 #include <atomic>
 #include <cstdlib>
@@ -113,6 +116,36 @@ bool isLoKitFormat(const QString& f)
         || f == QLatin1String("application/msword")
         || f == QLatin1String("application/mathml+xml")
         || f == QLatin1String("application/pdf");
+}
+
+/// A file manager copy of an image file is a URI, we route it to "insertfile"
+/// message instead so that the picture is embedded in its original format.
+bool insertClipboardImageFile(int dstFd, const QMimeData* data)
+{
+    constexpr std::array imageExtensions = { "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg" };
+
+    for (const QUrl& url : data->urls())
+    {
+        const QFileInfo fileInfo(url.toLocalFile());
+        if (!std::ranges::find(imageExtensions, fileInfo.suffix().toLower().toStdString()))
+        {
+            continue;
+        }
+
+        QFile file(fileInfo.absoluteFilePath());
+        if (!file.open(QIODevice::ReadOnly))
+        {
+            continue;
+        }
+
+        const std::string message = "insertfile name=" + fileInfo.fileName().toStdString() +
+                                    " type=graphic data=" + file.readAll().toBase64().toStdString();
+        fakeSocketWriteQueue(dstFd, message.c_str(), message.size());
+
+        return true;
+    }
+
+    return false;
 }
 
 void writeMimeDataToDoc(COKitDocument* dstDoc, const QMimeData* data)
@@ -288,6 +321,11 @@ bool pasteFromClipboard(unsigned dstDocId, int dstFd, const std::string& unoCmd)
     // External app owns the clipboard: copy it into LOKit before pasting.
     if (clipboardHoldsForeignData(data))
     {
+        if (insertClipboardImageFile(dstFd, data))
+        {
+            return false;
+        }
+
         if (DocumentData* dstData = DocumentData::getIfExists(dstDocId))
             writeMimeDataToDoc(dstData->loKitDocument, data);
         fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
