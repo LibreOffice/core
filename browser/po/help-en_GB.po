@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-07-02 19:01+0000\n"
-"Last-Translator: FarmYard Gaming <farmyardgaming@gmail.com>\n"
+"PO-Revision-Date: 2026-08-12 01:32+0000\n"
+"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/help/en_GB/>\n"
 "Language: en_GB\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -100,11 +100,11 @@ msgstr "Print"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Find and Replace"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -146,41 +146,41 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Open the context menu at the cursor or the selected cell"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Move focus to the next area of the application (menu bar, formula bar, "
+"document, sidebar, sheet tabs, status bar)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Move focus to the previous area of the application"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1365,41 +1365,43 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Selects the entire column of the current cell."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Selects the entire row of the current cell."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Opens the context menu of the focused sheet tab (insert, rename, delete, "
+"hide, move, and more)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"With a whole column or row selected, opens the matching column or row header "
+"context menu (insert, delete, width or height, hide, and more)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1653,7 +1655,7 @@ msgstr "Opening, closing, saving, printing and downloading documents"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Opening, closing, saving and printing documents"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.div.h3:480-5
@@ -1758,6 +1760,12 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> allows you to create and "
+"edit typical office documents, that is text documents, spreadsheets and "
+"presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
+"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
+"You can work alone on a document, or collaboratively as part of a team.</"
+"span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1786,17 +1794,16 @@ msgstr ""
 "notification in the footer when a new user enters or when a user leaves."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> uses modern browser "
-"resources to adapt the user interface to the size of the viewing area, "
-"including small screens found in mobile devices. The interface is composed "
-"of:"
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
+"span> uses modern browser resources to adapt the user interface to the size "
+"of the viewing area, including small screens found in mobile devices.</span> "
+"The interface is composed of:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -1985,6 +1992,10 @@ msgid ""
 "class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
 ">File</span> menu bar button."
 msgstr ""
+"To open a document, either open it in <span class=\"productname\">"
+"{productname}</span> from your platform's file manager or use the <span "
+"class=\"ui\">Open</span> button on the page shown from the <span "
+"class=\"ui\">File</span> menu bar button."
 
 #: html/cool-help.html%2Bdiv.div.div.p:458-7
 msgid ""
@@ -1992,6 +2003,9 @@ msgid ""
 "as</span> button on the page shown from the <span class=\"ui\">File</span> "
 "menu bar button."
 msgstr ""
+"To save the document in a different format use the <span class=\"ui\">Save "
+"as</span> button on the page shown from the <span class=\"ui\">File</span> "
+"menu bar button."
 
 #: html/cool-help.html%2Bdiv.div.div.p:463-7
 msgid ""
@@ -1999,12 +2013,17 @@ msgid ""
 "to be saved right away you can use the <span class=\"ui\">Save</span> button "
 "on the page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Documents are automatically saved perdiodically, but if you want a document "
+"to be saved right away you can use the <span class=\"ui\">Save</span> button "
+"on the page shown from the <span class=\"ui\">File</span> menu bar button."
 
 #: html/cool-help.html%2Bdiv.div.div.p:470-7
 msgid ""
 "To print the document, use the <span class=\"ui\">Print</span> button on the "
 "page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"To print the document, use the <span class=\"ui\">Print</span> button on the "
+"page shown from the <span class=\"ui\">File</span> menu bar button."
 
 #: html/cool-help.html%2Bdiv.div.div.p:481-5
 msgid ""
