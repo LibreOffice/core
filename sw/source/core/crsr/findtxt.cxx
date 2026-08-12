@@ -398,7 +398,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
         const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
         utl::TextSearch& rSText,
         SwMoveFnCollection const & fnMove, const SwPaM & rRegion,
-        bool bInReadOnly, SwRootFrame const*const pLayout,
+        bool bInReadOnly, SwRootFrame const*const pLayout, bool bMustStartWithCurrentNode,
         std::unique_ptr<SvxSearchItem>& xSearchItem)
 {
     if( rSearchOpt.searchString.isEmpty() )
@@ -415,11 +415,22 @@ bool FindTextImpl(SwPaM & rSearchPam,
     bool bFirst = true;
     SwContentNode * pNode;
 
+    const OUString& rSrch = rSearchOpt.searchString;
     const bool bRegSearch = SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2;
     const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( rSearchOpt.searchString == "^$" ||
                           rSearchOpt.searchString == "$^" );
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
+    const bool bAvoidGettingStuck = bRegSearch
+        && (rSrch == "^" || rSrch == "\\A"); // beginning of the paragraph
+    if (bAvoidGettingStuck)
+    {
+        // Do not search the current paragraph: prevent repeated finds of the same para.
+        // But do check current paragraph on wrap arounds, Find All, or forced paragraph moves
+        // which set bMustStartWithCurrentNode to true.
+        // Also check the current paragraph if not already at the very start.
+        bFirst = bMustStartWithCurrentNode || rPtPos.GetContentIndex();
+    }
 
     if (!xSearchItem)
     {
@@ -754,8 +765,27 @@ bool DoSearch(SwPaM & rSearchPam,
         SwTextNode const*const pNode, SwTextFrame const*const pFrame,
         SwRootFrame const*const pLayout, SwPaM& rPam)
 {
-    if (SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2
-        && rSearchOpt.searchString.endsWith("$"))
+    const OUString& rSrch = rSearchOpt.searchString;
+    const bool bRegSearch = SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2;
+    const bool bChkParaStart = bRegSearch && (rSrch == "^" || rSrch == "\\A");
+    if (bChkParaStart)
+    {
+        // every paragraph has a start - no need to actually do the regex search
+        if (bSrchForward ? nStart.GetAnyIndex() : nEnd.GetAnyIndex())
+            return false; // the beginning of the paragraph is not included in the search range.
+
+        if (pLayout)
+            *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(TextFrameIndex(0));
+        else
+        {
+            *rSearchPam.GetPoint() = *rPam.GetPoint();
+            rSearchPam.GetPoint()->SetContent(0);
+        }
+        rSearchPam.SetMark(); // Mark == Point
+        return true;
+    }
+
+    if (bRegSearch && rSrch.endsWith("$"))
     {
         bool bAlwaysSearchingForEndOfPara = true;
         sal_Int32 nIndex = 0;
@@ -942,19 +972,26 @@ struct SwFindParaText : public SwFindParas
     utl::TextSearch m_aSText;
     bool m_bReplace;
     bool m_bSearchInNotes;
+    bool m_bMustStartWithCurrentNode;
 
-    SwFindParaText(const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes,
-            bool bRepl, SwCursor& rCursor, SwRootFrame const*const pLayout)
+    SwFindParaText(const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes, bool bRepl,
+                   SwCursor& rCursor, SwRootFrame const*const pLayout,
+                   bool bMustStartWithCurrentNode)
         : m_rSearchOpt( rOpt )
         , m_rCursor( rCursor )
         , m_pLayout(pLayout)
         , m_aSText(rOpt)
         , m_bReplace( bRepl )
         , m_bSearchInNotes( bSearchInNotes )
+        , m_bMustStartWithCurrentNode(bMustStartWithCurrentNode)
     {}
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly, std::unique_ptr<SvxSearchItem>& xSearchItem) override;
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
+    virtual void SetMustStartWithCurrentNode(bool bSet) override
+    {
+        m_bMustStartWithCurrentNode = bSet;
+    }
 };
 
 }
@@ -970,8 +1007,10 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
-    const bool bFnd = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes,
-            m_aSText, fnMove, rRegion, bInReadOnly, m_pLayout, xSearchItem);
+    const bool bFnd
+        = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove,  rRegion,
+                           bInReadOnly, m_pLayout, m_bMustStartWithCurrentNode, xSearchItem);
+    m_bMustStartWithCurrentNode = false;
 
     if( bFnd && m_bReplace ) // replace string
     {
@@ -1050,7 +1089,9 @@ sal_Int32 SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
-    SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout);
+    const bool bMustStartWithCurrentNode = nStart != SwDocPositions::Curr;
+    SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout,
+                                   bMustStartWithCurrentNode);
     sal_Int32 nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )

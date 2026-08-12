@@ -41,6 +41,7 @@ struct SwFindParas
     // @param xSearchItem allocate in parent so we can do so outside the calling loop
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM&, bool, std::unique_ptr<SvxSearchItem>& xSearchItem) = 0;
     virtual bool IsReplaceMode() const = 0;
+    virtual void SetMustStartWithCurrentNode(bool) {}
 
 protected:
     ~SwFindParas() {}

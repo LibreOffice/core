@@ -486,6 +486,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
     xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
     // should be one for every non-empty paragraph
     CPPUNIT_ASSERT_EQUAL(sal_Int32(14), xIndex->getCount());
+
+    // tdf#135538
+    // Search for the beginning of the paragraph
+    xSearchDes->setSearchString(u"^"_ustr); // the start of the paragraph
+    CPPUNIT_ASSERT_EQUAL(nParas, xSearch->findAll(xSearchDes)->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)

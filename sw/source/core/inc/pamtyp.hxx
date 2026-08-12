@@ -98,7 +98,7 @@ namespace sw {
                 utl::TextSearch& rSText,
                 SwMoveFnCollection const & fnMove,
                 const SwPaM & rRegion, bool bInReadOnly,
-                SwRootFrame const* pLayout,
+                SwRootFrame const* pLayout, bool bMustStartWithCurrentNode,
                 std::unique_ptr<SvxSearchItem>& xSearchItem);
     bool FindFormatImpl(SwPaM & rSearchPam,
                 const SwFormat& rFormat,

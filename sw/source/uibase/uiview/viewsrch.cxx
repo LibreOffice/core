@@ -360,6 +360,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
             case SvxSearchCmd::REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
+                    aOpts.eStart
+                        = s_pSrchItem->GetBackward() ? SwDocPositions::End : SwDocPositions::Start;
                     s_bExtra = false;
                     sal_Int32 nFound;
 
@@ -676,6 +678,7 @@ sal_Int32 SwView::SearchAll()
     m_pWrtShell->StartAllAction();
 
     SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
+    aOpts.eStart = s_pSrchItem->GetBackward() ? SwDocPositions::End : SwDocPositions::Start;
 
     if (!s_pSrchItem->GetSelection())
     {

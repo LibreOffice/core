@@ -895,6 +895,8 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                         break;
                     }
                 }
+                else
+                    rParas.SetMustStartWithCurrentNode(true); // currently only for FindTextImpl
             }
 
             if( *pSttPos == *pEndPos )
