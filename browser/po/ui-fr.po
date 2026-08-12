@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-07-09 15:01+0000\n"
-"Last-Translator: Jérôme Herbinet <jerome@herbinet.fr>\n"
+"PO-Revision-Date: 2026-08-12 22:54+0000\n"
+"Last-Translator: Nioh <niohiguess@mailfence.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -422,7 +422,7 @@ msgstr "Votre serveur WOPI n'est pas sécurisé : vérification SSL échouée"
 msgid ""
 "Documents are not effectively contained: missing capabilities or namespaces."
 msgstr ""
-"Les Documents ne sont pas effectivement conteneurisés: il manque des "
+"Les Documents ne sont pas effectivement conteneurisés : il manque des "
 "capability ou des namespace."
 
 #: admin/src/AdminSocketServerAudit.js:45
@@ -454,7 +454,7 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
 msgstr ""
-"Cloisonnement du Kit rapide via l'utilisation de bind-mount non configuré."
+"Cloisonnement du Kit rapide via l'utilisation de bind-mount non configuré"
 
 #: admin/src/AdminSocketServerAudit.js:59
 #, fuzzy
@@ -1123,8 +1123,9 @@ msgid "Fetch models to select"
 msgstr "Récupérer modèles à sélectionner"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
+#, fuzzy
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Quota API dépassé - vérifiez votre plan et les détails de facturation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1761,9 +1762,8 @@ msgid "Set tone of voice"
 msgstr "Définir le ton de la voix"
 
 #: src/control/Control.AIChatSidebar.ts:978
-#, fuzzy
 msgid "Tone of voice: {0}{1}"
-msgstr "Ton de la voix: {0}{1}"
+msgstr "Ton de la voix : {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:980
 #, fuzzy
@@ -2037,9 +2037,8 @@ msgid "Modify document structure"
 msgstr "Modifier la structure du document"
 
 #: src/control/Control.AIChatSidebar.ts:2320
-#, fuzzy
 msgid "%1 wants to modify your document:"
-msgstr "%1 veut modifier votre document:"
+msgstr "%1 veut modifier votre document :"
 
 #: src/control/Control.AIChatSidebar.ts:2324
 #: src/control/Control.AIChatSidebar.ts:2335
@@ -2379,7 +2378,7 @@ msgstr "Nouveau"
 #: src/control/Control.BackstageView.ts:113
 #: src/control/backstage/OpenView.tsx:42
 msgid "Open"
-msgstr ""
+msgstr "Ouvrir"
 
 #: src/control/Control.BackstageView.ts:125
 #: src/control/Control.Notebookbar.js:757
@@ -3916,7 +3915,7 @@ msgstr ""
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Trouver et remplacer"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4911,7 +4910,7 @@ msgstr "Déplier toutes les sections"
 
 #: src/control/Control.PartsPreview.js:1064
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr "Supprimer la section \"%1\" et ses %2 diapositive(s)?"
+msgstr "Supprimer la section \"%1\" et ses %2 diapositive(s) ?"
 
 #: src/control/Control.PartsPreview.js:1112
 msgid "Enter new section name:"
@@ -4948,7 +4947,7 @@ msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:114
 msgid "Fast kit jail bind mounting enabled"
-msgstr "Cloisonnement du Kit rapide via l'utilisation de bind-mount."
+msgstr "Cloisonnement du Kit rapide via l'utilisation de bind-mount"
 
 #: src/control/Control.ServerAuditDialog.ts:127
 msgid "Poorly performing proxying of all network requests."
@@ -5517,7 +5516,7 @@ msgstr ""
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Édition collaborative"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
@@ -6019,9 +6018,8 @@ msgid "Line color"
 msgstr "Couleur de ligne"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2078
-#, fuzzy
 msgid "Line style"
-msgstr "Style de ligne :"
+msgstr "Style de ligne"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2082
 msgid "Hairline (0.05 pt)"
@@ -7436,7 +7434,6 @@ msgid "Collabora Online Development Edition"
 msgstr "Collabora Online Édition Développeur"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
-#, fuzzy
 msgid ""
 "Enjoy the latest developments in online productivity, free for you to use, "
 "to explore and to use with others in the browser. Various <a "
@@ -7446,26 +7443,25 @@ msgid ""
 msgstr ""
 "Bénéficiez des derniers développements en matière de productivité en ligne, "
 "que vous pouvez utiliser gratuitement, explorer et utiliser avec les autres "
-"dans le navigateur. Plusieurs <a target=\"_blank\" href=\"https://www."
-"collaboraonline.com/solutions/collabora-office-android-ios/\">applications</"
-"a> mobiles sont également disponibles."
+"dans le navigateur. Plusieurs<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.com/solutions/collabora-office-android-"
+"ios/\">applications</a> mobiles sont également disponibles."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "Découvrir toutes les nouveautés"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
-#, fuzzy
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
 "collaboraonline.com/code-26-04-release-notes/\">release notes</a> and learn "
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
-"Consultez les <a target=\"_blank\" href=\"https://www.collaboraonline.com/"
-"code-26-04-release-notes/\">notes de mise à jour</a> et découvrez les "
-"nouveautés : La dernière édition de développement de Collabora Online, "
-"destinée aux utilisateurs privés et aux petites équipes."
+"Consultez les <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/code-26-04-release-notes/\">notes de mise à jour</a> "
+"et découvrez les nouveautés : La dernière édition de développement de "
+"Collabora Online, destinée aux utilisateurs privés et aux petites équipes."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
 msgid "Get Involved"
@@ -7477,7 +7473,6 @@ msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -7488,12 +7483,13 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Vous souhaitez contribuer mais vous ne savez pas par où commencer ? Rendez-"
-"vous à la <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">page d'instructions</a> et construisez CODE à partir de zéro. "
-"Vous pouvez également aider en <a target=\"_blank\" href=\"https://www."
-"collaboraonline.org/post/translate/\">traduisant</a> ou en <a target=\"_blank"
-"\" href=\"https://www.collaboraonline.org/post/filebugs/\">rapportant un "
+"Vous souhaitez contribuer mais vous ne savez pas par où commencer ? Rendez-"
+"vous à la <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/build-code/\">page d'instructions</a> et "
+"construisez CODE à partir de zéro. Vous pouvez également aider en <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/translate/\">traduisant</a> ou en <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/filebugs/\">rapportant un "
 "rapport de bogue</a> en y détaillant les étapes essentielles sur la façon "
 "dont le reproduire."
 
