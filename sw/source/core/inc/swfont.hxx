@@ -107,6 +107,7 @@ class SwSubFont final : public SvxFont
     inline void SetRelief( const FontRelief eNew );
     inline void SetOpticalSizing( bool bOpticalSizing );
     inline void SetVariations( const std::vector<vcl::font::Variation>& rVariations );
+    inline void SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures );
 
     // methods for sub-/superscript
     inline void SetEscapement( const short nNewEsc );
@@ -242,6 +243,8 @@ public:
     inline void SetOpticalSizing( bool bOpticalSizing );
     inline void SetVariations( const std::vector<vcl::font::Variation>& rVariations,
                                const SwFontScript nWhich );
+    inline void SetVariations( const std::vector<vcl::font::Variation>& rVariations );
+    inline void SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures, SwFontScript nWhich );
 
     // methods for sub-/superscript
     inline void SetEscapement( const short nNewEsc );
@@ -748,6 +751,18 @@ inline void SwFont::SetVariations( const std::vector<vcl::font::Variation>& rVar
 {
     m_bFontChg = true;
     m_aSub[nWhich].SetVariations( rVariations );
+}
+
+inline void SwSubFont::SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures )
+{
+    m_nFontCacheId = nullptr;
+    Font::SetFeatures( rFeatures );
+}
+
+inline void SwFont::SetFeatures( const std::vector<vcl::font::FeatureSetting>& rFeatures, SwFontScript nWhich )
+{
+    m_bFontChg = true;
+    m_aSub[nWhich].SetFeatures( rFeatures );
 }
 
 inline void SwFont::SetPropWidth( const sal_uInt16 nNew )
