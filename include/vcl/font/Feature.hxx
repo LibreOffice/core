@@ -123,15 +123,32 @@ struct Feature
 
 // This is basically duplicates hb_feature_t to avoid including HarfBuzz
 // headers here, so the member types should remain compatible.
-struct FeatureSetting
+struct VCL_DLLPUBLIC FeatureSetting
 {
+    FeatureSetting() = default;
     FeatureSetting(const OString& feature);
+    FeatureSetting(uint32_t nTag, uint32_t nValue)
+        : m_nTag(nTag)
+        , m_nValue(nValue)
+    {
+    }
 
-    uint32_t m_nTag;
-    uint32_t m_nValue;
-    unsigned int m_nStart;
-    unsigned int m_nEnd;
+    bool operator==(const FeatureSetting& rOther) const
+    {
+        return m_nTag == rOther.m_nTag && m_nValue == rOther.m_nValue && m_nStart == rOther.m_nStart
+               && m_nEnd == rOther.m_nEnd;
+    }
+
+    uint32_t m_nTag = 0;
+    uint32_t m_nValue = 0;
+    unsigned int m_nStart = 0;
+    unsigned int m_nEnd = 0;
 };
+
+// The CSS font-feature-settings syntax, e.g. "smcp" 1, "onum" 0. A setting with
+// no value is on, as it is in CSS.
+VCL_DLLPUBLIC std::vector<FeatureSetting> FeaturesFromString(std::u16string_view rString);
+VCL_DLLPUBLIC OUString FeaturesToString(const std::vector<FeatureSetting>& rFeatures);
 
 } // namespace vcl::font
 

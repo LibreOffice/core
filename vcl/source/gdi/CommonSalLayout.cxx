@@ -60,6 +60,15 @@ GenericSalLayout::~GenericSalLayout()
         hb_set_destroy(mpVertGlyphs);
 }
 
+void GenericSalLayout::SetFeatures(const std::vector<vcl::font::FeatureSetting>& rFeatures)
+{
+    for (auto const& rFeat : rFeatures)
+        maFeatures.push_back({ rFeat.m_nTag, rFeat.m_nValue, rFeat.m_nStart, rFeat.m_nEnd });
+}
+
+// The features a font name carries, which is how they were stored before they
+// became an attribute of their own. Kept so that a name typed by hand still
+// works, and for documents not yet converted.
 void GenericSalLayout::ParseFeatures(std::u16string_view aName)
 {
     vcl::font::FeatureParser aParser(aName);
@@ -460,6 +469,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         maFeatures.push_back({ HB_TAG('c','l','i','g'), 0, 0, static_cast<unsigned int>(-1) });
     }
 
+    SetFeatures(rFontSelData.maFeatures);
     ParseFeatures(rFontSelData.maTargetName);
 
     double nXScale = 0;
