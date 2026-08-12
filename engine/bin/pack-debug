@@ -81,8 +81,13 @@ cat $DEBUGSRC | awk '
  rm -rf $buildroot
 
  # create source file list
+ #
+ # An rpm %files entry is one whitespace-delimited field, so a path holding a
+ # space cannot be named in it: rpmbuild reads each word as a file of its own
+ # and rejects the lot with 'File must begin with "/"'. Only bundled test
+ # corpora carry such names, and no backtrace ever resolves against those.
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
 
  # list all directories for complete rpm remove
 
@@ -145,8 +150,12 @@ cat $DEBUGSRC | awk '
  ' > ${DEBUGSRC}-debugsource
 
  # create source file list
+ #
+ # An epm list file names the destination and the source of a file as two
+ # whitespace-separated fields on one line, so a path holding a space cannot be
+ # named there either, and epm gives up with 'Packaging failed!'.
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' | grep -v '[[:space:]]' |
 
  # list all directories
 
