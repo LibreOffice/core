@@ -407,11 +407,13 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		if (ev.charCode == 0) {
 			this._handleKeyEvent(ev);
 		}
-		if (this._map._docLayer)
-			if (ev.shiftKey && ev.type === 'keydown')
+		if (this._map._docLayer) {
+			if (ev.shiftKey && ev.type === 'keydown') {
 				this._map._docLayer.shiftKeyPressed = true;
-			else if (ev.keyCode === this.keyCodes.SHIFT && ev.type === 'keyup')
+			} else if (ev.keyCode === this.keyCodes.SHIFT && ev.type === 'keyup') {
 				this._map._docLayer.shiftKeyPressed = false;
+			}
+		}
 		if (completeEvent)
 			completeEvent.finish();
 	},
