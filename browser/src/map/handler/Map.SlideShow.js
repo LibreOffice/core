@@ -61,7 +61,7 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 			return;
 		}
 
-		let doPresentation = function(that, e) {
+		let requestPresentation = function(that, e) {
 			that._presentInWindow = false;
 
 			that._startSlideNumber = 0; // Default: start from page 0
@@ -81,7 +81,7 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 				that._slideShow = null;
 			}
 
-			doPresentation(that, e);
+			requestPresentation(that, e);
 		};
 
 		if (!(this._cypressSVGPresentationTest || this._map['wopi'].DownloadAsPostMessage)) {
@@ -90,7 +90,7 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 
 				let that = this;
 				this._slideShow.requestFullscreen()
-					.then(function () { doPresentation(that, e); })
+					.then(function () { requestPresentation(that, e); })
 					.catch(function () {
 						fallback(that, e);
 					});
