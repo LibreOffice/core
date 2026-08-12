@@ -75,8 +75,14 @@ struct SdrCustomShapeInteraction
 class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
     // fObjectRotation is containing the object rotation in degrees.
-    double m_fObjectRotation;
-    bool mbAdjustingTextFrameWidthAndHeight;
+    double      m_fObjectRotation;
+
+    // DiagramModelID
+    OUString    m_aDiagramModelID;
+
+    // internal flags
+    bool        m_bAdjustingTextFrameWidthAndHeight;
+    bool        m_bImportingSmartArtMember;
 
     virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
@@ -85,6 +91,12 @@ protected:
     virtual void setUnoShape(const css::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
 
 public:
+    virtual void setDiagramDataModelID(const OUString& rID) override;
+    virtual const OUString& getDiagramDataModelID() const override;
+
+    void setImportingSmartArtMember(bool bNew) { m_bImportingSmartArtMember = bNew; }
+    bool getImportingSmartArtMember() const { return m_bImportingSmartArtMember; }
+
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     // to allow sdr::properties::CustomShapeProperties access

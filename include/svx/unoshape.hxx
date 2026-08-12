@@ -809,8 +809,8 @@ protected:
 public:
     SvxCustomShape(SdrObject* pObj);
     // override these for special property handling in subcasses. Return true if property is handled
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
-
 
     virtual ~SvxCustomShape() noexcept override;
 

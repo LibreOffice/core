@@ -204,9 +204,8 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
-bool SdrObject::ObjectNameIsDiagramModelID()
+bool SdrObject::isDiagramModelID(const OUString& rStr)
 {
-    const OUString& rStr(m_aObjName);
     if (rStr.isEmpty())
         return false;
 
@@ -290,6 +289,15 @@ bool SdrObject::useAdvancedDiagramFeatures()
     }
 
     return bUse;
+}
+
+void SdrObject::setDiagramDataModelID(const OUString& /*rID*/)
+{
+}
+
+const OUString& SdrObject::getDiagramDataModelID() const
+{
+    return EMPTY_OUSTRING;
 }
 
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
@@ -3327,10 +3335,6 @@ void SdrObject::MakeNameUnique()
 void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
 {
     if (GetName().isEmpty())
-        return;
-
-    if (ObjectNameIsDiagramModelID())
-        // do not make name unique for DiagramModelID's
         return;
 
     OUString sName(GetName().trim());
