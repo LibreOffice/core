@@ -2308,6 +2308,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettingsInherit)
     assertXPath(pDocument, "//textsimpleportion[3]", "font-variation-settings", u"\"wght\" 300");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontFeatureSettings)
+{
+    // tdf#108562 given an SVG file with font-feature-settings:
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/font-feature-settings.svg");
+
+    // Then make sure that the font feature settings are parsed and passed to the text primitives:
+    assertXPath(pDocument, "//textsimpleportion", 5);
+    // inherited from the group
+    assertXPath(pDocument, "//textsimpleportion[1]", "font-feature-settings", u"\"liga\" 0");
+    assertXPath(pDocument, "//textsimpleportion[2]", "font-feature-settings",
+                u"\"smcp\" 1, \"onum\" 0");
+    // a tag with no value is on
+    assertXPath(pDocument, "//textsimpleportion[3]", "font-feature-settings", u"\"zero\" 1");
+    // CTL
+    assertXPath(pDocument, "//textsimpleportion[4]", "font-feature-settings", u"\"liga\" 0");
+    // Asian
+    assertXPath(pDocument, "//textsimpleportion[5]", "font-feature-settings", u"\"liga\" 0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
