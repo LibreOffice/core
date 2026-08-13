@@ -1,0 +1,62 @@
+From 2e1d8e8b8ee0ff54d5c8448b6ead95aaf12f1e52
+Author: Julien Nabet <serval2412@yahoo.fr>
+Date:   Thu Aug 13 20:59:25 2026 +0200
+
+    Deal with some LMBCS group control
+    
+    LMBCS is Lotus Multi-Byte Character Set
+    Group control in LMBCS begin with 0x0F and the control character is the second byte
+    See https://github.com/unicode-org/icu/blob/main/icu4c/source/common/ucnv_lmb.cpp
+    
+    It'll allow to fix Libreoffice bug tdf#148749: FILEOPEN Lotus 123 entity encoding
+
+diff -ur libwps.org/src/lib/LotusSpreadsheet.cpp libwps/src/lib/LotusSpreadsheet.cpp
+--- libwps.org/src/lib/LotusSpreadsheet.cpp	2026-08-13 20:01:53.946906461 +0200
++++ libwps/src/lib/LotusSpreadsheet.cpp	2026-08-13 20:02:27.643098528 +0200
+@@ -3348,6 +3348,7 @@
+ 	WPSFont font=style.getFont();
+ 	m_listener->setFont(font);
+ 	bool prevEOL=false;
++	bool prevLMBCS_EOL=false;
+ 	std::string text;
+ 	while (!input->isEnd())
+ 	{
+@@ -3431,6 +3432,38 @@
+ 			}
+ 			prevEOL=false;
+ 			break;
++                case 0xf:
++			if (pos+1>=endPos)
++			{
++				WPS_DEBUG_MSG(("LotusSpreadsheet::sendText: can not read the control character value\n"));
++				break;
++			}
++			c=char(libwps::readU8(input));
++			if (c >= 0x20 && c <= 0x2F)
++			{
++				c -= 0x20;
++				switch(c)
++				{
++					case 0xd:
++						m_listener->insertUnicodeString(libwps_tools_win::Font::unicodeString(text, fontType));
++						text.clear();
++						m_listener->insertEOL();
++						prevLMBCS_EOL=true;
++						break;
++					case 0xa:
++						if (!prevLMBCS_EOL)
++						{
++							WPS_DEBUG_MSG(("LotusSpreadsheet::sendText: find 0xa without 0xd\n"));
++						}
++						prevLMBCS_EOL=false;
++						break;
++				}
++			}
++			else
++			{
++				WPS_DEBUG_MSG(("LotusSpreadsheet::sendText: find a control character followed by a character not included between 0x20 and 0x2F\n"));
++			}
++			break;
+ 		default:
+ 			if (c)
+ 				text.push_back(c);
