@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <atomic>
 #include <memory>
 #include <thread>
 #include <boost/property_tree/json_parser.hpp>
@@ -16,9 +17,11 @@
 #include <cstdlib>
 #include <string>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
 
@@ -110,6 +113,7 @@ public:
     void testDocumentLoadLanguage(COKit* pOffice);
     void testMultiKeyInput(COKit *pOffice);
     void testSetDocumentPasswordAfterLoad(COKit* pOffice);
+    void testSaveTemplateContentUnderMismatchedExtension(COKit* pOffice);
 #if 0
     void testOverlay( COKit* pOffice );
 #endif
@@ -137,17 +141,32 @@ void TiledRenderingTest::runAllTests()
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice );
 
-    testDocumentLoadFail( pOffice.get() );
-    testDocumentTypes( pOffice.get() );
-    testMultiKeyInput(pOffice.get());
-    testImpressSlideNames( pOffice.get() );
-    testCalcSheetNames( pOffice.get() );
-    testPaintPartTile( pOffice.get() );
-    testDocumentLoadLanguage(pOffice.get());
-    testSetDocumentPasswordAfterLoad(pOffice.get());
+    // A failure in any one of these must still reach the cleanup below: skip
+    // it and the process crashes on shutdown instead of reporting a normal
+    // test failure (see the comment on that cleanup for why). So run them
+    // under a catch-all and defer acting on a failure until after cleanup.
+    bool bAllPassed = true;
+    string sFailureWhat;
+    try
+    {
+        testDocumentLoadFail( pOffice.get() );
+        testSaveTemplateContentUnderMismatchedExtension(pOffice.get());
+        testDocumentTypes( pOffice.get() );
+        testMultiKeyInput(pOffice.get());
+        testImpressSlideNames( pOffice.get() );
+        testCalcSheetNames( pOffice.get() );
+        testPaintPartTile( pOffice.get() );
+        testDocumentLoadLanguage(pOffice.get());
+        testSetDocumentPasswordAfterLoad(pOffice.get());
 #if 0
-    testOverlay( pOffice.get() );
+        testOverlay( pOffice.get() );
 #endif
+    }
+    catch (const std::exception& e)
+    {
+        bAllPassed = false;
+        sFailureWhat = e.what();
+    }
 
     // tdf#113311: all tests have passed at this point. Destroy the Office and
     // then leave the process via _Exit() to skip C++ global destructors and
@@ -158,6 +177,12 @@ void TiledRenderingTest::runAllTests()
     // otherwise-green test on shutdown. Exiting here is the workaround
     // suggested in the bug for running this test reliably.
     pOffice.reset();
+
+    if (!bAllPassed)
+    {
+        fprintf(stderr, "TiledRenderingTest::runAllTests failed: %s\n", sFailureWhat.c_str());
+        std::_Exit(EXIT_FAILURE);
+    }
     std::_Exit(EXIT_SUCCESS);
 }
 
@@ -495,6 +520,99 @@ void TiledRenderingTest::testSetDocumentPasswordAfterLoad(COKit* pOffice)
     // Supplying a password now (as the kit does in response to a post-load
     // password request) must not crash. nullptr means "no password given".
     pOffice->setDocumentPassword(aDocURLUtf8.getStr(), nullptr);
+}
+
+namespace {
+
+// Reads one entry out of a zip-format file into an OString, for checking the
+// raw XML of an OOXML part after it has been saved to disk. Shells out to
+// unzip rather than pulling in the UNO zip package service, so this stays as
+// light on dependencies as the rest of this COKit-only test binary.
+OString readZipEntry(const string& rZipPath, const string& rEntryName)
+{
+    const string sCommand
+        = "/usr/bin/unzip -p '" + rZipPath + "' '" + rEntryName + "' 2>&1";
+    FILE* pPipe = popen(sCommand.c_str(), "r");
+    CPPUNIT_ASSERT(pPipe);
+
+    OStringBuffer aBuffer;
+    char aChunk[4096];
+    size_t nRead;
+    while ((nRead = fread(aChunk, 1, sizeof(aChunk), pPipe)) > 0)
+        aBuffer.append(aChunk, nRead);
+    const int nExit = pclose(pPipe);
+
+    const OString aResult = aBuffer.makeStringAndClear();
+    const string sDiag = sCommand + " -> exit " + std::to_string(nExit) + ", output: "
+        + aResult.getStr();
+    CPPUNIT_ASSERT_MESSAGE(sDiag, !aResult.isEmpty());
+    return aResult;
+}
+
+std::atomic<bool> gSaveResultSeen(false);
+
+void saveResultCallback(COKitCallbackType eType, const char* /*pPayload*/, void* /*pData*/)
+{
+    if (eType == COKitCallbackType::UNO_COMMAND_RESULT)
+        gSaveResultSeen = true;
+}
+
+}
+
+void TiledRenderingTest::testSaveTemplateContentUnderMismatchedExtension(COKit* pOffice)
+{
+    // Regression test for cool#12091: online creates a presentation from a
+    // .potx template by downloading the template's own bytes to a path
+    // named after the target document, so the file that gets loaded has a
+    // .pptx name but .potx content. Load such a file the same way and check
+    // that a plain save (no special filter arguments, as an ordinary
+    // autosave would issue) writes out the non-template presentation
+    // content type, not the template one the file's content was originally
+    // detected as.
+    const string sTemplatePath = m_sSrcRoot + "/kit/qa/data/blank_presentation_template.potx";
+    const string sWorkPath = string(getenv("WORKDIR_FOR_BUILD")) + "/cool12091.pptx";
+    const string sLockFile = string(getenv("WORKDIR_FOR_BUILD")) + "/.~lock.cool12091.pptx#";
+    remove(sLockFile.c_str());
+
+    {
+        FILE* pIn = fopen(sTemplatePath.c_str(), "rb");
+        CPPUNIT_ASSERT(pIn);
+        FILE* pOut = fopen(sWorkPath.c_str(), "wb");
+        CPPUNIT_ASSERT(pOut);
+        char aBuf[4096];
+        size_t nRead;
+        while ((nRead = fread(aBuf, 1, sizeof(aBuf), pIn)) > 0)
+            CPPUNIT_ASSERT_EQUAL(nRead, fwrite(aBuf, 1, nRead, pOut));
+        fclose(pIn);
+        fclose(pOut);
+    }
+
+    std::unique_ptr<COKitDocument> pDocument(
+        pOffice->documentLoadWithOptions(sWorkPath.c_str(), nullptr));
+    CPPUNIT_ASSERT(pDocument);
+
+    pDocument->registerCallback(saveResultCallback, nullptr);
+    gSaveResultSeen = false;
+    pDocument->postUnoCommand(".uno:Save", nullptr, true);
+    for (int i = 0; i < 1000 && !gSaveResultSeen; ++i)
+    {
+        processEventsToIdle();
+        if (!gSaveResultSeen)
+            usleep(1000);
+    }
+    CPPUNIT_ASSERT_MESSAGE("timed out waiting for .uno:Save to complete",
+                          gSaveResultSeen.load());
+    pDocument.reset();
+
+    // unzip's own pattern matching treats [ and ] as a character class, so
+    // the literal brackets in this entry's name need escaping.
+    const OString aContentTypes = readZipEntry(sWorkPath, "\\[Content_Types\\].xml");
+    CPPUNIT_ASSERT_MESSAGE(
+        string("expected the non-template presentation content type; got: ")
+            + aContentTypes.getStr(),
+        aContentTypes.indexOf("presentationml.presentation.main+xml"_ostr) != -1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
+        aContentTypes.indexOf("presentationml.template.main+xml"_ostr));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiledRenderingTest);

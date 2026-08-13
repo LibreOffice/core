@@ -3721,6 +3721,31 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
+        // Type detection can resolve a load to a template-format filter for a
+        // file whose own name does not have one of that filter's extensions,
+        // for example when the file at aURL is a .potx or .dotx saved under
+        // a .pptx or .docx name (online does this when a document is created
+        // from a template). Leaving the document tied to that filter would
+        // make a later plain save write out content whose declared type
+        // disagrees with the file's own extension. Retarget the document's
+        // own storage to the matching non-template filter for aURL now, so
+        // a later save is consistent with the file's name from the start.
+        if (SfxBaseModel* pLoadedModel = dynamic_cast<SfxBaseModel*>(xComponent.get()))
+        {
+            if (SfxObjectShell* pLoadedShell = pLoadedModel->GetObjectShell())
+            {
+                SfxMedium* pLoadedMedium = pLoadedShell->GetMedium();
+                std::shared_ptr<const SfxFilter> pLoadedFilter
+                    = pLoadedMedium ? pLoadedMedium->GetFilter() : nullptr;
+                if (pLoadedFilter && pLoadedFilter->IsOwnTemplateFormat()
+                    && !pLoadedFilter->GetWildcard().Matches(aURL))
+                {
+                    OString aURLUtf8 = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
+                    doc_saveAs(pDocument, aURLUtf8.getStr(), nullptr, "TakeOwnership,FromTemplate");
+                }
+            }
+        }
+
         // After loading the document, its initial view is the "current" view.
         if (pLib->mpCallback)
         {
