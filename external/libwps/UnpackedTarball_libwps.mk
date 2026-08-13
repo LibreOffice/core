@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	external/libwps/libtool.patch.0 \
 	external/libwps/enumarith.patch \
 	external/libwps/0001-const-up-some-things.patch.1 \
+	external/libwps/tdf148749.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
