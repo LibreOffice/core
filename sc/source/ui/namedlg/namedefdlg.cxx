@@ -253,8 +253,7 @@ void ScNameDefDlg::AddPushed()
         // aExpression valid?
         if ( FormulaError::NONE == pNewEntry->GetErrCode() )
         {
-            if ( !pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ ) )
-                pNewEntry = nullptr;
+            pNewEntry = pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ );
 
             if (mbUndo)
             {

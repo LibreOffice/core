@@ -2452,7 +2452,8 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
         {
             sal_uInt16 nIndex = rEntry.second->GetIndex();
             ScRangeData* pData = new ScRangeData(*rEntry.second);
-            if (pTransClip->pRangeName->insert(pData))
+            pData = pTransClip->pRangeName->insert(pData);
+            if (pData)
                 pData->SetIndex(nIndex);
         }
     }
@@ -2557,7 +2558,8 @@ void copyUsedNamesToClip(ScRangeName& rClipRangeName, ScRangeName* pRangeName,
             continue;
 
         ScRangeData* pData = new ScRangeData(*rEntry.second);
-        if (rClipRangeName.insert(pData))
+        pData = rClipRangeName.insert(pData);
+        if (pData)
             pData->SetIndex(nIndex);
     }
 }

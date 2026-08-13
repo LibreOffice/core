@@ -2030,6 +2030,41 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testNamedRangeRedefinedKeepsTheSameEntry)
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(0, u"Sheet1"_ustr));
+
+    ScRangeName& rNames = m_pDoc->GetRangeName();
+
+    // the xls import assigns the index itself before it hands the name over
+    ScRangeData* pFirst = new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$A$1:$A$10"_ustr);
+    pFirst->SetIndex(4);
+    ScRangeData* pInserted = rNames.insert(pFirst);
+    CPPUNIT_ASSERT(pInserted);
+
+    // a second definition of the same name arrives, under a different index
+    ScRangeData* pSecond = new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$B$1:$B$20"_ustr);
+    pSecond->SetIndex(7);
+    ScRangeData* pSurvivor = rNames.insert(pSecond);
+
+    // a pointer taken from the first insert still addresses the live entry
+    CPPUNIT_ASSERT_EQUAL(pInserted, pSurvivor);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rNames.size());
+
+    // and that entry holds the later definition
+    ScRange aRange;
+    CPPUNIT_ASSERT(pSurvivor->IsReference(aRange));
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 0, 0, 1, 19, 0), aRange);
+
+    // the later index reaches the entry, the earlier one reaches nothing
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), pSurvivor->GetIndex());
+    CPPUNIT_ASSERT_EQUAL(pSurvivor, rNames.findByIndex(7));
+    CPPUNIT_ASSERT(!rNames.findByIndex(4));
+
+    m_pDoc->SetRangeName(nullptr);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertNameList)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

@@ -739,13 +739,12 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
         pRangeNameToken->AdjustAbsoluteRefs(rOldDoc, rOldPos, rNewPos, true);
     }
 
-    bool bInserted;
     if (nNewSheet < 0)
-        bInserted = rNewDoc.GetRangeName().insert(pRangeData);
+        pRangeData = rNewDoc.GetRangeName().insert(pRangeData);
     else
-        bInserted = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
+        pRangeData = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
 
-    return bInserted ? pRangeData : nullptr;
+    return pRangeData;
 }
 
 struct SheetIndex

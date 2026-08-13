@@ -241,16 +241,14 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
     pData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
     if (mnXclTab == EXC_NAME_GLOBAL)
     {
-        if (!GetDoc().GetRangeName().insert(pData))
-            pData = nullptr;
+        pData = GetDoc().GetRangeName().insert(pData);
     }
     else
     {
         ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
         if (pLocalNames)
         {
-            if (!pLocalNames->insert(pData))
-                pData = nullptr;
+            pData = pLocalNames->insert(pData);
         }
         else
         {
@@ -291,12 +289,10 @@ const XclImpName* XclImpNameManager::FindName( std::u16string_view rXclName, SCT
 {
     const XclImpName* pGlobalName = nullptr;   // a found global name
     const XclImpName* pLocalName = nullptr;    // a found local name
-    // If a duplicate name is seen by ScRangeName::insert then the existing
-    // name is erased and the new one inserted, so in the case of duplicates
-    // the last one seen is valid and the others invalid. So do this lookup in
-    // reverse in order to return the XclImpName* that references the valid
-    // entry (see tdf#44831 for the insert behavior and 'forum-mso-en4-30276.xls'
-    // for an example of this problem)
+    // A file can define the same name more than once, as
+    // 'forum-mso-en4-30276.xls' does. All of the duplicates share the one Calc
+    // entry that holds the last definition. Search from the end, so the name
+    // the file defines last is the one returned.
     for (auto itName = maNameList.rbegin(); itName != maNameList.rend(); ++itName)
     {
         const auto& rxName = *itName;
