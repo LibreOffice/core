@@ -93,8 +93,12 @@ curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/webp.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/mathml.dict
-# upstream rtf.dict has an unescaped \h on line 90 that libFuzzer's ParseDictionaryFile rejects
-sed -i '/"\\headerr"/d' rtf.dict
+# Every backslash in rtf.dict stands for the backslash that starts an RTF control
+# word, and libFuzzer wants each one written as a pair. A few entries are written
+# with a single backslash, which libFuzzer rejects. First turn every run of
+# backslashes into one backslash, then write each one as a pair.
+sed -i -e 's/\\\\*/\\/g' rtf.dict
+sed -i -e 's/\\/\\\\/g' rtf.dict
 # build our own fuzz dict for odf, following the pattern of svg.dict
 echo "# Keywords taken from libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng" > odf.dict
 echo "# and libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng" >> odf.dict
