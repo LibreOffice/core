@@ -23,6 +23,14 @@ DBUS_SOCKET := $(XDG_RUNTIME_DIR)/bus
  unexport DBUS_SESSION_BUS_ADDRESS
  endif
 
+# Cypress runs tput, if there is no TERM set then we get a frequent and annoying
+# "No value for $$TERM and no -T specified", so set a fallback and use an
+# explicit COLUMNS value of the num of cols that were used anyway in this case.
+ ifeq ($(TERM),)
+ export TERM := dumb
+ export COLUMNS := 100
+ endif
+
 V = $(if $(verbose),,@)
 abs_dir = $(if $(filter $(abs_builddir),$(abs_srcdir)),.,$(abs_srcdir))
 CYPRESS_BINARY = $(abs_builddir)/node_modules/cypress/bin/cypress
