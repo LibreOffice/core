@@ -337,6 +337,11 @@ void Application::viewCallback(COKitCallbackType eType, const OString& pPayload)
     }
 }
 
+bool Application::acceptsViewCallback(COKitCallbackType /*eType*/) const
+{
+    return comphelper::COKit::isActive() && m_pCallback != nullptr;
+}
+
 void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
 {
 }

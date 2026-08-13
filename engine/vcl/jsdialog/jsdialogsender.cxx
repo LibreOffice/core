@@ -35,14 +35,14 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
     }
 
     const vcl::ICOKitNotifier* pNotifier = m_aNotifierWindow->GetKitNotifier();
-    if (pNotifier)
+    if (!pNotifier || !pNotifier->acceptsViewCallback(COKitCallbackType::JSDIALOG))
+        return;
+
+    if (m_bForce || sMsg != m_LastNotificationMessage)
     {
-        if (m_bForce || sMsg != m_LastNotificationMessage)
-        {
-            m_bForce = false;
-            m_LastNotificationMessage = sMsg;
-            pNotifier->viewCallback(COKitCallbackType::JSDIALOG, m_LastNotificationMessage);
-        }
+        m_bForce = false;
+        m_LastNotificationMessage = sMsg;
+        pNotifier->viewCallback(COKitCallbackType::JSDIALOG, m_LastNotificationMessage);
     }
 }
 

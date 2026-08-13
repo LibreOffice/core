@@ -432,6 +432,8 @@ public:
 
     /// ICOKitNotifier.
     virtual bool hasKitClient() const override;
+    /// ICOKitNotifier.
+    virtual bool acceptsViewCallback(COKitCallbackType eType) const override;
     /// ICOKitNotifier. Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.

@@ -3307,6 +3307,7 @@ static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_
     {
         switch (eType)
         {
+        case COKitCallbackType::JSDIALOG:
         case COKitCallbackType::FORM_FIELD_BUTTON:
         case COKitCallbackType::TEXT_SELECTION:
         case COKitCallbackType::COMMENT:
@@ -3374,6 +3375,11 @@ void SfxViewShell::viewCallbackWithViewId(COKitCallbackType eType, const OString
 }
 
 bool SfxViewShell::hasKitClient() const { return pImpl->m_pCOKitViewCallback != nullptr; }
+
+bool SfxViewShell::acceptsViewCallback(COKitCallbackType eType) const
+{
+    return !ignoreCOKitViewCallback(eType, pImpl.get()) && pImpl->m_pCOKitViewCallback != nullptr;
+}
 
 void SfxViewShell::viewCallback(COKitCallbackType eType, const OString& pPayload) const
 {

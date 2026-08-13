@@ -1326,6 +1326,7 @@ public:
                               const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>()) const override;
     virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const override;
     virtual bool hasKitClient() const override { return m_pCallback != nullptr; }
+    virtual bool acceptsViewCallback(COKitCallbackType eType) const override;
     virtual void notifyInvalidation(tools::Rectangle const* pRect) const override;
     virtual void notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const override;
     virtual OString dumpNotifyState() const override;

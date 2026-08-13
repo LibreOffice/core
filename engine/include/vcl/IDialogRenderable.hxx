@@ -42,6 +42,9 @@ public:
     /// Whether a client is attached to receive the callbacks at all.
     virtual bool hasKitClient() const = 0;
 
+    /// Whether viewCallback() would hand a payload of this type to the client now.
+    virtual bool acceptsViewCallback(COKitCallbackType eType) const = 0;
+
     /// Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
