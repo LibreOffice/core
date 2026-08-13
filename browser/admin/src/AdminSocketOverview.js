@@ -150,13 +150,15 @@ function upsertDocsTable(doc, sName, socket, wopiHost) {
 	var eTimeCell = document.createElement('td');
 	eTimeCell.innerText = Util.humanizeSecs(doc['elapsedTime']);
 	if (add === true) { row.appendChild(eTimeCell); } else { row.cells[0] = eTimeCell; }
-	eTimeCell.className = 'has-text-centered';
+	eTimeCell.className = 'has-text-centered elapsed_time';
+	eTimeCell.setAttribute('data-secs', doc['elapsedTime']);
 
 	var idleCell = document.createElement('td');
 	idleCell.id = 'docidle' + doc['pid'];
 	idleCell.innerText = Util.humanizeSecs(doc['idleTime']);
 	if (add === true) { row.appendChild(idleCell); } else { row.cells[0] = idleCell; }
-	idleCell.className = 'has-text-centered';
+	idleCell.className = 'has-text-centered idle_time';
+	idleCell.setAttribute('data-secs', doc['idleTime']);
 
 	var isModifiedCell = document.createElement('td');
 	isModifiedCell.id = 'mod' + doc['pid'];
@@ -252,13 +254,13 @@ var AdminSocketOverview = AdminSocketBase.extend({
 		this._docElapsedTimeIntervalId =
 		setInterval(function() {
 			$('td.elapsed_time').each(function() {
-				var newSecs = parseInt($(this).val()) + 1;
-				$(this).val(newSecs);
+				var newSecs = parseInt($(this).data('secs')) + 1;
+				$(this).data('secs', newSecs);
 				$(this).html(Util.humanizeSecs(newSecs));
 			});
 			$('td.idle_time').each(function() {
-				var newSecs = parseInt($(this).val()) + 1;
-				$(this).val(newSecs);
+				var newSecs = parseInt($(this).data('secs')) + 1;
+				$(this).data('secs', newSecs);
 				$(this).html(Util.humanizeSecs(newSecs));
 			});
 		}, 1000);
@@ -289,7 +291,7 @@ var AdminSocketOverview = AdminSocketBase.extend({
 		else if (textMsg.startsWith('resetidle')) {
 			textMsg = textMsg.substring('resetidle'.length);
 			sPid = textMsg.trim().split(' ')[0];
-			document.getElementById('docidle' + sPid).innerText = Util.humanizeSecs(0);
+			$('#docidle' + sPid).data('secs', 0).text(Util.humanizeSecs(0));
 		}
 		else if (textMsg.startsWith('adddoc')) {
 			textMsg = textMsg.substring('adddoc'.length);
