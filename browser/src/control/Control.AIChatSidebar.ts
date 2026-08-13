@@ -1223,12 +1223,49 @@ namespace cool {
 			picker.classList.toggle('aichat-tone-picker-open', open);
 		}
 
+		// #aichat-main scrolls whenever the panel is taller than the dock, which
+		// is what happens at high browser zoom or in a short window. The tone
+		// picker sits near the bottom of that scroller, so an opening picker has
+		// to be scrolled to. Called only on the transitions that make the picker
+		// the centre of attention - not on every repaint of it, which would yank
+		// the view away while the user clicks around inside.
+		private scrollTonePickerIntoView(): void {
+			app.layoutingService.onDrain(() => {
+				const main = document.getElementById('aichat-main');
+				const picker = document.getElementById('aichat-tone-picker');
+				if (!main || !picker) return;
+
+				const mainRect = main.getBoundingClientRect();
+				const rect = picker.getBoundingClientRect();
+				// The header is sticky, so the usable top edge sits below it.
+				const header = document.getElementById('aichat-header');
+				const top =
+					mainRect.top + (header ? header.getBoundingClientRect().height : 0);
+
+				const hiddenAbove = rect.top < top - 1;
+				const overflowsBelow = rect.bottom > mainRect.bottom + 1;
+				if (!hiddenAbove && !overflowsBelow) return;
+
+				// Nudge it up if it fits; align its top when it is taller than
+				// the visible area, so the title and presets show first.
+				const delta =
+					overflowsBelow && !hiddenAbove && rect.height <= mainRect.bottom - top
+						? rect.bottom - mainRect.bottom
+						: rect.top - top;
+				main.scrollTo({
+					top: main.scrollTop + delta,
+					behavior: 'smooth',
+				});
+			});
+		}
+
 		private openTonePicker(): void {
 			if (this.tonePickerOpen || this.isProcessing) return;
 			this.tonePickerOpen = true;
 			this.setTonePickerOpenClass(true);
 			this.updateToneChip();
 			this.focusInitialPreset();
+			this.scrollTonePickerIntoView();
 		}
 
 		private closeTonePicker(): void {
@@ -1560,6 +1597,7 @@ namespace cool {
 			this.rebuildFormIconRow();
 			this.updateTonePicker();
 			this.focusFormName();
+			this.scrollTonePickerIntoView();
 		}
 
 		private closeToneForm(): void {
@@ -1624,6 +1662,7 @@ namespace cool {
 			this.closeEmojiPicker();
 			this.updateTonePicker();
 			this.focusDeleteConfirmCancel();
+			this.scrollTonePickerIntoView();
 		}
 
 		private closeDeleteConfirm(): void {
@@ -1724,6 +1763,9 @@ namespace cool {
 			if (this.emojiPickerOpen) return;
 			this.emojiPickerOpen = true;
 			this.updateTonePicker();
+			// The overlay is anchored to the picker's top, so the picker has to
+			// be on screen for it to be usable in a scrolled panel.
+			this.scrollTonePickerIntoView();
 		}
 
 		private closeEmojiPicker(): void {

@@ -55,13 +55,21 @@
 
 /* -- Main container -- */
 
+/* The panel scrolls as a whole. Normally everything fits and the transcript
+   is the only scroller, but at high browser zoom the header, tone picker and
+   input alone can be taller than the dock - then this scroller is what makes
+   the clipped parts reachable. */
 #aichat-main {
 	--aichat-accent: var(--doc-type, 11, 135, 231);
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
 	height: 100%;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: var(--scrollbar-width);
+	scrollbar-color: var(--scrollbar-color);
 	background: var(--color-main-background);
 }
 
@@ -79,7 +87,9 @@
 	flex-shrink: 0;
 	background: var(--color-background-lighter);
 	z-index: 1;
-	position: relative;
+	/* Keep New conversation / Close reachable while the panel is scrolled. */
+	position: sticky;
+	top: 0;
 }
 
 #aichat-title {
@@ -131,6 +141,11 @@
 
 #aichat-messages-area {
 	flex: 1;
+	/* Being a scroll container, its automatic minimum size is zero, so in a
+	   cramped panel it would shrink away to nothing instead of letting
+	   #aichat-main scroll. Floor it so the transcript stays usable and the
+	   surplus becomes panel scroll. */
+	min-height: 140px;
 	overflow-y: auto;
 	padding: 16px 14px;
 	display: flex !important;
