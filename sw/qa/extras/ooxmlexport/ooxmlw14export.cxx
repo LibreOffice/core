@@ -240,6 +240,45 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing", "val", u"proportional");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_FontFeatures)
+{
+    // tdf#104281: the w14 smart typography elements are font features
+    createSwDoc("TextEffects_Props3d_Ligatures_NumForm_NumSpacing.docx");
+
+    // w14:ligatures val="standard", and val="standardContextual"
+    CPPUNIT_ASSERT_EQUAL(u"\"liga\" 1, \"clig\" 0, \"hlig\" 0, \"dlig\" 0"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 1),
+                                               u"CharFontFeatures"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"liga\" 1, \"clig\" 1, \"hlig\" 0, \"dlig\" 0"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 3),
+                                               u"CharFontFeatures"_ustr));
+
+    // w14:numForm val="lining" with w14:numSpacing val="tabular", then oldStyle
+    // with proportional
+    CPPUNIT_ASSERT_EQUAL(u"\"lnum\" 1, \"tnum\" 1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(3), 3),
+                                               u"CharFontFeatures"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"onum\" 1, \"pnum\" 1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(3), 5),
+                                               u"CharFontFeatures"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_FontFeatures_StylisticSets_CntxtAlts)
+{
+    // tdf#104281: a stylistic set is ssXX, contextual alternates are calt
+    createSwDoc("TextEffects_StylisticSets_CntxtAlts.docx");
+
+    CPPUNIT_ASSERT_EQUAL(u"\"ss04\" 1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1),
+                                               u"CharFontFeatures"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"ss02\" 1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 3),
+                                               u"CharFontFeatures"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"calt\" 1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 1),
+                                               u"CharFontFeatures"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
 {
     createSwDoc("TextEffects_StylisticSets_CntxtAlts.docx");
