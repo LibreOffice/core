@@ -85,6 +85,8 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include "TextEffectsHandler.hxx"
+#include <algorithm>
+#include <vcl/font/Feature.hxx>
 #include "ThemeColorHandler.hxx"
 #include "CellColorHandler.hxx"
 #include "SectionColumnHandler.hxx"
@@ -109,6 +111,43 @@ struct
     bool      orient;
     sal_Int32 w;
 } CT_PageSz;
+
+namespace
+{
+/// Merges features into the run, which collects them from several w14 elements.
+void InsertFontFeatures(const PropertyMapPtr& rContext,
+                        const std::vector<vcl::font::FeatureSetting>& rFeatures)
+{
+    if (rFeatures.empty())
+        return;
+
+    std::vector<vcl::font::FeatureSetting> aFeatures;
+    if (std::optional<PropertyMap::Property> aProperty
+        = rContext->getProperty(PROP_CHAR_FONT_FEATURES))
+    {
+        OUString aString;
+        aProperty->second >>= aString;
+        aFeatures = vcl::font::FeaturesFromString(aString);
+    }
+
+    for (const auto& rFeature : rFeatures)
+    {
+        auto aIt = std::find_if(aFeatures.begin(), aFeatures.end(),
+                                [&rFeature](const vcl::font::FeatureSetting& rExisting) {
+                                    return rExisting.m_nTag == rFeature.m_nTag;
+                                });
+        if (aIt != aFeatures.end())
+            aIt->m_nValue = rFeature.m_nValue;
+        else
+            aFeatures.push_back(rFeature);
+    }
+
+    uno::Any aAny(vcl::font::FeaturesToString(aFeatures));
+    rContext->Insert(PROP_CHAR_FONT_FEATURES, aAny);
+    rContext->Insert(PROP_CHAR_FONT_FEATURES_ASIAN, aAny);
+    rContext->Insert(PROP_CHAR_FONT_FEATURES_COMPLEX, aAny);
+}
+}
 
 
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
@@ -3731,17 +3770,31 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
 
+    case NS_ooxml::LN_ligatures_ligatures:
+    case NS_ooxml::LN_numForm_numForm:
+    case NS_ooxml::LN_numSpacing_numSpacing:
+    case NS_ooxml::LN_stylisticSets_stylisticSets:
+    case NS_ooxml::LN_cntxtAlts_cntxtAlts:
+    {
+        // The w14 smart typography elements map to font features, not to a text effect
+        tools::SvRef<TextEffectsHandler> pHandler( new TextEffectsHandler(nSprmId) );
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties )
+            pProperties->resolve(*pHandler);
+        else if (nSprmId == NS_ooxml::LN_cntxtAlts_cntxtAlts)
+            // an empty w14:cntxtAlts carries no attribute to read the feature from
+            pHandler->addContextualAlternates();
+
+        InsertFontFeatures(rContext, pHandler->getFontFeatures());
+    }
+    break;
+
     case NS_ooxml::LN_glow_glow:
     case NS_ooxml::LN_shadow_shadow:
     case NS_ooxml::LN_reflection_reflection:
     case NS_ooxml::LN_textOutline_textOutline:
     case NS_ooxml::LN_scene3d_scene3d:
     case NS_ooxml::LN_props3d_props3d:
-    case NS_ooxml::LN_ligatures_ligatures:
-    case NS_ooxml::LN_numForm_numForm:
-    case NS_ooxml::LN_numSpacing_numSpacing:
-    case NS_ooxml::LN_stylisticSets_stylisticSets:
-    case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
         tools::SvRef<TextEffectsHandler> pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
         std::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
@@ -3760,12 +3813,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     rContext->Insert(PROP_CHAR_TRANSPARENCE, uno::Any(nTransparency));
                 }
-            }
-            else if (nSprmId == NS_ooxml::LN_cntxtAlts_cntxtAlts)
-            {
-                pTextEffectsHandlerPtr->lcl_sprm(rSprm);
-                beans::PropertyValue aGrabBag = pTextEffectsHandlerPtr->getInteropGrabBag();
-                rContext->Insert(*aPropertyId, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
             }
         }
     }

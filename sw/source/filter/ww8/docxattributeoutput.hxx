@@ -595,6 +595,9 @@ protected:
     /// Sfx item RES_CHRATR_FONT_VARIATIONS
     virtual void CharFontVariations( const SvxFontVariationsItem& ) override;
 
+    /// Sfx item RES_CHRATR_FONT_FEATURES
+    virtual void CharFontFeatures( const SvxFontFeaturesItem& ) override;
+
     /// Sfx item RES_CHRATR_BLINK
     virtual void CharAnimatedText( const SvxBlinkItem& rBlink ) override;
 

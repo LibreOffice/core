@@ -19,6 +19,7 @@
 #include "PropertyIds.hxx"
 
 #include <oox/helper/grabbagstack.hxx>
+#include <vcl/font/Feature.hxx>
 
 #include <memory>
 #include <optional>
@@ -32,8 +33,12 @@ protected:
     std::optional<PropertyIds> maPropertyId;
     OUString maElementName;
     std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
+    std::vector<vcl::font::FeatureSetting> maFontFeatures;
+    uint32_t mnLastStyleSetTag = 0;
 
     void convertElementIdToPropertyId(sal_Int32 aElementId);
+    void addFontFeature(const char* pTag, uint32_t nValue);
+    void addLigatureFeatures(std::u16string_view rValue);
 
 public:
     explicit TextEffectsHandler(sal_uInt32 aElementId);
@@ -42,6 +47,10 @@ public:
     const std::optional<PropertyIds>& getGrabBagPropertyId() const { return maPropertyId; }
 
     css::beans::PropertyValue getInteropGrabBag();
+
+    /// The OpenType features the w14 smart typography elements ask for.
+    const std::vector<vcl::font::FeatureSetting>& getFontFeatures() const { return maFontFeatures; }
+    void addContextualAlternates() { addFontFeature("calt", 1); }
 
     static OUString getSchemeColorValTypeString(sal_Int32 nType);
     static OUString getRectAlignmentString(sal_Int32 nType);

@@ -3258,6 +3258,11 @@ void RtfAttributeOutput::CharFontVariations(const SvxFontVariationsItem&)
     // MSOffice has no equivalent for font variation settings, so nothing is exported.
 }
 
+void RtfAttributeOutput::CharFontFeatures(const SvxFontFeaturesItem&)
+{
+    // RTF has no equivalent for font features, so nothing is exported.
+}
+
 void RtfAttributeOutput::OutputCharAutoKern(const SvxAutoKernItem& rAutoKern, OStringBuffer& buf)
 {
     buf.append(OOO_STRING_SVTOOLS_RTF_KERNING);
