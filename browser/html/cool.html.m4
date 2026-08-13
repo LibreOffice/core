@@ -25,9 +25,9 @@ m4_dnl------------------------------------------------------------------------
 <!DOCTYPE html>
 m4_ifelse(IOSAPP,[true],
 <!-- Related to issue #5841: the iOS app sets the base text direction via the "dir" parameter -->
-<html dir=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
+<html dir="" data-app-type="mobile"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
 ,
-<html %UI_RTL_SETTINGS%m4_ifelse(MOBILEAPP,[],[%DARK_THEME_ATTR%])><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html %UI_RTL_SETTINGS%m4_ifelse(MOBILEAPP,[],[%DARK_THEME_ATTR%],[ data-app-type="mobile"])><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 )m4_dnl
 <!--
   SPDX-License-Identifier: MPL-2.0
@@ -56,17 +56,11 @@ m4_ifelse(MOBILEAPP, [true],
 
 m4_ifelse(MOBILEAPP, [true],
 [
-  <style>
-    .webBasedCOOLOnly { display: none }
-  </style>
   <input type="hidden" id="init-app-type" value="mobile" />
   <input type="hidden" id="init-help-file" value="m4_syscmd([cat html/cool-help.html | sed 's/"/\&quot;/g'])" />
   <input type="hidden" id="init-product-branding-url" value="INFO_URL" />
 ],
 [
-  <style>
-    .mobileAppAndCODAOnly { display: none }
-  </style>
   <input type="hidden" id="init-welcome-url" value="%WELCOME_URL%" />
   <input type="hidden" id="init-feedback-url" value="%FEEDBACK_URL%" />
   <input type="hidden" id="init-accessibility-statement-url" value="%ACCESSIBILITY_STATEMENT_URL%" />

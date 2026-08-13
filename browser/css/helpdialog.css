@@ -175,3 +175,10 @@
 #keyboard-shortcuts-content-box:focus-visible {
 	outline: none;
 }
+
+/* Help contents that are relevant only for web-based Collabora Online, and
+   only for the mobile apps and Collabora Office, respectively. */
+html:not([data-app-type='mobile']) .mobileAppAndCODAOnly,
+html[data-app-type='mobile'] .webBasedCOOLOnly {
+	display: none;
+}
