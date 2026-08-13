@@ -880,12 +880,22 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
             sal_Int32 nLower, nUpper;
             if (nDims == 1 && pArray->GetDim(1, nLower, nUpper))
             {
-                if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
+                // tdf#146873 - inspect elements when they are non-fixed
+                bool bNeedsInit
+                    = eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY;
+                bool bInspectElements = bNeedsInit;
+                if (!bInspectElements)
+                {
+                    sal_Int32 nFirstIdx = nLower;
+                    SbxVariableRef xFirstVar = pArray->Get(&nFirstIdx);
+                    if (xFirstVar && !xFirstVar->IsFixed())
+                        bInspectElements = true;
+                }
+
+                if (bInspectElements)
                 {
                     // If all elements of the arrays are from the same type, take
                     // this one - otherwise the whole will be considered as Any-Sequence
-                    bool bNeedsInit = true;
-
                     for (sal_Int32 aIdx[1] = { nLower }; aIdx[0] <= nUpper; ++aIdx[0])
                     {
                         SbxVariableRef xVar = pArray->Get(aIdx);
@@ -917,12 +927,21 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
             // #i33795 Map also multi dimensional arrays to corresponding sequences
             else if( nDims > 1 )
             {
-                if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
+                // tdf#146873 - inspect elements when they are non-fixed
+                bool bNeedsInit = eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY;
+                bool bInspectElements = bNeedsInit;
+                if (!bInspectElements)
+                {
+                    SbxVariableRef xFirstVar = pArray->SbxArray::Get(0);
+                    if (xFirstVar && !xFirstVar->IsFixed())
+                        bInspectElements = true;
+                }
+
+                if (bInspectElements)
                 {
                     // For this check the array's dim structure does not matter
                     sal_uInt32 nFlatArraySize = pArray->Count();
 
-                    bool bNeedsInit = true;
                     for( sal_uInt32 i = 0 ; i < nFlatArraySize ; i++ )
                     {
                         SbxVariableRef xVar = pArray->SbxArray::Get(i);
