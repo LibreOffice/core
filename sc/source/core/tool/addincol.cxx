@@ -1046,8 +1046,8 @@ static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const S
     // as used in FillFunctionDescFromData
     const OUString& aCompare = (bEnglishFunctionNames ? rFuncData.GetUpperEnglish() : rFuncData.GetUpperLocal());
 
-    sal_uLong nCount = rFunctionList.GetCount();
-    for (sal_uLong nPos=0; nPos<nCount; nPos++)
+    sal_uInt32 nCount = rFunctionList.GetCount();
+    for (sal_uInt32 nPos=0; nPos<nCount; nPos++)
     {
         const ScFuncDesc* pDesc = rFunctionList.GetFunction( nPos );
         if ( pDesc && pDesc->mxFuncName && *pDesc->mxFuncName == aCompare )

@@ -290,7 +290,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
     SCSIZE nCol = 0;
     SCSIZE nRow = 0;
     bool bCalcAsShown = rDocument.GetDocOptions().IsCalcAsShown();
-    sal_uLong nIndex = 0;
+    sal_uInt64 nIndex = 0;
     if (bValidData)
     {
         for ( nCol = 0; nCol < nColCount; nCol++ )
