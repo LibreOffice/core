@@ -422,7 +422,7 @@ namespace svgio::svgreader
                     0,
                     false,
                     rSvgStyleAttributes.getFontVariations(),
-                    {},
+                    rSvgStyleAttributes.getFontFeatures(),
                     100, 0,
 
                     // extra props for decorated
@@ -455,7 +455,8 @@ namespace svgio::svgreader
                     COL_TRANSPARENT,
                     0,
                     false,
-                    rSvgStyleAttributes.getFontVariations());
+                    rSvgStyleAttributes.getFontVariations(),
+                    rSvgStyleAttributes.getFontFeatures());
             }
 
             if (fFillOpacity != 1.0)

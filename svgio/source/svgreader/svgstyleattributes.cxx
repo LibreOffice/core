@@ -1367,7 +1367,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(37, 0),
+            maResolvingParent(38, 0),
             mbStrokeDasharraySet(false),
             mbUseFillFromContextFill(false),
             mbUseFillFromContextStroke(false),
@@ -1758,6 +1758,14 @@ namespace svgio::svgreader
                     if(!aContent.isEmpty())
                     {
                         setFontVariations(vcl::font::VariationsFromString(aContent));
+                    }
+                    break;
+                }
+                case SVGToken::FontFeatureSettings:
+                {
+                    if(!aContent.isEmpty())
+                    {
+                        setFontFeatures(vcl::font::FeaturesFromString(aContent));
                     }
                     break;
                 }
@@ -2863,6 +2871,28 @@ namespace svgio::svgreader
             }
 
             return maFontVariations;
+        }
+
+        const std::vector<vcl::font::FeatureSetting>& SvgStyleAttributes::getFontFeatures() const
+        {
+            if(!maFontFeatures.empty())
+            {
+                return maFontFeatures;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[37] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[37];
+                const std::vector<vcl::font::FeatureSetting>& rInherited
+                    = pSvgStyleAttributes->getFontFeatures();
+                --maResolvingParent[37];
+
+                return rInherited;
+            }
+
+            return maFontFeatures;
         }
 
         FontWeight SvgStyleAttributes::getFontWeight() const
