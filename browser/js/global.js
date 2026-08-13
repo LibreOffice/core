@@ -280,6 +280,8 @@ class InitializerBase {
 		window.useStatusbarSaveIndicator = false;
 		window.checkFileInfoOverride = {};
 		window.deeplEnabled = false;
+		// Match COOL's ai.ethical_rating_message default (true).
+		window.aiEthicalRatingMessage = true;
 		// Match COOL's zotero.enable default (true). On the desktop the plugin
 		// is still gated on a user-provided API key (and !isSmallScreenDevice)
 		// so this only surfaces the feature where it makes sense.
@@ -457,6 +459,7 @@ class BrowserInitializer extends InitializerBase {
 		window.uiDefaults = JSON.parse(atob(element.dataset.uiDefaults));
 		window.checkFileInfoOverride = element.dataset.checkFileInfoOverride;
 		window.deeplEnabled = element.dataset.deeplEnabled.toLowerCase().trim() === "true";
+		window.aiEthicalRatingMessage = element.dataset.aiEthicalRatingMessage.toLowerCase().trim() === "true";
 		window.zoteroEnabled = element.dataset.zoteroEnabled.toLowerCase().trim() === "true";
 		window.documentSigningEnabled = element.dataset.documentSigningEnabled.toLowerCase().trim() === "true";
 		window.savedUIState = element.dataset.savedUiState.toLowerCase().trim() === "true";

@@ -423,6 +423,16 @@ namespace cool {
 			if (!badge) return;
 			const letter = app.map.aiEthicalRating || 'U';
 			badge.setAttribute('data-rating', letter);
+			const wrapper = document.getElementById('aichat-eu-wrapper');
+			// ai.ethical_rating_message=false leaves the bare letter: no tooltip
+			// and nothing for a screen reader to read out. Mark the wrapper so it
+			// drops the help cursor that would otherwise promise a tooltip.
+			if (wrapper)
+				wrapper.classList.toggle(
+					'aichat-eu-no-rating-message',
+					!window.aiEthicalRatingMessage,
+				);
+			if (!window.aiEthicalRatingMessage) return;
 			const label = AIChatSidebar.ratingLabel(letter);
 			const aria = _(
 				'Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, and training data.',
@@ -431,7 +441,6 @@ namespace cool {
 				.replace('{1}', label);
 			badge.setAttribute('role', 'img');
 			badge.setAttribute('aria-label', aria);
-			const wrapper = document.getElementById('aichat-eu-wrapper');
 			if (wrapper) wrapper.setAttribute('title', aria);
 		}
 

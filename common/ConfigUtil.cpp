@@ -76,6 +76,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "ai.api_key", "" },
     { "ai.api_url", "" },
     { "ai.enabled", "false" },
+    { "ai.ethical_rating_message", "true" },
     { "ai.image_api_key", "" },
     { "ai.image_api_url", "" },
     { "ai.image_model", "" },

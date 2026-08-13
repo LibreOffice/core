@@ -227,6 +227,11 @@
 	cursor: help;
 }
 
+/* ai.ethical_rating_message=false: no tooltip to reveal, so no help cursor. */
+#aichat-eu-wrapper.aichat-eu-no-rating-message {
+	cursor: default;
+}
+
 #aichat-eu-notice {
 	color: var(--color-text-light);
 	text-align: start;

@@ -376,6 +376,7 @@ interface Window {
 	KeyboardShortcuts: KeyboardShortcuts;
 
 	starterScreen: boolean;
+	aiEthicalRatingMessage: boolean;
 	allowUpdateNotification: boolean;
 	autoShowWelcome: boolean;
 	bundlejsLoaded: boolean;
