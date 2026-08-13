@@ -226,11 +226,10 @@ rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell& rViewSh, ::sd::Wind
 
 void FuInsertClipboard::DoExecute( SfxRequest&  )
 {
-    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
-    SotClipboardFormatId                        nFormatId;
+    auto pDataHelper = std::make_shared<TransferableDataHelper>(TransferableDataHelper::CreateFromSystemClipboard(mpWindow));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mrViewShell.GetFrameWeld()));
+    VclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mrViewShell.GetFrameWeld()));
     pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
     pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
     pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );
@@ -247,38 +246,45 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     pDlg->Insert( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, OUString() );
 
     //TODO/MBA: testing
-    pDlg->PreGetFormat(aDataHelper);
-    if (pDlg->Execute() != RET_OK)
-        return;
+    pDlg->PreGetFormat(*pDataHelper);
 
-    nFormatId = pDlg->GetFormatOnly();
-    if( nFormatId == SotClipboardFormatId::NONE || !aDataHelper.GetTransferable().is() )
-        return;
+    ::sd::View* pView = mpView;
+    ::sd::Window* pWindow = mpWindow;
+    ViewShell& rViewShell = mrViewShell;
+    pDlg->StartExecuteAsync([pDlg, pDataHelper, pView, pWindow, &rViewShell](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
+            if (nFormatId != SotClipboardFormatId::NONE && pDataHelper->GetTransferable().is())
+            {
+                sal_Int8 nAction = DND_ACTION_COPY;
+                DrawViewShell* pDrViewSh = nullptr;
 
-    sal_Int8 nAction = DND_ACTION_COPY;
-    DrawViewShell* pDrViewSh = nullptr;
+                if (!pView->InsertData(*pDataHelper,
+                        pWindow->PixelToLogic(::tools::Rectangle(Point(), pWindow->GetOutputSizePixel()).Center()),
+                        nAction, false, nFormatId))
+                {
+                    pDrViewSh = dynamic_cast<DrawViewShell*>(&rViewShell);
+                }
 
-    if (!mpView->InsertData( aDataHelper,
-                            mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                            nAction, false, nFormatId ))
-    {
-        pDrViewSh = dynamic_cast<DrawViewShell*>(&mrViewShell);
-    }
+                if (pDrViewSh)
+                {
+                    INetBookmark aINetBookmark(u""_ustr, u""_ustr);
 
-    if (!pDrViewSh)
-        return;
-
-    INetBookmark        aINetBookmark( u""_ustr, u""_ustr );
-
-    if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
-        aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-        ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
-        aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-        ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
-        aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-    {
-        pDrViewSh->InsertURLField(aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr, u""_ustr);
-    }
+                    if ((pDataHelper->HasFormat(SotClipboardFormatId::NETSCAPE_BOOKMARK) &&
+                        pDataHelper->GetINetBookmark(SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark)) ||
+                        (pDataHelper->HasFormat(SotClipboardFormatId::FILEGRPDESCRIPTOR) &&
+                        pDataHelper->GetINetBookmark(SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark)) ||
+                        (pDataHelper->HasFormat(SotClipboardFormatId::UNIFORMRESOURCELOCATOR) &&
+                        pDataHelper->GetINetBookmark(SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark)))
+                    {
+                        pDrViewSh->InsertURLField(aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr, u""_ustr);
+                    }
+                }
+            }
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 FuInsertOLE::FuInsertOLE (
