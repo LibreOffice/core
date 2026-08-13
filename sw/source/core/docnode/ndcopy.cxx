@@ -171,8 +171,8 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
             if( pN && pN->HasMergeFormatTable() &&
                 (pFormatItem = pBoxFormat->GetItemIfSet( RES_BOXATR_FORMAT, false )) )
             {
-                sal_uLong nOldIdx = pFormatItem->GetValue();
-                sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
+                sal_uInt32 nOldIdx = pFormatItem->GetValue();
+                sal_uInt32 nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
                 if( nNewIdx != nOldIdx )
                     pBoxFormat->SetFormatAttr( SwTableBoxNumFormat( nNewIdx ));
 
