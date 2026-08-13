@@ -322,12 +322,12 @@ void ZCodec::InitDecompress(SvStream & inStream)
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     if ( mbStatus &&  mbGzLib )
     {
-        sal_uInt8 j, nMethod, nFlags;
-        sal_uInt16 nFirstTwoBytes;
         inStream.Seek( 0 );
+        sal_uInt16 nFirstTwoBytes(0);
         inStream.ReadUInt16( nFirstTwoBytes );
         if ( nFirstTwoBytes != GZ_MAGIC_BYTES_LE )
             mbStatus = false;
+        sal_uInt8 nMethod(0), nFlags(0);
         inStream.ReadUChar( nMethod );
         inStream.ReadUChar( nFlags );
         if ( nMethod != Z_DEFLATED )
@@ -339,27 +339,29 @@ void ZCodec::InitDecompress(SvStream & inStream)
         /* skip the extra field */
         if ( nFlags & GZ_EXTRA_FIELD )
         {
-            sal_uInt8 n1, n2;
+            sal_uInt8 n1(0), n2(0);
             inStream.ReadUChar( n1 ).ReadUChar( n2 );
             inStream.SeekRel( n1 + ( n2 << 8 ) );
         }
         /* skip the original file name */
         if ( nFlags & GZ_ORIG_NAME)
         {
+            sal_uInt8 j;
             do
             {
                 inStream.ReadUChar( j );
             }
-            while ( j && !inStream.eof() );
+            while ( inStream.good() && j );
         }
         /* skip the .gz file comment */
         if ( nFlags & GZ_COMMENT )
         {
+            sal_uInt8 j;
             do
             {
                 inStream.ReadUChar( j );
             }
-            while ( j && !inStream.eof() );
+            while ( inStream.good() && j );
         }
         /* skip the header crc */
         if ( nFlags & GZ_HEAD_CRC )
