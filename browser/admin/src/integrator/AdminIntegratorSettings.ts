@@ -232,6 +232,7 @@ const defaultBrowserSetting: Record<string, any> = {
 		label: 'Default Zoom',
 		customType: 'zoomDropdown',
 	},
+	smoothScroll: true,
 	spreadsheet: {
 		ShowStatusbar: false,
 		A11yCheckDeck: false,
@@ -614,6 +615,7 @@ class SettingIframe {
 		spellOnline: _('Automatic Spell Checking'),
 		smartZoom: _('Smart Zoom'),
 		defaultZoom: _('Default Zoom'),
+		smoothScroll: _('Smooth scrolling'),
 		compactMode: _('Compact layout'),
 		ShowStatusbar: _('Show status bar'),
 		ShowRuler: _('Show Ruler'),

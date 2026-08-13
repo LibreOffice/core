@@ -133,8 +133,9 @@ export class ScrollSection extends CanvasSectionObject {
 		// level, so animating it again here scrolls too far and feels wrong.
 		// Always scroll in discrete steps there.
 		const isMac = window.L.Browser.mac;
+		const smoothScroll = window.prefs.getBoolean('smoothScroll', true);
 		this.sectionProperties.animateWheelScroll =
-			(<any>window).mode.isDesktop() && !reduceMotion && !isMac;
+			(<any>window).mode.isDesktop() && !reduceMotion && !isMac && smoothScroll;
 	}
 
 	public completePendingScroll(): void {
