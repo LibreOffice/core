@@ -61,8 +61,13 @@
 #include <QVariant>
 #include <common/SettingsStorage.hpp>
 #include <QWebChannel>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 #include <QWebEngineFullScreenRequest>
 #include <QTimer>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
 #include <QWebEngineSettings>
 #include <QWebSocket>
 
@@ -532,6 +537,38 @@ QStringList hostDisplayUris(const QStringList& portalFiles, const QMimeData* mim
     return displayUris;
 }
 
+// Hands the native preference set to the page before any of its own scripts
+// run. The WebChannel bridge only comes up once the page is loading, which is
+// after it has composed its load message, so preferences that have to travel
+// with that message cannot wait for the bridge to answer getAllPrefs().
+void seedPrefs(QWebEnginePage* page)
+{
+    const QByteArray prefs =
+        QByteArray::fromStdString(Application::getPrefs().serialize());
+
+    // Parse before embedding: the page gets this as source code, so anything
+    // malformed would be a syntax error in a script the page cannot report.
+    QJsonParseError error;
+    const QJsonDocument doc = QJsonDocument::fromJson(prefs, &error);
+    if (error.error != QJsonParseError::NoError || !doc.isObject())
+    {
+        LOG_WRN("Not seeding the preferences into the page: "
+                << error.errorString().toStdString());
+        return;
+    }
+
+    LOG_TRC("Seeding " << doc.object().size() << " preferences into the page");
+
+    QWebEngineScript script;
+    script.setName(QStringLiteral("codaPrefs"));
+    script.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    script.setWorldId(QWebEngineScript::MainWorld);
+    script.setRunsOnSubFrames(false);
+    script.setSourceCode(QStringLiteral("window.codaPrefs = %1;")
+                             .arg(QString::fromUtf8(doc.toJson(QJsonDocument::Compact))));
+    page->scripts().insert(script);
+}
+
 } // namespace
 
 void CODAWebEngineView::setDropFeedbackVisible(bool bVisible)
@@ -764,6 +801,8 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
 
     QWebEnginePage* page = new LoggingWebEnginePage(profile, _webView.get());
     _webView->setPage(page);
+
+    seedPrefs(page);
 
     page->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
     // JS-driven clipboard access is off by default in QtWebEngine - enable it so

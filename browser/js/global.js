@@ -904,7 +904,17 @@ function showWelcomeSVG() {
 	};
 
 	global.prefs = {
-		_localStorageCache: {}, // TODO: change this to new Map() when JS version allows
+		// The CODA apps seed their native preference set into the page before any
+		// script runs, so it is already here when the load message is composed -
+		// the bridge that would otherwise carry it is not up that early. Priming
+		// the cache gives the seed the precedence the bridge's own getAllPrefs()
+		// has, as get() reads the cache first.
+		_localStorageCache: (function() {
+			// TODO: change this to new Map() when JS version allows
+			if (!global.codaPrefs || typeof global.codaPrefs !== 'object')
+				return {};
+			return Object.assign({}, global.codaPrefs);
+		})(),
 		_userBrowserSetting: {},
 		_settingUpdateJSON: {},
 		_pendingSettingUpdate: undefined,
@@ -2317,6 +2327,13 @@ function showWelcomeSVG() {
 				var spellOnline = window.prefs.get('spellOnline');
 				if (spellOnline) {
 					msg += ' spellOnline=' + spellOnline;
+				}
+
+				// Formatting marks are a Writer-only setting, so the doc type the
+				// preference is stored under is known without waiting for the document.
+				const formattingMarks = window.prefs.get('text.ShowFormattingMarks');
+				if (formattingMarks) {
+					msg += ' formattingMarks=' + formattingMarks;
 				}
 
 				const darkTheme = window.prefs.seedDarkModeDefault();
