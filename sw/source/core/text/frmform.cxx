@@ -2395,9 +2395,6 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
 
         const bool bNew = !m_xParaPortion;
         EnsurePara(); // force creation of m_xParaPortion
-        // We have to work with a shared_ptr here because code like CalcAdditionalFirstLineOffset
-        // wants to swap out and then restore the SwParaPortion underneath us.
-        std::shared_ptr<SwParaPortion> xPara = m_xParaPortion;
         const bool bSetOffset =
             (GetOffset() && GetOffset() > TextFrameIndex(GetText().getLength()));
 
@@ -2405,12 +2402,12 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             ; // nothing
         // We return if already formatted, but if the TextFrame was just created
         // and does not have any format information
-        else if( !bNew && !xPara->GetReformat().Len() )
+        else if( !bNew && !EnsurePara()->GetReformat().Len() )
         {
             if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
             {
-                xPara->SetPrepAdjust();
-                xPara->SetPrep();
+                EnsurePara()->SetPrepAdjust();
+                EnsurePara()->SetPrep();
                 CalcPreps();
             }
             SetWidow( false );
@@ -2455,7 +2452,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 {
                     nexts.push_back(pNext);
                 }
-                FormatImpl(pRenderContext, xPara.get(), intersectingObjs);
+                FormatImpl(pRenderContext, EnsurePara(), intersectingObjs);
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrame* pCont = pFootnoteBoss->FindFootnoteCont();

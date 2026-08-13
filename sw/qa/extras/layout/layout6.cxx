@@ -2360,6 +2360,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf172156)
     CPPUNIT_ASSERT_GREATEREQUAL(9, countXPathNodes(pXmlDoc, "//anchored/fly"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf168873ParagraphReflow)
+{
+    createSwDoc("tdf168873-paragraph-reflow.fodt");
+
+    auto pXmlDoc = parseLayoutDump();
+
+    // The regression pushed all content after the table on page 2 onto page 3.
+    // Assert that the expected text is located specifically on page 2.
+    assertXPath(pXmlDoc, "//page[2]/body/txt[2]/SwParaPortion/SwLineLayout", "portion",
+                u"Wiederaufnahme der Kameraproduktion nach dem Zweiten Weltkrieg");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
