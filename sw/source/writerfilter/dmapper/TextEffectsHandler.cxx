@@ -466,6 +466,31 @@ OUString TextEffectsHandler::getNumSpacingString(sal_Int32 nType)
     return OUString();
 }
 
+void TextEffectsHandler::addFontFeature(const char* pTag, uint32_t nValue)
+{
+    uint32_t nTag = vcl::font::featureCode(pTag);
+    for (auto& rFeature : maFontFeatures)
+    {
+        if (rFeature.m_nTag == nTag)
+        {
+            rFeature.m_nValue = nValue;
+            return;
+        }
+    }
+    maFontFeatures.push_back({ nTag, nValue });
+}
+
+void TextEffectsHandler::addLigatureFeatures(std::u16string_view rValue)
+{
+    // ST_Ligatures names the ligature kinds that are on, the rest are off. The
+    // names are concatenated, so a substring match is what tells them apart.
+    bool bAll = rValue == u"all";
+    addFontFeature("liga", bAll || rValue.find(u"standard") != std::u16string_view::npos);
+    addFontFeature("clig", bAll || rValue.find(u"ontextual") != std::u16string_view::npos);
+    addFontFeature("hlig", bAll || rValue.find(u"istorical") != std::u16string_view::npos);
+    addFontFeature("dlig", bAll || rValue.find(u"iscretional") != std::u16string_view::npos);
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -725,30 +750,65 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_Ligatures_val:
             {
-                uno::Any aAny(getLigaturesString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
+                OUString aString = getLigaturesString(sal_Int32(aValue.getInt()));
+                addLigatureFeatures(aString);
+                mpGrabBagStack->appendElement(u"val"_ustr, uno::Any(aString));
             }
             break;
         case NS_ooxml::LN_CT_NumForm_val:
             {
-                uno::Any aAny(getNumFormString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
+                OUString aString = getNumFormString(sal_Int32(aValue.getInt()));
+                if (aString == u"lining")
+                    addFontFeature("lnum", 1);
+                else if (aString == u"oldStyle")
+                    addFontFeature("onum", 1);
+                mpGrabBagStack->appendElement(u"val"_ustr, uno::Any(aString));
             }
             break;
         case NS_ooxml::LN_CT_NumSpacing_val:
             {
-                uno::Any aAny(getNumSpacingString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
+                OUString aString = getNumSpacingString(sal_Int32(aValue.getInt()));
+                if (aString == u"proportional")
+                    addFontFeature("pnum", 1);
+                else if (aString == u"tabular")
+                    addFontFeature("tnum", 1);
+                mpGrabBagStack->appendElement(u"val"_ustr, uno::Any(aString));
             }
             break;
         case NS_ooxml::LN_CT_StyleSet_id:
-            mpGrabBagStack->addInt32(u"id"_ustr, sal_Int32(aValue.getInt()));
+            {
+                sal_Int32 nId = sal_Int32(aValue.getInt());
+                mnLastStyleSetTag = 0;
+                if (nId >= 1 && nId <= 99)
+                {
+                    OString aTag = "ss" + (nId < 10 ? OString("0") : OString())
+                                   + OString::number(nId);
+                    mnLastStyleSetTag = vcl::font::featureCode(aTag.getStr());
+                    addFontFeature(aTag.getStr(), 1);
+                }
+                mpGrabBagStack->addInt32(u"id"_ustr, nId);
+            }
             break;
         case NS_ooxml::LN_CT_StyleSet_val:
         case NS_ooxml::LN_CT_OnOff_val:
             {
-                uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
+                OUString aString = getOnOffString(sal_Int32(aValue.getInt()));
+                bool bOn = aString == u"true" || aString == u"1";
+                if (maElementName == "cntxtAlts")
+                    addFontFeature("calt", bOn ? 1 : 0);
+                else if (maElementName == "stylisticSets" && !bOn && mnLastStyleSetTag)
+                {
+                    // the set was pushed on by its id, this turns it back off
+                    for (auto& rFeature : maFontFeatures)
+                    {
+                        if (rFeature.m_nTag == mnLastStyleSetTag)
+                        {
+                            rFeature.m_nValue = 0;
+                            break;
+                        }
+                    }
+                }
+                mpGrabBagStack->appendElement(u"val"_ustr, uno::Any(aString));
             }
             break;
         default:

@@ -49,6 +49,7 @@ class SvxUnderlineItem;
 class SvxWeightItem;
 class SvxAutoKernItem;
 class SvxFontVariationsItem;
+class SvxFontFeaturesItem;
 class SvxOpticalSizingItem;
 class SvxBlinkItem;
 class SvxBrushItem;
@@ -406,6 +407,9 @@ protected:
 
     /// Sfx item RES_CHRATR_FONT_VARIATIONS
     virtual void CharFontVariations( const SvxFontVariationsItem& ) = 0;
+
+    /// Sfx item RES_CHRATR_FONT_FEATURES
+    virtual void CharFontFeatures( const SvxFontFeaturesItem& ) = 0;
 
     /// Sfx item RES_CHRATR_BLINK
     virtual void CharAnimatedText( const SvxBlinkItem& ) = 0;

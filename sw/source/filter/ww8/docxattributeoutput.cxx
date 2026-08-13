@@ -64,6 +64,7 @@
 #include <editeng/widwitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -8592,6 +8593,105 @@ void DocxAttributeOutput::CharOpticalSizing( const SvxOpticalSizingItem& )
 void DocxAttributeOutput::CharFontVariations( const SvxFontVariationsItem& )
 {
     // MSOffice has no equivalent for font variation settings, so nothing is exported.
+}
+
+namespace
+{
+/// The value of a feature, or nothing when the font is left to decide.
+std::optional<uint32_t> lcl_getFeature(const std::vector<vcl::font::FeatureSetting>& rFeatures,
+                                       const char* pTag)
+{
+    uint32_t nTag = vcl::font::featureCode(pTag);
+    for (const auto& rFeature : rFeatures)
+    {
+        if (rFeature.m_nTag == nTag)
+            return rFeature.m_nValue;
+    }
+    return {};
+}
+
+bool lcl_isOn(const std::vector<vcl::font::FeatureSetting>& rFeatures, const char* pTag)
+{
+    std::optional<uint32_t> oValue = lcl_getFeature(rFeatures, pTag);
+    return oValue && *oValue;
+}
+}
+
+void DocxAttributeOutput::CharFontFeatures( const SvxFontFeaturesItem& rItem )
+{
+    // Word supports only the features the w14 elements name, the rest stay
+    // ODF-only.
+    const std::vector<vcl::font::FeatureSetting>& rFeatures = rItem.GetFeatures();
+
+    if (lcl_getFeature(rFeatures, "liga") || lcl_getFeature(rFeatures, "clig")
+        || lcl_getFeature(rFeatures, "hlig") || lcl_getFeature(rFeatures, "dlig"))
+    {
+        bool bStandard = lcl_isOn(rFeatures, "liga");
+        bool bContextual = lcl_isOn(rFeatures, "clig");
+        bool bHistorical = lcl_isOn(rFeatures, "hlig");
+        bool bDiscretional = lcl_isOn(rFeatures, "dlig");
+
+        OString aValue;
+        if (bStandard && bContextual && bHistorical && bDiscretional)
+            aValue = "all"_ostr;
+        else if (!bStandard && !bContextual && !bHistorical && !bDiscretional)
+            aValue = "none"_ostr;
+        else
+        {
+            // the names are concatenated, and only the first one is lower case
+            if (bStandard)
+                aValue += "standard";
+            if (bContextual)
+                aValue += aValue.isEmpty() ? "contextual" : "Contextual";
+            if (bHistorical)
+                aValue += aValue.isEmpty() ? "historical" : "Historical";
+            if (bDiscretional)
+                aValue += aValue.isEmpty() ? "discretional" : "Discretional";
+        }
+        m_pSerializer->singleElementNS(XML_w14, XML_ligatures, FSNS(XML_w14, XML_val), aValue);
+    }
+
+    if (lcl_isOn(rFeatures, "lnum"))
+        m_pSerializer->singleElementNS(XML_w14, XML_numForm, FSNS(XML_w14, XML_val), "lining");
+    else if (lcl_isOn(rFeatures, "onum"))
+        m_pSerializer->singleElementNS(XML_w14, XML_numForm, FSNS(XML_w14, XML_val), "oldStyle");
+
+    if (lcl_isOn(rFeatures, "pnum"))
+        m_pSerializer->singleElementNS(XML_w14, XML_numSpacing, FSNS(XML_w14, XML_val),
+                                       "proportional");
+    else if (lcl_isOn(rFeatures, "tnum"))
+        m_pSerializer->singleElementNS(XML_w14, XML_numSpacing, FSNS(XML_w14, XML_val), "tabular");
+
+    std::vector<sal_Int32> aStyleSets;
+    for (const auto& rFeature : rFeatures)
+    {
+        if (!rFeature.m_nValue)
+            continue;
+        OUString aTag = vcl::font::featureCodeAsString(rFeature.m_nTag);
+        if (aTag.startsWith(u"ss"))
+        {
+            sal_Int32 nId = aTag.copy(2).toInt32();
+            if (nId > 0)
+                aStyleSets.push_back(nId);
+        }
+    }
+    if (!aStyleSets.empty())
+    {
+        m_pSerializer->startElementNS(XML_w14, XML_stylisticSets);
+        for (sal_Int32 nId : aStyleSets)
+            m_pSerializer->singleElementNS(XML_w14, XML_styleSet, FSNS(XML_w14, XML_id),
+                                           OString::number(nId));
+        m_pSerializer->endElementNS(XML_w14, XML_stylisticSets);
+    }
+
+    // w14:cntxtAlts with no w14:val is on, so turning it off needs the attribute
+    if (std::optional<uint32_t> oContextual = lcl_getFeature(rFeatures, "calt"))
+    {
+        if (*oContextual)
+            m_pSerializer->singleElementNS(XML_w14, XML_cntxtAlts);
+        else
+            m_pSerializer->singleElementNS(XML_w14, XML_cntxtAlts, FSNS(XML_w14, XML_val), "0");
+    }
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
