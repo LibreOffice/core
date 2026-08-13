@@ -443,10 +443,18 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     mxLbCustomLang->set_active_id(static_cast<LanguageType>(nLanguage));
 
     // *** column type ListBox ***
-    OUString aColumnUser( ScResId( SCSTR_COLUMN_USER ) );
-    for (sal_Int32 nIdx {0}; nIdx>=0; )
+    static const std::array<TranslateId, 7> aColumnTypes = {
+        SCSTR_COLUMN_USER_STANDARD,
+        SCSTR_COLUMN_USER_TEXT,
+        SCSTR_COLUMN_USER_DATE_DMY,
+        SCSTR_COLUMN_USER_DATE_MDY,
+        SCSTR_COLUMN_USER_DATE_YMD,
+        SCSTR_COLUMN_USER_US_ENGLISH,
+        SCSTR_COLUMN_USER_SKIP,
+    };
+    for (const auto& nId : aColumnTypes)
     {
-        mxLbType->append_text(aColumnUser.getToken(0, ';', nIdx));
+        mxLbType->append_text(ScResId(nId));
     }
 
     mxLbType->connect_changed( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
