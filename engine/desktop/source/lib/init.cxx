@@ -3176,7 +3176,6 @@ static COKitDocument* lo_documentLoadWithOptions  (COKit* pThis,
 static void                    lo_registerCallback (COKit* pThis,
                                                     COKitCallback pCallback,
                                                     void* pData);
-static char* lo_getFilterTypes(COKit* pThis);
 static void                    lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures features);
 static void                    lo_setDocumentPassword(COKit* pThis,
                                                        const char* pURL,
@@ -3277,11 +3276,6 @@ COKitDocument* COKitImpl::documentLoadWithOptions(const char* pURL, const char* 
 void COKitImpl::registerCallback(COKitCallback pCallback, void* pData)
 {
     lo_registerCallback(this, pCallback, pData);
-}
-
-char* COKitImpl::getFilterTypes()
-{
-    return lo_getFilterTypes(this);
 }
 
 void COKitImpl::setOptionalFeatures(COKitOptionalFeatures features)
@@ -9146,43 +9140,6 @@ static std::string lo_getError (COKit *pThis)
 
     COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
     return convertOUString(pLib->maLastExceptionMsg);
-}
-
-static char* lo_getFilterTypes(COKit* pThis)
-{
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    COKitImpl* pImpl = static_cast<COKitImpl*>(pThis);
-
-    if (!xSFactory.is())
-        xSFactory = comphelper::getProcessServiceFactory();
-
-    if (!xSFactory.is())
-    {
-        pImpl->maLastExceptionMsg = u"Service factory is not available"_ustr;
-        return nullptr;
-    }
-
-    uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance(u"com.sun.star.document.TypeDetection"_ustr), uno::UNO_QUERY);
-    const cpo::uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
-    tools::JsonWriter aJson;
-    for (const OUString& rType : aTypes)
-    {
-        cpo::uno::Sequence<beans::PropertyValue> aValues;
-        if (xTypeDetection->getByName(rType) >>= aValues)
-        {
-            auto it = std::find_if(std::cbegin(aValues), std::cend(aValues), [](const beans::PropertyValue& rValue) { return rValue.Name == "MediaType"; });
-            OUString aValue;
-            if (it != std::cend(aValues) && (it->Value >>= aValue) && !aValue.isEmpty())
-            {
-                auto typeNode = aJson.startNode(rType.toUtf8());
-                aJson.put("MediaType", aValue.toUtf8());
-            }
-        }
-    }
-
-    return convertOString(aJson.finishAndGetAsOString());
 }
 
 static void lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures const features)

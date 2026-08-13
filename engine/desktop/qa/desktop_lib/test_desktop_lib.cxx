@@ -154,7 +154,6 @@ public:
     void testGetStyles();
     void testGetFonts();
     void testCreateView();
-    void testGetFilterTypes();
     void testGetPartPageRectangles();
     void testSearchCalc();
     void testPropertySettingOnFormulaBar();
@@ -245,7 +244,6 @@ public:
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
-    CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPropertySettingOnFormulaBar);
@@ -623,20 +621,6 @@ void DesktopKitTest::testGetPartPageRectangles()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
 
     free(pRectangles);
-}
-
-void DesktopKitTest::testGetFilterTypes()
-{
-    COKitImpl aOffice;
-    char* pJSON = aOffice.getFilterTypes();
-
-    std::stringstream aStream(pJSON);
-    boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
-
-    CPPUNIT_ASSERT(!aTree.empty());
-    CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
-    free(pJSON);
 }
 
 void DesktopKitTest::testSearchCalc()

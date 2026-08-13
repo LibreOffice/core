@@ -438,7 +438,6 @@ namespace desktop {
         std::string getError() override;
         COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) override;
         void registerCallback(COKitCallback pCallback, void* pData) override;
-        char* getFilterTypes() override;
         void setOptionalFeatures(COKitOptionalFeatures features) override;
         void setDocumentPassword(char const* pURL, char const* pPassword) override;
         char* getVersionInfo() override;

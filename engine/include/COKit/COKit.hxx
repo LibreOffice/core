@@ -1474,23 +1474,6 @@ struct COKit
     virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
 
     /**
-     * Returns details of filter types.
-     *
-     * Example returned string:
-     *
-     * {
-     *     "writer8": {
-     *         "MediaType": "application/vnd.oasis.opendocument.text"
-     *     },
-     *     "calc8": {
-     *         "MediaType": "application/vnd.oasis.opendocument.spreadsheet"
-     *     }
-     * }
-     *
-     */
-    virtual char* getFilterTypes() = 0;
-
-    /**
      * Set bitmask of optional features supported by the client.
      *
      * @see COKitOptionalFeatures
