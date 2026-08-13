@@ -215,7 +215,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         xAxis.set( createInstance( u"com.sun.star.chart2.Axis"_ustr ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
-        aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted );
+        aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted && !mrModel.mbHidden );
 
         // axis line, tick, and gridline properties ---------------------------
 

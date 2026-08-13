@@ -73,6 +73,8 @@ struct AxisModel
     std::optional< double >  mofMin;             /// Minimum axis value.
     std::optional< sal_Int32 > monBaseTimeUnit;  /// Base time unit shown on a date axis.
     sal_Int32           mnAxisId;           /// Unique axis identifier.
+    bool                mbHidden = false;   /// "hidden" attribute for chartex
+                                            ///     (not sure if this is the same as mbDeleted)
     sal_Int32           mnAxisPos;          /// Position of the axis (top/bottom/left/right).
     sal_Int32           mnCrossAxisId;      /// Identifier of a crossing axis.
     sal_Int32           mnCrossBetween;     /// This value axis crosses between or inside category.
