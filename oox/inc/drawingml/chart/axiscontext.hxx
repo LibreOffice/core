@@ -106,7 +106,8 @@ public:
 class CxAxisContext final : public AxisContextBase
 {
 public:
-    explicit            CxAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel, sal_Int32 nId );
+    explicit            CxAxisContext( ::oox::core::ContextHandler2Helper& rParent,
+            AxisModel& rModel, sal_Int32 nId, bool bHidden);
     virtual             ~CxAxisContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

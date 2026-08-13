@@ -325,10 +325,11 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
 }
 
 CxAxisContext::CxAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel,
-        sal_Int32 nId) :
+        sal_Int32 nId, bool bHidden) :
     AxisContextBase( rParent, rModel )
 {
     mrModel.mnAxisId = nId;
+    mrModel.mbHidden = bHidden;
 }
 
 CxAxisContext::~CxAxisContext()

@@ -179,12 +179,18 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                 case CX_TOKEN(plotAreaRegion) :
                     return this;
                 case CX_TOKEN(axis) :
-                    if (rAttribs.hasAttribute(XML_id)) {
-                        sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
-                        // TODO: also handle attribute "hidden"
-                        return new CxAxisContext(*this, mrModel.maAxes.create(nElement, mrModel.meCT), nId);
-                    } else {
-                        return nullptr;
+                    {
+                        bool bHidden = false;
+                        if (rAttribs.hasAttribute(XML_hidden)) {
+                            bHidden = rAttribs.getBool(XML_hidden, false);
+                        }
+                        if (rAttribs.hasAttribute(XML_id)) {
+                            sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
+                            return new CxAxisContext(*this, mrModel.maAxes.create(nElement, mrModel.meCT),
+                                    nId, bHidden);
+                        } else {
+                            return nullptr;
+                        }
                     }
                 case CX_TOKEN(spPr) :
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.getOrCreate() );
