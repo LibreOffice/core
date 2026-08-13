@@ -303,7 +303,7 @@ namespace desktop {
         bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
         COKitDocumentType getDocumentType() override;
         int getParts() override;
-        char* getPartPageRectangles() override;
+        std::string getWriterPageRectangles() override;
         int getPart() override;
         void setPart(int nPart) override;
         char* getPartName(int nPart) override;

@@ -3448,16 +3448,16 @@ int SwXTextDocument::getParts()
     return pWrtShell->GetPageCnt();
 }
 
-OUString SwXTextDocument::getPartPageRectangles()
+std::string SwXTextDocument::getWriterPageRectangles()
 {
     SolarMutexGuard aGuard;
 
     if (!m_pDocShell)
-        return OUString();
+        return {};
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
-        return OUString();
+        return {};
 
     return pWrtShell->getPageRectangles();
 }

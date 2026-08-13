@@ -114,7 +114,7 @@ namespace LOKitHelper
     // TODO: create a struct with all the resultInfo properties and
     inline void fetchWriterSpecificData(COKitDocument *loKitDocument, std::unordered_map<std::string, std::string> &resultInfo, int& mode, std::string& hasComments)
     {
-        std::string rectangles = loKitDocument->getPartPageRectangles();
+        std::string rectangles = loKitDocument->getWriterPageRectangles();
 
         rectangles = Util::replace(rectangles, ";", "], [");
 

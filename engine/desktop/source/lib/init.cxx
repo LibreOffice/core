@@ -4939,9 +4939,9 @@ void COKitDocumentImpl::moveSelectedParts(int nPosition, bool bDuplicate, int nI
     pDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
 }
 
-char* COKitDocumentImpl::getPartPageRectangles()
+std::string COKitDocumentImpl::getWriterPageRectangles()
 {
-    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartPageRectangles");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getWriterPageRectangles");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4950,10 +4950,10 @@ char* COKitDocumentImpl::getPartPageRectangles()
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
-    return convertOUString(pDoc->getPartPageRectangles());
+    return pDoc->getWriterPageRectangles();
 }
 
 static char* doc_getA11yFocusedParagraph(COKitDocument* pThis)

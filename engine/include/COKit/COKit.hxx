@@ -1819,7 +1819,7 @@ struct COKitDocument
      * @return a rectangle list, using the same format as
      * COKitCallbackType::TEXT_SELECTION.
      */
-    virtual char* getPartPageRectangles() = 0;
+    virtual std::string getWriterPageRectangles() = 0;
 
     /// Get the current part number of the document. For a presentation or
     /// drawing document a part number is the page's stable unique identifier;

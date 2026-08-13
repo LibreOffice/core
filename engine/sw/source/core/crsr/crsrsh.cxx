@@ -1652,25 +1652,27 @@ sal_uInt16 SwCursorShell::GetPageCnt()
     return GetLayout()->GetPageNum();
 }
 
-OUString SwCursorShell::getPageRectangles()
+std::string SwCursorShell::getPageRectangles()
 {
     CurrShell aCurr(this);
     SwRootFrame* pLayout = GetLayout();
-    OUStringBuffer aBuf;
+    std::stringstream aBuf;
+    bool bFirst = true;
     for (const SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        aBuf.append(OUString::number(pFrame->getFrameArea().Left())
-            + ", "
-            + OUString::number(pFrame->getFrameArea().Top())
-            + ", "
-            + OUString::number(pFrame->getFrameArea().Width())
-            + ", "
-            + OUString::number(pFrame->getFrameArea().Height())
-            + "; ");
+        if (bFirst)
+            bFirst = false;
+        else
+            aBuf << "; ";
+        aBuf << pFrame->getFrameArea().Left()
+            << ", "
+            << pFrame->getFrameArea().Top()
+            << ", "
+            << pFrame->getFrameArea().Width()
+            << ", "
+            << pFrame->getFrameArea().Height();
     }
-    if (!aBuf.isEmpty())
-        aBuf.setLength( aBuf.getLength() - 2); // remove the last "; "
-    return aBuf.makeStringAndClear();
+    return aBuf.str();
 }
 
 void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const

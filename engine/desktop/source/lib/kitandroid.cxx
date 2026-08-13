@@ -220,8 +220,8 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getP
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    char* pRectangles = pDocument->getPartPageRectangles();
-    return pEnv->NewStringUTF(pRectangles);
+    std::string pRectangles = pDocument->getWriterPageRectangles();
+    return pEnv->NewStringUTF(pRectangles.c_str());
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getParts

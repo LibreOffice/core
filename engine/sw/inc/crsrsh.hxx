@@ -928,8 +928,8 @@ public:
     OUString GetCursorDescr() const;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-    /// Implementation of COKitDocument::getPartPageRectangles() for Writer.
-    OUString getPageRectangles();
+    /// Implementation of COKitDocument::getWriterPageRectangles() for Writer.
+    std::string getPageRectangles();
 
     /// See SwView::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const;

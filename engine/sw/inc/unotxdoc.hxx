@@ -467,8 +467,8 @@ public:
     virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::resetSelection().
     virtual void resetSelection() override;
-    /// @see vcl::ITiledRenderable::getPartPageRectangles().
-    virtual OUString getPartPageRectangles() override;
+    /// @see vcl::ITiledRenderable::getWriterPageRectangles().
+    virtual std::string getWriterPageRectangles() override;
     /// @see vcl::ITiledRenderable::setClipboard().
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().

@@ -209,11 +209,11 @@ public:
     virtual void resetSelection() = 0;
 
     /**
-     * @see COKitDocument::getPartPageRectangles().
+     * @see COKitDocument::getWriterPageRectangles().
      */
-    virtual OUString getPartPageRectangles()
+    virtual std::string getWriterPageRectangles()
     {
-        return OUString();
+        return {};
     }
 
     /**

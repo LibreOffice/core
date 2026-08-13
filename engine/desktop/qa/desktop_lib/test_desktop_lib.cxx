@@ -606,7 +606,7 @@ void DesktopKitTest::testGetPartPageRectangles()
     // Test that we get as many page rectangles as expected: blank document is
     // one page.
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
-    char* pRectangles = pDocument->getPartPageRectangles();
+    std::string pRectangles = pDocument->getWriterPageRectangles();
     OUString sRectangles = OUString::fromUtf8(pRectangles);
 
     std::vector<OUString> aRectangles;
@@ -619,8 +619,6 @@ void DesktopKitTest::testGetPartPageRectangles()
     }
     while (nIndex >= 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
-
-    free(pRectangles);
 }
 
 void DesktopKitTest::testSearchCalc()
