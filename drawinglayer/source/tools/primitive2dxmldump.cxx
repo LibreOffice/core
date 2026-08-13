@@ -997,6 +997,13 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     rWriter.attribute("font-variation-settings",
                                       vcl::font::VariationsToString(rFontVariations));
                 }
+
+                const auto& rFontFeatures = rTextSimplePortionPrimitive2D.getFontFeatures();
+                if (!rFontFeatures.empty())
+                {
+                    rWriter.attribute("font-feature-settings",
+                                      vcl::font::FeaturesToString(rFontFeatures));
+                }
                 rWriter.endElement();
             }
             break;
