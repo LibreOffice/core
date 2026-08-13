@@ -67,6 +67,7 @@ constexpr inline std::string_view sCSS1_PV_oblique = "oblique";
 constexpr inline std::string_view sCSS1_P_font_variant = "font-variant";
 constexpr inline std::string_view sCSS1_P_font_optical_sizing = "font-optical-sizing";
 constexpr inline std::string_view sCSS1_P_font_variation_settings = "font-variation-settings";
+constexpr inline std::string_view sCSS1_P_font_feature_settings = "font-feature-settings";
 
 //constexpr inline std::string_view sCSS1_PV_normal = "normal";
 constexpr inline std::string_view sCSS1_PV_small_caps = "small-caps";

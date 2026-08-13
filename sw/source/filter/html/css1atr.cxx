@@ -34,6 +34,7 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -2578,6 +2579,26 @@ static SwHTMLWriter& OutCSS1_SvxFontVariations( SwHTMLWriter& rWrt, const SfxPoo
     return rWrt;
 }
 
+static SwHTMLWriter& OutCSS1_SvxFontFeatures( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
+{
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_FONT_FEATURES: nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_FONT_FEATURES: nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rWrt.IsCSS1Script( nScript ) )
+        return rWrt;
+
+    const auto& rFeatures = static_cast<const SvxFontFeaturesItem&>(rHt).GetFeatures();
+    if( !rFeatures.empty() )
+    {
+        OUString aStr = vcl::font::FeaturesToString(rFeatures);
+        rWrt.OutCSS1_Property( sCSS1_P_font_feature_settings, aStr );
+    }
+    return rWrt;
+}
+
 static SwHTMLWriter& OutCSS1_SvxFontWeight( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
@@ -3498,9 +3519,9 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_FONT_VARIATIONS */    OutCSS1_SvxFontVariations,
 /* RES_CHRATR_CJK_FONT_VARIATIONS */ OutCSS1_SvxFontVariations,
 /* RES_CHRATR_CTL_FONT_VARIATIONS */ OutCSS1_SvxFontVariations,
-/* RES_CHRATR_FONT_FEATURES */      nullptr,
-/* RES_CHRATR_CJK_FONT_FEATURES */  nullptr,
-/* RES_CHRATR_CTL_FONT_FEATURES */  nullptr,
+/* RES_CHRATR_FONT_FEATURES */      OutCSS1_SvxFontFeatures,
+/* RES_CHRATR_CJK_FONT_FEATURES */  OutCSS1_SvxFontFeatures,
+/* RES_CHRATR_CTL_FONT_FEATURES */  OutCSS1_SvxFontFeatures,
 
 /* RES_TXTATR_REFMARK */            nullptr,
 /* RES_TXTATR_TOXMARK */            nullptr,

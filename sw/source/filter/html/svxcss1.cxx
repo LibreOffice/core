@@ -32,6 +32,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/blinkitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <vcl/font/Feature.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -290,6 +291,9 @@ struct SvxCSS1ItemIds
     sal_uInt16 nFontVariations;
     sal_uInt16 nFontVariationsCJK;
     sal_uInt16 nFontVariationsCTL;
+    sal_uInt16 nFontFeatures;
+    sal_uInt16 nFontFeaturesCJK;
+    sal_uInt16 nFontFeaturesCTL;
 
     sal_uInt16 nLineSpacing;
     sal_uInt16 nAdjust;
@@ -749,6 +753,9 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     aItemIds.nFontVariations = initTrueWhich( SID_ATTR_CHAR_FONT_VARIATIONS );
     aItemIds.nFontVariationsCJK = initTrueWhich( SID_ATTR_CHAR_CJK_FONT_VARIATIONS );
     aItemIds.nFontVariationsCTL = initTrueWhich( SID_ATTR_CHAR_CTL_FONT_VARIATIONS );
+    aItemIds.nFontFeatures = initTrueWhich( SID_ATTR_CHAR_FONT_FEATURES );
+    aItemIds.nFontFeaturesCJK = initTrueWhich( SID_ATTR_CHAR_CJK_FONT_FEATURES );
+    aItemIds.nFontFeaturesCTL = initTrueWhich( SID_ATTR_CHAR_CTL_FONT_FEATURES );
 
     aItemIds.nLineSpacing = initTrueWhich( SID_ATTR_PARA_LINESPACE );
     aItemIds.nAdjust = initTrueWhich( SID_ATTR_PARA_ADJUST );
@@ -1307,6 +1314,54 @@ static void ParseCSS1_font_variation_settings( const CSS1Expression *pExpr,
         aItem.SetWhich( aItemIds.nFontVariationsCJK );
         rItemSet.Put( aItem );
         aItem.SetWhich( aItemIds.nFontVariationsCTL );
+        rItemSet.Put( aItem );
+    }
+}
+
+static void ParseCSS1_font_feature_settings( const CSS1Expression *pExpr,
+                                    SfxItemSet &rItemSet,
+                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                    const SvxCSS1Parser& /*rParser*/ )
+{
+    assert(pExpr && "no expression");
+
+    std::vector<vcl::font::FeatureSetting> aFeatures;
+    while( pExpr && pExpr->GetType() == CSS1_STRING )
+    {
+        OUString aTag = pExpr->GetString();
+        pExpr = pExpr->GetNext();
+
+        // A tag with no value is on, as it is in CSS
+        uint32_t nValue = 1;
+        if( pExpr && pExpr->GetType() == CSS1_NUMBER )
+        {
+            nValue = static_cast<uint32_t>(pExpr->GetNumber());
+            pExpr = pExpr->GetNext();
+        }
+        else if( pExpr && pExpr->GetType() == CSS1_IDENT )
+        {
+            OUString aValue = pExpr->GetString();
+            if( aValue.equalsIgnoreAsciiCase( u"off"_ustr ) )
+            {
+                nValue = 0;
+                pExpr = pExpr->GetNext();
+            }
+            else if( aValue.equalsIgnoreAsciiCase( u"on"_ustr ) )
+                pExpr = pExpr->GetNext();
+        }
+
+        if( aTag.getLength() == 4 )
+            aFeatures.push_back({ vcl::font::featureCode(OUStringToOString(aTag,
+                RTL_TEXTENCODING_ASCII_US).getStr()), nValue });
+    }
+
+    if( !aFeatures.empty() )
+    {
+        SvxFontFeaturesItem aItem( std::move(aFeatures), aItemIds.nFontFeatures );
+        rItemSet.Put( aItem );
+        aItem.SetWhich( aItemIds.nFontFeaturesCJK );
+        rItemSet.Put( aItem );
+        aItem.SetWhich( aItemIds.nFontFeaturesCTL );
         rItemSet.Put( aItem );
     }
 }
@@ -3163,6 +3218,7 @@ CSS1PropEntry constexpr aCSS1PropFnTab[] =
     { sCSS1_P_float, ParseCSS1_float },
     { sCSS1_P_font, ParseCSS1_font },
     { sCSS1_P_font_family, ParseCSS1_font_family },
+    { sCSS1_P_font_feature_settings, ParseCSS1_font_feature_settings },
     { sCSS1_P_font_optical_sizing, ParseCSS1_font_optical_sizing },
     { sCSS1_P_font_size, ParseCSS1_font_size },
     { sCSS1_P_font_style, ParseCSS1_font_style },

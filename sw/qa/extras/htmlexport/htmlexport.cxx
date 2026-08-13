@@ -1695,6 +1695,21 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFontVariationSettings)
                          getProperty<OUString>(xRetCursor, u"CharFontVariations"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFontFeatureSettings)
+{
+    createSwDoc();
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
+    xRun->setString(u"text"_ustr);
+    uno::Reference<beans::XPropertySet> xCursor(xRun, uno::UNO_QUERY);
+
+    xCursor->setPropertyValue(u"CharFontFeatures"_ustr, uno::Any(u"\"smcp\" 1, \"onum\" 0"_ustr));
+    saveAndReload(TestFilter::HTML_WRITER);
+
+    uno::Reference<beans::XPropertySet> xRetCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"\"smcp\" 1, \"onum\" 0"_ustr,
+                         getProperty<OUString>(xRetCursor, u"CharFontFeatures"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
