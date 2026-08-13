@@ -31,6 +31,13 @@ DBUS_SOCKET := $(XDG_RUNTIME_DIR)/bus
  export COLUMNS := 100
  endif
 
+# The cypress electron process has no dbus session here and logs a frequent and
+# annoying "Failed to connect to the bus" for every spec, so raise its log level
+# to fatal, except when ENABLE_LOGGING asks for the noisy output.
+ ifeq ($(ENABLE_LOGGING),)
+ export ELECTRON_EXTRA_LAUNCH_ARGS := --log-level=3
+ endif
+
 V = $(if $(verbose),,@)
 abs_dir = $(if $(filter $(abs_builddir),$(abs_srcdir)),.,$(abs_srcdir))
 CYPRESS_BINARY = $(abs_builddir)/node_modules/cypress/bin/cypress
