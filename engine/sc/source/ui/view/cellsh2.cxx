@@ -67,6 +67,7 @@
 #include <queryentry.hxx>
 #include <markdata.hxx>
 #include <documentlinkmgr.hxx>
+#include <warnbox.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <o3tl/make_shared.hxx>
@@ -1152,21 +1153,59 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             {
                                 ScDocument& rImportDoc = pDocSh->GetDocument();
 
-                                OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
-                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
-
-                                ScImportExport aImport( rImportDoc, aRange.aStart );
                                 ScAsciiOptions aOptions;
                                 pDlg->GetOptions( aOptions );
                                 pDlg->SaveParameters();
-                                aImport.SetExtOptions( aOptions );
-                                aImport.SetApi( false );
-                                aImport.SetImportBroadcast( true );
-                                aImport.SetOverwriting( true );
-                                pStream->Seek( 0 );
-                                aImport.ImportStream( *pStream, OUString(), SotClipboardFormatId::STRING );
 
-                                pDocSh->GetUndoManager()->LeaveListAction();
+                                auto aImportFunc =
+                                    [pStream, pDocSh, aRange, nViewShellId, aOptions]
+                                    {
+                                        ScDocument& rDestDoc = pDocSh->GetDocument();
+
+                                        OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
+                                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
+
+                                        ScImportExport aImport( rDestDoc, aRange.aStart );
+                                        aImport.SetExtOptions( aOptions );
+                                        // The overwrite warning is put up below, so don't let
+                                        // ScImportExport ask a second time.
+                                        aImport.SetApi( true );
+                                        aImport.SetImportBroadcast( true );
+                                        aImport.SetOverwriting( true );
+                                        pStream->Seek( 0 );
+                                        aImport.ImportStream( *pStream, OUString(), SotClipboardFormatId::STRING );
+
+                                        pDocSh->GetUndoManager()->LeaveListAction();
+                                    };
+
+                                // Splitting a cell writes into the columns to its right, so find
+                                // out how far the data would reach and ask before throwing away
+                                // whatever is in the way. ScImportExport does check this itself,
+                                // but only with a synchronous dialog, which tiled rendering can
+                                // neither show nor wait for.
+                                ScImportExport aProbe( rImportDoc, aRange.aStart );
+                                aProbe.SetExtOptions( aOptions );
+                                aProbe.SetDetermineRangeOnly( true );
+                                pStream->Seek( 0 );
+                                aProbe.ImportStream( *pStream, OUString(), SotClipboardFormatId::STRING );
+
+                                const ScRange& rDest = aProbe.GetRange();
+                                const SCCOL nFirstOverwritten = aRange.aStart.Col() + 1;
+                                if ( rDest.aEnd.Col() >= nFirstOverwritten &&
+                                     !rImportDoc.IsBlockEmpty( nFirstOverwritten, rDest.aStart.Row(),
+                                                               rDest.aEnd.Col(), rDest.aEnd.Row(),
+                                                               aRange.aStart.Tab() ) )
+                                {
+                                    ScReplaceWarnBox::AskOverwriteAsync(
+                                        ScDocShell::GetActiveDialogParent(),
+                                        [aImportFunc](bool bOverwrite)
+                                        {
+                                            if ( bOverwrite )
+                                                aImportFunc();
+                                        });
+                                }
+                                else
+                                    aImportFunc();
                             }
 
                             pDlg->disposeOnce();

@@ -72,6 +72,8 @@ class SAL_DLLPUBLIC_RTTI ScImportExport
                                 // In this case we cannot use the insert optimization, but we
                                 // do not need to broadcast after the import.
     bool        mbIncludeBOM; // Whether to include a byte-order-mark in the output.
+    bool        mbDetermineRangeOnly;   // Only work out which range an import would
+                                        // cover, leaving the document untouched.
     ScExportTextOptions mExportTextOptions;
 
     std::unique_ptr<ScAsciiOptions> pExtOptions;        // extended options
@@ -151,6 +153,11 @@ public:
     const OUString& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 
     void SetApi( bool bApi ) { mbApi = bApi; }
+    /** Import only far enough to find out which range the data would occupy,
+        without writing anything to the document; the result is then available
+        through GetRange(). Only supported by the extended ASCII import, i.e.
+        together with SetExtOptions(). */
+    void SetDetermineRangeOnly( bool b ) { mbDetermineRangeOnly = b; }
     void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
     void SetOverwriting( const bool bOverwriting ) { mbOverwriting = bOverwriting; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }

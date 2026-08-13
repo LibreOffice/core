@@ -46,6 +46,15 @@
 	max-width: 380px;
 }
 
+/* Message boxes take their 300px min-width rather than sizing to their text, so
+   a sentence much longer than that wraps even though the 380px cap leaves room.
+   The overwrite warning is two such sentences, so let it size to its content. */
+.jsdialog-window.messagebox:not(.modalpopup)
+.jsdialog-container:not(.snackbar):has(#CheckWarningDialog) {
+	width: max-content;
+	max-width: 560px;
+}
+
 /* A dialog that has a window of its own keeps its natural size in a narrow
    window, because that window is sized to the dialog. */
 @media (max-width: 480px) {

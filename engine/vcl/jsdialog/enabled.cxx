@@ -160,6 +160,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/analysisofvariancedialog.ui" },
         { u"modules/scalc/ui/cellprotectionpage.ui" },
         { u"modules/scalc/ui/chardialog.ui" },
+        { u"modules/scalc/ui/checkwarningdialog.ui" },
         { u"modules/scalc/ui/chisquaretestdialog.ui" },
         { u"modules/scalc/ui/colwidthdialog.ui" },
         { u"modules/scalc/ui/conditionaleasydialog.ui" },

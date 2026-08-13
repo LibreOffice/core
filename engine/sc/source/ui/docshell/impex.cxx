@@ -113,7 +113,8 @@ ScImportExport::ScImportExport( ScDocument& r )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mbDetermineRangeOnly(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -128,7 +129,8 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mbDetermineRangeOnly(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -144,7 +146,8 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mbDetermineRangeOnly(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -161,7 +164,8 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mbDetermineRangeOnly(false)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -1580,7 +1584,10 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
 bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 {
     if (!pExtOptions)
+    {
+        assert(!mbDetermineRangeOnly && "SetDetermineRangeOnly() needs SetExtOptions()");
         return Text2Doc( rStrm );
+    }
 
     sal_uInt64 const nOldPos = rStrm.Tell();
     sal_uInt64 const nRemaining = rStrm.remainingSize();
@@ -1647,7 +1654,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     // Determine range for Undo.
     // We don't need this during import of a file to a new sheet or document...
-    bool bDetermineRange = bUndo;
+    bool bDetermineRange = bUndo || mbDetermineRangeOnly;
     bool bColumnsAreDetermined = false;
 
     // Row heights don't need to be adjusted on the fly if EndPaste() is called
@@ -1830,6 +1837,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         {
             aRange.aEnd.SetCol( nEndCol );
             aRange.aEnd.SetRow( nRow );
+
+            // The caller only wanted to know the range, the document was not
+            // touched during this pass.
+            if ( mbDetermineRangeOnly )
+                return true;
 
             if ( !mbApi && nStartCol != nEndCol &&
                  !rDoc.IsBlockEmpty( nStartCol + 1, nStartRow, nEndCol, nRow, nTab ) )

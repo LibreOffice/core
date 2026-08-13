@@ -346,6 +346,50 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1, '', true);
     });
 
+    it('Text to Columns overwrite warning dialog', function () {
+        // the import dialog does not fit the default viewport
+        cy.viewport(1280, 960);
+        helper.processToIdle(win);
+
+        cy.cGet('#spreadsheet-tab0').click();
+
+        // No uno command puts this warning up on its own, it only appears once
+        // Text to Columns works out that the split would reach into a cell that
+        // already holds something, so set that situation up first.
+        calcHelper.enterCellAddressAndConfirm(win, 'B20');
+        helper.typeIntoDocument('KEEPME{enter}');
+        calcHelper.enterCellAddressAndConfirm(win, 'A20');
+        helper.typeIntoDocument('AAA;BBB;CCC{enter}');
+        // Text to Columns is only offered for a single-column selection.
+        calcHelper.enterCellAddressAndConfirm(win, 'A20');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TextToColumns');
+        });
+
+        // The import dialog itself is covered by 'Text Import Dialog' above,
+        // here it is only the way to reach the warning: splitting on the
+        // semicolons makes the second and third column land on B20 and C20.
+        cy.cGet('.ui-csv-grid-container').should('exist');
+        // the separator checkboxes are only sensitive in 'separated by' mode
+        cy.cGet('#toseparatedby-input').check();
+        cy.then(() => {
+            return helper.processToIdle(win);
+        });
+        cy.cGet('#semicolon-input').check();
+        cy.then(() => {
+            return helper.processToIdle(win);
+        });
+        cy.cGet('.ui-csv-grid-container').parents('form.jsdialog-container')
+            .find('.ui-pushbutton.jsdialog.button-primary').click();
+
+        cy.cGet('#CheckWarningDialog').should('exist');
+        // closes with 'No', which leaves B20 alone for the tests that follow
+        a11yHelper.handleDialog(win, 1, '', true);
+
+        cy.viewport(Cypress.config('viewportWidth'), Cypress.config('viewportHeight'));
+    });
+
     it('PDF export warning dialog', function () {
         cy.cGet('#spreadsheet-tab0').click();
         a11yHelper.testPDFExportWarningDialog(win);

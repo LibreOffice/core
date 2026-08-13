@@ -19,6 +19,8 @@
 
 #include <warnbox.hxx>
 
+#include <comphelper/kit.hxx>
+
 #include <scmod.hxx>
 #include <inputopt.hxx>
 
@@ -32,21 +34,52 @@ ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)
     m_xDialog->set_default_response(RET_YES);
 }
 
+void ScReplaceWarnBox::SaveWarningOnBox()
+{
+    if (m_xWarningOnBox->get_active())
+        return;
+
+    ScModule* pScMod = ScModule::get();
+    ScInputOptions aInputOpt(pScMod->GetInputOptions());
+    aInputOpt.SetReplaceCellsWarn(false);
+    pScMod->SetInputOptions(aInputOpt);
+}
+
 short ScReplaceWarnBox::run()
 {
     short nRet = RET_YES;
-    ScModule* pScMod = ScModule::get();
-    if (pScMod->GetInputOptions().GetReplaceCellsWarn())
+    if (ScModule::get()->GetInputOptions().GetReplaceCellsWarn())
     {
         nRet = MessageDialogController::run();
-        if (!m_xWarningOnBox->get_active())
-        {
-            ScInputOptions aInputOpt(pScMod->GetInputOptions());
-            aInputOpt.SetReplaceCellsWarn(false);
-            pScMod->SetInputOptions(aInputOpt);
-        }
+        SaveWarningOnBox();
     }
     return nRet;
+}
+
+void ScReplaceWarnBox::AskOverwriteAsync(weld::Window* pParent,
+                                         const std::function<void(bool)>& rDoneFn)
+{
+    // Tiled rendering switches the option off wholesale so that paste can
+    // overwrite silently (ScModelObj::initializeForTiledRendering), so there it
+    // says nothing about what the user wants and the checkbox has nothing to
+    // switch off either.
+    const bool bOptionApplies = !comphelper::COKit::isActive();
+
+    if (bOptionApplies && !ScModule::get()->GetInputOptions().GetReplaceCellsWarn())
+    {
+        rDoneFn(true);
+        return;
+    }
+
+    auto xBox = std::make_shared<ScReplaceWarnBox>(pParent);
+    if (!bOptionApplies)
+        xBox->m_xWarningOnBox->hide();
+
+    weld::DialogController::runAsync(xBox, [xBox, bOptionApplies, rDoneFn](sal_Int32 nResult) {
+        if (bOptionApplies)
+            xBox->SaveWarningOnBox();
+        rDoneFn(nResult == RET_YES);
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

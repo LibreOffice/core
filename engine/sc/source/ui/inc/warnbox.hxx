@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include <vcl/weld.hxx>
 
 /** Warning box for "Replace cell contents?".
@@ -27,6 +29,10 @@ class ScReplaceWarnBox : public weld::MessageDialogController
 {
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 
+    /** Turns the "Warn before replacing cells" option off if the user unchecked
+        the box. */
+    void SaveWarningOnBox();
+
 public:
     ScReplaceWarnBox(weld::Window* pParent);
 
@@ -34,6 +40,17 @@ public:
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
     virtual short run() override;
+
+    /** Asks asynchronously whether cells holding data may be overwritten and
+        calls rDoneFn(true) once the user agreed.
+
+        Behaves like run() as far as the "Warn before replacing cells" option
+        goes, except under tiled rendering: there the option is turned off
+        wholesale so that paste can overwrite silently
+        (ScModelObj::initializeForTiledRendering), so it is neither asked nor
+        written, and the "Warn me about this in the future." checkbox stays
+        hidden. */
+    static void AskOverwriteAsync(weld::Window* pParent, const std::function<void(bool)>& rDoneFn);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
