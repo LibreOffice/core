@@ -4441,7 +4441,7 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=4 n-rows=3 -->
+                      <!-- n-columns=5 n-rows=3 -->
                       <object class="GtkGrid" id="gdInsertReferences">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -4469,7 +4469,7 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">3</property>
+                            <property name="width">4</property>
                           </packing>
                         </child>
                         <child>
@@ -4479,7 +4479,7 @@
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
-                            <property name="left-attach">3</property>
+                            <property name="left-attach">4</property>
                             <property name="top-attach">0</property>
                             <property name="height">3</property>
                           </packing>
@@ -4578,6 +4578,70 @@
                             <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
                             <property name="height">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertPageField">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="btnInsertInsertPageNumberField">
+                                <property name="visible">True</property>
+                                <property name="action-name">.uno:InsertPageNumberField</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="btnInsertInsertPageCountField">
+                                <property name="visible">True</property>
+                                <property name="action-name">.uno:InsertPageCountField</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">3</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertDateTitleField">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="btnInsertInsertDateField">
+                                <property name="visible">True</property>
+                                <property name="action-name">.uno:InsertDateField</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="btnInsertInsertTitleField">
+                                <property name="visible">True</property>
+                                <property name="action-name">.uno:InsertTitleField</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">3</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <accessibility>
@@ -6406,8 +6470,8 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=6 n-rows=3 -->
-                      <object class="GtkGrid" id="gdReferencesFields">
+                      <!-- n-columns=3 n-rows=3 -->
+                      <object class="GtkGrid" id="gdReferencesBibliography">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-start">3</property>
@@ -6417,24 +6481,24 @@
                         <property name="row-spacing">3</property>
                         <property name="column-spacing">3</property>
                         <child>
-                          <object class="GtkLabel" id="lbReferencesFields">
+                          <object class="GtkLabel" id="lbReferencesBibliography">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelReferencesFields">Fields</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelReferencesBibliography">Bibliography</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
-                              <relation type="label-for" target="gdReferencesFields"/>
+                              <relation type="label-for" target="gdReferencesBibliography"/>
                             </accessibility>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">5</property>
+                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -6447,99 +6511,9 @@
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
-                            <property name="left-attach">5</property>
+                            <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
                             <property name="height">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxReferencesInsertFieldCtrl">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="toolbar-style">both</property>
-                            <property name="show-arrow">False</property>
-                            <property name="icon_size">3</property>
-                            <child>
-                              <object class="GtkMenuToolButton" id="btnReferencesInsertFieldCtrl">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:InsertFieldCtrl</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">False</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                            <property name="height">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxReferencesInsertPageField">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="toolbar-style">icons</property>
-                            <property name="show-arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="btnReferencesInsertPageNumberField">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:InsertPageNumberField</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolButton" id="btnReferencesInsertPageCountField">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:InsertPageCountField</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxReferencesDateTitleField">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="toolbar-style">icons</property>
-                            <property name="show-arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="btnReferencesInsertDateField">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:InsertDateField</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolButton" id="btnReferencesInsertTitleField">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:InsertTitleField</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
@@ -6563,7 +6537,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">3</property>
+                            <property name="left-attach">0</property>
                             <property name="top-attach">0</property>
                             <property name="height">2</property>
                           </packing>
@@ -6586,7 +6560,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">4</property>
+                            <property name="left-attach">1</property>
                             <property name="top-attach">0</property>
                           </packing>
                         </child>
@@ -6608,24 +6582,12 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">4</property>
+                            <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkSeparator">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                            <property name="height">2</property>
-                          </packing>
-                        </child>
                         <accessibility>
-                          <relation type="labelled-by" target="lbReferencesFields"/>
+                          <relation type="labelled-by" target="lbReferencesBibliography"/>
                         </accessibility>
                       </object>
                       <packing>
@@ -15142,7 +15104,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnToolsAutoFormatApply">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:AutoFormatApply</property>
                               </object>
                               <packing>
@@ -15166,7 +15127,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnToolsOnlineAutoFormat">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:OnlineAutoFormat</property>
                               </object>
                               <packing>
@@ -15189,7 +15149,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnToolsAutoCorrectDlg">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:AutoCorrectDlg</property>
                               </object>
                               <packing>
