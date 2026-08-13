@@ -20,6 +20,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include "emfpbrush.hxx"
 #include "emfppath.hxx"
@@ -182,10 +183,20 @@ namespace emfplushelper
 
                     sal_uInt64 const pos = s.Tell();
                     SAL_INFO("drawinglayer.emf", "EMF+\t use boundary, points: " << boundaryPointCount);
+
+                    sal_uInt64 const nBytesPerPoint = 2 * sizeof(float);
+                    sal_uInt64 const nMaxPoints = s.remainingSize() / nBytesPerPoint;
+                    if (boundaryPointCount < 0
+                        || o3tl::make_unsigned(boundaryPointCount) > nMaxPoints)
+                    {
+                        SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated boundary points");
+                        return;
+                    }
+
                     path.reset( new EMFPPath(boundaryPointCount) );
                     path->Read(s, 0x0);
 
-                    s.Seek(pos + 8 * boundaryPointCount);
+                    s.Seek(pos + nBytesPerPoint * boundaryPointCount);
 
                     const ::basegfx::B2DRectangle aBounds(path->GetPolygon(rR, false).getB2DRange());
                     aWidth = aBounds.getWidth();
