@@ -53,6 +53,19 @@ Sub verify_testSplit
         TestUtil.AssertEqual(VarType(splitArr(i)), 8200, "VarType(splitArr(i))")
     Next
 
+    ' tdf#146873 - CoreReflection.getType() must not error after Split() elements are wrapped in Array()
+    splitArr = Split("a-b-c", "-")
+    For i = 0 To UBound(splitArr)
+        splitArr(i) = Array(splitArr(i))
+    Next
+    Dim oReflection As Object : oReflection = CreateUnoService("com.sun.star.reflection.CoreReflection")
+    ' Without the fix in place, this assignment would have failed
+    Dim oObject As Object : oObject = oReflection.GetType(splitArr)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 20 (20 for typelib_TypeClass_SEQUENCE)
+    ' - Actual  : Object variable not set
+    TestUtil.AssertEqual(oObject.TypeClass, 20, "CoreReflection.getType() for oObject.TypeClass after Split() + Array()")
+
     ' tdf#141474 keyword names need to match that of VBA
     TestUtil.AssertEqual(Split(expression:="LibreOffice StarOffice")(1), "StarOffice", "Split with 1 keyword name" )
     Dim txt As String : txt = "Libre_Office_Star_Office"
