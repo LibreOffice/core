@@ -289,6 +289,7 @@ private:
     /// Calculate tile rendering priority from a TileDesc
     Priority getTilePriority(const TileDesc& desc) const override;
     std::vector<ViewIdInactivity> getViewIdsByInactivity() const override;
+    CanonicalViewId resolveCanonicalViewId(CanonicalViewId id) const override;
 
 public:
     /// Request loading a document, or a new view, if one exists,
@@ -535,6 +536,11 @@ private:
     bool _editorChangeWarning;
     std::map<int, std::unique_ptr<CallbackDescriptor>> _viewIdToCallbackDescr;
     SessionMap<ChildSession> _sessions;
+
+    /// Canonical view ids a session has left, mapped onto the one it holds now.
+    /// WSD keeps stamping tile requests with the old id until it is told of the
+    /// change, so those requests arrive here needing translation.
+    std::map<CanonicalViewId, CanonicalViewId> _retiredCanonicalIds;
 
     bool _legacyUnoApiSeen = false;
 

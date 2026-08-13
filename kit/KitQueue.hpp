@@ -35,6 +35,10 @@ public:
 
     using ViewIdInactivity = std::pair<CanonicalViewId, float>;
     virtual std::vector<ViewIdInactivity> getViewIdsByInactivity() const { return {}; }
+
+    /// Maps a canonical view id a session has already left onto the one it holds
+    /// now. Returns the id unchanged when no session ever retired it.
+    virtual CanonicalViewId resolveCanonicalViewId(CanonicalViewId id) const { return id; }
 };
 
 /// Queue for handling the Kit's messaging needs
@@ -98,6 +102,10 @@ public:
     void clearTileQueue() { _tileQueues.clear(); }
     void pushTileQueue(const Payload &value);
     void pushTileCombineRequest(const Payload &value);
+    /// Restamps the tiles queued under one canonical view id with another, for a
+    /// session whose canonical view id changed while it had tiles outstanding.
+    /// Only safe once no session is left holding the id being moved away from.
+    void reassignTileQueue(CanonicalViewId from, CanonicalViewId to);
     /// Pops the highest priority TileCombined from the
     /// render queue, with it's priority.
     TileCombined popTileQueue(TilePrioritizer::Priority& priority);

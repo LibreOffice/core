@@ -761,19 +761,50 @@ void KitQueue::pushTileCombineRequest(const Payload &value)
     const std::string_view msg(value.data(), value.size());
     const TileCombined tileCombined = TileCombined::parse(msg);
 
-    std::vector<TileDesc>& tileQueue = ensureTileQueue(tileCombined.getCanonicalViewId());
+    const CanonicalViewId viewId = _prio.resolveCanonicalViewId(tileCombined.getCanonicalViewId());
+    std::vector<TileDesc>& tileQueue = ensureTileQueue(viewId);
     const std::vector<TileDesc>& tiles = tileCombined.getTiles();
     tileQueue.reserve(tileQueue.size() + tiles.size());
     for (const auto& tile : tiles)
-        sortedInsert(tileQueue, tile);
+    {
+        TileDesc desc = tile;
+        desc.setCanonicalViewId(viewId);
+        sortedInsert(tileQueue, desc);
+    }
 }
 
 void KitQueue::pushTileQueue(const Payload &value)
 {
     const std::string_view msg(value.data(), value.size());
-    const TileDesc desc = TileDesc::parse(msg);
+    TileDesc desc = TileDesc::parse(msg);
+    desc.setCanonicalViewId(_prio.resolveCanonicalViewId(desc.getCanonicalViewId()));
     std::vector<TileDesc>& tileQueue = ensureTileQueue(desc.getCanonicalViewId());
     sortedInsert(tileQueue, desc);
+}
+
+void KitQueue::reassignTileQueue(CanonicalViewId from, CanonicalViewId to)
+{
+    const auto found = std::find_if(_tileQueues.begin(), _tileQueues.end(),
+                                    [from](const auto& queue) { return queue.first == from; });
+    if (found == _tileQueues.end())
+        return;
+
+    std::vector<TileDesc> tiles = std::move(found->second);
+    _tileQueues.erase(found);
+
+    if (tiles.empty())
+        return;
+
+    LOG_TRC("Reassigning " << tiles.size() << " queued tiles from canonical view id " << from
+                           << " to " << to);
+
+    std::vector<TileDesc>& tileQueue = ensureTileQueue(to);
+    tileQueue.reserve(tileQueue.size() + tiles.size());
+    for (TileDesc& tile : tiles)
+    {
+        tile.setCanonicalViewId(to);
+        sortedInsert(tileQueue, tile);
+    }
 }
 
 size_t KitQueue::getTileQueueSize() const
