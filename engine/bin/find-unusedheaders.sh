@@ -67,7 +67,7 @@ for subdir in $(ls -d */ | grep -v \
     # Find all .h / .hxx files and see if they are mentioned in the module
     # skip special directories: pch and precompiled_ (compilerplugins does not have separate pch dir), workben (playground code), test (dead code?)
     for i in  $(find "$subdir" -name "*\.h" -o -name "*\.hxx" -o -name "\.hrc" -o -name "*\.hlst" | grep -v -e "/pch/" -e "/precompiled_" -e "/workben/" -e "/test/" | xargs basename -a ); do
-        # Search only in source files, and skip mentions in makefiles, .yaml, clang-format excludelist etc.
+        # Search only in source files, and skip mentions in makefiles, .yaml, etc.
         if [ $(git grep -l "$i" "$subdir"/{*\.[hc]xx,*\.[hc],*\.hrc,*\.mm,*\.m,*\.py} | wc -l) -eq 0 ] ; then
             echo "Out of use header: $(find "$subdir" -name "$i")";
         fi

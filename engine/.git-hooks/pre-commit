@@ -6,7 +6,6 @@
 # if it wants to stop the commit.
 
 use strict;
-use lib "solenv/clang-format";
 #use File::Copy;
 #use Cwd;
 
@@ -174,152 +173,6 @@ sub check_author()
     }
 }
 
-sub check_style($)
-{
-    if (! -e "solenv/clang-format/ClangFormat.pm")
-    {
-        # Not in the main repo.
-        return;
-    }
-
-    require ClangFormat;
-    ClangFormat->import();
-
-    my ($h) = @_;
-    my $src = ClangFormat::get_extension_regex();
-    my @bad_names = ();
-    my @bad_renames = ();
-    my $clang_format = ClangFormat::find();
-
-    ## Check if ClangFormat has get_excludelist or the old
-    ## get_blacklist
-    my $excluded_list_names;
-    eval    { ClangFormat::get_excludelist() };
-    if ($@) { $excluded_list_names = ClangFormat::get_blacklist(); }
-    else    { $excluded_list_names = ClangFormat::get_excludelist(); }
-
-    # Get a list of renamed files.
-    my %renames; # key is target pathname, value is source pathname
-    open (IN, "git diff-index --cached --find-renames --diff-filter=R --name-status --relative $h |")
-        || die "Cannot run git diff.";
-    while (my $line = <IN>)
-    {
-        chomp $line;
-        $line =~ /^[^\t]+\t([^\t]+)\t([^\t]+)$/ ||  die "Unexpected response line: $line";
-        $renames{$2} = $1;
-    }
-
-    # Get a list of non-deleted changed files.
-    open (FILES, "git diff-index --cached --diff-filter=AM --name-only --relative $h |") ||  die "Cannot run git diff.";
-    while (my $filename = <FILES>)
-    {
-        chomp $filename;
-        if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
-        {
-            if (!defined($clang_format))
-            {
-                my $version = ClangFormat::get_wanted_version();
-                my $opt_lo = ClangFormat::get_own_directory();
-
-                print("\nWARNING: Commit touches new (non-excluded) files, but no clang-format"
-                      . " ${version}\n");
-                print(" found (via CLANG_FORMAT or PATH env vars, or in ${opt_lo}).\n\n");
-
-                my $platform = "linux64";
-                my $download = "wget";
-                if ($^O eq "cygwin")
-                {
-                    $platform = "win.exe";
-                }
-                elsif ($^O eq "darwin")
-                {
-                    $platform = "mac";
-                    $download = "curl -O";
-                }
-
-                print("To get a suitable binary, please do:\n\n");
-                print("mkdir -p $opt_lo\n");
-                print("cd $opt_lo\n");
-                print("$download https://dev-www.libreoffice.org/bin/clang-format-$version-$platform\n");
-                print("cp clang-format-$version-$platform clang-format\n");
-                print("chmod +x clang-format\n\n");
-
-                print("(Or read solenv/clang-format/README on how to build it yourself.\n");
-                return;
-            }
-            chdir("..") or die "Cannot chdir to repo root: $!";
-            my $ok = ClangFormat::check_style($clang_format, "engine/$filename");
-            chdir("engine") or die "Cannot chdir back to engine: $!";
-            if (!$ok)
-            {
-                if (defined($renames{$filename}))
-                {
-                    push @bad_renames, $filename;
-                }
-                else
-                {
-                    push @bad_names, $filename;
-                }
-            }
-        }
-    }
-
-    # Enforce style.
-    if (scalar @bad_names || scalar @bad_renames)
-    {
-        my $autostyle = `git config libreoffice.autostyle`;
-        chomp $autostyle;
-        if ($autostyle ne "true" or scalar @bad_renames)
-        {
-            print("\nThe above differences were found between the code to commit \n");
-            print("and the clang-format rules.\n");
-            if (scalar @bad_names)
-            {
-                print("You can apply these changes with:\n");
-                print("\n$clang_format -i " . join(" ", map { "engine/$_" } @bad_names) . "\n\n");
-            }
-            if (scalar @bad_renames)
-            {
-                print("\nATTENTION: Of files detected as renamed by git, the following ones are\n");
-                print("not clang-format'ed and are not listed in the excludelist. If they are\n");
-                print("renames of previously excluded files, they should be added to the\n");
-                print("excludelist:\n\n");
-                foreach my $name (@bad_renames)
-                {
-                    if (exists($excluded_list_names->{$renames{$name}}))
-                    {
-                        print("* engine/$name got renamed from engine/$renames{$name},\n");
-                        print("    which is even still listed in the excludelist!\n");
-                    }
-                    else
-                    {
-                        print("* engine/$name\n");
-                    }
-                }
-                print("\n");
-            }
-            print("Aborting commit. Apply changes and commit again or skip checking\n");
-            print("with --no-verify (not recommended).\n");
-            exit(1);
-        }
-        else
-        {
-            # 'git config libreoffice.autostyle true' was invoked to run
-            # clang-format automatically.
-            print("\nThe above differences were found between the code to commit \n");
-            print("and the clang-format rules. Fixing these now automatically.\n");
-            print("Running '$clang_format -i " . join(" ", map { "engine/$_" } @bad_names) . "' for you...\n");
-            chdir("..") or die "Cannot chdir to repo root: $!";
-            system("$clang_format -i " . join(" ", map { "engine/$_" } @bad_names));
-            # TODO this stages all local modifications, staging originally
-            # unstaged hunks.
-            system("git add " . join(" ", map { "engine/$_" } @bad_names));
-            chdir("engine") or die "Cannot chdir back to engine: $!";
-            print("Done.\n");
-        }
-    }
-}
-
 # Do the work :-)
 
 # Initial commit: diff against an empty tree object
@@ -384,9 +237,6 @@ while (<FILES>)
 
 # fix whitespace in code
 check_whitespaces( $against);
-
-# fix style in code
-check_style($against);
 
 # catch missing author info
 check_author();
