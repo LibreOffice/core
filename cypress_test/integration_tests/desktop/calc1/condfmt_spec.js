@@ -21,7 +21,7 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 		desktopHelper.getDropdown('home-conditional-format-menu').click();
 
 		// Should not have the first entry selected by default.
-		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Highlight cells with...').parent().should('not.have.class', 'selected');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Highlight cells with').parent().should('not.have.class', 'selected');
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Manage...').parent().should('not.have.class', 'selected');
 
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Manage...').click();
@@ -70,10 +70,10 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 	}
 
 	it('Data bar submenu grid has even column spacing', function() {
-		checkSubmenuGridHasEvenColumnSpacing('Data Bar...', 'databarset');
+		checkSubmenuGridHasEvenColumnSpacing('Data Bar', 'databarset');
 	});
 
 	it('Color scale submenu grid has even column spacing', function() {
-		checkSubmenuGridHasEvenColumnSpacing('Color Scale...', 'scaleset');
+		checkSubmenuGridHasEvenColumnSpacing('Color Scale', 'scaleset');
 	});
 });
