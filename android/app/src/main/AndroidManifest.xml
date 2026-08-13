@@ -82,6 +82,17 @@
                 <!-- Seems at least Android 5.0 does not recognize this as the mime type of .otp files. -->
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-template" />
 
+                <!-- ODF, older vendor-prefixed names that some tools still write
+                     instead of the standard ones above -->
+                <data android:mimeType="application/x-vnd.oasis.opendocument.text" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.graphics" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.presentation" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.spreadsheet" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.text-template" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.spreadsheet-template" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.graphics-template" />
+                <data android:mimeType="application/x-vnd.oasis.opendocument.presentation-template" />
+
                 <!-- MS -->
                 <data android:mimeType="application/rtf" />
                 <data android:mimeType="text/rtf" />

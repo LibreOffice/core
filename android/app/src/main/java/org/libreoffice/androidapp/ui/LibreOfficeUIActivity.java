@@ -776,6 +776,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 "application/vnd.oasis.opendocument.graphics-template",
                 "application/vnd.oasis.opendocument.presentation-template",
 
+                // ODF, older vendor-prefixed names that some tools still write
+                // instead of the standard ones above
+                "application/x-vnd.oasis.opendocument.text",
+                "application/x-vnd.oasis.opendocument.graphics",
+                "application/x-vnd.oasis.opendocument.presentation",
+                "application/x-vnd.oasis.opendocument.spreadsheet",
+                "application/x-vnd.oasis.opendocument.text-template",
+                "application/x-vnd.oasis.opendocument.spreadsheet-template",
+                "application/x-vnd.oasis.opendocument.graphics-template",
+                "application/x-vnd.oasis.opendocument.presentation-template",
+
                 // MS
                 "application/rtf",
                 "text/rtf",
