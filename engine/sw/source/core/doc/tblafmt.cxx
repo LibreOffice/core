@@ -912,6 +912,50 @@ sal_uInt8 SwTableAutoFormat::CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uIn
     return nRet;
 }
 
+sal_uInt8 SwTableAutoFormat::GetTableStyleRowRole(size_t nRow, size_t nRows,
+                                                   const SwTableStyleSettings& rSettings)
+{
+    RowColRole eRole;
+    if (!nRow)
+        eRole = RowColRole::First;
+    else if (nRow + 1 == nRows)
+        eRole = RowColRole::Last;
+    else
+        eRole = (nRow - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
+
+    if (eRole == RowColRole::First && !rSettings.m_bUseFirstRowStyle)
+        eRole = RowColRole::BandA;
+    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastRowStyle)
+        eRole = RowColRole::BandB;
+
+    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseRowBandingStyle)
+        eRole = RowColRole::BandA;
+
+    return static_cast<sal_uInt8>(eRole);
+}
+
+sal_uInt8 SwTableAutoFormat::GetTableStyleColRole(size_t nCol, size_t nCols,
+                                                   const SwTableStyleSettings& rSettings)
+{
+    RowColRole eRole;
+    if (!nCol)
+        eRole = RowColRole::First;
+    else if (nCol + 1 == nCols)
+        eRole = RowColRole::Last;
+    else
+        eRole = (nCol - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
+
+    if (eRole == RowColRole::First && !rSettings.m_bUseFirstColumnStyle)
+        eRole = RowColRole::BandA;
+    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastColumnStyle)
+        eRole = RowColRole::BandB;
+
+    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseColumnBandingStyle)
+        eRole = RowColRole::BandA;
+
+    return static_cast<sal_uInt8>(eRole);
+}
+
 void SwTableAutoFormat::SetXObject(rtl::Reference<SwXTextTableStyle> const& xObject)
 {
     m_xUnoTextTableStyle = xObject.get();

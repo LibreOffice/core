@@ -40,6 +40,7 @@
 #include "swdllapi.h"
 
 struct SwAfVersions;
+struct SwTableStyleSettings;
 
 class SvNumberFormatter;
 class SwTable;
@@ -278,6 +279,32 @@ public:
      * cell in a given table.
      */
     static sal_uInt8 CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uInt32 nRow, sal_uInt32 nRows);
+
+    /// The 4 roles a row or column can play when resolving a table style live: one of the
+    /// two fixed ends, or one of the two bands that alternate between the ends.
+    enum class RowColRole : sal_uInt8
+    {
+        First = 0,
+        BandA = 1,
+        BandB = 2,
+        Last = 3
+    };
+
+    /// Number of values in RowColRole. A row role and a column role combine into one of
+    /// 16 box format positions as nRowRole * nRoleCount + nColRole.
+    static constexpr sal_uInt8 nRoleCount = static_cast<sal_uInt8>(RowColRole::Last) + 1;
+
+    /// Which of the 4 row roles a row plays when resolving a table style live, given how
+    /// many rows the table has and which row roles are switched on. An unused role falls
+    /// back to a banding role - or, with banding off too, uniformly to the first banding
+    /// role, the same way it already renders as a plain body row in the style itself.
+    static sal_uInt8 GetTableStyleRowRole(size_t nRow, size_t nRows,
+                                          const SwTableStyleSettings& rSettings);
+
+    /// Column equivalent of GetTableStyleRowRole, scoped to one line's own box count (a
+    /// line's box count can differ from another line's in the presence of merged cells).
+    static sal_uInt8 GetTableStyleColRole(size_t nCol, size_t nCols,
+                                          const SwTableStyleSettings& rSettings);
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable

@@ -4060,64 +4060,6 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
 
 namespace {
 
-/// The 4 roles a row or column can play when resolving a table style live: one of the two
-/// fixed ends, or one of the two bands that alternate between the ends.
-enum class RowColRole : sal_uInt8
-{
-    First = 0,
-    BandA = 1,
-    BandB = 2,
-    Last = 3
-};
-
-/// Which of a table style's 16 box-format positions applies to a row, given how many rows the
-/// table has and which row roles are switched on. Falls back to a banding role - or, with
-/// banding off too, uniformly to the first banding role - when a row's own role is off, the
-/// same way an unused role already renders as a plain body row in the style itself.
-sal_uInt8 lcl_TableStyleRowRole(size_t nRow, size_t nRows, const SwTableStyleSettings& rSettings)
-{
-    RowColRole eRole;
-    if (!nRow)
-        eRole = RowColRole::First;
-    else if (nRow + 1 == nRows)
-        eRole = RowColRole::Last;
-    else
-        eRole = (nRow - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
-
-    if (eRole == RowColRole::First && !rSettings.m_bUseFirstRowStyle)
-        eRole = RowColRole::BandA;
-    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastRowStyle)
-        eRole = RowColRole::BandB;
-
-    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseRowBandingStyle)
-        eRole = RowColRole::BandA;
-
-    return static_cast<sal_uInt8>(eRole);
-}
-
-/// Column equivalent of lcl_TableStyleRowRole, scoped to one line's own box count (a line's
-/// box count can differ from another line's in the presence of merged cells).
-sal_uInt8 lcl_TableStyleColRole(size_t nCol, size_t nCols, const SwTableStyleSettings& rSettings)
-{
-    RowColRole eRole;
-    if (!nCol)
-        eRole = RowColRole::First;
-    else if (nCol + 1 == nCols)
-        eRole = RowColRole::Last;
-    else
-        eRole = (nCol - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
-
-    if (eRole == RowColRole::First && !rSettings.m_bUseFirstColumnStyle)
-        eRole = RowColRole::BandA;
-    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastColumnStyle)
-        eRole = RowColRole::BandB;
-
-    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseColumnBandingStyle)
-        eRole = RowColRole::BandA;
-
-    return static_cast<sal_uInt8>(eRole);
-}
-
 /// Look up (or lazily build) the frame format this table shares between every cell in the
 /// given role, so that toggling a role or switching styles later is a re-parenting of a few
 /// shared formats rather than a rewrite of every cell's attributes.
@@ -4168,7 +4110,8 @@ bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
     {
         const SwTableBoxes& rBoxes = rLines[nRow]->GetTabBoxes();
         const size_t nCols = rBoxes.size();
-        const sal_uInt8 nRowRole = pStyle ? lcl_TableStyleRowRole(nRow, nRows, rSettings) : 0;
+        const sal_uInt8 nRowRole
+            = pStyle ? SwTableAutoFormat::GetTableStyleRowRole(nRow, nRows, rSettings) : 0;
         for (size_t nCol = 0; nCol < nCols; ++nCol)
         {
             SwTableBox* pBox = rBoxes[nCol];
@@ -4181,8 +4124,9 @@ bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
             SwFrameFormat* pTargetFormat;
             if (pStyle)
             {
-                const sal_uInt8 nColRole = lcl_TableStyleColRole(nCol, nCols, rSettings);
-                const sal_uInt8 nPos = static_cast<sal_uInt8>(nRowRole * 4 + nColRole);
+                const sal_uInt8 nColRole = SwTableAutoFormat::GetTableStyleColRole(nCol, nCols, rSettings);
+                const sal_uInt8 nPos = static_cast<sal_uInt8>(
+                        nRowRole * SwTableAutoFormat::nRoleCount + nColRole);
                 pTargetFormat = lcl_GetOrCreateTableStyleRoleFormat(
                         *this, rTable, *pStyle, nPos, nRows == 1, nCols == 1);
             }

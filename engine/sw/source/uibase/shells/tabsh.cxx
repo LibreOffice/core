@@ -60,6 +60,7 @@
 #include <fmtrowsplt.hxx>
 #include <fmtfsize.hxx>
 #include <node.hxx>
+#include <pagedesc.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <rootfrm.hxx>
@@ -70,6 +71,7 @@
 #include <uiitems.hxx>
 #include <tabsh.hxx>
 #include <tblafmt.hxx>
+#include <tblafmtpreview.hxx>
 #include <swtablerep.hxx>
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
@@ -1992,6 +1994,20 @@ void SwTableShell::GetTableDesignStyleState(SfxItemSet &rSet)
             }
             case SID_TABLE_STYLE_LIST:
             {
+                // Preview each style using the current table's own row/column role
+                // settings, so the swatches match what applying them would look like.
+                SwTableStyleSettings aSettings;
+                if (pTableNode)
+                    aSettings = pTableNode->GetTable().GetTableStyleSettings();
+
+                // The preview draws its own text lines in black or white, whichever one
+                // is readable against the current page style's background color.
+                const SwPageDesc& rPageDesc = rSh.GetPageDesc(rSh.GetCurPageDesc());
+                const Color& rPageBackColor
+                    = rPageDesc.GetMaster().GetAttrSet().Get(RES_BACKGROUND).GetColor();
+                const bool bIsPageDark
+                    = rPageBackColor != COL_TRANSPARENT && rPageBackColor.IsDark();
+
                 tools::JsonWriter aJson;
                 {
                     auto aArray = aJson.startArray("TableStyles");
@@ -2003,9 +2019,18 @@ void SwTableShell::GetTableDesignStyleState(SfxItemSet &rSet)
                             continue;
                         auto aStyleStruct = aJson.startStruct();
                         aJson.put("Name", rStyle.GetName().toString());
-                        // A rendered preview per style lands in a follow-up phase; the
-                        // browser already falls back to a placeholder icon for an empty one.
-                        aJson.put("Image", "");
+                        // The browser falls back to a placeholder icon if this is empty,
+                        // so one style's rendering failure doesn't blank the whole list.
+                        OString aDataUri;
+                        try
+                        {
+                            aDataUri = sw::CreateTableStylePreviewDataUri(rStyle, aSettings,
+                                                                          bIsPageDark);
+                        }
+                        catch (...)
+                        {
+                        }
+                        aJson.put("Image", OStringToOUString(aDataUri, RTL_TEXTENCODING_UTF8));
                     }
                 }
                 const OString aStr = aJson.finishAndGetAsOString();
