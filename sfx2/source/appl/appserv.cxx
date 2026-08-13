@@ -1452,6 +1452,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_MENUBAR:
                 {
+#ifdef MACOSX
+                    rSet.DisableItem( nWhich );
+                    rSet.Put( SfxVisibilityItem( nWhich, false ) );
+#else
                     Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
                     Reference< XFrame > xFrame = xDesktop->getActiveFrame();
 
@@ -1483,6 +1487,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );
                     }
+#endif
                     break;
                 }
                 case SID_SAFE_MODE:
