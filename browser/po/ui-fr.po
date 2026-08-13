@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-12 22:54+0000\n"
+"PO-Revision-Date: 2026-08-14 06:16+0000\n"
 "Last-Translator: Nioh <niohiguess@mailfence.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -63,7 +63,6 @@ msgid "Status"
 msgstr "État"
 
 #: admin/admin.strings.js:24
-#, fuzzy
 msgid "Details"
 msgstr "Détails"
 
@@ -473,7 +472,6 @@ msgid "Error"
 msgstr "Erreur"
 
 #: admin/src/AdminSocketServerAudit.js:107
-#, fuzzy
 msgid "Learn more"
 msgstr "En savoir plus"
 
@@ -667,7 +665,6 @@ msgid "Content"
 msgstr "Contenu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
-#, fuzzy
 msgid "Display"
 msgstr "Afficher"
 
@@ -892,6 +889,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
 msgstr ""
+"Les paramètres sont uniquement disponibles pour les utilisateurs connectés."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
