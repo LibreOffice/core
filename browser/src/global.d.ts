@@ -241,7 +241,7 @@ interface AppInterface {
 	documentSettingsLive?: boolean;
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;
-	impressTableStyles: ImpressTableStylesService;
+	tableStyleGallery: TableStyleGalleryService;
 	colorLastSelection: any;
 	serverAudit: any;
 	remoteLinks: Array<{

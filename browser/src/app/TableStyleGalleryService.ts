@@ -11,26 +11,37 @@
  */
 
 /*
- * This file contains the service which keeps the Impress "Table Design"
- * notebookbar tab's style gallery in sync with the engine's list of named
- * table design styles.
+ * This file contains the service which keeps the "Table Design" notebookbar tab's style gallery
+ * in sync with the engine's list of named table design styles. Writer and Impress differ only in
+ * the command that applies a style and reports the current one.
  */
 
-interface ImpressTableStyleEntry {
+interface TableStyleGalleryEntry {
 	Name: string;
 	Image: string; // data:image/png;base64,... rendered by the engine
 }
 
-class ImpressTableStylesService {
-	private styles: Array<ImpressTableStyleEntry> = [];
+class TableStyleGalleryService {
+	private styles: Array<TableStyleGalleryEntry> = [];
 	private currentStyleName: string = '';
 
 	constructor() {
 		app.map.on('commandstatechanged', this.onCommandState.bind(this));
 	}
 
+	// Writer applies a style with .uno:SetTableStyle rather than .uno:TableStyle: it already has
+	// an unrelated, older command named "TableStyle" (the table-styles family in the Manage
+	// Styles sidebar), and UNO command lookup resolves by name against whichever slot registered
+	// first, so reusing that name would silently dispatch to the wrong command. The document
+	// type is known only once the document has loaded, so it is looked up on every call.
+	private getApplyCommand(): string {
+		return app.map.getDocType() === 'text'
+			? '.uno:SetTableStyle'
+			: '.uno:TableStyle';
+	}
+
 	public onCommandState(e: any) {
-		if (e.commandName === '.uno:TableStyle') {
+		if (e.commandName === this.getApplyCommand()) {
 			if (typeof e.state !== 'string') return;
 			this.currentStyleName = e.state;
 			this.updateTableStylesGallery();
@@ -94,8 +105,11 @@ class ImpressTableStylesService {
 		const style = this.styles[stylePos];
 		if (!style) return;
 
-		app.map.sendUnoCommand('.uno:TableStyle', {
-			TableStyle: { type: 'string', value: style.Name },
+		// The engine's slot names the command's string parameter after the command itself.
+		const applyCommand = this.getApplyCommand();
+		const argument = applyCommand.substring('.uno:'.length);
+		app.map.sendUnoCommand(applyCommand, {
+			[argument]: { type: 'string', value: style.Name },
 		});
 	}
 }

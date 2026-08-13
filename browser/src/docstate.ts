@@ -300,7 +300,7 @@
 		DocumentColors: { name: _('Document colors'), colors: [] },
 	},
 	tableStyles: null, // TableStylesService
-	impressTableStyles: null, // ImpressTableStylesService
+	tableStyleGallery: null, // TableStyleGalleryService
 	colorLastSelection: {}, // last used colors for uno commands
 
 	serverAudit: null, // contains list of warnings / errors detected on the server instance

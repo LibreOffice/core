@@ -55,15 +55,25 @@ describe(['taglighthouse'], 'Accessibility Writer Notebookbar Tests', { testIsol
 		return tabs.find(function (t) { return t.name === name; });
 	}
 
-	it('Notebookbar tab: Table (context)', function () {
+	function enterTableContext() {
 		// Workaround: we start in a table, so table context
 		// should be active, but at the moment is it not, workaround
 		// that bug by leaving the table and reentering it.
 		helper.typeIntoDocument('{ctrl}{end}');
 		helper.typeIntoDocument('{ctrl}{end}');
 		helper.typeIntoDocument('{ctrl}{home}');
+	}
+
+	it('Notebookbar tab: Table (context)', function () {
+		enterTableContext();
 
 		selectAndValidateTab(findTab('Table'));
+	});
+
+	it('Notebookbar tab: TableDesign (context)', function () {
+		enterTableContext();
+
+		selectAndValidateTab(findTab('TableDesign'));
 	});
 
 	it('Notebookbar tab: Shape (context)', function () {

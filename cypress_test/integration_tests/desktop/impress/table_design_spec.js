@@ -55,7 +55,7 @@ describe(['tagdesktop'], 'Table Design tab', function() {
 		cy.cGet('#table-design-styles_0').should('be.visible');
 
 		cy.getFrameWindow().then(function(win) {
-			const wanted = win.app.impressTableStyles.generateTableStylesJSON().aria.label;
+			const wanted = win.app.tableStyleGallery.generateTableStylesJSON().aria.label;
 			expect(wanted, 'the name the tab asks for').to.not.be.empty;
 
 			a11yHelper.getAXNodes().then(function(nodes) {

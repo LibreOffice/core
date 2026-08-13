@@ -368,7 +368,7 @@ COOL_JS_LST =\
 	src/app/ExportFormats.ts \
 	src/docdispatcher.ts \
 	src/app/TableStylesService.ts \
-	src/app/ImpressTableStylesService.ts \
+	src/app/TableStyleGalleryService.ts \
 	src/core/geometry.ts \
 	src/core/TimerRegistry.ts \
 	src/core/DPIChangeListener.ts \
@@ -740,6 +740,8 @@ COOL_JS_LST =\
 	src/control/Notebookbar.AIAssistantTab.ts \
 	src/control/Notebookbar.WriterReferencesTab.ts \
 	src/control/Notebookbar.WriterTableTab.ts \
+	src/control/Notebookbar.TableDesignTabBase.ts \
+	src/control/Notebookbar.WriterTableDesignTab.ts \
 	src/control/Control.Notebookbar.js \
 	src/control/Control.NotebookbarWriter.js \
 	src/control/Control.NotebookbarCalc.js \
@@ -1599,7 +1601,7 @@ pot:
 		src/app/SlideAvatars.ts \
 		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \
-		src/app/ImpressTableStylesService.ts \
+		src/app/TableStyleGalleryService.ts \
 		src/canvas/sections/CommentListSection.ts \
 		src/canvas/sections/CommentSection.ts \
 		src/canvas/sections/CompareChangesLabelSection.ts \
@@ -1657,8 +1659,10 @@ pot:
 		src/control/Notebookbar.ImpressAnimationTab.ts \
 		src/control/Notebookbar.ImpressTableDesignTab.ts \
 		src/control/Notebookbar.ImpressTransitionTab.ts \
+		src/control/Notebookbar.TableDesignTabBase.ts \
 		src/control/Notebookbar.WriterReferencesTab.ts \
 		src/control/Notebookbar.WriterTableTab.ts \
+		src/control/Notebookbar.WriterTableDesignTab.ts \
 		src/control/Sidebar.FromNotebookbarPanel.ts \
 		src/control/Control.Notebookbar.js \
 		src/control/Control.NotebookbarBase.ts \

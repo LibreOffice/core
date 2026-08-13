@@ -603,6 +603,7 @@ label.notebookbar.ui-checkbox-label {
 .jsdialog #stylesview-iconview-list:not(.sidebar),
 .jsdialog #masterpagenb-iconview-list:not(.sidebar),
 .jsdialog #tablestyles_design-iconview-list:not(.sidebar),
+.jsdialog #table-design-styles-iconview-list:not(.sidebar),
 .jsdialog #transitions_icons-iconview-list:not(.sidebar),
 .jsdialog #iconview_theme_colors-iconview-list:not(.sidebar) {
 	height: auto !important;
@@ -657,6 +658,7 @@ label.notebookbar.ui-checkbox-label {
 .notebookbar#masterpageall_icons,
 .notebookbar#masterpagecurrent_icons,
 .notebookbar#tablestyles_design,
+.notebookbar#table-design-styles,
 .notebookbar#transitions_icons,
 .notebookbar#iconview_theme_colors,
 .notebookbar#custom_animation_list,

@@ -37,7 +37,7 @@ class ServerConnectionService {
 		app.console.debug('ServerConnectionService: onBasicUI');
 
 		app.tableStyles = new TableStylesService();
-		app.impressTableStyles = new ImpressTableStylesService();
+		app.tableStyleGallery = new TableStyleGalleryService();
 	}
 
 	public onWopiProps(props: {

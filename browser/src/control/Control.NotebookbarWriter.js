@@ -31,6 +31,10 @@ var formulaTabName = 'Formula';
 
 window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
+	onCallback: function(objectType, eventType, object, data, builder) {
+		return JSDialog.WriterTableDesignTab.onCallback(objectType, eventType, object, data, builder);
+	},
+
 	getTabs: function() {
 		return this._filterExtensionsTab(this._insertContributedNotebookbarTabs([
 			{
@@ -77,6 +81,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'name': formTabName,
 				'accessibility': { focusBack: true, combination: 'M' }
 			},
+			JSDialog.WriterTableDesignTab.getEntry(),
 			JSDialog.WriterTableTab.getEntry(),
 			{
 				'text': _('Shape'),
@@ -147,6 +152,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			this.getReviewTab(),
 			this.getFormatTab(),
 			this.getFormTab(),
+			this.getTableDesignTab(),
 			this.getTableTab(),
 			this.getShapeTab(),
 			this.getPictureTab(),
@@ -2547,6 +2553,11 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 		];
 
 		return this.getTabPage(reviewTabName, content);
+	},
+
+	getTableDesignTab: function() {
+		const tab = JSDialog.WriterTableDesignTab;
+		return this.getTabPage(tab.getName(), tab.getContent());
 	},
 
 	getTableTab: function() {
