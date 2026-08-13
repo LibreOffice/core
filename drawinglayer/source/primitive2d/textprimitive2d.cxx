@@ -207,7 +207,8 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
     const basegfx::BColor& rFontColor, const Color& rTextFillColor, short nLetterSpacing,
     bool bOpticalSizing, const std::vector<vcl::font::Variation>& rFontVariations,
-    sal_uInt8 nProportionalFontSize, short nEscapement)
+    const std::vector<vcl::font::FeatureSetting>& rFontFeatures, sal_uInt8 nProportionalFontSize,
+    short nEscapement)
     : maTextTransform(std::move(rNewTransform))
     , maText(std::move(rText))
     , mnTextPosition(nTextPosition)
@@ -221,6 +222,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     , mnLetterSpacing(nLetterSpacing)
     , mbOpticalSizing(bOpticalSizing)
     , maFontVariations(rFontVariations)
+    , maFontFeatures(rFontFeatures)
     , mnProportionalFontSize(nProportionalFontSize)
     , mnEscapement(nEscapement)
 {
@@ -278,6 +280,7 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
                 && getFontColor() == rCompare.getFontColor()
                 && maTextFillColor == rCompare.maTextFillColor
                 && getFontVariations() == rCompare.getFontVariations()
+                && getFontFeatures() == rCompare.getFontFeatures()
                 && getProportionalFontSize() == rCompare.getProportionalFontSize()
                 && getEscapement() == rCompare.getEscapement());
     }
