@@ -314,6 +314,11 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 			this._slideShowWindowProxy.close();
 			this._map.uiManager.closeSnackbar();
 		}
+		else if (e.code === 'F5') {
+			// This window/iframe is separate from the main editor, so the F5
+			// blocking there does not cover it; block the browser reload here too.
+			e.preventDefault();
+		}
 	},
 
 	_processSlideshowVideoForSafari: function() {
