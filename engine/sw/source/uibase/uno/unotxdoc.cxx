@@ -3973,6 +3973,8 @@ void SwXTextDocument::initializeForTiledRendering(const cpo::uno::Sequence<css::
         }
         else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
             aViewOption.SetOnlineSpell(rValue.Value.get<bool>());
+        else if (rValue.Name == ".uno:ControlCodes" && rValue.Value.has<bool>())
+            aViewOption.SetViewMetaCharsWithDefaults(rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
             sThemeName = rValue.Value.get<OUString>();
         else if (rValue.Name == ".uno:InvertBackground" && rValue.Value.has<OUString>())

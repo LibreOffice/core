@@ -2349,6 +2349,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " spellOnline=" << getSpellOnline();
         }
 
+        if (!getFormattingMarks().empty())
+        {
+            oss << " formattingMarks=" << getFormattingMarks();
+        }
+
         if (!getDarkTheme().empty())
         {
             oss << " darkTheme=" << getDarkTheme();

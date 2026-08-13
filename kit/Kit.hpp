@@ -379,7 +379,8 @@ private:
     bool forwardToChild(std::string_view prefix, const std::vector<char>& payload);
 
     static std::string makeRenderParams(const std::string& renderOpts, const std::string& userName,
-                                        const std::string& spellOnline, const std::string& theme,
+                                        const std::string& spellOnline,
+                                        const std::string& formattingMarks, const std::string& theme,
                                         const std::string& backgroundTheme,
                                         const std::string& userPrivateInfo);
 

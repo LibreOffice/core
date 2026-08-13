@@ -160,6 +160,21 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             ;
 }
 
+void SwViewOption::SetViewMetaCharsWithDefaults(bool b)
+{
+    SetViewMetaChars(b);
+    if (b && !(IsParagraph() || IsTab() || IsLineBreak() || IsShowHiddenChar() ||
+               IsShowBookmarks() || IsBlank()))
+    {
+        SetParagraph(b);
+        SetTab(b);
+        SetLineBreak(b);
+        SetBlank(b);
+        SetShowHiddenChar(b);
+        SetShowBookmarks(b);
+    }
+}
+
 bool SwViewOption::IsShowOutlineContentVisibilityButton() const
 {
     return m_nCoreOptions.bShowOutlineContentVisibilityButton;

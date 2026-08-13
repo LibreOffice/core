@@ -146,25 +146,6 @@ static void lcl_SetViewMarks(SwViewOption& rVOpt, bool bOn )
             ViewOptFlags::FieldShadings, bOn, true);
 }
 
-static void lcl_SetViewMetaChars( SwViewOption& rVOpt, bool bOn)
-{
-    rVOpt.SetViewMetaChars( bOn );
-    if(bOn && !(rVOpt.IsParagraph()     ||
-            rVOpt.IsTab()       ||
-            rVOpt.IsLineBreak() ||
-            rVOpt.IsShowHiddenChar() ||
-            rVOpt.IsShowBookmarks() ||
-            rVOpt.IsBlank()))
-    {
-        rVOpt.SetParagraph(bOn);
-        rVOpt.SetTab(bOn);
-        rVOpt.SetLineBreak(bOn);
-        rVOpt.SetBlank(bOn);
-        rVOpt.SetShowHiddenChar(bOn);
-        rVOpt.SetShowBookmarks(bOn);
-    }
-}
-
 void SwView::RecheckBrowseMode()
 {
     // OS: pay attention to numerical order!
@@ -684,7 +665,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsViewMetaChars();
 
-        lcl_SetViewMetaChars( *pOpt, bFlag );
+        pOpt->SetViewMetaCharsWithDefaults(bFlag);
         break;
 
     case FN_VIEW_REDLINE_RENDER_MODE:

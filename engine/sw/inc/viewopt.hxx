@@ -583,6 +583,8 @@ public:
     { return !m_bReadonly && m_nCoreOptions.bViewMetachars; }
     void SetViewMetaChars( bool b)
     { m_nCoreOptions.bViewMetachars = b; }
+    /// Sets the formatting marks, picking every individual mark when none is chosen yet.
+    void SetViewMetaCharsWithDefaults(bool b);
 
     bool IsRedlineRecordingOn() const { return m_nCoreOptions.bRedlineRecordingOn; }
 

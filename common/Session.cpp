@@ -260,6 +260,11 @@ void Session::parseDocOptions(const StringVector& tokens, int& part, std::string
             _spellOnline = std::move(value);
             ++offset;
         }
+        else if (name == "formattingMarks")
+        {
+            _formattingMarks = std::move(value);
+            ++offset;
+        }
         else if (name == "darkTheme")
         {
             _darkTheme = std::move(value);

@@ -460,6 +460,13 @@ class Socket {
 			msg += ' spellOnline=' + spellOnline;
 		}
 
+		// Formatting marks are a Writer-only setting, so the doc type the
+		// preference is stored under is known without waiting for the document.
+		const formattingMarks = window.prefs.get('text.ShowFormattingMarks');
+		if (formattingMarks) {
+			msg += ' formattingMarks=' + formattingMarks;
+		}
+
 		const darkTheme = window.prefs.seedDarkModeDefault();
 		msg += ' darkTheme=' + darkTheme;
 

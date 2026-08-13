@@ -1083,10 +1083,11 @@ class UIManager extends window.L.Control {
 			if (e.commandName !== '.uno:ControlCodes') return;
 			const isOn = e.state === 'true';
 
-			// The first state is core's starting value once the document view
-			// is ready. Sending the toggle any earlier is lost. Correct the
-			// state here with a single toggle when it does not match the saved
-			// preference, and let the resulting change be persisted below.
+			// The load applies the saved preference, so the first state normally
+			// already matches it and no toggle is needed. It can still disagree
+			// when the preference was not yet available as the load was sent, as
+			// the CODA apps fetch it over the bridge; correct that here with a
+			// single toggle and let the resulting change be persisted below.
 			if (!initialStateSeen) {
 				initialStateSeen = true;
 				if (isOn !== wantMarks) {

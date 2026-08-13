@@ -278,6 +278,10 @@ public:
 
     void setSpellOnline(const std::string& val) { _spellOnline = val; }
 
+    const std::string& getFormattingMarks() const { return _formattingMarks; }
+
+    void setFormattingMarks(const std::string& val) { _formattingMarks = val; }
+
     const std::string& getDarkTheme() const { return _darkTheme; }
 
     void setDarkTheme(const std::string& val) { _darkTheme = val; }
@@ -447,6 +451,9 @@ private:
 
     /// The start value of Auto Spell Checking whether it is enabled or disabled on start.
     std::string _spellOnline;
+
+    /// The start value of Formatting Marks whether they are shown or not on start.
+    std::string _formattingMarks;
 
     /// The start value for Dark Theme whether it is active or not on start.
     std::string _darkTheme;
