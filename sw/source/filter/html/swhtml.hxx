@@ -135,6 +135,9 @@ struct HTMLAttrTable
     HTMLAttr* pFontVariations;
     HTMLAttr* pFontVariationsCJK;
     HTMLAttr* pFontVariationsCTL;
+    HTMLAttr* pFontFeatures;
+    HTMLAttr* pFontFeaturesCJK;
+    HTMLAttr* pFontFeaturesCTL;
     HTMLAttr* pCharHidden;
 };
 
