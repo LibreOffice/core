@@ -822,7 +822,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	onMouseEnter() {
-		this.context.canvas.style.cursor = 'move';
+		this.context.canvas.style.cursor =
+			GraphicSelection.extraInfo?.isDraggable === false ? 'not-allowed' : 'move';
 	}
 
 	adjustSnapTransformCoordinate(x: number, y: number) {
@@ -1262,7 +1263,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	onMouseMove(position: cool.SimplePoint, dragDistance: number[]) {
-		let canDrag = !app.file.textCursor.visible;
+		let canDrag = !app.file.textCursor.visible && GraphicSelection.extraInfo?.isDraggable !== false;
 
 		if (canDrag && app.map.getDocType() === 'presentation') {
 			// Tables get selected when multiple cells are selected. In this case, we check if DeleteRows is disabled.

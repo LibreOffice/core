@@ -38,6 +38,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
+#include <svx/svxids.hrc>
 #include <svx/svdomedia.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -667,6 +669,74 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(), Size(100, 100)),
                          pRectangleObject->GetLogicRect());
     pRectangleObject->NbcMove({ 100, 100 });
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testMoveProtectedShapeIgnoresGeoAttr)
+{
+    // cool#7286: SdrEditView::SetGeoAttrToMarked is what commits a shape drag
+    // done with the mouse. It checked only whether the marked object could
+    // move at all, never whether its position was protected, so a
+    // position-protected shape still moved.
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aRect(Point(100, 100), Size(100, 100));
+    rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aRect);
+    pPage->NbcInsertObject(pRectangleObject.get());
+    pRectangleObject->SetMoveProtect(true);
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.ShowSdrPage(pPage.get());
+    aView.MarkObj(pRectangleObject.get(), aView.GetSdrPageView());
+
+    SfxItemSet aNewPos(pModel->GetItemPool(),
+                       svl::Items<SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_POS_Y>);
+    aNewPos.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X, 500));
+    aNewPos.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y, 500));
+    aView.SetGeoAttrToMarked(aNewPos);
+
+    // Without the fix, this would have moved the shape to (500, 500),
+    // ignoring the protection flag.
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testResizeProtectedShapeIgnoresGeoAttr)
+{
+    // cool#7286: same gap as testMoveProtectedShapeIgnoresGeoAttr, but for
+    // the size protection flag.
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aRect(Point(100, 100), Size(100, 100));
+    rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aRect);
+    pPage->NbcInsertObject(pRectangleObject.get());
+    pRectangleObject->SetResizeProtect(true);
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.ShowSdrPage(pPage.get());
+    aView.MarkObj(pRectangleObject.get(), aView.GetSdrPageView());
+
+    SfxItemSet aNewSize(pModel->GetItemPool(),
+                        svl::Items<SID_ATTR_TRANSFORM_WIDTH, SID_ATTR_TRANSFORM_HEIGHT>);
+    aNewSize.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH, 500));
+    aNewSize.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT, 500));
+    aView.SetGeoAttrToMarked(aNewSize);
+
+    // Without the fix, this would have grown the shape to 500x500, ignoring
+    // the protection flag.
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
                          pRectangleObject->GetLogicRect());
 

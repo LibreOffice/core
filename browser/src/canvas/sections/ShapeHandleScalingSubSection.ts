@@ -158,6 +158,8 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent) {
 		if (this.sectionProperties.cropModeEnabled)
 			this.context.canvas.style.cursor = this.sectionProperties.cropCursor;
+		else if (GraphicSelection.extraInfo?.isResizable === false)
+			this.context.canvas.style.cursor = 'not-allowed';
 		else
 			this.context.canvas.style.cursor = this.sectionProperties.mousePointerType;
 	}
@@ -407,6 +409,10 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		if (this.containerObject.isDraggingSomething()) {
 			this.stopPropagating();
 			e.stopPropagation();
+
+			if (!this.sectionProperties.cropModeEnabled && GraphicSelection.extraInfo?.isResizable === false)
+				return;
+
 			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
 			this.moveHandlesOnDrag(point, e);
 

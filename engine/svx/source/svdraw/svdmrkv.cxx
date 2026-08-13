@@ -1083,6 +1083,32 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     }
                 }
                 aExtraInfo.append(", \"isRotatable\": " + OString::boolean(bRotatable));
+
+                // The selection is draggable only when no marked object has its
+                // position protected.
+                bool bMoveProtect = false;
+                for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
+                {
+                    if (rMarkList.GetMark(nMark)->GetMarkedSdrObj()->IsMoveProtect())
+                    {
+                        bMoveProtect = true;
+                        break;
+                    }
+                }
+                aExtraInfo.append(", \"isDraggable\": " + OString::boolean(!bMoveProtect));
+
+                // The selection is resizable only when no marked object has its
+                // size protected.
+                bool bResizeProtect = false;
+                for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
+                {
+                    if (rMarkList.GetMark(nMark)->GetMarkedSdrObj()->IsResizeProtect())
+                    {
+                        bResizeProtect = true;
+                        break;
+                    }
+                }
+                aExtraInfo.append(", \"isResizable\": " + OString::boolean(!bResizeProtect));
             }
 
             if (bIsChart)

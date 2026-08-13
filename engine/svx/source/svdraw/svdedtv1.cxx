@@ -1867,7 +1867,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     }
 
     // change size and height
-    if (bChgSiz && (m_bResizeFreeAllowed || m_bResizePropAllowed)) {
+    if (bChgSiz && (m_bResizeFreeAllowed || m_bResizePropAllowed) && !m_bResizeProtect) {
         auto nWidth = aRect.Right()-aRect.Left();
         double aWdt = nWidth == 0 ? 0 : (double(nSizX) / nWidth);
         auto nHeight = aRect.Bottom()-aRect.Top();
@@ -1927,7 +1927,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     }
 
     // change position
-    bool bMoveAllowed = m_bMoveAllowed;
+    bool bMoveAllowed = m_bMoveAllowed && !m_bMoveProtect;
     SfxViewShell* pViewShell = GetSfxViewShell();
     if (!bMoveAllowed && pViewShell && pViewShell->GetSignPDFCertificate().Is())
     {
