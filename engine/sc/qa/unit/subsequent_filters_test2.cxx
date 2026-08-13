@@ -1669,6 +1669,61 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testNamedTableRef)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTableRefColumnLineBreak)
+{
+    createScDoc("xlsx/tableref-column-linebreak.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // The imported table column name keeps its real line break: the _x000a_
+    // escape in the tableColumn "name" attribute is decoded on import.
+    const ScDBData* pData
+        = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLEWITHBREAK"_ustr);
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT(!pData->GetTableColumnNames().empty());
+    CPPUNIT_ASSERT_EQUAL(u"Also LONG\nBUT TWO LINES"_ustr, pData->GetTableColumnNames()[0]);
+
+    // The structured reference keeps the real line break in its string form
+    // (like Excel's two-paragraph display), not an _x000a_ escape.
+    const OUString aTotalFormula = pDoc->GetFormula(5, 5, 0); // totals row F6
+    CPPUNIT_ASSERT(aTotalFormula.indexOf(u"_x000a_") < 0);
+    CPPUNIT_ASSERT(aTotalFormula.indexOf('\n') >= 0);
+
+    // Both defined names resolve to their column's 4 data cells. Without the fix
+    // LongNameWithBreak fails to resolve and COUNTA yields #NAME?.
+    pDoc->SetString(ScAddress(7, 0, 0), u"=COUNTA(LongNameNormal)"_ustr);
+    pDoc->SetString(ScAddress(7, 1, 0), u"=COUNTA(LongNameWithBreak)"_ustr);
+    pDoc->CalcAll();
+    ScFormulaCell* pNormal = pDoc->GetFormulaCell(ScAddress(7, 0, 0));
+    ScFormulaCell* pBreak = pDoc->GetFormulaCell(ScAddress(7, 1, 0));
+    CPPUNIT_ASSERT(pNormal);
+    CPPUNIT_ASSERT(pBreak);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pNormal->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pBreak->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(7, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTableRefColumnLineBreakExport)
+{
+    createScDoc("xlsx/tableref-column-linebreak.xlsx");
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDoc = getScDoc();
+
+    const ScDBData* pData
+        = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLEWITHBREAK"_ustr);
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT(!pData->GetTableColumnNames().empty());
+    CPPUNIT_ASSERT_EQUAL(u"Also LONG\nBUT TWO LINES"_ustr, pData->GetTableColumnNames()[0]);
+
+    // The defined name still resolves to its column's 4 data cells after export.
+    pDoc->SetString(ScAddress(7, 1, 0), u"=COUNTA(LongNameWithBreak)"_ustr);
+    pDoc->CalcAll();
+    ScFormulaCell* pBreak = pDoc->GetFormulaCell(ScAddress(7, 1, 0));
+    CPPUNIT_ASSERT(pBreak);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pBreak->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(7, 1, 0)));
+}
+
 namespace
 {
 void testCells(const ScDocument* pDoc)
