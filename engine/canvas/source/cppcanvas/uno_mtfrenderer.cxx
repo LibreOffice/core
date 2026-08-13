@@ -54,7 +54,7 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     ScopedVclPtrInstance<VirtualDevice> xVDev(*reinterpret_cast<OutputDevice*>(pOutputDevice), DeviceFormat::WITH_ALPHA);
     xVDev->SetOutputSizePixel(aSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
 
-    vclcanvas::Canvas aBitmapCanvas(xVDev.get());
+    vclcanvas::Canvas aBitmapCanvas(*xVDev);
 
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
     ::basegfx::B2DHomMatrix aMatrix;

@@ -96,16 +96,13 @@ namespace vclcanvas
         }
     }
 
-    Canvas::Canvas( OutputDevice* pOutDev )
+    Canvas::Canvas( OutputDevice& rOutDev )
     {
         SolarMutexGuard aGuard;
 
         SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );
 
-        if( !pOutDev )
-            throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
-
-        mxOutDev = pOutDev;
+        mxOutDev = &rOutDev;
     }
 
 
@@ -126,26 +123,18 @@ namespace vclcanvas
         ENSURE_OR_RETURN_FALSE( rGrf,
                           "Invalid Graphic" );
 
-        if( !mxOutDev )
-            return false; // disposed
-        else
-        {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
-            setupOutDevState( viewState, renderState, IGNORE_COLOR );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+        setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
-            if (!rGrf->Draw(*mxOutDev, rPt, rSz, &rAttr))
-                return false;
+        if (!rGrf->Draw(*mxOutDev, rPt, rSz, &rAttr))
+            return false;
 
-            return true;
-        }
+        return true;
     }
 
     basegfx::B2DPolyPolygon Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-        if( !mxOutDev )
-            return {}; // we're disposed
 
         // vcl only handles even_odd polygons
         return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points );
@@ -154,10 +143,6 @@ namespace vclcanvas
     void Canvas::clear()
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-        // are we disposed?
-        if( !mxOutDev )
-            return;
 
         OutputDevice& rOutDev( *mxOutDev );
         vclcanvastools::OutDevStateKeeper aStateKeeper( rOutDev );
@@ -180,10 +165,6 @@ namespace vclcanvas
                           __func__);
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-        // are we disposed?
-        if( !mxOutDev )
-            return;
 
         // nope, render
         vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
@@ -234,105 +215,102 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
-        if( mxOutDev )
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+
+        ::basegfx::B2DHomMatrix aMatrix;
+        ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+
+        ::basegfx::B2DPolyPolygon aPolyPoly( xPolyPolygon );
+
+        // apply dashing, if any
+        if( strokeAttributes.DashArray.hasElements() )
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+            const std::vector<double> aDashArray(
+                ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray) );
 
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+            ::basegfx::B2DPolyPolygon aDashedPolyPoly;
 
-            ::basegfx::B2DPolyPolygon aPolyPoly( xPolyPolygon );
-
-            // apply dashing, if any
-            if( strokeAttributes.DashArray.hasElements() )
+            for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
             {
-                const std::vector<double> aDashArray(
-                    ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray) );
+                // AW: new interface; You may also get gaps in the same run now
+                basegfx::utils::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
+                //aDashedPolyPoly.append(
+                //    ::basegfx::utils::applyLineDashing( aPolyPoly.getB2DPolygon(i),
+                //                                        aDashArray ) );
+            }
 
-                ::basegfx::B2DPolyPolygon aDashedPolyPoly;
+            aPolyPoly = std::move(aDashedPolyPoly);
+        }
 
-                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+        ::basegfx::B2DSize aLinePixelSize(strokeAttributes.StrokeWidth,
+                                          strokeAttributes.StrokeWidth);
+        aLinePixelSize *= aMatrix;
+        ::basegfx::B2DPolyPolygon aStrokedPolyPoly;
+        if( aLinePixelSize.getLength() < 1.42 )
+        {
+            // line width < 1.0 in device pixel, thus, output as a
+            // simple hairline poly-polygon
+            setupOutDevState( viewState, renderState, LINE_COLOR );
+
+            aStrokedPolyPoly = std::move(aPolyPoly);
+        }
+        else
+        {
+            // render as a 'thick' line
+            setupOutDevState( viewState, renderState, FILL_COLOR );
+
+            for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+            {
+                double fMiterMinimumAngle;
+                if (strokeAttributes.MiterLimit <= 1.0)
                 {
-                    // AW: new interface; You may also get gaps in the same run now
-                    basegfx::utils::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
-                    //aDashedPolyPoly.append(
-                    //    ::basegfx::utils::applyLineDashing( aPolyPoly.getB2DPolygon(i),
-                    //                                        aDashArray ) );
+                    fMiterMinimumAngle = M_PI_2;
                 }
-
-                aPolyPoly = std::move(aDashedPolyPoly);
-            }
-
-            ::basegfx::B2DSize aLinePixelSize(strokeAttributes.StrokeWidth,
-                                              strokeAttributes.StrokeWidth);
-            aLinePixelSize *= aMatrix;
-            ::basegfx::B2DPolyPolygon aStrokedPolyPoly;
-            if( aLinePixelSize.getLength() < 1.42 )
-            {
-                // line width < 1.0 in device pixel, thus, output as a
-                // simple hairline poly-polygon
-                setupOutDevState( viewState, renderState, LINE_COLOR );
-
-                aStrokedPolyPoly = std::move(aPolyPoly);
-            }
-            else
-            {
-                // render as a 'thick' line
-                setupOutDevState( viewState, renderState, FILL_COLOR );
-
-                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+                else
                 {
-                    double fMiterMinimumAngle;
-                    if (strokeAttributes.MiterLimit <= 1.0)
-                    {
-                        fMiterMinimumAngle = M_PI_2;
-                    }
-                    else
-                    {
-                        fMiterMinimumAngle = 2.0 * asin(1.0/strokeAttributes.MiterLimit);
-                    }
-
-                    // TODO(F2): Also use Cap settings from
-                    // StrokeAttributes, the
-                    // createAreaGeometryForLineStartEnd() method does not
-                    // seem to fit very well here
-
-                    // AW: New interface, will create bezier polygons now
-                    aStrokedPolyPoly.append(basegfx::utils::createAreaGeometry(
-                        aPolyPoly.getB2DPolygon(i),
-                        strokeAttributes.StrokeWidth*0.5,
-                        b2DJoineFromJoin(strokeAttributes.JoinType),
-                        unoCapeFromCap(strokeAttributes.StartCapType),
-                        basegfx::deg2rad(12.5) /* default fMaxAllowedAngle*/ ,
-                        0.4 /* default fMaxPartOfEdge*/ ,
-                        fMiterMinimumAngle
-                        ));
-                    //aStrokedPolyPoly.append(
-                    //    ::basegfx::utils::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
-                    //                                                    strokeAttributes.StrokeWidth*0.5,
-                    //                                                    b2DJoineFromJoin(strokeAttributes.JoinType) ) );
+                    fMiterMinimumAngle = 2.0 * asin(1.0/strokeAttributes.MiterLimit);
                 }
+
+                // TODO(F2): Also use Cap settings from
+                // StrokeAttributes, the
+                // createAreaGeometryForLineStartEnd() method does not
+                // seem to fit very well here
+
+                // AW: New interface, will create bezier polygons now
+                aStrokedPolyPoly.append(basegfx::utils::createAreaGeometry(
+                    aPolyPoly.getB2DPolygon(i),
+                    strokeAttributes.StrokeWidth*0.5,
+                    b2DJoineFromJoin(strokeAttributes.JoinType),
+                    unoCapeFromCap(strokeAttributes.StartCapType),
+                    basegfx::deg2rad(12.5) /* default fMaxAllowedAngle*/ ,
+                    0.4 /* default fMaxPartOfEdge*/ ,
+                    fMiterMinimumAngle
+                    ));
+                //aStrokedPolyPoly.append(
+                //    ::basegfx::utils::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
+                //                                                    strokeAttributes.StrokeWidth*0.5,
+                //                                                    b2DJoineFromJoin(strokeAttributes.JoinType) ) );
             }
+        }
 
-            // transform only _now_, all the StrokeAttributes are in
-            // user coordinates.
-            aStrokedPolyPoly.transform( aMatrix );
+        // transform only _now_, all the StrokeAttributes are in
+        // user coordinates.
+        aStrokedPolyPoly.transform( aMatrix );
 
-            // TODO(F2): When using alpha here, must handle that via
-            // temporary surface or somesuch.
+        // TODO(F2): When using alpha here, must handle that via
+        // temporary surface or somesuch.
 
-            // Note: the generated stroke poly-polygon is NOT free of
-            // self-intersections. Therefore, if we would render it
-            // via OutDev::DrawPolyPolygon(), on/off fill would
-            // generate off areas on those self-intersections.
-            for( sal_uInt32 i=0; i<aStrokedPolyPoly.count(); ++i )
-            {
-                const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
-                if( polygon.isClosed()) {
-                    mxOutDev->DrawPolygon( polygon );
-                } else {
-                    mxOutDev->DrawPolyLine( polygon );
-                }
+        // Note: the generated stroke poly-polygon is NOT free of
+        // self-intersections. Therefore, if we would render it
+        // via OutDev::DrawPolyPolygon(), on/off fill would
+        // generate off areas on those self-intersections.
+        for( sal_uInt32 i=0; i<aStrokedPolyPoly.count(); ++i )
+        {
+            const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
+            if( polygon.isClosed()) {
+                mxOutDev->DrawPolygon( polygon );
+            } else {
+                mxOutDev->DrawPolyLine( polygon );
             }
         }
     }
@@ -350,25 +328,22 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
-        if( mxOutDev )
-        {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
 
-            const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
-            ::basegfx::B2DPolyPolygon aB2DPolyPoly(xPolyPolygon);
-            aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
-            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
-                                             aB2DPolyPoly,
-                                             viewState, renderState ) );
-            if( nAlpha == 255 )
-            {
-                mxOutDev->DrawPolyPolygon( aPolyPoly );
-            }
-            else
-            {
-                const int nTransPercent( ((255 - nAlpha) * 100 + 128) / 255 );  // normal rounding, no truncation here
-                mxOutDev->DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
-            }
+        const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
+        ::basegfx::B2DPolyPolygon aB2DPolyPoly(xPolyPolygon);
+        aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
+        const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
+                                         aB2DPolyPoly,
+                                         viewState, renderState ) );
+        if( nAlpha == 255 )
+        {
+            mxOutDev->DrawPolyPolygon( aPolyPoly );
+        }
+        else
+        {
+            const int nTransPercent( ((255 - nAlpha) * 100 + 128) / 255 );  // normal rounding, no truncation here
+            mxOutDev->DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
         }
 
         // TODO(P1): Provide caching here.
@@ -388,13 +363,8 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        if( mxOutDev )
-        {
-            // TODO(F2): font properties and font matrix
-            return new CanvasFont(fontRequest, eMark, fontMatrix, *mxOutDev);
-        }
-
-        return rtl::Reference< vclcanvas::CanvasFont >();
+        // TODO(F2): font properties and font matrix
+        return new CanvasFont(fontRequest, eMark, fontMatrix, *mxOutDev);
     }
 
 
@@ -416,40 +386,37 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xFont.is(),
                          "font is NULL");
 
-        if( mxOutDev )
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+
+        ::Point aOutpos;
+        if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
+            return; // no output necessary
+
+        // change text direction and layout mode
+        vcl::text::ComplexTextLayoutFlags nLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
+        switch( textDirection )
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+            case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
+            case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+                break;
 
-            ::Point aOutpos;
-            if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
-                return; // no output necessary
-
-            // change text direction and layout mode
-            vcl::text::ComplexTextLayoutFlags nLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
-            switch( textDirection )
-            {
-                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
-                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
-                    break;
-
-                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
-                    [[fallthrough]];
-                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
-                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginRight;
-                    break;
-            }
-
-            // TODO(F2): alpha
-            mxOutDev->SetLayoutMode( nLayoutMode );
-            mxOutDev->DrawText( aOutpos,
-                                text.Text,
-                                ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
-                                ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
+            case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+                [[fallthrough]];
+            case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginRight;
+                break;
         }
+
+        // TODO(F2): alpha
+        mxOutDev->SetLayoutMode( nLayoutMode );
+        mxOutDev->DrawText( aOutpos,
+                            text.Text,
+                            ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
+                            ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
     }
 
 
@@ -466,23 +433,20 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
-        if( mxOutDev )
-        {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
 
-            // TODO(T3): Race condition. We're taking the font
-            // from xLayoutedText, and then calling draw() at it,
-            // without exclusive access. Move setupTextOutput(),
-            // e.g. to impltools?
+        // TODO(T3): Race condition. We're taking the font
+        // from xLayoutedText, and then calling draw() at it,
+        // without exclusive access. Move setupTextOutput(),
+        // e.g. to impltools?
 
-            ::Point aOutpos;
-            if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                return; // no output necessary
+        ::Point aOutpos;
+        if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
+            return; // no output necessary
 
-            // TODO(F2): What about the offset scalings?
-            // TODO(F2): alpha
-            xLayoutedText->draw( *mxOutDev, aOutpos, viewState, renderState );
-        }
+        // TODO(F2): What about the offset scalings?
+        // TODO(F2): alpha
+        xLayoutedText->draw( *mxOutDev, aOutpos, viewState, renderState );
     }
 
     void
@@ -498,32 +462,29 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
-        if( mxOutDev )
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+        setupOutDevState( viewState, renderState, LINE_COLOR );
+
+        const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( xPolyPolygon, viewState, renderState ) );
+
+        if( xPolyPolygon.isClosed() )
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
-            setupOutDevState( viewState, renderState, LINE_COLOR );
+            mxOutDev->DrawPolyPolygon( aPolyPoly );
+        }
+        else
+        {
+            // mixed open/closed state. Cannot render open polygon
+            // via DrawPolyPolygon(), since that implicitly
+            // closed every polygon. OTOH, no need to distinguish
+            // further and render closed polygons via
+            // DrawPolygon(), and open ones via DrawPolyLine():
+            // closed polygons will simply already contain the
+            // closing segment.
+            sal_uInt16 nSize( aPolyPoly.Count() );
 
-            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( xPolyPolygon, viewState, renderState ) );
-
-            if( xPolyPolygon.isClosed() )
+            for( sal_uInt16 i=0; i<nSize; ++i )
             {
-                mxOutDev->DrawPolyPolygon( aPolyPoly );
-            }
-            else
-            {
-                // mixed open/closed state. Cannot render open polygon
-                // via DrawPolyPolygon(), since that implicitly
-                // closed every polygon. OTOH, no need to distinguish
-                // further and render closed polygons via
-                // DrawPolygon(), and open ones via DrawPolyLine():
-                // closed polygons will simply already contain the
-                // closing segment.
-                sal_uInt16 nSize( aPolyPoly.Count() );
-
-                for( sal_uInt16 i=0; i<nSize; ++i )
-                {
-                    mxOutDev->DrawPolyLine( aPolyPoly[i] );
-                }
+                mxOutDev->DrawPolyLine( aPolyPoly[i] );
             }
         }
     }
@@ -533,9 +494,6 @@ namespace vclcanvas
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        if( !mxOutDev )
-            return geometry::IntegerSize2D(); // we're disposed
-
         return vcl::unotools::integerSize2DFromSize( mxOutDev->GetOutputSizePixel() );
     }
 
@@ -543,9 +501,6 @@ namespace vclcanvas
                                         const vclcanvas::RenderState&   renderState,
                                         ColorType                       eColorType ) const
     {
-        ENSURE_OR_THROW( mxOutDev,
-                         "outdev null. Are we disposed?" );
-
         ::canvastools::verifyInput( renderState,
                                       __func__,
                                       2,
@@ -613,162 +568,156 @@ namespace vclcanvas
                                       4,
                                       bModulateColors ? 3 : 0 );
 
-        if( mxOutDev )
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+        setupOutDevState( viewState, renderState, IGNORE_COLOR );
+
+        ::basegfx::B2DHomMatrix aMatrix;
+        ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+
+        ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
+        aOutputPos *= aMatrix;
+
+        ::Bitmap aBmp( rBitmap );
+
+        // TODO(F2): Implement modulation again for other color
+        // channels (currently, works only for alpha). Note: this
+        // is already implemented in transformBitmap()
+        if( bModulateColors &&
+            renderState.DeviceColor.has_value())
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
-            setupOutDevState( viewState, renderState, IGNORE_COLOR );
+            // optimize away the case where alpha modulation value
+            // is 1.0 - we then simply switch off modulation at all
+            bModulateColors = renderState.DeviceColor->GetAlpha() != 255;
+        }
 
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
-
-            ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
-            aOutputPos *= aMatrix;
-
-            ::Bitmap aBmp( rBitmap );
-
-            // TODO(F2): Implement modulation again for other color
-            // channels (currently, works only for alpha). Note: this
-            // is already implemented in transformBitmap()
-            if( bModulateColors &&
-                renderState.DeviceColor.has_value())
-            {
-                // optimize away the case where alpha modulation value
-                // is 1.0 - we then simply switch off modulation at all
-                bModulateColors = renderState.DeviceColor->GetAlpha() != 255;
-            }
-
-            // check whether we can render bitmap as-is: must not
-            // modulate colors, matrix must either be the identity
-            // transform (that's clear), _or_ contain only
+        // check whether we can render bitmap as-is: must not
+        // modulate colors, matrix must either be the identity
+        // transform (that's clear), _or_ contain only
+        // translational components.
+        if( !bModulateColors &&
+            (aMatrix.isIdentity() ||
+             (::basegfx::fTools::equalZero( aMatrix.get(0,1) ) &&
+              ::basegfx::fTools::equalZero( aMatrix.get(1,0) ) &&
+              ::rtl::math::approxEqual(aMatrix.get(0,0), 1.0) &&
+              ::rtl::math::approxEqual(aMatrix.get(1,1), 1.0)) ) )
+        {
+            // optimized case: identity matrix, or only
             // translational components.
-            if( !bModulateColors &&
-                (aMatrix.isIdentity() ||
-                 (::basegfx::fTools::equalZero( aMatrix.get(0,1) ) &&
-                  ::basegfx::fTools::equalZero( aMatrix.get(1,0) ) &&
-                  ::rtl::math::approxEqual(aMatrix.get(0,0), 1.0) &&
-                  ::rtl::math::approxEqual(aMatrix.get(1,1), 1.0)) ) )
-            {
-                // optimized case: identity matrix, or only
-                // translational components.
-                mxOutDev->DrawBitmap( vcl::unotools::pointFromB2DPoint( aOutputPos ), aBmp );
+            mxOutDev->DrawBitmap( vcl::unotools::pointFromB2DPoint( aOutputPos ), aBmp );
 
-                // Returning a cache object is not useful, the XBitmap
-                // itself serves this purpose
-                return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
+            // Returning a cache object is not useful, the XBitmap
+            // itself serves this purpose
+            return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
+        }
+        else if( mxOutDev->HasFastDrawTransformedBitmap())
+        {
+            ::basegfx::B2DHomMatrix aSizeTransform;
+            aSizeTransform.scale( aBmp.GetSizePixel().Width(), aBmp.GetSizePixel().Height() );
+            aMatrix = aMatrix * aSizeTransform;
+            const double fAlpha = bModulateColors ? renderState.DeviceColor->GetAlpha() : 1.0;
+
+            mxOutDev->DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
+            return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
+        }
+        else
+        {
+            // Matrix contains non-trivial transformation (or
+            // color modulation is requested), decompose to check
+            // whether GraphicObject suffices
+            ::basegfx::B2DVector aScale;
+            double               nRotate;
+            double               nShearX;
+            aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
+
+            GraphicAttr             aGrfAttr;
+            GraphicObjectSharedPtr  pGrfObj;
+
+            ::Size aBmpSize( aBmp.GetSizePixel() );
+
+            // setup alpha modulation
+            if( bModulateColors )
+            {
+                // TODO(F1): Note that the GraphicManager has a
+                // subtle difference in how it calculates the
+                // resulting alpha value: it's using the inverse
+                // alpha values (i.e. 'transparency'), and
+                // calculates transOrig + transModulate, instead
+                // of transOrig + transModulate -
+                // transOrig*transModulate (which would be
+                // equivalent to the origAlpha*modulateAlpha the
+                // DX canvas performs)
+                aGrfAttr.SetAlpha( renderState.DeviceColor->GetAlpha() );
             }
-            else if( mxOutDev->HasFastDrawTransformedBitmap())
-            {
-                ::basegfx::B2DHomMatrix aSizeTransform;
-                aSizeTransform.scale( aBmp.GetSizePixel().Width(), aBmp.GetSizePixel().Height() );
-                aMatrix = aMatrix * aSizeTransform;
-                const double fAlpha = bModulateColors ? renderState.DeviceColor->GetAlpha() : 1.0;
 
-                mxOutDev->DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
-                return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
+            if( ::basegfx::fTools::equalZero( nShearX ) )
+            {
+                // no shear, GraphicObject is enough (the
+                // GraphicObject only supports scaling, rotation
+                // and translation)
+
+                // #i75339# don't apply mirror flags, having
+                // negative size values is enough to make
+                // GraphicObject flip the bitmap
+
+                // The angle has to be mapped from radian to tenths of
+                // degrees with the orientation reversed: [0,2Pi) ->
+                // (3600,0].  Note that the original angle may have
+                // values outside the [0,2Pi) interval.
+                const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
+                aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
+
+                pGrfObj = std::make_shared<GraphicObject>( aBmp );
             }
             else
             {
-                // Matrix contains non-trivial transformation (or
-                // color modulation is requested), decompose to check
-                // whether GraphicObject suffices
-                ::basegfx::B2DVector aScale;
-                double               nRotate;
-                double               nShearX;
-                aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
+                // modify output position, to account for the fact
+                // that transformBitmap() always normalizes its output
+                // bitmap into the smallest enclosing box.
+                ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
+                                                            ::basegfx::B2DRectangle(0,
+                                                                                    0,
+                                                                                    aBmpSize.Width(),
+                                                                                    aBmpSize.Height()),
+                                                            aMatrix );
 
-                GraphicAttr             aGrfAttr;
-                GraphicObjectSharedPtr  pGrfObj;
+                aOutputPos.setX( aDestRect.getMinX() );
+                aOutputPos.setY( aDestRect.getMinY() );
 
-                ::Size aBmpSize( aBmp.GetSizePixel() );
+                // complex transformation, use generic affine bitmap
+                // transformation
+                aBmp = vclcanvastools::transformBitmap( aBmp, aMatrix );
 
-                // setup alpha modulation
-                if( bModulateColors )
-                {
-                    // TODO(F1): Note that the GraphicManager has a
-                    // subtle difference in how it calculates the
-                    // resulting alpha value: it's using the inverse
-                    // alpha values (i.e. 'transparency'), and
-                    // calculates transOrig + transModulate, instead
-                    // of transOrig + transModulate -
-                    // transOrig*transModulate (which would be
-                    // equivalent to the origAlpha*modulateAlpha the
-                    // DX canvas performs)
-                    aGrfAttr.SetAlpha( renderState.DeviceColor->GetAlpha() );
-                }
+                pGrfObj = std::make_shared<GraphicObject>( aBmp );
 
-                if( ::basegfx::fTools::equalZero( nShearX ) )
-                {
-                    // no shear, GraphicObject is enough (the
-                    // GraphicObject only supports scaling, rotation
-                    // and translation)
+                // clear scale values, generated bitmap already
+                // contains scaling
+                aScale.setX( 1.0 ); aScale.setY( 1.0 );
 
-                    // #i75339# don't apply mirror flags, having
-                    // negative size values is enough to make
-                    // GraphicObject flip the bitmap
-
-                    // The angle has to be mapped from radian to tenths of
-                    // degrees with the orientation reversed: [0,2Pi) ->
-                    // (3600,0].  Note that the original angle may have
-                    // values outside the [0,2Pi) interval.
-                    const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
-                    aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
-
-                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
-                }
-                else
-                {
-                    // modify output position, to account for the fact
-                    // that transformBitmap() always normalizes its output
-                    // bitmap into the smallest enclosing box.
-                    ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
-                                                                ::basegfx::B2DRectangle(0,
-                                                                                        0,
-                                                                                        aBmpSize.Width(),
-                                                                                        aBmpSize.Height()),
-                                                                aMatrix );
-
-                    aOutputPos.setX( aDestRect.getMinX() );
-                    aOutputPos.setY( aDestRect.getMinY() );
-
-                    // complex transformation, use generic affine bitmap
-                    // transformation
-                    aBmp = vclcanvastools::transformBitmap( aBmp, aMatrix );
-
-                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
-
-                    // clear scale values, generated bitmap already
-                    // contains scaling
-                    aScale.setX( 1.0 ); aScale.setY( 1.0 );
-
-                    // update bitmap size, bitmap has changed above.
-                    aBmpSize = aBmp.GetSizePixel();
-                }
-
-                // output GraphicObject
-                const ::Point aPt( vcl::unotools::pointFromB2DPoint( aOutputPos ) );
-                const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width() ),
-                                   ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height() ) );
-
-                pGrfObj->Draw(*mxOutDev,
-                              aPt,
-                              aSz,
-                              &aGrfAttr);
-
-                // created GraphicObject, which possibly cached
-                // display bitmap - return cache object, to retain
-                // that information.
-                return new CachedBitmap( std::move(pGrfObj),
-                                      aPt,
-                                      aSz,
-                                      aGrfAttr,
-                                      viewState,
-                                      renderState,
-                                      *this);
+                // update bitmap size, bitmap has changed above.
+                aBmpSize = aBmp.GetSizePixel();
             }
-        }
 
-        // Nothing rendered
-        return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
+            // output GraphicObject
+            const ::Point aPt( vcl::unotools::pointFromB2DPoint( aOutputPos ) );
+            const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width() ),
+                               ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height() ) );
+
+            pGrfObj->Draw(*mxOutDev,
+                          aPt,
+                          aSz,
+                          &aGrfAttr);
+
+            // created GraphicObject, which possibly cached
+            // display bitmap - return cache object, to retain
+            // that information.
+            return new CachedBitmap( std::move(pGrfObj),
+                                  aPt,
+                                  aSz,
+                                  aGrfAttr,
+                                  viewState,
+                                  renderState,
+                                  *this);
+        }
     }
 
     bool Canvas::setupTextOutput( ::Point&                                        o_rOutPos,
@@ -776,9 +725,6 @@ namespace vclcanvas
                                         const vclcanvas::RenderState&                   renderState,
                                         const rtl::Reference< vclcanvas::CanvasFont >& xFont   ) const
     {
-        ENSURE_OR_THROW( mxOutDev,
-                         "outdev null. Are we disposed?" );
-
         OutputDevice& rOutDev( *mxOutDev );
 
         setupOutDevState( viewState, renderState, TEXT_COLOR );

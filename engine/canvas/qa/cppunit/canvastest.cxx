@@ -76,7 +76,7 @@ public:
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();
-        mCanvas = std::make_unique<vclcanvas::Canvas>(mVclDevice.get());
+        mCanvas = std::make_unique<vclcanvas::Canvas>(*mVclDevice);
     }
 
     void testDrawLine()

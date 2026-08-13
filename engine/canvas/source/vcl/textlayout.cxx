@@ -82,7 +82,9 @@ namespace vclcanvas
         mpFont(std::move( rFont )),
         mxOutDev( xOutDev ),
         mnTextDirection( nDirection )
-    {}
+    {
+        assert(mxOutDev);
+    }
 
     // XTextLayout
 
@@ -123,9 +125,6 @@ namespace vclcanvas
     geometry::RealRectangle2D TextLayout::queryTextBounds(  )
     {
         SolarMutexGuard aGuard;
-
-        if( !mxOutDev )
-            return geometry::RealRectangle2D();
 
         OutputDevice& rOutDev = *mxOutDev;
 

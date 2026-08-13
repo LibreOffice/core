@@ -593,316 +593,383 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( !textures.empty(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
-        if( mxOutDev )
+        assert( mxOutDev );
+
+        vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+
+        setupOutDevState( viewState, renderState, IGNORE_COLOR );
+        ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
+                                   xPolyPolygon,
+                                   viewState, renderState ) );
+
+        // TODO(F1): Multi-texturing
+        if( textures[0].Gradient.is() )
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
+            ::canvas::ParametricPolyPolygon* pGradient = textures[0].Gradient.get();
 
-            setupOutDevState( viewState, renderState, IGNORE_COLOR );
-            ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
-                                       xPolyPolygon,
-                                       viewState, renderState ) );
-
-            // TODO(F1): Multi-texturing
-            if( textures[0].Gradient.is() )
+            if( pGradient->getValues().maColors.size() )
             {
-                ::canvas::ParametricPolyPolygon* pGradient = textures[0].Gradient.get();
+                // copy state from Gradient polypoly locally
+                // (given object might change!)
+                const ::canvas::ParametricPolyPolygon::Values aValues(
+                    pGradient->getValues() );
 
-                if( pGradient->getValues().maColors.size() )
+                if( aValues.maColors.size() < 2 )
                 {
-                    // copy state from Gradient polypoly locally
-                    // (given object might change!)
-                    const ::canvas::ParametricPolyPolygon::Values aValues(
-                        pGradient->getValues() );
-
-                    if( aValues.maColors.size() < 2 )
-                    {
-                        vclcanvas::RenderState aTempState=renderState;
-                        aTempState.DeviceColor = aValues.maColors[0];
-                        fillPolyPolygon(xPolyPolygon, viewState, aTempState);
-                    }
-                    else
-                    {
-                        // TODO(E1): Return value
-                        // TODO(F1): FillRule
-                        gradientFill( *mxOutDev,
-                                      aValues,
-                                      aValues.maColors,
-                                      aPolyPoly,
-                                      viewState,
-                                      renderState,
-                                      textures[0]);
-                    }
+                    vclcanvas::RenderState aTempState=renderState;
+                    aTempState.DeviceColor = aValues.maColors[0];
+                    fillPolyPolygon(xPolyPolygon, viewState, aTempState);
                 }
                 else
                 {
-                    // TODO(F1): The generic case is missing here
-                    ENSURE_OR_THROW( false,
-                                      "CanvasHelper::fillTexturedPolyPolygon(): unknown parametric polygon encountered" );
+                    // TODO(E1): Return value
+                    // TODO(F1): FillRule
+                    gradientFill( *mxOutDev,
+                                  aValues,
+                                  aValues.maColors,
+                                  aPolyPoly,
+                                  viewState,
+                                  renderState,
+                                  textures[0]);
                 }
             }
-            else if( !textures[0].aBitmap.IsEmpty() )
+            else
             {
-                geometry::IntegerSize2D aBmpSize = vcl::unotools::integerSize2DFromSize( textures[0].aBitmap.GetSizePixel() );
+                // TODO(F1): The generic case is missing here
+                ENSURE_OR_THROW( false,
+                                  "CanvasHelper::fillTexturedPolyPolygon(): unknown parametric polygon encountered" );
+            }
+        }
+        else if( !textures[0].aBitmap.IsEmpty() )
+        {
+            geometry::IntegerSize2D aBmpSize = vcl::unotools::integerSize2DFromSize( textures[0].aBitmap.GetSizePixel() );
 
-                ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
-                                 aBmpSize.Height != 0,
-                                 "CanvasHelper::fillTexturedPolyPolygon(): zero-sized texture bitmap" );
+            ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
+                             aBmpSize.Height != 0,
+                             "CanvasHelper::fillTexturedPolyPolygon(): zero-sized texture bitmap" );
 
-                // determine maximal bound rect of texture-filled
-                // polygon
-                const ::tools::Rectangle aPolygonDeviceRect(
-                    aPolyPoly.GetBoundRect() );
+            // determine maximal bound rect of texture-filled
+            // polygon
+            const ::tools::Rectangle aPolygonDeviceRect(
+                aPolyPoly.GetBoundRect() );
 
 
-                // first of all, determine whether we have a
-                // drawBitmap() in disguise
-                // =========================================
+            // first of all, determine whether we have a
+            // drawBitmap() in disguise
+            // =========================================
 
-                const bool bRectangularPolygon( vclcanvastools::isRectangle( aPolyPoly ) );
+            const bool bRectangularPolygon( vclcanvastools::isRectangle( aPolyPoly ) );
 
-                ::basegfx::B2DHomMatrix aTotalTransform;
-                ::canvastools::mergeViewAndRenderTransform(aTotalTransform,
-                                                             viewState,
-                                                             renderState);
-                ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                                textures[0].AffineTransform );
+            ::basegfx::B2DHomMatrix aTotalTransform;
+            ::canvastools::mergeViewAndRenderTransform(aTotalTransform,
+                                                         viewState,
+                                                         renderState);
+            ::basegfx::B2DHomMatrix aTextureTransform;
+            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
+                                                            textures[0].AffineTransform );
 
-                aTotalTransform *= aTextureTransform;
+            aTotalTransform *= aTextureTransform;
 
-                const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
-                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvastools::calcTransformedRectBounds(
-                                                            aRect,
-                                                            aTotalTransform );
+            const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
+            ::basegfx::B2DRectangle aTextureDeviceRect = ::canvastools::calcTransformedRectBounds(
+                                                        aRect,
+                                                        aTotalTransform );
 
-                const ::tools::Rectangle aIntegerTextureDeviceRect(
-                    vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
+            const ::tools::Rectangle aIntegerTextureDeviceRect(
+                vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
-                if( bRectangularPolygon &&
-                    aIntegerTextureDeviceRect == aPolygonDeviceRect )
+            if( bRectangularPolygon &&
+                aIntegerTextureDeviceRect == aPolygonDeviceRect )
+            {
+                vclcanvas::RenderState aLocalState( renderState );
+                aLocalState.AffineTransform *= aTextureTransform;
+                ::basegfx::B2DHomMatrix aScaleCorrection;
+                aScaleCorrection.scale( 1.0/aBmpSize.Width,
+                                        1.0/aBmpSize.Height );
+                aLocalState.AffineTransform *= aScaleCorrection;
+
+                // need alpha modulation?
+                if( !::rtl::math::approxEqual( textures[0].Alpha,
+                                               1.0 ) )
                 {
-                    vclcanvas::RenderState aLocalState( renderState );
-                    aLocalState.AffineTransform *= aTextureTransform;
-                    ::basegfx::B2DHomMatrix aScaleCorrection;
-                    aScaleCorrection.scale( 1.0/aBmpSize.Width,
-                                            1.0/aBmpSize.Height );
-                    aLocalState.AffineTransform *= aScaleCorrection;
+                    // setup alpha modulation values
+                    aLocalState.DeviceColor = ::Color(ColorAlpha, textures[0].Alpha * 255, 0, 0, 0);
 
-                    // need alpha modulation?
+                    return drawBitmapModulated( textures[0].aBitmap,
+                                                viewState,
+                                                aLocalState );
+                }
+                else
+                {
+                    return drawBitmap( textures[0].aBitmap,
+                                       viewState,
+                                       aLocalState );
+                }
+            }
+            else
+            {
+                // No easy mapping to drawBitmap() - calculate
+                // texturing parameters
+                // ===========================================
+
+                ::Bitmap aBmp( textures[0].aBitmap );
+
+                // scale down bitmap to [0,1]x[0,1] rect, as required
+                // from the XCanvas interface.
+                ::basegfx::B2DHomMatrix aScaling;
+                ::basegfx::B2DHomMatrix aPureTotalTransform; // pure view*render*texture transform
+                aScaling.scale( 1.0/aBmpSize.Width,
+                                1.0/aBmpSize.Height );
+
+                aTotalTransform = aTextureTransform * aScaling;
+                aPureTotalTransform = aTextureTransform;
+
+                // combine with view and render transform
+                ::basegfx::B2DHomMatrix aMatrix;
+                ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+
+                // combine all three transformations into one
+                // global texture-to-device-space transformation
+                aTotalTransform *= aMatrix;
+                aPureTotalTransform *= aMatrix;
+
+                // analyze transformation, and setup an
+                // appropriate GraphicObject
+                ::basegfx::B2DVector aScale;
+                ::basegfx::B2DPoint  aOutputPos;
+                double               nRotate;
+                double               nShearX;
+                aTotalTransform.decompose( aScale, aOutputPos, nRotate, nShearX );
+
+                GraphicAttr             aGrfAttr;
+                GraphicObjectSharedPtr  pGrfObj;
+
+                if( ::basegfx::fTools::equalZero( nShearX ) )
+                {
+                    // no shear, GraphicObject is enough (the
+                    // GraphicObject only supports scaling, rotation
+                    // and translation)
+
+                    // #i75339# don't apply mirror flags, having
+                    // negative size values is enough to make
+                    // GraphicObject flip the bitmap
+
+                    // The angle has to be mapped from radian to tenths of
+                    // degrees with the orientation reversed: [0,2Pi) ->
+                    // (3600,0].  Note that the original angle may have
+                    // values outside the [0,2Pi) interval.
+                    const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
+                    aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
+
+                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
+                }
+                else
+                {
+                    // modify output position, to account for the fact
+                    // that transformBitmap() always normalizes its output
+                    // bitmap into the smallest enclosing box.
+                    ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
+                                                                ::basegfx::B2DRectangle(0,
+                                                                                        0,
+                                                                                        aBmpSize.Width,
+                                                                                        aBmpSize.Height),
+                                                                aMatrix );
+
+                    aOutputPos.setX( aDestRect.getMinX() );
+                    aOutputPos.setY( aDestRect.getMinY() );
+
+                    // complex transformation, use generic affine bitmap
+                    // transformation
+                    aBmp = vclcanvastools::transformBitmap( aBmp, aTotalTransform);
+
+                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
+
+                    // clear scale values, generated bitmap already
+                    // contains scaling
+                    aScale.setX( 1.0 ); aScale.setY( 1.0 );
+
+                    // update bitmap size, bitmap has changed above.
+                    aBmpSize = vcl::unotools::integerSize2DFromSize(aBmp.GetSizePixel());
+                }
+
+
+                // render texture tiled into polygon
+                // =================================
+
+                // calc device space direction vectors. We employ
+                // the following approach for tiled output: the
+                // texture bitmap is output in texture space
+                // x-major order, i.e. tile neighbors in texture
+                // space x direction are rendered back-to-back in
+                // device coordinate space (after the full device
+                // transformation). Thus, the aNextTile* vectors
+                // denote the output position updates in device
+                // space, to get from one tile to the next.
+                ::basegfx::B2DVector aNextTileX( 1.0, 0.0 );
+                ::basegfx::B2DVector aNextTileY( 0.0, 1.0 );
+                aNextTileX *= aPureTotalTransform;
+                aNextTileY *= aPureTotalTransform;
+
+                ::basegfx::B2DHomMatrix aInverseTextureTransform( aPureTotalTransform );
+
+                ENSURE_ARG_OR_THROW( aInverseTextureTransform.isInvertible(),
+                                 "CanvasHelper::fillTexturedPolyPolygon(): singular texture matrix" );
+
+                aInverseTextureTransform.invert();
+
+                // calc bound rect of extended texture area in
+                // device coordinates. Therefore, we first calc
+                // the area of the polygon bound rect in texture
+                // space. To maintain texture phase, this bound
+                // rect is then extended to integer coordinates
+                // (extended, because shrinking might leave some
+                // inner polygon areas unfilled).
+                // Finally, the bound rect is transformed back to
+                // device coordinate space, were we determine the
+                // start point from it.
+                ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvastools::calcTransformedRectBounds(
+                                                            vcl::unotools::b2DRectangleFromRectangle(aPolygonDeviceRect),
+                                                            aInverseTextureTransform );
+
+                // calc left, top of extended polygon rect in
+                // texture space, create one-texture instance rect
+                // from it (i.e. rect from start point extending
+                // 1.0 units to the right and 1.0 units to the
+                // bottom). Note that the rounding employed here
+                // is a bit subtle, since we need to round up/down
+                // as _soon_ as any fractional amount is
+                // encountered. This is to ensure that the full
+                // polygon area is filled with texture tiles.
+                const sal_Int32 nX1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinX() ) );
+                const sal_Int32 nY1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinY() ) );
+                const sal_Int32 nX2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxX() ) );
+                const sal_Int32 nY2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxY() ) );
+                const ::basegfx::B2DRectangle aSingleTextureRect(
+                    nX1, nY1,
+                    nX1 + 1.0,
+                    nY1 + 1.0 );
+
+                // and convert back to device space
+                ::basegfx::B2DRectangle aSingleDeviceTextureRect = ::canvastools::calcTransformedRectBounds(
+                                                            aSingleTextureRect,
+                                                            aPureTotalTransform );
+
+                const ::Point aPtRepeat( vcl::unotools::pointFromB2DPoint(
+                                             aSingleDeviceTextureRect.getMinimum() ) );
+                const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width ),
+                                   ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height ) );
+                const ::Size  aIntegerNextTileX( vcl::unotools::sizeFromB2DSize(aNextTileX) );
+                const ::Size  aIntegerNextTileY( vcl::unotools::sizeFromB2DSize(aNextTileY) );
+
+                const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                   ::basegfx::fround<::tools::Long>( aOutputPos.getX() ) : aPtRepeat.X(),
+                                   textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
+                                   ::basegfx::fround<::tools::Long>( aOutputPos.getY() ) : aPtRepeat.Y() );
+                const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                         1 : nX2 - nX1 );
+                const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                         1 : nY2 - nY1 );
+
+                OutputDevice& rOutDev( *mxOutDev );
+
+                if( bRectangularPolygon )
+                {
+                    // use optimized output path
+
+
+                    // this distinction really looks like a
+                    // micro-optimization, but in fact greatly speeds up
+                    // especially complex fills. That's because when using
+                    // clipping, we can output polygons instead of
+                    // poly-polygons, and don't have to output the gradient
+                    // twice for XOR
+
+                    // setup alpha modulation
                     if( !::rtl::math::approxEqual( textures[0].Alpha,
                                                    1.0 ) )
                     {
-                        // setup alpha modulation values
-                        aLocalState.DeviceColor = ::Color(ColorAlpha, textures[0].Alpha * 255, 0, 0, 0);
+                        // TODO(F1): Note that the GraphicManager has
+                        // a subtle difference in how it calculates
+                        // the resulting alpha value: it's using the
+                        // inverse alpha values (i.e. 'transparency'),
+                        // and calculates transOrig + transModulate,
+                        // instead of transOrig + transModulate -
+                        // transOrig*transModulate (which would be
+                        // equivalent to the origAlpha*modulateAlpha
+                        // the DX canvas performs)
+                        aGrfAttr.SetAlpha(
+                            static_cast< sal_uInt8 >(
+                                ::basegfx::fround( 255.0 * textures[0].Alpha ) ) );
+                    }
 
-                        return drawBitmapModulated( textures[0].aBitmap,
-                                                    viewState,
-                                                    aLocalState );
-                    }
-                    else
-                    {
-                        return drawBitmap( textures[0].aBitmap,
-                                           viewState,
-                                           aLocalState );
-                    }
+                    rOutDev.IntersectClipRegion( aPolygonDeviceRect );
+                    textureFill( rOutDev,
+                                 *pGrfObj,
+                                 aPt,
+                                 aIntegerNextTileX,
+                                 aIntegerNextTileY,
+                                 nTilesX,
+                                 nTilesY,
+                                 aSz,
+                                 aGrfAttr );
                 }
                 else
                 {
-                    // No easy mapping to drawBitmap() - calculate
-                    // texturing parameters
+                    // output texture the hard way: XORing out the
+                    // polygon
                     // ===========================================
 
-                    ::Bitmap aBmp( textures[0].aBitmap );
-
-                    // scale down bitmap to [0,1]x[0,1] rect, as required
-                    // from the XCanvas interface.
-                    ::basegfx::B2DHomMatrix aScaling;
-                    ::basegfx::B2DHomMatrix aPureTotalTransform; // pure view*render*texture transform
-                    aScaling.scale( 1.0/aBmpSize.Width,
-                                    1.0/aBmpSize.Height );
-
-                    aTotalTransform = aTextureTransform * aScaling;
-                    aPureTotalTransform = aTextureTransform;
-
-                    // combine with view and render transform
-                    ::basegfx::B2DHomMatrix aMatrix;
-                    ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
-
-                    // combine all three transformations into one
-                    // global texture-to-device-space transformation
-                    aTotalTransform *= aMatrix;
-                    aPureTotalTransform *= aMatrix;
-
-                    // analyze transformation, and setup an
-                    // appropriate GraphicObject
-                    ::basegfx::B2DVector aScale;
-                    ::basegfx::B2DPoint  aOutputPos;
-                    double               nRotate;
-                    double               nShearX;
-                    aTotalTransform.decompose( aScale, aOutputPos, nRotate, nShearX );
-
-                    GraphicAttr             aGrfAttr;
-                    GraphicObjectSharedPtr  pGrfObj;
-
-                    if( ::basegfx::fTools::equalZero( nShearX ) )
+                    if( !::rtl::math::approxEqual( textures[0].Alpha,
+                                                   1.0 ) )
                     {
-                        // no shear, GraphicObject is enough (the
-                        // GraphicObject only supports scaling, rotation
-                        // and translation)
+                        // uh-oh. alpha blending is required,
+                        // cannot do direct XOR, but have to
+                        // prepare the filled polygon within a
+                        // VDev
+                        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
+                        pVDev->SetOutputSizePixel( aPolygonDeviceRect.GetSize() );
 
-                        // #i75339# don't apply mirror flags, having
-                        // negative size values is enough to make
-                        // GraphicObject flip the bitmap
+                        // shift output to origin of VDev
+                        const ::Point aOutPos( aPt - aPolygonDeviceRect.TopLeft() );
+                        aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
+                                                      -aPolygonDeviceRect.Top() ) );
 
-                        // The angle has to be mapped from radian to tenths of
-                        // degrees with the orientation reversed: [0,2Pi) ->
-                        // (3600,0].  Note that the original angle may have
-                        // values outside the [0,2Pi) interval.
-                        const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
-                        aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
+                        const vcl::Region aPolyClipRegion( aPolyPoly );
 
-                        pGrfObj = std::make_shared<GraphicObject>( aBmp );
+                        pVDev->SetClipRegion( aPolyClipRegion );
+                        textureFill( *pVDev,
+                                     *pGrfObj,
+                                     aOutPos,
+                                     aIntegerNextTileX,
+                                     aIntegerNextTileY,
+                                     nTilesX,
+                                     nTilesY,
+                                     aSz,
+                                     aGrfAttr );
+
+                        // output VDev content alpha-blended to
+                        // target position.
+                        const ::Point aEmptyPoint;
+                        Bitmap aContentBmp(
+                            pVDev->GetBitmap( aEmptyPoint,
+                                             pVDev->GetOutputSizePixel() ) );
+
+                        sal_uInt8 nCol( static_cast< sal_uInt8 >(
+                                       ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
+                        AlphaMask aAlpha( pVDev->GetOutputSizePixel(),
+                                          &nCol );
+
+                        Bitmap aOutputBmp( aContentBmp.CreateColorBitmap(), aAlpha );
+                        rOutDev.DrawBitmap( aPolygonDeviceRect.TopLeft(),
+                                              aOutputBmp );
                     }
                     else
                     {
-                        // modify output position, to account for the fact
-                        // that transformBitmap() always normalizes its output
-                        // bitmap into the smallest enclosing box.
-                        ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
-                                                                    ::basegfx::B2DRectangle(0,
-                                                                                            0,
-                                                                                            aBmpSize.Width,
-                                                                                            aBmpSize.Height),
-                                                                    aMatrix );
+                        const vcl::Region aPolyClipRegion( aPolyPoly );
 
-                        aOutputPos.setX( aDestRect.getMinX() );
-                        aOutputPos.setY( aDestRect.getMinY() );
+                        rOutDev.Push( vcl::PushFlags::CLIPREGION );
+                        rOutDev.IntersectClipRegion( aPolyClipRegion );
 
-                        // complex transformation, use generic affine bitmap
-                        // transformation
-                        aBmp = vclcanvastools::transformBitmap( aBmp, aTotalTransform);
-
-                        pGrfObj = std::make_shared<GraphicObject>( aBmp );
-
-                        // clear scale values, generated bitmap already
-                        // contains scaling
-                        aScale.setX( 1.0 ); aScale.setY( 1.0 );
-
-                        // update bitmap size, bitmap has changed above.
-                        aBmpSize = vcl::unotools::integerSize2DFromSize(aBmp.GetSizePixel());
-                    }
-
-
-                    // render texture tiled into polygon
-                    // =================================
-
-                    // calc device space direction vectors. We employ
-                    // the following approach for tiled output: the
-                    // texture bitmap is output in texture space
-                    // x-major order, i.e. tile neighbors in texture
-                    // space x direction are rendered back-to-back in
-                    // device coordinate space (after the full device
-                    // transformation). Thus, the aNextTile* vectors
-                    // denote the output position updates in device
-                    // space, to get from one tile to the next.
-                    ::basegfx::B2DVector aNextTileX( 1.0, 0.0 );
-                    ::basegfx::B2DVector aNextTileY( 0.0, 1.0 );
-                    aNextTileX *= aPureTotalTransform;
-                    aNextTileY *= aPureTotalTransform;
-
-                    ::basegfx::B2DHomMatrix aInverseTextureTransform( aPureTotalTransform );
-
-                    ENSURE_ARG_OR_THROW( aInverseTextureTransform.isInvertible(),
-                                     "CanvasHelper::fillTexturedPolyPolygon(): singular texture matrix" );
-
-                    aInverseTextureTransform.invert();
-
-                    // calc bound rect of extended texture area in
-                    // device coordinates. Therefore, we first calc
-                    // the area of the polygon bound rect in texture
-                    // space. To maintain texture phase, this bound
-                    // rect is then extended to integer coordinates
-                    // (extended, because shrinking might leave some
-                    // inner polygon areas unfilled).
-                    // Finally, the bound rect is transformed back to
-                    // device coordinate space, were we determine the
-                    // start point from it.
-                    ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvastools::calcTransformedRectBounds(
-                                                                vcl::unotools::b2DRectangleFromRectangle(aPolygonDeviceRect),
-                                                                aInverseTextureTransform );
-
-                    // calc left, top of extended polygon rect in
-                    // texture space, create one-texture instance rect
-                    // from it (i.e. rect from start point extending
-                    // 1.0 units to the right and 1.0 units to the
-                    // bottom). Note that the rounding employed here
-                    // is a bit subtle, since we need to round up/down
-                    // as _soon_ as any fractional amount is
-                    // encountered. This is to ensure that the full
-                    // polygon area is filled with texture tiles.
-                    const sal_Int32 nX1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinX() ) );
-                    const sal_Int32 nY1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinY() ) );
-                    const sal_Int32 nX2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxX() ) );
-                    const sal_Int32 nY2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxY() ) );
-                    const ::basegfx::B2DRectangle aSingleTextureRect(
-                        nX1, nY1,
-                        nX1 + 1.0,
-                        nY1 + 1.0 );
-
-                    // and convert back to device space
-                    ::basegfx::B2DRectangle aSingleDeviceTextureRect = ::canvastools::calcTransformedRectBounds(
-                                                                aSingleTextureRect,
-                                                                aPureTotalTransform );
-
-                    const ::Point aPtRepeat( vcl::unotools::pointFromB2DPoint(
-                                                 aSingleDeviceTextureRect.getMinimum() ) );
-                    const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width ),
-                                       ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height ) );
-                    const ::Size  aIntegerNextTileX( vcl::unotools::sizeFromB2DSize(aNextTileX) );
-                    const ::Size  aIntegerNextTileY( vcl::unotools::sizeFromB2DSize(aNextTileY) );
-
-                    const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
-                                       ::basegfx::fround<::tools::Long>( aOutputPos.getX() ) : aPtRepeat.X(),
-                                       textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
-                                       ::basegfx::fround<::tools::Long>( aOutputPos.getY() ) : aPtRepeat.Y() );
-                    const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
-                                             1 : nX2 - nX1 );
-                    const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
-                                             1 : nY2 - nY1 );
-
-                    OutputDevice& rOutDev( *mxOutDev );
-
-                    if( bRectangularPolygon )
-                    {
-                        // use optimized output path
-
-
-                        // this distinction really looks like a
-                        // micro-optimization, but in fact greatly speeds up
-                        // especially complex fills. That's because when using
-                        // clipping, we can output polygons instead of
-                        // poly-polygons, and don't have to output the gradient
-                        // twice for XOR
-
-                        // setup alpha modulation
-                        if( !::rtl::math::approxEqual( textures[0].Alpha,
-                                                       1.0 ) )
-                        {
-                            // TODO(F1): Note that the GraphicManager has
-                            // a subtle difference in how it calculates
-                            // the resulting alpha value: it's using the
-                            // inverse alpha values (i.e. 'transparency'),
-                            // and calculates transOrig + transModulate,
-                            // instead of transOrig + transModulate -
-                            // transOrig*transModulate (which would be
-                            // equivalent to the origAlpha*modulateAlpha
-                            // the DX canvas performs)
-                            aGrfAttr.SetAlpha(
-                                static_cast< sal_uInt8 >(
-                                    ::basegfx::fround( 255.0 * textures[0].Alpha ) ) );
-                        }
-
-                        rOutDev.IntersectClipRegion( aPolygonDeviceRect );
                         textureFill( rOutDev,
                                      *pGrfObj,
                                      aPt,
@@ -912,75 +979,7 @@ namespace vclcanvas
                                      nTilesY,
                                      aSz,
                                      aGrfAttr );
-                    }
-                    else
-                    {
-                        // output texture the hard way: XORing out the
-                        // polygon
-                        // ===========================================
-
-                        if( !::rtl::math::approxEqual( textures[0].Alpha,
-                                                       1.0 ) )
-                        {
-                            // uh-oh. alpha blending is required,
-                            // cannot do direct XOR, but have to
-                            // prepare the filled polygon within a
-                            // VDev
-                            ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
-                            pVDev->SetOutputSizePixel( aPolygonDeviceRect.GetSize() );
-
-                            // shift output to origin of VDev
-                            const ::Point aOutPos( aPt - aPolygonDeviceRect.TopLeft() );
-                            aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
-                                                          -aPolygonDeviceRect.Top() ) );
-
-                            const vcl::Region aPolyClipRegion( aPolyPoly );
-
-                            pVDev->SetClipRegion( aPolyClipRegion );
-                            textureFill( *pVDev,
-                                         *pGrfObj,
-                                         aOutPos,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-
-                            // output VDev content alpha-blended to
-                            // target position.
-                            const ::Point aEmptyPoint;
-                            Bitmap aContentBmp(
-                                pVDev->GetBitmap( aEmptyPoint,
-                                                 pVDev->GetOutputSizePixel() ) );
-
-                            sal_uInt8 nCol( static_cast< sal_uInt8 >(
-                                           ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
-                            AlphaMask aAlpha( pVDev->GetOutputSizePixel(),
-                                              &nCol );
-
-                            Bitmap aOutputBmp( aContentBmp.CreateColorBitmap(), aAlpha );
-                            rOutDev.DrawBitmap( aPolygonDeviceRect.TopLeft(),
-                                                  aOutputBmp );
-                        }
-                        else
-                        {
-                            const vcl::Region aPolyClipRegion( aPolyPoly );
-
-                            rOutDev.Push( vcl::PushFlags::CLIPREGION );
-                            rOutDev.IntersectClipRegion( aPolyClipRegion );
-
-                            textureFill( rOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            rOutDev.Pop();
-                        }
+                        rOutDev.Pop();
                     }
                 }
             }

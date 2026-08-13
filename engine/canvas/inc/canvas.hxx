@@ -52,7 +52,7 @@ namespace vclcanvas
     class SAL_DLLPUBLIC_RTTI Canvas
     {
     public:
-        VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
+        VCLCANVAS_DLLPUBLIC Canvas( OutputDevice& rOutDev );
 
         /// For resource tracking
         VCLCANVAS_DLLPUBLIC ~Canvas();

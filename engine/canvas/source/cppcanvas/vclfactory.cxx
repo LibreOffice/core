@@ -44,7 +44,8 @@ namespace cppcanvas
             GDIMetaFile& rMetaFile,
             const basegfx::B2DHomMatrix& rTransform2)
     {
-        vclcanvas::Canvas aCanvas(pOutDev);
+        assert(pOutDev);
+        vclcanvas::Canvas aCanvas(*pOutDev);
         cppcanvas::RendererSharedPtr renderer
             = cppcanvas::VCLFactory::createRenderer(aCanvas, rTransform1, rMetaFile);
         renderer->setTransformation(rTransform2);
