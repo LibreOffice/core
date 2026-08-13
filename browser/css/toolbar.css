@@ -550,6 +550,7 @@ button.leaflet-control-search-next
 #conditionalformatmenu-grid {
 	display: grid;
 	grid-template-columns: repeat(3, auto);
+	justify-items: center;
 }
 
 #conditionalformatmenu-grid button:not(#iconsetoverlay) {
@@ -558,7 +559,7 @@ button.leaflet-control-search-next
 	padding: 3px;
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
-	margin: 3px;
+	margin: var(--spacing-s);
 	overflow: auto; /* child margins otherwise don't expand *this* element (parent) */
 	min-width: initial;
 }
@@ -570,10 +571,10 @@ button.leaflet-control-search-next
 
 #conditionalformatmenu-grid #iconsetoverlay {
 	grid-column: 1/4;
-	width: 100%;
-	margin: 0px;
+	justify-self: stretch;
+	width: auto; /* .button-secondary sets width: max-content */
+	margin: var(--spacing-s);
 }
-
 #home-assign-layout {
 	width: fit-content;
 }

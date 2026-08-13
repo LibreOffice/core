@@ -250,6 +250,7 @@ function getConditionalFormatMenuElementsImpl(more, type, count, unoCommand, jsd
 	if (more) {
 		const button = document.createElement('button');
 		button.id = more;
+		button.className = 'button-secondary';
 		button.onclick = function() {
 			moreConditionalFormat(unoCommand, !!jsdialogDropdown);
 		};
