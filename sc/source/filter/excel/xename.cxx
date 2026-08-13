@@ -22,7 +22,9 @@
 #include <map>
 
 #include <document.hxx>
+#include <global.hxx>
 #include <rangenam.hxx>
+#include <unotools/charclass.hxx>
 #include <tokenarray.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
@@ -679,17 +681,21 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
 
 OUString XclExpNameManagerImpl::GetUnusedName( const OUString& rName ) const
 {
+    const CharClass& rCharClass = ScGlobal::getCharClass();
     OUString aNewName( rName );
     sal_Int32 nAppIdx = 0;
     bool bExist = true;
     while( bExist )
     {
-        // search the list of user-defined names
+        // search the list of user-defined names. Two names that differ
+        // only in letter case count as the same name, so compare the
+        // uppercase form of each pair.
         bExist = false;
+        OUString aUpperName( rCharClass.uppercase( aNewName ) );
         for( size_t nPos = mnFirstUserIdx, nSize = maNameList.GetSize(); !bExist && (nPos < nSize); ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
-            bExist = xName->GetOrigName() == aNewName;
+            bExist = rCharClass.uppercase( xName->GetOrigName() ) == aUpperName;
             // name exists -> create a new name "<originalname>_<counter>"
             if( bExist )
                 aNewName = rName + "_" + OUString::number( ++nAppIdx );
