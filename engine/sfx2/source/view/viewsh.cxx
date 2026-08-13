@@ -3308,6 +3308,7 @@ static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_
         switch (eType)
         {
         case COKitCallbackType::JSDIALOG:
+        case COKitCallbackType::VIEW_RENDER_STATE:
         case COKitCallbackType::FORM_FIELD_BUTTON:
         case COKitCallbackType::TEXT_SELECTION:
         case COKitCallbackType::COMMENT:
