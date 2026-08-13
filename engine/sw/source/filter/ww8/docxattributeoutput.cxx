@@ -459,31 +459,25 @@ bool lcl_hasParaSdtEndBefore(const SwNode& rNode)
     return rMap.contains(u"ParaSdtEndBefore"_ustr);
 }
 
-bool lcl_HasTblHeaderFromStyle(const SwFrameFormat* pTableFormat,
-                               const DocxTableStyleExport& rTableStyleExport)
+bool lcl_HasTblHeaderFromStyle(const SwTable* pTable, const DocxTableStyleExport& rTableStyleExport)
 {
-    // does the table actually apply a table style, and does it use the firstRow style?
-    const std::map<OUString, cpo::uno::Any>& rGrabBag
-        = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
-    bool bIsUsingFirstRow = false;
+    // does the table actually apply a table style, and does its current, live setting
+    // use the firstRow style?
+    if (!pTable->GetTableStyleSettings().m_bUseFirstRowStyle)
+        return false;
+
+    const std::map<OUString, cpo::uno::Any>& rGrabBag = pTable->GetFrameFormat()
+        ->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
     OUString sStyleId;
     for (const auto& rElement : rGrabBag)
     {
         if (rElement.first == "TableStyleName")
-            sStyleId = rElement.second.get<OUString>();
-        else if (rElement.first == "TableStyleLook")
         {
-            for (const auto& rTblLook : rElement.second.get<cpo::uno::Sequence<beans::PropertyValue>>())
-            {
-                if (rTblLook.Name == "val")
-                {
-                    bIsUsingFirstRow = rTblLook.Value.get<sal_Int32>() & 0x020;
-                    break;
-                }
-            }
+            sStyleId = rElement.second.get<OUString>();
+            break;
         }
     }
-    if (!bIsUsingFirstRow || sStyleId.isEmpty())
+    if (sStyleId.isEmpty())
         return false;
 
     return rTableStyleExport.FirstRowHasTblHeader(sStyleId);
@@ -5107,7 +5101,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
         // and perhaps our tblLook uses that firstRow style
         // and perhaps the firstRow style defines a tblHeader
         // then in that case we need to write an explicit false to dis-inherit.
-        if (lcl_HasTblHeaderFromStyle(pTable->GetFrameFormat(), *m_pTableStyleExport))
+        if (lcl_HasTblHeaderFromStyle(pTable, *m_pTableStyleExport))
             m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "false");
     }
 

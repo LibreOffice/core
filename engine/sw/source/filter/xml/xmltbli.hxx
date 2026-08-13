@@ -23,6 +23,7 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 #include "xmlimp.hxx"
+#include <swtable.hxx>
 
 #include <memory>
 #include <unordered_map>
@@ -51,6 +52,9 @@ class SwXMLTableContext : public XMLTextTableContext
     OUString     m_aStyleName;
     OUString     m_aDfltCellStyleName;
     OUString     m_aTemplateName;
+    /// Which of the template's row/column roles apply. Defaults (see SwTableStyleSettings)
+    /// match what a table without these attributes at all should look like.
+    SwTableStyleSettings m_aTemplateSettings;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {

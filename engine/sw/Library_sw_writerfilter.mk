@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,sw_writerfilter,\
     sot \
     svl \
     svt \
+    svx \
 	svxcore \
     sw \
     tl \

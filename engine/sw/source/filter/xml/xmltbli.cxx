@@ -1156,6 +1156,48 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
             case XML_ELEMENT(TABLE, XML_TEMPLATE_NAME):
                 m_aTemplateName = sValue;
                 break;
+            case XML_ELEMENT(TABLE, XML_USE_FIRST_ROW_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseFirstRowStyle = bTmp;
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_USE_LAST_ROW_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseLastRowStyle = bTmp;
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_USE_FIRST_COLUMN_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseFirstColumnStyle = bTmp;
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_USE_LAST_COLUMN_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseLastColumnStyle = bTmp;
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_USE_BANDING_ROWS_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseRowBandingStyle = bTmp;
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_USE_BANDING_COLUMNS_STYLES):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
+                    m_aTemplateSettings.m_bUseColumnBandingStyle = bTmp;
+                break;
+            }
             case XML_ELEMENT(XML, XML_ID):
                 sXmlId = sValue;
                 break;
@@ -2496,6 +2538,7 @@ void SwXMLTableContext::MakeTable()
     UIName sStyleName;
     SwStyleNameMapper::FillUIName( ProgName(m_aTemplateName), sStyleName, SwGetPoolIdFromName::TableStyle );
     m_pTableNode->GetTable().SetTableStyleName( TableStyleName(sStyleName.toString()) );
+    m_pTableNode->GetTable().SetTableStyleSettings( m_aTemplateSettings );
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
 

@@ -32,6 +32,7 @@
 #include <tools/datetimeutils.hxx>
 
 #include <fmtfsize.hxx>
+#include <swtable.hxx>
 #include <unocoll.hxx>
 #include <formatflysplit.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -293,34 +294,40 @@ void DocxAttributeOutput::TableDefinition(
                 = rGrabBagElement.second.get<table::BorderLine2>();
         else if (rGrabBagElement.first == "TableStyleLook")
         {
+            // Build the six flags from the table's current live settings rather than
+            // replaying the grab bag's own copy: those settings may have been changed
+            // since import (e.g. a banding toggle switched in the notebookbar), and the
+            // grab bag would otherwise silently re-export the stale, original state.
+            const SwTableStyleSettings& rSettings = pTable->GetTableStyleSettings();
+            sal_Int32 nVal = 0;
+            if (rSettings.m_bUseFirstRowStyle)
+                nVal |= 0x020;
+            if (rSettings.m_bUseLastRowStyle)
+                nVal |= 0x040;
+            if (rSettings.m_bUseFirstColumnStyle)
+                nVal |= 0x080;
+            if (rSettings.m_bUseLastColumnStyle)
+                nVal |= 0x100;
+            if (!rSettings.m_bUseRowBandingStyle)
+                nVal |= 0x200;
+            if (!rSettings.m_bUseColumnBandingStyle)
+                nVal |= 0x400;
+
             rtl::Reference<FastAttributeList> pAttributeList
                 = FastSerializerHelper::createAttrList();
-            const cpo::uno::Sequence<beans::PropertyValue> aAttributeList
-                = rGrabBagElement.second.get<cpo::uno::Sequence<beans::PropertyValue>>();
-
-            for (const auto& rAttribute : aAttributeList)
-            {
-                if (rAttribute.Name == "val")
-                    pAttributeList->add(
-                        FSNS(XML_w, XML_val),
-                        lcl_padStartToLength(OString::number(rAttribute.Value.get<sal_Int32>(), 16),
-                                             4, '0'));
-                else
-                {
-                    static DocxStringTokenMap const aTokens[]
-                        = { { "firstRow", XML_firstRow },
-                            { "lastRow", XML_lastRow },
-                            { "firstColumn", XML_firstColumn },
-                            { "lastColumn", XML_lastColumn },
-                            { "noHBand", XML_noHBand },
-                            { "noVBand", XML_noVBand },
-                            { nullptr, 0 } };
-
-                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
-                        pAttributeList->add(FSNS(XML_w, nToken),
-                                            (rAttribute.Value.get<sal_Int32>() ? "1" : "0"));
-                }
-            }
+            pAttributeList->add(FSNS(XML_w, XML_val),
+                                lcl_padStartToLength(OString::number(nVal, 16), 4, '0'));
+            pAttributeList->add(FSNS(XML_w, XML_firstRow),
+                                rSettings.m_bUseFirstRowStyle ? "1" : "0");
+            pAttributeList->add(FSNS(XML_w, XML_lastRow), rSettings.m_bUseLastRowStyle ? "1" : "0");
+            pAttributeList->add(FSNS(XML_w, XML_firstColumn),
+                                rSettings.m_bUseFirstColumnStyle ? "1" : "0");
+            pAttributeList->add(FSNS(XML_w, XML_lastColumn),
+                                rSettings.m_bUseLastColumnStyle ? "1" : "0");
+            pAttributeList->add(FSNS(XML_w, XML_noHBand),
+                                !rSettings.m_bUseRowBandingStyle ? "1" : "0");
+            pAttributeList->add(FSNS(XML_w, XML_noVBand),
+                                !rSettings.m_bUseColumnBandingStyle ? "1" : "0");
 
             m_pSerializer->singleElementNS(XML_w, XML_tblLook, pAttributeList);
         }

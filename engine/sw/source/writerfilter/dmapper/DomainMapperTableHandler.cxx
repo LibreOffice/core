@@ -60,6 +60,12 @@
 #include <unotbl.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
+#include <doc.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -241,6 +247,11 @@ struct TableInfo
     sal_Int32 nTopBorderDistance;
     sal_Int32 nBottomBorderDistance;
     sal_Int32 nTblLook;
+    /// The table's own w:tblLook value, as imported, before endTable() clears a role's bit
+    /// here because the referenced table style has no conditional formatting for that role.
+    /// Live per-table settings round-tripped through export read this instead of nTblLook,
+    /// since a role the user turned on stays on regardless of what the current style defines.
+    sal_Int32 nOriginalTblLook;
     sal_Int32 nNestLevel;
     PropertyMapPtr pTableDefaults;
     PropertyMapPtr pTableBorders;
@@ -254,6 +265,7 @@ struct TableInfo
     , nTopBorderDistance(0)
     , nBottomBorderDistance(0)
     , nTblLook(0x4a0)
+    , nOriginalTblLook(0x4a0)
     , nNestLevel(0)
     , pTableDefaults(new PropertyMap)
     , pTableBorders(new PropertyMap)
@@ -386,6 +398,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if(aTblLook)
         {
             aTblLook->second >>= rInfo.nTblLook;
+            rInfo.nOriginalTblLook = rInfo.nTblLook;
             m_aTableProperties->Erase( aTblLook->first );
         }
 
@@ -1517,6 +1530,128 @@ static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable
     }
 }
 
+namespace {
+
+/// Which combination of a table style's conditional-formatting roles a canonical grid
+/// position stands for, mirroring the per-cell mask built a few hundred lines above (search
+/// nCnfStyleMask) but for a role position rather than a real row/column index.
+sal_Int32 lcl_GetTableStyleCnfMask(sal_uInt8 nRowRole, sal_uInt8 nColRole)
+{
+    sal_Int32 nMask = 0;
+    switch (nRowRole)
+    {
+        case 0: nMask |= CNF_FIRST_ROW; break;
+        case 1: nMask |= CNF_ODD_HBAND; break;
+        case 2: nMask |= CNF_EVEN_HBAND; break;
+        case 3: nMask |= CNF_LAST_ROW; break;
+    }
+    switch (nColRole)
+    {
+        case 0: nMask |= CNF_FIRST_COLUMN; break;
+        case 1: nMask |= CNF_ODD_VBAND; break;
+        case 2: nMask |= CNF_EVEN_VBAND; break;
+        case 3: nMask |= CNF_LAST_COLUMN; break;
+    }
+
+    if (nMask == (CNF_FIRST_ROW | CNF_FIRST_COLUMN))
+        nMask |= CNF_FIRST_ROW_FIRST_COLUMN;
+    else if (nMask == (CNF_LAST_ROW | CNF_FIRST_COLUMN))
+        nMask |= CNF_LAST_ROW_FIRST_COLUMN;
+    else if (nMask == (CNF_FIRST_ROW | CNF_LAST_COLUMN))
+        nMask |= CNF_FIRST_ROW_LAST_COLUMN;
+    else if (nMask == (CNF_LAST_ROW | CNF_LAST_COLUMN))
+        nMask |= CNF_LAST_ROW_LAST_COLUMN;
+
+    return nMask;
+}
+
+/// Fill in the border and background a grid position resolves to for a DOCX table style,
+/// leaving every other item at the sensible defaults SwAutoFormatProps' own constructor
+/// already set - character formatting stays out of scope here, matching the same box-level
+/// boundary SwDoc::ApplyTableStyleLive already draws for live resolution.
+void lcl_FillBoxAutoFormat(SwBoxAutoFormat& rBoxFormat, const PropertyMapPtr& pProps)
+{
+    if (!pProps)
+        return;
+
+    SwAutoFormatProps& rProps = rBoxFormat.GetProps();
+
+    SvxBoxItem aBox(RES_BOX);
+    bool bHasBorder = false;
+    static const struct { PropertyIds eId; SvxBoxItemLine eLine; } aBorders[] = {
+        { PROP_TOP_BORDER, SvxBoxItemLine::TOP },
+        { PROP_BOTTOM_BORDER, SvxBoxItemLine::BOTTOM },
+        { PROP_LEFT_BORDER, SvxBoxItemLine::LEFT },
+        { PROP_RIGHT_BORDER, SvxBoxItemLine::RIGHT },
+    };
+    for (const auto& rBorder : aBorders)
+    {
+        const std::optional<PropertyMap::Property> oProp = pProps->getProperty(rBorder.eId);
+        table::BorderLine2 aLine;
+        if (oProp && (oProp->second >>= aLine))
+        {
+            ::editeng::SvxBorderLine aSvxLine;
+            if (SvxBoxItem::LineToSvxLine(aLine, aSvxLine, true))
+            {
+                aBox.SetLine(&aSvxLine, rBorder.eLine);
+                bHasBorder = true;
+            }
+        }
+    }
+    if (bHasBorder)
+        rProps.SetBox(aBox);
+
+    const std::optional<PropertyMap::Property> oBackColor = pProps->getProperty(PROP_BACK_COLOR);
+    sal_Int32 nBackColor = 0;
+    if (oBackColor && (oBackColor->second >>= nBackColor))
+        rProps.SetBackground(SvxBrushItem(Color(ColorTransparency, nBackColor), RES_BACKGROUND));
+
+    const std::optional<PropertyMap::Property> oCharColor = pProps->getProperty(PROP_CHAR_COLOR);
+    sal_Int32 nCharColor = 0;
+    if (oCharColor && (oCharColor->second >>= nCharColor))
+        rProps.SetColor(SvxColorItem(Color(ColorTransparency, nCharColor), RES_CHRATR_COLOR));
+}
+
+/// Convert a DOCX table style into an equivalent named Writer table style, the first time it's
+/// referenced in this document, so live table-style resolution (SwDoc::ApplyTableStyleLive) has
+/// something to resolve against - Writer's own style catalog otherwise shares no names or
+/// definitions with Word's built-in table styles.
+TableStyleName lcl_ImportTableStyle(SwDoc& rDoc, TableStyleSheetEntry& rStyle)
+{
+    OUString sName = !rStyle.m_sConvertedStyleName.isEmpty() ? rStyle.m_sConvertedStyleName
+                                                              : rStyle.m_sStyleName;
+    if (sName.isEmpty())
+        sName = rStyle.m_sStyleIdentifierD;
+    if (sName.isEmpty())
+        return TableStyleName();
+
+    const TableStyleName aStyleName(sName);
+    // Already converted earlier for this document - reuse it rather than building a duplicate.
+    if (rDoc.GetTableStyles().FindAutoFormat(aStyleName))
+        return aStyleName;
+
+    SwTableAutoFormat* pNewFormat = rDoc.MakeTableStyle(aStyleName);
+    if (!pNewFormat)
+        return TableStyleName();
+
+    for (sal_uInt8 nRowRole = 0; nRowRole < SwTableAutoFormat::nRoleCount; ++nRowRole)
+    {
+        for (sal_uInt8 nColRole = 0; nColRole < SwTableAutoFormat::nRoleCount; ++nColRole)
+        {
+            const sal_Int32 nMask = lcl_GetTableStyleCnfMask(nRowRole, nColRole);
+            SwBoxAutoFormat aBoxFormat;
+            lcl_FillBoxAutoFormat(aBoxFormat, rStyle.GetProperties(nMask));
+            const sal_uInt8 nPos
+                = static_cast<sal_uInt8>(nRowRole * SwTableAutoFormat::nRoleCount + nColRole);
+            pNewFormat->SetBoxFormat(aBoxFormat, nPos);
+        }
+    }
+
+    return aStyleName;
+}
+
+}
+
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 {
 #ifdef DBG_UTIL
@@ -1637,6 +1772,27 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 
                 if (xTable.is())
                 {
+                    SwTable* pTable
+                        = xTable->GetFrameFormat() ? SwTable::FindTable(xTable->GetFrameFormat()) : nullptr;
+                    if (aTableInfo.pTableStyle && pTable)
+                    {
+                        const TableStyleName aStyleName = lcl_ImportTableStyle(
+                            xTable->GetFrameFormat()->GetDoc(), *aTableInfo.pTableStyle);
+                        if (!aStyleName.isEmpty())
+                        {
+                            pTable->SetTableStyleName(aStyleName);
+
+                            SwTableStyleSettings aSettings;
+                            aSettings.m_bUseFirstRowStyle = (aTableInfo.nOriginalTblLook & 0x020) != 0;
+                            aSettings.m_bUseLastRowStyle = (aTableInfo.nOriginalTblLook & 0x040) != 0;
+                            aSettings.m_bUseFirstColumnStyle = (aTableInfo.nOriginalTblLook & 0x080) != 0;
+                            aSettings.m_bUseLastColumnStyle = (aTableInfo.nOriginalTblLook & 0x100) != 0;
+                            aSettings.m_bUseRowBandingStyle = !(aTableInfo.nOriginalTblLook & 0x200);
+                            aSettings.m_bUseColumnBandingStyle = !(aTableInfo.nOriginalTblLook & 0x400);
+                            pTable->SetTableStyleSettings(aSettings);
+                        }
+                    }
+
                     if (!aMerges.empty())
                     {
                         static const std::vector<std::u16string_view> aBorderNames

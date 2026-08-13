@@ -1128,12 +1128,26 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
                      EncodeStyleName(pTableFormat->GetName().toString()));
     }
 
-    // table:template-name=
+    // table:template-name= and which of its row/column roles apply
     if (!rTable.GetTableStyleName().isEmpty())
     {
         ProgName sStyleName;
         SwStyleNameMapper::FillProgName(UIName(rTable.GetTableStyleName().toString()), sStyleName, SwGetPoolIdFromName::TableStyle);
         AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName.toString());
+
+        const SwTableStyleSettings& rSettings = rTable.GetTableStyleSettings();
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES,
+                     GetXMLToken(rSettings.m_bUseFirstRowStyle ? XML_TRUE : XML_FALSE));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES,
+                     GetXMLToken(rSettings.m_bUseLastRowStyle ? XML_TRUE : XML_FALSE));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES,
+                     GetXMLToken(rSettings.m_bUseFirstColumnStyle ? XML_TRUE : XML_FALSE));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES,
+                     GetXMLToken(rSettings.m_bUseLastColumnStyle ? XML_TRUE : XML_FALSE));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES,
+                     GetXMLToken(rSettings.m_bUseRowBandingStyle ? XML_TRUE : XML_FALSE));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES,
+                     GetXMLToken(rSettings.m_bUseColumnBandingStyle ? XML_TRUE : XML_FALSE));
     }
 
     SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);
