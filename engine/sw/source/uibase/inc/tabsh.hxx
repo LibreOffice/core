@@ -45,6 +45,8 @@ public:
     void    GetFrameBorderState(SfxItemSet &rSet);
     void    GetLineStyleState(SfxItemSet &rSet);
     void    ExecTableStyle(SfxRequest& rReq);
+    void    ExecTableDesignStyle(SfxRequest& rReq);
+    void    GetTableDesignStyleState(SfxItemSet &rSet);
 
     void    ExecNumberFormat(SfxRequest const & rReq);
 

@@ -346,6 +346,28 @@ interface BaseTextTable
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_TABLE_SET_STYLE // status(final|play)
+    [
+        ExecMethod = ExecTableDesignStyle ;
+        StateMethod = GetTableDesignStyleState ;
+        GroupId = SfxGroupId::Table;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_TABLE_STYLE_SETTINGS // status(final|play)
+    [
+        ExecMethod = ExecTableDesignStyle ;
+        StateMethod = GetTableDesignStyleState ;
+        GroupId = SfxGroupId::Table;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_TABLE_STYLE_LIST // status()
+    [
+        StateMethod = GetTableDesignStyleState ;
+        GroupId = SfxGroupId::Table;
+    ]
+
     FN_TABLE_MODE_FIX
     [
         ExecMethod = Execute;

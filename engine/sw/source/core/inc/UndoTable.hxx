@@ -172,6 +172,23 @@ public:
     void SaveBoxContent( const SwTableBox& rBox );
 };
 
+/// Undo for SwFEShell::SetTableStyleLive/SetTableStyleSettingsLive. Unlike
+/// SwUndoTableAutoFormat, this never touches cell content: applying a (style, settings) pair
+/// live never writes into hand-formatted cells, so undo is simply reapplying the previous
+/// (style, settings) pair, swapping it with the current one so redo reverses it again.
+class SwUndoTableStyleLive final : public SwUndo
+{
+    SwNodeOffset m_nStartNode;
+    TableStyleName m_TableStyleName;
+    SwTableStyleSettings m_TableStyleSettings;
+
+public:
+    SwUndoTableStyleLive( const SwTableNode& rTableNd );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+};
+
 using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>>>;
 
 class SwUndoTableNdsChg final : public SwUndo

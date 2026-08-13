@@ -1480,6 +1480,39 @@ void SwUndoTableAutoFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoRedo(false, rContext);
 }
 
+SwUndoTableStyleLive::SwUndoTableStyleLive( const SwTableNode& rTableNd )
+    : SwUndo( SwUndoId::TABLE_STYLE, rTableNd.GetDoc() )
+    , m_nStartNode( rTableNd.GetIndex() )
+    , m_TableStyleName( rTableNd.GetTable().GetTableStyleName() )
+    , m_TableStyleSettings( rTableNd.GetTable().GetTableStyleSettings() )
+{
+}
+
+void SwUndoTableStyleLive::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc& rDoc = rContext.GetDoc();
+    SwTableNode* pTableNd = rDoc.GetNodes()[ m_nStartNode ]->GetTableNode();
+    OSL_ENSURE( pTableNd, "no TableNode" );
+    if( !pTableNd )
+        return;
+
+    SwTable& rTable = pTableNd->GetTable();
+    TableStyleName aCurrentName( rTable.GetTableStyleName() );
+    SwTableStyleSettings aCurrentSettings( rTable.GetTableStyleSettings() );
+
+    rTable.SetTableStyleName( m_TableStyleName );
+    rTable.SetTableStyleSettings( m_TableStyleSettings );
+    rDoc.ApplyTableStyleLive( *pTableNd );
+
+    m_TableStyleName = aCurrentName;
+    m_TableStyleSettings = aCurrentSettings;
+}
+
+void SwUndoTableStyleLive::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    UndoImpl( rContext );
+}
+
 SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTableNd,

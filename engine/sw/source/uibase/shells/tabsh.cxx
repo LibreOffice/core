@@ -38,6 +38,8 @@
 #include <svx/svddef.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <tools/json_writer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/request.hxx>
@@ -67,6 +69,7 @@
 #include <inputwin.hxx>
 #include <uiitems.hxx>
 #include <tabsh.hxx>
+#include <tblafmt.hxx>
 #include <swtablerep.hxx>
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
@@ -1906,6 +1909,112 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     SvxLineItem aLine( SID_FRAME_LINESTYLE );
     aLine.SetLine(pLine);
     rSet.Put( aLine );
+}
+
+void SwTableShell::ExecTableDesignStyle(SfxRequest& rReq)
+{
+    SwWrtShell &rSh = GetShell();
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return;
+
+    switch (rReq.GetSlot())
+    {
+        case FN_TABLE_SET_STYLE:
+        {
+            if (const SfxStringItem* pArg = pArgs->GetItemIfSet(FN_TABLE_SET_STYLE, false))
+                rSh.SetTableStyleLive(TableStyleName(pArg->GetValue()));
+            break;
+        }
+        case SID_TABLE_STYLE_SETTINGS:
+        {
+            SwTableStyleSettings aSettings;
+            if (const SwTableNode* pTableNode = rSh.IsCursorInTable())
+                aSettings = pTableNode->GetTable().GetTableStyleSettings();
+
+            const SfxBoolItem* pPoolItem = nullptr;
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEFIRSTROWSTYLE, false)))
+                aSettings.m_bUseFirstRowStyle = pPoolItem->GetValue();
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USELASTROWSTYLE, false)))
+                aSettings.m_bUseLastRowStyle = pPoolItem->GetValue();
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEBANDINGROWSTYLE, false)))
+                aSettings.m_bUseRowBandingStyle = pPoolItem->GetValue();
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEFIRSTCOLUMNSTYLE, false)))
+                aSettings.m_bUseFirstColumnStyle = pPoolItem->GetValue();
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USELASTCOLUMNSTYLE, false)))
+                aSettings.m_bUseLastColumnStyle = pPoolItem->GetValue();
+            if ((pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEBANDINGCOLUMNSTYLE, false)))
+                aSettings.m_bUseColumnBandingStyle = pPoolItem->GetValue();
+
+            rSh.SetTableStyleSettingsLive(aSettings);
+            break;
+        }
+    }
+
+    rReq.Done();
+}
+
+void SwTableShell::GetTableDesignStyleState(SfxItemSet &rSet)
+{
+    SwWrtShell &rSh = GetShell();
+    const SwTableNode* pTableNode = rSh.IsCursorInTable();
+
+    SfxWhichIter aIter( rSet );
+    for (sal_uInt16 nSlot = aIter.FirstWhich(); nSlot; nSlot = aIter.NextWhich())
+    {
+        switch (nSlot)
+        {
+            case FN_TABLE_SET_STYLE:
+            {
+                OUString sStyleName;
+                if (pTableNode)
+                    sStyleName = pTableNode->GetTable().GetTableStyleName().toString();
+                rSet.Put(SfxStringItem(FN_TABLE_SET_STYLE, sStyleName));
+                break;
+            }
+            case SID_TABLE_STYLE_SETTINGS:
+            {
+                SwTableStyleSettings aSettings;
+                if (pTableNode)
+                    aSettings = pTableNode->GetTable().GetTableStyleSettings();
+
+                tools::JsonWriter aJson;
+                aJson.put("UseFirstRowStyle", aSettings.m_bUseFirstRowStyle);
+                aJson.put("UseLastRowStyle", aSettings.m_bUseLastRowStyle);
+                aJson.put("UseBandingRowStyle", aSettings.m_bUseRowBandingStyle);
+                aJson.put("UseFirstColumnStyle", aSettings.m_bUseFirstColumnStyle);
+                aJson.put("UseLastColumnStyle", aSettings.m_bUseLastColumnStyle);
+                aJson.put("UseBandingColumnStyle", aSettings.m_bUseColumnBandingStyle);
+                const OString aStr = aJson.finishAndGetAsOString();
+                rSet.Put(SfxStringItem(SID_TABLE_STYLE_SETTINGS,
+                        OStringToOUString(aStr, RTL_TEXTENCODING_UTF8)));
+                break;
+            }
+            case SID_TABLE_STYLE_LIST:
+            {
+                tools::JsonWriter aJson;
+                {
+                    auto aArray = aJson.startArray("TableStyles");
+                    const SwTableAutoFormatTable& rStyles = rSh.GetDoc()->GetTableStyles();
+                    for (size_t i = 0; i < rStyles.size(); ++i)
+                    {
+                        const SwTableAutoFormat& rStyle = rStyles[i];
+                        if (rStyle.IsHidden())
+                            continue;
+                        auto aStyleStruct = aJson.startStruct();
+                        aJson.put("Name", rStyle.GetName().toString());
+                        // A rendered preview per style lands in a follow-up phase; the
+                        // browser already falls back to a placeholder icon for an empty one.
+                        aJson.put("Image", "");
+                    }
+                }
+                const OString aStr = aJson.finishAndGetAsOString();
+                rSet.Put(SfxStringItem(SID_TABLE_STYLE_LIST,
+                        OStringToOUString(aStr, RTL_TEXTENCODING_UTF8)));
+                break;
+            }
+        }
+    }
 }
 
 void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)

@@ -62,6 +62,7 @@
 #include <tblsel.hxx>
 #include <swerror.h>
 #include <swundo.hxx>
+#include <UndoTable.hxx>
 #include <frmtool.hxx>
 #include <fmtrowsplt.hxx>
 #include <node.hxx>
@@ -1430,6 +1431,64 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
     // set the name & update
     TableStyleName aStyleName = rStyle.GetName();
     return UpdateTableStyleFormatting(pTableNode, false, &aStyleName);
+}
+
+static bool lcl_ApplyTableStyleLive(SwFEShell& rShell, SwTableNode& rTableNode,
+        std::unique_ptr<SwUndoTableStyleLive> pUndo)
+{
+    SwDoc* pDoc = rShell.GetDoc();
+    IDocumentUndoRedo& rUndoRedo = pDoc->GetIDocumentUndoRedo();
+    bool const bUndo(pUndo != nullptr);
+    if (bUndo)
+    {
+        rUndoRedo.AppendUndo(std::move(pUndo));
+        // The granular attribute changes ApplyTableStyleLive makes below are an
+        // implementation detail of applying the (style, settings) pair, not separate user
+        // actions; undoing is reapplying the previous pair (see SwUndoTableStyleLive), not
+        // replaying each attribute change.
+        rUndoRedo.DoUndo(false);
+    }
+
+    bool bRet = pDoc->ApplyTableStyleLive(rTableNode);
+
+    if (bUndo)
+        rUndoRedo.DoUndo(true);
+
+    return bRet;
+}
+
+bool SwFEShell::SetTableStyleLive(const TableStyleName& rStyleName)
+{
+    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
+    if (!pTableNode)
+        return false;
+
+    CurrShell aCurr( this );
+    StartAllAction();
+    std::unique_ptr<SwUndoTableStyleLive> pUndo;
+    if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode);
+    pTableNode->GetTable().SetTableStyleName(rStyleName);
+    bool bRet = lcl_ApplyTableStyleLive(*this, *pTableNode, std::move(pUndo));
+    EndAllActionAndCall();
+    return bRet;
+}
+
+bool SwFEShell::SetTableStyleSettingsLive(const SwTableStyleSettings& rSettings)
+{
+    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
+    if (!pTableNode)
+        return false;
+
+    CurrShell aCurr( this );
+    StartAllAction();
+    std::unique_ptr<SwUndoTableStyleLive> pUndo;
+    if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode);
+    pTableNode->GetTable().SetTableStyleSettings(rSettings);
+    bool bRet = lcl_ApplyTableStyleLive(*this, *pTableNode, std::move(pUndo));
+    EndAllActionAndCall();
+    return bRet;
 }
 
 bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,

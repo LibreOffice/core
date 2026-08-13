@@ -4701,6 +4701,24 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
     GroupId = SfxGroupId::Enumeration;
 ]
 
+SfxStringItem SetTableStyle FN_TABLE_SET_STYLE
+(SfxStringItem SetTableStyle FN_TABLE_SET_STYLE)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
 //-#i68101#------------------------------------------------------------------------
 SfxStringItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
 ()

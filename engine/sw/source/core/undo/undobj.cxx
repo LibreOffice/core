@@ -705,6 +705,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::RENAME_TABLE:
             pId = STR_RENAMETABLE_UNDO;
             break;
+        case SwUndoId::TABLE_STYLE:
+            pId = STR_UNDO_TABLE_STYLE;
+            break;
     }
 
     assert(pId);

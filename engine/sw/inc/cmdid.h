@@ -686,6 +686,10 @@ class SwUINumRuleItem;
 #define FN_UNO_CONTENT_CONTROL (FN_EXTRA2 + 132)
 #define FN_UNO_IS_CONTENT_EMPTY  (FN_EXTRA2 + 133)
 #define FN_UNO_STYLE_ALIASES     (FN_EXTRA2 + 134)
+// SID_TABLE_STYLE's UNO name "TableStyle" collides with SwDocShell's pre-existing
+// SID_STYLE_FAMILY6 slot of the same name, so applying a table style live uses this
+// separate slot instead of the one Impress reuses from svx.sdi.
+#define FN_TABLE_SET_STYLE       TypedWhichId<SfxStringItem>(FN_EXTRA2 + 135)
 
 // Area: Help
 // Region: Traveling & Selection

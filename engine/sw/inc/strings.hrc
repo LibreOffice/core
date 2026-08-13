@@ -514,6 +514,7 @@
 #define STR_DELGRF                              NC_("STR_DELGRF", "Delete Image")
 #define STR_TABLE_ATTR                          NC_("STR_TABLE_ATTR", "Apply table attributes")
 #define STR_UNDO_TABLE_AUTOFMT                  NC_("STR_UNDO_TABLE_AUTOFMT", "AutoFormat Table")
+#define STR_UNDO_TABLE_STYLE                    NC_("STR_UNDO_TABLE_STYLE", "Apply Table Style")
 #define STR_UNDO_TABLE_INSCOL                   NC_("STR_UNDO_TABLE_INSCOL", "Insert Column")
 #define STR_UNDO_TABLE_INSROW                   NC_("STR_UNDO_TABLE_INSROW", "Insert Row")
 #define STR_UNDO_TABLE_DELBOX                   NC_("STR_UNDO_TABLE_DELBOX", "Delete row/column")

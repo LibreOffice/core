@@ -43,6 +43,7 @@ class SwTabCols;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
 class SwTableAutoFormat;
+struct SwTableStyleSettings;
 class SwFrame;
 class SwFormatFrameSize;
 class SwFormatRowSplit;
@@ -750,6 +751,17 @@ public:
     bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, TableStyleName const* pStyleName = nullptr);
 
     SW_DLLPUBLIC bool GetTableAutoFormat( SwTableAutoFormat& rGet );
+
+    /// Apply a named table style to the whole current table, live: the table keeps the style
+    /// name and its current row/column role settings (see SetTableStyleSettingsLive), and
+    /// cells resolve their box border and background from it instead of having those values
+    /// baked in. Tracked by undo. Returns false if the cursor isn't in a table.
+    SW_DLLPUBLIC bool SetTableStyleLive(const TableStyleName& rStyleName);
+
+    /// Change which of the current table style's row/column roles apply to the whole current
+    /// table (header row, total row, banded rows/columns, first/last column). Tracked by
+    /// undo. Returns false if the cursor isn't in a table.
+    SW_DLLPUBLIC bool SetTableStyleSettingsLive(const SwTableStyleSettings& rSettings);
 
     void SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff );
 
