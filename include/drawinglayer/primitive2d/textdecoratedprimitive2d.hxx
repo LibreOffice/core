@@ -92,6 +92,7 @@ namespace drawinglayer::primitive2d
                 short nLetterSpacing,
                 bool bOpticalSizing,
                 const std::vector<vcl::font::Variation>& rFontVariations,
+                const std::vector<vcl::font::FeatureSetting>& rFontFeatures,
                 sal_uInt8 nProportionalFontSize,
                 short nEscapement,
 

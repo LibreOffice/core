@@ -422,6 +422,7 @@ namespace svgio::svgreader
                     0,
                     false,
                     rSvgStyleAttributes.getFontVariations(),
+                    {},
                     100, 0,
 
                     // extra props for decorated
