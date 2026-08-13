@@ -1,0 +1,7 @@
+{
+    "manifestVersion": "0.1",
+    "name": "Commands demo",
+    "icon": "icon.svg",
+    "supports": ["text"],
+    "contributes": "ui.json"
+}

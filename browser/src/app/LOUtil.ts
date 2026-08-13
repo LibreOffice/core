@@ -1023,6 +1023,17 @@ class LOUtil {
 		if (text) document.execCommand('insertText', false, text);
 	}
 
+	// Turns arbitrary text into an HTML-safe string with no markup at all, unlike
+	// sanitize above, which still lets safe markup (bold, links, ...) through.
+	// Uses the browser's own serializer rather than a hand-written substitution:
+	// setting textContent escapes the text as a text node, and reading innerHTML
+	// back out gives that same text as HTML source.
+	public static escapeHtml(text: string): string {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
+	}
+
 	// Mirror data-cooltip onto aria-label so the accessible name
 	// matches the visible tooltip, even when branding overrides
 	// data-cooltip after load (e.g. to "Collabora Online"). When

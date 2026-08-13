@@ -1354,6 +1354,27 @@ class Dispatcher {
 			return;
 		}
 
+		if (action.startsWith('ext:')) {
+			// Split on the first remaining colon only, so a commandId that itself
+			// contains a colon doesn't get truncated the way action.split(':') would:
+			const rest = action.slice('ext:'.length);
+			const sep = rest.indexOf(':');
+			const extId = sep < 0 ? rest : rest.slice(0, sep);
+			const commandId = sep < 0 ? '' : rest.slice(sep + 1);
+			const ext = app.map._extensions && app.map._extensions[extId];
+			if (!ext) {
+				console.warn(
+					'extension ' +
+						extId +
+						': not found; cannot dispatch command ' +
+						commandId,
+				);
+				return;
+			}
+			ext.invokeCommand(commandId);
+			return;
+		}
+
 		if (
 			action === '.uno:Copy' ||
 			action === '.uno:Cut' ||

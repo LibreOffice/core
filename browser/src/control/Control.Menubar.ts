@@ -1803,7 +1803,12 @@ class Menubar extends window.L.Control {
 		}
 		const target = menu[idx];
 		const exts = (this._map._extensions || {}) as { [id: string]: any };
-		const ids = Object.keys(exts).sort();
+		// Only an extension with a sidebar `entry` has anything for this toggle to
+		// open; a commands-only extension reaches the menu solely through
+		// _applyExtensionMenuContributions below.
+		const ids = Object.keys(exts)
+			.filter((id) => exts[id].options.manifest.entry)
+			.sort();
 		if (ids.length === 0) {
 			// Hide the whole Extensions submenu when nothing is installed.
 			// Use the `hidden` flag rather than splicing the entry out, so a
@@ -1815,10 +1820,75 @@ class Menubar extends window.L.Control {
 		}
 		target.hidden = false;
 		target.menu = ids.map((id) => ({
-			name: exts[id].options.manifest.name as string,
+			name: app.LOUtil.escapeHtml(exts[id].options.manifest.name as string),
 			id: 'extension-toggle-' + id,
 			type: 'action',
 		}));
+	}
+
+	// Splices each loaded extension's contributes.menus entries into the matching
+	// top-level menu (looked up by id, e.g. 'insert'), appended at the end of that
+	// menu's own items.  Runs after _refreshExtensionsMenu for the same reason:
+	// called again once loadExtensions resolves and app.map._extensions is
+	// actually populated.  Idempotent across repeated calls (locale change,
+	// discovery resolving, ...): every call first strips any 'ext:' items a
+	// previous pass left behind before adding the current ones back.
+	private _applyExtensionMenuContributions(menu: MenuItem[]): void {
+		for (const item of menu) {
+			if (item.menu) {
+				item.menu = item.menu.filter(
+					(sub) => !sub.id || !sub.id.startsWith('ext:'),
+				);
+			}
+		}
+		if (!window.enableExperimentalFeatures) return;
+		const exts = (this._map._extensions || {}) as { [id: string]: any };
+		for (const extId of Object.keys(exts)) {
+			const manifest = exts[extId].options.manifest;
+			const menus = manifest.contributes && manifest.contributes.menus;
+			if (!menus) continue;
+			const commands = manifest.contributes.commands || [];
+			for (const menuId of Object.keys(menus)) {
+				const target = menu.find((item) => item.id === menuId);
+				if (!target) {
+					console.warn(
+						'extension ' +
+							extId +
+							': contributes.menus names unknown menu "' +
+							menuId +
+							'"',
+					);
+					continue;
+				}
+				if (!target.menu) target.menu = [];
+				for (const commandId of menus[menuId]) {
+					const command = commands.find(
+						(c: { id: string; title: string }) => c.id === commandId,
+					);
+					if (!command) {
+						console.warn(
+							'extension ' +
+								extId +
+								': contributes.menus["' +
+								menuId +
+								'"] names unknown command "' +
+								commandId +
+								'"',
+						);
+						continue;
+					}
+					target.menu.push({
+						// A manifest's command title is extension-author content, not
+						// engine-translated UI text, so it needs the same HTML-escaping
+						// any other externally-supplied text would need before landing in
+						// a menu label:
+						name: app.LOUtil.escapeHtml(command.title),
+						id: 'ext:' + extId + ':' + commandId,
+						type: 'action',
+					});
+				}
+			}
+		}
 	}
 
 	// Public entry point for external callers to ask for a menubar rebuild
@@ -1845,15 +1915,19 @@ class Menubar extends window.L.Control {
 		var docType = this._map.getDocType();
 		if (docType === 'text') {
 			this._refreshExtensionsMenu(this.options.text);
+			this._applyExtensionMenuContributions(this.options.text);
 			this._initializeMenu(this.options.text);
 		} else if (docType === 'spreadsheet') {
 			this._refreshExtensionsMenu(this.options.spreadsheet);
+			this._applyExtensionMenuContributions(this.options.spreadsheet);
 			this._initializeMenu(this.options.spreadsheet);
 		} else if (docType === 'presentation') {
 			this._refreshExtensionsMenu(this.options.presentation);
+			this._applyExtensionMenuContributions(this.options.presentation);
 			this._initializeMenu(this.options.presentation);
 		} else if (docType === 'drawing') {
 			this._refreshExtensionsMenu(this.options.drawing);
+			this._applyExtensionMenuContributions(this.options.drawing);
 			this._initializeMenu(this.options.drawing);
 		}
 
@@ -2539,7 +2613,8 @@ class Menubar extends window.L.Control {
 			|| id === 'serveraudit'
 			|| id === 'animationdeck'
 			|| id === 'transitiondeck'
-			|| id.startsWith('extension-toggle-')) {
+			|| id.startsWith('extension-toggle-')
+			|| id.startsWith('ext:')) {
 			app.dispatcher.dispatch(id);
 		} else if (id === ('settings-dialog')) {
 			this._map.settings.showSettingsDialog();

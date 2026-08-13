@@ -1,0 +1,12 @@
+{
+    "commands": [
+        {
+            "id": "insertDate",
+            "title": "Insert Date",
+            "script": "commands/dates.js"
+        }
+    ],
+    "menus": {
+        "insert": ["insertDate"]
+    }
+}
