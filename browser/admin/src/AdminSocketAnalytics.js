@@ -133,11 +133,20 @@ var AdminSocketAnalytics = AdminSocketBase.extend({
 		})]);
 
 
-		yScale = d3.scaleLinear().range([this._graphHeight - this._graphMargins.bottom, this._graphMargins.top]).domain([d3.min(data, function(d) {
-			return d.value;
-		}), d3.max(data, function(d) {
-			return d.value;
-		})]);
+		var minVal = d3.min(data, function(d) { return d.value; });
+		var maxVal = d3.max(data, function(d) { return d.value; });
+		if (option === 'mem') {
+			// Memory use often stays within a fraction of a MB of itself for
+			// long stretches. Widen a too-narrow domain so consecutive tick
+			// values don't round to the same 1-decimal MB label.
+			var minSpanKB = 1024;
+			if (maxVal - minVal < minSpanKB) {
+				var mid = (maxVal + minVal) / 2;
+				minVal = mid - minSpanKB / 2;
+				maxVal = mid + minSpanKB / 2;
+			}
+		}
+		yScale = d3.scaleLinear().range([this._graphHeight - this._graphMargins.bottom, this._graphMargins.top]).domain([minVal, maxVal]);
 
 		d3XAxis = d3.axisBottom(xScale)
 			.tickFormat(function(d) {
