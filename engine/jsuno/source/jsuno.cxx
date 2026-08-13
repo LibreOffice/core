@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
@@ -2563,6 +2564,15 @@ public:
         aOutParamIndex = {};
         aOutParam = {};
 
+        if (aFunctionName == u"getTypes") {
+            return cpo::uno::Any(
+                cpo::uno::Sequence{
+                    cppu::UnoType<css::lang::XTypeProvider>::get(), m_interfaceType});
+        }
+        if (aFunctionName == u"getImplementationId") {
+            return cpo::uno::Any(cpo::uno::Sequence<sal_Int8>{});
+        }
+
         cpo::uno::Type const returnType = lookupMethodReturnType(m_interfaceType, aFunctionName);
         bool const isVoid = returnType.getTypeClass() == cpo::uno::TypeClass_VOID;
         // Void-return methods are fire-and-forget; non-void methods spin Application::Yield
@@ -2689,8 +2699,12 @@ JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int a
         css::uno::Reference<css::script::XInvocationAdapterFactory2> factory
             = css::script::InvocationAdapterFactory::create(
                 comphelper::getProcessComponentContext());
+        //TODO: Ideally, XInvocationAdapterFactory2::createAdapter would automatically add
+        // XTypeProvider support:
         css::uno::Reference<css::uno::XInterface> adapter(
-            factory->createAdapter(invocation, { interfaceType }), css::uno::UNO_SET_THROW);
+            factory->createAdapter(
+                invocation, { cppu::UnoType<css::lang::XTypeProvider>::get(), interfaceType }),
+            css::uno::UNO_SET_THROW);
         {
             std::lock_guard lock(g_proxyMapMutex);
             auto const[it, inserted] = g_proxyMap.try_emplace(id, adapter);
