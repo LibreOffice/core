@@ -13,6 +13,7 @@
 
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -32,6 +33,7 @@
 #include <fmturl.hxx>
 #include <textcontentcontrol.hxx>
 #include <fmtfsize.hxx>
+#include <shellio.hxx>
 #include <swdtflvr.hxx>
 
 using namespace css;
@@ -132,6 +134,37 @@ CPPUNIT_TEST_FIXTURE(Test, testHeading)
     CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1),
                          getProperty<sal_Int16>(getParagraph(1), u"OutlineLevel"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImportUtf8Bom)
+{
+    setImportFilterName(TestFilter::MD);
+    createSwDoc("utf8-bom.md");
+
+    // Without the accompanying fix in place, this test would have failed, the paragraph started
+    // with a U+FEFF, i.e. the byte order mark was imported as text.
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImportUtf8)
+{
+    // The readers are created on demand, make sure ReadMarkdown is available.
+    createSwDoc();
+
+    // Pretend the system encoding is not UTF-8, which is the case on Windows.
+    SwAsciiOptions aOptions;
+    aOptions.SetCharSet(RTL_TEXTENCODING_MS_1252);
+    ReadMarkdown->GetReaderOpt().SetASCIIOpts(aOptions);
+    comphelper::ScopeGuard aGuard([] { ReadMarkdown->GetReaderOpt().ResetASCIIOpts(); });
+
+    setImportFilterName(TestFilter::MD);
+    createSwDoc("utf8-albanian.md");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Përshëndetje, çfarë bëni?
+    // - Actual  : PÃ«rshÃ«ndetje, Ã§farÃ« bÃ«ni?
+    // i.e. the UTF-8 input was decoded using the system encoding.
+    CPPUNIT_ASSERT_EQUAL(u"Përshëndetje, çfarë bëni?"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testList)

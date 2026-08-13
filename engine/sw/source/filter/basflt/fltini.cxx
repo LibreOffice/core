@@ -42,7 +42,8 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr, *ReadMarkdown = nullptr;
+Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr;
+MarkdownReader *ReadMarkdown = nullptr;
 
 static Reader* GetRTFReader();
 static Reader* GetWW8Reader();

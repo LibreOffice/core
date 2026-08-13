@@ -79,6 +79,19 @@ bool allowAccessLink(const SwDoc& rDoc)
     }
     return !SvtSecurityOptions::isUntrustedReferer(sReferer);
 }
+
+/// Checks if the bytes are a well-formed UTF-8 sequence.
+bool IsValidUtf8(const OString& rBytes)
+{
+    rtl_uString* pTarget = nullptr;
+    bool bValid = rtl_convertStringToUString(
+        &pTarget, rBytes.getStr(), rBytes.getLength(), RTL_TEXTENCODING_UTF8,
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+            | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+    if (pTarget)
+        rtl_uString_release(pTarget);
+    return bValid;
+}
 }
 
 SwNumRuleItem SwMarkdownParser::GetNumRuleItem(const UIName& rName, sal_uInt8 nLevel) const
@@ -878,9 +891,8 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
     }
 
     SwMarkdownParser parser(rDoc, rPam, *m_pStream, rBaseURL, !m_bInsertMode);
-    const rtl_TextEncoding eSrcEnc = m_aOption.GetASCIIOpts().GetCharSet();
-    parser.SetSrcEncoding(eSrcEnc);
-    comphelper::ScopeGuard guard([this] { m_aOption.ResetASCIIOpts(); });
+    parser.SetSrcEncoding(m_eSrcEnc);
+    comphelper::ScopeGuard guard([this] { m_eSrcEnc = RTL_TEXTENCODING_DONTKNOW; });
 
     if (pNumRuleItem)
     {
@@ -916,16 +928,14 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
 
 ErrCode SwMarkdownParser::CallParser()
 {
-    // use utf8
+    // md_parse() wants utf8
     rtl_TextEncoding eSrcEnc = m_eSrcEnc;
-    if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
+    const bool bGuessEnc = eSrcEnc == RTL_TEXTENCODING_DONTKNOW;
+    if (bGuessEnc)
     {
+        // A byte order mark, if there is one, decides.
         m_rInput.DetectEncoding();
         eSrcEnc = m_rInput.GetStreamEncoding();
-        if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
-        {
-            return ERRCODE_IO_INVALIDCHAR;
-        }
     }
 
     const sal_uInt64 nFilesize = m_rInput.remainingSize();
@@ -943,6 +953,15 @@ ErrCode SwMarkdownParser::CallParser()
     else
     {
         sUtf8Data = read_uInt8s_ToOString(m_rInput, nFilesize);
+
+        // Markdown is UTF-8 by definition (RFC 7763), and that is what the export writes, so
+        // trust the guessed encoding only for input that can not be UTF-8.
+        if (bGuessEnc && eSrcEnc != RTL_TEXTENCODING_UTF8 && IsValidUtf8(sUtf8Data))
+            eSrcEnc = RTL_TEXTENCODING_UTF8;
+
+        if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
+            return ERRCODE_IO_INVALIDCHAR;
+
         if (eSrcEnc != RTL_TEXTENCODING_UTF8)
         {
             OUString sData = OStringToOUString(sUtf8Data, eSrcEnc);

@@ -1,0 +1,1 @@
+Përshëndetje, çfarë bëni?

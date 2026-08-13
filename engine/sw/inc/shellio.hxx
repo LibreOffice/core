@@ -334,8 +334,14 @@ class MarkdownReader final : public Reader
     /// Parse FilterOptions passed to the importer.
     void SetupFilterOptions(SwDoc& rDoc);
 
+    /// Encoding of the input, RTL_TEXTENCODING_DONTKNOW means detect it.
+    rtl_TextEncoding m_eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
+
 public:
     MarkdownReader(): Reader() {}
+
+    /// Markdown is UTF-8, so this is only for in-memory input, e.g. the clipboard.
+    void SetSrcEncoding( rtl_TextEncoding eSrcEnc ) { m_eSrcEnc = eSrcEnc; }
 };
 
 class SW_DLLPUBLIC StgReader : public Reader
@@ -407,7 +413,8 @@ public:
 
 // BEGIN source/filter/basflt/fltini.cxx
 
-extern Reader *ReadAscii, *ReadHTML, *ReadXML, *ReadMarkdown;
+extern Reader *ReadAscii, *ReadHTML, *ReadXML;
+extern SW_DLLPUBLIC MarkdownReader *ReadMarkdown;
 
 SW_DLLPUBLIC Reader* SwGetReaderXML();
 
