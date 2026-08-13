@@ -193,7 +193,7 @@ namespace emfplushelper
                         return;
                     }
 
-                    path.reset( new EMFPPath(boundaryPointCount) );
+                    path.reset( new EMFPPath(boundaryPointCount, false/*bHasPointTypes*/) );
                     path->Read(s, 0x0);
 
                     s.Seek(pos + nBytesPerPoint * boundaryPointCount);
