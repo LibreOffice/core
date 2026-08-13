@@ -170,8 +170,8 @@ void Application::initialize()
     }
 
     // Initialize recent files
-    Poco::Path configDir = Desktop::getConfigPath();
-    recentFiles.load(configDir.append("RecentDocuments.conf").toString(), 15);
+    const Poco::Path configDir = Desktop::getConfigPath();
+    recentFiles.load(Poco::Path(configDir).append("RecentDocuments.conf").toString(), 15);
 
     // Initialize persistent prefs
     prefs = std::make_unique<Prefs>(
