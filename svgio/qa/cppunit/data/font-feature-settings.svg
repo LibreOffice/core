@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <g font-family="Linux Libertine G" font-feature-settings="'liga' 0">
+    <text y="1em">Inherited</text>
+    <text y="2em" style="font-feature-settings: 'smcp' 1, 'onum' 0">Style</text>
+    <text y="3em" font-feature-settings="'zero'">Presentation attribute</text>
+    <text y="4em" font-family="Noto Sans Arabic">مرحبا</text>
+    <text y="5em" font-family="Noto Sans CJK JP">こんにちは</text>
+  </g>
+</svg>
