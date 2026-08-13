@@ -307,6 +307,9 @@ protected:
     /// Sfx item RES_CHRATR_FONT_VARIATIONS
     void CharFontVariations(const SvxFontVariationsItem& rFontVariations) override;
 
+    /// Sfx item RES_CHRATR_FONT_FEATURES
+    void CharFontFeatures(const SvxFontFeaturesItem& rFontFeatures) override;
+
     /// Sfx item RES_CHRATR_BLINK
     void CharAnimatedText(const SvxBlinkItem& rBlink) override;
 

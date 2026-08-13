@@ -37,6 +37,7 @@
 #include <svl/whiter.hxx>
 #include <svl/grabbagitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fontfeaturesitem.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -1326,6 +1327,11 @@ void WW8AttributeOutput::CharOpticalSizing( const SvxOpticalSizingItem& )
 void WW8AttributeOutput::CharFontVariations( const SvxFontVariationsItem& )
 {
     // MSOffice has no equivalent for font variation settings, so nothing is exported.
+}
+
+void WW8AttributeOutput::CharFontFeatures( const SvxFontFeaturesItem& )
+{
+    // The binary format has no equivalent for font features, so nothing is exported.
 }
 
 void WW8AttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
@@ -5789,6 +5795,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_CHRATR_FONT_VARIATIONS:
             CharFontVariations(rHt.StaticWhichCast(RES_CHRATR_FONT_VARIATIONS));
+            break;
+        case RES_CHRATR_FONT_FEATURES:
+            CharFontFeatures(rHt.StaticWhichCast(RES_CHRATR_FONT_FEATURES));
             break;
         case RES_CHRATR_BLINK:
             CharAnimatedText(rHt.StaticWhichCast(RES_CHRATR_BLINK));
