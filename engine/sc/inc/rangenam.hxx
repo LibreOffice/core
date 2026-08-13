@@ -68,7 +68,7 @@ public:
 
 private:
     OUString        aName;
-    OUString        aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
+    OUString        aUpperName; // #i62977# for faster searching, always the upper-case form of aName
     OUString        maNewName;  ///< used for formulas after changing names in the dialog
     std::unique_ptr<ScTokenArray>
                     pCode;
@@ -103,6 +103,11 @@ public:
      * pDocument or pPos are passed, those values are assigned instead of the
      * copies. */
     ScRangeData( const ScRangeData& rScRangeData, ScDocument* pDocument = nullptr, const ScAddress* pPos = nullptr );
+
+    /** Takes the values of rData, including the name and the index, and
+        moves the token code out of rData. The document reference is kept
+        unchanged. */
+    ScRangeData&    operator=( ScRangeData&& rData );
 
     SC_DLLPUBLIC ~ScRangeData();
 
@@ -250,9 +255,10 @@ public:
     bool empty() const { return m_Data.empty(); }
 
     /** Insert object into set.
-        @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
-        ownership of p and if it can't insert it deletes the object! So, if
-        this insert here returns false the object where p pointed to is gone!
+        Takes ownership of p in all cases. If an entry with the same
+        upper-case name already exists, the values of p are moved into that
+        existing entry, p itself is deleted, and pointers held to the
+        existing entry stay valid.
 
         @param  bReuseFreeIndex
                 If the ScRangeData p points to has an index value of 0:
@@ -260,8 +266,11 @@ public:
                 If `FALSE` then assign a new index slot. The Manage Names
                 dialog uses this so that deleting and adding ranges in the same
                 run is guaranteed to not reuse previously assigned indexes.
+
+        @return the entry that now holds the values of p, or nullptr if p
+                was null.
      */
-    SC_DLLPUBLIC bool insert( ScRangeData* p, bool bReuseFreeIndex = true );
+    SC_DLLPUBLIC ScRangeData* insert( ScRangeData* p, bool bReuseFreeIndex = true );
 
     void erase(const ScRangeData& r);
     void erase(const OUString& rName);

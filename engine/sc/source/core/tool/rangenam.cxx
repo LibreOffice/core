@@ -138,6 +138,20 @@ ScRangeData::~ScRangeData()
 {
 }
 
+ScRangeData& ScRangeData::operator=( ScRangeData&& rData )
+{
+    aName = std::move(rData.aName);
+    aUpperName = std::move(rData.aUpperName);
+    maNewName = std::move(rData.maNewName);
+    pCode = std::move(rData.pCode);
+    aPos = rData.aPos;
+    eType = rData.eType;
+    eTempGrammar = rData.eTempGrammar;
+    nIndex = rData.nIndex;
+    bModified = rData.bModified;
+    return *this;
+}
+
 void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
 {
     if (eTempGrammar == FormulaGrammar::GRAM_UNSPECIFIED)
@@ -800,10 +814,10 @@ void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, con
     }
 }
 
-bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
+ScRangeData* ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
 {
     if (!p)
-        return false;
+        return nullptr;
 
     if (!p->GetIndex())
     {
@@ -829,19 +843,33 @@ bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
     }
 
     OUString aName(p->GetUpperName());
-    erase(aName); // ptr_map won't insert it if a duplicate name exists.
-    std::pair<DataType::iterator, bool> r =
-        m_Data.insert(std::make_pair(aName, std::unique_ptr<ScRangeData>(p)));
-    if (r.second)
+    DataType::iterator itrExisting = m_Data.find(aName);
+    if (itrExisting != m_Data.end())
     {
-        // Data inserted.  Store its index for mapping.
-        size_t nPos = p->GetIndex() - 1;
-        if (nPos >= maIndexToData.size())
-            maIndexToData.resize(nPos+1, nullptr);
-        maIndexToData[nPos] = p;
-        mHasPossibleAddressConflictDirty = true;
+        // An entry with this name already exists.  Move the values of p into
+        // it, so that pointers held to the existing entry stay valid.  The
+        // move takes the index of p as well, so free the slot the existing
+        // entry holds before the move overwrites its index.
+        ScRangeData* pExisting = itrExisting->second.get();
+        sal_uInt16 nOldIndex = pExisting->GetIndex();
+        assert(0 < nOldIndex && nOldIndex <= maIndexToData.size() && maIndexToData[nOldIndex-1] == pExisting);
+        maIndexToData[nOldIndex-1] = nullptr;
+        *pExisting = std::move(*p);
+        delete p;
+        p = pExisting;
     }
-    return r.second;
+    else
+    {
+        m_Data.insert(std::make_pair(aName, std::unique_ptr<ScRangeData>(p)));
+    }
+
+    // Store the index of the surviving entry for mapping.
+    size_t nPos = p->GetIndex() - 1;
+    if (nPos >= maIndexToData.size())
+        maIndexToData.resize(nPos+1, nullptr);
+    maIndexToData[nPos] = p;
+    mHasPossibleAddressConflictDirty = true;
+    return p;
 }
 
 void ScRangeName::erase(const ScRangeData& r)

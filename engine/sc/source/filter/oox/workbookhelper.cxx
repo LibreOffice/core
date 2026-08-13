@@ -371,7 +371,6 @@ namespace {
 
 WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName& rNames, const OUString& rName, sal_Int16 nIndex, sal_Int32 nUnoType)
 {
-    bool bDone = false;
     ScRangeData::Type nNewType = ScRangeData::Type::Name;
     if ( nUnoType & NamedRangeFlag::FILTER_CRITERIA )    nNewType |= ScRangeData::Type::Criteria;
     if ( nUnoType & NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
@@ -389,13 +388,9 @@ WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName& rNa
     {
         return WorkbookHelper::RangeDataRet(pNew, true);
     }
-    if ( rNames.insert(pNew) )
-        bDone = true;
-    if (!bDone)
-    {
-        delete pNew;
+    pNew = rNames.insert(pNew);
+    if (!pNew)
         throw RuntimeException();
-    }
     return WorkbookHelper::RangeDataRet(pNew, false);
 }
 
