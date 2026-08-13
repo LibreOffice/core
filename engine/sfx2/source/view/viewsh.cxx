@@ -3303,7 +3303,7 @@ static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_
     if (!comphelper::COKit::isActive())
         return true;
 
-    if (comphelper::COKit::isTiledPainting())
+    if (comphelper::COKit::isTiledPaintingOf(pImpl->m_nDocId))
     {
         switch (eType)
         {

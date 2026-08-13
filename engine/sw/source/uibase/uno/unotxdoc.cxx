@@ -3392,15 +3392,15 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // Draw Form controls
-    comphelper::COKit::setTiledPainting(true);
+    SwView* pView = m_pDocShell->GetView();
+    comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(pView->GetDocId());
     SwDrawModel* pDrawLayer = GetDocOrThrow().getIDocumentDrawModelAccess().GetDrawModel();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(0));
     SdrView* pDrawView = pViewShell->GetDrawView();
-    SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
+    SwEditWin& rEditWin = pView->GetEditWin();
     tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
     Size aOutputSize(nOutputWidth, nOutputHeight);
     KitControlHandler::paintControlTile(pPage, pDrawView, rEditWin, rDevice, aOutputSize, aTileRect);
-    comphelper::COKit::setTiledPainting(false);
 }
 
 Size SwXTextDocument::getDocumentSize()

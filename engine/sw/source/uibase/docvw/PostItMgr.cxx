@@ -1136,13 +1136,10 @@ void SwPostItMgr::LayoutPostIts()
                             // view that has the comment focus emits callbacks,
                             // so the editing view jumps to the comment, but
                             // not the others.
-                            bool bTiledPainting = comphelper::COKit::isTiledPainting();
-                            if (!bTiledPainting)
-                                // No focus -> disable callbacks.
-                                comphelper::COKit::setTiledPainting(!visiblePostIt->HasChildPathFocus());
+                            // No focus -> disable callbacks.
+                            comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(
+                                mpView->GetDocId(), !visiblePostIt->HasChildPathFocus());
                             visiblePostIt->ShowNote();
-                            if (!bTiledPainting)
-                                comphelper::COKit::setTiledPainting(bTiledPainting);
                         }
                         else
                         {

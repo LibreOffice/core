@@ -4822,7 +4822,8 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         return;
 
     // we need to skip tile invalidation for controls on rendering
-    comphelper::COKit::setTiledPainting(true);
+    comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(
+        pViewSh->GetViewShellBase().GetDocId());
 
     // Setup drawing layer to work properly. Since we use a custom VirtualDevice
     // for the drawing, SdrPaintView::BeginCompleteRedraw() will call FindPaintWindow()
@@ -4905,8 +4906,6 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         Size aOutputSize(nOutputWidth, nOutputHeight);
         KitControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
     }
-
-    comphelper::COKit::setTiledPainting(false);
 }
 
 OString SdXImpressDocument::getViewRenderState(const SfxViewShell* pViewShell)

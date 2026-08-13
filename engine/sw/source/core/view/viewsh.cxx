@@ -2220,7 +2220,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // TODO clean up SwViewShell's approach to output devices (the many of
     // them - mpBufferedOut, mpOut, mpWin, ...)
     OutputDevice *pSaveOut = mpOut;
-    comphelper::COKit::setTiledPainting(true);
+    const SfxViewShell* pKitViewShell = GetSfxViewShell();
+    comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(
+        pKitViewShell ? pKitViewShell->GetDocId() : comphelper::COKit::getDocId());
     mpOut = &rDevice;
 
     // resizes the virtual device so to contain the entries context
@@ -2306,7 +2308,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     }
 
     mpOut = pSaveOut;
-    comphelper::COKit::setTiledPainting(false);
 }
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )

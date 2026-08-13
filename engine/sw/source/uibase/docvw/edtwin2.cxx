@@ -785,16 +785,10 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     else
     {
         pWrtShell->setOutputToWindow(true);
-        bool bTiledPainting = false;
-        if (comphelper::COKit::isActive())
         {
-            bTiledPainting = comphelper::COKit::isTiledPainting();
-            comphelper::COKit::setTiledPainting(true);
-        }
-        pWrtShell->Paint(rRenderContext, rRect);
-        if (comphelper::COKit::isActive())
-        {
-            comphelper::COKit::setTiledPainting(bTiledPainting);
+            comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(
+                GetView().GetDocId(), comphelper::COKit::isActive());
+            pWrtShell->Paint(rRenderContext, rRect);
         }
         pWrtShell->setOutputToWindow(false);
     }

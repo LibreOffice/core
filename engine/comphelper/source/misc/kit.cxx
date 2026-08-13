@@ -49,7 +49,7 @@ static OUString g_aUserConfigDir;
 
 static bool g_bPartInInvalidation(false);
 
-static bool g_bTiledPainting(false);
+static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
 
 static bool g_bIdleLayouting(false);
 
@@ -207,15 +207,24 @@ bool isPartInInvalidation()
     return g_bPartInInvalidation;
 }
 
-void setTiledPainting(bool bTiledPainting)
-{
-    g_bTiledPainting = bTiledPainting;
-}
-
 bool isTiledPainting()
 {
-    return g_bTiledPainting;
+    return g_nTiledPaintingDocId != NoDocId;
 }
+
+bool isTiledPaintingOf(ViewShellDocId nDocId)
+{
+    return g_nTiledPaintingDocId != NoDocId && g_nTiledPaintingDocId == nDocId;
+}
+
+TiledPaintingGuard::TiledPaintingGuard(ViewShellDocId nDocId, bool bTiledPainting)
+    : m_nPrevDocId(g_nTiledPaintingDocId)
+{
+    if (bTiledPainting)
+        g_nTiledPaintingDocId = nDocId;
+}
+
+TiledPaintingGuard::~TiledPaintingGuard() { g_nTiledPaintingDocId = m_nPrevDocId; }
 
 void setIdleLayouting(bool bIdleLayouting)
 {

@@ -1041,11 +1041,11 @@ void SwAnnotationWin::DeactivatePostIt()
     // Make sure this view doesn't emit COKit callbacks during the update, as the
     // sidebar window's SidebarTextControl doesn't have a valid twip offset
     // (map mode origin) during that operation.
-    bool bTiledPainting = comphelper::COKit::isTiledPainting();
-    comphelper::COKit::setTiledPainting(true);
-    // write the visible text back into the SwField
-    UpdateData();
-    comphelper::COKit::setTiledPainting(bTiledPainting);
+    {
+        comphelper::COKit::TiledPaintingGuard aTiledPaintingGuard(mrView.GetDocId());
+        // write the visible text back into the SwField
+        UpdateData();
+    }
 
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);

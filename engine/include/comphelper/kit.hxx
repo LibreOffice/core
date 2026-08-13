@@ -98,10 +98,30 @@ COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
 /// Set whether clients want a part number in an invalidation payload.
 COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
 
-/// Check if we are doing tiled painting.
+/// The ViewShellDocId of no document at all.
+constexpr ViewShellDocId NoDocId(-1);
+
+/// Check if we are doing tiled painting, for code only reachable from within it.
 COMPHELPER_DLLPUBLIC bool isTiledPainting();
-/// Set if we are doing tiled painting.
-COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
+/// Check if the tiled painting in progress is this document's, for code that can
+/// be reached on behalf of a document other than the one being painted.
+COMPHELPER_DLLPUBLIC bool isTiledPaintingOf(ViewShellDocId nDocId);
+
+/// Marks a document as the one being tile painted for as long as it lives, and
+/// puts back the document that was marked before. Pass bTiledPainting false to
+/// keep the current marking instead of taking it over.
+class COMPHELPER_DLLPUBLIC TiledPaintingGuard
+{
+    const ViewShellDocId m_nPrevDocId;
+
+public:
+    explicit TiledPaintingGuard(ViewShellDocId nDocId, bool bTiledPainting = true);
+    ~TiledPaintingGuard();
+
+    TiledPaintingGuard(const TiledPaintingGuard&) = delete;
+    TiledPaintingGuard& operator=(const TiledPaintingGuard&) = delete;
+};
+
 /// Set if we are doing idle layout.
 COMPHELPER_DLLPUBLIC void setIdleLayouting(bool bIdleLayouting);
 /// Check if we are painting the dialog.
