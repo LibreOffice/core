@@ -64,9 +64,9 @@ namespace emfplushelper
         return static_cast<sal_Int16>(nRet);
     }
 
-    EMFPPath::EMFPPath (sal_uInt32 _nPoints, bool bLines)
+    EMFPPath::EMFPPath (sal_uInt32 _nPoints, bool _bHasPointTypes)
         : nPoints(_nPoints)
-        , bHasPointTypes(!bLines)
+        , bHasPointTypes(_bHasPointTypes)
     {
     }
 
