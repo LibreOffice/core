@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:h text:outline-level="1">First Heading</text:h>
+   <text:p>Body text under the first heading.</text:p>
+   <text:h text:outline-level="1">Second Heading</text:h>
+   <text:p>Body text under the second heading.</text:p>
+   <text:h text:outline-level="1">Third Heading</text:h>
+   <text:p>Body text under the third heading.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

@@ -414,10 +414,26 @@ std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
     return std::make_unique<SwNavigationPI>(pParent, rxFrame, pBindings, nullptr);
 }
 
+namespace
+{
+    // Return the view whose bindings created this panel
+    SfxViewShell* lcl_GetNavigatorViewShell(const SfxBindings* pBindings)
+    {
+        for (SwView* pView = SwModule::GetFirstView(); pView;
+             pView = SwModule::GetNextView(pView))
+        {
+            if (&pView->GetViewFrame().GetBindings() == pBindings)
+                return pView;
+        }
+        return SfxViewShell::Current();
+    }
+}
+
 SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg)
-    : PanelLayout(pParent, u"NavigatorPanel"_ustr, u"modules/swriter/ui/navigatorpanel.ui"_ustr)
+    : PanelLayout(pParent, u"NavigatorPanel"_ustr, u"modules/swriter/ui/navigatorpanel.ui"_ustr,
+                  reinterpret_cast<sal_uInt64>(lcl_GetNavigatorViewShell(_pBindings)))
     , m_aDocFullName(SID_DOCFULLNAME, *_pBindings, *this)
     , m_aPageStats(FN_STAT_PAGE, *_pBindings, *this)
     , m_aNavElement(FN_NAV_ELEMENT, *_pBindings, *this)
@@ -453,7 +469,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     InitContentFunctionsToolbar();
     if (comphelper::COKit::isActive())
     {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
+        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(lcl_GetNavigatorViewShell(_pBindings));
         jsdialog::SendNavigatorForView(nShellId);
     }
 

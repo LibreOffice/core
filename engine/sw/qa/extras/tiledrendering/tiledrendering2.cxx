@@ -27,6 +27,8 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
@@ -1334,6 +1336,53 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoCommentDeletionAndTextChange)
     CPPUNIT_ASSERT_EQUAL(std::string("Add"),
                          aView.m_aComment.get_child("action").get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testNavigatorContentTreeKeyedToOwningView)
+{
+    // The Navigator content tree must be keyed on the view that owns it,
+    // not on view is current when the panel is built
+    createDoc("navigator-headings.fodt");
+
+    // The first view owns the Navigator built below.
+    SwView* pOwningView = getSwDocShell()->GetView();
+
+    // A second view, which becomes the current one.
+    KitHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    int nForeignView = KitHelper::getCurrentView();
+    SfxViewShell* pForeignShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(static_cast<SfxViewShell*>(pOwningView) != pForeignShell);
+
+    // Build the first view's Navigator while the second view is current.
+    pOwningView->GetViewFrame().ToggleChildWindow(SID_NAVIGATOR);
+    Scheduler::ProcessEventsToIdle();
+
+    // A content-tree activation the way the client sends it.
+    StringMap aActivate;
+    aActivate[u"cmd"_ustr] = u"activate"_ustr;
+    aActivate[u"data"_ustr] = u"0"_ustr;
+    aActivate[u"type"_ustr] = u"treeview"_ustr;
+
+    OUString sOwningKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(pOwningView)))
+          + "navigator";
+    OUString sForeignKey
+        = OUString::number(reinterpret_cast<sal_uInt64>(pForeignShell)) + "navigator";
+
+    // The content tree is reachable from its owning view...
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sOwningKey, u"contenttree"_ustr, aActivate));
+    // ...and was not registered under the view that was merely current at build.
+    CPPUNIT_ASSERT(!jsdialog::ExecuteAction(sForeignKey, u"contenttree"_ustr, aActivate));
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Close the Navigator and drop the extra view. A Navigator left open keeps a
+    // process-wide shown-state that makes a fresh view in a later test reopen it,
+    // and its page-status controller would then emit extra state changes.
+    pOwningView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
+    KitHelper::destroyView(nForeignView);
+    Scheduler::ProcessEventsToIdle();
 }
 }
 
