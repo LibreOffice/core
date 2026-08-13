@@ -2356,6 +2356,7 @@ namespace emfplushelper
                                             0,
                                             false,
                                             {},
+                                            {},
                                             100, 0,
                                             color.getBColor(), // OverlineColor
                                             color.getBColor(), // TextlineColor
@@ -2859,6 +2860,7 @@ namespace emfplushelper
                                                     COL_TRANSPARENT,
                                                     0,
                                                     false,
+                                                    {},
                                                     {},
                                                     100, 0,
                                                     color.getBColor(),

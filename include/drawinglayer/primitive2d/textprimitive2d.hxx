@@ -27,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <vcl/font/Feature.hxx>
 #include <vcl/font/Variation.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -145,6 +146,9 @@ private:
     /// Font variation settings
     std::vector<vcl::font::Variation> maFontVariations;
 
+    /// Font feature settings
+    std::vector<vcl::font::FeatureSetting> maFontFeatures;
+
     /// Proportional font size (for superscript/subscript), 100 = normal. Must be > 0.
     sal_Int32 mnProportionalFontSize{ 100 };
 
@@ -173,6 +177,7 @@ public:
                                  const Color& rTextFillColor = COL_TRANSPARENT,
                                  short nLetterSpacing = 0, bool bOpticalSizing = false,
                                  const std::vector<vcl::font::Variation>& rFontVariations = {},
+                                 const std::vector<vcl::font::FeatureSetting>& rFontFeatures = {},
                                  sal_uInt8 nProportionalFontSize = 100, short nEscapement = 0);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -195,6 +200,7 @@ public:
     short getLetterSpacing() const { return mnLetterSpacing; }
     bool getOpticalSizing() const { return mbOpticalSizing; }
     const std::vector<vcl::font::Variation>& getFontVariations() const { return maFontVariations; }
+    const std::vector<vcl::font::FeatureSetting>& getFontFeatures() const { return maFontFeatures; }
     sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
     sal_Int32 getEscapement() const { return mnEscapement; }
 
