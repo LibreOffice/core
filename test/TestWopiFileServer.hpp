@@ -126,6 +126,30 @@ std::string userPresetDir(const std::string& userId)
     return "test/data/presets/user/u-" + safe;
 }
 
+// Settings requests name the user either in a userid parameter or in a
+// "test-<userid>" access token. The bare "test" token yields an empty string.
+std::string settingsUserId(const Poco::URI::QueryParameters& params)
+{
+    std::string userId;
+    std::string accessToken;
+    for (const auto& param : params)
+    {
+        if (param.first == "userid")
+            userId = param.second;
+        else if (param.first == "access_token")
+            accessToken = param.second;
+    }
+
+    if (!userId.empty())
+        return userId;
+
+    constexpr std::string_view tokenPrefix = "test-";
+    if (accessToken.starts_with(tokenPrefix))
+        return accessToken.substr(tokenPrefix.size());
+
+    return std::string();
+}
+
 //handles request starts with /wopi/files
 void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetails& requestDetails,
                        std::istream& message, const std::shared_ptr<StreamSocket>& socket)
@@ -542,14 +566,7 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
             // tests seed and read directly.
             std::string presetUser;
             if (serveBrowerSettings)
-            {
-                const auto useridIt =
-                    std::find_if(params.begin(), params.end(),
-                                 [](const std::pair<std::string, std::string>& pair)
-                                 { return pair.first == "userid"; });
-                if (useridIt != params.end())
-                    presetUser = useridIt->second;
-            }
+                presetUser = settingsUserId(params);
             auto items = getAssetVec(PresetType::User);
             handlePresetRequest("user", etagString, prefix, socket, items, serveBrowerSettings,
                                 unittest, presetUser);
@@ -630,15 +647,9 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
             const std::string& type = splitStr[1];
             const std::string& fileName = splitStr[3];
 
-            // The user id (carried on the upload URI via _uriPublic, preserved
-            // by getPresetUploadBaseUrl) selects this user's own store, so the
-            // GET listing reads back what this user uploaded (see userPresetDir).
-            std::string userId;
-            for (const auto& param : params)
-            {
-                if (param.first == "userid")
-                    userId = param.second;
-            }
+            // The user id selects this user's own store, so the GET listing
+            // reads back what this user uploaded (see userPresetDir).
+            const std::string userId = settingsUserId(params);
 
             // Write under FileServerRoot so the location matches where the
             // GET/index handlers read presets from (they use
