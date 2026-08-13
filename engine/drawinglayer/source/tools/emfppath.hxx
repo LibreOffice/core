@@ -33,7 +33,7 @@ namespace emfplushelper
         bool                         bHasPointTypes;
 
     public:
-        EMFPPath(sal_uInt32 _nPoints, bool bLines = false);
+        EMFPPath(sal_uInt32 _nPoints, bool _bHasPointTypes = true);
 
         virtual ~EMFPPath() override;
 

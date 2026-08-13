@@ -1892,7 +1892,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
 
-                        EMFPPath path(points, true);
+                        EMFPPath path(points, false/*bHasPointTypes*/);
                         path.Read(rMS, flags);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
@@ -1903,7 +1903,7 @@ namespace emfplushelper
                         sal_uInt32 points(0);
                         rMS.ReadUInt32(points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
-                        EMFPPath path(points, true);
+                        EMFPPath path(points, false/*bHasPointTypes*/);
                         path.Read(rMS, flags);
 
                         // 0x2000 bit indicates whether to draw an extra line between the last point
@@ -1978,7 +1978,7 @@ namespace emfplushelper
                                                    << " NumSegments: " << aNumSegments
                                                    << " Points: " << points);
 
-                        EMFPPath path(points, true);
+                        EMFPPath path(points, false/*bHasPointTypes*/);
                         path.Read(rMS, flags);
 
                         if (points >= 2)
@@ -2014,7 +2014,7 @@ namespace emfplushelper
                             SAL_WARN("drawinglayer.emf", "Not enough number of points");
                             break;
                         }
-                        EMFPPath path(points, true);
+                        EMFPPath path(points, false/*bHasPointTypes*/);
                         path.Read(rMS, flags);
                         if (type == EmfPlusRecordTypeFillClosedCurve)
                         {
