@@ -2238,10 +2238,9 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
                 return nullptr;
             }
 
-            const char* loError = _loKit->getError();
+            std::string loError = _loKit->getError();
             session->sendTextFrameAndLogError(
-                COOLProtocol::buildErrorFrame("load", "faileddocloading",
-                                              loError ? loError : ""));
+                COOLProtocol::buildErrorFrame("load", "faileddocloading", loError));
 
             // When the kit runs in-process it is shared with the rest of the
             // application, so a failed load must not close the connection or

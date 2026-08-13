@@ -2383,8 +2383,8 @@ openDocumentInThread (gpointer data)
     priv->m_pDocument = priv->m_pOffice->documentLoadWithOptions(url.c_str(), "en-US" );
     if ( !priv->m_pDocument )
     {
-        char *pError = priv->m_pOffice->getError();
-        g_task_return_new_error(task, g_quark_from_static_string ("COKit error"), 0, "%s", pError);
+        std::string aError = priv->m_pOffice->getError();
+        g_task_return_new_error(task, g_quark_from_static_string ("COKit error"), 0, "%s", aError.c_str());
     }
     else
     {

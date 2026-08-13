@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
+#include <string>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -1458,8 +1459,8 @@ struct COKit
      */
     virtual COKitDocument* documentLoad(const char* pURL) = 0;
 
-    /// Returns the last error as a string. The caller owns the returned string and frees it.
-    virtual char* getError() = 0;
+    /// Returns the last error as a string.
+    virtual std::string getError() = 0;
 
     virtual COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) = 0;
 

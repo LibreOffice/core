@@ -82,7 +82,7 @@ protected:
         loKitDocument = loKit->documentLoad(args[1].c_str());
         if (!loKitDocument)
         {
-            logger().fatal("Document loading failed: " + std::string(loKit->getError()));
+            logger().fatal("Document loading failed: " + loKit->getError());
             return EX_UNAVAILABLE;
         }
 

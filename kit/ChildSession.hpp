@@ -250,14 +250,7 @@ private:
 
     std::string getLOKitLastError() const
     {
-        char *lastErr = _docManager->getLOKit()->getError();
-        std::string ret;
-        if (lastErr != nullptr)
-        {
-            ret = std::string(lastErr, strlen(lastErr));
-            free (lastErr);
-        }
-        return ret;
+        return _docManager->getLOKit()->getError();
     }
 
     void updateCursorPosition(const std::string &rect);

@@ -51,8 +51,8 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getErr
     (JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    char* pError = pCOKit->getError();
-    return pEnv->NewStringUTF(pError);
+    std::string aError = pCOKit->getError();
+    return pEnv->NewStringUTF(aError.c_str());
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy

@@ -435,7 +435,7 @@ namespace desktop {
         void dumpState(rtl::OStringBuffer &aState);
 
         COKitDocument* documentLoad(const char* pURL) override;
-        char* getError() override;
+        std::string getError() override;
         COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) override;
         void registerCallback(COKitCallback pCallback, void* pData) override;
         char* getFilterTypes() override;

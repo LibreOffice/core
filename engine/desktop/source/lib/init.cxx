@@ -3169,7 +3169,7 @@ void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectan
 
 static int                     lo_initialize    (COKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static COKitDocument* lo_documentLoad  (COKit* pThis, const char* pURL);
-static char *                  lo_getError      (COKit* pThis);
+static std::string                 lo_getError      (COKit* pThis);
 static COKitDocument* lo_documentLoadWithOptions  (COKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
@@ -3264,7 +3264,7 @@ COKitDocument* COKitImpl::documentLoad(const char* pURL)
     return lo_documentLoad(this, pURL);
 }
 
-char* COKitImpl::getError()
+std::string COKitImpl::getError()
 {
     return lo_getError(this);
 }
@@ -9113,7 +9113,7 @@ static bool lo_takeLegacyUnoApiUseFlag()
     return comphelper::takeLegacyUnoApiUseFlag();
 }
 
-static char* lo_getError (COKit *pThis)
+static std::string lo_getError (COKit *pThis)
 {
     comphelper::ProfileZone aZone("lo_getError");
 

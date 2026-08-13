@@ -48,7 +48,7 @@ static void convert(COKit* office, const std::string& input, std::set<std::strin
                                            nullptr /* options */));
         if (!doc)
         {
-            std::cerr << "Error: could not load document: " << office->getError() << "\n";
+            std::cerr << "Error: could not load document: " << office->getError().c_str() << "\n";
             return;
         }
 
@@ -59,7 +59,7 @@ static void convert(COKit* office, const std::string& input, std::set<std::strin
                 if (!doc->saveAs((stem + "." + format).c_str(), format.c_str(), nullptr /* options */))
                 {
                     std::cerr << "Error: could not export document as " << format
-                              << ": " << office->getError() << "\n";
+                              << ": " << office->getError().c_str() << "\n";
                 }
             }
             catch (const std::exception& e)
