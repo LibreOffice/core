@@ -56,7 +56,7 @@ TableColumn::TableColumn( const WorkbookHelper& rHelper ) :
 void TableColumn::importTableColumn( const AttributeList& rAttribs )
 {
     mnId = rAttribs.getInteger( XML_id, -1 );
-    maName = rAttribs.getString( XML_name, OUString() );
+    maName = rAttribs.getXString( XML_name, OUString() );
     maModel.maUniqueName = rAttribs.getXString( XML_uniqueName, OUString() );
     mnDataDxfId = rAttribs.getInteger( XML_dataDxfId, -1 );
     if ( rAttribs.hasAttribute(XML_totalsRowLabel ) )
