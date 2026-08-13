@@ -124,6 +124,8 @@ bool insertClipboardImageFile(int dstFd, const QMimeData* data)
 {
     constexpr std::array imageExtensions = { "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg" };
 
+    bool inserted = false;
+
     for (const QUrl& url : data->urls())
     {
         const QFileInfo fileInfo(url.toLocalFile());
@@ -142,10 +144,16 @@ bool insertClipboardImageFile(int dstFd, const QMimeData* data)
                                     " type=graphic data=" + file.readAll().toBase64().toStdString();
         fakeSocketWriteQueue(dstFd, message.c_str(), message.size());
 
-        return true;
+        if (data->urls().size() > 1)
+        {
+            const std::string resetMessage = "resetselection";
+            fakeSocketWriteQueue(dstFd, resetMessage.c_str(), resetMessage.size());
+        }
+
+        inserted = true;
     }
 
-    return false;
+    return inserted;
 }
 
 void writeMimeDataToDoc(COKitDocument* dstDoc, const QMimeData* data)
