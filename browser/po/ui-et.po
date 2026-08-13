@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-10 18:53+0000\n"
+"PO-Revision-Date: 2026-08-14 06:16+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/et/>\n"
@@ -616,7 +616,7 @@ msgstr "Säti mõõt alusvõrgu alusel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:635
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Sünkrooni teljed"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:636
 msgid "Snap grid"
@@ -757,7 +757,7 @@ msgstr "Taust"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:665
 msgid "Print Black"
-msgstr ""
+msgstr "Trüki mustana"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:666
 msgid "Hidden text"
@@ -817,11 +817,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:940
 msgid "Upload Wordbook"
-msgstr ""
+msgstr "Laadi sõnaraamat üles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:946
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumendi kujundused"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:948
 msgid ""
@@ -831,7 +831,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:954
 msgid "Upload Theme"
-msgstr ""
+msgstr "Laadi kujundus üles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:960
 #: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:652
@@ -841,7 +841,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:109
 msgid "Extensions"
-msgstr ""
+msgstr "Lisamoodulid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:962
 msgid ""
@@ -993,7 +993,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:1818
 #: src/control/Control.NotebookbarWriter.js:1819
 msgid "AI Assistant"
-msgstr ""
+msgstr "Tehisaru abiline"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2279
 msgid ""
@@ -1036,24 +1036,24 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:2878
 #: admin/src/integrator/AdminIntegratorSettings.ts:2996
 msgid "Fetching models..."
-msgstr ""
+msgstr "Laadin mudeleid…"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2925
 #: admin/src/integrator/AdminIntegratorSettings.ts:2940
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: admin/src/integrator/AdminIntegratorSettings.ts:3052
 msgid "No models found"
-msgstr ""
+msgstr "Ühtegi mudelit ei leidu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2950
 #: admin/src/integrator/AdminIntegratorSettings.ts:3062
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Mudelite laadimine õnnestus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2956
 #: admin/src/integrator/AdminIntegratorSettings.ts:3068
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Mudelite laadimine ei õnnestunud"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2966
 msgid "Invalid provider configuration"
@@ -1086,7 +1086,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3596
 msgid "Enter {0}"
-msgstr ""
+msgstr "Sisesta {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3654
 msgid "Reset"
@@ -1126,7 +1126,7 @@ msgstr ""
 
 #: admin/src/integrator/WordBook.ts:333
 msgid "Type to add a word"
-msgstr ""
+msgstr "Sisesta lisatav sõna"
 
 #: admin/src/integrator/WordBook.ts:338
 #: src/control/Notebookbar.ImpressAnimationTab.ts:67
@@ -1283,15 +1283,15 @@ msgstr "Uuenda"
 
 #: src/canvas/sections/CommentSection.ts:45
 msgid "Edit comment"
-msgstr ""
+msgstr "Muuda kommentaari"
 
 #: src/canvas/sections/CommentSection.ts:46
 msgid "Reply comment"
-msgstr ""
+msgstr "Vasta kommentaarile"
 
 #: src/canvas/sections/CommentSection.ts:47
 msgid "Open menu"
-msgstr ""
+msgstr "Ava menüü"
 
 #: src/canvas/sections/CommentSection.ts:196
 #: src/canvas/sections/CommentSection.ts:676
@@ -1307,12 +1307,12 @@ msgstr ""
 #: src/canvas/sections/CommentSection.ts:571
 #: src/canvas/sections/CommentSection.ts:572
 msgid "Accept change"
-msgstr ""
+msgstr "Nõustu muudatusega"
 
 #: src/canvas/sections/CommentSection.ts:578
 #: src/canvas/sections/CommentSection.ts:579
 msgid "Reject change"
-msgstr ""
+msgstr "Hülga muudatus"
 
 #: src/canvas/sections/CommentSection.ts:603
 msgid "Resolved"
@@ -1361,15 +1361,15 @@ msgstr "Määra jutulõng lahendatuks"
 
 #: src/canvas/sections/CommentSection.ts:1277
 msgid "Promote to top comment"
-msgstr ""
+msgstr "Tõsta kommentaar esile"
 
 #: src/canvas/sections/CommentSection.ts:1282
 msgid "Show on the side"
-msgstr ""
+msgstr "Näita küljel"
 
 #: src/canvas/sections/CommentSection.ts:1282
 msgid "Open in full view"
-msgstr ""
+msgstr "Ava täisvaates"
 
 #: src/canvas/sections/CommentSection.ts:1289
 msgid "Show in navigator"
@@ -1443,11 +1443,11 @@ msgstr ""
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Päis"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Jalus"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
@@ -1480,7 +1480,7 @@ msgstr ""
 
 #: src/control/Control.AboutDialog.ts:178
 msgid "View widgets"
-msgstr ""
+msgstr "Vaata vidinaid"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
@@ -1488,7 +1488,7 @@ msgstr ""
 
 #: src/control/Control.AboutDialog.ts:220
 msgid "Time zone:"
-msgstr ""
+msgstr "Ajavöönd:"
 
 #: src/control/Control.AboutDialog.ts:275
 msgid "Copy all version information in English"
@@ -1500,16 +1500,16 @@ msgstr ""
 
 #: src/control/Control.AboutDialog.ts:437
 msgid "Version:"
-msgstr ""
+msgstr "Versioon:"
 
 #: src/control/Control.AddressInputField.ts:67
 msgid "cell address"
-msgstr ""
+msgstr "lahtri aadress"
 
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Nimekast"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
@@ -1617,7 +1617,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:657
 msgid "New conversation"
-msgstr ""
+msgstr "Uus vastus"
 
 #: src/control/Control.AIChatSidebar.ts:688
 msgid "Ask AI anything about your document..."
@@ -3449,9 +3449,8 @@ msgid "PowerPoint Presentation (.pptx)"
 msgstr ""
 
 #: src/control/Control.Menubar.ts:465 src/control/Control.Menubar.ts:677
-#, fuzzy
 msgid "Save Comments"
-msgstr "Näita kommentaare"
+msgstr "Savesta kommentaarid"
 
 #: src/control/Control.Menubar.ts:474
 #: src/control/Control.NotebookbarBuilder.js:464
@@ -6320,9 +6319,8 @@ msgid ""
 msgstr ""
 
 #: src/docdispatcher.ts:869
-#, fuzzy
 msgid "Are you sure you want to delete this slide?"
-msgstr "Kas sa oled kindel, et soovid selle sessiooni lõpetada?"
+msgstr "Kas sa oled kindel, et soovid selle slaidi kustutada?"
 
 #: src/docdispatcher.ts:872
 msgid "Are you sure you want to delete this page?"
@@ -6621,9 +6619,8 @@ msgid "Named Range"
 msgstr ""
 
 #: src/layer/tile/CanvasTileLayer.js:3749
-#, fuzzy
 msgid "No Comments"
-msgstr "Näita kommentaare"
+msgstr "Kommentaare pole"
 
 #: src/main.js:399
 msgid "Warning! The browser you are using is not supported."
