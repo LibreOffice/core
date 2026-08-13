@@ -2574,16 +2574,27 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'text': _UNO('.uno:GoalSeekDialog', 'spreadsheet'),
 								'command': '.uno:GoalSeekDialog',
 								'accessibility': { focusBack: true,	combination: 'SG', de: null }
-							},
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
 							{
 								'id': 'data-solver-dialog',
 								'type': 'toolitem',
 								'text': _UNO('.uno:SolverDialog', 'spreadsheet'),
 								'command': '.uno:SolverDialog',
 								'accessibility': { focusBack: true,	combination: 'SV', de: null }
-							},
+							}
 						]
-					},
+					}
+				],
+				'vertical': 'true'
+			},
+			{
+				'type': 'container',
+				'children': [
 					{
 						'type': 'toolbox',
 						'children': [
@@ -2593,7 +2604,12 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'text': _UNO('.uno:Validation', 'spreadsheet'),
 								'command': '.uno:Validation',
 								'accessibility': { focusBack: true,	combination: 'DV', de: null }
-							},
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
 							{
 								'id': 'data-text-to-columns',
 								'type': 'toolitem',
