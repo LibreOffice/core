@@ -1010,6 +1010,18 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );     // only nTab with Flags
         pUndoDoc->AddUndoTab( 0, nCount-1 );                    // all sheets for references
 
+        // Deleting nTab rewrites any formula on another sheet that refers to
+        // it into a #REF! error. Snapshot those sheets' formulas too, so
+        // ScMoveUndo::UndoRef() has the original formula to put back on undo
+        // instead of leaving the error in place.
+        for (SCTAB nOtherTab = 0; nOtherTab < nCount; ++nOtherTab)
+        {
+            if (nOtherTab == nTab)
+                continue;
+            rDoc.CopyToDocument(0,0,nOtherTab, rDoc.MaxCol(),rDoc.MaxRow(),nOtherTab,
+                                 InsertDeleteFlags::FORMULA, false, *pUndoDoc );
+        }
+
         rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
         OUString aOldName;
         rDoc.GetName( nTab, aOldName );

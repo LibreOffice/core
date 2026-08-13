@@ -19,6 +19,8 @@
 
 #include <scitems.hxx>
 
+#include <algorithm>
+
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/borderline.hxx>
@@ -2614,6 +2616,18 @@ bool ScViewFunc::DeleteTables(const std::vector<SCTAB>& rTabs, bool bRecord)
         }
 
         pUndoDoc->AddUndoTab( 0, nCount-1 );            //  all Tabs for references
+
+        // Deleting these tabs rewrites any formula on another sheet that
+        // refers to one of them into a #REF! error. Snapshot that sheet's
+        // formulas too, so ScMoveUndo::UndoRef() has the original formula to
+        // put back on undo instead of leaving the error in place.
+        for (SCTAB nOtherTab = 0; nOtherTab < nCount; ++nOtherTab)
+        {
+            if (std::find(rTabs.begin(), rTabs.end(), nOtherTab) != rTabs.end())
+                continue;
+            rDoc.CopyToDocument(0,0,nOtherTab, rDoc.MaxCol(),rDoc.MaxRow(),nOtherTab,
+                                 InsertDeleteFlags::FORMULA, false, *pUndoDoc );
+        }
 
         rDoc.BeginDrawUndo();                          //  DeleteTab creates a SdrUndoDelPage
 

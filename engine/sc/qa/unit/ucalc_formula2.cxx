@@ -7307,6 +7307,41 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalNameAsArgumentHasNoParameters)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testUndoDeleteTabRestoresCrossSheetFormula)
+{
+    // cool#15924: deleting a sheet turns a formula on another sheet that
+    // refers to it into a #REF! error. Undoing the delete brought the
+    // deleted sheet back, but the #REF! error was left in place on the
+    // other sheet instead of the original formula.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 42.0);
+    m_pDoc->SetString(ScAddress(0, 0, 1), u"=Sheet1.A1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(ScAddress(0, 0, 1)));
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    CPPUNIT_ASSERT(rFunc.DeleteTable(0, true));
+
+    // The formula is now on the remaining sheet's tab 0 and broken.
+    FormulaError nError = m_pDoc->GetErrCode(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Formula should be a #REF! error after the referenced sheet is deleted.",
+                           nError != FormulaError::NONE);
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // Without the fix, the formula stayed "=#REF!" and its value stayed an error.
+    CPPUNIT_ASSERT_EQUAL(u"=Sheet1.A1"_ustr, m_pDoc->GetFormula(0, 0, 1));
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(ScAddress(0, 0, 1)));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
