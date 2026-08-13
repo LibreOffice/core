@@ -2293,6 +2293,21 @@ CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettings)
     assertXPath(pDocument, "//textsimpleportion[7]", "font-variation-settings", u"\"wght\" 700");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettingsInherit)
+{
+    // font-variation-settings is an inherited property.
+    xmlDocUniquePtr pDocument
+        = dumpAndParseSvg(u"/svgio/qa/cppunit/data/font-variation-settings-inherit.svg");
+
+    assertXPath(pDocument, "//textsimpleportion", 3);
+    // inherited from the group
+    assertXPath(pDocument, "//textsimpleportion[1]", "font-variation-settings", u"\"wght\" 300");
+    // the child's own list replaces the inherited one, it does not merge with it
+    assertXPath(pDocument, "//textsimpleportion[2]", "font-variation-settings", u"\"wght\" 700");
+    // the script of the text makes no difference
+    assertXPath(pDocument, "//textsimpleportion[3]", "font-variation-settings", u"\"wght\" 300");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

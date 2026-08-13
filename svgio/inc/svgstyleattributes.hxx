@@ -422,7 +422,7 @@ namespace svgio::svgreader
             void setFontWeight(const FontWeight aFontWeight) { maFontWeight = aFontWeight; }
 
             /// FontVariations content
-            const std::vector<vcl::font::Variation>& getFontVariations() const { return maFontVariations; }
+            const std::vector<vcl::font::Variation>& getFontVariations() const;
             void setFontVariations(std::vector<vcl::font::Variation>&& rFontVariations) { maFontVariations = std::move(rFontVariations); }
 
             /// FontDirection content

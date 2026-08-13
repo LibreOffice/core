@@ -1367,7 +1367,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(36, 0),
+            maResolvingParent(37, 0),
             mbStrokeDasharraySet(false),
             mbUseFillFromContextFill(false),
             mbUseFillFromContextStroke(false),
@@ -2841,6 +2841,28 @@ namespace svgio::svgreader
 
             // default is FontStyle::normal
             return FontStyle::normal;
+        }
+
+        const std::vector<vcl::font::Variation>& SvgStyleAttributes::getFontVariations() const
+        {
+            if (!maFontVariations.empty())
+            {
+                return maFontVariations;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[36] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[36];
+                const std::vector<vcl::font::Variation>& rInherited
+                    = pSvgStyleAttributes->getFontVariations();
+                --maResolvingParent[36];
+
+                return rInherited;
+            }
+
+            return maFontVariations;
         }
 
         FontWeight SvgStyleAttributes::getFontWeight() const

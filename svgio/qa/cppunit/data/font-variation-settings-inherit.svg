@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <g font-family="Reem Kufi" font-variation-settings="'wght' 300">
+    <text y="1em">Inherited</text>
+    <text y="2em" style="font-variation-settings: 'wght' 700">Overridden</text>
+    <text y="3em" font-family="Noto Sans Arabic">مرحبا</text>
+  </g>
+</svg>
