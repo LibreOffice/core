@@ -653,6 +653,18 @@ void DicList::CreateDicList(bool bDispatchEvents)
         }
     }
 
+    // Under Collabora Online, a wordbook the WOPI host supplies lands in the
+    // same directory as the engine's own bundled dictionaries, without ever
+    // being added to the ActiveDictionaries list consulted above. Activate
+    // every dictionary found on this instance so a host-supplied wordbook is
+    // used regardless of its file name.
+    if (comphelper::COKit::isActive())
+    {
+        for (const uno::Reference< XDictionary >& xDic : aDicList)
+            if (xDic.is())
+                xDic->setActive( true );
+    }
+
     // suppress collected events during creation of the dictionary list.
     // there should be no events during creation.
     mxDicEvtLstnrHelper->ClearEvents();
