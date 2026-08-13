@@ -199,9 +199,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
 
-    // Should be a unique_ptr, but code like CalcAdditionalFirstLineOffset wants to play games
-    // where it swaps out and then restores the SwParaPortion.
-    std::shared_ptr<SwParaPortion> m_xParaPortion;
+    std::unique_ptr<SwParaPortion> m_xParaPortion;
 
     /// redline merge data
     std::unique_ptr<sw::MergedPara> m_pMergedPara;
@@ -303,7 +301,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     bool GetDropRect_( SwRect &rRect ) const;
 
     // returns the old SwParaPortion, if present
-    std::shared_ptr<SwParaPortion> SetPara(std::shared_ptr<SwParaPortion> xNew);
+    std::unique_ptr<SwParaPortion> SetPara(std::unique_ptr<SwParaPortion> xNew);
 
     bool IsFootnoteNumFrame_() const;
 

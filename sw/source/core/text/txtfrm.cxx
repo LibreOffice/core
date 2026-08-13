@@ -3397,7 +3397,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 class SwTestFormat
 {
     SwTextFrame *pFrame;
-    std::shared_ptr<SwParaPortion> xOldPara;
+    std::unique_ptr<SwParaPortion> xOldPara;
     SwRect aOldFrame, aOldPrt;
 public:
     SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPrv, SwTwips nMaxHeight );
@@ -3449,7 +3449,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
         aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getFrameArea()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
     }
 
-    xOldPara = pFrame->SetPara(std::make_shared<SwParaPortion>());
+    xOldPara = pFrame->SetPara(std::make_unique<SwParaPortion>());
     OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped before Format_" );
 
     if ( pFrame->IsVertical() )
@@ -3676,7 +3676,7 @@ SwTwips SwTextFrame::CalcFitToContent()
         return getFramePrintArea().Width();
 
     //Swap old para for a dummy
-    std::shared_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
+    std::unique_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
     const SwPageFrame* pPage = FindPageFrame();
 
     const Point   aOldFramePos   = getFrameArea().Pos();
@@ -3781,7 +3781,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
         return;
 
     // keep current paragraph portion and apply dummy paragraph portion
-    std::shared_ptr<SwParaPortion> xOldPara = SetPara(std::make_shared<SwParaPortion>());
+    std::unique_ptr<SwParaPortion> xOldPara = SetPara(std::make_unique<SwParaPortion>());
 
     // lock paragraph
     TextFrameLockGuard aLock( this );

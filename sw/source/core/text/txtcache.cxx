@@ -28,7 +28,7 @@ SwParaPortion *SwTextFrame::EnsurePara()
 {
     if (!m_xParaPortion)
     {
-        m_xParaPortion = std::make_shared<SwParaPortion>();
+        m_xParaPortion = std::make_unique<SwParaPortion>();
     }
     return m_xParaPortion.get();
 }
@@ -47,17 +47,10 @@ void SwTextFrame::RemoveFromCache()
     m_xParaPortion.reset();
 }
 
-std::shared_ptr<SwParaPortion> SwTextFrame::SetPara(std::shared_ptr<SwParaPortion> xNew)
+std::unique_ptr<SwParaPortion> SwTextFrame::SetPara(std::unique_ptr<SwParaPortion> xNew)
 {
-    std::shared_ptr<SwParaPortion> xOld;
-
-    if ( m_xParaPortion )
-        xOld = std::move(m_xParaPortion);
-
-    if (xNew)
-        m_xParaPortion = std::move(xNew);
-
-    return xOld;
+    std::swap(m_xParaPortion, xNew);
+    return xNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

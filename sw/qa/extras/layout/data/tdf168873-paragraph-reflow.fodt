@@ -1,0 +1,972 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:initial-creator>Stefan Lange</meta:initial-creator><meta:creation-date>2025-05-30T23:50:00</meta:creation-date><dc:date>2026-08-13T05:45:59.202178104</dc:date><meta:editing-duration>P11DT3H47M26S</meta:editing-duration><meta:editing-cycles>1014</meta:editing-cycles><meta:generator>LibreOffice/26.2.5.2$Linux_X86_64 LibreOffice_project/620$Build-2</meta:generator><meta:print-date>2025-10-14T23:49:36.306146000</meta:print-date><meta:printed-by>PDF-Dateien</meta:printed-by><dc:description>als "Altissa-Doku A5 V6.4.3 (neu erstellt).odt" kopiert aus "Altissa-Doku A5 V6.4.2_2025-06-19_06-12_Fehler_korr.+Zahlen_updated_korr_LO_25.2.4+LO_25.8_+Tab-Spalte.odt"
+Ändrungen in V6.4.4: Bestimmte Formatierugszeichen ersetzt oder , wie vor allem die Masse der unnötigen SHY gelöscht</dc:description><meta:document-statistic meta:table-count="4" meta:image-count="10" meta:object-count="0" meta:page-count="5" meta:paragraph-count="27" meta:word-count="800" meta:character-count="5959" meta:non-whitespace-character-count="5175"/></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Arial1" svg:font-family="Arial" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Sans1" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Sans2" svg:font-family="'Liberation Sans'" style:font-adornments="Standard" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="NSimSun" svg:font-family="NSimSun" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="OpenSymbol" svg:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:writing-mode="lr-tb" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" loext:tab-stop-distance="0cm" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="NSimSun" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Arial1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="lr-tb"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="NSimSun" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Arial1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.247cm" style:contextual-spacing="false" fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:orphans="0" fo:widows="0" text:number-lines="false" text:line-number="0"/>
+  </style:style>
+  <style:style style:name="Header_20_and_20_Footer" style:display-name="Header and Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="9.23cm" style:type="center"/>
+     <style:tab-stop style:position="18.461cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Header_20_and_20_Footer" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="9.23cm" style:type="center"/>
+     <style:tab-stop style:position="18.461cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Footer_20_right" style:display-name="Footer right" style:family="paragraph" style:parent-style-name="Footer" style:class="extra" style:master-page-name="">
+   <style:paragraph-properties fo:text-align="right" style:justify-single-word="false" style:page-number="auto" text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="6.399cm" style:type="center"/>
+     <style:tab-stop style:position="12.801cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Footnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra" style:master-page-name="">
+   <style:paragraph-properties fo:margin-left="0.6cm" fo:text-indent="-0.6cm" style:auto-text-indent="false" style:page-number="auto" text:number-lines="false" text:line-number="0">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:text-position="0% 100%" style:font-name="Liberation Sans2" fo:font-family="'Liberation Sans'" style:font-style-name="Standard" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="8pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="Endnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-left="0.6cm" fo:text-indent="-0.6cm" style:auto-text-indent="false" text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+   <style:text-properties fo:color="#ff6600" loext:opacity="100%" style:font-name="Liberation Sans2" fo:font-family="'Liberation Sans'" style:font-style-name="Standard" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10pt" style:text-underline-style="none"/>
+  </style:style>
+  <style:style style:name="Visited_20_Internet_20_Link" style:display-name="Visited Internet Link" style:family="text">
+   <style:text-properties fo:color="#800000" loext:opacity="100%" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="Bullet_20_Symbols" style:display-name="Bullet Symbols" style:family="text">
+   <style:text-properties style:font-name="OpenSymbol" fo:font-family="OpenSymbol" style:font-charset="x-symbol" style:font-name-asian="OpenSymbol" style:font-family-asian="OpenSymbol" style:font-charset-asian="x-symbol" style:font-name-complex="OpenSymbol" style:font-family-complex="OpenSymbol" style:font-charset-complex="x-symbol"/>
+  </style:style>
+  <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
+  <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+  <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Graphics" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:background-color="transparent" draw:fill="none" draw:fill-color="#729fcf"/>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" loext:num-list-format="%2%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" loext:num-list-format="%3%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" loext:num-list-format="%4%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" loext:num-list-format="%5%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" text:default-style-name="Footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" text:master-page-name="Footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" text:default-style-name="Endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-format="i" text:start-value="0"/>
+  <text:bibliography-configuration text:prefix="[" text:suffix="]" text:numbered-entries="true" text:sort-algorithm="alphanumeric" fo:language="en" fo:country="US"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <style:default-page-layout>
+   <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+  </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Tabelle27" style:family="table">
+   <style:table-properties style:width="12.801cm" table:align="margins" style:may-break-between-rows="false"/>
+  </style:style>
+  <style:style style:name="Tabelle27.A" style:family="table-column">
+   <style:table-column-properties style:column-width="0.051cm" style:rel-column-width="261*"/>
+  </style:style>
+  <style:style style:name="Tabelle27.B" style:family="table-column">
+   <style:table-column-properties style:column-width="6.2cm" style:rel-column-width="31742*"/>
+  </style:style>
+  <style:style style:name="Tabelle27.C" style:family="table-column">
+   <style:table-column-properties style:column-width="0.3cm" style:rel-column-width="1535*"/>
+  </style:style>
+  <style:style style:name="Tabelle27.D" style:family="table-column">
+   <style:table-column-properties style:column-width="6.198cm" style:rel-column-width="31733*"/>
+  </style:style>
+  <style:style style:name="Tabelle27.E" style:family="table-column">
+   <style:table-column-properties style:column-width="0.051cm" style:rel-column-width="264*"/>
+  </style:style>
+  <style:style style:name="Tabelle27.1" style:family="table-row">
+   <style:table-row-properties style:row-height="4.65cm"/>
+  </style:style>
+  <style:style style:name="Tabelle27.A1" style:family="table-cell">
+   <style:table-cell-properties style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Tabelle27.2" style:family="table-row">
+   <style:table-row-properties style:min-row-height="0.002cm"/>
+  </style:style>
+  <style:style style:name="Tabelle30" style:family="table">
+   <style:table-properties style:width="12.801cm" table:align="margins" style:may-break-between-rows="false"/>
+  </style:style>
+  <style:style style:name="Tabelle30.A" style:family="table-column">
+   <style:table-column-properties style:column-width="0.049cm" style:rel-column-width="252*"/>
+  </style:style>
+  <style:style style:name="Tabelle30.B" style:family="table-column">
+   <style:table-column-properties style:column-width="6.2cm" style:rel-column-width="31742*"/>
+  </style:style>
+  <style:style style:name="Tabelle30.C" style:family="table-column">
+   <style:table-column-properties style:column-width="0.3cm" style:rel-column-width="1535*"/>
+  </style:style>
+  <style:style style:name="Tabelle30.E" style:family="table-column">
+   <style:table-column-properties style:column-width="0.051cm" style:rel-column-width="264*"/>
+  </style:style>
+  <style:style style:name="Tabelle30.1" style:family="table-row">
+   <style:table-row-properties style:row-height="4.65cm"/>
+  </style:style>
+  <style:style style:name="Tabelle30.A1" style:family="table-cell">
+   <style:table-cell-properties style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Tabelle31" style:family="table">
+   <style:table-properties style:width="12.801cm" table:align="margins" style:may-break-between-rows="false"/>
+  </style:style>
+  <style:style style:name="Tabelle31.A" style:family="table-column">
+   <style:table-column-properties style:column-width="0.049cm" style:rel-column-width="252*"/>
+  </style:style>
+  <style:style style:name="Tabelle31.B" style:family="table-column">
+   <style:table-column-properties style:column-width="6.2cm" style:rel-column-width="31742*"/>
+  </style:style>
+  <style:style style:name="Tabelle31.C" style:family="table-column">
+   <style:table-column-properties style:column-width="0.3cm" style:rel-column-width="1535*"/>
+  </style:style>
+  <style:style style:name="Tabelle31.E" style:family="table-column">
+   <style:table-column-properties style:column-width="0.051cm" style:rel-column-width="264*"/>
+  </style:style>
+  <style:style style:name="Tabelle31.1" style:family="table-row">
+   <style:table-row-properties style:row-height="4.65cm"/>
+  </style:style>
+  <style:style style:name="Tabelle31.A1" style:family="table-cell">
+   <style:table-cell-properties style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Tabelle32" style:family="table">
+   <style:table-properties style:width="12.801cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Tabelle32.A" style:family="table-column">
+   <style:table-column-properties style:column-width="0.049cm" style:rel-column-width="252*"/>
+  </style:style>
+  <style:style style:name="Tabelle32.B" style:family="table-column">
+   <style:table-column-properties style:column-width="6.2cm" style:rel-column-width="31742*"/>
+  </style:style>
+  <style:style style:name="Tabelle32.C" style:family="table-column">
+   <style:table-column-properties style:column-width="0.3cm" style:rel-column-width="1535*"/>
+  </style:style>
+  <style:style style:name="Tabelle32.E" style:family="table-column">
+   <style:table-column-properties style:column-width="0.051cm" style:rel-column-width="264*"/>
+  </style:style>
+  <style:style style:name="Tabelle32.1" style:family="table-row">
+   <style:table-row-properties style:row-height="4.65cm" fo:keep-together="always"/>
+  </style:style>
+  <style:style style:name="Tabelle32.A1" style:family="table-cell">
+   <style:table-cell-properties style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Tabelle32.2" style:family="table-row">
+   <style:table-row-properties style:min-row-height="0.39cm" fo:keep-together="always"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Footer_20_right">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="6.399cm" style:type="center"/>
+     <style:tab-stop style:position="12.801cm" style:type="center"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:master-page-name="Außenseite">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:break-before="page"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.199cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0.101cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans1" fo:font-size="8pt" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P10" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P11" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:master-page-name="">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.199cm" fo:margin-bottom="0.199cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="9pt" fo:font-weight="normal" style:font-size-asian="7.84999990463257pt" style:font-weight-asian="normal" style:font-size-complex="9pt" style:font-weight-complex="normal" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0.101cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P13" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false"/>
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="8pt" fo:font-weight="bold" style:font-size-asian="7pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P14" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0.101cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P15" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0.06cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P16" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:master-page-name="">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.25cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:keep-with-next="always"/>
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-weight="bold" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P17" style:family="paragraph" style:parent-style-name="Text_20_body" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread" loext:hyphenation-keep-line="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P18" style:family="paragraph" style:parent-style-name="Text_20_body">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P19" style:family="paragraph" style:parent-style-name="Text_20_body">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P20" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:list-style-name="L1" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P21" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:list-style-name="L1">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P22" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:list-style-name="L1" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.199cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread" loext:hyphenation-keep-line="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P23" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans1" fo:font-size="9pt" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="9pt" style:font-size-complex="9pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P24" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0.101cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P25" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P26" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans1" fo:font-size="8pt" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="8pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P27" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0.199cm" fo:margin-bottom="0.199cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P28" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="7pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P29" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="8pt" style:font-size-asian="7pt" style:font-size-complex="8pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P30" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="115%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0cm" style:auto-text-indent="false" fo:break-before="auto" fo:break-after="auto"/>
+   <style:text-properties fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="P31" style:family="paragraph" style:parent-style-name="Text_20_body" style:master-page-name="">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" style:page-number="auto"/>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties fo:color="#ff6600" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="9pt" style:text-underline-style="none" style:font-size-asian="9pt" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="T4" style:family="text">
+   <style:text-properties fo:color="#ff6600" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="T9" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T10" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T11" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T12" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T13" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T14" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T15" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T16" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans1"/>
+  </style:style>
+  <style:style style:name="T17" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T18" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T19" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T20" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T21" style:family="text">
+   <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T22" style:family="text">
+   <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T23" style:family="text">
+   <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T24" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T25" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T26" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T27" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T28" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T29" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T30" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T31" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T32" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T33" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T34" style:family="text">
+   <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T35" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T36" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T37" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T38" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T39" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T40" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T41" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T42" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T43" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:font-size="8pt" style:text-underline-style="none" style:font-size-asian="8pt" style:font-size-complex="8pt"/>
+  </style:style>
+  <style:style style:name="T44" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:font-size="8pt" style:text-underline-style="none" style:font-size-asian="8pt" style:font-size-complex="8pt"/>
+  </style:style>
+  <style:style style:name="T45" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T46" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T47" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T48" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T49" style:family="text">
+   <style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/>
+  </style:style>
+  <style:style style:name="T50" style:family="text">
+   <style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/>
+  </style:style>
+  <style:style style:name="T51" style:family="text">
+   <style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/>
+  </style:style>
+  <style:style style:name="T52" style:family="text">
+   <style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/>
+  </style:style>
+  <style:style style:name="T53" style:family="text">
+   <style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/>
+  </style:style>
+  <style:style style:name="T54" style:family="text">
+   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="T55" style:family="text">
+   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="T56" style:family="text">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T57" style:family="text">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T58" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T59" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T60" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T61" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T62" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T63" style:family="text">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T64" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T65" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T66" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T67" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T68" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T69" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T70" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T71" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T72" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T73" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T74" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="T75" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T76" style:family="text">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="top" style:vertical-rel="baseline" fo:padding="0cm" fo:border="none" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+  </style:style>
+  <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+  </style:style>
+  <style:style style:name="fr3" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+  </style:style>
+  <text:list-style style:name="L1">
+   <text:list-level-style-bullet text:level="1" text:style-name="Bullet_20_Symbols" loext:num-list-format="%1%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.499cm" fo:text-indent="-0.499cm" fo:margin-left="0.499cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="2" text:style-name="Bullet_20_Symbols" loext:num-list-format="%2%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.905cm" fo:text-indent="-0.635cm" fo:margin-left="1.905cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="3" text:style-name="Bullet_20_Symbols" loext:num-list-format="%3%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.54cm" fo:text-indent="-0.635cm" fo:margin-left="2.54cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="4" text:style-name="Bullet_20_Symbols" loext:num-list-format="%4%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.175cm" fo:text-indent="-0.635cm" fo:margin-left="3.175cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="5" text:style-name="Bullet_20_Symbols" loext:num-list-format="%5%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.81cm" fo:text-indent="-0.635cm" fo:margin-left="3.81cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="6" text:style-name="Bullet_20_Symbols" loext:num-list-format="%6%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="4.445cm" fo:text-indent="-0.635cm" fo:margin-left="4.445cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="7" text:style-name="Bullet_20_Symbols" loext:num-list-format="%7%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="5.08cm" fo:text-indent="-0.635cm" fo:margin-left="5.08cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="8" text:style-name="Bullet_20_Symbols" loext:num-list-format="%8%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="5.715cm" fo:text-indent="-0.635cm" fo:margin-left="5.715cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="9" text:style-name="Bullet_20_Symbols" loext:num-list-format="%9%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="6.35cm" fo:text-indent="-0.635cm" fo:margin-left="6.35cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="10" text:style-name="Bullet_20_Symbols" loext:num-list-format="%10%" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="6.985cm" fo:text-indent="-0.635cm" fo:margin-left="6.985cm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-family="OpenSymbol"/>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="14.801cm" fo:page-height="21.001cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="0.801cm" fo:margin-left="1cm" fo:margin-right="1cm" fo:background-color="#ffffff" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.55cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="true" style:layout-grid-display="true" style:layout-grid-base-width="0.37cm" style:layout-grid-snap-to="true" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="100%" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="0.6cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.499cm" fo:background-color="transparent" style:dynamic-spacing="false" draw:fill="none" draw:fill-color="#729fcf"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="14.801cm" fo:page-height="21.001cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="1.799cm" fo:margin-left="1cm" fo:margin-right="1cm" fo:background-color="#ffffff" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="100%" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm8">
+   <style:page-layout-properties fo:page-width="14.801cm" fo:page-height="21.001cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm11">
+   <style:page-layout-properties fo:page-width="14.801cm" fo:page-height="21.001cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="0.801cm" fo:margin-left="1cm" fo:margin-right="1cm" fo:background-color="transparent" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" draw:fill="none" draw:fill-color="#729fcf" draw:opacity="100%" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:background-size="full" draw:fill-color="#ffffff" draw:opacity="100%"/>
+  </style:style>
+  <style:style style:name="dp2" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+  <style:style style:name="dp3" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none" draw:background-size="full" draw:fill-color="#729fcf" draw:opacity="100%"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1">
+   <style:footer>
+    <text:p text:style-name="P1"><text:span text:style-name="T1"><text:tab/></text:span><text:span text:style-name="T1"><text:page-number text:select-page="current">0</text:page-number></text:span><text:span text:style-name="T2"><text:tab/></text:span><text:a xlink:type="simple" xlink:href="#Inhaltsverzeichnis1|region" office:name="nach oben zum Anfang" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T3">▲</text:span></text:a><text:span text:style-name="T4"> </text:span></text:p>
+   </style:footer>
+  </style:master-page>
+  <style:master-page style:name="First_20_Page" style:display-name="First Page" style:page-layout-name="pm2" draw:style-name="dp1" style:next-style-name="Standard"/>
+  <style:master-page style:name="Footnote" style:page-layout-name="pm8" draw:style-name="dp2"/>
+  <style:master-page style:name="Endnote" style:page-layout-name="pm8" draw:style-name="dp2"/>
+  <style:master-page style:name="Außenseite" style:page-layout-name="pm11" draw:style-name="dp3" style:next-style-name="First_20_Page"/>
+  </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P5"><text:span text:style-name="T9">I</text:span><text:span text:style-name="T10">nnengehäuse mit der Filmbühne und dem Gehäusemantel g</text:span><text:span text:style-name="T11">leitet</text:span><text:span text:style-name="T10"> und der</text:span><text:span text:style-name="T12"> Stabilisierung und/oder </text:span><text:span text:style-name="T10">der</text:span><text:span text:style-name="T12"> Abdichung des Gehäuses </text:span><text:span text:style-name="T10">dienen soll</text:span><text:span text:style-name="T12">. Von außen sind diese Bodendeckel an den beiden Schrauben an der Unterseite </text:span><text:span text:style-name="T10">nahe</text:span><text:span text:style-name="T12"> der Hinterkante zu erkennen. Die Alu-Sch</text:span><text:span text:style-name="T13">ie</text:span><text:span text:style-name="T12">ne wurde abgelöst von einem Blecheinsatz, den man unverändert bis zu frühen Altix III findet und in geänderte</text:span><text:span text:style-name="T14">n</text:span><text:span text:style-name="T12"> Form</text:span><text:span text:style-name="T14">en</text:span><text:span text:style-name="T12"> bei </text:span><text:span text:style-name="T15">allen später gefertigten Altix bis hin zu den letzten </text:span><text:span text:style-name="T12">Altix IV und V. </text:span><text:span text:style-name="T16">Für die ersten Bodendeckel mit Blecheinsatz wurden bereits vorproduzierte </text:span><text:span text:style-name="T10">frühe </text:span><text:span text:style-name="T16">Deckel-Außenteile aufgebraucht, </text:span><text:span text:style-name="T14">wobei die </text:span><text:span text:style-name="T16">nicht </text:span><text:span text:style-name="T14">mehr </text:span><text:span text:style-name="T16">benötigten Bohrungen </text:span><text:span text:style-name="T14">für die Befestigung der Alu-Schiene</text:span><text:span text:style-name="T16"> mit Blindnieten verschlossen </text:span><text:span text:style-name="T14">wurden</text:span><text:span text:style-name="T16">.</text:span></text:p>
+   <text:p text:style-name="P6">Die Transportknöpfe bes<text:span text:style-name="T17">itzen</text:span> eine sehr feine <text:span text:style-name="T18">Links-Rechts</text:span>-Rändelung ohne umlaufende Rillen, die Oberseite der Knöpfe <text:span text:style-name="T17">ist</text:span> flach. <text:span text:style-name="T19">Möglicherweise wurden vor der kriegsbedingten </text:span><text:span text:style-name="T20">E</text:span><text:span text:style-name="T19">instellung </text:span><text:span text:style-name="T20">zumindest der zivilen [Kamera]-Produkt</text:span><text:span text:style-name="T21">ion </text:span><text:span text:style-name="T22">auch bereits relativ fein gerändelte Transportknöpfe mit erhabener Oberseite und </text:span><text:span text:style-name="T23">zwei</text:span><text:span text:style-name="T22"> umlaufenden Rillen montiert.</text:span></text:p>
+   <table:table table:name="Tabelle27" table:style-name="Tabelle27">
+    <table:table-column table:style-name="Tabelle27.A"/>
+    <table:table-column table:style-name="Tabelle27.B"/>
+    <table:table-column table:style-name="Tabelle27.C"/>
+    <table:table-column table:style-name="Tabelle27.D"/>
+    <table:table-column table:style-name="Tabelle27.E"/>
+    <table:table-row table:style-name="Tabelle27.1">
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr1" draw:name="Bild78" text:anchor-type="as-char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="1"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N8+fLF/5evXjMAACBcBnlNP5LRAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #415484 als Fixfokus-Objektiv</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild77" text:anchor-type="char" svg:width="6.189cm" svg:height="4.641cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12P8+PHD/5evXjMAACEEBpG4gjgVAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #415484 als Fixfokus-Objektiv - Unterseite mit 2 Schrauben für die Alu-Schiene</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Tabelle27.2">
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" table:number-columns-spanned="3" office:value-type="string">
+      <text:p text:style-name="P8">▲</text:p>
+      <text:p text:style-name="P9"><text:span text:style-name="T24">Altix I </text:span><text:span text:style-name="T25">mit Pololyt 3,5/35 Nr. 415484</text:span><text:span text:style-name="T26"> </text:span><text:span text:style-name="T27">als</text:span><text:span text:style-name="T25"> Fixfokus-Objektiv, </text:span><text:span text:style-name="T24">frühe</text:span><text:span text:style-name="T28">s</text:span><text:span text:style-name="T24"> </text:span><text:span text:style-name="T28">Exemplar</text:span><text:span text:style-name="T24"> </text:span><text:span text:style-name="T26">von 1939:</text:span><text:span text:style-name="T24"> fein </text:span><text:span text:style-name="T26">gerändelte</text:span><text:span text:style-name="T24"> Transportknöpfe, </text:span><text:span text:style-name="T29">Abziehbü</text:span><text:span text:style-name="T30">g</text:span><text:span text:style-name="T29">el </text:span><text:span text:style-name="T26">für Bodendeckel </text:span><text:span text:style-name="T29">von vorn gesehen rechts, </text:span><text:span text:style-name="T26">einfaches „Innenleben“ des Bodendeckels </text:span><text:span text:style-name="T28">mit</text:span><text:span text:style-name="T26"> </text:span><text:span text:style-name="T31">von außen </text:span><text:span text:style-name="T26">an das Bodenblech geschraubte</text:span><text:span text:style-name="T28">r</text:span><text:span text:style-name="T26"> Alu-</text:span><text:span text:style-name="T28">Schien</text:span><text:span text:style-name="T26">e, </text:span><text:span text:style-name="T32">zum Vergleich unten rechts der Bodendeckel mit Blecheinsatz einer späteren Altix I</text:span></text:p>
+      <text:p text:style-name="P10"><text:span text:style-name="T32"><text:s/></text:span><text:span text:style-name="T33">▼</text:span></text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:covered-table-cell/>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Tabelle27.1">
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild44" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="3"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N88+bN/xOnTjMAAB99BiKoSYTsAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #415484 als Fixfokus-Objektiv - Bodendeckel mit Alu-Schiene von innen</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild45" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="4"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N8+/bN/3PnLjAAAB+6BjM/MSFmAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #455462 als N-F-Objektiv - Bodendeckel mit Blecheinsatz von innen</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle27.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P11"><text:span text:style-name="T34"/></text:p>
+   <table:table table:name="Tabelle30" table:style-name="Tabelle30">
+    <table:table-column table:style-name="Tabelle30.A"/>
+    <table:table-column table:style-name="Tabelle30.B"/>
+    <table:table-column table:style-name="Tabelle30.C"/>
+    <table:table-column table:style-name="Tabelle30.B"/>
+    <table:table-column table:style-name="Tabelle30.E"/>
+    <text:soft-page-break/>
+    <table:table-row table:style-name="Tabelle30.1">
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild179" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="6"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N8+fL5/wcPHzMAACAHBl5Zx1UYAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #462243 als N-F-Objektiv - Transportknöpfe mit Rillen</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild178" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="7"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N89+7t/8dPnjIAACCPBnb2p6iuAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #462243 als N-F-Objektiv - Unterseite ohne Blindniete</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle30.A1" table:number-columns-spanned="3" office:value-type="string">
+      <text:p text:style-name="P12">Altix I<text:span text:style-name="T35"> </text:span><text:span text:style-name="T36">mit Pololyt 3,5/35 Nr. 462243: </text:span><text:span text:style-name="T19">relativ fein</text:span> gerändelteTransportknöpfe <text:span text:style-name="T19">mit</text:span> <text:span text:style-name="T37">zwei</text:span> umlaufenden Rillen, 1940/<text:span text:style-name="T19">1941</text:span> – <text:span text:style-name="T38">oder erst 1947?</text:span></text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:covered-table-cell/>
+     <table:table-cell table:style-name="Tabelle30.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P13"/>
+   <table:table table:name="Tabelle31" table:style-name="Tabelle31">
+    <table:table-column table:style-name="Tabelle31.A"/>
+    <table:table-column table:style-name="Tabelle31.B"/>
+    <table:table-column table:style-name="Tabelle31.C"/>
+    <table:table-column table:style-name="Tabelle31.B"/>
+    <table:table-column table:style-name="Tabelle31.E"/>
+    <table:table-row table:style-name="Tabelle31.1">
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild95" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="8"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12P88OHD/3PnzjEAAB/7BjtE79i8AAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #487645 - reguläre Ausführung mit 2 + 1 Führungsblechen in den Filmkammern</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr2" draw:name="Bild96" text:anchor-type="char" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="9"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N8/+7d/7NnzzEAAB/SBjTrxhmoAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #462241 - Führungsbleche in der Aufwickelkammer fehlen</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle31.A1" table:number-columns-spanned="3" office:value-type="string">
+      <text:p text:style-name="P14">Führungsbleche in den Filmkammern der Altix I: links die reguläre Ausführung mit 2 + 1 Blechen (Kamera mit Pololyt 3,5/35 Nr. 487645) und rechts ein Exemplar (mit Pololyt 3,5/35 Nr. 4<text:span text:style-name="T39">62241) ohne die Bleche in der Aufwickelkammer</text:span></text:p>
+      <text:p text:style-name="P15"><text:span text:style-name="T40">O</text:span><text:span text:style-name="T39">b die Bleche </text:span><text:span text:style-name="T41">in der </text:span><text:span text:style-name="T39">Aufwickelkammer</text:span><text:span text:style-name="T41"> </text:span><text:span text:style-name="T39">„eingespart“ </text:span><text:span text:style-name="T41">oder</text:span><text:span text:style-name="T39"> einfach nur vergessen wurden, </text:span><text:span text:style-name="T40">ist nicht bekannt</text:span><text:span text:style-name="T39">. </text:span><text:span text:style-name="T41">Im Fall der Einsparung </text:span><text:span text:style-name="T42">z. B. wegen der Fertigung 1940/1941 unter Kriegsbedingungen </text:span><text:span text:style-name="T41">sol</text:span><text:span text:style-name="T42">l</text:span><text:span text:style-name="T41">te es noch weitere solcher Kameras geben</text:span><text:span text:style-name="T39">.</text:span></text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:covered-table-cell/>
+     <table:table-cell table:style-name="Tabelle31.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P16"><text:bookmark text:name="Altix_I_NK"/><text:soft-page-break/>Wiederaufnahme der Kameraproduktion nach dem Zweiten Weltkrieg</text:p>
+   <text:p text:style-name="P17">Die Annahme, dass bestimmte technische Änderungen bereits nach kurzer Zeit noch vor der kriegsbedingten Produktionseinstellung vorgenommen wurden, ist nur zum Teil richtig. Einige dieser Änderungen waren 1940 schon vorbereitet und möglicherweise auch in die Fertigung überführt. So ist in einem schwedischen Versandkatalog von Mai 1941 eine „Altix-Rapid“ abgebildet, die mit Filmtransportknöpfen in der geänderten Form ausgestattet ist<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+      <text:p text:style-name="Footnote"><text:span text:style-name="T43">Altix-Rapid → </text:span><text:span text:style-name="T44">Altix II </text:span><text:span text:style-name="T43">S. </text:span><text:span text:style-name="T43"><text:bookmark-ref text:reference-format="page" text:ref-name="__RefHeading___Toc21974_4111279622">Error: Reference source not found</text:bookmark-ref></text:span><text:span text:style-name="T43"><text:s/></text:span><text:span text:style-name="T44">f.</text:span></text:p></text:note-body></text:note>! Zum Tragen kamen <text:span text:style-name="T45">die</text:span><text:span text:style-name="T46">se</text:span><text:span text:style-name="T45"> </text:span>Änderungen aber wohl erst bei Kameras, die nach der Wiederaufnahme der Produktion im Jahr 1947 montiert wurden. <text:span text:style-name="T47">Das gilt </text:span><text:span text:style-name="T48">vielleicht nicht</text:span><text:span text:style-name="T47"> für die</text:span><text:span text:style-name="T49"> </text:span><text:span text:style-name="T50">feiner </text:span><text:span text:style-name="T49">gerändelten Filmtransportknöpfe mit zwei umlaufenden Rillen.</text:span><text:span text:style-name="T51"> </text:span><text:span text:style-name="T49">Sie wurden auch </text:span><text:span text:style-name="T52">schon </text:span><text:span text:style-name="T49">bei Kameras gesichtet, die mit Pololyt 3,5/35 </text:span><text:span text:style-name="T53">im</text:span><text:span text:style-name="T49"> Nummern</text:span><text:span text:style-name="T53">b</text:span><text:span text:style-name="T49">ereic</text:span><text:span text:style-name="T53">h</text:span><text:span text:style-name="T49"> von 460xxx bis 462xxx ausgestattet sind. </text:span><text:span text:style-name="T53">Diese wurden lt. </text:span><text:span text:style-name="T54"><text:bibliography-mark text:identifier="Thiele_Photoobjektive" text:bibliography-type="book" text:author="Thiele, Hartmut" text:booktitle="Große Nummernsammlung Photoobjektive" text:institution="Privatdruck München" text:publisher="Thiele, Hartmut" text:title="Große Nummernsammlung Photoobjektive" text:year="3. erweiterte Auflage, 2019" loext:target-type="3">[0]</text:bibliography-mark></text:span><text:span text:style-name="T53"><text:s/>bereits 1939 produziert.</text:span></text:p>
+   <text:p text:style-name="P18">Andere Änderungen wie die Tiefenschärfetabelle auf der Rückwandklappe, der Wegfall der Öse am Kameraboden und die Vereinfachung der Doppelbelichtungssperre waren zwar möglicherweise schon früher angedacht, aber realisiert wurden sie definitiv erst nach 1947.</text:p>
+   <text:p text:style-name="P18"><text:span text:style-name="T46">Ein </text:span>Indiz <text:span text:style-name="T46">dafür sind</text:span> die Objektive. <text:span text:style-name="T45">Bis auf wenige Ausnahmen haben a</text:span>lle bekannten Kameras mit den genannten Merkmalen Objektive mit Nummern über 463000. Diese wu<text:span text:style-name="T51">rden nach </text:span><text:span text:style-name="T55">„Große Nummernsammlung Photoobjektive“ </text:span><text:span text:style-name="T55"><text:bibliography-mark text:identifier="Thiele_Photoobjektive" text:bibliography-type="book" text:author="Thiele, Hartmut" text:booktitle="Große Nummernsammlung Photoobjektive" text:institution="Privatdruck München" text:publisher="Thiele, Hartmut" text:title="Große Nummernsammlung Photoobjektive" text:year="3. erweiterte Auflage, 2019" loext:target-type="3">[0]</text:bibliography-mark></text:span><text:span text:style-name="T55"><text:s/></text:span><text:span text:style-name="T51">erst ab 1947 hergestellt. </text:span></text:p>
+   <text:p text:style-name="P19"><text:span text:style-name="T51">Außerdem sind bisher aus den Jahren 1939 bis 1940/1941 außer de</text:span>m oben erwähnten Versandkatalog keine Druckstücke wie Bedienungsanleitungen, Prospekte oder Anzeigen bekannt, die auf diese Änderungen hinweisen. Auch die ab 1947 hergestellten Kameras wurden zunächst mit Bedienungsanleitungen der Vorkriegskameras verkauft.</text:p>
+   <text:p text:style-name="P17">Erst bei späten Altix I mit Objektivnummern über 485000 wurden bisher Bedienungsanleitungen gefunden, deren Abbildungen Kameras mit den unten genannten Merkmalen der Nachkriegskameras zeigen. Sie sind mit einer später in der DDR, möglicherweise aber auch schon vor Gründung der DDR in der sowjetischen Besatzungszone obligatorischen Druckstück-Registrierungsnummer versehen („D 05 447 5“ bzw. „1816 D 05 747 3“ bei der russischen Ausgabe) und wurden damit eindeutig erst nach dem Krieg gedruckt. Die oben erwähnten Änderungen wurden nicht sofort und auch nicht gleichzeitig eingeführt. Bei Wiederaufnahme der Produktion im Jahr 1947 wurden zunächst noch Kameras der <text:span text:style-name="T56">Vorkriegsaus</text:span><text:span text:style-name="T57">f</text:span><text:span text:style-name="T56">ührung</text:span> aus vor der Produktionsunterbrechung eingelagerten <text:soft-page-break/>Teilen produziert. Interessant ist, dass man bei vielen Kameras auch in den u. g. Übergangsvarianten glänzend verchromte Gehäuse findet.</text:p>
+   <text:p text:style-name="P19"><text:bookmark text:name="Altix_I_Übergang"/><text:span text:style-name="T58">Wenn</text:span><text:span text:style-name="T59"> </text:span><text:span text:style-name="T60">T</text:span><text:span text:style-name="T59">eile</text:span><text:span text:style-name="T61"> </text:span><text:span text:style-name="T59">aufgebraucht waren, wurden stattdessen neu gefertigte Teile verbaut.</text:span><text:span text:style-name="T62"> </text:span><text:span text:style-name="T60">Auf die Altix I in der Vorkriegsausführung folgten dadurch verschiedene </text:span><text:span text:style-name="T63">Übergangsvarianten</text:span><text:span text:style-name="T64">, bevor bei Objektivnummern ab </text:span><text:span text:style-name="T60">etwa </text:span><text:span text:style-name="T64">480xxx die </text:span><text:span text:style-name="T58">Altix I in der typischen</text:span><text:span text:style-name="T64"> </text:span><text:span text:style-name="T63">Nachkriegsausführung</text:span><text:span text:style-name="T64"> </text:span><text:span text:style-name="T65">er</text:span><text:span text:style-name="T66">sch</text:span><text:span text:style-name="T60">ien</text:span><text:span text:style-name="T65">. </text:span><text:span text:style-name="T61">Gesichtet wurden die </text:span><text:span text:style-name="T60">einzelnen </text:span><text:span text:style-name="T61">Änderungen bei Kameras mit Objektivnummern ab </text:span><text:span text:style-name="T67">etwa </text:span><text:span text:style-name="T61">…</text:span></text:p>
+   <text:list text:style-name="L1">
+    <text:list-item>
+     <text:p text:style-name="P20">463xxx: <text:span text:style-name="T68">beginnend </text:span>Bodendeckel ohne Abziehbügel <text:span text:style-name="T61">(</text:span><text:span text:style-name="T69">Stativgewinde aber zunächst noch mit den groben Rillen</text:span><text:span text:style-name="T61">,</text:span><text:span text:style-name="T68"> </text:span>Bodendeckel <text:span text:style-name="T68">mit </text:span>Abziehbügel<text:span text:style-name="T68"> </text:span><text:span text:style-name="T70">z. T. </text:span><text:span text:style-name="T68">noch bis 467xxx</text:span><text:span text:style-name="T61">)</text:span> </text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P21">46<text:span text:style-name="T71">9</text:span>xxx: Rückwandklappe mit <text:span text:style-name="T72">geätzter </text:span>Tiefenschärfetabelle <text:span text:style-name="T73">(dunkle Stellen vertieft) statt der Belederung</text:span></text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P22">480xxx: alle übrigen Änderungen für die typische <text:span text:style-name="T56">Nachkriegsausführung</text:span> (vereinfachte Doppelbelichtungssperre mit Schieber nur auf der Rückseite des Kameradeckels, gröber gerändelte Transportknöpfe, weiße Belichtungszeitenskala, feine Rillen an den Unterseiten der Stativgewinde, schwarz ausgelegter Altix-Schriftzug, unlackierter Bildzähler, Rückwandklappen meistens mit „gemusterter“ Filmandruckplatte und gedruckter Tiefenschärftetabelle, nur noch vereinzelt ältere mit glatter Andruckplatte und geätzter Tabelle, Kameragehäuse und Bedienteile häufig vernickelt)</text:p>
+    </text:list-item>
+   </text:list>
+   <table:table table:name="Tabelle32" table:style-name="Tabelle32">
+    <table:table-column table:style-name="Tabelle32.A"/>
+    <table:table-column table:style-name="Tabelle32.B"/>
+    <table:table-column table:style-name="Tabelle32.C"/>
+    <table:table-column table:style-name="Tabelle32.B"/>
+    <table:table-column table:style-name="Tabelle32.E"/>
+    <table:table-row table:style-name="Tabelle32.1">
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr3" draw:name="Bild91" text:anchor-type="paragraph" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="2"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12P88P7t/0dPXzAAACCrBnxx7QysAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #4474407 (Übergangsvariante mit glänzend verchromten Gehäuseteilen und geätzter Tiefenschärfetabelle)</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"><draw:frame draw:style-name="fr3" draw:name="Bild92" text:anchor-type="paragraph" svg:width="6.2cm" svg:height="4.65cm" draw:z-index="5"><draw:image draw:mime-type="image/png">
+         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAACXBIWXMAAAsTAAALEwEAmpwY
+          AAAAEklEQVQI12N89/bN/+s3bjAAACAUBk/YP14IAAAAAElFTkSuQmCC
+         </office:binary-data>
+        </draw:image>
+        <svg:title>Altix I mit Pololyt 3,5/35 #4474407 (Übergangsvariante mit glänzend verchromten Gehäuseteilen und geätzter Tiefenschärfetabelle)</svg:title>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Tabelle32.2">
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P23"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle32.A1" table:number-columns-spanned="3" office:value-type="string">
+      <text:p text:style-name="P24">▲</text:p>
+      <text:p text:style-name="P25">Altix I<text:span text:style-name="T35"> </text:span><text:span text:style-name="T36">mit Pololyt 3,5/35 Nr. 4</text:span><text:span text:style-name="T74">74407: </text:span><text:span text:style-name="T75">Übergangs</text:span><text:span text:style-name="T76">variante</text:span><text:span text:style-name="T75"> mit glänzend verchromten Gehäuseteilen und geätzter Tiefenschärfetabelle</text:span></text:p>
+      <text:p text:style-name="P26">▼</text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:covered-table-cell/>
+     <table:table-cell table:style-name="Tabelle32.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P27"/>
+   <text:p text:style-name="P28"/>
+   <text:p text:style-name="P28"/>
+   <text:p text:style-name="P29"/>
+   <text:p text:style-name="P29"><text:soft-page-break/></text:p>
+   <text:p text:style-name="P30"/>
+   <text:p text:style-name="P31"/>
+  </office:text>
+ </office:body>
+</office:document>
