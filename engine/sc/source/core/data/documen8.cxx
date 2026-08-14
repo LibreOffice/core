@@ -37,6 +37,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -820,6 +821,7 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
     weld::WaitObject aWaitSwitch(pWin);
 
     pExternalRefMgr->enableDocTimer(false);
+    OUStringBuffer aFailedFiles;
     ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS), aRefLinks.size(), true);
     for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
     {
@@ -832,7 +834,8 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
             continue;
         }
 
-        // Update failed.  Notify the user.
+        // Update failed.  Collect the name, the user is notified once the
+        // whole update is through.
 
         OUString aFile;
         sfx2::LinkManager::GetDisplayNames(pRefLink, nullptr, &aFile);
@@ -840,16 +843,23 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
         INetURLObject aUrl(aFile,INetURLObject::EncodeMechanism::WasEncoded);
         aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
 
-        OUString sMessage = ScResId(SCSTR_EXTDOC_NOT_LOADED) +
-            "\n\n" +
-            aFile;
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
-                                                  VclMessageType::Warning, VclButtonsType::Ok,
-                                                  sMessage));
-        xBox->run();
+        if (!aFailedFiles.isEmpty())
+            aFailedFiles.append("\n");
+        aFailedFiles.append(aFile);
     }
 
     pExternalRefMgr->enableDocTimer(true);
+
+    if (!aFailedFiles.isEmpty())
+    {
+        OUString sMessage = ScResId(SCSTR_EXTDOC_NOT_LOADED) +
+            "\n\n" +
+            std::u16string_view(aFailedFiles);
+        std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  sMessage));
+        xBox->runAsync(xBox, [](sal_Int32) {});
+    }
 
     if (!bAny)
         return;
