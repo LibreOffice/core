@@ -152,7 +152,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
         nPoolId = SwPoolFormatId::COLL_LABEL_FIGURE;
 
         SwSetExpFieldType* pTypeIll= static_cast<SwSetExpFieldType*>(rSh.GetFieldType(SwFieldIds::SetExp, SwResId(STR_POOLCOLL_LABEL_ABB)));
-        if(rSh.IsUsed(*pTypeIll)) //default to illustration for legacy docs
+        if(pTypeIll && rSh.IsUsed(*pTypeIll)) //default to illustration for legacy docs
         {
             nPoolId = SwPoolFormatId::COLL_LABEL_ABB;
 
