@@ -20,9 +20,12 @@
 
 #include <vcl/virdev.hxx>
 
+#include <tools/UnitConversion.hxx>
+
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <unomodel.hxx>
 
 using namespace css;
@@ -294,6 +297,30 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testFormImageRemoteNotFetched)
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetOutputSizePixel(Size(1024, 768));
     pImpressDocument->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertChartAtClientVisibleCenter)
+{
+    // Given a Draw document, and a client looking at the lower part of the page:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odg");
+    const ::tools::Rectangle aVisibleArea(Point(1000, 6000), Size(9000, 4000));
+    pXImpressDocument->setClientVisibleArea(aVisibleArea);
+
+    // When inserting a chart:
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    dispatchCommand(mxComponent, u".uno:InsertObjectChart"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then it lands where the client looks. Without the accompanying fix in place,
+    // this test would have failed: the chart was centred on the kit window's own
+    // geometry, a fixed spot of the page outside the client's view.
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    const ::tools::Rectangle aObject = pPage->GetObj(0)->GetLogicRect();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(convertTwipToMm100(aVisibleArea.Center().X())),
+                                 double(aObject.Center().X()), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(convertTwipToMm100(aVisibleArea.Center().Y())),
+                                 double(aObject.Center().Y()), 2.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

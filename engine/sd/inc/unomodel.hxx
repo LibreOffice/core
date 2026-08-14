@@ -355,7 +355,7 @@ public:
     /// @see COKitDocument::resetSelection().
     SD_DLLPUBLIC virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
-    virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
+    SD_DLLPUBLIC virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
     /// @see vcl::ITiledRenderable::setPageZoom().
     virtual void setPageZoom(int nPageZoom) override;
     /// @see vcl::ITiledRenderable::setClipboard().
