@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-05-30 08:44+0000\n"
+"PO-Revision-Date: 2026-08-15 06:51+0000\n"
 "Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/help/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -101,11 +101,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "查找"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "查找和替换"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -1596,7 +1596,7 @@ msgstr "<span class=\"productname\">{productname}</span> 帮助"
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 #: html/cool-help.html%2Bdiv.div.h3:383-5
 msgid "Collaborative editing"
-msgstr "协同编辑"
+msgstr "协作编辑"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 #: html/cool-help.html%2Bdiv.div.h3:393-5
