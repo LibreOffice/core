@@ -47,6 +47,11 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 		getEntry('Complimentary Close').click();
 
 		helper.processToIdle(this.win); // stabilize
+		// The style list fetches its preview images on demand. Those
+		// round-trips can land after processToIdle returns and swap a
+		// text placeholder for an image mid-capture. Wait for every
+		// in-flight render_entry to be answered first.
+		helper.waitForOnDemandRenders(this.win);
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('style_initial', 0.07);
 
 		// open context menu and "new" dialog
@@ -65,6 +70,9 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 			.find('.ui-treeview-expander-column').should('exist').click();
 
 		helper.processToIdle(this.win); // stabilize
+		// Expanding the entry rebuilds the treeview and re-requests the
+		// preview images. Wait for them before capturing.
+		helper.waitForOnDemandRenders(this.win);
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('style_added', 0.07);
 	});
 
@@ -76,6 +84,7 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 
 		// visually check position and renders
 		helper.processToIdle(this.win);
+		helper.waitForOnDemandRenders(this.win);
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('style_sidebar_context_menu', 0.1);
 	});
 });
