@@ -551,6 +551,31 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 		});
 	});
 
+	describe('Tone picker - short panel scrolls', function() {
+		it('Tone form Save and Cancel stay reachable when the panel is short', function() {
+			// A short viewport reproduces the same geometry as high browser
+			// zoom: the form is taller than the space left in the panel.
+			cy.viewport(1280, 400);
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form').should('exist');
+			// The picker is the scroll container for the form content.
+			cy.cGet('#aichat-tone-picker').should(($el) => {
+				expect($el[0].scrollHeight).to.be.greaterThan($el[0].clientHeight);
+				expect(getComputedStyle($el[0]).overflowY).to.equal('auto');
+			});
+			cy.cGet('#aichat-tone-form-save button').scrollIntoView().should('be.visible');
+			cy.cGet('#aichat-tone-form-cancel button').scrollIntoView().click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form').should('not.exist');
+			aichatHelper.closeTonePicker();
+		});
+	});
+
 	describe('Tone picker - emoji picker inside form', function() {
 		beforeEach(function() {
 			cy.clearLocalStorage();
