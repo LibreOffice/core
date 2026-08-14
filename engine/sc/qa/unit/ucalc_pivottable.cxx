@@ -796,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
     ScRangeName& rNames = m_pDoc->GetRangeName();
     ScRangeData* pName = new ScRangeData(
         *m_pDoc, aRangeName, aRangeStr);
-    bool bSuccess = rNames.insert(pName);
+    bool bSuccess = rNames.insert(std::unique_ptr<ScRangeData>(pName));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bSuccess);
 
     ScSheetSourceDesc aSheetDesc(m_pDoc);

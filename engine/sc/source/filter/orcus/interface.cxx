@@ -205,11 +205,11 @@ void ScOrcusNamedExpression::commit()
     if (!pNames)
         return;
 
-    ScRangeData* pRange
-        = new ScRangeData(mrDoc.getDoc(), maName, maExpr, maBasePos, ScRangeData::Type::Name,
-                          mrGlobalSettings.getCalcGrammar());
+    std::unique_ptr<ScRangeData> pRange(
+        new ScRangeData(mrDoc.getDoc(), maName, maExpr, maBasePos, ScRangeData::Type::Name,
+                        mrGlobalSettings.getCalcGrammar()));
 
-    pNames->insert(pRange, false);
+    pNames->insert(std::move(pRange), false);
 
     reset(); // make sure to reset the state for the next run.
 }

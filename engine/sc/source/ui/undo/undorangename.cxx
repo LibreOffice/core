@@ -113,7 +113,7 @@ void ScUndoAddRangeData::Redo()
     {
         pRangeName = rDoc.GetRangeName( mnTab );
     }
-    pRangeName->insert(new ScRangeData(*mpRangeData));
+    pRangeName->insert(std::make_unique<ScRangeData>(*mpRangeData));
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
 }
 

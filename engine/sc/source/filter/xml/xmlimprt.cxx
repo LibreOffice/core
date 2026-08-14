@@ -1289,9 +1289,9 @@ public:
             if (!p.bIsExpression)
                 ScXMLConverter::ConvertCellRangeAddress(aContent);
 
-            ScRangeData* pData = new ScRangeData(
-                mrDoc, p.sName, aContent, aPos, nNewType, p.eGrammar);
-            mrRangeName.insert(pData);
+            std::unique_ptr<ScRangeData> pData(new ScRangeData(
+                mrDoc, p.sName, aContent, aPos, nNewType, p.eGrammar));
+            mrRangeName.insert(std::move(pData));
         }
     }
 };

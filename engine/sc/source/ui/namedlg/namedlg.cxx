@@ -419,10 +419,10 @@ void ScNameDlg::NameModified()
     if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
     if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
 
-    ScRangeData* pNewEntry = new ScRangeData( mrDoc, aNewName, aExpr,
-            maCursorPos, nType);
+    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData( mrDoc, aNewName, aExpr,
+            maCursorPos, nType));
     pNewEntry->SetIndex( nIndex);
-    pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);
+    pNewRangeName->insert(std::move(pNewEntry), false /*bReuseFreeIndex*/);
     aLine.aName = aNewName;
     aLine.aExpression = aExpr;
     aLine.aScope = aNewScope;

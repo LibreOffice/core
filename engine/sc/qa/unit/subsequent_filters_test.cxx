@@ -582,14 +582,14 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
     ScRangeName* pNamedRanges = &pDoc->GetRangeName();
     ScRangeData* pRangeData1 = new ScRangeData(*pDoc, u"NAME1"_ustr, u"100"_ustr);
     pRangeData1->AddType(ScRangeData::Type::Hidden);
-    pNamedRanges->insert(pRangeData1);
+    pNamedRanges->insert(std::unique_ptr<ScRangeData>(pRangeData1));
     ScRangeData* pRangeData2 = new ScRangeData(*pDoc, u"NAME2"_ustr, u"text1"_ustr);
     pRangeData2->AddType(ScRangeData::Type::Hidden);
-    pNamedRanges->insert(pRangeData2);
+    pNamedRanges->insert(std::unique_ptr<ScRangeData>(pRangeData2));
     ScRangeData* pRangeData3 = new ScRangeData(*pDoc, u"NAME3"_ustr, u"200"_ustr);
-    pNamedRanges->insert(pRangeData3);
+    pNamedRanges->insert(std::unique_ptr<ScRangeData>(pRangeData3));
     ScRangeData* pRangeData4 = new ScRangeData(*pDoc, u"NAME4"_ustr, u"text2"_ustr);
-    pNamedRanges->insert(pRangeData4);
+    pNamedRanges->insert(std::unique_ptr<ScRangeData>(pRangeData4));
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
 
     // Save and reload to test whether the named expressions retain the hidden  where applicable

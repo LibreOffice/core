@@ -488,9 +488,9 @@ void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nInde
         return;
 
     OUString sRange = gaConstraintParts[ePart] + OUString::number(nIndex);
-    ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
+    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData(m_rDoc, sRange, sValue));
     pNewEntry->AddType(ScRangeData::Type::Hidden);
-    m_pRangeName->insert(pNewEntry);
+    m_pRangeName->insert(std::move(pNewEntry));
 }
 
 // Reads a single constraint part from its associated named range; returns false if the named
@@ -708,9 +708,9 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
     const auto iter = gaNamedRanges.find(eParam);
     assert(iter != gaNamedRanges.end());
     OUString sRange = iter->second;
-    ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
+    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData(m_rDoc, sRange, sValue));
     pNewEntry->AddType(ScRangeData::Type::Hidden);
-    m_pRangeName->insert(pNewEntry);
+    m_pRangeName->insert(std::move(pNewEntry));
 }
 
 // Writes a parameter value of type 'double' to the file as a named range
@@ -725,9 +725,9 @@ void SolverSettings::WriteDoubleParamValue(SolverParameter eParam, std::u16strin
     OUString sLocalizedValue = rtl::math::doubleToUString(
         fValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
         ScGlobal::getLocaleData().getNumDecimalSep()[0], true);
-    ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sLocalizedValue);
+    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData(m_rDoc, sRange, sLocalizedValue));
     pNewEntry->AddType(ScRangeData::Type::Hidden);
-    m_pRangeName->insert(pNewEntry);
+    m_pRangeName->insert(std::move(pNewEntry));
 }
 
 void SolverSettings::GetEngineOptions(cpo::uno::Sequence<css::beans::PropertyValue>& aOptions)

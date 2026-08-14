@@ -2012,9 +2012,9 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
 
     if (bInsert)
     {
-        ScRangeData* pData = new ScRangeData( rDoc, aName, aContent,
-                ScAddress( nPosX, nPosY, nTab));
-        if (!rList.insert(pData))
+        std::unique_ptr<ScRangeData> pData(new ScRangeData( rDoc, aName, aContent,
+                ScAddress( nPosX, nPosY, nTab)));
+        if (!rList.insert(std::move(pData)))
         {
             OSL_FAIL("nanu?");
         }

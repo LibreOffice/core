@@ -720,7 +720,7 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
     ScAddress aRangePos( pOldRangeData->GetPos());
     if (nNewSheet >= 0)
         aRangePos.SetTab( nNewSheet);
-    ScRangeData* pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos);
+    std::unique_ptr<ScRangeData> pRangeData(new ScRangeData(*pOldRangeData, &rNewDoc, &aRangePos));
     pRangeData->SetIndex(0);    // needed for insert to assign a new index
     ScTokenArray* pRangeNameToken = pRangeData->GetCode();
     if (bSameDoc && nNewSheet >= 0)
@@ -741,11 +741,9 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
     }
 
     if (nNewSheet < 0)
-        pRangeData = rNewDoc.GetRangeName().insert(pRangeData);
+        return rNewDoc.GetRangeName().insert(std::move(pRangeData));
     else
-        pRangeData = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
-
-    return pRangeData;
+        return rNewDoc.GetRangeName(nNewSheet)->insert(std::move(pRangeData));
 }
 
 struct SheetIndex

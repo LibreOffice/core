@@ -956,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRef)
     auto pName
         = std::make_unique<ScRangeData>(*pDoc, u"MyName"_ustr, aNameTokens, ScAddress(0, 0, 0));
     ScRangeData* pNameRaw = pName.get();
-    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(std::move(pName)));
 
     ScTokenArray aValidationTokens(*pDoc);
     aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);
@@ -1003,7 +1003,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefWithHea
     auto pName
         = std::make_unique<ScRangeData>(*pDoc, u"MyName"_ustr, aNameTokens, ScAddress(0, 0, 0));
     ScRangeData* pNameRaw = pName.get();
-    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(std::move(pName)));
 
     ScTokenArray aValidationTokens(*pDoc);
     aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);
@@ -1059,7 +1059,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefColumn)
     // A column-qualified reference is more than one token.
     CPPUNIT_ASSERT(pName->GetCode()->GetLen() > 1);
     ScRangeData* pNameRaw = pName.get();
-    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(std::move(pName)));
 
     ScTokenArray aValidationTokens(*pDoc);
     aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);

@@ -4939,7 +4939,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
     // Add a named range so InsertNameList has something to insert
     ScRangeName& rGlobalNames = pDocument->GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(*pDocument, u"TestRange"_ustr, u"$A$10:$B$20"_ustr);
-    rGlobalNames.insert(pRangeData);
+    rGlobalNames.insert(std::unique_ptr<ScRangeData>(pRangeData));
 
     // Create sheet view 1
     {

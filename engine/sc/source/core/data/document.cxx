@@ -2433,8 +2433,7 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
         for (const auto& rEntry : *pRangeName)
         {
             sal_uInt16 nIndex = rEntry.second->GetIndex();
-            ScRangeData* pData = new ScRangeData(*rEntry.second);
-            pData = pTransClip->pRangeName->insert(pData);
+            ScRangeData* pData = pTransClip->pRangeName->insert(std::make_unique<ScRangeData>(*rEntry.second));
             if (pData)
                 pData->SetIndex(nIndex);
         }
@@ -2539,8 +2538,7 @@ void copyUsedNamesToClip(ScRangeName& rClipRangeName, ScRangeName* pRangeName,
         if (!bInUse)
             continue;
 
-        ScRangeData* pData = new ScRangeData(*rEntry.second);
-        pData = rClipRangeName.insert(pData);
+        ScRangeData* pData = rClipRangeName.insert(std::make_unique<ScRangeData>(*rEntry.second));
         if (pData)
             pData->SetIndex(nIndex);
     }

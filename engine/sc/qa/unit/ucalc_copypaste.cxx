@@ -258,14 +258,14 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     static constexpr OUString aGlobal2Symbol(u"$Sheet1.$A$1:$A$23"_ustr);
     ScRangeData* pGlobal2 = new ScRangeData(*m_pDoc, u"global2"_ustr, aGlobal2Symbol);
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
-    pGlobalRangeName->insert(pGlobal);
-    pGlobalRangeName->insert(pGlobal2);
+    pGlobalRangeName->insert(std::unique_ptr<ScRangeData>(pGlobal));
+    pGlobalRangeName->insert(std::unique_ptr<ScRangeData>(pGlobal2));
     std::unique_ptr<ScRangeName> pLocalRangeName1(new ScRangeName());
-    pLocalRangeName1->insert(pLocal1);
-    pLocalRangeName1->insert(pLocal2);
-    pLocalRangeName1->insert(pLocal3);
-    pLocalRangeName1->insert(pLocal4);
-    pLocalRangeName1->insert(pLocal5);
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal1));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal2));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal3));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal4));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal5));
     m_pDoc->SetRangeName(std::move(pGlobalRangeName));
     m_pDoc->SetRangeName(0, std::move(pLocalRangeName1));
 

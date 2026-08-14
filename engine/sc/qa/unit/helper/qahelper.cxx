@@ -946,7 +946,7 @@ bool ScUcalcTestBase::insertRangeNames(
             aA1, ScRangeData::Type::Name,
             formula::FormulaGrammar::GRAM_ENGLISH);
         pNew->SetIndex(p->mnIndex);
-        bool bSuccess = pNames->insert(pNew);
+        bool bSuccess = pNames->insert(std::unique_ptr<ScRangeData>(pNew));
         if (!bSuccess)
         {
             std::cerr << "Insertion failed." << std::endl;

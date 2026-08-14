@@ -3172,8 +3172,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
             rList.erase(*pData);
         }
 
-        // don't delete, insert took ownership, even on failure!
-        if ( rList.insert( pNewEntry.release() ) )
+        if ( rList.insert( std::move(pNewEntry) ) )
             bOk = true;
 
         rDoc.CompileHybridFormula();

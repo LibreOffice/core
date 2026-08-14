@@ -2650,8 +2650,8 @@ void ScPosWnd::DoEnter()
                         ScRangeName aNewRanges( rNames );
                         ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
                         OUString aContent(aSelection.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
-                        ScRangeData* pNew = new ScRangeData( rDoc, aText, aContent, aCursor );
-                        if ( aNewRanges.insert(pNew) )
+                        std::unique_ptr<ScRangeData> pNew(new ScRangeData( rDoc, aText, aContent, aCursor ));
+                        if ( aNewRanges.insert(std::move(pNew)) )
                         {
                             pDocShell->GetDocFunc().ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(true);
