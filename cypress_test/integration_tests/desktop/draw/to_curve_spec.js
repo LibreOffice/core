@@ -3,12 +3,6 @@
 const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
 
-// svx/svdobjkind.hxx
-const KIND_LINE = 2;
-const KIND_RECTANGLE = 3;
-const KIND_PATH_LINE = 10;
-const KIND_PATH_FILL = 11;
-
 describe(['tagdesktop'], 'Convert to curve', function() {
 
 	beforeEach(function() {
@@ -30,7 +24,7 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 
 	function selectionKind() {
 		return cy.getFrameWindow()
-			.its('app.definitions.graphicSelection.extraInfo.type');
+			.its('app.definitions.graphicSelection.extraInfo.typeString');
 	}
 
 	function selectionRectangle() {
@@ -68,20 +62,20 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 
 	it('Keeps the shape selected after converting it to a curve', function() {
 		selectObject(1);
-		selectionKind().should('equal', KIND_RECTANGLE);
+		selectionKind().should('equal', 'rectangle');
 
 		convertToCurve();
 
 		selectionRectangle().should('not.be.null');
-		selectionKind().should('equal', KIND_PATH_FILL);
+		selectionKind().should('equal', 'pathFill');
 	});
 
 	it('A converted line can still be selected afterwards', function() {
 		selectObject(2);
-		selectionKind().should('equal', KIND_LINE);
+		selectionKind().should('equal', 'line');
 
 		convertToCurve();
-		selectionKind().should('equal', KIND_PATH_LINE);
+		selectionKind().should('equal', 'pathLine');
 
 		helper.typeIntoDocument('{esc}');
 		selectionRectangle().should('be.null');
@@ -90,7 +84,7 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 
 		cy.getFrameWindow().then(function(win) {
 			const selection = win.app.definitions.graphicSelection;
-			expect(selection.extraInfo.type, 'kind').to.equal(KIND_PATH_LINE);
+			expect(selection.extraInfo.typeString, 'kind').to.equal('pathLine');
 			expect(selection.rectangle.cWidth, 'selection width').to.be.greaterThan(0);
 			expect(selection.rectangle.cHeight, 'selection height').to.be.greaterThan(0);
 		});
@@ -103,7 +97,7 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 		openShapeTab();
 		clickConvertToCurveButton();
 
-		selectionKind().should('equal', KIND_PATH_FILL);
+		selectionKind().should('equal', 'pathFill');
 		drawnHandle().should('exist');
 
 		helper.typeIntoDocument('{esc}');
