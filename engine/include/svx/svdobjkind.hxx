@@ -19,7 +19,10 @@
 
 #pragma once
 
+#include <string_view>
+
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <svx/svxdllapi.h>
 
 enum class SdrObjKind : sal_uInt16
 {
@@ -139,5 +142,7 @@ inline constexpr bool IsInventorE3D(SdrObjKind e)
 {
     return e >= SdrObjKind::E3D_INVENTOR_FIRST && e <= SdrObjKind::E3D_INVENTOR_LAST;
 }
+
+SVXCORE_DLLPUBLIC std::string_view SdrObjKindToString(SdrObjKind eKind);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

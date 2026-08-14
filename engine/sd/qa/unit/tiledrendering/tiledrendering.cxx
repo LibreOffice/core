@@ -2555,6 +2555,7 @@ void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal
 
     CPPUNIT_ASSERT(aTree.get_child("OrdNum").get_value<int>() >= 0);
     CPPUNIT_ASSERT(aTree.get_child("ObjectRectangles").size() >= 1);
+    CPPUNIT_ASSERT(!aTree.get_child("typeString").get_value<std::string>().empty());
 }
 
 }

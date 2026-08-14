@@ -1019,8 +1019,9 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 + OString::number(reinterpret_cast<sal_IntPtr>(pO))
                 + "\",\"type\":"
                 + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier()))
-                + ",\"OrdNum\":" + OString::number(pO->GetOrdNum())
-                );
+                + ",\"typeString\":\"");
+            aExtraInfo.append(SdrObjKindToString(pO->GetObjIdentifier()));
+            aExtraInfo.append("\",\"OrdNum\":" + OString::number(pO->GetOrdNum()));
 
             aExtraInfo.append(", \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
             aExtraInfo.append(", \"isDiagram\": " + OString::boolean(pO->isDiagram()));

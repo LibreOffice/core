@@ -644,6 +644,113 @@ SdrObjKind SdrObject::GetObjIdentifier() const
     return SdrObjKind::NONE;
 }
 
+std::string_view SdrObjKindToString(SdrObjKind eKind)
+{
+    switch (eKind)
+    {
+        case SdrObjKind::NONE: return "none";
+        case SdrObjKind::Group: return "group";
+        case SdrObjKind::Line: return "line";
+        case SdrObjKind::Rectangle: return "rectangle";
+        case SdrObjKind::CircleOrEllipse: return "circleOrEllipse";
+        case SdrObjKind::CircleSection: return "circleSection";
+        case SdrObjKind::CircleArc: return "circleArc";
+        case SdrObjKind::CircleCut: return "circleCut";
+        case SdrObjKind::Polygon: return "polygon";
+        case SdrObjKind::PolyLine: return "polyLine";
+        case SdrObjKind::PathLine: return "pathLine";
+        case SdrObjKind::PathFill: return "pathFill";
+        case SdrObjKind::FreehandLine: return "freehandLine";
+        case SdrObjKind::FreehandFill: return "freehandFill";
+        case SdrObjKind::Text: return "text";
+        case SdrObjKind::TitleText: return "titleText";
+        case SdrObjKind::OutlineText: return "outlineText";
+        case SdrObjKind::Graphic: return "graphic";
+        case SdrObjKind::OLE2: return "ole2";
+        case SdrObjKind::Edge: return "edge";
+        case SdrObjKind::Caption: return "caption";
+        case SdrObjKind::PathPoly: return "pathPoly";
+        case SdrObjKind::PathPolyLine: return "pathPolyLine";
+        case SdrObjKind::Page: return "page";
+        case SdrObjKind::Measure: return "measure";
+        case SdrObjKind::OLEPluginFrame: return "olePluginFrame";
+        case SdrObjKind::UNO: return "uno";
+        case SdrObjKind::CustomShape: return "customShape";
+        case SdrObjKind::Media: return "media";
+        case SdrObjKind::Table: return "table";
+        case SdrObjKind::Annotation: return "annotation";
+        case SdrObjKind::E3D_Scene: return "e3dScene";
+        case SdrObjKind::E3D_Object: return "e3dObject";
+        case SdrObjKind::E3D_Cube: return "e3dCube";
+        case SdrObjKind::E3D_Sphere: return "e3dSphere";
+        case SdrObjKind::E3D_Extrusion: return "e3dExtrusion";
+        case SdrObjKind::E3D_Lathe: return "e3dLathe";
+        case SdrObjKind::E3D_CompoundObject: return "e3dCompoundObject";
+        case SdrObjKind::E3D_Polygon: return "e3dPolygon";
+        case SdrObjKind::FormControl: return "formControl";
+        case SdrObjKind::FormEdit: return "formEdit";
+        case SdrObjKind::FormButton: return "formButton";
+        case SdrObjKind::FormFixedText: return "formFixedText";
+        case SdrObjKind::FormListbox: return "formListbox";
+        case SdrObjKind::FormCheckbox: return "formCheckbox";
+        case SdrObjKind::FormCombobox: return "formCombobox";
+        case SdrObjKind::FormRadioButton: return "formRadioButton";
+        case SdrObjKind::FormGroupBox: return "formGroupBox";
+        case SdrObjKind::FormGrid: return "formGrid";
+        case SdrObjKind::FormImageButton: return "formImageButton";
+        case SdrObjKind::FormFileControl: return "formFileControl";
+        case SdrObjKind::FormDateField: return "formDateField";
+        case SdrObjKind::FormTimeField: return "formTimeField";
+        case SdrObjKind::FormNumericField: return "formNumericField";
+        case SdrObjKind::FormCurrencyField: return "formCurrencyField";
+        case SdrObjKind::FormPatternField: return "formPatternField";
+        case SdrObjKind::FormHidden: return "formHidden";
+        case SdrObjKind::FormImageControl: return "formImageControl";
+        case SdrObjKind::FormFormattedField: return "formFormattedField";
+        case SdrObjKind::FormScrollbar: return "formScrollbar";
+        case SdrObjKind::FormSpinButton: return "formSpinButton";
+        case SdrObjKind::FormNavigationBar: return "formNavigationBar";
+        case SdrObjKind::BasicDialogControl: return "basicDialogControl";
+        case SdrObjKind::BasicDialogDialog: return "basicDialogDialog";
+        case SdrObjKind::BasicDialogPushButton: return "basicDialogPushButton";
+        case SdrObjKind::BasicDialogRadioButton: return "basicDialogRadioButton";
+        case SdrObjKind::BasicDialogCheckbox: return "basicDialogCheckbox";
+        case SdrObjKind::BasicDialogListbox: return "basicDialogListbox";
+        case SdrObjKind::BasicDialogCombobox: return "basicDialogCombobox";
+        case SdrObjKind::BasicDialogGroupBox: return "basicDialogGroupBox";
+        case SdrObjKind::BasicDialogEdit: return "basicDialogEdit";
+        case SdrObjKind::BasicDialogFixedText: return "basicDialogFixedText";
+        case SdrObjKind::BasicDialogImageControl: return "basicDialogImageControl";
+        case SdrObjKind::BasicDialogProgressbar: return "basicDialogProgressbar";
+        case SdrObjKind::BasicDialogHorizontalScrollbar: return "basicDialogHorizontalScrollbar";
+        case SdrObjKind::BasicDialogVerticalScrollbar: return "basicDialogVerticalScrollbar";
+        case SdrObjKind::BasicDialogHorizontalFixedLine: return "basicDialogHorizontalFixedLine";
+        case SdrObjKind::BasicDialogVerticalFixedLine: return "basicDialogVerticalFixedLine";
+        case SdrObjKind::BasicDialogDateField: return "basicDialogDateField";
+        case SdrObjKind::BasicDialogTimeField: return "basicDialogTimeField";
+        case SdrObjKind::BasicDialogNumericField: return "basicDialogNumericField";
+        case SdrObjKind::BasicDialogCurencyField: return "basicDialogCurencyField";
+        case SdrObjKind::BasicDialogFormattedField: return "basicDialogFormattedField";
+        case SdrObjKind::BasicDialogPatternField: return "basicDialogPatternField";
+        case SdrObjKind::BasicDialogFileControl: return "basicDialogFileControl";
+        case SdrObjKind::BasicDialogTreeControl: return "basicDialogTreeControl";
+        case SdrObjKind::BasicDialogSpinButton: return "basicDialogSpinButton";
+        case SdrObjKind::BasicDialogGridControl: return "basicDialogGridControl";
+        case SdrObjKind::BasicDialogHyperlinkControl: return "basicDialogHyperlinkControl";
+        case SdrObjKind::BasicDialogFormRadio: return "basicDialogFormRadio";
+        case SdrObjKind::BasicDialogFormCheck: return "basicDialogFormCheck";
+        case SdrObjKind::BasicDialogFormList: return "basicDialogFormList";
+        case SdrObjKind::BasicDialogFormCombo: return "basicDialogFormCombo";
+        case SdrObjKind::BasicDialogFormSpin: return "basicDialogFormSpin";
+        case SdrObjKind::BasicDialogFormVerticalScroll: return "basicDialogFormVerticalScroll";
+        case SdrObjKind::BasicDialogFormHorizontalScroll: return "basicDialogFormHorizontalScroll";
+        case SdrObjKind::SwFlyDrawObjIdentifier: return "swFlyDrawObj";
+        case SdrObjKind::NewFrame: return "newFrame";
+    }
+
+    return {};
+}
+
 void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bRotateFreeAllowed=false;
