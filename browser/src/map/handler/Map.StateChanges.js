@@ -143,15 +143,6 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 			app.activeDocument.activeLayout.scrollTo(scrollPoint.pX, scrollPoint.pY);
 		}
 
-		if (commandName == '.uno:ReshufflePagePopup') {
-			if (!app.map.isReadOnlyMode())
-			{
-				app.map.uiManager.showSnackbar(_('Apply this order to your presentation?'), _('Update Slides'), function () {
-					app.map.sendUnoCommand('.uno:ReshufflePages');
-				});
-			}
-		}
-
 		if (commandName == '.uno:HasOverviewPage') {
 			app.impress.hasOverviewPage = e.state === "true";
 		}
