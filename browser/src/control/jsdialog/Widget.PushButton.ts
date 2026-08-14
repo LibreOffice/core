@@ -85,7 +85,11 @@ JSDialog.pushButton = function (
 		);
 		image = window.L.DomUtil.create('img', '', pushbutton);
 		if (_isStringLCIcon(data.image)) {
-			app.LOUtil.setImage(image, data.image, builder.map);
+			app.LOUtil.setImage(
+				image,
+				app.LOUtil.getIconNameOfIcon(data.image) || data.image,
+				builder.map,
+			);
 		} else {
 			image.src = data.image;
 		}

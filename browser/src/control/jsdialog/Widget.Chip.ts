@@ -76,7 +76,11 @@ JSDialog.chip = function (
 		const iconSpan = window.L.DomUtil.create('span', 'ui-chip-icon', main);
 		if (_chipIsLCIcon(data.icon)) {
 			const img = window.L.DomUtil.create('img', '', iconSpan);
-			app.LOUtil.setImage(img, data.icon, builder.map);
+			app.LOUtil.setImage(
+				img,
+				app.LOUtil.getIconNameOfIcon(data.icon) || data.icon,
+				builder.map,
+			);
 			img.alt = '';
 		} else {
 			iconSpan.textContent = data.icon;

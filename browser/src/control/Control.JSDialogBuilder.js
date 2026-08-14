@@ -1468,22 +1468,28 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				var buttonImage = window.L.DomUtil.create('div', 'w2ui-icon ' + data.w2icon, button);
 			}
 			else if (hasImage !== false){
-				if (data.icon) {
+				var isIconURL = data.icon && this._isStringCloseToURL(data.icon);
+				// The engine sends the icon theme link name, map it to the icon
+				// we ship under that name, so that we don't request a file that
+				// is not there and fall back to the base64 image below instead.
+				var coreIconName = data.icon && !isIconURL ?
+					app.LOUtil.getIconNameOfIcon(data.icon) : '';
+				if (isIconURL) {
 					buttonImage = window.L.DomUtil.create('img', '', button);
-					if (this._isStringCloseToURL(data.icon)) {
-						buttonImage.src = data.icon;
-					} else {
-						app.LOUtil.setImage(buttonImage, data.icon, builder.map);
-						// Fall back to base64 PNG if the SVG is not available.
-						// checkIfImageExists sets display:none on error, so
-						// restore it when substituting the fallback image.
-						if (data.image) {
-							buttonImage.onerror = function() {
-								buttonImage.onerror = null;
-								buttonImage.src = data.image;
-								buttonImage.style.display = '';
-							};
-						}
+					buttonImage.src = data.icon;
+				}
+				else if (coreIconName) {
+					buttonImage = window.L.DomUtil.create('img', '', button);
+					app.LOUtil.setImage(buttonImage, coreIconName, builder.map);
+					// Fall back to base64 PNG if the SVG is not available.
+					// checkIfImageExists sets display:none on error, so
+					// restore it when substituting the fallback image.
+					if (data.image) {
+						buttonImage.onerror = function() {
+							buttonImage.onerror = null;
+							buttonImage.src = data.image;
+							buttonImage.style.display = '';
+						};
 					}
 				}
 				else if (data.image) {

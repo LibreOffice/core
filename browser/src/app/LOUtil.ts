@@ -436,12 +436,23 @@ class LOUtil {
 			cleanName = cleanName.toLowerCase();
 		}
 
+		// An icon theme link name can arrive here in place of a command name:
+		// the engine sends the .ui icon-name of its toolbar items as e.g.
+		// 'lc_insertfooter.svg'. Reduce it to the bare name, so that the skip
+		// rules and the alias table below see the same thing they would see
+		// for a command. Only the lc_/sc_ prefix marks such a link name, our
+		// own icon files (e.g. statusbarmenu.svg) must not be touched here.
+		if (cleanName.startsWith('lc_') || cleanName.startsWith('sc_'))
+			cleanName = LOUtil.stripName(cleanName);
+
 		// Skip icon lookup for numeric-only IDs (JSDialog artifacts like 1, 5, 65535),
-		// core sr* resource IDs (like sr20006), and JSDialog submenu placeholder IDs
-		// (submenu1, submenu2, ...).
+		// core sr*/sc* resource IDs (like sr20006, sc20177), and JSDialog submenu
+		// placeholder IDs (submenu1, submenu2, ...). We ship no icon under those
+		// names, the engine sends a base64 image for them.
 		if (
 			/^\d+$/.test(cleanName) ||
 			/^sr\d+$/.test(cleanName) ||
+			/^sc\d+$/.test(cleanName) ||
 			/^submenu\d+$/.test(cleanName)
 		)
 			return '';
@@ -692,6 +703,24 @@ class LOUtil {
 		}
 
 		return 'lc_' + cleanName + '.svg';
+	}
+
+	// Resolve an icon file name that the engine sent us, e.g. a toolbar item
+	// whose .ui icon-name is 'cmd/sc_insertfooter.png' arrives here as
+	// 'lc_insertfooter.svg'. Those are icon theme link names, so they have to
+	// go through the same alias table as the uno commands to end up at an icon
+	// we actually ship. Returns an empty string when there is nothing to
+	// request, in which case the caller should use the base64 fallback the
+	// engine sends alongside the icon name.
+	public static getIconNameOfIcon(iconFileName: string): string {
+		if (!iconFileName) return '';
+
+		// Anything without the size prefix is one of our own icon files, it is
+		// already the name we ship it under.
+		if (!iconFileName.startsWith('lc_') && !iconFileName.startsWith('sc_'))
+			return iconFileName;
+
+		return LOUtil.getIconNameOfCommand(iconFileName, true);
 	}
 
 	public static checkIfImageExists(
