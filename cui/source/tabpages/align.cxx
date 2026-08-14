@@ -700,13 +700,14 @@ void AlignmentTabPage::UpdateEnableControls()
 {
     const sal_Int32 nHorAlign = m_xLbHorAlign->get_active_id().toInt32();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
+    bool bHorRight = (nHorAlign == ALIGNDLG_HORALIGN_RIGHT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
     bool bHorDist  = (nHorAlign == ALIGNDLG_HORALIGN_DISTRIBUTED);
 
     // indent edit field only for left alignment
-    m_xFtIndent->set_sensitive( bHorLeft );
-    m_xEdIndent->set_sensitive( bHorLeft );
+    m_xFtIndent->set_sensitive( bHorLeft || bHorRight );
+    m_xEdIndent->set_sensitive( bHorLeft || bHorRight );
 
     // stacked disabled for fill alignment
     m_xCbStacked->set_sensitive(!bHorFill);
