@@ -143,7 +143,7 @@ std::string settingsUserId(const Poco::URI::QueryParameters& params)
     if (!userId.empty())
         return userId;
 
-    constexpr std::string_view tokenPrefix = "test-";
+    static constexpr std::string_view tokenPrefix = "test-";
     if (accessToken.starts_with(tokenPrefix))
         return accessToken.substr(tokenPrefix.size());
 
