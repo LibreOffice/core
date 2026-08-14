@@ -139,12 +139,35 @@ img.sidebar.ui-image {
 	filter: none;
 }
 
-.sidebar.ui-panel-plain-label::before {
-	content: none;
+.sidebar.ui-panel-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: var(--header-font-size);
+	font-family: var(--cool-font);
+	color: var(--color-main-text);
+	height: 54px;
+	padding: var(--spacing-xl);
+	box-sizing: border-box;
 }
 
-.sidebar.ui-expander .ui-panel-close-wrapper {
-	margin-inline-end: 8px;
+.sidebar.ui-panel-title {
+	flex: 1;
+	min-width: 0;
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.sidebar.ui-panel-content {
+	padding-inline: 10px;
+	width: 300px;
+	line-height: var(--default-height);
+}
+
+.sidebar.ui-panel-content > .root-container.jsdialog {
+	margin: var(--spacing-s);
 }
 
 #softedgeframe .sidebar.ui-expander-content,
@@ -937,8 +960,8 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	display: flex !important;
 }
 
-.StyleListPanel .ui-expander-content.jsdialog.sidebar.expanded {
-	height: calc(100% - 45px);
+.StyleListPanel .ui-panel-content.jsdialog.sidebar {
+	height: calc(100% - 54px);
 }
 
 #TemplatePanel .sidebar .unotoolbutton {

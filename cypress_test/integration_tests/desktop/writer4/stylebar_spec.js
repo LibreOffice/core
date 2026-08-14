@@ -92,7 +92,7 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 	// returns there instead of closing the sidebar.
 	it('Close button returns to the properties deck', function() {
 		// the panel content is shown without a collapse toggle
-		cy.cGet('#StyleListDeck .ui-expander-content').should('be.visible');
+		cy.cGet('#StyleListDeck .ui-panel-content').should('be.visible');
 
 		cy.cGet('#StyleListDeck .ui-panel-close-button').click();
 

@@ -36,9 +36,10 @@ JSDialog.deck = function (
   return false;
 };
 
-// Builds a panel header without the expand toggle; the panel content is always visible. The
-// header carries the way out of the deck instead: a close button at the trailing edge that
-// sends the panel's closeCommand.
+// Builds the single section of an overlay deck without the expander framework: the content
+// is always visible, so the header is a plain heading with a close button at the trailing
+// edge that sends the panel's closeCommand. The header is laid out like the navigation
+// header: the header row carries the padding, so the close button needs no margin.
 function buildPanelWithHeaderAction(
   parentContainer: Element,
   data: PanelWidgetJSON,
@@ -51,29 +52,18 @@ function buildPanelWithHeaderAction(
   let closeWrapper: HTMLElement;
 
   const container = (
-    <div
-      class={'ui-expander-container ' + builder.options.cssClass}
-      id={data.id}
-    >
+    <div class={'ui-panel-container ' + builder.options.cssClass} id={data.id}>
       <div
-        class={'ui-expander ' + builder.options.cssClass}
+        class={'ui-panel-header ' + builder.options.cssClass}
         ref={(el: HTMLElement) => {
           header = el;
         }}
       >
-        <h2 class={'ui-expander-heading ' + builder.options.cssClass}>
-          <span
-            class={
-              'ui-expander-label ui-panel-plain-label ' +
-              builder.options.cssClass
-            }
-            id={labelId}
-          >
-            {builder._cleanText(data.text)}
-          </span>
+        <h2 class={'ui-panel-title ' + builder.options.cssClass} id={labelId}>
+          {builder._cleanText(data.text)}
         </h2>
         <div
-          class="close-navigation-wrapper ui-panel-close-wrapper"
+          class="close-navigation-wrapper"
           ref={(el: HTMLElement) => {
             closeWrapper = el;
           }}
@@ -91,7 +81,7 @@ function buildPanelWithHeaderAction(
         </div>
       </div>
       <div
-        class={'ui-expander-content expanded ' + builder.options.cssClass}
+        class={'ui-panel-content ' + builder.options.cssClass}
         id={data.id + '-children'}
         role="region"
         aria-labelledby={labelId}
