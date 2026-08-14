@@ -312,7 +312,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 				'id': 'extension-toggle-' + id,
 				'type': 'bigcustomtoolitem',
 				'text': manifest.name,
-				'icon': manifest.icon ? baseUrl + manifest.icon : undefined,
+				'icon': manifest.icon
+					? baseUrl + manifest.icon
+					: app.LOUtil.getURL('images/extension-fallback.svg'),
 				'command': 'extension-toggle-' + id,
 			});
 		}
