@@ -54,7 +54,7 @@ INDIVIDUAL CHECKS
 
     Each check is also served on its own at /<endpoint>/<check>, for example
     /readyz/forkit or /livez/ping. The response is HTTP 200 with the body
-    "ok", or HTTP 500 with the body "internal server error: <reason>".
+    "ok", or HTTP 500 with the body "internal server error: reason withheld".
     A check that is not part of the endpoint returns HTTP 404.
 
 CHECKS
@@ -70,9 +70,11 @@ CHECKS
                 close, but new work should go elsewhere.
     kit-spares  (readyz) - A pre-spawned kit process is available for the next
                 document, or one is currently being forked.
-    disk-space  (readyz) - None of the periodically checked file systems (the
-                child jails, the cache) is nearly full. The underlying check
-                is cached, so a change can take up to a minute to show.
+    disk-space  (readyz) - None of the registered file systems is nearly full,
+                that is the one holding the child jails. It fails when the free
+                space is both 5 GB or less and 5% or less of the file system.
+                The underlying check is cached, so a change can take up to a
+                minute to show.
     memory      (readyz) - The most recent memory usage sample is within the
                 budget derived from the memproportion setting and any cgroup
                 limits. The sample is taken by the periodic memory statistics
