@@ -311,7 +311,6 @@ public:
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) = 0;
     virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat);
-
     /**
      * Appends to rText the node text.
      * @param rText
@@ -1135,6 +1134,7 @@ public:
      * @return
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+    virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat) override;
 
     /**
      * Gets the formula baseline.
@@ -1206,6 +1206,7 @@ public:
      * @return
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+    virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat) override;
 
     /**
      * Accept a visitor.
@@ -1360,6 +1361,7 @@ public:
      * @return
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+    virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat) override;
 
     /**
      * Accept a visitor.
@@ -1419,6 +1421,7 @@ public:
      * @return
      */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+    virtual void ArrangeOpenType(OutputDevice &rDev, const SmFormat &rFormat) override;
 
     /**
      * Accept a visitor.

@@ -148,6 +148,10 @@ double LogicalFontInstance::GetOpenTypeMathConstant(vcl::OpenTypeMathConstant aC
     hb_position_t nHBValue
         = hb_ot_math_get_constant(pHbFont, static_cast<hb_ot_math_constant_t>(aConstant));
 
+    // Scale from font units to device pixels
+    double nXScale = 0, nYScale = 0;
+    GetScale(&nXScale, &nYScale);
+
     switch (aConstant)
     {
         case vcl::OpenTypeMathConstant::ScriptPercentScaleDown:
@@ -155,8 +159,14 @@ double LogicalFontInstance::GetOpenTypeMathConstant(vcl::OpenTypeMathConstant aC
         case vcl::OpenTypeMathConstant::RadicalDegreeBottomRaisePercent:
             return nHBValue / 100.0;
 
+        case vcl::OpenTypeMathConstant::RadicalKernBeforeDegree:
+        case vcl::OpenTypeMathConstant::RadicalKernAfterDegree:
+        case vcl::OpenTypeMathConstant::SkewedFractionHorizontalGap:
+        case vcl::OpenTypeMathConstant::SpaceAfterScript:
+            return nHBValue * nXScale;
+
         default:
-            return double(nHBValue);
+            return nHBValue * nYScale;
     }
 }
 

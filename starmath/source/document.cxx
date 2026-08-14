@@ -278,7 +278,13 @@ void SmDocShell::ArrangeFormula()
     // Numbers should not be converted, for now.
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
-    if (pOutDev->SupportsOpenTypeMath())
+    // To get the current Math font in the format tab
+    pOutDev->Push(vcl::PushFlags::FONT);
+    pOutDev->SetFont(rFormat.GetFont(FNT_MATH));
+    bool bSupportsMath = pOutDev->SupportsOpenTypeMath();
+    pOutDev->Pop();
+
+    if (bSupportsMath)
         mpTree->ArrangeOpenType(*pOutDev, rFormat);
     else
         mpTree->Arrange(*pOutDev, rFormat);

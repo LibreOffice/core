@@ -2294,8 +2294,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, TestGetOpenTypeMathConstant)
     double nFractionRuleThickness
         = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::FractionRuleThickness);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "STIX Two Math has a MATH table and should return FractionRuleThickness's value",
-        static_cast<double>(68), nFractionRuleThickness);
+        "STIX Two Math has a MATH table and should return FractionRuleThickness's value", 4.896,
+        nFractionRuleThickness);
 
     double nScriptScriptPercentScaleDown
         = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::ScriptScriptPercentScaleDown);
@@ -2306,8 +2306,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, TestGetOpenTypeMathConstant)
     double nSubscriptShiftDown
         = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::SubscriptShiftDown);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "STIX Two Math has a MATH table and should return SubscriptShiftDown's value",
-        static_cast<double>(210), nSubscriptShiftDown);
+        "STIX Two Math has a MATH table and should return SubscriptShiftDown's value", 15.12,
+        nSubscriptShiftDown);
 
 #endif
 }
