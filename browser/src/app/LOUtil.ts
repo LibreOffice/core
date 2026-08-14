@@ -697,6 +697,18 @@ class LOUtil {
 			endnotedialog: 'footnotedialog',
 			updateallindexes: 'insertmultiindex',
 			formatframemenu: 'framedialog',
+			// Navigator content type toolbars. The engine gives the buttons that
+			// repeat across those toolbars a per content type suffix to keep the
+			// item idents unique, so they arrive here as separate names.
+			'objecttitledescription-frames': 'shownote',
+			'objecttitledescription-images': 'shownote',
+			'objecttitledescription-oleobjects': 'shownote',
+			'objecttitledescription-drawingobjects': 'shownote',
+			'framedialog-more': 'framedialog',
+			editbookmark: 'insertbookmark',
+			fielddialog: 'insertfield',
+			updatefields3funlocksoftfixed3abool3d1: 'updateall',
+			navelement: 'navigator',
 		};
 		if (iconURLAliases[cleanName]) {
 			cleanName = iconURLAliases[cleanName];
