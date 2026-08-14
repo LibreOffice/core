@@ -1,4 +1,3 @@
-"SdXImpressDocument";"com::sun::star::drawing::XDrawPagesSupplier";"getDrawPages()"
 "SdXImpressDocument";"com::sun::star::document::XEventBroadcaster#optional";"addEventListener()"
 "SdXImpressDocument";"com::sun::star::document::XEventBroadcaster#optional";"removeEventListener()"
 "SdXImpressDocument";"com::sun::star::document::XLinkTargetSupplier";"getLinks()"

@@ -1,4 +1,3 @@
-"ScModelObj";"com::sun::star::drawing::XDrawPagesSupplier";"getDrawPages()"
 "ScModelObj";"com::sun::star::document::XEventBroadcaster#optional";"addEventListener()"
 "ScModelObj";"com::sun::star::document::XEventBroadcaster#optional";"removeEventListener()"
 "ScModelObj";"com::sun::star::style::XStyleFamiliesSupplier";"getStyleFamilies()"
