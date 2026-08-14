@@ -75,6 +75,14 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
+    if (BufferedDecompositionGroupPrimitive2D::isExporting())
+    {
+        if (!maBuffered2DDecomposition)
+            maBuffered2DDecomposition = create2DDecomposition(rViewInformation);
+        rVisitor.visit(maBuffered2DDecomposition);
+        maBuffered2DDecomposition.clear();
+        return;
+    }
     if (!mbFlushOnTimer)
     {
         // no flush/multithreading is in use, just call

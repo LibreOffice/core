@@ -72,10 +72,32 @@ BufferedDecompositionGroupPrimitive2D::~BufferedDecompositionGroupPrimitive2D()
         BufferedDecompositionFlusher::remove(this);
 }
 
+static bool gbExporting { false };
+
+// static
+void BufferedDecompositionGroupPrimitive2D::setExporting(bool b)
+{
+    gbExporting = b;
+}
+
+// static
+bool BufferedDecompositionGroupPrimitive2D::isExporting()
+{
+    return gbExporting;
+}
+
 void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
+    if (gbExporting)
+    {
+        if (maBuffered2DDecomposition.empty())
+            create2DDecomposition(maBuffered2DDecomposition, rViewInformation);
+        rVisitor.visit(maBuffered2DDecomposition);
+        maBuffered2DDecomposition.clear();
+        return;
+    }
     if (!mbFlushOnTimer)
     {
         // no flush/multithreading is in use, just call

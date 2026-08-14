@@ -122,6 +122,7 @@
 #include "objstor.hxx"
 #include "exoticfileloadexception.hxx"
 #include <o3tl/string_view.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -2697,6 +2698,11 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
     if ( xExporter.is() )
     {
+        drawinglayer::primitive2d::BufferedDecompositionGroupPrimitive2D::setExporting(true);
+        comphelper::ScopeGuard g([] {
+            drawinglayer::primitive2d::BufferedDecompositionGroupPrimitive2D::setExporting(false);
+        });
+
         try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );

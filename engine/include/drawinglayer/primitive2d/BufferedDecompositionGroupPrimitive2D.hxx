@@ -77,6 +77,11 @@ public:
     virtual void
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// Sets a static thread-local to tell the internals of this class to avoid buffering data,
+    // which is unnecessary during file export, and dramatically reduces memory consumption.
+    static void setExporting(bool b);
+    static bool isExporting();
 };
 
 } // end of namespace drawinglayer::primitive2d
