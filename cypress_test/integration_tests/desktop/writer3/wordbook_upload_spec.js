@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var ceHelper = require('../../common/contenteditable_helper');
@@ -14,9 +14,9 @@ describe(['tagdesktop'], 'Wordbook upload.', function() {
 	var userQuery = 'userid=' + userId;
 
 	// Where the dev WOPI server files a userconfig upload away. Mirrors
-	// userPresetDir() in test/TestWopiFileServer.hpp. Relative paths resolve
-	// against the cypress project root, which is cypress_test.
-	var uploadedWordbook = '../test/data/presets/user/u-' + userId + '/standard.dic';
+	// userPresetDir() in test/TestWopiFileServer.hpp. The presets root is an
+	// absolute path in the build directory, which the Makefile passes in.
+	var uploadedWordbook = Cypress.env('PRESETS_ROOT') + '/user/u-' + userId + '/standard.dic';
 
 	var emptyWordbook = 'OOoUserDict1\nlang: <none>\ntype: positive\n---\n';
 

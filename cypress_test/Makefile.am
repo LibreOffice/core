@@ -50,9 +50,15 @@ SERVER_ARG = $(subst :, ,$(shell basename $(if $(coolwsd),$(coolwsd),http://loca
 COOLWSD_SERVER = $(firstword $(SERVER_ARG))
 FREE_PORT = $(lastword $(SERVER_ARG))
 
+# The working copy of the presets the dev WOPI server offers to the tests.
+# Tests get the location from the environment, since the cypress project root
+# is the source directory.
+PRESETS_ROOT = $(abs_top_builddir)/test/data/presets
+
 export COOLWSD_SERVER
 export FREE_PORT
 export COOLWSD_VERSION_HASH
+export PRESETS_ROOT
 
 BUFFERED_SCRIPT = $(abs_srcdir)/run_buffered.sh
 
@@ -309,8 +315,9 @@ define cleanup_before_run
 	$(V)rm -f $(PID_FILE)
 	$(V)rm -rf cypress
 	$(V)rm -rf integration_tests/snapshots/actual
-	$(V)rm -rf $(abs_top_srcdir)/test/data/presets
-	$(V)cp -r $(abs_top_srcdir)/test/data/presets-default $(abs_top_srcdir)/test/data/presets
+	$(V)rm -rf $(PRESETS_ROOT)
+	$(V)mkdir -p $(dir $(PRESETS_ROOT))
+	$(V)cp -r $(abs_top_srcdir)/test/data/presets-default $(PRESETS_ROOT)
 endef
 
 NODE_BINS = \

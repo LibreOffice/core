@@ -22,6 +22,8 @@ export default defineConfig({
 	env: {
 		USER_INTERFACE: process.env.USER_INTERFACE,
 		WSD_VERSION_HASH: process.env.COOLWSD_VERSION_HASH,
+		// Absolute path of the presets the dev WOPI server offers, in the builddir.
+		PRESETS_ROOT: process.env.PRESETS_ROOT,
 		visualRegressionType: 'regression',
 		visualRegressionBaseDirectory: './integration_tests/snapshots/base',
 	},

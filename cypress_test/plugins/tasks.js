@@ -1,9 +1,19 @@
 /* -*- js-indent-level: 8 -*- */
-/* global require Promise __dirname */
+/* global require Promise */
 
 var fs = require('fs');
 var path = require('path');
+var process = require('process');
 var list = require('./selectorList').list;
+
+// Absolute path of the presets the dev WOPI server offers, set by the Makefile.
+// They are in the build directory, next to the coolwsd that serves them.
+function presetsRoot() {
+	if (!process.env.PRESETS_ROOT) {
+		throw new Error('PRESETS_ROOT is unset. Start the tests from the cypress_test Makefile.');
+	}
+	return process.env.PRESETS_ROOT;
+}
 
 function copyFile(args) {
 	return new Promise(function(resolve) {
@@ -38,15 +48,15 @@ function getSelectors(args) {
 }
 
 // Seed a debug user's browser settings on disk. The test WOPI server serves
-// these back from per-user store test/data/presets/user/u-<userId>/ when the
-// document is loaded with that &userid (see userPresetDir() in
+// these back from the per-user store user/u-<userId>/ under the presets root
+// when the document is loaded with that &userid (see userPresetDir() in
 // test/TestWopiFileServer.hpp). Writing the file matters beyond the initial
 // value: it makes the client receive a browsersetting: message, which turns on
 // useBrowserSetting so subsequent theme changes are persisted to the server -
 // which is what the theme isolation/reload tests need.
 function writeUserSetting(args) {
 	return new Promise(function(resolve) {
-		var dir = path.resolve(__dirname, '../../test/data/presets/user/u-' + String(args.userId));
+		var dir = path.join(presetsRoot(), 'user', 'u-' + String(args.userId));
 		fs.mkdirSync(dir, { recursive: true });
 		fs.writeFileSync(path.join(dir, 'browsersetting.json'), JSON.stringify(args.settings));
 		resolve('wrote browsersetting.json for u-' + args.userId);
@@ -56,7 +66,7 @@ function writeUserSetting(args) {
 // Mirrors userPresetDir() in test/TestWopiFileServer.hpp: the default user
 // ("test" or empty) uses the shared location, others get u-<userId>.
 function userPresetDir(userId) {
-	var base = path.resolve(__dirname, '../../test/data/presets/user');
+	var base = path.join(presetsRoot(), 'user');
 	if (!userId || String(userId) === 'test')
 		return base;
 	return path.join(base, 'u-' + String(userId));

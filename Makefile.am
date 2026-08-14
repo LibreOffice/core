@@ -599,8 +599,9 @@ $(SYSTEM_STAMP): ${top_srcdir}/coolwsd-systemplate-setup $(CLEANUP_DEPS)
 	$(QUIET_MKDIRP) mkdir -p $@
 
 presets-dir:
-	@rm -rf $(abs_top_srcdir)/test/data/presets
-	@cp -r $(abs_top_srcdir)/test/data/presets-default $(abs_top_srcdir)/test/data/presets
+	@rm -rf $(abs_top_builddir)/test/data/presets
+	@mkdir -p $(abs_top_builddir)/test/data
+	@cp -r $(abs_top_srcdir)/test/data/presets-default $(abs_top_builddir)/test/data/presets
 
 cleanup:
 	$(CLEANUP_COMMAND)
