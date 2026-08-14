@@ -3518,10 +3518,15 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
         return;
     }
 #else
-    // Browser COOL: the kit is chroot'd; this path is jail-doc-root-relative
-    // so WSD's GET handler under /cool/.../<downloadId> can read it back via
-    // FileUtil::buildLocalPathToJail.
-    const std::string baseDir = JAILED_DOCUMENT_ROOT;
+    // Browser COOL: the export lands under the jail's document root, named the
+    // way this process sees it. With a chroot that is the path inside the jail,
+    // and the jail root is empty. Without a chroot, the jail root must be
+    // prepended, taking care not to create consecutive slashes, which break
+    // prefix matches on the path/url.
+    std::string jailRoot = JailRoot;
+    if (!jailRoot.empty() && jailRoot.back() == '/')
+        jailRoot.pop_back();
+    const std::string baseDir = jailRoot + JAILED_DOCUMENT_ROOT;
 #endif
 
     const auto download = FileUtil::createDownloadJailPath(baseDir, filename);

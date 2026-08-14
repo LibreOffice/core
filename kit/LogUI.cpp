@@ -18,6 +18,7 @@
 
 #include <kit/LogUI.hpp>
 
+#include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 
 void LogUiCmd::logUiCmdLine(int userId, const std::string& line)
@@ -48,8 +49,10 @@ void LogUiCmd::saveLogFile()
 
 void LogUiCmd::createTmpFile(const std::string& docId)
 {
-    const std::string tempFile = "/tmp/kit-ui-cmd.log";
+    const std::string tempFile = FileUtil::getSysTempDirectoryPath() + "/kit-ui-cmd.log";
     _fileStreamUICommands.open(tempFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
+    if (!_fileStreamUICommands)
+        LOG_WRN("Failed to open the UI command log [" << tempFile << "], so it stays empty");
     _kitStartTimeSec = std::chrono::steady_clock::now();
     _kitStartTimeStr = Util::getTimeNow("%Y-%m-%d %T");
     _docId = docId;

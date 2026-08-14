@@ -30,6 +30,12 @@ namespace Landlock
     /// True when the kernel can enforce landlock rules for this process
     bool isSupported();
 
+    /// True when a file can be moved from one allowed directory to another.
+    bool allowsCrossDirectoryRename();
+
+    /// True when the kernel allows restricting file truncate
+    bool restrictsTruncate();
+
     /// Lock-down process paths denying read/write access to many of them
     bool lock(const std::vector<Permission> &perms);
 

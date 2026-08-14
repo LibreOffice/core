@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include <cerrno>
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -175,6 +176,30 @@ class UnitKitLandlock : public UnitKit
         probe.close();
         if (!FileUtil::Stat(probePath).exists())
             failures << "cannot write inside the own jail tmp directory; ";
+
+        // control: shortening a file in the own jail tmp directory is possible
+        if (truncate(probePath.c_str(), 0) != 0)
+            failures << "cannot truncate a file in the own jail tmp directory; ";
+        if (FileUtil::Stat(probePath).size() != 0)
+            failures << "truncating a file in the own jail tmp directory left it unchanged; ";
+
+        // control: moving a file from one directory to another
+        if (Landlock::allowsCrossDirectoryRename())
+        {
+            const std::string subDir = tmpDir + "/unit-landlock-subdir";
+            Poco::File(subDir).createDirectories();
+            const std::string movedPath = subDir + "/unit-landlock-moved.txt";
+            if (rename(probePath.c_str(), movedPath.c_str()) != 0)
+                failures << "cannot move a file into a directory inside the own jail; ";
+            else if (rename(movedPath.c_str(), probePath.c_str()) != 0)
+                failures << "cannot move a file back out of a directory inside the own jail; ";
+            FileUtil::removeFile(subDir, /*recursive=*/true);
+        }
+
+        // a file cannot be moved out of the jail
+        if (rename(probePath.c_str(), (childRoot + "/unit-landlock-escaped.txt").c_str()) == 0)
+            failures << "a file can be moved out of the jail; ";
+
         FileUtil::removeFile(probePath);
 
         // the jails parent directory can neither be listed nor traversed into siblings
@@ -192,6 +217,26 @@ class UnitKitLandlock : public UnitKit
         else if (errno != EACCES)
             failures << "reading [" << secretPath << "] failed with errno " << errno
                      << " instead of EACCES; ";
+
+        // the secret of another jail cannot be destroyed
+        if (Landlock::restrictsTruncate())
+        {
+            if (truncate(secretPath.c_str(), 0) == 0)
+                failures << "secret [" << secretPath << "] of another jail can be truncated; ";
+            else if (errno != EACCES)
+                failures << "truncating [" << secretPath << "] failed with errno " << errno
+                         << " instead of EACCES; ";
+        }
+
+        // no reason to list, only access to specific files allowed
+        checkDirDenied(failures, "/etc");
+
+        // control: one of the few files that are still allowed
+        const int passwdFd = open("/etc/passwd", O_RDONLY | O_CLOEXEC);
+        if (passwdFd < 0)
+            failures << "cannot read /etc/passwd; ";
+        else
+            close(passwdFd);
 
         // nothing can be created in the jails parent directory
         if (mkdir((childRoot + "/unit-landlock-escape").c_str(), S_IRWXU) == 0)
