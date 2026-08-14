@@ -230,13 +230,16 @@ void ScDocShell::PerformLinkUpdate()
         // If we have WEBSERVICE/Dde link and other external links in the document, it might indicate some
         // exfiltration attempt, add *another* warning about this on top of the "Security Warning"
         // shown in the infobar before they got here.
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetActiveDialogParent(),
-                                                       VclMessageType::Warning, VclButtonsType::YesNo,
-                                                       ScResId(STR_TRUST_DOCUMENT_WARNING)));
+        std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetActiveDialogParent(),
+                                                        VclMessageType::Warning, VclButtonsType::YesNo,
+                                                        ScResId(STR_TRUST_DOCUMENT_WARNING)));
         xQueryBox->set_secondary_text(ScResId(STR_WEBSERVICE_WITH_LINKS_WARNING));
         xQueryBox->set_default_response(RET_NO);
-        if (xQueryBox->run() != RET_YES)
-            return;
+        xQueryBox->runAsync(xQueryBox, [xThis = ScDocShellRef(this)](sal_Int32 nResult) {
+            if (nResult == RET_YES)
+                xThis->ReloadAllLinks();
+        });
+        return;
     }
 
     ReloadAllLinks();
