@@ -1121,28 +1121,14 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         return;
 
     SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
-    TranslateId pResId;
-    switch( nPoolId )
-    {
-        case SwPoolFormatId::COLL_LABEL_ABB:
-            pResId = STR_POOLCOLL_LABEL_ABB;
-        break;
-        case SwPoolFormatId::COLL_LABEL_TABLE:
-            pResId = STR_POOLCOLL_LABEL_TABLE;
-        break;
-        case SwPoolFormatId::COLL_LABEL_FRAME:
-            pResId = STR_POOLCOLL_LABEL_FRAME;
-        break;
-        case SwPoolFormatId::COLL_LABEL_DRAWING:
-            pResId = STR_POOLCOLL_LABEL_DRAWING;
-        break;
-        case SwPoolFormatId::COLL_LABEL_FIGURE:
-            pResId = STR_POOLCOLL_LABEL_FIGURE;
-        break;
-        default: break;
-    }
-    if (pResId)
-        SetPar1(SwResId(pResId));
+    // Name the category the way this document names it. Localizing the pool
+    // id here would answer in the locale of the current view, which need not
+    // be the one the document, and with it its sequence field types, was
+    // created in.
+    const SwFieldType* pSeqType
+        = rDoc.getIDocumentFieldsAccess().GetPredefinedSequenceFieldType( nPoolId );
+    if (pSeqType)
+        SetPar1(pSeqType->GetName().toString());
 }
 
 SwGetRefFieldType::SwGetRefFieldType( SwDoc& rDc )

@@ -55,6 +55,7 @@
 #include <usrfld.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <poolfmt.hxx>
 #include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 #include <unotools/transliterationwrapper.hxx>
@@ -340,6 +341,27 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
         }
     }
     return pRet;
+}
+
+/// Find one of the predefined sequence types by identity instead of by name
+SwFieldType* DocumentFieldsManager::GetPredefinedSequenceFieldType(SwPoolFormatId nPoolId) const
+{
+    // The offsets follow the order in which InitFieldTypes() appends these
+    // types as the last INIT_SEQ_FLDTYPES entries.
+    SwFieldTypes::size_type nOffset;
+    switch( nPoolId )
+    {
+    case SwPoolFormatId::COLL_LABEL_ABB:     nOffset = 0; break;
+    case SwPoolFormatId::COLL_LABEL_TABLE:   nOffset = 1; break;
+    case SwPoolFormatId::COLL_LABEL_FRAME:   nOffset = 2; break;
+    case SwPoolFormatId::COLL_LABEL_DRAWING: nOffset = 3; break;
+    case SwPoolFormatId::COLL_LABEL_FIGURE:  nOffset = 4; break;
+    default: return nullptr;
+    }
+
+    SwFieldType* pType = (*mpFieldTypes)[INIT_FLDTYPES - INIT_SEQ_FLDTYPES + nOffset].get();
+    assert( pType->Which() == SwFieldIds::SetExp );
+    return pType;
 }
 
 /// Remove field type
@@ -1673,6 +1695,8 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     // We expect this in the InsertFieldType!
     // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
     //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
+    // Keep the order in sync with GetPredefinedSequenceFieldType(), which
+    // addresses these types by their offset from INIT_FLDTYPES.
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
                 UIName(SwResId(STR_POOLCOLL_LABEL_ABB)), SwGetSetExpType::Sequence) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,

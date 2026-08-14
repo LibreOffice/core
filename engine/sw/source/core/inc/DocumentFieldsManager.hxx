@@ -39,6 +39,7 @@ public:
     virtual SwFieldType *InsertFieldType(const SwFieldType &) override;
     virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const override;
     virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const override;
+    virtual SwFieldType* GetPredefinedSequenceFieldType(SwPoolFormatId nPoolId) const override;
     virtual void RemoveFieldType(size_t nField) override;
     virtual void UpdateFields(bool bCloseDB, bool bSetModified = true) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;

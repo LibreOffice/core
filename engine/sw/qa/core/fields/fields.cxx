@@ -41,7 +41,10 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <authfld.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <poolfmt.hxx>
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
 
@@ -485,6 +488,33 @@ CPPUNIT_TEST_FIXTURE(Test, testODFStyleRef)
         CPPUNIT_ASSERT_EQUAL(sValue.second, xField->getPresentation(false));
     }
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPredefinedSequenceFieldTypes)
+{
+    createSwDoc();
+    const IDocumentFieldsAccess& rFields = getSwDoc()->getIDocumentFieldsAccess();
+
+    // The caption categories are addressed by their position among the field
+    // types, so a reordering of DocumentFieldsManager::InitFieldTypes() has to
+    // be caught here.
+    static const std::pair<SwPoolFormatId, OUString> aCategories[] = {
+        { SwPoolFormatId::COLL_LABEL_ABB, u"Illustration"_ustr },
+        { SwPoolFormatId::COLL_LABEL_TABLE, u"Table"_ustr },
+        { SwPoolFormatId::COLL_LABEL_FRAME, u"Text"_ustr },
+        { SwPoolFormatId::COLL_LABEL_DRAWING, u"Drawing"_ustr },
+        { SwPoolFormatId::COLL_LABEL_FIGURE, u"Figure"_ustr },
+    };
+
+    for (const auto& rCategory : aCategories)
+    {
+        const SwFieldType* pType = rFields.GetPredefinedSequenceFieldType(rCategory.first);
+        CPPUNIT_ASSERT(pType);
+        CPPUNIT_ASSERT_EQUAL(rCategory.second, pType->GetName().toString());
+    }
+
+    // Anything that is not a caption category has no predefined type.
+    CPPUNIT_ASSERT(!rFields.GetPredefinedSequenceFieldType(SwPoolFormatId::COLL_TEXT));
 }
 }
 

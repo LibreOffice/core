@@ -29,6 +29,7 @@
 #include <calc.hxx>
 #include <uitool.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -151,7 +152,8 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     {
         nPoolId = SwPoolFormatId::COLL_LABEL_FIGURE;
 
-        SwSetExpFieldType* pTypeIll= static_cast<SwSetExpFieldType*>(rSh.GetFieldType(SwFieldIds::SetExp, SwResId(STR_POOLCOLL_LABEL_ABB)));
+        SwFieldType* pTypeIll = rSh.GetDoc()->getIDocumentFieldsAccess().
+                GetPredefinedSequenceFieldType(SwPoolFormatId::COLL_LABEL_ABB);
         if(pTypeIll && rSh.IsUsed(*pTypeIll)) //default to illustration for legacy docs
         {
             nPoolId = SwPoolFormatId::COLL_LABEL_ABB;
@@ -192,7 +194,16 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     if( nPoolId != SwPoolFormatId::ZERO )
     {
         if (sString.isEmpty())
-            sString = SwStyleNameMapper::GetUIName(nPoolId, ProgName()).toString();
+        {
+            // Take the name this document's own sequence field type carries.
+            // The style pool would answer in the locale of this view, while
+            // the field type, and with it the category box filled from it,
+            // was named in the locale the document was created in.
+            const SwFieldType* pSeqType = rSh.GetDoc()->getIDocumentFieldsAccess().
+                    GetPredefinedSequenceFieldType(nPoolId);
+            sString = pSeqType ? pSeqType->GetName().toString()
+                               : SwStyleNameMapper::GetUIName(nPoolId, ProgName()).toString();
+        }
         auto nIndex = m_xCategoryBox->find_text(sString);
         if (nIndex != -1)
             m_xCategoryBox->set_active(nIndex);

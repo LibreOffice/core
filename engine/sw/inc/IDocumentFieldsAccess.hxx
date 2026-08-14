@@ -40,6 +40,7 @@ class SetGetExpField;
 class SwNode;
 class SwTable;
 enum class SwFieldIds : sal_uInt16;
+enum class SwPoolFormatId : sal_uInt16;
 class SwRootFrame;
 class IDocumentRedlineAccess;
 
@@ -57,6 +58,19 @@ namespace cpo::uno { class Any; }
     virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const = 0;
 
     virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
+
+    /** Get one of the sequence field types that every document is created
+        with, that is, the caption categories for illustrations, tables,
+        frames, drawings and figures.
+
+        Their names are taken from the UI locale that was current when the
+        document was constructed, which need not be the locale of the view
+        asking for them, so they cannot be looked up by name.
+
+        @param nPoolId one of the SwPoolFormatId::COLL_LABEL_* ids
+        @return the type, or nullptr if nPoolId is not a caption category
+    */
+    virtual SwFieldType* GetPredefinedSequenceFieldType(SwPoolFormatId nPoolId) const = 0;
 
     // convenience methods
     SwFieldType* GetFieldType(SwFieldIds nResId, const UIName& rName, bool bDbFieldMatching) const
