@@ -529,7 +529,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool
 
 IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, void)
 {
-    SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
+    std::shared_ptr<SvxCharacterMap> xMap(new SvxCharacterMap(GetFrameWeld(), nullptr, nullptr));
 
     sal_uInt16 nMask = 1;
     std::optional<vcl::Font> pFmtFont;
@@ -558,55 +558,58 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     }
 
     if (pFmtFont)
-        aMap.SetCharFont(*pFmtFont);
+        xMap->SetCharFont(*pFmtFont);
     if (bSameBullet)
-        aMap.SetChar(cBullet);
-    if (aMap.run() != RET_OK)
-        return;
+        xMap->SetChar(cBullet);
 
-    sal_UCS4 cChar = aMap.GetChar();
-    vcl::Font aActBulletFont = aMap.GetCharFont();
+    weld::DialogController::runAsync(xMap, [this, xMap](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+            return;
 
-    sal_uInt16 _nMask = 1;
-    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
-    {
-        if (nActNumLvl & _nMask)
+        sal_UCS4 cChar = xMap->GetChar();
+        vcl::Font aActBulletFont = xMap->GetCharFont();
+
+        sal_uInt16 _nMask = 1;
+        for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
-            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            aNumFmt.SetBulletFont(&aActBulletFont);
-            aNumFmt.SetBulletChar(cChar);
-            pActNum->SetLevel(i, aNumFmt);
+            if (nActNumLvl & _nMask)
+            {
+                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+                aNumFmt.SetBulletFont(&aActBulletFont);
+                aNumFmt.SetBulletChar(cChar);
+                pActNum->SetLevel(i, aNumFmt);
+            }
+            _nMask <<= 1;
         }
-        _nMask <<= 1;
-    }
 
-    cpo::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
-    cpo::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
-    auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
-    auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
+        cpo::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
+        cpo::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
+        auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
+        auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
 
-    OUString sId = m_xExamplesIV->get_selected_id();
-    sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
-    for (size_t i = 0; i < m_aBulletSymbols.size(); ++i)
-    {
-        if (i == nIndex)
+        OUString sId = m_xExamplesIV->get_selected_id();
+        sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
+        for (size_t i = 0; i < m_aBulletSymbols.size(); ++i)
         {
-            aBulletSymbolsListRange[i] = OUString(&cChar, 1);
-            aBulletSymbolsFontsListRange[i] = aActBulletFont.GetFamilyName();
+            if (i == nIndex)
+            {
+                aBulletSymbolsListRange[i] = OUString(&cChar, 1);
+                aBulletSymbolsFontsListRange[i] = aActBulletFont.GetFamilyName();
+            }
+            else
+            {
+                aBulletSymbolsListRange[i] = m_aBulletSymbols[i];
+                aBulletSymbolsFontsListRange[i] = m_aBulletSymbolsFonts[i];
+            }
         }
-        else
-        {
-            aBulletSymbolsListRange[i] = m_aBulletSymbols[i];
-            aBulletSymbolsFontsListRange[i] = m_aBulletSymbolsFonts[i];
-        }
-    }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::BulletsNumbering::DefaultBullets::set(aBulletSymbolsList, batch);
-    officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::set(aBulletSymbolsFontsList, batch);
-    batch->commit();
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::BulletsNumbering::DefaultBullets::set(aBulletSymbolsList, batch);
+        officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::set(aBulletSymbolsFontsList, batch);
+        batch->commit();
 
-    SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::BULLET, aPreviewSize);
+        SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::BULLET, aPreviewSize);
+    });
 }
 
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -2186,7 +2189,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, 
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
 {
-    SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
+    std::shared_ptr<SvxCharacterMap> xMap(new SvxCharacterMap(GetFrameWeld(), nullptr, nullptr));
 
     sal_uInt16 nMask = 1;
     std::optional<vcl::Font> pFmtFont;
@@ -2216,31 +2219,34 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
     }
 
     if (pFmtFont)
-        aMap.SetCharFont(*pFmtFont);
+        xMap->SetCharFont(*pFmtFont);
     else
-        aMap.SetCharFont(aActBulletFont);
+        xMap->SetCharFont(aActBulletFont);
     if (bSameBullet)
-        aMap.SetChar(cBullet);
-    if (aMap.run() != RET_OK)
-        return;
+        xMap->SetChar(cBullet);
 
-    // change Font Numrules
-    aActBulletFont = aMap.GetCharFont();
+    weld::DialogController::runAsync(xMap, [this, xMap](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+            return;
 
-    sal_uInt16 _nMask = 1;
-    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
-    {
-        if(nActNumLvl & _nMask)
+        // change Font Numrules
+        aActBulletFont = xMap->GetCharFont();
+
+        sal_uInt16 _nMask = 1;
+        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
-            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            aNumFmt.SetBulletFont(&aActBulletFont);
-            aNumFmt.SetBulletChar(aMap.GetChar());
-            pActNum->SetLevel(i, aNumFmt);
+            if(nActNumLvl & _nMask)
+            {
+                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+                aNumFmt.SetBulletFont(&aActBulletFont);
+                aNumFmt.SetBulletChar(xMap->GetChar());
+                pActNum->SetLevel(i, aNumFmt);
+            }
+            _nMask <<= 1;
         }
-        _nMask <<= 1;
-    }
 
-    SetModified();
+        SetModified();
+    });
 }
 
 IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
