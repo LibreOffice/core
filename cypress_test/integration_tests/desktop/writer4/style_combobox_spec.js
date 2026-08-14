@@ -18,13 +18,15 @@ describe(['tagdesktop'], 'Sidebar style combo box', function() {
 
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
+			return helper.processToIdle(win);
 		});
 	});
 
 	it('Typing a name with no matching style creates nothing', function() {
 		var bogusName = 'ZzNoSuchStyleXyz';
 
-		cy.cGet('#applystyle .ui-combobox-content').click().clear();
+		cy.cGet('#applystyle .ui-combobox-content').click();
+		cy.cGet('#applystyle .ui-combobox-content').clear();
 		// One character at a time with a delay, the way a user searches the
 		// list by typing slowly, then commit with Return.
 		helper.typeText('#applystyle .ui-combobox-content', bogusName, 100);
@@ -39,7 +41,9 @@ describe(['tagdesktop'], 'Sidebar style combo box', function() {
 	it('Typing an existing style name still applies it', function() {
 		helper.setDummyClipboardForCopy();
 
-		cy.cGet('#applystyle .ui-combobox-content').click().clear().type('Title{enter}');
+		cy.cGet('#applystyle .ui-combobox-content').click();
+		cy.cGet('#applystyle .ui-combobox-content').clear();
+		cy.cGet('#applystyle .ui-combobox-content').type('Title{enter}');
 
 		writerHelper.selectAllTextOfDoc();
 		helper.copy();
@@ -51,7 +55,8 @@ describe(['tagdesktop'], 'Sidebar style combo box', function() {
 
 		// 'Title' is the exact name of an existing style, but nothing has
 		// committed the combo box yet: no Return, no picking from the dropdown.
-		cy.cGet('#applystyle .ui-combobox-content').click().clear();
+		cy.cGet('#applystyle .ui-combobox-content').click();
+		cy.cGet('#applystyle .ui-combobox-content').clear();
 		helper.typeText('#applystyle .ui-combobox-content', 'Title', 100);
 
 		cy.then(() => { return helper.processToIdle(this.win); });
