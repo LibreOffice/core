@@ -1298,7 +1298,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFunc_MATCH_INDIRECT)
 
     ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(*m_pDoc, u"RoleAssignment"_ustr, u"$D$4:$D$13"_ustr);
-    rGlobalNames.insert(pRangeData);
+    rGlobalNames.insert(std::unique_ptr<ScRangeData>(pRangeData));
 
     // D6: data to match, in 3rd row of named range.
     m_pDoc->SetString(3, 5, 0, u"Test1"_ustr);
@@ -1907,7 +1907,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRangeName)
 
     ScRangeName& rRangeName = rExtDoc.GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(rExtDoc, u"ExternalName"_ustr, u"$Data1.$A$1"_ustr);
-    rRangeName.insert(pRangeData);
+    rRangeName.insert(std::unique_ptr<ScRangeData>(pRangeData));
 
     m_pDoc->InsertTab(0, u"Test Sheet"_ustr);
     m_pDoc->SetString(0, 1, 0, u"='file:///extdata.fake'#ExternalName"_ustr);
@@ -2498,7 +2498,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
                 = new ScRangeData(*m_pDoc, OUString::createFromAscii(aNames[i].pName),
                                   OUString::createFromAscii(aNames[i].pExpr), ScAddress(2, 4, 0),
                                   ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-            bool bInserted = rGlobalNames.insert(pName);
+            bool bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
             CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("Failed to insert named expression ")
                                            + aNames[i].pName + ".")
                                        .getStr(),
@@ -2675,7 +2675,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
                 = new ScRangeData(*m_pDoc, OUString::createFromAscii(aHlNames[i].pName),
                                   OUString::createFromAscii(aHlNames[i].pExpr), ScAddress(6, 12, 0),
                                   ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-            bool bInserted = rGlobalNames.insert(pName);
+            bool bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
             CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("Failed to insert named expression ")
                                            + aHlNames[i].pName + ".")
                                        .getStr(),
@@ -4016,7 +4016,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf100818)
     //Insert local range name
     ScRangeData* pLocal = new ScRangeData(*m_pDoc, u"local"_ustr, u"$Sheet1.$A$1"_ustr);
     std::unique_ptr<ScRangeName> pLocalRangeName(new ScRangeName);
-    pLocalRangeName->insert(pLocal);
+    pLocalRangeName->insert(std::unique_ptr<ScRangeData>(pLocal));
     m_pDoc->SetRangeName(0, std::move(pLocalRangeName));
 
     m_pDoc->SetValue(0, 0, 0, 1.0);
@@ -4186,9 +4186,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testIntersectionOpExcel)
 
     ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     // Horizontal cell range covering C2.
-    rGlobalNames.insert(new ScRangeData(*m_pDoc, u"horz"_ustr, u"$B$2:$D$2"_ustr));
+    rGlobalNames.insert(std::make_unique<ScRangeData>(*m_pDoc, u"horz"_ustr, u"$B$2:$D$2"_ustr));
     // Vertical cell range covering C2.
-    rGlobalNames.insert(new ScRangeData(*m_pDoc, u"vert"_ustr, u"$C$1:$C$3"_ustr));
+    rGlobalNames.insert(std::make_unique<ScRangeData>(*m_pDoc, u"vert"_ustr, u"$C$1:$C$3"_ustr));
     // Data in C2.
     m_pDoc->SetValue(2, 1, 0, 1.0);
 
@@ -6961,8 +6961,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionTakesOperandWhole)
 {
     // The wrapper encloses the whole operand, whatever form the operand takes.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
-    m_pDoc->GetRangeName().insert(
-        new ScRangeData(*m_pDoc, u"myrange"_ustr, u"$Sheet1.$A$1:$A$3"_ustr, ScAddress(1, 0, 0)));
+    m_pDoc->GetRangeName().insert(std::make_unique<ScRangeData>(
+        *m_pDoc, u"myrange"_ustr, u"$Sheet1.$A$1:$A$3"_ustr, ScAddress(1, 0, 0)));
 
     // A name reaches the writer as its own token rather than as a push.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(myrange)"_ustr,

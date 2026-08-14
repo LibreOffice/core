@@ -225,8 +225,8 @@ bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPo
 {
     ScRangeName& rGlobalNames = GetRangeName();
 
-    ScRangeData* pName = new ScRangeData(*this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
-    return rGlobalNames.insert(pName);
+    std::unique_ptr<ScRangeData> pName(new ScRangeData(*this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar()));
+    return rGlobalNames.insert(std::move(pName));
 }
 
 bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
@@ -235,8 +235,8 @@ bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const Sc
     if (!pLocalNames)
         return false;
 
-    ScRangeData* pName = new ScRangeData(*this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
-    return pLocalNames->insert(pName);
+    std::unique_ptr<ScRangeData> pName(new ScRangeData(*this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar()));
+    return pLocalNames->insert(std::move(pName));
 }
 
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString& rName, bool* pSheetLocal ) const

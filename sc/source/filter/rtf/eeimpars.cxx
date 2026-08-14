@@ -424,9 +424,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             {   // Anchor Name => RangeName
                 if (!rRangeNames.findByUpperName(ScGlobal::getCharClass().uppercase(*pE->pName)))
                 {
-                    ScRangeData* pData = new ScRangeData( mrDoc, *pE->pName,
-                        ScAddress( nCol, nRow, nTab ) );
-                    rRangeNames.insert( pData );
+                    rRangeNames.insert( std::make_unique<ScRangeData>( mrDoc, *pE->pName,
+                        ScAddress( nCol, nRow, nTab ) ) );
                 }
             }
         }

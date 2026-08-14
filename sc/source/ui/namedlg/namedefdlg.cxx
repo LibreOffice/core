@@ -237,11 +237,11 @@ void ScNameDefDlg::AddPushed()
     {
         ScRangeData::Type nType = ScRangeData::Type::Name;
 
-        ScRangeData* pNewEntry = new ScRangeData( mrDoc,
+        std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData( mrDoc,
                 aName,
                 aExpression,
                 maCursorPos,
-                nType );
+                nType ));
 
         if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
         if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
@@ -253,7 +253,7 @@ void ScNameDefDlg::AddPushed()
         // aExpression valid?
         if ( FormulaError::NONE == pNewEntry->GetErrCode() )
         {
-            pNewEntry = pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ );
+            ScRangeData* pInserted = pRangeName->insert( std::move(pNewEntry), false /*bReuseFreeIndex*/ );
 
             if (mbUndo)
             {
@@ -264,10 +264,10 @@ void ScNameDefDlg::AddPushed()
                 if (!mrDoc.GetTable(aScope, nTab))
                     nTab = -1;
 
-                assert( pNewEntry);     // undo of no insertion smells fishy
-                if (pNewEntry)
+                assert( pInserted);     // undo of no insertion smells fishy
+                if (pInserted)
                     mpDocShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoAddRangeData>( *mpDocShell, pNewEntry, nTab) );
+                            std::make_unique<ScUndoAddRangeData>( *mpDocShell, pInserted, nTab) );
 
                 // set table stream invalid, otherwise RangeName won't be saved if no other
                 // call invalidates the stream
@@ -287,7 +287,6 @@ void ScNameDefDlg::AddPushed()
         }
         else
         {
-            delete pNewEntry;
             m_xEdRange->GrabFocus();
             m_xEdRange->SelectAll();
         }

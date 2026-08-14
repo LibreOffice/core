@@ -236,24 +236,20 @@ void XclImpName::ConvertTokens()
 void XclImpName::InsertName(const ScTokenArray* pArray)
 {
     // create the Calc name data
-    ScRangeData* pData = new ScRangeData(GetDoc(), maScName, *pArray, ScAddress(), meNameType);
-    pData->GuessPosition();             // calculate base position for relative refs
-    pData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
+    std::unique_ptr<ScRangeData> pNewData(new ScRangeData(GetDoc(), maScName, *pArray, ScAddress(), meNameType));
+    pNewData->GuessPosition();             // calculate base position for relative refs
+    pNewData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
+    ScRangeData* pData = nullptr;
     if (mnXclTab == EXC_NAME_GLOBAL)
     {
-        pData = GetDoc().GetRangeName().insert(pData);
+        pData = GetDoc().GetRangeName().insert(std::move(pNewData));
     }
     else
     {
         ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
         if (pLocalNames)
         {
-            pData = pLocalNames->insert(pData);
-        }
-        else
-        {
-            delete pData;
-            pData = nullptr;
+            pData = pLocalNames->insert(std::move(pNewData));
         }
 
         if (GetBiff() == EXC_BIFF8 && pData)

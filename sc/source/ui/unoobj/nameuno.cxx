@@ -190,24 +190,20 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (pNewType)
         nType = *pNewType;
 
-    ScRangeData* pNew = nullptr;
+    std::unique_ptr<ScRangeData> pNew;
     if (pNewTokens)
-        pNew = new ScRangeData( rDoc, aInsName, *pNewTokens, aPos, nType );
+        pNew.reset(new ScRangeData( rDoc, aInsName, *pNewTokens, aPos, nType ));
     else
-        pNew = new ScRangeData( rDoc, aInsName, aContent, aPos, nType, eGrammar );
+        pNew.reset(new ScRangeData( rDoc, aInsName, aContent, aPos, nType, eGrammar ));
 
     pNew->SetIndex( pOld->GetIndex() );
 
     pNewRanges->erase(*pOld);
-    if (pNewRanges->insert(pNew))
+    if (pNewRanges->insert(std::move(pNew)))
     {
         pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mxParent->IsModifyAndBroadcast(), nTab);
 
         aName = aInsName;   //! broadcast?
-    }
-    else
-    {
-        pNew = nullptr;        //! uno::Exception/Error or something
     }
 }
 
@@ -487,16 +483,12 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
                 {
                     std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
                     // GRAM_API for API compatibility.
-                    ScRangeData* pNew = new ScRangeData( rDoc, aName, aContent,
-                                                        aPos, nNewType,formula::FormulaGrammar::GRAM_API );
-                    if ( pNewRanges->insert(pNew) )
+                    std::unique_ptr<ScRangeData> pNew(new ScRangeData( rDoc, aName, aContent,
+                                                        aPos, nNewType,formula::FormulaGrammar::GRAM_API ));
+                    if ( pNewRanges->insert(std::move(pNew)) )
                     {
                         pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mbModifyAndBroadcast, GetTab_Impl());
                         bDone = true;
-                    }
-                    else
-                    {
-                        pNew = nullptr;
                     }
                 }
         }

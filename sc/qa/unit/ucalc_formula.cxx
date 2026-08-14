@@ -124,12 +124,12 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCreateStringFromTokens)
 
         if (aNames[i].bGlobal)
         {
-            bool bInserted = rGlobalNames.insert(pName);
+            bool bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
             CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
         }
         else
         {
-            bool bInserted = pSheetNames->insert(pName);
+            bool bInserted = pSheetNames->insert(std::unique_ptr<ScRangeData>(pName));
             CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
         }
     }
@@ -3376,7 +3376,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
         *m_pDoc, u"ToLeft"_ustr, u"RC[-1]"_ustr, ScAddress(2,1,0),
         ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
 
-    bool bInserted = rGlobalNames.insert(pName);
+    bool bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     // Insert formulas in D2:D5 using the named expression.
@@ -3417,7 +3417,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     // Insert a new named expression that references these values as absolute range.
     pName = new ScRangeData(
         *m_pDoc, u"MyRange"_ustr, u"$B$10:$B$12"_ustr, ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-    bInserted = rGlobalNames.insert(pName);
+    bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     // Set formula at C8 that references this named expression.
@@ -3473,7 +3473,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
 
     pName = new ScRangeData(
         *m_pDoc, u"MyRange"_ustr, u"$B$1:$C$6"_ustr, ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-    bInserted = rGlobalNames.insert(pName);
+    bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(u"$B$1:$C$6"_ustr, aExpr);
@@ -3936,7 +3936,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameCopySheet)
 
     m_pDoc->InsertTab(0, u"Test2"_ustr);
     // Local name referencing sheet Test2.
-    bInserted = m_pDoc->GetRangeName(0)->insert( new ScRangeData( *m_pDoc, u"localname"_ustr, u"$Test2.$A$1"_ustr));
+    bInserted = m_pDoc->GetRangeName(0)->insert( std::make_unique<ScRangeData>( *m_pDoc, u"localname"_ustr, u"$Test2.$A$1"_ustr));
     CPPUNIT_ASSERT(bInserted);
     m_pDoc->SetString(ScAddress(0,0,0), u"=SHEET()"_ustr);
     m_pDoc->SetString(ScAddress(1,0,0), u"=localname"_ustr);
@@ -4773,7 +4773,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncSUBTOTAL)
         *m_pDoc, u"MyRelative"_ustr, u"$C1:$C$1000"_ustr, ScAddress(2, 999, 0),
         ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
 
-    bool bInserted = rGlobalNames.insert(pName);
+    bool bInserted = rGlobalNames.insert(std::unique_ptr<ScRangeData>(pName));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     for (size_t i = 0; i < 1025; i++)

@@ -255,9 +255,8 @@ public:
     bool empty() const { return m_Data.empty(); }
 
     /** Insert object into set.
-        Takes ownership of p in all cases. If an entry with the same
-        upper-case name already exists, the values of p are moved into that
-        existing entry, p itself is deleted, and pointers held to the
+        If an entry with the same upper-case name already exists, the values
+        of p are moved into that existing entry and pointers held to the
         existing entry stay valid.
 
         @param  bReuseFreeIndex
@@ -270,7 +269,7 @@ public:
         @return the entry that now holds the values of p, or nullptr if p
                 was null.
      */
-    SC_DLLPUBLIC ScRangeData* insert( ScRangeData* p, bool bReuseFreeIndex = true );
+    SC_DLLPUBLIC ScRangeData* insert( std::unique_ptr<ScRangeData> p, bool bReuseFreeIndex = true );
 
     void erase(const ScRangeData& r);
     void erase(const OUString& rName);

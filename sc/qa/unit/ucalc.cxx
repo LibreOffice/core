@@ -2007,10 +2007,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     ScRangeData* pLocal3 = new ScRangeData( *m_pDoc, u"local3"_ustr, u"Sheet1.$A$1"_ustr);
     ScRangeData* pLocal4 = new ScRangeData( *m_pDoc, u"local4"_ustr, u"$A$1"_ustr); // implicit relative sheet reference
     std::unique_ptr<ScRangeName> pLocalRangeName1(new ScRangeName);
-    pLocalRangeName1->insert(pLocal1);
-    pLocalRangeName1->insert(pLocal2);
-    pLocalRangeName1->insert(pLocal3);
-    pLocalRangeName1->insert(pLocal4);
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal1));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal2));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal3));
+    pLocalRangeName1->insert(std::unique_ptr<ScRangeData>(pLocal4));
     m_pDoc->SetRangeName(0, std::move(pLocalRangeName1));
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (1, u"Sheet2"_ustr));
@@ -2037,15 +2037,17 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRangeRedefinedKeepsTheSameEntry)
     ScRangeName& rNames = m_pDoc->GetRangeName();
 
     // the xls import assigns the index itself before it hands the name over
-    ScRangeData* pFirst = new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$A$1:$A$10"_ustr);
+    std::unique_ptr<ScRangeData> pFirst(
+        new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$A$1:$A$10"_ustr));
     pFirst->SetIndex(4);
-    ScRangeData* pInserted = rNames.insert(pFirst);
+    ScRangeData* pInserted = rNames.insert(std::move(pFirst));
     CPPUNIT_ASSERT(pInserted);
 
     // a second definition of the same name arrives, under a different index
-    ScRangeData* pSecond = new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$B$1:$B$20"_ustr);
+    std::unique_ptr<ScRangeData> pSecond(
+        new ScRangeData(*m_pDoc, u"MyRange"_ustr, u"$Sheet1.$B$1:$B$20"_ustr));
     pSecond->SetIndex(7);
-    ScRangeData* pSurvivor = rNames.insert(pSecond);
+    ScRangeData* pSurvivor = rNames.insert(std::move(pSecond));
 
     // a pointer taken from the first insert still addresses the live entry
     CPPUNIT_ASSERT_EQUAL(pInserted, pSurvivor);
@@ -4263,8 +4265,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98642)
     ScRangeData* pName2 = new ScRangeData( *m_pDoc, u"name2"_ustr, u"$Sheet1.$A$1"_ustr);
 
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
-    pGlobalRangeName->insert(pName1);
-    pGlobalRangeName->insert(pName2);
+    pGlobalRangeName->insert(std::unique_ptr<ScRangeData>(pName1));
+    pGlobalRangeName->insert(std::unique_ptr<ScRangeData>(pName2));
     m_pDoc->SetRangeName(std::move(pGlobalRangeName));
 
     m_pDoc->SetString(1, 0, 0, u"=name1"_ustr);

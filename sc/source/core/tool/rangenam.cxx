@@ -814,7 +814,7 @@ void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, con
     }
 }
 
-ScRangeData* ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
+ScRangeData* ScRangeName::insert( std::unique_ptr<ScRangeData> p, bool bReuseFreeIndex )
 {
     if (!p)
         return nullptr;
@@ -843,6 +843,7 @@ ScRangeData* ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
     }
 
     OUString aName(p->GetUpperName());
+    ScRangeData* pRet;
     DataType::iterator itrExisting = m_Data.find(aName);
     if (itrExisting != m_Data.end())
     {
@@ -855,21 +856,21 @@ ScRangeData* ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
         assert(0 < nOldIndex && nOldIndex <= maIndexToData.size() && maIndexToData[nOldIndex-1] == pExisting);
         maIndexToData[nOldIndex-1] = nullptr;
         *pExisting = std::move(*p);
-        delete p;
-        p = pExisting;
+        pRet = pExisting;
     }
     else
     {
-        m_Data.insert(std::make_pair(aName, std::unique_ptr<ScRangeData>(p)));
+        pRet = p.get();
+        m_Data.insert(std::make_pair(aName, std::move(p)));
     }
 
     // Store the index of the surviving entry for mapping.
-    size_t nPos = p->GetIndex() - 1;
+    size_t nPos = pRet->GetIndex() - 1;
     if (nPos >= maIndexToData.size())
         maIndexToData.resize(nPos+1, nullptr);
-    maIndexToData[nPos] = p;
+    maIndexToData[nPos] = pRet;
     mHasPossibleAddressConflictDirty = true;
-    return p;
+    return pRet;
 }
 
 void ScRangeName::erase(const ScRangeData& r)
