@@ -5,18 +5,18 @@ msgstr ""
 "Project-Id-Version: Collabora Online - Help\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-08-15 06:51+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/help/sl/>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/help/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
@@ -105,11 +105,11 @@ msgstr "Natisni"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Najdi"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Najdi in zamenjaj"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -151,18 +151,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Odprite kontekstni meni na položaju kazalca ali izbrano celico"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>konec</kbd>"
+"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
@@ -172,20 +171,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>konec</kbd>"
+"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1363,35 +1361,35 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Izbere celoten stolpec trenutne celice."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Krmilka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>tabulatorka</kbd>"
+"<kbd>Krmilka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>preslednica</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Izbere celotno vrstico trenutne celice."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>tabulatorka</kbd>"
+"<kbd>Dvigalka</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>preslednica</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Odpre kontekstni meni zavihka delovnega lista s pozornostjo (vstavi, "
+"preimenuj, izbriši, skrij, premakni ter drugo)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
@@ -1636,7 +1634,7 @@ msgstr "Pomoč za <span class=\"productname\">{productname}</span>"
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 #: html/cool-help.html%2Bdiv.div.h3:383-5
 msgid "Collaborative editing"
-msgstr "Skupinsko urejanje"
+msgstr "Sodelovalno urejanje"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 #: html/cool-help.html%2Bdiv.div.h3:393-5
@@ -1651,7 +1649,7 @@ msgstr "Odpiranje, zapiranje, shranjevanje, tiskanje in prenašanje dokumentov"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Odpiranje, zapiranje, shranjevanje in tiskanje dokumentov"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.div.h3:480-5
@@ -1785,16 +1783,16 @@ msgstr ""
 "obvestilom v nogi, ko vstopi novi uporabnik ali ko se uporabnik odjavi."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> uporablja vire sodobnih "
-"brskalnikov, da prilagodi uporabniški vmesnik velikosti vidne površine, "
-"vključno z manjšimi zasloni mobilnih naprav. Vmesnik sestavljajo:"
+"<span class=\"webBasedCOOLOnly\"><span class=\"productname\">{productname}</"
+"span> uporablja vire sodobnih brskalnikov, da prilagodi uporabniški vmesnik "
+"velikosti vidne površine, vključno z manjšimi zasloni mobilnih naprav.</"
+"span> Vmesnik sestavljajo:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
