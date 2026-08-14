@@ -12,6 +12,10 @@
 
 class NextEffectEventArray {
 	aEventArray: EventBase[] = [];
+	// The node each event starts, kept in step with aEventArray so that the
+	// effect about to run can be described without having to guess which one
+	// it is.
+	aNodeArray: BaseNode[] = [];
 
 	size() {
 		return this.aEventArray.length;
@@ -21,7 +25,11 @@ class NextEffectEventArray {
 		return this.aEventArray[nIndex];
 	}
 
-	appendEvent(aEvent: EventBase) {
+	nodeAt(nIndex: number): BaseNode {
+		return this.aNodeArray[nIndex];
+	}
+
+	appendEvent(aEvent: EventBase, aAnimationNode: BaseNode) {
 		const nSize = this.size();
 		for (let i = 0; i < nSize; ++i) {
 			if (this.aEventArray[i].getId() == aEvent.getId()) {
@@ -34,6 +42,7 @@ class NextEffectEventArray {
 			}
 		}
 		this.aEventArray.push(aEvent);
+		this.aNodeArray.push(aAnimationNode);
 		aNextEffectEventArrayDebugPrinter.print(
 			'NextEffectEventArray.appendEvent: event(' +
 				aEvent.getId() +
@@ -44,5 +53,6 @@ class NextEffectEventArray {
 
 	clear() {
 		this.aEventArray = [];
+		this.aNodeArray = [];
 	}
 }

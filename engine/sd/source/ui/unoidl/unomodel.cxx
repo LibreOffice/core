@@ -147,7 +147,9 @@
 #include <ViewShellBase.hxx>
 #include "UnoDocumentSettings.hxx"
 
+#include <A11yObjectName.hxx>
 #include <Annotation.hxx>
+#include <CustomAnimationPreset.hxx>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <UndoSlideSection.hxx>
@@ -621,7 +623,7 @@ class AnimationsExporter
 {
 public:
     AnimationsExporter(::tools::JsonWriter& rWriter,
-                       const Reference<drawing::XDrawPage>& xDrawPage);
+                       const Reference<drawing::XDrawPage>& xDrawPage, bool bAllyState);
     void exportAnimations();
     void exportTriggers() const;
     [[nodiscard]] bool hasEffects() const { return mbHasEffects; }
@@ -645,14 +647,17 @@ private:
     Reference<XPropertySet> mxPageProps;
     Reference<XAnimationNode> mxRootNode;
     bool mbHasEffects;
+    bool mbAllyState;
     std::unordered_map<SdrObject*, OString> maEventTriggerSet;
 };
 
 AnimationsExporter::AnimationsExporter(::tools::JsonWriter& rWriter,
-                                       const Reference<drawing::XDrawPage>& xDrawPage)
+                                       const Reference<drawing::XDrawPage>& xDrawPage,
+                                       bool bAllyState)
     : mrWriter(rWriter)
     , mxDrawPage(xDrawPage)
     , mbHasEffects(false)
+    , mbAllyState(bAllyState)
 {
     if (!mxDrawPage.is())
         return;
@@ -1022,6 +1027,15 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
                 if (rValue.Value >>= aPresetId)
                 {
                     mrWriter.put("presetId", aPresetId);
+
+                    if (mbAllyState)
+                    {
+                        CustomAnimationPresetPtr pPreset
+                            = CustomAnimationPresets::getCustomAnimationPresets()
+                                  .getEffectDescriptor(aPresetId);
+                        if (pPreset)
+                            mrWriter.put("presetLabel", pPreset->getLabel());
+                    }
                 }
             }
             else if (IsXMLToken(rValue.Name, XML_PRESET_SUB_TYPE))
@@ -1446,6 +1460,9 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
             if (pObject)
             {
                 mrWriter.put("title", pObject->GetTitle());
+
+                if (mbAllyState)
+                    mrWriter.put("objectName", sd::GetA11yObjectName(*pObject));
             }
         }
         nTemp = xAnimate->getSubItem();
@@ -6222,7 +6239,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 }
 
 
-                AnimationsExporter aAnimationExporter(aJsonWriter, pSlide);
+                AnimationsExporter aAnimationExporter(aJsonWriter, pSlide, bAllyState);
                 if (aAnimationExporter.hasEffects())
                 {
                     {

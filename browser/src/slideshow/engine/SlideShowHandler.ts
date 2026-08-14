@@ -332,19 +332,34 @@ class SlideShowHandler {
 		if (curMetaSlide?.animationsHandler) {
 			const aAnimatedElementMap =
 				curMetaSlide.animationsHandler.getAnimatedElementMap();
-			let effect = 0;
 			const currentEffect = this.nCurrentEffect;
 			aAnimatedElementMap.forEach((aAnimatedElement: AnimatedElement) => {
 				aAnimatedElement.notifyNextEffectStart(currentEffect);
-				if (effect === currentEffect) {
-					this.addA11yStringDelayed(
-						_('Animation Start: ') + aAnimatedElement.getTitle(),
-						500,
-					);
-				}
-				effect++;
 			});
 		}
+
+		this.announceEffect(
+			this.aNextEffectEventArray?.nodeAt(this.nCurrentEffect),
+		);
+	}
+
+	private announceEffect(aEffectNode: BaseNode) {
+		const sPresetLabel = aEffectNode?.getPresetLabel();
+		const sObjectName = aEffectNode?.getTargetAnimatedElement()?.getTitle();
+
+		let sAnnouncement;
+		if (sPresetLabel && sObjectName)
+			sAnnouncement = _('Animation: {0}, {1}')
+				.replace('{0}', sPresetLabel)
+				.replace('{1}', sObjectName);
+		else if (sPresetLabel || sObjectName)
+			sAnnouncement = _('Animation: {0}').replace(
+				'{0}',
+				sPresetLabel || sObjectName,
+			);
+		else sAnnouncement = _('Animation');
+
+		this.addA11yStringDelayed(sAnnouncement, 500);
 	}
 
 	notifyNextEffectEnd() {

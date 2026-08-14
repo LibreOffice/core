@@ -78,14 +78,14 @@ abstract class AnimationBaseNode extends BaseNode {
 					? new AnimatedTextElement(
 							this.aTargetHash,
 							slideHash,
-							aNodeInfo.title,
+							aNodeInfo.title || aNodeInfo.objectName,
 							slideWidth,
 							slideHeight,
 						)
 					: new AnimatedElement(
 							this.aTargetHash,
 							slideHash,
-							aNodeInfo.title,
+							aNodeInfo.title || aNodeInfo.objectName,
 							slideWidth,
 							slideHeight,
 						);
@@ -188,6 +188,10 @@ abstract class AnimationBaseNode extends BaseNode {
 	}
 
 	public getAnimatedElement() {
+		return this.aAnimatedElement;
+	}
+
+	public getTargetAnimatedElement(): AnimatedElement {
 		return this.aAnimatedElement;
 	}
 

@@ -32,6 +32,7 @@ interface BaseNodeInfo {
 	endSync?: string;
 	nodeType?: string;
 	presetId?: string;
+	presetLabel?: string;
 	presetSubType?: string;
 	presetClass?: string;
 	masterElement?: string;
@@ -52,6 +53,7 @@ interface IterateNodeInfo extends ContainerNodeInfo {
 interface AnimateNodeInfo extends BaseNodeInfo {
 	targetElement?: string;
 	title?: string;
+	objectName?: string;
 	subItem?: string;
 	attributeName?: string;
 	values?: string;

@@ -151,6 +151,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
+	sd/source/core/A11yObjectName \
 	sd/source/core/CustomAnimationCloner \
 	sd/source/core/CustomAnimationEffect \
 	sd/source/core/CustomAnimationPreset \

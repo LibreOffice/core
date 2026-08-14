@@ -139,12 +139,13 @@ function makeDelay(aFunctor: any, nTimeout: number) {
 }
 
 function registerEvent(
-	nNodeId: number,
+	aAnimationNode: BaseNode,
 	aSlideShow: SlideShowHandler,
 	aTiming: Timing,
 	aEvent: EventBase,
 	aNodeContext: NodeContext,
 ) {
+	const nNodeId = aAnimationNode.getId();
 	const aSlideShowContext = aNodeContext._context;
 	const eTimingType = aTiming.getType();
 
@@ -245,7 +246,7 @@ function registerEvent(
 					else {
 						switch (eEventType) {
 							case EventTrigger.OnNext:
-								aNextEffectEventArray.appendEvent(aEvent);
+								aNextEffectEventArray.appendEvent(aEvent, aAnimationNode);
 								break;
 							default:
 								window.app.console.log(

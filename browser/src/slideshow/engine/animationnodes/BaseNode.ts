@@ -460,7 +460,7 @@ abstract class BaseNode {
 				);
 			}
 			registerEvent(
-				this.getId(),
+				this,
 				this.aNodeContext._context.aSlideShowHandler,
 				this.getBegin(),
 				this.aActivationEvent,
@@ -598,6 +598,14 @@ abstract class BaseNode {
 
 	public isContainer(): boolean {
 		return this.bIsContainer;
+	}
+
+	public getPresetLabel(): string | undefined {
+		return this.aNodeInfo.presetLabel;
+	}
+
+	public getTargetAnimatedElement(): AnimatedElement {
+		return null;
 	}
 
 	public isMainSequenceRootNode(): boolean {

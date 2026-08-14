@@ -72,6 +72,26 @@ abstract class BaseContainerNode extends BaseNode {
 			(!this.getEnd() || this.getEnd().getType() != TimingType.Offset);
 	}
 
+	// the preset is on the effect node
+	public getPresetLabel(): string | undefined {
+		const sPresetLabel = super.getPresetLabel();
+		if (sPresetLabel) return sPresetLabel;
+
+		for (const aChildNode of this.aChildrenArray) {
+			const sChildPresetLabel = aChildNode.getPresetLabel();
+			if (sChildPresetLabel) return sChildPresetLabel;
+		}
+		return undefined;
+	}
+
+	public getTargetAnimatedElement(): AnimatedElement {
+		for (const aChildNode of this.aChildrenArray) {
+			const aAnimatedElement = aChildNode.getTargetAnimatedElement();
+			if (aAnimatedElement) return aAnimatedElement;
+		}
+		return null;
+	}
+
 	public appendChildNode(aAnimationNode: BaseNode) {
 		if (!this.checkValidNode()) return;
 
