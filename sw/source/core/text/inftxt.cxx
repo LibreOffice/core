@@ -839,22 +839,11 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     // we should take line spacing into account.
     // otherwise, bottom of some letters will be cut because of the "field shading" background layer.
-    switch (rSpace.GetInterLineSpaceRule())
+    if (rSpace.GetLineSpaceRule() == SvxLineSpaceRule::Auto
+        && rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop) // proportional
     {
-        case SvxInterLineSpaceRule::Prop: // proportional
-        {
-            if (nPropLineSpace < 100)
-                nHeight = rPor.Height() * nPropLineSpace / 100;
-        }
-        break;
-        case SvxInterLineSpaceRule::Fix: // fixed
-        {
-            if (rSpace.GetInterLineSpace() > 0)
-                nHeight = std::min<SwTwips>(rSpace.GetInterLineSpace(), rPor.Height());
-        }
-        break;
-        default:
-            break;
+        if (nPropLineSpace < 100)
+            nHeight = rPor.Height() * nPropLineSpace / 100;
     }
 
     Size aSize( rPor.Width(), nHeight);
@@ -895,23 +884,11 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
         else
         {
             SwTwips nAscent = rPor.GetAscent();
-
-            switch (rSpace.GetInterLineSpaceRule())
+            if (rSpace.GetLineSpaceRule() == SvxLineSpaceRule::Auto
+                && rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop) // proportional
             {
-                case SvxInterLineSpaceRule::Prop: // proportional
-                {
-                    if (nPropLineSpace < 100)
-                        nAscent = (rPor.GetAscent() * nPropLineSpace / 100);
-                }
-                break;
-                case SvxInterLineSpaceRule::Fix: // fixed
-                {
-                    if (rSpace.GetInterLineSpace() > 0)
-                        nAscent = std::min<SwTwips>(rSpace.GetInterLineSpace(), rPor.GetAscent());
-                }
-                break;
-                default:
-                    break;
+                if (nPropLineSpace < 100)
+                    nAscent = (rPor.GetAscent() * nPropLineSpace / 100);
             }
 
             aPoint.setY( Y() - nAscent);
