@@ -1215,9 +1215,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
         = getDataSequenceFromDocByRole(xChartDoc, u"calculated-y");
     CPPUNIT_ASSERT(!xCalculatedY.is());
 
-    // The X axis must carry the bin range labels from the histogram template,
-    // not the generic "1", "2", ... labels that the OOXML axis converter
-    // produces by default.
+    // The X axis carries the bin range labels from the histogram template, not the generic
+    // "1", "2", ... labels that the OOXML axis converter produces by default. The axis and the
+    // series read the same sequence, so the labels match the ones asserted for the series.
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     chart2::ScaleData aScaleData = xXAxis->getScaleData();
@@ -1255,6 +1255,46 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     double fBinWidth = 0.0;
     CPPUNIT_ASSERT(xReloadedProperties->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountLiveUpdate)
+{
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    // Keep the category sequence currently held by the X axis. Changing the
+    // bin count must update this same sequence instead of leaving it stale
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xAxisCategories(
+        aScaleData.Categories->getValues(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCategories.is());
+
+    const Sequence<OUString> aOriginalLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aOriginalLabels.getLength());
+
+    Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
+
+    // Switching to fixed-count mode initially uses the stored default of ten bins.
+    xProperties->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
+
+    const Sequence<OUString> aFixedCountLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aFixedCountLabels.getLength());
+
+    // Changing the count must update the same sequence without save/reload.
+    xProperties->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(3)));
+
+    const Sequence<OUString> aUpdatedLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aUpdatedLabels.getLength());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_ODS)

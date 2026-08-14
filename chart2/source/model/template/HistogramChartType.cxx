@@ -241,37 +241,51 @@ void HistogramChartType::createCalculatedDataSeries()
             = new LabeledDataSequence(xCalcSeq);
         xSeries->setCalculatedYSequence(xLabeledCalc);
 
-        // 3. Regenerate the categories (bins)
-        rtl::Reference<HistogramDataSequence> xCatSeq = new HistogramDataSequence(
-            xValuesY, true, nFrequencyType, fBinWidth, nBinCount, bUseUnderflowBin,
-            fUnderflowBinValue, bUseOverflowBin, fOverflowBinValue);
+        auto createCategorySequence = [&]() {
+            rtl::Reference<HistogramDataSequence> xCatSeq = new HistogramDataSequence(
+                xValuesY, true, nFrequencyType, fBinWidth, nBinCount, bUseUnderflowBin,
+                fUnderflowBinValue, bUseOverflowBin, fOverflowBinValue);
 
-        uno::Reference<chart2::data::XDataSequence> xCatDataSeq(xCatSeq);
-        uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
-        if (xCatProp.is())
-        {
-            xCatProp->setPropertyValue(u"Role"_ustr, uno::Any(u"categories"_ustr));
-        }
+            uno::Reference<chart2::data::XDataSequence> xCatDataSeq(xCatSeq);
+            uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
+            if (xCatProp.is())
+            {
+                xCatProp->setPropertyValue(u"Role"_ustr, uno::Any(u"categories"_ustr));
+            }
 
-        uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCat
-            = new LabeledDataSequence(xCatSeq);
+            return uno::Reference<chart2::data::XLabeledDataSequence>(
+                new LabeledDataSequence(xCatSeq));
+        };
 
-        // 4. Attach the categories to the DataSeries so the View can find them
+        // 3. Update existing histogram categories in place. The X axis and the DataSeries hold
+        // the same sequence, so new bin parameters reach the axis labels through it.
         bool bHasCategories = false;
         for (auto& seq : aSeqs)
         {
-            if (seq.is() && DataSeriesHelper::getRole(seq) == u"categories"_ustr)
+            if (!seq.is() || DataSeriesHelper::getRole(seq) != u"categories"_ustr)
+                continue;
+
+            rtl::Reference<HistogramDataSequence> xHistogramSequence
+                = dynamic_cast<HistogramDataSequence*>(seq->getValues().get());
+
+            if (xHistogramSequence.is())
             {
-                seq = xLabeledCat;
-                bHasCategories = true;
-                break;
+                xHistogramSequence->setBinningParameters(nFrequencyType, fBinWidth, nBinCount,
+                                                         bUseUnderflowBin, fUnderflowBinValue,
+                                                         bUseOverflowBin, fOverflowBinValue);
             }
+            else
+            {
+                seq = createCategorySequence();
+            }
+
+            bHasCategories = true;
+            break;
         }
 
+        // 4. Attach generated categories when the series does not have them yet
         if (!bHasCategories)
-        {
-            aSeqs.push_back(xLabeledCat);
-        }
+            aSeqs.push_back(createCategorySequence());
 
         xSeries->setData(aSeqs);
     }

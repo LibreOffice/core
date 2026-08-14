@@ -90,7 +90,10 @@ InterpretedData HistogramDataInterpreter::interpretDataSource(
         resultSeries = new DataSeries();
     }
 
-    resultSeries->setData(DataSeries::tDataSequenceContainer{ valuesYSeqLabeled });
+    // The diagram axis and the DataSeries hold the same generated category sequence, so new
+    // bin settings reach the X axis labels through it.
+    resultSeries->setData(
+        DataSeries::tDataSequenceContainer{ valuesYSeqLabeled, xLabeledCategorySeq });
     resultSeries->setCalculatedYSequence(xLabeledFreqSeq);
 
     // Structure the result: one group, one series for a standard histogram
