@@ -1108,7 +1108,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	right: 12px;
 	top: 64px;
 	z-index: 20;
-	max-height: 320px;
+	max-height: min(320px, 45vh);
 	overflow-y: auto;
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border);

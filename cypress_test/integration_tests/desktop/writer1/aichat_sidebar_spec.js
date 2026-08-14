@@ -574,6 +574,23 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			cy.cGet('#aichat-tone-form').should('not.exist');
 			aichatHelper.closeTonePicker();
 		});
+
+		it('Emoji overlay fits inside a short viewport', function() {
+			cy.viewport(1280, 400);
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			// The + icon button opens the emoji overlay.
+			cy.cGet('#aichat-tone-form-emoji-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			// 45vh of a 400px viewport is 180px, below the 320px fixed cap.
+			cy.cGet('#aichat-tone-form-emoji-picker').should(($el) => {
+				expect($el[0].getBoundingClientRect().height).to.be.at.most(181);
+			});
+		});
 	});
 
 	describe('Tone picker - emoji picker inside form', function() {
