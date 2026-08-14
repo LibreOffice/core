@@ -2211,6 +2211,10 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSX
     const int nSecond = countXPathNodes(pSecondTable, pRepeatItemLabelsXPath);
     CPPUNIT_ASSERT_EQUAL(5, nFirst + nSecond);
     CPPUNIT_ASSERT(nFirst == 0 || nSecond == 0);
+
+    // MS Excel ignores the extension unless the table claims at least its 2010 version
+    assertXPath(pFirstTable, "/x:pivotTableDefinition", "updatedVersion", u"4");
+    assertXPath(pSecondTable, "/x:pivotTableDefinition", "updatedVersion", u"4");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableClassicLayoutXLSX)

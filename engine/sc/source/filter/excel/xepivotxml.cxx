@@ -1273,6 +1273,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_applyAlignmentFormats, ToPsz10(false),
         XML_applyWidthHeightFormats, ToPsz10(false),
         XML_dataCaption, "Values",
+        // MS Excel 2010: MSO drops the pivot table extensions of a newer version, like the
+        // repeat item labels of a field; raise it when writing markup of a later version
+        XML_updatedVersion, "4",
         XML_showDrill, ToPsz10(rSaveData.GetExpandCollapse()),
         XML_useAutoFormatting, ToPsz10(false),
         XML_itemPrintTitles, ToPsz10(true),
