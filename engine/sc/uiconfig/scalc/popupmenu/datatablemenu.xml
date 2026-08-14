@@ -8,7 +8,6 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
-  <menu:menuitem menu:id=".uno:RunInsCalcTable"/>
   <menu:menuitem menu:id=".uno:RemoveCalcTable"/>
   <menu:menuitem menu:id=".uno:TableTotalRow"/>
   <menu:menuitem menu:id=".uno:ResizeCalcTable"/>

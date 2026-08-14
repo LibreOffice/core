@@ -1087,7 +1087,6 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:DeletePivotTable', 'spreadsheet'), uno: '.uno:DeletePivotTable'}]},
 				{type: 'separator'},
 				{name: _UNO('.uno:DataTableMenu', 'spreadsheet'), type: 'menu', menu: [
-					{name: _UNO('.uno:RunInsCalcTable', 'spreadsheet'), uno: '.uno:InsertCalcTable'},
 					{name: _UNO('.uno:RemoveCalcTable', 'spreadsheet'), uno: '.uno:RemoveCalcTable'},
 					{name: _UNO('.uno:TableTotalRow', 'spreadsheet'), uno: '.uno:TableTotalRow'},
 					{name: _UNO('.uno:ResizeCalcTable', 'spreadsheet'), uno: '.uno:ResizeCalcTable'},
