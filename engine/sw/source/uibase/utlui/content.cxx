@@ -7343,36 +7343,44 @@ void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
 
 void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
 {
+    assert(nCommentId != 0 && "nCommentId is 0, which is not a valid comment Id");
+    if (nCommentId == 0)
+    {
+        SAL_WARN("sw.ui", "nCommentId is 0, which is not a valid comment Id");
+        return;
+    }
+
     std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_iter_first(*xIter))
         return;
     do
     {
         SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xIter));
-        if (pCntType && pCntType->GetType() == ContentTypeId::POSTIT)
+        if (!pCntType || pCntType->GetType() != ContentTypeId::POSTIT)
         {
-            m_xTreeView->set_cursor(*xIter);
-            m_xTreeView->select(*xIter);
-            m_xTreeView->expand_row(*xIter);
-            UpdateContentFunctionsToolbar();
+            m_xTreeView->collapse_row(*xIter);
+            continue;
+        }
 
-            for (bool bChild = m_xTreeView->iter_children(*xIter); bChild; bChild = m_xTreeView->iter_next(*xIter))
+        m_xTreeView->set_cursor(*xIter);
+        m_xTreeView->select(*xIter);
+        m_xTreeView->expand_row(*xIter);
+        UpdateContentFunctionsToolbar();
+
+        const int nBaseDepth = m_xTreeView->get_iter_depth(*xIter);
+        for (bool bChild = m_xTreeView->iter_children(*xIter); bChild && m_xTreeView->get_iter_depth(*xIter) > nBaseDepth; bChild = m_xTreeView->iter_next(*xIter))
+        {
+            if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
             {
-                if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
+                const SwPostItField* pPostItField = pPostIt->GetPostItField();
+                if (pPostItField && nCommentId == pPostItField->GetPostItId())
                 {
-                    const SwPostItField* pPostItField = pPostIt->GetPostItField();
-                    if (pPostItField && nCommentId == pPostItField->GetPostItId())
-                    {
-                        GotoContent(weld::fromId<SwContent*>(m_xTreeView->get_id(*xIter)));
-                        m_xTreeView->grab_focus();
-                        break;
-                    }
+                    GotoContent(weld::fromId<SwContent*>(m_xTreeView->get_id(*xIter)));
+                    m_xTreeView->grab_focus();
+                    return;
                 }
             }
-            break;
         }
-        else
-            m_xTreeView->collapse_row(*xIter);
 
     } while (m_xTreeView->iter_next_sibling(*xIter));
 }
