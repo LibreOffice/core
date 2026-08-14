@@ -18,6 +18,9 @@
  */
 
 #include <sal/log.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+#include <svx/svdoashp.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotable.hxx>
@@ -40,8 +43,38 @@ using namespace sdr::table;
 
 namespace
 {
-void CreateTitleDescription(const SdrObject* pObject, OUStringBuffer& rHtml)
+OUString GetObjectName(const SdrObject* pObject)
 {
+    OUString aName = pObject->GetName();
+    if (!aName.isEmpty())
+        return aName;
+
+    if (pObject->GetObjIdentifier() == SdrObjKind::Graphic)
+        return SvxResId(STR_ObjNameSingulGRAF);
+
+    if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape)
+    {
+        const SdrObjCustomShape* pCustomShape
+            = static_cast<const SdrObjCustomShape*>(pObject);
+        if (pCustomShape->IsTextPath())
+            return SvxResId(STR_ObjNameSingulFONTWORK);
+
+        OUString aShapeName = pCustomShape->GetCustomShapeName();
+        if (!aShapeName.isEmpty())
+            return aShapeName;
+    }
+
+    return pObject->TakeObjNameSingul();
+}
+
+void CreateTitleDescription(const SdrObject* pObject, OUStringBuffer& rHtml, bool bWithName)
+{
+    if (bWithName)
+    {
+        rHtml.append("<h2>");
+        rHtml.append(GetObjectName(pObject));
+        rHtml.append("</h2>\n\r");
+    }
     rHtml.append("<h2>");
     rHtml.append(pObject->GetTitle());
     rHtml.append("</h2>\n\r<p>");
@@ -64,6 +97,9 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
 
     for (const rtl::Reference<SdrObject>& pObject : *pPage)
     {
+        if (pObject->IsDecorative())
+            continue;
+
         PresObjKind eKind = pPage->GetPresObjKind(pObject.get());
 
         switch (eKind)
@@ -89,7 +125,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
                     }
                     else
                     {
-                        CreateTitleDescription(pObject.get(), rHtml);
+                        CreateTitleDescription(pObject.get(), rHtml, true);
                     }
                 }
             }
@@ -114,7 +150,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
             break;
 
             default:
-                CreateTitleDescription(pObject.get(), rHtml);
+                CreateTitleDescription(pObject.get(), rHtml, false);
                 break;
         }
     }
