@@ -58,6 +58,10 @@ public:
         bool bUseOverflowBin = false, double fOverflowBinValue = 0.0);
     virtual ~HistogramDataSequence() override;
 
+    void setBinningParameters(sal_Int32 nFrequencyType, double fBinWidth, sal_Int32 nBinCount,
+                              bool bUseUnderflowBin, double fUnderflowBinValue,
+                              bool bUseOverflowBin, double fOverflowBinValue);
+
     /// declare XServiceInfo methods
     virtual OUString getImplementationName() override;
     virtual bool supportsService(const OUString& ServiceName) override;

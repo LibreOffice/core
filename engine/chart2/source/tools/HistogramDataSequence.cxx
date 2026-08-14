@@ -82,6 +82,37 @@ HistogramDataSequence::~HistogramDataSequence()
     }
 }
 
+void HistogramDataSequence::setBinningParameters(sal_Int32 nFrequencyType, double fBinWidth,
+                                                 sal_Int32 nBinCount, bool bUseUnderflowBin,
+                                                 double fUnderflowBinValue, bool bUseOverflowBin,
+                                                 double fOverflowBinValue)
+{
+    {
+        osl::MutexGuard aGuard(GetMutex());
+
+        // Recomputing the bins is expensive, so parameters that repeat the ones already held
+        // leave the cached bins and the modified state alone.
+        if (m_nFrequencyType == nFrequencyType && m_fBinWidth == fBinWidth
+            && m_nBinCount == nBinCount && m_bUseUnderflowBin == bUseUnderflowBin
+            && m_fUnderflowBinValue == fUnderflowBinValue && m_bUseOverflowBin == bUseOverflowBin
+            && m_fOverflowBinValue == fOverflowBinValue)
+        {
+            return;
+        }
+
+        m_nFrequencyType = nFrequencyType;
+        m_fBinWidth = fBinWidth;
+        m_nBinCount = nBinCount;
+        m_bUseUnderflowBin = bUseUnderflowBin;
+        m_fUnderflowBinValue = fUnderflowBinValue;
+        m_bUseOverflowBin = bUseOverflowBin;
+        m_fOverflowBinValue = fOverflowBinValue;
+        m_bIsDirty = true;
+    }
+
+    m_xModifyEventForwarder->modified(lang::EventObject(static_cast<cppu::OWeakObject*>(this)));
+}
+
 IMPLEMENT_FORWARD_XINTERFACE2(HistogramDataSequence, HistogramDataSequence_Base,
                               ::comphelper::OPropertyContainer)
 

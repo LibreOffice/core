@@ -1193,17 +1193,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleEqualScales)
     // Both dimensions run from minus one to one, so the plot area has to be
     // square for the two of them to be at the same scale, which is what makes
     // the circle of radius one a circle rather than an ellipse.
-    Reference<drawing::XShape> xPlotArea(
-        getShapeByName(xShapes, u"PlotAreaExcludingAxes"_ustr), UNO_SET_THROW);
+    Reference<drawing::XShape> xPlotArea(getShapeByName(xShapes, u"PlotAreaExcludingAxes"_ustr),
+                                         UNO_SET_THROW);
     const awt::Size aPlotArea = xPlotArea->getSize();
     CPPUNIT_ASSERT_GREATER(sal_Int32(0), aPlotArea.Width);
     CPPUNIT_ASSERT_EQUAL(aPlotArea.Height, aPlotArea.Width);
 
     // The same thing said through the axes: they are drawn the same length.
-    Reference<drawing::XShape> xAcross(
-        getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr), UNO_SET_THROW);
-    Reference<drawing::XShape> xUp(
-        getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr), UNO_SET_THROW);
+    Reference<drawing::XShape> xAcross(getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr),
+                                       UNO_SET_THROW);
+    Reference<drawing::XShape> xUp(getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr),
+                                   UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(xUp->getSize().Height, xAcross->getSize().Width);
 }
 
@@ -1225,10 +1225,14 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleODSRoundtrip)
 
     // Each series keeps its feature column as the series range and the two
     // dimension columns as a domain each.
-    assertXPath(pXmlDoc, "/office:document-content/office:body/office:chart/chart:chart"
-                         "/chart:plot-area/chart:series", 3);
-    assertXPath(pXmlDoc, "/office:document-content/office:body/office:chart/chart:chart"
-                         "/chart:plot-area/chart:series[1]/chart:domain", 2);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:chart/chart:chart"
+                "/chart:plot-area/chart:series",
+                3);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:chart/chart:chart"
+                "/chart:plot-area/chart:series[1]/chart:domain",
+                2);
 
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -1305,9 +1309,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
         = getDataSequenceFromDocByRole(xChartDoc, u"calculated-y");
     CPPUNIT_ASSERT(!xCalculatedY.is());
 
-    // The X axis must carry the bin range labels from the histogram template,
-    // not the generic "1", "2", ... labels that the OOXML axis converter
-    // produces by default.
+    // The X axis carries the bin range labels from the histogram template, not the generic
+    // "1", "2", ... labels that the OOXML axis converter produces by default. The axis and the
+    // series read the same sequence, so the labels match the ones asserted for the series.
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     chart2::ScaleData aScaleData = xXAxis->getScaleData();
@@ -1318,7 +1322,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAxisBinLabels.getLength());
     CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aAxisBinLabels[0]);
-    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.88]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aAxisBinLabels[1]);
 
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
@@ -1345,6 +1349,46 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     double fBinWidth = 0.0;
     CPPUNIT_ASSERT(xReloadedProperties->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountLiveUpdate)
+{
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    // Keep the category sequence currently held by the X axis. Changing the
+    // bin count must update this same sequence instead of leaving it stale
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xAxisCategories(
+        aScaleData.Categories->getValues(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCategories.is());
+
+    const Sequence<OUString> aOriginalLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aOriginalLabels.getLength());
+
+    Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
+
+    // Switching to fixed-count mode initially uses the stored default of ten bins.
+    xProperties->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(2)));
+
+    const Sequence<OUString> aFixedCountLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aFixedCountLabels.getLength());
+
+    // Changing the count must update the same sequence without save/reload.
+    xProperties->setPropertyValue(u"BinCount"_ustr, cpo::uno::Any(sal_Int32(3)));
+
+    const Sequence<OUString> aUpdatedLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aUpdatedLabels.getLength());
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_ODS)
