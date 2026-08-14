@@ -44,6 +44,8 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
+#include <sfx2/viewsh.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
@@ -684,6 +686,22 @@ double Window::GetVisibleHeight() const
 
 Point Window::GetVisibleCenter()
 {
+    // In the kit this window does not follow the user's viewport: UpdateMapMode()
+    // leaves the map origin alone, so its geometry says nothing about what is on
+    // screen. The client visible area is what tells where the user is looking.
+    if (comphelper::COKit::isActive() && mpViewShell)
+    {
+        if (const SfxViewShell* pViewShell = mpViewShell->GetViewShell())
+        {
+            const ::tools::Rectangle aVisibleArea(pViewShell->getKitVisibleArea());
+            if (!aVisibleArea.IsEmpty())
+            {
+                const Point aCenter(aVisibleArea.Center());
+                return Point(convertTwipToMm100(aCenter.X()), convertTwipToMm100(aCenter.Y()));
+            }
+        }
+    }
+
     Point aPos = ::tools::Rectangle(Point(), GetOutputSizePixel()).Center();
 
     // For COKit
