@@ -49,14 +49,7 @@ namespace drawinglayer::processor2d
             if (!rColor.isAutomatic())
                 return rColor;
 
-            const Color aAutoColor(getViewInformation2D().getAutoColor());
-            if (COL_AUTO != aAutoColor)
-                return aAutoColor.getBColor();
-
-            // Nobody told us what automatic means here, which is the case for output that
-            // is not a view: print, print preview and PDF export. A dark document
-            // background is a property of a view, not something to put on paper.
-            return COL_WHITE.getBColor();
+            return getViewInformation2D().getResolvedAutoColor().getBColor();
         }
 
         // Primitive2DDecompositionVisitor

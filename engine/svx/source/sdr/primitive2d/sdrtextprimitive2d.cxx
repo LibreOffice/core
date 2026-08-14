@@ -101,6 +101,7 @@ namespace drawinglayer::primitive2d
             maOutlinerParaObject(std::move(aOutlinerParaObject)),
             mnLastPageNumber(0),
             mnLastPageCount(0),
+            maLastAutoColor(COL_AUTO),
             mbContainsPageField(false),
             mbContainsPageCountField(false),
             mbContainsOtherFields(false)
@@ -183,14 +184,24 @@ namespace drawinglayer::primitive2d
                     }
                 }
 
-                // #i101443#  check change of TextBackgroundolor
+                // Only ask for a new decomposition while the text object is still there to
+                // make one, the buffered one is all there is once it is gone
                 if(!bDoDelete && getSdrText())
                 {
+                    // #i101443#  check change of TextBackgroundolor
                     SdrOutliner& rDrawOutliner = getSdrText()->GetObject().getSdrModelFromSdrObject().GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                     bNewTextBackgroundColorIsSet = true;
 
                     if(aNewTextBackgroundColor != maLastTextBackgroundColor)
+                    {
+                        bDoDelete = true;
+                    }
+
+                    // check change of what an automatic color means: the automatic font color
+                    // is chosen for contrast against the document background of the view being
+                    // rendered, and two views of the same document can have different themes
+                    if(rViewInformation.getResolvedAutoColor() != maLastAutoColor)
                     {
                         bDoDelete = true;
                     }
@@ -229,6 +240,7 @@ namespace drawinglayer::primitive2d
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageNumber = nCurrentlyValidPageNumber;
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageCount = nCurrentlyValidPageCount;
                 const_cast< SdrTextPrimitive2D* >(this)->maLastTextBackgroundColor = aNewTextBackgroundColor;
+                const_cast< SdrTextPrimitive2D* >(this)->maLastAutoColor = rViewInformation.getResolvedAutoColor();
             }
 
             // call parent

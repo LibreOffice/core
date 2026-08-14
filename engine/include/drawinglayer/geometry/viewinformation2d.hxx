@@ -166,8 +166,17 @@ public:
     bool getPixelSnapHairline() const;
     void setPixelSnapHairline(bool bNew);
 
+    /** What an automatic color means in the view processed, COL_AUTO when the view does not
+        say. A dark document background is a property of a view, so only a view sets this.
+     */
     Color getAutoColor() const;
     void setAutoColor(Color aNew);
+
+    /** getAutoColor(), but with the fallback the renderers use applied: when nobody told us
+        what automatic means here, which is the case for output that is not a view - print,
+        print preview, PDF export - it is white. Never returns COL_AUTO.
+     */
+    Color getResolvedAutoColor() const;
 
     DrawModeFlags getDrawModeFlags() const;
     void setDrawModeFlags(DrawModeFlags aNew);

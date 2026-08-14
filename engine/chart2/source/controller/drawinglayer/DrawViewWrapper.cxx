@@ -222,13 +222,11 @@ void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg
     }
     SetApplicationBackgroundColor(aFillColor);
 
-    SdrOutliner& rOutliner = GetModel().GetDrawOutliner();
-    Color aOldBackColor = rOutliner.GetBackgroundColor();
-    rOutliner.SetBackgroundColor(aFillColor);
-
+    // The document background of a chart that has none of its own stays automatic, the
+    // renderer resolves it, see ViewInformation2D::getResolvedAutoColor(). Putting the color
+    // of this view into the draw outliner of the model instead would leave it there for
+    // whoever renders next, PDF export and print included.
     E3dView::CompleteRedraw( pOut, rReg );
-
-    rOutliner.SetBackgroundColor(aOldBackColor);
 }
 
 SdrObject* DrawViewWrapper::getSelectedObject() const

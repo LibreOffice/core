@@ -62,6 +62,26 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/*  An automatic background has no fixed value, the renderer decides what it means: on screen
+    the document background of the view being rendered, white for output that is not a view,
+    i.e. print, print preview and PDF export, see ViewInformation2D::getResolvedAutoColor().
+    Resolve it here, because the automatic font color is chosen for contrast against this
+    color, and leaving it automatic lets the outliner take the color of the view of the
+    session for paper too. SdrTextPrimitive2D::get2DDecomposition() drops a decomposition made
+    for another automatic color, so this is asked again for each render target.
+ */
+void impResolveAutomaticOutlinerBg(::Outliner& rOutliner,
+                                   const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+{
+    if (COL_AUTO != rOutliner.GetBackgroundColor())
+        return;
+
+    rOutliner.SetBackgroundColor(rViewInformation.getResolvedAutoColor());
+}
+}
+
 // primitive decompositions
 void SdrTextObj::impDecomposeContourTextPrimitive(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
@@ -198,6 +218,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // That color needs to be restored on leaving this method
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
     setSuitableOutlinerBg(rOutliner);
+    impResolveAutomaticOutlinerBg(rOutliner, aViewInformation);
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));
@@ -440,6 +461,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     {
         setSuitableOutlinerBg(rOutliner);
     }
+
+    impResolveAutomaticOutlinerBg(rOutliner, aViewInformation);
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));

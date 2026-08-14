@@ -67,6 +67,12 @@ namespace drawinglayer::primitive2d
             // needed because of background color change
             Color                                   maLastTextBackgroundColor;
 
+            // remember what an automatic color meant for the last decomposition, see
+            // ViewInformation2D::getAutoColor(). An automatic font color is chosen for contrast
+            // against the background, so a decomposition made for one render target must not be
+            // reused for a target where automatic means another color
+            Color                                   maLastAutoColor;
+
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
             bool                                    mbContainsPageField : 1;
             bool                                    mbContainsPageCountField : 1;

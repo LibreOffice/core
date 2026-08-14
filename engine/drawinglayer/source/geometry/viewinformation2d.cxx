@@ -368,6 +368,12 @@ Color ViewInformation2D::getAutoColor() const { return mpViewInformation2D->getA
 
 void ViewInformation2D::setAutoColor(Color aNew) { mpViewInformation2D->setAutoColor(aNew); }
 
+Color ViewInformation2D::getResolvedAutoColor() const
+{
+    const Color aAutoColor(mpViewInformation2D->getAutoColor());
+    return COL_AUTO == aAutoColor ? COL_WHITE : aAutoColor;
+}
+
 DrawModeFlags ViewInformation2D::getDrawModeFlags() const
 {
     return mpViewInformation2D->getDrawModeFlags();

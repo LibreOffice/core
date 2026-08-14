@@ -18,6 +18,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
+#include <tools/stream.hxx>
 #include <vcl/scheduler.hxx>
 #include <COKit/COKit.hxx>
 
@@ -853,6 +855,137 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartBackgroundFollowsDarkMode)
     // Without the accompanying fix the automatic background of the chart was not resolved for
     // the rendering view, so the chart stayed light while the sheet around it went dark
     CPPUNIT_ASSERT_EQUAL(aDarkColor, Color(pAccess->GetPixel(5, 5)));
+}
+
+// This lives next to testChartBackgroundFollowsDarkMode() for the same reason, rendering a
+// document with a chart leaves a shell of the chart behind.
+// The automatic font color of a chart is chosen for contrast against the background it sits
+// on, which for a chart with no background of its own is the document background of the view.
+// A session renders the document before the theme of its view arrives, so what the first
+// render made of an automatic color must not be what every later render gets.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartTextFollowsDarkMode)
+{
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    const OUString aOldScheme(svtools::EditableColorConfig().GetCurrentSchemeName());
+    {
+        // Add a dark scheme, but leave the one the document is loaded with in charge
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"DarkTest"_ustr);
+        aColorConfig.LoadScheme(aOldScheme);
+    }
+
+    // The chart of this document sits at the top left corner of the sheet and is bigger than
+    // the tile rendered below, so the whole tile is chart
+    ScModelObj* pModelObj = createDoc("chart.ods");
+    ScTestViewCallback aView;
+    comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
+        dispatchCommand(
+            mxComponent, u".uno:ChangeTheme"_ustr,
+            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+    });
+
+    // Render it once before the view has a theme, as a session does
+    getTile(pModelObj, 0, 0, 3840, 3840);
+
+    dispatchCommand(
+        mxComponent, u".uno:ChangeTheme"_ustr,
+        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+
+    // The rest of the test says nothing unless the document background really is dark now
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+
+    Bitmap aBitmap = getTile(pModelObj, 0, 0, 3840, 3840);
+    BitmapScopedReadAccess pAccess(aBitmap);
+
+    // The top left corner of the chart holds the topmost label of the value axis and nothing
+    // else, so a pixel that is not the dark background there is the text
+    bool bLightText(false);
+    for (tools::Long nY = 0; nY < 90 && !bLightText; ++nY)
+    {
+        for (tools::Long nX = 0; nX < 120 && !bLightText; ++nX)
+            bLightText = Color(pAccess->GetPixel(nY, nX)).IsBright();
+    }
+
+    // Without the accompanying fix the text kept the color the first render had picked for it,
+    // so the chart of a dark sheet was labelled in black
+    CPPUNIT_ASSERT(bLightText);
+}
+
+// A dark document background is what the view of a session looks like, not what its paper
+// looks like, so the automatic text color of a chart has to be picked for white when the
+// target is a PDF rather than a view.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartTextNotExportedDarkToPdf)
+{
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    const OUString aOldScheme(svtools::EditableColorConfig().GetCurrentSchemeName());
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"DarkTest"_ustr);
+        aColorConfig.LoadScheme(aOldScheme);
+    }
+
+    ScModelObj* pModelObj = createDoc("chart.ods");
+    ScTestViewCallback aView;
+    comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
+        dispatchCommand(
+            mxComponent, u".uno:ChangeTheme"_ustr,
+            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+    });
+    dispatchCommand(
+        mxComponent, u".uno:ChangeTheme"_ustr,
+        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+
+    // The session looks at the chart before it exports it
+    getTile(pModelObj, 0, 0, 3840, 3840);
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
+    };
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, aArgs);
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aPDFFile);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT(pPdfDocument->getPageCount() > 0);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    // Without the accompanying fix the labels of the chart came out in the white the dark view
+    // needs, so the paper had white text on white
+    int nTexts(0);
+    for (int nObject = 0; nObject < pPage->getObjectCount(); ++nObject)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(nObject);
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
+            continue;
+        ++nTexts;
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
+    }
+
+    // and the assert above says nothing unless the chart labels really are in there
+    CPPUNIT_ASSERT(nTexts > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteShapeAtCellCursor)
