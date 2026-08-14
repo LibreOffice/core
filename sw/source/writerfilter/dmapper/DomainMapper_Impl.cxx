@@ -10128,7 +10128,8 @@ void DomainMapper_Impl::ApplySettingsTable()
     {
         rtl::Reference< SwXTextDefaults > xTextDefaults(m_xTextDocument->createTextDefaults());
         sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
-        xTextDefaults->setPropertyValue( getPropertyName( PROP_TAB_STOP_DISTANCE ), uno::Any(nDefTab) );
+        const uno::Any aDefTab(nDefTab ? nDefTab : sal_Int32(1)); // zero is invalid in LO
+        xTextDefaults->setPropertyValue(getPropertyName(PROP_TAB_STOP_DISTANCE), aDefTab);
         if (m_pSettingsTable->GetLinkStyles())
         {
             // If linked styles are enabled, set paragraph defaults from Word's default template
