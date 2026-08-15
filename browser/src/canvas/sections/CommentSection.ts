@@ -805,21 +805,14 @@ export class Comment extends CanvasSectionObject {
 		}
 	}
 
+	// Paints this comment in the highlight colours.
 	public highlight (): void {
 		if (app.map._docLayer._docType === 'text') {
 			this.sectionProperties.usedTextColor = this.sectionProperties.highlightedTextColor;
-
-			var x: number = Math.round(this.position[0] / app.dpiScale);
-			var y: number = Math.round(this.position[1] / app.dpiScale);
-			(this.containerObject.getSectionWithName(app.CSections.Scroll.name) as any as cool.ScrollSection).onScrollTo({x: x, y: y});
 		}
 		else if (app.map._docLayer._docType === 'spreadsheet') {
 			this.backgroundColor = '#777777'; //background: rgba(119, 119, 119, 0.25);
 			this.backgroundOpacity = 0.25;
-
-			var x: number = Math.round(this.position[0] / app.dpiScale);
-			var y: number = Math.round(this.position[1] / app.dpiScale);
-			(this.containerObject.getSectionWithName(app.CSections.Scroll.name) as any as cool.ScrollSection).onScrollTo({x: x, y: y});
 		}
 
 		this.containerObject.requestReDraw();

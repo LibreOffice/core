@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:table-column table:number-columns-repeated="5"/>
+    <table:table-row table:number-rows-repeated="9">
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell office:value-type="string">
+      <office:annotation svg:width="2.899cm" svg:height="1.799cm" svg:x="11.889cm" svg:y="2.564cm">
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2026-08-14T19:50:29</dc:date>
+       <text:p>Comment 1</text:p>
+      </office:annotation>
+      <text:p>Cell 2</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>
