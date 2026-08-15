@@ -2306,14 +2306,14 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
         return;
 
     {
-        // Set the default locale/language of a new view to the document
+        // Set the default locale of a new view to the document
         // language.
         ScDocShell* pDocShell = GetViewData().GetDocShell();
         ScDocument& rDoc = pDocShell->GetDocument();
         LanguageType eLatin, eCjk, eCtl;
         rDoc.GetLanguage(eLatin, eCjk, eCtl);
         OUString aLang = LanguageTag(eLatin).getBcp47();
-        SetKitLanguageAndLocale(aLang);
+        SetKitLocale(aLang);
     }
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
