@@ -2265,6 +2265,7 @@ private:
 
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
+    DECL_LINK(ActivateHdl, Edit&, bool);
 
 public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,

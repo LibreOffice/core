@@ -5798,6 +5798,15 @@ SalInstanceFormattedSpinButton::SalInstanceFormattedSpinButton(FormattedField* p
     m_xButton->SetUpHdl(LINK(this, SalInstanceFormattedSpinButton, UpDownHdl));
     m_xButton->SetDownHdl(LINK(this, SalInstanceFormattedSpinButton, UpDownHdl));
     m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceFormattedSpinButton, LoseFocusHdl));
+
+    if (Edit* pEdit = m_xButton->GetSubEdit())
+    {
+        pEdit->SetActivateHdl(LINK(this, SalInstanceFormattedSpinButton, ActivateHdl));
+    }
+    else
+    {
+        m_xButton->SetActivateHdl(LINK(this, SalInstanceFormattedSpinButton, ActivateHdl));
+    }
 }
 
 void SalInstanceFormattedSpinButton::do_set_text(const OUString& rText)
@@ -5838,6 +5847,15 @@ SalInstanceFormattedSpinButton::~SalInstanceFormattedSpinButton()
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
     m_xButton->SetUpHdl(Link<SpinField&, void>());
+
+    if (Edit* pEdit = m_xButton->GetSubEdit())
+    {
+        pEdit->SetActivateHdl(Link<Edit&, bool>());
+    }
+    else
+    {
+        m_xButton->SetActivateHdl(Link<Edit&, bool>());
+    }
 }
 
 IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, UpDownHdl, SpinField&, void)
@@ -5850,6 +5868,17 @@ IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, LoseFocusHdl, Control&, void)
     if (!m_pFormatter)
         signal_value_changed();
     m_aLoseFocusHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, ActivateHdl, Edit&, bool)
+{
+    // Return commits the typed text through the formatter the same way losing focus does, so
+    // the value read during the notification is the reformatted one.
+    if (m_pFormatter)
+        m_pFormatter->EntryLostFocus();
+
+    signal_value_changed();
+    return m_aActivateHdl.Call(*this);
 }
 
 SalInstanceLabel::SalInstanceLabel(Control* pLabel, SalInstanceBuilder* pBuilder,
