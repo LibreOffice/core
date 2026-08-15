@@ -586,6 +586,21 @@ enum OpCode : sal_uInt16
         ocNone              = 0xFFFF
 };
 
+// Whether the opcode is one of the two whitespace token forms.
+constexpr bool isWhitespaceOpCode(OpCode eOp) { return eOp == ocSpaces || eOp == ocWhitespace; }
+
+// Whether the opcode is a unary operator.
+constexpr bool isUnaryOperatorOpCode(OpCode eOp)
+{
+    return ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators;
+}
+
+// Whether the opcode is a binary operator.
+constexpr bool isBinaryOperatorOpCode(OpCode eOp)
+{
+    return ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators;
+}
+
 // Only to be used for debugging output. No guarantee of stability of the
 // return value.
 

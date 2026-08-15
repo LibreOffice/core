@@ -298,10 +298,10 @@ public:
                                     bool bAllowArrAdvance = false );
 
 private:
-    // Emit a non-parenthesised @ operand on OOXML save. The caller
-    // supplies the wrapper's parentheses. Advances maArrIterator past
-    // the operand and leaves rpToken at the next token.
-    void EmitSingleValueOperandOOXML(OUStringBuffer& rBuffer, const FormulaToken*& rpToken);
+    // Write one token, or the error string that stands in for it, and
+    // advance rpToken. When this returns false, the buffer holds the
+    // error string that replaces the whole formula.
+    bool AppendTokenOrError(OUStringBuffer& rBuffer, const FormulaToken*& rpToken);
 public:
 
     void AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const;
