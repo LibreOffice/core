@@ -1525,10 +1525,6 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     return pNewArr;
 }
 
-namespace {
-inline bool isWhitespace( OpCode eOp ) { return eOp == ocSpaces || eOp == ocWhitespace; }
-}
-
 bool FormulaTokenArray::MayReferenceFollow()
 {
     if ( !pCode || nLen <= 0 )
@@ -1536,11 +1532,11 @@ bool FormulaTokenArray::MayReferenceFollow()
 
     // ignore trailing spaces
     sal_uInt16 i = nLen - 1;
-    while (i > 0 && isWhitespace( pCode[i]->GetOpCode()))
+    while (i > 0 && isWhitespaceOpCode( pCode[i]->GetOpCode()))
     {
         --i;
     }
-    if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
+    if (i > 0 || !isWhitespaceOpCode( pCode[i]->GetOpCode()))
     {
         OpCode eOp = pCode[i]->GetOpCode();
         if ( (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators ) ||
@@ -1865,8 +1861,10 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
 {
     if( mpFTA->GetArray() )
     {
-        while ((mnIndex < mpFTA->GetLen()) && isWhitespace( mpFTA->GetArray()[ mnIndex ]->GetOpCode()))
+        while ((mnIndex < mpFTA->GetLen()) && isWhitespaceOpCode(mpFTA->GetArray()[mnIndex]->GetOpCode()))
+        {
             ++mnIndex;
+        }
         if( mnIndex < mpFTA->GetLen() )
             return mpFTA->GetArray()[ mnIndex++ ];
     }
@@ -1902,7 +1900,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
     if( mpFTA->GetArray() && mnIndex < mpFTA->GetLen() )
     {
         sal_uInt16 j = mnIndex;
-        while (j < mpFTA->GetLen() && isWhitespace( mpFTA->GetArray()[j]->GetOpCode()))
+        while (j < mpFTA->GetLen() && isWhitespaceOpCode( mpFTA->GetArray()[j]->GetOpCode()))
             j++;
         if ( j < mpFTA->GetLen() )
             return mpFTA->GetArray()[ j ];
@@ -1918,9 +1916,9 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
     if( mpFTA->GetArray() && mnIndex > 1 )
     {
         sal_uInt16 j = mnIndex - 2;
-        while (isWhitespace( mpFTA->GetArray()[j]->GetOpCode()) && j > 0 )
+        while (isWhitespaceOpCode( mpFTA->GetArray()[j]->GetOpCode()) && j > 0 )
             j--;
-        if (j > 0 || !isWhitespace( mpFTA->GetArray()[j]->GetOpCode()))
+        if (j > 0 || !isWhitespaceOpCode( mpFTA->GetArray()[j]->GetOpCode()))
             return mpFTA->GetArray()[ j ];
         else
             return nullptr;

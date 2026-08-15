@@ -40,6 +40,7 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <algorithm>
 #include <mutex>
+#include <ranges>
 
 namespace formula
 {
@@ -1560,7 +1561,7 @@ bool FormulaCompiler::GetToken()
              nWasColRowName = 0;
         OpCode eTmpOp;
         mpToken = maArrIterator.Next();
-        while (mpToken && ((eTmpOp = mpToken->GetOpCode()) == ocSpaces || eTmpOp == ocWhitespace))
+        while (mpToken && isWhitespaceOpCode(eTmpOp = mpToken->GetOpCode()))
         {
             if (eTmpOp == ocSpaces)
             {
@@ -2808,65 +2809,172 @@ void FormulaCompiler::CreateStringFromTokenArray( OUString& rFormula )
     rFormula = aBuffer.makeStringAndClear();
 }
 
-void FormulaCompiler::EmitSingleValueOperandOOXML(
-    OUStringBuffer& rBuffer, const FormulaToken*& rpToken)
+namespace
 {
-    // Emit one @ operand: a nested @, a function call, or a primary
-    // push.
-    if (!rpToken)
-        return;
-    if (rpToken->GetOpCode() == ocSingleValue)
+// Operators that can stand in front of an operand. A sign in that position is
+// unary, whichever of the two opcodes the parser gave it. The @ and the # get
+// wrappers of their own, so they stay out.
+bool lclIsPrefixOperator(OpCode eOp)
+{
+    if (eOp == ocSingleValue || eOp == ocSpill)
+        return false;
+    return eOp == ocAdd || eOp == ocSub || isUnaryOperatorOpCode(eOp);
+}
+
+bool lclIsOoxmlFactorSeparator(OpCode eOp)
+{
+    // Tokens that end one factor and start the next at the same parenthesis
+    // depth, resetting where a # wrapper would splice.
+    if (isBinaryOperatorOpCode(eOp))
+        return true;
+    return eOp == ocSep || eOp == ocArrayColSep || eOp == ocArrayRowSep;
+}
+
+// AND, OR and the call operator have operator opcodes but are written as a
+// call, so the parenthesis behind the name opens an argument list, not a group.
+bool lclIsCallBeforeArguments(OpCode eOp, const FormulaTokenArrayPlainIterator& rIterator)
+{
+    if (eOp != ocAnd && eOp != ocOr && eOp != ocCall)
+        return false;
+    const FormulaToken* pNext = rIterator.PeekNextNoSpaces();
+    return pNext && pNext->GetOpCode() == ocOpen;
+}
+
+// Tokens that end the operand of an @ in front of them. Range, intersection,
+// union and call bind tighter than the @ and stay inside. Everything above it
+// in the grammar ends it.
+bool lclEndsSingleValueOperand(OpCode eOp)
+{
+    if (eOp == ocRange || eOp == ocIntersect || eOp == ocUnion || eOp == ocCall)
+        return false;
+    if (isBinaryOperatorOpCode(eOp))
+        return true;
+    return eOp == ocSep || eOp == ocArrayColSep || eOp == ocArrayRowSep
+           || eOp == ocPercentSign;
+}
+
+// An @ whose wrapper is still to go in: where it goes, the parenthesis scope
+// of its operand, and whether the operand has written text yet. An operand
+// that stays empty takes no wrapper.
+struct PendingSingleValue
+{
+    sal_Int32 mnScope;
+    sal_Int32 mnWrapStart;
+    bool mbHasOperand;
+};
+
+// Mark the pending wrappers' operands as written. Marks never come off, so
+// the walk from the back can stop at the first marked one.
+void lclMarkPendingOperand(std::vector<PendingSingleValue>& rPending)
+{
+    for (PendingSingleValue& rSingle : std::views::reverse(rPending))
     {
-        rBuffer.append(u"_xlfn.SINGLE(");
-        rpToken = maArrIterator.Next();
-        EmitSingleValueOperandOOXML(rBuffer, rpToken);
-        rBuffer.append(u")");
-        return;
-    }
-    // Capture the splice point so a trailing # postfix can wrap the
-    // operand text we are about to emit with _xlfn.ANCHORARRAY(...).
-    sal_Int32 nOperandStart = rBuffer.getLength();
-    // Primary push or function name. Emit the current token first.
-    rpToken = CreateStringFromToken(rBuffer, rpToken, true);
-    // If the next token is ocOpen, this token was a function name
-    // and the call's argument list still has to be emitted.
-    if (rpToken && rpToken->GetOpCode() == ocOpen)
-    {
-        sal_uInt16 nDepth = 0;
-        while (rpToken)
-        {
-            OpCode eOp = rpToken->GetOpCode();
-            if (eOp == ocOpen)
-                ++nDepth;
-            rpToken = CreateStringFromToken(rBuffer, rpToken, true);
-            if (eOp == ocClose)
-            {
-                --nDepth;
-                if (nDepth == 0)
-                    break;
-            }
-        }
-    }
-    // A trailing # postfix binds tighter than the surrounding @, so
-    // wrap the operand text we just emitted with the ANCHORARRAY
-    // wrapper before the outer SINGLE closes.
-    if (rpToken && rpToken->GetOpCode() == ocSpill)
-    {
-        rBuffer.insert(nOperandStart, u"_xlfn.ANCHORARRAY(");
-        rBuffer.append(u")");
-        rpToken = maArrIterator.Next();
+        if (rSingle.mbHasOperand)
+            break;
+        rSingle.mbHasOperand = true;
     }
 }
 
-static bool lclIsOoxmlFactorSeparator(OpCode eOp)
+// Whether the text from nStart to the end is one parenthesised group, so its
+// parentheses can double as the wrapper's. Quoted literals are skipped. A
+// doubled quote toggles the quote state twice, which cancels out.
+bool lclIsOneParenthesizedGroup(const OUStringBuffer& rBuffer, sal_Int32 nStart)
 {
-    // Tokens that end one factor and start the next at the current
-    // parenthesis depth. The # postfix wraps the most recent factor, so the
-    // tracked position resets after any of these.
-    if (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators)
-        return true;
-    return eOp == ocSep || eOp == ocArrayColSep || eOp == ocArrayRowSep
-        || eOp == ocRange || eOp == ocUnion || eOp == ocIntersect;
+    const sal_Int32 nEnd = rBuffer.getLength();
+    if (nEnd - nStart < 2 || rBuffer[nStart] != '(' || rBuffer[nEnd - 1] != ')')
+        return false;
+    sal_Int32 nGroupDepth = 0;
+    sal_Unicode cQuote = 0;
+    for (sal_Int32 nIndex = nStart; nIndex < nEnd; ++nIndex)
+    {
+        const sal_Unicode cChar = rBuffer[nIndex];
+        if (cQuote != 0)
+        {
+            if (cChar == cQuote)
+                cQuote = 0;
+        }
+        else if (cChar == '"' || cChar == '\'')
+            cQuote = cChar;
+        else if (cChar == '(')
+            ++nGroupDepth;
+        else if (cChar == ')')
+        {
+            --nGroupDepth;
+            if (nGroupDepth == 0)
+                return nIndex == nEnd - 1;
+        }
+    }
+    return false;
+}
+
+// Splice in the wrappers pending from nScope and deeper, innermost first.
+// Each operand runs from its recorded start to the buffer's end.
+void lclCloseSingleValues(OUStringBuffer& rBuffer, std::vector<PendingSingleValue>& rPending,
+                          sal_Int32 nScope)
+{
+    while (!rPending.empty() && rPending.back().mnScope >= nScope)
+    {
+        const PendingSingleValue& rSingle = rPending.back();
+        if (rSingle.mbHasOperand)
+        {
+            if (lclIsOneParenthesizedGroup(rBuffer, rSingle.mnWrapStart))
+                rBuffer.insert(rSingle.mnWrapStart, u"_xlfn.SINGLE");
+            else
+            {
+                rBuffer.insert(rSingle.mnWrapStart, u"_xlfn.SINGLE(");
+                rBuffer.append(u")");
+            }
+        }
+        rPending.pop_back();
+    }
+}
+
+// Drop the wrappers pending from nScope and deeper without splicing them in.
+void lclCancelSingleValues(std::vector<PendingSingleValue>& rPending, sal_Int32 nScope)
+{
+    while (!rPending.empty() && rPending.back().mnScope >= nScope)
+        rPending.pop_back();
+}
+} // namespace
+
+bool FormulaCompiler::AppendTokenOrError(OUStringBuffer& rBuffer, const FormulaToken*& rpToken)
+{
+    const OpCode eOp = rpToken->GetOpCode();
+    if (rpToken->GetType() == svByte)
+    {
+        if (eOp == ocNoName && FormulaGrammar::isOOXML(meGrammar))
+        {
+            // A call with no name would come out as "#NAME!()", which no reader
+            // accepts, so the error string replaces the whole formula.
+            rBuffer.setLength(0);
+            rBuffer.append(GetNativeSymbol(ocErrRef));
+            return false;
+        }
+        if (eOp == ocExternal || eOp == ocPush)
+        {
+            // A function token that lost its name. The error string stands in for
+            // this one token only.
+            rBuffer.append(GetNativeSymbol(ocErrRef));
+            rpToken = maArrIterator.Next();
+            return true;
+        }
+    }
+    else if (eOp == ocPush && rpToken->GetType() == svError
+             && static_cast<const FormulaErrorToken*>(rpToken)->GetError() == FormulaError::NoName
+             && FormulaGrammar::isOOXML(meGrammar))
+    {
+        const FormulaToken* pNext = maArrIterator.PeekNext();
+        if (pNext && pNext->IsRef())
+        {
+            // The error would come out as "#NAME?$C7", which no reader accepts,
+            // so the error string replaces the whole formula.
+            rBuffer.setLength(0);
+            rBuffer.append(GetNativeSymbol(ocErrName));
+            return false;
+        }
+    }
+    rpToken = CreateStringFromToken(rBuffer, rpToken, true);
+    return true;
 }
 
 void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
@@ -2911,30 +3019,18 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     // the optional leading '='.
     std::vector<sal_Int32> aFactorStarts;
     aFactorStarts.push_back(rBuffer.getLength());
+    // The @ markers whose _xlfn.SINGLE wrapper is still to be spliced in.
+    std::vector<PendingSingleValue> aPendingSingles;
+    // Whether the next token stands where an operand starts, so a plus or a
+    // minus there is the unary form.
+    bool bOperandPosition = true;
+    // Whether the current factor is raw text that never parsed, which no
+    // wrapper's parentheses can go around.
+    bool bBadFactor = false;
+    bool bUnwritable = false;
     const FormulaToken* t = maArrIterator.First();
     while( t )
     {
-        // Discard writing unknown functions without a name in OOXML ex: #NAME!()
-        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocNoName
-            && t->GetType() == svByte)
-        {
-            rBuffer.setLength(0);
-            rBuffer.append(GetNativeSymbol(ocErrRef));
-            break;
-        }
-        // #NAME? followed by a ref produces invalid OOXML like "#NAME?$C7"
-        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocPush
-            && t->GetType() == svError
-            && static_cast<const FormulaErrorToken*>(t)->GetError() == FormulaError::NoName)
-        {
-            FormulaToken* pNextToken = maArrIterator.PeekNext();
-            if (pNextToken && pNextToken->IsRef())
-            {
-                rBuffer.setLength(0);
-                rBuffer.append(GetNativeSymbol(ocErrName));
-                break;
-            }
-        }
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocOffset
             && t->GetType() == svByte)
         {
@@ -2952,7 +3048,12 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                     {
                         rBuffer.append(GetNativeSymbol(t->GetOpCode()));
                         rBuffer.append(GetNativeSymbol(pNext->GetOpCode()));
+                        // The consumed parenthesis opens a scope like a written one.
+                        lclMarkPendingOperand(aPendingSingles);
+                        aFactorStarts.push_back(rBuffer.getLength());
                         rBuffer.append(GetNativeSymbol(ocErrRef));
+                        bOperandPosition = false;
+                        bBadFactor = false;
                         maArrIterator.Jump(aTempIter.GetIndex());
                         t = maArrIterator.Next();
                         continue;
@@ -2960,37 +3061,32 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                 }
             }
         }
-        if ((t->GetOpCode() == ocExternal || t->GetOpCode() == ocPush) && t->GetType() == svByte)
+
+        // The @ writes no text of its own. Remember where its wrapper goes and
+        // the scope its operand lives in. The wrapper is spliced in once the
+        // operand stands in the buffer.
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSingleValue)
         {
-            rBuffer.append(GetNativeSymbol(ocErrRef));
+            aPendingSingles.push_back({ static_cast<sal_Int32>(aFactorStarts.size()),
+                                        rBuffer.getLength(), false });
             t = maArrIterator.Next();
             continue;
         }
 
-        // Wrap a bare or function-call @ operand in the parentheses
-        // that _xlfn.SINGLE needs. The symbol-table walk handles the
-        // parenthesised case on its own.
-        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSingleValue
-            && maArrIterator.PeekNext()
-            && maArrIterator.PeekNext()->GetOpCode() != ocOpen)
-        {
-            aFactorStarts.back() = rBuffer.getLength();
-            rBuffer.append(u"_xlfn.SINGLE(");
-            t = maArrIterator.Next();
-            EmitSingleValueOperandOOXML(rBuffer, t);
-            rBuffer.append(u")");
-            continue;
-        }
-
-        // XLSX writes the # operator as _xlfn.ANCHORARRAY(operand).
-        // The operand is already in the buffer, so wrap it by splicing
-        // the prefix at the factor start and appending the close.
+        // XLSX writes the # operator as _xlfn.ANCHORARRAY around the operand
+        // already in the buffer, splicing the prefix at the factor start. Text
+        // that never parsed takes no parentheses, so a # behind it is dropped.
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSpill)
         {
-            rBuffer.insert(aFactorStarts.back(), u"_xlfn.ANCHORARRAY(");
-            rBuffer.append(u")");
+            if (!bBadFactor)
+            {
+                rBuffer.insert(aFactorStarts.back(), u"_xlfn.ANCHORARRAY(");
+                rBuffer.append(u")");
+                lclMarkPendingOperand(aPendingSingles);
+                aFactorStarts.back() = rBuffer.getLength();
+            }
             t = maArrIterator.Next();
-            aFactorStarts.back() = rBuffer.getLength();
+            bOperandPosition = false;
             continue;
         }
 
@@ -3000,32 +3096,95 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             // branch. ocOpen pushes a nested scope, ocClose pops it,
             // and a factor separator starts a fresh factor.
             const OpCode eOpHere = t->GetOpCode();
-            const bool bSeparator
-                = lclIsOoxmlFactorSeparator(eOpHere);
-            if (eOpHere == ocOpen)
+            const bool bWhitespace = isWhitespaceOpCode(eOpHere);
+            // A sign where an operand starts can only be the unary form,
+            // whichever opcode the parser gave it, and belongs to the operand
+            // behind it.
+            const bool bPrefix = bOperandPosition && lclIsPrefixOperator(eOpHere);
+            const bool bCallName = !bPrefix && lclIsCallBeforeArguments(eOpHere, maArrIterator);
+            const bool bSeparator = !bPrefix && lclIsOoxmlFactorSeparator(eOpHere);
+
+            // A structured table reference walks through here token by token,
+            // so its brackets scope like parentheses and the separators inside
+            // them stay inside the reference.
+            if (eOpHere == ocOpen || eOpHere == ocTableRefOpen)
             {
-                // Leave the outer factor start alone: a grouping '(' is
-                // already marked by the preceding separator, and a
-                // function call must be wrapped from its name.
-                t = CreateStringFromToken(rBuffer, t, true);
+                // Leave the outer factor start alone: a separator already
+                // marked a grouping '(', and a call is wrapped from its name.
+                if (!AppendTokenOrError(rBuffer, t))
+                {
+                    bUnwritable = true;
+                    break;
+                }
+                lclMarkPendingOperand(aPendingSingles);
                 aFactorStarts.push_back(rBuffer.getLength());
+                bOperandPosition = true;
+                bBadFactor = false;
                 continue;
             }
-            if (eOpHere == ocClose)
+            if (eOpHere == ocClose || eOpHere == ocTableRefClose)
             {
-                t = CreateStringFromToken(rBuffer, t, true);
+                if (aFactorStarts.size() > 1)
+                {
+                    // A wrapper whose operand lives in this scope closes inside
+                    // the parenthesis that ends the scope.
+                    lclCloseSingleValues(rBuffer, aPendingSingles, sal_Int32(aFactorStarts.size()));
+                }
+                if (!AppendTokenOrError(rBuffer, t))
+                {
+                    bUnwritable = true;
+                    break;
+                }
                 if (aFactorStarts.size() > 1)
                     aFactorStarts.pop_back();
+                lclMarkPendingOperand(aPendingSingles);
+                bOperandPosition = false;
+                bBadFactor = false;
                 continue;
             }
-            t = CreateStringFromToken(rBuffer, t, true);
-            if (bSeparator)
+
+            // An operator the grammar puts above the @ ends its operand, so the
+            // wrapper closes in front of it.
+            if (!bPrefix && !bCallName && lclEndsSingleValueOperand(eOpHere))
+                lclCloseSingleValues(rBuffer, aPendingSingles, sal_Int32(aFactorStarts.size()));
+
+            if (eOpHere == ocBad)
+            {
+                // Raw text that no parse could read cannot take parentheses, so
+                // the @ markers waiting on it are left out.
+                lclCancelSingleValues(aPendingSingles, sal_Int32(aFactorStarts.size()));
+                bBadFactor = true;
+            }
+
+            const sal_Int32 nLengthBefore = rBuffer.getLength();
+            if (!AppendTokenOrError(rBuffer, t))
+            {
+                bUnwritable = true;
+                break;
+            }
+            if (!bPrefix && !bWhitespace && rBuffer.getLength() > nLengthBefore)
+                lclMarkPendingOperand(aPendingSingles);
+            if (bSeparator || bPrefix)
+            {
+                // A separator starts a fresh factor, and a prefix sign stays
+                // outside the # wrapper of the operand it applies to.
                 aFactorStarts.back() = rBuffer.getLength();
+            }
+            if (bSeparator)
+                bBadFactor = false;
+            if (!bWhitespace)
+                bOperandPosition = bPrefix || bSeparator;
             continue;
         }
 
-        t = CreateStringFromToken(rBuffer, t, true);
+        if (!AppendTokenOrError(rBuffer, t))
+            break;
     }
+
+    // Whatever is still pending wraps up to the end of the formula, unless the
+    // formula came out as a single error string.
+    if (FormulaGrammar::isOOXML(meGrammar) && !bUnwritable)
+        lclCloseSingleValues(rBuffer, aPendingSingles, 1);
 
     if (pSaveArr != mpArr)
     {
@@ -3065,7 +3224,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     if( bSpaces )
         rBuffer.append( ' ');
 
-    if (eOp == ocSpaces || eOp == ocWhitespace)
+    if (isWhitespaceOpCode(eOp))
     {
         bool bWriteSpaces = true;
         if (eOp == ocSpaces && mxSymbols->isODFF())
