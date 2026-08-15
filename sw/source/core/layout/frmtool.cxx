@@ -1041,6 +1041,20 @@ SwContentNotify::~SwContentNotify()
     suppress_fun_call_w_exception(ImplDestroy());
 }
 
+SwFlyFrame *FindFlyFrameOfFormat(const SwFrame& rAnchorFrame, const SwFrameFormat& rFormat)
+{
+    if (const SwSortedObjs* pObjs = rAnchorFrame.GetDrawObjs())
+    {
+        for (SwAnchoredObject* pObj : *pObjs)
+        {
+            SwFlyFrame* pFly = pObj->DynCastFlyFrame();
+            if (pFly && pObj->GetFrameFormat() == &rFormat)
+                return pFly;
+        }
+    }
+    return nullptr;
+}
+
 // note this *cannot* be static because it's a friend
 void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *const pFormat, const SwFormatAnchor & rAnch)
 {
@@ -1097,6 +1111,11 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
             }
             else
             {
+                // Do not create a second fly frame of this format on the same anchor frame.
+                // Hiding or showing tracked changes rebuilds the frames of the merged nodes, and
+                // the anchor frame may have survived that with its fly frame still attached.
+                if (::FindFlyFrameOfFormat(*pFrame, *pFormat))
+                    return;
                 SwFlyFrame *pFly;
                 if( bFlyAtFly )
                     pFly = new SwFlyLayFrame( static_cast<SwFlyFrameFormat*>(pFormat), pFrame, pFrame );

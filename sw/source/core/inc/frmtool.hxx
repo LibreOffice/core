@@ -34,6 +34,7 @@ class SwFormatAnchor;
 class SwViewShell;
 class SwPageFrame;
 class SwFlyFrame;
+class SwFrameFormat;
 class SwContentFrame;
 class SwRootFrame;
 class SwDoc;
@@ -131,6 +132,9 @@ void PaintCharacterBorder(const SwFont& rFont, const SwRect& rPaintArea, const b
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
 SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
+
+// Get the fly frame of the given format that is anchored at the given frame, if there is one.
+SwFlyFrame *FindFlyFrameOfFormat(const SwFrame& rAnchorFrame, const SwFrameFormat& rFormat);
 
 SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling );
