@@ -201,6 +201,13 @@ JSDialog.OpenDropdown = function (
 		}
 
 		if (entry && json?.children?.length) json.children[0].children?.push(entry);
+
+		if (entries[i].separatorAfter && json?.children?.length)
+			json.children[0].children?.push({
+				id: id + '-separator-' + i,
+				type: 'separator',
+				orientation: 'horizontal',
+			} as SeparatorWidgetJSON);
 	}
 
 	const focusId = initialSelectedId || checkedFocusId;

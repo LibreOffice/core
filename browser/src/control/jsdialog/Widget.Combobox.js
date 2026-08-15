@@ -90,8 +90,13 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	else if (data.checked !== undefined)
 		window.L.DomUtil.addClass(entry, 'notchecked');
 
-	if (data.customRenderer)
+	if (data.customRenderer) {
+		// the text is replaced by the rendered preview, so the entry needs to
+		// carry its name for the screen reader on its own
+		if (data.text)
+			entry.setAttribute('aria-label', data.text);
 		JSDialog.OnDemandRenderer(builder, data.comboboxId, 'combobox', data.pos, content, entry, data.text);
+	}
 
 	var entryData = data.pos + ';' + data.text;
 
@@ -305,19 +310,30 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	if (data.selectedCount > 0)
 		var selectedEntryPos = parseInt(data.selectedEntries[0]);
 
+	// positions which have a separator drawn below them
+	var separatorAfter = {};
+	var lastPreviewEntry = Infinity;
+	for (var s in data.separators) {
+		lastPreviewEntry = parseInt(data.separators[s]);
+		separatorAfter[lastPreviewEntry] = true;
+	}
+
 	// convert to dropdown entries
 	var entries = [];
 	for (var i in data.entries) {
+		var isPreviewEntry =
+			data.renderSelectedEntry && parseInt(i) <= lastPreviewEntry;
 		entries.push({
 			text: data.entries[i].toString(),
 			// keep the name as a tooltip when it is only shown as an icon
-			hint: data.renderSelectedEntry
-				? data.entries[i].toString()
-				: undefined,
+			hint: isPreviewEntry ? data.entries[i].toString() : undefined,
 			selected: parseInt(i) === selectedEntryPos,
-			customRenderer: data.customEntryRenderer,
+			customRenderer: data.renderSelectedEntry
+				? isPreviewEntry
+				: data.customEntryRenderer,
 			// icon-only rows for line-end arrow pickers
-			class: data.renderSelectedEntry ? 'ui-combobox-lineend' : undefined
+			class: isPreviewEntry ? 'ui-combobox-lineend' : undefined,
+			separatorAfter: separatorAfter[parseInt(i)]
 		});
 	}
 
@@ -521,8 +537,6 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	};
 
 	if (data.renderSelectedEntry && data.customEntryRenderer) {
-		window.L.DomUtil.addClass(container, 'ui-combobox-rendered-value');
-
 		container._selectedValuePos = -1;
 		container._renderSelectedValue = function (pos) {
 			container._selectedValuePos =
@@ -531,19 +545,22 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			var preview = container.querySelector(
 				':scope > .ui-combobox-value-preview');
 
-			if (container._selectedValuePos < 0 || !entries[container._selectedValuePos]) {
+			var entry = entries[container._selectedValuePos];
+			if (container._selectedValuePos < 0 || !entry || !entry.customRenderer) {
+				window.L.DomUtil.removeClass(container, 'ui-combobox-rendered-value');
 				if (preview)
 					window.L.DomUtil.remove(preview);
 				return;
 			}
 
+			window.L.DomUtil.addClass(container, 'ui-combobox-rendered-value');
+
 			if (!preview)
 				preview = window.L.DomUtil.create(
 					'img', 'ui-combobox-value-preview', container);
 
-			var entryText = entries[container._selectedValuePos].text;
-			preview.alt = entryText;
-			preview.title = entryText;
+			preview.alt = entry.text;
+			preview.title = entry.text;
 
 			var cache = builder.rendersCache[data.id];
 			if (cache && cache.images[container._selectedValuePos]) {
@@ -575,9 +592,12 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 
 	container.onSelect = function (pos) {
 		resetSelection();
-		if (pos >= 0 && entries[pos])
+		// -1 is a valid position: it deselects everything
+		if (pos >= 0 && entries[pos]) {
 			entries[pos].selected = true;
-		else if (!entries[pos])
+			if (document.activeElement !== content)
+				content.value = entries[pos].text;
+		} else if (pos >= 0)
 			console.warn('Cannot find entry with pos: "' + pos + '" in "' + data.id + '"');
 		if (typeof container._renderSelectedValue === 'function')
 			container._renderSelectedValue(pos);

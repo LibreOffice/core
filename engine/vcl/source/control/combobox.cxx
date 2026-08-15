@@ -1592,6 +1592,16 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         }
     }
 
+    if (m_pImplLB && m_pImplLB->GetSeparatorPos() != LISTBOX_ENTRY_NOTFOUND)
+    {
+        auto separatorsNode = rJsonWriter.startArray("separators");
+        for (sal_Int32 i = 0; i < GetEntryCount(); ++i)
+        {
+            if (m_pImplLB->isSeparator(i))
+                rJsonWriter.putSimpleValue(OUString::number(i));
+        }
+    }
+
     {
         auto selectedNode = rJsonWriter.startArray("selectedEntries");
         for (int i = 0; i < GetSelectedEntryCount(); ++i)

@@ -448,6 +448,10 @@ public:
      * Adds a new separator at the given position n.
      */
     void            AddSeparator( sal_Int32 n )     { maLBWindow->AddSeparator( n ); }
+    /**
+     * Checks if a separator is drawn below the entry at position n.
+     */
+    bool            isSeparator( sal_Int32 n ) const { return maLBWindow->isSeparator( n ); }
 
     void            SetTopEntry( sal_Int32  nTop )      { maLBWindow->SetTopEntry( nTop ); }
     sal_Int32       GetTopEntry() const             { return maLBWindow->GetTopEntry(); }

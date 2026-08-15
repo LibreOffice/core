@@ -33,6 +33,7 @@
 class ToolbarUnoDispatcher;
 class XLineStartItem;
 class XLineEndItem;
+class XLineEndEntry;
 class XLineEndList;
 typedef rtl::Reference<XLineEndList> XLineEndListRef;
 class XLineWidthItem;
@@ -94,6 +95,8 @@ protected:
     sal_Int32 mnWidthCoreValue;
 
 private:
+    css::uno::Reference<css::frame::XFrame> mxFrame;
+
     //ui controls
     std::unique_ptr<weld::Label> mxFTWidth;
     std::unique_ptr<weld::Toolbar> mxTBWidth;
@@ -126,6 +129,10 @@ private:
     void FillLineEndListBox(weld::ComboBox& rListBox);
     void SelectLineEndEntry(weld::ComboBox& rListBox,
                             const std::optional<basegfx::B2DPolyPolygon>& roPolygon);
+    const XLineEndEntry* GetSelectedLineEnd(const weld::ComboBox& rListBox) const;
+    template <class ItemType>
+    std::optional<ItemType> PickLineEnd(weld::ComboBox& rListBox,
+                                        std::optional<basegfx::B2DPolyPolygon>& roPolygon);
     // draw one dropdown entry for the given id
     void RenderLineEndEntry(const weld::ComboBox::render_args& rArgs, bool bStart);
 

@@ -540,6 +540,7 @@ void ImplListBoxWindow::ImplCalcMetrics()
 void ImplListBoxWindow::Clear()
 {
     maEntryList.Clear();
+    maSeparators.clear();
 
     mnMaxHeight     = mnMaxTxtHeight;
     mnMaxWidth      = 0;
