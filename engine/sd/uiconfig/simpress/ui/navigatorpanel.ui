@@ -94,6 +94,7 @@
                 <property name="headers-visible">False</property>
                 <property name="reorderable">True</property>
                 <property name="search-column">1</property>
+                <property name="activate-on-single-click">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection11"/>
                 </child>
@@ -117,7 +118,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tree-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|STR_OBJECTS_TREE">Page Tree</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|tree">Lists available slides. Double-click a slide to make it the active slide.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|tree">Lists available slides. Click a slide to make it the active slide.</property>
                   </object>
                 </child>
               </object>
