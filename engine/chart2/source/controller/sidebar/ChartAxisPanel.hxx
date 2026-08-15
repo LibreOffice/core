@@ -74,18 +74,35 @@ private:
     std::unique_ptr<weld::Widget> mxGridLabel;
     std::unique_ptr<weld::MetricSpinButton> mxNFRotation;
 
+    std::unique_ptr<weld::Widget> mxBxHistogramBinning;
+    std::unique_ptr<weld::RadioButton> mxRBHistogramAutomatic;
+    std::unique_ptr<weld::RadioButton> mxRBHistogramBinWidth;
+    std::unique_ptr<weld::FormattedSpinButton> mxHistogramBinWidth;
+    std::unique_ptr<weld::RadioButton> mxRBHistogramBinCount;
+    std::unique_ptr<weld::SpinButton> mxHistogramBinCount;
+    std::unique_ptr<weld::CheckButton> mxCBHistogramOverflow;
+    std::unique_ptr<weld::FormattedSpinButton> mxHistogramOverflow;
+    std::unique_ptr<weld::CheckButton> mxCBHistogramUnderflow;
+    std::unique_ptr<weld::FormattedSpinButton> mxHistogramUnderflow;
+
     rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxModifyListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     bool mbModelValid;
+    // True while the panel is writing widget values from the model.
+    bool mbUpdating;
 
     void Initialize();
     void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
+    void updateHistogramControlSensitivity();
 
     DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(ListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(TextRotationHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(HistogramToggleHdl, weld::Toggleable&, void);
+    DECL_LINK(HistogramValueHdl, weld::FormattedSpinButton&, void);
+    DECL_LINK(HistogramBinCountHdl, weld::SpinButton&, void);
 };
 
 } } // end of namespace ::chart::sidebar

@@ -27,6 +27,7 @@
 #include <DataSource.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
+#include <servicenames_charttypes.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Scaling.hxx>
@@ -1007,6 +1008,33 @@ rtl::Reference< ChartType > AxisHelper::getChartTypeByIndex( const rtl::Referenc
         if( nIndex >= 0 && o3tl::make_unsigned(nIndex) < aChartTypeList.size() )
             xChartType = aChartTypeList[nIndex];
     }
+
+    return xChartType;
+}
+
+rtl::Reference<ChartType> AxisHelper::getHistogramChartTypeOfAxis(
+    const rtl::Reference< Axis >& xAxis, const rtl::Reference< ChartModel >& xChartDoc)
+{
+    if (!xAxis.is() || !xChartDoc.is())
+        return nullptr;
+
+    rtl::Reference<BaseCoordinateSystem> xCooSys(
+        AxisHelper::getCoordinateSystemOfAxis(xAxis, xChartDoc->getFirstChartDiagram()));
+    if (!xCooSys.is())
+        return nullptr;
+
+    // The bin settings sit on the chart type, and the primary X axis is the one that shows them.
+    sal_Int32 nDimensionIndex = -1;
+    sal_Int32 nAxisIndex = -1;
+    if (!AxisHelper::getIndicesForAxis(xAxis, xCooSys, nDimensionIndex, nAxisIndex)
+        || nDimensionIndex != 0 || nAxisIndex != 0)
+    {
+        return nullptr;
+    }
+
+    rtl::Reference<ChartType> xChartType(AxisHelper::getChartTypeByIndex(xCooSys, 0));
+    if (!xChartType.is() || xChartType->getChartType() != CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)
+        return nullptr;
 
     return xChartType;
 }
