@@ -42,4 +42,10 @@
     <string name="calc_adjust_height">Achustar altaria</string>
     <string name="calc_adjust_width">Achustar amplaria</string>
     <string name="calc_delete">Eliminar</string>
+    <string name="about_privacy_policy">Norma de privacidat</string>
+    <string name="alert_cancel">Cancelar</string>
+    <string name="insert_table">Ficar tabla</string>
+    <string name="message_saving">Se ye alzando lo documento…</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_pwd_dialog_cancel">Cancelar</string>
 </resources>
