@@ -1587,7 +1587,7 @@ const TranslateId ocMATRIX_UNIT_ARY[] =
 // -=*# Resources for function BYCOL #*=-
 const TranslateId ocBYCOL_ARY[] =
 {
-    NC_("ocBYCOL", "Applies a function to each column of an array. Returns an single-row array of the same width."),
+    NC_("ocBYCOL", "Applies a function to each column of an array. Returns a single-row array of the same width."),
     NC_("ocBYCOL", "Array"),
     NC_("ocBYCOL", "An array to calculate."),
     NC_("ocBYCOL", "Function"),
@@ -1597,7 +1597,7 @@ const TranslateId ocBYCOL_ARY[] =
 // -=*# Resources for function BYROW #*=-
 const TranslateId ocBYROW_ARY[] =
 {
-    NC_("ocBYROW", "Applies a function to each row of an array. Returns an single-column array of the same height."),
+    NC_("ocBYROW", "Applies a function to each row of an array. Returns a single-column array of the same height."),
     NC_("ocBYROW", "Array"),
     NC_("ocBYROW", "An array to calculate."),
     NC_("ocBYROW", "Function"),
