@@ -3568,12 +3568,6 @@ void SfxViewShell::SetKitLocale(const OUString& rBcp47LanguageTag)
     mpCalendar->loadDefaultCalendar(GetKitLocale().getLocale());
 }
 
-void SfxViewShell::SetKitLanguageAndLocale(const OUString& rBcp47LanguageTag)
-{
-    SetKitLanguageTag(rBcp47LanguageTag);
-    SetKitLocale(rBcp47LanguageTag);
-}
-
 CalendarWrapper& SfxViewShell::GetKitCalendar()
 {
     if (!mpCalendar)

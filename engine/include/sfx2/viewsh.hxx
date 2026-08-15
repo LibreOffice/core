@@ -494,8 +494,6 @@ public:
     void SetKitLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit locale of this view.
     const LanguageTag& GetKitLocale() const { return maKitLocale; }
-    /// Set the COKit locale and language of this view.
-    void SetKitLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit calendar of this view.
     CalendarWrapper& GetKitCalendar();
     /// Get the form factor of the device where the Kit client is running.
