@@ -760,6 +760,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/tabview \
     sc/source/ui/view/tabview2 \
     sc/source/ui/view/tabview3 \
+    sc/source/ui/view/ScSecurityLabelTarget \
     sc/source/ui/view/tabview4 \
     sc/source/ui/view/tabview5 \
     sc/source/ui/view/tabvwsh \

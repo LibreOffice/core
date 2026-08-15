@@ -48,6 +48,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/seclabel/StanagLabel.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
@@ -1452,12 +1454,29 @@ OString ScModelObj::getViewRenderState(const SfxViewShell* pViewShell)
 bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
     return rCommand == u"FormulaDepChain" || rCommand == u"CalcFunctionList"
-           || rCommand == u"EvaluateFormula" || rCommand == u"ExtractDocumentStructure";
+           || rCommand == u"EvaluateFormula" || rCommand == u"ExtractDocumentStructure"
+           || rCommand == u"SecurityLabel";
 }
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     OString aCommand(rCommand);
+    if (aCommand.startsWith(".uno:SecurityLabel"))
+    {
+        // The document's STANAG label as a self-describing marking string (empty when
+        // unlabelled), for the browser's read-only classification banner.
+        rJsonWriter.put("commandName", ".uno:SecurityLabel");
+        OUString aMarking;
+        if (pDocShell)
+        {
+            svx::seclabel::StanagLabel aLabel;
+            if (svx::seclabel::readLabel(pDocShell->GetModel(), aLabel))
+                aMarking = aLabel.summary();
+        }
+        auto aValues = rJsonWriter.startNode("commandValues");
+        rJsonWriter.put("marking", aMarking);
+        return;
+    }
     if (aCommand.startsWith(".uno:FormulaDepChain"))
     {
         rJsonWriter.put("commandName", ".uno:FormulaDepChain");

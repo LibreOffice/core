@@ -33,10 +33,13 @@
 #include <strings.hrc>
 #include <scmod.hxx>
 #include <appoptio.hxx>
+#include <ScSecurityLabelTarget.hxx>
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <sc.hrc>
+#include <svx/seclabel/SecurityLabelDialog.hxx>
+#include <vcl/abstdlg.hxx>
 #include <helpids.h>
 #include <inputwin.hxx>
 #include <scresid.hxx>
@@ -415,6 +418,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case SID_SECURITY_LABEL:
+            {
+                // The dialog lives in svx; Calc supplies the marking-placement target.
+                VclPtr<VclAbstractDialog> pDlg(svx::seclabel::CreateSecurityLabelDialog(
+                    GetFrameWeld(), std::make_unique<ScSecurityLabelTarget>(*this)));
+                pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/) {});
+                rReq.Done();
+            }
+            break;
+
         case FID_INSERT_FILE:
             {
                 const SfxPoolItem* pItem;
