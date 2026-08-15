@@ -713,6 +713,7 @@ void SAL_CALL SwarmSolver::solve()
 
     maStatus.clear();
     mbSuccess = false;
+    mfResultValue = 0.0;
     if (!maVariables.getLength())
         return;
 
@@ -838,6 +839,9 @@ void SAL_CALL SwarmSolver::solve()
     {
         maSolution.realloc(aSolution.size());
         std::copy(aSolution.begin(), aSolution.end(), maSolution.getArray());
+        // The feasibility check left the solution in the document, so the
+        // objective cell now holds the value that goes with it.
+        mfResultValue = getValue(maObjective);
     }
     else
     {

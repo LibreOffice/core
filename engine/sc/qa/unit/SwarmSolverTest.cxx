@@ -66,6 +66,7 @@ class SwarmSolverTest : public UnoApiTest
 {
     void testUnconstrained();
     void testVariableBounded();
+    void testResultValueIsTheObjective();
     void testVariableConstrained();
     void testTwoVariables();
     void testMultipleVariables();
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST_SUITE(SwarmSolverTest);
     CPPUNIT_TEST(testUnconstrained);
     CPPUNIT_TEST(testVariableBounded);
+    CPPUNIT_TEST(testResultValueIsTheObjective);
     CPPUNIT_TEST(testVariableConstrained);
     CPPUNIT_TEST(testMultipleVariables);
     CPPUNIT_TEST(testTwoVariables);
@@ -195,6 +197,43 @@ void SwarmSolverTest::testVariableBounded()
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
+}
+
+void SwarmSolverTest::testResultValueIsTheObjective()
+{
+    // A solved model reports the objective its solution reaches. The objective
+    // B2 is 10*B1^2 - 60*B1 - 40, whose lowest value is -130 at B1 = 3.
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ cpo::uno::Any(100.0) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ cpo::uno::Any(-100.0) }
+    };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(false);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-130.0, xSolver->getResultValue(), 1E-4);
 }
 
 void SwarmSolverTest::testVariableConstrained()
