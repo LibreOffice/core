@@ -1192,30 +1192,37 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     pEditView->getImpl().DrawSelectionXOR();
                     if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                     {
-                        UndoActionStart( EDITUNDO_INSERT );
-                        if ( rKeyEvent.GetKeyCode().IsShift() )
                         {
-                            aCurSel = AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
-                            aCurSel = InsertLineBreak( aCurSel );
-                        }
-                        else
-                        {
-                            if (aAutoText.isEmpty())
+                            if (aAutoText.isEmpty() || rKeyEvent.GetKeyCode().IsShift())
                             {
+                                EditSelection aAutoCorrectSel(aCurSel);
+
+                                // for undo stack - start the next line first, so it is undone last
+                                if (rKeyEvent.GetKeyCode().IsShift())
+                                    aCurSel = InsertLineBreak(aCurSel);
+                                else
+                                    aCurSel = InsertParaBreak(aCurSel);
+
+                                // for the undo stack - do the autocorrect last, so it is undone 1st
                                 if (GetStatus().DoAutoCorrect())
-                                    aCurSel = AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
-                                aCurSel = InsertParaBreak( aCurSel );
+                                {
+                                    UndoActionStart(EDITUNDO_INSERT, CreateESel(aCurSel));
+                                    AutoCorrect(
+                                        aAutoCorrectSel, 0, !pEditView->IsInsertMode(), pFrameWin);
+                                    UndoActionEnd();
+                                }
                             }
                             else
                             {
+                                UndoActionStart(EDITUNDO_INSERT);
                                 DBG_ASSERT( !aCurSel.HasRange(), "Selection on complete?!" );
                                 EditPaM aStart = WordLeft(aCurSel.Max());
                                 EditSelection aSelection(aStart, aCurSel.Max());
                                 aCurSel = InsertText(aSelection, aAutoText);
                                 SetAutoCompleteText( OUString(), true );
+                                UndoActionEnd();
                             }
                         }
-                        UndoActionEnd();
                         bModified = true;
                     }
                 }
