@@ -54,6 +54,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124398_groupshapeChart)
     assertXPath(pXmlDoc, "//wpg:graphicFrame/wpg:xfrm", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168607_tabstopZero)
+{
+    // Given a 1 page document, where the default tab-stop length is zero
+
+    createSwDoc("tdf168607_tabstopZero.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    saveAndReload(TestFilter::DOC);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171527_flyInFramePr)
 {
     // given a with a framePr'd image anchoring a drawing shape

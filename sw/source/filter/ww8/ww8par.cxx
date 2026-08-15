@@ -1972,9 +1972,7 @@ void SwWW8ImplReader::ImportDop()
         !m_xWDop->fDontAdjustLineHeightInTable);
 
     // Import Default Tabs
-    tools::Long nDefTabSiz = m_xWDop->dxaTab;
-    if( nDefTabSiz < 56 )
-        nDefTabSiz = 709;
+    tools::Long nDefTabSiz = std::max<tools::Long>(1, m_xWDop->dxaTab);
 
     // We want exactly one DefaultTab
     SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SvxTabAdjust::Default, RES_PARATR_TABSTOP );
