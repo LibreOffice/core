@@ -285,13 +285,8 @@ const XclImpName* XclImpNameManager::FindName( std::u16string_view rXclName, SCT
 {
     const XclImpName* pGlobalName = nullptr;   // a found global name
     const XclImpName* pLocalName = nullptr;    // a found local name
-    // A file can define the same name more than once, as
-    // 'forum-mso-en4-30276.xls' does. All of the duplicates share the one Calc
-    // entry that holds the last definition. Search from the end, so the name
-    // the file defines last is the one returned.
-    for (auto itName = maNameList.rbegin(); itName != maNameList.rend(); ++itName)
+    for( const auto& rxName : maNameList )
     {
-        const auto& rxName = *itName;
         if( rxName->GetXclName() == rXclName )
         {
             if( rxName->GetScTab() == nScTab )
