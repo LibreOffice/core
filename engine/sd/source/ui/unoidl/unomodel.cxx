@@ -117,6 +117,8 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svditer.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/seclabel/StanagLabel.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -2780,7 +2782,8 @@ bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
     if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
         || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure"
-        || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns")
+        || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
+        || rCommand == u"SecurityLabel")
         return true;
     return false;
 }
@@ -2843,6 +2846,23 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 {
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+
+    if (o3tl::starts_with(rCommand, ".uno:SecurityLabel"))
+    {
+        // The document's STANAG label as a self-describing marking string (empty when
+        // unlabelled), for the browser's read-only classification banner.
+        rJsonWriter.put("commandName", ".uno:SecurityLabel");
+        OUString aMarking;
+        if (mpDocShell)
+        {
+            svx::seclabel::StanagLabel aLabel;
+            if (svx::seclabel::readLabel(mpDocShell->GetModel(), aLabel))
+                aMarking = aLabel.summary();
+        }
+        auto aValues = rJsonWriter.startNode("commandValues");
+        rJsonWriter.put("marking", aMarking);
+        return;
+    }
 
     if (o3tl::starts_with(rCommand, ".uno:ExtractDocumentStructure"))
     {

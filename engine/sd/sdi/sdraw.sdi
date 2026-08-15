@@ -3416,6 +3416,23 @@ SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem SecurityLabel SID_SECURITY_LABEL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem InsertPageNumber SID_INSERT_PAGE_NUMBER
 ()
 [

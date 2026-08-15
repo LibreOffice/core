@@ -21,6 +21,8 @@
 
 #include <DrawViewShell.hxx>
 #include <DrawController.hxx>
+#include <SdSecurityLabelTarget.hxx>
+#include <svx/seclabel/SecurityLabelDialog.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
@@ -280,6 +282,18 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             Invalidate();
             rReq.Done();
 
+            break;
+        }
+
+        case SID_SECURITY_LABEL:
+        {
+            // The dialog lives in svx; Impress supplies the marking-placement target.
+            vcl::Window* pSecWin = GetActiveWindow();
+            VclPtr<VclAbstractDialog> pSecDlg(svx::seclabel::CreateSecurityLabelDialog(
+                pSecWin ? pSecWin->GetFrameWeld() : nullptr,
+                std::make_unique<SdSecurityLabelTarget>(*this)));
+            pSecDlg->StartExecuteAsync([pSecDlg](sal_Int32 /*nResult*/) {});
+            rReq.Done();
             break;
         }
 

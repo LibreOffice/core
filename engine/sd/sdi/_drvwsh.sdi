@@ -2479,6 +2479,12 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
+    SID_SECURITY_LABEL
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
     SID_INSERT_PAGE_NUMBER // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;

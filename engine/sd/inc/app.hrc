@@ -435,5 +435,6 @@
 #define SID_MOVE_SLIDE_SECTION_UP           (SID_SD_START+456)
 #define SID_MOVE_SLIDE_SECTION_DOWN         (SID_SD_START+457)
 #define SID_REMOVE_SLIDE_SECTION_AND_SLIDES (SID_SD_START+458)
+#define SID_SECURITY_LABEL                  (SID_SD_START+459) /* SPIF/STANAG security label */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

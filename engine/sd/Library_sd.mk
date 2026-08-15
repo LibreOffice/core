@@ -445,6 +445,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/OutlinerIterator \
 	sd/source/ui/view/PresentationViewShellBase \
 	sd/source/ui/view/SlideSorterViewShellBase \
+	sd/source/ui/view/SdSecurityLabelTarget \
 	sd/source/ui/view/ToolBarManager \
 	sd/source/ui/view/ViewClipboard \
 	sd/source/ui/view/ViewShellBase \
