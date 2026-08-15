@@ -3239,22 +3239,8 @@ void SwFlyFrameFormat::MakeFrames()
             }
         }
 
-        if (bAdd && pFrame->GetDrawObjs())
-        {
-            // #i28701# - new type <SwSortedObjs>
-            SwSortedObjs &rObjs = *pFrame->GetDrawObjs();
-            for(SwAnchoredObject* pObj : rObjs)
-            {
-                // #i28701# - consider changed type of
-                // <SwSortedObjs> entries.
-                if( pObj->DynCastFlyFrame() !=  nullptr &&
-                    (pObj->GetFrameFormat()) == this )
-                {
-                    bAdd = false;
-                    break;
-                }
-            }
-        }
+        if (bAdd && ::FindFlyFrameOfFormat(*pFrame, *this))
+            bAdd = false;
 
         if( bAdd )
         {

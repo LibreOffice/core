@@ -1748,6 +1748,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169882)
     saveAndReload(TestFilter::ODT);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFlyInDeleteRedline)
+{
+    // The document has one paragraph-anchored text frame and tracked deletions that span the
+    // paragraphs around the anchor. It is saved with tracked changes hidden in the layout.
+    createSwDoc("fdo66811-1.odt");
+    saveAndReload(TestFilter::ODT);
+
+    // The text frame was exported twice
+    auto pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame", 1);
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
