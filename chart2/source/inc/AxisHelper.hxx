@@ -191,6 +191,12 @@ public:
         getChartTypeByIndex( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys,
                              sal_Int32 nIndex );
 
+    /** The histogram chart type the given axis carries the bin settings for, or an empty
+        reference when the axis is not the primary X axis of a histogram chart. */
+    static rtl::Reference<::chart::ChartType>
+        getHistogramChartTypeOfAxis(const rtl::Reference<::chart::Axis>& xAxis,
+                                    const rtl::Reference<::chart::ChartModel>& xChartDoc);
+
     static void setRTLAxisLayout( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
     static rtl::Reference< ::chart::ChartType >

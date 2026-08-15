@@ -33,7 +33,6 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <ChartView.hxx>
-#include <servicenames_charttypes.hxx>
 #include <memory>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -96,42 +95,6 @@ OUString lcl_getHistogramPropertyName(sal_uInt16 nWhichId)
         default:
             return OUString();
     }
-}
-
-rtl::Reference<::chart::ChartType> lcl_getHistogramChartTypeForAxis(
-    const rtl::Reference<::chart::Axis>& xAxis,
-    const rtl::Reference<::chart::ChartModel>& xChartDoc)
-{
-    if (!xAxis.is() || !xChartDoc.is())
-        return nullptr;
-
-    rtl::Reference<::chart::BaseCoordinateSystem> xCooSys(
-        AxisHelper::getCoordinateSystemOfAxis(
-            xAxis, xChartDoc->getFirstChartDiagram()));
-
-    if (!xCooSys.is())
-        return nullptr;
-
-    sal_Int32 nDimensionIndex = -1;
-    sal_Int32 nAxisIndex = -1;
-    if (!AxisHelper::getIndicesForAxis(
-            xAxis, xCooSys, nDimensionIndex, nAxisIndex)
-        || nDimensionIndex != 0 || nAxisIndex != 0)
-    {
-        return nullptr;
-    }
-
-    rtl::Reference<::chart::ChartType> xChartType
-        = AxisHelper::getChartTypeByIndex(xCooSys, 0);
-
-    if (!xChartType.is()
-        || xChartType->getChartType()
-               != CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)
-    {
-        return nullptr;
-    }
-
-    return xChartType;
 }
 
 } // anonymous namespace
@@ -225,7 +188,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
     if (!aHistogramProperty.isEmpty())
     {
         rtl::Reference<::chart::ChartType> xHistogramType
-            = lcl_getHistogramChartTypeForAxis(m_xAxis, m_xChartDoc);
+            = AxisHelper::getHistogramChartTypeOfAxis(m_xAxis, m_xChartDoc);
 
         if (!xHistogramType.is())
         {
@@ -555,7 +518,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     if (!aHistogramProperty.isEmpty())
     {
         rtl::Reference<::chart::ChartType> xHistogramType
-            = lcl_getHistogramChartTypeForAxis(m_xAxis, m_xChartDoc);
+            = AxisHelper::getHistogramChartTypeOfAxis(m_xAxis, m_xChartDoc);
 
         if (!xHistogramType.is())
         {

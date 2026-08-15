@@ -20,14 +20,19 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <sal/log.hxx>
+#include <vcl/formatter.hxx>
+#include <vcl/svapp.hxx>
 
+#include <Axis.hxx>
+#include <AxisHelper.hxx>
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
-#include <Axis.hxx>
+#include <ChartType.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -196,6 +201,18 @@ double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
     return nVal;
 }
 
+rtl::Reference<::chart::ChartType> getHistogramChartType(
+    const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID)
+{
+    if (!xModel.is())
+    {
+        return nullptr;
+    }
+
+    return AxisHelper::getHistogramChartTypeOfAxis(ObjectIdentifier::getAxisForCID(rCID, xModel),
+                                                   xModel);
+}
+
 }
 
 ChartAxisPanel::ChartAxisPanel(
@@ -207,10 +224,21 @@ ChartAxisPanel::ChartAxisPanel(
     , mxLBLabelPos(m_xBuilder->weld_combo_box(u"comboboxtext_label_position"_ustr))
     , mxGridLabel(m_xBuilder->weld_widget(u"label_props"_ustr))
     , mxNFRotation(m_xBuilder->weld_metric_spin_button(u"spinbutton1"_ustr, FieldUnit::DEGREE))
+    , mxBxHistogramBinning(m_xBuilder->weld_widget(u"boxHISTOGRAM_BINNING"_ustr))
+    , mxRBHistogramAutomatic(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_AUTOMATIC"_ustr))
+    , mxRBHistogramBinWidth(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_BIN_WIDTH"_ustr))
+    , mxHistogramBinWidth(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_BIN_WIDTH"_ustr))
+    , mxRBHistogramBinCount(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_BIN_COUNT"_ustr))
+    , mxHistogramBinCount(m_xBuilder->weld_spin_button(u"MT_HISTOGRAM_BIN_COUNT"_ustr))
+    , mxCBHistogramOverflow(m_xBuilder->weld_check_button(u"CBX_HISTOGRAM_OVERFLOW"_ustr))
+    , mxHistogramOverflow(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_OVERFLOW"_ustr))
+    , mxCBHistogramUnderflow(m_xBuilder->weld_check_button(u"CBX_HISTOGRAM_UNDERFLOW"_ustr))
+    , mxHistogramUnderflow(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_UNDERFLOW"_ustr))
     , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
     , mbModelValid(true)
+    , mbUpdating(false)
 {
     Initialize();
 }
@@ -236,6 +264,13 @@ void ChartAxisPanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
+    for (weld::FormattedSpinButton* pField : { mxHistogramBinWidth.get(), mxHistogramOverflow.get(),
+                                               mxHistogramUnderflow.get() })
+    {
+        pField->GetFormatter().ClearMinValue();
+        pField->GetFormatter().ClearMaxValue();
+    }
+
     updateData();
 
     Link<weld::Toggleable&,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
@@ -246,6 +281,19 @@ void ChartAxisPanel::Initialize()
     mxNFRotation->connect_value_changed(aSpinButtonLink);
 
     mxLBLabelPos->connect_changed(LINK(this, ChartAxisPanel, ListBoxHdl));
+
+    Link<weld::Toggleable&, void> aHistogramToggle = LINK(this, ChartAxisPanel, HistogramToggleHdl);
+    mxRBHistogramAutomatic->connect_toggled(aHistogramToggle);
+    mxRBHistogramBinWidth->connect_toggled(aHistogramToggle);
+    mxRBHistogramBinCount->connect_toggled(aHistogramToggle);
+    mxCBHistogramOverflow->connect_toggled(aHistogramToggle);
+    mxCBHistogramUnderflow->connect_toggled(aHistogramToggle);
+
+    Link<weld::FormattedSpinButton&, void> aHistogramValue = LINK(this, ChartAxisPanel, HistogramValueHdl);
+    mxHistogramBinWidth->connect_value_changed(aHistogramValue);
+    mxHistogramOverflow->connect_value_changed(aHistogramValue);
+    mxHistogramUnderflow->connect_value_changed(aHistogramValue);
+    mxHistogramBinCount->connect_value_changed(LINK(this, ChartAxisPanel, HistogramBinCountHdl));
 }
 
 void ChartAxisPanel::updateData()
@@ -260,11 +308,50 @@ void ChartAxisPanel::updateData()
 
     SolarMutexGuard aGuard;
 
+    mbUpdating = true;
+    const comphelper::ScopeGuard aUpdateGuard([this]() { mbUpdating = false; });
+
     mxCBShowLabel->set_active(isLabelShown(mxModel, aCID));
     mxCBReverse->set_active(isReverse(mxModel, aCID));
 
     mxLBLabelPos->set_active(getLabelPosition(mxModel, aCID));
     mxNFRotation->set_value(getAxisRotation(mxModel, aCID), FieldUnit::DEGREE);
+
+    rtl::Reference<::chart::ChartType> xHistogramType = getHistogramChartType(mxModel, aCID);
+    mxBxHistogramBinning->set_visible(xHistogramType.is());
+
+    if (!xHistogramType.is())
+    {
+        return;
+    }
+
+    sal_Int32 nFrequencyType = 0;
+    double fBinWidth = 0.0;
+    sal_Int32 nBinCount = 1;
+    bool bUseOverflow = false;
+    double fOverflow = 0.0;
+    bool bUseUnderflow = false;
+    double fUnderflow = 0.0;
+
+    xHistogramType->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
+    xHistogramType->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth;
+    xHistogramType->getPropertyValue(u"BinCount"_ustr) >>= nBinCount;
+    xHistogramType->getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflow;
+    xHistogramType->getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflow;
+    xHistogramType->getPropertyValue(u"UseUnderflowBin"_ustr) >>= bUseUnderflow;
+    xHistogramType->getPropertyValue(u"UnderflowBinValue"_ustr) >>= fUnderflow;
+
+    mxRBHistogramAutomatic->set_active(nFrequencyType != 1 && nFrequencyType != 2);
+    mxRBHistogramBinWidth->set_active(nFrequencyType == 1);
+    mxRBHistogramBinCount->set_active(nFrequencyType == 2);
+    mxHistogramBinWidth->GetFormatter().SetValue(fBinWidth);
+    mxHistogramBinCount->set_value(nBinCount);
+    mxCBHistogramOverflow->set_active(bUseOverflow);
+    mxHistogramOverflow->GetFormatter().SetValue(fOverflow);
+    mxCBHistogramUnderflow->set_active(bUseUnderflow);
+    mxHistogramUnderflow->GetFormatter().SetValue(fUnderflow);
+
+    updateHistogramControlSensitivity();
 }
 
 std::unique_ptr<PanelLayout> ChartAxisPanel::Create (
@@ -326,6 +413,14 @@ void ChartAxisPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
+void ChartAxisPanel::updateHistogramControlSensitivity()
+{
+    mxHistogramBinWidth->set_sensitive(mxRBHistogramBinWidth->get_active());
+    mxHistogramBinCount->set_sensitive(mxRBHistogramBinCount->get_active());
+    mxHistogramOverflow->set_sensitive(mxCBHistogramOverflow->get_active());
+    mxHistogramUnderflow->set_sensitive(mxCBHistogramUnderflow->get_active());
+}
+
 void ChartAxisPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
@@ -366,6 +461,107 @@ IMPL_LINK(ChartAxisPanel, TextRotationHdl, weld::MetricSpinButton&, rMetricField
     OUString aCID = getCID(mxModel);
     double nVal = rMetricField.get_value(FieldUnit::DEGREE);
     setAxisRotation(mxModel, aCID, nVal);
+}
+
+IMPL_LINK(ChartAxisPanel, HistogramToggleHdl, weld::Toggleable&, rToggle, void)
+{
+    if (mbUpdating)
+    {
+        return;
+    }
+
+    rtl::Reference<::chart::ChartType> xHistogramType = getHistogramChartType(mxModel, getCID(mxModel));
+    if (!xHistogramType.is())
+    {
+        return;
+    }
+
+    updateHistogramControlSensitivity();
+
+    if (&rToggle == mxRBHistogramAutomatic.get() && rToggle.get_active())
+    {
+        xHistogramType->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(0)));
+    }
+    else if (&rToggle == mxRBHistogramBinWidth.get() && rToggle.get_active())
+    {
+        xHistogramType->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
+    }
+    else if (&rToggle == mxRBHistogramBinCount.get() && rToggle.get_active())
+    {
+        xHistogramType->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
+    }
+    else if (&rToggle == mxCBHistogramOverflow.get())
+    {
+        xHistogramType->setPropertyValue(u"UseOverflowBin"_ustr, uno::Any(rToggle.get_active()));
+    }
+    else if (&rToggle == mxCBHistogramUnderflow.get())
+    {
+        xHistogramType->setPropertyValue(u"UseUnderflowBin"_ustr, uno::Any(rToggle.get_active()));
+    }
+}
+
+IMPL_LINK(ChartAxisPanel, HistogramValueHdl, weld::FormattedSpinButton&, rField, void)
+{
+    if (mbUpdating)
+    {
+        return;
+    }
+
+    rtl::Reference<::chart::ChartType> xHistogramType = getHistogramChartType(mxModel, getCID(mxModel));
+    if (!xHistogramType.is())
+    {
+        return;
+    }
+
+    const double fValue = rField.GetFormatter().GetValue();
+
+    // While both special bins are on, the underflow boundary has to stay below the overflow
+    // one. A pair that crosses is dropped when the bins are computed, so the edit is refused
+    // here and the field goes back to the value the model holds.
+    const bool bBothSpecialBins
+        = mxCBHistogramUnderflow->get_active() && mxCBHistogramOverflow->get_active();
+
+    if (&rField == mxHistogramBinWidth.get())
+    {
+        if (fValue <= 0.0)
+        {
+            updateData();
+            return;
+        }
+        xHistogramType->setPropertyValue(u"BinWidth"_ustr, uno::Any(fValue));
+    }
+    else if (&rField == mxHistogramOverflow.get())
+    {
+        if (bBothSpecialBins && mxHistogramUnderflow->GetFormatter().GetValue() >= fValue)
+        {
+            updateData();
+            return;
+        }
+        xHistogramType->setPropertyValue(u"OverflowBinValue"_ustr, uno::Any(fValue));
+    }
+    else if (&rField == mxHistogramUnderflow.get())
+    {
+        if (bBothSpecialBins && fValue >= mxHistogramOverflow->GetFormatter().GetValue())
+        {
+            updateData();
+            return;
+        }
+        xHistogramType->setPropertyValue(u"UnderflowBinValue"_ustr, uno::Any(fValue));
+    }
+}
+
+IMPL_LINK(ChartAxisPanel, HistogramBinCountHdl, weld::SpinButton&, rField, void)
+{
+    if (mbUpdating || rField.get_value() <= 0)
+    {
+        return;
+    }
+
+    rtl::Reference<::chart::ChartType> xHistogramType = getHistogramChartType(mxModel, getCID(mxModel));
+    if (xHistogramType.is())
+    {
+        xHistogramType->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(rField.get_value())));
+    }
 }
 
 } // end of namespace ::chart::sidebar
