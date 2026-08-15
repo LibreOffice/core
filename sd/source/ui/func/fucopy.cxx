@@ -75,7 +75,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<ATTR_COPY_START, ATTR_COPY_END>( mrViewShell.GetPool() ));
+        SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLSTYLE, XATTR_FILLSTYLE, ATTR_COPY_START, ATTR_COPY_END>( mrViewShell.GetPool() ));
 
         // indicate color attribute
         SfxItemSet aAttr( mrDoc.GetPool() );
@@ -91,6 +91,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             {
                 XColorItem aXColorItem( ATTR_COPY_START_COLOR, pFillColorItem->GetName(),
                                                     pFillColorItem->GetColorValue() );
+                aSet.Put(*pFillStyleItem);
                 aSet.Put( aXColorItem );
 
             }

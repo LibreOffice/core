@@ -23,6 +23,7 @@
 #include <svx/sdangitm.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svl/intitem.hxx>
 
 #include <svtools/unitconv.hxx>
@@ -34,6 +35,8 @@
 #include <sdattr.hrc>
 #include <View.hxx>
 #include <drawdoc.hxx>
+
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 
 namespace sd {
@@ -171,8 +174,17 @@ void CopyDlg::Reset()
         m_xMtrFldAngle->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldWidth->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldHeight->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
-        m_xLbStartColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
-        m_xLbEndColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+        // tdf#173141: in duplicate dialog, we want to retrieve previously selected start and stop color
+        // only if the shape uses solid color (and not gradient or bitmap for example)
+        if ( const XFillStyleItem* pFillStyleItem = mrOutAttrs.GetItemIfSet( XATTR_FILLSTYLE ) )
+        {
+            css::drawing::FillStyle eStyle = pFillStyleItem->GetValue();
+            if( eStyle == css::drawing::FillStyle_SOLID )
+            {
+                m_xLbStartColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+                m_xLbEndColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+            }
+        }
     }
 
 }
