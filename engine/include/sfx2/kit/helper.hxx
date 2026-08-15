@@ -244,8 +244,8 @@ public:
     static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, COKitCallbackType eType);
 
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
-    /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
-    static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
+    /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload.
+    static OString makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
                                              bool bMispelledWord = false, const OString& rHyperlink = ""_ostr,
                                              int nEditorViewId = -1);
 

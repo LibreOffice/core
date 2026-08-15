@@ -1733,15 +1733,15 @@ void DesktopKitTest::testNotificationCompression()
     handler->queue(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, ""_ostr); // 0
     handler->queue(COKitCallbackType::TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
     handler->queue(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, ""_ostr); // Should be dropped.
-    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // 1
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10, 0, 0"_ostr); // 1
     handler->queue(COKitCallbackType::TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Should be dropped.
     handler->queue(COKitCallbackType::TEXT_SELECTION, ""_ostr); // Superseded.
     handler->queue(COKitCallbackType::STATE_CHANGED, ""_ostr); // 2
     handler->queue(COKitCallbackType::STATE_CHANGED, ".uno:Bold"_ostr); // 3
     handler->queue(COKitCallbackType::STATE_CHANGED, ""_ostr); // 4
     handler->queue(COKitCallbackType::MOUSE_POINTER, "text"_ostr); // 5
-    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10, 0, 0"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10, 0, 0"_ostr); // Should be dropped.
     handler->queue(COKitCallbackType::MOUSE_POINTER, "text"_ostr); // Should be dropped.
     handler->queue(COKitCallbackType::TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Superseded.
     handler->queue(COKitCallbackType::TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Superseded.
@@ -1771,7 +1771,7 @@ void DesktopKitTest::testNotificationCompression()
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
     CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10"), std::get<1>(notifs[i++]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10, 0, 0"), std::get<1>(notifs[i++]));
 
     CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
@@ -1845,12 +1845,6 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
 void DesktopKitTest::testTileInvalidationCompression()
 {
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
-
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aGuard([]()
-    {
-        comphelper::COKit::setPartInInvalidation(false);
-    });
 
     // Single part merging
     {
@@ -1985,44 +1979,8 @@ void DesktopKitTest::testTileInvalidationCompression()
 void DesktopKitTest::testPartInInvalidation()
 {
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
-    // No part in invalidation: merge.
+    // Intersection and parts match -> merge.
     {
-        std::vector<std::tuple<int, std::string>> notifs;
-        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(KitHelper::getCurrentView());
-
-        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
-        handler->queue(COKitCallbackType::INVALIDATE_TILES, "20, 10, 20, 10"_ostr);
-
-        Scheduler::ProcessEventsToIdle();
-
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-
-        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
-        CPPUNIT_ASSERT_EQUAL(std::string("10, 10, 30, 10"), std::get<1>(notifs[0]));
-    }
-    // No part in invalidation: don't merge.
-    {
-        std::vector<std::tuple<int, std::string>> notifs;
-        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(KitHelper::getCurrentView());
-
-        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
-        handler->queue(COKitCallbackType::INVALIDATE_TILES, "40, 10, 20, 10"_ostr);
-
-        Scheduler::ProcessEventsToIdle();
-
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
-    }
-
-    // Part in invalidation, intersection and parts match -> merge.
-    {
-        comphelper::COKit::setPartInInvalidation(true);
-        comphelper::ScopeGuard aGuard([]()
-        {
-            comphelper::COKit::setPartInInvalidation(false);
-        });
-
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
@@ -2033,15 +1991,25 @@ void DesktopKitTest::testPartInInvalidation()
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-    }
-    // Part in invalidation, intersection and parts don't match -> don't merge.
-    {
-        comphelper::COKit::setPartInInvalidation(true);
-        comphelper::ScopeGuard aGuard([]()
-        {
-            comphelper::COKit::setPartInInvalidation(false);
-        });
 
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("10, 10, 30, 10, 0, 0"), std::get<1>(notifs[0]));
+    }
+    // No intersection -> don't merge.
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(KitHelper::getCurrentView());
+
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "40, 10, 20, 10, 0, 0"_ostr);
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
+    }
+    // Intersection and parts don't match -> don't merge.
+    {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
@@ -2068,7 +2036,9 @@ void DesktopKitTest::testBinaryCallback()
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
 
     const tools::Rectangle rect1(Point(10,15),Size(20,25));
-    const std::string rect1String(rect1.toString());
+    // -1 means all parts, so the invalidation carries the part it was given.
+    const int nAllParts = -1;
+    const std::string rect1String(std::string(rect1.toString()) + ", -1, 0");
     // Verify that using queue() and viewInvalidateTilesCallback() has the same result.
     {
         std::vector<std::tuple<int, std::string>> notifs;
@@ -2088,8 +2058,8 @@ void DesktopKitTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
-        handler->viewInvalidateTilesCallback(&rect1, INT_MIN, 0);
+        handler->tilePainted(nAllParts, /*nMode=*/0, rect1);
+        handler->viewInvalidateTilesCallback(&rect1, nAllParts, 0);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2103,14 +2073,14 @@ void DesktopKitTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
-        handler->viewInvalidateTilesCallback(nullptr, INT_MIN, 0);
+        handler->tilePainted(nAllParts, /*nMode=*/0, rect1);
+        handler->viewInvalidateTilesCallback(nullptr, nAllParts, 0);
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
         CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
-        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY"), std::get<1>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY, -1, 0"), std::get<1>(notifs[0]));
     }
 }
 
@@ -2396,9 +2366,15 @@ public:
         break;
         case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
-            cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
-            if (std::string_view("EMPTY") == pPayload)
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
+
+            if (aRectangle == "EMPTY")
                 return;
+            cpo::uno::Sequence<OUString> aSeq
+                = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aOwnCursor.SetLeft(aSeq[0].toInt32());
             m_aOwnCursor.SetTop(aSeq[1].toInt32());
@@ -2573,11 +2549,6 @@ void DesktopKitTest::testPaintPartTile()
 void DesktopKitTest::testPaintTileOmitInvalidate()
 {
     // Given a painted tile:
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aGuard([]()
-    {
-        comphelper::COKit::setPartInInvalidation(false);
-    });
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     ViewCallback aView(pDocument);
     const int nCanvasWidth = 256;
@@ -2600,11 +2571,6 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
 {
     // Given a document with 2 views: view 1 renders sheet One, then view 2 gets created and finally
     // view 1 switches to sheet Two:
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aGuard([]()
-    {
-        comphelper::COKit::setPartInInvalidation(false);
-    });
     COKitDocumentImpl* pDocument = loadDoc("create-view-omit-invalidate.ods");
     pDocument->initializeForRendering(nullptr);
     ViewCallback aView1(pDocument);

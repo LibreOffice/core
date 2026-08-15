@@ -96,13 +96,13 @@ void SwTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPa
             tools::Rectangle aInvalidation;
             cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-            if (std::string_view("EMPTY") == pPayload)
+            if (aPayload.startsWith("EMPTY"))
             {
                 m_bFullInvalidateSeen = true;
                 return;
             }
 
-            CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+            CPPUNIT_ASSERT(aSeq.getLength() >= 4);
             aInvalidation.SetLeft(aSeq[0].toInt32());
             aInvalidation.SetTop(aSeq[1].toInt32());
             aInvalidation.setWidth(aSeq[2].toInt32());
@@ -179,22 +179,19 @@ void SwTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPa
         break;
         case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
-            if (comphelper::COKit::isViewIdForVisCursorInvalidation())
-            {
-                boost::property_tree::ptree aTree;
-                std::stringstream aStream(pPayload);
-                boost::property_tree::read_json(aStream, aTree);
-                boost::property_tree::ptree& aChild = aTree.get_child("hyperlink");
-                m_sHyperlinkText = OString(aChild.get("text", ""));
-                m_sHyperlinkLink = OString(aChild.get("link", ""));
+            boost::property_tree::ptree aTree;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, aTree);
+            boost::property_tree::ptree& aChild = aTree.get_child("hyperlink");
+            m_sHyperlinkText = OString(aChild.get("text", ""));
+            m_sHyperlinkLink = OString(aChild.get("link", ""));
 
-                OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
-                cpo::uno::Sequence<OUString> aSeq
-                    = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
-                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-                m_aCursorRectangle = tools::Rectangle(Point(aSeq[0].toInt32(), aSeq[1].toInt32()),
-                                                      Size(aSeq[2].toInt32(), aSeq[3].toInt32()));
-            }
+            OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
+            cpo::uno::Sequence<OUString> aSeq
+                = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            m_aCursorRectangle = tools::Rectangle(Point(aSeq[0].toInt32(), aSeq[1].toInt32()),
+                                                  Size(aSeq[2].toInt32(), aSeq[3].toInt32()));
         }
         break;
         case COKitCallbackType::FORM_FIELD_BUTTON:

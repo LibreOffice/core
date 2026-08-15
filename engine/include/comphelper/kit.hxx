@@ -93,11 +93,6 @@ COMPHELPER_DLLPUBLIC bool isSlideshowRendering();
 COMPHELPER_DLLPUBLIC void setVectorRendering(bool bVectorRendering);
 COMPHELPER_DLLPUBLIC bool isVectorRendering();
 
-/// Check whether clients want a part number in an invalidation payload.
-COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
-/// Set whether clients want a part number in an invalidation payload.
-COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
-
 /// The ViewShellDocId of no document at all.
 constexpr ViewShellDocId NoDocId(-1);
 
@@ -149,11 +144,6 @@ COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
 COMPHELPER_DLLPUBLIC bool isCompatFlagSet(Compat flag);
 /// Reset compatibility flags
 COMPHELPER_DLLPUBLIC void resetCompatFlag();
-
-/// Check whether clients want viewId in visible cursor invalidation payload.
-COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
-/// Set whether clients want viewId in visible cursor invalidation payload.
-COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
 
 /// Update the current Kit's locale.
 COMPHELPER_DLLPUBLIC void setLocale(const LanguageTag& languageTag);

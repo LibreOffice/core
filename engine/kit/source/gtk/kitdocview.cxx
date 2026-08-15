@@ -2933,8 +2933,6 @@ static gboolean kit_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath.c_str());
         return FALSE;
     }
-    priv->m_nKitFeatures |= COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK;
-    priv->m_nKitFeatures |= COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
     priv->m_pOffice->setOptionalFeatures(priv->m_nKitFeatures);
 
     if (priv->m_bUnipoll)

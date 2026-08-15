@@ -2622,39 +2622,15 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
     CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+    // Each view is told which view its own cursor moved for.
+    CPPUNIT_ASSERT_EQUAL(nView1, aView1.m_nOwnCursorInvalidatedBy);
+    CPPUNIT_ASSERT_EQUAL(nView2, aView2.m_nOwnCursorInvalidatedBy);
     // Check that views have correct location for the other's cursor.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor, aView2.m_aViewCursor);
     CPPUNIT_ASSERT_EQUAL(aView2.m_aOwnCursor, aView1.m_aViewCursor);
     // Their cursors should be on the same line, first view's more to the right.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.getY(), aView2.m_aOwnCursor.getY());
     CPPUNIT_ASSERT_GREATER(aView2.m_aOwnCursor.getX(), aView1.m_aOwnCursor.getX());
-
-    // Do the same as before, but set the related compatibility flag first
-    KitHelper::setView(nView2);
-
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
-
-    Scheduler::ProcessEventsToIdle();
-    aView1.m_bOwnCursorInvalidated = false;
-    aView1.m_bViewCursorInvalidated = false;
-    aView2.m_bOwnCursorInvalidated = false;
-    aView2.m_bViewCursorInvalidated = false;
-
-    emulateTyping(u"x");
-
-    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
-    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
-    CPPUNIT_ASSERT_EQUAL(nView1, aView1.m_nOwnCursorInvalidatedBy);
-    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
-    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
-    CPPUNIT_ASSERT_EQUAL(nView2, aView2.m_nOwnCursorInvalidatedBy);
-    CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor, aView2.m_aViewCursor);
-    CPPUNIT_ASSERT_EQUAL(aView2.m_aOwnCursor, aView1.m_aViewCursor);
-    // Their cursors should be on the same line, first view's more to the right.
-    CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.getY(), aView2.m_aOwnCursor.getY());
-    CPPUNIT_ASSERT_GREATER(aView2.m_aOwnCursor.getX(), aView1.m_aOwnCursor.getX());
-
-    comphelper::COKit::setViewIdForVisCursorInvalidation(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidationViewIdNotCurrent)
@@ -2673,8 +2649,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidationViewIdNotCur
     CPPUNIT_ASSERT(nView1 != nView2);
     Scheduler::ProcessEventsToIdle();
 
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
-
     KitHelper::setView(nView2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(SfxViewShell::Current() != static_cast<SfxViewShell*>(pView1));
@@ -2690,8 +2664,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidationViewIdNotCur
 
     CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
     CPPUNIT_ASSERT_EQUAL(nView1, aView1.m_nOwnCursorInvalidatedBy);
-
-    comphelper::COKit::setViewIdForVisCursorInvalidation(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeselectCustomShape)
@@ -3047,7 +3019,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineNotificationDuringSave)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)
 {
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
     SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
@@ -4164,12 +4135,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_blackPatternFill)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
 {
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
     SvtSearchOptions aSearchOpt;
     aSearchOpt.SetNotes(true);
     aSearchOpt.Commit();
     comphelper::ScopeGuard g([] {
-            comphelper::COKit::setViewIdForVisCursorInvalidation(false);
             SvtSearchOptions aOpt;
             aOpt.SetNotes(false);
             aOpt.Commit();

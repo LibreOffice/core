@@ -570,21 +570,19 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     if (rPayload.startsWith("EMPTY")) // payload starts with "EMPTY"
     {
         aRet.m_aRectangle = tools::Rectangle(0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips);
-        if (comphelper::COKit::isPartInInvalidation())
+
+        int nSeparatorPos = rPayload.indexOf(',', 6);
+        bool bHasMode = nSeparatorPos > 0;
+        if (bHasMode)
         {
-            int nSeparatorPos = rPayload.indexOf(',', 6);
-            bool bHasMode = nSeparatorPos > 0;
-            if (bHasMode)
-            {
-                aRet.m_nPart = o3tl::toInt32(rPayload.subView(6, nSeparatorPos - 6));
-                assert(rPayload.getLength() > nSeparatorPos);
-                aRet.m_nMode = o3tl::toInt32(rPayload.subView(nSeparatorPos + 1));
-            }
-            else
-            {
-                aRet.m_nPart = o3tl::toInt32(rPayload.subView(6));
-                aRet.m_nMode = 0;
-            }
+            aRet.m_nPart = o3tl::toInt32(rPayload.subView(6, nSeparatorPos - 6));
+            assert(rPayload.getLength() > nSeparatorPos);
+            aRet.m_nMode = o3tl::toInt32(rPayload.subView(nSeparatorPos + 1));
+        }
+        else
+        {
+            aRet.m_nPart = o3tl::toInt32(rPayload.subView(6));
+            aRet.m_nMode = 0;
         }
 
         return aRet;
@@ -612,25 +610,22 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
         ++pos;
     assert(pos < end);
     tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-    tools::Long nPart = INT_MIN;
     tools::Long nMode = 0;
-    if (comphelper::COKit::isPartInInvalidation())
-    {
-        while (pos < end && *pos != ',')
-            ++pos;
-        if (pos < end)
-            ++pos;
-        assert(pos < end);
-        nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
 
-        while (pos < end && *pos != ',')
-            ++pos;
-        if (pos < end)
-        {
-            ++pos;
-            assert(pos < end);
-            nMode = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-        }
+    while (pos < end && *pos != ',')
+        ++pos;
+    if (pos < end)
+        ++pos;
+    assert(pos < end);
+    tools::Long nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+
+    while (pos < end && *pos != ',')
+        ++pos;
+    if (pos < end)
+    {
+        ++pos;
+        assert(pos < end);
+        nMode = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     }
 
     aRet.m_aRectangle = SanitizedRectangle(nLeft, nTop, nWidth, nHeight);
@@ -2076,22 +2071,7 @@ void CallbackFlushHandler::setUpdatedTypePerViewId( COKitCallbackType eType, int
 void CallbackFlushHandler::resetUpdatedTypePerViewId( COKitCallbackType eType, int nViewId )
 {
     assert(isUpdatedTypePerViewId(eType));
-    bool allViewIds = false;
-    // Handle specially messages that do not have viewId for backwards compatibility.
-    if( eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
-        allViewIds = true;
-    if( !allViewIds )
-    {
-        setUpdatedTypePerViewId( eType, nViewId, -1, false );
-        return;
-    }
-    for( auto& it : m_updatedTypesPerViewId )
-    {
-        std::vector<PerViewIdData>& types = it.second;
-        const size_t nIndex = static_cast<size_t>(eType);
-        if( types.size() >= nIndex )
-            types[ nIndex ].set = false;
-    }
+    setUpdatedTypePerViewId( eType, nViewId, -1, false );
 }
 
 void CallbackFlushHandler::viewCallback(COKitCallbackType eType, const OString& pPayload)
@@ -9151,15 +9131,9 @@ static void lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures const fea
 
     COKitImpl *const pLib = static_cast<COKitImpl*>(pThis);
     pLib->mOptionalFeatures = features;
-    if ((features & COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK)
-        != COKitOptionalFeatures::NONE)
-        comphelper::COKit::setPartInInvalidation(true);
     if ((features & COKitOptionalFeatures::RANGE_HEADERS)
         != COKitOptionalFeatures::NONE)
         comphelper::COKit::setRangeHeaders(true);
-    if ((features & COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
-        != COKitOptionalFeatures::NONE)
-        comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 }
 
 static void lo_setDocumentPassword(COKit* pThis,

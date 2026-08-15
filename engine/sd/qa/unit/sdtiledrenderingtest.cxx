@@ -96,7 +96,7 @@ std::vector<OUString> lcl_convertSeparated(std::u16string_view rString, sal_Unic
 void lcl_convertRectangle(std::u16string_view rString, ::tools::Rectangle& rRectangle)
 {
     cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
-    CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+    CPPUNIT_ASSERT(aSeq.getLength() >= 4);
     rRectangle.SetLeft(aSeq[0].toInt32());
     rRectangle.SetTop(aSeq[1].toInt32());
     rRectangle.setWidth(aSeq[2].toInt32());
@@ -111,7 +111,7 @@ void SdTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPa
         case COKitCallbackType::INVALIDATE_TILES:
         {
             OUString aPayload = OUString::createFromAscii(pPayload);
-            if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
+            if (!aPayload.startsWith("EMPTY") && m_aInvalidation.IsEmpty())
                 lcl_convertRectangle(aPayload, m_aInvalidation);
         }
         break;
@@ -237,7 +237,7 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             {
                 cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
                     OUString::createFromAscii(pPayload));
-                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                CPPUNIT_ASSERT(aSeq.getLength() >= 4);
                 tools::Rectangle aInvalidationRect;
                 aInvalidationRect.SetLeft(aSeq[0].toInt32());
                 aInvalidationRect.SetTop(aSeq[1].toInt32());

@@ -50,7 +50,7 @@ namespace desktop {
         constexpr static tools::Rectangle emptyAllRectangle = {0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips};
 
         RectangleAndPart()
-            : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
+            : m_nPart(INT_MIN)  // A part nobody has set yet. -1 is reserved to mean "all parts".
             , m_nMode(0)
         {
         }
@@ -64,11 +64,10 @@ namespace desktop {
 
         OString toString() const
         {
-            if (m_nPart >= -1)
-                return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString())
-                    + ", " + OString::number(m_nPart) + ", " + OString::number(m_nMode);
-            else
-                return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString());
+            // Every payload carries the part, so the part must have been set by now.
+            assert(m_nPart >= -1);
+            return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString())
+                + ", " + OString::number(m_nPart) + ", " + OString::number(m_nMode);
         }
 
         /// Infinite Rectangle is both sides are

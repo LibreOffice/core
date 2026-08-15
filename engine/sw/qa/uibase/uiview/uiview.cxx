@@ -623,7 +623,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 {
     // Set up COKit:
     comphelper::COKit::setActive(true);
-    comphelper::COKit::setPartInInvalidation(true);
 
     // Given a document where redline render mode is set to "omit deletes":
     createSwDoc();
@@ -652,7 +651,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 
     // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
-    comphelper::COKit::setPartInInvalidation(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

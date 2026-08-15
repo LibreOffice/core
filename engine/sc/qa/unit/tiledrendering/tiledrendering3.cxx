@@ -687,7 +687,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditCursorBounds)
     ScTestViewCallback aView;
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 
     // ~170% zoom.
     pModelObj->setClientZoom(256, 256, 2222, 2222);
@@ -729,7 +728,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextSelectionBounds)
     ScTestViewCallback aView;
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
-    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 
     // ~170% zoom.
     pModelObj->setClientZoom(256, 256, 2222, 2222);

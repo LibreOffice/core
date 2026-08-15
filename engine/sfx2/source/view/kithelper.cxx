@@ -759,7 +759,7 @@ void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::R
 void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
 {
     // -1 means all parts
-    const int nPart = comphelper::COKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
+    const int nPart = pThisView->getPart();
     KitHelper::notifyInvalidation(pThisView, nPart, pRect);
 }
 
@@ -769,7 +769,7 @@ void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, const int nInP
         return;
 
     // -1 means all parts
-    const int nPart = comphelper::COKit::isPartInInvalidation() ? nInPart : INT_MIN;
+    const int nPart = nInPart;
     const int nMode = pThisView->getEditMode();
     pThisView->viewInvalidateTilesCallback(pRect, nPart, nMode);
 }
@@ -881,22 +881,15 @@ void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int n
     }
 }
 
-OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
+OString KitHelper::makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
     bool bMispelledWord, const OString& rHyperlink, int nEditorViewId)
 {
-    if (comphelper::COKit::isViewIdForVisCursorInvalidation())
-    {
-        OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
-        return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
-            "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
-            "\", \"rectangle\": \"" + rRectangle +
-            "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
-            "\", \"hyperlink\": " + sHyperlink + " }";
-    }
-    else
-    {
-        return rRectangle;
-    }
+    OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
+    return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
+        "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
+        "\", \"rectangle\": \"" + rRectangle +
+        "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
+        "\", \"hyperlink\": " + sHyperlink + " }";
 }
 
 OString KitHelper::makeModifiedStatusPayload(bool bModified)

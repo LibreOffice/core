@@ -76,21 +76,16 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
         {
             m_bOwnCursorInvalidated = true;
 
-            OString sRect;
-            if (comphelper::COKit::isViewIdForVisCursorInvalidation())
-            {
-                std::stringstream aStream(pPayload);
-                boost::property_tree::ptree aTree;
-                boost::property_tree::read_json(aStream, aTree);
-                sRect = OString(aTree.get_child("rectangle").get_value<std::string>());
-                m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
-            }
-            else
-                sRect = aPayload;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            OString sRect(aTree.get_child("rectangle").get_value<std::string>());
+            m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
+
+            if (sRect == "EMPTY")
+                return;
             cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
-            if (std::string_view("EMPTY") == pPayload)
-                return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aOwnCursor.SetLeft(aSeq[0].toInt32());
             m_aOwnCursor.SetTop(aSeq[1].toInt32());

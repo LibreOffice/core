@@ -2012,9 +2012,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageDownInvalidation)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
 {
-    const bool oldPartInInvalidation = comphelper::COKit::isPartInInvalidation();
-    comphelper::COKit::setPartInInvalidation(true);
-
     ScModelObj* pModelObj = createDoc("two_sheets.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2082,8 +2079,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
-
-    comphelper::COKit::setPartInInvalidation(oldPartInInvalidation);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)

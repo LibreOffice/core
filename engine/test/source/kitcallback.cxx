@@ -70,11 +70,9 @@ void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle*
         buf.append(pRect->toString());
     else
         buf.append("EMPTY");
-    if (comphelper::COKit::isPartInInvalidation())
-    {
-        buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
-                   + OString::number(static_cast<sal_Int32>(nMode)));
-    }
+
+    buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
+               + OString::number(static_cast<sal_Int32>(nMode)));
     callCallback(COKitCallbackType::INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
 }
 
@@ -129,9 +127,6 @@ void TestKitCallbackWrapper::discardUpdatedTypes(COKitCallbackType eType, int nV
     // If we do not have a specific view id, drop flag for all views.
     bool allViewIds = false;
     if (nViewId < 0)
-        allViewIds = true;
-    if (eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
-        && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     for (auto it = m_updatedTypesPerViewId.begin(); it != m_updatedTypesPerViewId.end();)
     {

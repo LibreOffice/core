@@ -1369,11 +1369,6 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCellEditInvalidatesBaseSheetTiles)
     pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
-    // Report the part in each tile invalidation so the test can tell which
-    // sheet was invalidated.
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
-
     ScTestViewCallback aView;
     ScTabViewShell* pTabView = aView.getTabViewShell();
 
@@ -1453,9 +1448,6 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesBaseSheetTiles)
     pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
-
     ScTestViewCallback aView;
     ScTabViewShell* pTabView = aView.getTabViewShell();
 
@@ -1504,9 +1496,6 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesCurrentSheetViewTiles)
     ScModelObj* pModelObj = createDoc("empty.ods");
     pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
-
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
 
     ScTestViewCallback aView;
     ScTabViewShell* pTabView = aView.getTabViewShell();
@@ -7262,10 +7251,6 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_OperationInvalidatesOtherView)
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
-
-    comphelper::COKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aPartInvalidationGuard(
-        []() { comphelper::COKit::setPartInInvalidation(false); });
 
     setupViews();
 

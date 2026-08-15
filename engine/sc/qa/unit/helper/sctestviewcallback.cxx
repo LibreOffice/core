@@ -35,8 +35,7 @@ void ScTestEditCursorMessage::parseMessage(const char* pMessage)
 {
     clear();
     if (!pMessage
-        || !comphelper::COKit::isCompatFlagSet(comphelper::COKit::Compat::scPrintTwipsMsgs)
-        || !comphelper::COKit::isViewIdForVisCursorInvalidation())
+        || !comphelper::COKit::isCompatFlagSet(comphelper::COKit::Compat::scPrintTwipsMsgs))
         return;
 
     std::stringstream aStream(pMessage);

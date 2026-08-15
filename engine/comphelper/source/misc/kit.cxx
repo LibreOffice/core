@@ -47,8 +47,6 @@ static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
 
-static bool g_bPartInInvalidation(false);
-
 static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
 
 static bool g_bIdleLayouting(false);
@@ -56,8 +54,6 @@ static bool g_bIdleLayouting(false);
 static bool g_bDialogPainting(false);
 
 static bool g_bRangeHeaders(false);
-
-static bool g_bViewIdForVisCursorInvalidation(false);
 
 static bool g_bSlideshowRendering(false);
 
@@ -197,16 +193,6 @@ OUString getUserConfigDir()
     return g_aUserConfigDir;
 }
 
-void setPartInInvalidation(bool bPartInInvalidation)
-{
-    g_bPartInInvalidation = bPartInInvalidation;
-}
-
-bool isPartInInvalidation()
-{
-    return g_bPartInInvalidation;
-}
-
 bool isTiledPainting()
 {
     return g_nTiledPaintingDocId != NoDocId;
@@ -254,16 +240,6 @@ double getDPIScale()
 void setRangeHeaders(bool bRangeHeaders)
 {
     g_bRangeHeaders = bRangeHeaders;
-}
-
-void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation)
-{
-    g_bViewIdForVisCursorInvalidation = bViewIdForVisCursorInvalidation;
-}
-
-bool isViewIdForVisCursorInvalidation()
-{
-    return g_bViewIdForVisCursorInvalidation;
 }
 
 bool isRangeHeaders()

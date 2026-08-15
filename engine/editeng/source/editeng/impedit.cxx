@@ -1501,12 +1501,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
-                if (comphelper::COKit::isViewIdForVisCursorInvalidation())
-                    KitHelper::notifyOtherView(*pThisShell, pThisShell,
-                            COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, aMessageParams);
-                else
-                    pThisShell->viewCallback(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR,
-                            OString(aMessageParams.get<std::string>("rectangle")));
+                KitHelper::notifyOtherView(*pThisShell, pThisShell,
+                                           COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, aMessageParams);
             }
         }
 

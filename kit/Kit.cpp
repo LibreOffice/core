@@ -2204,9 +2204,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         const COKitOptionalFeatures flags
             = COKitOptionalFeatures::DOCUMENT_PASSWORD
             | COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY
-            | COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK
-            | COKitOptionalFeatures::RANGE_HEADERS
-            | COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
+            | COKitOptionalFeatures::RANGE_HEADERS;
         _loKit->setOptionalFeatures(flags);
 
         std::string loadUri = uri;
