@@ -251,6 +251,8 @@ void ViewContact::createViewIndependentPrimitive2DSequence(
     rVisitor.visit(xReference);
 }
 
+bool ViewContact::allowsPrimitiveReuse() const { return true; }
+
 void ViewContact::getViewIndependentPrimitive2DContainer(
     drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
@@ -266,7 +268,7 @@ void ViewContact::getViewIndependentPrimitive2DContainer(
         xNew = embedToObjectSpecificInformation(std::move(xNew));
     }
 
-    if (mxViewIndependentPrimitive2DSequence != xNew)
+    if (!allowsPrimitiveReuse() || mxViewIndependentPrimitive2DSequence != xNew)
     {
         // has changed, copy content
         const_cast<ViewContact*>(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);

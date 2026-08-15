@@ -125,6 +125,13 @@ public:
     void ActionChangedIfDifferentPageView(const SdrPageView& rSdrPageView);
     bool hasMultipleViewObjectContacts() const;
 
+    /** Says whether the primitives of the last call may be kept when freshly created ones
+        compare equal to them. They usually may, and that keeps what those primitives have
+        cached, but not when they were made for objects that are gone by now, see
+        ViewContactOfSdrOle2Obj.
+     */
+    virtual bool allowsPrimitiveReuse() const;
+
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
     void getViewIndependentPrimitive2DContainer(

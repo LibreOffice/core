@@ -41,6 +41,13 @@ public:
     /// helper to create transformation from SdrObject
     basegfx::B2DHomMatrix createObjectTransform() const;
 
+    /*  A chart builds its shapes anew after every change, so the primitives of the ones it
+        had before refer to objects that are gone. Such a primitive can no longer be
+        decomposed and would go on painting what it was decomposed for last, e.g. the text
+        color of another render target, so there is nothing worth keeping about it.
+     */
+    virtual bool allowsPrimitiveReuse() const override;
+
     // basic constructor, used from SdrObject.
     explicit ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
     virtual ~ViewContactOfSdrOle2Obj() override;

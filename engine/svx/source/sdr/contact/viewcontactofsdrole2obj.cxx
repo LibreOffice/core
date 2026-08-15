@@ -72,6 +72,8 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         aObjectRange.getMinX(), aObjectRange.getMinY());
 }
 
+bool ViewContactOfSdrOle2Obj::allowsPrimitiveReuse() const { return !GetOle2Obj().IsChart(); }
+
 void ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // get object transformation
