@@ -101,6 +101,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 	//   (b) the comment dialog is actually on-screen (bounding rect intersects
 	//       the iframe viewport), not merely display != none - a dialog
 	//       positioned off-canvas would otherwise pass a naive display check.
+	//   (c) the comment can be read: a dialog at visibility hidden keeps its
+	//       size and its place on screen, so the two checks above pass for a
+	//       dialog that shows nothing.
 	function assertCommentShownAndAnchorVisible(win, author) {
 		const comment = findCommentByAuthor(win, author);
 		expect(comment, author + ' not found').to.exist;
@@ -108,6 +111,8 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		expect(container, author + ' has no container DOM node').to.exist;
 		expect(getComputedStyle(container).display,
 			author + ' comment dialog display=none').to.not.equal('none');
+		expect(getComputedStyle(container).visibility,
+			author + ' comment dialog visibility=hidden').to.not.equal('hidden');
 
 		const anchorY = comment.sectionProperties.data.anchorPos[1];
 		expect(win.app.isYVisibleInTheDisplayedArea(anchorY),

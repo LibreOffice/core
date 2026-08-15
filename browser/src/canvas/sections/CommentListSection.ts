@@ -549,7 +549,10 @@ export class CommentSection extends CanvasSectionObject {
 		*/
 		if (app.activeDocument.activeLayout.viewHasEnoughSpaceToShowFullWidthComments())
 			return false;
-		return availableSpace < this.sectionProperties.commentWidth && availableSpace >= 0;
+		// The space beside the page turns negative once the page is wider than
+		// the view. That is less room than a narrow margin, so the comments
+		// collapse there too.
+		return availableSpace < this.sectionProperties.commentWidth;
 	}
 
 	public hideAllComments (): void {

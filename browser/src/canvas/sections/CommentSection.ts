@@ -1052,22 +1052,26 @@ export class Comment extends CanvasSectionObject {
 		}
 	}
 
-	private showImpressDraw() {
-		if (this.isInsideActivePart()) {
-			this.sectionProperties.container.style.display = '';
-			this.sectionProperties.nodeModify.style.display = 'none';
-			this.sectionProperties.nodeReply.style.display = 'none';
-			this.sectionProperties.contentNode.style.display = '';
-			this.cachedIsEdit = false;
-			this.setContainerPos(true);
-			if (this.isSelected() || !this.isCollapsed) {
-				this.sectionProperties.container.style.visibility = '';
-			}
-			else {
-				this.sectionProperties.container.style.visibility = 'hidden';
-			}
-			window.L.DomUtil.addClass(this.sectionProperties.container, 'cool-annotation-collapsed-show');
+	// True when the comment was put on display, false when it belongs to another
+	// slide or page and was left alone.
+	private showImpressDraw(): boolean {
+		if (!this.isInsideActivePart())
+			return false;
+
+		this.sectionProperties.container.style.display = '';
+		this.sectionProperties.nodeModify.style.display = 'none';
+		this.sectionProperties.nodeReply.style.display = 'none';
+		this.sectionProperties.contentNode.style.display = '';
+		this.cachedIsEdit = false;
+		this.setContainerPos(true);
+		if (this.isSelected() || !this.isCollapsed) {
+			this.sectionProperties.container.style.visibility = '';
 		}
+		else {
+			this.sectionProperties.container.style.visibility = 'hidden';
+		}
+		window.L.DomUtil.addClass(this.sectionProperties.container, 'cool-annotation-collapsed-show');
+		return true;
 	}
 
 	public setLayoutClass(): void {
@@ -1087,7 +1091,11 @@ export class Comment extends CanvasSectionObject {
 
 		if (this.hidden === false && !this.isEdit()) return;
 
-		this.showMarker();
+		// A marker belongs on the page its comment is anchored to. The
+		// file-based view has every page on display at once, so every marker is
+		// on screen there; otherwise the current slide carries the markers.
+		if (this.isInsideActivePart() || app.file.fileBasedView)
+			this.showMarker();
 
 		// On mobile, container shouldn't be 'document-container', but it is 'document-container' on initialization. So we hide the comment until comment wizard is opened.
 		if ((<any>window).mode.isSmallScreenDevice() && this.sectionProperties.container.parentElement === document.getElementById('document-container'))
@@ -1102,8 +1110,10 @@ export class Comment extends CanvasSectionObject {
 			this.showWriter();
 			this.hidden = false;
 		} else if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
-			this.showImpressDraw();
-			this.hidden = false;
+			// The flag holds whether the box ended up on display. A comment
+			// anchored to another slide or page keeps its box closed, so it
+			// stays hidden.
+			this.hidden = !this.showImpressDraw();
 		} else if (app.map._docLayer._docType === 'spreadsheet')
 			this.showCalc();
 
