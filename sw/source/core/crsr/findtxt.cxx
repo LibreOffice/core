@@ -386,7 +386,7 @@ lcl_CleanStr(const SwTextNode& rNd,
 static bool DoSearch(SwPaM & rSearchPam,
     const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
     SwMoveFnCollection const & fnMove,
-    bool bSrchForward, bool bChkEmptyPara, bool bChkParaEnd,
+    bool bSrchForward,
     AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex nTextLen,
     SwTextNode const* pNode, SwTextFrame const* pTextFrame,
     SwRootFrame const* pLayout, SwPaM& rPam);
@@ -417,10 +417,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
 
     const OUString& rSrch = rSearchOpt.searchString;
     const bool bRegSearch = SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2;
-    const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
-                        ( rSearchOpt.searchString == "^$" ||
-                          rSearchOpt.searchString == "$^" );
-    const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
+    const bool bChkEmptyPara = bRegSearch && (rSrch == "^$" || rSrch == "$^");
     const bool bAvoidGettingStuck = bRegSearch && !bChkEmptyPara
         && (rSrch.startsWith("^") || rSrch.startsWith("\\A")); // beginning of the paragraph
     if (bAvoidGettingStuck)
@@ -715,7 +712,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 }
                 // search inside the text between a note
                 bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward,
-                                  bChkEmptyPara, bChkParaEnd, nStartInside, nEndInside, nTextLen,
+                                  nStartInside, nEndInside, nTextLen,
                                   pNode->GetTextNode(), pFrame, pLayout, *oPam);
                 if (bFound)
                     break;
@@ -746,7 +743,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             // if there is no SwPostItField inside or searching inside notes
             // is disabled, we search the whole length just like before
             bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward,
-                              bChkEmptyPara, bChkParaEnd, nStart, nEnd, nTextLen,
+                              nStart, nEnd, nTextLen,
                               pNode->GetTextNode(), pFrame, pLayout, *oPam);
         }
         if (bFound)
@@ -760,13 +757,14 @@ bool FindTextImpl(SwPaM & rSearchPam,
 bool DoSearch(SwPaM & rSearchPam,
         const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                       SwMoveFnCollection const & fnMove, bool bSrchForward,
-                      bool bChkEmptyPara, bool bChkParaEnd,
         AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex const nTextLen,
         SwTextNode const*const pNode, SwTextFrame const*const pFrame,
         SwRootFrame const*const pLayout, SwPaM& rPam)
 {
     const OUString& rSrch = rSearchOpt.searchString;
     const bool bRegSearch = SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2;
+    const bool bChkEmptyPara = bRegSearch && (rSrch == "^$" || rSrch == "$^");
+    const bool bChkParaEnd = bRegSearch && rSrch == "$";
     const bool bChkParaStart = bRegSearch && (rSrch == "^" || rSrch == "\\A");
     if (bChkParaStart)
     {
