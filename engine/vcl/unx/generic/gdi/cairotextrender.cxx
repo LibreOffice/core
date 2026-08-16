@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_fuzzers.h>
 
 #include <comphelper/scopeguard.hxx>
 #include <unx/cairotextrender.hxx>
@@ -157,7 +158,10 @@ namespace
     }
 }
 
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+// Declared weak, so they resolve to null when the build links no leak checker. Every call site
+// tests the pointer first. The fuzzer build is the only one here that links one, and it is always
+// gcc or clang, which the weak attribute needs.
+#if ENABLE_FUZZERS
 extern "C"
 {
     __attribute__((weak)) void __lsan_disable();
@@ -367,7 +371,7 @@ void CairoTextRender::ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, c
         return;
     }
 
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if ENABLE_FUZZERS
     if (nHeight > 7000)
     {
         SAL_WARN("vcl", "rendering text would use > 2G Memory: " << nHeight);
@@ -451,7 +455,7 @@ void CairoTextRender::ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, c
         return;
     }
 
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if ENABLE_FUZZERS
     if (__lsan_disable)
         __lsan_disable();
 #endif
@@ -532,7 +536,7 @@ void CairoTextRender::ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, c
         aI = aNext;
     }
 
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if ENABLE_FUZZERS
     if (__lsan_enable)
         __lsan_enable();
 #endif

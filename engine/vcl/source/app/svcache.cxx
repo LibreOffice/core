@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_fuzzers.h>
+
 #include <vcl/dropcache.hxx>
 #include <svcache.hxx>
 #include <svdata.hxx>
@@ -166,7 +168,9 @@ CacheMemory& CacheMemory::GetMemoryResource()
 //static
 std::pmr::memory_resource& CacheOwner::GetMemoryResource()
 {
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if ENABLE_FUZZERS
+    // The arena allocates in large blocks, which hides individual allocations from the leak
+    // checker. Hand out the default resource so every allocation is one the checker can see.
     return *std::pmr::get_default_resource();
 #else
     return CacheMemory::GetMemoryResource();

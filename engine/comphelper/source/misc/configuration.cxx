@@ -287,7 +287,7 @@ namespace comphelper {
 
 static bool bIsFuzzing = false;
 
-#if !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if !ENABLE_FUZZERS
 bool IsFuzzing()
 {
     return bIsFuzzing;

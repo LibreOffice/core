@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_fuzzers.h>
+
 #include <hintids.hxx>
 #include <hints.hxx>
 
@@ -283,7 +285,9 @@ void SwTextNode::ImplDestroy()
     if (IsOutline() && !m_bLastOutlineState)
         m_bLastOutlineState = true;
 
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    // ResetAttr is expensive, and during document destruction its result is discarded. Skipping it
+    // there keeps a large document inside the fuzzer timeout.
+#if ENABLE_FUZZERS
     if (!GetDoc().IsInDtor())
 #endif
     {

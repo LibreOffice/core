@@ -11,6 +11,7 @@
 #define INCLUDED_COMPHELPER_CONFIGURATION_HXX
 
 #include <sal/config.h>
+#include <config_fuzzers.h>
 
 #include <optional>
 #include <string_view>
@@ -185,7 +186,7 @@ private:
 // Avoid using the config layer and rely on defaults which is only useful
 // for special test tool targets (typically fuzzing) where start-up speed
 // is of the essence
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+#if ENABLE_FUZZERS
 constexpr bool IsFuzzing() { return true; }
 #else
 COMPHELPER_DLLPUBLIC bool IsFuzzing();
