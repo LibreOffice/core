@@ -2006,13 +2006,11 @@ class Menubar extends window.L.Control {
 	}
 
 	/**
-	 * Creates a new document when the file icon is clicked.
-	 * @param e - The event data.
+	 * Asks the integration to create a new document of the same type.
 	 */
-	private _createDocument(e: any): void {
-		var self = e.data.self;
-		var docType = self._map.getDocType();
-		self._map.fire('postMessage', {msgId: 'UI_CreateFile', args: {DocumentType: docType}});
+	private _createDocument(): void {
+		const docType = this._map.getDocType();
+		this._map.fire('postMessage', {msgId: 'UI_CreateFile', args: {DocumentType: docType}});
 	}
 
 	/**
@@ -2847,9 +2845,7 @@ class Menubar extends window.L.Control {
 			if (this._menubarCont != null)
 				this._menubarCont.insertBefore(liItem, this._menubarCont.firstChild);
 
-			const $docLogo = $(aItem);
-			$docLogo.bind('click', {self: this}, this._createDocument);
-			$docLogo.bind('click', this._createDocument.bind(this));
+			aItem.addEventListener('click', () => this._createDocument());
 		}
 	}
 
