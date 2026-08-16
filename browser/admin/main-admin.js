@@ -34,6 +34,9 @@ global._ = function (string) {
 	return string.toLocaleString();
 };
 
+// Defines global._n() on top of the string lookup installed above.
+require('../js/plural.js');
+
 global.l10nstrings = require('./admin.strings.js');
 
 global.d3 = require('d3');

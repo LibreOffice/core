@@ -50,5 +50,6 @@
 /// <reference path="./Shortcuts.test.ts" />
 /// <reference path="./VectorPrimitiveRenderer.test.ts" />
 /// <reference path="./InternUtil.test.ts" />
+/// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />
 // NOTE: reference new tests here ...

@@ -14,7 +14,7 @@
  * PresenterConsole
  */
 
-/* global app SlideShow _ LOUtil DOMPurify */
+/* global app SlideShow _ _n LOUtil DOMPurify */
 
 class PresenterConsole {
 	constructor(map, presenter) {
@@ -1655,7 +1655,7 @@ class PresenterConsole {
 
 		if (repeat > 0) {
 			ctx.fillText(
-				_('Repeat in {0} seconds').replace('{0}', repeat),
+				_n('Repeat in %n second', 'Repeat in %n seconds', repeat),
 				width / 2,
 				height / 2,
 				Math.max(0, width - 20),

@@ -12,7 +12,7 @@
  * window.L.Control.PartsPreview
  */
 
-/* global _ app $ Hammer _UNO cool JSDialog buildSlideDragGhost */
+/* global _ _n app $ Hammer _UNO cool JSDialog buildSlideDragGhost */
 window.L.Control.PartsPreview = window.L.Control.extend({
 	options: {
 		fetchThumbnail: true,
@@ -1061,9 +1061,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				break;
 			case 'removeSectionAndSlides': {
 				var n = section.slideCount;
-				var msg = _('Delete section "%1" and its %2 slide(s)?')
-					.replace('%1', section.name)
-					.replace('%2', String(n));
+				var msg = _n(
+					'Delete section "%1" and its %n slide?',
+					'Delete section "%1" and its %n slides?',
+					n
+				).replace('%1', section.name);
 				app.map.uiManager.showInfoModal(
 					'remove-section-slides-modal',
 					_('Delete'),

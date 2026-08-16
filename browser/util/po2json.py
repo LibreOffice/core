@@ -36,6 +36,14 @@ if options.destfile != '' and len(args) != 1:
 
 paramFix = re.compile("(\\(([0-9])\\))")
 
+# Plural entries are keyed the way a MO file keys them - the two source strings
+# joined by a NUL - and hold the translated forms joined by NUL as well. The
+# language's plural rule rides along under a reserved NUL key. A NUL can never
+# occur in a msgid, so neither key can collide with a real string. See
+# browser/js/plural.js, which does the lookup for _n().
+NUL = "\u0000"
+RULE_KEY = NUL + "plural-forms"
+
 for srcfile in args:
 
     destfile = os.path.splitext(srcfile)[0] + ".json"
@@ -52,6 +60,29 @@ for srcfile in args:
                       encoding="utf-8",
                       wrapwidth=-1)
     for entry in po.translated_entries():
+        if entry.msgid_plural:
+            forms = [entry.msgstr_plural[key]
+                     for key in sorted(entry.msgstr_plural, key=int)]
+
+            # Every form is checked against the source it is a form of, so a
+            # bad one drops the whole entry back to the English forms.
+            problems = []
+            for index, form in enumerate(forms):
+                source = entry.msgid if index == 0 else entry.msgid_plural
+                problems += l10n_html_check.check_string(source, form)
+            if problems:
+                sys.stderr.write(
+                    "WARNING: dropping translation with unexpected HTML in %s: %s\n"
+                    "  msgid : %r\n  msgstr: %r\n"
+                    % (srcfile, "; ".join(problems), entry.msgid, forms))
+                continue
+
+            xlate_map[entry.msgid + NUL + entry.msgid_plural] = NUL.join(forms)
+            # Keep a plain lookup of the singular working, in case the same
+            # string is also passed to _() somewhere.
+            xlate_map.setdefault(entry.msgid, forms[0])
+            continue
+
         if entry.msgstr == '':
             continue
 
@@ -68,6 +99,10 @@ for srcfile in args:
             continue
 
         xlate_map[entry.msgid] = entry.msgstr
+
+    plural_forms = po.metadata.get("Plural-Forms", "").strip()
+    if plural_forms:
+        xlate_map[RULE_KEY] = plural_forms
 
     if not os.path.exists(os.path.dirname(destfile)):
         try:

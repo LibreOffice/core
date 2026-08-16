@@ -461,3 +461,5 @@ interface Window {
 
 // For localization
 declare function _(text: string): string;
+// Picks the plural form the language asks for and puts count in place of %n.
+declare function _n(singular: string, plural: string, count: number): string;

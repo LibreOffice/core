@@ -17,7 +17,7 @@
  * text area itself.
  */
 
-/* global app _ */
+/* global app _ _n */
 
 window.L.A11yTextInput = window.L.TextInput.extend({
 	initialize: function() {
@@ -252,7 +252,13 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			eventDescription += _('Out of table') + '. ';
 		}
 		for (i = 0; i < inList.length; i++) {
-			eventDescription += _('Table with {0} rows and {1} columns').replace('{0}', inList[i].rowCount).replace('{1}', inList[i].colCount) + '. ';
+			// One msgid can carry only one plural count, so the row and the column
+			// count are separate plural entries that the sentence below composes.
+			const rows = _n('%n row', '%n rows', inList[i].rowCount);
+			const columns = _n('%n column', '%n columns', inList[i].colCount);
+			// TRANSLATORS: {0} is a row count, {1} a column count, both already
+			// TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
+			eventDescription += _('Table with {0} and {1}').replace('{0}', rows).replace('{1}', columns) + '. ';
 		}
 		if (this._lastRowIndex !== row || this._lastRowSpan !== rowSpan) {
 			this._lastRowIndex = row;

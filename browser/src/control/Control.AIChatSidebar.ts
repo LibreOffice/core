@@ -2352,77 +2352,65 @@ namespace cool {
 				}
 			}
 
-			const one = (n: number, singular: string, plural: string): string =>
-				n === 1 ? singular : plural.replace('%1', String(n));
 			const parts: string[] = [];
 
 			const inserts =
 				(counts['InsertMasterSlide'] || 0) +
 				(counts['InsertMasterSlideByName'] || 0);
 			if (inserts)
-				parts.push(one(inserts, _('insert 1 slide'), _('insert %1 slides')));
+				parts.push(_n('insert %n slide', 'insert %n slides', inserts));
 			if (counts['DeleteSlide'])
 				parts.push(
-					one(
-						counts['DeleteSlide'],
-						_('delete 1 slide'),
-						_('delete %1 slides'),
-					),
+					_n('delete %n slide', 'delete %n slides', counts['DeleteSlide']),
 				);
 			if (counts['DuplicateSlide'])
 				parts.push(
-					one(
+					_n(
+						'duplicate %n slide',
+						'duplicate %n slides',
 						counts['DuplicateSlide'],
-						_('duplicate 1 slide'),
-						_('duplicate %1 slides'),
 					),
 				);
 			if (counts['MoveSlide'])
-				parts.push(
-					one(counts['MoveSlide'], _('move 1 slide'), _('move %1 slides')),
-				);
+				parts.push(_n('move %n slide', 'move %n slides', counts['MoveSlide']));
 			if (counts['RenameSlide'])
 				parts.push(
-					one(
-						counts['RenameSlide'],
-						_('rename 1 slide'),
-						_('rename %1 slides'),
-					),
+					_n('rename %n slide', 'rename %n slides', counts['RenameSlide']),
 				);
 			const layouts =
 				(counts['ChangeLayout'] || 0) + (counts['ChangeLayoutByName'] || 0);
 			if (layouts)
-				parts.push(one(layouts, _('change 1 layout'), _('change %1 layouts')));
+				parts.push(_n('change %n layout', 'change %n layouts', layouts));
 			if (counts['SetText'])
 				parts.push(
-					one(
+					_n(
+						'set text in %n place',
+						'set text in %n places',
 						counts['SetText'],
-						_('set text in 1 place'),
-						_('set text in %1 places'),
 					),
 				);
 			if (counts['EditTextObject'])
 				parts.push(
-					one(
+					_n(
+						'format text in %n place',
+						'format text in %n places',
 						counts['EditTextObject'],
-						_('format text in 1 place'),
-						_('format text in %1 places'),
 					),
 				);
 			if (counts['GenerateImage'])
 				parts.push(
-					one(
+					_n(
+						'generate %n image',
+						'generate %n images',
 						counts['GenerateImage'],
-						_('generate 1 image'),
-						_('generate %1 images'),
 					),
 				);
 			if (counts['UnoCommand'])
 				parts.push(
-					one(
+					_n(
+						'run %n document command',
+						'run %n document commands',
 						counts['UnoCommand'],
-						_('run 1 document command'),
-						_('run %1 document commands'),
 					),
 				);
 			const described = [
@@ -2451,11 +2439,10 @@ namespace cool {
 				// A command these descriptions do not know is reported by its
 				// raw name, so the badge cannot under-describe the change.
 				parts.push(
-					one(
-						counts[base],
-						_('run 1 %2 command'),
-						_('run %1 %2 commands'),
-					).replace('%2', base),
+					_n('run %n %1 command', 'run %n %1 commands', counts[base]).replace(
+						'%1',
+						base,
+					),
 				);
 			}
 

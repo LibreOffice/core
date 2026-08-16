@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/// <reference path="../js/plural.js" />
 /// <reference path="../src/dom/JSX.ts" />
 /// <reference path="../src/app/DocUtil.ts" />
 /// <reference path="../src/app/LocaleService.ts" />

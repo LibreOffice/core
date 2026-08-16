@@ -72,56 +72,94 @@ def unescape(s):
     return "".join(out)
 
 
+# Plural entries are keyed the way browser/js/plural.js looks them up: the two
+# source strings joined by a NUL, mapping to the translated forms joined by NUL,
+# with the language's plural rule under a reserved NUL key. See util/po2json.py,
+# which does the same for the strings of the main UI.
+NUL = "\u0000"
+RULE_KEY = NUL + "plural-forms"
+
+_STRING = r"""(['"])((?:\\.|(?!\1).)*?)\1"""
+
 # Matches _('...') / _("...") with escaped quotes inside.
-_CALL_RE = re.compile(r"""_\(\s*(['"])((?:\\.|(?!\1).)*?)\1""", re.DOTALL)
+_CALL_RE = re.compile(r"""_\(\s*""" + _STRING, re.DOTALL)
+
+# Matches _n('...', '...', count), the plural form of the same.
+_PLURAL_CALL_RE = re.compile(
+    r"""(?<![\w$])_n\(\s*""" + _STRING + r"""\s*,\s*"""
+    + _STRING.replace(r"\1", r"\3"), re.DOTALL)
 
 
 def collect_msgids(base):
-    """The set of source strings the Options dialog passes to _()."""
+    """The set of source strings the Options dialog passes to _() and _n()."""
     ids = set()
     for rel in SETTINGS_SOURCES:
         with open(os.path.join(base, rel), encoding="utf-8") as f:
             text = f.read()
         for _quote, raw in _CALL_RE.findall(text):
             ids.add(unescape(raw))
+        for _q1, singular, _q2, plural in _PLURAL_CALL_RE.findall(text):
+            ids.add(unescape(singular) + NUL + unescape(plural))
     return ids
 
 
 def parse_po(path):
-    """Minimal PO reader: msgid -> msgstr, ignoring plurals and contexts."""
+    """Minimal PO reader: msgid -> msgstr, ignoring contexts.
+
+    Plural entries and the header's plural rule are stored the way
+    browser/js/plural.js looks them up.
+    """
     table = {}
-    msgid = ""
-    msgstr = ""
+    entry = {}
     state = None
 
     def piece(line, keyword):
         return unescape(line[len(keyword):].strip().strip('"'))
 
+    def flush():
+        msgid = entry.get("msgid", "")
+        if "msgid_plural" in entry:
+            forms = [entry[key] for key in sorted(
+                (key for key in entry if key.startswith("msgstr[")),
+                key=lambda key: int(key[len("msgstr["):-1]))]
+            if forms and all(forms):
+                table[msgid + NUL + entry["msgid_plural"]] = NUL.join(forms)
+                table.setdefault(msgid, forms[0])
+        elif msgid:
+            if entry.get("msgstr"):
+                table[msgid] = entry["msgstr"]
+        elif entry.get("msgstr"):
+            # The header entry, whose msgstr carries the plural rule.
+            for header in entry["msgstr"].split("\n"):
+                if header.startswith("Plural-Forms:"):
+                    table[RULE_KEY] = header[len("Plural-Forms:"):].strip()
+        entry.clear()
+
     with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.rstrip("\n")
-            if line.startswith("msgid "):
-                if state and msgid:
-                    table[msgid] = msgstr
-                msgid = piece(line, "msgid ")
-                msgstr = ""
-                state = "id"
+            if line.startswith("#"):
+                continue
+            keyword = None
+            if line.startswith("msgid_plural "):
+                keyword = "msgid_plural"
+            elif line.startswith("msgid "):
+                keyword = "msgid"
             elif line.startswith("msgstr "):
-                msgstr = piece(line, "msgstr ")
-                state = "str"
+                keyword = "msgstr"
+            elif line.startswith("msgstr[") and "] " in line:
+                keyword = line[:line.index("]") + 1]
+
+            if keyword:
+                entry[keyword] = piece(line, keyword + " ")
+                state = keyword
             elif line.startswith('"'):
-                if state == "id":
-                    msgid += unescape(line.strip().strip('"'))
-                elif state == "str":
-                    msgstr += unescape(line.strip().strip('"'))
+                if state:
+                    entry[state] += unescape(line.strip().strip('"'))
             elif line.strip() == "":
-                if state and msgid:
-                    table[msgid] = msgstr
-                msgid = ""
-                msgstr = ""
+                flush()
                 state = None
-    if state and msgid:
-        table[msgid] = msgstr
+    flush()
     return table
 
 
@@ -131,7 +169,8 @@ def localizations(base, lang, allow):
     if not os.path.exists(path):
         return {}
     table = parse_po(path)
-    return {k: table[k] for k in allow if table.get(k)}
+    wanted = set(allow) | {RULE_KEY}
+    return {k: table[k] for k in wanted if table.get(k)}
 
 
 def main():

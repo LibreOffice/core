@@ -117,8 +117,8 @@ MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
 ENGINE_WORKDIR = @LO_PATH@/../workdir
 
 # The mocha bundle compiles the files that mocha_tests/sources.ts references out
-# of src/, so a change to any source file there must rebuild it.
-MOCHA_SRC_DEPS = $(shell find $(srcdir)/src \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
+# of src/ and js/, so a change to any source file there must rebuild it.
+MOCHA_SRC_DEPS = $(shell find $(srcdir)/src $(srcdir)/js \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
 
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
@@ -321,6 +321,7 @@ NODE_MODULES_JS =\
 
 COOL_LIBS_JS =\
 	Autolinker.js \
+	plural.js \
 	sanitize-url.js
 
 if !ENABLE_MOBILEAPP
@@ -1110,6 +1111,7 @@ $(DIST_FOLDER)/images/templates/preview/%.png: $(srcdir)/images/templates/previe
 	@cp $< $@
 
 $(DIST_FOLDER)/admin-bundle.js: $(COOL_ADMIN_DST) \
+	$(srcdir)/admin/main-admin.js $(srcdir)/js/plural.js \
 	$(INTERMEDIATE_DIR)/admin-src.js
 	@NODE_PATH=$(abs_builddir)/node_modules:$(INTERMEDIATE_DIR) $(NODE) node_modules/browserify/bin/cmd.js -g browserify-css $(if $(IS_SEPARATE),--debug,) -o $@ $(srcdir)/admin/main-admin.js
 	$(if $(IS_SEPARATE),,@$(NODE) node_modules/esbuild-wasm/bin/esbuild --minify --charset=utf8 --outfile=$@.tmp $@ && mv $@.tmp $@)
@@ -1125,7 +1127,7 @@ eslint.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	@touch $@
 
 prettier.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
-	$(call run_prettier_check,--debug-check $(srcdir)/src $(srcdir)/js/global.js)
+	$(call run_prettier_check,--debug-check $(srcdir)/src $(srcdir)/js/global.js $(srcdir)/js/plural.js)
 	@touch $@
 
 # Generate the localization map files from Langs.conf (the single source of
@@ -1206,7 +1208,9 @@ $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist: $(COOL_JS_DST)
 	@for file in $^; do echo "$$file" >> $@.tmp; done
 	$(QUIET_CMP) if cmp -s $@.tmp $@; then rm $@.tmp; else mv $@.tmp $@; fi
 
-$(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist
+# Makefile is a prerequisite because the list also names COOL_LIBS_JS and the
+# node modules, which the jslist does not track.
+$(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist Makefile
 	$(foreach file,$(L10N_ALL_JS_ENTRY) $(NODE_MODULES_JS) $(COOL_LIBS_JS) $(patsubst %.tsx,%.js,$(patsubst %.ts,%.js,$(patsubst $(DIST_FOLDER)/src/%,src/%,$(COOL_JS_LST)))), $(shell echo -n $(file), >> $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp))
 	@truncate $(if $(filter Darwin FreeBSD,$(shell uname -s)),-s -1,--size=-1) $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp
 	@mv $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4
@@ -1447,7 +1451,7 @@ libs:
 	&& $(call npm_source,$(NODE_MODULES_SRC))
 
 pot:
-	xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --output=po/templates/cool-ui.pot \
+	xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --keyword=_n:1,2 --add-comments=TRANSLATORS: --output=po/templates/cool-ui.pot \
 		admin/admin.strings.js \
 		admin/src/AdminClusterOverview.js \
 		admin/src/AdminSocketAnalytics.js \
