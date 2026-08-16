@@ -15,7 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Translate Toolkit 2.5.0\n"
 
 #: admin/admin.strings.js:15
@@ -1906,66 +1907,77 @@ msgid "insert %n slide"
 msgid_plural "insert %n slides"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2403
 msgid "generate %n image"
 msgid_plural "generate %n images"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
@@ -4890,6 +4902,7 @@ msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6693,12 +6706,14 @@ msgid "%n row"
 msgid_plural "%n rows"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
@@ -7142,6 +7157,7 @@ msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
