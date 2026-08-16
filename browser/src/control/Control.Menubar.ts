@@ -2845,7 +2845,15 @@ class Menubar extends window.L.Control {
 			if (this._menubarCont != null)
 				this._menubarCont.insertBefore(liItem, this._menubarCont.firstChild);
 
-			aItem.addEventListener('click', () => this._createDocument());
+			/**!
+			 * Only the desktop applications have a backstage view.
+			 * Everywhere else the icon asks the integration to create
+			 * a file of the same type.
+			 */
+			if (window.mode.isCODesktop())
+				app.LOUtil.openTemplatesFromDocumentLogo(aItem, this._map);
+			else
+				aItem.addEventListener('click', () => this._createDocument());
 		}
 	}
 

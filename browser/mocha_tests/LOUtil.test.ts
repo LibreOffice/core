@@ -184,4 +184,44 @@ describe('LOUtil', function () {
 		});
 	});
 
+	describe('openTemplatesFromDocumentLogo()', function () {
+
+		function setUpLogo() {
+			const logo = document.createElement('a');
+			const tabsShown: string[] = [];
+			const map = {
+				backstageView: {
+					show: function (tab: string) { tabsShown.push(tab); },
+				},
+			};
+			LOUtil.openTemplatesFromDocumentLogo(logo, map);
+			return { logo: logo, tabsShown: tabsShown };
+		}
+
+		it('the icon takes keyboard focus and is announced as a button', function () {
+			const setup = setUpLogo();
+			nodeassert.strictEqual('button', setup.logo.getAttribute('role'));
+			nodeassert.strictEqual('0', setup.logo.getAttribute('tabindex'));
+		});
+
+		it('a click opens the templates', function () {
+			const setup = setUpLogo();
+			setup.logo.click();
+			nodeassert.deepEqual(['new'], setup.tabsShown);
+		});
+
+		it('Enter and Space open the templates', function () {
+			const setup = setUpLogo();
+			setup.logo.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter' }));
+			setup.logo.dispatchEvent(new window.KeyboardEvent('keydown', { key: ' ' }));
+			nodeassert.deepEqual(['new', 'new'], setup.tabsShown);
+		});
+
+		it('any other key leaves the document on screen', function () {
+			const setup = setUpLogo();
+			setup.logo.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'a' }));
+			nodeassert.deepEqual([], setup.tabsShown);
+		});
+	});
+
 });

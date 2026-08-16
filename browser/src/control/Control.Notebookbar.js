@@ -118,6 +118,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 				docLogo.setAttribute('data-cooltip', iconTooltip);
 			}
 			app.LOUtil.syncDocumentLogoAriaLabel(docLogo);
+			// Only the desktop applications have a backstage view.
+			if (window.mode.isCODesktop())
+				app.LOUtil.openTemplatesFromDocumentLogo(docLogo, this.map);
 			window.L.control.attachTooltipEventListener(docLogo, this.map);
 			$('.main-nav').prepend(docLogoHeader);
 

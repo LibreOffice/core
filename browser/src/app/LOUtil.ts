@@ -1059,6 +1059,33 @@ class LOUtil {
 		});
 	}
 
+	/**!
+	 * Turn the file type icon into a control that opens the templates
+	 * of the running application, which the backstage view filters down
+	 * to the type of the open document. The icon is an anchor without an
+	 * href, which the browser neither focuses nor activates from the
+	 * keyboard, so the role, the tab stop and the Enter and Space keys
+	 * are all set up here.
+	 */
+	public static openTemplatesFromDocumentLogo(
+		docLogo: HTMLElement,
+		map: any,
+	): void {
+		docLogo.setAttribute('role', 'button');
+		docLogo.setAttribute('tabindex', '0');
+
+		const openTemplates = () => {
+			if (map && map.backstageView) map.backstageView.show('new');
+		};
+
+		docLogo.addEventListener('click', openTemplates);
+		docLogo.addEventListener('keydown', (event: KeyboardEvent) => {
+			if (event.key !== 'Enter' && event.key !== ' ') return;
+			event.preventDefault();
+			openTemplates();
+		});
+	}
+
 	public static getDocumentLogoClass(docType: string) {
 		let iconClass: string;
 		let iconTooltip: string;

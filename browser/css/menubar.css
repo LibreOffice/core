@@ -40,6 +40,15 @@
 	background-position: center;
 }
 
+/**!
+ * The icon is an anchor without an href, which the browser draws with
+ * the plain arrow. The hand pointer comes from here, and the role picks
+ * out the case where the icon is clickable.
+ */
+.document-logo[role='button'] {
+	cursor: pointer;
+}
+
 .document-title {
 	white-space: nowrap;
 	display: flex;
