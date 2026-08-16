@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Collabora Online - Help\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-15 06:51+0000\n"
+"PO-Revision-Date: 2026-08-16 09:38+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
 "online/help/sl/>\n"
@@ -168,6 +168,9 @@ msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Premaknite pozornost na naslednjo področje programa (menijska vrstica, "
+"vrstica za formule, dokument, stranska vrstica, zavihki delovnih listov, "
+"vrstica stanja)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
@@ -175,7 +178,7 @@ msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Premaknite pozornost na predhodno področje programa"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 msgid ""
@@ -1396,6 +1399,9 @@ msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Ob izbranem celotnem stolpcu ali vrstici odpre kontekstni meni ustrezne "
+"glave stolpca ali vrstice (vstavi, izbriši, širina ali višina, skrij in "
+"drugo)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
