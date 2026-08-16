@@ -212,6 +212,9 @@ const onMessage = (e) => {
 	}
 };
 
+// Zoom keys as per browsersetting.json.
+const ZOOM_SETTING_KEYS: Array<string> = ['smartZoom', 'defaultZoom'];
+
 /* 
 	`defaultZoom` - index of the default zoom level in ZOOM_LEVELS (when smartZoom is set to false).
 				  - used as `index+1` internally as the fist zoom level in the list has the zoom value of 1)
@@ -691,6 +694,7 @@ class SettingIframe {
 	private _visibleSections: Set<Element> = new Set();
 
 	private _browserSettingSection: HTMLElement | null = null;
+	private _zoomSection: HTMLElement | null = null;
 	private _xcuSection: HTMLElement | null = null;
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
@@ -1295,6 +1299,8 @@ class SettingIframe {
 			// from the Notebookbar, so hide both toggles here.
 			if ((key === 'compactMode' || key === 'darkTheme') && isCODesktop)
 				continue;
+			// The zoom settings have a section of their own.
+			if (ZOOM_SETTING_KEYS.includes(key)) continue;
 			// Include:
 			// - plain booleans
 			// - objects that have a customType (like compactToggle and defaultZoom)
@@ -1343,8 +1349,43 @@ class SettingIframe {
 			}
 		}, 0);
 
-		this.installSettingsHooks();
+		this.generateZoomSettingsUI(sharedConfigsContainer);
+
 		this.addSubElements();
+		this.installSettingsHooks();
+	}
+
+	/**!
+	 * The control ids keep the common- prefix, since that prefix is the name the
+	 * setting has in browsersetting.json.
+	 */
+	private generateZoomSettingsUI(sharedConfigsContainer: HTMLElement): void {
+		const zoomContainer = document.createElement('div');
+		zoomContainer.id = 'zoom-behaviour';
+		zoomContainer.className = 'section';
+		zoomContainer.appendChild(this.createHeading(_('Zoom Behaviour')));
+
+		zoomContainer.appendChild(
+			this.createCheckboxToggle(
+				'smartZoom',
+				this.browserSettingOptions.smartZoom,
+				'common-smartZoom',
+				this.browserSettingOptions,
+			),
+		);
+		zoomContainer.appendChild(
+			this.renderZoomDropdown(
+				'defaultZoom',
+				this.browserSettingOptions.defaultZoom,
+				'common-defaultZoom',
+			),
+		);
+
+		this._zoomSection = this.mountConfigSection(
+			sharedConfigsContainer,
+			this._zoomSection,
+			zoomContainer,
+		);
 	}
 
 	// A checkbox that carries a line of explanation stacks the two, with the
@@ -1846,8 +1887,13 @@ class SettingIframe {
 		);
 	}
 
+	/**!
+	 * Reads the Interface Settings back off the page. They are shown in two
+	 * sections, the Interface Settings and the Zoom Behaviour beside it.
+	 */
 	private collectBrowserSettingsFromUI(): void {
 		this.collectBrowserSettingsFromSection(this._browserSettingSection);
+		this.collectBrowserSettingsFromSection(this._zoomSection);
 	}
 
 	private collectBrowserSettingsFromSection(
@@ -3291,6 +3337,11 @@ class SettingIframe {
 					this._browserSettingSection,
 					'browser-setting',
 					_('Interface Settings'),
+				);
+				this._zoomSection = this.createEmptySection(
+					this._zoomSection,
+					'zoom-behaviour',
+					_('Zoom Behaviour'),
 				);
 			} else {
 				if (data.browsersetting && data.browsersetting.length > 0) {
