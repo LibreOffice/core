@@ -705,7 +705,7 @@ void AlignmentTabPage::UpdateEnableControls()
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
     bool bHorDist  = (nHorAlign == ALIGNDLG_HORALIGN_DISTRIBUTED);
 
-    // indent edit field only for left alignment
+    // indent edit field only for left or right alignment
     m_xFtIndent->set_sensitive( bHorLeft || bHorRight );
     m_xEdIndent->set_sensitive( bHorLeft || bHorRight );
 
