@@ -7469,9 +7469,13 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionTakesOperandWhole)
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(-myrange)"_ustr,
                          resolveAndPrintAsOoxml(*m_pDoc, u"-myrange"_ustr));
 
-    // An inline matrix reaches the writer as one push, brackets and all.
+    // An inline matrix reaches the writer as one push, brackets and all. Its column
+    // separator is a comma, which does not turn a parenthesized matrix into a union
+    // list, so the group's own pair still serves as the wrapper's.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE({1,2})"_ustr,
                          resolveAndPrintAsOoxml(*m_pDoc, u"{1;2}"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE({1,2})"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@({1;2})"_ustr));
 
     // Whitespace between the @ and its operand goes inside the wrapper.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE( A1:A3)"_ustr,
@@ -7550,6 +7554,98 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeBindsTighterThanSignAndMarker
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionSavesAsParenthesizedListInOoxml)
+{
+    // OOXML spells the union operator with the same comma that separates arguments,
+    // so a union expression takes parentheses of its own to stay one argument.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"(A1,B2)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1~B2"_ustr));
+    // One pair encloses the whole list, however many parts it has.
+    CPPUNIT_ASSERT_EQUAL(u"(A1,B2,C3)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1~B2~C3"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"SUM((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM(A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"INDEX((A1:B3,D1:E3),1,1,2)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"INDEX(A1:B3~D1:E3;1;1;2)"_ustr));
+    // AND and OR open an argument list too, although their opcodes are operators.
+    CPPUNIT_ASSERT_EQUAL(u"AND((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"AND(A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"OR((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"OR(A1~B2)"_ustr));
+
+    // A sign applies to the whole union, so the list's parentheses sit inside it.
+    CPPUNIT_ASSERT_EQUAL(u"-(A1,B2)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"-A1~B2"_ustr));
+    // The list ends where an operator of looser binding follows.
+    CPPUNIT_ASSERT_EQUAL(u"(1+(A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(1+A1~B2)"_ustr));
+
+    // Not doubling the pair is what holds a formula's shape over round trips.
+    CPPUNIT_ASSERT_EQUAL(u"(A1,B2)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"(A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SUM((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM((A1~B2))"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapper)
+{
+    // The union binds tighter than the @, so the parenthesized list sits inside the
+    // _xlfn.SINGLE wrapper and keeps the wrapper to one argument.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@A1~B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@(A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SUM(_xlfn.SINGLE((A1,B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM(@A1~B2)"_ustr));
+
+    // With the @ inside the group, one pair of parentheses cannot serve both, so
+    // the list takes a pair of its own.
+    CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE((A1,B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(@A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SUM((_xlfn.SINGLE((A1,B2))))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM((@A1~B2))"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
+{
+    // The list's opening parenthesis moves the text behind it along, and a wrapper
+    // spliced afterwards still lands where its own operand begins.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScSingleRefData aFirst;
+    aFirst.InitAddress(ScAddress(0, 0, 0));
+    ScSingleRefData aSecond;
+    aSecond.InitAddress(ScAddress(1, 1, 0));
+
+    // An @ behind the union operator, a shape no parse of a formula produces.
+    ScTokenArray aMarkerInList(*m_pDoc);
+    aMarkerInList.AddSingleReference(aFirst);
+    aMarkerInList.AddOpCode(ocUnion);
+    aMarkerInList.AddOpCode(ocSingleValue);
+    aMarkerInList.AddSingleReference(aSecond);
+
+    CPPUNIT_ASSERT_EQUAL(u"($A$1,_xlfn.SINGLE($B$2))"_ustr,
+                         printAsOoxml(*m_pDoc, aMarkerInList, ScAddress(1, 0, 0)));
+
+    // A percent sign in front of the union operator, likewise. The sign follows the
+    // first part of the list, so the list still begins in front of that part.
+    ScTokenArray aPercentInList(*m_pDoc);
+    aPercentInList.AddSingleReference(aFirst);
+    aPercentInList.AddOpCode(ocPercentSign);
+    aPercentInList.AddOpCode(ocUnion);
+    aPercentInList.AddSingleReference(aSecond);
+
+    CPPUNIT_ASSERT_EQUAL(u"($A$1%,$B$2)"_ustr,
+                         printAsOoxml(*m_pDoc, aPercentInList, ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testWrappersDroppedFromTextThatDidNotParse)
 {
     // Text that no parse could read cannot take parentheses, so every wrapper around
@@ -7578,6 +7674,16 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testWrappersDroppedFromTextThatDidNotParse)
     aSpilled.AddOpCode(ocSpill);
 
     CPPUNIT_ASSERT_EQUAL(u"PW value"_ustr, printAsOoxml(*m_pDoc, aSpilled, ScAddress(1, 0, 0)));
+
+    // A union list that reaches such text goes without its parentheses too.
+    ScTokenArray aUnion(*m_pDoc);
+    ScSingleRefData aReference;
+    aReference.InitAddress(ScAddress(0, 0, 0));
+    aUnion.AddSingleReference(aReference);
+    aUnion.AddOpCode(ocUnion);
+    aUnion.AddBad(u"PW value"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"$A$1,PW value"_ustr, printAsOoxml(*m_pDoc, aUnion, ScAddress(1, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }

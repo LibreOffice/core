@@ -1401,6 +1401,43 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOnSpilledRangeXlsxExport)
                        u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testReferenceUnionXlsxRoundTrip)
+{
+    // OOXML spells the union operator with the same comma that separates
+    // arguments, so a union saves as a parenthesized list that stays one
+    // argument and survives the round trip.
+
+    // F1:F3 hold =SUM(A1~B2), =AREAS(A1:A2~B1:B2) and
+    // =INDEX(A1:B3~D1:E3;1;1;2).
+    createScDoc("fods/reference-union.fods");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(5, 2, 0)));
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='F1']/x:f",
+                       u"SUM((A1,B2))");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[@r='F2']/x:f",
+                       u"AREAS((A1:A2,B1:B2))");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[@r='F3']/x:f",
+                       u"INDEX((A1:B3,D1:E3),1,1,2)");
+
+    // On reload each union is still one argument, now inside the parentheses
+    // the save gave it, and the values are unchanged.
+    saveAndReload(TestFilter::XLSX);
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"=SUM((A1~B2))"_ustr, pDoc->GetFormula(5, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=AREAS((A1:A2~B1:B2))"_ustr, pDoc->GetFormula(5, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=INDEX((A1:B3~D1:E3),1,1,2)"_ustr, pDoc->GetFormula(5, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(5, 2, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
