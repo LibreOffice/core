@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-03-28 15:08+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
+"PO-Revision-Date: 2026-08-16 11:52+0000\n"
+"Last-Translator: Michal Várady <miko.vaji@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "help/cs/>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
-msgstr ""
+msgstr "Otevřít"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
@@ -97,15 +97,15 @@ msgstr "Tisk (stáhnout jako PDF)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:22-70
 msgid "Print"
-msgstr ""
+msgstr "Tisk"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Najít"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Najít a nahradit"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Otevře místní nabídku u kurzoru nebo vybrané buňky"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
@@ -165,14 +165,16 @@ msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Přesune zaměření na další oblast aplikace (hlavní nabídku, lištu vzorců, "
+"dokument, postranní lištu, karty listů nebo stavový řádek)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Přesune zaměření na předchozí oblast aplikace"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
@@ -1362,7 +1364,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Vybere celý sloupec aktuální buňky."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
@@ -1375,7 +1377,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Vybere celý řádek aktuální buňky."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
@@ -1391,12 +1393,17 @@ msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Otevře místní nabídku zaměřené karty listu (vložení, přejmenování, "
+"odstranění, skrytí, přesunutí a další možnosti)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Je-li vybrán celý sloupec nebo řádek, otevře odpovídající místní nabídku "
+"záhlaví sloupce či řádku (vložení, odstranění, šířka či výška, skrytí a "
+"další možnosti)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1650,7 +1657,7 @@ msgstr "Otevírání, uzavírání, ukládání, tisk a stahování dokumentů"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Otevírání, zavírání, ukládání a tisk dokumentů"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.div.h3:480-5
@@ -1755,6 +1762,11 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> umožňuje snadno a přímočaře "
+"vytvářet a upravovat běžné kancelářské dokumenty, tedy textové dokumenty, "
+"sešity a prezentace, <span class=\"webBasedCOOLOnly\">přímo v prohlížeči.</"
+"span> <span class=\"webBasedCOOLOnly\">Na dokumentu můžete pracovat sami "
+"nebo společně v týmu.</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1856,6 +1868,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Stavový řádek zobrazující číslo stránky, počet slov, režim vkládání, režim "
+"výběru, jazyk, režim úprav, navigaci, přiblížení a vyhledávání"
 
 #: html/cool-help.html%2Bdiv.div.div.p:418-5
 msgid ""
@@ -1923,6 +1937,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Informační lišta s šipkami pro navigaci mezi stránkami, ovládacími prvky "
+"přiblížení a úrovní přiblížení"
 
 #: html/cool-help.html%2Bdiv.div.p:437-5
 msgid ""
@@ -1989,6 +2005,10 @@ msgid ""
 "class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
 ">File</span> menu bar button."
 msgstr ""
+"Chcete-li otevřít dokument, otevřete jej v aplikaci <span "
+"class=\"productname\">{productname}</span> ze správce souborů své platformy "
+"nebo použijte tlačítko <span class=\"ui\">Otevřít</span> na stránce, kterou "
+"zobrazíte tlačítkem <span class=\"ui\">Soubor</span> na hlavní liště nabídek."
 
 #: html/cool-help.html%2Bdiv.div.div.p:458-7
 msgid ""
@@ -1996,6 +2016,9 @@ msgid ""
 "as</span> button on the page shown from the <span class=\"ui\">File</span> "
 "menu bar button."
 msgstr ""
+"Chcete-li dokument uložit v jiném formátu, použijte tlačítko <span "
+"class=\"ui\">Uložit jako</span> na stránce, kterou zobrazíte tlačítkem <span "
+"class=\"ui\">Soubor</span> na hlavní liště nabídek."
 
 #: html/cool-help.html%2Bdiv.div.div.p:463-7
 msgid ""
@@ -2003,12 +2026,19 @@ msgid ""
 "to be saved right away you can use the <span class=\"ui\">Save</span> button "
 "on the page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Dokumenty se automaticky pravidelně ukládají. Chcete-li však dokument uložit "
+"okamžitě, použijte tlačítko <span class=\"ui\">Uložit</span> na stránce, "
+"kterou zobrazíte tlačítkem <span class=\"ui\">Soubor</span> na hlavní liště "
+"nabídek."
 
 #: html/cool-help.html%2Bdiv.div.div.p:470-7
 msgid ""
 "To print the document, use the <span class=\"ui\">Print</span> button on the "
 "page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Chcete-li dokument vytisknout, použijte tlačítko <span class=\"ui\">Tisk</"
+"span> na stránce, kterou zobrazíte tlačítkem <span class=\"ui\">Soubor</"
+"span> na hlavní liště nabídek."
 
 #: html/cool-help.html%2Bdiv.div.div.p:481-5
 msgid ""
@@ -2098,6 +2128,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialogové okno Opravit dokument se seznamem předchozích stavů dokumentu a "
+"sloupci pro typ akce, autora a časové razítko"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:492-5
 msgid ""
@@ -2132,6 +2164,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Překryvná vrstva neaktivního dokumentu se zprávou: Neaktivní dokument – "
+"klepnutím ho znovu načtete a budete moci pokračovat v úpravách"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:498-5
 msgid ""
@@ -2228,6 +2262,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Dialogové okno Průvodce grafem se seznamem typů grafu vlevo, náhledy stylů "
+"grafu a možnostmi 3D zobrazení a tvaru"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2238,6 +2274,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Sloupcový graf se seskupenými sloupci zobrazující data čtyř řádků ve třech "
+"sloupcích"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:524-28
 msgid ""
@@ -2328,6 +2366,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Pole komentáře se jménem autora, datem a textem komentáře zobrazené vedle "
+"dokumentu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:538-5
 msgid ""
@@ -2355,7 +2395,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Text s červeným vlnitým podtržením pod chybně napsaným slovem"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:544-5
 msgid ""
@@ -2401,6 +2441,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Lišta vzorců s odkazem na buňku B1, ikonou průvodce funkcí a vzorcem =SIN(PI"
+"()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:559-5
 msgid ""
@@ -2437,6 +2479,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Dialogové okno Formát buněk na kartě Čísla se seznamem kategorií, možnostmi "
+"formátu, desetinnými místy a kódem formátu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:571-30
 msgid ""
@@ -2475,6 +2519,8 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Rozbalovací nabídka automatického filtru ve sloupci sešitu s řazením, "
+"filtrováním podle barvy či podmínky a zaškrtávacími poli jednotlivých hodnot"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:578-7
 msgid ""
@@ -2511,6 +2557,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Sešit s ovládacími prvky seskupení řádků a sloupců, tlačítky úrovní osnovy a "
+"přepínači pro sbalení a rozbalení"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:587-5
 msgid ""
@@ -2535,6 +2583,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialogové okno Platnost na kartě Kritéria s nastavením Povolit na Seznam a "
+"možnostmi pro prázdné buňky, seznam výběru a hodnoty položek"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:593-7
 msgid ""
@@ -2562,6 +2612,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Rozbalovací seznam v buňce s platnými položkami Apple, Pear, Banana, Kiwi a "
+"Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:598-7
 msgid ""
@@ -2590,6 +2642,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Buňka sešitu s místním oknem komentáře se jménem autora, datem, textem "
+"komentáře a tlačítky Uložit a Zrušit"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:606-5
 msgid ""
@@ -2610,6 +2664,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Výběr sady ikon podmíněného formátování se sadami šipek, kruhů, semaforů, "
+"hvězd, smajlíků a symbolů sloupcového grafu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:615-30
 msgid ""
@@ -2701,6 +2757,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Dialogové okno Odstavec na kartě Odsazení a rozestupy s nastavením odsazení, "
+"rozestupů a řádkování a s náhledem vpravo"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.h4:636-5
 msgid "Handling Tables"
@@ -2724,6 +2782,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Výběr Vložit tabulku s mřížkou pro volbu počtu řádků a sloupců, aktuálně 5 × "
+"3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:641-5
 msgid ""
@@ -2755,6 +2815,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Sledovaná změna zobrazená jako pole komentáře vedle dokumentu se jménem "
+"autora, datem a popisem změny"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:647-5
 msgid ""
@@ -2887,6 +2949,8 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panel vlastností snímku s nastavením formátu, orientace, pozadí a předlohy "
+"snímku a s galerií náhledů rozvržení pod nimi"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:686-30
 msgid ""
@@ -3071,6 +3135,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Dialogové okno Slovník synonym pro slovo company se seznamem alternativ, "
+"například institution, establishment a troupe, a polem Nahradit za"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:737-5
 msgid ""
@@ -3111,6 +3177,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Dialogové okno Počet slov s počtem slov a znaků v aktuálním výběru a v celém "
+"dokumentu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.p:748-5
 msgid ""
@@ -3156,6 +3224,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Dialogové okno Speciální znaky s mřížkou znaků, poli pro hledání a písmo, "
+"vstupy šestnáctkového a desítkového kódu a naposledy použitými a oblíbenými "
+"znaky dole"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:759-7
 msgid ""
@@ -3259,6 +3330,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Dialogové okno Spravovat změny se seznamem sledovaných změn a sloupci Akce, "
+"Autor, Datum a Komentář a s tlačítky Přijmout, Odmítnout, Přijmout vše a "
+"Odmítnout vše"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.h4:780-5
 msgid "How do I set the margins of the document?"
@@ -3293,6 +3367,8 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Dialogové okno Styl stránky na kartě Organizátor s poli pro název stylu, "
+"následující styl, odvození a kategorii a se souhrnem vlastností stránky"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.h4:790-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3450,6 +3526,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialogové okno Import textu se znakovou sadou, národním prostředím, "
+"možnostmi oddělovače a náhledem importovaných dat CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:838-7
 msgid ""
@@ -3558,6 +3636,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Dialogové okno Oblast na kartě Barva s paletou barev, náhledy aktivní a nové "
+"barvy, poli hodnot RGB a oddílem vlastní palety"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.ol.li:879-7
 msgid "Set the properties of the element of the object."
