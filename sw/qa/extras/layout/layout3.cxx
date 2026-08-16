@@ -2766,6 +2766,56 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testQuoVadisFootnoteContinuation)
     assertXPath(pXmlDoc, "//ftn[contains(@symbol, 'SwFootnoteFrame')]", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testLinkPortion)
+{
+    createSwDoc("link.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The hyperlink run must show up as its own text portion with the
+    // expanded text "link".
+    assertXPath(pXmlDoc, "//SwLinePortion[@portion='link']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testPageNumberFieldPortion)
+{
+    createSwDoc("pagenumber.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The page-number field portion must expand to "1".
+    assertXPath(pXmlDoc, "//SwFieldPortion[@expand='1']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testFootnoteBodyPortion)
+{
+    createSwDoc("footnote.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The anchor text in the body paragraph must be laid out correctly.
+    assertXPath(pXmlDoc, "//body/txt//SwLinePortion[@portion='This is a footnote']", 1);
+    // The footnote body text must be laid out in the footnote container.
+    assertXPath(pXmlDoc, "//ftncont/ftn/txt//SwLinePortion[@portion='test']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testRubyPortion)
+{
+    createSwDoc("ruby.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The ruby base/text pair must be formatted as a SwMultiPortion backed
+    // by a SwRubyPortion, with base text "Ruby".
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwRubyPortion')][@portion='Ruby']",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testAsCharShapePortion)
+{
+    createSwDoc("shape.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Shape's SdrObject must survive layout, regardless of container.
+    assertXPath(pXmlDoc, "//SdrObject[@name='Shape 1']", 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
