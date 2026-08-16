@@ -839,6 +839,8 @@ void SvStream::DetectEncoding(size_t maxBytes)
     // by default, let's use the first character set detected
     const UCharsetMatch* match = matches[0];
     constexpr int CONFIDENCE_MIN_SKIP_CHARSETS = 10;
+    // initialize to -1 so we're sure to retrieve an encoding when matchCount != 0
+    int max_confidence = -1;
     for (int i=0; i < matchCount; i++)
     {
         const char* pName = ucsdet_getName(matches[i], &uerr);
@@ -846,13 +848,15 @@ void SvStream::DetectEncoding(size_t maxBytes)
         SAL_INFO("tools.stream",
                 "\tcharacter set name=" << pName
                 << " has a confidence of " << confidence);
-        if (confidence == CONFIDENCE_MIN_SKIP_CHARSETS &&
-             std::find(aSkipCharsets.begin(), aSkipCharsets.end(), pName) != aSkipCharsets.end())
+        if (std::find(aSkipCharsets.begin(), aSkipCharsets.end(), pName) != aSkipCharsets.end())
         {
-            continue;
+            confidence -= CONFIDENCE_MIN_SKIP_CHARSETS;
         }
-        match = matches[i];
-        break;
+        if (confidence > max_confidence)
+        {
+            match = matches[i];
+            max_confidence = confidence;
+        }
     }
 
     const char* pEncodingName = ucsdet_getName(match, &uerr);
