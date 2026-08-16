@@ -305,9 +305,9 @@ KIT_DOC_VIEW_DLLPUBLIC void    kit_doc_view_highlight_all          (KitDocumentV
  * Returns: Selected text. The caller must free the returned buffer after
  * use. Returns null if no document is set.
  */
-KIT_DOC_VIEW_DLLPUBLIC gchar*   kit_doc_view_copy_selection        (KitDocumentView* pDocView,
+KIT_DOC_VIEW_DLLPUBLIC std::string   kit_doc_view_copy_selection  (KitDocumentView* pDocView,
                                                                     const gchar* pMimeType,
-                                                                    gchar** pUsedMimeType);
+                                                                    std::string* pUsedMimeType);
 
 /**
  * kit_doc_view_paste:

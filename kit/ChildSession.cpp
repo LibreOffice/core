@@ -1674,10 +1674,7 @@ std::string ChildSession::getTextSelectionInternal(const std::string& mimeType)
 {
     getLOKitDocument()->setView(_viewId);
 
-    LOKitHelper::ScopedString textSelection(getLOKitDocument()->getTextSelection(mimeType.c_str(), nullptr));
-
-    std::string str(textSelection ? textSelection.get() : "");
-    return str;
+    return getLOKitDocument()->getTextSelection(mimeType.c_str(), nullptr);
 }
 
 bool ChildSession::getTextSelection(const StringVector& tokens)

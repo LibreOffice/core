@@ -1229,9 +1229,9 @@ static void doc_setTextSelection (COKitDocument* pThis,
                                   COKitSetTextSelectionType eType,
                                   int nX,
                                   int nY);
-static char* doc_getTextSelection(COKitDocument* pThis,
-                                  const char* pMimeType,
-                                  char** pUsedMimeType);
+static std::string doc_getTextSelection(COKitDocument* pThis,
+                                  std::string_view pMimeType,
+                                  std::string* pUsedMimeType);
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
 static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
                                                       const char* pMimeType,
@@ -1607,7 +1607,7 @@ void COKitDocumentImpl::setTextSelection(COKitSetTextSelectionType eType, int nX
     doc_setTextSelection(this, eType, nX, nY);
 }
 
-char* COKitDocumentImpl::getTextSelection(const char* pMimeType, char** pUsedMimeType)
+std::string COKitDocumentImpl::getTextSelection(std::string_view pMimeType, std::string* pUsedMimeType)
 {
     return doc_getTextSelection(this, pMimeType, pUsedMimeType);
 }
@@ -7116,7 +7116,7 @@ static bool getFromTransferable(
     return true;
 }
 
-static char* doc_getTextSelection(COKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
+static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view pMimeType, std::string* pUsedMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
 
@@ -7127,33 +7127,33 @@ static char* doc_getTextSelection(COKitDocument* pThis, const char* pMimeType, c
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return nullptr;
+        return {};
     }
 
     OString aType
-        = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
+        = !pMimeType.empty() ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
 
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
-        return nullptr;
+        return {};
 
     if (pUsedMimeType) // legacy
     {
-        if (pMimeType)
-            *pUsedMimeType = strdup(pMimeType);
+        if (!pMimeType.empty())
+            *pUsedMimeType = std::string(pMimeType);
         else
-            *pUsedMimeType = nullptr;
+            *pUsedMimeType = {};
     }
 
-    return convertOString(aRet);
+    return std::string(aRet);
 }
 
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis)

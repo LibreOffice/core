@@ -1956,7 +1956,7 @@ struct COKitDocument
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
      * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
      */
-    virtual char* getTextSelection(const char* pMimeType, char** pUsedMimeType) = 0;
+    virtual std::string getTextSelection(std::string_view pMimeType, std::string* pUsedMimeType) = 0;
 
     /**
      * Pastes content at the current cursor position.

@@ -3979,10 +3979,10 @@ kit_doc_view_highlight_all (KitDocumentView* pDocView,
     doSearch(pDocView, pText, false, true);
 }
 
-SAL_DLLPUBLIC_EXPORT gchar*
+SAL_DLLPUBLIC_EXPORT std::string
 kit_doc_view_copy_selection (KitDocumentView* pDocView,
                              const gchar* pMimeType,
-                             gchar** pUsedMimeType)
+                             std::string* pUsedMimeType)
 {
     COKitDocument* pDocument = kit_doc_view_get_document(pDocView);
     if (!pDocument)
@@ -3991,7 +3991,7 @@ kit_doc_view_copy_selection (KitDocumentView* pDocView,
     std::stringstream ss;
     ss << "COKitDocument::getTextSelection('" << pMimeType << "')";
     g_info("%s", ss.str().c_str());
-    return pDocument->getTextSelection(pMimeType, pUsedMimeType);
+    return pDocument->getTextSelection(pMimeType, aUsedMimeType);
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean
