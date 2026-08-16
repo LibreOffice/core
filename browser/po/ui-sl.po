@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-08-15 06:51+0000\n"
+"PO-Revision-Date: 2026-08-16 10:18+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/sl/>\n"
@@ -868,6 +868,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Naložite stisnjeno razširitev kot .zip; njena vsebina (manifest.json, ...) "
+"se razširi na strežniku."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
@@ -1916,6 +1918,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Zahteva je potekla. Rok zapadlosti zahteve lahko povečate v razdelku UI v "
+"nastavitvah."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -2017,7 +2021,7 @@ msgstr "Vsebine izbora ni možno razčleniti"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Izberite oblikovanje ali nadaljujte brez njega:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
@@ -2534,7 +2538,7 @@ msgstr "Vnesite URL strežnika"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Pojavno ime"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
@@ -5139,6 +5143,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Vdelani skript uporablja zastareli API com.sun.star UNO API, za katerega "
+"podpora zna biti odstranjena v prihodnjih izdajah."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
@@ -5435,6 +5441,8 @@ msgstr "Kako želite urejati?"
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Drugi uporabniki si ogledujejo ta dokument. Izberite, kako želite "
+"nadaljevati:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
@@ -5458,7 +5466,7 @@ msgstr "Ohrani ogled krajevne kopije"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Nadaljuj z mojo različico"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
@@ -5466,27 +5474,29 @@ msgstr "Pridruži se skupinskemu urejanju"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Čakanje, da se spremembe shranijo ..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Drugi uporabniki urejajo ta dokument. Izberite, kako želite nadaljevati:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "je začel/a urejati"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 je začel/a urejati"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Še nekdo drug zdaj ureja ta dokument. Izberite, kako želite nadaljevati:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5635,7 +5645,7 @@ msgstr "Preimenovanje ..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Ni možno deliti z drugimi"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6953,7 +6963,7 @@ msgstr "Predstavitev v oknu: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Predstavljanje v drugem oknu"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -7306,11 +7316,11 @@ msgstr "Rumena zamisel"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Dobrodošli v Preglednico"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Dobrodošli v Predstavitev"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
