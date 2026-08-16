@@ -5612,9 +5612,8 @@ msgid "started editing"
 msgstr "mulai mengedit"
 
 #: src/control/Permission.js:538
-#, javascript-format
-msgid "%0 started editing"
-msgstr "%0 mulai mengedit"
+msgid "{0} started editing"
+msgstr "{0} mulai mengedit"
 
 #: src/control/Permission.js:539
 msgid ""

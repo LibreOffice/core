@@ -5629,12 +5629,11 @@ msgstr ""
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr "szerkeszteni kezdett"
+msgstr "elkezdte a szerkesztést"
 
 #: src/control/Permission.js:538
-#, javascript-format
-msgid "%0 started editing"
-msgstr "%0 szerkeszteni kezdett"
+msgid "{0} started editing"
+msgstr "{0} elkezdte a szerkesztést"
 
 #: src/control/Permission.js:539
 msgid ""

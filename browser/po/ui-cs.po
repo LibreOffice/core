@@ -5647,9 +5647,8 @@ msgid "started editing"
 msgstr "nyní upravuje dokument"
 
 #: src/control/Permission.js:538
-#, javascript-format
-msgid "%0 started editing"
-msgstr "%0 nyní upravuje dokument"
+msgid "{0} started editing"
+msgstr "{0} nyní upravuje dokument"
 
 #: src/control/Permission.js:539
 msgid ""

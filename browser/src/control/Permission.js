@@ -535,7 +535,7 @@ window.L.Map.include({
 		this._showCollabJoinDialog(
 			avatar
 				? { name: userName, rest: _('started editing') }
-				: _('%0 started editing').replace('%0', userName),
+				: _('{0} started editing').replace('{0}', userName),
 			_('Someone else is now editing this document. Choose how you\'d like to continue:'),
 			avatar);
 	},

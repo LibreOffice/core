@@ -5675,9 +5675,8 @@ msgid "started editing"
 msgstr "thosaigh ag eagarthóireacht"
 
 #: src/control/Permission.js:538
-#, javascript-format
-msgid "%0 started editing"
-msgstr "Thosaigh %0 ag eagarthóireacht"
+msgid "{0} started editing"
+msgstr "Thosaigh {0} ag eagarthóireacht"
 
 #: src/control/Permission.js:539
 msgid ""
