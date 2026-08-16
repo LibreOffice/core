@@ -7368,8 +7368,12 @@ void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
         UpdateContentFunctionsToolbar();
 
         const int nBaseDepth = m_xTreeView->get_iter_depth(*xIter);
-        for (bool bChild = m_xTreeView->iter_children(*xIter); bChild && m_xTreeView->get_iter_depth(*xIter) > nBaseDepth; bChild = m_xTreeView->iter_next(*xIter))
+        for (bool bChild = m_xTreeView->iter_children(*xIter); bChild; bChild = m_xTreeView->iter_next(*xIter))
         {
+            // iter_next() doesn't stop when starting node's descendants are exhausted -> leave
+            if (m_xTreeView->get_iter_depth(*xIter) <= nBaseDepth)
+                break;
+
             if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
             {
                 const SwPostItField* pPostItField = pPostIt->GetPostItField();
