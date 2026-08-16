@@ -20,6 +20,10 @@
 #include <ParticleSwarmOptimization.hxx>
 
 #include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
+#include <string>
 
 using namespace css;
 
@@ -62,6 +66,30 @@ public:
     static double clampVariable(size_t, double fValue) { return fValue; }
 };
 
+// Seeds the tests solve with. One is drawn per run, so a run stays short while
+// the pool gets covered as runs accumulate.
+constexpr sal_Int32 constTestSeeds[]
+    = { 1, 42, 137, 1009, 4242, 12345, 65537, 271828, 999983, 7654321 };
+
+// The seed this run solves with, drawn once and printed. SC_SOLVER_TEST_SEED
+// forces one, to repeat a run.
+sal_Int32 testSeed()
+{
+    static const sal_Int32 nSeed = [] {
+        const char* pForced = std::getenv("SC_SOLVER_TEST_SEED");
+        const sal_Int32 nPicked
+            = pForced ? sal_Int32(std::atoi(pForced))
+                      : constTestSeeds[std::random_device()() % std::size(constTestSeeds)];
+        std::cerr << "swarm solver tests: random seed " << nPicked << std::endl;
+        return nPicked;
+    }();
+
+    return nSeed;
+}
+
+// The seed as a line of text, so a failure says which run to repeat.
+std::string seedMessage() { return "random seed " + std::to_string(testSeed()); }
+
 class SwarmSolverTest : public UnoApiTest
 {
     void testUnconstrained();
@@ -82,6 +110,20 @@ class SwarmSolverTest : public UnoApiTest
     void testRepeatedSolveResetsState();
     void testControllersUnlockedAfterError();
     void testConstrainedLinearProgram();
+
+    // A solver with this run's seed set.
+    uno::Reference<sheet::XSolver> createSolver()
+    {
+        uno::Reference<sheet::XSolver> xSolver(
+            m_xContext->getServiceManager()->createInstanceWithContext(
+                u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+            uno::UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
+        xPropSet->setPropertyValue(u"RandomSeed"_ustr, cpo::uno::Any(testSeed()));
+
+        return xSolver;
+    }
 
 public:
     SwarmSolverTest()
@@ -119,11 +161,7 @@ void SwarmSolverTest::testUnconstrained()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
 
@@ -142,16 +180,12 @@ void SwarmSolverTest::testUnconstrained()
 
     // test results
     xSolver->solve();
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-    // It happens that the unconstrained test does not find a solution in the
-    // timeframe or number of generations it has available as the search space is
-    // too big and the values might not converge to solution. So for now just run
-    // the test so we know for sure the algorithm is guaranteed to finish
-    // and doesn't cause any seg faults.
-    //CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], .9);
+    // The search reaches the optimum even with nothing constraining it.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), 3.0, aSolution[0], 1E-4);
 }
 
 void SwarmSolverTest::testVariableBounded()
@@ -162,11 +196,7 @@ void SwarmSolverTest::testVariableBounded()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
 
@@ -192,11 +222,11 @@ void SwarmSolverTest::testVariableBounded()
 
     // test results
     xSolver->solve();
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), 3.0, aSolution[0], 1E-5);
 }
 
 void SwarmSolverTest::testResultValueIsTheObjective()
@@ -207,10 +237,7 @@ void SwarmSolverTest::testResultValueIsTheObjective()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
     cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -232,8 +259,8 @@ void SwarmSolverTest::testResultValueIsTheObjective()
 
     xSolver->solve();
 
-    CPPUNIT_ASSERT(xSolver->getSuccess());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-130.0, xSolver->getResultValue(), 1E-4);
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), -130.0, xSolver->getResultValue(), 1E-4);
 }
 
 void SwarmSolverTest::testVariableConstrained()
@@ -244,11 +271,7 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
 
@@ -277,12 +300,12 @@ void SwarmSolverTest::testVariableConstrained()
 
     // test results
     xSolver->solve();
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // The hybrid default reaches the optimum to within a stochastic tolerance.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.741657, aSolution[0], 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), -0.741657, aSolution[0], 1E-4);
 }
 
 void SwarmSolverTest::testTwoVariables()
@@ -293,11 +316,7 @@ void SwarmSolverTest::testTwoVariables()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 5);
 
@@ -329,13 +348,13 @@ void SwarmSolverTest::testTwoVariables()
 
     // test results
     xSolver->solve();
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // FIXME increased the delta to cope with failures seen on jenkins
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.666667, aSolution[0], 1E-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.666667, aSolution[1], 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), 0.666667, aSolution[0], 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), -1.666667, aSolution[1], 1E-4);
 }
 
 void SwarmSolverTest::testMultipleVariables()
@@ -346,11 +365,7 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
     xPropSet->setPropertyValue(u"Integer"_ustr, cpo::uno::Any(true));
@@ -411,12 +426,12 @@ void SwarmSolverTest::testMultipleVariables()
 
     // test results
     xSolver->solve();
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
 #if 0
-    // Disable for now, needs algorithm stability improvements
+    // Disabled: some seeds reach the point below, others stop at 0, 5, 0, 0.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aSolution[0], 1E-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[1], 1E-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[2], 1E-5);
@@ -438,10 +453,7 @@ void SwarmSolverTest::testInfeasibleConstraints()
 
         uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-        uno::Reference<sheet::XSolver> xSolver;
-        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                    uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSolver> xSolver = createSolver();
 
         uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
         xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
@@ -488,10 +500,7 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
 
         uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-        uno::Reference<sheet::XSolver> xSolver;
-        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                    uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSolver> xSolver = createSolver();
 
         uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
         xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
@@ -524,7 +533,8 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
 
         xSolver->solve();
 
-        CPPUNIT_ASSERT_MESSAGE("Solvable model must report success", xSolver->getSuccess());
+        CPPUNIT_ASSERT_MESSAGE("Solvable model must report success, " + seedMessage(),
+                               xSolver->getSuccess());
 
         cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
         CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
@@ -541,7 +551,7 @@ void SwarmSolverTest::testParticleSwarmResultLength()
     // grew past the variable count.
 
     MockProvider aProvider(3);
-    sc::ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8, testSeed());
 
     aAlgorithm.initialize();
     for (int i = 0; i < 20; ++i)
@@ -557,7 +567,7 @@ void SwarmSolverTest::testParticleSwarmVelocityNotInitializedAsPosition()
     // (for the position only), not twice.
 
     MockProvider aProvider(3);
-    sc::ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8, testSeed());
 
     aAlgorithm.initialize();
 
@@ -570,13 +580,13 @@ void SwarmSolverTest::testSameSeedRepeatsTheRun()
     // two runs over the same model land on the same result.
 
     MockProvider aProviderOne(3);
-    sc::ParticleSwarmOptimizationSolver<MockProvider> aFirst(aProviderOne, 8, 42);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aFirst(aProviderOne, 8, testSeed());
     aFirst.initialize();
     for (int i = 0; i < 20; ++i)
         aFirst.next();
 
     MockProvider aProviderTwo(3);
-    sc::ParticleSwarmOptimizationSolver<MockProvider> aSecond(aProviderTwo, 8, 42);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aSecond(aProviderTwo, 8, testSeed());
     aSecond.initialize();
     for (int i = 0; i < 20; ++i)
         aSecond.next();
@@ -604,13 +614,7 @@ void SwarmSolverTest::testSameSeedRepeatsTheSolve()
 
         uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-        uno::Reference<sheet::XSolver> xSolver;
-        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                    uno::UNO_QUERY_THROW);
-
-        uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-        xPropSet->setPropertyValue(u"RandomSeed"_ustr, cpo::uno::Any(sal_Int32(42)));
+        uno::Reference<sheet::XSolver> xSolver = createSolver();
 
         table::CellAddress aObjective(0, 1, 1);
         cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -652,10 +656,7 @@ void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
     cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -697,10 +698,7 @@ void SwarmSolverTest::testContradictoryBoundsTerminate()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
     cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -740,10 +738,7 @@ void SwarmSolverTest::testUnboundedIntegerVariable()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
     xPropSet->setPropertyValue(u"Integer"_ustr, cpo::uno::Any(true));
@@ -782,10 +777,7 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
     cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -835,10 +827,7 @@ void SwarmSolverTest::testControllersUnlockedAfterError()
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XModel> xModel(xDocument, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     table::CellAddress aObjective(0, 1, 1);
     // sheet index 99 does not exist, so reading or writing this cell throws
@@ -876,10 +865,7 @@ void SwarmSolverTest::testConstrainedLinearProgram()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSolver> xSolver = createSolver();
 
     // objective 2x + 4y is in B3
     table::CellAddress aObjective(0, 1, 2);
@@ -912,12 +898,12 @@ void SwarmSolverTest::testConstrainedLinearProgram()
 
     xSolver->solve();
 
-    CPPUNIT_ASSERT(xSolver->getSuccess());
+    CPPUNIT_ASSERT_MESSAGE(seedMessage(), xSolver->getSuccess());
 
     cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[1], 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), 3.0, aSolution[0], 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(seedMessage(), 1.0, aSolution[1], 1E-3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);
