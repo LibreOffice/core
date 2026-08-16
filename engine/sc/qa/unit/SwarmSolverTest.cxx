@@ -73,6 +73,8 @@ class SwarmSolverTest : public UnoApiTest
     void testLargeObjectiveStillSolvable();
     void testParticleSwarmResultLength();
     void testParticleSwarmVelocityNotInitializedAsPosition();
+    void testSameSeedRepeatsTheRun();
+    void testSameSeedRepeatsTheSolve();
     void testUnreadableConstraintStillChecksOthers();
     void testContradictoryBoundsTerminate();
     void testUnboundedIntegerVariable();
@@ -96,6 +98,8 @@ public:
     CPPUNIT_TEST(testLargeObjectiveStillSolvable);
     CPPUNIT_TEST(testParticleSwarmResultLength);
     CPPUNIT_TEST(testParticleSwarmVelocityNotInitializedAsPosition);
+    CPPUNIT_TEST(testSameSeedRepeatsTheRun);
+    CPPUNIT_TEST(testSameSeedRepeatsTheSolve);
     CPPUNIT_TEST(testUnreadableConstraintStillChecksOthers);
     CPPUNIT_TEST(testContradictoryBoundsTerminate);
     CPPUNIT_TEST(testUnboundedIntegerVariable);
@@ -519,6 +523,83 @@ void SwarmSolverTest::testParticleSwarmVelocityNotInitializedAsPosition()
     aAlgorithm.initialize();
 
     CPPUNIT_ASSERT_EQUAL(8, aProvider.mnInitCalls);
+}
+
+void SwarmSolverTest::testSameSeedRepeatsTheRun()
+{
+    // The search is stochastic, but a seed repeats the whole random sequence, so
+    // two runs over the same model land on the same result.
+
+    MockProvider aProviderOne(3);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aFirst(aProviderOne, 8, 42);
+    aFirst.initialize();
+    for (int i = 0; i < 20; ++i)
+        aFirst.next();
+
+    MockProvider aProviderTwo(3);
+    sc::ParticleSwarmOptimizationSolver<MockProvider> aSecond(aProviderTwo, 8, 42);
+    aSecond.initialize();
+    for (int i = 0; i < 20; ++i)
+        aSecond.next();
+
+    std::vector<double> const& rFirstResult = aFirst.getResult();
+    std::vector<double> const& rSecondResult = aSecond.getResult();
+
+    CPPUNIT_ASSERT_EQUAL(rFirstResult.size(), rSecondResult.size());
+    for (size_t i = 0; i < rFirstResult.size(); ++i)
+        CPPUNIT_ASSERT_EQUAL(rFirstResult[i], rSecondResult[i]);
+}
+
+void SwarmSolverTest::testSameSeedRepeatsTheSolve()
+{
+    // With a seed set through the properties, the whole solve repeats: the same
+    // model solved twice from the same document comes out at the same values.
+
+    std::vector<cpo::uno::Sequence<double>> aSolutions;
+
+    for (int nRun = 0; nRun < 2; ++nRun)
+    {
+        // A solve leaves its result in the variable cell, so each run reloads
+        // the file and both start from the same values.
+        loadFromFile(u"Simple.ods");
+
+        uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+        uno::Reference<sheet::XSolver> xSolver;
+        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                    uno::UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
+        xPropSet->setPropertyValue(u"RandomSeed"_ustr, cpo::uno::Any(sal_Int32(42)));
+
+        table::CellAddress aObjective(0, 1, 1);
+        cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+        cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
+            { /* [0] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+              /*     Right    */ cpo::uno::Any(100.0) },
+            { /* [1] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+              /*     Right    */ cpo::uno::Any(-100.0) }
+        };
+
+        xSolver->setDocument(xDocument);
+        xSolver->setObjective(aObjective);
+        xSolver->setVariables(aVariables);
+        xSolver->setConstraints(aConstraints);
+        xSolver->setMaximize(false);
+
+        xSolver->solve();
+
+        CPPUNIT_ASSERT(xSolver->getSuccess());
+        aSolutions.push_back(xSolver->getSolution());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(aSolutions[0].getLength(), aSolutions[1].getLength());
+    for (sal_Int32 i = 0; i < aSolutions[0].getLength(); ++i)
+        CPPUNIT_ASSERT_EQUAL(aSolutions[0][i], aSolutions[1][i]);
 }
 
 void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()

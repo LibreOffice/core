@@ -28,8 +28,9 @@ template <typename DataProvider> class DifferentialEvolutionSolver
     DEAlgorithm<DataProvider> maAlgorithm;
 
 public:
-    DifferentialEvolutionSolver(DataProvider& rDataProvider, size_t nNumOfParticles)
-        : maSwarm(rDataProvider, nNumOfParticles)
+    DifferentialEvolutionSolver(DataProvider& rDataProvider, size_t nNumOfParticles,
+                                sal_Int32 nSeed = 0)
+        : maSwarm(rDataProvider, nNumOfParticles, nSeed)
         , maAlgorithm(maSwarm, constDifferentialWeight, constCrossoverProbability,
                       DifferentialBound::Wrap, DifferentialBase::RandomMember)
     {

@@ -129,6 +129,7 @@ enum
     PROP_INTEGER,
     PROP_TIMEOUT,
     PROP_ALGORITHM,
+    PROP_RANDOM_SEED,
 };
 
 class SwarmSolver
@@ -150,6 +151,9 @@ private:
     bool mbInteger;
     sal_Int32 mnTimeout;
     sal_Int32 mnAlgorithm;
+    // A value above zero makes every run draw the same random sequence. Zero
+    // draws a fresh one for each run.
+    sal_Int32 mnRandomSeed;
 
     // results
     bool mbSuccess;
@@ -187,6 +191,7 @@ public:
         , mbInteger(false)
         , mnTimeout(60000)
         , mnAlgorithm(2)
+        , mnRandomSeed(0)
         , mbSuccess(false)
         , mfResultValue(0.0)
     {
@@ -198,6 +203,8 @@ public:
                          cppu::UnoType<decltype(mnTimeout)>::get());
         registerProperty(u"Algorithm"_ustr, PROP_ALGORITHM, 0, &mnAlgorithm,
                          cppu::UnoType<decltype(mnAlgorithm)>::get());
+        registerProperty(u"RandomSeed"_ustr, PROP_RANDOM_SEED, 0, &mnRandomSeed,
+                         cppu::UnoType<decltype(mnRandomSeed)>::get());
     }
 
     // OPropertyArrayUsageHelper
@@ -288,6 +295,9 @@ public:
                 break;
             case PROP_ALGORITHM:
                 pResId = RID_PROPERTY_ALGORITHM;
+                break;
+            case PROP_RANDOM_SEED:
+                pResId = RID_PROPERTY_RANDOM_SEED;
                 break;
             default:
                 break;
@@ -789,7 +799,7 @@ void SAL_CALL SwarmSolver::solve()
     {
         size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 50, 300);
         mnSeedCount = nPopulation / 2;
-        DifferentialEvolutionSolver<SwarmSolver> aDE(*this, nPopulation);
+        DifferentialEvolutionSolver<SwarmSolver> aDE(*this, nPopulation, mnRandomSeed);
         SwarmRunner<DifferentialEvolutionSolver<SwarmSolver>> aEvolution(aDE);
         aEvolution.setTimeout(mnTimeout);
         aSolution = aEvolution.solve();
@@ -798,7 +808,7 @@ void SAL_CALL SwarmSolver::solve()
     {
         size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 100, 300);
         mnSeedCount = nPopulation / 2;
-        DEPSOSolver<SwarmSolver> aDepso(*this, nPopulation);
+        DEPSOSolver<SwarmSolver> aDepso(*this, nPopulation, mnRandomSeed);
         SwarmRunner<DEPSOSolver<SwarmSolver>> aRunner(aDepso);
         aRunner.setTimeout(mnTimeout);
         aSolution = aRunner.solve();
@@ -807,7 +817,7 @@ void SAL_CALL SwarmSolver::solve()
     {
         size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 100, 300);
         mnSeedCount = nPopulation / 2;
-        ParticleSwarmOptimizationSolver<SwarmSolver> aPSO(*this, nPopulation);
+        ParticleSwarmOptimizationSolver<SwarmSolver> aPSO(*this, nPopulation, mnRandomSeed);
         SwarmRunner<ParticleSwarmOptimizationSolver<SwarmSolver>> aSwarmSolver(aPSO);
         aSwarmSolver.setTimeout(mnTimeout);
         aSolution = aSwarmSolver.solve();

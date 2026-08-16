@@ -25,8 +25,9 @@ template <typename DataProvider> class ParticleSwarmOptimizationSolver
     PSOAlgorithm<DataProvider> maAlgorithm;
 
 public:
-    ParticleSwarmOptimizationSolver(DataProvider& rDataProvider, size_t nNumOfParticles)
-        : maSwarm(rDataProvider, nNumOfParticles)
+    ParticleSwarmOptimizationSolver(DataProvider& rDataProvider, size_t nNumOfParticles,
+                                    sal_Int32 nSeed = 0)
+        : maSwarm(rDataProvider, nNumOfParticles, nSeed)
         , maAlgorithm(maSwarm)
     {
     }

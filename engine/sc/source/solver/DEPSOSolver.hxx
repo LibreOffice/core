@@ -42,8 +42,8 @@ template <typename DataProvider> class DEPSOSolver
     DEAlgorithm<DataProvider> maDifferential;
 
 public:
-    DEPSOSolver(DataProvider& rDataProvider, size_t nNumOfParticles)
-        : maSwarm(rDataProvider, nNumOfParticles)
+    DEPSOSolver(DataProvider& rDataProvider, size_t nNumOfParticles, sal_Int32 nSeed = 0)
+        : maSwarm(rDataProvider, nNumOfParticles, nSeed)
         , maParticleSwarm(maSwarm)
         , maDifferential(maSwarm, constDifferentialWeight, constCrossover, DifferentialBound::Clamp,
                          DifferentialBase::GlobalBest)
