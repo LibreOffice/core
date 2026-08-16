@@ -107,7 +107,9 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
     if (!pWriteAcc)
         return false;
 
-    if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcRgba)
+   // We can do the same calculations for RGBA and BGRA
+    if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcRgba
+        || pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcBgra)
     {
         // We can skip doing unpremultiple/premultiply for this format, the result
         // is the same if we operate in premultiplied space.
