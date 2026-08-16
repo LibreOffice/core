@@ -1615,7 +1615,10 @@ img.context-menu-icon {
 	border: 4px solid transparent;
 	border-top: 5px solid var(--color-main-text);
 	display: inline-block !important;
-	margin-inline-start: -16px;
+	/* The negative start margin lays the arrow over the end of the box in front
+	   of it. The two margins and the 8px the arrow is wide add up to zero, so
+	   the arrow takes no width of its own in the row. */
+	margin-inline-start: -12px;
 	margin-inline-end: 4px;
 	margin-top: 4px;
 	cursor: pointer;
@@ -1626,10 +1629,6 @@ img.context-menu-icon {
 	margin-inline-end: 0;
 }
 
-:dir(rtl) .ui-listbox-arrow {
-	margin-inline-start: 4px;
-	margin-inline-end: -16px;
-}
 .ui-listbox[disabled='disabled'] ~ .ui-listbox-arrow,
 .ui-combobox[disabled='disabled'] ~ .ui-listbox-arrow {
 	opacity: 0.5;

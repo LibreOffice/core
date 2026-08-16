@@ -16,6 +16,17 @@
 	width: 100%;
 }
 
+/* A dropdown is at least as wide as the entry it shows, and stretches further
+   when there is more room. */
+.notebookbar.ui-listbox-container {
+	min-width: max-content;
+}
+
+/* The narrowest a dropdown gets, so a short entry still leaves room to click. */
+.notebookbar.ui-listbox {
+	min-width: 70px;
+}
+
 /* center text vertically */
 
 .notebookbar.ui-radiobutton,
@@ -887,7 +898,7 @@ label.notebookbar.ui-checkbox-label {
 	height: 30px;
 }
 
-#Animation.notebookbar .ui-listbox-container {
+#Animation.notebookbar .ui-listbox {
 	min-width: 100px;
 }
 
