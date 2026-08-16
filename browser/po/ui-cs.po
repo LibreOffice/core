@@ -12,17 +12,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-01 21:01+0000\n"
-"Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
+"PO-Revision-Date: 2026-08-16 11:53+0000\n"
+"Last-Translator: Michal Várady <miko.vaji@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cs/>\n"
-"Language: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -69,7 +69,7 @@ msgstr "Stav"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -456,6 +456,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Někteří klienti se připojili pomocí starého formátu URL WebSocketu, jehož "
+"podpora bude ukončena. Zkontrolujte, zda proxy předává kompaktní formát."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3782
@@ -465,7 +467,7 @@ msgstr "Chyba"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Zjistit více"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -565,7 +567,7 @@ msgstr "Zobrazit pravítko"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Zobrazit formátovací značky"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 #: src/control/Control.NotebookbarWriter.js:2313
@@ -655,11 +657,11 @@ msgstr "Obsah"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Display"
-msgstr ""
+msgstr "Zobrazení"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Zobrazit hranice"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 #: src/control/Control.BackstageView.ts:824
@@ -839,17 +841,19 @@ msgstr "Nahrát slovník"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:946
 msgid "Document themes"
-msgstr ""
+msgstr "Motivy dokumentu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:948
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Nahrajte vlastní motivy dokumentu (.theme). Určují barevné palety dostupné v "
+"nabídce Formát > Motiv."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:954
 msgid "Upload Theme"
-msgstr ""
+msgstr "Nahrát motiv"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:960
 #: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:652
@@ -859,21 +863,23 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:109
 msgid "Extensions"
-msgstr ""
+msgstr "Rozšíření"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:962
 msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Nahrajte balíček rozšíření jako soubor .zip; jeho obsah (manifest.json, …) "
+"se rozbalí na serveru."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Nahrát rozšíření"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Nastavení je dostupné pouze přihlášeným uživatelům."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -899,10 +905,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Je-li tato volba zapnuta, Writer při otevření přizpůsobí dokument šířce "
+"zobrazení. Je-li vypnuta, dokument se otevře s výchozí úrovní přiblížení "
+"nastavenou níže."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1459
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Pro {0} není k dispozici žádné nastavení"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1471
 msgid "Select a tab to browser settings."
@@ -980,7 +989,7 @@ msgstr "nastavení API účtu Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2180
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Nastavení Zotera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2212
 #: admin/src/integrator/AdminIntegratorSettings.ts:3393
@@ -997,7 +1006,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2237
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Nastavení podepisování dokumentů"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2275
 #: admin/src/integrator/AdminIntegratorSettings.ts:2292
@@ -1019,19 +1028,21 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Nastavte přihlašovací údaje a model poskytovatele AI. Při změně "
+"přihlašovacích údajů se modely načtou automaticky."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2380
 msgid "Text Generation"
-msgstr ""
+msgstr "Generování textu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2430
 #: admin/src/integrator/AdminIntegratorSettings.ts:2556
 msgid "e.g."
-msgstr ""
+msgstr "např."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Pokud ho server nevyžaduje, ponechte prázdné"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1039,60 +1050,66 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Pro akce s dokumentem (prohlížení a úpravy) zvolte model s nativním voláním "
+"funkcí či nástrojů, například gpt-4o, llama3.1 nebo qwen2.5. Modely bez této "
+"funkce (např. základní llama3 nebo gemma) mohou konverzovat, ale nemohou "
+"používat nástroje dokumentu."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2498
 msgid "Image Generation"
-msgstr ""
+msgstr "Generování obrázků"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2503
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Stejné jako pro textovou AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Chcete-li použít klíč textové AI, ponechte prázdné"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2878
 #: admin/src/integrator/AdminIntegratorSettings.ts:2996
 msgid "Fetching models..."
-msgstr ""
+msgstr "Načítají se modely…"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2925
 #: admin/src/integrator/AdminIntegratorSettings.ts:2940
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: admin/src/integrator/AdminIntegratorSettings.ts:3052
 msgid "No models found"
-msgstr ""
+msgstr "Nebyly nalezeny žádné modely"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2950
 #: admin/src/integrator/AdminIntegratorSettings.ts:3062
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modely byly úspěšně načteny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2956
 #: admin/src/integrator/AdminIntegratorSettings.ts:3068
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Modely se nepodařilo načíst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2966
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Neplatné nastavení poskytovatele"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3103
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Žádný (zakázat generování obrázků)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3120
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Načíst modely k výběru"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Byla překročena kvóta API – zkontrolujte tarif a fakturační údaje"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Modely se nepodařilo načíst (HTTP {0}). Zkontrolujte URL poskytovatele a "
+"klíč API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3293
 #: admin/src/integrator/Xcu.ts:345
@@ -1105,23 +1122,23 @@ msgstr "Nahrát Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3596
 msgid "Enter {0}"
-msgstr ""
+msgstr "Zadejte {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3654
 msgid "Reset"
-msgstr ""
+msgstr "Obnovit"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3655
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Obnovit výchozí hodnoty – {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3659
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Opravdu chcete obnovit výchozí hodnoty ({0})?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3675
 msgid "Save {0}"
-msgstr ""
+msgstr "Uložit – {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1250,7 +1267,7 @@ msgstr "Zpracování událostí se nečekaně dlouho odkládalo: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "Webové stránky {0}, otevřou se na nové kartě"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
@@ -1263,16 +1280,16 @@ msgstr "Světla"
 
 #: src/app/TableStylesService.ts:105
 msgid "Medium"
-msgstr ""
+msgstr "Střední"
 
 #: src/app/TableStylesService.ts:107
 msgid "Dark"
-msgstr ""
+msgstr "Tmavé"
 
 #: src/app/TableStylesService.ts:109
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Vlastní"
 
 #: src/app/TableStylesService.ts:248 src/app/TableStylesService.ts:260
 #: src/app/TableStylesService.ts:263
@@ -1427,7 +1444,7 @@ msgstr "Aktuální verze"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n dalších"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1447,43 +1464,45 @@ msgstr "Odstranit odkaz"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Rozbalit"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Nápověda k této chybě"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Prozkoumat pomocí Průvodce funkcí"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Upravit na liště vzorců"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Požádat AI o pomoc s opravou této chyby"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Záhlaví"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Zápatí"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
-msgstr ""
+msgstr "Oblast vzorce nebyla rozšířena o vložené buňky."
 
 #: src/control/CalcNotifications.ts:65
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Odstraněním vznikly v jiných vzorcích chyby #REF!. Původní stav obnovíte "
+"vrácením změny."
 
 #: src/control/CalcNotifications.ts:66
 msgid "Find First"
-msgstr ""
+msgstr "Najít první"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1496,7 +1515,7 @@ msgstr "Automatická barva"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:831
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(otevře se na nové kartě)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1533,43 +1552,43 @@ msgstr "adresa buňky"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Pole názvu"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Zkrátit následující text"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Zkrátit"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Shrnout hlavní body tohoto textu"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Shrnout tento text"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Rozšířit tento text a doplnit podrobnosti"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Rozšířit tento text"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Opravit gramatické, pravopisné a interpunkční chyby"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Opravit gramatiku a pravopis"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
-msgstr ""
+msgstr "Přirozený"
 
 #: src/control/Control.AIChatSidebar.ts:142
 #, fuzzy
@@ -1583,19 +1602,19 @@ msgstr "Řadit"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Friendly"
-msgstr ""
+msgstr "Přátelský"
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Professional"
-msgstr ""
+msgstr "Profesionální"
 
 #: src/control/Control.AIChatSidebar.ts:146
 msgid "Casual"
-msgstr ""
+msgstr "Neformální"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Nejlepší"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1604,113 +1623,116 @@ msgstr "Dobré"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Špatné"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámé"
 
 #: src/control/Control.AIChatSidebar.ts:404
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Hodnocení etické AI: {0} ({1}). Vychází z licencování open source, možnosti "
+"vlastního hostování a trénovacích dat."
 
 #: src/control/Control.AIChatSidebar.ts:497
 msgid "Your message"
-msgstr ""
+msgstr "Vaše zpráva"
 
 #: src/control/Control.AIChatSidebar.ts:499
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Akce vyžadující schválení"
 
 #: src/control/Control.AIChatSidebar.ts:501
 msgid "Error message"
-msgstr ""
+msgstr "Chybové hlášení"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid "AI response"
-msgstr ""
+msgstr "Odpověď AI"
 
 #: src/control/Control.AIChatSidebar.ts:576
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Obsah vygenerovala externí služba AI ({0}). Před použitím jej zkontrolujte."
 
 #: src/control/Control.AIChatSidebar.ts:579
 msgid "Content generated by an external AI service. Please review before use."
-msgstr ""
+msgstr "Obsah vygenerovala externí služba AI. Před použitím jej zkontrolujte."
 
 #: src/control/Control.AIChatSidebar.ts:657
 msgid "New conversation"
-msgstr ""
+msgstr "Nová konverzace"
 
 #: src/control/Control.AIChatSidebar.ts:688
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Zeptejte se AI na cokoli o dokumentu…"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Loading"
-msgstr ""
+msgstr "Načítání"
 
 #: src/control/Control.AIChatSidebar.ts:759
 msgid "Chat messages"
-msgstr ""
+msgstr "Zprávy konverzace"
 
 #: src/control/Control.AIChatSidebar.ts:789
 msgid "AI generated image"
-msgstr ""
+msgstr "Obrázek vygenerovaný AI"
 
 #: src/control/Control.AIChatSidebar.ts:828
 msgid "Retry"
-msgstr ""
+msgstr "Zkusit znovu"
 
 #: src/control/Control.AIChatSidebar.ts:852
 #: src/control/Control.AIChatSidebar.ts:885
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Vložit na pozici kurzoru"
 
 #: src/control/Control.AIChatSidebar.ts:861
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopírovat do schránky"
 
 #: src/control/Control.AIChatSidebar.ts:912
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Jako kontext se používá vybraný text"
 
 #: src/control/Control.AIChatSidebar.ts:919
 msgid "Ask AI..."
-msgstr ""
+msgstr "Zeptat se AI…"
 
 #: src/control/Control.AIChatSidebar.ts:922
 msgid "Message input"
-msgstr ""
+msgstr "Vstup zprávy"
 
 #: src/control/Control.AIChatSidebar.ts:938
 msgid "Stop generating"
-msgstr ""
+msgstr "Zastavit generování"
 
 #: src/control/Control.AIChatSidebar.ts:939
 msgid "Send message"
-msgstr ""
+msgstr "Odeslat zprávu"
 
 #: src/control/Control.AIChatSidebar.ts:953
 #: src/control/Control.AIChatSidebar.ts:966
 msgid "Set tone"
-msgstr ""
+msgstr "Nastavit tón"
 
 #: src/control/Control.AIChatSidebar.ts:977
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Nastavit tón hlasu"
 
 #: src/control/Control.AIChatSidebar.ts:978
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Tón hlasu: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:980
 msgid "with emoji"
-msgstr ""
+msgstr "s emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1022
 #: src/control/Control.AIChatSidebar.ts:1072
@@ -1722,19 +1744,19 @@ msgstr "Žádný"
 #: src/control/Control.AIChatSidebar.ts:1035
 #: src/control/Control.AIChatSidebar.ts:1306
 msgid "Tone of voice"
-msgstr ""
+msgstr "Tón hlasu"
 
 #: src/control/Control.AIChatSidebar.ts:1041
 msgid "Reset voice"
-msgstr ""
+msgstr "Obnovit výchozí tón"
 
 #: src/control/Control.AIChatSidebar.ts:1044
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Obnovit výchozí tón hlasu"
 
 #: src/control/Control.AIChatSidebar.ts:1060
 msgid "Your tones"
-msgstr ""
+msgstr "Vaše tóny"
 
 #: src/control/Control.AIChatSidebar.ts:1077
 #, fuzzy
@@ -1743,15 +1765,15 @@ msgstr "Režim úprav"
 
 #: src/control/Control.AIChatSidebar.ts:1094
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Přidat vlastní tón"
 
 #: src/control/Control.AIChatSidebar.ts:1096
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Přidat vlastní tón hlasu"
 
 #: src/control/Control.AIChatSidebar.ts:1107
 msgid "Emojify"
-msgstr ""
+msgstr "Doplnit emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1113
 #: src/control/Control.StatusBar.js:171
@@ -1766,139 +1788,142 @@ msgstr "Vypnuto"
 
 #: src/control/Control.AIChatSidebar.ts:1116
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Přepnout doplňování emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1277
 msgid "Use icon"
-msgstr ""
+msgstr "Použít ikonu"
 
 #: src/control/Control.AIChatSidebar.ts:1287
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Vybrat jiné emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1301
 msgid "Back to tones"
-msgstr ""
+msgstr "Zpět k tónům"
 
 #: src/control/Control.AIChatSidebar.ts:1314
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: src/control/Control.AIChatSidebar.ts:1326
 msgid "Name your tone"
-msgstr ""
+msgstr "Pojmenujte tón"
 
 #: src/control/Control.AIChatSidebar.ts:1333
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "např. Rychlá odpověď"
 
 #: src/control/Control.AIChatSidebar.ts:1335
 msgid "Tone name"
-msgstr ""
+msgstr "Název tónu"
 
 #: src/control/Control.AIChatSidebar.ts:1340
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Popište, jak má AI psát"
 
 #: src/control/Control.AIChatSidebar.ts:1348
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Pište krátké a přímé věty. Používejte srozumitelný jazyk a vynechte "
+"společenské fráze."
 
 #: src/control/Control.AIChatSidebar.ts:1352
 msgid "Tone description"
-msgstr ""
+msgstr "Popis tónu"
 
 #: src/control/Control.AIChatSidebar.ts:1361
 #: src/control/Control.AIChatSidebar.ts:1423
 #: src/control/Control.AIChatSidebar.ts:1465
 msgid "Delete tone"
-msgstr ""
+msgstr "Odstranit tón"
 
 #: src/control/Control.AIChatSidebar.ts:1363
 msgid "Delete this tone"
-msgstr ""
+msgstr "Odstranit tento tón"
 
 #: src/control/Control.AIChatSidebar.ts:1376
 msgid "Save voice"
-msgstr ""
+msgstr "Uložit tón"
 
 #: src/control/Control.AIChatSidebar.ts:1378
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Uložit tón hlasu"
 
 #: src/control/Control.AIChatSidebar.ts:1393
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Hledat emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1394
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Vybrat emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1418
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Potvrzení odstranění tónu"
 
 #: src/control/Control.AIChatSidebar.ts:1429
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Tento tón hlasu bude odstraněn"
 
 #: src/control/Control.AIChatSidebar.ts:1458
 msgid "Cancel delete"
-msgstr ""
+msgstr "Zrušit odstranění"
 
 #: src/control/Control.AIChatSidebar.ts:1485
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Dosáhli jste maximálního počtu {0} vlastních tónů."
 
 #: src/control/Control.AIChatSidebar.ts:1719
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Diagnostikovat chybu ve vzorci"
 
 #: src/control/Control.AIChatSidebar.ts:1725
 msgid "Sanity check data"
-msgstr ""
+msgstr "Prověřit data"
 
 #: src/control/Control.AIChatSidebar.ts:1731
 msgid "Create a formula"
-msgstr ""
+msgstr "Vytvořit vzorec"
 
 #: src/control/Control.AIChatSidebar.ts:1738
 msgid "Create slides"
-msgstr ""
+msgstr "Vytvořit snímky"
 
 #: src/control/Control.AIChatSidebar.ts:1770
 msgid "See less"
-msgstr ""
+msgstr "Zobrazit méně"
 
 #: src/control/Control.AIChatSidebar.ts:1770
 msgid "See more"
-msgstr ""
+msgstr "Zobrazit více"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Výběr šablony vzhledu byl zrušen."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Obrázek byl vložen na pozici kurzoru"
 
 #: src/control/Control.AIChatSidebar.ts:1911
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Text byl vložen na pozici kurzoru"
 
 #: src/control/Control.AIChatSidebar.ts:1990
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Blížíte se k limitu délky zprávy"
 
 #: src/control/Control.AIChatSidebar.ts:2037
 msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Vypršel časový limit požadavku. Můžete ho prodloužit v oddílu AI v nastavení."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -1906,143 +1931,145 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Výběr obsahuje obrázky nebo jiný netextový obsah, který nelze odeslat jako "
+"kontext."
 
 #: src/control/Control.AIChatSidebar.ts:2158
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Zpráva je příliš dlouhá. Zkraťte ji a zkuste to znovu."
 
 #: src/control/Control.AIChatSidebar.ts:2239
 msgid "Error: "
-msgstr ""
+msgstr "Chyba: "
 
 #: src/control/Control.AIChatSidebar.ts:2269
 msgid "Generated image"
-msgstr ""
+msgstr "Vygenerovaný obrázek"
 
 #: src/control/Control.AIChatSidebar.ts:2281
 msgid "AI request failed"
-msgstr ""
+msgstr "Požadavek AI se nezdařil"
 
 #: src/control/Control.AIChatSidebar.ts:2298
 msgid "The AI assistant"
-msgstr ""
+msgstr "Asistent AI"
 
 #: src/control/Control.AIChatSidebar.ts:2311
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Chcete pokračovat?"
 
 #: src/control/Control.AIChatSidebar.ts:2314
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 chce prozkoumat váš dokument. Chcete pokračovat?"
 
 #: src/control/Control.AIChatSidebar.ts:2318
 msgid "Modify document structure"
-msgstr ""
+msgstr "Upravit strukturu dokumentu"
 
 #: src/control/Control.AIChatSidebar.ts:2320
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 chce upravit váš dokument:"
 
 #: src/control/Control.AIChatSidebar.ts:2324
 #: src/control/Control.AIChatSidebar.ts:2335
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Chcete tuto změnu použít?"
 
 #: src/control/Control.AIChatSidebar.ts:2326
 msgid "Set cell formula"
-msgstr ""
+msgstr "Nastavit vzorec buňky"
 
 #: src/control/Control.AIChatSidebar.ts:2328
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 chce nastavit vzorec ve vašem sešitu:"
 
 #: src/control/Control.AIChatSidebar.ts:2338
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 chce provést akci. Chcete pokračovat?"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "Approve"
-msgstr ""
+msgstr "Schválit"
 
 #: src/control/Control.AIChatSidebar.ts:2371
 msgid "Approve action"
-msgstr ""
+msgstr "Schválit akci"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "Reject"
-msgstr ""
+msgstr "Odmítnout"
 
 #: src/control/Control.AIChatSidebar.ts:2385
 msgid "Reject action"
-msgstr ""
+msgstr "Odmítnout akci"
 
 #: src/control/Control.AIChatSidebar.ts:2404
 msgid "Applying changes..."
-msgstr ""
+msgstr "Používají se změny…"
 
 #: src/control/Control.AIChatSidebar.ts:2407
 msgid "Change rejected"
-msgstr ""
+msgstr "Změna odmítnuta"
 
 #: src/control/Control.AIChatSidebar.ts:2497
 msgid "Use section: "
-msgstr ""
+msgstr "Použít sekci: "
 
 #: src/control/Control.AIChatSidebar.ts:2541
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Vypršel časový limit načtení výběru"
 
 #: src/control/Control.AIChatSidebar.ts:2560
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Obsah výběru se nepodařilo zpracovat"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Vyberte vzhled prezentace nebo pokračujte bez něj:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "Bez šablony"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Pokračovat bez šablony vzhledu"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Šablona vzhledu: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Pokračuje se bez šablony vzhledu."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Vypršel časový limit analýzy vzorce"
 
 #: src/control/Control.AIChatSidebar.ts:3045
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Analyzují se závislosti vzorce…"
 
 #: src/control/Control.AIChatSidebar.ts:3053
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Vzorec se nepodařilo analyzovat."
 
 #: src/control/Control.AIChatSidebar.ts:3063
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Vybraná buňka neobsahuje vzorec."
 
 #: src/control/Control.AIChatSidebar.ts:3065
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Vzorec ve vybrané buňce neobsahuje chybu."
 
 #: src/control/Control.AIChatSidebar.ts:3074
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Diagnostikovat chybu ve vzorci v"
 
 #: src/control/Control.AIChatSidebar.ts:3095
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "V sešitu mám chybu ve vzorci."
 
 #: src/control/Control.AIChatSidebar.ts:3097
 #, fuzzy
@@ -2056,7 +2083,7 @@ msgstr "Listy"
 
 #: src/control/Control.AIChatSidebar.ts:3105
 msgid "contains"
-msgstr ""
+msgstr "obsahuje"
 
 #: src/control/Control.AIChatSidebar.ts:3107
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -2067,25 +2094,27 @@ msgstr "Vzorec"
 
 #: src/control/Control.AIChatSidebar.ts:3111
 msgid "Referenced cells"
-msgstr ""
+msgstr "Odkazované buňky"
 
 #: src/control/Control.AIChatSidebar.ts:3117
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Zjistěte, proč tento vzorec vrací"
 
 #: src/control/Control.AIChatSidebar.ts:3121
 msgid "error."
-msgstr ""
+msgstr "chybu."
 
 #: src/control/Control.AIChatSidebar.ts:3123
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Vysvětlete hlavní příčinu a navrhněte způsob opravy."
 
 #: src/control/Control.AIChatSidebar.ts:3127
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Při odkazování na konkrétní buňky formátujte každou adresu buňky jako odkaz, "
+"na který lze klepnout: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:3142
 #, fuzzy
@@ -2094,11 +2123,11 @@ msgstr "Vzorec"
 
 #: src/control/Control.AIChatSidebar.ts:3144
 msgid "ERROR"
-msgstr ""
+msgstr "CHYBA"
 
 #: src/control/Control.AIChatSidebar.ts:3158
 msgid "value"
-msgstr ""
+msgstr "hodnota"
 
 #: src/control/Control.AIChatSidebar.ts:3168
 #, fuzzy
@@ -2107,7 +2136,7 @@ msgstr "Text"
 
 #: src/control/Control.AIChatSidebar.ts:3173
 msgid "empty"
-msgstr ""
+msgstr "prázdná"
 
 #: src/control/Control.AIChatSidebar.ts:3175
 #, fuzzy
@@ -2116,75 +2145,87 @@ msgstr "Oblast"
 
 #: src/control/Control.AIChatSidebar.ts:3177
 msgid "errors in"
-msgstr ""
+msgstr "chyby v buňkách"
 
 #: src/control/Control.AIChatSidebar.ts:3180
 msgid "only partially scanned"
-msgstr ""
+msgstr "prohledáno jen částečně"
 
 #: src/control/Control.AIChatSidebar.ts:3189
 msgid "circular reference"
-msgstr ""
+msgstr "cyklický odkaz"
 
 #: src/control/Control.AIChatSidebar.ts:3239
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Nejprve vyberte data, která chcete prověřit."
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analyzují se vybraná data…"
 
 #: src/control/Control.AIChatSidebar.ts:3257
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Data sešitu se nepodařilo načíst."
 
 #: src/control/Control.AIChatSidebar.ts:3266
 msgid "No data found in selection."
-msgstr ""
+msgstr "Ve výběru nebyla nalezena žádná data."
 
 #: src/control/Control.AIChatSidebar.ts:3296
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Popište snímky, které chcete vytvořit. Například: „Přehled obnovitelných "
+"zdrojů energie v 5 snímcích“ nebo „Představení našeho týmu“."
 
 #: src/control/Control.AIChatSidebar.ts:3323
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Popište požadovaný vzorec. Například: „Vypočítat průměr sloupce B“ nebo „"
+"Sečíst všechny hodnoty, u nichž je sloupec A větší než 100“."
 
 #: src/control/Control.AIChatSidebar.ts:3333
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Čísla řádků čtěte ze sloupce „Řádek“ – pozice řádků nepočítejte ani "
+"neodhadujte."
 
 #: src/control/Control.AIChatSidebar.ts:3337
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Sloupec buňky určete porovnáním hodnoty s písmenem sloupce v řádku záhlaví – "
+"nehádejte."
 
 #: src/control/Control.AIChatSidebar.ts:3341
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Na buňku odkazujte spojením záhlaví sloupce s číslem řádku (např. sloupec B "
+"+ řádek 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:3344
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Při odkazování na konkrétní buňky formátujte každou buňku jako odkaz, na "
+"který lze klepnout: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:3350
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Prověřte následující data sešitu."
 
 #: src/control/Control.AIChatSidebar.ts:3351
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Analyzujte v těchto datech:"
 
 #: src/control/Control.AIChatSidebar.ts:3355
 msgid ""
@@ -2192,18 +2233,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Porušení Benfordova zákona – zkontrolujte, zda se rozdělení prvních číslic "
+"číselných hodnot významně neodchyluje od očekávaného rozdělení, což může "
+"naznačovat manipulaci s daty."
 
 #: src/control/Control.AIChatSidebar.ts:3361
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Statistické odlehlé hodnoty – určete hodnoty, které se významně odchylují od "
+"svého sloupce nebo skupiny."
 
 #: src/control/Control.AIChatSidebar.ts:3367
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Obecné anomálie – podezřelé vzorce, neočekávané duplicity, nesrovnalosti "
+"nebo problémy s formátováním."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2252,7 +2300,7 @@ msgstr "Nezobrazovat toto znovu"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Při zpracování příkazu {1} došlo k chybě typu {0}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -2470,104 +2518,104 @@ msgstr "Další info o vlastnostech"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Otevřete dokument z počítače nebo cloudového úložiště."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Otevřít soubor z počítače"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Přidat cloud +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Upravit účet"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Přidat nový účet"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL serveru"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Zadejte URL serveru"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Zobrazovaný název"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Zadejte zobrazovaný název"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Název zobrazovaný v seznamu cloudů (nejvýše 40 znaků)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Uložit změny"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Přidat účet"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Odebrat účet"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Odpojí toto cloudové úložiště"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Nový účet byl úspěšně přidán"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Nyní máte přístup k souborům v tomto cloudu."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Otevřít soubory"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Odebrat tento účet?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Budete odpojeni od tohoto cloudového účtu."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Přetažením soubor otevřete"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Toto mobilní zobrazení není plně přístupné."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Prohlášení o přístupnosti"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3215,7 +3263,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:408
 #: src/control/Control.NotebookbarBuilder.js:598
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:114 src/control/Control.UIManager.ts:552
 msgid "Rename Document"
@@ -3273,7 +3321,7 @@ msgstr "Opravit"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:704 src/control/Control.Menubar.ts:886
 msgid "Find"
-msgstr ""
+msgstr "Najít"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -3342,7 +3390,7 @@ msgstr "Místní obrázek…"
 #: src/control/Control.Menubar.ts:199 src/control/Control.Menubar.ts:543
 #: src/control/Control.Menubar.ts:734 src/control/Control.Menubar.ts:925
 msgid "Shapes ..."
-msgstr ""
+msgstr "Tvary…"
 
 #: src/control/Control.Menubar.ts:220 src/control/Control.Menubar.ts:222
 #: src/control/Control.Menubar.ts:1436 src/control/Control.Menubar.ts:1438
@@ -3558,7 +3606,7 @@ msgstr "Lokální multimédia..."
 #: src/control/Control.NotebookbarImpress.js:2730
 #: src/control/Control.NotebookbarImpress.js:3124
 msgid "Distribute"
-msgstr ""
+msgstr "Rozmístit"
 
 #: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:1280
 #: src/control/Control.PresentationBar.js:128
@@ -3810,11 +3858,11 @@ msgstr "Výsledky"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maximalizovat do mřížky"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Najít a nahradit"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -3832,7 +3880,7 @@ msgstr "Návrh tabulky"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Možnosti tabulky"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
@@ -3987,7 +4035,7 @@ msgstr "Návrh"
 
 #: src/control/Notebookbar.WriterTableTab.ts:484
 msgid "Cell Background"
-msgstr ""
+msgstr "Pozadí buňky"
 
 #: src/control/Notebookbar.WriterTableTab.ts:507
 #: src/control/Control.NotebookbarCalc.js:72
@@ -4004,7 +4052,7 @@ msgstr "Řadit"
 
 #: src/control/Notebookbar.WriterTableTab.ts:585
 msgid "Protect"
-msgstr ""
+msgstr "Zamknout"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:123
 msgid "Animations"
@@ -4013,7 +4061,7 @@ msgstr "Animace"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Neuložené změny. Uložit"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4053,7 +4101,7 @@ msgstr "Obrázek (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Neuložené změny."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -4102,7 +4150,7 @@ msgstr "Obrázek"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:96
 msgid "Chart"
-msgstr ""
+msgstr "Graf"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -4171,13 +4219,15 @@ msgstr "Schránka"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:153
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Štěteček formátu (dvojitým klepnutím zůstane aktivní)"
 
 #: src/control/Control.NotebookbarCalc.js:463
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Štěteček formátu je aktivní (použijete ho stisknutím klávesy Enter v buňce; "
+"ukončíte ho dalším klepnutím nebo klávesou Esc)"
 
 #: src/control/Control.NotebookbarCalc.js:499
 #: src/control/Control.NotebookbarDraw.js:692
@@ -4417,7 +4467,7 @@ msgstr "Vložit tabulku se stylem"
 
 #: src/control/Control.NotebookbarCalc.js:1819
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Chcete-li vložit tabulku se stylem, vyberte upravitelnou oblast buněk"
 
 #: src/control/Control.NotebookbarCalc.js:1828
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4490,7 +4540,7 @@ msgstr "Filtr"
 
 #: src/control/Control.NotebookbarCalc.js:2627
 msgid "Proofing"
-msgstr ""
+msgstr "Kontrola pravopisu"
 
 #: src/control/Control.NotebookbarCalc.js:2655
 #: src/control/Control.NotebookbarImpress.js:2053
@@ -4506,7 +4556,7 @@ msgstr "Komentáře"
 
 #: src/control/Control.NotebookbarCalc.js:2738
 msgid "Protection"
-msgstr ""
+msgstr "Ochrana"
 
 #: src/control/Control.NotebookbarCalc.js:2801
 msgid "Format Cells"
@@ -4552,6 +4602,7 @@ msgstr "Pravítka"
 #: src/control/Control.TopToolbar.js:153
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Štěteček formátu je aktivní (ukončíte ho dalším klepnutím nebo klávesou Esc)"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1060
@@ -4569,7 +4620,7 @@ msgstr "Předloha"
 
 #: src/control/Control.NotebookbarImpress.js:486
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Spustit prezentaci"
 
 #: src/control/Control.NotebookbarImpress.js:491
 msgid "From Beginning"
@@ -4597,7 +4648,7 @@ msgstr "Zobrazí poznámky, další snímek a časovač"
 
 #: src/control/Control.NotebookbarImpress.js:524
 msgid "Present"
-msgstr ""
+msgstr "Prezentovat"
 
 #: src/control/Control.NotebookbarImpress.js:530
 msgid "Present in Window"
@@ -4626,7 +4677,7 @@ msgstr "Zobrazí snímky tak, jak je bude měnit přednášející"
 
 #: src/control/Control.NotebookbarImpress.js:559
 msgid "Set Up"
-msgstr ""
+msgstr "Nastavení"
 
 #: src/control/Control.NotebookbarImpress.js:686
 msgid "Slide Views"
@@ -4761,7 +4812,7 @@ msgstr "Vložit"
 
 #: src/control/Control.PartsPreview.js:578
 msgid "Add Section"
-msgstr ""
+msgstr "Vložit sekci"
 
 #: src/control/Control.PartsPreview.js:668
 msgid "preview of page %1"
@@ -4773,44 +4824,44 @@ msgstr "Snímek %1"
 
 #: src/control/Control.PartsPreview.js:788
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Přepnout sekci %1"
 
 #: src/control/Control.PartsPreview.js:979
 #: src/control/Control.PartsPreview.js:1111
 msgid "Rename Section"
-msgstr ""
+msgstr "Přejmenovat sekci"
 
 #: src/control/Control.PartsPreview.js:986
 msgid "Remove Section"
-msgstr ""
+msgstr "Odstranit sekci"
 
 #: src/control/Control.PartsPreview.js:994
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Odstranit sekci a snímky"
 
 #: src/control/Control.PartsPreview.js:1003
 msgid "Move Section Up"
-msgstr ""
+msgstr "Posunout sekci nahoru"
 
 #: src/control/Control.PartsPreview.js:1012
 msgid "Move Section Down"
-msgstr ""
+msgstr "Posunout sekci dolů"
 
 #: src/control/Control.PartsPreview.js:1021
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Sbalit všechny sekce"
 
 #: src/control/Control.PartsPreview.js:1029
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Rozbalit všechny sekce"
 
 #: src/control/Control.PartsPreview.js:1064
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Odstranit sekci „%1“ včetně snímků (%2)?"
 
 #: src/control/Control.PartsPreview.js:1112
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Zadejte nový název sekce:"
 
 #: src/control/Control.SaveState.ts:51
 msgid "Saving"
@@ -4857,10 +4908,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Připojeno pomocí starého formátu URL WebSocketu, jehož podpora bude "
+"ukončena. Zkontrolujte, zda proxy předává kompaktní formát."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Připojeno pomocí kompaktního formátu URL WebSocketu"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4967,17 +5020,19 @@ msgstr "Počet vybraných"
 
 #: src/control/Control.StatusBar.js:284
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Přizpůsobit snímek oknu"
 
 #: src/control/Control.StatusBar.js:285
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Přizpůsobí stránku šířce okna. Inteligentní přiblížení při otevření lze "
+"přepnout v Možnostech na kartě Soubor."
 
 #: src/control/Control.StatusBar.js:290
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Nabídka stavového řádku"
 
 #: src/control/Control.StatusBar.js:567
 msgid "The document is probably locked and has been opened as view-only"
@@ -5021,7 +5076,7 @@ msgstr "Vložit list za tento"
 
 #: src/control/Control.Tabs.js:108 src/control/Control.Tabs.js:115
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Obnovit barvu karty"
 
 #: src/control/Control.Tabs.js:135 src/control/Control.Tabs.js:139
 msgid "Move Sheet Left"
@@ -5037,7 +5092,7 @@ msgstr "Kopírovat list…"
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, zamknutý"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5100,26 +5155,28 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Vložený skript používá zastaralé API com.sun.star UNO, které může být v "
+"budoucích verzích odstraněno."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
-msgstr ""
+msgstr "Kopírovat podrobnosti chyby"
 
 #: src/control/Control.UIManager.ts:2916
 msgid "Show technical details"
-msgstr ""
+msgstr "Zobrazit technické podrobnosti"
 
 #: src/control/Control.UIManager.ts:2930
 msgid "Technical Details:"
-msgstr ""
+msgstr "Technické podrobnosti:"
 
 #: src/control/Control.UIManager.ts:2934
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Podrobnosti chyby byly zkopírovány do schránky"
 
 #: src/control/Control.UIManager.ts:2944
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Podrobnosti chyby se nepodařilo zkopírovat"
 
 #: src/control/Control.UserList.ts:57
 msgid "{user} has joined"
@@ -5334,15 +5391,17 @@ msgstr ""
 
 #: src/control/HRuler.ts:321
 msgid "First line"
-msgstr ""
+msgstr "První řádek"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Před"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dvojitým klepnutím vložíte zarážku tabulátoru. Další možnosti zobrazíte "
+"klepnutím pravým tlačítkem."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5386,64 +5445,66 @@ msgstr "Zadejte název souboru"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Jak chcete dokument upravovat?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Tento dokument si prohlížejí další uživatelé. Zvolte, jak chcete pokračovat:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Upravovat místně"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Změny se synchronizují při uložení"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Spolupráce při úpravách"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Upravovat společně v reálném čase"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Pokračovat v prohlížení místní kopie"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Pokračovat se svou verzí"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Připojit se ke společným úpravám"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Čeká se na uložení změn…"
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Tento dokument upravují další uživatelé. Zvolte, jak chcete pokračovat:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "nyní upravuje dokument"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 nyní upravuje dokument"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Tento dokument nyní upravuje někdo další. Zvolte, jak chcete pokračovat:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5563,19 +5624,19 @@ msgstr "Nadpis, svislý text a obrázek"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standardní výběr"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Rozšiřitelný výběr"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Doplnitelný výběr"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Výběr bloku"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5592,7 +5653,7 @@ msgstr "Přejmenovávání…"
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Sdílení se nezdařilo"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -5627,7 +5688,7 @@ msgstr "Prohlížení"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:325
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Uložit obrázek na server"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:363
 msgid "Paste Special"
@@ -5836,7 +5897,7 @@ msgstr "Vedle sebe"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1832
 msgid "Hidden"
-msgstr ""
+msgstr "Skryté"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1846
 msgid "This user"
@@ -6000,7 +6061,7 @@ msgstr "Automaticky"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Paleta"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -6013,7 +6074,7 @@ msgstr "Otevřít"
 
 #: src/control/jsdialog/Widget.Combobox.js:274
 msgid " list"
-msgstr ""
+msgstr " seznam"
 
 #: src/control/jsdialog/Widget.Combobox.js:275
 #, fuzzy
@@ -6022,57 +6083,59 @@ msgstr "Otevřít hypertextový odkaz"
 
 #: src/control/jsdialog/Widget.Combobox.js:406
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtrovat položky"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Pozice {n}, rozdělení nastaveno"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Pozice {n}, bez rozdělení"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Pravítko rozdělení sloupců. Šipkami přesuňte kurzor a mezerníkem přepněte "
+"rozdělení."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "Náhled importu CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Číslo řádku"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
-msgstr ""
+msgstr "Sloupec {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Smajlíci"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Lidé a gesta"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Předměty"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Příroda a jídlo"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Naposledy použité"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Výrazu „{0}“ neodpovídají žádné emoji"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -6123,7 +6186,7 @@ msgstr "Vybraná oblast buněk"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Výběr buněk"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -6149,15 +6212,15 @@ msgstr "Volba funkcí"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Funkce buněk tabulky"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Velikost vybraného tvaru"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Velikost tvaru"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 #, fuzzy
@@ -6188,7 +6251,7 @@ msgstr "Ohraničení buněk"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Otevřít postranní lištu Styly"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -6200,7 +6263,7 @@ msgstr "Posunout dolů"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Další možnosti"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -6228,15 +6291,15 @@ msgstr "Další možnosti pro {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1743
 msgid "Cell value"
-msgstr ""
+msgstr "Hodnota buňky"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1747
 msgid "row %1"
-msgstr ""
+msgstr "řádek %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1756
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2527
 msgid "Headings and objects that you add to the document will appear here"
@@ -6259,7 +6322,7 @@ msgstr ""
 
 #: src/app/Socket.ts:640
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Připojení k dokumentu bylo přerušeno."
 
 #: src/app/Socket.ts:641
 msgid "The server has been disconnected."
@@ -6279,11 +6342,11 @@ msgstr "Úspěšně exportováno: "
 
 #: src/app/Socket.ts:1174
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Tento dokument obsahuje odkazy na externí obsah."
 
 #: src/app/Socket.ts:1175
 msgid "Allow"
-msgstr ""
+msgstr "Povolit"
 
 #: src/app/Socket.ts:1709
 msgid "Discard"
@@ -6327,7 +6390,7 @@ msgstr "Nesprávný server, opětovné připojování..."
 
 #: src/app/Socket.ts:1963
 msgid "Unsupported version."
-msgstr ""
+msgstr "Nepodporovaná verze."
 
 #: src/app/Socket.ts:1964
 msgid "Unsupported server version."
@@ -6391,6 +6454,7 @@ msgstr "Server se vypíná"
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
 msgstr ""
+"AI není nastavena. Nastavíte ji v nabídce Soubor > Možnosti > Asistent AI."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6422,7 +6486,7 @@ msgstr "vybráno {0} karet"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Na disku není volné místo."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6759,7 +6823,7 @@ msgstr "Při vkládání mimo {productname} nejprve klikněte na tlačítko Stá
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Správce zakázal kopírování z dokumentu"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -6773,7 +6837,7 @@ msgstr "Nepodařilo se stáhnout obsah schránky, zkuste zkopírovat znovu"
 
 #: src/map/Clipboard.js:390
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Obsah schránky se nepodařilo nahrát"
 
 #: src/map/Clipboard.js:1482
 msgid ""
@@ -6919,7 +6983,7 @@ msgstr "Prezentace v okně: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Prezentace probíhá v jiném okně"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -6956,11 +7020,11 @@ msgstr "Režim prezentace byl pro tento dokument zakázán"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Použít toto pořadí v prezentaci?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Aktualizovat snímky"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6988,27 +7052,27 @@ msgstr "Dialogové okno Vítejte"
 
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Nastavení uloženo. Chcete-li používat asistenta AI, přidejte klíč API."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
-msgstr ""
+msgstr "Nastavení uloženo"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Přeskočit"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "První"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Přeskočit vše"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "První snímek"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -7032,15 +7096,15 @@ msgstr "Ukončit prezentaci"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Začátek animace: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Začátek přechodu: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Konec přechodu: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7090,11 +7154,11 @@ msgstr "Oddálit"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Náhled aktuálního snímku"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Náhled následujícího snímku"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7102,11 +7166,11 @@ msgstr "Náhled snímku {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Opouštíte prezentaci."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "Odkaz není platný."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7148,7 +7212,7 @@ msgstr "Ukončit sledování"
 
 #: src/control/Control.Extension.ts:334
 msgid "Close extension"
-msgstr ""
+msgstr "Zavřít rozšíření"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -7272,11 +7336,11 @@ msgstr "Žlutý nápad"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Vítejte v sešitu"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Vítejte v prezentaci"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
