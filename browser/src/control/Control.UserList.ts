@@ -46,9 +46,6 @@ class UserList extends window.L.Control {
 		followingChipTextEditor: string;
 		followingChipTooltipText: string;
 		userAvatarAlt: string;
-		nUsers?: string;
-		oneUser?: string;
-		noUser?: string;
 		dropdownId: string;
 	} = {
 		userLimitHeader: 6,
@@ -60,9 +57,6 @@ class UserList extends window.L.Control {
 		followingChipTextEditor: _('Following the editor'),
 		followingChipTooltipText: _('Stop following'),
 		userAvatarAlt: _('Avatar for {user}'),
-		nUsers: undefined,
-		oneUser: undefined,
-		noUser: undefined,
 		dropdownId: 'userlist',
 	};
 
@@ -74,16 +68,6 @@ class UserList extends window.L.Control {
 		map.on('addview', this.onAddView, this);
 		map.on('removeview', this.onRemoveView, this);
 		map.on('deselectuser', this.deselectUser, this);
-
-		if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
-			this.options.nUsers = '%n';
-			this.options.oneUser = '1';
-			this.options.noUser = '0';
-		} else {
-			this.options.nUsers = _('%n users');
-			this.options.oneUser = _('1 user');
-			this.options.noUser = _('0 users');
-		}
 
 		const userListElement = document.getElementById('userListSummaryButton');
 		userListElement.setAttribute('aria-label', _('User List Summary'));
@@ -361,14 +345,6 @@ class UserList extends window.L.Control {
 
 	updateUserListCount() {
 		const count = this.users.size;
-		let text = '';
-		if (count > 1) {
-			text = this.options.nUsers.replace('%n', count.toString());
-		} else if (count === 1) {
-			text = this.options.oneUser;
-		} else {
-			text = this.options.noUser;
-		}
 
 		if (this.map.mobileTopBar) {
 			if (!this.hideUserList() && count > 1)
