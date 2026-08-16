@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 22:58+0200\n"
+"POT-Creation-Date: 2026-08-16 13:56+0200\n"
 "PO-Revision-Date: 2025-05-31 14:22+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collabora-online/"
@@ -26,8 +26,8 @@ msgid ""
 "LibreOffice based editor for Microsoft Office, LibreOffice and OpenOffice "
 "docs."
 msgstr ""
-"நுண்மென், விடுதலை மற்றும் திறந்த அலுவலகம் ஆவணத்திற்கான விடுதலைஅலுவலகம் அடிப்படையிலான "
-"திருத்தி."
+"நுண்மென், விடுதலை மற்றும் திறந்த அலுவலகம் ஆவணத்திற்கான விடுதலைஅலுவலகம் "
+"அடிப்படையிலான திருத்தி."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:13-1
@@ -37,18 +37,18 @@ msgid ""
 "and now it's on Android, enhancing your possibilities to work on mobile and "
 "for collaboration."
 msgstr ""
-"ஒத்துழைப்பு அலுவலகம் என்பது உலகின் மிகவும் பிரபலமான திறந்த மூல அலுவலக தொகுப்பான "
-"லிப்ரேஃபிசை அடிப்படையாகக் கொண்ட ஒரு உரை ஆசிரியர், விரிதாள் மற்றும் விளக்கக்காட்சி "
-"திட்டமாகும் - இப்போது அது ஆண்ட்ராய்டில் உள்ளது, இது மொபைலிலும் ஒத்துழைப்பிலும் வேலை "
-"செய்வதற்கான உங்கள் சாத்தியங்களை மேம்படுத்துகிறது."
+"ஒத்துழைப்பு அலுவலகம் என்பது உலகின் மிகவும் பிரபலமான திறந்த மூல அலுவலக "
+"தொகுப்பான லிப்ரேஃபிசை அடிப்படையாகக் கொண்ட ஒரு உரை ஆசிரியர், விரிதாள் மற்றும் "
+"விளக்கக்காட்சி திட்டமாகும் - இப்போது அது ஆண்ட்ராய்டில் உள்ளது, இது மொபைலிலும்"
+" ஒத்துழைப்பிலும் வேலை செய்வதற்கான உங்கள் சாத்தியங்களை மேம்படுத்துகிறது."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
 msgid ""
 "This app is in active development, feedback and bug reports are very welcome."
 msgstr ""
-"இந்த பயன்பாடு செயலில் உள்ள வளர்ச்சியில் உள்ளது, கருத்து மற்றும் பிழை அறிக்கைகள் மிகவும் "
-"வரவேற்கப்படுகின்றன."
+"இந்த பயன்பாடு செயலில் உள்ள வளர்ச்சியில் உள்ளது, கருத்து மற்றும் பிழை "
+"அறிக்கைகள் மிகவும் வரவேற்கப்படுகின்றன."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:21-1
@@ -61,15 +61,16 @@ msgstr "திறந்த ஆவண வடிவம் (.odt, .odp, .ods, .ots,
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
-"Microsoft Office 2007/2010/2013/2016/2019 "
-"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
+"xltx, .ppsx)"
 msgstr ""
-"நுண்மென் ஆபிச் 2007/2010/2013/2016/2019 "
-"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
+"நுண்மென் ஆபிச் 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, .xltx, ."
+"ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
-msgstr "நுண்மென் ஆபிச் 97/2000/எக்ச்பி/2003 (.டாக், .பிபிடி, .xls, .dot, .xlt, .pps)"
+msgstr ""
+"நுண்மென் ஆபிச் 97/2000/எக்ச்பி/2003 (.டாக், .பிபிடி, .xls, .dot, .xlt, .pps)"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:31-1
@@ -79,13 +80,14 @@ msgstr "சிக்கல்களைப் புகாரளிக்கவ�
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
 msgid ""
-"Use the bugtracker and attach any files that caused problems via <a "
-"href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
-"that anything you enter in the bugtracker will be public."
+"Use the bugtracker and attach any files that caused problems via <a href="
+"\"https://col.la/android\"> https://col.la/android</a>. Please note that "
+"anything you enter in the bugtracker will be public."
 msgstr ""
-"Bugtracker ஐப் பயன்படுத்தி <a href = \"https://col.la/android\"> https://col.la/"
-"android </a> வழியாக சிக்கல்களை ஏற்படுத்தும் எந்த கோப்புகளையும் இணைக்கவும். "
-"பிழைத்திருத்தத்தில் நீங்கள் உள்ளிடுவது பொதுவில் இருக்கும் என்பதை நினைவில் கொள்க."
+"Bugtracker ஐப் பயன்படுத்தி <a href = \"https://col.la/android\"> https://col."
+"la/android </a> வழியாக சிக்கல்களை ஏற்படுத்தும் எந்த கோப்புகளையும் இணைக்கவும்"
+". பிழைத்திருத்தத்தில் நீங்கள் உள்ளிடுவது பொதுவில் இருக்கும் என்பதை நினைவில் "
+"கொள்க."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
@@ -99,9 +101,10 @@ msgid ""
 "Windows, Mac, and Linux. This, combined with a new front-end based on "
 "Collabora Online, reads and saves documents similarly to LibreOffice desktop."
 msgstr ""
-"அண்ட்ராய்டுக்கான ஒத்துழைப்பு அலுவலகம் சாளரங்கள், மேக் மற்றும் லினக்சிற்கான லிப்ரேஃபிச் போன்ற "
-"இயந்திரத்தைப் பயன்படுத்துகிறது. இது, ஒத்துழைப்பு நிகழ்நிலை அடிப்படையில் ஒரு புதிய முன்-"
-"முனையுடன் இணைந்து, லிப்ரேஃபிச் டெச்க்டாப்பைப் போலவே ஆவணங்களையும் படித்து சேமிக்கிறது."
+"அண்ட்ராய்டுக்கான ஒத்துழைப்பு அலுவலகம் சாளரங்கள், மேக் மற்றும் லினக்சிற்கான "
+"லிப்ரேஃபிச் போன்ற இயந்திரத்தைப் பயன்படுத்துகிறது. இது, ஒத்துழைப்பு நிகழ்நிலை "
+"அடிப்படையில் ஒரு புதிய முன்-முனையுடன் இணைந்து, லிப்ரேஃபிச் டெச்க்டாப்பைப் "
+"போலவே ஆவணங்களையும் படித்து சேமிக்கிறது."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:48-1
@@ -111,10 +114,11 @@ msgid ""
 "developing Android support since 2012, with the help of Google Summer of "
 "Code students Andrzej Hunt, Iain Billet and Kaishu Sahu."
 msgstr ""
-"ஒத்துழைப்பு பொறியாளர்கள் டோர் லில்ல்க்விச்ட், டோமாச் வச்நெர், மைக்கேல் மீக்ச், மைக்க்லோச் வச்னா, "
-"சான் ஓலெசோவ்ச்கே, மெர்ட் டூமர், ரசேச் படியா மற்றும் ச்கைலர் கிரே ஆகியோர் 2012 முதல் "
-"ஆண்ட்ராய்டு ஆதரவை உருவாக்கி வருகின்றனர், கூகிள் கோடை மாணவர்களின் ஆண்ட்ரிச் மாணவர்களின் "
-"ஆண்ட்ரிச் அன்ட், ஐயின் பில்லெட் மற்றும் கெயிசு சாஅ் ."
+"ஒத்துழைப்பு பொறியாளர்கள் டோர் லில்ல்க்விச்ட், டோமாச் வச்நெர், மைக்கேல் மீக்ச்"
+", மைக்க்லோச் வச்னா, சான் ஓலெசோவ்ச்கே, மெர்ட் டூமர், ரசேச் படியா மற்றும் "
+"ச்கைலர் கிரே ஆகியோர் 2012 முதல் ஆண்ட்ராய்டு ஆதரவை உருவாக்கி வருகின்றனர், "
+"கூகிள் கோடை மாணவர்களின் ஆண்ட்ரிச் மாணவர்களின் ஆண்ட்ரிச் அன்ட், ஐயின் பில்லெட்"
+" மற்றும் கெயிசு சாஅ் ."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:52-1
