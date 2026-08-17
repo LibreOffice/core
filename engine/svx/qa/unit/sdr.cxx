@@ -13,6 +13,12 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <extendedprimitive2dxmldump.hxx>
@@ -62,6 +68,23 @@ SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawP
     drawinglayer::primitive2d::Primitive2DContainer aContainer;
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, aContainer);
     return aContainer;
+}
+
+/// The mask a shape is clipped with, wherever it sits in the primitives of a page.
+const drawinglayer::primitive2d::MaskPrimitive2D*
+findMask(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives)
+{
+    for (const auto& rPrimitive : rPrimitives)
+    {
+        if (auto pMask
+            = dynamic_cast<const drawinglayer::primitive2d::MaskPrimitive2D*>(rPrimitive.get()))
+            return pMask;
+        if (auto pGroup
+            = dynamic_cast<const drawinglayer::primitive2d::GroupPrimitive2D*>(rPrimitive.get()))
+            if (auto pMask = findMask(pGroup->getChildren()))
+                return pMask;
+    }
+    return nullptr;
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
@@ -317,6 +340,90 @@ CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
     // rotated text is not pixel-perfect; it is about one pixel off compared to Powerpoint).
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2744.0, aTranslate.getX(), 10.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(14896.0, aTranslate.getY(), 10.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonIsPainted)
+{
+    // Given a graphic shape whose clip polygon is a frame with a hole in it:
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xShape = xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr)
+                      .queryThrow<drawing::XShape>();
+    xShape->setPosition(awt::Point(1000, 2000));
+    xShape->setSize(awt::Size(5000, 4000));
+    auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                         ->getDrawPages()
+                         ->getByIndex(0)
+                         .queryThrow<drawing::XDrawPage>();
+    xDrawPage.queryThrow<drawing::XShapes>()->add(xShape);
+
+    drawing::PolyPolygonBezierCoords aClip;
+    aClip.Coordinates
+        = { { awt::Point(0, 0), awt::Point(5000, 0), awt::Point(5000, 4000), awt::Point(0, 4000) },
+            { awt::Point(1000, 1000), awt::Point(1000, 3000), awt::Point(4000, 3000),
+              awt::Point(4000, 1000) } };
+    aClip.Flags = { { drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL,
+                      drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL },
+                    { drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL,
+                      drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL } };
+    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"GraphicClipPolyPolygon"_ustr, cpo::uno::Any(aClip));
+
+    // Then it is painted through that polygon. Without this the shape covered its whole frame, and
+    // a clip the model held travelled from file to file without ever being drawn.
+    const drawinglayer::primitive2d::MaskPrimitive2D* pMask
+        = findMask(renderPageToPrimitives(xDrawPage));
+    CPPUNIT_ASSERT(pMask);
+
+    // Both contours reach the mask, or there would be no hole to see through.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), pMask->getMask().count());
+    // The polygon states the shape's own coordinates; on the page it sits where the shape does.
+    const basegfx::B2DRange aRange(pMask->getMask().getB2DRange());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aRange.getMinX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0, aRange.getMinY(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxY(), 1.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonFollowsAFlip)
+{
+    // Given a graphic shape clipped to the left fifth of its frame:
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xShape = xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr)
+                      .queryThrow<drawing::XShape>();
+    xShape->setPosition(awt::Point(1000, 2000));
+    xShape->setSize(awt::Size(5000, 4000));
+    auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                         ->getDrawPages()
+                         ->getByIndex(0)
+                         .queryThrow<drawing::XDrawPage>();
+    xDrawPage.queryThrow<drawing::XShapes>()->add(xShape);
+
+    drawing::PolyPolygonBezierCoords aClip;
+    aClip.Coordinates = { { awt::Point(0, 0), awt::Point(1000, 0), awt::Point(1000, 4000),
+                            awt::Point(0, 4000) } };
+    aClip.Flags = { { drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL,
+                      drawing::PolygonFlags_NORMAL, drawing::PolygonFlags_NORMAL } };
+    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"GraphicClipPolyPolygon"_ustr, cpo::uno::Any(aClip));
+
+    // When the shape is flipped about its own vertical centre:
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    CPPUNIT_ASSERT(pObject);
+    pObject->Mirror(Point(3500, 2000), Point(3500, 6000));
+
+    // Then the clip goes with it, and covers the right fifth. A flip reaches the graphic through
+    // its own attributes and not the object matrix, so a mask that stayed behind showed the picture
+    // turned round inside an outline that had not moved.
+    const drawinglayer::primitive2d::MaskPrimitive2D* pMask
+        = findMask(renderPageToPrimitives(xDrawPage));
+    CPPUNIT_ASSERT(pMask);
+    const basegfx::B2DRange aRange(pMask->getMask().getB2DRange());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5000.0, aRange.getMinX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0, aRange.getMinY(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxY(), 1.0);
 }
 }
 
