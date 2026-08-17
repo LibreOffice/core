@@ -33,7 +33,7 @@ $(call gb_Executable_get_target,osl_process_child) : \
 
 $(gb_Executable_BINDIR)/$(sal_BATCH_FILE) : \
 		$(SRCDIR)/sal/qa/osl/process/$(sal_BATCH_FILE)
-	mkdir -p $(dir $@) && \
+	mkdir -p $(dir $@)
 	$(call gb_Deliver_deliver,$<,$@)
 
 $(call gb_Executable_get_clean_target,osl_process_child) :
