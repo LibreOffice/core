@@ -188,6 +188,12 @@ public:
     /// that parse, in filename order. A missing directory or non-SPIF files are skipped.
     void loadFromDir(const OUString& rDirUrl);
 
+    /// Load the policies provisioned for this session: every *.xml the WOPI host synced
+    /// into the jail's user config dir under spif/ ($(userurl)/spif), falling back to the
+    /// dev stopgap policy shipped in the installation. The single provisioning
+    /// source shared by the dialog and the on-load banner.
+    void loadProvisioned();
+
     /// The provisioned policy rLabel was created under (first OID match), or nullptr.
     const SpifPolicy* findByLabel(const StanagLabel& rLabel) const;
 

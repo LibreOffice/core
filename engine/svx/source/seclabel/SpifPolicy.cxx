@@ -9,10 +9,14 @@
 
 #include <svx/seclabel/SpifPolicy.hxx>
 
+#include <config_folders.h>
+
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <algorithm>
 #include <set>
@@ -22,6 +26,16 @@ namespace svx::seclabel
 {
 namespace
 {
+// TODO dev stopgap: fixed policy path. Replaced by WOPI provisioning (Phase F).
+// The file sits beside the sample TSCP policies in the installation.
+OUString getDevPolicyUrl()
+{
+    OUString sUrl(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER
+                  "/classification/spif-collabora.xml"_ustr);
+    rtl::Bootstrap::expandMacros(sUrl);
+    return sUrl;
+}
+
 OUString toOU(std::string_view rStr) { return OStringToOUString(rStr, RTL_TEXTENCODING_UTF8); }
 
 // SPIF "selection" type: an integer or "unbounded". -1 represents unbounded.
@@ -512,6 +526,17 @@ void SpifPolicySet::loadFromDir(const OUString& rDirUrl)
 
     for (const auto& rUrl : aFiles)
         loadFile(rUrl);
+}
+
+void SpifPolicySet::loadProvisioned()
+{
+    // The provisioned policies: every *.xml the WOPI host synced into the jail's
+    // user config dir under spif/. $(userurl) resolves to that config root.
+    loadFromDir(SvtPathOptions().SubstituteVariable(u"$(userurl)/spif"_ustr));
+    if (!empty())
+        return;
+
+    loadFile(getDevPolicyUrl());
 }
 
 const SpifPolicy* SpifPolicySet::findByLabel(const StanagLabel& rLabel) const

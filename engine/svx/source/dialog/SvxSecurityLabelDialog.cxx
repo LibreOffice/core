@@ -20,10 +20,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
 #include <tools/datetime.hxx>
-#include <rtl/bootstrap.hxx>
-#include <config_folders.h>
 #include <unotools/datetime.hxx>
-#include <unotools/pathoptions.hxx>
 #include <vcl/abstdlgimpl.hxx>
 
 #include <set>
@@ -32,20 +29,6 @@ using namespace css;
 
 namespace
 {
-// The provisioned SPIF policies sync into the jail's user config dir under spif/
-// (WOPI presets delivery); $(userurl) resolves to that config root.
-constexpr OUString gsPolicyDir = u"$(userurl)/spif"_ustr;
-
-// TODO dev stopgap: fixed policy path. Replaced by WOPI provisioning (Phase F).
-// The file sits beside the sample TSCP policies in the installation.
-OUString getDevPolicyUrl()
-{
-    OUString sUrl(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER
-                  "/classification/spif-collabora.xml"_ustr);
-    rtl::Bootstrap::expandMacros(sUrl);
-    return sUrl;
-}
-
 OUString formatViolation(const svx::seclabel::SpifViolation& rViolation)
 {
     using T = svx::seclabel::SpifViolationType;
@@ -106,11 +89,8 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
                                     m_xCategories->get_height_rows(6));
     m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    // The provisioned policies: every *.xml the WOPI host synced into the jail's
-    // spif/ config dir. Falls back to the dev stopgap when none are present.
-    m_aPolicySet.loadFromDir(SvtPathOptions().SubstituteVariable(gsPolicyDir));
-    if (m_aPolicySet.empty())
-        m_aPolicySet.loadFile(getDevPolicyUrl());
+    // The provisioned policies (WOPI-preset spif/ dir, with the dev stopgap).
+    m_aPolicySet.loadProvisioned();
 
     PopulatePolicies();
     initFromExistingLabel();
