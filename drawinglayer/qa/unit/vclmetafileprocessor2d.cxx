@@ -256,7 +256,7 @@ public:
                 CPPUNIT_ASSERT_GREATER(nStartIdx + 15, nEndIdx);
 
                 OString aStr(sLine.subView(nStartIdx, nEndIdx - nStartIdx - 1));
-                auto aCoords = comphelper::string::split(aStr, ' ');
+                auto aCoords = comphelper::string::split(OUString::fromUtf8(aStr), ' ');
                 CPPUNIT_ASSERT_EQUAL(size_t(4), aCoords.size());
 
                 // Assert that the Link's Rect is within the expected range, which depends

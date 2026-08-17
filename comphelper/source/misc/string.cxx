@@ -392,25 +392,6 @@ std::vector<OUString>
     return vec;
 }
 
-std::vector<OString>
-    split(std::string_view rStr, const char cSeparator)
-{
-    std::vector< OString > vec;
-    std::size_t idx = 0;
-    do
-    {
-        std::string_view kw = o3tl::getToken(rStr, cSeparator, idx);
-        kw = o3tl::trim(kw);
-        if (!kw.empty())
-        {
-            vec.push_back(OString(kw));
-        }
-
-    } while (idx != std::string_view::npos);
-
-    return vec;
-}
-
 uno::Sequence< OUString >
     convertCommaSeparated( std::u16string_view i_rString )
 {

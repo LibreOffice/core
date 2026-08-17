@@ -305,9 +305,6 @@ COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
 COMPHELPER_DLLPUBLIC std::vector<OUString>
     split(std::u16string_view rString, const sal_Unicode cSeparator);
 
-COMPHELPER_DLLPUBLIC std::vector<OString>
-    split(std::string_view rString, const char cSeparator);
-
 /** Convert a single comma separated string to a sequence of strings.
 
     Note that no escaping of commas or anything fancy is done.
