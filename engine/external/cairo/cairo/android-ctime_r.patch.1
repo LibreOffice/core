@@ -1,0 +1,28 @@
+fix(android/cairo): drop ctime_r
+
+Android already declares ctime_r in time.h, so the fallback is unneeded.
+Additionally, the detection is buggy so HAVE_CTIME_R doesn't properly trigger on
+cross-compiled Android builds causing:
+
+    cairo-ps-surface.c:106:14: error: static declaration of 'ctime_r' follows
+    non-static declaration
+
+We need to drop the extra declaration
+
+--- a/src/cairo-ps-surface.c
++++ b/src/cairo-ps-surface.c
+@@ -102,14 +102,6 @@
+ #define DEBUG_FALLBACK(s)
+ #endif
+ 
+-#ifndef HAVE_CTIME_R
+-static char *ctime_r(const time_t *timep, char *buf)
+-{
+-    (void)buf;
+-    return ctime(timep);
+-}
+-#endif
+-
+ /**
+  * SECTION:cairo-ps
+  * @Title: PostScript Surfaces

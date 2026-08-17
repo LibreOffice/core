@@ -35,6 +35,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/disable-cairo-utilities.patch.1 \
 ))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_UnpackedTarball_add_patches,cairo,\
+    external/cairo/cairo/android-ctime_r.patch.1 \
+))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/libcairo-bundled-soname.patch.1 \
 ))
