@@ -2362,6 +2362,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_masterKeepsItsPlaceholder
     assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='dt']", 1);
     assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ftr']", 1);
     assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='sldNum']", 1);
+
+    // The body comes from the first layout that has one, since the page standing for the group is
+    // the Title Slide layout and has none. That layout inherits the master's geometry, so the
+    // placeholder lands where the master put it rather than where a layout would.
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body']", 1);
+    assertXPath(pMaster, aTree + "/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']/p:spPr/a:xfrm/a:off",
+                "y", u"1825560");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
