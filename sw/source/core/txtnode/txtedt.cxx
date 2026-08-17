@@ -2068,7 +2068,7 @@ void SwTextNode::TransliterateText(
 
     // now apply the changes from end to start to leave the offsets of the
     // yet unchanged text parts remain the same.
-    size_t nSum(0);
+    sal_Int32 nSum(0);
 
     for (size_t i = 0; i < aChanges.size(); ++i)
     {   // check this here since AddChanges cannot be moved below
@@ -2077,7 +2077,7 @@ void SwTextNode::TransliterateText(
             aChanges[ aChanges.size() - 1 - i ];
 
         nSum += rData.sChanged.getLength() - rData.nLen;
-        if (nSum > o3tl::make_unsigned(GetSpaceLeft()))
+        if (nSum > 0 && nSum > GetSpaceLeft())
         {
             SAL_WARN("sw.core", "SwTextNode::ReplaceTextOnly: "
                     "node text with insertion > node capacity.");
