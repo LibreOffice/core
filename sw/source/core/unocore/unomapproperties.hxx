@@ -175,6 +175,8 @@
         { UNO_NAME_CHAR_NO_HYPHENATION,                 RES_CHRATR_NOHYPHEN,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_OPTICAL_SIZING,                 RES_CHRATR_OPTICAL_SIZING,     cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_FONT_VARIATIONS,                RES_CHRATR_FONT_VARIATIONS,    cppu::UnoType<OUString>::get(),   PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { UNO_NAME_CHAR_CJK_FONT_VARIATIONS,            RES_CHRATR_CJK_FONT_VARIATIONS, cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { UNO_NAME_CHAR_CTL_FONT_VARIATIONS,            RES_CHRATR_CTL_FONT_VARIATIONS, cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_SHADOWED,                       RES_CHRATR_SHADOWED,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_CONTOURED,                      RES_CHRATR_CONTOUR,            cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_DROP_CAP_FORMAT,                     RES_PARATR_DROP,               cppu::UnoType<css::style::DropCapFormat>::get(),    PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT     | CONVERT_TWIPS }, \
@@ -452,6 +454,8 @@
                     { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
                     { UNO_NAME_CHAR_OPTICAL_SIZING, RES_CHRATR_OPTICAL_SIZING ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
                     { UNO_NAME_CHAR_FONT_VARIATIONS, RES_CHRATR_FONT_VARIATIONS ,  cppu::UnoType<OUString>::get()  ,       PROPERTY_NONE,     0},\
+                    { UNO_NAME_CHAR_CJK_FONT_VARIATIONS, RES_CHRATR_CJK_FONT_VARIATIONS ,  cppu::UnoType<OUString>::get()  ,       PROPERTY_NONE,     0},\
+                    { UNO_NAME_CHAR_CTL_FONT_VARIATIONS, RES_CHRATR_CTL_FONT_VARIATIONS ,  cppu::UnoType<OUString>::get()  ,       PROPERTY_NONE,     0},\
                     { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { UNO_NAME_DROP_CAP_FORMAT, RES_PARATR_DROP,        cppu::UnoType<css::style::DropCapFormat>::get()  , PROPERTY_NONE, MID_DROPCAP_FORMAT|CONVERT_TWIPS     },\

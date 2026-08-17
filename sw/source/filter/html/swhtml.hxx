@@ -131,6 +131,8 @@ struct HTMLAttrTable
     HTMLAttr* pCharBox;
     HTMLAttr* pOpticalSizing;
     HTMLAttr* pFontVariations;
+    HTMLAttr* pFontVariationsCJK;
+    HTMLAttr* pFontVariationsCTL;
 };
 
 class HTMLAttr

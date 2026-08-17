@@ -120,17 +120,19 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     39, // RES_CHRATR_SCRIPT_HINT,               // 45
     40, // RES_CHRATR_OPTICAL_SIZING             // 46
     41, // RES_CHRATR_FONT_VARIATIONS            // 47
-    42, // RES_TXTATR_REFMARK,                   // 48
-    43, // RES_TXTATR_TOXMARK,                   // 49
-    44, // RES_TXTATR_META,                      // 50
-    44, // RES_TXTATR_METAFIELD,                 // 51
-     0, // RES_TXTATR_AUTOFMT,                   // 52
-     0, // RES_TXTATR_INETFMT                    // 53
-     0, // RES_TXTATR_CHARFMT,                   // 54
-    45, // RES_TXTATR_CJK_RUBY,                  // 55
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 56
-    46, // RES_TXTATR_INPUTFIELD                 // 57
-    47, // RES_TXTATR_CONTENTCONTROL             // 58
+    42, // RES_CHRATR_CJK_FONT_VARIATIONS        // 48
+    43, // RES_CHRATR_CTL_FONT_VARIATIONS        // 49
+    44, // RES_TXTATR_REFMARK,                   // 50
+    45, // RES_TXTATR_TOXMARK,                   // 51
+    46, // RES_TXTATR_META,                      // 52
+    46, // RES_TXTATR_METAFIELD,                 // 53
+     0, // RES_TXTATR_AUTOFMT,                   // 54
+     0, // RES_TXTATR_INETFMT                    // 55
+     0, // RES_TXTATR_CHARFMT,                   // 56
+    47, // RES_TXTATR_CJK_RUBY,                  // 57
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 58
+    48, // RES_TXTATR_INPUTFIELD                 // 59
+    49, // RES_TXTATR_CONTENTCONTROL             // 60
 };
 
 namespace CharFormat
@@ -839,7 +841,16 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetOpticalSizing( rItem.StaticWhichCast(RES_CHRATR_OPTICAL_SIZING).GetValue() );
             break;
         case RES_CHRATR_FONT_VARIATIONS :
-            rFnt.SetVariations( rItem.StaticWhichCast(RES_CHRATR_FONT_VARIATIONS).GetVariations() );
+            rFnt.SetVariations( rItem.StaticWhichCast(RES_CHRATR_FONT_VARIATIONS).GetVariations(),
+                                SwFontScript::Latin );
+            break;
+        case RES_CHRATR_CJK_FONT_VARIATIONS :
+            rFnt.SetVariations( rItem.StaticWhichCast(RES_CHRATR_CJK_FONT_VARIATIONS).GetVariations(),
+                                SwFontScript::CJK );
+            break;
+        case RES_CHRATR_CTL_FONT_VARIATIONS :
+            rFnt.SetVariations( rItem.StaticWhichCast(RES_CHRATR_CTL_FONT_VARIATIONS).GetVariations(),
+                                SwFontScript::CTL );
             break;
         case RES_TXTATR_CJK_RUBY :
             rFnt.SetVertical( 0_deg10, m_bVertLayout );

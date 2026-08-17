@@ -669,7 +669,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( const SvxOpticalSizingItem* pItem = pAttrSet->GetItemIfSet( RES_CHRATR_OPTICAL_SIZING ) )
             SetOpticalSizing( pItem->GetValue() );
         if( const SvxFontVariationsItem* pItem = pAttrSet->GetItemIfSet( RES_CHRATR_FONT_VARIATIONS ) )
-            SetVariations( pItem->GetVariations() );
+            SetVariations( pItem->GetVariations(), SwFontScript::Latin );
+        if( const SvxFontVariationsItem* pItem = pAttrSet->GetItemIfSet( RES_CHRATR_CJK_FONT_VARIATIONS ) )
+            SetVariations( pItem->GetVariations(), SwFontScript::CJK );
+        if( const SvxFontVariationsItem* pItem = pAttrSet->GetItemIfSet( RES_CHRATR_CTL_FONT_VARIATIONS ) )
+            SetVariations( pItem->GetVariations(), SwFontScript::CTL );
     }
     else
     {

@@ -288,6 +288,8 @@ struct SvxCSS1ItemIds
     sal_uInt16 nBlink;
     sal_uInt16 nOpticalSizing;
     sal_uInt16 nFontVariations;
+    sal_uInt16 nFontVariationsCJK;
+    sal_uInt16 nFontVariationsCTL;
 
     sal_uInt16 nLineSpacing;
     sal_uInt16 nAdjust;
@@ -745,6 +747,8 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     aItemIds.nBlink = initTrueWhich( SID_ATTR_FLASH );
     aItemIds.nOpticalSizing = initTrueWhich( SID_ATTR_CHAR_OPTICAL_SIZING );
     aItemIds.nFontVariations = initTrueWhich( SID_ATTR_CHAR_FONT_VARIATIONS );
+    aItemIds.nFontVariationsCJK = initTrueWhich( SID_ATTR_CHAR_CJK_FONT_VARIATIONS );
+    aItemIds.nFontVariationsCTL = initTrueWhich( SID_ATTR_CHAR_CTL_FONT_VARIATIONS );
 
     aItemIds.nLineSpacing = initTrueWhich( SID_ATTR_PARA_LINESPACE );
     aItemIds.nAdjust = initTrueWhich( SID_ATTR_PARA_ADJUST );
@@ -1297,7 +1301,14 @@ static void ParseCSS1_font_variation_settings( const CSS1Expression *pExpr,
     }
 
     if( !aVariations.empty() )
-        rItemSet.Put( SvxFontVariationsItem( std::move(aVariations), aItemIds.nFontVariations ) );
+    {
+        SvxFontVariationsItem aItem( std::move(aVariations), aItemIds.nFontVariations );
+        rItemSet.Put( aItem );
+        aItem.SetWhich( aItemIds.nFontVariationsCJK );
+        rItemSet.Put( aItem );
+        aItem.SetWhich( aItemIds.nFontVariationsCTL );
+        rItemSet.Put( aItem );
+    }
 }
 
 static void ParseCSS1_text_transform( const CSS1Expression *pExpr,

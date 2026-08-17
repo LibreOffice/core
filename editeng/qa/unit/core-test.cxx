@@ -14,6 +14,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <editdoc.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <EditSelection.hxx>
 #include <ParagraphPortionList.hxx>
 
@@ -141,6 +142,7 @@ public:
     void testTdf162803StaleKashidaArray();
     void testTdf157037PasteTextAutoDirection();
     void testFontVariationsItem();
+    void testFontVariationsScript();
     void testEscapementNotPreservedOnParaBreak();
     void testAutoDirNotPreservedOnParaBreak();
     void testFontTypographicConversion();
@@ -180,6 +182,7 @@ public:
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testTdf157037PasteTextAutoDirection);
     CPPUNIT_TEST(testFontVariationsItem);
+    CPPUNIT_TEST(testFontVariationsScript);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
     CPPUNIT_TEST(testAutoDirNotPreservedOnParaBreak);
     CPPUNIT_TEST(testFontTypographicConversion);
@@ -2468,6 +2471,26 @@ void Test::testTdf157037PasteTextAutoDirection()
     CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(2));
     CPPUNIT_ASSERT(aEditEngine.IsRightToLeft(3));
     CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(4));
+}
+
+void Test::testFontVariationsScript()
+{
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTVARIATIONS, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS, i18n::ScriptType::COMPLEX));
+
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CJK, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CJK, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CJK, i18n::ScriptType::COMPLEX));
+
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CTL, i18n::ScriptType::LATIN));
+    CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CTL, i18n::ScriptType::ASIAN));
+    CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTVARIATIONS_CTL, i18n::ScriptType::COMPLEX));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_FONTVARIATIONS_CJK),
+                         GetScriptItemId(EE_CHAR_FONTVARIATIONS, SvtScriptType::ASIAN));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_FONTVARIATIONS_CTL),
+                         GetScriptItemId(EE_CHAR_FONTVARIATIONS, SvtScriptType::COMPLEX));
 }
 
 void Test::testFontVariationsItem()

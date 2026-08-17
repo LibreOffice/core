@@ -154,6 +154,8 @@ inline constexpr OUString UNO_NAME_CHAR_ESCAPEMENT_HEIGHT = u"CharEscapementHeig
 inline constexpr OUString UNO_NAME_CHAR_TRANSPARENCE = u"CharTransparence"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_OPTICAL_SIZING = u"CharOpticalSizing"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_FONT_VARIATIONS = u"CharFontVariations"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_CJK_FONT_VARIATIONS = u"CharFontVariationsAsian"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_CTL_FONT_VARIATIONS = u"CharFontVariationsComplex"_ustr;
 inline constexpr OUString UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS
     = u"HideTabLeaderAndPageNumber"_ustr;
 inline constexpr OUString UNO_NAME_TAB_IN_TOC = u"TabInTOC"_ustr;

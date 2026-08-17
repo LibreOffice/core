@@ -1606,6 +1606,12 @@ HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
     case RES_CHRATR_FONT_VARIATIONS:
         ppAttr = &m_xAttrTab->pFontVariations;
         break;
+    case RES_CHRATR_CJK_FONT_VARIATIONS:
+        ppAttr = &m_xAttrTab->pFontVariationsCJK;
+        break;
+    case RES_CHRATR_CTL_FONT_VARIATIONS:
+        ppAttr = &m_xAttrTab->pFontVariationsCTL;
+        break;
     case RES_CHRATR_BOX:
         ppAttr = &m_xAttrTab->pCharBox;
         break;

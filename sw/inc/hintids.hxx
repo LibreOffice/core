@@ -251,7 +251,11 @@ inline constexpr TypedWhichId<SvxOpticalSizingItem> RES_CHRATR_OPTICAL_SIZING(RE
                                                                               + 46);
 inline constexpr TypedWhichId<SvxFontVariationsItem> RES_CHRATR_FONT_VARIATIONS(RES_CHRATR_BEGIN
                                                                                 + 47);
-inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 48);
+inline constexpr TypedWhichId<SvxFontVariationsItem> RES_CHRATR_CJK_FONT_VARIATIONS(RES_CHRATR_BEGIN
+                                                                                    + 48);
+inline constexpr TypedWhichId<SvxFontVariationsItem> RES_CHRATR_CTL_FONT_VARIATIONS(RES_CHRATR_BEGIN
+                                                                                    + 49);
+inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 50);
 
 // this Attribute used only in a TextNodes SwpAttr-Array
 inline constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);

@@ -912,6 +912,8 @@ namespace xmloff::token {
         TOKEN( "font-style-name-asian",           XML_FONT_STYLE_NAME_ASIAN ),
         TOKEN( "font-style-name-complex",         XML_FONT_STYLE_NAME_COMPLEX ),
         TOKEN( "font-variation-settings",         XML_FONT_VARIATION_SETTINGS ),
+        TOKEN( "font-variation-settings-asian",   XML_FONT_VARIATION_SETTINGS_ASIAN ),
+        TOKEN( "font-variation-settings-complex", XML_FONT_VARIATION_SETTINGS_COMPLEX ),
         TOKEN( "font-variant",                    XML_FONT_VARIANT ),
         TOKEN( "font-weight",                     XML_FONT_WEIGHT ),
         TOKEN( "font-weight-asian",               XML_FONT_WEIGHT_ASIAN ),

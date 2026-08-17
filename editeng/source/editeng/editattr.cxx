@@ -484,7 +484,8 @@ void EditCharAttribOpticalSizing::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribFontVariations::EditCharAttribFontVariations(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
 : EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {
-    assert(rItem.Which() == EE_CHAR_FONTVARIATIONS);
+    assert(rItem.Which() == EE_CHAR_FONTVARIATIONS || rItem.Which() == EE_CHAR_FONTVARIATIONS_CJK
+           || rItem.Which() == EE_CHAR_FONTVARIATIONS_CTL);
 }
 
 void EditCharAttribFontVariations::SetFont( SvxFont& rFont, OutputDevice* )

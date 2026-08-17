@@ -1639,6 +1639,62 @@ CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettings)
                          getProperty<OUString>(xRun, u"CharFontVariations"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettingsPerScript)
+{
+    createSwDoc();
+
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xCursor->setPropertyValue(u"CharFontVariations"_ustr, uno::Any(u"\"wght\" 700"_ustr));
+    xCursor->setPropertyValue(u"CharFontVariationsAsian"_ustr, uno::Any(u"\"wght\" 500"_ustr));
+    xCursor->setPropertyValue(u"CharFontVariationsComplex"_ustr, uno::Any(u"\"wght\" 300"_ustr));
+
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "//style:style/style:text-properties[@loext:font-variation-settings='\"wght\" 700']",
+                1);
+    assertXPath(pXmlDoc,
+                "//style:style/style:text-properties"
+                "[@loext:font-variation-settings-asian='\"wght\" 500']",
+                1);
+    assertXPath(pXmlDoc,
+                "//style:style/style:text-properties"
+                "[@loext:font-variation-settings-complex='\"wght\" 300']",
+                1);
+
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"\"wght\" 700"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontVariations"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"wght\" 500"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontVariationsAsian"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"\"wght\" 300"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontVariationsComplex"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettingsWesternOnly)
+{
+    createSwDoc();
+
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xCursor->setPropertyValue(u"CharFontVariations"_ustr, uno::Any(u"\"wght\" 700"_ustr));
+
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//style:style/style:text-properties",
+                           "font-variation-settings-asian");
+    assertXPathNoAttribute(pXmlDoc, "//style:style/style:text-properties",
+                           "font-variation-settings-complex");
+
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"\"wght\" 700"_ustr,
+                         getProperty<OUString>(xRun, u"CharFontVariations"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xRun, u"CharFontVariationsAsian"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         getProperty<OUString>(xRun, u"CharFontVariationsComplex"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
