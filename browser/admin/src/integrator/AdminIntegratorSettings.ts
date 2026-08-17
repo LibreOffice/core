@@ -3381,9 +3381,14 @@ class SettingIframe {
 				return;
 			}
 
-			element.scrollIntoView({
+			/**!
+			 * The left navbar marks the section at the top of the list, so the
+			 * whole section comes up. The target keeps its place inside it.
+			 */
+			const section = element.closest('.section') ?? element;
+			section.scrollIntoView({
 				behavior: 'smooth',
-				block: 'center',
+				block: 'start',
 				inline: 'start',
 			} as ScrollIntoViewOptions);
 			element.focus({ preventScroll: true });
