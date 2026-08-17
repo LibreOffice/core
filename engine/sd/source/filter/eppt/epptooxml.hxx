@@ -129,12 +129,12 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    /** Create a new placeholder index for a master placeholder shape
+    /** The placeholder index of a master placeholder shape, allocating one on first use
 
         @param rXShape Master placeholder shape
         @returns Placeholder index
     */
-    sal_Int32 CreateNewPlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    sal_Int32 GetOrCreatePlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
     css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
     /** Writes the master page's content placeholders into the layout they belong on */
