@@ -719,7 +719,7 @@ class TestUno(unittest.TestCase):
                     test)))
 
         v = test.getAnyException()
-        self.assertTrue(v.Message.startswith('error')) #TODO: use Python 3.14 assertStartsWith
+        self.assertEqual(v.Message, 'error')
         self.assertEqual(v.Context, None)
         self.assertEqual(v.m1, -123456)
         self.assertEqual(v.m2, 100.5)
@@ -950,8 +950,7 @@ class TestUno(unittest.TestCase):
 
         with self.assertRaises(RuntimeException) as cm:
             test.throwRuntimeException()
-        self.assertTrue(cm.exception.Message.startswith('test'))
-            #TODO: use Python 3.14 assertStartsWith
+        self.assertEqual(cm.exception.Message, 'test')
         self.assertIsNone(cm.exception.Context)
 
         test.executeTest(Test())

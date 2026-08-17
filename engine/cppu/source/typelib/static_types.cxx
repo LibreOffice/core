@@ -193,7 +193,7 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     typelib_TypeDescription * pTD1 = nullptr;
                     OUString sTypeName1(u"cpo.uno.Exception"_ustr);
 
-                    typelib_CompoundMember_Init aMembers[2];
+                    typelib_CompoundMember_Init aMembers[3];
                     OUString sMemberType0(u"string"_ustr);
                     OUString sMemberName0(u"Message"_ustr);
                     aMembers[0].eTypeClass = typelib_TypeClass_STRING;
@@ -204,9 +204,14 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     aMembers[1].eTypeClass = typelib_TypeClass_INTERFACE;
                     aMembers[1].pTypeName = sMemberType1.pData;
                     aMembers[1].pMemberName = sMemberName1.pData;
+                    OUString sMemberType2(u"string"_ustr);
+                    OUString sMemberName2(u"Origin"_ustr);
+                    aMembers[2].eTypeClass = typelib_TypeClass_STRING;
+                    aMembers[2].pTypeName = sMemberType2.pData;
+                    aMembers[2].pMemberName = sMemberName2.pData;
 
                     ::typelib_typedescription_new(
-                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, nullptr, 2, aMembers );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, nullptr, 3, aMembers );
                     typelib_typedescription_register( &pTD1 );
                     s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef;
                     typelib_typedescriptionreference_acquire(

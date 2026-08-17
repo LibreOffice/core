@@ -99,6 +99,7 @@ $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/lib/uno/environments/remote/ThreadPoolManager \
     ridljar/com/sun/star/lib/uno/environments/remote/remote_environment \
     ridljar/com/sun/star/lib/uno/helper/ComponentBase \
+    ridljar/com/sun/star/lib/uno/helper/ExceptionOrigin \
     ridljar/com/sun/star/lib/uno/helper/Factory \
     ridljar/com/sun/star/lib/uno/helper/InterfaceContainer \
     ridljar/com/sun/star/lib/uno/helper/MultiTypeInterfaceContainer \

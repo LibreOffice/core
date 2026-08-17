@@ -100,12 +100,6 @@ void Bridge::handle_java_exc(
         jni, uno_data.get(), val, td.get()->pWeakRef, nullptr,
         false /* no assign */, false /* no out param */ );
 
-#if OSL_DEBUG_LEVEL > 0
-    // patch Message, append stack trace
-    reinterpret_cast< cpo::uno::Exception * >(
-        uno_data.get() )->Message += jni.get_stack_trace( jo_exc.get() );
-#endif
-
     typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
     uno_exc->pType = td.get()->pWeakRef;
     uno_exc->pData = uno_data.release();
@@ -114,7 +108,8 @@ void Bridge::handle_java_exc(
         "bridges",
         "exception occurred uno->java: [" << exc_name << "] "
         << (static_cast<cpo::uno::Exception const *>(uno_exc->pData)
-            ->Message));
+            ->Message)
+        << " at " << static_cast<cpo::uno::Exception const *>(uno_exc->pData)->Origin);
 }
 
 

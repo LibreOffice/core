@@ -12,6 +12,7 @@ module cpo {
     published exception Exception {
      string Message;
      ::cpo::uno::XInterface Context;
+     string Origin;
     };
     published exception RuntimeException: ::cpo::uno::Exception {
     };

@@ -300,6 +300,12 @@ static void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Except
     _inout_rBuffer.append( "Message: " );
     _inout_rBuffer.append( _e.Message );
 
+    if (!_e.Origin.isEmpty()) {
+        _inout_rBuffer.append("\n");
+        lcl_indent( _inout_rBuffer, _nLevel );
+        _inout_rBuffer.append("Origin: ");
+        _inout_rBuffer.append(_e.Origin);
+    }
 }
 
 // construct an error message for the exception

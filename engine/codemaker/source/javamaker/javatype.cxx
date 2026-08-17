@@ -1523,6 +1523,34 @@ void handlePolyStructType(
     writeClassFile(options, className, *cf);
 }
 
+bool isOriginMember(
+    bool membersOfBaseException, unoidl::ExceptionTypeEntity::Member const & member)
+{
+    return membersOfBaseException && member.name == "Origin";
+}
+
+sal_uInt16 addOriginInit(OString const & className, ClassFile::Code * code)
+{
+    code->loadLocalReference(0);
+    code->loadLocalReference(0);
+    code->instrInvokestatic(
+        "com/sun/star/lib/uno/helper/ExceptionOrigin"_ostr, "of"_ostr,
+        "(Ljava/lang/Throwable;)Ljava/lang/String;"_ostr);
+    code->instrPutfield(className, "Origin"_ostr, "Ljava/lang/String;"_ostr);
+    return 2;
+}
+
+sal_uInt16 addMemberInit(
+    rtl::Reference< TypeManager > const & manager, OString const & className, bool baseException,
+    unoidl::ExceptionTypeEntity::Member const & member, std::set<OUString> * dependencies,
+    ClassFile::Code * code)
+{
+    return isOriginMember(baseException, member)
+        ? addOriginInit(className, code)
+        : addFieldInit(
+            manager, className, member.name, false, member.type, dependencies, code);
+}
+
 void addExceptionBaseArguments(
     rtl::Reference< TypeManager > const & manager, std::set<OUString> * dependencies,
     MethodDescriptor * methodDescriptor, ClassFile::Code * code,
@@ -1548,7 +1576,9 @@ void addExceptionBaseArguments(
              ent2.getDirectMembers().begin());
          i != ent2.getDirectMembers().end(); ++i)
     {
-        if (!baseException || i != ent2.getDirectMembers().begin()) {
+        if ((!baseException || i != ent2.getDirectMembers().begin())
+            && !isOriginMember(baseException, *i))
+        {
             methodDescriptor->addParameter(i->type, false, true, nullptr);
             addLoadLocal(
                 manager, code, index, false, i->type, false, dependencies);
@@ -1593,6 +1623,9 @@ void handleExceptionType(
         addField(
             manager, dependencies, cf.get(), &typeInfo, -1,
             u"cpo.uno.XInterface"_ustr, u"Context"_ustr, index++);
+        addField(
+            manager, dependencies, cf.get(), &typeInfo, -1, u"string"_ustr, u"Origin"_ustr,
+            index++);
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1616,6 +1649,7 @@ void handleExceptionType(
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
                 u"cpo.uno.XInterface", dependencies, code.get()));
+        stack = std::max(stack, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1624,9 +1658,8 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             stack = std::max(
                 stack,
-                addFieldInit(
-                    manager, className, i->name, false, i->type, dependencies,
-                    code.get()));
+                addMemberInit(
+                    manager, className, baseException, *i, dependencies, code.get()));
         }
     }
     code->instrReturn();
@@ -1648,6 +1681,7 @@ void handleExceptionType(
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
                 u"cpo.uno.XInterface", dependencies, code.get()));
+        stack = std::max(stack, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1656,9 +1690,8 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             stack = std::max(
                 stack,
-                addFieldInit(
-                    manager, className, i->name, false, i->type, dependencies,
-                    code.get()));
+                addMemberInit(
+                    manager, className, baseException, *i, dependencies, code.get()));
         }
     }
     code->instrReturn();
@@ -1686,6 +1719,7 @@ void handleExceptionType(
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
                 u"cpo.uno.XInterface", dependencies, code.get()));
+        stack = std::max(stack, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1694,9 +1728,8 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             stack = std::max(
                 stack,
-                addFieldInit(
-                    manager, className, i->name, false, i->type, dependencies,
-                    code.get()));
+                addMemberInit(
+                    manager, className, baseException, *i, dependencies, code.get()));
         }
     }
     code->instrReturn();
@@ -1717,6 +1750,7 @@ void handleExceptionType(
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
                 u"cpo.uno.XInterface", dependencies, code.get()));
+        stack = std::max(stack, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1725,9 +1759,8 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             stack = std::max(
                 stack,
-                addFieldInit(
-                    manager, className, i->name, false, i->type, dependencies,
-                    code.get()));
+                addMemberInit(
+                    manager, className, baseException, *i, dependencies, code.get()));
         }
     }
     code->instrReturn();
@@ -1757,6 +1790,7 @@ void handleExceptionType(
             addDirectArgument(
                 manager, dependencies, &desc1, code.get(), &index2, className,
                 "Context"_ostr, false, u"cpo.uno.XInterface"_ustr));
+        maxSize = std::max(maxSize, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1765,7 +1799,9 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             maxSize = std::max(
                 maxSize,
-                addDirectArgument(
+                isOriginMember(baseException, *i)
+                ? addOriginInit(className, code.get())
+                : addDirectArgument(
                     manager, dependencies, &desc1, code.get(), &index2,
                     className, codemaker::convertString(i->name), false,
                     i->type));
@@ -1804,6 +1840,7 @@ void handleExceptionType(
             addDirectArgument(
                 manager, dependencies, &desc2, code.get(), &index3, className,
                 "Context"_ostr, false, u"cpo.uno.XInterface"_ustr));
+        maxSize2 = std::max(maxSize2, addOriginInit(className, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1812,7 +1849,9 @@ void handleExceptionType(
         if (!baseException || i != entity->getDirectMembers().begin()) {
             maxSize2 = std::max(
                 maxSize2,
-                addDirectArgument(
+                isOriginMember(baseException, *i)
+                ? addOriginInit(className, code.get())
+                : addDirectArgument(
                     manager, dependencies, &desc2, code.get(), &index3,
                     className, codemaker::convertString(i->name), false,
                     i->type));

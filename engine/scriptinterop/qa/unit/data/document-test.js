@@ -119,12 +119,7 @@ function test() {
     } catch (e) {
         indexMessage = e.message;
     }
-    if (globalThis.cool) {
-        console.assert( //TODO
-            indexMessage.startsWith('Index (5) must be less than the content length (5).'));
-    } else {
-        console.assert(indexMessage === 'Index (5) must be less than the content length (5).');
-    }
+    console.assert(indexMessage === 'Index (5) must be less than the content length (5).');
 
     console.assert(body.getChildIndex(p0) === 0);
     console.assert(body.getChildIndex(body.getChild(1)) === 1);
@@ -190,11 +185,7 @@ function test() {
         } catch (e) {
             caught = e.message;
         }
-        if (globalThis.cool) {
-            console.assert(caught.startsWith(message)); //TODO
-        } else {
-            console.assert(caught === message);
-        }
+        console.assert(caught === message);
     }
 
     // No user selection on a freshly opened document, so getSelection returns null:

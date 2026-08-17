@@ -172,6 +172,11 @@ public:
     }
 };
 
+bool isOriginMember(typelib_CompoundTypeDescription const * type, std::u16string_view memberName) {
+    return memberName == u"Origin"
+        && OUString::unacquired(&type->aBase.pTypeName) == u"cpo.uno.Exception";
+}
+
 /// @throws RuntimeException
 void fillStruct(
     const Reference< XInvocation2 > &inv,
@@ -205,8 +210,11 @@ void fillStruct(
         const int remainingPosInitialisers = PyTuple_Size(initializer) - state.getCntConsumed();
         for( int i = 0 ; i < remainingPosInitialisers && i < nMembers ; i ++ )
         {
-            const int tupleIndex = state.getCntConsumed();
             const OUString aMemberName (pCompType->ppMemberNames[i]);
+            if (isOriginMember(pCompType, aMemberName)) {
+                continue;
+            }
+            const int tupleIndex = state.getCntConsumed();
             state.setInitialised(aMemberName, tupleIndex);
             PyObject *element = PyTuple_GetItem( initializer, tupleIndex );
             Any a = runtime.pyObject2Any( element );
@@ -220,6 +228,9 @@ void fillStruct(
     for ( int i = 0; i < nMembers ; ++i)
     {
         const OUString memberName (pCompType->ppMemberNames[i]);
+        if (isOriginMember(pCompType, memberName)) {
+            continue;
+        }
         if ( ! state.isInitialised( memberName ) )
         {
             OUString buf = "pyuno._createUnoStructHelper: member '" +

@@ -273,13 +273,18 @@ JNI_compound_type_info::JNI_compound_type_info(
                 jni_info->m_RuntimeException_type.getTypeLibType() ))
         {
             // coverity[ctor_dtor_leak] - on purpose
-            m_fields.reset(new jfieldID[ 2 ]);
+            m_fields.reset(new jfieldID[ 3 ]);
             m_fields[ 0 ] = nullptr; // special Throwable.getMessage()
             // field Context
             m_fields[ 1 ] = jni->GetFieldID(
                 static_cast<jclass>(jo_class.get()), "Context", "Ljava/lang/Object;" );
             jni.ensure_no_exception();
             assert( m_fields[ 1 ] != nullptr );
+            // field Origin
+            m_fields[2] = jni->GetFieldID(
+                static_cast<jclass>(jo_class.get()), "Origin", "Ljava/lang/String;");
+            jni.ensure_no_exception();
+            assert(m_fields[2] != nullptr);
         }
         else
         {

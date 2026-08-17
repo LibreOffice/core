@@ -40,6 +40,8 @@ published exception Exception
      */
     cpo::uno::XInterface Context;
 
+    /** potentially tells where the exception came from, as a debugging aid */
+    string Origin;
 };
 
 

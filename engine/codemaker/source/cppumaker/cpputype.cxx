@@ -2685,6 +2685,12 @@ private:
     rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
 
+bool isOriginMember(
+    std::u16string_view exceptionName, unoidl::ExceptionTypeEntity::Member const & member)
+{
+    return exceptionName == u"cpo.uno.Exception" && member.name == "Origin";
+}
+
 void ExceptionType::dumpHdlFile(
         FileStream & out, codemaker::cppumaker::Includes & includes)
 {
@@ -2766,9 +2772,7 @@ void ExceptionType::dumpHppFile(
     if (name_ == "cpo.uno.Exception")
     {
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "    if (!Message.isEmpty())\n";
-        out << "        Message += \" \";\n";
-        out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+        out << "    Origin = o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
         out << "#endif\n";
     }
     out << "}\n\n";
@@ -2778,6 +2782,9 @@ void ExceptionType::dumpHppFile(
         out << indent() << "inline " << id_ << "::" << id_ << "(";
         bFirst = !dumpBaseMembers(out, base, true, false);
         for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
+            if (isOriginMember(name_, member)) {
+                continue;
+            }
             if (!bFirst) {
                 out << ", ";
             }
@@ -2802,6 +2809,9 @@ void ExceptionType::dumpHppFile(
             bFirst = false;
         }
         for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
+            if (isOriginMember(name_, member)) {
+                continue;
+            }
             out << indent() << (bFirst ? ":" : ",") << " " << member.name << "("
                 << member.name << "_)\n";
             bFirst = false;
@@ -2819,9 +2829,7 @@ void ExceptionType::dumpHppFile(
         if (name_ == "cpo.uno.Exception")
         {
             out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-            out << "    if (!Message.isEmpty())\n";
-            out << "        Message += \" \";\n";
-            out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+            out << "    Origin = o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
             out << "#endif\n";
         }
         out << "}\n\n";
@@ -2838,6 +2846,7 @@ void ExceptionType::dumpHppFile(
         out << "    os << typeid(exception).name();\n";
         out << "    if (!exception.Message.isEmpty())\n";
         out << "      os << \" msg: \" << exception.Message;\n";
+        out << "    os << \" at \" << exception.Origin;\n";
         out << "    return os;\n";
         out << "}\n";
         out << "\n";
@@ -3024,6 +3033,9 @@ void ExceptionType::dumpDeclaration(FileStream & out)
         bool eligibleForDefaults = entity_->getDirectMembers().empty();
         bool bFirst = !dumpBaseMembers(out, base, true, eligibleForDefaults);
         for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
+            if (isOriginMember(name_, member)) {
+                continue;
+            }
             if (!bFirst) {
                 out << ", ";
             }
@@ -3077,6 +3089,9 @@ bool ExceptionType::dumpBaseMembers(
                                  eligibleForDefaults && ent2->getDirectMembers().empty() );
     int memberCount = 0;
     for (const unoidl::ExceptionTypeEntity::Member& member : ent2->getDirectMembers()) {
+        if (isOriginMember(base, member)) {
+            continue;
+        }
         if (hasMember) {
             out << ", ";
         }

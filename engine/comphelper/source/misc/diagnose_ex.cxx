@@ -71,6 +71,8 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const cpo::uno::Any &
         sMessage.append(toOString(exception.Message));
         sMessage.append("\"");
     }
+    sMessage.append(" at ");
+    sMessage.append(toOString(exception.Origin));
     if ( exception.Context.is() )
     {
         const char* pContext = typeid( *exception.Context ).name();

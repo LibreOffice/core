@@ -455,7 +455,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
 {
     const v = test.getAnyException();
     console.log(v);
-    console.assert(v.message.startsWith('error'));
+    console.assert(v.message === 'error');
     console.assert(v.Context === null);
     console.assert(v.m1 === -123456);
     console.assert(v.m2 === 100.5);
@@ -890,10 +890,10 @@ try {
         console.assert(false);
 } catch (e) {
     console.assert(e instanceof uno.idl.com.sun.star.lang.WrappedTargetException);
-    console.assert(e.message.startsWith('wrapped'));
+    console.assert(e.message === 'wrapped');
     console.assert(uno.sameUnoObject(e.Context, test));
     console.assert(e.TargetException instanceof uno.idl.cpo.uno.RuntimeException);
-    console.assert(e.TargetException.message.startsWith('test'));
+    console.assert(e.TargetException.message === 'test');
     console.assert(uno.sameUnoObject(e.TargetException.Context, test));
 }
 console.assert(test.StringAttribute === 'hä');

@@ -66,12 +66,13 @@ public final class TypeDescription_Test {
             new String[0], null);
         TypeSignature exceptionTypeSig = new TypeSignature(
             null, new String[0], null,
-            new String[]{"Context"}, new TypeSignature[] { interfaceTypeSig });
+            new String[]{"Context", "Origin"},
+            new TypeSignature[] { interfaceTypeSig, emptyTypeSig });
             // cpo.uno.Exception.idl says that Exception (a) has no
-            // base exception, and (b) has two fields, Message and Context; the
+            // base exception, and (b) has three fields, Message, Context, and Origin; the
             // generated cpo.uno.Exception.java, however, (a) is
-            // inherited from java.lang.Exception, and (b) has only one field,
-            // Context, as Message is inherited from java.lang.Exception
+            // inherited from java.lang.Exception, and (b) has only two fields,
+            // Context and Origin, as Message is inherited from java.lang.Exception
         TypeSignature namingServiceTypeSig = new TypeSignature(
             interfaceTypeSig,
             new String[] { "getRegisteredObject", "registerObject",
@@ -95,7 +96,7 @@ public final class TypeDescription_Test {
         Object[] exceptionData = new Object [] {
             "cpo.uno.Exception", "[Lcpo.uno.Exception;",
             cpo.uno.Exception.class, TypeClass.EXCEPTION,
-            new Object[] { interfaceData } };
+            new Object[] { interfaceData, stringData } };
         Object[] namingServiceData = new Object[] {
             "cpo.uno.XNamingService",
             "[Lcpo.uno.XNamingService;", XNamingService.class,

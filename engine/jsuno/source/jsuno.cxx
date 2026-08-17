@@ -3387,6 +3387,13 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
                         JS_GetOpaque(dataVal, getRuntimeData(ctx)->exceptionClassId));
                     if (typeRef != nullptr) {
                         exc.name = OUString::unacquired(&typeRef->pTypeName).toUtf8();
+                        if (ValueRef const originVal(ctx, JS_GetPropertyStr(ctx, err, "Origin"));
+                            JS_IsString(originVal))
+                        {
+                            if (auto const p = toWellFormedUtf8(ctx, originVal)) {
+                                exc.name.append(" at ").append(p->getStr(), p->getLength());
+                            }
+                        }
                     }
                 }
             }

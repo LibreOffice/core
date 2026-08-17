@@ -864,6 +864,11 @@ void PythonStubGenerator::generateException(const unoidl::ExceptionTypeEntity* e
 
     for (const auto& member : allMembers)
     {
+        // The Origin of cpo.uno.Exception, which pyuno only takes as a keyword argument, goes
+        // through **kwargs:
+        if (member.name == "Origin") {
+            continue;
+        }
         OString safeMemberName = getSafePythonIdentifier(codemaker::convertString(member.name));
         OString memberTypeHint = mapUnoTypeToPythonHint(member.type, *m_typeManager, m_moduleName,
                                                         m_pyClassName, m_imports, m_dependentTypes);

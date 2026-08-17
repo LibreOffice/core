@@ -1002,11 +1002,7 @@ static bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     catch( const RuntimeException & e )
     {
         bReturn = (
-#if OSL_DEBUG_LEVEL == 0
-            // java stack traces trash Message
-            // The message might also contain source location
-            e.Message.indexOf(STRING_TEST_CONSTANT) >= 0 &&
-#endif
+            e.Message == STRING_TEST_CONSTANT &&
             xLBT->getInterface() == e.Context &&
             x == e.Context );
     }
@@ -1030,10 +1026,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
             catch (const IllegalArgumentException &rExc)
             {
                 if (rExc.ArgumentPosition == 5 &&
-#if OSL_DEBUG_LEVEL == 0
-                    // java stack traces trash Message
-                    rExc.Message.startsWith(STRING_TEST_CONSTANT) &&
-#endif
+                    rExc.Message == STRING_TEST_CONSTANT &&
                     rExc.Context == xLBT->getInterface())
                 {
 #ifdef COMPCHECK
@@ -1057,11 +1050,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
         catch (const RuntimeException & rExc)
         {
             if (rExc.Context == xLBT->getInterface()
-#if OSL_DEBUG_LEVEL == 0
-                    // java stack traces trash Message
-                && rExc.Message.startsWith(STRING_TEST_CONSTANT)
-#endif
-                )
+                && rExc.Message == STRING_TEST_CONSTANT)
             {
                 ++nCount;
             }
@@ -1077,11 +1066,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
     catch (const cpo::uno::Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface()
-#if OSL_DEBUG_LEVEL == 0
-            // java stack traces trash Message
-            && rExc.Message.startsWith(STRING_TEST_CONSTANT)
-#endif
-            )
+            && rExc.Message == STRING_TEST_CONSTANT)
         {
             ++nCount;
         }

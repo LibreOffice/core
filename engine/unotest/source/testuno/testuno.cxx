@@ -195,7 +195,7 @@ bool checkAnyException(cpo::uno::Any const& value)
         return false;
     }
     auto const& e = *o3tl::forceAccess<css::testuno::Exception>(value);
-    return e.Message.startsWith("error") && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
+    return e.Message == "error" && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
            && e.m3 == u"hä";
 }
 
@@ -704,7 +704,7 @@ void doExecuteTest(cpo::uno::Reference<css::testuno::XTest> const& test)
     }
     catch (cpo::uno::RuntimeException& e)
     {
-        verify(e.Message.startsWith("test"));
+        verify(e.Message == "test");
     }
 }
 
