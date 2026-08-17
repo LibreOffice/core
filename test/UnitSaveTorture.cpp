@@ -740,7 +740,8 @@ class UnitKitSaveTorture : public UnitKit
 {
     bool stampExists(const std::string& name, bool log = true)
     {
-        const std::string path = "/tmp/" + name;
+        // The temporary directory of this process is the tmp directory of its own jail
+        const std::string path = FileUtil::getSysTempDirectoryPath() + '/' + name;
         const bool exists = FileUtil::Stat(path).exists();
         if (log)
             TST_LOG("Stamp [" << name << "] " << (exists ? "exists" : "missing"));
