@@ -35,6 +35,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -803,6 +804,39 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testOpticalSizing2)
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
     uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(false, xRunProps->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest4, testPlaceholderPromptODFRoundTrip)
+{
+    // Given one layout whose picture placeholder authored a prompt, and another whose authored
+    // none - a slide layout arrives as a master page, so that is where to look for them:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    saveAndReload(TestFilter::ODP);
+
+    auto xMPs = mxComponent.queryThrow<drawing::XMasterPagesSupplier>()->getMasterPages();
+    OUString aPrompt;
+    sal_Int32 nPrompts = 0;
+    for (sal_Int32 nPage = 0; nPage < xMPs->getCount(); ++nPage)
+    {
+        auto xShapes = xMPs->getByIndex(nPage).queryThrow<drawing::XShapes>();
+        for (sal_Int32 nShape = 0; nShape < xShapes->getCount(); ++nShape)
+        {
+            auto xProps = xShapes->getByIndex(nShape).queryThrow<beans::XPropertySet>();
+            OUString aShapePrompt;
+            if (xProps->getPropertySetInfo()->hasPropertyByName(u"CustomPromptText"_ustr)
+                && (xProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aShapePrompt)
+                && !aShapePrompt.isEmpty())
+            {
+                aPrompt = aShapePrompt;
+                ++nPrompts;
+            }
+        }
+    }
+
+    // The authored prompt survives ODF, which has no representation of its own for one. Without
+    // the accompanying fix nothing carried it, and the reload showed a localized default instead.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nPrompts);
+    CPPUNIT_ASSERT_EQUAL(u"Custom prompt to insert an image"_ustr, aPrompt);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

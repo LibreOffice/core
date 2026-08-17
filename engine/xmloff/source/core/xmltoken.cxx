@@ -1573,6 +1573,7 @@ namespace xmloff::token {
         TOKEN( "bounciness",                      XML_PHYSICS_ANIMATION_BOUNCINESS ),
         TOKEN( "pie-offset",                      XML_PIE_OFFSET ),
         TOKEN( "placeholder",                     XML_PLACEHOLDER ),
+        TOKEN( "placeholder-prompt",              XML_PLACEHOLDER_PROMPT ),
         TOKEN( "placeholder-type",                XML_PLACEHOLDER_TYPE ),
         TOKEN( "placing",                         XML_PLACING ),
         TOKEN( "plain-number",                    XML_PLAIN_NUMBER ),

@@ -2485,6 +2485,14 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- The prompt an empty placeholder shows, when the document authors one of its own. -->
+  <rng:define name="presentation-shape-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:placeholder-prompt">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>
