@@ -4731,7 +4731,7 @@ void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
         case RndStdIds::FLY_AT_CHAR:
         case RndStdIds::FLY_AT_PARA:
         case RndStdIds::FLY_AS_CHAR:
-            // vertical: page | horizontal: page
+            // pcVert (2) : para | pcHorz (0) : para (column)
             nP |= (2 << 4) | (0 << 6);
             break;
         default:

@@ -1938,26 +1938,28 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
 {
     short nDropLines = rSwFormatDrop.GetLines();
     short nDistance = rSwFormatDrop.GetDistance();
+
     int rFontHeight, rDropHeight, rDropDescent;
+    const bool bHasDropSize = rNode.GetDropSize(rFontHeight, rDropHeight, rDropDescent);
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
     m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), nSty, nSty+2 );     // Style #
 
     m_rWW8Export.InsUInt16( NS_sprm::PPc::val );            // Alignment (sprmPPc)
-    m_rWW8Export.m_pO->push_back( 0x20 );
+    m_rWW8Export.m_pO->push_back(0x020); // pcVert (2) : para/text | pcHorz (0) : para/column
 
     m_rWW8Export.InsUInt16( NS_sprm::PWr::val );            // Wrapping (sprmPWr)
-    m_rWW8Export.m_pO->push_back( 0x02 );
+    m_rWW8Export.m_pO->push_back(0x02); // ST_Wrap (2) : around
 
     m_rWW8Export.InsUInt16( NS_sprm::PDcs::val );            // Dropcap (sprmPDcs)
-    int nDCS = ( nDropLines << 3 ) | 0x01;
+    int nDCS = ( nDropLines << 3 ) | 0x01; // Regular drop cap
     m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( nDCS ) );
 
     m_rWW8Export.InsUInt16( NS_sprm::PDxaFromText::val );            // Distance from text (sprmPDxaFromText)
     m_rWW8Export.InsUInt16( nDistance );
 
-    if ( rNode.GetDropSize( rFontHeight, rDropHeight, rDropDescent ) )
+    if (bHasDropSize)
     {
         m_rWW8Export.InsUInt16( NS_sprm::PDyaLine::val );            // Line spacing
         m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( -rDropHeight ) );
@@ -1977,7 +1979,7 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
     m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
     m_rWW8Export.m_pO->clear();
 
-    if ( rNode.GetDropSize( rFontHeight, rDropHeight, rDropDescent ) )
+    if (bHasDropSize)
     {
         const SwCharFormat *pSwCharFormat = rSwFormatDrop.GetCharFormat();
         if ( pSwCharFormat )
