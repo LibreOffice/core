@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Choose a theme</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; padding: 12px; }
+.theme { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; margin-bottom: 8px; }
+.theme:hover { outline: 2px solid #0369a1; }
+.swatch { width: 22px; height: 22px; border: 1px solid #999; border-radius: 4px; }
+.name { font-weight: 600; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<div id="themes"></div>
+
+<script>
+const THEMES = [
+  { name: 'Daylight', background: '#ffffff', titleColor: '#1f2937', bodyColor: '#374151' },
+  { name: 'Midnight', background: '#111827', titleColor: '#f9fafb', bodyColor: '#d1d5db' },
+  { name: 'Ocean',    background: '#0c4a6e', titleColor: '#e0f2fe', bodyColor: '#bae6fd' },
+  { name: 'Forest',   background: '#14532d', titleColor: '#ecfdf5', bodyColor: '#bbf7d0' },
+  { name: 'Sand',     background: '#fef3c7', titleColor: '#78350f', bodyColor: '#92400e' },
+  { name: 'Plum',     background: '#4a1d4e', titleColor: '#fdf4ff', bodyColor: '#e9d5ff' },
+];
+
+const list = document.getElementById('themes');
+THEMES.forEach(function (t) {
+  const row = document.createElement('div');
+  row.className = 'theme';
+  for (const color of [t.background, t.titleColor, t.bodyColor]) {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.style.background = color;
+    row.appendChild(s);
+  }
+  const name = document.createElement('span');
+  name.className = 'name';
+  name.textContent = t.name;
+  row.appendChild(name);
+  row.onclick = function () { cool.dialog.close(t); };
+  list.appendChild(row);
+});
+</script>
+</body>
+</html>

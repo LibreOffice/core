@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Deck builder</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; background: #fff; padding: 12px; }
+label { display: block; margin: 8px 0 4px; font-weight: 600; }
+textarea { width: 100%; height: 140px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; font-family: inherit; resize: vertical; }
+button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; background: #333; color: #fff; margin-top: 8px; }
+button:disabled { background: #999; cursor: default; }
+.divider { margin: 16px 0; border-top: 1px solid #ddd; }
+.result { margin-top: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; min-height: 1.5em; white-space: pre-wrap; word-break: break-word; }
+.result.error { color: #b00; border-color: #f5c0c0; background: #fff5f5; }
+.theme-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.theme-row button { margin-top: 0; }
+.swatch { display: inline-block; width: 14px; height: 14px; vertical-align: middle; border: 1px solid #999; margin-right: 4px; }
+.preview { margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.preview[hidden] { display: none; }
+.preview svg { display: block; width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; }
+.preview-empty { margin-top: 12px; color: #777; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<label for="outline">Outline (# title, - bullet, indent to nest, **bold**, *italic*, ~~strike~~):</label>
+<textarea id="outline" spellcheck="false"># Quarterly review
+- **Wins** and losses
+- Numbers at a glance
+  - *Revenue* is up
+# Next quarter
+- Three priorities
+- ~~Last quarter's goals~~ owners and dates</textarea>
+
+<div class="theme-row">
+  <button onclick="chooseTheme()">Choose theme...</button>
+  <span id="themeLabel"></span>
+</div>
+
+<div id="preview" class="preview" hidden></div>
+<div id="previewEmpty" class="preview-empty">nothing to preview yet</div>
+
+<div class="divider"></div>
+
+<button id="build" onclick="buildSlides()">Build slides</button>
+<div id="buildResult" class="result"></div>
+
+<script>
+let theme = { name: 'Daylight', background: '#ffffff', titleColor: '#1f2937', bodyColor: '#374151' };
+
+// Markers nest ("**bold *both***"); a marker with no closer ahead keeps its characters as
+// literal text.  The underscore doubles as an italic marker, so snake_case_words italicize -
+// an accepted limitation of this demo parser.
+function parseInline(line) {
+  const markers = [
+    { token: '**', flag: 'bold' },
+    { token: '~~', flag: 'strike' },
+    { token: '*', flag: 'italic' },
+    { token: '_', flag: 'italic' },
+  ];
+  const runs = [];
+  const open = [];
+  let text = '';
+  function flush() {
+    if (!text) return;
+    const run = { text: text };
+    for (const o of open) run[o.flag] = true;
+    runs.push(run);
+    text = '';
+  }
+  let i = 0;
+  scan: while (i < line.length) {
+    for (const m of markers) {
+      if (!line.startsWith(m.token, i)) continue;
+      const openAt = open.findIndex(function (o) { return o.token === m.token; });
+      if (openAt !== -1) {
+        flush();
+        open.splice(openAt, 1);
+        i += m.token.length;
+        continue scan;
+      }
+      if (line.indexOf(m.token, i + m.token.length) !== -1) {
+        flush();
+        open.push(m);
+        i += m.token.length;
+        continue scan;
+      }
+      break;
+    }
+    text += line.charAt(i++);
+  }
+  flush();
+  return runs;
+}
+
+// Parses the plain-text outline into [{title, bullets}], where title is a run list and each
+// bullet is {level, runs}.
+function parseOutline(text) {
+  const slides = [];
+  let current = null;
+  for (const rawLine of text.split('\n')) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    if (line.charAt(0) === '#') {
+      current = { title: parseInline(line.replace(/^#+\s*/, '')), bullets: [] };
+      slides.push(current);
+      continue;
+    }
+    if (!current) {
+      current = { title: [], bullets: [] };
+      slides.push(current);
+    }
+    const m = rawLine.match(/^([ \t]*)[-*][ \t]+(.*)$/);
+    if (m) {
+      const level = Math.min(Math.floor(m[1].replace(/\t/g, '  ').length / 2), 4);
+      current.bullets.push({ level: level, runs: parseInline(m[2]) });
+    } else {
+      current.bullets.push({ level: 0, runs: parseInline(line) });
+    }
+  }
+  return slides;
+}
+
+function escapeXml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function runsToTspans(runs) {
+  return runs.map(function (run) {
+    const attrs = (run.bold ? ' font-weight="bold"' : '')
+      + (run.italic ? ' font-style="italic"' : '')
+      + (run.strike ? ' text-decoration="line-through"' : '');
+    return '<tspan' + attrs + '>' + escapeXml(run.text) + '</tspan>';
+  }).join('');
+}
+
+function slideThumbnail(slide) {
+  const W = 160, H = 90;
+  let svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '">';
+  svg += '<rect width="' + W + '" height="' + H + '" fill="' + theme.background + '"/>';
+  if (slide.title.length > 0) {
+    svg += '<text x="13" y="22" font-size="11" font-weight="bold" font-family="sans-serif"'
+      + ' fill="' + theme.titleColor + '">' + runsToTspans(slide.title) + '</text>';
+  }
+  let y = slide.title.length > 0 ? 38 : 22;
+  for (const bullet of slide.bullets) {
+    if (y > H - 6) break;
+    svg += '<text x="' + (13 + bullet.level * 6) + '" y="' + y + '" font-size="7"'
+      + ' font-family="sans-serif" fill="' + theme.bodyColor + '">'
+      + escapeXml('\u2022 ') + runsToTspans(bullet.runs) + '</text>';
+    y += 10;
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+function renderPreview() {
+  const slides = parseOutline(document.getElementById('outline').value);
+  const previewEl = document.getElementById('preview');
+  const emptyEl = document.getElementById('previewEmpty');
+  if (slides.length === 0) {
+    previewEl.hidden = true;
+    emptyEl.hidden = false;
+    return;
+  }
+  previewEl.innerHTML = slides.map(slideThumbnail).join('');
+  previewEl.hidden = false;
+  emptyEl.hidden = true;
+}
+
+function renderThemeLabel() {
+  const el = document.getElementById('themeLabel');
+  el.innerHTML = '';
+  for (const color of [theme.background, theme.titleColor, theme.bodyColor]) {
+    const s = document.createElement('span');
+    s.className = 'swatch';
+    s.style.background = color;
+    el.appendChild(s);
+  }
+  el.appendChild(document.createTextNode(theme.name));
+}
+
+async function chooseTheme() {
+  const outcome = await cool.dialog.open({
+    url: 'themes.html',
+    title: 'Choose a theme',
+    width: 320,
+  });
+  if (outcome.cancelled) return;
+  theme = outcome.value;
+  renderThemeLabel();
+  renderPreview();
+}
+
+function buildSlides() {
+  const slides = parseOutline(document.getElementById('outline').value);
+  const btn = document.getElementById('build');
+  const resultEl = document.getElementById('buildResult');
+  resultEl.classList.remove('error');
+  if (slides.length === 0) {
+    resultEl.classList.add('error');
+    resultEl.textContent = 'the outline is empty';
+    return;
+  }
+  resultEl.textContent = '...';
+  btn.disabled = true;
+  cool.callRemote(function (slides, theme) {
+    const p = cool.getActivePresentation();
+    const pageWidth = p.getPageWidth();
+    const pageHeight = p.getPageHeight();
+    const margin = pageWidth * 0.08;
+    const contentWidth = pageWidth - 2 * margin;
+    const titleTop = pageHeight * 0.10;
+    const titleHeight = pageHeight * 0.18;
+    const bodyTop = titleTop + titleHeight + pageHeight * 0.05;
+    const bodyHeight = pageHeight - bodyTop - pageHeight * 0.08;
+    const titleSize = Math.round(pageHeight * 0.08);
+    const bodySize = Math.round(pageHeight * 0.045);
+    // A run with no text is skipped: it would produce an empty range, and an empty range has no
+    // text style.
+    function appendRuns(text, runs) {
+      for (const run of runs) {
+        if (run.text.length === 0) continue;
+        const style = text.appendText(run.text).getTextStyle();
+        if (run.bold) style.setBold(true);
+        if (run.italic) style.setItalic(true);
+        if (run.strike) style.setStrikethrough(true);
+      }
+    }
+    let built = 0;
+    for (const s of slides) {
+      const slide = p.appendSlide().setBackgroundColor(theme.background);
+      if (s.title.length > 0) {
+        const text = slide.insertTextBox('', margin, titleTop, contentWidth,
+          titleHeight).getText();
+        appendRuns(text, s.title);
+        // The whole title is bold by design, on top of any inline styling.  A title whose runs
+        // were all empty leaves the box without text, and then there is nothing to style.
+        if (text.asString().length > 0) {
+          text.getTextStyle().setBold(true).setFontSize(titleSize)
+            .setForegroundColor(theme.titleColor);
+        }
+      }
+      if (s.bullets.length > 0) {
+        const text = slide.insertTextBox('', margin, bodyTop, contentWidth,
+          bodyHeight).getText();
+        for (let i = 0; i < s.bullets.length; i++) {
+          const b = s.bullets[i];
+          // The first paragraph already exists in a fresh box; each later line appends one.  A
+          // new paragraph starts at the previous line's bullet depth, so the level is set every
+          // time.
+          const para = i === 0 ? text : text.appendParagraph('').getRange();
+          para.setBulletLevel(b.level);
+          appendRuns(text, b.runs);
+        }
+        // Bullet lines whose runs were all empty leave the box without text, and then there is
+        // nothing to style.
+        if (text.asString().length > 0) {
+          text.getTextStyle().setFontSize(bodySize).setForegroundColor(theme.bodyColor);
+        }
+      }
+      built++;
+    }
+    return 'built ' + built + ' slides, now ' + p.getSlides().length + ' total';
+  }, slides, theme).then(function (text) {
+    resultEl.textContent = text;
+  }).catch(function (err) {
+    resultEl.classList.add('error');
+    resultEl.textContent = err.message || String(err);
+  }).finally(function () {
+    btn.disabled = false;
+  });
+}
+
+document.getElementById('outline').addEventListener('input', renderPreview);
+renderThemeLabel();
+renderPreview();
+</script>
+</body>
+</html>
