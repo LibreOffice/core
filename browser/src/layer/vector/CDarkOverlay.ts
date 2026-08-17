@@ -15,16 +15,18 @@ class CDarkOverlay extends CPathGroup {
 		super([]);
 		this.options = options;
 		this.rectangles = this.createRectangles(4);
+		for (let i = 0; i < this.rectangles.length; i++)
+			this.push(this.rectangles[i]);
 		this.setPointSet(pointSet);
 	}
 
+	// Moves the four rectangles the group already owns to their new places.
 	public setPointSet(pointSet: CPointSet) {
 		var points = pointSet.getPointArray();
 		if (!points) {
 			for (var i = 0; i < this.rectangles.length; i++) {
 				this.rectangles[i].setBounds(
 					new cool.Bounds(new cool.Point(0, 0), new cool.Point(0, 1)));
-				this.push(this.rectangles[i]);
 			}
 			return;
 		}
@@ -33,7 +35,6 @@ class CDarkOverlay extends CPathGroup {
 
 		for (var i = 0; i < this.rectangles.length; i++) {
 			this.rectangles[i].setBounds(rectangleBounds[i]);
-			this.push(this.rectangles[i]);
 		}
 	}
 
