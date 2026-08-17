@@ -94,6 +94,7 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		| $(call gb_Postprocess_get_target,AllLibraries) \
 		  $(call gb_Postprocess_get_target,AllExecutables) \
 		  $(call gb_Postprocess_get_target,AllPackages)
+	$(if $(gb_External_StaticLink),,$(error can only be invoked on top-level))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
 	$(foreach v, \
@@ -101,6 +102,7 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(eval export $(v)=$($v)) \
 	)
 	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
+	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
 	&& $(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
 		$(readlicense_oo_DIR) \
 		$(readlicense_oo_DIR)/LICENSE.html \
@@ -114,7 +116,8 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)" \
 		$${EXTERNALSFILE} \
-	&& rm -f $${EXTERNALSFILE}
+		$${EXTERNALSTATICFILE} \
+	&& rm -f $${EXTERNALSFILE} $${EXTERNALSTATICFILE}
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )

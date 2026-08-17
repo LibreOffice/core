@@ -248,6 +248,15 @@ gb_Externals += $(foreach lib,$(4),$(1);native;$$(call gb_Library_get_target,$(l
 
 endef
 
+# for static linking or header only libraries:
+# $(call gb_Helper_LinkTarget_use_external,linktarget,external)
+define gb_Helper_LinkTarget_use_external
+gb_External_StaticLink += $(call gb_LinkTarget__get_workdir_linktargetobject,$(1));$(2)
+$(if $(gb_PARTIAL_BUILD),,$(if $(call gb_LinkTarget__is_merged,$(1)),\
+gb_External_StaticLink += $(call gb_LinkTarget__get_workdir_linktargetobject,$(call gb_Library_get_linktarget,merged));$(2)))
+
+endef
+
 # a plugin is a library, why can't be dynamically linked and must be dlopen'd, but must be linked static
 define gb_Helper_register_plugins_for_install
 $(call gb_Helper_register_libraries_for_install,$(1),$(2),$(3))
