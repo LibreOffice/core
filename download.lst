@@ -121,8 +121,8 @@ FIREBIRD_TARBALL := Firebird-3.0.13.33818-0.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONTCONFIG_SHA256SUM := cf8e6576ef0484c15079bdaf77cd9c51c464df5365814ada4d3ee7331ea31eb5
-FONTCONFIG_TARBALL := fontconfig-2.18.2.tar.xz
+FONTCONFIG_SHA256SUM := 4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3
+FONTCONFIG_TARBALL := fontconfig-2.18.3.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
