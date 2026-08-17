@@ -2752,7 +2752,10 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     // inheritance.
     mpFS->startElementNS(XML_p, XML_spPr);
     WriteShapeTransformation(xShape, XML_a);
-    WritePresetShape("rect"_ostr);
+    // A picture placeholder can be clipped to an outline, which is the shape's own geometry in the
+    // file; where there is one it takes the place of the rectangle.
+    if (!WriteGraphicClipCustomGeometry(xProps, xShape->getSize()))
+        WritePresetShape("rect"_ostr);
     if (xProps.is())
     {
         // A picture placeholder's "Graphic" property is the internal
